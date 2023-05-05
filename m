@@ -1,169 +1,169 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5383FC7;
-	Fri,  5 May 2023 10:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFEDBA35
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 12:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683281538; x=1714817538;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683289857; x=1714825857;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+Tsbdo5pjmj5u3W5R6dLVr9eBlkJdAaspJjhiqP2evg=;
-  b=eOLfWjXSh627nBf1E6IAhz9Pb3UNhbn+q+1TTjGXNmqgpohhsFjE3Kxv
-   k0ar04MinNneBOQErzvrqOTx9O4y7zEEInUDT/DDz8Va1v+CAhGH8RbZx
-   HW7mGXwitOktnl0+Iibpa0rFezXIO6Xt3PM3QcccSSKD4igyjWwEv/rjJ
-   rS3akkb5nscW2YhwuQCAL6THbHi6g3KZW7GKAdT7QLK3Zauuz0X0ni03H
-   MzqQWePvNiKpidbp/Cih7tGhB8sd6Yp6ePM3KUaUKkXAfYZzPhHmO7L6i
-   LZCYgHsaE+pneog5wEfoFpMrxjco7nDqXG0hHCumpWR9mz6HuB2MRkRzN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412404977"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="412404977"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 03:12:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="697503684"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="697503684"
-Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 May 2023 03:12:12 -0700
-Received: from kbuild by fe5d646e317d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pusQ7-0000Ut-2G;
-	Fri, 05 May 2023 10:12:11 +0000
-Date: Fri, 5 May 2023 18:11:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Helge Deller <deller@gmx.de>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fbdev@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
-Message-ID: <202305051758.yjd7CtkI-lkp@intel.com>
-References: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
+  bh=XweA9V5HDK7utS7/TPunyp7LYfGFUrdjDqzcDo9MXNU=;
+  b=YoQ2DIH/s/h4iJhQguSkPHF/sa+wsUUyGJ8ATuvS7BMThlCA35Q46aRf
+   sxAxGzTI8Jl22iv3mu5rIOj7R+rj7JeSSZPbZ6ZkKZ54KOFXg0dmAQTQe
+   OcVxidTNLE/xq5RBsH08iKqedabqSUmvDBFxFimDx/sbhEMHxZhSOP1Pn
+   kdN8hSy6/QsuWGSNt1Yu2lsiKrQ2LDMu0+S6OEhzs4A7I/RpmU33TgKmw
+   qBkNx8glHVM5zHPAFbOmohcfztGatR/67j/X0/AAns+v6nyuHf8yNBknq
+   F1vmFbPO5Hdato/b3b9G0u4+ohvvR1iUc3qdHsGR4VYnO0C/W/3Cg0FrX
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,252,1677567600"; 
+   d="asc'?scan'208";a="150539472"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2023 05:30:47 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 5 May 2023 05:30:38 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 5 May 2023 05:30:34 -0700
+Date: Fri, 5 May 2023 13:30:15 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+CC: Conor Dooley <conor@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+	Philipp Rudo <prudo@linux.vnet.ibm.com>, Dave Young <dyoung@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>, Thomas Gleixner
+	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom
+ Rix <trix@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
+	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, Philipp Rudo
+	<prudo@redhat.com>, <kexec@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Ross Zwisler <zwisler@google.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Simon Horman <horms@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, <llvm@lists.linux.dev>,
+	<linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+	<stable@vger.kernel.org>
+Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+Message-ID: <20230505-subsidy-shininess-46a8be31b267@wendy>
+References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
+ <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
+ <20230501-cottage-overjoyed-1aeb9d72d309@spud>
+ <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="HCjo7mmLcFsfwCMI"
+Content-Disposition: inline
+In-Reply-To: <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
+
+--HCjo7mmLcFsfwCMI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230430-nokia770-regression-v2-1-984ed3ca5444@linaro.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Mon, May 01, 2023 at 09:54:43PM +0200, Ricardo Ribalda wrote:
+> On Mon, 1 May 2023 at 19:41, Conor Dooley <conor@kernel.org> wrote:
+> > On Mon, May 01, 2023 at 02:38:22PM +0200, Ricardo Ribalda wrote:
+> > > If PGO is enabled, the purgatory ends up with multiple .text sections.
+> > > This is not supported by kexec and crashes the system.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_pura=
+gory")
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > >  arch/riscv/purgatory/Makefile | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Mak=
+efile
+> > > index 5730797a6b40..cf3a44121a90 100644
+> > > --- a/arch/riscv/purgatory/Makefile
+> > > +++ b/arch/riscv/purgatory/Makefile
+> > > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+> > >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+> > >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
+> > >
+> > > +# When profile optimization is enabled, llvm emits two different ove=
+rlapping
+> > > +# text sections, which is not supported by kexec. Remove profile opt=
+imization
+> > > +# flags.
+> > > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-u=
+se=3D%,$(KBUILD_CFLAGS))
+> >
+> > With the caveat of not being au fait with the workings of either PGO or
+> > of purgatory, how come you modify KBUILD_CFLAGS here rather than the
+> > purgatory specific PURGATORY_CFLAGS that are used later in the file?
+>=20
+> Definitely, not a Makefile expert here, but when I tried this:
+>=20
+> @@ -35,6 +40,7 @@ PURGATORY_CFLAGS_REMOVE :=3D -mcmodel=3Dkernel
+>  PURGATORY_CFLAGS :=3D -mcmodel=3Dlarge -ffreestanding
+> -fno-zero-initialized-in-bss -g0
+>  PURGATORY_CFLAGS +=3D $(DISABLE_STACKLEAK_PLUGIN) -DDISABLE_BRANCH_PROFI=
+LING
+>  PURGATORY_CFLAGS +=3D -fno-stack-protector
+> +PURGATORY_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D%
+> -fprofile-use=3D%,$(KBUILD_CFLAGS))
+>=20
+> It did not work.
 
-kernel test robot noticed the following build errors:
+Unfortunately I am oh-so-far from an expert on this kind of thing, but I
+had thought that PURGATORY_CFLAGS_REMOVE was intended for this sort of
+purpose.
 
-[auto build test ERROR on 348551ddaf311c76b01cdcbaf61b6fef06a49144]
+> Fixes: bde971a83bbf ("KVM: arm64: nvhe: Fix build with profile optimizati=
+on")
+>=20
+> does this approach, so this is what I tried and worked.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
-base:   348551ddaf311c76b01cdcbaf61b6fef06a49144
-patch link:    https://lore.kernel.org/r/20230430-nokia770-regression-v2-1-984ed3ca5444%40linaro.org
-patch subject: [PATCH v2 1/3] Input: ads7846 - Convert to use software nodes
-config: hexagon-randconfig-r041-20230501 (https://download.01.org/0day-ci/archive/20230505/202305051758.yjd7CtkI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9708c9277cc820e52916ddf795926d3254bb5eed
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Linus-Walleij/Input-ads7846-Convert-to-use-software-nodes/20230505-162601
-        git checkout 9708c9277cc820e52916ddf795926d3254bb5eed
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
+That doesn't have a specific CFLAGS though afaict.
+Perhaps Nick etc have a more informed opinion here than I do, sorry.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305051758.yjd7CtkI-lkp@intel.com/
+Thanks,
+Conor.
 
-All errors (new ones prefixed by >>):
+> > > +
+> > >  # When linking purgatory.ro with -r unresolved symbols are not check=
+ed,
+> > >  # also link a purgatory.chk binary without -r to check for unresolve=
+d symbols.
+> > >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> > >
+> > > --
+> > > 2.40.1.495.gc816e09b53d-goog
+> > >
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>=20
+>=20
+>=20
+> --=20
+> Ricardo Ribalda
 
-   In file included from drivers/input/touchscreen/ads7846.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/input/touchscreen/ads7846.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/input/touchscreen/ads7846.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/input/touchscreen/ads7846.c:1406:21: error: use of undeclared identifier 'ads7846_dt_ids'
-                   .of_match_table = ads7846_dt_ids,
-                                     ^
-   6 warnings and 1 error generated.
+--HCjo7mmLcFsfwCMI
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-vim +/ads7846_dt_ids +1406 drivers/input/touchscreen/ads7846.c
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFT21wAKCRB4tDGHoIJi
+0vY1AP9RxvKzAScY63Nnz9Vp/3U8917fwYnV71pbtJgtzZt3WAEA8S2SNODAX7Qy
+Vn7vxaBudJDiNoZ4dz80u4gzoYd3SwE=
+=X4se
+-----END PGP SIGNATURE-----
 
-  1401	
-  1402	static struct spi_driver ads7846_driver = {
-  1403		.driver = {
-  1404			.name	= "ads7846",
-  1405			.pm	= pm_sleep_ptr(&ads7846_pm),
-> 1406			.of_match_table = ads7846_dt_ids,
-  1407		},
-  1408		.probe		= ads7846_probe,
-  1409		.remove		= ads7846_remove,
-  1410	};
-  1411	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--HCjo7mmLcFsfwCMI--
