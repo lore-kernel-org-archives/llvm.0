@@ -1,84 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out187-4.us.a.mail.aliyun.com (out187-4.us.a.mail.aliyun.com [47.90.187.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE8A1376
-	for <llvm@lists.linux.dev>; Fri,  5 May 2023 03:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683255665;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ow8NQUHJ6Qt5ilTeuxyKNXyrZHEhuZx9HtEBNwUWDB8=;
-	b=ZRU/GlU0oaXfMOy/xQpcXfpmrsTjcHbPS+UAwLn589lCWiU7qSSM/NOZznfF8Vj50nFD1H
-	C0dIcfY/Mfzx0VYkM46XEk40YaZkD6440glofLSDKg620w5O0OD/36FnvbAgarw5kW6v2+
-	WeHIJbRG1VqIltodhVkIJayXarFUuGs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-7bZLX1LiMx6ZrG7oGL0FIQ-1; Thu, 04 May 2023 23:01:03 -0400
-X-MC-Unique: 7bZLX1LiMx6ZrG7oGL0FIQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93A6485C6E3
-	for <llvm@lists.linux.dev>; Fri,  5 May 2023 03:01:03 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7CB092026D16;
-	Fri,  5 May 2023 03:01:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, 78b421b6)
-Date: Fri, 05 May 2023 03:01:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A381376
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 03:10:20 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047188;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---.SYe4zj5_1683256196;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.SYe4zj5_1683256196)
+          by smtp.aliyun-inc.com;
+          Fri, 05 May 2023 11:09:57 +0800
+Date: Fri, 05 May 2023 11:09:56 +0800
+From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To: Juergen Gross <jgross@suse.com>
+Cc:  <linux-kernel@vger.kernel.org>,
+  "Thomas Garnier" <thgarnie@chromium.org>,
+  "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+  "Kees Cook" <keescook@chromium.org>,
+  "Brian Gerst" <brgerst@gmail.com>,
+  "Thomas Gleixner" <tglx@linutronix.de>,
+  "Ingo Molnar" <mingo@redhat.com>,
+  "Borislav Petkov" <bp@alien8.de>,
+  "Dave Hansen" <dave.hansen@linux.intel.com>,
+   <x86@kernel.org>,
+  "H. Peter Anvin" <hpa@zytor.com>,
+  "Andy Lutomirski" <luto@kernel.org>,
+  "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+  "Darren Hart" <dvhart@infradead.org>,
+  "Andy Shevchenko" <andy@infradead.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,
+  "Nick Desaulniers" <ndesaulniers@google.com>,
+  "Tom Rix" <trix@redhat.com>,
+  "Peter Zijlstra" <peterz@infradead.org>,
+  "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
+  "Ashok Raj" <ashok.raj@intel.com>,
+  "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
+  "Catalin Marinas" <catalin.marinas@arm.com>,
+  "Guo Ren" <guoren@kernel.org>,
+  "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+  "Jason A. Donenfeld" <Jason@zx2c4.com>,
+  "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>,
+  "Kim Phillips" <kim.phillips@amd.com>,
+  "David Woodhouse" <dwmw@amazon.co.uk>,
+  "Josh Poimboeuf" <jpoimboe@kernel.org>,
+   <xen-devel@lists.xenproject.org>,
+   <platform-driver-x86@vger.kernel.org>,
+   <llvm@lists.linux.dev>
+Subject: Re: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported
+ by compiler
+Message-ID: <20230505030956.GA103506@k08j02272.eu95sqa>
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+ <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+ <edd4b974-08de-0769-0dba-f945ed06f222@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <72987.123050423010303945@us-mta-631.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <edd4b974-08de-0769-0dba-f945ed06f222@suse.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-Hi, we tested your kernel and here are the results:
+On Thu, May 04, 2023 at 12:31:59PM +0200, Juergen Gross wrote:
+> On 28.04.23 11:50, Hou Wenlong wrote:
+> >From: Brian Gerst <brgerst@gmail.com>
+> >
+> >From: Brian Gerst <brgerst@gmail.com>
+> >
+> >If the compiler supports it, use a standard per-cpu variable for the
+> >stack protector instead of the old fixed location.  Keep the fixed
+> >location code for compatibility with older compilers.
+> >
+> >[Hou Wenlong: Disable it on Clang, adapt new code change and adapt
+> >missing GS set up path in pvh_start_xen()]
+> >
+> >Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> >Co-developed-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> >Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> >Cc: Thomas Garnier <thgarnie@chromium.org>
+> >Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> >Cc: Kees Cook <keescook@chromium.org>
+> >---
+> >  arch/x86/Kconfig                      | 12 ++++++++++++
+> >  arch/x86/Makefile                     | 21 ++++++++++++++-------
+> >  arch/x86/entry/entry_64.S             |  6 +++++-
+> >  arch/x86/include/asm/processor.h      | 17 ++++++++++++-----
+> >  arch/x86/include/asm/stackprotector.h | 16 +++++++---------
+> >  arch/x86/kernel/asm-offsets_64.c      |  2 +-
+> >  arch/x86/kernel/cpu/common.c          | 15 +++++++--------
+> >  arch/x86/kernel/head_64.S             | 16 ++++++++++------
+> >  arch/x86/kernel/vmlinux.lds.S         |  4 +++-
+> >  arch/x86/platform/pvh/head.S          |  8 ++++++++
+> >  arch/x86/xen/xen-head.S               | 14 +++++++++-----
+> >  11 files changed, 88 insertions(+), 43 deletions(-)
+> >
+> 
+> ...
+> 
+> >diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+> >index 643d02900fbb..09eaf59e8066 100644
+> >--- a/arch/x86/xen/xen-head.S
+> >+++ b/arch/x86/xen/xen-head.S
+> >@@ -51,15 +51,19 @@ SYM_CODE_START(startup_xen)
+> >  	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+> >-	/* Set up %gs.
+> >-	 *
+> >-	 * The base of %gs always points to fixed_percpu_data.  If the
+> >-	 * stack protector canary is enabled, it is located at %gs:40.
+> >+	/*
+> >+	 * Set up GS base.
+> >  	 * Note that, on SMP, the boot cpu uses init data section until
+> >  	 * the per cpu areas are set up.
+> >  	 */
+> >  	movl	$MSR_GS_BASE,%ecx
+> >-	movq	$INIT_PER_CPU_VAR(fixed_percpu_data),%rax
+> >+#if defined(CONFIG_STACKPROTECTOR_FIXED)
+> >+	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
+> >+#elif defined(CONFIG_SMP)
+> >+	movabs	$__per_cpu_load, %rdx
+> 
+> Shouldn't above 2 targets be %rax?
+>
+Ah yes, my mistake. I didn't test it on XEN guest, sorry,
+I'll test XEN guest before the next submission.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Thanks.
+
+> >+#else
+> >+	xorl	%eax, %eax
+> >+#endif
+> >  	cdq
+> >  	wrmsr
+> 
+> 
+> Juergen
+
+> pub  2048R/28BF132F 2014-06-02 Juergen Gross <jg@pfupf.net>
+> uid                            Juergen Gross <jgross@suse.com>
+> uid                            Juergen Gross <jgross@novell.com>
+> uid                            Juergen Gross <jgross@suse.de>
+> sub  2048R/16375B53 2014-06-02
 
 
-Kernel information:
-    Commit message: Merge tag 'linux-watchdog-6.4-rc1' of git://www.linux-w=
-atchdog.org/linux-watchdog
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/87290
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34402=
-5
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
