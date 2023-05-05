@@ -1,169 +1,144 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFEDBA35
-	for <llvm@lists.linux.dev>; Fri,  5 May 2023 12:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5191FB3;
+	Fri,  5 May 2023 15:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683289857; x=1714825857;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683298947; x=1714834947;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XweA9V5HDK7utS7/TPunyp7LYfGFUrdjDqzcDo9MXNU=;
-  b=YoQ2DIH/s/h4iJhQguSkPHF/sa+wsUUyGJ8ATuvS7BMThlCA35Q46aRf
-   sxAxGzTI8Jl22iv3mu5rIOj7R+rj7JeSSZPbZ6ZkKZ54KOFXg0dmAQTQe
-   OcVxidTNLE/xq5RBsH08iKqedabqSUmvDBFxFimDx/sbhEMHxZhSOP1Pn
-   kdN8hSy6/QsuWGSNt1Yu2lsiKrQ2LDMu0+S6OEhzs4A7I/RpmU33TgKmw
-   qBkNx8glHVM5zHPAFbOmohcfztGatR/67j/X0/AAns+v6nyuHf8yNBknq
-   F1vmFbPO5Hdato/b3b9G0u4+ohvvR1iUc3qdHsGR4VYnO0C/W/3Cg0FrX
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,252,1677567600"; 
-   d="asc'?scan'208";a="150539472"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2023 05:30:47 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 5 May 2023 05:30:38 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 5 May 2023 05:30:34 -0700
-Date: Fri, 5 May 2023 13:30:15 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-CC: Conor Dooley <conor@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-	Philipp Rudo <prudo@linux.vnet.ibm.com>, Dave Young <dyoung@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom
- Rix <trix@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
-	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, Philipp Rudo
-	<prudo@redhat.com>, <kexec@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Ross Zwisler <zwisler@google.com>, Steven
- Rostedt <rostedt@goodmis.org>, Simon Horman <horms@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, <llvm@lists.linux.dev>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-	<stable@vger.kernel.org>
-Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
-Message-ID: <20230505-subsidy-shininess-46a8be31b267@wendy>
-References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
- <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
- <20230501-cottage-overjoyed-1aeb9d72d309@spud>
- <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
+  bh=CE0l/faMRL3j+GUaQ0XO9bqeDaRnnBzt1VfxirJS3x4=;
+  b=TZ3KOhu7dw6M/jCv+8Z8SzzhKlkL5kQiuody9RGhgQWE+0VcFOLy8s4Z
+   N97bPGgO45bSrvRAw5juQ6wMRLkx5n3b4Zc6A6IlNJ67wPnj1Ix/UgaCb
+   vfM+CL194lLcSCAZZk0XjRyub2IY3oX18c5NRGoyS+pvcN/LzV6NLeS0g
+   Mt4Okex0TwYPAiGfN9QsaDece37KuHVctbu4N3BwkRm6piaDGvbW8Z8Y8
+   DqcGM5UtCnqZJjV7TpdiOhJvdSniMqcrEoYBkGuMyn3Dl0OA7PWQKKdeH
+   X3Xv6v9vGBaBiOdfs1G57vfLiugXbCKjRfcEaH981c5IGhhy+5nyI00iZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="414761233"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="414761233"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 08:02:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="1027533320"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="1027533320"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 05 May 2023 08:02:21 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1puwwt-0000fV-0v;
+	Fri, 05 May 2023 15:02:19 +0000
+Date: Fri, 5 May 2023 23:01:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+	tzimmermann@suse.de, airlied@redhat.com, javierm@redhat.com,
+	lyude@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH 3/4] drm/mgag200: Add IRQ support
+Message-ID: <202305052227.GGoicr9j-lkp@intel.com>
+References: <20230505124337.854845-4-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="HCjo7mmLcFsfwCMI"
-Content-Disposition: inline
-In-Reply-To: <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
-
---HCjo7mmLcFsfwCMI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230505124337.854845-4-jfalempe@redhat.com>
 
-On Mon, May 01, 2023 at 09:54:43PM +0200, Ricardo Ribalda wrote:
-> On Mon, 1 May 2023 at 19:41, Conor Dooley <conor@kernel.org> wrote:
-> > On Mon, May 01, 2023 at 02:38:22PM +0200, Ricardo Ribalda wrote:
-> > > If PGO is enabled, the purgatory ends up with multiple .text sections.
-> > > This is not supported by kexec and crashes the system.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_pura=
-gory")
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > ---
-> > >  arch/riscv/purgatory/Makefile | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Mak=
-efile
-> > > index 5730797a6b40..cf3a44121a90 100644
-> > > --- a/arch/riscv/purgatory/Makefile
-> > > +++ b/arch/riscv/purgatory/Makefile
-> > > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
-> > >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
-> > >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
-> > >
-> > > +# When profile optimization is enabled, llvm emits two different ove=
-rlapping
-> > > +# text sections, which is not supported by kexec. Remove profile opt=
-imization
-> > > +# flags.
-> > > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-u=
-se=3D%,$(KBUILD_CFLAGS))
-> >
-> > With the caveat of not being au fait with the workings of either PGO or
-> > of purgatory, how come you modify KBUILD_CFLAGS here rather than the
-> > purgatory specific PURGATORY_CFLAGS that are used later in the file?
->=20
-> Definitely, not a Makefile expert here, but when I tried this:
->=20
-> @@ -35,6 +40,7 @@ PURGATORY_CFLAGS_REMOVE :=3D -mcmodel=3Dkernel
->  PURGATORY_CFLAGS :=3D -mcmodel=3Dlarge -ffreestanding
-> -fno-zero-initialized-in-bss -g0
->  PURGATORY_CFLAGS +=3D $(DISABLE_STACKLEAK_PLUGIN) -DDISABLE_BRANCH_PROFI=
-LING
->  PURGATORY_CFLAGS +=3D -fno-stack-protector
-> +PURGATORY_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D%
-> -fprofile-use=3D%,$(KBUILD_CFLAGS))
->=20
-> It did not work.
+Hi Jocelyn,
 
-Unfortunately I am oh-so-far from an expert on this kind of thing, but I
-had thought that PURGATORY_CFLAGS_REMOVE was intended for this sort of
-purpose.
+kernel test robot noticed the following build warnings:
 
-> Fixes: bde971a83bbf ("KVM: arm64: nvhe: Fix build with profile optimizati=
-on")
->=20
-> does this approach, so this is what I tried and worked.
+[auto build test WARNING on 457391b0380335d5e9a5babdec90ac53928b23b4]
 
-That doesn't have a specific CFLAGS though afaict.
-Perhaps Nick etc have a more informed opinion here than I do, sorry.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-mgag200-Rename-constant-MGAREG_Status-to-MGAREG_STATUS/20230505-204705
+base:   457391b0380335d5e9a5babdec90ac53928b23b4
+patch link:    https://lore.kernel.org/r/20230505124337.854845-4-jfalempe%40redhat.com
+patch subject: [PATCH 3/4] drm/mgag200: Add IRQ support
+config: i386-randconfig-a013-20230501 (https://download.01.org/0day-ci/archive/20230505/202305052227.GGoicr9j-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cbbd69ea02ffdcee64621b76bf22cb360d943294
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jocelyn-Falempe/drm-mgag200-Rename-constant-MGAREG_Status-to-MGAREG_STATUS/20230505-204705
+        git checkout cbbd69ea02ffdcee64621b76bf22cb360d943294
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mgag200/
 
-Thanks,
-Conor.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305052227.GGoicr9j-lkp@intel.com/
 
-> > > +
-> > >  # When linking purgatory.ro with -r unresolved symbols are not check=
-ed,
-> > >  # also link a purgatory.chk binary without -r to check for unresolve=
-d symbols.
-> > >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
-> > >
-> > > --
-> > > 2.40.1.495.gc816e09b53d-goog
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
->=20
->=20
->=20
-> --=20
-> Ricardo Ribalda
+All warnings (new ones prefixed by >>):
 
---HCjo7mmLcFsfwCMI
-Content-Type: application/pgp-signature; name="signature.asc"
+>> drivers/gpu/drm/mgag200/mgag200_drv.c:113:13: warning: no previous prototype for function 'mgag200_driver_irq_handler' [-Wmissing-prototypes]
+   irqreturn_t mgag200_driver_irq_handler(int irq, void *arg)
+               ^
+   drivers/gpu/drm/mgag200/mgag200_drv.c:113:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t mgag200_driver_irq_handler(int irq, void *arg)
+   ^
+   static 
+>> drivers/gpu/drm/mgag200/mgag200_drv.c:129:6: warning: no previous prototype for function 'mgag200_init_irq' [-Wmissing-prototypes]
+   void mgag200_init_irq(struct mga_device *mdev)
+        ^
+   drivers/gpu/drm/mgag200/mgag200_drv.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mgag200_init_irq(struct mga_device *mdev)
+   ^
+   static 
+>> drivers/gpu/drm/mgag200/mgag200_drv.c:137:6: warning: no previous prototype for function 'mgag200_enable_irq' [-Wmissing-prototypes]
+   void mgag200_enable_irq(struct mga_device *mdev)
+        ^
+   drivers/gpu/drm/mgag200/mgag200_drv.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mgag200_enable_irq(struct mga_device *mdev)
+   ^
+   static 
+   3 warnings generated.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFT21wAKCRB4tDGHoIJi
-0vY1AP9RxvKzAScY63Nnz9Vp/3U8917fwYnV71pbtJgtzZt3WAEA8S2SNODAX7Qy
-Vn7vxaBudJDiNoZ4dz80u4gzoYd3SwE=
-=X4se
------END PGP SIGNATURE-----
+vim +/mgag200_driver_irq_handler +113 drivers/gpu/drm/mgag200/mgag200_drv.c
 
---HCjo7mmLcFsfwCMI--
+   112	
+ > 113	irqreturn_t mgag200_driver_irq_handler(int irq, void *arg)
+   114	{
+   115		struct mga_device *mdev = (struct mga_device *) arg;
+   116		u32 status;
+   117	
+   118		status = RREG32(MGAREG_STATUS);
+   119	
+   120		if (status & MGAIRQ_SOFTRAP) {
+   121			WREG32(MGAREG_ICLEAR, MGAIRQ_SOFTRAP);
+   122			mdev->dma_in_use = 0;
+   123			wake_up(&mdev->waitq);
+   124			return IRQ_HANDLED;
+   125		}
+   126		return IRQ_NONE;
+   127	}
+   128	
+ > 129	void mgag200_init_irq(struct mga_device *mdev)
+   130	{
+   131		/* Disable *all* interrupts */
+   132		WREG32(MGAREG_IEN, 0);
+   133		/* Clear bits if they're already high */
+   134		WREG32(MGAREG_ICLEAR, 0xf);
+   135	}
+   136	
+ > 137	void mgag200_enable_irq(struct mga_device *mdev)
+   138	{
+   139		/* Enable only Softrap IRQ */
+   140		WREG32(MGAREG_IEN, MGAIRQ_SOFTRAP);
+   141	}
+   142	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
