@@ -1,84 +1,140 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2129D10F2
-	for <llvm@lists.linux.dev>; Sat,  6 May 2023 17:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683392465;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9bNHwYeGLSZlQpxqZa+gzt0hXMlcuK1AW2+tbnbpPeE=;
-	b=UVZHtAd8aPEJjKGqSKCHb4RvPo42kHm4hFxLnSlsvzgRPnS0+m3nmwXwHxCG+S9hfZA7gN
-	t/8mlj2lOVAwlqUmd4DMOy9jChLojs/sGuwMLE/szYTOuxxVaVGZwlInvBrqec9H01J5p8
-	+3/dCZQMgXlMa7xF8dOCNrisvVUrFeM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-kDL9ClTINmaB6bWltw6kVg-1; Sat, 06 May 2023 13:01:04 -0400
-X-MC-Unique: kDL9ClTINmaB6bWltw6kVg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E58E885627
-	for <llvm@lists.linux.dev>; Sat,  6 May 2023 17:01:04 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F11C414171B6;
-	Sat,  6 May 2023 17:01:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, dd9e11d6)
-Date: Sat, 06 May 2023 17:01:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A8BC2FC;
+	Sat,  6 May 2023 18:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683396746; x=1714932746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YngAekiyMFQcAH087yL/A1vfWTMr5bD0St58aYn+lAc=;
+  b=MIfrrhm0go25i+vKnZvlkr2NS245FLl63Hq3o5CeLizef1m0X2hjmHEd
+   ua+rCWGW0ryDtlDUxQhjcgTDDAnQJi0kLDEQJVBjAe7CPkxiR6CNYSbXY
+   tOsnTRCPQQOccdhjPqc61JzF8JCtDxt2JF3ZoWRR+cHF0PUJoW7iCPuMK
+   9DWRMiWbQaCtC2TMy+cSNx7o8bqU2XvZsgNoOfSW8F/wicMAcb0j02Yy4
+   QZB1Zrckg0kndldjcz5lEYpavrsWj583TDSz7QdNnoQfAke+J7d98VXjt
+   vp6h+rcMx1RsW5obtMTCaifetc4uOlX8g8UZnTLfqMvTcxmlQe3iSvHt0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="329030121"
+X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
+   d="scan'208";a="329030121"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 11:12:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="822147827"
+X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
+   d="scan'208";a="822147827"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 May 2023 11:12:22 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pvMOL-0000RF-1n;
+	Sat, 06 May 2023 18:12:21 +0000
+Date: Sun, 7 May 2023 02:12:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+Message-ID: <202305070235.r9bEq3U8-lkp@intel.com>
+References: <20230506162403.375212-1-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <76801.123050613010400336@us-mta-465.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506162403.375212-1-aford173@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Adam,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on v6.3 next-20230505]
+[cannot apply to abelvesa/clk/imx linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230506162403.375212-1-aford173%40gmail.com
+patch subject: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+config: powerpc-randconfig-r012-20230507 (https://download.01.org/0day-ci/archive/20230507/202305070235.r9bEq3U8-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d92df3b38fc20beb735cb3b75f118b45d1ae304b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
+        git checkout d92df3b38fc20beb735cb3b75f118b45d1ae304b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/clk/imx/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305070235.r9bEq3U8-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/imx/clk-composite-8m.c:122:5: warning: no previous prototype for function 'imx8m_divider_determine_rate' [-Wmissing-prototypes]
+   int imx8m_divider_determine_rate(struct clk_hw *hw,
+       ^
+   drivers/clk/imx/clk-composite-8m.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int imx8m_divider_determine_rate(struct clk_hw *hw,
+   ^
+   static 
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/jejb/scsi
+vim +/imx8m_divider_determine_rate +122 drivers/clk/imx/clk-composite-8m.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/87508
+   121	
+ > 122	int imx8m_divider_determine_rate(struct clk_hw *hw,
+   123					      struct clk_rate_request *req)
+   124	{
+   125		struct clk_divider *divider = to_clk_divider(hw);
+   126		int prediv_value;
+   127		int div_value;
+   128	
+   129		/* if read only, just return current value */
+   130		if (divider->flags & CLK_DIVIDER_READ_ONLY) {
+   131			u32 val;
+   132	
+   133			val = readl(divider->reg);
+   134			prediv_value = val >> divider->shift;
+   135			prediv_value &= clk_div_mask(divider->width);
+   136	
+   137			div_value = val >> PCG_DIV_SHIFT;
+   138			div_value &= clk_div_mask(PCG_DIV_WIDTH);
+   139	
+   140			return divider_ro_determine_rate(hw, req, divider->table,
+   141							 PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+   142							 divider->flags, prediv_value * div_value);
+   143		}
+   144	
+   145		return divider_determine_rate(hw, req, divider->table,
+   146					      PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+   147					      divider->flags);
+   148	}
+   149	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34476=
-7
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
