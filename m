@@ -1,84 +1,62 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B5BD2FF
-	for <llvm@lists.linux.dev>; Sat,  6 May 2023 20:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683403862;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RCX1a+mZWDfgZbMaB4BqRTHLC106owkkouKcVUb+Szk=;
-	b=aJBLuj39W4J9sq3PzQya+YLqU7hCKiDyvN9tv7BZY65kClHHa2weyynso9FktVWnzL9htb
-	EM4qEwfvwGbfb9kWL8uiE5/lDID2bK9FY7AL1K18EzEoWwdxr2Q9KTEMds7QYp1vnNSZug
-	suqTVuVEdNuuIOguZ6WmQfWANYkYs/k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-SEpL10aiMdGqU8Ae8YCHRg-1; Sat, 06 May 2023 16:11:01 -0400
-X-MC-Unique: SEpL10aiMdGqU8Ae8YCHRg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E67643806636
-	for <llvm@lists.linux.dev>; Sat,  6 May 2023 20:11:00 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D64A1492B00;
-	Sat,  6 May 2023 20:11:00 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, fc4354c6)
-Date: Sat, 06 May 2023 20:11:00 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9146210C;
+	Sat,  6 May 2023 20:35:46 +0000 (UTC)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6435bbedb4fso3443868b3a.3;
+        Sat, 06 May 2023 13:35:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683405346; x=1685997346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePf+V2r15a9+U18c5r7fdtX14NzXyo2pzCcvu9zcVLE=;
+        b=bp5k6g01m9IDlDucoCTae0sK8IV6VORVSKXs40sNfOUekK+2gpxoKWI1bee1DuiyQi
+         OD6oXllE7JFM327pV62Rb+DccPXLi9vfZloEIXzwLEYTU0e0gqT/Un5T/kt78IK/N/L7
+         hwKaUuI5qdnayRYS/zonfQckhCE3UnZ8aONDoiqSY9oxPvvRc9fBzVRwPBJyVIsi8E1t
+         M/gQDSHT5m09/fBOYA6oG1qMjoflH6hjbRuP0i5t07EkCYpV+NAtDt98Jc3J1ezTa+wG
+         zVLfYyxdKXe9iB641MLN2M9jMT8Vm0WH4iozTmtrNfjhdbWtyXFKsCeBHRmTbPpEC1F/
+         s+EA==
+X-Gm-Message-State: AC+VfDxzWKa4b7kWcM/WH5kN8M44vqcuejcdRJptp6mfAatvsWJMJ+Py
+	wFLPuDYUNlHPQeMwuKqOBoc=
+X-Google-Smtp-Source: ACHHUZ5R4Z5jtbumWsIRm3yITqvoOsJEZ8hcXQTqQFDgh8DYBZvvU9/lY+UgRfTnpV/C3qia+eB6Ew==
+X-Received: by 2002:a05:6a21:100e:b0:f5:7035:9a05 with SMTP id nk14-20020a056a21100e00b000f570359a05mr6321313pzb.29.1683405345773;
+        Sat, 06 May 2023 13:35:45 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id y25-20020a62b519000000b00643a5f3ef45sm3081327pfe.199.2023.05.06.13.35.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 13:35:45 -0700 (PDT)
+Message-ID: <e66ed1da-4bf6-e098-1f00-b0f35add2a9a@acm.org>
+Date: Sat, 6 May 2023 13:35:44 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <80630.123050616110100147@us-mta-588.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [bvanassche:mq-deadline 8/11] block/mq-deadline.c:785:43: error:
+ incompatible pointer types passing 'struct list_head **' to parameter of type
+ 'struct list_head *'; remove &
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <202305061437.7YgxVCFa-lkp@intel.com>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <202305061437.7YgxVCFa-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 5/5/23 23:21, kernel test robot wrote:
+>>> block/mq-deadline.c:785:43: error: incompatible pointer types passing 'struct list_head **' to parameter of type 'struct list_head *'; remove & [-Werror,-Wincompatible-pointer-types]
+>             if (blk_mq_sched_try_insert_merge(q, rq, &free))
+>                                                      ^~~~~
+>     block/blk-mq-sched.h:15:26: note: passing argument to parameter 'free' here
+>                                        struct list_head *free);
+>                                                          ^
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+A tested fix has been uploaded to my github repository.
 
-
-Kernel information:
-    Commit message: Merge tag 'mm-stable-2023-05-06-10-49' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/akpm/mm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/87511
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34478=
-2
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Bart.
 
