@@ -1,101 +1,119 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4A515B0;
-	Sun,  7 May 2023 02:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683424889; x=1714960889;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TUykyREkvoYgkJ35tg+SCwpfydW6o1znBSlKjgRpjXs=;
-  b=CH+JNf/RpwSCCpK01YRHa7Oy/F36oG+UWUtEuoyB93/pz5pfzhGao3Kn
-   NfLc6ZSoajkKizL5DFWTBGksov8GsFwgLtl9lY2t8kXksfhNl81QXNKtM
-   /ny57qowHLq6SsvPxYH942UAlpsQ5iGDrrp5BZefacJhGe6S3Bqy/KqUC
-   +nFv1xkpZR1QFuQfuuHDugGGoslN441qtj/Qdq6q9/zG1sw6bERspKERe
-   1r5x+pLYOOjrxoEZwcE+nVF1mj8VUiUx5ueUP7xO5Riri6zlZbYd39RZi
-   FZbruGbUBbjseTqlZEIwwIixWUWZ75u+HKihNjbFAcZ2G+qIKQVVSQBLi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="435756498"
-X-IronPort-AV: E=Sophos;i="5.99,256,1677571200"; 
-   d="scan'208";a="435756498"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 19:01:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="787656636"
-X-IronPort-AV: E=Sophos;i="5.99,256,1677571200"; 
-   d="scan'208";a="787656636"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 May 2023 19:01:26 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pvTiH-0000ZA-1f;
-	Sun, 07 May 2023 02:01:25 +0000
-Date: Sun, 7 May 2023 10:01:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: [stable:linux-4.19.y 3525/9999] ld.lld: error:
- drivers/media/usb/usbtv/usbtv-audio.o: contains a compressed section, but
- zlib is not available
-Message-ID: <202305070940.YD1J8Lug-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D5C1365
+	for <llvm@lists.linux.dev>; Sun,  7 May 2023 02:57:10 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ba2362d4ea9so658481276.3
+        for <llvm@lists.linux.dev>; Sat, 06 May 2023 19:57:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683428229; x=1686020229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y27uBZQDxoMMmtt5dKQE+mflLBajPhR2V/YDaYqpNNc=;
+        b=asf8yuwLMoYRuSDkl98e4jZU6XQaGVjcL2PIQTWhuRJCleA6VzN3yh+OhCkGY1y7fz
+         YJtMEbGpvu2iLcaAdjgkagdg7MMmc751nhF+AiQnFLUZa/oAzKRM9uijfTCaFqrL36SP
+         BXHlOz5HYDhMOi15HlL34ObZ5hiWEg+zIsp+jKoH1p3thfS4QJM044e6Do3/FHv+uTM2
+         oM4bmCPGFV00e7BUl6s3kvJY/eC/XYyoTqOTuh98xB5TW/odbILtotYOuDUscuV70OlZ
+         midw/cjHuQtCClml5TPlpjV6ViNyBcc7t5yL3DOBzRh4EHG5U/sCOr75wKY/4rNsXdBW
+         soZg==
+X-Gm-Message-State: AC+VfDxZW1Qm4nUgiNro+eg0/xbk0Ss7D0ld2hei72WmtS0+ih8qbrCS
+	5VLuuWobkNNtW7iEJ9xKfxGREH2UQft3iR5Fk+Y=
+X-Google-Smtp-Source: ACHHUZ5KYd+Vp866GdYz32Yb8G1anYuwcXULbK3NRkDd6T9rO6BPZvKgFiMbj5mIdsFH380Y3SgiWsJzPH/v6x/8GkQ=
+X-Received: by 2002:a25:e648:0:b0:b9e:712f:4a17 with SMTP id
+ d69-20020a25e648000000b00b9e712f4a17mr6602071ybh.6.1683428229058; Sat, 06 May
+ 2023 19:57:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230506021450.3499232-1-irogers@google.com>
+In-Reply-To: <20230506021450.3499232-1-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Sat, 6 May 2023 19:56:56 -0700
+Message-ID: <CAM9d7cieo+cF9uNfgQq=R1BofNN5Ae69sjz80rV8-TxXPZFasg@mail.gmail.com>
+Subject: Re: [PATCH v1] perf build: Add system include paths to BPF builds
+To: Ian Rogers <irogers@google.com>
+Cc: Song Liu <songliubraving@meta.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
-head:   cdfda37ab2cfc783a190b563806cda611c35d1e3
-commit: d4503a3fd3bbf8ddecddb4d71be7110d7651eb8a [3525/9999] media: usbtv: Fix refcounting mixup
-config: x86_64-randconfig-a016-20230501 (https://download.01.org/0day-ci/archive/20230507/202305070940.YD1J8Lug-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=d4503a3fd3bbf8ddecddb4d71be7110d7651eb8a
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-4.19.y
-        git checkout d4503a3fd3bbf8ddecddb4d71be7110d7651eb8a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/
+Hi Ian,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305070940.YD1J8Lug-lkp@intel.com/
+On Fri, May 5, 2023 at 7:15=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> There are insufficient headers in tools/include to satisfy building
+> BPF programs and their header dependencies. Add the system include
+> paths from the non-BPF clang compile so that these headers can be
+> found.
+>
+> This code was taken from:
+> tools/testing/selftests/bpf/Makefile
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-All errors (new ones prefixed by >>):
+Thanks, this fixes the BPF build failure on my machine.
 
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/media/usb/usbtv/usbtv-video.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/media/usb/usbtv/usbtv-audio.o: contains a compressed section, but zlib is not available
-   ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+Tested-by: Namhyung Kim <namhyung@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Namhyung
+
+
+> ---
+>  tools/perf/Makefile.perf | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 61c33d100b2b..37befdfa8ac8 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1057,7 +1057,25 @@ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) =
+$(LIBPERF_OUTPUT) $(LIBSUBCMD_
+>
+>  ifndef NO_BPF_SKEL
+>  BPFTOOL :=3D $(SKEL_TMP_OUT)/bootstrap/bpftool
+> -BPF_INCLUDE :=3D -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE)
+> +
+> +# Get Clang's default includes on this system, as opposed to those seen =
+by
+> +# '-target bpf'. This fixes "missing" files on some architectures/distro=
+s,
+> +# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
+> +#
+> +# Use '-idirafter': Don't interfere with include mechanics except where =
+the
+> +# build would have failed anyways.
+> +define get_sys_includes
+> +$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
+> +       | sed -n '/<...> search starts here:/,/End of search list./{ s| \=
+(/.*\)|-idirafter \1|p }') \
+> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{pri=
+ntf("-D__riscv_xlen=3D%d -D__BITS_PER_LONG=3D%d", $$3, $$3)}')
+> +endef
+> +
+> +ifneq ($(CROSS_COMPILE),)
+> +CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+> +endif
+> +
+> +CLANG_SYS_INCLUDES =3D $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_A=
+RCH))
+> +BPF_INCLUDE :=3D -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE) $(CLANG_SYS_IN=
+CLUDES)
+>
+>  $(BPFTOOL): | $(SKEL_TMP_OUT)
+>         $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
+> --
+> 2.40.1.521.gf1e218fcd8-goog
+>
