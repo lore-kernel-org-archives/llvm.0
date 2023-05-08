@@ -1,111 +1,101 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83747154A5;
-	Mon,  8 May 2023 08:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683534209; x=1715070209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d8hef3ly/B44n04COlg3yUbiCm7locyauOjKHCixXJI=;
-  b=TJkfruB991JkM1snG2uVq2wcaorPGA9cIQUQKkQxsQ1XavObABWmpP82
-   nu8Zo5DMV0VOAcuxqKqEvvQEZAB9YIE3gMPXd4jqJoDUdORnhjxuzS1Te
-   bfEIMWKvsFg0qLnItc3Jkm+wkmAjaBaSdy8w34JaBK3PwmAvzrJZvj9be
-   9rvAb9FZeJCe+ldG6ghdloz3Bnv91tNVKW7gyQNKr/xsryB7REH+Dm0Cw
-   xFLQqknnAKfi5gGF65l+lRm8o6KUgBDzy7roHPEz5KHxwaFLATmIJQTDZ
-   xyfI78HwjJkrKYvDDI0CNFt7YsDRV4ZVtx1ThauBpzkdmA6dPFJsZCKOV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="329949675"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="329949675"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:23:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872714982"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="872714982"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 May 2023 01:23:26 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pvw9W-00018n-0s;
-	Mon, 08 May 2023 08:23:26 +0000
-Date: Mon, 8 May 2023 16:23:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 3/10] drivers/hwmon/oxp-sensors.c:299:10:
- warning: cast to smaller integer type 'enum oxp_board' from 'void *'
-Message-ID: <202305081625.IMCuQoxj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D40154A5
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 08:24:24 +0000 (UTC)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3f427118644so3994385e9.0
+        for <llvm@lists.linux.dev>; Mon, 08 May 2023 01:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683534263; x=1686126263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m5LglcJTmAOL674iFSW91v8iQ+c+VWN66eezYdcY/eo=;
+        b=FkoBtct+K+FHjRPlHL9ykOQXt4jjYt99V2O+8Vje8XlvSQzc6v+6j4rXJJruHwHd5I
+         wj2Hp+C2JBQLstF/iJcFcUWQRCc1HgKdzlVL4cXoWSeXlt0Z5chr0kXEnr/CttPDrlbY
+         x2QIlOimiAyMBchumS0veYf//2RtScWx9T2KoBIqrvzBuKroy1jh6B5sGhEZg3rpDDwW
+         4JtorSK0X+Dzb8JNk9ZJ4KEx3ovHxrpZF3/S01fHY/WUoBD8Iy3Xff68c6hi21Ii+H/1
+         51Bt4xy/tufm5jMIKbRql0n/WodjbVuz0M9OOYXrUP1Y5dTSFRLbwg5KNCSV0fIg2hbg
+         ERbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683534263; x=1686126263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m5LglcJTmAOL674iFSW91v8iQ+c+VWN66eezYdcY/eo=;
+        b=bXG/Syqs0wn56LmKvLB6yvwG8RKmuG6oZYEO6b0oYhEbLAH/bh1sz04gDi7hWyTX0X
+         MA9YRTNTQ5zDY/k5FoDfInwfBKFoKlN0XPEbdZUzYRumFhV3V7z1uKBN3t40ndUk8C1g
+         eBnIkksvQWJRJfB9Xe/KudKrtdVQA3tv1RHe5dSOtie9Grea6iUcVYBMA43usdcJUr/C
+         pK2l3boJFTAg//QfG/fXa6PfVCmsQN+3HK5Sqa4quku5D0nq9rFhvZ0bhn7RPGl99DJh
+         mHxnome6gxGPY9Q/787ZX8MSHVt68hg4KZn85bT5z75twvJrFIHCFJafyqliyd0AG+ca
+         RzHg==
+X-Gm-Message-State: AC+VfDzsv84PumbXah/CimarViIL05ZiA0zMs3sbr4ifpPDS5HRu11O5
+	XeIHTk8PO4HIx1Cs2jZSU9g=
+X-Google-Smtp-Source: ACHHUZ7qgZXuInT52CBe2fdIODHvN3TsFZFGNC53yWfuzxRIbJsq0WD/6yJNKLgPzMeJ/5eb9LSI8A==
+X-Received: by 2002:a05:600c:2191:b0:3f4:1a97:ab1d with SMTP id e17-20020a05600c219100b003f41a97ab1dmr4138816wme.1.1683534262558;
+        Mon, 08 May 2023 01:24:22 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05600c45cd00b003f1738d0d13sm19383989wmo.1.2023.05.08.01.24.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 01:24:21 -0700 (PDT)
+Message-ID: <f5cf30b2-c29c-03ac-e7fc-4c7da2cd0c5b@gmail.com>
+Date: Mon, 8 May 2023 10:24:19 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   92613681c0090612f0368dcebdcc232af9d74ae8
-commit: bfae15559531b4aacd626152ffea929c27304dd8 [3/10] hwmon: (oxp-sensors) Use less convoluted enum cast
-config: x86_64-randconfig-a006-20230508 (https://download.01.org/0day-ci/archive/20230508/202305081625.IMCuQoxj-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=bfae15559531b4aacd626152ffea929c27304dd8
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout bfae15559531b4aacd626152ffea929c27304dd8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305081625.IMCuQoxj-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/oxp-sensors.c:299:10: warning: cast to smaller integer type 'enum oxp_board' from 'void *' [-Wvoid-pointer-to-enum-cast]
-           board = (enum oxp_board)dmi_entry->driver_data;
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] phy: mediatek: fix returning garbage
+Content-Language: en-US, ca-ES, es-ES
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
+ p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, kishon@kernel.org,
+ angelogioacchino.delregno@collabora.com, nathan@kernel.org,
+ ndesaulniers@google.com, granquet@baylibre.com,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230414122253.3171524-1-trix@redhat.com>
+ <ZFTMPWp8LhwA9uHz@matsya> <db9c3190-28d8-199f-f4f0-a12524d0451e@gmail.com>
+ <ZFipVfhLVyye/eud@matsya>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <ZFipVfhLVyye/eud@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +299 drivers/hwmon/oxp-sensors.c
 
-   280	
-   281	/* Initialization logic */
-   282	static int oxp_platform_probe(struct platform_device *pdev)
-   283	{
-   284		const struct dmi_system_id *dmi_entry;
-   285		struct device *dev = &pdev->dev;
-   286		struct device *hwdev;
-   287	
-   288		/*
-   289		 * Have to check for AMD processor here because DMI strings are the
-   290		 * same between Intel and AMD boards, the only way to tell them apart
-   291		 * is the CPU.
-   292		 * Intel boards seem to have different EC registers and values to
-   293		 * read/write.
-   294		 */
-   295		dmi_entry = dmi_first_match(dmi_table);
-   296		if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-   297			return -ENODEV;
-   298	
- > 299		board = (enum oxp_board)dmi_entry->driver_data;
-   300	
-   301		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-   302							     &oxp_ec_chip_info, NULL);
-   303	
-   304		return PTR_ERR_OR_ZERO(hwdev);
-   305	}
-   306	
+On 08/05/2023 09:48, Vinod Koul wrote:
+> On 05-05-23, 17:37, Matthias Brugger wrote:
+>>
+>>
+>> On 05/05/2023 11:28, Vinod Koul wrote:
+>>> On 14-04-23, 08:22, Tom Rix wrote:
+>>>> clang reports
+>>>> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
+>>>>     'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>>>>           if (ret)
+>>>>               ^~~
+>>>> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
+>>>
+>>> I have applied "phy: mediatek: hdmi: mt8195: fix uninitialized variable
+>>> usage in pll_calc"
+>>
+>> Thanks Vinod, that was on my list for today as well. I was a bit puzzled
+>> because you took the patch that added it, but I wasn't sure if you would
+>> take the fix. How do you want to handle things like this in the future?
+> 
+> Fixes should be sent as Fixes patch
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I'm not sure what do you mean. Patch subject includes the word fix and the patch 
+has a fixes tag. What was missing here?
+
+Does this mean you will take fixes for this driver in the future or do you want 
+me to take care of them?
+
+Regards,
+Matthias
