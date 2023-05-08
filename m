@@ -1,140 +1,83 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D162100;
-	Mon,  8 May 2023 17:13:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683566020; x=1715102020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5NIJkXs6LUjGrSFzNNxUCT1m1jDLIh1i0BRiM4BtLpM=;
-  b=Wz0B+q6rY/jJd62BVskZBKoXKjIrXUgEwLe0ZSJzv91vOoN8MS149pgq
-   FyxXDfZB66PiaoYJSTvvR/VutwPxmlP0Wm8H9NDf6ZTf0bJFBCNMxIUEb
-   XNHtn40EPKFqPnyEq8Ma5gGsOMDNqaY493efX/DUgWMmkllMemkmtBQ4P
-   uGpEOnt0W9n5XgYdYci2vbzgrHXZ5eFtQ0gvelO8Ai+5A9TF0OwgDUWgs
-   TNviMzscbzcsTyuawp8cjRijQq2gNnYOqP38yIXOC2v0NIvuFeadFjJ6T
-   dMenyfumB3Fx45rhR2zWSPo3eNztU+PGkXvkWvU5FyKY7HtUyLf864UJ8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="348533002"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="348533002"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 10:13:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="701493547"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="701493547"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 May 2023 10:13:38 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pw4Qb-0001Kz-0o;
-	Mon, 08 May 2023 17:13:37 +0000
-Date: Tue, 9 May 2023 01:13:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eiichi Tsukata <eiichi.tsukata@nutanix.com>, paul@paul-moore.com,
-	eparis@redhat.com, linux-kernel@vger.kernel.org,
-	audit@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Subject: Re: [PATCH 4/4] audit: check if queue is full after
- prepare_to_wait_exclusive()
-Message-ID: <202305090112.uJSc0NBw-lkp@intel.com>
-References: <20230508075812.76077-5-eiichi.tsukata@nutanix.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53655682
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 18:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683571862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=njDHay2s6bhZA+83+zr7T+ObS36bGfU1wrnoJ/TIHEA=;
+	b=M9/pcKKg7pbLOdECXmSmYpCTk8swo2IYVTwcmxyNUTpfOeY2/mQJPR44pDHlBM23B4GGyY
+	RBKq8CHvV3NB5zK1oQkQaq+C9AnN0+YAViwnFxbeKSQpGNeB/Rkj3kwTCYwJwXADiv3UPL
+	okhU2svMpG78p/+LURM2Udwd937IxwY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-4DL9ziTAOT6aznR1jjA6nw-1; Mon, 08 May 2023 14:51:01 -0400
+X-MC-Unique: 4DL9ziTAOT6aznR1jjA6nw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F322800047
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 18:51:01 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 090702026D16;
+	Mon,  8 May 2023 18:51:00 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, ba0ad6ed)
+Date: Mon, 08 May 2023 18:51:00 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508075812.76077-5-eiichi.tsukata@nutanix.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <54258.123050814510101843@us-mta-145.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eiichi,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on pcmoore-audit/next]
-[also build test WARNING on linus/master v6.4-rc1 next-20230508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eiichi-Tsukata/audit-refactor-queue-full-checks/20230508-160019
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-patch link:    https://lore.kernel.org/r/20230508075812.76077-5-eiichi.tsukata%40nutanix.com
-patch subject: [PATCH 4/4] audit: check if queue is full after prepare_to_wait_exclusive()
-config: i386-randconfig-a001-20230508 (https://download.01.org/0day-ci/archive/20230509/202305090112.uJSc0NBw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cbc69d0c34bdbc06ebca3e3020cfc24034fcf173
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eiichi-Tsukata/audit-refactor-queue-full-checks/20230508-160019
-        git checkout cbc69d0c34bdbc06ebca3e3020cfc24034fcf173
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305090112.uJSc0NBw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/audit.c:651:6: warning: variable 'rtime' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (audit_queue_full(&audit_queue)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/audit.c:657:9: note: uninitialized use occurs here
-           return rtime;
-                  ^~~~~
-   kernel/audit.c:651:2: note: remove the 'if' if its condition is always true
-           if (audit_queue_full(&audit_queue)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/audit.c:642:12: note: initialize the variable 'rtime' to silence this warning
-           long rtime;
-                     ^
-                      = 0
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +651 kernel/audit.c
+Kernel information:
+    Commit message: media: nxp: imx8-isi: fix buiding on 32-bit
 
-   630	
-   631	/**
-   632	 * wait_for_kauditd - Wait for kauditd to drain the queue
-   633	 * @stime: time to sleep
-   634	 *
-   635	 * Description:
-   636	 * Waits for kauditd to drain the queue then adds duration of sleep time to
-   637	 * audit_backlog_wait_time_actual as cumulative sum.
-   638	 * Returns remaining time to sleep.
-   639	 */
-   640	static long wait_for_kauditd(long stime)
-   641	{
-   642		long rtime;
-   643		DEFINE_WAIT(wait);
-   644	
-   645		prepare_to_wait_exclusive(&audit_backlog_wait, &wait,
-   646					  TASK_UNINTERRUPTIBLE);
-   647	
-   648		/* need to check if the queue is full again because kauditd might have
-   649		 * flushed the queue and went to sleep after prepare_to_wait_exclusive()
-   650		 */
- > 651		if (audit_queue_full(&audit_queue)) {
-   652			rtime = schedule_timeout(stime);
-   653			atomic_add(stime - rtime, &audit_backlog_wait_time_actual);
-   654		}
-   655		finish_wait(&audit_backlog_wait, &wait);
-   656	
-   657		return rtime;
-   658	}
-   659	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/87655
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34529=
+4
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
