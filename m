@@ -1,43 +1,43 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64A1168C7
-	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:53:20 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1aaf706768cso33122995ad.0
-        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:53:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4413171AE
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:53:28 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1aaf7067647so29630115ad.0
+        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683546800; x=1686138800;
+        d=ventanamicro.com; s=google; t=1683546808; x=1686138808;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qd6PQ1vE/SZdiXRk2V4YVd/9ukw5PfEy62nQ6sf0Uk0=;
-        b=Wj+BdFY08go+Klnkl9ikMjatb5QJpTO2cewG54fs1b3lW77HcXNjgQTN2vzRD/j8ke
-         U3yyKNS6ssEcggGMDfAXgwZPVb+FBmqfOr+Em+1ArsfHhZf2wSJZfgC6VkUq+JwWgyLn
-         g+RLMWOOtmon/m7EVa2DCP+ETl1ECCK4M3nMIjFho7LKvb2yNVDCezwfPiVlDcs9QJCj
-         8LW7073DSm3mdChDFXxsHRRaDLUKp6u28cqpHj2tCtL9vO7xzRypFejOqMQyJUAGg7RB
-         COx5W+bUevsvQur/1Cp+1+YUYxa7JkuqnS6OOhyy6oxt/zn2DyhnlYWkHpifR+QPUO6n
-         siaA==
+        bh=1wcGbfhUP5NrwGCYl7Q1yL0FMzRdJBr1PIlnUSkktJs=;
+        b=fBHUfS8fWSAOqlwT6Q08NJnR0u3M9PyiSxhBSIcvPa/yshAYWNpI0o9m3i1+avJke7
+         UpdOLZb8RloM1SZR7kh5kmhzwoaBrLsvxZoeqYVZqqF396fb/4BhWwd23qb9VCpaKumw
+         +uzkOQJbxs7oZeo9NsWhaHt5YsTFd1D2MQy8quk+pYQZ9V1E+g372HhAHRdQNMKrPpL/
+         Y2eneBn1k8hN2tTm1lHK/RgQHMRZvomTuBl9iOkHafRg69ncMDwy+Yu/SoJirdME89sk
+         +YabmC7IczGRfgKnOXQXtodoUNlYgFuPjduPauQRgsg6YGZbopdDa3L+DuoJF7LnTN5O
+         CPQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683546800; x=1686138800;
+        d=1e100.net; s=20221208; t=1683546808; x=1686138808;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qd6PQ1vE/SZdiXRk2V4YVd/9ukw5PfEy62nQ6sf0Uk0=;
-        b=jIwPf0d5kPDyAIR7NSbehtvuIrmtToU+yoJQvnCrOBIUb5S4hswhgr4cP8AHbcrX2f
-         Gr4oawWvvpqN0cD4Q50Lwo5WHYPiUu/j48Yx1SWVblFtNbvpbeyWH8vwQODWD5XxI3wx
-         CeZlq6lVMm8SZnwP2SUjK6LMxgDPfU0z9NilOc0rPeXL0Xvj+hAKM5TPv6kMxXtY20Lo
-         4N6eCjyAzhtvg3DVAqTQ1gCf01IWRcsJ5npqDv7keMvw57LdvaaIpVcN7eWwtuO4krjb
-         sBxgMW5oiktZf+9d4qhSfBObAqYUQcoqi2ltxAB92xgEQr6hVeRRqCqX6X8SCWTwtECS
-         SXXA==
-X-Gm-Message-State: AC+VfDzoDlYOhdnQ7WClermosX2ohetfgYJqOOAo3yvfnYDI+tYQH/hX
-	mTh8N0atrMzRPFbfNJARH0XLCA==
-X-Google-Smtp-Source: ACHHUZ44JOKf09v8SpLqQAPymUJYFxrBhM0oK44TrPeFKd+o5n6tK/8ozBu8m8cH4Q+O9X7/qncP4w==
-X-Received: by 2002:a17:903:1252:b0:1aa:f0a7:933 with SMTP id u18-20020a170903125200b001aaf0a70933mr12699535plh.25.1683546800261;
-        Mon, 08 May 2023 04:53:20 -0700 (PDT)
+        bh=1wcGbfhUP5NrwGCYl7Q1yL0FMzRdJBr1PIlnUSkktJs=;
+        b=JX4fZXf1q/WVNco1I0hWOn4EToDqyMJawK3Jq9FWTHRbtxFniTiaUYwkmC9SB15jst
+         W/SokziaiU8/l1DbhJUKR+GKCJRD7wUjzCQIlNbJw9RojpXBdXYJVyXpE8OVAnOTN1c0
+         rG+zYqL4p/6AMHAwm/tDqwLgXtm7MGeiFRyQKCqYA0/oiLsmb8trH+noGX2XXZrOGSbq
+         Id9WuEZ1qPdM5g43k8tbOINLinkdubI5kaEeuyx28vT/WkJEQP8uA48c8JI1y8wwLxNZ
+         n165DYz7EX6ST5SvPIhq2bDYGNDkwVC57HYQi5JRZub3tZDxfDwOFhYKD8eFwQvHElBK
+         v5dA==
+X-Gm-Message-State: AC+VfDx3lbMqClvx8RQ6RxKgjN404JHObU3m6AqbduS/uoNQ6rr2x8KM
+	zzS2LYLO35o1cgml+px8HQ0EEQBV3AuuVwuUDTs=
+X-Google-Smtp-Source: ACHHUZ4YPZPXYK0bFQvCKyd/gnSncEBJ6qVKzMyJ4dAbIZymuHBA+fio0dFknn2dgtRYb5PHf8ADKA==
+X-Received: by 2002:a17:902:b405:b0:1a5:a1b:bbd8 with SMTP id x5-20020a170902b40500b001a50a1bbbd8mr9546124plr.45.1683546808426;
+        Mon, 08 May 2023 04:53:28 -0700 (PDT)
 Received: from sunil-laptop.. ([106.51.189.144])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.53.12
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.53.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:53:19 -0700 (PDT)
+        Mon, 08 May 2023 04:53:28 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -65,10 +65,12 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH V5 03/21] crypto: hisilicon/qm: Fix to enable build with RISC-V clang
-Date: Mon,  8 May 2023 17:22:19 +0530
-Message-Id: <20230508115237.216337-4-sunilvl@ventanamicro.com>
+	Sunil V L <sunilvl@ventanamicro.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH V5 04/21] ACPI: tables: Print RINTC information when MADT is parsed
+Date: Mon,  8 May 2023 17:22:20 +0530
+Message-Id: <20230508115237.216337-5-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230508115237.216337-1-sunilvl@ventanamicro.com>
 References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
@@ -80,57 +82,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
-allmodconfig build. However, build fails with clang and below
-error is seen.
+When MADT is parsed, print RINTC information as below:
 
-drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+Q' in asm
-                       "+Q" (*((char __iomem *)fun_base))
-                       ^
-This is expected error with clang due to the way it is designed.
+ACPI: RISC-V INTC (acpi_uid[0x0000] hart_id[0x0] enabled)
+ACPI: RISC-V INTC (acpi_uid[0x0001] hart_id[0x1] enabled)
+...
+ACPI: RISC-V INTC (acpi_uid[0x000f] hart_id[0xf] enabled)
 
-To fix this issue, move arm64 assembly code under #if.
+This debug information will be very helpful during bring up.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/999
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-[sunilvl@ventanamicro.com: Moved tmp0 and tmp1 into the #if]
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- drivers/crypto/hisilicon/qm.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/acpi/tables.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index ad0c042b5e66..2eaeaac2e246 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -610,13 +610,9 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
- static void qm_mb_write(struct hisi_qm *qm, const void *src)
- {
- 	void __iomem *fun_base = qm->io_base + QM_MB_CMD_SEND_BASE;
--	unsigned long tmp0 = 0, tmp1 = 0;
+diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+index 7b4680da57d7..8ab0a82b4da4 100644
+--- a/drivers/acpi/tables.c
++++ b/drivers/acpi/tables.c
+@@ -220,6 +220,16 @@ void acpi_table_print_madt_entry(struct acpi_subtable_header *header)
+ 		}
+ 		break;
  
--	if (!IS_ENABLED(CONFIG_ARM64)) {
--		memcpy_toio(fun_base, src, 16);
--		dma_wmb();
--		return;
--	}
-+#if IS_ENABLED(CONFIG_ARM64)
-+	unsigned long tmp0 = 0, tmp1 = 0;
- 
- 	asm volatile("ldp %0, %1, %3\n"
- 		     "stp %0, %1, %2\n"
-@@ -626,6 +622,11 @@ static void qm_mb_write(struct hisi_qm *qm, const void *src)
- 		       "+Q" (*((char __iomem *)fun_base))
- 		     : "Q" (*((char *)src))
- 		     : "memory");
-+#else
-+	memcpy_toio(fun_base, src, 16);
-+	dma_wmb();
-+#endif
++	case ACPI_MADT_TYPE_RINTC:
++		{
++			struct acpi_madt_rintc *p = (struct acpi_madt_rintc *)header;
 +
- }
- 
- static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
++			pr_debug("RISC-V INTC (acpi_uid[0x%04x] hart_id[0x%llx] %s)\n",
++				 p->uid, p->hart_id,
++				 (p->flags & ACPI_MADT_ENABLED) ? "enabled" : "disabled");
++		}
++		break;
++
+ 	default:
+ 		pr_warn("Found unsupported MADT entry (type = 0x%x)\n",
+ 			header->type);
 -- 
 2.34.1
 
