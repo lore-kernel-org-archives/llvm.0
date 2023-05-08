@@ -1,43 +1,43 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9859D171AE
-	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:55:15 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-52c759b7d45so4027337a12.3
-        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:55:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DCD6171AE
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:55:24 +0000 (UTC)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-64115eef620so33804636b3a.1
+        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683546915; x=1686138915;
+        d=ventanamicro.com; s=google; t=1683546924; x=1686138924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yTcS6ERydBi3sd7UUw2QFTJaMwmeqvxl7dgO0DDj6Ys=;
-        b=fw9w2wVvyg18HQUViAb/q8qFm0YGCFl6OA5t0nEkt/x4efJjZz1AlZazIVHATLSW+w
-         heUG1plkNWqhle47JUQzWHWSG+vGxo82ayY9ANGhfWkzbQO8Dr6YUiheG3svkLfmg+NN
-         2GZx2gFnSEjoQGMVoLG9jHAqVyTSd707Zvc6pVK2NLdcrbmEHn3Glt7k/emJkDKaKSq2
-         MIRlCk1P2l9380YHjRqRfnRuqH8OWIWYheVO0szdRaxlAliT5X3EoD3CDOtTxHsFXQ1y
-         F8OptUnVg8xt4KdB2scf8uJ5YrNv+5MozGjfHscY0OiyRNm/5t2/AQGAJfIYOrKzz/J2
-         rCFw==
+        bh=yRIRI8aArNgE1fextAvbnFu2fBTu5X0gP4d56RcrLtU=;
+        b=dPMbOuJszGZR9AahCXbvkNUwii+U9QMTSbyX/g4rgl2Q6FpYBFAPcbDw395JVWTi3S
+         E6urCy+MpwA2mwwR1jCyAvffT1l31W8/LPIcJGeeFTD5aLYHDEquT54qiJ2PiGwewAK/
+         7/al2D5PTVEakeiZsNEdWqALf2XkQL0K7k9aFb+4iJxePbBgZXZVkfp8vW4aBTIcs+SD
+         +bz/l9nW3Yjj7WFv+zwFHYEfdt26tbRHLOQXJbw4w/Xh1zaR7Z1ODfJ0Z4leFb0BXw7C
+         UqtjGgxhDIEAThPM+W99EdZymdIczjmy/IDVSEpiG7tDS91x79zJImn26Sq77ax+bOHo
+         zOIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683546915; x=1686138915;
+        d=1e100.net; s=20221208; t=1683546924; x=1686138924;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yTcS6ERydBi3sd7UUw2QFTJaMwmeqvxl7dgO0DDj6Ys=;
-        b=D6Y0NMBOZ3eghaBDWlpIgoroAc3X2KJ52W3djyYruc2TuktrkJuyzIwZhDBXIEJMgj
-         CKmQm40l9FRluLiPciEEF9blFEVvbtHlSxWvfmlbegpOs/kVz3QuaeyDpzTnS3ljCQix
-         C57jf0csoaBMqB+gOHL53oA0V9zlg4oaoLgpTDvrZgtWMT4sUGRjIWVXNtMhk6FNgvDb
-         dP9SnSuOhRJcQYZ8849rbzWgP7MmTiXrA7wbuzol4JPgwFmRbaSDx7HHofJweFf7eK5W
-         NNzzLmt+VCYaIdxwvI7OTR5M7rsZAzQIZn0bGpTL98Rtu8rOXv24DwbRpWNYMC7JVyN1
-         b1YQ==
-X-Gm-Message-State: AC+VfDx5cEoUCEZP9TPtqeG1hIRD/S18Yho4a0FLnX/yQf2LgTsxI+z7
-	7YYaCmP3ySaNeNjK58JJVlCAGg==
-X-Google-Smtp-Source: ACHHUZ5LX88i99DmSCUmXSBK7hbOW5754EnsnTa/mud3XPBdrIA3mmjSCvDHn3cMXRSoaPysS72Dog==
-X-Received: by 2002:a17:902:868f:b0:1a6:b971:faf8 with SMTP id g15-20020a170902868f00b001a6b971faf8mr9907040plo.53.1683546915118;
-        Mon, 08 May 2023 04:55:15 -0700 (PDT)
+        bh=yRIRI8aArNgE1fextAvbnFu2fBTu5X0gP4d56RcrLtU=;
+        b=aKGXpgP1DFdB+e7xKZmKmZfR1srkzP+79vjN1KQQ8BL3JBvqrdwDE5fTA3vgJXbEhW
+         6o9OCO1sBi9AVjyP5JE9novO+UZcrUgTXgNR6GvP6pBgMd5Br74FhZ68CWNZW4YP5OhJ
+         oUFWgF1/c3QKEmxB523TEa2d5VrMXM/pPdSMwvHl01NwkJX+e+dWg4Bx/RszD3eTGLMZ
+         WxR7JGoZ70SFCtrB+Z2SQxsjEDlMxP/Pb2xJY88ZzXAMIjsnmaIvgofmZNsiKTdb/5Ep
+         t8MceTSnFPJ0fV+5/f2JMYfQ+HrhVsZNVTuOB0mkMu4hepZfY+HqS92fxWuPR4O5cGMh
+         bECw==
+X-Gm-Message-State: AC+VfDxsMtZuOSDsCbszC5xsZLOez6Men2JW9nTN9pkwV9AlHp6DQ0gn
+	Kv0XwWArJl5s7bJa+ec+1wSW4g==
+X-Google-Smtp-Source: ACHHUZ6789eMhEedD+DjgP1qLrd+M1OvHlv3gMG5XLhQSR4jt23EMajfCnuU+TlGtnZrH0ieEuaCGA==
+X-Received: by 2002:a17:902:e550:b0:1a6:e564:6044 with SMTP id n16-20020a170902e55000b001a6e5646044mr12627890plf.7.1683546924015;
+        Mon, 08 May 2023 04:55:24 -0700 (PDT)
 Received: from sunil-laptop.. ([106.51.189.144])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.55.07
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.55.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:55:14 -0700 (PDT)
+        Mon, 08 May 2023 04:55:23 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Andrew Jones <ajones@ventanamicro.com>,
 	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH V5 17/21] clocksource/timer-riscv: Add ACPI support
-Date: Mon,  8 May 2023 17:22:33 +0530
-Message-Id: <20230508115237.216337-18-sunilvl@ventanamicro.com>
+Subject: [PATCH V5 18/21] RISC-V: time.c: Add ACPI support for time_init()
+Date: Mon,  8 May 2023 17:22:34 +0530
+Message-Id: <20230508115237.216337-19-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230508115237.216337-1-sunilvl@ventanamicro.com>
 References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
@@ -83,47 +83,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Initialize the timer driver based on RHCT table on ACPI based
-platforms.
-
-Currently, ACPI doesn't support a flag to indicate that the
-timer interrupt can wake up the cpu irrespective of its
-power state. It will be added in future update.
+On ACPI based platforms, timer related information is
+available in RHCT. Add ACPI based probe support to the
+timer initialization.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/clocksource/timer-riscv.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/riscv/kernel/time.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index cecc4662293b..da3071b387eb 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -10,6 +10,7 @@
- 
- #define pr_fmt(fmt) "riscv-timer: " fmt
+diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
+index babaf3b48ba8..23641e82a9df 100644
+--- a/arch/riscv/kernel/time.c
++++ b/arch/riscv/kernel/time.c
+@@ -4,6 +4,7 @@
+  * Copyright (C) 2017 SiFive
+  */
  
 +#include <linux/acpi.h>
- #include <linux/clocksource.h>
+ #include <linux/of_clk.h>
  #include <linux/clockchips.h>
- #include <linux/cpu.h>
-@@ -207,3 +208,13 @@ static int __init riscv_timer_init_dt(struct device_node *n)
- }
+ #include <linux/clocksource.h>
+@@ -18,17 +19,29 @@ EXPORT_SYMBOL_GPL(riscv_timebase);
+ void __init time_init(void)
+ {
+ 	struct device_node *cpu;
++	struct acpi_table_rhct *rhct;
++	acpi_status status;
+ 	u32 prop;
  
- TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
+-	cpu = of_find_node_by_path("/cpus");
+-	if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
+-		panic(KERN_WARNING "RISC-V system with no 'timebase-frequency' in DTS\n");
+-	of_node_put(cpu);
+-	riscv_timebase = prop;
++	if (acpi_disabled) {
++		cpu = of_find_node_by_path("/cpus");
++		if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
++			panic("RISC-V system with no 'timebase-frequency' in DTS\n");
 +
-+#ifdef CONFIG_ACPI
-+static int __init riscv_timer_acpi_init(struct acpi_table_header *table)
-+{
-+	return riscv_timer_init_common();
-+}
++		of_node_put(cpu);
++		riscv_timebase = prop;
++		of_clk_init(NULL);
++	} else {
++		status = acpi_get_table(ACPI_SIG_RHCT, 0, (struct acpi_table_header **)&rhct);
++		if (ACPI_FAILURE(status))
++			panic("RISC-V ACPI system with no RHCT table\n");
 +
-+TIMER_ACPI_DECLARE(aclint_mtimer, ACPI_SIG_RHCT, riscv_timer_acpi_init);
-+
-+#endif
++		riscv_timebase = rhct->time_base_freq;
++		acpi_put_table((struct acpi_table_header *)rhct);
++	}
+ 
+ 	lpj_fine = riscv_timebase / HZ;
+ 
+-	of_clk_init(NULL);
+ 	timer_probe();
+ 
+ 	tick_setup_hrtimer_broadcast();
 -- 
 2.34.1
 
