@@ -1,43 +1,43 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC5D171AE
-	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:55:00 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1aaebed5bd6so30378645ad.1
-        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:55:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C96171AE
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:55:07 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1aaed87d8bdso30311365ad.3
+        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683546900; x=1686138900;
+        d=ventanamicro.com; s=google; t=1683546907; x=1686138907;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GSuTggFYj3JSbFizfFEsySbatkGCHwC0oNgPzvEucIg=;
-        b=OwnBVNyw27EdkLus1jTOuwbndB2EL2oVzQ7k7WqNfE23/8qlo+tk8UFosj4+DGtIEM
-         we9+O1U8hj7m0aWDcbRQxN5ACgyeeG2VJSTA+BGXf0Lc91Yu3v8w6YkG0P9tVDrl1Pjb
-         M/Jj9HtGkwPWIa+gtgQXauU7tRECTZ4MSLSX7eV6SQDAJy5Q22e88y0ohlQ2w+9nI9vm
-         4cLX6IAHT9CSG0m6PilY/qusyz8K+wT4LRCKXTzhosGOyZItkPHdE81/RAXq3F3cHu9l
-         MrD0rX8pil+aPxPPGWzdKtYQEVz9zLmR7W/XzVVJNkvN4gGzVcNn/RllSUoQVTVxW2HZ
-         pP5w==
+        bh=IS1GWILYl7Q6QsdApEh939z6h09NwhOHpvU6XTgdfRk=;
+        b=eJP89kRror/WxWaBzogTWwKQS/PyObvkTktOyW2ST1w6dYrfbIM25CrRJEoriiGQPv
+         jBw7v2p3iubHma3A00VZI1GxTututaNq3cEMEB+VpqfPtLgUM9ldNDYuerBTRWKmM7HO
+         Lceb3PA1kqCbvSCD9bENVg7C0g0Thk/GkHZNcEGymFu7CY4aWIYRjmikxQwgnKx9rwzO
+         tSjzRzpNulsyDBmv+tYYCYByckjjCpnnnyHxJGnbxutWrWtqV71BjhaIl0FcKjMZ539i
+         O/gtCtD7xMfoH2ESqmBOdrXjxLrTeJUIMhCeYnp5nlw9g4GL5wD79puJaehSyrvk/xSt
+         K2Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683546900; x=1686138900;
+        d=1e100.net; s=20221208; t=1683546907; x=1686138907;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GSuTggFYj3JSbFizfFEsySbatkGCHwC0oNgPzvEucIg=;
-        b=X/+Oxn1L4lfyo6LX16oOOTfaCUp9stFCpJlPuOvoT16kEXmwS++h6pUkUaAOMoKSh0
-         2hgB59UH9h9J/lcMVpYvSpml/g3fLAF4n97fYcoQquYMMQCSHuGr+xcAsLUPZzz1oRwl
-         gLD/MqE8g86G+ur3AehrssC9EjAT8XKVUV9yL853FPnoaas5dNwpmvwDF/gIC0fOgJ1g
-         nQakPcrhq7gkms4vEXKE4rtwWfmUYcTSgS0pkSbiSgdjJCOTJnsMpCKyREIzmZpH6Uhz
-         oZ2H/qdf5TTo7ZU7tGB8DxIQDR+NtoAGAHc/GHyBoOlh5e722SHjEXcz5thGCwSSBylf
-         6/fA==
-X-Gm-Message-State: AC+VfDxZ/ogD7CFrnRnrykWSebC/YRllCdKj5zrpPQ9kZ5d6m0WLxlfx
-	CesRc4zWlULUwDD21LwtsOuTbQ==
-X-Google-Smtp-Source: ACHHUZ74VlINKqqw1M1Nzm9Knvlkg1O1yI8Vgz31f0P7xgzVEMnDcYaHW6CpqAaMkpJZUju498eICg==
-X-Received: by 2002:a17:902:eccc:b0:1a6:6b85:7b4a with SMTP id a12-20020a170902eccc00b001a66b857b4amr12146859plh.18.1683546899877;
-        Mon, 08 May 2023 04:54:59 -0700 (PDT)
+        bh=IS1GWILYl7Q6QsdApEh939z6h09NwhOHpvU6XTgdfRk=;
+        b=jy5A62uverOEHDVXLEkriF4N4dPN7y255ZA4uG5OjmE+im/BX9Sz8AQXEvBwELu/8R
+         qnBgHmoJ8RvaqE+hhj2RuD8teiOcp50MSzuneyDoomc2m2h0FkABTgMQA70edlCRhw3B
+         dsF3vNwbNVHJp6acFuETlGfCIX2DopPpiZX2x4MaSh0aJqh26LYHYmUForZXjro2I/jD
+         4PKJ4/RW6TV0U6xxm8spK+Hl91ettjENigig90ngxrzVkk44w6OUcfeNpf+JiWVeGmjR
+         nYdqR2HnP0XdeFg/8xXhBQ2Wv4dt4ckv+DPH1Up20QM9xMnswdcVMx6hfFkNnPaDprTs
+         hUZQ==
+X-Gm-Message-State: AC+VfDwLdYNTUCvoGkMg7i11UvUJG3YOlKjFXjC2fCYiIBLhnqpHwi7X
+	TxCNARgnH3L8xfmwKoHeB70WQA==
+X-Google-Smtp-Source: ACHHUZ6//ba6VErYOIFC/lD2lq4dOAV7ar+pg4EF30qL8CJ9coxtnjfAekRLC5ouqlPwgJX2ME/5RA==
+X-Received: by 2002:a17:903:2344:b0:1ac:6a6f:2dc3 with SMTP id c4-20020a170903234400b001ac6a6f2dc3mr5426436plh.20.1683546907481;
+        Mon, 08 May 2023 04:55:07 -0700 (PDT)
 Received: from sunil-laptop.. ([106.51.189.144])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.54.51
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.55.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:54:59 -0700 (PDT)
+        Mon, 08 May 2023 04:55:07 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -66,12 +66,13 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	Sunil V L <sunilvl@ventanamicro.com>,
+	Anup Patel <apatel@ventanamicro.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Andrew Jones <ajones@ventanamicro.com>,
 	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH V5 15/21] irqchip/riscv-intc: Add ACPI support
-Date: Mon,  8 May 2023 17:22:31 +0530
-Message-Id: <20230508115237.216337-16-sunilvl@ventanamicro.com>
+Subject: [PATCH V5 16/21] clocksource/timer-riscv: Refactor riscv_timer_init_dt()
+Date: Mon,  8 May 2023 17:22:32 +0530
+Message-Id: <20230508115237.216337-17-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230508115237.216337-1-sunilvl@ventanamicro.com>
 References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
@@ -83,115 +84,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for initializing the RISC-V INTC driver on ACPI
-platforms.
+Refactor the timer init function such that few things can be
+shared by both DT and ACPI based platforms.
 
+Co-developed-by: Anup Patel <apatel@ventanamicro.com>
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/irqchip/irq-riscv-intc.c | 70 +++++++++++++++++++++++++-------
- 1 file changed, 55 insertions(+), 15 deletions(-)
+ drivers/clocksource/timer-riscv.c | 81 +++++++++++++++----------------
+ 1 file changed, 40 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-index f229e3e66387..4adeee1bc391 100644
---- a/drivers/irqchip/irq-riscv-intc.c
-+++ b/drivers/irqchip/irq-riscv-intc.c
-@@ -6,6 +6,7 @@
-  */
- 
- #define pr_fmt(fmt) "riscv-intc: " fmt
-+#include <linux/acpi.h>
- #include <linux/atomic.h>
- #include <linux/bits.h>
- #include <linux/cpu.h>
-@@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
- 	return intc_domain->fwnode;
+diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+index 5f0f10c7e222..cecc4662293b 100644
+--- a/drivers/clocksource/timer-riscv.c
++++ b/drivers/clocksource/timer-riscv.c
+@@ -124,61 +124,28 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
  }
  
-+static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-+{
-+	int rc;
-+
-+	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-+					       &riscv_intc_domain_ops, NULL);
-+	if (!intc_domain) {
-+		pr_err("unable to add IRQ domain\n");
-+		return -ENXIO;
-+	}
-+
-+	rc = set_handle_irq(&riscv_intc_irq);
-+	if (rc) {
-+		pr_err("failed to set irq handler\n");
-+		return rc;
-+	}
-+
-+	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-+
-+	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-+
-+	return 0;
-+}
-+
- static int __init riscv_intc_init(struct device_node *node,
- 				  struct device_node *parent)
+-static int __init riscv_timer_init_dt(struct device_node *n)
++static int __init riscv_timer_init_common(void)
  {
-@@ -133,24 +158,39 @@ static int __init riscv_intc_init(struct device_node *node,
- 	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
- 		return 0;
+-	int cpuid, error;
+-	unsigned long hartid;
+-	struct device_node *child;
++	int error;
+ 	struct irq_domain *domain;
++	struct fwnode_handle *intc_fwnode = riscv_get_intc_hwnode();
  
--	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
--					    &riscv_intc_domain_ops, NULL);
--	if (!intc_domain) {
--		pr_err("unable to add IRQ domain\n");
--		return -ENXIO;
+-	error = riscv_of_processor_hartid(n, &hartid);
+-	if (error < 0) {
+-		pr_warn("Not valid hartid for node [%pOF] error = [%lu]\n",
+-			n, hartid);
+-		return error;
 -	}
-+	return riscv_intc_init_common(of_node_to_fwnode(node));
-+}
- 
--	rc = set_handle_irq(&riscv_intc_irq);
--	if (rc) {
--		pr_err("failed to set irq handler\n");
--		return rc;
+-
+-	cpuid = riscv_hartid_to_cpuid(hartid);
+-	if (cpuid < 0) {
+-		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+-		return cpuid;
 -	}
-+IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
+-
+-	if (cpuid != smp_processor_id())
+-		return 0;
+-
+-	child = of_find_compatible_node(NULL, NULL, "riscv,timer");
+-	if (child) {
+-		riscv_timer_cannot_wake_cpu = of_property_read_bool(child,
+-					"riscv,timer-cannot-wake-cpu");
+-		of_node_put(child);
+-	}
+-
+-	domain = NULL;
+-	child = of_get_compatible_child(n, "riscv,cpu-intc");
+-	if (!child) {
+-		pr_err("Failed to find INTC node [%pOF]\n", n);
+-		return -ENODEV;
+-	}
+-	domain = irq_find_host(child);
+-	of_node_put(child);
++	domain = irq_find_matching_fwnode(intc_fwnode, DOMAIN_BUS_ANY);
+ 	if (!domain) {
+-		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
++		pr_err("Failed to find irq_domain for INTC node [%pfwP]\n",
++		       intc_fwnode);
+ 		return -ENODEV;
+ 	}
  
--	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-+#ifdef CONFIG_ACPI
+ 	riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+ 	if (!riscv_clock_event_irq) {
+-		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
++		pr_err("Failed to map timer interrupt for node [%pfwP]\n", intc_fwnode);
+ 		return -ENODEV;
+ 	}
  
--	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-+static int __init riscv_intc_acpi_init(union acpi_subtable_headers *header,
-+				       const unsigned long end)
+-	pr_info("%s: Registering clocksource cpuid [%d] hartid [%lu]\n",
+-	       __func__, cpuid, hartid);
+ 	error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+ 	if (error) {
+-		pr_err("RISCV timer register failed [%d] for cpu = [%d]\n",
+-		       error, cpuid);
++		pr_err("RISCV timer registration failed [%d]\n", error);
+ 		return error;
+ 	}
+ 
+@@ -207,4 +174,36 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+ 	return error;
+ }
+ 
++static int __init riscv_timer_init_dt(struct device_node *n)
 +{
-+	struct fwnode_handle *fn;
-+	struct acpi_madt_rintc *rintc;
- 
--	return 0;
-+	rintc = (struct acpi_madt_rintc *)header;
++	int cpuid, error;
++	unsigned long hartid;
++	struct device_node *child;
 +
-+	/*
-+	 * The ACPI MADT will have one INTC for each CPU (or HART)
-+	 * so riscv_intc_acpi_init() function will be called once
-+	 * for each INTC. We only do INTC initialization
-+	 * for the INTC belonging to the boot CPU (or boot HART).
-+	 */
-+	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
++	error = riscv_of_processor_hartid(n, &hartid);
++	if (error < 0) {
++		pr_warn("Invalid hartid for node [%pOF] error = [%lu]\n",
++			n, hartid);
++		return error;
++	}
++
++	cpuid = riscv_hartid_to_cpuid(hartid);
++	if (cpuid < 0) {
++		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
++		return cpuid;
++	}
++
++	if (cpuid != smp_processor_id())
 +		return 0;
 +
-+	fn = irq_domain_alloc_named_fwnode("RISCV-INTC");
-+	if (!fn) {
-+		pr_err("unable to allocate INTC FW node\n");
-+		return -ENOMEM;
++	child = of_find_compatible_node(NULL, NULL, "riscv,timer");
++	if (child) {
++		riscv_timer_cannot_wake_cpu = of_property_read_bool(child,
++					"riscv,timer-cannot-wake-cpu");
++		of_node_put(child);
 +	}
 +
-+	return riscv_intc_init_common(fn);
- }
- 
--IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-+IRQCHIP_ACPI_DECLARE(riscv_intc, ACPI_MADT_TYPE_RINTC, NULL,
-+		     ACPI_MADT_RINTC_VERSION_V1, riscv_intc_acpi_init);
-+#endif
++	return riscv_timer_init_common();
++}
++
+ TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
 -- 
 2.34.1
 
