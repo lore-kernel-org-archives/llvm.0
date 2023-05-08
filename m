@@ -1,43 +1,43 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B61171AE
-	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:53:53 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-64115e652eeso33918886b3a.0
-        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:53:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2CF171AE
+	for <llvm@lists.linux.dev>; Mon,  8 May 2023 11:54:01 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1aaec6f189cso29522665ad.3
+        for <llvm@lists.linux.dev>; Mon, 08 May 2023 04:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683546833; x=1686138833;
+        d=ventanamicro.com; s=google; t=1683546841; x=1686138841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bvg+GJpfRbLLmDkZ0StW7roD1sWqDLKd1ZxLgpiB2U8=;
-        b=JiQARQ4bGK+5crktw+7cwuQmByROt6U3e6Ck6CkUSKgq+vqqGrp7mRQkU3K4gb/AF/
-         6cxIoSse+C4MjTlJVBg3QYSR7p7G6jCn/p44wxSYx9PQGwB6ZmnkIUPnpdgRvo6wMWqy
-         0L9UwtLh0lVesJVxEre1vDBtMHsou9/GN5Ik4Z0P6ry7rbfpq2Q2HaUlgMOYNF9QcwRK
-         nAFdRlV2btCkQ0lEpoY0F7zVlss+e2rWgZqK9aKWX9zQpBqYxXfOEryFswqrQKMNMbto
-         4XSSp5d0l4YLXXnQgnJzURNzut2UPTZ2o1aQZ2v6QK7NmTkPtfXc7SmaUBiaVAwtQMy0
-         s+4Q==
+        bh=d2h3vevkYkVu6ki2VA7HPdPz/xuNcH/E20UC4Fi6w3o=;
+        b=ZZntHeSbVEpN02Cc+DEk3iz4bVfHnuRM7WXQFLS0RRgrCwNBHq8sayu889D7P++r3l
+         1gAWSEh9mwMM1kV8cZ4wLRQO6IgX4yBBIXJiz9RrSkfYghpY3CmVSdAcHA9dEq3URnX/
+         QpFe+mOoaH7nAoQtsuoqkZzYKMeL3KF7pKgtxQiTauaupMtTSAz+NKn1LgASFO5wXbUi
+         EcqgjxB7hqnvV7G1mrA8dhh2WIDT5/evRVQiT1GKkkpgK3LN02qAuAAKd90NpRQ113F1
+         OffZEST/D6geWJCn+4z4IOeEejiohuTr/piTkuJSkGofxieZm2iKwTRYMQijgLtpweAr
+         cTKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683546833; x=1686138833;
+        d=1e100.net; s=20221208; t=1683546841; x=1686138841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bvg+GJpfRbLLmDkZ0StW7roD1sWqDLKd1ZxLgpiB2U8=;
-        b=Mi6M4kfL7QBPeDBWQ/0tsoP9p6tebIVQqXi9RC9hFVwGLbkYYuKLiEogHQhr/yqLNg
-         I1OeTYC6MTT3Kj7shS9huUBNK5Q3beKdIbQ7cwZ0TRJiubH0I0UwpNo4MV5zYvbGA7pW
-         fHXTI1Q1Xims7OwA47eMBk91T3jpEVrCL+tbU5ng1PVPuJhZO4CZOjpA0Vqw7pjQHYWE
-         pzv/1npNUjWrE5Jcq+ucg2FNi6Te7hOzOSZm4jQyYn6YHVyCSNezI0bKPDOeKhr12fp5
-         Niq5PvVuqT+dKbR1G5rk4ID64MKQat5QLRjorLiFTr63/+UqV1iRxGBp8+TxDMiJqAtF
-         DYDg==
-X-Gm-Message-State: AC+VfDx+sIombYukDbApkXPROgFWvphQVaWwK8pBlTTL5UK236BKmrsD
-	mB6PgIOPMRuHhL+bdfZtk9RjUw==
-X-Google-Smtp-Source: ACHHUZ78mQRTxmDA8cJ1VBAYZeP/kutmyD+kv4sglD4jLeruz7kfJ7OgcH7foXykJ6aN3VTuav5H7Q==
-X-Received: by 2002:a17:902:e550:b0:1a6:e564:6044 with SMTP id n16-20020a170902e55000b001a6e5646044mr12623756plf.7.1683546833102;
-        Mon, 08 May 2023 04:53:53 -0700 (PDT)
+        bh=d2h3vevkYkVu6ki2VA7HPdPz/xuNcH/E20UC4Fi6w3o=;
+        b=ez+45QRg4jYbSYPRgQCJH6cdtus73DcueahDPGKImO5lr0RplbmrfawAFb3WKKsNml
+         XEy4rvXbCaAegerFM6s7F6X3ilMhkqXORC1wGNixhuR7Ty4mn4jbBL4ka43ZtOhfgVXd
+         tRbxulvFBJ8K66/jptbW8BOBeSpczQjKU7NSFJgzNFlXhJAlcSICmOlzcqb0V3BEqEq4
+         QTQlZR4BTlGfba1uyr7LRoOIceyO1BmPpBK+L4Edgc7YHRyGOK28XWhsP8+lR5P/5wOq
+         /fk7V8kOxgzQuYnrOEq8dXdmenmN19rcVfVNqUHnCxqFy4hDHln/vKYKzWZ48QzeY4Bp
+         Hg6g==
+X-Gm-Message-State: AC+VfDyXfeZ0LOMbiBDv7msZ/AX7tsuVSIyT9Nfm+kUOFoZfyC5XZzvJ
+	yJVrOixzQRxDrx8MclFBE7t+YA==
+X-Google-Smtp-Source: ACHHUZ69ugSarTSAMXC6f5oL9jNd6KuCehtnlrYptJAQTMRmfWkWaZ+k5Pb6dtDwggIXeWsz/yggPg==
+X-Received: by 2002:a17:902:e74c:b0:1aa:cddd:57f2 with SMTP id p12-20020a170902e74c00b001aacddd57f2mr12752642plf.25.1683546840856;
+        Mon, 08 May 2023 04:54:00 -0700 (PDT)
 Received: from sunil-laptop.. ([106.51.189.144])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.53.45
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b001aaed524541sm7015149plz.227.2023.05.08.04.53.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:53:52 -0700 (PDT)
+        Mon, 08 May 2023 04:54:00 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -66,11 +66,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
 	Sunil V L <sunilvl@ventanamicro.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH V5 07/21] ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
-Date: Mon,  8 May 2023 17:22:23 +0530
-Message-Id: <20230508115237.216337-8-sunilvl@ventanamicro.com>
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH V5 08/21] RISC-V: ACPI: Cache and retrieve the RINTC structure
+Date: Mon,  8 May 2023 17:22:24 +0530
+Message-Id: <20230508115237.216337-9-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230508115237.216337-1-sunilvl@ventanamicro.com>
 References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
@@ -82,80 +81,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-processor_core needs arch-specific functions to map the ACPI ID
-to the physical ID. In RISC-V platforms, hartid is the physical id
-and RINTC structure in MADT provides this mapping. Add arch-specific
-function to get this mapping from RINTC.
+RINTC structures in the MADT provide mapping between the hartid
+and the CPU. This is required many times even at run time like
+cpuinfo. So, instead of parsing the ACPI table every time, cache
+the RINTC structures and provide a function to get the correct
+RINTC structure for a given cpu.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- arch/riscv/include/asm/acpi.h |  3 +++
- drivers/acpi/processor_core.c | 29 +++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ arch/riscv/include/asm/acpi.h | 10 ++++++++
+ arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
+ arch/riscv/kernel/setup.c     |  4 ++++
+ 3 files changed, 59 insertions(+)
 
 diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-index bcade255bd6e..9be52b6ffae1 100644
+index 9be52b6ffae1..6519529c8bdf 100644
 --- a/arch/riscv/include/asm/acpi.h
 +++ b/arch/riscv/include/asm/acpi.h
-@@ -15,6 +15,9 @@
- /* Basic configuration for ACPI */
- #ifdef CONFIG_ACPI
+@@ -59,6 +59,16 @@ static inline bool acpi_has_cpu_in_madt(void)
  
-+typedef u64 phys_cpuid_t;
-+#define PHYS_CPUID_INVALID INVALID_HARTID
-+
- /* ACPI table mapping after acpi_permanent_mmap is set */
- void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
- #define acpi_os_ioremap acpi_os_ioremap
-diff --git a/drivers/acpi/processor_core.c b/drivers/acpi/processor_core.c
-index 2ac48cda5b20..d6606a9f2da6 100644
---- a/drivers/acpi/processor_core.c
-+++ b/drivers/acpi/processor_core.c
-@@ -106,6 +106,32 @@ static int map_gicc_mpidr(struct acpi_subtable_header *entry,
- 	return -EINVAL;
- }
+ static inline void arch_fix_phys_package_id(int num, u32 slot) { }
  
-+/*
-+ * Retrieve the RISC-V hartid for the processor
-+ */
-+static int map_rintc_hartid(struct acpi_subtable_header *entry,
-+			    int device_declaration, u32 acpi_id,
-+			    phys_cpuid_t *hartid)
++void acpi_init_rintc_map(void);
++struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
++u32 get_acpi_id_for_cpu(int cpu);
++#else
++static inline void acpi_init_rintc_map(void) { }
++static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
 +{
-+	struct acpi_madt_rintc *rintc =
-+	    container_of(entry, struct acpi_madt_rintc, header);
-+
-+	if (!(rintc->flags & ACPI_MADT_ENABLED))
-+		return -ENODEV;
-+
-+	/* device_declaration means Device object in DSDT, in the
-+	 * RISC-V, logical processors are required to
-+	 * have a Processor Device object in the DSDT, so we should
-+	 * check device_declaration here
-+	 */
-+	if (device_declaration && rintc->uid == acpi_id) {
-+		*hartid = rintc->hart_id;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
++	return NULL;
 +}
 +
- static phys_cpuid_t map_madt_entry(struct acpi_table_madt *madt,
- 				   int type, u32 acpi_id)
- {
-@@ -136,6 +162,9 @@ static phys_cpuid_t map_madt_entry(struct acpi_table_madt *madt,
- 		} else if (header->type == ACPI_MADT_TYPE_GENERIC_INTERRUPT) {
- 			if (!map_gicc_mpidr(header, type, acpi_id, &phys_id))
- 				break;
-+		} else if (header->type == ACPI_MADT_TYPE_RINTC) {
-+			if (!map_rintc_hartid(header, type, acpi_id, &phys_id))
-+				break;
- 		}
- 		entry += header->length;
- 	}
+ #endif /* CONFIG_ACPI */
+ 
+ #endif /*_ASM_ACPI_H*/
+diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+index 81d448c41714..89e142611c84 100644
+--- a/arch/riscv/kernel/acpi.c
++++ b/arch/riscv/kernel/acpi.c
+@@ -24,6 +24,51 @@ EXPORT_SYMBOL(acpi_disabled);
+ int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+ EXPORT_SYMBOL(acpi_pci_disabled);
+ 
++static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
++
++static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
++{
++	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
++	int cpuid;
++
++	if (!(rintc->flags & ACPI_MADT_ENABLED))
++		return 0;
++
++	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
++	/*
++	 * When CONFIG_SMP is disabled, mapping won't be created for
++	 * all cpus.
++	 * CPUs more than num_possible_cpus, will be ignored.
++	 */
++	if (cpuid >= 0 && cpuid < num_possible_cpus())
++		cpu_madt_rintc[cpuid] = *rintc;
++
++	return 0;
++}
++
++/*
++ * Instead of parsing (and freeing) the ACPI table, cache
++ * the RINTC structures since they are frequently used
++ * like in  cpuinfo.
++ */
++void __init acpi_init_rintc_map(void)
++{
++	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) <= 0) {
++		pr_err("No valid RINTC entries exist\n");
++		BUG();
++	}
++}
++
++struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
++{
++	return &cpu_madt_rintc[cpu];
++}
++
++u32 get_acpi_id_for_cpu(int cpu)
++{
++	return acpi_cpu_get_madt_rintc(cpu)->uid;
++}
++
+ /*
+  * __acpi_map_table() will be called before paging_init(), so early_ioremap()
+  * or early_memremap() should be called here to for ACPI table mapping.
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 9fb839074e16..a44c7fcde12f 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -21,6 +21,7 @@
+ #include <linux/efi.h>
+ #include <linux/crash_dump.h>
+ 
++#include <asm/acpi.h>
+ #include <asm/alternative.h>
+ #include <asm/cacheflush.h>
+ #include <asm/cpu_ops.h>
+@@ -293,6 +294,9 @@ void __init setup_arch(char **cmdline_p)
+ 	setup_smp();
+ #endif
+ 
++	if (!acpi_disabled)
++		acpi_init_rintc_map();
++
+ 	riscv_init_cbo_blocksizes();
+ 	riscv_fill_hwcap();
+ 	apply_boot_alternatives();
 -- 
 2.34.1
 
