@@ -1,37 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC873C22
-	for <llvm@lists.linux.dev>; Mon,  8 May 2023 08:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E10C433EF;
-	Mon,  8 May 2023 08:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683536267;
-	bh=G5v7NSAKXe2kLiZkicPjPQ/vKtmbjwfgIRwrsi4rT4A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pl0UQZj54buaQ35xQcBdmpJB5ccWsOHmiWJ7iamjj1B4SoCPRo1KbNe+Aukzlc5n0
-	 uZMuGpJNslVEQWFdp6SVSfIhl/01niiqlSnP43z5Z5MyWpV91e66gqMkOJI237gRtj
-	 ar6LG2CQu7g7xRL4EVmpPL6H0s6z659skAJLJikwHvbbxMh5NnoDKthlZjFvuauR+7
-	 UHGLwXIF475Aupcf11AcKtW9W9LVMZcZPTlUgJmb7cx5K+Z1MqjMjPoxtdohoSGWUu
-	 ZnDq6Q2bic907kFa2sq5IqN5KB4gpocS4VZx3rcrWCAuBmKvVpfnAgAuP+NM0k8+Ce
-	 lE1EgjLr+fVPg==
-Date: Mon, 8 May 2023 14:27:42 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
-	p.zabel@pengutronix.de, chunfeng.yun@mediatek.com,
-	kishon@kernel.org, angelogioacchino.delregno@collabora.com,
-	nathan@kernel.org, ndesaulniers@google.com, granquet@baylibre.com,
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] phy: mediatek: fix returning garbage
-Message-ID: <ZFi5hqhsTKqV96hF@matsya>
-References: <20230414122253.3171524-1-trix@redhat.com>
- <ZFTMPWp8LhwA9uHz@matsya>
- <db9c3190-28d8-199f-f4f0-a12524d0451e@gmail.com>
- <ZFipVfhLVyye/eud@matsya>
- <f5cf30b2-c29c-03ac-e7fc-4c7da2cd0c5b@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB35A93B;
+	Mon,  8 May 2023 09:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683539372; x=1715075372;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w042wTQBiEIVxcg3YStNPzuYG+sn3RWl76EyF7cq+3s=;
+  b=jWvNVrKrGUINHJfP7cdsNKENKKvpE15wqb+I3S9VHsMzEFXBTS7zFa7P
+   6/Jyp6g+t/fsgmnImRGBtyaRZYlrdLTmUnBOJzsenK63VDKHOOlWAyl4+
+   V4+8HHWLaWfIza9WSxtq0H8WQ4pw+gLWwXnKqK7Q7NCx/GqS5QjX+o3GC
+   5OX6e4Qb/VIAY9UCdvscxyIJdHfp+YvNzJX7OitUGoC5AD2x21tgFuC1v
+   hLmHZ0JoSeFwdCx8ZnNh7zr3CbexHk8yhTaHmFiI3BfwnRWSFYH+au2pI
+   ZwgKsZK1LXt9+it7GEykxC6k7sgs9Aq5DazfnOR99s5/5QWSeKwfW352y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415163399"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="415163399"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:49:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="729016233"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="729016233"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 08 May 2023 02:49:30 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pvxUn-0001Ar-1x;
+	Mon, 08 May 2023 09:49:29 +0000
+Date: Mon, 8 May 2023 17:48:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/1] media: pci: ipu3-cio2: Obtain remote pad from
+ endpoint
+Message-ID: <202305081739.XqGimPpf-lkp@intel.com>
+References: <20230508064123.979451-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,41 +47,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f5cf30b2-c29c-03ac-e7fc-4c7da2cd0c5b@gmail.com>
+In-Reply-To: <20230508064123.979451-1-sakari.ailus@linux.intel.com>
 
-On 08-05-23, 10:24, Matthias Brugger wrote:
-> 
-> 
-> On 08/05/2023 09:48, Vinod Koul wrote:
-> > On 05-05-23, 17:37, Matthias Brugger wrote:
-> > > 
-> > > 
-> > > On 05/05/2023 11:28, Vinod Koul wrote:
-> > > > On 14-04-23, 08:22, Tom Rix wrote:
-> > > > > clang reports
-> > > > > drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
-> > > > >     'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-> > > > >           if (ret)
-> > > > >               ^~~
-> > > > > ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
-> > > > 
-> > > > I have applied "phy: mediatek: hdmi: mt8195: fix uninitialized variable
-> > > > usage in pll_calc"
-> > > 
-> > > Thanks Vinod, that was on my list for today as well. I was a bit puzzled
-> > > because you took the patch that added it, but I wasn't sure if you would
-> > > take the fix. How do you want to handle things like this in the future?
-> > 
-> > Fixes should be sent as Fixes patch
-> > 
-> 
-> I'm not sure what do you mean. Patch subject includes the word fix and the
-> patch has a fixes tag. What was missing here?
-> 
-> Does this mean you will take fixes for this driver in the future or do you
-> want me to take care of them?
+Hi Sakari,
 
-Yes I would take the fixes as well for the drivers
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on sailus-media-tree/streams linus/master v6.4-rc1 next-20230508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-pci-ipu3-cio2-Obtain-remote-pad-from-endpoint/20230508-144532
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230508064123.979451-1-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v2 1/1] media: pci: ipu3-cio2: Obtain remote pad from endpoint
+config: x86_64-buildonly-randconfig-r002-20230508 (https://download.01.org/0day-ci/archive/20230508/202305081739.XqGimPpf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/68c87524825aee53569c763e18948d5571271fa9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sakari-Ailus/media-pci-ipu3-cio2-Obtain-remote-pad-from-endpoint/20230508-144532
+        git checkout 68c87524825aee53569c763e18948d5571271fa9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/pci/intel/ipu3/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305081739.XqGimPpf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/pci/intel/ipu3/ipu3-cio2-main.c:1428:9: error: passing 'const struct fwnode_handle *' to parameter of type 'struct fwnode_handle *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                                     s_asd->endpoint.local_fwnode,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/media-entity.h:1082:27: note: passing argument to parameter 'fwnode' here
+                                   struct fwnode_handle *fwnode,
+                                                         ^
+   1 error generated.
+
+
+vim +1428 drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+
+  1412	
+  1413	/* .complete() is called after all subdevices have been located */
+  1414	static int cio2_notifier_complete(struct v4l2_async_notifier *notifier)
+  1415	{
+  1416		struct cio2_device *cio2 = to_cio2_device(notifier);
+  1417		struct device *dev = &cio2->pci_dev->dev;
+  1418		struct sensor_async_subdev *s_asd;
+  1419		struct v4l2_async_subdev *asd;
+  1420		struct cio2_queue *q;
+  1421		int ret;
+  1422	
+  1423		list_for_each_entry(asd, &cio2->notifier.asd_list, asd_list) {
+  1424			s_asd = to_sensor_asd(asd);
+  1425			q = &cio2->queue[s_asd->csi2.port];
+  1426	
+  1427			ret = media_entity_get_fwnode_pad(&q->sensor->entity,
+> 1428							  s_asd->endpoint.local_fwnode,
+  1429							  MEDIA_PAD_FL_SOURCE);
+  1430			if (ret < 0) {
+  1431				dev_err(dev, "no endpoint for %pfw (%d)\n",
+  1432					s_asd->endpoint.local_fwnode, ret);
+  1433				return ret;
+  1434			}
+  1435	
+  1436			ret = media_create_pad_link(&q->sensor->entity, ret,
+  1437						    &q->subdev.entity, CIO2_PAD_SINK,
+  1438						    0);
+  1439			if (ret) {
+  1440				dev_err(dev, "failed to create link for %s (endpoint %pfw, error %d)\n",
+  1441					q->sensor->name, s_asd->endpoint.local_fwnode,
+  1442					ret);
+  1443				return ret;
+  1444			}
+  1445		}
+  1446	
+  1447		return v4l2_device_register_subdev_nodes(&cio2->v4l2_dev);
+  1448	}
+  1449	
 
 -- 
-~Vinod
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
