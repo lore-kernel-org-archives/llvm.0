@@ -1,164 +1,223 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8193619902;
-	Tue,  9 May 2023 20:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683665572; x=1715201572;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YDsfLsmKSQhk72LLYzXf4zfetkEmnRzr+xoglAtz1qY=;
-  b=ZLfdOmRzy2iMmgiDArQZ2B1N05ioQy+hAJuDQIB6dF2b1CWuFi6qbLKS
-   EQyjIhcczncHQ6CgluK9vOf52bYQUCNfoeYgTSX0OJJgltpPgXn2RvHMQ
-   g1+8eftLi9auDFOEuQs7PDAWosatB3n4phHl8hCoE4BQN8SCSOiwvV7dr
-   9dubEFnNWT7e6bAMKV6NAMJjs+XDApNv51iBVI40Td8UqMrUiRmP4Cjtj
-   Iwl6wOVG0dRCaDXHlUmUlohumnAaFoHzvlt2Z9taxaINCrI9EC3kA+iOz
-   8ljAP/yPmPs2DLFPF55fr6hfDHExG04YlWXg2Es6LJV5srssI3uriQUj7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="350081845"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="350081845"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:52:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649486666"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="649486666"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 13:52:50 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pwUKH-0002UK-0N;
-	Tue, 09 May 2023 20:52:49 +0000
-Date: Wed, 10 May 2023 04:51:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
- warning: unused variable 'c8sectpfe_match'
-Message-ID: <202305100443.8KKSnL1P-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243F719904
+	for <llvm@lists.linux.dev>; Tue,  9 May 2023 21:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED23C433EF;
+	Tue,  9 May 2023 21:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683667174;
+	bh=aeVE82GOAm+8/pi+l38V8m9CkT3EyRdDIYsSw5VqQw8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=g5/4E8HYdQqTpUvxqE0+Z7SR7ucyG7jxF73chu3Tm0qdUfJnnzw+kuiG3I3MfdYHP
+	 BREvL3UDJlypcI0PX3BBiSdW4jlDjvsFtF6Ce+N0xSGHlu/DdD1zCtxs1zu1/c8tOM
+	 1KZU5fsSUeeRj52HIwzBa4dZr1A+2J5ukXNNTeYhEtZlbLkgxHjW1v57p50S4IprjF
+	 +BL+RrTQGDsCEzvQBb1/j/fevH45W+f5MOPPN/ddNtxcRcHBRUzfPnp/RFjXh13Cjf
+	 QqYbLOtdYh8Uxrd6ewnGvMbJiFqV6Nd/ZV2dNDeHXOVVpLHKYmEELhrYqwuO7/HHmZ
+	 qKHnAOxl3k/cA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Leon Romanovsky <leon@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	gregkh@linuxfoundation.org,
+	mcgrof@kernel.org,
+	linux-rdma@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.3 01/18] RDMA/core: Fix multiple -Warray-bounds warnings
+Date: Tue,  9 May 2023 17:19:09 -0400
+Message-Id: <20230509211928.21010-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi Mauro,
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 
-First bad commit (maybe != root cause):
+[ Upstream commit aa4d540b4150052ae3b36d286b9c833a961ce291 ]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   16a8829130ca22666ac6236178a6233208d425c3
-commit: e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2 media: platform: place stm32/ and sti/ under st/ dir
-date:   1 year, 2 months ago
-config: s390-randconfig-r014-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100443.8KKSnL1P-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/st/sti/c8sectpfe/
+GCC-13 (and Clang)[1] does not like to access a partially allocated
+object, since it cannot reason about it for bounds checking.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305100443.8KKSnL1P-lkp@intel.com/
+In this case 140 bytes are allocated for an object of type struct
+ib_umad_packet:
 
-All warnings (new ones prefixed by >>):
+        packet = kzalloc(sizeof(*packet) + IB_MGMT_RMPP_HDR, GFP_KERNEL);
 
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   13 warnings generated.
+However, notice that sizeof(*packet) is only 104 bytes:
 
+struct ib_umad_packet {
+        struct ib_mad_send_buf *   msg;                  /*     0     8 */
+        struct ib_mad_recv_wc *    recv_wc;              /*     8     8 */
+        struct list_head           list;                 /*    16    16 */
+        int                        length;               /*    32     4 */
 
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+        /* XXX 4 bytes hole, try to pack */
 
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
+        struct ib_user_mad         mad __attribute__((__aligned__(8))); /*    40    64 */
 
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
+        /* size: 104, cachelines: 2, members: 5 */
+        /* sum members: 100, holes: 1, sum holes: 4 */
+        /* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+        /* last cacheline: 40 bytes */
+} __attribute__((__aligned__(8)));
 
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+and 36 bytes extra bytes are allocated for a flexible-array member in
+struct ib_user_mad:
 
+include/rdma/ib_mad.h:
+120 enum {
+...
+123         IB_MGMT_RMPP_HDR = 36,
+... }
+
+struct ib_user_mad {
+        struct ib_user_mad_hdr     hdr;                  /*     0    64 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+        __u64                      data[] __attribute__((__aligned__(8))); /*    64     0 */
+
+        /* size: 64, cachelines: 1, members: 2 */
+        /* forced alignments: 1 */
+} __attribute__((__aligned__(8)));
+
+So we have sizeof(*packet) + IB_MGMT_RMPP_HDR == 140 bytes
+
+Then the address of the flex-array member (for which only 36 bytes were
+allocated) is casted and copied into a pointer to struct ib_rmpp_mad,
+which, in turn, is of size 256 bytes:
+
+        rmpp_mad = (struct ib_rmpp_mad *) packet->mad.data;
+
+struct ib_rmpp_mad {
+        struct ib_mad_hdr          mad_hdr;              /*     0    24 */
+        struct ib_rmpp_hdr         rmpp_hdr;             /*    24    12 */
+        u8                         data[220];            /*    36   220 */
+
+        /* size: 256, cachelines: 4, members: 3 */
+};
+
+The thing is that those 36 bytes allocated for flex-array member data
+in struct ib_user_mad onlly account for the size of both struct ib_mad_hdr
+and struct ib_rmpp_hdr, but nothing is left for array u8 data[220].
+So, the compiler is legitimately complaining about accessing an object
+for which not enough memory was allocated.
+
+Apparently, the only members of struct ib_rmpp_mad that are relevant
+(that are actually being used) in function ib_umad_write() are mad_hdr
+and rmpp_hdr. So, instead of casting packet->mad.data to
+(struct ib_rmpp_mad *) create a new structure
+
+struct ib_rmpp_mad_hdr {
+        struct ib_mad_hdr       mad_hdr;
+        struct ib_rmpp_hdr      rmpp_hdr;
+} __packed;
+
+and cast packet->mad.data to (struct ib_rmpp_mad_hdr *).
+
+Notice that
+
+        IB_MGMT_RMPP_HDR == sizeof(struct ib_rmpp_mad_hdr) == 36 bytes
+
+Refactor the rest of the code, accordingly.
+
+Fix the following warnings seen under GCC-13 and -Warray-bounds:
+drivers/infiniband/core/user_mad.c:564:50: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:566:42: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:618:25: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:622:44: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+
+Link: https://github.com/KSPP/linux/issues/273
+Link: https://godbolt.org/z/oYWaGM4Yb [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/ZBpB91qQcB10m3Fw@work
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/infiniband/core/user_mad.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/infiniband/core/user_mad.c b/drivers/infiniband/core/user_mad.c
+index f83954180a338..d21c0a042f0a5 100644
+--- a/drivers/infiniband/core/user_mad.c
++++ b/drivers/infiniband/core/user_mad.c
+@@ -131,6 +131,11 @@ struct ib_umad_packet {
+ 	struct ib_user_mad mad;
+ };
+ 
++struct ib_rmpp_mad_hdr {
++	struct ib_mad_hdr	mad_hdr;
++	struct ib_rmpp_hdr      rmpp_hdr;
++} __packed;
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/ib_umad.h>
+ 
+@@ -494,11 +499,11 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 			     size_t count, loff_t *pos)
+ {
+ 	struct ib_umad_file *file = filp->private_data;
++	struct ib_rmpp_mad_hdr *rmpp_mad_hdr;
+ 	struct ib_umad_packet *packet;
+ 	struct ib_mad_agent *agent;
+ 	struct rdma_ah_attr ah_attr;
+ 	struct ib_ah *ah;
+-	struct ib_rmpp_mad *rmpp_mad;
+ 	__be64 *tid;
+ 	int ret, data_len, hdr_len, copy_offset, rmpp_active;
+ 	u8 base_version;
+@@ -506,7 +511,7 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 	if (count < hdr_size(file) + IB_MGMT_RMPP_HDR)
+ 		return -EINVAL;
+ 
+-	packet = kzalloc(sizeof *packet + IB_MGMT_RMPP_HDR, GFP_KERNEL);
++	packet = kzalloc(sizeof(*packet) + IB_MGMT_RMPP_HDR, GFP_KERNEL);
+ 	if (!packet)
+ 		return -ENOMEM;
+ 
+@@ -560,13 +565,13 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 		goto err_up;
+ 	}
+ 
+-	rmpp_mad = (struct ib_rmpp_mad *) packet->mad.data;
+-	hdr_len = ib_get_mad_data_offset(rmpp_mad->mad_hdr.mgmt_class);
++	rmpp_mad_hdr = (struct ib_rmpp_mad_hdr *)packet->mad.data;
++	hdr_len = ib_get_mad_data_offset(rmpp_mad_hdr->mad_hdr.mgmt_class);
+ 
+-	if (ib_is_mad_class_rmpp(rmpp_mad->mad_hdr.mgmt_class)
++	if (ib_is_mad_class_rmpp(rmpp_mad_hdr->mad_hdr.mgmt_class)
+ 	    && ib_mad_kernel_rmpp_agent(agent)) {
+ 		copy_offset = IB_MGMT_RMPP_HDR;
+-		rmpp_active = ib_get_rmpp_flags(&rmpp_mad->rmpp_hdr) &
++		rmpp_active = ib_get_rmpp_flags(&rmpp_mad_hdr->rmpp_hdr) &
+ 						IB_MGMT_RMPP_FLAG_ACTIVE;
+ 	} else {
+ 		copy_offset = IB_MGMT_MAD_HDR;
+@@ -615,12 +620,12 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 		tid = &((struct ib_mad_hdr *) packet->msg->mad)->tid;
+ 		*tid = cpu_to_be64(((u64) agent->hi_tid) << 32 |
+ 				   (be64_to_cpup(tid) & 0xffffffff));
+-		rmpp_mad->mad_hdr.tid = *tid;
++		rmpp_mad_hdr->mad_hdr.tid = *tid;
+ 	}
+ 
+ 	if (!ib_mad_kernel_rmpp_agent(agent)
+-	   && ib_is_mad_class_rmpp(rmpp_mad->mad_hdr.mgmt_class)
+-	   && (ib_get_rmpp_flags(&rmpp_mad->rmpp_hdr) & IB_MGMT_RMPP_FLAG_ACTIVE)) {
++	    && ib_is_mad_class_rmpp(rmpp_mad_hdr->mad_hdr.mgmt_class)
++	    && (ib_get_rmpp_flags(&rmpp_mad_hdr->rmpp_hdr) & IB_MGMT_RMPP_FLAG_ACTIVE)) {
+ 		spin_lock_irq(&file->send_lock);
+ 		list_add_tail(&packet->list, &file->send_list);
+ 		spin_unlock_irq(&file->send_lock);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
