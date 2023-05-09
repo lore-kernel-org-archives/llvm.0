@@ -1,658 +1,231 @@
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7345383;
-	Tue,  9 May 2023 07:05:08 +0000 (UTC)
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cxd+mi8FlkHd8GAA--.11334S3;
-	Tue, 09 May 2023 15:05:06 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlrWf8FlkzT1SAA--.16926S2;
-	Tue, 09 May 2023 15:05:04 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-ia64@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org,
-	bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	loongson-kernel@lists.loongnix.cn
-Subject: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-Date: Tue,  9 May 2023 15:05:03 +0800
-Message-Id: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID:AQAAf8BxlrWf8FlkzT1SAA--.16926S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfZFWUCF4DAw4DGFWUZry8AFb_yoW8KF17to
-	WagF1jkrWxGa1rXan5WF47Gay5ZF1v9r4xJw1fJ3y5Ga4fCr17Gr48WayIv3ZxCrn3t34U
-	WFWa9rZ8Xws2qwn3n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-	J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-	UUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-	0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-	ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-	AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8l38UUUUUU==
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AA48839;
+	Tue,  9 May 2023 09:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683624353; x=1715160353;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Vp7F6suoEnCAro+YT4h1w9bpYeXW8FkSrq3e6M45gMw=;
+  b=IvuDyxizamXwWZIvHg99A3GKNtIjAr5kg7DnUmECDAuTLWlKMReLRC00
+   Y0l+yNuWtfE92RYnpqUg1IyI6imA7+ume6J5nR19QDefDU1yiO+57d0xY
+   X/f/z4UCgTxE09TzWZ87h6VypofsciPEzQzzJ4qv7PSls11ABqvgXUUm4
+   s4x3IwSFOJc8ZNie1zJAUFR/v5d/991yPPPV5eFlrNLRx3d7GqxDTGQ8m
+   op4xG34Clr4/yP7dKZ6YiKkM/tZ5jfe9MtSJoEpdf49R+4vWbzEvWXOy3
+   JokmVu89PPgree5P0BVn86KweVQzbpXZ2UdZdpVATfa3mGI9Qvs97tYNL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="347326802"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="347326802"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP; 09 May 2023 02:25:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788449352"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="788449352"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2023 02:25:51 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pwJbS-00020q-1P;
+	Tue, 09 May 2023 09:25:50 +0000
+Date: Tue, 9 May 2023 17:25:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [avpatel:riscv_timer_imp_v1 10/14]
+ drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of
+ type
+Message-ID: <202305091731.mW8KEjj7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
-in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
-usable, just define __BITS_PER_LONG as (__CHAR_BIT__ * __SIZEOF_LONG__) in
-asm-generic uapi bitsperlong.h, simpler, works everywhere.
+Hi Anup,
 
-Remove all the arch specific uapi bitsperlong.h which will be generated as
-arch/*/include/generated/uapi/asm/bitsperlong.h.
+First bad commit (maybe != root cause):
 
-Suggested-by: Xi Ruoyao <xry111@xry111.site>
-Link: https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+tree:   https://github.com/avpatel/linux.git riscv_timer_imp_v1
+head:   f1bb550b4ea97cede175e141b831d4b9134a6338
+commit: a81f5ab22e765fe40a903c46531ada8da1eb0b8c [10/14] RISC-V: Select APLIC and IMSIC drivers
+config: riscv-randconfig-r021-20230507 (https://download.01.org/0day-ci/archive/20230509/202305091731.mW8KEjj7-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/a81f5ab22e765fe40a903c46531ada8da1eb0b8c
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_timer_imp_v1
+        git checkout a81f5ab22e765fe40a903c46531ada8da1eb0b8c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
 
-This is based on 6.4-rc1
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091731.mW8KEjj7-lkp@intel.com/
 
- arch/alpha/include/uapi/asm/bitsperlong.h          |  9 --------
- arch/arm64/include/uapi/asm/bitsperlong.h          | 24 -------------------
- arch/ia64/include/uapi/asm/bitsperlong.h           |  9 --------
- arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
- arch/mips/include/uapi/asm/bitsperlong.h           |  9 --------
- arch/parisc/include/uapi/asm/bitsperlong.h         | 13 -----------
- arch/powerpc/include/uapi/asm/bitsperlong.h        | 13 -----------
- arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -----------
- arch/s390/include/uapi/asm/bitsperlong.h           | 14 -----------
- arch/sparc/include/uapi/asm/bitsperlong.h          | 14 -----------
- arch/x86/include/uapi/asm/bitsperlong.h            | 14 -----------
- include/uapi/asm-generic/bitsperlong.h             | 11 +--------
- tools/arch/alpha/include/uapi/asm/bitsperlong.h    |  9 --------
- tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 -------------------
- tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
- tools/arch/ia64/include/uapi/asm/bitsperlong.h     |  9 --------
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
- .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
- tools/arch/mips/include/uapi/asm/bitsperlong.h     |  9 --------
- tools/arch/parisc/include/uapi/asm/bitsperlong.h   | 15 ------------
- tools/arch/powerpc/include/uapi/asm/bitsperlong.h  | 13 -----------
- tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -----------
- tools/arch/s390/include/uapi/asm/bitsperlong.h     | 13 -----------
- tools/arch/sparc/include/uapi/asm/bitsperlong.h    | 13 -----------
- tools/arch/x86/include/uapi/asm/bitsperlong.h      | 13 -----------
- tools/include/uapi/asm-generic/bitsperlong.h       | 12 ++--------
- tools/include/uapi/asm/bitsperlong.h               | 24 -------------------
- 27 files changed, 3 insertions(+), 356 deletions(-)
- delete mode 100644 arch/alpha/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/ia64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/mips/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/parisc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/powerpc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/s390/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/sparc/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/x86/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/alpha/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/ia64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/mips/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/parisc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/powerpc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/s390/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/sparc/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/x86/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/include/uapi/asm/bitsperlong.h
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/alpha/include/uapi/asm/bitsperlong.h b/arch/alpha/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 6c5bf7d..0000000
---- a/arch/alpha/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/arch/arm64/include/uapi/asm/bitsperlong.h b/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/arch/ia64/include/uapi/asm/bitsperlong.h b/arch/ia64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 1146d55..0000000
---- a/arch/ia64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_IA64_BITSPERLONG_H
--#define __ASM_IA64_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_IA64_BITSPERLONG_H */
-diff --git a/arch/loongarch/include/uapi/asm/bitsperlong.h b/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/arch/mips/include/uapi/asm/bitsperlong.h b/arch/mips/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7268380d..0000000
---- a/arch/mips/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_MIPS_BITSPERLONG_H
--#define __ASM_MIPS_BITSPERLONG_H
--
--#define __BITS_PER_LONG _MIPS_SZLONG
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_MIPS_BITSPERLONG_H */
-diff --git a/arch/parisc/include/uapi/asm/bitsperlong.h b/arch/parisc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 307e2ef..0000000
---- a/arch/parisc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_PARISC_BITSPERLONG_H
--#define __ASM_PARISC_BITSPERLONG_H
--
--#if defined(__LP64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_PARISC_BITSPERLONG_H */
-diff --git a/arch/powerpc/include/uapi/asm/bitsperlong.h b/arch/powerpc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 46ece3e..0000000
---- a/arch/powerpc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_POWERPC_BITSPERLONG_H
--#define __ASM_POWERPC_BITSPERLONG_H
--
--#if defined(__powerpc64__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_POWERPC_BITSPERLONG_H */
-diff --git a/arch/riscv/include/uapi/asm/bitsperlong.h b/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7d0b32e..0000000
---- a/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/arch/s390/include/uapi/asm/bitsperlong.h b/arch/s390/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index cceaf47..0000000
---- a/arch/s390/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_S390_BITSPERLONG_H
--#define __ASM_S390_BITSPERLONG_H
--
--#ifndef __s390x__
--#define __BITS_PER_LONG 32
--#else
--#define __BITS_PER_LONG 64
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_S390_BITSPERLONG_H */
--
-diff --git a/arch/sparc/include/uapi/asm/bitsperlong.h b/arch/sparc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index cd9a432..0000000
---- a/arch/sparc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#if defined(__sparc__) && defined(__arch64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
--
-diff --git a/arch/x86/include/uapi/asm/bitsperlong.h b/arch/x86/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 5d72c845..0000000
---- a/arch/x86/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_X86_BITSPERLONG_H
--#define __ASM_X86_BITSPERLONG_H
--
--#if defined(__x86_64__) && !defined(__ILP32__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_X86_BITSPERLONG_H */
--
-diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-index 693d9a4..a230ba3 100644
---- a/include/uapi/asm-generic/bitsperlong.h
-+++ b/include/uapi/asm-generic/bitsperlong.h
-@@ -2,15 +2,6 @@
- #ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
--/*
-- * There seems to be no way of detecting this automatically from user
-- * space, so 64 bit architectures should override this in their
-- * bitsperlong.h. In particular, an architecture that supports
-- * both 32 and 64 bit user space must not rely on CONFIG_64BIT
-- * to decide it, but rather check a compiler provided macro.
-- */
--#ifndef __BITS_PER_LONG
--#define __BITS_PER_LONG 32
--#endif
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/arch/alpha/include/uapi/asm/bitsperlong.h b/tools/arch/alpha/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 6c5bf7d..0000000
---- a/tools/arch/alpha/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/tools/arch/arm64/include/uapi/asm/bitsperlong.h b/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h b/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 5adca0d..0000000
---- a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 and
-- * only version 2 as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-- * 02110-1301, USA.
-- */
--
--#ifndef __ASM_HEXAGON_BITSPERLONG_H
--#define __ASM_HEXAGON_BITSPERLONG_H
--
--#define __BITS_PER_LONG 32
--
--#include <asm-generic/bitsperlong.h>
--
--#endif
-diff --git a/tools/arch/ia64/include/uapi/asm/bitsperlong.h b/tools/arch/ia64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 1146d55..0000000
---- a/tools/arch/ia64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_IA64_BITSPERLONG_H
--#define __ASM_IA64_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_IA64_BITSPERLONG_H */
-diff --git a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h b/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 76da34b..0000000
---- a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,2 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#include <asm-generic/bitsperlong.h>
-diff --git a/tools/arch/mips/include/uapi/asm/bitsperlong.h b/tools/arch/mips/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7268380d..0000000
---- a/tools/arch/mips/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_MIPS_BITSPERLONG_H
--#define __ASM_MIPS_BITSPERLONG_H
--
--#define __BITS_PER_LONG _MIPS_SZLONG
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_MIPS_BITSPERLONG_H */
-diff --git a/tools/arch/parisc/include/uapi/asm/bitsperlong.h b/tools/arch/parisc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 23ac756..0000000
---- a/tools/arch/parisc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_PARISC_BITSPERLONG_H
--#define __ASM_PARISC_BITSPERLONG_H
--
--#if defined(__LP64__)
--#define __BITS_PER_LONG 64
--#define SHIFT_PER_LONG 6
--#else
--#define __BITS_PER_LONG 32
--#define SHIFT_PER_LONG 5
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_PARISC_BITSPERLONG_H */
-diff --git a/tools/arch/powerpc/include/uapi/asm/bitsperlong.h b/tools/arch/powerpc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 46ece3e..0000000
---- a/tools/arch/powerpc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_POWERPC_BITSPERLONG_H
--#define __ASM_POWERPC_BITSPERLONG_H
--
--#if defined(__powerpc64__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_POWERPC_BITSPERLONG_H */
-diff --git a/tools/arch/riscv/include/uapi/asm/bitsperlong.h b/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 0b9b58b..0000000
---- a/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/tools/arch/s390/include/uapi/asm/bitsperlong.h b/tools/arch/s390/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index d2bb620..0000000
---- a/tools/arch/s390/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_S390_BITSPERLONG_H
--#define __ASM_S390_BITSPERLONG_H
--
--#ifndef __s390x__
--#define __BITS_PER_LONG 32
--#else
--#define __BITS_PER_LONG 64
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_S390_BITSPERLONG_H */
-diff --git a/tools/arch/sparc/include/uapi/asm/bitsperlong.h b/tools/arch/sparc/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 3b4e617..0000000
---- a/tools/arch/sparc/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_ALPHA_BITSPERLONG_H
--#define __ASM_ALPHA_BITSPERLONG_H
--
--#if defined(__sparc__) && defined(__arch64__)
--#define __BITS_PER_LONG 64
--#else
--#define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_ALPHA_BITSPERLONG_H */
-diff --git a/tools/arch/x86/include/uapi/asm/bitsperlong.h b/tools/arch/x86/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index f8a92e0..0000000
---- a/tools/arch/x86/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_X86_BITSPERLONG_H
--#define __ASM_X86_BITSPERLONG_H
--
--#if defined(__x86_64__) && !defined(__ILP32__)
--# define __BITS_PER_LONG 64
--#else
--# define __BITS_PER_LONG 32
--#endif
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_X86_BITSPERLONG_H */
-diff --git a/tools/include/uapi/asm-generic/bitsperlong.h b/tools/include/uapi/asm-generic/bitsperlong.h
-index 23e6c41..a230ba3 100644
---- a/tools/include/uapi/asm-generic/bitsperlong.h
-+++ b/tools/include/uapi/asm-generic/bitsperlong.h
-@@ -1,15 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- #ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
--/*
-- * There seems to be no way of detecting this automatically from user
-- * space, so 64 bit architectures should override this in their
-- * bitsperlong.h. In particular, an architecture that supports
-- * both 32 and 64 bit user space must not rely on CONFIG_64BIT
-- * to decide it, but rather check a compiler provided macro.
-- */
--#ifndef __BITS_PER_LONG
--#define __BITS_PER_LONG 32
--#endif
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/include/uapi/asm/bitsperlong.h b/tools/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index da52065..0000000
---- a/tools/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#if defined(__i386__) || defined(__x86_64__)
--#include "../../../arch/x86/include/uapi/asm/bitsperlong.h"
--#elif defined(__aarch64__)
--#include "../../../arch/arm64/include/uapi/asm/bitsperlong.h"
--#elif defined(__powerpc__)
--#include "../../../arch/powerpc/include/uapi/asm/bitsperlong.h"
--#elif defined(__s390__)
--#include "../../../arch/s390/include/uapi/asm/bitsperlong.h"
--#elif defined(__sparc__)
--#include "../../../arch/sparc/include/uapi/asm/bitsperlong.h"
--#elif defined(__mips__)
--#include "../../../arch/mips/include/uapi/asm/bitsperlong.h"
--#elif defined(__ia64__)
--#include "../../../arch/ia64/include/uapi/asm/bitsperlong.h"
--#elif defined(__riscv)
--#include "../../../arch/riscv/include/uapi/asm/bitsperlong.h"
--#elif defined(__alpha__)
--#include "../../../arch/alpha/include/uapi/asm/bitsperlong.h"
--#elif defined(__loongarch__)
--#include "../../../arch/loongarch/include/uapi/asm/bitsperlong.h"
--#else
--#include <asm-generic/bitsperlong.h>
--#endif
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of type [-Wshift-count-overflow]
+                   valH = (priv->msicfg.base_ppn >> 32) &
+                                                 ^  ~~
+   14 warnings generated.
+
+
+vim +331 drivers/irqchip/irq-riscv-aplic.c
+
+f5e62553412fff Anup Patel 2022-01-18  322  
+f5e62553412fff Anup Patel 2022-01-18  323  static void aplic_init_hw_global(struct aplic_priv *priv)
+f5e62553412fff Anup Patel 2022-01-18  324  {
+f5e62553412fff Anup Patel 2022-01-18  325  	u32 val;
+f5e62553412fff Anup Patel 2022-01-18  326  #ifdef CONFIG_RISCV_M_MODE
+f5e62553412fff Anup Patel 2022-01-18  327  	u32 valH;
+f5e62553412fff Anup Patel 2022-01-18  328  
+f5e62553412fff Anup Patel 2022-01-18  329  	if (!priv->nr_idcs) {
+f5e62553412fff Anup Patel 2022-01-18  330  		val = priv->msicfg.base_ppn;
+f5e62553412fff Anup Patel 2022-01-18 @331  		valH = (priv->msicfg.base_ppn >> 32) &
+f5e62553412fff Anup Patel 2022-01-18  332  			APLIC_xMSICFGADDRH_BAPPN_MASK;
+f5e62553412fff Anup Patel 2022-01-18  333  		valH |= (priv->msicfg.lhxw & APLIC_xMSICFGADDRH_LHXW_MASK)
+f5e62553412fff Anup Patel 2022-01-18  334  			<< APLIC_xMSICFGADDRH_LHXW_SHIFT;
+f5e62553412fff Anup Patel 2022-01-18  335  		valH |= (priv->msicfg.hhxw & APLIC_xMSICFGADDRH_HHXW_MASK)
+f5e62553412fff Anup Patel 2022-01-18  336  			<< APLIC_xMSICFGADDRH_HHXW_SHIFT;
+f5e62553412fff Anup Patel 2022-01-18  337  		valH |= (priv->msicfg.lhxs & APLIC_xMSICFGADDRH_LHXS_MASK)
+f5e62553412fff Anup Patel 2022-01-18  338  			<< APLIC_xMSICFGADDRH_LHXS_SHIFT;
+f5e62553412fff Anup Patel 2022-01-18  339  		valH |= (priv->msicfg.hhxs & APLIC_xMSICFGADDRH_HHXS_MASK)
+f5e62553412fff Anup Patel 2022-01-18  340  			<< APLIC_xMSICFGADDRH_HHXS_SHIFT;
+f5e62553412fff Anup Patel 2022-01-18  341  		writel(val, priv->regs + APLIC_xMSICFGADDR);
+f5e62553412fff Anup Patel 2022-01-18  342  		writel(valH, priv->regs + APLIC_xMSICFGADDRH);
+f5e62553412fff Anup Patel 2022-01-18  343  	}
+f5e62553412fff Anup Patel 2022-01-18  344  #endif
+f5e62553412fff Anup Patel 2022-01-18  345  
+f5e62553412fff Anup Patel 2022-01-18  346  	/* Setup APLIC domaincfg register */
+f5e62553412fff Anup Patel 2022-01-18  347  	val = readl(priv->regs + APLIC_DOMAINCFG);
+f5e62553412fff Anup Patel 2022-01-18  348  	val |= APLIC_DOMAINCFG_IE;
+f5e62553412fff Anup Patel 2022-01-18  349  	if (!priv->nr_idcs)
+f5e62553412fff Anup Patel 2022-01-18  350  		val |= APLIC_DOMAINCFG_DM;
+f5e62553412fff Anup Patel 2022-01-18  351  	writel(val, priv->regs + APLIC_DOMAINCFG);
+f5e62553412fff Anup Patel 2022-01-18  352  	if (readl(priv->regs + APLIC_DOMAINCFG) != val)
+f5e62553412fff Anup Patel 2022-01-18  353  		pr_warn("%pfwP: unable to write 0x%x in domaincfg\n",
+f5e62553412fff Anup Patel 2022-01-18  354  			priv->fwnode, val);
+f5e62553412fff Anup Patel 2022-01-18  355  }
+f5e62553412fff Anup Patel 2022-01-18  356  
+
+:::::: The code at line 331 was first introduced by commit
+:::::: f5e62553412fff47a0babd7b77b4a4285ac3fa5c irqchip: Add RISC-V advanced PLIC driver
+
+:::::: TO: Anup Patel <apatel@ventanamicro.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
 -- 
-2.1.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
