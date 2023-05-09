@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A9A19909
-	for <llvm@lists.linux.dev>; Tue,  9 May 2023 21:20:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E19C4339C;
-	Tue,  9 May 2023 21:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8C419909
+	for <llvm@lists.linux.dev>; Tue,  9 May 2023 21:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3687C4339E;
+	Tue,  9 May 2023 21:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683667229;
-	bh=ay1xtbhr8/38OtjONDJS8bx+nHBrKQq9//Env+2D/H8=;
+	s=k20201202; t=1683667245;
+	bh=YDxSLj3eKvYArABS28ZMmjiLOadmowpjoODcllvDd3g=;
 	h=From:To:Cc:Subject:Date:From;
-	b=bOXFUHQeXGieZ3KYkwpQuQ4prOKyt2zH0BCMoAE7rWHEF5rDmFNu5AbeLtyvUm6oI
-	 qFPZXiRp/dyabpIQivkRwu0pYejOzNIxYYewMgNkfScCexKM3QDUZZzyjBa34ayFZI
-	 N27S3tgj2Rb+x175b8n6s+6jIWZjBda2EIsZ+6D3Id5ZyriIH0jStxn8iqOKInsYVX
-	 4K685sL7XcBBQghd83b11HJw2nh/PnlIPetTh+U7Pl9nOtg5eBCs3mOl2m6BY4ViDf
-	 vDEJfaABG2dl+L8xiYw+yQb0sIAj9GoT84oTwXvI8rcX6iqoinQKTgm88hKnnDwh8J
-	 yc5S8KTSXCGJw==
+	b=oU3wE1itEf6uTGfLmrAT81aHHUCjwlwA3gUTmA0wlFNHesxDF2uFmeB/BcqEA3kp9
+	 UAq59HZDl8DZidue3rE4p4a7QDT+DJfy0QvcGYKEEPGwVK7Hw6kOHLd0xMmQoK6+Az
+	 +mvxp/pOqD9ja+F4TuO/LdwV/uKTovWkCYbI0aCPY2mOktv/xxPfdCKmilZCTZxFgs
+	 mn5KonF8yFbtJNAjYQWn5kcBZ+fIP/iq37PVk0Jl8pEe/pgf5y5Kf2RyPvdUr/9CL2
+	 ckqSXuh2EuPoCdgkuC1CejNbIN0/KFA4mAC/ph8WCl9gS7RFDI3HH17KwqRjjiPrjd
+	 oWt5eN/Hggg7w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -27,9 +27,9 @@ Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	mcgrof@kernel.org,
 	linux-rdma@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 01/13] RDMA/core: Fix multiple -Warray-bounds warnings
-Date: Tue,  9 May 2023 17:20:09 -0400
-Message-Id: <20230509212023.22105-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 1/5] RDMA/core: Fix multiple -Warray-bounds warnings
+Date: Tue,  9 May 2023 17:20:37 -0400
+Message-Id: <20230509212044.22294-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -147,7 +147,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/infiniband/core/user_mad.c b/drivers/infiniband/core/user_mad.c
-index 98cb594cd9a69..a61c9ede43387 100644
+index 4688a6657c875..3bd0dcde8576d 100644
 --- a/drivers/infiniband/core/user_mad.c
 +++ b/drivers/infiniband/core/user_mad.c
 @@ -131,6 +131,11 @@ struct ib_umad_packet {
