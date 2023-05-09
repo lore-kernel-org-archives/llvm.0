@@ -1,51 +1,44 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8811990B;
-	Tue,  9 May 2023 22:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80221990C;
+	Tue,  9 May 2023 22:37:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683669896; x=1715205896;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9/P81WHdTJbxaMSzeklpkHr2QdhoRoTstEJFSrWxSg8=;
-  b=AZrDBqzW7r9oTy6Qjd6sKJjxMgr+YbmI55EDAnezqvlKuCau6CND6tkm
-   XS0zt/8V/9QpLYAOXw3qh+njdyiMp/IjQbilKMLBxaabkNLQaXmJYD8+P
-   ZG6LOtQnWYYKnQxFJPsEGDhsrvhUrEZUYP882J0lw9LVwaxk+3zp5vGN7
-   INtaojVXmxL4/kMsgC7hPeHmAffUvDXH+RtianHhw3Ddgz0r/oCmMxMLS
-   mCRkwWwzaiqZQWv8qEtD8BwePMI8LT3E6yN4AyiFxiSfu6abeFxXq/UMl
-   3VLQwbVn5qiAx8TnP+KAWkGnfDHBTWiDqd4+UnuZr9q7qPDpf5yTn4M8L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="350095814"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="350095814"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:04:55 -0700
+  t=1683671875; x=1715207875;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5n6VV0nH8Sd1Fww0nDPfaJiqSwFe3rj7RhAINpuiC0Q=;
+  b=J9GynS3Ra6CjNkjM+vQeH/I3cJTZAvtbSlLxIGXo7qQ59KbyMHcSPRq0
+   Z9iKBoOvxvyqSD0WS4ZfBwrWmmnN5JJ+Lkk/RWsARqmomGz1LgKaq345f
+   HfVtBEoepZUsDxj9OOXzDvCbqmIpejmx+UVqq4KJYzt7asXdsuPWnlZ/y
+   /wLKxjtpNz+Lu0M0b4Bz5W4cfj9Ig+28zR96aOLm6ywm36UYIqTZqIrtb
+   S1c8gYdWiAXa0th/VMwxHuJz34F79TWvSbgkGv/CqPky2r2M2F4Qd2Ls3
+   bKGPqw5ChOj5HZHuJGekKSSnCsD7tQ0LL0BuvqG1xBSb/hubuJYmQFRGb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="350100986"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="350100986"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:35:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="768674791"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="768674791"
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="676621533"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="676621533"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 May 2023 15:04:53 -0700
+  by orsmga006.jf.intel.com with ESMTP; 09 May 2023 15:35:54 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pwVS0-0002YC-15;
-	Tue, 09 May 2023 22:04:52 +0000
-Date: Wed, 10 May 2023 06:04:16 +0800
+	id 1pwVw1-0002aW-2P;
+	Tue, 09 May 2023 22:35:53 +0000
+Date: Wed, 10 May 2023 06:35:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Udipto Goswami <quic_ugoswami@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Atish Patra <atishp@rivosinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pratham Pratap <quic_ppratap@quicinc.com>,
-	Jack Pham <quic_jackp@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-	Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: Re: [PATCH v8] usb: dwc3: debugfs: Prevent any register access when
- devices is runtime suspended
-Message-ID: <202305100533.3s1xdH64-lkp@intel.com>
-References: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
+	Atish Patra <Atish.Patra@wdc.com>
+Subject: [atishp04:kvm_perf_snapshot_rfc 5/7]
+ drivers/perf/riscv_pmu_sbi.c:500:42: warning: format specifies type 'int'
+ but the argument has type 'long'
+Message-ID: <202305100606.77rwZJhG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,122 +47,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504045052.22347-1-quic_ugoswami@quicinc.com>
 
-Hi Udipto,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus johan-usb-serial/usb-next johan-usb-serial/usb-linus linus/master v6.4-rc1 next-20230509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Udipto-Goswami/usb-dwc3-debugfs-Prevent-any-register-access-when-devices-is-runtime-suspended/20230504-125225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230504045052.22347-1-quic_ugoswami%40quicinc.com
-patch subject: [PATCH v8] usb: dwc3: debugfs: Prevent any register access when devices is runtime suspended
-config: hexagon-randconfig-r024-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100533.3s1xdH64-lkp@intel.com/config)
+tree:   https://github.com/atishp04/linux kvm_perf_snapshot_rfc
+head:   5ae7188de04f861c3f4026005a0ace2cf2575bde
+commit: 51adde1839f15db1a4074f7b36eb2dccad7fa534 [5/7] perf: RISC-V: Implement SBI PMU snapshot function
+config: riscv-randconfig-r042-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100606.77rwZJhG-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1c53edaeee33380f0fc3e0d262829ffaa66f45e1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Udipto-Goswami/usb-dwc3-debugfs-Prevent-any-register-access-when-devices-is-runtime-suspended/20230504-125225
-        git checkout 1c53edaeee33380f0fc3e0d262829ffaa66f45e1
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/atishp04/linux/commit/51adde1839f15db1a4074f7b36eb2dccad7fa534
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 kvm_perf_snapshot_rfc
+        git checkout 51adde1839f15db1a4074f7b36eb2dccad7fa534
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/dwc3/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/ drivers/usb/dwc3/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305100533.3s1xdH64-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305100606.77rwZJhG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/usb/dwc3/debugfs.c:23:
-   In file included from drivers/usb/dwc3/core.h:20:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/usb/dwc3/debugfs.c:23:
-   In file included from drivers/usb/dwc3/core.h:20:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/usb/dwc3/debugfs.c:23:
-   In file included from drivers/usb/dwc3/core.h:20:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/usb/dwc3/debugfs.c:720:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-                   return ret;
-                   ^
-   drivers/usb/dwc3/debugfs.c:718:2: note: previous statement is here
-           if (ret < 0)
-           ^
-   7 warnings generated.
+>> drivers/perf/riscv_pmu_sbi.c:500:42: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                   pr_err("%s: ret.error %d\n", __func__, ret.error);
+                                         ~~               ^~~~~~~~~
+                                         %ld
+   include/linux/printk.h:498:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/if +720 drivers/usb/dwc3/debugfs.c
+vim +500 drivers/perf/riscv_pmu_sbi.c
 
-   707	
-   708	static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
-   709	{
-   710		struct dwc3_ep		*dep = s->private;
-   711		struct dwc3		*dwc = dep->dwc;
-   712		unsigned long		flags;
-   713		u32			mdwidth;
-   714		u32			val;
-   715		int			ret;
-   716	
-   717		ret = pm_runtime_resume_and_get(dwc->dev);
-   718		if (ret < 0)
-   719			pm_runtime_put_sync(dwc->dev);
- > 720			return ret;
-   721	
-   722		spin_lock_irqsave(&dwc->lock, flags);
-   723		val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
-   724	
-   725		/* Convert to bytes */
-   726		mdwidth = dwc3_mdwidth(dwc);
-   727	
-   728		val *= mdwidth;
-   729		val >>= 3;
-   730		seq_printf(s, "%u\n", val);
-   731		spin_unlock_irqrestore(&dwc->lock, flags);
-   732	
-   733		pm_runtime_put_sync(dwc->dev);
-   734		return 0;
-   735	}
-   736	
+   472	
+   473	static int pmu_sbi_snapshot_init(struct riscv_pmu *pmu, int cpu)
+   474	{
+   475		struct page *snapshot_page;
+   476		struct cpu_hw_events *cpu_hw_evt;
+   477		phys_addr_t snapshot_addr_phys;
+   478		struct sbiret ret = {0};
+   479	
+   480		cpu_hw_evt = per_cpu_ptr(pmu->hw_events, cpu);
+   481		if (cpu_hw_evt->snapshot_addr)
+   482			return 0;
+   483	
+   484		snapshot_page = alloc_page(GFP_ATOMIC | __GFP_ZERO);
+   485		if (!snapshot_page) {
+   486			pmu_sbi_snapshot_deinit(pmu);
+   487			return -ENOMEM;
+   488		}
+   489		cpu_hw_evt->snapshot_addr = page_to_virt(snapshot_page);
+   490		snapshot_addr_phys = page_to_phys(snapshot_page);
+   491	#if defined(CONFIG_32BIT)
+   492		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_ENABLE_SNAPSHOT, (unsigned long)snapshot_addr_phys,
+   493				 (u64)(snapshot_addr_phys) >> 32, 0, 0, 0, 0);
+   494	#else
+   495		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_ENABLE_SNAPSHOT, (unsigned long)snapshot_addr_phys,
+   496				0, 0, 0, 0, 0);
+   497	#endif
+   498		/* Free up the snapshot area memory and fall back to default SBI */
+   499		if (ret.error) {
+ > 500			pr_err("%s: ret.error %d\n", __func__, ret.error);
+   501			pmu_sbi_snapshot_deinit(pmu);
+   502		}
+   503	
+   504		return 0;
+   505	}
+   506	
 
 -- 
 0-DAY CI Kernel Test Service
