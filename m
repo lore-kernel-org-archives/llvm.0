@@ -1,130 +1,227 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302F918018;
-	Tue,  9 May 2023 16:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B120C433D2;
-	Tue,  9 May 2023 16:46:01 +0000 (UTC)
-Date: Tue, 9 May 2023 12:45:59 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Ajay Kaher <akaher@vmware.com>
-Cc: kernel test robot <lkp@intel.com>, "mhiramat@kernel.org"
- <mhiramat@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "chinglinyu@google.com" <chinglinyu@google.com>, Nadav Amit
- <namit@vmware.com>, Srivatsa Bhat <srivatsab@vmware.com>,
- "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>, Alexey Makhalov
- <amakhalov@vmware.com>, Vasavi Sirnapalli <vsirnapalli@vmware.com>, Tapas
- Kundu <tkundu@vmware.com>, "er.ajay.kaher@gmail.com"
- <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Message-ID: <20230509124559.0d5557ad@rorschach.local.home>
-In-Reply-To: <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
-References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
-	<202305030116.Gu6yyvKj-lkp@intel.com>
-	<1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66BD1097B
+	for <llvm@lists.linux.dev>; Tue,  9 May 2023 17:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C601C433EF;
+	Tue,  9 May 2023 17:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683654615;
+	bh=rVSz+Tb3H1/HHESESFxVFjW2CxxTsz7vH2xOqzNlQXc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SWUmzHG8xFjWpRkUn7jxvkUG21EZyVRmvIHAfaVcDHRGM9jMRutvis8vhLLUy4O6s
+	 TNfr8CkW+0xFnginSyEkOvFBFvpfOmfhA5nD3ARTrQ70JeNf4ZdFCI5HaO0KOLYccW
+	 vQdtgGdmg/tQ5H63l/yZA/IRiWefyI99JD7UG/jkDkK98gs8oeXFAAGuZ3x/WUQl08
+	 dJVCQI52RgYMOfw8/KVYJ1KtUhhMWuPE0OU99QGXVBQFCtLEJXKyVpOEh03tYK0nnO
+	 JOdA+2jhGLcjwX9OUN+wPeWnGy/ROl2o4urTxQBEOvfJ3/SX8Fmf+xvybwL/5Cz17z
+	 qRmXV8na65m5w==
+Date: Tue, 9 May 2023 18:50:07 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Weili Qian <qianweili@huawei.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V5 08/21] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <20230509-atlantic-writing-3ceea38e050e@spud>
+References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
+ <20230508115237.216337-9-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="VyG74+KZvewY8TZ5"
+Content-Disposition: inline
+In-Reply-To: <20230508115237.216337-9-sunilvl@ventanamicro.com>
+
+
+--VyG74+KZvewY8TZ5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 9 May 2023 12:29:23 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+Hey Sunil,
 
-> =EF=BB=BF> On 02/05/23, 11:42 PM, "kernel test robot" <lkp@intel.com> wro=
-te: =20
-> >   >> kernel/trace/trace_events.c:2424:17: warning: variable 'd_events' =
-set but not used [-Wunused-but-set-variable] =20
-> >           struct dentry *d_events;
-> >                       ^
-> >    1 warning generated.
-> > =20
+On Mon, May 08, 2023 at 05:22:24PM +0530, Sunil V L wrote:
+> RINTC structures in the MADT provide mapping between the hartid
+> and the CPU. This is required many times even at run time like
+> cpuinfo. So, instead of parsing the ACPI table every time, cache
+> the RINTC structures and provide a function to get the correct
+> RINTC structure for a given cpu.
 >=20
-> Steve, with-in event_create_dir(), do we have any scenario when file->eve=
-nt_call->class->system
-> doesn't have TRACE_SYSTEM? And need to execute following:
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+=46rom this patch until "RISC-V: Add ACPI initialization in
+setup_arch()" (which is 19/21), the series fails to build.
+
+allmodconfig, clang-16:
+=2E./arch/riscv/include/asm/acpi.h:22:23: error: unknown type name 'acpi_ph=
+ysical_address'; did you mean 'efi_physical_addr_t'?
+=2E./arch/riscv/include/asm/acpi.h:22:51: error: unknown type name 'acpi_si=
+ze'
+
+rv32_defconfig, clang-16:
+arch/riscv/kernel/setup.c:297:7: error: use of undeclared identifier 'acpi_=
+disabled'; did you mean '__cpu_disable'?
+arch/riscv/kernel/setup.c:297:7: warning: address of function '__cpu_disabl=
+e' will always evaluate to 'true' [-Wpointer-bool-conversion]
+
+I ballsed up a toolchain upgrade to gcc-13, so the whole series is
+showing build issues on patchwork for the gcc configurations:
+https://patchwork.kernel.org/project/linux-riscv/list/?series=3D745787
+
+However, I suspect that the same patches that fail for clang-16 will
+fail for gcc-13 too, once I have fixed that!
+
+Cheers,
+Conor.
+
+> ---
+>  arch/riscv/include/asm/acpi.h | 10 ++++++++
+>  arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/setup.c     |  4 ++++
+>  3 files changed, 59 insertions(+)
 >=20
-> ae63b31e4d0e2e Steven Rostedt           2012-05-03  2437                d=
-_events =3D parent;
+> diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> index 9be52b6ffae1..6519529c8bdf 100644
+> --- a/arch/riscv/include/asm/acpi.h
+> +++ b/arch/riscv/include/asm/acpi.h
+> @@ -59,6 +59,16 @@ static inline bool acpi_has_cpu_in_madt(void)
+> =20
+>  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> =20
+> +void acpi_init_rintc_map(void);
+> +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+> +u32 get_acpi_id_for_cpu(int cpu);
+> +#else
+> +static inline void acpi_init_rintc_map(void) { }
+> +static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
+> +{
+> +	return NULL;
+> +}
+> +
+>  #endif /* CONFIG_ACPI */
+> =20
+>  #endif /*_ASM_ACPI_H*/
+> diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> index 81d448c41714..89e142611c84 100644
+> --- a/arch/riscv/kernel/acpi.c
+> +++ b/arch/riscv/kernel/acpi.c
+> @@ -24,6 +24,51 @@ EXPORT_SYMBOL(acpi_disabled);
+>  int acpi_pci_disabled =3D 1;	/* skip ACPI PCI scan and IRQ initializatio=
+n */
+>  EXPORT_SYMBOL(acpi_pci_disabled);
+> =20
+> +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
+> +
+> +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, co=
+nst unsigned long end)
+> +{
+> +	struct acpi_madt_rintc *rintc =3D (struct acpi_madt_rintc *)header;
+> +	int cpuid;
+> +
+> +	if (!(rintc->flags & ACPI_MADT_ENABLED))
+> +		return 0;
+> +
+> +	cpuid =3D riscv_hartid_to_cpuid(rintc->hart_id);
+> +	/*
+> +	 * When CONFIG_SMP is disabled, mapping won't be created for
+> +	 * all cpus.
+> +	 * CPUs more than num_possible_cpus, will be ignored.
+> +	 */
+> +	if (cpuid >=3D 0 && cpuid < num_possible_cpus())
+> +		cpu_madt_rintc[cpuid] =3D *rintc;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Instead of parsing (and freeing) the ACPI table, cache
+> + * the RINTC structures since they are frequently used
+> + * like in  cpuinfo.
+> + */
+> +void __init acpi_init_rintc_map(void)
+> +{
+> +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, =
+0) <=3D 0) {
+> +		pr_err("No valid RINTC entries exist\n");
+> +		BUG();
+> +	}
+> +}
+> +
+> +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
+> +{
+> +	return &cpu_madt_rintc[cpu];
+> +}
+> +
+> +u32 get_acpi_id_for_cpu(int cpu)
+> +{
+> +	return acpi_cpu_get_madt_rintc(cpu)->uid;
+> +}
+> +
+>  /*
+>   * __acpi_map_table() will be called before paging_init(), so early_iore=
+map()
+>   * or early_memremap() should be called here to for ACPI table mapping.
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 9fb839074e16..a44c7fcde12f 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/efi.h>
+>  #include <linux/crash_dump.h>
+> =20
+> +#include <asm/acpi.h>
+>  #include <asm/alternative.h>
+>  #include <asm/cacheflush.h>
+>  #include <asm/cpu_ops.h>
+> @@ -293,6 +294,9 @@ void __init setup_arch(char **cmdline_p)
+>  	setup_smp();
+>  #endif
+> =20
+> +	if (!acpi_disabled)
+> +		acpi_init_rintc_map();
+> +
+>  	riscv_init_cbo_blocksizes();
+>  	riscv_fill_hwcap();
+>  	apply_boot_alternatives();
+> --=20
+> 2.34.1
 >=20
-> looking for your input if we could remove d_events from event_create_dir(=
-).
->=20
 
-I have hit this in the beginning, but I don't think it's an issue
-anymore. Perhaps just have it be:
+--VyG74+KZvewY8TZ5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        if (WARN_ON_ONCE(strcmp(call->class->system, TRACE_SYSTEM) =3D=3D 0=
-))
-		return -ENODEV;
+-----BEGIN PGP SIGNATURE-----
 
-        ef_subsystem =3D event_subsystem_dir(tr, call->class->system, file,=
- parent);
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqHzwAKCRB4tDGHoIJi
+0vwIAP42h0wsHOgAHQ3WyuVw8G1XFBezccQwODC76RxofaL0TAEA+V+4IuPaUdHr
+5H2An4OZhjeskB4ClsRk3M+rqDqMXAc=
+=OVlw
+-----END PGP SIGNATURE-----
 
-Hmm, how about just add this patch before your patch set:
-
--- Steve
-
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH] tracing: Require all trace events to have a TRACE_SYSTEM
-
-The creation of the trace event directory requires that a TRACE_SYSTEM is
-defined that the trace event directory is added within the system it was
-defined in.
-
-The code handled the case where a TRACE_SYSTEM was not added, and would
-then add the event at the events directory. But nothing should be doing
-this. This code also prevents the implementation of creating dynamic
-dentrys for the eventfs system.
-
-As this path has never been hit on correct code, remove it. If it does get
-hit, issues a WARN_ON_ONCE() and return ENODEV.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-
-  (lightly tested)
-
- kernel/trace/trace_events.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 654ffa40457a..16bc5ba45507 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2424,14 +2424,15 @@ event_create_dir(struct dentry *parent, struct trac=
-e_event_file *file)
-=20
- 	/*
- 	 * If the trace point header did not define TRACE_SYSTEM
--	 * then the system would be called "TRACE_SYSTEM".
-+	 * then the system would be called "TRACE_SYSTEM". This should
-+	 * never happen.
- 	 */
--	if (strcmp(call->class->system, TRACE_SYSTEM) !=3D 0) {
--		d_events =3D event_subsystem_dir(tr, call->class->system, file, parent);
--		if (!d_events)
--			return -ENOMEM;
--	} else
--		d_events =3D parent;
-+	if (WARN_ON_ONCE(strcmp(call->class->system, TRACE_SYSTEM) =3D=3D 0))
-+		return -ENODEV;
-+
-+	d_events =3D event_subsystem_dir(tr, call->class->system, file, parent);
-+	if (!d_events)
-+		return -ENOMEM;
-=20
- 	name =3D trace_event_name(call);
- 	file->dir =3D tracefs_create_dir(name, d_events);
---=20
-2.39.2
-
+--VyG74+KZvewY8TZ5--
