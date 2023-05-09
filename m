@@ -1,43 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5E07C;
-	Tue,  9 May 2023 00:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248637C;
+	Tue,  9 May 2023 01:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683593810; x=1715129810;
+  t=1683596941; x=1715132941;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CHRDmATNd+cu84KOlpSXxhq/BfDuEfYk+bHHjHOCmQU=;
-  b=nJfX08F3YEM8hBd5Fyr+HKYpxT5dxGPj0zijww1Hs211iazrI+c7I0I7
-   ty64qSXdtOkjKCB4w9rFeGvkN+chDH31OIaYsRGQvqUiHzmuoQS0nYuR+
-   a2dVo5RinJU3iHi0CSFiXsjunejQAsWemFHBokBZr8pm30AIxvQtUQ9w0
-   gZ5tu8jR5mYMFxV/fWPt1Yuf7PSOqlXNoryga4eibFFBEaoyUB8xsZy1V
-   p9BSf0AdfTBbDXDdfugSZDaHYGRGi41goGcYzX2H/+PfGY87GleDqwFmy
-   cbKw3UIEcwRfuJKjUeBBHQFNv7fp2IDV2oY44DjUwBqxSZ/yO5ychjlmu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="334232046"
+  bh=9FKeGHqCiKAFHJK5QI85sPQAI/QxNp5IkFv1H0CKa30=;
+  b=WwfE0fmffKhBLYGEMMy6Sg2HBX8UKdsbDPdftow1UECL5ylST9FSd9dP
+   txbPIKSmQqNazxF3620KbKdWo2R3un5G/s45D2ZYG81LndxKgIGMXfouL
+   eGH5oJ/U0x6Nrbhrs+cpS2NskdGFCFcMrk4tckebfdbvyatOYT0FIQBze
+   H1eabZDy7G3r8ClERw7qGgz+LPnQ5LypZJTpdsXQda23ZaaDGF6uUGcaS
+   83k7cmPEG3r3Nf0QusyyFTeBU+4h8mcFOj21qaNE9PAYq5DKjiHDs5TBm
+   12i7QmXJnGmKqT9cDY+H+Lbkl8Nf18wWtstl/Oa6r/TtQjfBt3VoADqfh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="330149734"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="334232046"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 17:56:48 -0700
+   d="scan'208";a="330149734"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 18:48:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="649082806"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="698714256"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="649082806"
+   d="scan'208";a="698714256"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 May 2023 17:56:47 -0700
+  by orsmga002.jf.intel.com with ESMTP; 08 May 2023 18:48:49 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pwBeo-0001Vs-1l;
-	Tue, 09 May 2023 00:56:46 +0000
-Date: Tue, 9 May 2023 08:56:14 +0800
+	id 1pwCTA-0001Zz-2B;
+	Tue, 09 May 2023 01:48:48 +0000
+Date: Tue, 9 May 2023 09:48:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
+To: Rob Clark <robdclark@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/2] net: remove __skb_frag_set_page()
-Message-ID: <202305090842.2IQADg4N-lkp@intel.com>
-References: <20230508123922.39284-3-linyunsheng@huawei.com>
+Subject: Re: [PATCH v2] drm/msm: Fix submit error-path leaks
+Message-ID: <202305090953.EA36hnYI-lkp@intel.com>
+References: <20230501181327.1618596-1-robdclark@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,127 +46,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508123922.39284-3-linyunsheng@huawei.com>
+In-Reply-To: <20230501181327.1618596-1-robdclark@gmail.com>
 
-Hi Yunsheng,
+Hi Rob,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master v6.4-rc1 next-20230508]
-[cannot apply to horms-ipvs/master]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc1 next-20230508]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yunsheng-Lin/net-introduce-and-use-skb_frag_fill_page_desc/20230508-204326
-base:   net/main
-patch link:    https://lore.kernel.org/r/20230508123922.39284-3-linyunsheng%40huawei.com
-patch subject: [PATCH RFC 2/2] net: remove __skb_frag_set_page()
-config: x86_64-randconfig-a004-20230508 (https://download.01.org/0day-ci/archive/20230509/202305090842.2IQADg4N-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Fix-submit-error-path-leaks/20230502-021521
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230501181327.1618596-1-robdclark%40gmail.com
+patch subject: [PATCH v2] drm/msm: Fix submit error-path leaks
+config: arm-randconfig-r002-20230507 (https://download.01.org/0day-ci/archive/20230509/202305090953.EA36hnYI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/999d6693757a196e863558b6d7663425165a7acb
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/895a58ff05de3cebb081d61f8e001864f4ef41c2
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yunsheng-Lin/net-introduce-and-use-skb_frag_fill_page_desc/20230508-204326
-        git checkout 999d6693757a196e863558b6d7663425165a7acb
+        git fetch --no-tags linux-review Rob-Clark/drm-msm-Fix-submit-error-path-leaks/20230502-021521
+        git checkout 895a58ff05de3cebb081d61f8e001864f4ef41c2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/broadcom/bnxt/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305090842.2IQADg4N-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305090953.EA36hnYI-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:1105:17: warning: variable 'nr_frags' set but not used [-Wunused-but-set-variable]
-                           unsigned int nr_frags;
+>> drivers/gpu/drm/msm/msm_gem_submit.c:770:7: warning: variable 'submit' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (out_fence_fd < 0) {
+                       ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/msm_gem_submit.c:971:6: note: uninitialized use occurs here
+           if (submit) {
+               ^~~~~~
+   drivers/gpu/drm/msm/msm_gem_submit.c:770:3: note: remove the 'if' if its condition is always false
+                   if (out_fence_fd < 0) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/msm_gem_submit.c:725:31: note: initialize the variable 'submit' to silence this warning
+           struct msm_gem_submit *submit;
                                         ^
+                                         = NULL
    1 warning generated.
 
 
-vim +/nr_frags +1105 drivers/net/ethernet/broadcom/bnxt/bnxt.c
+vim +770 drivers/gpu/drm/msm/msm_gem_submit.c
 
-c0c050c58d8409 Michael Chan    2015-10-22  1054  
-23e4c0469ad03f Andy Gospodarek 2022-04-08  1055  static u32 __bnxt_rx_agg_pages(struct bnxt *bp,
-e44758b78ae814 Michael Chan    2018-10-14  1056  			       struct bnxt_cp_ring_info *cpr,
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1057  			       struct skb_shared_info *shinfo,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1058  			       u16 idx, u32 agg_bufs, bool tpa,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1059  			       struct xdp_buff *xdp)
-c0c050c58d8409 Michael Chan    2015-10-22  1060  {
-e44758b78ae814 Michael Chan    2018-10-14  1061  	struct bnxt_napi *bnapi = cpr->bnapi;
-c0c050c58d8409 Michael Chan    2015-10-22  1062  	struct pci_dev *pdev = bp->pdev;
-b6ab4b01f53b5f Michael Chan    2016-01-02  1063  	struct bnxt_rx_ring_info *rxr = bnapi->rx_ring;
-c0c050c58d8409 Michael Chan    2015-10-22  1064  	u16 prod = rxr->rx_agg_prod;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1065  	u32 i, total_frag_len = 0;
-bfcd8d791ec184 Michael Chan    2019-07-29  1066  	bool p5_tpa = false;
-c0c050c58d8409 Michael Chan    2015-10-22  1067  
-bfcd8d791ec184 Michael Chan    2019-07-29  1068  	if ((bp->flags & BNXT_FLAG_CHIP_P5) && tpa)
-bfcd8d791ec184 Michael Chan    2019-07-29  1069  		p5_tpa = true;
-bfcd8d791ec184 Michael Chan    2019-07-29  1070  
-c0c050c58d8409 Michael Chan    2015-10-22  1071  	for (i = 0; i < agg_bufs; i++) {
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1072  		skb_frag_t *frag = &shinfo->frags[i];
-c0c050c58d8409 Michael Chan    2015-10-22  1073  		u16 cons, frag_len;
-c0c050c58d8409 Michael Chan    2015-10-22  1074  		struct rx_agg_cmp *agg;
-c0c050c58d8409 Michael Chan    2015-10-22  1075  		struct bnxt_sw_rx_agg_bd *cons_rx_buf;
-c0c050c58d8409 Michael Chan    2015-10-22  1076  		struct page *page;
-c0c050c58d8409 Michael Chan    2015-10-22  1077  		dma_addr_t mapping;
-c0c050c58d8409 Michael Chan    2015-10-22  1078  
-bfcd8d791ec184 Michael Chan    2019-07-29  1079  		if (p5_tpa)
-bfcd8d791ec184 Michael Chan    2019-07-29  1080  			agg = bnxt_get_tpa_agg_p5(bp, rxr, idx, i);
-bfcd8d791ec184 Michael Chan    2019-07-29  1081  		else
-4a228a3a5e58e5 Michael Chan    2019-07-29  1082  			agg = bnxt_get_agg(bp, cpr, idx, i);
-c0c050c58d8409 Michael Chan    2015-10-22  1083  		cons = agg->rx_agg_cmp_opaque;
-c0c050c58d8409 Michael Chan    2015-10-22  1084  		frag_len = (le32_to_cpu(agg->rx_agg_cmp_len_flags_type) &
-c0c050c58d8409 Michael Chan    2015-10-22  1085  			    RX_AGG_CMP_LEN) >> RX_AGG_CMP_LEN_SHIFT;
-c0c050c58d8409 Michael Chan    2015-10-22  1086  
-c0c050c58d8409 Michael Chan    2015-10-22  1087  		cons_rx_buf = &rxr->rx_agg_ring[cons];
-9501ff8f37986d Yunsheng Lin    2023-05-08  1088  		skb_frag_fill_page_desc(frag, cons_rx_buf->page,
-9501ff8f37986d Yunsheng Lin    2023-05-08  1089  					cons_rx_buf->offset, frag_len);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1090  		shinfo->nr_frags = i + 1;
-c0c050c58d8409 Michael Chan    2015-10-22  1091  		__clear_bit(cons, rxr->rx_agg_bmap);
-c0c050c58d8409 Michael Chan    2015-10-22  1092  
-c0c050c58d8409 Michael Chan    2015-10-22  1093  		/* It is possible for bnxt_alloc_rx_page() to allocate
-c0c050c58d8409 Michael Chan    2015-10-22  1094  		 * a sw_prod index that equals the cons index, so we
-c0c050c58d8409 Michael Chan    2015-10-22  1095  		 * need to clear the cons entry now.
-c0c050c58d8409 Michael Chan    2015-10-22  1096  		 */
-11cd119d31a71b Michael Chan    2017-02-06  1097  		mapping = cons_rx_buf->mapping;
-c0c050c58d8409 Michael Chan    2015-10-22  1098  		page = cons_rx_buf->page;
-c0c050c58d8409 Michael Chan    2015-10-22  1099  		cons_rx_buf->page = NULL;
-c0c050c58d8409 Michael Chan    2015-10-22  1100  
-31b9998bf225ec Andy Gospodarek 2022-04-08  1101  		if (xdp && page_is_pfmemalloc(page))
-31b9998bf225ec Andy Gospodarek 2022-04-08  1102  			xdp_buff_set_frag_pfmemalloc(xdp);
-31b9998bf225ec Andy Gospodarek 2022-04-08  1103  
-c0c050c58d8409 Michael Chan    2015-10-22  1104  		if (bnxt_alloc_rx_page(bp, rxr, prod, GFP_ATOMIC) != 0) {
-c0c050c58d8409 Michael Chan    2015-10-22 @1105  			unsigned int nr_frags;
-c0c050c58d8409 Michael Chan    2015-10-22  1106  
-c0c050c58d8409 Michael Chan    2015-10-22  1107  			nr_frags = --shinfo->nr_frags;
-c0c050c58d8409 Michael Chan    2015-10-22  1108  			cons_rx_buf->page = page;
-c0c050c58d8409 Michael Chan    2015-10-22  1109  
-c0c050c58d8409 Michael Chan    2015-10-22  1110  			/* Update prod since possibly some pages have been
-c0c050c58d8409 Michael Chan    2015-10-22  1111  			 * allocated already.
-c0c050c58d8409 Michael Chan    2015-10-22  1112  			 */
-c0c050c58d8409 Michael Chan    2015-10-22  1113  			rxr->rx_agg_prod = prod;
-4a228a3a5e58e5 Michael Chan    2019-07-29  1114  			bnxt_reuse_rx_agg_bufs(cpr, idx, i, agg_bufs - i, tpa);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1115  			return 0;
-c0c050c58d8409 Michael Chan    2015-10-22  1116  		}
-c0c050c58d8409 Michael Chan    2015-10-22  1117  
-c519fe9a4f0d1a Shannon Nelson  2017-05-09  1118  		dma_unmap_page_attrs(&pdev->dev, mapping, BNXT_RX_PAGE_SIZE,
-9a6aa350488533 Andy Gospodarek 2022-04-08  1119  				     bp->rx_dir,
-c519fe9a4f0d1a Shannon Nelson  2017-05-09  1120  				     DMA_ATTR_WEAK_ORDERING);
-c0c050c58d8409 Michael Chan    2015-10-22  1121  
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1122  		total_frag_len += frag_len;
-c0c050c58d8409 Michael Chan    2015-10-22  1123  		prod = NEXT_RX_AGG(prod);
-c0c050c58d8409 Michael Chan    2015-10-22  1124  	}
-c0c050c58d8409 Michael Chan    2015-10-22  1125  	rxr->rx_agg_prod = prod;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1126  	return total_frag_len;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1127  }
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1128  
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  718  
+7198e6b03155f6 Rob Clark         2013-07-19  719  int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+7198e6b03155f6 Rob Clark         2013-07-19  720  		struct drm_file *file)
+7198e6b03155f6 Rob Clark         2013-07-19  721  {
+7198e6b03155f6 Rob Clark         2013-07-19  722  	struct msm_drm_private *priv = dev->dev_private;
+7198e6b03155f6 Rob Clark         2013-07-19  723  	struct drm_msm_gem_submit *args = data;
+7198e6b03155f6 Rob Clark         2013-07-19  724  	struct msm_file_private *ctx = file->driver_priv;
+ccc40d42bd59ac Aashish Sharma    2022-10-11  725  	struct msm_gem_submit *submit;
+c01a958eca6e7f Rob Clark         2016-02-03  726  	struct msm_gpu *gpu = priv->gpu;
+f7de15450e906e Jordan Crouse     2017-10-20  727  	struct msm_gpu_submitqueue *queue;
+f97decac5f4c2d Jordan Crouse     2017-10-20  728  	struct msm_ringbuffer *ring;
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  729  	struct msm_submit_post_dep *post_deps = NULL;
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  730  	struct drm_syncobj **syncobjs_to_reset = NULL;
+4cd0945901a6dd Rob Clark         2016-06-16  731  	int out_fence_fd = -1;
+92ec0767710797 Daniel Vetter     2019-11-20  732  	bool has_ww_ticket = false;
+7198e6b03155f6 Rob Clark         2013-07-19  733  	unsigned i;
+fc1dd04c3841c4 Rob Clark         2022-08-02  734  	int ret;
+375f9a63a66bae Rob Clark         2021-07-27  735  
+c01a958eca6e7f Rob Clark         2016-02-03  736  	if (!gpu)
+c01a958eca6e7f Rob Clark         2016-02-03  737  		return -ENXIO;
+c01a958eca6e7f Rob Clark         2016-02-03  738  
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  739  	if (args->pad)
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  740  		return -EINVAL;
+ab723b7a992a19 Bas Nieuwenhuizen 2020-01-24  741  
+4a257ca694015f Rob Clark         2022-05-02  742  	if (unlikely(!ctx->aspace) && !capable(CAP_SYS_RAWIO)) {
+4a257ca694015f Rob Clark         2022-05-02  743  		DRM_ERROR_RATELIMITED("IOMMU support or CAP_SYS_RAWIO required!\n");
+4a257ca694015f Rob Clark         2022-05-02  744  		return -EPERM;
+4a257ca694015f Rob Clark         2022-05-02  745  	}
+4a257ca694015f Rob Clark         2022-05-02  746  
+7198e6b03155f6 Rob Clark         2013-07-19  747  	/* for now, we just have 3d pipe.. eventually this would need to
+7198e6b03155f6 Rob Clark         2013-07-19  748  	 * be more clever to dispatch to appropriate gpu module:
+7198e6b03155f6 Rob Clark         2013-07-19  749  	 */
+d9c181e22a0599 Rob Clark         2016-04-23  750  	if (MSM_PIPE_ID(args->flags) != MSM_PIPE_3D0)
+d9c181e22a0599 Rob Clark         2016-04-23  751  		return -EINVAL;
+d9c181e22a0599 Rob Clark         2016-04-23  752  
+d9c181e22a0599 Rob Clark         2016-04-23  753  	if (MSM_PIPE_FLAGS(args->flags) & ~MSM_SUBMIT_FLAGS)
+7198e6b03155f6 Rob Clark         2013-07-19  754  		return -EINVAL;
+7198e6b03155f6 Rob Clark         2013-07-19  755  
+6a8bd08d0465b2 Rob Clark         2017-12-13  756  	if (args->flags & MSM_SUBMIT_SUDO) {
+6a8bd08d0465b2 Rob Clark         2017-12-13  757  		if (!IS_ENABLED(CONFIG_DRM_MSM_GPU_SUDO) ||
+6a8bd08d0465b2 Rob Clark         2017-12-13  758  		    !capable(CAP_SYS_RAWIO))
+6a8bd08d0465b2 Rob Clark         2017-12-13  759  			return -EINVAL;
+6a8bd08d0465b2 Rob Clark         2017-12-13  760  	}
+6a8bd08d0465b2 Rob Clark         2017-12-13  761  
+f7de15450e906e Jordan Crouse     2017-10-20  762  	queue = msm_submitqueue_get(ctx, args->queueid);
+f7de15450e906e Jordan Crouse     2017-10-20  763  	if (!queue)
+f7de15450e906e Jordan Crouse     2017-10-20  764  		return -ENOENT;
+f7de15450e906e Jordan Crouse     2017-10-20  765  
+fc40e5e10c3bcc Rob Clark         2021-07-27  766  	ring = gpu->rb[queue->ring_nr];
+f97decac5f4c2d Jordan Crouse     2017-10-20  767  
+1d8a5ca436ee4a Rob Clark         2021-07-27  768  	if (args->flags & MSM_SUBMIT_FENCE_FD_OUT) {
+1d8a5ca436ee4a Rob Clark         2021-07-27  769  		out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
+1d8a5ca436ee4a Rob Clark         2021-07-27 @770  		if (out_fence_fd < 0) {
 
 -- 
 0-DAY CI Kernel Test Service
