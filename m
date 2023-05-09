@@ -1,227 +1,508 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66BD1097B
-	for <llvm@lists.linux.dev>; Tue,  9 May 2023 17:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C601C433EF;
-	Tue,  9 May 2023 17:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683654615;
-	bh=rVSz+Tb3H1/HHESESFxVFjW2CxxTsz7vH2xOqzNlQXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SWUmzHG8xFjWpRkUn7jxvkUG21EZyVRmvIHAfaVcDHRGM9jMRutvis8vhLLUy4O6s
-	 TNfr8CkW+0xFnginSyEkOvFBFvpfOmfhA5nD3ARTrQ70JeNf4ZdFCI5HaO0KOLYccW
-	 vQdtgGdmg/tQ5H63l/yZA/IRiWefyI99JD7UG/jkDkK98gs8oeXFAAGuZ3x/WUQl08
-	 dJVCQI52RgYMOfw8/KVYJ1KtUhhMWuPE0OU99QGXVBQFCtLEJXKyVpOEh03tYK0nnO
-	 JOdA+2jhGLcjwX9OUN+wPeWnGy/ROl2o4urTxQBEOvfJ3/SX8Fmf+xvybwL/5Cz17z
-	 qRmXV8na65m5w==
-Date: Tue, 9 May 2023 18:50:07 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Weili Qian <qianweili@huawei.com>,
-	Zhou Wang <wangzhou1@hisilicon.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V5 08/21] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <20230509-atlantic-writing-3ceea38e050e@spud>
-References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
- <20230508115237.216337-9-sunilvl@ventanamicro.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009A514A9A;
+	Tue,  9 May 2023 19:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683659853; x=1715195853;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XPmv6AlcWeZDj2HAcLYuAIFurhPpqhljgSDmDA9hqh0=;
+  b=OvdCZmIbd2JmAqJsD5jfQtU8lFj5I+ofzOVuFHk9XjscTPog3Moj+zDa
+   C0qxb5UP8mq6ChguLVZpkj89oijrHlZbAGdTRjBauCHRuR5ScxdNnRU2p
+   VDHYQ0WYv60V6yIWBbCS0kGMBnpHErO8iRyWv8dMwLlxJdAXpwAd+3Cml
+   aYLPJnZJEVLnx/IWKAmI9jWn1Spra0dhDm+Q0guaatxsRZ2KzPJQaPLHh
+   ZVTvCdBnYIVfpqhHIfCxz2jltnJitJLfy8kpWCFAh7GKl2e2my7qcedrK
+   PKWZiLub4tsMYZljKZklfAh51cCyOFqsoIs74HT0G/7HIQRNxQszlJgia
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="353095702"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="353095702"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 12:17:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="945413474"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="945413474"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 09 May 2023 12:17:30 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pwSq1-0002QW-1X;
+	Tue, 09 May 2023 19:17:29 +0000
+Date: Wed, 10 May 2023 03:17:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yimin Gu <ustcymgu@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Jesse Taube <Mr.Bossman075@gmail.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: drivers/scsi/ppa.c:307:4: warning: performing pointer arithmetic on
+ a null pointer has undefined behavior
+Message-ID: <202305100328.UfvAhADW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="VyG74+KZvewY8TZ5"
-Content-Disposition: inline
-In-Reply-To: <20230508115237.216337-9-sunilvl@ventanamicro.com>
-
-
---VyG74+KZvewY8TZ5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Sunil,
+Hi Yimin,
 
-On Mon, May 08, 2023 at 05:22:24PM +0530, Sunil V L wrote:
-> RINTC structures in the MADT provide mapping between the hartid
-> and the CPU. This is required many times even at run time like
-> cpuinfo. So, instead of parsing the ACPI table every time, cache
-> the RINTC structures and provide a function to get the correct
-> RINTC structure for a given cpu.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-=46rom this patch until "RISC-V: Add ACPI initialization in
-setup_arch()" (which is 19/21), the series fails to build.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1dc3731daf1f350cfd631b5559aac865ab2fbb4c
+commit: b5e2c507b06c9d36411845149162a804ae7b04a9 riscv: Kconfig: Allow RV32 to build with no MMU
+date:   6 weeks ago
+config: riscv-randconfig-r013-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100328.UfvAhADW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b5e2c507b06c9d36411845149162a804ae7b04a9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b5e2c507b06c9d36411845149162a804ae7b04a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
 
-allmodconfig, clang-16:
-=2E./arch/riscv/include/asm/acpi.h:22:23: error: unknown type name 'acpi_ph=
-ysical_address'; did you mean 'efi_physical_addr_t'?
-=2E./arch/riscv/include/asm/acpi.h:22:51: error: unknown type name 'acpi_si=
-ze'
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305100328.UfvAhADW-lkp@intel.com/
 
-rv32_defconfig, clang-16:
-arch/riscv/kernel/setup.c:297:7: error: use of undeclared identifier 'acpi_=
-disabled'; did you mean '__cpu_disable'?
-arch/riscv/kernel/setup.c:297:7: warning: address of function '__cpu_disabl=
-e' will always evaluate to 'true' [-Wpointer-bool-conversion]
+All warnings (new ones prefixed by >>):
 
-I ballsed up a toolchain upgrade to gcc-13, so the whole series is
-showing build issues on patchwork for the gcc configurations:
-https://patchwork.kernel.org/project/linux-riscv/list/?series=3D745787
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/ppa.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/scsi/ppa.c:307:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           outsw(ppb + 4, buffer, len >> 1);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/scsi/ppa.c:313:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           outsb(ppb + 4, buffer, len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/scsi/ppa.c:360:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           insw(ppb + 4, buffer, len >> 1);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/scsi/ppa.c:366:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           insb(ppb + 4, buffer, len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   17 warnings generated.
+--
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/imm.c:15:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/scsi/imm.c:371:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           outsw(ppb + 4, buffer, len >> 1);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/scsi/imm.c:377:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           outsb(ppb + 4, buffer, len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/scsi/imm.c:431:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           insw(ppb + 4, buffer, len >> 1);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/scsi/imm.c:437:4: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                           insb(ppb + 4, buffer, len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   17 warnings generated.
+--
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:23:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:279:
+>> drivers/scsi/nsp32_io.h:233:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(base + reg, buf, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/scsi/nsp32.c:279:
+   drivers/scsi/nsp32_io.h:248:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(base + reg, buf, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   15 warnings generated.
 
-However, I suspect that the same patches that fail for clang-16 will
-fail for gcc-13 too, once I have fixed that!
 
-Cheers,
-Conor.
+vim +307 drivers/scsi/ppa.c
 
-> ---
->  arch/riscv/include/asm/acpi.h | 10 ++++++++
->  arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
->  arch/riscv/kernel/setup.c     |  4 ++++
->  3 files changed, 59 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-> index 9be52b6ffae1..6519529c8bdf 100644
-> --- a/arch/riscv/include/asm/acpi.h
-> +++ b/arch/riscv/include/asm/acpi.h
-> @@ -59,6 +59,16 @@ static inline bool acpi_has_cpu_in_madt(void)
-> =20
->  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-> =20
-> +void acpi_init_rintc_map(void);
-> +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
-> +u32 get_acpi_id_for_cpu(int cpu);
-> +#else
-> +static inline void acpi_init_rintc_map(void) { }
-> +static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> +{
-> +	return NULL;
-> +}
-> +
->  #endif /* CONFIG_ACPI */
-> =20
->  #endif /*_ASM_ACPI_H*/
-> diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-> index 81d448c41714..89e142611c84 100644
-> --- a/arch/riscv/kernel/acpi.c
-> +++ b/arch/riscv/kernel/acpi.c
-> @@ -24,6 +24,51 @@ EXPORT_SYMBOL(acpi_disabled);
->  int acpi_pci_disabled =3D 1;	/* skip ACPI PCI scan and IRQ initializatio=
-n */
->  EXPORT_SYMBOL(acpi_pci_disabled);
-> =20
-> +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
-> +
-> +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, co=
-nst unsigned long end)
-> +{
-> +	struct acpi_madt_rintc *rintc =3D (struct acpi_madt_rintc *)header;
-> +	int cpuid;
-> +
-> +	if (!(rintc->flags & ACPI_MADT_ENABLED))
-> +		return 0;
-> +
-> +	cpuid =3D riscv_hartid_to_cpuid(rintc->hart_id);
-> +	/*
-> +	 * When CONFIG_SMP is disabled, mapping won't be created for
-> +	 * all cpus.
-> +	 * CPUs more than num_possible_cpus, will be ignored.
-> +	 */
-> +	if (cpuid >=3D 0 && cpuid < num_possible_cpus())
-> +		cpu_madt_rintc[cpuid] =3D *rintc;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Instead of parsing (and freeing) the ACPI table, cache
-> + * the RINTC structures since they are frequently used
-> + * like in  cpuinfo.
-> + */
-> +void __init acpi_init_rintc_map(void)
-> +{
-> +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, =
-0) <=3D 0) {
-> +		pr_err("No valid RINTC entries exist\n");
-> +		BUG();
-> +	}
-> +}
-> +
-> +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> +{
-> +	return &cpu_madt_rintc[cpu];
-> +}
-> +
-> +u32 get_acpi_id_for_cpu(int cpu)
-> +{
-> +	return acpi_cpu_get_madt_rintc(cpu)->uid;
-> +}
-> +
->  /*
->   * __acpi_map_table() will be called before paging_init(), so early_iore=
-map()
->   * or early_memremap() should be called here to for ACPI table mapping.
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 9fb839074e16..a44c7fcde12f 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -21,6 +21,7 @@
->  #include <linux/efi.h>
->  #include <linux/crash_dump.h>
-> =20
-> +#include <asm/acpi.h>
->  #include <asm/alternative.h>
->  #include <asm/cacheflush.h>
->  #include <asm/cpu_ops.h>
-> @@ -293,6 +294,9 @@ void __init setup_arch(char **cmdline_p)
->  	setup_smp();
->  #endif
-> =20
-> +	if (!acpi_disabled)
-> +		acpi_init_rintc_map();
-> +
->  	riscv_init_cbo_blocksizes();
->  	riscv_fill_hwcap();
->  	apply_boot_alternatives();
-> --=20
-> 2.34.1
->=20
+^1da177e4c3f41 Linus Torvalds 2005-04-16  281  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  282  static int ppa_out(ppa_struct *dev, char *buffer, int len)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  283  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  284  	int r;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  285  	unsigned short ppb = dev->base;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  286  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  287  	r = ppa_wait(dev);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  288  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  289  	if ((r & 0x50) != 0x40) {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  290  		ppa_fail(dev, DID_ERROR);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  291  		return 0;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  292  	}
+^1da177e4c3f41 Linus Torvalds 2005-04-16  293  	switch (dev->mode) {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  294  	case PPA_NIBBLE:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  295  	case PPA_PS2:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  296  		/* 8 bit output, with a loop */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  297  		r = ppa_byte_out(ppb, buffer, len);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  298  		break;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  299  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  300  	case PPA_EPP_32:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  301  	case PPA_EPP_16:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  302  	case PPA_EPP_8:
+^1da177e4c3f41 Linus Torvalds 2005-04-16  303  		epp_reset(ppb);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  304  		w_ctr(ppb, 0x4);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  305  #ifdef CONFIG_SCSI_IZIP_EPP16
+^1da177e4c3f41 Linus Torvalds 2005-04-16  306  		if (!(((long) buffer | len) & 0x01))
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @307  			outsw(ppb + 4, buffer, len >> 1);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  308  #else
+^1da177e4c3f41 Linus Torvalds 2005-04-16  309  		if (!(((long) buffer | len) & 0x03))
+^1da177e4c3f41 Linus Torvalds 2005-04-16  310  			outsl(ppb + 4, buffer, len >> 2);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  311  #endif
+^1da177e4c3f41 Linus Torvalds 2005-04-16  312  		else
+^1da177e4c3f41 Linus Torvalds 2005-04-16  313  			outsb(ppb + 4, buffer, len);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  314  		w_ctr(ppb, 0xc);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  315  		r = !(r_str(ppb) & 0x01);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  316  		w_ctr(ppb, 0xc);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  317  		ecp_sync(dev);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  318  		break;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  319  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  320  	default:
+cebadc5c97547a Alan Cox       2007-07-09  321  		printk(KERN_ERR "PPA: bug in ppa_out()\n");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  322  		r = 0;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  323  	}
+^1da177e4c3f41 Linus Torvalds 2005-04-16  324  	return r;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  325  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  326  
 
---VyG74+KZvewY8TZ5
-Content-Type: application/pgp-signature; name="signature.asc"
+:::::: The code at line 307 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
------BEGIN PGP SIGNATURE-----
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqHzwAKCRB4tDGHoIJi
-0vwIAP42h0wsHOgAHQ3WyuVw8G1XFBezccQwODC76RxofaL0TAEA+V+4IuPaUdHr
-5H2An4OZhjeskB4ClsRk3M+rqDqMXAc=
-=OVlw
------END PGP SIGNATURE-----
-
---VyG74+KZvewY8TZ5--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
