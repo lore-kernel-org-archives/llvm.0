@@ -1,44 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80221990C;
-	Tue,  9 May 2023 22:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72F819937;
+	Tue,  9 May 2023 22:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683671875; x=1715207875;
+  t=1683672873; x=1715208873;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5n6VV0nH8Sd1Fww0nDPfaJiqSwFe3rj7RhAINpuiC0Q=;
-  b=J9GynS3Ra6CjNkjM+vQeH/I3cJTZAvtbSlLxIGXo7qQ59KbyMHcSPRq0
-   Z9iKBoOvxvyqSD0WS4ZfBwrWmmnN5JJ+Lkk/RWsARqmomGz1LgKaq345f
-   HfVtBEoepZUsDxj9OOXzDvCbqmIpejmx+UVqq4KJYzt7asXdsuPWnlZ/y
-   /wLKxjtpNz+Lu0M0b4Bz5W4cfj9Ig+28zR96aOLm6ywm36UYIqTZqIrtb
-   S1c8gYdWiAXa0th/VMwxHuJz34F79TWvSbgkGv/CqPky2r2M2F4Qd2Ls3
-   bKGPqw5ChOj5HZHuJGekKSSnCsD7tQ0LL0BuvqG1xBSb/hubuJYmQFRGb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="350100986"
+  bh=71piCgGuWzuiYkG20Ao5AVjLrI1+LjiGMmLpicz+61w=;
+  b=PmXcHvfFQHMnmQdjc3rBeDvpqvdB6hlR/C01sOZXmiFnTetMzytKiKVo
+   W6IQdvkeCEEQD2GQKs0WKks9pWod1S+UxhLKJiiY7Sjj2sWXFHB293H0E
+   wmsc8c5eJJutC1GhuIY4/yOkhqWaCi31sjtPnvPN9ItXBGc2i7lakMDlE
+   Fb78gpOc969nN1H2MWP2+6IVz8tvdsj2LmsAonN39yUXcsmF/hhgyVrOS
+   xPKX5NCwLy/krKv6Rqe+CQh4hebAPMqu6IObtWcd1oK2+gAVJEcug6atY
+   pp78hYzSSV1xl53iArtFigr5DJ/AJDOO+c3WkH8P2B8csRImbjjkj5bjq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330439320"
 X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="350100986"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:35:56 -0700
+   d="scan'208";a="330439320"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:45:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="676621533"
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649523056"
 X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="676621533"
+   d="scan'208";a="649523056"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 May 2023 15:35:54 -0700
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 15:45:54 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pwVw1-0002aW-2P;
-	Tue, 09 May 2023 22:35:53 +0000
-Date: Wed, 10 May 2023 06:35:12 +0800
+	id 1pwW5h-0002ay-32;
+	Tue, 09 May 2023 22:45:53 +0000
+Date: Wed, 10 May 2023 06:45:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Atish Patra <Atish.Patra@wdc.com>
-Subject: [atishp04:kvm_perf_snapshot_rfc 5/7]
- drivers/perf/riscv_pmu_sbi.c:500:42: warning: format specifies type 'int'
- but the argument has type 'long'
-Message-ID: <202305100606.77rwZJhG-lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:b4/virt-to-pfn-v6-4-rc1 11/12]
+ arch/arm64/kernel/vdso.c:291:38: error: incompatible integer to pointer
+ conversion passing 'unsigned long' to parameter of type 'const void *'
+Message-ID: <202305100635.jHxJhhgc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,84 +47,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/atishp04/linux kvm_perf_snapshot_rfc
-head:   5ae7188de04f861c3f4026005a0ace2cf2575bde
-commit: 51adde1839f15db1a4074f7b36eb2dccad7fa534 [5/7] perf: RISC-V: Implement SBI PMU snapshot function
-config: riscv-randconfig-r042-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100606.77rwZJhG-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/virt-to-pfn-v6-4-rc1
+head:   2c9796d7393a139f2b658603859f3cb95f98fec6
+commit: e9d83dd0dd653d3355fb5c7309ce964050c162ed [11/12] arm64: memory: Make virt_to_pfn() a static inline
+config: arm64-randconfig-r011-20230509 (https://download.01.org/0day-ci/archive/20230510/202305100635.jHxJhhgc-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/51adde1839f15db1a4074f7b36eb2dccad7fa534
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_perf_snapshot_rfc
-        git checkout 51adde1839f15db1a4074f7b36eb2dccad7fa534
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=e9d83dd0dd653d3355fb5c7309ce964050c162ed
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator b4/virt-to-pfn-v6-4-rc1
+        git checkout e9d83dd0dd653d3355fb5c7309ce964050c162ed
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/ drivers/usb/dwc3/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305100606.77rwZJhG-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305100635.jHxJhhgc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/perf/riscv_pmu_sbi.c:500:42: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                   pr_err("%s: ret.error %d\n", __func__, ret.error);
-                                         ~~               ^~~~~~~~~
-                                         %ld
-   include/linux/printk.h:498:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+>> arch/arm64/kernel/vdso.c:291:38: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+           aarch32_vectors_page = virt_to_page(vdso_page);
+                                               ^~~~~~~~~
+   arch/arm64/include/asm/memory.h:364:50: note: expanded from macro 'virt_to_page'
+   #define virt_to_page(x)         pfn_to_page(virt_to_pfn(x))
+                                                           ^
+   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
+   #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+                                               ^~~
+   arch/arm64/include/asm/memory.h:337:53: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(const void *kaddr)
+                                                       ^
+   1 error generated.
 
 
-vim +500 drivers/perf/riscv_pmu_sbi.c
+vim +291 arch/arm64/kernel/vdso.c
 
-   472	
-   473	static int pmu_sbi_snapshot_init(struct riscv_pmu *pmu, int cpu)
-   474	{
-   475		struct page *snapshot_page;
-   476		struct cpu_hw_events *cpu_hw_evt;
-   477		phys_addr_t snapshot_addr_phys;
-   478		struct sbiret ret = {0};
-   479	
-   480		cpu_hw_evt = per_cpu_ptr(pmu->hw_events, cpu);
-   481		if (cpu_hw_evt->snapshot_addr)
-   482			return 0;
-   483	
-   484		snapshot_page = alloc_page(GFP_ATOMIC | __GFP_ZERO);
-   485		if (!snapshot_page) {
-   486			pmu_sbi_snapshot_deinit(pmu);
-   487			return -ENOMEM;
-   488		}
-   489		cpu_hw_evt->snapshot_addr = page_to_virt(snapshot_page);
-   490		snapshot_addr_phys = page_to_phys(snapshot_page);
-   491	#if defined(CONFIG_32BIT)
-   492		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_ENABLE_SNAPSHOT, (unsigned long)snapshot_addr_phys,
-   493				 (u64)(snapshot_addr_phys) >> 32, 0, 0, 0, 0);
-   494	#else
-   495		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_ENABLE_SNAPSHOT, (unsigned long)snapshot_addr_phys,
-   496				0, 0, 0, 0, 0);
-   497	#endif
-   498		/* Free up the snapshot area memory and fall back to default SBI */
-   499		if (ret.error) {
- > 500			pr_err("%s: ret.error %d\n", __func__, ret.error);
-   501			pmu_sbi_snapshot_deinit(pmu);
-   502		}
-   503	
-   504		return 0;
-   505	}
-   506	
+9031fefde6f2ac Will Deacon       2012-03-05  275  
+1255a7341bee6c Vincenzo Frascino 2019-04-15  276  static int aarch32_alloc_kuser_vdso_page(void)
+9031fefde6f2ac Will Deacon       2012-03-05  277  {
+9031fefde6f2ac Will Deacon       2012-03-05  278  	extern char __kuser_helper_start[], __kuser_helper_end[];
+9031fefde6f2ac Will Deacon       2012-03-05  279  	int kuser_sz = __kuser_helper_end - __kuser_helper_start;
+1255a7341bee6c Vincenzo Frascino 2019-04-15  280  	unsigned long vdso_page;
+9031fefde6f2ac Will Deacon       2012-03-05  281  
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  282  	if (!IS_ENABLED(CONFIG_KUSER_HELPERS))
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  283  		return 0;
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  284  
+7cd6ca1d790226 Will Deacon       2021-03-18  285  	vdso_page = get_zeroed_page(GFP_KERNEL);
+1255a7341bee6c Vincenzo Frascino 2019-04-15  286  	if (!vdso_page)
+0d747f6585954d Vincenzo Frascino 2019-04-15  287  		return -ENOMEM;
+9031fefde6f2ac Will Deacon       2012-03-05  288  
+1255a7341bee6c Vincenzo Frascino 2019-04-15  289  	memcpy((void *)(vdso_page + 0x1000 - kuser_sz), __kuser_helper_start,
+1255a7341bee6c Vincenzo Frascino 2019-04-15  290  	       kuser_sz);
+74fc72e77dc5c8 Mark Rutland      2020-04-28 @291  	aarch32_vectors_page = virt_to_page(vdso_page);
+1255a7341bee6c Vincenzo Frascino 2019-04-15  292  	return 0;
+0d747f6585954d Vincenzo Frascino 2019-04-15  293  }
+9031fefde6f2ac Will Deacon       2012-03-05  294  
+
+:::::: The code at line 291 was first introduced by commit
+:::::: 74fc72e77dc5c8033d1b47d2c8a7229b4b83a746 arm64: vdso: remove aarch32_vdso_pages[]
+
+:::::: TO: Mark Rutland <mark.rutland@arm.com>
+:::::: CC: Will Deacon <will@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
