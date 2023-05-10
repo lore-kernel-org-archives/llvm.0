@@ -1,43 +1,47 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECAE20B41;
-	Wed, 10 May 2023 09:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C69613D;
+	Wed, 10 May 2023 09:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683712406; x=1715248406;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N61PN5BxjYQhTwm8CofFwhWiPElebpinbQlKFIgu+eA=;
-  b=gQKV+vub/XMDyArzAmSIaw7Q6gPB0ElvCN9S/zony6TyVEJ8pD3P3it4
-   Qu/kGMzkddqtL7OuhuZW0mT6fMkCs06d0pk57YGmmIzFg8pDiitzPPKzH
-   iEweh62RIaXpmZEyt5pAaaX1pp4Hk9Ut37x8kh2rzA7/XWY7oyh0yd4GI
-   MGrnz91x1ENbmJsJTuKaZuCTF5RWz/MI/57suujFDeER12ftmVZBdBx9D
-   TN2UDMSjqpiIJtAjhxVQHFaQay4S0I2BQldWbOgf2Rvhy20eW2Ba3LLBq
-   A8lPJwfFs5hLpPk19DAL8YeuNakEWSPP88uy+zU7DwWryu8s8c9TlBLSv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="353244939"
+  t=1683712408; x=1715248408;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vvkolml/HN19Sg1F836qmjywFOfBzb5v/yoO63FWOBE=;
+  b=JDDdTlECIXzwa7WJF8Bg2sCKhdmDfszGbx4NrV29PRgjuU+CNfF7Ud84
+   hKt5laqyNRaT9leCsXzbbjZZh8D8vCkcIkr2eVIg+zQR5QxNuo4l2rB3N
+   k1I2lKwXYUA9r5fD7EYuQfhRfmRFudMSn7o1I6vLB7usNZ/J246838TvA
+   w5XojvlUL/8rRoTE6Fk9fNYNEKyl/JlQljUf76xdgzGb31KYR/QzYcURI
+   oAP2PYJRhHFQdgQafwkZ9gayi7jLq8kwd9WF6TmY14mh69t7fDvpjd7/t
+   hST72Sr6g2K4paeK2mI3441Tro6FojlfOw32mOWlLRMmWcBOEW/g6stj5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="413469510"
 X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="353244939"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 02:53:26 -0700
+   d="scan'208";a="413469510"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 02:53:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="811073399"
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="729884460"
 X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="811073399"
+   d="scan'208";a="729884460"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 10 May 2023 02:53:24 -0700
+  by orsmga008.jf.intel.com with ESMTP; 10 May 2023 02:53:25 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pwgVg-00037Q-0Z;
+	id 1pwgVg-00037S-0c;
 	Wed, 10 May 2023 09:53:24 +0000
-Date: Wed, 10 May 2023 17:52:44 +0800
+Date: Wed, 10 May 2023 17:52:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_sbi_nested_v1 31/34]
- arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of
- non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
-Message-ID: <202305101726.pbYUJOlm-lkp@intel.com>
+To: Yan Wang <rk.code@outlook.com>, andrew@lunn.ch, hkallweit1@gmail.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@armlinux.org.uk
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yan Wang <rk.code@outlook.com>
+Subject: Re: [PATCH v3] net: mdiobus: Add a function to deassert reset
+Message-ID: <202305101702.4xW6vT72-lkp@intel.com>
+References: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,76 +50,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
-head:   45022f814ebdecd0254e892212bb91fd50d90689
-commit: bbde11eab22a977d6bac34f90f8ee5b6d55c66e3 [31/34] RISC-V: KVM: Use SBI sync SRET call when available
-config: riscv-buildonly-randconfig-r004-20230509 (https://download.01.org/0day-ci/archive/20230510/202305101726.pbYUJOlm-lkp@intel.com/config)
+Hi Yan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.4-rc1 next-20230510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/KL1PR01MB5448A33A549CDAD7D68945B9E6779%40KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+patch subject: [PATCH v3] net: mdiobus: Add a function to deassert reset
+config: hexagon-randconfig-r045-20230509 (https://download.01.org/0day-ci/archive/20230510/202305101702.4xW6vT72-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/bbde11eab22a977d6bac34f90f8ee5b6d55c66e3
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_nested_v1
-        git checkout bbde11eab22a977d6bac34f90f8ee5b6d55c66e3
+        # https://github.com/intel-lab-lkp/linux/commit/f7ded94d887d1020adb4813c2b1025142288e882
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
+        git checkout f7ded94d887d1020adb4813c2b1025142288e882
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/mdio/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305101726.pbYUJOlm-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305101702.4xW6vT72-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
-   .type __kvm_riscv_switch_to STT_FUNC ; .set .L__sym_size___kvm_riscv_switch_to, .-__kvm_riscv_switch_to ; .size __kvm_riscv_switch_to, .L__sym_size___kvm_riscv_switch_to
-                                                                                   ^
+   In file included from drivers/net/mdio/fwnode_mdio.c:10:
+   In file included from include/linux/fwnode_mdio.h:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/net/mdio/fwnode_mdio.c:10:
+   In file included from include/linux/fwnode_mdio.h:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/mdio/fwnode_mdio.c:10:
+   In file included from include/linux/fwnode_mdio.h:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/net/mdio/fwnode_mdio.c:64:10: error: call to undeclared function 'fwnode_gpiod_get_index'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
+                   ^
+>> drivers/net/mdio/fwnode_mdio.c:64:53: error: use of undeclared identifier 'GPIOD_OUT_HIGH'
+           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
+                                                              ^
+>> drivers/net/mdio/fwnode_mdio.c:69:2: error: call to undeclared function 'gpiod_set_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           gpiod_set_value_cansleep(reset, 0);
+           ^
+>> drivers/net/mdio/fwnode_mdio.c:71:2: error: call to undeclared function 'gpiod_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           gpiod_put(reset);
+           ^
+   6 warnings and 4 errors generated.
 
 
-vim +259 arch/riscv/kvm/vcpu_switch.S
+vim +/fwnode_gpiod_get_index +64 drivers/net/mdio/fwnode_mdio.c
 
-bbde11eab22a97 Anup Patel 2022-10-09  230  
-bbde11eab22a97 Anup Patel 2022-10-09  231  	/*
-bbde11eab22a97 Anup Patel 2022-10-09  232  	 * Parameters:
-bbde11eab22a97 Anup Patel 2022-10-09  233  	 * A0 <= Pointer to struct kvm_vcpu_arch
-bbde11eab22a97 Anup Patel 2022-10-09  234  	 * A1 <= SBI extension ID
-bbde11eab22a97 Anup Patel 2022-10-09  235  	 * A2 <= SBI function ID
-bbde11eab22a97 Anup Patel 2022-10-09  236  	 * A3 <= Flags for SBI sync SRET call
-bbde11eab22a97 Anup Patel 2022-10-09  237  	 */
-bbde11eab22a97 Anup Patel 2022-10-09  238  ENTRY(__kvm_riscv_nacl_switch_to)
-bbde11eab22a97 Anup Patel 2022-10-09  239  	SAVE_HOST_GPRS
-bbde11eab22a97 Anup Patel 2022-10-09  240  
-bbde11eab22a97 Anup Patel 2022-10-09  241  	SAVE_HOST_AND_RESTORE_GUEST_CSRS __kvm_riscv_nacl_switch_to_return
-bbde11eab22a97 Anup Patel 2022-10-09  242  
-bbde11eab22a97 Anup Patel 2022-10-09  243  	/* Resume Guest using SBI nested acceleration */
-bbde11eab22a97 Anup Patel 2022-10-09  244  	add	a6, a2, zero
-bbde11eab22a97 Anup Patel 2022-10-09  245  	add	a7, a1, zero
-bbde11eab22a97 Anup Patel 2022-10-09  246  	ecall
-bbde11eab22a97 Anup Patel 2022-10-09  247  
-bbde11eab22a97 Anup Patel 2022-10-09  248  	/* Back to Host */
-bbde11eab22a97 Anup Patel 2022-10-09  249  	.align 2
-bbde11eab22a97 Anup Patel 2022-10-09  250  __kvm_riscv_nacl_switch_to_return:
-bbde11eab22a97 Anup Patel 2022-10-09  251  	SAVE_GUEST_GPRS
-bbde11eab22a97 Anup Patel 2022-10-09  252  
-bbde11eab22a97 Anup Patel 2022-10-09  253  	SAVE_GUEST_AND_RESTORE_HOST_CSRS
-bbde11eab22a97 Anup Patel 2022-10-09  254  
-bbde11eab22a97 Anup Patel 2022-10-09  255  	RESTORE_HOST_GPRS
-34bde9d8b9e6e5 Anup Patel 2021-09-27  256  
-34bde9d8b9e6e5 Anup Patel 2021-09-27  257  	/* Return to C code */
-34bde9d8b9e6e5 Anup Patel 2021-09-27  258  	ret
-34bde9d8b9e6e5 Anup Patel 2021-09-27 @259  ENDPROC(__kvm_riscv_switch_to)
-9f7013265112a9 Anup Patel 2021-09-27  260  
-
-:::::: The code at line 259 was first introduced by commit
-:::::: 34bde9d8b9e6e5249db3c07cf1ebfe75c23c671c RISC-V: KVM: Implement VCPU world-switch
-
-:::::: TO: Anup Patel <anup.patel@wdc.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
+    59	
+    60	static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
+    61	{
+    62		struct gpio_desc *reset;
+    63	
+  > 64		reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
+    65		if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
+    66			return;
+    67	
+    68		usleep_range(100, 200);
+  > 69		gpiod_set_value_cansleep(reset, 0);
+    70		/*Release the reset pin,it needs to be registered with the PHY.*/
+  > 71		gpiod_put(reset);
+    72	}
+    73	
 
 -- 
 0-DAY CI Kernel Test Service
