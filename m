@@ -1,119 +1,86 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670B1174E8;
-	Wed, 10 May 2023 19:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683746749; x=1715282749;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xbF9cDuYLfi2Lkc/Fd8T0Ym7FAElxPngnHVYsz6YF10=;
-  b=efgqZVw9qsuTZ/z4hSdoE1CSOraxhcK9XdEsagQb5FlyKvIzVZstS1Nf
-   mIurq45Ij8tI7sYYDCjWWjGL4rgel95fXoL+3sL+qr22FUmK1A6aPuSwW
-   WPpTCyFzFQKMcLWUNHEV4fAW8K0GoITgg7quFU1DZDGP9pX2nBl9bOjzJ
-   qmlbv+ldrTee6QZuJ5DDfdRCGBb5fpVL2SUVu4YM53mio+UTyVMRWrhpX
-   Xd7igTgaopUGa9ZebXybCucfcDfIo/w9qm8p+FR6/4rTEWU9acgky9RzW
-   zVu8d5G07C3WgDx8VFt2Ku/FVZ9uyuSP0Y9BdZlo1r8/4EmCXYepGh8TE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="339555042"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="339555042"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 12:25:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="699419161"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="699419161"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 10 May 2023 12:25:45 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pwpRY-0003XG-1T;
-	Wed, 10 May 2023 19:25:44 +0000
-Date: Thu, 11 May 2023 03:25:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/core 1/2] kernel/locking/lockdep.c:3603:65:
- error: too few arguments to function call, expected 2, have 1
-Message-ID: <202305110344.xVyXq6m3-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FC48C0F
+	for <llvm@lists.linux.dev>; Wed, 10 May 2023 20:20:41 +0000 (UTC)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-959a3e2dd27so1364716766b.3
+        for <llvm@lists.linux.dev>; Wed, 10 May 2023 13:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1683750039; x=1686342039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OAFo2QD9kP26+xLj7IQr31EYTyjtIOLhJ8ql3Ihcx00=;
+        b=jxsmsS+gHVUJhyrdUSU1l6POO30DFjZvAUNL7ax2bs6B5GU/IFC6aC0LnwQX5zkrsx
+         W/Nq0Z94IY3UyyadUsWpZDyLAaoy6pShR7AuyoznoXCXHVN5UKu4x+ioQKDdITW2GNPc
+         am7MyjesHZcpOOaqtnKHkUegZ067hpj3saeOs31fcyOy4bdkWEEsFgtU21ZKYafg6bA2
+         KL8lx28r5i1xZKrEjTbNYpjGDQmvISJNTGbQ9JKIjCUdI4ga/FhA03iXfRBXYhJnyvhj
+         HEK+xU8GfzC47XnMA/+qWhX9uFByXx9EpBqLKRtLLQzwoEAruSlpkbA2YDasiHGldroa
+         YHTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683750039; x=1686342039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OAFo2QD9kP26+xLj7IQr31EYTyjtIOLhJ8ql3Ihcx00=;
+        b=AP9qlXej4kPKNnI6OYZSFHgHlhtyjoZ3ozuHqsjOojhWNUmWdNXImi3dO9oYy8Q5lE
+         lLMML8MneZCu6R3BPoSmtmdtnHORWjoIqFdiH0+WEpzJTp3jr9bKHc8HMWWx8j3m9352
+         rTyxXCL2uzWC5K8S5ZPAJwuSvQBmhmyH9LmGoh3T+qxMpIZ44jNfv9LAxVrh7HoMTdHc
+         IPrh8OwWxV0DGabg01vB0Fkxue5AbGQ0YhiWAtV8Te0PfL+mNmsPhqQkwDu2BACfqPbW
+         /PczD2hIl+akC29lrQUOxCT/O85AbwF0rrFauvH55ONlC72AmQqMwc4zYJShuRxHg0Gx
+         om5A==
+X-Gm-Message-State: AC+VfDzslBkW9DX/agu1c1Q7goyT2X1GQAwLyKTTx02CIM54lsGcEIgh
+	+iJHE4KJOztMJi0XWr+nYIAvh3p3R+4WXLSnKKg=
+X-Google-Smtp-Source: ACHHUZ6ZV3iLr3PUKpv3GxOStpEC4A5BOulRxZkBK+cDqBdXIdfnSBRtdzFLtvH4Qa3W8mSFyCCg+/4QeyJCLh7yU4g=
+X-Received: by 2002:a17:907:e8b:b0:94f:764e:e310 with SMTP id
+ ho11-20020a1709070e8b00b0094f764ee310mr19539753ejc.37.1683750038942; Wed, 10
+ May 2023 13:20:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
+In-Reply-To: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Wed, 10 May 2023 22:20:28 +0200
+Message-ID: <CAFBinCBjvfNHUX5X=4jJ0Gtx1Z9MABMv7FioEabjvtbkOrTEkQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: meson-mx-sdhc: Avoid cast to incompatible function type
+To: Simon Horman <horms@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   c9b4ca9414103eefcb5b2fdce5b0238f64768a53
-commit: 42c02af27bb3c420d2de11d8c9c0b17ce40f76ac [1/2] lockdep: Add lock_set_cmp_fn() annotation
-config: arm64-randconfig-r026-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110344.xVyXq6m3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=42c02af27bb3c420d2de11d8c9c0b17ce40f76ac
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue locking/core
-        git checkout 42c02af27bb3c420d2de11d8c9c0b17ce40f76ac
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/locking/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305110344.xVyXq6m3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/locking/lockdep.c:3603:65: error: too few arguments to function call, expected 2, have 1
-                   print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
-                   ~~~~~~~~~~~~~~~                                               ^
-   kernel/locking/lockdep.c:732:13: note: 'print_lock_name' declared here
-   static void print_lock_name(struct held_lock *hlock, struct lock_class *class)
-               ^
-   kernel/locking/lockdep.c:4915:6: warning: no previous prototype for function 'lockdep_set_lock_cmp_fn' [-Wmissing-prototypes]
-   void lockdep_set_lock_cmp_fn(struct lockdep_map *lock, lock_cmp_fn cmp_fn,
-        ^
-   kernel/locking/lockdep.c:4915:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void lockdep_set_lock_cmp_fn(struct lockdep_map *lock, lock_cmp_fn cmp_fn,
-   ^
-   static 
-   1 warning and 1 error generated.
-
-
-vim +3603 kernel/locking/lockdep.c
-
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3591  
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3592  static void print_chain_keys_chain(struct lock_chain *chain)
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3593  {
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3594  	int i;
-f6ec8829ac9d59 Yuyang Du                 2019-05-06  3595  	u64 chain_key = INITIAL_CHAIN_KEY;
-f611e8cf98ec90 Boqun Feng                2020-08-07  3596  	u16 hlock_id;
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3597  
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3598  	printk("depth: %u\n", chain->depth);
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3599  	for (i = 0; i < chain->depth; i++) {
-f611e8cf98ec90 Boqun Feng                2020-08-07  3600  		hlock_id = chain_hlocks[chain->base + i];
-f611e8cf98ec90 Boqun Feng                2020-08-07  3601  		chain_key = print_chain_key_iteration(hlock_id, chain_key);
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3602  
-28df029d53a2fd Cheng Jui Wang            2022-02-10 @3603  		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3604  		printk("\n");
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3605  	}
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3606  }
-39e2e173fb1f90 Alfredo Alvarez Fernandez 2016-03-30  3607  
-
-:::::: The code at line 3603 was first introduced by commit
-:::::: 28df029d53a2fd80c1b8674d47895648ad26dcfb lockdep: Correct lock_classes index mapping
-
-:::::: TO: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Wed, May 10, 2023 at 2:39=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> Rather than casting mmc_free_host to an incompatible function type,
+> provide a trivial wrapper with the correct signature for the use-case.
+>
+> Reported by clang-16 with W=3D1:
+>
+>  .../meson-mx-sdhc-mmc.c:791:38: error: cast from 'void (*)(struct mmc_ho=
+st *)' to 'void (*)(void *)' converts to incompatible function type [-Werro=
+r,-Wcast-function-type-strict]
+>          ret =3D devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_=
+host,
+>                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~
+>  ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_act=
+ion_or_reset'
+>          __devm_add_action_or_reset(release, action, data, #action)
+>                                             ^~~~~~
+>
+> The same approach is taken in litex_mmc.c with the function
+> litex_mmc_free_host_wrapper(). There may be scope for consolidation.
+>
+> No functional change intended.
+> Compile tested only.
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
