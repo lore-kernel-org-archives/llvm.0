@@ -1,86 +1,81 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FC48C0F
-	for <llvm@lists.linux.dev>; Wed, 10 May 2023 20:20:41 +0000 (UTC)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-959a3e2dd27so1364716766b.3
-        for <llvm@lists.linux.dev>; Wed, 10 May 2023 13:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683750039; x=1686342039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OAFo2QD9kP26+xLj7IQr31EYTyjtIOLhJ8ql3Ihcx00=;
-        b=jxsmsS+gHVUJhyrdUSU1l6POO30DFjZvAUNL7ax2bs6B5GU/IFC6aC0LnwQX5zkrsx
-         W/Nq0Z94IY3UyyadUsWpZDyLAaoy6pShR7AuyoznoXCXHVN5UKu4x+ioQKDdITW2GNPc
-         am7MyjesHZcpOOaqtnKHkUegZ067hpj3saeOs31fcyOy4bdkWEEsFgtU21ZKYafg6bA2
-         KL8lx28r5i1xZKrEjTbNYpjGDQmvISJNTGbQ9JKIjCUdI4ga/FhA03iXfRBXYhJnyvhj
-         HEK+xU8GfzC47XnMA/+qWhX9uFByXx9EpBqLKRtLLQzwoEAruSlpkbA2YDasiHGldroa
-         YHTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683750039; x=1686342039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OAFo2QD9kP26+xLj7IQr31EYTyjtIOLhJ8ql3Ihcx00=;
-        b=AP9qlXej4kPKNnI6OYZSFHgHlhtyjoZ3ozuHqsjOojhWNUmWdNXImi3dO9oYy8Q5lE
-         lLMML8MneZCu6R3BPoSmtmdtnHORWjoIqFdiH0+WEpzJTp3jr9bKHc8HMWWx8j3m9352
-         rTyxXCL2uzWC5K8S5ZPAJwuSvQBmhmyH9LmGoh3T+qxMpIZ44jNfv9LAxVrh7HoMTdHc
-         IPrh8OwWxV0DGabg01vB0Fkxue5AbGQ0YhiWAtV8Te0PfL+mNmsPhqQkwDu2BACfqPbW
-         /PczD2hIl+akC29lrQUOxCT/O85AbwF0rrFauvH55ONlC72AmQqMwc4zYJShuRxHg0Gx
-         om5A==
-X-Gm-Message-State: AC+VfDzslBkW9DX/agu1c1Q7goyT2X1GQAwLyKTTx02CIM54lsGcEIgh
-	+iJHE4KJOztMJi0XWr+nYIAvh3p3R+4WXLSnKKg=
-X-Google-Smtp-Source: ACHHUZ6ZV3iLr3PUKpv3GxOStpEC4A5BOulRxZkBK+cDqBdXIdfnSBRtdzFLtvH4Qa3W8mSFyCCg+/4QeyJCLh7yU4g=
-X-Received: by 2002:a17:907:e8b:b0:94f:764e:e310 with SMTP id
- ho11-20020a1709070e8b00b0094f764ee310mr19539753ejc.37.1683750038942; Wed, 10
- May 2023 13:20:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B59C21CF7;
+	Wed, 10 May 2023 22:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683757310; x=1715293310;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bc6Pee1ijgCXCbkYkvsg3gDTH8C0gRkRzAMMPlcyXB4=;
+  b=fvAkiA+Taq+DdQZ1L2hZ9ee1sPfxd6UCdeL4A3t7LA20Gsh5IT63rfg7
+   7K+JWNlM08/vK1v1g3XUj2eyMC0Cq7QpwNao+7/O/hSyyuBEAooImvaQX
+   nxTxevtmhmpLETWA7an6JwQeTanU683M+TIm4w0Cbg1cYOtkfszjkK4d7
+   OG435ytM/6iamnA1lKJTj5IuAPJqyWlS2zV7lRhRwiIPJzHSe9gN1A/sh
+   dpqoXT57w+WaHwQfayR6Omv8+/242dx5P2PBskhW2PSxWGaZcGCYYsv9g
+   JqUWged48/k8nGNhRy6X+wqffpyUrsxnttMKutwifN030ujCcNbW2kUwx
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="339593173"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="339593173"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 15:21:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="732313721"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="732313721"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 10 May 2023 15:21:48 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pwsBv-0003cG-1l;
+	Wed, 10 May 2023 22:21:47 +0000
+Date: Thu, 11 May 2023 06:21:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: [niks:has_ioport_v4 36/41] ld.lld: error: undefined symbol:
+ uhci_check_and_reset_hc
+Message-ID: <202305110616.Legw0MPh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
-In-Reply-To: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Wed, 10 May 2023 22:20:28 +0200
-Message-ID: <CAFBinCBjvfNHUX5X=4jJ0Gtx1Z9MABMv7FioEabjvtbkOrTEkQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: meson-mx-sdhc: Avoid cast to incompatible function type
-To: Simon Horman <horms@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, May 10, 2023 at 2:39=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
-te:
->
-> Rather than casting mmc_free_host to an incompatible function type,
-> provide a trivial wrapper with the correct signature for the use-case.
->
-> Reported by clang-16 with W=3D1:
->
->  .../meson-mx-sdhc-mmc.c:791:38: error: cast from 'void (*)(struct mmc_ho=
-st *)' to 'void (*)(void *)' converts to incompatible function type [-Werro=
-r,-Wcast-function-type-strict]
->          ret =3D devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_=
-host,
->                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~
->  ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_act=
-ion_or_reset'
->          __devm_add_action_or_reset(release, action, data, #action)
->                                             ^~~~~~
->
-> The same approach is taken in litex_mmc.c with the function
-> litex_mmc_free_host_wrapper(). There may be scope for consolidation.
->
-> No functional change intended.
-> Compile tested only.
->
-> Signed-off-by: Simon Horman <horms@kernel.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v4
+head:   b873f53aa1a6487f4a450747bd5ee38afad6dfe4
+commit: 216a01adc35d677e5b2db113a4df427faae01e75 [36/41] usb: pci-quirks: handle HAS_IOPORT dependencies
+config: riscv-randconfig-r042-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110616.Legw0MPh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=216a01adc35d677e5b2db113a4df427faae01e75
+        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
+        git fetch --no-tags niks has_ioport_v4
+        git checkout 216a01adc35d677e5b2db113a4df427faae01e75
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305110616.Legw0MPh-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: uhci_check_and_reset_hc
+   >>> referenced by pci-quirks.c
+   >>>               drivers/usb/host/pci-quirks.o:(quirk_usb_early_handoff) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
