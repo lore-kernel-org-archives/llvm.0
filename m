@@ -1,123 +1,84 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3595B20B42
-	for <llvm@lists.linux.dev>; Wed, 10 May 2023 12:54:47 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3f42c865534so18151005e9.2
-        for <llvm@lists.linux.dev>; Wed, 10 May 2023 05:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683723285; x=1686315285;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=DsPeOMPF8LMsfujWKUmhb5P5Qm+Y5emVq+pEA4n3YfU=;
-        b=vgGMtv0Z8dWkBLZETAjMPca0sTA0GXeNY2meKWGf6GZCT+YgiaWWVlfCaaWfGU2MfI
-         uSPD6O1g2cz5QDgy/l30Hys/2tjFl+l3EmTVGfIMGTOUphTsN1iMYT+zR+2QPllsjwzo
-         gaodANu4pPTAlODyHoNWwH2vR/sKW0hLS+q8q9YYCbE8O2nnuvjdUTlu/oUV/viRFoFI
-         EHjWKFDECumotp9kw7ObscpJ+ISLNeHfEoTRibUjp/B5JByatMI49xLqObo2b3UDpR1H
-         MUlSx4ViCKjnIaDeeqxYwVybCPFZyd08yhXEmJdBNvtu7nt0thshH3iIGUuHChlzMoBz
-         khGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683723285; x=1686315285;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DsPeOMPF8LMsfujWKUmhb5P5Qm+Y5emVq+pEA4n3YfU=;
-        b=RGYfbP8jE/nzfkUja0aelLBK5J7FEDzZ6Z0emd8g8twi5oLJtRsnmUmGFCePS/09cp
-         Qz313f1HG/LwEUJsZfYTPeqDvmJT4uEjLFtaJm3QNxHwDQpsUHxjkIzxZvZNq5HQCQ3e
-         EwQ4UUeTG9NDIh5HOyj9dVpmcgnuwwfyxMpBotD0y+/Kk7X9zDYUhW8U1G9gq2qvcQI+
-         7xHMBb6bzTyeiUswSH6+elBmKgP04Uxs9Vj9XwnwzgZozIlKxIbiYejpAZ5ziSJRUCn6
-         rVxsQPXLK79BrX/nITmHSw3hbqQCKjGeMWMPQzpAMvza7TPCpMPngvOAHt2J8Gn1nFQz
-         WVrg==
-X-Gm-Message-State: AC+VfDyNhnfTb/78ujFEHuZniVLt0aZ9X1GL2x/Z4o2drVliinN3MxxX
-	SJpAsplbnfwlGEMhyu6J7zbA+A==
-X-Google-Smtp-Source: ACHHUZ5fGwpDlDihF+FQJ3nyzntea8nQCmV/QQWHmnUMJ3kkiuW6ZAn09HPIcHOLDS5Do3lkyOg7TQ==
-X-Received: by 2002:a05:600c:2313:b0:3f4:2266:8cef with SMTP id 19-20020a05600c231300b003f422668cefmr9445090wmo.31.1683723285344;
-        Wed, 10 May 2023 05:54:45 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:2ee9:7e58:bce6:9219? ([2a01:e0a:982:cbb0:2ee9:7e58:bce6:9219])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05600c210500b003f427cba193sm7559862wml.41.2023.05.10.05.54.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 05:54:44 -0700 (PDT)
-Message-ID: <4633b31e-6fd3-829a-ceaf-59087edb854e@linaro.org>
-Date: Wed, 10 May 2023 14:54:43 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202066AA8
+	for <llvm@lists.linux.dev>; Wed, 10 May 2023 15:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683733811;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kb2ErcM1kPWwWZQ26JMK9XXnIbJglLcpMrIeQxjENNQ=;
+	b=c+EfKqUkvOfZ70aBakhsehHmFAPqXoHlhGenqxJGPK+Ft3RBxGJm7CQ0pHvlvpL55FeRKI
+	N2TkSVmcaMMX5L2/4yWzSdeajsULJK+dIGgGS9/bEwTUJzsemP7705/ueYyARz6m1A5e4P
+	xzLfMJZDY4C2KKiRSYnxBpdjX6qogiQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-266-OK9pG4D5NUORtFBoCoUhXg-1; Wed, 10 May 2023 11:50:08 -0400
+X-MC-Unique: OK9pG4D5NUORtFBoCoUhXg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A20CC280BC69
+	for <llvm@lists.linux.dev>; Wed, 10 May 2023 15:50:08 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8F16C47CD0;
+	Wed, 10 May 2023 15:50:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, ad2fd53a)
+Date: Wed, 10 May 2023 15:50:08 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] mmc: meson-mx-sdhc: Avoid cast to incompatible function
- type
-Content-Language: en-US
-To: Simon Horman <horms@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Kevin Hilman <khilman@baylibre.com>, Jerome Brunet
- <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-amlogic@lists.infradead.org, llvm@lists.linux.dev
-References: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230510-mmc-sdhci-msm-function-cast-v1-1-5ae634b24fbd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <79992.123051011500802393@us-mta-266.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/05/2023 14:39, Simon Horman wrote:
-> Rather than casting mmc_free_host to an incompatible function type,
-> provide a trivial wrapper with the correct signature for the use-case.
-> 
-> Reported by clang-16 with W=1:
-> 
->   .../meson-mx-sdhc-mmc.c:791:38: error: cast from 'void (*)(struct mmc_host *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->           ret = devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
->                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_action_or_reset'
->           __devm_add_action_or_reset(release, action, data, #action)
->                                              ^~~~~~
-> 
-> The same approach is taken in litex_mmc.c with the function
-> litex_mmc_free_host_wrapper(). There may be scope for consolidation.
-> 
-> No functional change intended.
-> Compile tested only.
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->   drivers/mmc/host/meson-mx-sdhc-mmc.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/meson-mx-sdhc-mmc.c b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-> index da85c2f2acb8..97168cdfa8e9 100644
-> --- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
-> +++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-> @@ -776,6 +776,11 @@ static void meson_mx_sdhc_init_hw(struct mmc_host *mmc)
->   	regmap_write(host->regmap, MESON_SDHC_ISTA, MESON_SDHC_ISTA_ALL_IRQS);
->   }
->   
-> +static void meason_mx_mmc_free_host(void *data)
-> +{
-> +       mmc_free_host(data);
-> +}
-> +
->   static int meson_mx_sdhc_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -788,8 +793,7 @@ static int meson_mx_sdhc_probe(struct platform_device *pdev)
->   	if (!mmc)
->   		return -ENOMEM;
->   
-> -	ret = devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
-> -				       mmc);
-> +	ret = devm_add_action_or_reset(dev, meason_mx_mmc_free_host, mmc);
->   	if (ret) {
->   		dev_err(dev, "Failed to register mmc_free_host action\n");
->   		return ret;
-> 
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
+
+
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v6.4-2' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/88374
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34842=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
