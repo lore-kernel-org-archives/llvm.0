@@ -1,72 +1,54 @@
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD1B62F
-	for <llvm@lists.linux.dev>; Wed, 10 May 2023 05:48:03 +0000 (UTC)
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6ab0bad2587so1820717a34.3
-        for <llvm@lists.linux.dev>; Tue, 09 May 2023 22:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683697682; x=1686289682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLoXxmvmI+TNDBhJrgne+NmasMw88TAHwNMgEXRV8rI=;
-        b=cdGX27W3aTaVuF1lXqNU3dXFL5s/Mxv+Moz1oLv1bQd1dEC9mDTi2x1P2N71gBko7J
-         2+zczCTSBLiri2fJqfSyyz5RHx46ktfWmUOXnHuyj5Cn4nTnemxRsBPtCWjjZawCjJGN
-         78Z4MCWQKxZMpusPRAJQCksQy1Dfq+cU/sE+LDbzedpxxiDwbqNmgut9N0xguAbrwjC6
-         i26od8SWAexY2jtV7kg0NYHScaH2lXuJWt2XqxC61phsOtpGEOKp0RycWSufEb7ci05D
-         XrgVIiuCTq2cXFJRCtMevAMjlG69+8PadWF6hGIxq7j2gai3jXAqXDEXXYFo0g1p+Z4b
-         ehIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683697682; x=1686289682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aLoXxmvmI+TNDBhJrgne+NmasMw88TAHwNMgEXRV8rI=;
-        b=QKfdwtB2JUU+guPCB0nnX/eDcWsm0THvKm3JJ/KSkyvDcZFa8eNg5QqFOMqFqbZ5ME
-         mcnXigvCQ2BcthKCo+dVcllSzTW/gOiPxvNMCyFSrfiJ0KEAIMMCOZ2exhpMz/YRLFkZ
-         bmrHyaIwo7g6qBlZds7l86o6bZldt1iZ/Uf7g2SwLzh+VkDkhuMaESCVQsRNpoxcrjw6
-         cjQ5YnOIk+uhRq0XnjXlxgt1zvZrlreJo5ScWFQAKqe9/1fa9Y9KplvtZNvSKfHhYyAF
-         he427BWwI8Sb7p7bx9T2Swn+qnMw8+zWI0YSvOCWWZ6s7SLF9UhjHqqAnSVVU4QvD75x
-         JKlw==
-X-Gm-Message-State: AC+VfDx9VcdUTVn3Mu5uOoq6mrQzUX3mNrMUw5+u+lB5yyuTOA/VaxHl
-	HQKbnEL0F6l2fJJm1pQqu5IWsQ==
-X-Google-Smtp-Source: ACHHUZ4YI0Ows+2qLCE5z9Sy2RLUd1OHJeod9NGdxiAb7Ex5AAbigEasnBSuYpWAru1W0u5cnRfMdw==
-X-Received: by 2002:a9d:730d:0:b0:6ab:b20:18a5 with SMTP id e13-20020a9d730d000000b006ab0b2018a5mr2569954otk.26.1683697682642;
-        Tue, 09 May 2023 22:48:02 -0700 (PDT)
-Received: from sunil-laptop ([106.51.188.76])
-        by smtp.gmail.com with ESMTPSA id p25-20020a9d76d9000000b0068bd922a244sm603978otl.20.2023.05.09.22.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 22:48:02 -0700 (PDT)
-Date: Wed, 10 May 2023 11:17:49 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Weili Qian <qianweili@huawei.com>,
-	Zhou Wang <wangzhou1@hisilicon.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH V5 03/21] crypto: hisilicon/qm: Fix to enable build with
- RISC-V clang
-Message-ID: <ZFswBePAtF/ror5G@sunil-laptop>
-References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
- <20230508115237.216337-4-sunilvl@ventanamicro.com>
- <ZFmtSReX9/WR5CkK@gondor.apana.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77EC2F37;
+	Wed, 10 May 2023 08:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683706706; x=1715242706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I+vGMDDEGxtiu3VkujCFgaDu4FJdh9q/ZxqvG7WTFVs=;
+  b=XcYa5M5YYObL/rl5R8t2HccGbHnGS0pFr/aBgLt2gK3g3AgvpRNl+mDo
+   rk28XyZn5/BGZPBRJWIT2uZZNx3Lr4pE6m+UhiIZZ+pJvi7SK17ejGqy3
+   hzRbPepPqd0B7jrwQZkeM4PTNxwympVBTUkERnukkl2WkoEHJ1h8nupxl
+   FvkiGChcWO+F2Bwa6h7r/Vyr6xwKmptsCu4Psi4mz/MU2/VWXhiKQrAPj
+   OeuEXZNSTW0fxpjrnqBwYd4FXJGtobjn4roGDXnznLhV3BtEoMIPISVwV
+   hl27B6YqRlX58SPq4BgBlyyAvXYojsXFyqrxl4ZroVMkXF0QcHZ5tWIQm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330521029"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="330521029"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 01:18:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="676761148"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="676761148"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 10 May 2023 01:18:22 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pwf1h-00033A-1v;
+	Wed, 10 May 2023 08:18:21 +0000
+Date: Wed, 10 May 2023 16:18:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Message-ID: <202305101517.ld1hBheg-lkp@intel.com>
+References: <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,60 +57,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFmtSReX9/WR5CkK@gondor.apana.org.au>
+In-Reply-To: <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
 
-On Tue, May 09, 2023 at 10:17:45AM +0800, Herbert Xu wrote:
-> On Mon, May 08, 2023 at 05:22:19PM +0530, Sunil V L wrote:
-> > With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
-> > allmodconfig build. However, build fails with clang and below
-> > error is seen.
-> > 
-> > drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+Q' in asm
-> >                        "+Q" (*((char __iomem *)fun_base))
-> >                        ^
-> > This is expected error with clang due to the way it is designed.
-> > 
-> > To fix this issue, move arm64 assembly code under #if.
-> > 
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/999
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > [sunilvl@ventanamicro.com: Moved tmp0 and tmp1 into the #if]
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > ---
-> >  drivers/crypto/hisilicon/qm.c | 13 +++++++------
-> >  1 file changed, 7 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-> > index ad0c042b5e66..2eaeaac2e246 100644
-> > --- a/drivers/crypto/hisilicon/qm.c
-> > +++ b/drivers/crypto/hisilicon/qm.c
-> > @@ -610,13 +610,9 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
-> >  static void qm_mb_write(struct hisi_qm *qm, const void *src)
-> >  {
-> >  	void __iomem *fun_base = qm->io_base + QM_MB_CMD_SEND_BASE;
-> > -	unsigned long tmp0 = 0, tmp1 = 0;
-> >  
-> > -	if (!IS_ENABLED(CONFIG_ARM64)) {
-> > -		memcpy_toio(fun_base, src, 16);
-> > -		dma_wmb();
-> > -		return;
-> > -	}
-> 
-> Please leave this bit as it stands.
-> 
-> > +#if IS_ENABLED(CONFIG_ARM64)
-> > +	unsigned long tmp0 = 0, tmp1 = 0;
-> >  
-> >  	asm volatile("ldp %0, %1, %3\n"
-> >  		     "stp %0, %1, %2\n"
-> > @@ -626,6 +622,11 @@ static void qm_mb_write(struct hisi_qm *qm, const void *src)
-> >  		       "+Q" (*((char __iomem *)fun_base))
-> >  		     : "Q" (*((char *)src))
-> >  		     : "memory");
-> 
-> And simply add the ifdef around the assembly.
-> 
-Sure, Herbert.
+Hi Souradeep,
 
-Thanks!
-Sunil
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc1 next-20230510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230509-185332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu%40quicinc.com
+patch subject: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20230510/202305101517.ld1hBheg-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7883e99da179c8b49f6834b84a91259b03679e56
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230509-185332
+        git checkout 7883e99da179c8b49f6834b84a91259b03679e56
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/ drivers/net/can/usb/ drivers/soc/qcom/ drivers/watchdog/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305101517.ld1hBheg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/soc/qcom/boot_stats.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/soc/qcom/boot_stats.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/soc/qcom/boot_stats.c:9:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/soc/qcom/boot_stats.c:76:6: warning: no previous prototype for function 'boot_stats_remove' [-Wmissing-prototypes]
+   void boot_stats_remove(struct platform_device *pdev)
+        ^
+   drivers/soc/qcom/boot_stats.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void boot_stats_remove(struct platform_device *pdev)
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/boot_stats_remove +76 drivers/soc/qcom/boot_stats.c
+
+    75	
+  > 76	void boot_stats_remove(struct platform_device *pdev)
+    77	{
+    78		struct bs_data *drvdata = platform_get_drvdata(pdev);
+    79	
+    80		debugfs_remove_recursive(drvdata->dbg_dir);
+    81	}
+    82	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
