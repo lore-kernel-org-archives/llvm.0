@@ -1,112 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C4D3D60;
-	Wed, 10 May 2023 17:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2FDC433D2;
-	Wed, 10 May 2023 17:34:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683740097;
-	bh=NnMa4/6VIx6yW41nazHwwitKXnWorurym5zBq4Ka0XY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jRo3jRZJDb/ziEHcYjG6t77yGeolVrZqQA3zUzLWSQFI7MZweGu4GL/g4VnbdIO0L
-	 6e5lWTdD5ZPwxQ3FmWKtybySqvbfZdQyjsym1DpQsJGipspkcj9okAp7BL5ywvn0mB
-	 PFDTljAY+P1LmVcJW+pIreogI63jKwLk+AJUoj5AC9oXquwoiD1kILywh6qlhB0Dcn
-	 juPH3sTfFIQcHwG9Qs4M43g4df6VTtHIjGVSGvo+qxkAtjxgZhiKQZNlz2okv+Pjys
-	 3gW0GaHsLlibWtUnkgO6pTrHA9YrBX6v8DABsgrX/5AUVg1Ge/yQEaXELP8phjOmZE
-	 PLkc0LXe3/zQg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id BE0DD403B5; Wed, 10 May 2023 14:34:54 -0300 (-03)
-Date: Wed, 10 May 2023 14:34:54 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Song Liu <songliubraving@meta.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1] perf build: Add system include paths to BPF builds
-Message-ID: <ZFvVvp0tYqxHWFsB@kernel.org>
-References: <20230506021450.3499232-1-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39322174D9;
+	Wed, 10 May 2023 18:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683744946; x=1715280946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qJuobSYQOCG0DEo5QmwhxaibZ7eQUmxWevHHQ5zZSig=;
+  b=FQUEmB+2MzXYw7RrmkRJQYzCf5GXvffGbrV9PMNjidBoHIgf14244xqF
+   ILl9+R/a3R+ad92Q5MWi9/ftNzzTkCwS5Jknv2yoSa3U+D665Z5OxPBJ6
+   oDdMa07xNXh2R1+iPolPz20z0AdFNA++JBWaIgKSSGQ3I8lySbHLnWZIH
+   pMfiv24OBQpMamnzI2jijlJinRTgxaYq68BcU1uJGzLM0/kUN/xOeTmaz
+   yH3c8vCcrJjjHY20pB9kThslEwjWaBs3irPrXVy7TtZpb0jjHVjfSdamL
+   1xG0n+pA+HqtvG5NDJ+jJ/GpL4ND7tBh7zjfC3NPbnzJrk7UUIlPoeAnZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="347756401"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="347756401"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 11:55:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="693497345"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="693497345"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 10 May 2023 11:55:44 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pwoyV-0003W2-1S;
+	Wed, 10 May 2023 18:55:43 +0000
+Date: Thu, 11 May 2023 02:54:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/4] workqueue: support holding a mutex for each work
+Message-ID: <202305110212.TS8jPQib-lkp@intel.com>
+References: <20230510175846.cc21c84b0e6b.I9d3df459c43a78530d9c2046724bb45626402d5f@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230506021450.3499232-1-irogers@google.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20230510175846.cc21c84b0e6b.I9d3df459c43a78530d9c2046724bb45626402d5f@changeid>
 
-Em Fri, May 05, 2023 at 07:14:50PM -0700, Ian Rogers escreveu:
-> There are insufficient headers in tools/include to satisfy building
-> BPF programs and their header dependencies. Add the system include
-> paths from the non-BPF clang compile so that these headers can be
-> found.
-> 
-> This code was taken from:
-> tools/testing/selftests/bpf/Makefile
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Makefile.perf | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 61c33d100b2b..37befdfa8ac8 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1057,7 +1057,25 @@ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_
->  
->  ifndef NO_BPF_SKEL
+Hi Johannes,
 
-So this patch was done before the reverts, I adjusted it to what is
-upstream and to another patch that makes the build use the headers from
-the perf sources instead of the system's (linux/bpf.h and
-linux/perf_event.h, from vmlinux.h), please take a look at the patch
-below, I'm also trying to figure out that other problem you pointed with
-linux/types.s :-\
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-What I have now in tmp.perf-tools:
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on wireless/main tj-wq/for-next linus/master v6.4-rc1 next-20230510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-⬢[acme@toolbox perf-tools]$ git log --oneline torvalds/master..
-a2af0f6b8ef7ea40 (HEAD -> perf-tools) perf build: Add system include paths to BPF builds
-5be6cecda0802f23 perf bpf skels: Make vmlinux.h use bpf.h and perf_event.h in source directory
-7d161165d9072dcb perf parse-events: Do not break up AUX event group
-a468085011ea8bba perf test test_intel_pt.sh: Test sample mode with event with PMU name
-123361659fa405de perf evsel: Modify group pmu name for software events
-34e82891d995ab89 tools arch x86: Sync the msr-index.h copy with the kernel sources
-705049ca4f5b7b00 tools headers kvm: Sync uapi/{asm/linux} kvm.h headers with the kernel sources
-8d6a41c8065e1120 tools include UAPI: Sync the sound/asound.h copy with the kernel sources
-92b8e61e88351091 tools headers UAPI: Sync the linux/const.h with the kernel headers
-e7ec3a249c38a9c9 tools headers UAPI: Sync the i915_drm.h with the kernel sources
-e6232180e524e112 tools headers UAPI: Sync the drm/drm.h with the kernel sources
-5d1ac59ff7445e51 tools headers UAPI: Sync the linux/in.h with the kernel sources
-b0618f38e2ab8ce3 perf build: Gracefully fail the build if BUILD_BPF_SKEL=1 is specified and clang isn't available
-5f0b89e632ed81b6 perf test java symbol: Remove needless debuginfod queries
-327daf34554d20a6 perf parse-events: Don't reorder ungrouped events by PMU
-ccc66c6092802d68 perf metric: JSON flag to not group events if gathering a metric group
-1b114824106ca468 perf stat: Introduce skippable evsels
-2a939c8695035b11 perf metric: Change divide by zero and !support events behavior
-⬢[acme@toolbox perf-tools]$
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/workqueue-support-pausing-ordered-workqueues/20230511-000621
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20230510175846.cc21c84b0e6b.I9d3df459c43a78530d9c2046724bb45626402d5f%40changeid
+patch subject: [RFC PATCH 2/4] workqueue: support holding a mutex for each work
+config: hexagon-randconfig-r002-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110212.TS8jPQib-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b4039a3ff5134e4344a9e12908180a69888c4c9a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Johannes-Berg/workqueue-support-pausing-ordered-workqueues/20230511-000621
+        git checkout b4039a3ff5134e4344a9e12908180a69888c4c9a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/
 
-Please help me test this,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305110212.TS8jPQib-lkp@intel.com/
 
-Regards,
+All warnings (new ones prefixed by >>):
 
-- Arnaldo
+   In file included from kernel/trace/trace_events.c:14:
+>> include/linux/workqueue.h:392:12: warning: declaration of 'struct mutex' will not be visible outside of this function [-Wvisibility]
+                     struct mutex *work_mutex, ...);
+                            ^
+   In file included from kernel/trace/trace_events.c:27:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/trace/trace_events.c:27:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/trace/trace_events.c:27:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   kernel/trace/trace_events.c:2123:37: warning: unused variable 'ftrace_event_id_fops' [-Wunused-const-variable]
+   static const struct file_operations ftrace_event_id_fops = {
+                                       ^
+   8 warnings generated.
+--
+   In file included from kernel/trace/power-traces.c:10:
+>> include/linux/workqueue.h:392:12: warning: declaration of 'struct mutex' will not be visible outside of this function [-Wvisibility]
+                     struct mutex *work_mutex, ...);
+                            ^
+   In file included from kernel/trace/power-traces.c:15:
+   In file included from include/trace/events/power.h:12:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/trace/power-traces.c:15:
+   In file included from include/trace/events/power.h:12:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/trace/power-traces.c:15:
+   In file included from include/trace/events/power.h:12:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   7 warnings generated.
 
 
+vim +392 include/linux/workqueue.h
+
+   389	
+   390	__printf(1, 5) struct workqueue_struct *
+   391	__alloc_workqueue(const char *fmt, unsigned int flags, int max_active,
+ > 392			  struct mutex *work_mutex, ...);
+   393	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
