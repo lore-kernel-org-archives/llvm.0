@@ -1,209 +1,195 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from CY4PR02CU007.outbound.protection.outlook.com (mail-westcentralusazon11011004.outbound.protection.outlook.com [40.93.199.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E7B6139;
-	Wed, 10 May 2023 10:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683716132; x=1715252132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ZiZp8HlqgvDguHB3TpoFlQNPzyWbhxSYgCDOAIgjQY=;
-  b=Yv7CtttAPbE93pO802ZfQQXvg6y8/RtwtbqiEECX62ZhmlQbxCxsKgRk
-   roaeSJXh+d88B0GGfcPmaYnHnBE/ApPejM7bd4lGO4aVZyyzNYMM9WLPR
-   KOdSTA6Tqt4ve9WnU/8fZR7gbf5WXlTUvT/6tTsVw9VEZfZo5zpcCoBcm
-   UxyDKrHwJ5l+RugHLvKXTXTGnqKwpjZXntHLc0px18ZM5mMiVNgkXLjQG
-   m+GcE2RMBJHRabkrlSHG634/3P49oTmgm3BkpKvY0hKHA2c46kjKKMltV
-   RJl1wKFJIoh7RzC4WAA4MA+AeaqFpDuMlDUKQVlVvdFXvutgumbb7U7Va
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="413481763"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="413481763"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 03:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="764247324"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="764247324"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 May 2023 03:55:27 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pwhTj-0003Aj-0Z;
-	Wed, 10 May 2023 10:55:27 +0000
-Date: Wed, 10 May 2023 18:54:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>, wg@grandegger.com,
-	mkl@pengutronix.de, michal.swiatkowski@linux.intel.com,
-	Steen.Hegelund@microchip.com, mailhol.vincent@wanadoo.fr
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, frank.jungclaus@esd.eu,
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com,
-	"Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-Message-ID: <202305101816.meuESNdN-lkp@intel.com>
-References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8767482;
+	Wed, 10 May 2023 11:11:19 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EfyS1n6DrdC/B8V5BLP4mepDw863HN3Dv/qcg+uIPy7fg/NKFwavsdjrR2YJMU4du11JrCYpJLsU+bXVeDkfNhmVSkIHIgE26p5LQz+rrk/LrEsv66a6jrc2TsUkT/J0ng5zpNAnPAamLMLg7rvcl+BE6lKCumew1ILTuzI69P7b9if8drPeBVXu3kCTNWypTn3F//I12F4bgKgFjQN2Wb7/K8iUJaDzh0B5odc1KNqpwAeUS/ahudWXFB4H8Vxo4atobABehxNsEzygD2XSCZcFyizOqCXb+eHHYF8EmH7ksjbkXkBH9N6JkCocbX9yiRnzZqwOYOtEUietOpRjwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Er3WA6U7Gs0roXtPWhjHlBlBIkfnJl2hhignr9ehuAc=;
+ b=UoSzNEXsLG3kxBLQ/xzfyVNoKq02Jpgo4lqb1BMVUxjjEK+nfFuVMRF8VOV7qo60UbKszX5hE3+rV7DdRw5DZZTQyYvpaP46kWiB+pNwArBO1V7Bty5G9xC9DpvoDpvbduH1tugELYE34NqXCAjY8UDV9AJD3AgEuSHQALQgnkO8Fp9go/80DHQCpMhSFx8zPdRjOP1EcngT8STiK4Xzz9QDeIz24XVLq3pklaohM55O8D/fNY94DtRP/BCSMd1KaqPi/cAb3Bim6mScFRHcxqFcXssO4ps726EhXKCQo/dEZOZznraiIiqJb4Tpcz+armo+KP0YKc7vHKiqegp7bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Er3WA6U7Gs0roXtPWhjHlBlBIkfnJl2hhignr9ehuAc=;
+ b=yi76OnPE14kKQXCePaXvCLp2noMhEHDC2sPmTptWuhZgR2TDvYMOVD2Kk5nW4OzaRx7fCSQ6J0ZOPLbg6zfI7X5GnnHzxjdtrI/EO6EgJ/FEV2SpmTuR0HPBo+ILNsfL6LTmDHsVS3tS719J9w/dgyoBDm9IFKs0oS0IAMuV0Sc=
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
+ by BL0PR05MB5364.namprd05.prod.outlook.com (2603:10b6:208:6b::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
+ 2023 11:11:16 +0000
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::5631:475a:58d4:cf66]) by PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::5631:475a:58d4:cf66%7]) with mapi id 15.20.6363.033; Wed, 10 May 2023
+ 11:11:15 +0000
+From: Ajay Kaher <akaher@vmware.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+CC: kernel test robot <lkp@intel.com>, "mhiramat@kernel.org"
+	<mhiramat@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"chinglinyu@google.com" <chinglinyu@google.com>, Nadav Amit
+	<namit@vmware.com>, Srivatsa Bhat <srivatsab@vmware.com>,
+	"srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>, Alexey Makhalov
+	<amakhalov@vmware.com>, Vasavi Sirnapalli <vsirnapalli@vmware.com>, Tapas
+ Kundu <tkundu@vmware.com>, "er.ajay.kaher@gmail.com"
+	<er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Thread-Topic: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Thread-Index: AQHZfOilHbAIv3gBO0Sfrm8lUvOVTK9HSCgAgAr9/YD//+uAgIABNMGA
+Date: Wed, 10 May 2023 11:11:15 +0000
+Message-ID: <400E4466-629C-4306-86B1-E8BA0CB5EF66@vmware.com>
+References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
+ <202305030116.Gu6yyvKj-lkp@intel.com>
+ <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
+ <20230509124559.0d5557ad@rorschach.local.home>
+In-Reply-To: <20230509124559.0d5557ad@rorschach.local.home>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3731.500.231)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR05MB8703:EE_|BL0PR05MB5364:EE_
+x-ms-office365-filtering-correlation-id: d2acbed2-a497-4af9-6f37-08db514745ac
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ WlnwHS/9kL3vM6scHL8VdSA0rG4Z4jq/8a/t07dWbbKbPKgdBlx/nmfBbRU6qEZzvtCW1SnG8b0Dd3jtQjw4BYUc2+VuRblnHGkLEi1qfvj/35f3KNx82HBWdFJuzowsSS8h9XlP/v8JpbsYk2hX4f+Ph8b5YjbSvAl8VbMKihxQdwRJCwDpBeyCLWxmx4Tvv3uvfxAMuuF4yX4IE0QznWdm1xlpmS//0zVcqzpI6JVZ71bFERsi7SPShT0hme5TnPDfrBRR0yqxflWchQnYKDjAdPeJ83zp/pLSeRfF9sdPr7W+Z9FsIqswCm3vtuB83dckrcgC0TjpBYkfR084/ct7hWZi3lMU0gsIK5Dm7ah6FtxQ0bqCFibHYpseYC75/ISj4ql8qXnXBGn9/GCpomr1EAlmbu1pQu6aN11PNTMSM1ccWRwTtil+3JMzxXIjHPo128ae0zkgFUzad68cDhqYHK8e24ebt0Pi/AulmGtNCbfD6On2S6o1zt2wkCeiTKioO2lAwWMBsyZi1R7njQUL234kdtUS8Dwbg9jNhUeSlpjRBL19brY7/5jf6xBqyGxlDxCN2NoxuOS4au31gJJmDIO8ohMVeA35O6JD8eoh9yqqu0nrmkAEkT//fWcFDzg5ru4zT5G+9msckjgdyXpS3Q5EreGLynjgIpgsItXJW+hiBLoJZOLmaEhg7FKv
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(451199021)(478600001)(122000001)(83380400001)(54906003)(66946007)(76116006)(66556008)(66476007)(64756008)(86362001)(66446008)(91956017)(2616005)(316002)(6486002)(6916009)(4326008)(38100700002)(8936002)(71200400001)(8676002)(7416002)(36756003)(41300700001)(2906002)(5660300002)(53546011)(186003)(26005)(6506007)(6512007)(33656002)(38070700005)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bkdsY1FmVnFPNW5xRXNEVzc0Y2Jjc1hMTFhBYWRlMEtsZjlVcCtRbDZpRGhH?=
+ =?utf-8?B?RDAwZDAyR2N5ckRvV0ltWncxV0JJTnR4ZEs3Z1RFclgwZlY0VVNYQkhIQ2tD?=
+ =?utf-8?B?YzMvdFJzYzRWbWxidU16S2dpcW13UUl1ZHl3ZWRqanI2N0hYcWRUOEhyRU1o?=
+ =?utf-8?B?UXBNNzZVL1ZKYlMzQkpDVTFvLzNBdnNXN0tyKzRDR0tRb042MWFpWHZXSnJk?=
+ =?utf-8?B?ZEh0a3B0MTlMdk04NVQreG81NTArYmVYaDIxYU9kWW9jeDJGaDMxMHhpZ20x?=
+ =?utf-8?B?SWoxTGFuMlVjQzV0Um1ITU8xMlZ4d09oYVIzejg1cDRCdElmM2FtRzk2a1po?=
+ =?utf-8?B?cEpNK3BHQkJoMHMrOVk2bzBnL01sVUp4OHdjVTFZa1R1TnEyUTRSRG1XaXBq?=
+ =?utf-8?B?bVk3Z3plUkNUTmtvNTYyQTN6MlRUWklway94Ymw3WjZKbmtsdGV3eXh1NHE1?=
+ =?utf-8?B?L0VQZFZ4aThLVnVUVXlWYSs2c0xhMi9UcXIxUzQ4L2xobnZIbUd5OWFEcXFL?=
+ =?utf-8?B?aW1QTmVUUUh3ek0rejVHZmxmcEc4M0tuOFRISzIvdkpJYlhFdmJsY1p2eCtu?=
+ =?utf-8?B?VEltb1dpRmhVeHF0LzAzalNodUp0VnZXQklXUXZYYTZzWHN1N09SSFdDQzZK?=
+ =?utf-8?B?Q1lYc24xRytuRGpzREdlVW5jMlJscTZ0U2xjaWdCMDBrcXVPZm9IQTlDN1py?=
+ =?utf-8?B?eGpBYXlxV1dWUkZ4dm9aMzMxbzdkVzg0QWg2ZklzeHZVQXI1SmVPTlpUU0I1?=
+ =?utf-8?B?Nm4yVllZY3JjQURmTU5Fb0NURWV0UXZoMW9YdE9JWVlyaG0yS0d3NjF0VU4v?=
+ =?utf-8?B?dUVHVTlEWTVvNlZkTy9Wc3U2Vlk1V1N6NjBzR0hER1ZFUTM0L2s2LzJoYThk?=
+ =?utf-8?B?V0FzY080eDVoSE1XVldLdUlHN3Q0cTlqcndGMEcyQmUrR3hUWGwweS9HNCtX?=
+ =?utf-8?B?UG9iWkpQamtoUVJycWtqSFpkWDNsNjFaOG1Fb0pVR0RaUzk3ZytYMlVLWHRM?=
+ =?utf-8?B?a2VhWWZUbEMxTTNQUVhjSTR4dklIeVRaU1UzTUttd0RrblU4c0h5aEMxaDhw?=
+ =?utf-8?B?aHdWaERnbUx5QUVrZHpNYTVYL2RLN3FjWVNERUdpSmpjUmUzTnR3a2tHeUZE?=
+ =?utf-8?B?VFpndG5rSlh0WllHQ0VIS3htV3JKd292andxMmJaSFcxVG82UGZWWGltRUhn?=
+ =?utf-8?B?TUNHcDR6eWVlM0J6TmUzRERja0h0eW41UHpyZXZSMTVQMmwzcDcya2VPWldD?=
+ =?utf-8?B?RU1HOHh2dkM4U3l6NFFrck9hSWExUkVwODNyTi9ZT2swR090N1FpVHg4eCtk?=
+ =?utf-8?B?N05XVXY0OVhqT0M1YzBwZGZOYmd3NGgyN1NkbTdWQ00rYldRcEx3aGEvMzJk?=
+ =?utf-8?B?TGVuamJOdFVsVk9vOElOWWZ4OUpKWGUxcGg2SW5QcFVKbEdMSllKTk1XR3dw?=
+ =?utf-8?B?dHFqMjdKRmtVTzNwVkZ2MVlUdjByTjkwbU5UclQ1THRnT1ZsbHdHV0tPOGdR?=
+ =?utf-8?B?NmZiYTcyZjVVSVE3VEN4WnZCVzRUaDFvTUxydXozbkZiTG9UdTNOWUNmL3ln?=
+ =?utf-8?B?c1NYZExJN3hhUmFsNVNIbEpyZ1lFaXBvekQvZnpGOXduT2krcHV5Z3BSUXhB?=
+ =?utf-8?B?QWZmMzVvZ24xN2d3VVpZNUpoYVNhN3lGdEFHZHBtcjZYQkZDUmprUUF4NnMx?=
+ =?utf-8?B?VzlIUFk5WEdibVBnQlJqTFVINzcvLzlvUzdHSzVGRjQyeWlOMVQ3R1Bpa1Yy?=
+ =?utf-8?B?TXBZTVBaOTFxM0ZLcXVCeldpb0RmWXF5VHZ1eFlnV0Z6azQ3NFRZSjFUSS9V?=
+ =?utf-8?B?THNrNHowby82Q0R1YVAvbVEwTkhtYUtOeVVYOWdFVnhwK2kzK2pqSGRWalRO?=
+ =?utf-8?B?YWJGVmVIclZtMGVCYkxVV3RLeGt5RWtHUmUvYWJoRlZxQlgvU1d1MlRJVHIr?=
+ =?utf-8?B?RGxHZW1NWWJIWTVWRU50ZXhzcGtCOTVKUm5IV21vVytmNElHL1pjeCs2T2dD?=
+ =?utf-8?B?UlFJbzFGUU1XU2dkd3FTTkdabE5FZGRnVDRKMkVnQko2WW9VVFdhOVJUM21G?=
+ =?utf-8?B?OERqR05nejBPZXQrbU1Ta2lzcmNVbTJRWi8vYWhMOWswM2NINzViQUpRMks1?=
+ =?utf-8?Q?wJ9rNVuOe3qK3mbDzu2A+alZf?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F6A8F3B74BDC0E4096C1B60F8EF00139@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2acbed2-a497-4af9-6f37-08db514745ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2023 11:11:15.5979
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kqMvGKtdga6Kwmp/hUHnUabV18aDveHY7Gy6LcVVnyWO1WEVcKrGXuES2ASMabRy4OrIIWAhOfgS2+Gk4ZZc9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR05MB5364
 
-Hi Ji-Ze,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on linus/master v6.4-rc1 next-20230510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hong%40fintek.com.tw
-patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20230510/202305101816.meuESNdN-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359f8c83f48e10a0becfd13541
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-        git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/ drivers/net/can/usb/ drivers/watchdog/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305101816.meuESNdN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/can/usb/f81604.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/can/usb/f81604.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/can/usb/f81604.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/net/can/usb/f81604.c:441:28: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                               urb->actual_length, sizeof(*frame));
-                                                   ^~~~~~~~~~~~~~
-   7 warnings generated.
-
-
-vim +441 drivers/net/can/usb/f81604.c
-
-   411	
-   412	static void f81604_read_bulk_callback(struct urb *urb)
-   413	{
-   414		struct f81604_can_frame *frame = urb->transfer_buffer;
-   415		struct net_device *netdev = urb->context;
-   416		int ret;
-   417	
-   418		if (!netif_device_present(netdev))
-   419			return;
-   420	
-   421		if (urb->status)
-   422			netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
-   423				    ERR_PTR(urb->status));
-   424	
-   425		switch (urb->status) {
-   426		case 0: /* success */
-   427			break;
-   428	
-   429		case -ENOENT:
-   430		case -EPIPE:
-   431		case -EPROTO:
-   432		case -ESHUTDOWN:
-   433			return;
-   434	
-   435		default:
-   436			goto resubmit_urb;
-   437		}
-   438	
-   439		if (urb->actual_length != sizeof(*frame)) {
-   440			netdev_warn(netdev, "URB length %u not equal to %lu\n",
- > 441				    urb->actual_length, sizeof(*frame));
-   442			goto resubmit_urb;
-   443		}
-   444	
-   445		f81604_process_rx_packet(netdev, frame);
-   446	
-   447	resubmit_urb:
-   448		ret = usb_submit_urb(urb, GFP_ATOMIC);
-   449		if (ret == -ENODEV)
-   450			netif_device_detach(netdev);
-   451		else if (ret)
-   452			netdev_err(netdev,
-   453				   "%s: failed to resubmit read bulk urb: %pe\n",
-   454				   __func__, ERR_PTR(ret));
-   455	}
-   456	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+DQoNCj4gT24gMDktTWF5LTIwMjMsIGF0IDEwOjE1IFBNLCBTdGV2ZW4gUm9zdGVkdCA8cm9zdGVk
+dEBnb29kbWlzLm9yZz4gd3JvdGU6DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24g
+VHVlLCA5IE1heSAyMDIzIDEyOjI5OjIzICswMDAwDQo+IEFqYXkgS2FoZXIgPGFrYWhlckB2bXdh
+cmUuY29tPiB3cm90ZToNCj4gDQo+PiDvu78+IE9uIDAyLzA1LzIzLCAxMTo0MiBQTSwgImtlcm5l
+bCB0ZXN0IHJvYm90IiA8bGtwQGludGVsLmNvbT4gd3JvdGU6DQo+Pj4+PiBrZXJuZWwvdHJhY2Uv
+dHJhY2VfZXZlbnRzLmM6MjQyNDoxNzogd2FybmluZzogdmFyaWFibGUgJ2RfZXZlbnRzJyBzZXQg
+YnV0IG5vdCB1c2VkIFstV3VudXNlZC1idXQtc2V0LXZhcmlhYmxlXQ0KPj4+ICAgICAgICAgIHN0
+cnVjdCBkZW50cnkgKmRfZXZlbnRzOw0KPj4+ICAgICAgICAgICAgICAgICAgICAgIF4NCj4+PiAg
+IDEgd2FybmluZyBnZW5lcmF0ZWQuDQo+Pj4gDQo+PiANCj4+IFN0ZXZlLCB3aXRoLWluIGV2ZW50
+X2NyZWF0ZV9kaXIoKSwgZG8gd2UgaGF2ZSBhbnkgc2NlbmFyaW8gd2hlbiBmaWxlLT5ldmVudF9j
+YWxsLT5jbGFzcy0+c3lzdGVtDQo+PiBkb2Vzbid0IGhhdmUgVFJBQ0VfU1lTVEVNPyBBbmQgbmVl
+ZCB0byBleGVjdXRlIGZvbGxvd2luZzoNCj4+IA0KPj4gYWU2M2IzMWU0ZDBlMmUgU3RldmVuIFJv
+c3RlZHQgICAgICAgICAgIDIwMTItMDUtMDMgIDI0MzcgICAgICAgICAgICAgICAgZF9ldmVudHMg
+PSBwYXJlbnQ7DQo+PiANCj4+IGxvb2tpbmcgZm9yIHlvdXIgaW5wdXQgaWYgd2UgY291bGQgcmVt
+b3ZlIGRfZXZlbnRzIGZyb20gZXZlbnRfY3JlYXRlX2RpcigpLg0KPj4gDQo+IA0KPiBJIGhhdmUg
+aGl0IHRoaXMgaW4gdGhlIGJlZ2lubmluZywgYnV0IEkgZG9uJ3QgdGhpbmsgaXQncyBhbiBpc3N1
+ZQ0KPiBhbnltb3JlLiBQZXJoYXBzIGp1c3QgaGF2ZSBpdCBiZToNCj4gDQo+ICAgICAgICBpZiAo
+V0FSTl9PTl9PTkNFKHN0cmNtcChjYWxsLT5jbGFzcy0+c3lzdGVtLCBUUkFDRV9TWVNURU0pID09
+IDApKQ0KPiAgICAgICAgICAgICAgICByZXR1cm4gLUVOT0RFVjsNCj4gDQo+ICAgICAgICBlZl9z
+dWJzeXN0ZW0gPSBldmVudF9zdWJzeXN0ZW1fZGlyKHRyLCBjYWxsLT5jbGFzcy0+c3lzdGVtLCBm
+aWxlLCBwYXJlbnQpOw0KPiANCj4gSG1tLCBob3cgYWJvdXQganVzdCBhZGQgdGhpcyBwYXRjaCBi
+ZWZvcmUgeW91ciBwYXRjaCBzZXQ6DQo+IA0KDQpTb3VuZHMgZ29vZC4gVGhhbmtzIFN0ZXZlIDop
+DQpPbmNlIHlvdSB3aWxsIG1lcmdlIGJlbG93IHBhdGNoLCBJIHdpbGwgcmViYXNlIHRoaXMgcGF0
+Y2ggaW4gdjMuDQoNCi0gQWpheQ0KDQo+IA0KPiBGcm9tOiAiU3RldmVuIFJvc3RlZHQgKEdvb2ds
+ZSkiIDxyb3N0ZWR0QGdvb2RtaXMub3JnPg0KPiBTdWJqZWN0OiBbUEFUQ0hdIHRyYWNpbmc6IFJl
+cXVpcmUgYWxsIHRyYWNlIGV2ZW50cyB0byBoYXZlIGEgVFJBQ0VfU1lTVEVNDQo+IA0KPiBUaGUg
+Y3JlYXRpb24gb2YgdGhlIHRyYWNlIGV2ZW50IGRpcmVjdG9yeSByZXF1aXJlcyB0aGF0IGEgVFJB
+Q0VfU1lTVEVNIGlzDQo+IGRlZmluZWQgdGhhdCB0aGUgdHJhY2UgZXZlbnQgZGlyZWN0b3J5IGlz
+IGFkZGVkIHdpdGhpbiB0aGUgc3lzdGVtIGl0IHdhcw0KPiBkZWZpbmVkIGluLg0KPiANCj4gVGhl
+IGNvZGUgaGFuZGxlZCB0aGUgY2FzZSB3aGVyZSBhIFRSQUNFX1NZU1RFTSB3YXMgbm90IGFkZGVk
+LCBhbmQgd291bGQNCj4gdGhlbiBhZGQgdGhlIGV2ZW50IGF0IHRoZSBldmVudHMgZGlyZWN0b3J5
+LiBCdXQgbm90aGluZyBzaG91bGQgYmUgZG9pbmcNCj4gdGhpcy4gVGhpcyBjb2RlIGFsc28gcHJl
+dmVudHMgdGhlIGltcGxlbWVudGF0aW9uIG9mIGNyZWF0aW5nIGR5bmFtaWMNCj4gZGVudHJ5cyBm
+b3IgdGhlIGV2ZW50ZnMgc3lzdGVtLg0KPiANCj4gQXMgdGhpcyBwYXRoIGhhcyBuZXZlciBiZWVu
+IGhpdCBvbiBjb3JyZWN0IGNvZGUsIHJlbW92ZSBpdC4gSWYgaXQgZG9lcyBnZXQNCj4gaGl0LCBp
+c3N1ZXMgYSBXQVJOX09OX09OQ0UoKSBhbmQgcmV0dXJuIEVOT0RFVi4NCj4gDQo+IFNpZ25lZC1v
+ZmYtYnk6IFN0ZXZlbiBSb3N0ZWR0IChHb29nbGUpIDxyb3N0ZWR0QGdvb2RtaXMub3JnPg0KPiAt
+LS0NCj4gDQo+ICAobGlnaHRseSB0ZXN0ZWQpDQo+IA0KPiBrZXJuZWwvdHJhY2UvdHJhY2VfZXZl
+bnRzLmMgfCAxNSArKysrKysrKy0tLS0tLS0NCj4gMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9u
+cygrKSwgNyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvdHJhY2UvdHJh
+Y2VfZXZlbnRzLmMgYi9rZXJuZWwvdHJhY2UvdHJhY2VfZXZlbnRzLmMNCj4gaW5kZXggNjU0ZmZh
+NDA0NTdhLi4xNmJjNWJhNDU1MDcgMTAwNjQ0DQo+IC0tLSBhL2tlcm5lbC90cmFjZS90cmFjZV9l
+dmVudHMuYw0KPiArKysgYi9rZXJuZWwvdHJhY2UvdHJhY2VfZXZlbnRzLmMNCj4gQEAgLTI0MjQs
+MTQgKzI0MjQsMTUgQEAgZXZlbnRfY3JlYXRlX2RpcihzdHJ1Y3QgZGVudHJ5ICpwYXJlbnQsIHN0
+cnVjdCB0cmFjZV9ldmVudF9maWxlICpmaWxlKQ0KPiANCj4gICAgICAgIC8qDQo+ICAgICAgICAg
+KiBJZiB0aGUgdHJhY2UgcG9pbnQgaGVhZGVyIGRpZCBub3QgZGVmaW5lIFRSQUNFX1NZU1RFTQ0K
+PiAtICAgICAgICAqIHRoZW4gdGhlIHN5c3RlbSB3b3VsZCBiZSBjYWxsZWQgIlRSQUNFX1NZU1RF
+TSIuDQo+ICsgICAgICAgICogdGhlbiB0aGUgc3lzdGVtIHdvdWxkIGJlIGNhbGxlZCAiVFJBQ0Vf
+U1lTVEVNIi4gVGhpcyBzaG91bGQNCj4gKyAgICAgICAgKiBuZXZlciBoYXBwZW4uDQo+ICAgICAg
+ICAgKi8NCj4gLSAgICAgICBpZiAoc3RyY21wKGNhbGwtPmNsYXNzLT5zeXN0ZW0sIFRSQUNFX1NZ
+U1RFTSkgIT0gMCkgew0KPiAtICAgICAgICAgICAgICAgZF9ldmVudHMgPSBldmVudF9zdWJzeXN0
+ZW1fZGlyKHRyLCBjYWxsLT5jbGFzcy0+c3lzdGVtLCBmaWxlLCBwYXJlbnQpOw0KPiAtICAgICAg
+ICAgICAgICAgaWYgKCFkX2V2ZW50cykNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
+IC1FTk9NRU07DQo+IC0gICAgICAgfSBlbHNlDQo+IC0gICAgICAgICAgICAgICBkX2V2ZW50cyA9
+IHBhcmVudDsNCj4gKyAgICAgICBpZiAoV0FSTl9PTl9PTkNFKHN0cmNtcChjYWxsLT5jbGFzcy0+
+c3lzdGVtLCBUUkFDRV9TWVNURU0pID09IDApKQ0KPiArICAgICAgICAgICAgICAgcmV0dXJuIC1F
+Tk9ERVY7DQo+ICsNCj4gKyAgICAgICBkX2V2ZW50cyA9IGV2ZW50X3N1YnN5c3RlbV9kaXIodHIs
+IGNhbGwtPmNsYXNzLT5zeXN0ZW0sIGZpbGUsIHBhcmVudCk7DQo+ICsgICAgICAgaWYgKCFkX2V2
+ZW50cykNCj4gKyAgICAgICAgICAgICAgIHJldHVybiAtRU5PTUVNOw0KPiANCj4gICAgICAgIG5h
+bWUgPSB0cmFjZV9ldmVudF9uYW1lKGNhbGwpOw0KPiAgICAgICAgZmlsZS0+ZGlyID0gdHJhY2Vm
+c19jcmVhdGVfZGlyKG5hbWUsIGRfZXZlbnRzKTsNCj4gLS0NCj4gMi4zOS4yDQo+IA0KPiANCj4g
+ISEgRXh0ZXJuYWwgRW1haWw6IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2Yg
+dGhlIG9yZ2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMg
+dW5sZXNzIHlvdSByZWNvZ25pemUgdGhlIHNlbmRlci4NCg0KDQo=
