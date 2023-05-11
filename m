@@ -1,100 +1,84 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1FB629
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:19:30 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so80542383a12.0
-        for <llvm@lists.linux.dev>; Thu, 11 May 2023 08:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1683818369; x=1686410369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mJpRi8U4anHxP91Og34clDJuvOhSvC/Ny6ZY6fVS6NA=;
-        b=TmbsosqpHKsbyV71znStNqd9RFeitV2eXYJsFJpgGLAWKEAdwqfW53ks0v0R3avk2a
-         OghVcmxL6fmRRmfoUA4i/6v/wgDgTX0cvj9AUrkOz/zF7mPs0BqHfcVS2hkuwk6XwS/l
-         tgMfDkjGR3PYqyeIZy8t1VHU63NOqSI8LZ6E9Z0I7c7m6chu1sFS75o4OdKGtCdxWUy8
-         oaGw6twk/jGvsUjdobAivroaAm9uEvUB5AgLXUEtT6Q+Mx6aT+2IUSp37uPhTN+O+//J
-         sDyoZFGrkuM56fa5LetP7SulRGvgVJuU++QlN4eWnma9MIYk0XJiH3dWLRUMrxLfbRML
-         2kdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683818369; x=1686410369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mJpRi8U4anHxP91Og34clDJuvOhSvC/Ny6ZY6fVS6NA=;
-        b=Wa74uYhg5PVCYU4xdHsPJZtORC0XUPxYBXP5CYkaMSfh/jmDtqAqu4ZZF7b3Vu3ytI
-         0qLUIz+/KwFtqFfBzmbOyU5EZK6Ay8bEBJ1u0p5Ph932rdWdz+jRnbWWDuzKRA8mJphM
-         mIqCClXNuHeLq4UK+ZsxC+ie7h89JKGYpqXHVjLsmfctqJRrf2oBP7shJSrGho0KA2h6
-         IivUHw2vha7XH/8HTHXDQaeuNv6SCbwmJFudX9NocxXh2mXl/H3ssoeOtxndxgDVHPLJ
-         WGcCOV7DgQgQOHJaVVpQSqwb6QHVqt8v6BdNs8UDDZPJw6/uJaFiHwOh1JG7lHIwI7v3
-         O82A==
-X-Gm-Message-State: AC+VfDy2Ac0wMEi6t4EK4Pp3Lt8lqQJX/BC6ufo9Akmmxcj8QmViLHqp
-	FWYVHV2eKpfoSkovZmQnbz7JeIGSLQgxTwQ90sdDmw==
-X-Google-Smtp-Source: ACHHUZ622cGWEkiUpT7RoLmMpy0Uatilmpa5SvU9Xkc1QW1rLBsLFS38+mmhk0wsxGczsQ251uXMbzXui36AgnhTh7U=
-X-Received: by 2002:a17:907:8a08:b0:969:2df9:a0dd with SMTP id
- sc8-20020a1709078a0800b009692df9a0ddmr12191725ejc.25.1683818368935; Thu, 11
- May 2023 08:19:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D05629
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683818466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oqeBSLbsWjnqDQKU7hPOUi2Ls1yxnP5EQ+Gmw5F5aQU=;
+	b=hFFSEaY+AZ8HNN/EqEyoU1yuAq0Sh5Mj7U71FRuuWJhGYRUjW8xPtxS3u2ZUKsle/Vb19U
+	GvpDNGMLvVKe0qRvSi0Fxxw522gAObN/nEjT3I9WH8z981K8LCXIEDI95yyK1+YE6d96J0
+	d2w9Br0LLo0JXtTy83Z2FCSiRSk61gg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-39-dxoIAywaPIukzdMUa4oX2Q-1; Thu, 11 May 2023 11:21:05 -0400
+X-MC-Unique: dxoIAywaPIukzdMUa4oX2Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8618C1857F0D
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:21:01 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7101D42AB8;
+	Thu, 11 May 2023 15:21:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, 105131df)
+Date: Thu, 11 May 2023 15:21:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <00000000000019af1d05fb5fdd99@google.com>
-In-Reply-To: <00000000000019af1d05fb5fdd99@google.com>
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Thu, 11 May 2023 08:19:17 -0700
-Message-ID: <CAN+4W8jFTcnS-EBppkoRXmfzUOgiGNwBku69==-b-Z_2fDHfUw@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] KASAN: slab-out-of-bounds Write in copy_array (2)
-To: syzbot <syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <72225.123051111210500551@us-mta-39.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 10, 2023 at 5:14=E2=80=AFPM syzbot
-<syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_cle=
-a..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux=
-.git fixes
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D17eaa0c628000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Decebece1b90c0=
-342
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd742fd7d34097f9=
-49179
-> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
-GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: riscv64
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/5=
-ab53d394dbf/non_bootable_disk-950b879b.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/938475579d6c/vmlinu=
-x-950b879b.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/bcf263d8c574/I=
-mage-950b879b.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com
+Hi, we tested your kernel and here are the results:
 
-That tree doesn't have the fix yet:
-https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/tree/kernel=
-/bpf/verifier.c?h=3Dfixes&id=3D950b879b7f02#n1065
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-#syz fix: bpf: Always use maximal size for copy_array()
+
+Kernel information:
+    Commit message: Merge tag 'dt-fixes-6.4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/krzk/linux-dt
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/88541
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34896=
+9
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
