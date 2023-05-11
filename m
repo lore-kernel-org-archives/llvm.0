@@ -1,78 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111FB1C762
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 10:58:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2170EC433D2;
-	Thu, 11 May 2023 10:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683802731;
-	bh=qcDiAjFqWhhByq5JwWK2mEEaI3nzFryjK7tJr89pp7Q=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CEjFQMdf7Jj+aStt5qyHlb4JjvgF+r2KsnPRRnT92mEJ4Ql/TTUFxzxMdp5u/oYwq
-	 YbNCifcWA4EGsPuxb5BcydH8k29bN+7DjmaWWQ5MHQahMZ5/S6uiBlTBbAlTgCg/BK
-	 dpm0O8SxJ4p3e/MDSHE9yevb67H1r5plm8qSDW391Nru2bqFI1RYQl7w7hkhA9FZLr
-	 TaZtL4XuIwtpS/VvLVYyF4cw6mc+F78sxLVVwxozf2xj8jwYOpSdOdexjwIDtzfUF7
-	 f4QiQ3aGJWcA6Y4PutrmGEdiRHDzkZCA1PikycZdA/1trPHaWnq9cP886iHxA5kahq
-	 6c+/3EBqQJLOQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	stable@vger.kernel.org,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	linux-clk@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74ACD1F956;
+	Thu, 11 May 2023 14:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683814794; x=1715350794;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3vKeUp1MgKXuPO2KHbni+kKpyIP8A1nYuuHf6QGEErM=;
+  b=ZKr706xpbjnnxBKIo67wDt1o0bIZFcuKtxcstQ6H/tzyKkAK64DBAHV2
+   U6L/zDbrV9wPUc0oCbAAFKBQoz6IEgpWjdo57DTF5bVXCGuJht6Th0L2m
+   QYfpySG1yjw4nHZDvw6g+YMZ/mHqK0YWeQDwb/uyfNUxkFVSb44csenVe
+   jLhtSyY1EHZZSsvN1AQYBlCzpMz8QtHRHb1svu1wF3Xu6GevEQPan4Ka7
+   ub0KA1U08GgSddypw2b6U6QPtpofenFrrxaq/pNB9e17hX9UcPkKg9W8R
+   o0GJ1X6dxM5kM12pi+kFWcIojlhvO5yFxhpJOd/b0jKtttxTk/jDR3gsb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="413863234"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="413863234"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:15:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="732592975"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="732592975"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 May 2023 07:15:28 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1px74p-00042e-2U;
+	Thu, 11 May 2023 14:15:27 +0000
+Date: Thu, 11 May 2023 22:14:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Roesch <shr@devkernel.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] clk: pxa: fix NULL pointer dereference in pxa3xx_clk_update_accr
-Date: Thu, 11 May 2023 12:58:33 +0200
-Message-Id: <20230511105845.299859-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: mm/ksm.c:2439:13: warning: stack frame size (2576) exceeds limit
+ (2048) in 'ksm_do_scan'
+Message-ID: <202305112201.5lqIyEo4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   80e62bc8487b049696e67ad133c503bf7f6806f7
+commit: 739100c88f49a67c6487bb2d826b0b5a2ddc80e2 mm: add tracepoints to ksm
+date:   6 weeks ago
+config: mips-randconfig-r023-20230511 (https://download.01.org/0day-ci/archive/20230511/202305112201.5lqIyEo4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=739100c88f49a67c6487bb2d826b0b5a2ddc80e2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 739100c88f49a67c6487bb2d826b0b5a2ddc80e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-sparse points out an embarrasing bug in an older patch of mine,
-which uses the register offset instead of an __iomem pointer:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305112201.5lqIyEo4-lkp@intel.com/
 
-drivers/clk/pxa/clk-pxa3xx.c:167:9: sparse: sparse: Using plain integer as NULL pointer
+All warnings (new ones prefixed by >>):
 
-Unlike sparse, gcc and clang ignore this bug and fail to warn
-because a literal '0' is considered a valid representation of
-a NULL pointer.
+>> mm/ksm.c:2439:13: warning: stack frame size (2576) exceeds limit (2048) in 'ksm_do_scan' [-Wframe-larger-than]
+   static void ksm_do_scan(unsigned int scan_npages)
+               ^
+   2492/2576 (96.74%) spills, 84/2576 (3.26%) variables
+   1 warning generated.
 
-Fixes: 3c816d950a49 ("ARM: pxa: move clk register definitions to driver")
-Cc: stable@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202305111301.RAHohdob-lkp@intel.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/clk/pxa/clk-pxa3xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/pxa/clk-pxa3xx.c b/drivers/clk/pxa/clk-pxa3xx.c
-index 42958a542662..621e298f101a 100644
---- a/drivers/clk/pxa/clk-pxa3xx.c
-+++ b/drivers/clk/pxa/clk-pxa3xx.c
-@@ -164,7 +164,7 @@ void pxa3xx_clk_update_accr(u32 disable, u32 enable, u32 xclkcfg, u32 mask)
- 	accr &= ~disable;
- 	accr |= enable;
- 
--	writel(accr, ACCR);
-+	writel(accr, clk_regs + ACCR);
- 	if (xclkcfg)
- 		__asm__("mcr p14, 0, %0, c6, c0, 0\n" : : "r"(xclkcfg));
- 
+vim +/ksm_do_scan +2439 mm/ksm.c
+
+31dbd01f314364 Izik Eidus       2009-09-21  2434  
+31dbd01f314364 Izik Eidus       2009-09-21  2435  /**
+31dbd01f314364 Izik Eidus       2009-09-21  2436   * ksm_do_scan  - the ksm scanner main worker function.
+b7701a5f2ee8e6 Mike Rapoport    2018-02-06  2437   * @scan_npages:  number of pages we want to scan before we return.
+31dbd01f314364 Izik Eidus       2009-09-21  2438   */
+31dbd01f314364 Izik Eidus       2009-09-21 @2439  static void ksm_do_scan(unsigned int scan_npages)
+31dbd01f314364 Izik Eidus       2009-09-21  2440  {
+21fbd59136e077 Qi Zheng         2022-08-31  2441  	struct ksm_rmap_item *rmap_item;
+3f649ab728cda8 Kees Cook        2020-06-03  2442  	struct page *page;
+31dbd01f314364 Izik Eidus       2009-09-21  2443  
+878aee7d6b5504 Andrea Arcangeli 2011-01-13  2444  	while (scan_npages-- && likely(!freezing(current))) {
+31dbd01f314364 Izik Eidus       2009-09-21  2445  		cond_resched();
+31dbd01f314364 Izik Eidus       2009-09-21  2446  		rmap_item = scan_get_next_rmap_item(&page);
+31dbd01f314364 Izik Eidus       2009-09-21  2447  		if (!rmap_item)
+31dbd01f314364 Izik Eidus       2009-09-21  2448  			return;
+31dbd01f314364 Izik Eidus       2009-09-21  2449  		cmp_and_merge_page(page, rmap_item);
+31dbd01f314364 Izik Eidus       2009-09-21  2450  		put_page(page);
+31dbd01f314364 Izik Eidus       2009-09-21  2451  	}
+31dbd01f314364 Izik Eidus       2009-09-21  2452  }
+31dbd01f314364 Izik Eidus       2009-09-21  2453  
+
+:::::: The code at line 2439 was first introduced by commit
+:::::: 31dbd01f314364b70c2e026a5793a29a4da8a9dc ksm: Kernel SamePage Merging
+
+:::::: TO: Izik Eidus <ieidus@redhat.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
