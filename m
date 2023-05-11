@@ -1,84 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782F81C747;
-	Thu, 11 May 2023 10:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E13CCC433D2;
-	Thu, 11 May 2023 10:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111FB1C762
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 10:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2170EC433D2;
+	Thu, 11 May 2023 10:58:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683800887;
-	bh=YQBBlf6460hat49SMSw0E4vcpVclaF31GHF1eKeJqO4=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=r6i3yJFAZn0L/VjKJjy/Q2YMoWwqpjXxqN85m6bwkCMtqGx1YQY+Qh/9RVf335Oc4
-	 ThKDHnkl1yKAFFFy00bCDoPEebqiv3rRVecj3xHQKnSkWBr55rQST2q9rPvE2Js8pt
-	 UyEuP5102NuXWptWc5RJZGINbE2CoUeSu/qWznqVifMcQjRd4Xe+RgWqWbaNTvPXtd
-	 n4Gl04i8+SQHqXXvJGp8HUle9bHlthhmZE2jwBiN1iSJBE4jDhnMXSWv7r5Q7yoXZz
-	 KP1YqghLgkRVZ5SyljGuEsnETTk95B79n/S7TNcpjettrklqhpGK9TS2CQUB3bVEfU
-	 i+N56SVZT2k8w==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailauth.nyi.internal (Postfix) with ESMTP id B0F3427C0054;
-	Thu, 11 May 2023 06:28:05 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 11 May 2023 06:28:05 -0400
-X-ME-Sender: <xms:NcNcZO-YkcbAcWYAFxl2JXzVY7Mwys-G2xPCSTO_RI4amBCubRj6UA>
-    <xme:NcNcZOvzruE-udcPh9eOPtuCgYRUTZSsbkHYvYVpCYG0egDW91NumCNLAfLrUzmmf
-    IWDsdBBFsk8n8DVemc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
-    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
-    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
-    guvg
-X-ME-Proxy: <xmx:NcNcZEBVp-RkB_iDzF81hP6igI0a3IcV5XvAWm_xFih5SyZ0SfXDOQ>
-    <xmx:NcNcZGc4ug32hlZD1BalTUBRjusPyxIRgtsnj2yWK7YpjnF8oqqxmg>
-    <xmx:NcNcZDNSLrQqVzzY9VzJoe6YgDRu66Ma86-L8gNDdYcAZVo7-iBaLQ>
-    <xmx:NcNcZJ1JQ6nFb4F9dEjyyiuDpHeLC_7Iiz8vsgpmiq4Xa7HEB7RRoQ>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6B337B60086; Thu, 11 May 2023 06:28:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+	s=k20201202; t=1683802731;
+	bh=qcDiAjFqWhhByq5JwWK2mEEaI3nzFryjK7tJr89pp7Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CEjFQMdf7Jj+aStt5qyHlb4JjvgF+r2KsnPRRnT92mEJ4Ql/TTUFxzxMdp5u/oYwq
+	 YbNCifcWA4EGsPuxb5BcydH8k29bN+7DjmaWWQ5MHQahMZ5/S6uiBlTBbAlTgCg/BK
+	 dpm0O8SxJ4p3e/MDSHE9yevb67H1r5plm8qSDW391Nru2bqFI1RYQl7w7hkhA9FZLr
+	 TaZtL4XuIwtpS/VvLVYyF4cw6mc+F78sxLVVwxozf2xj8jwYOpSdOdexjwIDtzfUF7
+	 f4QiQ3aGJWcA6Y4PutrmGEdiRHDzkZCA1PikycZdA/1trPHaWnq9cP886iHxA5kahq
+	 6c+/3EBqQJLOQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	stable@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] clk: pxa: fix NULL pointer dereference in pxa3xx_clk_update_accr
+Date: Thu, 11 May 2023 12:58:33 +0200
+Message-Id: <20230511105845.299859-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <363ef5bd-0278-4589-8c74-752451ccd362@app.fastmail.com>
-In-Reply-To: <c593b7b3f3d42545ca07424a6ab5afb268c150a2.camel@linux.ibm.com>
-References: <202305110634.RGuHbrxM-lkp@intel.com>
- <0474d84f-69cb-4c98-9833-695ed25bc65c@app.fastmail.com>
- <e5c936bbbe81d11fb577098679376c64a83d4d4c.camel@linux.ibm.com>
- <73615d5f-d507-42aa-8689-7e80093c9f75@app.fastmail.com>
- <c593b7b3f3d42545ca07424a6ab5afb268c150a2.camel@linux.ibm.com>
-Date: Thu, 11 May 2023 12:27:45 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "kernel test robot" <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [niks:has_ioport_v4 36/41] drivers/usb/host/pci-quirks.c:289:5: warning:
- no previous prototype for function 'usb_hcd_amd_remote_wakeup_quirk'
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 11, 2023, at 11:34, Niklas Schnelle wrote:
-> On Thu, 2023-05-11 at 10:49 +0200, Arnd Bergmann wrote:
->> > 
->> > I think I saw it but assumed that the extern declaration in
->> > include/linux/usb/hcd.h was enough. I guess before this was hidden by
->> > the missing CONFIG_USB_PCI_AMD. Should be fixed now.
->> 
->> Ok. It looks like linux/usb/hcd.h is just not included in quirks.c, 
->> so adding an #include should also fix it.
->
-> It feels a little cleaner to keep it in pci-quirks.h where it was
-> before the patch. I just wonder if we then also need an #ifdef
-> CONFIG_USB_PCI_AMD around the extern declaration?
+From: Arnd Bergmann <arnd@arndb.de>
 
-I generally prefer not to have an #ifdef around an extern declaration
-unless there is a 'static inline' version in the #else path.
+sparse points out an embarrasing bug in an older patch of mine,
+which uses the register offset instead of an __iomem pointer:
 
-    Arnd
+drivers/clk/pxa/clk-pxa3xx.c:167:9: sparse: sparse: Using plain integer as NULL pointer
+
+Unlike sparse, gcc and clang ignore this bug and fail to warn
+because a literal '0' is considered a valid representation of
+a NULL pointer.
+
+Fixes: 3c816d950a49 ("ARM: pxa: move clk register definitions to driver")
+Cc: stable@vger.kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305111301.RAHohdob-lkp@intel.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/clk/pxa/clk-pxa3xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/pxa/clk-pxa3xx.c b/drivers/clk/pxa/clk-pxa3xx.c
+index 42958a542662..621e298f101a 100644
+--- a/drivers/clk/pxa/clk-pxa3xx.c
++++ b/drivers/clk/pxa/clk-pxa3xx.c
+@@ -164,7 +164,7 @@ void pxa3xx_clk_update_accr(u32 disable, u32 enable, u32 xclkcfg, u32 mask)
+ 	accr &= ~disable;
+ 	accr |= enable;
+ 
+-	writel(accr, ACCR);
++	writel(accr, clk_regs + ACCR);
+ 	if (xclkcfg)
+ 		__asm__("mcr p14, 0, %0, c6, c0, 0\n" : : "r"(xclkcfg));
+ 
+-- 
+2.39.2
+
