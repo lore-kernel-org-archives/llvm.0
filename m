@@ -1,90 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9656629
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451A5C433EF;
-	Thu, 11 May 2023 15:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75B2629
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE00C433EF;
+	Thu, 11 May 2023 15:30:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683818666;
-	bh=gTCIsTeyvWVF7CNHhHZqQxWhHlR+f/E82arExFViVMw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=VhUgQka3XsqdVpNVOu3b0Ofus2BN683WIdaE8dHh6/OFIT59zLXdCx/jTPsXJe4Za
-	 i7fhpyMEKAozHakcAsWM3PhFZoFbbC6yFpRrBbDtFb9ecdXrk0CCQaXp1d6Y7r3o+/
-	 zVyE3sBNpvgb11fkEJCOJBDDUzsxLzIyA9ICtDnxoVTXn+6LqUAjsLWXuqW7IOlv5h
-	 xrtPyMHIEZTSkAUsjVl6wxAsS/Yz1GnduqJaPf/XSP8sqgoCtSfS3MdyFwrMUcJ9AS
-	 Mhg58ZBjL9O9Er4tfQm1RR6RSg/3gWU1Yoia4pbaEdEbDOZpQOEM/DypmW00bRqFUH
-	 DPQBLbrFd754A==
-From: Simon Horman <horms@kernel.org>
-Date: Thu, 11 May 2023 17:24:18 +0200
-Subject: [PATCH] PCI: microchip: Avoid cast to incompatible function type
+	s=k20201202; t=1683819057;
+	bh=SJGJCU3gDVdyuC2QEctenjUwW0dVdNNgc2Fs7wfRUns=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Plchd8Sgzf0HyZ6hAta56VujgSCqgIqmnXlPXxDg3/EQeUS2meUBh57yRNcbIwcvf
+	 ymUNvFgu9cQF2habL+H6SJxZyzn0tSJV68f1wG3dlb8dcbYDPRRCylRubpvGiung9b
+	 Acu3rRXq2q6WQ4S592Be2MD7seZqsiHsRJm9kjPULT4RIIz5eeSAiL+mBiBqBSJ29e
+	 nvQTswr6Xhoao9K2aYU2ZCFBoAXe1qDBf8MpGgmIipD+pWELVlZfFstz5/Wwh6gpQy
+	 cm9Pq+e3lC3hTAIuubP7rfe07pmFqU8pnAD3sPbd6sWBhcsi6eiB+4xiyjIHYHU0x1
+	 n71zOWGE8XU0w==
+Date: Thu, 11 May 2023 16:30:52 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] PCI: microchip: Avoid cast to incompatible function type
+Message-ID: <20230511-coming-saturate-a2ae32462a3a@spud>
+References: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKEIXWQC/x2N0QrCMAwAf2Xk2cA6rWX+iuyhy6IN1q40KsLYv
- xt8vIPjNlBuwgqXboPGH1FZi4E7dEApljujLMYw9MOx985hJcGnUFspSUXKD6SoL/TLOYyjP7n
- AASyeozLOLRZKlpd3ziZr45t8/7frtO8/GrgVU30AAAA=
-To: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Daire McNamara <daire.mcnamara@microchip.com>, 
- Conor Dooley <conor.dooley@microchip.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Rob Herring <robh@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
- linux-riscv@lists.infradead.org, linux-pci@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Simon Horman <horms@kernel.org>
-X-Mailer: b4 0.12.2
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="EILHGzwimB/Seb9q"
+Content-Disposition: inline
+In-Reply-To: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
 
-Rather than casting clk_disable_unprepare to an incompatible function type,
-update the type to match that expected by devm_add_action_or_reset.
 
-Reported by clang-16 with W-1:
+--EILHGzwimB/Seb9q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- .../pcie-microchip-host.c:866:32: warning: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-         devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_action_or_reset'
-         __devm_add_action_or_reset(release, action, data, #action)
-                                             ^~~~~~
-No functional change intended.
-Compile tested only.
+On Thu, May 11, 2023 at 05:24:18PM +0200, Simon Horman wrote:
+> Rather than casting clk_disable_unprepare to an incompatible function typ=
+e,
+> update the type to match that expected by devm_add_action_or_reset.
+>=20
+> Reported by clang-16 with W-1:
+>=20
+>  .../pcie-microchip-host.c:866:32: warning: cast from 'void (*)(struct cl=
+k *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-=
+function-type-strict]
+>          devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unp=
+repare,
+>                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~
+>  ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_act=
+ion_or_reset'
+>          __devm_add_action_or_reset(release, action, data, #action)
+>                                              ^~~~~~
+> No functional change intended.
+> Compile tested only.
+>=20
 
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/pci/controller/pcie-microchip-host.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Yeah, there's already a patch for this:
+https://lore.kernel.org/linux-pci/20230111125323.1911373-3-daire.mcnamara@m=
+icrochip.com/
 
-diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/controller/pcie-microchip-host.c
-index 5e710e485464..d8aa6e3cdbff 100644
---- a/drivers/pci/controller/pcie-microchip-host.c
-+++ b/drivers/pci/controller/pcie-microchip-host.c
-@@ -848,6 +848,11 @@ static const struct irq_domain_ops event_domain_ops = {
- 	.map = mc_pcie_event_map,
- };
- 
-+inline void mc_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
- static inline struct clk *mc_pcie_init_clk(struct device *dev, const char *id)
- {
- 	struct clk *clk;
-@@ -863,8 +868,7 @@ static inline struct clk *mc_pcie_init_clk(struct device *dev, const char *id)
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
--				 clk);
-+	devm_add_action_or_reset(dev, mc_clk_disable_unprepare, clk);
- 
- 	return clk;
- }
+The lads didn't want to pick any of that piecemeal & Daire hasn't been
+able to get back to that work until this week.
 
+I don't think we an ETA though on a v4, so:
+Fixes: 6f15a9c9f941 ("PCI: microchip: Add Microchip PolarFire PCIe controll=
+er driver")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+and I don't know if you wanna propagate the:
+| Reported-by: kernel test robot <lkp@intel.com>
+
+Thanks,
+Conor.
+
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>  drivers/pci/controller/pcie-microchip-host.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/c=
+ontroller/pcie-microchip-host.c
+> index 5e710e485464..d8aa6e3cdbff 100644
+> --- a/drivers/pci/controller/pcie-microchip-host.c
+> +++ b/drivers/pci/controller/pcie-microchip-host.c
+> @@ -848,6 +848,11 @@ static const struct irq_domain_ops event_domain_ops =
+=3D {
+>  	.map =3D mc_pcie_event_map,
+>  };
+> =20
+> +inline void mc_clk_disable_unprepare(void *data)
+> +{
+> +	clk_disable_unprepare(data);
+> +}
+> +
+>  static inline struct clk *mc_pcie_init_clk(struct device *dev, const cha=
+r *id)
+>  {
+>  	struct clk *clk;
+> @@ -863,8 +868,7 @@ static inline struct clk *mc_pcie_init_clk(struct dev=
+ice *dev, const char *id)
+>  	if (ret)
+>  		return ERR_PTR(ret);
+> =20
+> -	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
+> -				 clk);
+> +	devm_add_action_or_reset(dev, mc_clk_disable_unprepare, clk);
+> =20
+>  	return clk;
+>  }
+>=20
+
+--EILHGzwimB/Seb9q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF0KLAAKCRB4tDGHoIJi
+0tK+AQD8LmbqfvLBNOFt2fxN3TxKPiyS2a77L81h8U5fsh6TCQD/ZHftPgTlHksh
+kHFdg+H8MRi1rLrypMvc0N6nRlCySwM=
+=Prv1
+-----END PGP SIGNATURE-----
+
+--EILHGzwimB/Seb9q--
