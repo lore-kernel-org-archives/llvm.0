@@ -1,355 +1,1463 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E18EC9;
-	Thu, 11 May 2023 02:39:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683772793; x=1715308793;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ShPZWeMT7zbgBlJA8pzlJbsxgwsTW7aDr9uBiJaWkwM=;
-  b=BJ190s4kQxvGnYAuYJ++83MxWToljJ893gYdGyogpcXknZ1GXvkKVZKw
-   uzHKLNBtsQLnYAzKjr9aP8+R9ZkgJgKVKIzU/uesQvCa/8RUjnv39SVrE
-   MUiYMr+J4XfpiLc/m+k6pfRttbERLPKRjpbviqg5vsFpYwJWwn5eFjOI3
-   g50YoLPlGfEg1SyuQJkds7b/m7niD7h3C3jn9NY5fw604N/iKDL6qRVhF
-   nJj53So+gWALLNHMOxTpjYohnRCeruv4EVKSnOIdLhcZhQJSleEr9ScP3
-   JSyv+Ffu0nsgTmBTL578OkjyngSIa8O1WGBtW6EB6ahGI/KuUQKqPLGQh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="415960973"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="415960973"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 19:39:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="1029448336"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="1029448336"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 10 May 2023 19:39:51 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pwwDe-0003ie-2q;
-	Thu, 11 May 2023 02:39:50 +0000
-Date: Thu, 11 May 2023 10:39:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: [niks:has_ioport_v4 41/41] lib/iomap.c:81:23: error: call to '_inb'
- declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-Message-ID: <202305111015.BDgHTEHP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8ABDEC9
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 04:04:31 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1aaf21bb42bso57911395ad.2
+        for <llvm@lists.linux.dev>; Wed, 10 May 2023 21:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1683777871; x=1686369871;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WnWR//tQML5XIhnVb2XQd6Uff4J0Ti7r1F2Bjfi8ma8=;
+        b=ySnEyfAqV4OjZlgmAZ+uYzKl+it7Bp36XuWr5R8pTX1rez+HX6fP5lc+6qJEjRghxG
+         VWQE+fQVlrvM4aJVceR4kwjiHX1XtfGXlpGzOlhbRuVJbk2jEnn5tWZ9O+M0qiSJZ3Jq
+         yUvdS8yinDaKepd6kEtsR2apCz0vzRiyEkwiPxX3GzLBz/MwqFuljRsRcfTaTkaIoeyJ
+         DxmrUthRp8vdU5wzUJ8IrpRV0DMnsTVUnsJ4d0p46kwXrwdT3gzPxG0ERtAPqrGJ0p01
+         YARRqT0f9zzxOOlom2sCccEquJwK+KRrzGpW0FkBddkMMMIU6A2KKwJbg4WhfkBWVoBz
+         CiUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683777871; x=1686369871;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WnWR//tQML5XIhnVb2XQd6Uff4J0Ti7r1F2Bjfi8ma8=;
+        b=IJHhcrme++gJ5PwiIMHdHyFtIf2VzysVIAqIvt1/lDGbbrVTqQwdAB76WDR2E1qZ6r
+         MNhx4oWsfBvzfUmGJfK0fBRTVHbRiDcPRf3lEhK5EgF3WYqijjs1eib58YVddfGHW1PC
+         a+APXtYM2fWyrtuhlu6+Z0Rvy6Odq+HsTNG0OtQHLIF2iNEWhX2IrDfEV/vqq9hnGw69
+         KhnCOlLyvZLN/goAcuMvr9ra20iLtxpCg6D7FH/O5yazpXWXQbFUedCR+TqzVAOthqRK
+         XX71gc3XyRvhSjNJrReyquGwvVtY6b6F2GYkaSGPFz5w4g92jQt2GUiFXn7/ew6K6QJz
+         sqLQ==
+X-Gm-Message-State: AC+VfDwnK6klJ17gb7dNr04sXWypkbtXIoTHnsS6dzoaT7J0JP0MLPEg
+	VX35eZNj4NqA6DclKNpz9bTLZIq7dNb7dZIM36/pMw==
+X-Google-Smtp-Source: ACHHUZ4A0KhzwlQef2n8+eYp8peIbB6AePZv7KcNq8eL2l+TZw64jYwhJNCok6liy9dtiB6y80vlxw==
+X-Received: by 2002:a17:902:d2c4:b0:1ac:5717:fd2 with SMTP id n4-20020a170902d2c400b001ac57170fd2mr17541999plc.47.1683777869935;
+        Wed, 10 May 2023 21:04:29 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jg2-20020a17090326c200b001a6e9d170b8sm4620107plb.265.2023.05.10.21.04.28
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 21:04:28 -0700 (PDT)
+Message-ID: <645c694c.170a0220.f3b73.9fcb@mx.google.com>
+Date: Wed, 10 May 2023 21:04:28 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20230511
+X-Kernelci-Report-Type: build
+Subject: next/master build: 126 builds: 2 failed, 124 passed, 9 errors,
+ 204 warnings (next-20230511)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v4
-head:   b873f53aa1a6487f4a450747bd5ee38afad6dfe4
-commit: b873f53aa1a6487f4a450747bd5ee38afad6dfe4 [41/41] asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
-config: hexagon-randconfig-r045-20230509 (https://download.01.org/0day-ci/archive/20230511/202305111015.BDgHTEHP-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=b873f53aa1a6487f4a450747bd5ee38afad6dfe4
-        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-        git fetch --no-tags niks has_ioport_v4
-        git checkout b873f53aa1a6487f4a450747bd5ee38afad6dfe4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+next/master build: 126 builds: 2 failed, 124 passed, 9 errors, 204 warnings=
+ (next-20230511)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305111015.BDgHTEHP-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230511/
 
-All errors (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230511
+Git Commit: aabe491169befbe5481144acf575a0260939764a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
->> lib/iomap.c:81:23: error: call to '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
-           IO_COND(addr, return inb(port), return readb(addr));
-                                ^
-   include/asm-generic/io.h:642:13: note: expanded from macro 'inb'
-   #define inb _inb
-               ^
-   include/asm-generic/io.h:541:14: note: expanded from macro '_inb'
-   #define _inb _inb
-                ^
->> lib/iomap.c:87:23: error: call to '_inw' declared with 'error' attribute: inw() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, return inw(port), return readw(addr));
-                                ^
-   include/asm-generic/io.h:646:13: note: expanded from macro 'inw'
-   #define inw _inw
-               ^
-   include/asm-generic/io.h:559:14: note: expanded from macro '_inw'
-   #define _inw _inw
-                ^
-   lib/iomap.c:93:23: error: call to '_inw' declared with 'error' attribute: inw() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, return pio_read16be(port), return mmio_read16be(addr));
-                                ^
-   lib/iomap.c:64:35: note: expanded from macro 'pio_read16be'
-   #define pio_read16be(port) swab16(inw(port))
-                                     ^
-   include/asm-generic/io.h:646:13: note: expanded from macro 'inw'
-   #define inw _inw
-               ^
-   include/asm-generic/io.h:559:14: note: expanded from macro '_inw'
-   #define _inw _inw
-                ^
->> lib/iomap.c:99:23: error: call to '_inl' declared with 'error' attribute: inl() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, return inl(port), return readl(addr));
-                                ^
-   include/asm-generic/io.h:650:13: note: expanded from macro 'inl'
-   #define inl _inl
-               ^
-   include/asm-generic/io.h:577:14: note: expanded from macro '_inl'
-   #define _inl _inl
-                ^
-   lib/iomap.c:105:23: error: call to '_inl' declared with 'error' attribute: inl() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, return pio_read32be(port), return mmio_read32be(addr));
-                                ^
-   lib/iomap.c:65:35: note: expanded from macro 'pio_read32be'
-   #define pio_read32be(port) swab32(inl(port))
-                                     ^
-   include/asm-generic/io.h:650:13: note: expanded from macro 'inl'
-   #define inl _inl
-               ^
-   include/asm-generic/io.h:577:14: note: expanded from macro '_inl'
-   #define _inl _inl
-                ^
->> lib/iomap.c:207:16: error: call to '_outb' declared with 'error' attribute: outb() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, outb(val,port), writeb(val, addr));
-                         ^
-   include/asm-generic/io.h:654:14: note: expanded from macro 'outb'
-   #define outb _outb
-                ^
-   include/asm-generic/io.h:595:15: note: expanded from macro '_outb'
-   #define _outb _outb
-                 ^
->> lib/iomap.c:213:16: error: call to '_outw' declared with 'error' attribute: outw() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, outw(val,port), writew(val, addr));
-                         ^
-   include/asm-generic/io.h:658:14: note: expanded from macro 'outw'
-   #define outw _outw
-                ^
-   include/asm-generic/io.h:610:15: note: expanded from macro '_outw'
-   #define _outw _outw
-                 ^
-   lib/iomap.c:219:16: error: call to '_outw' declared with 'error' attribute: outw() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, pio_write16be(val,port), mmio_write16be(val, addr));
-                         ^
-   lib/iomap.c:193:33: note: expanded from macro 'pio_write16be'
-   #define pio_write16be(val,port) outw(swab16(val),port)
-                                   ^
-   include/asm-generic/io.h:658:14: note: expanded from macro 'outw'
-   #define outw _outw
-                ^
-   include/asm-generic/io.h:610:15: note: expanded from macro '_outw'
-   #define _outw _outw
-                 ^
->> lib/iomap.c:225:16: error: call to '_outl' declared with 'error' attribute: outl() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, outl(val,port), writel(val, addr));
-                         ^
-   include/asm-generic/io.h:662:14: note: expanded from macro 'outl'
-   #define outl _outl
-                ^
-   include/asm-generic/io.h:625:15: note: expanded from macro '_outl'
-   #define _outl _outl
-                 ^
-   lib/iomap.c:231:16: error: call to '_outl' declared with 'error' attribute: outl() requires CONFIG_HAS_IOPORT
-           IO_COND(addr, pio_write32be(val,port), mmio_write32be(val, addr));
-                         ^
-   lib/iomap.c:194:33: note: expanded from macro 'pio_write32be'
-   #define pio_write32be(val,port) outl(swab32(val),port)
-                                   ^
-   include/asm-generic/io.h:662:14: note: expanded from macro 'outl'
-   #define outl _outl
-                ^
-   include/asm-generic/io.h:625:15: note: expanded from macro '_outl'
-   #define _outl _outl
-                 ^
-   10 errors generated.
+Build Failures Detected:
 
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-vim +81 lib/iomap.c
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11   73  
-a28a4d4723c11f Alexander Potapenko 2022-09-15   74  /*
-a28a4d4723c11f Alexander Potapenko 2022-09-15   75   * Here and below, we apply __no_kmsan_checks to functions reading data from
-a28a4d4723c11f Alexander Potapenko 2022-09-15   76   * hardware, to ensure that KMSAN marks their return values as initialized.
-a28a4d4723c11f Alexander Potapenko 2022-09-15   77   */
-a28a4d4723c11f Alexander Potapenko 2022-09-15   78  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14   79  unsigned int ioread8(const void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16   80  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  @81  	IO_COND(addr, return inb(port), return readb(addr));
-6cbf0c704d7c3b Linus Torvalds      2007-05-04   82  	return 0xff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16   83  }
-a28a4d4723c11f Alexander Potapenko 2022-09-15   84  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14   85  unsigned int ioread16(const void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16   86  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  @87  	IO_COND(addr, return inw(port), return readw(addr));
-6cbf0c704d7c3b Linus Torvalds      2007-05-04   88  	return 0xffff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16   89  }
-a28a4d4723c11f Alexander Potapenko 2022-09-15   90  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14   91  unsigned int ioread16be(const void __iomem *addr)
-dae409a2778877 James Bottomley     2005-04-16   92  {
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11   93  	IO_COND(addr, return pio_read16be(port), return mmio_read16be(addr));
-6cbf0c704d7c3b Linus Torvalds      2007-05-04   94  	return 0xffff;
-dae409a2778877 James Bottomley     2005-04-16   95  }
-a28a4d4723c11f Alexander Potapenko 2022-09-15   96  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14   97  unsigned int ioread32(const void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16   98  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  @99  	IO_COND(addr, return inl(port), return readl(addr));
-6cbf0c704d7c3b Linus Torvalds      2007-05-04  100  	return 0xffffffff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  101  }
-a28a4d4723c11f Alexander Potapenko 2022-09-15  102  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14  103  unsigned int ioread32be(const void __iomem *addr)
-dae409a2778877 James Bottomley     2005-04-16  104  {
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  105  	IO_COND(addr, return pio_read32be(port), return mmio_read32be(addr));
-6cbf0c704d7c3b Linus Torvalds      2007-05-04  106  	return 0xffffffff;
-dae409a2778877 James Bottomley     2005-04-16  107  }
-^1da177e4c3f41 Linus Torvalds      2005-04-16  108  EXPORT_SYMBOL(ioread8);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  109  EXPORT_SYMBOL(ioread16);
-dae409a2778877 James Bottomley     2005-04-16  110  EXPORT_SYMBOL(ioread16be);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  111  EXPORT_SYMBOL(ioread32);
-dae409a2778877 James Bottomley     2005-04-16  112  EXPORT_SYMBOL(ioread32be);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  113  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  114  #ifdef readq
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  115  static u64 pio_read64_lo_hi(unsigned long port)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  116  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  117  	u64 lo, hi;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  118  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  119  	lo = inl(port);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  120  	hi = inl(port + sizeof(u32));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  121  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  122  	return lo | (hi << 32);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  123  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  124  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  125  static u64 pio_read64_hi_lo(unsigned long port)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  126  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  127  	u64 lo, hi;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  128  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  129  	hi = inl(port + sizeof(u32));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  130  	lo = inl(port);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  131  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  132  	return lo | (hi << 32);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  133  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  134  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  135  static u64 pio_read64be_lo_hi(unsigned long port)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  136  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  137  	u64 lo, hi;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  138  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  139  	lo = pio_read32be(port + sizeof(u32));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  140  	hi = pio_read32be(port);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  141  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  142  	return lo | (hi << 32);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  143  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  144  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  145  static u64 pio_read64be_hi_lo(unsigned long port)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  146  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  147  	u64 lo, hi;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  148  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  149  	hi = pio_read32be(port);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  150  	lo = pio_read32be(port + sizeof(u32));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  151  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  152  	return lo | (hi << 32);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  153  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  154  
-a28a4d4723c11f Alexander Potapenko 2022-09-15  155  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14  156  u64 ioread64_lo_hi(const void __iomem *addr)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  157  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  158  	IO_COND(addr, return pio_read64_lo_hi(port), return readq(addr));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  159  	return 0xffffffffffffffffULL;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  160  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  161  
-a28a4d4723c11f Alexander Potapenko 2022-09-15  162  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14  163  u64 ioread64_hi_lo(const void __iomem *addr)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  164  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  165  	IO_COND(addr, return pio_read64_hi_lo(port), return readq(addr));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  166  	return 0xffffffffffffffffULL;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  167  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  168  
-a28a4d4723c11f Alexander Potapenko 2022-09-15  169  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14  170  u64 ioread64be_lo_hi(const void __iomem *addr)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  171  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  172  	IO_COND(addr, return pio_read64be_lo_hi(port),
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  173  		return mmio_read64be(addr));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  174  	return 0xffffffffffffffffULL;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  175  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  176  
-a28a4d4723c11f Alexander Potapenko 2022-09-15  177  __no_kmsan_checks
-8f28ca6bd82112 Krzysztof Kozlowski 2020-08-14  178  u64 ioread64be_hi_lo(const void __iomem *addr)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  179  {
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  180  	IO_COND(addr, return pio_read64be_hi_lo(port),
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  181  		return mmio_read64be(addr));
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  182  	return 0xffffffffffffffffULL;
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  183  }
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  184  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  185  EXPORT_SYMBOL(ioread64_lo_hi);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  186  EXPORT_SYMBOL(ioread64_hi_lo);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  187  EXPORT_SYMBOL(ioread64be_lo_hi);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  188  EXPORT_SYMBOL(ioread64be_hi_lo);
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  189  
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  190  #endif /* readq */
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  191  
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  192  #ifndef pio_write16be
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  193  #define pio_write16be(val,port) outw(swab16(val),port)
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  194  #define pio_write32be(val,port) outl(swab32(val),port)
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  195  #endif
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  196  
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  197  #ifndef mmio_write16be
-aecc787c06f430 Logan Gunthorpe     2019-01-16  198  #define mmio_write16be(val,port) writew(swab16(val),port)
-aecc787c06f430 Logan Gunthorpe     2019-01-16  199  #define mmio_write32be(val,port) writel(swab32(val),port)
-79bf0cbd86ac48 Logan Gunthorpe     2019-01-16  200  #define mmio_write64be(val,port) writeq(swab64(val),port)
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  201  #endif
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  202  
-9f741cb8fecef9 Harvey Harrison     2008-02-08  203  void iowrite8(u8 val, void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  204  {
-a28a4d4723c11f Alexander Potapenko 2022-09-15  205  	/* Make sure uninitialized memory isn't copied to devices. */
-a28a4d4723c11f Alexander Potapenko 2022-09-15  206  	kmsan_check_memory(&val, sizeof(val));
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @207  	IO_COND(addr, outb(val,port), writeb(val, addr));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  208  }
-9f741cb8fecef9 Harvey Harrison     2008-02-08  209  void iowrite16(u16 val, void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  210  {
-a28a4d4723c11f Alexander Potapenko 2022-09-15  211  	/* Make sure uninitialized memory isn't copied to devices. */
-a28a4d4723c11f Alexander Potapenko 2022-09-15  212  	kmsan_check_memory(&val, sizeof(val));
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @213  	IO_COND(addr, outw(val,port), writew(val, addr));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  214  }
-9f741cb8fecef9 Harvey Harrison     2008-02-08  215  void iowrite16be(u16 val, void __iomem *addr)
-dae409a2778877 James Bottomley     2005-04-16  216  {
-a28a4d4723c11f Alexander Potapenko 2022-09-15  217  	/* Make sure uninitialized memory isn't copied to devices. */
-a28a4d4723c11f Alexander Potapenko 2022-09-15  218  	kmsan_check_memory(&val, sizeof(val));
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  219  	IO_COND(addr, pio_write16be(val,port), mmio_write16be(val, addr));
-dae409a2778877 James Bottomley     2005-04-16  220  }
-9f741cb8fecef9 Harvey Harrison     2008-02-08  221  void iowrite32(u32 val, void __iomem *addr)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  222  {
-a28a4d4723c11f Alexander Potapenko 2022-09-15  223  	/* Make sure uninitialized memory isn't copied to devices. */
-a28a4d4723c11f Alexander Potapenko 2022-09-15  224  	kmsan_check_memory(&val, sizeof(val));
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @225  	IO_COND(addr, outl(val,port), writel(val, addr));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  226  }
-9f741cb8fecef9 Harvey Harrison     2008-02-08  227  void iowrite32be(u32 val, void __iomem *addr)
-dae409a2778877 James Bottomley     2005-04-16  228  {
-a28a4d4723c11f Alexander Potapenko 2022-09-15  229  	/* Make sure uninitialized memory isn't copied to devices. */
-a28a4d4723c11f Alexander Potapenko 2022-09-15  230  	kmsan_check_memory(&val, sizeof(val));
-34ba8a5cd0b0d5 Linus Torvalds      2006-11-11  231  	IO_COND(addr, pio_write32be(val,port), mmio_write32be(val, addr));
-dae409a2778877 James Bottomley     2005-04-16  232  }
-^1da177e4c3f41 Linus Torvalds      2005-04-16  233  EXPORT_SYMBOL(iowrite8);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  234  EXPORT_SYMBOL(iowrite16);
-dae409a2778877 James Bottomley     2005-04-16  235  EXPORT_SYMBOL(iowrite16be);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  236  EXPORT_SYMBOL(iowrite32);
-dae409a2778877 James Bottomley     2005-04-16  237  EXPORT_SYMBOL(iowrite32be);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  238  
+Errors and Warnings Detected:
 
-:::::: The code at line 81 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+arc:
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+arm64:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+arm:
+    am200epdkit_defconfig (gcc-10): 2 warnings
+    aspeed_g5_defconfig (clang-17): 3 warnings
+    at91_dt_defconfig (gcc-10): 2 warnings
+    axm55xx_defconfig (gcc-10): 2 warnings
+    bcm2835_defconfig (gcc-10): 2 warnings
+    collie_defconfig (gcc-10): 1 warning
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    footbridge_defconfig (gcc-10): 2 warnings
+    gemini_defconfig (gcc-10): 1 warning
+    h3600_defconfig (gcc-10): 2 warnings
+    hisi_defconfig (gcc-10): 1 warning
+    imx_v4_v5_defconfig (gcc-10): 2 warnings
+    imxrt_defconfig (gcc-10): 1 warning
+    integrator_defconfig (gcc-10): 2 warnings
+    ixp4xx_defconfig (gcc-10): 2 warnings
+    jornada720_defconfig (gcc-10): 2 warnings
+    keystone_defconfig (gcc-10): 2 warnings
+    lpc18xx_defconfig (gcc-10): 1 warning
+    lpc32xx_defconfig (gcc-10): 2 warnings
+    milbeaut_m10v_defconfig (gcc-10): 2 warnings
+    mmp2_defconfig (gcc-10): 3 warnings
+    mps2_defconfig (gcc-10): 1 warning
+    multi_v4t_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-17): 6 warnings
+    multi_v5_defconfig (gcc-10): 2 warnings
+    multi_v7_defconfig+kselftest (gcc-10): 2 warnings
+    mvebu_v5_defconfig (gcc-10): 2 warnings
+    neponset_defconfig (gcc-10): 2 warnings
+    netwinder_defconfig (gcc-10): 1 warning
+    nhk8815_defconfig (gcc-10): 2 warnings
+    orion5x_defconfig (gcc-10): 2 warnings
+    pxa910_defconfig (gcc-10): 3 warnings
+    realview_defconfig (gcc-10): 2 warnings
+    rpc_defconfig (gcc-10): 8 errors, 1 warning
+    sama5_defconfig (gcc-10): 2 warnings
+    sp7021_defconfig (gcc-10): 2 warnings
+    spear13xx_defconfig (gcc-10): 2 warnings
+    spear3xx_defconfig (gcc-10): 2 warnings
+    spitz_defconfig (gcc-10): 2 warnings
+    stm32_defconfig (gcc-10): 1 warning
+    tegra_defconfig (gcc-10): 2 warnings
+    u8500_defconfig (gcc-10): 2 warnings
+    versatile_defconfig (gcc-10): 2 warnings
+    vf610m4_defconfig (gcc-10): 1 warning
+    vt8500_v6_v7_defconfig (gcc-10): 1 warning
+    wpcm450_defconfig (gcc-10): 2 warnings
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 2 warnings
+    32r2el_defconfig+debug (gcc-10): 2 warnings
+    ath25_defconfig (gcc-10): 2 warnings
+    ath79_defconfig (gcc-10): 2 warnings
+    bcm47xx_defconfig (gcc-10): 2 warnings
+    bmips_be_defconfig (gcc-10): 1 warning
+    bmips_stb_defconfig (gcc-10): 2 warnings
+    ci20_defconfig (gcc-10): 2 warnings
+    cobalt_defconfig (gcc-10): 2 warnings
+    cu1000-neo_defconfig (gcc-10): 2 warnings
+    cu1830-neo_defconfig (gcc-10): 2 warnings
+    db1xxx_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 6 warnings
+    decstation_defconfig (gcc-10): 2 warnings
+    ip28_defconfig (gcc-10): 6 warnings
+    loongson1c_defconfig (gcc-10): 2 warnings
+    loongson3_defconfig (gcc-10): 1 error, 6 warnings
+    malta_defconfig (gcc-10): 2 warnings
+    malta_kvm_defconfig (gcc-10): 2 warnings
+    maltaaprp_defconfig (gcc-10): 2 warnings
+    maltasmvp_defconfig (gcc-10): 2 warnings
+    maltaup_defconfig (gcc-10): 2 warnings
+    maltaup_xpa_defconfig (gcc-10): 2 warnings
+    omega2p_defconfig (gcc-10): 1 warning
+    pic32mzda_defconfig (gcc-10): 2 warnings
+    qi_lb60_defconfig (gcc-10): 2 warnings
+    rb532_defconfig (gcc-10): 2 warnings
+    rbtx49xx_defconfig (gcc-10): 3 warnings
+    rm200_defconfig (gcc-10): 2 warnings
+    rs90_defconfig (gcc-10): 1 warning
+    rt305x_defconfig (gcc-10): 2 warnings
+    sb1250_swarm_defconfig (gcc-10): 4 warnings
+    vocore2_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 2 warnings
+    sparc32_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig (gcc-10): 6 warnings
+    sparc64_defconfig+debug (gcc-10): 4 warnings
+    sparc64_defconfig+kselftest (gcc-10): 4 warnings
+    tinyconfig (gcc-10): 2 warnings
+
+x86_64:
+    allnoconfig (gcc-10): 3 warnings
+    x86_64_defconfig+crypto (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
+
+Errors summary:
+
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r2,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r1,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r2,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r2,=
+=3D0x'
+    1    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r1,=
+=3D0x'
+
+Warnings summary:
+
+    152  <stdin>:1567:2: warning: #warning syscall cachestat not implemente=
+d [-Wcpp]
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    7    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#war=
+nings]
+    7    1 warning generated.
+    7    #warning syscall cachestat not implemented
+    3    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallb=
+ack=E2=80=99 defined but not used [-Wunused-variable]
+    2    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    2    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x18ca: redunda=
+nt UACCESS disable
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x18b6: redunda=
+nt UACCESS disable
+    1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
+ndant UACCESS disable
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
+ UACCESS disable
+    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 6 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 6 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
+=E2=80=99 defined but not used [-Wunused-variable]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+    <stdin>:1567:2: warning: syscall cachestat not implemented [-W#warnings]
+    #warning syscall cachestat not implemented
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
+=E2=80=99 defined but not used [-Wunused-variable]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
+=E2=80=99 defined but not used [-Wunused-variable]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 8 errors, 1 warning, 0 section =
+mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r1,=3D0x'
+    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r2,=3D0x'
+    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r1,=3D0x'
+    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r2,=3D0x'
+    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r2,=3D0x'
+    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r3,=3D0x'
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+    <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-W=
+cpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x18ca: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x18b6: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
