@@ -1,139 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75B2629
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE00C433EF;
-	Thu, 11 May 2023 15:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683819057;
-	bh=SJGJCU3gDVdyuC2QEctenjUwW0dVdNNgc2Fs7wfRUns=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Plchd8Sgzf0HyZ6hAta56VujgSCqgIqmnXlPXxDg3/EQeUS2meUBh57yRNcbIwcvf
-	 ymUNvFgu9cQF2habL+H6SJxZyzn0tSJV68f1wG3dlb8dcbYDPRRCylRubpvGiung9b
-	 Acu3rRXq2q6WQ4S592Be2MD7seZqsiHsRJm9kjPULT4RIIz5eeSAiL+mBiBqBSJ29e
-	 nvQTswr6Xhoao9K2aYU2ZCFBoAXe1qDBf8MpGgmIipD+pWELVlZfFstz5/Wwh6gpQy
-	 cm9Pq+e3lC3hTAIuubP7rfe07pmFqU8pnAD3sPbd6sWBhcsi6eiB+4xiyjIHYHU0x1
-	 n71zOWGE8XU0w==
-Date: Thu, 11 May 2023 16:30:52 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] PCI: microchip: Avoid cast to incompatible function type
-Message-ID: <20230511-coming-saturate-a2ae32462a3a@spud>
-References: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD76629;
+	Thu, 11 May 2023 15:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683819152; x=1715355152;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zJ/KXKey+MForJ+KvlFh17iPEYXRJ+7tgAXrXnWw4CY=;
+  b=KL2PUHvmbG9+OWQlS5u3NHXPCgec1MlFHrUld7rqp08wSbdWJE579mnK
+   4ckfA/fMHQacybAguip2xxIqM8Qhzb3Eo3mEnY2gMfjqxUNIt5bLPu4OW
+   Ckhpdpi9m7GciNwMoVR4rr8002RDweqjk3j+tl1s4IPb0UNHQkCdXJ/24
+   7T1yqV82l47hu5mR/05hllD942YINS6dX+qHwsxd6fG0oBKFFR1HTu6EX
+   3S9cZmEtyRmd/LaMZq3PXJ3Q5dQNxT0vOGsDR1kAzwX4o4p9cedq/9SsY
+   KJapicA8kEFIGDar4znC4uKCtaBv5um/KVXTMPxBuakRPbfTf0CEF05aE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="339833325"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="339833325"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 08:32:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="693850167"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="693850167"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 May 2023 08:32:30 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1px8HN-00045E-2p;
+	Thu, 11 May 2023 15:32:29 +0000
+Date: Thu, 11 May 2023 23:31:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:hotplug 20/37] kernel/cpu.c:304:20: error: incompatible
+ pointer types passing 'atomic_t **' to parameter of type 'atomic_t *';
+ remove &
+Message-ID: <202305112311.qSBPUoSu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="EILHGzwimB/Seb9q"
-Content-Disposition: inline
-In-Reply-To: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
-
-
---EILHGzwimB/Seb9q
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 11, 2023 at 05:24:18PM +0200, Simon Horman wrote:
-> Rather than casting clk_disable_unprepare to an incompatible function typ=
-e,
-> update the type to match that expected by devm_add_action_or_reset.
->=20
-> Reported by clang-16 with W-1:
->=20
->  .../pcie-microchip-host.c:866:32: warning: cast from 'void (*)(struct cl=
-k *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-=
-function-type-strict]
->          devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unp=
-repare,
->                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
->  ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_act=
-ion_or_reset'
->          __devm_add_action_or_reset(release, action, data, #action)
->                                              ^~~~~~
-> No functional change intended.
-> Compile tested only.
->=20
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+head:   33940aaa057c4488b11b5de90abf994ffed76eac
+commit: 1507da72e88398f36d93398556ab865e98b4618a [20/37] x86/smpboot: Switch to hotplug core state synchronization
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230511/202305112311.qSBPUoSu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=1507da72e88398f36d93398556ab865e98b4618a
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel hotplug
+        git checkout 1507da72e88398f36d93398556ab865e98b4618a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Yeah, there's already a patch for this:
-https://lore.kernel.org/linux-pci/20230111125323.1911373-3-daire.mcnamara@m=
-icrochip.com/
-
-The lads didn't want to pick any of that piecemeal & Daire hasn't been
-able to get back to that work until this week.
-
-I don't think we an ETA though on a v4, so:
-Fixes: 6f15a9c9f941 ("PCI: microchip: Add Microchip PolarFire PCIe controll=
-er driver")
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-and I don't know if you wanna propagate the:
+If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305112311.qSBPUoSu-lkp@intel.com/
 
-Thanks,
-Conor.
+All errors (new ones prefixed by >>):
 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->  drivers/pci/controller/pcie-microchip-host.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/c=
-ontroller/pcie-microchip-host.c
-> index 5e710e485464..d8aa6e3cdbff 100644
-> --- a/drivers/pci/controller/pcie-microchip-host.c
-> +++ b/drivers/pci/controller/pcie-microchip-host.c
-> @@ -848,6 +848,11 @@ static const struct irq_domain_ops event_domain_ops =
-=3D {
->  	.map =3D mc_pcie_event_map,
->  };
-> =20
-> +inline void mc_clk_disable_unprepare(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
->  static inline struct clk *mc_pcie_init_clk(struct device *dev, const cha=
-r *id)
->  {
->  	struct clk *clk;
-> @@ -863,8 +868,7 @@ static inline struct clk *mc_pcie_init_clk(struct dev=
-ice *dev, const char *id)
->  	if (ret)
->  		return ERR_PTR(ret);
-> =20
-> -	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
-> -				 clk);
-> +	devm_add_action_or_reset(dev, mc_clk_disable_unprepare, clk);
-> =20
->  	return clk;
->  }
->=20
+>> kernel/cpu.c:304:20: error: incompatible pointer types passing 'atomic_t **' to parameter of type 'atomic_t *'; remove & [-Werror,-Wincompatible-pointer-types]
+           (void)atomic_xchg(&st, state);
+                             ^~~
+   include/linux/atomic/atomic-instrumented.h:470:23: note: passing argument to parameter 'v' here
+   atomic_xchg(atomic_t *v, int i)
+                         ^
+   1 error generated.
 
---EILHGzwimB/Seb9q
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +304 kernel/cpu.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF0KLAAKCRB4tDGHoIJi
-0tK+AQD8LmbqfvLBNOFt2fxN3TxKPiyS2a77L81h8U5fsh6TCQD/ZHftPgTlHksh
-kHFdg+H8MRi1rLrypMvc0N6nRlCySwM=
-=Prv1
------END PGP SIGNATURE-----
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  291  
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  292  #ifdef CONFIG_HOTPLUG_CORE_SYNC
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  293  /**
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  294   * cpuhp_ap_update_sync_state - Update synchronization state during bringup/teardown
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  295   * @state:	The synchronization state to set
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  296   *
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  297   * No synchronization point. Just update of the synchronization state, but implies
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  298   * a full barrier so that the AP changes are visible before the control CPU proceeds.
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  299   */
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  300  static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  301  {
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  302  	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  303  
+2dcac02ca74e74 Thomas Gleixner 2023-05-08 @304  	(void)atomic_xchg(&st, state);
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  305  }
+2dcac02ca74e74 Thomas Gleixner 2023-05-08  306  
 
---EILHGzwimB/Seb9q--
+:::::: The code at line 304 was first introduced by commit
+:::::: 2dcac02ca74e74a493ea41b4add310ca7c9e096c cpu/hotplug: Add CPU state tracking and synchronization
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
