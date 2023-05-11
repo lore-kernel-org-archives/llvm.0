@@ -1,170 +1,196 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFA9645;
-	Thu, 11 May 2023 04:42:40 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XHJIrguak4LdE8gFPJnKFOi23sMFFDai6hILN4JJKhrlFiGhIJxs2MO7g5e8jXvHV4tQwL1iuZbBjoPF1+K2+WPe4t3zKWfUt4CxGx9dsiYEX16V/JhT+V1pNjIDWKMd/L+XVa2/MzLF2U7TmUgZQcOU0XO1TqC2ithQVEc+5UnFnqgC/+1NkenS+ct9e7J6Qan4DWvOEuExtDjVoddKLjwJ1URDhrRVNphRaNZvn93eoxwWWwzez4UgoqPAbJhMWoq1T5xE0AZrUullN1DsQ754JNQj+WCxcOCgdN5bKgz2sbczVF8ne5UDS4WZa1JfRbo9yJ6Syf+0ZGGX4gfpJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DvQ1zJOwx9jinPR7Tzm/oFbqNYsF0WqQGrn9NsOSdrg=;
- b=HHW07FnrkGYSSIfcfAyIW+EQSmhi3+47xype0lOIApDSV30m9oe3X0S+jiadZuHQlD7mRDT8uHabJX4DHJdC8nAMMmFj4LQYeFya/hMWJpvWvViBq8v9CrpawCVV9iymnV0bGVmUpy53z9KALyF/Q3yfaYcMaDMuPqwPF4r9Fz1G+a0RNQSb5LuDVB1L9ZUP8Yqduk2YMR7N6ATlEjQyXpVtv3To7940XH7TLes9gCHTC6ega2ZhhGoX1O5GX9b6KndGFtmhcSjeGI7NEQRX4Yw0973g6xhhCTx4CEwWfVAtYc2X6dbQollDC2ffkc+5wgEKs0N115Mduvi9j5lGaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DvQ1zJOwx9jinPR7Tzm/oFbqNYsF0WqQGrn9NsOSdrg=;
- b=Jr1Dfpo+EC/a8yrJqgcqXDiEBRyssIaVbjklBdf1ZalLPDgdRdwlFnW1W5pBbM3xftVyg2/3RcMNU4/xHxsBIA1As4BgBNcccd8oHHzRAQDLbEMmJ5Y5UdtZLSWJkuy8Eg/7EonOjR7GPAgilFjl/oi9yrMZt1qFG+taA9ckxmCYERoswK0Ur9jUPT8c8sejtpZMDAz5I+WYucXpF/iheK+Go2b60aWZsUWJktaBnxS+iYOXu1ggvxvpqUPnQAvncbOAmFMcWioszBmsxTGHr9RrJH0kg+euKQXUfQaR1gOFnhS2H1n2Fjgam0IIkPNgIaf95zrbBrhmqa/1mpzSGQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB5054.namprd12.prod.outlook.com (2603:10b6:5:389::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Thu, 11 May
- 2023 04:42:27 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6387.021; Thu, 11 May 2023
- 04:42:26 +0000
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Tom Rix <trix@redhat.com>,
-	Will Deacon <will@kernel.org>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: [PATCH v5 08/17] iommu: Replace iommu_group_do_dma_first_attach with __iommu_device_set_domain
-Date: Thu, 11 May 2023 01:42:06 -0300
-Message-Id: <8-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
-In-Reply-To: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
-References:
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0042.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::17) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E0E63F
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 05:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683781987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jXq0NGvaEl6Y4fwYw+aVxphEabJEfnjuvJNHNLaO6rE=;
+	b=adofkFqONGW5oln+niB8H4Tm/xKTTfUny11+Sbn/XUHbcZ5SVrfajeNFosPdOM4pfEM8Sw
+	PD5isBGZDL+IS/v6e1cIAh3z/wWwmAny023nbpxUqeS/4Q5JRtF3yuwpJfITFOviSNpMTs
+	BKlOSsiyxb0oQLEwPnB0ned1awgQZ6s=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-60-zhR2uwrUM3q9dVtsDPMEfw-1; Thu, 11 May 2023 01:13:06 -0400
+X-MC-Unique: zhR2uwrUM3q9dVtsDPMEfw-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3941c5de005so1567491b6e.2
+        for <llvm@lists.linux.dev>; Wed, 10 May 2023 22:13:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683781985; x=1686373985;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+uo+qGSTvo4pu2L9Hp7yMuYb28kY5eo14mS2NSF3Z5E=;
+        b=aAxENrNk/DxEkNfOfZeoHQ7YroIQb0j4BrDccmcagVnY14q7oiTDuqLlHkcpGuvyMr
+         ZSjbv3UP6KrRjkOCHsG2nA2uuq/kjJjs1jOWVR5N81HfMohmDsI2rUe5zOnyR/DGKDUp
+         JlTEYxUhpok5326OZ/sz+F5xqJegejOJiz81UsTlITrd6LK/1seUJsIIUnbDyZnULXE/
+         af8uCQO9LklN1QVO9x1Xt22hMMkCjJjhiwQj7qNIEmL6PiTJl6uPDZAov2PnjdPfTwhu
+         Sb+OadhPHv6GXjDOR5DUxBQj0ZzMDgHoUpwBBBTvsWjAc0JQlbIy3qx+C4lixYGFl+6B
+         sbEA==
+X-Gm-Message-State: AC+VfDx+wGE+0zLQzhOBQlWzSjmW0GqjSFe5uMyTHwqVdZkelUUB/agm
+	YzhgVofD84pHXXSvHCdGXy6v9j47nxQG6UXCganyJvGm8579NW4fK0iczwz2Gauvs0pagKow9Vp
+	3zOpXEbLCfL6gag==
+X-Received: by 2002:a05:6808:356:b0:38d:eb23:e3f6 with SMTP id j22-20020a056808035600b0038deb23e3f6mr4543110oie.54.1683781985666;
+        Wed, 10 May 2023 22:13:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7fYjCrGSpdzuQcnUKYokAfndVCkRzUHk7KC9Wc2VdBsA1TSdOIFPzNf95qOS53lz/innugPQ==
+X-Received: by 2002:a05:6808:356:b0:38d:eb23:e3f6 with SMTP id j22-20020a056808035600b0038deb23e3f6mr4543103oie.54.1683781985399;
+        Wed, 10 May 2023 22:13:05 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a803:3602:abec:117:3c19:43b8? ([2804:1b3:a803:3602:abec:117:3c19:43b8])
+        by smtp.gmail.com with ESMTPSA id s130-20020acac288000000b0038e8efd297fsm3043841oif.9.2023.05.10.22.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 22:13:04 -0700 (PDT)
+Message-ID: <e20ccacc00c93917686162e0e1f539fe8fda2dd1.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 1/1] trace,smp: Add tracepoints around remotelly
+ called functions
+From: Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Date: Thu, 11 May 2023 02:13:02 -0300
+In-Reply-To: <202305110816.mcNeYnWd-lkp@intel.com>
+References: <20230510230128.150384-1-leobras@redhat.com>
+	 <202305110816.mcNeYnWd-lkp@intel.com>
+User-Agent: Evolution 3.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5054:EE_
-X-MS-Office365-Filtering-Correlation-Id: b17d1603-f621-4796-f122-08db51da1b3c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	0WQLWsj4bFBCAG/ZAKDrnZEetuI66TcH5NNOvavQKVnq7VZNaPdJzLxMLJOAacWKQrLZF3qyGynf3UbL9EbpTJ/fPLv2ezgx30G6auSJMToQYFvlNu2VD30sQrOfiiHyJ/OWhuzljRAVE56dkWJFuQTnIM4lyKDPZaeYc7dfI+hvV7GVpP3416yyy81nk0+GlqCgJVgV9WNc5mvYbz/AigqDfOqWPVAGnOUilaqkyEzub+DjXLcR+mZCVjoTYi9MEp3CdI2NM6e3vrMsMx7ED3vCjYGXIaomFqofYwQPqtlRW/Rul7D/PFAwY6PigCW/b2mXoVSZc8ERI2nLrSilVGseEYVtenyoGOwTzo9c0BX5ywVhCJ/SYW3Q8br34iaMHF3m8YKhe6isXOvqAScz+SFVFp54EmtuVns0OUcPN5x6QzHVI4npZwc8eKgZDkIgR5Lc9uwNDGYuPy12G6seY0DHpYW9EI851Eqb4/Gbsk9OCoifCzjzCU0DyHOYjS/Bu5aS3D+We+z8EQN1O4fNKpi9CfZ/tCrai/HiNfYJed4yGKW9Vp7QM05T/SWCEPte8eE3q+k8K65pQZiJV1oAyuRfm0aCmsb5HUkKDWm7bQ4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199021)(26005)(186003)(6506007)(6512007)(2906002)(41300700001)(66556008)(66476007)(316002)(4326008)(38100700002)(83380400001)(8676002)(7416002)(86362001)(8936002)(36756003)(5660300002)(2616005)(54906003)(110136005)(478600001)(6486002)(6666004)(66946007)(4216001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0mDnzZQzThfAUWAc1vqBm4ZrDUUQ3xtIZi1NHkci40H6j86DeJKnM5Oh5GOr?=
- =?us-ascii?Q?r4xQ/gqp3AXEdUsE1gMLquR8ZsjbtfheVOSnFx+vNJEFbNx1PnXXWCneOAZp?=
- =?us-ascii?Q?8a1DEX988QrY57r31SxxchSyGDl8FdUlTx5NNOav3B1NzGuBE33ZSrwGVaBx?=
- =?us-ascii?Q?W5VkMPbU5Z8rCdHJrT3ijTKkdn2y4nRg2vR8Fg4hXyr/xbVrK8HQyOOUsRCY?=
- =?us-ascii?Q?J9QaCx6tJCD3CaCOdTiOCYnTKXNge2DUYqCGC0kqoZX01ZA07Mi6HXbOWZ3N?=
- =?us-ascii?Q?JwL4P60NTNU9Do8YQldHgSekgtBbimPXi+FUawLMU+AdUt1jAjvJCd3bDxyn?=
- =?us-ascii?Q?YFeO1vAKJI0fBVPt4qyVxXb0abzSzOUx6v5uLjGPukxDSUyB6j4PO3VLWaTQ?=
- =?us-ascii?Q?7mGIxCfm29+HH0PtZn9fM1sJaXUsVbgtpuQk90qYgxPByyoVZ9c/c53jfbz5?=
- =?us-ascii?Q?1QeDHKTZGXXsBncDgLBPpKdTHN6/SVJAuUT5G1SU9cgVTJi2BYINwvl5EWsX?=
- =?us-ascii?Q?4v7kyMy8ngLyBEUVwAI+ZFIY/aeNFKYuvSQky+dcO061S3HFPdVo96KOSMMT?=
- =?us-ascii?Q?Cv17Sd9/zx5uldIGYCoGsOeMeWFuRLgKKzzpxVl3QvQL4KmZMOjFuAAXJXFT?=
- =?us-ascii?Q?OK2i/JvXbnHNa4QT6cTR1Q0uB4JuXqI7k+5WWdd0G30P3614CdRAkhrwRW+I?=
- =?us-ascii?Q?tT0Zyct4Eudx1ZMGH+pQpQ5fFKARbeQ3YDbdP4xUy34XEeACsJCZ3qW0ZlzV?=
- =?us-ascii?Q?TflQP/mGQydGSXxFinL0KR++ygX8UqyjA1gozZMFknST5SwJU4rvehrtKXoX?=
- =?us-ascii?Q?JAaZ76NzcQkGJgv5WpkpjI0usyyu9BxlJsBkOUTtRZssMv1nKVyHIRGHhvgy?=
- =?us-ascii?Q?unGG4in9p11YN+3xBwVpO3yu9ktCNedFaV+96BJ5o+dh8pY6AkSU3f0FSZjU?=
- =?us-ascii?Q?noUkymapVw8BGF1+yKLw5seT6/BB4c6lOZTD1NbkIgx1+Mab1Zv4+Bpvedfv?=
- =?us-ascii?Q?7urxkzOOcfkTcO42gszw1uMoKBCrhziZuuAP7mVj6Aqig4Ud3IGtnVCOtGpz?=
- =?us-ascii?Q?s51yHIKuIvb42c/F8T65mSjafAxnFoh+Kd+63VNAG0qQUYSgzAChN6yzXdwk?=
- =?us-ascii?Q?yJnIg+RpFwuwTrIPYHffJmzqMUxhFfcPblbU3XhvMobiytp9k3Q8mF9Glzuc?=
- =?us-ascii?Q?xfjENORIRe6PDNZXHRpf+p5C3X+ycGGhoIcyfHDCrM2V6oFdlZws6gyY5wM+?=
- =?us-ascii?Q?KYbGVGpY9D4ZpLI6V9kQIh9VekMnOGCtI75Pn2C4erV9iLOJirqEg2A9J+Kq?=
- =?us-ascii?Q?VG6I40CH1P/YDmoFKsyaAW61Yy8bPALUEJFWrgOGZFij7dOldasuLqXVKY8y?=
- =?us-ascii?Q?ReBzARPuu+r/KAVxstsofFxnIBtZbq6G6FP8UytVZnpHrHU+LCcTIbVShlqW?=
- =?us-ascii?Q?G/4NNwcUfSWCJmxzhx5pqhOL8kMCChlLRTmAziKU+f2nSys6nuYCHOGi9M05?=
- =?us-ascii?Q?2H1D/GnOoAOmK8kM4gZ+y/0x2FWdiZ3m6OGkfJC3PL447b4HQVlsoDP0guf+?=
- =?us-ascii?Q?4t15XlbYH6EeFr6ZrtwK3bp8S5wUk9EHhVLgiYYg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b17d1603-f621-4796-f122-08db51da1b3c
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 04:42:20.6230
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: negi/xg7CHpV5POIw44C2reHvxqFv3aQWrSZ9JJ24rQpKTBpPnMziHR+p+5yh4a7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5054
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since __iommu_device_set_domain() now knows how to handle deferred attach
-we can just call it directly from the only call site.
+On Thu, 2023-05-11 at 08:46 +0800, kernel test robot wrote:
+> Hi Leonardo,
+>=20
+> [This is a private test report for your RFC patch.]
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on v6.4-rc1 next-20230510]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Leonardo-Bras/trac=
+e-smp-Add-tracepoints-around-remotelly-called-functions/20230511-070554
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20230510230128.150384-1-leobras%=
+40redhat.com
+> patch subject: [RFC PATCH v3 1/1] trace,smp: Add tracepoints around remot=
+elly called functions
+> config: riscv-buildonly-randconfig-r004-20230509 (https://download.01.org=
+/0day-ci/archive/20230511/202305110816.mcNeYnWd-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb=
+98227c90adf2536c9ad644a74d5e92961111)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/fcef1c202a1635b9c=
+7244f06bbad605562b83d43
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Leonardo-Bras/trace-smp-Add-trac=
+epoints-around-remotelly-called-functions/20230511-070554
+>         git checkout fcef1c202a1635b9c7244f06bbad605562b83d43
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Link: https://lore.kernel.org/oe-kbuild-all/202305110816.mcNeYnWd-lkp@i=
+ntel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> > > kernel/smp.c:389:27: warning: passing 8-byte aligned argument to 32-b=
+yte aligned parameter 3 of 'csd_do_func' may result in an unaligned pointer=
+ access [-Walign-mismatch]
+>                    csd_do_func(func, info, csd);
+>                                            ^
+>    1 warning generated.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- drivers/iommu/iommu.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+Oh, ok, it makes sense.
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 5ca23efd2e048c..8b9325565b3b48 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -106,6 +106,10 @@ enum {
- 	IOMMU_SET_DOMAIN_MUST_SUCCEED = 1 << 0,
- };
- 
-+static int __iommu_device_set_domain(struct iommu_group *group,
-+				     struct device *dev,
-+				     struct iommu_domain *new_domain,
-+				     unsigned int flags);
- static int __iommu_group_set_domain_internal(struct iommu_group *group,
- 					     struct iommu_domain *new_domain,
- 					     unsigned int flags);
-@@ -401,17 +405,6 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
- 	return ret;
- }
- 
--static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
--{
--	struct iommu_domain *domain = data;
--
--	lockdep_assert_held(&dev->iommu_group->mutex);
--
--	if (dev->iommu->attach_deferred)
--		return 0;
--	return __iommu_attach_device(domain, dev);
--}
--
- int iommu_probe_device(struct device *dev)
- {
- 	const struct iommu_ops *ops;
-@@ -442,7 +435,7 @@ int iommu_probe_device(struct device *dev)
- 	 * attach the default domain.
- 	 */
- 	if (group->default_domain && !group->owner) {
--		ret = iommu_group_do_dma_first_attach(dev, group->default_domain);
-+		ret = __iommu_device_set_domain(group, dev, group->domain, 0);
- 		if (ret) {
- 			mutex_unlock(&group->mutex);
- 			iommu_group_put(group);
--- 
-2.40.1
+On generic_exec_single(), the second parameter is a struct __call_single_da=
+ta,
+while csd_do_func() csd argument is a call_single_data_t.
+
+
+In smp.h we have:
+
+/* Use __aligned() to avoid to use 2 cache lines for 1 csd */
+typedef struct __call_single_data call_single_data_t
+=09__aligned(sizeof(struct __call_single_data));
+
+
+Which makes call_single_data_t 32-byte aligned, while struct __call_single_=
+data
+is 8-byte aligned in 64BIT.
+
+Changing like this should fix the warning:
+-csd_do_func(smp_call_func_t func, void *info, call_single_data_t *csd)
++csd_do_func(smp_call_func_t func, void *info, struct __call_single_data *c=
+sd)
+
+
+I will send this on v4 shortly.
+
+
+>=20
+>=20
+> vim +/csd_do_func +389 kernel/smp.c
+>=20
+>    369=09
+>    370=09/*
+>    371=09 * Insert a previously allocated call_single_data_t element
+>    372=09 * for execution on the given CPU. data must already have
+>    373=09 * ->func, ->info, and ->flags set.
+>    374=09 */
+>    375=09static int generic_exec_single(int cpu, struct __call_single_dat=
+a *csd)
+>    376=09{
+>    377=09=09if (cpu =3D=3D smp_processor_id()) {
+>    378=09=09=09smp_call_func_t func =3D csd->func;
+>    379=09=09=09void *info =3D csd->info;
+>    380=09=09=09unsigned long flags;
+>    381=09
+>    382=09=09=09/*
+>    383=09=09=09 * We can unlock early even for the synchronous on-stack c=
+ase,
+>    384=09=09=09 * since we're doing this from the same CPU..
+>    385=09=09=09 */
+>    386=09=09=09csd_lock_record(csd);
+>    387=09=09=09csd_unlock(csd);
+>    388=09=09=09local_irq_save(flags);
+>  > 389=09=09=09csd_do_func(func, info, csd);
+>    390=09=09=09csd_lock_record(NULL);
+>    391=09=09=09local_irq_restore(flags);
+>    392=09=09=09return 0;
+>    393=09=09}
+>    394=09
+>    395=09=09if ((unsigned)cpu >=3D nr_cpu_ids || !cpu_online(cpu)) {
+>    396=09=09=09csd_unlock(csd);
+>    397=09=09=09return -ENXIO;
+>    398=09=09}
+>    399=09
+>    400=09=09__smp_call_single_queue(cpu, &csd->node.llist);
+>    401=09
+>    402=09=09return 0;
+>    403=09}
+>    404=09
+>=20
 
