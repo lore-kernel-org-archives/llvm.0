@@ -1,76 +1,84 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BF417722
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 22:21:02 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so64211105ad.3
-        for <llvm@lists.linux.dev>; Thu, 11 May 2023 15:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683843662; x=1686435662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wlwojL1oOxSkE9A9E+XKPYHRgPZOzZBvK0faNul9WI=;
-        b=Woh7eW/zLezx+tGcvpmJSrs1YDJCJJCMZAs0advUs5dvcXKQhCet0bdYHjzQ/SQjkG
-         MIWaOCgflPc12/F/qzYLnCLtIDDOQeRiGCUq40AjjV43BNkTyHYjlFZIqFrRDescw19g
-         wuiOK5rRib4rMTT3f73c0+QQGJqRmqPryqZTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683843662; x=1686435662;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+wlwojL1oOxSkE9A9E+XKPYHRgPZOzZBvK0faNul9WI=;
-        b=Hx4jl0ezPzWms6fubuteKbH3udX+5QOLui/8YhFoSy5gPWPlD90E7Y7JbDFQYP3bRv
-         Qi3nvP7/26Me0V0R25KGwwCWqMV1EWz735eOyZkwD+Fbst40hOmcaMEQEqJ5fWpO0c+s
-         Bjl2tRnhAomSXMvenH23vJSMBhJVAJF2XRfq+Si8d1ZRmXupPLkNE7jJryJJb83b/3T3
-         iACARt9DsM4aZL4h6hO/qis2no5iIo4VXo9o4cLHOuCzbWbI9VwCWi8y3LD0kJd12xgO
-         lmJSoxg+d5yWFsO4AzMRAyQUU3w7S+lPdhRUaH60RaEA+S5wWVsQjgsRdJYGR0ocN/0C
-         3R/Q==
-X-Gm-Message-State: AC+VfDwriWsTjZnSi45gUk/Bou+jDJQqlSevM4VttghHh9qaw10AckOP
-	rMLIa4l3pv2Qu6m9ZHK1A1rEkA==
-X-Google-Smtp-Source: ACHHUZ5gx/nQTd7MJcU+6HgrvcbdkMWHr+5/LzInvYhhOp0ogFqj0xEE1dO9byBVj8rTrR2lt8KXKg==
-X-Received: by 2002:a17:902:a609:b0:1ac:946e:4690 with SMTP id u9-20020a170902a60900b001ac946e4690mr11358838plq.49.1683843662240;
-        Thu, 11 May 2023 15:21:02 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id o3-20020a17090ad24300b0024e47fbe731sm16068073pjw.24.2023.05.11.15.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 15:21:01 -0700 (PDT)
-Date: Thu, 11 May 2023 15:21:01 -0700
-From: Kees Cook <keescook@chromium.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [stable:linux-5.15.y 36/9999] arch/s390/kernel/vtime.c:132:2:
- error: expected absolute expression
-Message-ID: <202305111519.04845F7@keescook>
-References: <202305111705.8j4cTm2s-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5F73FDF
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 23:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683846604;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=knG9E+tEN8KcSgKULUj+CvEFL6eY+WnKrkpcSIYBpg0=;
+	b=R4hhngxqfnm9hhMcmetISl7R67NdCbvLzfmtLLgv+UgjO8oSC8akzlaIoWXBWM6muwB9/P
+	E+VphrwTM1KLwXZXe2aO/+upkqbDSsm3kx7F5mBsWspYHk45507h6WQsDGAmGlGApv0lr3
+	NU7KaL+UieupOTeR81rLo4MyrzdHWaU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-279-4Qs3VjfoNICPZy0sP1OACA-1; Thu, 11 May 2023 19:10:03 -0400
+X-MC-Unique: 4Qs3VjfoNICPZy0sP1OACA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BD951C060E6
+	for <llvm@lists.linux.dev>; Thu, 11 May 2023 23:10:03 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 09642492C13;
+	Thu, 11 May 2023 23:10:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, cc3c44c9)
+Date: Thu, 11 May 2023 23:10:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305111705.8j4cTm2s-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <10757.123051119100300255@us-mta-279.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 11, 2023 at 05:14:16PM +0800, kernel test robot wrote:
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-> head:   8a7f2a5c5aa1648edb4f2029c6ec33870afb7a95
-> commit: 33db9912ff7c491f839c89a08e98f755aa09598f [36/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-> [...]
-> >> arch/s390/kernel/vtime.c:132:2: error: cpu alternatives does not support instructions blocks > 254 bytes
->            alternative_io("stpt %0\n .insn s,0xb2050000,%1\n",
->            ^
+Hi, we tested your kernel and here are the results:
 
-Thanks for the report! I don't think the new errors are related to this
-removal, though. This patch was just disabling a potential build config.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
--Kees
 
--- 
-Kees Cook
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2023-05-12' of git://anongit.freed=
+esktop.org/drm/drm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/88619
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34922=
+8
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
