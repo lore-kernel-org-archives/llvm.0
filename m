@@ -1,155 +1,83 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2022B1DDF4
-	for <llvm@lists.linux.dev>; Fri, 12 May 2023 13:15:44 +0000 (UTC)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33539445684so220665335ab.1
-        for <llvm@lists.linux.dev>; Fri, 12 May 2023 06:15:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683897344; x=1686489344;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dG2eApiQtw6EgBiB77e39j8L4/16nv2XSt+vqnLbeIk=;
-        b=V+Hogrs1sCJnvg5KY3UK/EOKFH4G0cNssh5D71ijJ9Cfzu7fgYhff7lT9b28an4uMZ
-         1JXqZs+mDokN8V8zqfQpmuwRetvQkRO5XVS2H72bWhSVGG3i1fk1C6WpB2JU1CePdW8V
-         h1Wlg7fx19rfBOrRTA4H50gi55hgd6ViOq/PJK7tSqVnSA3qtphTCzmNJKhNNs5I1ro1
-         xGNlTwkrF7pXEvyDCuXQQp/FQ56RkK+ioO0p1ffvKaMxNpnLGIaKeuaNO99h7nHulZZw
-         yrb290+uT5FtD9Z2kStZ9Dt1X9oW7idy9fNkrYMa6YgYIW12kho2rjKrHW18Mr/GTKAg
-         tgnA==
-X-Gm-Message-State: AC+VfDxmMW4w1hKC9eZVQ1TzSLmVDpCwMAlbtVljlHpzl0AdBodUqfJB
-	z8Hx4DrC29ikeSlJaqe+7ukA2MALDZRcD0oyJKEwp9oylK/b
-X-Google-Smtp-Source: ACHHUZ6lHUXFAvY3XmXJ5lxtlioqhGUNNrWs+dFObehrOfT4vuBYpMN/DzDPG77CXi7LeNN4wM01Cqu2bMych2sAdQHDkH0TnZ0F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B224DF69;
+	Fri, 12 May 2023 13:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683899090; x=1715435090;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Mz+bm1zyiDFApuqYAtgJoZTUthACqafyjST24ljsRgs=;
+  b=daVIcWbgLiuMRRf0HwJxZ9QtdEZXSGaZroKXhgTHMh/ur5koCs0wvZfB
+   RzNKeKp5WLBEFCXESBH2fonHFEUXkYSAFHjGtEpR/F9spqs9f2xYsnI2x
+   6JiUr7UBHONRFbED32PznVL07fxonihdnjKRi5+DH10s2SFC5CfDybK/g
+   IN2F7DQq4sZjwZFOsUF5pmH0TGQVh/rAFkmFx4U0UgxU3lhBJtiDE2E8i
+   1UF1SANo2jkEjGbAeUf6nBKHfPBfMWO0pGzXw/ZLrdgcFPniZDx3lO1UM
+   Nkn3WYiERQ4wkC23NbGVJs1qrNGse7/VYyTjxEWjgkbdPHFrcQ11oy8dA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="330408886"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="330408886"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 06:44:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694238753"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="694238753"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 May 2023 06:44:48 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pxT4i-0004td-0f;
+	Fri, 12 May 2023 13:44:48 +0000
+Date: Fri, 12 May 2023 21:44:25 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [avpatel:riscv_sbi_nested_v1 43/55] ld.lld: error:
+ vmlinux.a(drivers/regulator/qcom-labibb-regulator.o):(function
+ qcom_labibb_regulator_probe: .text+0x38): relocation R_RISCV_HI20 out of
+ range: 535176 is not in [-524288, 524287]; references '__stack_chk_guard'
+Message-ID: <202305122133.xKcEGC7y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:3546:0:b0:40f:8f07:e28e with SMTP id
- y6-20020a023546000000b0040f8f07e28emr7462886jae.1.1683897344175; Fri, 12 May
- 2023 06:15:44 -0700 (PDT)
-Date: Fri, 12 May 2023 06:15:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000009b58d05fb7ee7ad@google.com>
-Subject: [syzbot] [ext4?] general protection fault in ext4_acquire_dquot
-From: syzbot <syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com>
-To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+TO: Anup Patel <apatel@ventanamicro.com>
 
-syzbot found the following issue on:
+tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
+head:   c1ff19a17b95d49653eed009b10259ad6a70bae4
+commit: 534c5e0de96b344fefe9778e5ee63f74649ea624 [43/55] RISC-V: Add defines for SBI debug console extension
+config: riscv-buildonly-randconfig-r006-20230509 (https://download.01.org/0day-ci/archive/20230512/202305122133.xKcEGC7y-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/534c5e0de96b344fefe9778e5ee63f74649ea624
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_nested_v1
+        git checkout 534c5e0de96b344fefe9778e5ee63f74649ea624
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13c79eca280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
-dashboard link: https://syzkaller.appspot.com/bug?extid=e633c79ceaecbf479854
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130464fa280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13134234280000
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305122133.xKcEGC7y-lkp@intel.com/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/aa1d3602f38e/mount_0.gz
+All errors (new ones prefixed by >>):
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
+>> ld.lld: error: vmlinux.a(drivers/regulator/qcom-labibb-regulator.o):(function qcom_labibb_regulator_probe: .text+0x38): relocation R_RISCV_HI20 out of range: 535176 is not in [-524288, 524287]; references '__stack_chk_guard'
+   >>> referenced by qcom-labibb-regulator.c:762 (drivers/regulator/qcom-labibb-regulator.c:762)
+   >>> defined in vmlinux.a(arch/riscv/kernel/process.o)
 
-Unable to handle kernel paging request at virtual address dfff800000000005
-KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-[dfff800000000005] address between user and kernel address ranges
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 6080 Comm: syz-executor747 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
-lr : dquot_to_inode fs/ext4/super.c:6740 [inline]
-lr : ext4_acquire_dquot+0x1ac/0x398 fs/ext4/super.c:6766
-sp : ffff80001eb27280
-x29: ffff80001eb27280 x28: 1fffe0001c3c01fc x27: ffff800015d705b0
-x26: ffff0000dd93c000 x25: ffff0000dd93e000 x24: 1fffe0001c3c021c
-x23: dfff800000000000 x22: 0000000000000049 x21: 0000000000000028
-x20: 0000000000000000 x19: ffff0000e1e00fc0 x18: ffff0001b426cca8
-x17: 0000000000000000 x16: ffff8000089669b0 x15: 0000000000000001
-x14: 1ffff00002bae0b0 x13: dfff800000000000 x12: 0000000000000001
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : 0000000000000005 x7 : ffff800008c11f68 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff800012441b4c
-x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000003
-Call trace:
- ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
- dqget+0x844/0xc48 fs/quota/dquot.c:914
- __dquot_initialize+0x2cc/0xb54 fs/quota/dquot.c:1492
- dquot_initialize fs/quota/dquot.c:1550 [inline]
- dquot_file_open+0x90/0xc8 fs/quota/dquot.c:2181
- ext4_file_open+0x230/0x590 fs/ext4/file.c:903
- do_dentry_open+0x724/0xf90 fs/open.c:920
- vfs_open+0x7c/0x90 fs/open.c:1051
- do_open fs/namei.c:3560 [inline]
- path_openat+0x1f2c/0x27f8 fs/namei.c:3715
- do_filp_open+0x1bc/0x3cc fs/namei.c:3742
- do_sys_openat2+0x128/0x3d8 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 97e8a7df f94002a8 9100a115 d343fea8 (38776908) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	97e8a7df 	bl	0xffffffffffa29f7c
-   4:	f94002a8 	ldr	x8, [x21]
-   8:	9100a115 	add	x21, x8, #0x28
-   c:	d343fea8 	lsr	x8, x21, #3
-* 10:	38776908 	ldrb	w8, [x8, x23] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
