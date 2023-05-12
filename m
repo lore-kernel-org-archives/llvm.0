@@ -1,84 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5F73FDF
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 23:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683846604;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=knG9E+tEN8KcSgKULUj+CvEFL6eY+WnKrkpcSIYBpg0=;
-	b=R4hhngxqfnm9hhMcmetISl7R67NdCbvLzfmtLLgv+UgjO8oSC8akzlaIoWXBWM6muwB9/P
-	E+VphrwTM1KLwXZXe2aO/+upkqbDSsm3kx7F5mBsWspYHk45507h6WQsDGAmGlGApv0lr3
-	NU7KaL+UieupOTeR81rLo4MyrzdHWaU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-4Qs3VjfoNICPZy0sP1OACA-1; Thu, 11 May 2023 19:10:03 -0400
-X-MC-Unique: 4Qs3VjfoNICPZy0sP1OACA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BD951C060E6
-	for <llvm@lists.linux.dev>; Thu, 11 May 2023 23:10:03 +0000 (UTC)
-Received: from [172.64.2.74] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 09642492C13;
-	Thu, 11 May 2023 23:10:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
- mainline.kernel.org-clang, cc3c44c9)
-Date: Thu, 11 May 2023 23:10:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC7F39D;
+	Fri, 12 May 2023 01:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683853354; x=1715389354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dCRxN8GRlqazVUhRpYDi45qn973c860pPkgbS7cXHpY=;
+  b=DfjZ6wvvIyyVdxsGGFehKpLcIF2wBWq7/wqnx+F5Y+1/4e4wMPuaU9D2
+   aFCNItNST2r9BpPXEnjtLs1qHe7rwt6ybNGvqSK2yI8C7LcJisIDSMgKr
+   MmjiR51hJyN+Oo+7F9Whm2xPN9GJdg1wWxMtdVP3GY4fudH5TrmRPIudf
+   nZ3Unm3oOA8+WyhHP/ZWJ0MW6lihobD1W1Ese1N1apsB3LS0lb0JQS1dF
+   nf/YKrItqC4bguy8cIkJoEl1VbV/sD8cVHZ6MhlrXMKkkWIHhXasB9Clw
+   PwEyGVuOGNBBKhjSvOMNUW6k5yCqleuHOdQZJ4I2Z0+hWwRR4BxZe3ws7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335181909"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="335181909"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 18:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730613312"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="730613312"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 18:02:32 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pxHB1-0004MJ-11;
+	Fri, 12 May 2023 01:02:31 +0000
+Date: Fri, 12 May 2023 09:01:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Raul E Rangel <rrangel@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] Input: libps2 - introduce common interrupt handler
+Message-ID: <202305120818.unCn8fQ9-lkp@intel.com>
+References: <20230511185252.386941-7-dmitry.torokhov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <10757.123051119100300255@us-mta-279.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511185252.386941-7-dmitry.torokhov@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Dmitry,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on dtor-input/next]
+[also build test ERROR on dtor-input/for-linus hid/for-next linus/master v6.4-rc1 next-20230511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Torokhov/Input-libps2-attach-ps2dev-instances-as-serio-port-s-drvdata/20230512-025431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20230511185252.386941-7-dmitry.torokhov%40gmail.com
+patch subject: [PATCH 6/7] Input: libps2 - introduce common interrupt handler
+config: mips-randconfig-r031-20230510 (https://download.01.org/0day-ci/archive/20230512/202305120818.unCn8fQ9-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/1f2ba3a941e6f6a3ad745fa780825ac56570616e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Torokhov/Input-libps2-attach-ps2dev-instances-as-serio-port-s-drvdata/20230512-025431
+        git checkout 1f2ba3a941e6f6a3ad745fa780825ac56570616e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/input/keyboard/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305120818.unCn8fQ9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/input/keyboard/atkbd.c:424:3: error: must use 'struct' tag to refer to type 'atkbd'
+                   atkbd->resend = false;
+                   ^
+                   struct 
+>> drivers/input/keyboard/atkbd.c:424:3: error: expected expression
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-05-12' of git://anongit.freed=
-esktop.org/drm/drm
+vim +424 drivers/input/keyboard/atkbd.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/88619
+^1da177e4c3f41 Linus Torvalds  2005-04-16  400  
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  401  static enum ps2_disposition atkbd_pre_receive_byte(struct ps2dev *ps2dev,
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  402  						   u8 data, unsigned int flags)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  403  {
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  404  	struct serio *serio = ps2dev->serio;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  405  
+a9a1f9c315c27f Dmitry Torokhov 2010-01-06  406  	dev_dbg(&serio->dev, "Received %02x flags %02x\n", data, flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  407  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  408  #if !defined(__i386__) && !defined (__x86_64__)
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  409  	if ((flags & (SERIO_FRAME | SERIO_PARITY)) &&
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  410  	    (~flags & SERIO_TIMEOUT)) {
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  411  		struct atkbd *atkbd = container_of(ps2dev, struct atkbd,
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  412  						   ps2dev);
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  413  
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  414  		if (!atkbd->resend && atkbd->write) {
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  415  			dev_warn(&serio->dev,
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  416  				 "Frame/parity error: %02x\n", flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  417  			serio_write(serio, ATKBD_CMD_RESEND);
+a9a1f9c315c27f Dmitry Torokhov 2010-01-06  418  			atkbd->resend = true;
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  419  			return PS2_IGNORE;
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  420  		}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  421  	}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  422  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  423  	if (!flags && data == ATKBD_RET_ACK)
+a9a1f9c315c27f Dmitry Torokhov 2010-01-06 @424  		atkbd->resend = false;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  425  #endif
+^1da177e4c3f41 Linus Torvalds  2005-04-16  426  
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  427  	return PS2_PROCESS;
+1f2ba3a941e6f6 Dmitry Torokhov 2023-05-11  428  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  429  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34922=
-8
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
