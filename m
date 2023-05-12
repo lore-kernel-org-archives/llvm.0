@@ -1,43 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB255111B;
-	Fri, 12 May 2023 06:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4807D63D8;
+	Fri, 12 May 2023 07:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683871302; x=1715407302;
+  t=1683877788; x=1715413788;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=glQlXms576iIP6UyEOdZkwJwZrnSZBq9CppJqV3NqVc=;
-  b=gz2kAmScB6fkcJYWSQo55RiXhfhRmQRCGSkBF3Rt68+qJLtaFi48aD7n
-   mipeI3XeS58X98YqKdo5U/nM3LSlr+7I68sCMt1rnmAbJIXpOuVDLgTHU
-   tkhqNWV7Njksy4ZPvcRSbpwID9KLQozlwlec2M1gQVT9AcJAeV17q8Eu7
-   avaX+7ZDWYxEQskUndBLHnmlLq1zHcME4zFfsVb/ywgnZGFFmwGgV+1y9
-   IOEfOY3AdsYq+jOO7qb2BiwhkHDuWGqDPtWM11yX1pKaTjFG2olbsnjMx
-   hwcgja4Xm3ZbzKAhGTjQapxCvpAqsA/Dz1/USGG5zeur/Q0l8wDN/GIaX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353840819"
+  bh=vSWai5yvn4XBtWqajWXxkcAPVAYheX1l74DihYv3xFw=;
+  b=hrCUB8RVNxbVQTvYNnfjq8ylEB2iDFxTjyfDeVNv4kJNBulnKbqR2dr2
+   kDlsAdIBVjQovlm7B+ybo2a/DNo9UqOArvVsXncIsn7aPNDo9gr5SiBpL
+   CG+g0Jo+5BokjtKnEYdkOU911sr56dhRhkBGcC+LuI61PWNXtH2y0b1/x
+   AmPkj+nQRaZ/lEnXnn3eOv/HMgHbcBcrPOG7Jd1GnX3RuA8yR/VbWsg2C
+   vFCWo5kuqekbJnTCKhzajEooabpLOIeoa/q3P73ycBkP0VA/d0gVDDVhv
+   tOIAUcvzu6qB5exQAaB1Wlz7gDCrwE4L2rRfQeQhnTzxOtwDjRLHbkRSg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378865299"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353840819"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 23:01:41 -0700
+   d="scan'208";a="378865299"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 00:49:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730682994"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="811970352"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="730682994"
+   d="scan'208";a="811970352"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 23:01:38 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 00:49:41 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pxLqU-0004a0-00;
-	Fri, 12 May 2023 06:01:38 +0000
-Date: Fri, 12 May 2023 14:00:44 +0800
+	id 1pxNX2-0004em-3D;
+	Fri, 12 May 2023 07:49:40 +0000
+Date: Fri, 12 May 2023 15:49:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
+To: Tejas Upadhyay <tejas.upadhyay@intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/6] fs: unify locking semantics for fs freeze / thaw
-Message-ID: <202305121355.m1tpxu0F-lkp@intel.com>
-References: <20230508011717.4034511-2-mcgrof@kernel.org>
+Subject: Re: [Intel-gfx] [PATCH] drm/i915/gt: Add workaround 14016712196
+Message-ID: <202305121525.3EWdGoBY-lkp@intel.com>
+References: <20230512052744.778113-1-tejas.upadhyay@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,219 +47,186 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508011717.4034511-2-mcgrof@kernel.org>
+In-Reply-To: <20230512052744.778113-1-tejas.upadhyay@intel.com>
 
-Hi Luis,
+Hi Tejas,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on gfs2/for-next]
-[also build test ERROR on axboe-block/for-next jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev linus/master v6.4-rc1 next-20230512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on drm-tip/drm-tip]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Chamberlain/fs-unify-locking-semantics-for-fs-freeze-thaw/20230508-092008
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
-patch link:    https://lore.kernel.org/r/20230508011717.4034511-2-mcgrof%40kernel.org
-patch subject: [PATCH 1/6] fs: unify locking semantics for fs freeze / thaw
-config: hexagon-randconfig-r045-20230511 (https://download.01.org/0day-ci/archive/20230512/202305121355.m1tpxu0F-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tejas-Upadhyay/drm-i915-gt-Add-workaround-14016712196/20230512-132314
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230512052744.778113-1-tejas.upadhyay%40intel.com
+patch subject: [Intel-gfx] [PATCH] drm/i915/gt: Add workaround 14016712196
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230512/202305121525.3EWdGoBY-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f277836573b983c2aa96f25337a36a13e56382f5
+        # https://github.com/intel-lab-lkp/linux/commit/429038a73fb0b1cbcfa5b41e17d70e48d835d347
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Luis-Chamberlain/fs-unify-locking-semantics-for-fs-freeze-thaw/20230508-092008
-        git checkout f277836573b983c2aa96f25337a36a13e56382f5
+        git fetch --no-tags linux-review Tejas-Upadhyay/drm-i915-gt-Add-workaround-14016712196/20230512-132314
+        git checkout 429038a73fb0b1cbcfa5b41e17d70e48d835d347
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121355.m1tpxu0F-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121525.3EWdGoBY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/gfs2/sys.c:13:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/gfs2/sys.c:13:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/gfs2/sys.c:13:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/gfs2/sys.c:167:24: error: use of undeclared identifier 'sb'
-           if (!get_active_super(sb->s_bdev))
-                                 ^
->> fs/gfs2/sys.c:167:24: error: use of undeclared identifier 'sb'
->> fs/gfs2/sys.c:167:24: error: use of undeclared identifier 'sb'
-   fs/gfs2/sys.c:178:27: error: use of undeclared identifier 'sb'
-                   deactivate_locked_super(sb);
-                                           ^
-   fs/gfs2/sys.c:182:26: error: use of undeclared identifier 'sb'
-           deactivate_locked_super(sb);
-                                   ^
-   6 warnings and 5 errors generated.
---
-   In file included from fs/gfs2/util.c:11:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/gfs2/util.c:11:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/gfs2/util.c:11:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/gfs2/util.c:348:25: error: use of undeclared identifier 'sb'
-                   if (!get_active_super(sb->s_bdev)) {
-                                         ^
->> fs/gfs2/util.c:348:25: error: use of undeclared identifier 'sb'
->> fs/gfs2/util.c:348:25: error: use of undeclared identifier 'sb'
-   fs/gfs2/util.c:356:27: error: use of undeclared identifier 'sb'
-                   deactivate_locked_super(sb);
-                                           ^
-   6 warnings and 4 errors generated.
+>> drivers/gpu/drm/i915/gt/gen8_engine_cs.c:180:5: warning: no previous prototype for function 'mtl_dummy_pipe_control' [-Wmissing-prototypes]
+   int mtl_dummy_pipe_control(struct i915_request *rq, u32 *cs)
+       ^
+   drivers/gpu/drm/i915/gt/gen8_engine_cs.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mtl_dummy_pipe_control(struct i915_request *rq, u32 *cs)
+   ^
+   static 
+>> drivers/gpu/drm/i915/gt/gen8_engine_cs.c:248:36: warning: variable 'cs' is uninitialized when used here [-Wuninitialized]
+                   err = mtl_dummy_pipe_control(rq, cs);
+                                                    ^~
+   drivers/gpu/drm/i915/gt/gen8_engine_cs.c:245:10: note: initialize the variable 'cs' to silence this warning
+                   u32 *cs, count;
+                          ^
+                           = NULL
+   drivers/gpu/drm/i915/gt/gen8_engine_cs.c:210:36: warning: variable 'cs' is uninitialized when used here [-Wuninitialized]
+                   err = mtl_dummy_pipe_control(rq, cs);
+                                                    ^~
+   drivers/gpu/drm/i915/gt/gen8_engine_cs.c:207:10: note: initialize the variable 'cs' to silence this warning
+                   u32 *cs;
+                          ^
+                           = NULL
+   3 warnings generated.
 
 
-vim +/sb +167 fs/gfs2/sys.c
+vim +/mtl_dummy_pipe_control +180 drivers/gpu/drm/i915/gt/gen8_engine_cs.c
 
-   155	
-   156	static ssize_t freeze_store(struct gfs2_sbd *sdp, const char *buf, size_t len)
-   157	{
-   158		int error, n;
-   159	
-   160		error = kstrtoint(buf, 0, &n);
-   161		if (error)
-   162			return error;
-   163	
-   164		if (!capable(CAP_SYS_ADMIN))
-   165			return -EPERM;
-   166	
- > 167		if (!get_active_super(sb->s_bdev))
-   168			return -ENOTTY;
-   169	
-   170		switch (n) {
-   171		case 0:
-   172			error = thaw_super(sdp->sd_vfs);
-   173			break;
-   174		case 1:
-   175			error = freeze_super(sdp->sd_vfs);
-   176			break;
-   177		default:
-   178			deactivate_locked_super(sb);
-   179			return -EINVAL;
-   180		}
-   181	
-   182		deactivate_locked_super(sb);
+   179	
+ > 180	int mtl_dummy_pipe_control(struct i915_request *rq, u32 *cs)
+   181	{
+   182		struct intel_engine_cs *engine = rq->engine;
    183	
-   184		if (error) {
-   185			fs_warn(sdp, "freeze %d error %d\n", n, error);
-   186			return error;
-   187		}
-   188	
-   189		return len;
-   190	}
-   191	
+   184		if (IS_MTL_GRAPHICS_STEP(engine->i915, M, STEP_A0, STEP_B0) ||
+   185		    IS_MTL_GRAPHICS_STEP(engine->i915, P, STEP_A0, STEP_B0)) {
+   186			/* dummy PIPE_CONTROL + depth flush */
+   187			cs = intel_ring_begin(rq, 6);
+   188			if (IS_ERR(cs))
+   189				return PTR_ERR(cs);
+   190			cs = gen12_emit_pipe_control(cs,
+   191						     0,
+   192						     PIPE_CONTROL_DEPTH_CACHE_FLUSH,
+   193						     LRC_PPHWSP_SCRATCH_ADDR);
+   194			intel_ring_advance(rq, cs);
+   195		}
+   196	
+   197		return 0;
+   198	}
+   199	
+   200	int gen12_emit_flush_rcs(struct i915_request *rq, u32 mode)
+   201	{
+   202		struct intel_engine_cs *engine = rq->engine;
+   203		int err;
+   204	
+   205		if (mode & EMIT_FLUSH) {
+   206			u32 flags = 0;
+   207			u32 *cs;
+   208	
+   209			/* Wa_14016712196 */
+   210			err = mtl_dummy_pipe_control(rq, cs);
+   211			if (err)
+   212				return err;
+   213	
+   214			flags |= PIPE_CONTROL_TILE_CACHE_FLUSH;
+   215			flags |= PIPE_CONTROL_FLUSH_L3;
+   216			flags |= PIPE_CONTROL_RENDER_TARGET_CACHE_FLUSH;
+   217			flags |= PIPE_CONTROL_DEPTH_CACHE_FLUSH;
+   218			/* Wa_1409600907:tgl,adl-p */
+   219			flags |= PIPE_CONTROL_DEPTH_STALL;
+   220			flags |= PIPE_CONTROL_DC_FLUSH_ENABLE;
+   221			flags |= PIPE_CONTROL_FLUSH_ENABLE;
+   222	
+   223			flags |= PIPE_CONTROL_STORE_DATA_INDEX;
+   224			flags |= PIPE_CONTROL_QW_WRITE;
+   225	
+   226			flags |= PIPE_CONTROL_CS_STALL;
+   227	
+   228			if (!HAS_3D_PIPELINE(engine->i915))
+   229				flags &= ~PIPE_CONTROL_3D_ARCH_FLAGS;
+   230			else if (engine->class == COMPUTE_CLASS)
+   231				flags &= ~PIPE_CONTROL_3D_ENGINE_FLAGS;
+   232	
+   233			cs = intel_ring_begin(rq, 6);
+   234			if (IS_ERR(cs))
+   235				return PTR_ERR(cs);
+   236	
+   237			cs = gen12_emit_pipe_control(cs,
+   238						     PIPE_CONTROL0_HDC_PIPELINE_FLUSH,
+   239						     flags, LRC_PPHWSP_SCRATCH_ADDR);
+   240			intel_ring_advance(rq, cs);
+   241		}
+   242	
+   243		if (mode & EMIT_INVALIDATE) {
+   244			u32 flags = 0;
+   245			u32 *cs, count;
+   246	
+   247			/* Wa_14016712196 */
+ > 248			err = mtl_dummy_pipe_control(rq, cs);
+   249			if (err)
+   250				return err;
+   251	
+   252			flags |= PIPE_CONTROL_COMMAND_CACHE_INVALIDATE;
+   253			flags |= PIPE_CONTROL_TLB_INVALIDATE;
+   254			flags |= PIPE_CONTROL_INSTRUCTION_CACHE_INVALIDATE;
+   255			flags |= PIPE_CONTROL_TEXTURE_CACHE_INVALIDATE;
+   256			flags |= PIPE_CONTROL_VF_CACHE_INVALIDATE;
+   257			flags |= PIPE_CONTROL_CONST_CACHE_INVALIDATE;
+   258			flags |= PIPE_CONTROL_STATE_CACHE_INVALIDATE;
+   259	
+   260			flags |= PIPE_CONTROL_STORE_DATA_INDEX;
+   261			flags |= PIPE_CONTROL_QW_WRITE;
+   262	
+   263			flags |= PIPE_CONTROL_CS_STALL;
+   264	
+   265			if (!HAS_3D_PIPELINE(engine->i915))
+   266				flags &= ~PIPE_CONTROL_3D_ARCH_FLAGS;
+   267			else if (engine->class == COMPUTE_CLASS)
+   268				flags &= ~PIPE_CONTROL_3D_ENGINE_FLAGS;
+   269	
+   270			if (!HAS_FLAT_CCS(rq->engine->i915))
+   271				count = 8 + 4;
+   272			else
+   273				count = 8;
+   274	
+   275			cs = intel_ring_begin(rq, count);
+   276			if (IS_ERR(cs))
+   277				return PTR_ERR(cs);
+   278	
+   279			/*
+   280			 * Prevent the pre-parser from skipping past the TLB
+   281			 * invalidate and loading a stale page for the batch
+   282			 * buffer / request payload.
+   283			 */
+   284			*cs++ = preparser_disable(true);
+   285	
+   286			cs = gen8_emit_pipe_control(cs, flags, LRC_PPHWSP_SCRATCH_ADDR);
+   287	
+   288			if (!HAS_FLAT_CCS(rq->engine->i915)) {
+   289				/* hsdes: 1809175790 */
+   290				cs = gen12_emit_aux_table_inv(rq->engine->gt,
+   291							      cs, GEN12_GFX_CCS_AUX_NV);
+   292			}
+   293	
+   294			*cs++ = preparser_disable(false);
+   295			intel_ring_advance(rq, cs);
+   296		}
+   297	
+   298		return 0;
+   299	}
+   300	
 
 -- 
 0-DAY CI Kernel Test Service
