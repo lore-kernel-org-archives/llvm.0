@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125067F0;
-	Fri, 12 May 2023 02:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A08D7E9;
+	Fri, 12 May 2023 02:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683857676; x=1715393676;
+  t=1683859178; x=1715395178;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bTQMMuFBTiobMOFbnH8rp4MLKb+ziovLomHSpeBYDPI=;
-  b=ZcH2hwXyCCaasNZXG+YWoqXUH/tA7V1kXvuni1lbR+bukx/igI4gdcMw
-   K0QESEPVRXDfE06nH2tNApoVBSEkH7AConuBUfYR6a2G0JFZ1Bo9rtuO9
-   Kyz/xkXChNhOWo4PPKckHDlcNmcCdVCnKyOaZQDXGPNQrB8yoxioFcoIZ
-   d2rPdEZ6PqwIis4lgx6SJWYjPEjyzNPqRmViHlTfD2GgdWirVvg1Jz19I
-   IaJ3zitkoNE0db/9uttlw+DL/6c5vevrk7OwQBTxkjTzBMYB67qB1DZ+Z
-   4nERYDUoBEoxJjFyv7Wne60rWFG2FUkiDcFgbUbTTWH9l/puZWzojh9+A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="414045723"
+  bh=FrBRixNXTC6YblQw555jNmJTWEO78/6oICcr6TjjiJg=;
+  b=RvUqh3B9xKGJEIHvF4vUYHr2ISDJKU8aS+KVtw7q7cen8b9STBM9DIFh
+   Caap3ol7ad9+U/yP4yxncBAt0l3FPQuAHdQixMXbH2YHbQUeVBLBq8Ebf
+   bIF3Jq01RhI/5R7YW7b7yM1nS8Ya+6psXamzlbwjZdJ+k4EY8hi94lrd8
+   mlhTgjPWl77gRJof9Z8yxFSpu867xZA/fGH2D9COa6jiRp653M0WfVi1P
+   h/ikaZS8Q2JhRybsqLFQO+l9zCkYTy3r2TxPxbVMXgraLaqFCyYzPCqZQ
+   bkOJcLKEY36uqRTYvdM85pX5qzY7K+uR0Q7fQG3FQvlG/1iOPSuiOseji
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="331051478"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="414045723"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 19:14:35 -0700
+   d="scan'208";a="331051478"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 19:39:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="699989666"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824201788"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="699989666"
+   d="scan'208";a="824201788"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 11 May 2023 19:14:34 -0700
+  by orsmga004.jf.intel.com with ESMTP; 11 May 2023 19:39:34 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pxIIj-0004QA-0v;
-	Fri, 12 May 2023 02:14:33 +0000
-Date: Fri, 12 May 2023 10:13:41 +0800
+	id 1pxIgv-0004RO-2i;
+	Fri, 12 May 2023 02:39:33 +0000
+Date: Fri, 12 May 2023 10:38:48 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dave Jiang <dave.jiang@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl-qtg 7/30] include/linux/acpi.h:1535:49: warning:
+Subject: [djiang:cxl-qtg 7/30] include/linux/acpi.h:1535:49: error:
  declaration of 'struct acpi_subtable_proc' will not be visible outside of
  this function
-Message-ID: <202305121046.hGFw5dYW-lkp@intel.com>
+Message-ID: <202305121056.ixgdRdsG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,103 +50,51 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-qtg
 head:   fd35584ec7147f575dcdc65239bc8ac7fe340ab4
 commit: 216b67abb7e235c9a13ddf78f428cccf11a089f4 [7/30] acpi: move common tables helper functions to common lib
-config: s390-randconfig-r015-20230509 (https://download.01.org/0day-ci/archive/20230512/202305121046.hGFw5dYW-lkp@intel.com/config)
+config: powerpc-buildonly-randconfig-r003-20230509 (https://download.01.org/0day-ci/archive/20230512/202305121056.ixgdRdsG-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
         # https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/commit/?id=216b67abb7e235c9a13ddf78f428cccf11a089f4
         git remote add djiang https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git
         git fetch --no-tags djiang cxl-qtg
         git checkout 216b67abb7e235c9a13ddf78f428cccf11a089f4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/ drivers/hid/i2c-hid/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121046.hGFw5dYW-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121056.ixgdRdsG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/i2c/i2c-boardinfo.c:7:
+   In file included from arch/powerpc/kernel/traps.c:32:
+   In file included from include/linux/backlight.h:13:
+   In file included from include/linux/fb.h:7:
+   In file included from include/uapi/linux/fb.h:6:
+   In file included from include/linux/i2c.h:13:
+>> include/linux/acpi.h:1535:49: error: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Werror,-Wvisibility]
+           struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
+                                                          ^
+   arch/powerpc/kernel/traps.c:1440:5: error: no previous prototype for function 'is_valid_bugaddr' [-Werror,-Wmissing-prototypes]
+   int is_valid_bugaddr(unsigned long addr)
+       ^
+   arch/powerpc/kernel/traps.c:1440:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int is_valid_bugaddr(unsigned long addr)
+   ^
+   static 
+   2 errors generated.
+--
+   In file included from drivers/hid/i2c-hid/i2c-hid-core.c:22:
    In file included from include/linux/i2c.h:13:
 >> include/linux/acpi.h:1535:49: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
            struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
                                                           ^
    1 warning generated.
---
-   In file included from drivers/i2c/i2c-core-base.c:16:
->> include/linux/acpi.h:1535:49: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
-           struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
-                                                          ^
-   In file included from drivers/i2c/i2c-core-base.c:35:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/i2c/i2c-core-base.c:35:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/i2c/i2c-core-base.c:35:
-   In file included from include/linux/of_irq.h:7:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   13 warnings generated.
 
 
 vim +1535 include/linux/acpi.h
