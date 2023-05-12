@@ -1,67 +1,84 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7231E53E
-	for <llvm@lists.linux.dev>; Fri, 12 May 2023 14:07:20 +0000 (UTC)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-331663d8509so147780105ab.0
-        for <llvm@lists.linux.dev>; Fri, 12 May 2023 07:07:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683900439; x=1686492439;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMsA1OvUqk2tsx55m7tIfaPeJf529B0QdbQS7E31h+k=;
-        b=FJN3WFfBZcsXbF4UOWPvpNk8XIlQxeR+ToiO+zM6vSnMPKSVxRkBAWOaiUGX4V+3AR
-         3uv0kpAuldTyfDDsFiz15pVtNrYjJVcAcgOh6msQRRrkel2lmbAsAPPVoHrNL0oh19+F
-         aItGU2DyFP7bD1NYXBJ7Ph93Jyof3XSo58L2Ia1sWOEe6NyMyN9DJ/RtnzLc4xuX2Nxh
-         +f5tuGdQEz8UHP80gRCFzvAq89ASeq7S8ZGh40v8bXl6aBb0vJcra5oOZDf8ujpT3FGg
-         inIBskysR3rFROiwbp7HeofecCsOtG3euRcfQx/bQnZ6yBGvoqVzz3joWtxCh1oqC8nw
-         X5jQ==
-X-Gm-Message-State: AC+VfDwcl/f2cf0txBgBp3v4iwJ8Yzq1ELUEJUX3/KWVABp8TCTrF6te
-	B3ZQudhgUS6ZDDUBJzrTfqLwlG9/TCx+pyuk69Wqo4msGxS+
-X-Google-Smtp-Source: ACHHUZ78MXlEJPSlarcif/f+n4E+wXrSeNZwdz4IonDEPpF9krYy99Fg2BkvtT1Pz45rvxB1dwiGb1hHl8Vm/hIK24b49hIDwO07
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134DF1DDDC
+	for <llvm@lists.linux.dev>; Fri, 12 May 2023 14:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683900608;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7i1Ihps4CfsyJfiZEBECyB4+vpk+DipQbe3xBsRFyKA=;
+	b=BnFYwMFmxx7aRoBgUmOvp9wISKfKIQ77INeA5hqKvnLAzywKdpPtMUNtEQ1IBobGa/IazB
+	pxG1l6rXPA150S7+s1VhAHPN/QKh4RuPGtPZgFsjVmmxRx2m6OrkAdzV7O95MrGY4/iKDh
+	bjkDY7dMVchsycj4KqjozuHfSCGatEQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-gWN8DTCNNyyD35HkWZ7Rnw-1; Fri, 12 May 2023 10:10:06 -0400
+X-MC-Unique: gWN8DTCNNyyD35HkWZ7Rnw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 792722A5955E
+	for <llvm@lists.linux.dev>; Fri, 12 May 2023 14:10:06 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6748A2027179;
+	Fri, 12 May 2023 14:10:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, 47a2ee5d)
+Date: Fri, 12 May 2023 14:10:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:860e:0:b0:40f:7382:e4aa with SMTP id
- e14-20020a02860e000000b0040f7382e4aamr6776856jai.2.1683900439423; Fri, 12 May
- 2023 07:07:19 -0700 (PDT)
-Date: Fri, 12 May 2023 07:07:19 -0700
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000877b2c05fb7f9fd4@google.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From: syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, 
-	clang-built-linux@googlegroups.com, dvyukov@google.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <73148.123051210100603204@us-mta-635.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has bisected this issue to:
+Hi, we tested your kernel and here are the results:
 
-commit 6e5be40d32fb1907285277c02e74493ed43d77fe
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Fri Aug 13 14:21:30 2021 +0000
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-    fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1587a32a280000
-start commit:   8ed710da2873 Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1787a32a280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1387a32a280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b83f3e90d74765ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e7ec29880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11829e23880000
+Kernel information:
+    Commit message: Merge tag 'firewire-fixes-6.4-rc2' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/ieee1394/linux1394
 
-Reported-by: syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com
-Fixes: 6e5be40d32fb ("fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile")
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/88672
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34940=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
