@@ -1,42 +1,54 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4361A32;
-	Fri, 12 May 2023 03:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A2DA3F;
+	Fri, 12 May 2023 03:52:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683863557; x=1715399557;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=89dNGZOLGkIN3PtYPrHUazerKGVbbcltTjysT58ZfCs=;
-  b=SwZR/rNDvW9lXRL0qGm1VQCCafQFzehlnisyC85LFRVH7kH0J0mSlF2O
-   4qKVhvpjFkUw6M3finIGQBGj89OvBzL1xtW+YKe7b+u5wJpfZGwewLU18
-   JgDcdPKXZznJkt9Cyhj2Jf2ImQlazSsjDH7VGlH48lLMdFVr3P6zj95Tf
-   fPMHjrL1WVEB8PxWE/QtyvwWzdy7pVAs/dmTIii+WsBH6J91FOXpSRDE8
-   H3A2OtkigrJktK9ihOaKFUKujvKWUiLVsjBHKSMWfO1iqsjVgvhz9kizI
-   yR+Lt9BtIMwpgKV9WarbPCa8Stk3FzEJ8fzgyb9lKSBw3n3sVU/LC9UbG
+  t=1683863559; x=1715399559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/jdt5J/MbXbSHrSga9SWJu2XrGCkbNisrV5j1w7pfo=;
+  b=IaeueHj/Sv1cXvlpzo8TCkSyQq0RQnJ1I/1XheyuRgORQ1qkK0zR8hcn
+   q2kOoNh+7nmbO++SuKY0maAxZ58hnOkzKGtVZyuXgF32xtegi7XHntDB5
+   x4hEK0HYqEsHbzUIt4JtpXI8edFYRY8TAGtknvo1aFXfoGxIVZbBFjDmS
+   CQF3cxIKEp8Dq8XFPFoGF7C4kjXYKQCRNp8bsy3V6neRO0shJ1Q1rlRs2
+   fvdOCZjvdhPNb+h1k44czo4tSUYLBxuTTqhwwJdWtkJbU/Ut3YXhsukqN
+   mWQQy7GwmxSsrKgo6qpsBkdhrjiPeRrc+UaMf/GkU0Vb3RugzQn4C+W+1
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="437027723"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="348190518"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="437027723"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:52:36 -0700
+   d="scan'208";a="348190518"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:52:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="769629438"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="1029898974"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="769629438"
+   d="scan'208";a="1029898974"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2023 20:52:35 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 11 May 2023 20:52:35 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pxJpa-0004TD-2C;
+	id 1pxJpa-0004T6-20;
 	Fri, 12 May 2023 03:52:34 +0000
-Date: Fri, 12 May 2023 11:52:19 +0800
+Date: Fri, 12 May 2023 11:52:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl-qtg 8/30] include/linux/poll.h:140:27: warning: division
- by zero is undefined
-Message-ID: <202305121131.xoUncOQW-lkp@intel.com>
+To: Peter Xu <peterx@redhat.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
+	Andrew Lutomirski <luto@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-fsdevel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+	syzbot+48011b86c8ea329af1b9@syzkaller.appspotmail.com,
+	Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/3] mm: handle_mm_fault_one()
+Message-ID: <202305121127.9uKHOw3S-lkp@intel.com>
+References: <ZF2E6i4pqJr7m436@x1n>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,128 +57,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZF2E6i4pqJr7m436@x1n>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-qtg
-head:   fd35584ec7147f575dcdc65239bc8ac7fe340ab4
-commit: 7d709841b48071e203642a18aef6b5e7ff850fe4 [8/30] acpi: tables: Add CDAT table parsing support
-config: mips-cu1000-neo_defconfig (https://download.01.org/0day-ci/archive/20230512/202305121131.xoUncOQW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+Hi Peter,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-handle_mm_fault_one/20230512-081554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/ZF2E6i4pqJr7m436%40x1n
+patch subject: [PATCH 1/3] mm: handle_mm_fault_one()
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230512/202305121127.9uKHOw3S-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/commit/?id=7d709841b48071e203642a18aef6b5e7ff850fe4
-        git remote add djiang https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git
-        git fetch --no-tags djiang cxl-qtg
-        git checkout 7d709841b48071e203642a18aef6b5e7ff850fe4
+        # https://github.com/intel-lab-lkp/linux/commit/0a03a4870c8a62e3ba52a0f9b50b307f509acb2b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peter-Xu/mm-handle_mm_fault_one/20230512-081554
+        git checkout 0a03a4870c8a62e3ba52a0f9b50b307f509acb2b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/generic/ drivers/irqchip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121131.xoUncOQW-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121127.9uKHOw3S-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/mips/generic/init.c:10:
-   In file included from include/linux/irqchip.h:14:
-   include/linux/acpi.h:1540:49: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
-           struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
-                                                          ^
-   include/linux/acpi.h:1547:6: error: unknown type name 'acpi_tbl_entry_handler_arg'
-                             acpi_tbl_entry_handler_arg handler, void *arg,
-                             ^
-   In file included from arch/mips/generic/init.c:21:
-   In file included from arch/mips/include/asm/time.h:13:
-   In file included from include/linux/rtc.h:40:
->> include/linux/poll.h:140:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:138:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:124:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:140:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:138:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:124:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   3 warnings and 1 error generated.
---
-   In file included from drivers/irqchip/irq-ingenic.c:12:
-   In file included from include/linux/irqchip.h:14:
-   include/linux/acpi.h:1540:49: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
-           struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
-                                                          ^
-   include/linux/acpi.h:1547:6: error: unknown type name 'acpi_tbl_entry_handler_arg'
-                             acpi_tbl_entry_handler_arg handler, void *arg,
-                             ^
->> drivers/irqchip/irq-ingenic.c:111:22: warning: shift count >= width of type [-Wshift-count-overflow]
-                   gc->wake_enabled = IRQ_MSK(32);
-                                      ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   drivers/irqchip/irq-ingenic.c:124:22: warning: shift count >= width of type [-Wshift-count-overflow]
-                   irq_reg_writel(gc, IRQ_MSK(32), JZ_REG_INTC_SET_MASK);
-                                      ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   3 warnings and 1 error generated.
---
-   In file included from drivers/irqchip/irq-ingenic-tcu.c:9:
-   In file included from include/linux/irqchip.h:14:
-   include/linux/acpi.h:1540:49: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
-           struct acpi_table_header *table_header, struct acpi_subtable_proc *proc,
-                                                          ^
-   include/linux/acpi.h:1547:6: error: unknown type name 'acpi_tbl_entry_handler_arg'
-                             acpi_tbl_entry_handler_arg handler, void *arg,
-                             ^
->> drivers/irqchip/irq-ingenic-tcu.c:135:21: warning: shift count >= width of type [-Wshift-count-overflow]
-           gc->wake_enabled = IRQ_MSK(32);
-                              ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   drivers/irqchip/irq-ingenic-tcu.c:147:39: warning: shift count >= width of type [-Wshift-count-overflow]
-           regmap_write(tcu->map, TCU_REG_TMSR, IRQ_MSK(32));
-                                                ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   3 warnings and 1 error generated.
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+>> include/linux/mm.h:2371:6: error: use of undeclared identifier 'fault'
+           if (fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED))
+               ^
+>> include/linux/mm.h:2396:20: error: use of undeclared identifier 'mm'
+                   mmap_read_unlock(mm);
+                                    ^
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1287: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +140 include/linux/poll.h
+vim +/fault +2371 include/linux/mm.h
 
-7a163b2195cda0 Al Viro 2018-02-01  135  
-7a163b2195cda0 Al Viro 2018-02-01  136  static inline __poll_t demangle_poll(u16 val)
-7a163b2195cda0 Al Viro 2018-02-01  137  {
-7a163b2195cda0 Al Viro 2018-02-01  138  #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-7a163b2195cda0 Al Viro 2018-02-01  139  	return M(IN) | M(OUT) | M(PRI) | M(ERR) | M(NVAL) |
-7a163b2195cda0 Al Viro 2018-02-01 @140  		M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-7a163b2195cda0 Al Viro 2018-02-01  141  		M(HUP) | M(RDHUP) | M(MSG);
-7a163b2195cda0 Al Viro 2018-02-01  142  #undef M
-7a163b2195cda0 Al Viro 2018-02-01  143  }
-7a163b2195cda0 Al Viro 2018-02-01  144  #undef __MAP
-7a163b2195cda0 Al Viro 2018-02-01  145  
-7a163b2195cda0 Al Viro 2018-02-01  146  
-
-:::::: The code at line 140 was first introduced by commit
-:::::: 7a163b2195cda0cddf47b5caf14a7229d4e2bea3 unify {de,}mangle_poll(), get rid of kernel-side POLL...
-
-:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+  2362	
+  2363	static inline bool
+  2364	mm_should_release_mmap(unsigned long flags, vm_fault_t retval)
+  2365	{
+  2366		/* The caller explicitly requested to keep the mmap read lock */
+  2367		if (flags & FAULT_FLAG_RETRY_NOWAIT)
+  2368			return false;
+  2369	
+  2370		/* If the mmap read lock is already released, we're all good */
+> 2371		if (fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED))
+  2372			return false;
+  2373	
+  2374		/* Otherwise always release it */
+  2375		return true;
+  2376	}
+  2377	
+  2378	/*
+  2379	 * This is mostly handle_mm_fault(), but it also take care of releasing
+  2380	 * mmap or vma read lock as long as possible (e.g. when !RETRY_NOWAIT).
+  2381	 *
+  2382	 * Normally it's the case when we got a hardware page fault, where we want
+  2383	 * to release the lock right after the page fault. And it's not for case
+  2384	 * like GUP where it can fault a range of pages continuously with mmap lock
+  2385	 * being held during the process.
+  2386	 */
+  2387	static inline vm_fault_t
+  2388	handle_mm_fault_one(struct vm_area_struct *vma, unsigned long address,
+  2389			    unsigned int flags, struct pt_regs *regs)
+  2390	{
+  2391		vm_fault_t retval = handle_mm_fault(vma, address, flags, regs);
+  2392	
+  2393		if (flags & FAULT_FLAG_VMA_LOCK)
+  2394			vma_end_read(vma);
+  2395		else if (mm_should_release_mmap(flags, retval))
+> 2396			mmap_read_unlock(mm);
+  2397	
+  2398		return retval;
+  2399	}
+  2400	
 
 -- 
 0-DAY CI Kernel Test Service
