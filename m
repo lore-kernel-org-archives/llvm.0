@@ -1,51 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AA522601;
-	Fri, 12 May 2023 22:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6AEC4339B;
-	Fri, 12 May 2023 22:59:17 +0000 (UTC)
-Date: Fri, 12 May 2023 18:59:16 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Ajay Kaher <akaher@vmware.com>
-Cc: kernel test robot <lkp@intel.com>, "mhiramat@kernel.org"
- <mhiramat@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "chinglinyu@google.com" <chinglinyu@google.com>, Nadav Amit
- <namit@vmware.com>, Srivatsa Bhat <srivatsab@vmware.com>,
- "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>, Alexey Makhalov
- <amakhalov@vmware.com>, Vasavi Sirnapalli <vsirnapalli@vmware.com>, Tapas
- Kundu <tkundu@vmware.com>, "er.ajay.kaher@gmail.com"
- <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Message-ID: <20230512185916.22bda1a5@rorschach.local.home>
-In-Reply-To: <400E4466-629C-4306-86B1-E8BA0CB5EF66@vmware.com>
-References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
-	<202305030116.Gu6yyvKj-lkp@intel.com>
-	<1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
-	<20230509124559.0d5557ad@rorschach.local.home>
-	<400E4466-629C-4306-86B1-E8BA0CB5EF66@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E6D22600
+	for <llvm@lists.linux.dev>; Fri, 12 May 2023 23:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683933066;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gHaNvJbQBkXZpOjuvZOTf1Zp2eyE/aOsgbGqE1WZ+vk=;
+	b=RdUAoKthqkcOOzDI+bPp8BVXIAA9XB0wWOzyEn1W8u56ONwsfBpzAESoWqPxMfLvBYfbXO
+	nUifz+DdDmJAPIqKPDLhYoXOhQ+qaN+dc3P3jqPbug3LuC89YRumgDUfliRrVQ+Px5Z2z/
+	gkqf1jpTvcqNWlTFLS7EMUUAJgJOeaA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-103-iHhQgcAxM4uRlWg7UEIRvA-1; Fri, 12 May 2023 19:11:04 -0400
+X-MC-Unique: iHhQgcAxM4uRlWg7UEIRvA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9467D1C05EB6
+	for <llvm@lists.linux.dev>; Fri, 12 May 2023 23:11:04 +0000 (UTC)
+Received: from [172.64.2.74] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7DCA963F8A;
+	Fri, 12 May 2023 23:11:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc1,
+ mainline.kernel.org-clang, 76c7f887)
+Date: Fri, 12 May 2023 23:11:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <42110.123051219110400449@us-mta-103.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 10 May 2023 11:11:15 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-> Sounds good. Thanks Steve :)
-> Once you will merge below patch, I will rebase this patch in v3.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-Feel free to just add it at the start of your queue. You just need to
-keep the "From" line and it will be added as my patch.
 
--- Steve
+Kernel information:
+    Commit message: Merge tag 'for-6.4-rc1-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/88707
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34950=
+7
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
