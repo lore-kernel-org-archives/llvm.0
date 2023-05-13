@@ -1,136 +1,240 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E7922622
-	for <llvm@lists.linux.dev>; Sat, 13 May 2023 21:15:36 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1aaf0bc8a07so21620935ad.0
-        for <llvm@lists.linux.dev>; Sat, 13 May 2023 14:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684012536; x=1686604536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hzp0Qb4mDjpD9Mou4KpzPLwzl2YJnM4HCnwQameMVSA=;
-        b=u+UIGW/roPHFNYjPZUnKJd/1sa6U0JXTsngOmVp+K/nS33JPdGdV3WbT813Z/FkHfA
-         JBMcpMYbO0sQOwpv443zxUMTIhB7i2tCfnBQpTJ/i2MGPJMPKr2xhCr8mL9d2Vtb6Vx7
-         3Sf98c6PcfzTu39+AehjlHwXdSiiXH5Bwbx1JZcaUSkg4pn2NClGifNxazyBhPRvY5lV
-         2Dw9y8bv55T3PXCBING/VbL6ZhBhyNTP91cmX6x7ClsdsTkmcJRFdPCFJ4YFv0MgyJKi
-         vRPj9VCkLJ6BV/WLjevo6TO6I5x3IJKXQRFwp/SmGixv/g8/8ihdNoqvG7nu8FNXN6IS
-         pzWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684012536; x=1686604536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hzp0Qb4mDjpD9Mou4KpzPLwzl2YJnM4HCnwQameMVSA=;
-        b=CwWMVaqnDEnaCKjrXVW9AIGEhWgnEdlyOnc7ti2YEMMIg6MWhU3q7p5H6hdig0IY/t
-         wfELRMPR+3XfL21bRqAdhZG+0QovCvaiguVmJ3Fp8abKun1Tfh/2gQyDQ7qXrklE3tX5
-         IHMueTs77mVe2j+B3oEbTlv99jn1QCEbtENMVm30x1EUIsPaYApmCDTJJTCUqyNX3XJC
-         0LQgJvtiooRaLiOREVP1+EZObcgPyoCR8d3C/SnRATydVqT1GnMmlcI6FTrlBICVA6tM
-         su3C6A2KkMlp0LsX2xt9VjtzWphkqUypsWtU6PvdfrOCkEk0EzftKwWAdK66401nI0lJ
-         0CiA==
-X-Gm-Message-State: AC+VfDwkqVcK3Xbr6nonUyghQ/VBf8Y0ckGaustYj7c0U9XMk90fj5LX
-	SdofpWbXDh5KB/ZAaC8T53c2Zg==
-X-Google-Smtp-Source: ACHHUZ4BC4ek84IpPhjvOy57FgGhRfINtnLd1MrDEoLu0t6EYcK6DS+tm2JSEf9Pcva+q8iA2FmgTA==
-X-Received: by 2002:a17:902:d4c4:b0:1ac:40f7:8b5a with SMTP id o4-20020a170902d4c400b001ac40f78b5amr33972856plg.3.1684012536347;
-        Sat, 13 May 2023 14:15:36 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c21500b001ab13f1fa82sm10260662pll.85.2023.05.13.14.15.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 14:15:35 -0700 (PDT)
-Message-ID: <892f5292-884b-42ef-fe24-05cfac56e527@kernel.dk>
-Date: Sat, 13 May 2023 15:15:34 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE4422622;
+	Sat, 13 May 2023 21:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684012638; x=1715548638;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0s57tNnIPT9T/MIj8pmL/DM0D61rjIJ7s9cH1EwS+y8=;
+  b=WSDwmMQKKJJrq3k8O9E91PY3CypB8HJsUdJ/QqDAXjNxjlP893j0ByY7
+   6jq48y9PVk7L3rH/iidz221CEygwmXlTRpYztHVysiG1EWBHDVBsbHD1C
+   Z6+hicGyLOmEHJ4QDEIsjPwucKNgnCZ6kMAZpK/2NCNfJoka8u0WqO9Dl
+   CW+LgG8DNMKjRpuHqz5Qc8hy+Py/3AlRd026au/44pJ/s/ohWd0BYyM2S
+   HqpaNAwd/1+70Ovrs72SZS1KbWbrCnqO4DwJh2YvwiG9a03WCb5dfwHn3
+   hB3DapkMEFH+WLg5MxHMTL6Wc2/nDcPybUtKQPPFKpJO/vNLUtdwEm6Hs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="340322936"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="340322936"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 14:17:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="770159584"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="770159584"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 13 May 2023 14:17:16 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pxwc8-0005gO-0r;
+	Sat, 13 May 2023 21:17:16 +0000
+Date: Sun, 14 May 2023 05:17:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
+ for function 'mpc52xx_psc_spi_transfer_one_message'
+Message-ID: <202305140510.4bQWOrsi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
-Content-Language: en-US
-To: Simon Horman <horms@kernel.org>, Tian Lan <tilan7663@gmail.com>
-Cc: lkp@intel.com, linux-block@vger.kernel.org, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, tian.lan@twosigma.com
-References: <202305140021.WvuGBjaZ-lkp@intel.com>
- <20230513190534.331274-1-tilan7663@gmail.com> <ZF/4/k+u3h2fXgHU@kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZF/4/k+u3h2fXgHU@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/13/23 2:54?PM, Simon Horman wrote:
-> On Sat, May 13, 2023 at 03:05:34PM -0400, Tian Lan wrote:
->> From: Tian Lan <tian.lan@twosigma.com>
->>
->> The nr_active counter continues to increase over time which causes the
->> blk_mq_get_tag to hang until the thread is rescheduled to a different
->> core despite there are still tags available.
->>
->> kernel-stack
->>
->>   INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
->>   Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
->>   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->>   task:inboundIOReacto state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
->>     Call Trace:
->>     <TASK>
->>     __schedule+0x351/0xa20
->>     scheduler+0x5d/0xe0
->>     io_schedule+0x42/0x70
->>     blk_mq_get_tag+0x11a/0x2a0
->>     ? dequeue_task_stop+0x70/0x70
->>     __blk_mq_alloc_requests+0x191/0x2e0
->>
->> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
->> __blk_mq_free_request being called.
->>
->>   320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0 in-flight 1
->>          b'__blk_mq_free_request+0x1 [kernel]'
->>          b'bt_iter+0x50 [kernel]'
->>          b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
->>          b'blk_mq_timeout_work+0x7c [kernel]'
->>          b'process_one_work+0x1c4 [kernel]'
->>          b'worker_thread+0x4d [kernel]'
->>          b'kthread+0xe6 [kernel]'
->>          b'ret_from_fork+0x1f [kernel]'
->>
->> Signed-off-by: Tian Lan <tian.lan@twosigma.com>
->> ---
->>  block/blk-mq.c | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/block/blk-mq.c b/block/blk-mq.c
->> index 9c8dc70020bc..732a39d88cd6 100644
->> --- a/block/blk-mq.c
->> +++ b/block/blk-mq.c
->> @@ -716,6 +716,10 @@ static void __blk_mq_free_request(struct request *rq)
->>  	blk_crypto_free_request(rq);
->>  	blk_pm_mark_last_busy(rq);
->>  	rq->mq_hctx = NULL;
->> +
->> +	if (rq->rq_flags & RQF_MQ_INFLIGHT)
->> +		__blk_mq_dec_active_requests(hctx);
->> +
->>  	if (rq->tag != BLK_MQ_NO_TAG)
->>  		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
->>  	if (sched_tag != BLK_MQ_NO_TAG)
->> @@ -733,9 +737,6 @@ void blk_mq_free_request(struct request *rq)
->>  	    q->elevator->type->ops.finish_request)
->>  		q->elevator->type->ops.finish_request(rq);
->>  
->> -	if (rq->rq_flags & RQF_MQ_INFLIGHT)
->> -		__blk_mq_dec_active_requests(hctx);
->> -
-> 
-> Unless I am mistaken, hctx is now unused in this function.
+Hi Mark,
 
-Indeed. Tian, first one didn't compile and this one will most certainly
-spew a warning. That's 2 for 2 so far. I realize that you tested this
-one a different kernel in prod, but don't seen stuff you haven't even
-compiled.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d4d58949a6eac1c45ab022562c8494725e1ac094
+commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
+date:   11 months ago
+config: powerpc-mpc5200_defconfig (https://download.01.org/0day-ci/archive/20230514/202305140510.4bQWOrsi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145cfc3840e5931a789a8e2e76af841ab4cad44b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 145cfc3840e5931a789a8e2e76af841ab4cad44b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140510.4bQWOrsi-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   __do_insb
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insb'
+   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:641:
+   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:117:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:641:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:119:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:580:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:641:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:121:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:641:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:123:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/spi/spi-mpc52xx-psc.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:641:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:638:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:125:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:583:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for function 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+       ^
+   drivers/spi/spi-mpc52xx-psc.c:195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+
+   194	
+ > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   196						 struct spi_message *m)
+   197	{
+   198		struct spi_device *spi;
+   199		struct spi_transfer *t = NULL;
+   200		unsigned cs_change;
+   201		int status;
+   202	
+   203		spi = m->spi;
+   204		cs_change = 1;
+   205		status = 0;
+   206		list_for_each_entry (t, &m->transfers, transfer_list) {
+   207			if (t->bits_per_word || t->speed_hz) {
+   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
+   209				if (status < 0)
+   210					break;
+   211			}
+   212	
+   213			if (cs_change)
+   214				mpc52xx_psc_spi_activate_cs(spi);
+   215			cs_change = t->cs_change;
+   216	
+   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
+   218			if (status)
+   219				break;
+   220			m->actual_length += t->len;
+   221	
+   222			spi_transfer_delay_exec(t);
+   223	
+   224			if (cs_change)
+   225				mpc52xx_psc_spi_deactivate_cs(spi);
+   226		}
+   227	
+   228		m->status = status;
+   229		if (status || !cs_change)
+   230			mpc52xx_psc_spi_deactivate_cs(spi);
+   231	
+   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
+   233	
+   234		spi_finalize_current_message(ctlr);
+   235	
+   236		return 0;
+   237	}
+   238	
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
