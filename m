@@ -1,45 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEF61846;
-	Sat, 13 May 2023 12:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA278EDB;
+	Sat, 13 May 2023 16:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683979992; x=1715515992;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gAQhb9mzpbMYwi5NcArK3mdl8GclsbYhzOu4c26BJZA=;
-  b=jMA8knvjP29YNJpaSbxtVm3Ulf0PQo2yadx+kM4fzHHAwB73U+JCIjdE
-   pDRkfCI4TfqmdN/IvpEECx2piF6+VtNWvgNxVp3F1sgrkdlscFbfhi4TX
-   hI0ufF27eZsrF4PYCuFVOEumXydtuhumXxXkOa4e8Xq8CH0hK2QQdCOTw
-   iXPgXQbWkpUHhSi7YoBMWQFVSiBo0cxUP4Ddj4fM9pNx7mDAjQhYeTHhi
-   P11temhc7bp1dSUMsGPGQ4D/25zP3Z4Ly4ErXgzk7eobZVVbVjaiz40K7
-   o3xxwXT+W8Ty9vGllBKfKV/RhKlzHcNC2peToU4OjnI/psPY6mgdb3sm+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="353216871"
+  t=1683996138; x=1715532138;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+VurshB2dzauVxUpD5PBLrCMQYl2D3wJFmfVctgqA1o=;
+  b=JnYrw6spCvCIz/UwGQuVnz5Sxxessl5WhTgMZ5Z3/wCFvtF/6U45lRAw
+   iTHBEGvPbi/Zv8SdJ9XHAr8yOY9UW8+kWSBXOdy/cocWwfTjWTl9FMWBJ
+   glG2WwVSCnwiWnII/9m3rVQiaFOPFq7TLuiwISPxfRpqFGaFC/TA9HPLo
+   8ZITti0L48zpBlCceZX8XQYpJgaQf7U+XYytqM72kCw6GgJezkn5gXZqA
+   fLu52Vl1R7CQErGCCwVeHSR9QJdZG/5kfbyF5J4Wa9SwlGot2ByYrMPmp
+   bCfoUibMmeFNx08mqaokDbPAgLGGofskwvgssWA1H9u7WnKn5hLZGRVnk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="330589995"
 X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
-   d="scan'208";a="353216871"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 05:13:12 -0700
+   d="scan'208";a="330589995"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 09:42:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="700451204"
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="812431266"
 X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
-   d="scan'208";a="700451204"
+   d="scan'208";a="812431266"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 May 2023 05:13:10 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 13 May 2023 09:42:13 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pxo7Z-0005U4-1X;
-	Sat, 13 May 2023 12:13:09 +0000
-Date: Sat, 13 May 2023 20:12:47 +0800
+	id 1pxsJx-0005a4-0l;
+	Sat, 13 May 2023 16:42:13 +0000
+Date: Sun, 14 May 2023 00:41:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johan Hovold <johan+linaro@kernel.org>
+To: Tian Lan <tilan7663@gmail.com>, axboe@kernel.dk,
+	linux-block@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sasha Levin <sashal@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/6.1 154/183]
- drivers/gpu/drm/msm/msm_drv.c:567:1: warning: unused label 'err_put_dev'
-Message-ID: <202305132013.OTjUZVR5-lkp@intel.com>
+	Tian Lan <tian.lan@twosigma.com>
+Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
+Message-ID: <202305140021.WvuGBjaZ-lkp@intel.com>
+References: <20230513141234.8395-1-tilan7663@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,71 +48,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230513141234.8395-1-tilan7663@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/6.1
-head:   b35b1f6de36bba692669bc17cc73a8c04ab72347
-commit: 33b0190e2d33a31066ff655c30500bd4fb6dbd91 [154/183] drm/msm: fix workqueue leak on bind errors
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230513/202305132013.OTjUZVR5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+Hi Tian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tian-Lan/blk-mq-fix-blk_mq_hw_ctx-active-request-accounting/20230513-221329
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230513141234.8395-1-tilan7663%40gmail.com
+patch subject: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230514/202305140021.WvuGBjaZ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=33b0190e2d33a31066ff655c30500bd4fb6dbd91
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/6.1
-        git checkout 33b0190e2d33a31066ff655c30500bd4fb6dbd91
+        # https://github.com/intel-lab-lkp/linux/commit/f958f858d42c76e1439649993bd485ac02200f87
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tian-Lan/blk-mq-fix-blk_mq_hw_ctx-active-request-accounting/20230513-221329
+        git checkout f958f858d42c76e1439649993bd485ac02200f87
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305132013.OTjUZVR5-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140021.WvuGBjaZ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/msm_drv.c:567:1: warning: unused label 'err_put_dev' [-Wunused-label]
-   err_put_dev:
-   ^~~~~~~~~~~~
-   1 warning generated.
+>> block/blk-mq.c:1574:45: error: expected ';' after expression
+                           __blk_mq_dec_active_requests(rq->mq_hctx)
+                                                                    ^
+                                                                    ;
+   1 error generated.
 
 
-vim +/err_put_dev +567 drivers/gpu/drm/msm/msm_drv.c
+vim +1574 block/blk-mq.c
 
-c8afe684c95cd1 Rob Clark         2013-06-26  548  
-2b669875332fbd Archit Taneja     2016-05-02  549  	ret = msm_debugfs_late_init(ddev);
-a7d3c9509b2fec Rob Clark         2014-05-30  550  	if (ret)
-77050c3febb180 Jeykumar Sankaran 2018-06-27  551  		goto err_msm_uninit;
-a7d3c9509b2fec Rob Clark         2014-05-30  552  
-2b669875332fbd Archit Taneja     2016-05-02  553  	drm_kms_helper_poll_init(ddev);
-c8afe684c95cd1 Rob Clark         2013-06-26  554  
-c8afe684c95cd1 Rob Clark         2013-06-26  555  	return 0;
-c8afe684c95cd1 Rob Clark         2013-06-26  556  
-77050c3febb180 Jeykumar Sankaran 2018-06-27  557  err_msm_uninit:
-2b669875332fbd Archit Taneja     2016-05-02  558  	msm_drm_uninit(dev);
-005811446f06d8 Johan Hovold      2023-03-06  559  
-005811446f06d8 Johan Hovold      2023-03-06  560  	return ret;
-005811446f06d8 Johan Hovold      2023-03-06  561  
-c91b75f465d975 Johan Hovold      2023-03-06  562  err_deinit_vram:
-c91b75f465d975 Johan Hovold      2023-03-06  563  	msm_deinit_vram(ddev);
-33b0190e2d33a3 Johan Hovold      2023-03-06  564  err_cleanup_mode_config:
-33b0190e2d33a3 Johan Hovold      2023-03-06  565  	drm_mode_config_cleanup(ddev);
-33b0190e2d33a3 Johan Hovold      2023-03-06  566  	destroy_workqueue(priv->wq);
-005811446f06d8 Johan Hovold      2023-03-06 @567  err_put_dev:
-005811446f06d8 Johan Hovold      2023-03-06  568  	drm_dev_put(ddev);
-005811446f06d8 Johan Hovold      2023-03-06  569  
-c8afe684c95cd1 Rob Clark         2013-06-26  570  	return ret;
-c8afe684c95cd1 Rob Clark         2013-06-26  571  }
-c8afe684c95cd1 Rob Clark         2013-06-26  572  
-
-:::::: The code at line 567 was first introduced by commit
-:::::: 005811446f06d8b939b0c0ef55ade26cb655391c drm/msm: fix drm device leak on bind errors
-
-:::::: TO: Johan Hovold <johan+linaro@kernel.org>
-:::::: CC: Sasha Levin <sashal@kernel.org>
+  1566	
+  1567	void blk_mq_put_rq_ref(struct request *rq)
+  1568	{
+  1569		if (is_flush_rq(rq)) {
+  1570			if (rq->end_io(rq, 0) == RQ_END_IO_FREE)
+  1571				blk_mq_free_request(rq);
+  1572		} else if (req_ref_put_and_test(rq)) {
+  1573			if (rq->rq_flags & RQF_MQ_INFLIGHT)
+> 1574				__blk_mq_dec_active_requests(rq->mq_hctx)
+  1575	
+  1576			__blk_mq_free_request(rq);
+  1577		}
+  1578	}
+  1579	
 
 -- 
 0-DAY CI Kernel Test Service
