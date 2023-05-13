@@ -1,43 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735E8947F;
-	Sat, 13 May 2023 22:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7466122623;
+	Sat, 13 May 2023 23:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684016959; x=1715552959;
+  t=1684020020; x=1715556020;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=55WnoW770A7AW46VBywjG+22e4tx++ou05eIzPjyJg8=;
-  b=V5g57m3u2b0teiIrdY8ZBPRD/nP3MBrShIamqu9mneblYnfCRjVZlW04
-   cNE+f/xarCX6CUlysi1mmnEZ9W9rmlGYskdJkVDYGy+6hCSvxV5rLHNvB
-   2/rawrpVaRAAi03x67drU9+RolZs9RnPaxxjTNxXKSomBbowv21nbR4Pv
-   xfWH9eZRXdUw22V8dlKzi1ZXIHk6tzc61xMkTXhIMFfR3UxXwFNTK6ppT
-   pvIN90lz3dKorSLkbcobdOQqEidf0fpxP1+t+VE+IM8+gAMlNtI3rChI1
-   B3BBfRP0qHDYzEzwDYKaF5GMbAr3yFNfYwI57Z5v2LK9muPBH7Kf/Pj1n
+  bh=t2pwekUEwPifF9xXa7e60mZIUn0GXkjrc3LEc8lXdXs=;
+  b=AsoTnXXA0rSm3cWKJjm9qGBTbFuXiVJDhwjD6wyh/mgF280Zkt0JnRP2
+   NYiDMJtDs5UfjrBlSaA+JZE1gYNQpUtGCwp4t67DFxTO/gzBUccC4XFgf
+   ANSNPq0UbKJA2n56pk2I/eCCz/3lxr1HGnh5+uJMNkU4pJD6tc+fyOw9d
+   MGAriygpcRrWSdPfUBeOTfamNZg094ORQzqZWxhWkxOTPEpYZEBMOPDcN
+   kCwAbtLHi6zWzVhuhv82dYsD4iJCWXBMLFsxIPaVoZsy9uFXeq3/3SoUV
+   8YY5G/bXV1nb4Po4ciP0t2kxkiK6Jn+c1l+7yfeKKPFJD4t7V0iqJQlPm
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="416633315"
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="353261149"
 X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="416633315"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 15:29:19 -0700
+   d="scan'208";a="353261149"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 16:20:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="703530274"
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="812487056"
 X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="703530274"
+   d="scan'208";a="812487056"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 May 2023 15:29:17 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 13 May 2023 16:20:18 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pxxjo-0005hk-2t;
-	Sat, 13 May 2023 22:29:16 +0000
-Date: Sun, 14 May 2023 06:28:30 +0800
+	id 1pxyXB-0005iy-1U;
+	Sat, 13 May 2023 23:20:17 +0000
+Date: Sun, 14 May 2023 07:19:33 +0800
 From: kernel test robot <lkp@intel.com>
 To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
- 189/453] drivers/pci/endpoint/functions/pci-epf-mhi.c:185:5: warning: no
- previous prototype for function 'pci_epf_mhi_iatu_read'
-Message-ID: <202305140657.EjS0EOnP-lkp@intel.com>
+ 191/453] drivers/pci/endpoint/functions/pci-epf-mhi.c:447:5: warning: no
+ previous prototype for function 'pci_epf_mhi_core_init'
+Message-ID: <202305140727.ysgXB9e4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,18 +49,18 @@ Content-Disposition: inline
 
 tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
 head:   255ec801b7a09e914735a942f27f3c74f5e8e810
-commit: 7935e8cdfe2198432a4b403ecf9a766d82a6a070 [189/453] PCI: endpoint: epf-mhi: Add eDMA support
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230514/202305140657.EjS0EOnP-lkp@intel.com/config)
+commit: 7965d9ce6732a510b9c38995707c25ae0cdba1d0 [191/453] PCI: endpoint: epf-mhi: Switch to new interface between EPC and EPF
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230514/202305140727.ysgXB9e4-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install powerpc cross compiling tool for clang build
         # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/krzk/linux/commit/7935e8cdfe2198432a4b403ecf9a766d82a6a070
+        # https://github.com/krzk/linux/commit/7965d9ce6732a510b9c38995707c25ae0cdba1d0
         git remote add krzk-github https://github.com/krzk/linux
         git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
-        git checkout 7935e8cdfe2198432a4b403ecf9a766d82a6a070
+        git checkout 7965d9ce6732a510b9c38995707c25ae0cdba1d0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
@@ -68,175 +68,191 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305140657.EjS0EOnP-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140727.ysgXB9e4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:124:24: error: field has incomplete type 'enum pci_notify_event'
-           enum pci_notify_event event;
-                                 ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:124:7: note: forward declaration of 'enum pci_notify_event'
-           enum pci_notify_event event;
-                ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:172:6: warning: no previous prototype for function 'pci_epf_mhi_raise_irq' [-Wmissing-prototypes]
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:171:6: warning: no previous prototype for function 'pci_epf_mhi_raise_irq' [-Wmissing-prototypes]
    void pci_epf_mhi_raise_irq(struct mhi_ep_cntrl *mhi_cntrl, u32 vector)
         ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:171:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    void pci_epf_mhi_raise_irq(struct mhi_ep_cntrl *mhi_cntrl, u32 vector)
    ^
    static 
->> drivers/pci/endpoint/functions/pci-epf-mhi.c:185:5: warning: no previous prototype for function 'pci_epf_mhi_iatu_read' [-Wmissing-prototypes]
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:184:5: warning: no previous prototype for function 'pci_epf_mhi_iatu_read' [-Wmissing-prototypes]
    int pci_epf_mhi_iatu_read(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void __iomem *to,
        ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:185:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    int pci_epf_mhi_iatu_read(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void __iomem *to,
    ^
    static 
->> drivers/pci/endpoint/functions/pci-epf-mhi.c:222:5: warning: no previous prototype for function 'pci_epf_mhi_iatu_write' [-Wmissing-prototypes]
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:221:5: warning: no previous prototype for function 'pci_epf_mhi_iatu_write' [-Wmissing-prototypes]
    int pci_epf_mhi_iatu_write(struct mhi_ep_cntrl *mhi_cntrl, void __iomem *from, u64 to,
        ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:222:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:221:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
    int pci_epf_mhi_iatu_write(struct mhi_ep_cntrl *mhi_cntrl, void __iomem *from, u64 to,
    ^
    static 
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:450:57: error: no member named 'nb' in 'struct pci_epf'
-           struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
-                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
-           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:338:74: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                            ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                                          ^~~~
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:450:24: error: no member named 'nb' in 'pci_epf'
-           struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
-                                 ^                                ~~
-   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
-           ((type *)(__mptr - offsetof(type, member))); })
-                              ^              ~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-                                   ^                        ~~~~~~
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:450:18: error: initializing 'struct pci_epf *' with an expression of incompatible type 'void'
-           struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:460:7: error: use of undeclared identifier 'CORE_INIT'
-           case CORE_INIT:
-                ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:485:7: error: use of undeclared identifier 'LINK_UP'
-           case LINK_UP:
-                ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:525:7: error: use of undeclared identifier 'LINK_DOWN'
-           case LINK_DOWN:
-                ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:535:7: error: use of undeclared identifier 'BME'
-           case BME:
-                ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:588:7: error: no member named 'nb' in 'struct pci_epf'
-           epf->nb.notifier_call = pci_epf_mhi_notifier;
-           ~~~  ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:589:2: error: call to undeclared function 'pci_epc_register_notifier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           pci_epc_register_notifier(epc, &epf->nb);
-           ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:589:39: error: no member named 'nb' in 'struct pci_epf'
-           pci_epc_register_notifier(epc, &epf->nb);
-                                           ~~~  ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:602:2: error: call to undeclared function 'pci_epc_unregister_notifier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           pci_epc_unregister_notifier(epc, &epf->nb);
-           ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:602:2: note: did you mean 'pci_epf_unregister_driver'?
-   include/linux/pci-epf.h:216:6: note: 'pci_epf_unregister_driver' declared here
-   void pci_epf_unregister_driver(struct pci_epf_driver *driver);
-        ^
-   drivers/pci/endpoint/functions/pci-epf-mhi.c:602:41: error: no member named 'nb' in 'struct pci_epf'
-           pci_epc_unregister_notifier(epc, &epf->nb);
-                                             ~~~  ^
-   3 warnings and 13 errors generated.
+>> drivers/pci/endpoint/functions/pci-epf-mhi.c:447:5: warning: no previous prototype for function 'pci_epf_mhi_core_init' [-Wmissing-prototypes]
+   int pci_epf_mhi_core_init(struct pci_epf *epf)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:447:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_epf_mhi_core_init(struct pci_epf *epf)
+   ^
+   static 
+>> drivers/pci/endpoint/functions/pci-epf-mhi.c:482:5: warning: no previous prototype for function 'pci_epf_mhi_link_up' [-Wmissing-prototypes]
+   int pci_epf_mhi_link_up(struct pci_epf *epf)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:482:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_epf_mhi_link_up(struct pci_epf *epf)
+   ^
+   static 
+>> drivers/pci/endpoint/functions/pci-epf-mhi.c:533:5: warning: no previous prototype for function 'pci_epf_mhi_link_down' [-Wmissing-prototypes]
+   int pci_epf_mhi_link_down(struct pci_epf *epf)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:533:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_epf_mhi_link_down(struct pci_epf *epf)
+   ^
+   static 
+>> drivers/pci/endpoint/functions/pci-epf-mhi.c:550:5: warning: no previous prototype for function 'pci_epf_mhi_bme' [-Wmissing-prototypes]
+   int pci_epf_mhi_bme(struct pci_epf *epf)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-mhi.c:550:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_epf_mhi_bme(struct pci_epf *epf)
+   ^
+   static 
+   7 warnings generated.
 
 
-vim +/pci_epf_mhi_iatu_read +185 drivers/pci/endpoint/functions/pci-epf-mhi.c
+vim +/pci_epf_mhi_core_init +447 drivers/pci/endpoint/functions/pci-epf-mhi.c
 
-   184	
- > 185	int pci_epf_mhi_iatu_read(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void __iomem *to,
-   186				  size_t size)
-   187	{
-   188		struct pci_epf_mhi *epf_mhi = container_of(mhi_cntrl, struct pci_epf_mhi, mhi_cntrl);
-   189		struct pci_epf *epf = epf_mhi->epf;
-   190		struct pci_epc *epc = epf_mhi->epf->epc;
-   191		void __iomem *tre_buf;
-   192		phys_addr_t tre_phys;
-   193		size_t offset = from % 0x1000;
-   194		int ret;
-   195	
-   196		mutex_lock(&epf_mhi->lock);
-   197	
-   198		tre_buf = pci_epc_mem_alloc_addr(epc, &tre_phys, size + offset);
-   199		if (!tre_buf) {
-   200			mutex_unlock(&epf_mhi->lock);
-   201			return -ENOMEM;
-   202		}
-   203	
-   204		ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, tre_phys, from - offset,
-   205				       size + offset);
-   206		if (ret) {
-   207			pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-   208			mutex_unlock(&epf_mhi->lock);
-   209			return ret;
-   210		}
-   211	
-   212		memcpy_fromio(to, tre_buf + offset, size);
-   213	
-   214		pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, tre_phys);
-   215		pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-   216	
-   217		mutex_unlock(&epf_mhi->lock);
-   218	
-   219		return 0;
-   220	}
-   221	
- > 222	int pci_epf_mhi_iatu_write(struct mhi_ep_cntrl *mhi_cntrl, void __iomem *from, u64 to,
-   223				   size_t size)
-   224	{
-   225		struct pci_epf_mhi *epf_mhi = container_of(mhi_cntrl, struct pci_epf_mhi, mhi_cntrl);
-   226		struct pci_epf *epf = epf_mhi->epf;
-   227		struct pci_epc *epc = epf_mhi->epf->epc;
-   228		void __iomem *tre_buf;
-   229		phys_addr_t tre_phys;
-   230		size_t offset = to % 0x1000;
-   231		int ret;
-   232	
-   233		mutex_lock(&epf_mhi->lock);
-   234	
-   235		tre_buf = pci_epc_mem_alloc_addr(epc, &tre_phys, size + offset);
-   236		if (!tre_buf) {
-   237			mutex_unlock(&epf_mhi->lock);
-   238			return -ENOMEM;
-   239		}
-   240	
-   241		ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, tre_phys, to - offset,
-   242				       size + offset);
-   243		if (ret) {
-   244			pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-   245			mutex_unlock(&epf_mhi->lock);
-   246			return ret;
-   247		}
-   248	
-   249		memcpy_toio(tre_buf + offset, from, size);
-   250	
-   251		pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, tre_phys);
-   252		pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-   253	
-   254		mutex_unlock(&epf_mhi->lock);
-   255	
-   256		return 0;
-   257	}
-   258	
+   446	
+ > 447	int pci_epf_mhi_core_init(struct pci_epf *epf)
+   448	{
+   449		struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+   450		const struct pci_epf_mhi_ep_info *info = epf_mhi->info;
+   451		struct pci_epf_bar *epf_bar = &epf->bar[info->bar_num];
+   452		struct pci_epc *epc = epf->epc;
+   453		struct device *dev = &epf->dev;
+   454		int ret;
+   455	
+   456		epf_bar->phys_addr = epf_mhi->mmio_phys;
+   457		epf_bar->size = epf_mhi->mmio_size;
+   458		epf_bar->barno = info->bar_num;
+   459		epf_bar->flags = info->epf_flags;
+   460		ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, epf_bar);
+   461		if (ret) {
+   462			dev_err(dev, "Failed to set BAR: %d\n", ret);
+   463			return ret;
+   464		}
+   465	
+   466		ret = pci_epc_set_msi(epc, epf->func_no, epf->vfunc_no,
+   467				      order_base_2(info->msi_count));
+   468		if (ret) {
+   469			dev_err(dev, "Failed to set MSI configuration: %d\n", ret);
+   470			return ret;
+   471		}
+   472	
+   473		ret = pci_epc_write_header(epc, epf->func_no, epf->vfunc_no, epf->header);
+   474		if (ret) {
+   475			dev_err(dev, "Failed to set Configuration header: %d\n", ret);
+   476			return ret;
+   477		}
+   478	
+   479		return 0;
+   480	}
+   481	
+ > 482	int pci_epf_mhi_link_up(struct pci_epf *epf)
+   483	{
+   484		struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+   485		const struct pci_epf_mhi_ep_info *info = epf_mhi->info;
+   486		struct mhi_ep_cntrl *mhi_cntrl = &epf_mhi->mhi_cntrl;
+   487		struct pci_epc *epc = epf->epc;
+   488		struct device *dev = &epf->dev;
+   489		int ret;
+   490	
+   491		if (info->flags & MHI_EPF_USE_DMA) {
+   492			ret = pci_epf_mhi_dma_init(epf_mhi);
+   493			if (ret) {
+   494				dev_err(dev, "Failed to initialize DMA: %d\n", ret);
+   495				return ret;
+   496			}
+   497		}
+   498	
+   499		mhi_cntrl->mmio = epf_mhi->mmio;
+   500		mhi_cntrl->irq = epf_mhi->irq;
+   501		mhi_cntrl->mru = info->mru;
+   502	
+   503		/* Assign the struct dev of PCI EP as MHI controller device */
+   504		mhi_cntrl->cntrl_dev = epc->dev.parent;
+   505		mhi_cntrl->raise_irq = pci_epf_mhi_raise_irq;
+   506		mhi_cntrl->alloc_map = pci_epf_mhi_alloc_map;
+   507		mhi_cntrl->unmap_free = pci_epf_mhi_unmap_free;
+   508		mhi_cntrl->read_from_host = pci_epf_mhi_iatu_read;
+   509		mhi_cntrl->write_to_host = pci_epf_mhi_iatu_write;
+   510		if (info->flags & MHI_EPF_USE_DMA) {
+   511			mhi_cntrl->transfer_from_host = pci_epf_mhi_edma_read;
+   512			mhi_cntrl->transfer_to_host = pci_epf_mhi_edma_write;
+   513		} else {
+   514			mhi_cntrl->transfer_from_host = pci_epf_mhi_iatu_read;
+   515			mhi_cntrl->transfer_to_host = pci_epf_mhi_iatu_write;
+   516		}
+   517	
+   518		/* Register the MHI EP controller */
+   519		ret = mhi_ep_register_controller(mhi_cntrl, info->config);
+   520		if (ret) {
+   521			dev_err(dev, "Failed to register MHI EP controller: %d\n", ret);
+   522			if (info->flags & MHI_EPF_USE_DMA)
+   523				pci_epf_mhi_dma_deinit(epf_mhi);
+   524	
+   525			return ret;
+   526		}
+   527	
+   528		epf_mhi->mhi_registered = true;
+   529	
+   530		return 0;
+   531	}
+   532	
+ > 533	int pci_epf_mhi_link_down(struct pci_epf *epf)
+   534	{
+   535		struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+   536		const struct pci_epf_mhi_ep_info *info = epf_mhi->info;
+   537		struct mhi_ep_cntrl *mhi_cntrl = &epf_mhi->mhi_cntrl;
+   538	
+   539		if (epf_mhi->mhi_registered) {
+   540			mhi_ep_power_down(mhi_cntrl);
+   541			if (info->flags & MHI_EPF_USE_DMA)
+   542				pci_epf_mhi_dma_deinit(epf_mhi);
+   543			mhi_ep_unregister_controller(mhi_cntrl);
+   544			epf_mhi->mhi_registered = false;
+   545		}
+   546	
+   547		return 0;
+   548	}
+   549	
+ > 550	int pci_epf_mhi_bme(struct pci_epf *epf)
+   551	{
+   552		struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
+   553		const struct pci_epf_mhi_ep_info *info = epf_mhi->info;
+   554		struct mhi_ep_cntrl *mhi_cntrl = &epf_mhi->mhi_cntrl;
+   555		struct device *dev = &epf->dev;
+   556		int ret;
+   557	
+   558		/* Power up the MHI EP stack if link is up and stack is in power down state */
+   559		if (!mhi_cntrl->enabled && epf_mhi->mhi_registered) {
+   560			ret = mhi_ep_power_up(mhi_cntrl);
+   561			if (ret) {
+   562				dev_err(dev, "Failed to power up MHI EP: %d\n", ret);
+   563				if (info->flags & MHI_EPF_USE_DMA)
+   564					pci_epf_mhi_dma_deinit(epf_mhi);
+   565				mhi_ep_unregister_controller(mhi_cntrl);
+   566				epf_mhi->mhi_registered = false;
+   567			}
+   568		}
+   569	
+   570		return 0;
+   571	}
+   572	
 
 -- 
 0-DAY CI Kernel Test Service
