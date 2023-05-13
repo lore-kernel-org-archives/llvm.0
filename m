@@ -1,43 +1,43 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85302262F;
-	Sat, 13 May 2023 22:11:41 +0000 (UTC)
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-3f443080ef7so23918761cf.1;
-        Sat, 13 May 2023 15:11:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C2C2262F;
+	Sat, 13 May 2023 22:12:42 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-61cd6191a62so52114716d6.3;
+        Sat, 13 May 2023 15:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684015900; x=1686607900;
+        d=gmail.com; s=20221208; t=1684015961; x=1686607961;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1OmxjGDfjF/mdsU98I37esgs4VenxbTsH7hU7po07tU=;
-        b=BSSPtXG8kQJ1Jm5sPNLCViqbC0PXyQDgHmnTd8t+j8yd6sQnWMi4v5t2cDDdMUE9jJ
-         Jt4Lw60yeoCByOoQfgpsGGZB+Pq0kg87OdBvDDGYmMLjimLSQuDu120a3nRXa3PTRbhi
-         zLseThj4id+9V6IZJjB39XpnD21Ce5nR4RjA+//Fg+DdpRlzs+bODDgjub/vNIYjFaEU
-         Av2KKgDAXibJUPdExjyn0b2FWKr8TKQnQ/90g4KOJskYBoZZnBJcrbpyME8/pQDEtwI4
-         QCqyToJqJ8E9IgGdtDWaBont8THuOzqcwDM2v2QTybXR76Nvk+9zN7Z6/ENBBpiMRZ/6
-         nuUw==
+        bh=aorJbr2vWqTfz4xCQEc44dONwfNHEh7HNMggbMbeThc=;
+        b=Zib5koM5wfL6dbup3SEFNbT3G2BDzKg+KVwvBqWK/cK7PVwumvI+rsffcwVnkT6Wj6
+         FId6cEY9Ck4+ziUC4MJ80W0bkti/VETeDi4b/sDzFuBXYLiJYPdCS6919MaElLOhxUxX
+         qARhhvfiplp13hsrFkX0FNrxkA4aXFg5ca5YTnw9Lg1R5Mt0luq2JvhdiJkE1jhClxfF
+         YUB3yZ1VoKgs6rhHkroFqn0rn3SZJCDddQcea7qo+bmGeXUMkkyHhy1A0AoWwUssH8Wv
+         TMRVyNrU37mmTYXjjh+rM8vtzxMbOX1tfeHJZrPab54D26hk6VZqbWdCWK2w8JPL0Vmj
+         TOlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684015900; x=1686607900;
+        d=1e100.net; s=20221208; t=1684015961; x=1686607961;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1OmxjGDfjF/mdsU98I37esgs4VenxbTsH7hU7po07tU=;
-        b=A78kLikVzF+sWd+5Mr5pYI7zT6e7N6j4gxwJ0+4zfaK4sQul7L6GQhHhI0iPAYZnFk
-         Uvba+3wafN8QYHqvBRH1O2K07GrHg8IAfwODfYxaKcGyrrX/feF7JRJoemwi28L3o0s7
-         lQr0kNiE3H6X+IolliRMZMERRQzpv76loRbEf7e5VuKVEPZMR2SyAR+g2sMZ7+Cc1zlw
-         xGRvAqNcaNFpsp5ayPMJ4pABZMi6urcUlMvqN33pULrQQje98vV+HR7Pf1jueQcKYJzn
-         9sRiY5Vt6i1vge2ur/QoRjXfs4KqFRa6n8PHa5Tg+HwpO3XstwFmZIjfBVgpLEoJphoa
-         KgMQ==
-X-Gm-Message-State: AC+VfDyPGno1vKR5u4NCGL2j+fqXd7cJ1qYiAVoPzVe9Ho6nF5OpzsXm
-	RH/D2rc2kPM42gvtC6LjF34=
-X-Google-Smtp-Source: ACHHUZ7Jo+jb2jm6BP/QiHgDNobYYQbUGXXY5tzSmLY8qoeVPsb37mTbAH7eHQSEwZzw0nNy2M6DZA==
-X-Received: by 2002:a05:622a:188d:b0:3f5:aa3:acf9 with SMTP id v13-20020a05622a188d00b003f50aa3acf9mr5239511qtc.56.1684015900411;
-        Sat, 13 May 2023 15:11:40 -0700 (PDT)
+        bh=aorJbr2vWqTfz4xCQEc44dONwfNHEh7HNMggbMbeThc=;
+        b=RXU5dp1Q5udiHLh2DKewOXOZVu4J7F0GjvzUH0tf2+Zc5ds0Szc0hKUiv6gpolA4o/
+         PHhfdmliBjBu67pwJoaVASZPScgpvePW04KC4OA/ttvHDiWlgpCwhjo6uTCp1C0bC4Ej
+         WkeHezUqOIHpbkdMSugJ3kTUvQ2hbXNqhpRtIi36Zm1zqVU1lnx+NhPxjq55WfuxOI+D
+         QuToUvVo9nUz7/2yr1kBCioPjxd6kSd0vZRsshb9GVb7AKPkIvoCONxrTCR67ibdpqjA
+         C3NEf95KO6s6zwtNu94tALHkXq+Rh0tjIratpQjgjbvjH959TjbxOTyg/deycWljd+eA
+         PTEg==
+X-Gm-Message-State: AC+VfDwJrU/KRinhBt30nnwt+AGCsss8y1/atY8FKvSD/nixxg02m5Uy
+	cIi85j1mWs6VV3j28nSafIg=
+X-Google-Smtp-Source: ACHHUZ4oZKjOS8COCGNpfZMECnSjYgydDhaCgYtEvQ1qobX9Zmu61JGoq7x171okr27z3jCEU8mp7g==
+X-Received: by 2002:a05:6214:e46:b0:621:2641:c656 with SMTP id o6-20020a0562140e4600b006212641c656mr30753642qvc.31.1684015961578;
+        Sat, 13 May 2023 15:12:41 -0700 (PDT)
 Received: from tian-Alienware-15-R4.fios-router.home (pool-173-77-254-84.nycmny.fios.verizon.net. [173.77.254.84])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac85f92000000b003f51b00ad87sm268174qta.35.2023.05.13.15.11.39
+        by smtp.gmail.com with ESMTPSA id t8-20020a05620a034800b0074ca7c33b79sm6239608qkm.23.2023.05.13.15.12.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 15:11:40 -0700 (PDT)
+        Sat, 13 May 2023 15:12:41 -0700 (PDT)
 From: Tian Lan <tilan7663@gmail.com>
 To: axboe@kernel.dk
 Cc: horms@kernel.org,
@@ -47,9 +47,9 @@ Cc: horms@kernel.org,
 	oe-kbuild-all@lists.linux.dev,
 	tian.lan@twosigma.com,
 	tilan7663@gmail.com
-Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
-Date: Sat, 13 May 2023 18:11:38 -0400
-Message-Id: <20230513221138.497270-1-tilan7663@gmail.com>
+Subject: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
+Date: Sat, 13 May 2023 18:12:27 -0400
+Message-Id: <20230513221227.497327-1-tilan7663@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <892f5292-884b-42ef-fe24-05cfac56e527@kernel.dk>
 References: <892f5292-884b-42ef-fe24-05cfac56e527@kernel.dk>
@@ -61,13 +61,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Thanks Simon and Jens, I will remove the unused reference. 
+From: Tian Lan <tian.lan@twosigma.com>
 
-And I'm sorry again, I'm very fresh in kernel development and still 
-trying to learn the whole process. Hopefully this is the last time I will 
-have to make the change (previously, I was compiling the entire kernel and
-missed the warning message). Thank you all for being patient with me and 
-tolerate all the silly mistakes.
+The nr_active counter continues to increase over time which causes the
+blk_mq_get_tag to hang until the thread is rescheduled to a different
+core despite there are still tags available.
 
-Tian
+kernel-stack
+
+  INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
+  Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:inboundIOReacto state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+    Call Trace:
+    <TASK>
+    __schedule+0x351/0xa20
+    scheduler+0x5d/0xe0
+    io_schedule+0x42/0x70
+    blk_mq_get_tag+0x11a/0x2a0
+    ? dequeue_task_stop+0x70/0x70
+    __blk_mq_alloc_requests+0x191/0x2e0
+
+kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+__blk_mq_free_request being called.
+
+  320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0 in-flight 1
+         b'__blk_mq_free_request+0x1 [kernel]'
+         b'bt_iter+0x50 [kernel]'
+         b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+         b'blk_mq_timeout_work+0x7c [kernel]'
+         b'process_one_work+0x1c4 [kernel]'
+         b'worker_thread+0x4d [kernel]'
+         b'kthread+0xe6 [kernel]'
+         b'ret_from_fork+0x1f [kernel]'
+
+Signed-off-by: Tian Lan <tian.lan@twosigma.com>
+---
+ block/blk-mq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index f6dad0886a2f..850bfb844ed2 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -683,6 +683,10 @@ static void __blk_mq_free_request(struct request *rq)
+ 	blk_crypto_free_request(rq);
+ 	blk_pm_mark_last_busy(rq);
+ 	rq->mq_hctx = NULL;
++
++	if (rq->rq_flags & RQF_MQ_INFLIGHT)
++		__blk_mq_dec_active_requests(hctx);
++
+ 	if (rq->tag != BLK_MQ_NO_TAG)
+ 		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
+ 	if (sched_tag != BLK_MQ_NO_TAG)
+@@ -694,15 +698,11 @@ static void __blk_mq_free_request(struct request *rq)
+ void blk_mq_free_request(struct request *rq)
+ {
+ 	struct request_queue *q = rq->q;
+-	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
+ 
+ 	if ((rq->rq_flags & RQF_ELVPRIV) &&
+ 	    q->elevator->type->ops.finish_request)
+ 		q->elevator->type->ops.finish_request(rq);
+ 
+-	if (rq->rq_flags & RQF_MQ_INFLIGHT)
+-		__blk_mq_dec_active_requests(hctx);
+-
+ 	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
+ 		laptop_io_completion(q->disk->bdi);
+ 
+-- 
+2.25.1
 
