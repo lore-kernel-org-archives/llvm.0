@@ -1,45 +1,45 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E34110B
-	for <llvm@lists.linux.dev>; Sun, 14 May 2023 01:39:56 +0000 (UTC)
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6463185f761so1524094b3a.0
-        for <llvm@lists.linux.dev>; Sat, 13 May 2023 18:39:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2178F110D
+	for <llvm@lists.linux.dev>; Sun, 14 May 2023 01:52:40 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1a69e101070so22085765ad.1
+        for <llvm@lists.linux.dev>; Sat, 13 May 2023 18:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684028396; x=1686620396;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1684029159; x=1686621159;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BKt1LzqC9JJ0Xe6yYnzJlUisPwLdy3pufUyPL32XOaM=;
-        b=nECaR3gjPwh6MtV/ocnAfi0i76b2pKNm80xPlzQjU5bUU2VqhDkk3LKd09aHbeotEZ
-         m1UthZI8Q2RHwFokq+b9tj5iRlU5qZRPzzcXdyVt2BGgwaCnCt6cDu33wB+bQ24YKqEK
-         oMeCKIzQLuw868KYYWHt8QK9F6WW+vTnpDQrre36VmMH4yxxvR175ogoGc0ppJmhbp8Q
-         YamdM6zT3xaf68GnsT8kiPmHa8LCp492EdyCuGJlOgiMuVa9P1jMZu2ikvkmQQOG70+I
-         zZHwKeAw/Map8dp6rc4aPQsXeIgB8UUa2XDR2bDbsY/BlJopHyP24kQ+jUJBfa6mm0xq
-         IfHg==
+        bh=oYTLjSURSYHVU2rpRc9lA2aRFMXcyJmFXv9MzBM+Tuc=;
+        b=rkIuz56VoEWdSOE4dcBRejNDyVWfz8b7UFzyDD0seSF3wjb4AkUTdKrhbOkwo7p0IX
+         beqJoSEh0dL3nU3V9fRQ4gR1zvjzOlD8f2Ou49bu9861odVnM+MaMuAdMp/uAjHzcwKM
+         wyIVRTbUajPB/DGXHwYDjkMvED0K/PWZBBseyoiKnPbZkTd2nlYaEsrMhRqJ+cTLXcsr
+         Tjyu1Zv/1fCp5BzyfvDDArqDJaKcaPQN4Hr5Sf+ru+vs8xN/FuchC+hBUiesyY9D8SSj
+         aM5+M7j1xZT507n9NmblvEssp9QyxyJjo5Z/7+l4EGyXVmo7DA9skMF6qBUpT94DirpS
+         6y0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684028396; x=1686620396;
+        d=1e100.net; s=20221208; t=1684029159; x=1686621159;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKt1LzqC9JJ0Xe6yYnzJlUisPwLdy3pufUyPL32XOaM=;
-        b=ORMAYOZOzPL22qD2IdWIzxKfXfTRulV6jQk9HFBh2SqCxcx0sb/xneFvKYmNoyh+gX
-         pBvpdIFKq3sJdnsPNyjxzdfi5lBRtW2wDxxQ/U9sq+DdRzNd73VyEzjG8xInDUb8QNgB
-         lDdtnYpfj8slI9ZiDk4jQkMjRmWmlNXi6rzTcx8rvS4w0e2w6KgZz1bVpe3zTPZO/0/N
-         1TKSHDqiiT7YLVNtM/scyj1peP0qJfW56fmf9/U5pw2rZB4ReEO4Ws+boN/I5b//3IlB
-         Z2yvBDjvKokz1Wam0vHm05aogwgevn9SHxswKTKKJbdtTYivcExo8pQp8xGeHicqLCzz
-         zmhQ==
-X-Gm-Message-State: AC+VfDz8Km506lWNhQz9A3HD/V8yrtGh9Au09so3oC4Xm11WzPo6L1rI
-	KVvwbZrkyeaDclQAp4iaRdUcig==
-X-Google-Smtp-Source: ACHHUZ7+n1rNhr7BvicPANiiQIqOjnF0OlLgFLES77MbyHHld7HARnW7PRPPTPJEa16G0RVe9R6yrw==
-X-Received: by 2002:a05:6a00:4c99:b0:637:434a:75df with SMTP id eb25-20020a056a004c9900b00637434a75dfmr28759474pfb.0.1684028396366;
-        Sat, 13 May 2023 18:39:56 -0700 (PDT)
+        bh=oYTLjSURSYHVU2rpRc9lA2aRFMXcyJmFXv9MzBM+Tuc=;
+        b=lYRQH5xVHN68N7qOxx28lqO+vETTbvTRLnO8d7YxUR7DDOEQ3vXwGp0lK4V/dF6aRI
+         t0zZt1s/Ers/6sKskgx9CI30JKbKAwky4wUMWzCpA1RgP+7DF53RRPkVCNGnHKpSDyeD
+         go0///uqeLlmoSesBeNi+UHa6jRCvU/iU+xOD4t/Z86sFPf2shLtBLhy5ZxqBfnDD/+5
+         eKIjVycQ5fOFzZ0EEgyJ8PDdldztHU+5V11rqWR/UgsUjWcm0UOaoGUnpSh5YYZV16Ns
+         9hm97Zj4s49bwqhPr6JT6JQI6Nnhxf4doWP6WS9E3xddlanmagSvc+vbZ0wsBzA0W0T6
+         +xTg==
+X-Gm-Message-State: AC+VfDxRqPva8Ma1ZSE32bIMmCu/H5VFD4DEqhV5zOP/GVUda01GKcAi
+	87VZte7UtO7kGuLtoRWvgY0WRg==
+X-Google-Smtp-Source: ACHHUZ7vWekjpSO9fr8o8GUMMJGghmlRyA/1nKUzo/CINXVA4mZrF8FEO1gazciJX0tN9sPoKXa70w==
+X-Received: by 2002:a17:902:f547:b0:1a9:581b:fbaa with SMTP id h7-20020a170902f54700b001a9581bfbaamr34696152plf.2.1684029159469;
+        Sat, 13 May 2023 18:52:39 -0700 (PDT)
 Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id o33-20020a635a21000000b0052871962579sm8880012pgb.63.2023.05.13.18.39.54
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b001a661000398sm10497035plh.103.2023.05.13.18.52.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 18:39:55 -0700 (PDT)
-Message-ID: <a685e5d2-5da8-2ff2-c53d-dbf77fa9609d@kernel.dk>
-Date: Sat, 13 May 2023 19:39:54 -0600
+        Sat, 13 May 2023 18:52:38 -0700 (PDT)
+Message-ID: <da0ae57e-71c2-9ad5-1134-c12309032402@kernel.dk>
+Date: Sat, 13 May 2023 19:52:37 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,29 +52,61 @@ Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
 Content-Language: en-US
 To: Tian Lan <tilan7663@gmail.com>
 Cc: horms@kernel.org, linux-block@vger.kernel.org, lkp@intel.com,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tian.lan@twosigma.com
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tian.lan@twosigma.com,
+ Ming Lei <ming.lei@redhat.com>
 References: <892f5292-884b-42ef-fe24-05cfac56e527@kernel.dk>
- <20230513221138.497270-1-tilan7663@gmail.com>
+ <20230513221227.497327-1-tilan7663@gmail.com>
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230513221138.497270-1-tilan7663@gmail.com>
+In-Reply-To: <20230513221227.497327-1-tilan7663@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/13/23 4:11 PM, Tian Lan wrote:
-> Thanks Simon and Jens, I will remove the unused reference. 
+On 5/13/23 4:12 PM, Tian Lan wrote:
+> From: Tian Lan <tian.lan@twosigma.com>
 > 
-> And I'm sorry again, I'm very fresh in kernel development and still 
-> trying to learn the whole process. Hopefully this is the last time I will 
-> have to make the change (previously, I was compiling the entire kernel and
-> missed the warning message). Thank you all for being patient with me and 
-> tolerate all the silly mistakes.
+> The nr_active counter continues to increase over time which causes the
+> blk_mq_get_tag to hang until the thread is rescheduled to a different
+> core despite there are still tags available.
+> 
+> kernel-stack
+> 
+>   INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
+>   Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
+>   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>   task:inboundIOReacto state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+>     Call Trace:
+>     <TASK>
+>     __schedule+0x351/0xa20
+>     scheduler+0x5d/0xe0
+>     io_schedule+0x42/0x70
+>     blk_mq_get_tag+0x11a/0x2a0
+>     ? dequeue_task_stop+0x70/0x70
+>     __blk_mq_alloc_requests+0x191/0x2e0
+> 
+> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+> __blk_mq_free_request being called.
+> 
+>   320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0 in-flight 1
+>          b'__blk_mq_free_request+0x1 [kernel]'
+>          b'bt_iter+0x50 [kernel]'
+>          b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+>          b'blk_mq_timeout_work+0x7c [kernel]'
+>          b'process_one_work+0x1c4 [kernel]'
+>          b'worker_thread+0x4d [kernel]'
+>          b'kthread+0xe6 [kernel]'
+>          b'ret_from_fork+0x1f [kernel]'
+> 
+> Signed-off-by: Tian Lan <tian.lan@twosigma.com>
 
-There should be zero warnings when compiling, so the easiest way to
-check and catch it would be:
+I think this needs:
 
-$ make -jX -s
+Cc: stable@vger.kernel.org
+Fixes: 2e315dc07df0 ("blk-mq: grab rq->refcount before calling ->fn in blk_mq_tagset_busy_iter")
 
-as that will be quiet unless a warning or error is triggered.
+tags, but I'm also now confused as to whether the flush handling part
+of that patch. Ming, what am I missing in terms of not honoring the
+flush ref on put? What happens if two iterators both grab the
+flush at the same time, and then subsequently put them?
 
 -- 
 Jens Axboe
