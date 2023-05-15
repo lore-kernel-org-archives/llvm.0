@@ -1,43 +1,43 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E904400
-	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:50:52 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ab267e3528so87453925ad.0
-        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:50:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8B24400
+	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:50:59 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-51452556acdso8373388a12.2
+        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684129852; x=1686721852;
+        d=ventanamicro.com; s=google; t=1684129859; x=1686721859;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yNB5noEZPasx/OngqcP7wy15OXtx85aYSDWecQ1qX3I=;
-        b=crUKtBVQVJV1vWBpuccoTSp8DaYY66fm3VKniawcVP6BKqjaKB4T2BaZyNqDyNPU7n
-         9YBY1TuYEPQIP65vBpgmiEENoR1RAcWrcdORTisds+fVFeKk4n6ot+7DHSQjWhfm42Ao
-         dd8qhZ0hLmlYljm0LhvMRdBdV5496JPxOHUG3c+dIxD65S9A9Ryz9EyK68M3tzx/B0S9
-         JBM/ZcwzO0eRD86zNvVnVbRkCTjmonAhCiFUSmyEaFJ7WoJ5cJ4XrULn3PiTm14zJR8u
-         OtxancRacVKlprqQD+tHP/Lkv/v3J35sEnIy3t7ws0ik1FK+XOq34vdkAgHW6F3l3d2P
-         kubA==
+        bh=xPSUnhfUj53RcidJeP5kL6gGwZHEmDmCHUal6KZm638=;
+        b=KkYXPMVJYldDXzlYMdzc07JWsILuYGQeAMIHfrngu72V6abryWThHX527Bvfd4MVSk
+         YMaJ5wGLKWQNP7EwwtjOYx0Bf9HmphDyD8Lfh0SAHLummac7h1DJlYj4yKBiudYcIcEF
+         w4osqYtf99ETJ7KsEqX2b4FHQxdvjoJDi11gPvMC3MYhahY9hKP/WXuS2h2P3tygrrfB
+         x9xWrrV1GXDXxDFTBesTudDEsL5qChVDtcGHhzsBOyUTi119lgWgmH4l9mQws0Fh7wcw
+         MUxTlv0ParZd6lf0bGG171wj/9avHRWsDGVNU242sc84wMExSkbyoNh1/YOZ3Xru4s/Y
+         jKNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684129852; x=1686721852;
+        d=1e100.net; s=20221208; t=1684129859; x=1686721859;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yNB5noEZPasx/OngqcP7wy15OXtx85aYSDWecQ1qX3I=;
-        b=YECA/ZIe9SXN/wBTwNkO/HwXCTYwM9HNNYSIj9QlhbnHlFmu8IjlTSKmlt7AcH5a9A
-         to7K50LFk5VmLDCQgWSFLjSKUGRRt/u/QUTjJeA3JyvmnCHm5lqQBIVxfM7WR5H7up0V
-         BeUTiD6jpTK4gmji1v9Orq5nEM+eYiuDSN2vnPCQx9KPuhPrC+ftVODc6enFh7P3NoX4
-         6IFm9EPI68jJt2GJg9P2Y3gWZG7Dmv0E3ruAqQRKincIf3s5dBg6H1NcbCylsEJhLsKF
-         ziXpi7MIcyiitN4Zcfodkr7YDVR5tbzTA4HyMOLSxjazDPmFG9aS4+irlDtc3S2LSpMd
-         vtFg==
-X-Gm-Message-State: AC+VfDwcz3Lat5QwEqDobsvElDVlSYkKdn8s4OOD/NeA+bTKvoNIvWaM
-	rTDanS2i7OP08/SMZ3JIhfq01A==
-X-Google-Smtp-Source: ACHHUZ77ebtnzP9PEn9FZrDUXbQi5C1QdeX+0Vl8vrWcZZPVJfFbLqWE1kMFlDBKeV3SaPILOcDi3Q==
-X-Received: by 2002:a17:902:b403:b0:1ac:8ad0:1703 with SMTP id x3-20020a170902b40300b001ac8ad01703mr21046473plr.35.1684129851850;
-        Sun, 14 May 2023 22:50:51 -0700 (PDT)
+        bh=xPSUnhfUj53RcidJeP5kL6gGwZHEmDmCHUal6KZm638=;
+        b=jKrXNMMQkH7xBR+RYGEUmGZdiALJLIjeMHvwtXx8RVgceH9TXtgUAJtC7XWTzlBYgn
+         Zobo0jpFmsSb6xgl172jHcleYOW0KpAeM/MNDbanN/18N6arQMnjjECHMxHX1lZgrwfI
+         yvK2tWDwVh8pgE72TGtv+F17tNc+hhCMaxpttDgLgrExPs8Ph3MCY3UlFPwBWRy8KhRM
+         GF8FXy6QI0v0eV4D4Dz7CgC1zUNhpo+BLF9hNZP1Gvsy2p6GdxPSK3MYv4ntV8Oc2Gva
+         1yQqsXIVMRNT00oqdUHK6Su9hUdDlP+WCJiKNg3B/rvb/PnXc5p+yGw1d/VpxRQKK14U
+         iYsA==
+X-Gm-Message-State: AC+VfDyetn4CmT2aJNCegO86svPuSNxE1pCY4IZXQ341H7lAgGt1oPxR
+	LGlfItcsMVNgSjEjXe3ULwcm0g==
+X-Google-Smtp-Source: ACHHUZ5gqjyjY/wyzV1UawFz+Je+eikfLLa2ymtotyaGp3hoDXgBMzNgRFQJABMjgIulkIKr/eAY7w==
+X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr30869286plq.30.1684129858710;
+        Sun, 14 May 2023 22:50:58 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.191.118])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.50.44
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.50.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 22:50:51 -0700 (PDT)
+        Sun, 14 May 2023 22:50:58 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -68,11 +68,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Tom Rix <trix@redhat.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Conor Dooley <conor.dooley@microchip.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH V6 11/21] RISC-V: smpboot: Create wrapper setup_smp()
-Date: Mon, 15 May 2023 11:19:18 +0530
-Message-Id: <20230515054928.2079268-12-sunilvl@ventanamicro.com>
+	Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH V6 12/21] RISC-V: smpboot: Add ACPI support in setup_smp()
+Date: Mon, 15 May 2023 11:19:19 +0530
+Message-Id: <20230515054928.2079268-13-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
 References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
@@ -84,44 +83,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-setup_smp() currently assumes DT-based platforms. To enable ACPI,
-first make this a wrapper function and move existing code to
-a separate DT-specific function.
+Enable SMP boot on ACPI based platforms by using the RINTC
+structures in the MADT table.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/kernel/smpboot.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/acpi.h |  2 +
+ arch/riscv/kernel/smpboot.c   | 72 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 73 insertions(+), 1 deletion(-)
 
+diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+index 39471759bec1..f71ce21ff684 100644
+--- a/arch/riscv/include/asm/acpi.h
++++ b/arch/riscv/include/asm/acpi.h
+@@ -64,6 +64,8 @@ struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+ u32 get_acpi_id_for_cpu(int cpu);
+ int acpi_get_riscv_isa(struct acpi_table_header *table,
+ 		       unsigned int cpu, const char **isa);
++
++static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
+ #else
+ static inline void acpi_init_rintc_map(void) { }
+ static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
 diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index 445a4efee267..a2e66126b733 100644
+index a2e66126b733..67bc5ef3e8b2 100644
 --- a/arch/riscv/kernel/smpboot.c
 +++ b/arch/riscv/kernel/smpboot.c
-@@ -70,7 +70,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+@@ -8,6 +8,7 @@
+  * Copyright (C) 2017 SiFive
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/arch_topology.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -70,6 +71,72 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
  	}
  }
  
--void __init setup_smp(void)
-+static void __init of_parse_and_init_cpus(void)
- {
- 	struct device_node *dn;
- 	unsigned long hart;
-@@ -116,6 +116,11 @@ void __init setup_smp(void)
- 	}
- }
- 
-+void __init setup_smp(void)
++#ifdef CONFIG_ACPI
++static unsigned int cpu_count = 1;
++
++static int __init acpi_parse_rintc(union acpi_subtable_headers *header, const unsigned long end)
 +{
-+	of_parse_and_init_cpus();
++	unsigned long hart;
++	static bool found_boot_cpu;
++	struct acpi_madt_rintc *processor = (struct acpi_madt_rintc *)header;
++
++	/*
++	 * Each RINTC structure in MADT will have a flag. If ACPI_MADT_ENABLED
++	 * bit in the flag is not enabled, it means OS should not try to enable
++	 * the cpu to which RINTC belongs.
++	 */
++	if (!(processor->flags & ACPI_MADT_ENABLED))
++		return 0;
++
++	if (BAD_MADT_ENTRY(processor, end))
++		return -EINVAL;
++
++	acpi_table_print_madt_entry(&header->common);
++
++	hart = processor->hart_id;
++	if (hart == INVALID_HARTID) {
++		pr_warn("Invalid hartid\n");
++		return 0;
++	}
++
++	if (hart == cpuid_to_hartid_map(0)) {
++		BUG_ON(found_boot_cpu);
++		found_boot_cpu = true;
++		early_map_cpu_to_node(0, acpi_numa_get_nid(cpu_count));
++		return 0;
++	}
++
++	if (cpu_count >= NR_CPUS) {
++		pr_warn("NR_CPUS is too small for the number of ACPI tables.\n");
++		return 0;
++	}
++
++	cpuid_to_hartid_map(cpu_count) = hart;
++	early_map_cpu_to_node(cpu_count, acpi_numa_get_nid(cpu_count));
++	cpu_count++;
++
++	return 0;
 +}
 +
- static int start_secondary_cpu(int cpu, struct task_struct *tidle)
++static void __init acpi_parse_and_init_cpus(void)
++{
++	int cpuid;
++
++	cpu_set_ops(0);
++
++	acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_rintc, 0);
++
++	for (cpuid = 1; cpuid < nr_cpu_ids; cpuid++) {
++		if (cpuid_to_hartid_map(cpuid) != INVALID_HARTID) {
++			cpu_set_ops(cpuid);
++			set_cpu_possible(cpuid, true);
++		}
++	}
++}
++#else
++#define acpi_parse_and_init_cpus(...)	do { } while (0)
++#endif
++
+ static void __init of_parse_and_init_cpus(void)
  {
- 	if (cpu_ops[cpu]->cpu_start)
+ 	struct device_node *dn;
+@@ -118,7 +185,10 @@ static void __init of_parse_and_init_cpus(void)
+ 
+ void __init setup_smp(void)
+ {
+-	of_parse_and_init_cpus();
++	if (acpi_disabled)
++		of_parse_and_init_cpus();
++	else
++		acpi_parse_and_init_cpus();
+ }
+ 
+ static int start_secondary_cpu(int cpu, struct task_struct *tidle)
 -- 
 2.34.1
 
