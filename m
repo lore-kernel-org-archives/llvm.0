@@ -1,43 +1,43 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A103FDB
-	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:51:54 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1aaf7067647so83474005ad.0
-        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:51:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D8646AA
+	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:52:00 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-52c759b7d45so11301086a12.3
+        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684129913; x=1686721913;
+        d=ventanamicro.com; s=google; t=1684129920; x=1686721920;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=38k1Pzb7K1cfn0j2an7l+ypiTAB8VfWPvQzIb1c40CU=;
-        b=DF3aOoyY2x5iaGKXW2mCt0x/pQaAbDiKZZA0gDxjyLTyhSF3crH1dqxukCLNdHLfzQ
-         ZzllGl7O4cpL+1Ul+Ds+6Hlon19xGezeeBDycdpnw1yNTf8V0jBLjijIo+4x3N7mMVMm
-         isEMw5L4IMR6Yb/m9GcCKifj8e3SKkJs+3i2W3GBRn5jdibK+1JCAXj2pMZ63lvDHW50
-         sZfCOt8sZJqQyLYQ+Oq/WAW56pMLyY47+byTDjC10jgBeL3W30bL0F7M6vHfzau4iz4q
-         t0kqk1PSabd2sPNafnYuKBGJfSKY19q3eIGZWj6Wm7bKwjIEx1AbGBqBd0HU8LRKruDN
-         NGrQ==
+        bh=X+OfAZD2wx9PpRLlK5NDY7msLe+VFYQ8VG8zPNASdds=;
+        b=UP3JUPsUJ1/3dUsx+9XwRd+aKn0C6kOE6fBDoUikT8FxNl+xp+gB8mahalQmb0ihgd
+         Q7u+3H+YPFZonb1x69OUR6zI0rB+riv1UAWhtDwxnb2ZYjGo/KQLlaA9itLN70mdWhJ3
+         7MfZAKjmm7ieCLax5AByypANHXzadlQMKgbl2Xf8ed2w1C3Jwb/FagmGdEpKAX5vxhvA
+         i5CZcBU38xUHH/66RZgRzORjVVXU5fbL3+wp3DtFJhQa14LyYexnLq/OuimaF0IQwnhe
+         ne3HqhdGKqD6OxKvlZZbQphR6a6h4mT305SQZbTST7GxwBLfTLQrpaM7xlGP/Ns5vVfG
+         I4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684129913; x=1686721913;
+        d=1e100.net; s=20221208; t=1684129920; x=1686721920;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=38k1Pzb7K1cfn0j2an7l+ypiTAB8VfWPvQzIb1c40CU=;
-        b=JBWry++52Ml4WZpW7csfyaC6T4NluhA6WMfkTR6ViDB26I2munf1baVZ67GwQ/w+No
-         Fhlgn07fXwTQBARnVzVX/hh4Vk5N8sRY7LA7/D0K1QHN2egBQQjVIL6kbLbzPqsmWtS0
-         kuQV39EX4VLHCVMB82OVtyzUlhelTqqrwNrFQsyIm9MwfOAiLGwKcP/11xZ9wR7KpiS8
-         pKGK+dRV/ZXEybW1cdfAtmv8doDvEiNBiJ6ApQqi6YCGzxUsCRHvZFvULnAFfUv/l0Vf
-         q3F4s/ZjPYmNhECrwqyR2dn54YporxJYmqrkRljd9bDBTGZ0l7WBj0/YEO7FHfjgdpGa
-         JNTg==
-X-Gm-Message-State: AC+VfDyLVczYJaZ9PuEpoY6dwCvlAF0Jh2lAPxA1zB/B8GALK4wg1mYd
-	0UjQpiV7RoKwK3GJAKg553lFCA==
-X-Google-Smtp-Source: ACHHUZ5cT0y2rm0ss7uQXiWI3AwrzqmHogjFI004ygSntqdlQauc3fg5I5daloTNm/BF5SXIXJdw8g==
-X-Received: by 2002:a17:902:fa0f:b0:1a9:8ff5:af43 with SMTP id la15-20020a170902fa0f00b001a98ff5af43mr30429186plb.18.1684129913618;
-        Sun, 14 May 2023 22:51:53 -0700 (PDT)
+        bh=X+OfAZD2wx9PpRLlK5NDY7msLe+VFYQ8VG8zPNASdds=;
+        b=M5gsGCk9HSyJ/faVXRuOuMyqE1zivC3FQ7OOxbsWti0qodYxAIFui/z9duy4sS5ab9
+         n318X3qGEZuCkJfHIQaPn9LrUeeXSdAQq0VnOUkLZ8LZjpJmckwU7suNzMJQcg8WamuS
+         qJouFMJvsnTCIeqIhwWQzmrFN5rqOepxA0ztymwlWMInjeqNKBY6TQiNnEiey3kTOfz5
+         MulH2MxsvvID1XIjq/8HBGvhK7v/rOL+TlsHb5SiyzO/XLTL29ZQzlma5Jqu+qh+cBN8
+         Fs9msVoid5mTQkIDZd7so475QkWsKI/h58z+yMyW317gefgjdyGK3/4eDFU29AbreVFF
+         hM4g==
+X-Gm-Message-State: AC+VfDyyb7uk+d2ZpKAwyj7CRL/Wjp2hu7Z40OxHO6m/3WwDzJ00IFMm
+	EMu1QNmugunfYPsG91OoxPMlHQ==
+X-Google-Smtp-Source: ACHHUZ7raKD1UEB9BO9HO/a5fCkuFHIsdIRcdjSH1aF/He9zg5LJ4Ho9n6tLwYP0ZSkrYVhsLcVMNA==
+X-Received: by 2002:a17:902:d48d:b0:1ac:8835:b89b with SMTP id c13-20020a170902d48d00b001ac8835b89bmr30050863plg.5.1684129920075;
+        Sun, 14 May 2023 22:52:00 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.191.118])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.51.47
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 22:51:53 -0700 (PDT)
+        Sun, 14 May 2023 22:51:59 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -66,12 +66,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH V6 20/21] RISC-V: Enable ACPI in defconfig
-Date: Mon, 15 May 2023 11:19:27 +0530
-Message-Id: <20230515054928.2079268-21-sunilvl@ventanamicro.com>
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH V6 21/21] MAINTAINERS: Add entry for drivers/acpi/riscv
+Date: Mon, 15 May 2023 11:19:28 +0530
+Message-Id: <20230515054928.2079268-22-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
 References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
@@ -83,28 +81,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support to build ACPI subsystem in defconfig.
+ACPI defines few RISC-V specific tables which need
+parsing code added in drivers/acpi/riscv. Add maintainer
+entries for this newly created folder.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index d98d6e90b2b8..d3d1fbf2dd5f 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -37,6 +37,7 @@ CONFIG_PM=y
- CONFIG_CPU_IDLE=y
- CONFIG_VIRTUALIZATION=y
- CONFIG_KVM=m
-+CONFIG_ACPI=y
- CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e0ad886d3163..1b6e41691d00 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -406,6 +406,13 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	drivers/acpi/arm64
+ 
++ACPI FOR RISC-V (ACPI/riscv)
++M:	Sunil V L <sunilvl@ventanamicro.com>
++L:	linux-acpi@vger.kernel.org
++L:	linux-riscv@lists.infradead.org
++S:	Maintained
++F:	drivers/acpi/riscv/
++
+ ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
+ M:	Sudeep Holla <sudeep.holla@arm.com>
+ L:	linux-acpi@vger.kernel.org
 -- 
 2.34.1
 
