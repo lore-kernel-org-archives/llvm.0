@@ -1,122 +1,73 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD41FD0;
-	Mon, 15 May 2023 05:54:36 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 64C1221D41;
-	Mon, 15 May 2023 05:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1684130069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2g2SRYrfL0FsqPNDX6p//ghRaOiZy0Uhnjt4q+fH5MU=;
-	b=FROqecaKMuexOzGH3mwY7yBusf7OEzWAIDx7xq4W9uNUasoKrYVvn11VOtuO3zOYqblpSL
-	K602eifFSNA9mxY5Sh0JyrYX05KSUlPKn/xBxclkbp0aPPsmMBb7bpset2lQyAGgb/K4IA
-	PP7AK6VfRbQptcBo4GQVu140Ayb1ekI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1684130069;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2g2SRYrfL0FsqPNDX6p//ghRaOiZy0Uhnjt4q+fH5MU=;
-	b=BUr6UGSB4yeTZb7D2IAkK+LUs1tT3SMVmySry2rX+5bf7i+31GT5JSMi2E3jNuUQVCPYXM
-	saejdp1e0wkf+eBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 367BF13499;
-	Mon, 15 May 2023 05:54:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id uKZvDBXJYWSAYwAAMHmgww
-	(envelope-from <hare@suse.de>); Mon, 15 May 2023 05:54:29 +0000
-Message-ID: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
-Date: Mon, 15 May 2023 07:54:28 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AF63FDB
+	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:55:06 +0000 (UTC)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+	id 1pyRAL-0092DT-4p; Mon, 15 May 2023 13:54:38 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 15 May 2023 13:54:37 +0800
+Date: Mon, 15 May 2023 13:54:37 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Weili Qian <qianweili@huawei.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH V6 03/21] crypto: hisilicon/qm: Fix to enable build with
+ RISC-V clang
+Message-ID: <ZGHJHcECXV0EptuT@gondor.apana.org.au>
+References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+ <20230515054928.2079268-4-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
-Content-Language: en-US
-To: Tian Lan <tilan7663@gmail.com>, ming.lei@redhat.com
-Cc: axboe@kernel.dk, horms@kernel.org, linux-block@vger.kernel.org,
- lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- tian.lan@twosigma.com
-References: <ZGDur5+koRgNh5Ih@ovpn-8-17.pek2.redhat.com>
- <20230514145328.595743-1-tilan7663@gmail.com>
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230514145328.595743-1-tilan7663@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515054928.2079268-4-sunilvl@ventanamicro.com>
 
-On 5/14/23 16:53, Tian Lan wrote:
-> From: Tian Lan <tian.lan@twosigma.com>
+On Mon, May 15, 2023 at 11:19:10AM +0530, Sunil V L wrote:
+> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
+> allmodconfig build. However, build fails with clang and below
+> error is seen.
 > 
-> The nr_active counter continues to increase over time which causes the
-> blk_mq_get_tag to hang until the thread is rescheduled to a different
-> core despite there are still tags available.
+> drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+Q' in asm
+>                        "+Q" (*((char __iomem *)fun_base))
+>                        ^
+> This is expected error with clang due to the way it is designed.
 > 
-> kernel-stack
+> To fix this issue, move arm64 assembly code under #if.
 > 
->    INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
->    Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
->    "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->    task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
->      Call Trace:
->      <TASK>
->      __schedule+0x351/0xa20
->      scheduler+0x5d/0xe0
->      io_schedule+0x42/0x70
->      blk_mq_get_tag+0x11a/0x2a0
->      ? dequeue_task_stop+0x70/0x70
->      __blk_mq_alloc_requests+0x191/0x2e0
-> 
-> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
-> __blk_mq_free_request being called.
-> 
->    320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
->           b'__blk_mq_free_request+0x1 [kernel]'
->           b'bt_iter+0x50 [kernel]'
->           b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
->           b'blk_mq_timeout_work+0x7c [kernel]'
->           b'process_one_work+0x1c4 [kernel]'
->           b'worker_thread+0x4d [kernel]'
->           b'kthread+0xe6 [kernel]'
->           b'ret_from_fork+0x1f [kernel]'
-> 
-> The issue is caused by the difference between blk_mq_free_request() and
-> blk_mq_end_request_batch() wrt. when to call __blk_mq_dec_active_requests().
-> The former does it before calling req_ref_put_and_test(), and the latter
-> decreases the active request after req_ref_put_and_test().
-> 
-> - Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
-> 
-> Signed-off-by: Tian Lan <tian.lan@twosigma.com>
-> Reviewed-by: Ming Lei <ming.lei@redhat.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/999
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> [sunilvl@ventanamicro.com: Moved tmp0 and tmp1 into the #if]
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 > ---
->   block/blk-mq.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+>  drivers/crypto/hisilicon/qm.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Cheers,
-
-Hannes
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
