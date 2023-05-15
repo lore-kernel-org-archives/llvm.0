@@ -1,114 +1,122 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D8646AA
-	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:52:00 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-52c759b7d45so11301086a12.3
-        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684129920; x=1686721920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X+OfAZD2wx9PpRLlK5NDY7msLe+VFYQ8VG8zPNASdds=;
-        b=UP3JUPsUJ1/3dUsx+9XwRd+aKn0C6kOE6fBDoUikT8FxNl+xp+gB8mahalQmb0ihgd
-         Q7u+3H+YPFZonb1x69OUR6zI0rB+riv1UAWhtDwxnb2ZYjGo/KQLlaA9itLN70mdWhJ3
-         7MfZAKjmm7ieCLax5AByypANHXzadlQMKgbl2Xf8ed2w1C3Jwb/FagmGdEpKAX5vxhvA
-         i5CZcBU38xUHH/66RZgRzORjVVXU5fbL3+wp3DtFJhQa14LyYexnLq/OuimaF0IQwnhe
-         ne3HqhdGKqD6OxKvlZZbQphR6a6h4mT305SQZbTST7GxwBLfTLQrpaM7xlGP/Ns5vVfG
-         I4Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684129920; x=1686721920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X+OfAZD2wx9PpRLlK5NDY7msLe+VFYQ8VG8zPNASdds=;
-        b=M5gsGCk9HSyJ/faVXRuOuMyqE1zivC3FQ7OOxbsWti0qodYxAIFui/z9duy4sS5ab9
-         n318X3qGEZuCkJfHIQaPn9LrUeeXSdAQq0VnOUkLZ8LZjpJmckwU7suNzMJQcg8WamuS
-         qJouFMJvsnTCIeqIhwWQzmrFN5rqOepxA0ztymwlWMInjeqNKBY6TQiNnEiey3kTOfz5
-         MulH2MxsvvID1XIjq/8HBGvhK7v/rOL+TlsHb5SiyzO/XLTL29ZQzlma5Jqu+qh+cBN8
-         Fs9msVoid5mTQkIDZd7so475QkWsKI/h58z+yMyW317gefgjdyGK3/4eDFU29AbreVFF
-         hM4g==
-X-Gm-Message-State: AC+VfDyyb7uk+d2ZpKAwyj7CRL/Wjp2hu7Z40OxHO6m/3WwDzJ00IFMm
-	EMu1QNmugunfYPsG91OoxPMlHQ==
-X-Google-Smtp-Source: ACHHUZ7raKD1UEB9BO9HO/a5fCkuFHIsdIRcdjSH1aF/He9zg5LJ4Ho9n6tLwYP0ZSkrYVhsLcVMNA==
-X-Received: by 2002:a17:902:d48d:b0:1ac:8835:b89b with SMTP id c13-20020a170902d48d00b001ac8835b89bmr30050863plg.5.1684129920075;
-        Sun, 14 May 2023 22:52:00 -0700 (PDT)
-Received: from localhost.localdomain ([106.51.191.118])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 22:51:59 -0700 (PDT)
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-acpi@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Sunil V L <sunilvl@ventanamicro.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Weili Qian <qianweili@huawei.com>,
-	Zhou Wang <wangzhou1@hisilicon.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH V6 21/21] MAINTAINERS: Add entry for drivers/acpi/riscv
-Date: Mon, 15 May 2023 11:19:28 +0530
-Message-Id: <20230515054928.2079268-22-sunilvl@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
-References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD41FD0;
+	Mon, 15 May 2023 05:54:36 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 64C1221D41;
+	Mon, 15 May 2023 05:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1684130069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2g2SRYrfL0FsqPNDX6p//ghRaOiZy0Uhnjt4q+fH5MU=;
+	b=FROqecaKMuexOzGH3mwY7yBusf7OEzWAIDx7xq4W9uNUasoKrYVvn11VOtuO3zOYqblpSL
+	K602eifFSNA9mxY5Sh0JyrYX05KSUlPKn/xBxclkbp0aPPsmMBb7bpset2lQyAGgb/K4IA
+	PP7AK6VfRbQptcBo4GQVu140Ayb1ekI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1684130069;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2g2SRYrfL0FsqPNDX6p//ghRaOiZy0Uhnjt4q+fH5MU=;
+	b=BUr6UGSB4yeTZb7D2IAkK+LUs1tT3SMVmySry2rX+5bf7i+31GT5JSMi2E3jNuUQVCPYXM
+	saejdp1e0wkf+eBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 367BF13499;
+	Mon, 15 May 2023 05:54:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id uKZvDBXJYWSAYwAAMHmgww
+	(envelope-from <hare@suse.de>); Mon, 15 May 2023 05:54:29 +0000
+Message-ID: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
+Date: Mon, 15 May 2023 07:54:28 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
+Content-Language: en-US
+To: Tian Lan <tilan7663@gmail.com>, ming.lei@redhat.com
+Cc: axboe@kernel.dk, horms@kernel.org, linux-block@vger.kernel.org,
+ lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ tian.lan@twosigma.com
+References: <ZGDur5+koRgNh5Ih@ovpn-8-17.pek2.redhat.com>
+ <20230514145328.595743-1-tilan7663@gmail.com>
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230514145328.595743-1-tilan7663@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-ACPI defines few RISC-V specific tables which need
-parsing code added in drivers/acpi/riscv. Add maintainer
-entries for this newly created folder.
+On 5/14/23 16:53, Tian Lan wrote:
+> From: Tian Lan <tian.lan@twosigma.com>
+> 
+> The nr_active counter continues to increase over time which causes the
+> blk_mq_get_tag to hang until the thread is rescheduled to a different
+> core despite there are still tags available.
+> 
+> kernel-stack
+> 
+>    INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
+>    Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
+>    "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>    task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+>      Call Trace:
+>      <TASK>
+>      __schedule+0x351/0xa20
+>      scheduler+0x5d/0xe0
+>      io_schedule+0x42/0x70
+>      blk_mq_get_tag+0x11a/0x2a0
+>      ? dequeue_task_stop+0x70/0x70
+>      __blk_mq_alloc_requests+0x191/0x2e0
+> 
+> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+> __blk_mq_free_request being called.
+> 
+>    320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
+>           b'__blk_mq_free_request+0x1 [kernel]'
+>           b'bt_iter+0x50 [kernel]'
+>           b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+>           b'blk_mq_timeout_work+0x7c [kernel]'
+>           b'process_one_work+0x1c4 [kernel]'
+>           b'worker_thread+0x4d [kernel]'
+>           b'kthread+0xe6 [kernel]'
+>           b'ret_from_fork+0x1f [kernel]'
+> 
+> The issue is caused by the difference between blk_mq_free_request() and
+> blk_mq_end_request_batch() wrt. when to call __blk_mq_dec_active_requests().
+> The former does it before calling req_ref_put_and_test(), and the latter
+> decreases the active request after req_ref_put_and_test().
+> 
+> - Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
+> 
+> Signed-off-by: Tian Lan <tian.lan@twosigma.com>
+> Reviewed-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   block/blk-mq.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Cheers,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0ad886d3163..1b6e41691d00 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -406,6 +406,13 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	drivers/acpi/arm64
- 
-+ACPI FOR RISC-V (ACPI/riscv)
-+M:	Sunil V L <sunilvl@ventanamicro.com>
-+L:	linux-acpi@vger.kernel.org
-+L:	linux-riscv@lists.infradead.org
-+S:	Maintained
-+F:	drivers/acpi/riscv/
-+
- ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
- M:	Sudeep Holla <sudeep.holla@arm.com>
- L:	linux-acpi@vger.kernel.org
+Hannes
 -- 
-2.34.1
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
 
