@@ -1,60 +1,58 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAD7C8CB;
-	Mon, 15 May 2023 12:26:51 +0000 (UTC)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-3f41b73104eso32808001cf.3;
-        Mon, 15 May 2023 05:26:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B66CC2F7;
+	Mon, 15 May 2023 12:28:43 +0000 (UTC)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-3f475746ae0so32802001cf.0;
+        Mon, 15 May 2023 05:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684153610; x=1686745610;
+        d=gmail.com; s=20221208; t=1684153723; x=1686745723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=frVvBnuP2+i1aJfoXn+uOQ4Dz2/3JLy5AwDGkoiWkAA=;
-        b=fHaGi/NwOVxcobMw6IFO5ss/FvKw2r+7FXIEJ85Odymwvh1N649DR1PnMuPFs/755N
-         8aE+UKy6gqPCSoh6fUUCmr5XSvycsKRwa8ALWDUlN4t7TT9FeaOO1KLD9m1PAEH2+kOW
-         OHWALp9MR6n95db+1TPk+5JG1AdHFqy2zery0rj0/3cgPe7zgs5ifehXM5t0SFE8Oi7H
-         qjnEffPyLYFbb5+1esjlFWScYEvF0TvOfQhRUkuAFtByu0fF6s6OyxnviCKQlyGmGDyg
-         w3ZNjxaVlTiKUZL7t7l5C3alt95WvCedpHaGf8sadF03BKjW26Iz1KHM3Yxfk2xfKReS
-         t+bw==
+        bh=I1VjVPqAfk/ppRiX01W6r2R4tRubSTNMzE3oD3ueN2U=;
+        b=ZWDv4c2aGhq+hVZZ96wLRricYpRxNLMwIkL+8XmiKvlkArDwiiYYvmPfggoS2OsHC7
+         DpDf88cplcY6csuDKDFO6cpBgJJpBs68+CdJGqkP4x+VH5zCWcDSxki8LSf7cP7nPu8i
+         ZFupC7LU7OoOZXbxL88NV35zuUChWS+ZeDzZVhn8VU8h4l7X0yLZ/s4OS0AP7gbp5LCa
+         lsRGsdodNgPPhcxoOi4ZfiOk3a2Tnkpehrsw07T/1rPQ+rw0/PDaHD94+LYK4pGG9eEx
+         iHEkWpw0kXB29GIdZBGE5XbQKLj5ct/SL+IAPnZBFokfH15IFAx2f0OS8pkoumQEs3nT
+         ehUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684153610; x=1686745610;
+        d=1e100.net; s=20221208; t=1684153723; x=1686745723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=frVvBnuP2+i1aJfoXn+uOQ4Dz2/3JLy5AwDGkoiWkAA=;
-        b=j7ysipj6tyjrmZDX6cTnfrvOQb3TKZ9b8UEbdTfYFY7hL7jwPnCj2Vb1L7nPNAts+r
-         pYbnaU+mBDyq3HWCntoZRtAGKc2GDHagevEyO2vvL7n0S21ETH8b1vSQZRcF5Fya2BDR
-         9xtuu8fmhbHEN+KIfPogDnVcKbwPmgtv4Pr9A1JmjV8rgVpXlmpbFEAre4QtgbyafxYQ
-         BnomS00RZJHr9sVv5hBEqa9rMcxPpTpmd6rwAKwQom0ck8Ux8RhfWry8uRSZdPHiEq5R
-         EgPdMDS7PhAFxPKvVyzpK5+fk2ydLkjKH07Zi5ogeAJF1EHQTTWU9giukO6fUY5dmlYp
-         IEbw==
-X-Gm-Message-State: AC+VfDzT4jUWWGumseO9zOs6Avs1NTZcbpeUMSxhF9sZa+8ShgIwvLit
-	FmoBLg/8xVwaw5e2R1kGkZA=
-X-Google-Smtp-Source: ACHHUZ6UVQqt/Q5Q7FdQgoJCVn2vJlZj9ekfWfTM2bVhtPYCZhqh96pfA590HhUR4eBOOfm4HFeeHQ==
-X-Received: by 2002:a05:622a:414:b0:3f3:895b:6161 with SMTP id n20-20020a05622a041400b003f3895b6161mr44618826qtx.65.1684153610369;
-        Mon, 15 May 2023 05:26:50 -0700 (PDT)
+        bh=I1VjVPqAfk/ppRiX01W6r2R4tRubSTNMzE3oD3ueN2U=;
+        b=I/JV4m/+x1lfNcOfxJH2QflXzUSeZ8wnuaStLPkLq1F28xAhPfnxp5z4R5MOO03rDY
+         vFFvVBI+3YC7WtjWRpbfukfRDnq4msGWoNzwmZ+1qudkPbr0ahMs2XlZ+bTd6yBJrHdG
+         LtStk67KuImzRgcsVN1ExVwBxFfENIW1dvfpCu6h4DtLVvFIKOJin03wczQN4chXylyq
+         JhQavPqg/JBMChp71s+0OtrwYyqwktZJy+4uMIbvd4zYJqkDlXBFF0PjskGrNRCLbajQ
+         l+tma5ZtYKJ4jpDLaU2FS65KzpAZLNbUCEy1h1Tl+UXqKbxW8hmthH2ddkmTKYdjvhat
+         pgag==
+X-Gm-Message-State: AC+VfDzzZPzfIOnDedzuXdqN3yCcLXpOznv2zgGTD5hMBF6K97O/mG4H
+	jXnhN/NekAJ5Ebm450uV7YE=
+X-Google-Smtp-Source: ACHHUZ7TsAlETEjPwHwpArVG57crjnQkJXO88HfoqSd41LsVLHtpYRU3+JVmPWC0ZJJEqC9MDT1G/Q==
+X-Received: by 2002:a05:622a:1ba4:b0:3ec:4705:d20e with SMTP id bp36-20020a05622a1ba400b003ec4705d20emr50519945qtb.30.1684153722836;
+        Mon, 15 May 2023 05:28:42 -0700 (PDT)
 Received: from tian-Alienware-15-R4.fios-router.home (pool-173-77-254-84.nycmny.fios.verizon.net. [173.77.254.84])
-        by smtp.gmail.com with ESMTPSA id m24-20020aed27d8000000b003f364778b2bsm5395733qtg.4.2023.05.15.05.26.48
+        by smtp.gmail.com with ESMTPSA id r23-20020ac87ef7000000b003b63b8df24asm5310066qtc.36.2023.05.15.05.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 05:26:49 -0700 (PDT)
+        Mon, 15 May 2023 05:28:42 -0700 (PDT)
 From: Tian Lan <tilan7663@gmail.com>
-To: hare@suse.de
-Cc: axboe@kernel.dk,
-	horms@kernel.org,
+To: axboe@kernel.dk
+Cc: horms@kernel.org,
 	linux-block@vger.kernel.org,
 	lkp@intel.com,
 	llvm@lists.linux.dev,
-	ming.lei@redhat.com,
 	oe-kbuild-all@lists.linux.dev,
 	tian.lan@twosigma.com,
 	tilan7663@gmail.com
-Subject: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
-Date: Mon, 15 May 2023 08:26:43 -0400
-Message-Id: <20230515122643.597546-1-tilan7663@gmail.com>
+Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
+Date: Mon, 15 May 2023 08:28:41 -0400
+Message-Id: <20230515122841.602259-1-tilan7663@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
-References: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
+In-Reply-To: <a685e5d2-5da8-2ff2-c53d-dbf77fa9609d@kernel.dk>
+References: <a685e5d2-5da8-2ff2-c53d-dbf77fa9609d@kernel.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,85 +61,6 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tian Lan <tian.lan@twosigma.com>
+Thanks Jens, this is very helpful!
 
-The nr_active counter continues to increase over time which causes the
-blk_mq_get_tag to hang until the thread is rescheduled to a different
-core despite there are still tags available.
-
-kernel-stack
-
-  INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
-  Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
-  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-  task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
-    Call Trace:
-    <TASK>
-    __schedule+0x351/0xa20
-    scheduler+0x5d/0xe0
-    io_schedule+0x42/0x70
-    blk_mq_get_tag+0x11a/0x2a0
-    ? dequeue_task_stop+0x70/0x70
-    __blk_mq_alloc_requests+0x191/0x2e0
-
-kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
-__blk_mq_free_request being called.
-
-  320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
-         b'__blk_mq_free_request+0x1 [kernel]'
-         b'bt_iter+0x50 [kernel]'
-         b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
-         b'blk_mq_timeout_work+0x7c [kernel]'
-         b'process_one_work+0x1c4 [kernel]'
-         b'worker_thread+0x4d [kernel]'
-         b'kthread+0xe6 [kernel]'
-         b'ret_from_fork+0x1f [kernel]'
-
-The issue is caused by the difference between blk_mq_free_request() and
-blk_mq_end_request_batch() wrt. when to call __blk_mq_dec_active_requests().
-The former does it before calling req_ref_put_and_test(), and the latter
-decreases the active request after req_ref_put_and_test().
-
-- Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
-
-Signed-off-by: Tian Lan <tian.lan@twosigma.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- block/blk-mq.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index f6dad0886a2f..850bfb844ed2 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -683,6 +683,10 @@ static void __blk_mq_free_request(struct request *rq)
- 	blk_crypto_free_request(rq);
- 	blk_pm_mark_last_busy(rq);
- 	rq->mq_hctx = NULL;
-+
-+	if (rq->rq_flags & RQF_MQ_INFLIGHT)
-+		__blk_mq_dec_active_requests(hctx);
-+
- 	if (rq->tag != BLK_MQ_NO_TAG)
- 		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
- 	if (sched_tag != BLK_MQ_NO_TAG)
-@@ -694,15 +698,11 @@ static void __blk_mq_free_request(struct request *rq)
- void blk_mq_free_request(struct request *rq)
- {
- 	struct request_queue *q = rq->q;
--	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
- 
- 	if ((rq->rq_flags & RQF_ELVPRIV) &&
- 	    q->elevator->type->ops.finish_request)
- 		q->elevator->type->ops.finish_request(rq);
- 
--	if (rq->rq_flags & RQF_MQ_INFLIGHT)
--		__blk_mq_dec_active_requests(hctx);
--
- 	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
- 		laptop_io_completion(q->disk->bdi);
- 
--- 
-2.25.1
-
+Tian
