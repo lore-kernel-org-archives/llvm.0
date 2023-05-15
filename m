@@ -1,43 +1,43 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E463D64
-	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:49:51 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1aaea43def7so84277555ad.2
-        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:49:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C0D3D64
+	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:49:57 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1aafa03f541so119226525ad.0
+        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684129791; x=1686721791;
+        d=ventanamicro.com; s=google; t=1684129797; x=1686721797;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/iGXLwFtJb/ikFg1cYTajKxo15m1ntUjHJP3AtJxPHQ=;
-        b=dzjo8FojeRcnufXLfXC0KBxuYEA22LD3hfHOwXg4ZDuLKLv0BrqZuH8SGOB++jp5uO
-         wzKiYKHcGFS22nfktsiZ/0soliO+6KwkV1F/CT4cSacQXjZNHJvQslYLfkfOySySRtSC
-         8UjaZJDHoN+NS64WsDBJKuPA3FJoVOmbNNpbeSntaVz+MYmRbJtjWSbb0awzzHpNTzQM
-         iMrORsenLXTKP1MfGL3i50980w+juwmbTsihGPxC1TFAomikj8sy7z3tZ5zOxuVobKLf
-         PO/dJlkFK4Nme80wJtwvZuMrtkTbpTOttq+0KOfxO/f5tg65WVxizgRj349mCeC4zcqw
-         YAGA==
+        bh=4CWREIVCWjShI+1eEDBl6O/SQK7CU6Z/SOibOv3uDSU=;
+        b=LaizqtRgx/46L7XZEEzAvGKk4DNL3cxT+KIJNCUnMf1yMdp2SUe33zOAN2WuA/4Nqa
+         /LAFe6wDAvy8FAPxcIeoG6pPGKyP6nl643DNNFL+KPrNAFuDHIzEULjjVMBFtvhXZzUU
+         pClnyaZQBT8RE1o5wOtGg7i+edZHRt2vGxLDwpWY4uqkjm3mPWxvLn7PvAmlO976y4M0
+         SSdEWmIR2ddEnCrxb+0vrKy8bmwG0oqJe+I2DEh54a35nyzrEg+fQkaZPlfSFerS15iE
+         iEhZ5R5TSoza6gkAxEX9fBXrJ2cae0PtGLkCNNS86q654yu8Vd7Utmk9+mrWq4i6JeA9
+         Nk2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684129791; x=1686721791;
+        d=1e100.net; s=20221208; t=1684129797; x=1686721797;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/iGXLwFtJb/ikFg1cYTajKxo15m1ntUjHJP3AtJxPHQ=;
-        b=XA/YRfeyA3goluT27TBvE0AFH9Y5sDHCsxNbCHPJDypm0JAjivV4xtRQq6uc64VD51
-         lvqNLMe9nSIz7t5q1hjj+23fiQe4lsptAxbfCk66E2WVVIY2BOfUpmOvlUfL1GtM1RA1
-         manW72sAt7S6U2CQHHQTcBc32kiLJMfO91stKi9+htfLwo6xH0o9mfUNN5GDVz1lLLHh
-         Bt7EyUCmEusQcb6WhpzS07U7u6SzO9KOb9D7vessMPLOJu/zAhq7FQZUcOjCWgoL3SmZ
-         0fIHYB/Cu559OSMQgJCi9ksDKxrA/uf+lCIVNI/hkmvnv05I4H80Y+6C96BT5Z52CWq3
-         dDZg==
-X-Gm-Message-State: AC+VfDyyOCUpuTdtxql/jgKFHHRVBJswee6VZryieSlHpRBy8Gnk4ULE
-	5WeNuz8QM5J6zkeyu5JiTxxomQ==
-X-Google-Smtp-Source: ACHHUZ5Z2n4/ARSq3kgTidyaSTNrk+RwN40D33bxOlnfkr8ZPEoD5Bs6K7sM3BLGphGdcRXft9Eprw==
-X-Received: by 2002:a17:902:e5cf:b0:1ad:e3a8:3bf with SMTP id u15-20020a170902e5cf00b001ade3a803bfmr12750021plf.21.1684129790858;
-        Sun, 14 May 2023 22:49:50 -0700 (PDT)
+        bh=4CWREIVCWjShI+1eEDBl6O/SQK7CU6Z/SOibOv3uDSU=;
+        b=LGOcznHpVDfIBb+B+4oixhwGnM3gjgmsCJZK528UMMFDjXHDJ0jNidsPZGkesV1rbl
+         lI/xf7W563EJTHK80taCz6ZuKyr+NYWrle46OU8L5zcHY3hzG0WbXzzmpxTX1W5n1s5P
+         J0GiVxfszrHdLkLtaXZth4WBijUZpJX11oxkxggU+2fiOM0RGqWsFzmBgRLYqIiBISiw
+         7S8ie+8c93Zd7vM3Z2ND+ffLpfSqjW8AvqhGiE7e2X8mZ4dHWXcLB5yFLWa5EuenO1rI
+         U+H1Z6v0QQ2tD61pY5tiS2Ju3vi24vMtU9LbfiTXg2vLvjTpSsdIppG5M5EJn/fnhS71
+         ujDw==
+X-Gm-Message-State: AC+VfDzIhN4NHZcLSzE0y/ojeXg+8JkcoTmaO3aBOa4bvBBXJV117nT6
+	S4QteBrfla+hpZk3QIuZfBXerw==
+X-Google-Smtp-Source: ACHHUZ5SBnZH4w/8kTkRxhSGgZWYJARyq6N8PLdcSNQB6VCfLcCyIRX0eY9eHJdSC6V7hPlOF0bM/g==
+X-Received: by 2002:a17:902:ab89:b0:1ad:1c22:1b53 with SMTP id f9-20020a170902ab8900b001ad1c221b53mr16090936plr.40.1684129797303;
+        Sun, 14 May 2023 22:49:57 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.191.118])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.49.44
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.49.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 22:49:50 -0700 (PDT)
+        Sun, 14 May 2023 22:49:56 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -66,9 +66,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH V6 02/21] platform/surface: Disable for RISC-V
-Date: Mon, 15 May 2023 11:19:09 +0530
-Message-Id: <20230515054928.2079268-3-sunilvl@ventanamicro.com>
+Subject: [PATCH V6 03/21] crypto: hisilicon/qm: Fix to enable build with RISC-V clang
+Date: Mon, 15 May 2023 11:19:10 +0530
+Message-Id: <20230515054928.2079268-4-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
 References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
@@ -80,33 +80,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
-in allmodconfig build. However, RISC-V doesn't support sub-word
-atomics which is used by this driver and hence allmodconfig
-build will fail.
+With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
+allmodconfig build. However, build fails with clang and below
+error is seen.
 
-There is currently no plan to support this driver for RISC-V. So,
-disable this driver for RISC-V even when ACPI is enabled.
+drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+Q' in asm
+                       "+Q" (*((char __iomem *)fun_base))
+                       ^
+This is expected error with clang due to the way it is designed.
 
+To fix this issue, move arm64 assembly code under #if.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/999
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+[sunilvl@ventanamicro.com: Moved tmp0 and tmp1 into the #if]
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
- drivers/platform/surface/aggregator/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/hisilicon/qm.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/platform/surface/aggregator/Kconfig b/drivers/platform/surface/aggregator/Kconfig
-index c114f9dd5fe1..88afc38ffdc5 100644
---- a/drivers/platform/surface/aggregator/Kconfig
-+++ b/drivers/platform/surface/aggregator/Kconfig
-@@ -4,7 +4,7 @@
- menuconfig SURFACE_AGGREGATOR
- 	tristate "Microsoft Surface System Aggregator Module Subsystem and Drivers"
- 	depends on SERIAL_DEV_BUS
--	depends on ACPI
-+	depends on ACPI && !RISCV
- 	select CRC_CCITT
- 	help
- 	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index ad0c042b5e66..edc6fd44e7ca 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -610,7 +610,10 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
+ static void qm_mb_write(struct hisi_qm *qm, const void *src)
+ {
+ 	void __iomem *fun_base = qm->io_base + QM_MB_CMD_SEND_BASE;
++
++#if IS_ENABLED(CONFIG_ARM64)
+ 	unsigned long tmp0 = 0, tmp1 = 0;
++#endif
+ 
+ 	if (!IS_ENABLED(CONFIG_ARM64)) {
+ 		memcpy_toio(fun_base, src, 16);
+@@ -618,6 +621,7 @@ static void qm_mb_write(struct hisi_qm *qm, const void *src)
+ 		return;
+ 	}
+ 
++#if IS_ENABLED(CONFIG_ARM64)
+ 	asm volatile("ldp %0, %1, %3\n"
+ 		     "stp %0, %1, %2\n"
+ 		     "dmb oshst\n"
+@@ -626,6 +630,7 @@ static void qm_mb_write(struct hisi_qm *qm, const void *src)
+ 		       "+Q" (*((char __iomem *)fun_base))
+ 		     : "Q" (*((char *)src))
+ 		     : "memory");
++#endif
+ }
+ 
+ static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
 -- 
 2.34.1
 
