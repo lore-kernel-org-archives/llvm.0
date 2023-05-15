@@ -1,43 +1,43 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0183D64
-	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:49:45 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-53033a0b473so5855977a12.0
-        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:49:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E463D64
+	for <llvm@lists.linux.dev>; Mon, 15 May 2023 05:49:51 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1aaea43def7so84277555ad.2
+        for <llvm@lists.linux.dev>; Sun, 14 May 2023 22:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684129784; x=1686721784;
+        d=ventanamicro.com; s=google; t=1684129791; x=1686721791;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rfepdXJdsq6ohX2AkAAGDRO8NQz+5w0XQmMbJfl5w48=;
-        b=FF8l4h5Fv5CwOz55cyPlj8vNJJWDVMCkL9k6YPzgVyjIgqTq/5qVdZ+c4hVx+DU5zG
-         7FfFBlhKYQ/qpU6PI+9MV2mxM9OMWh7pkrzjZFF7VozIKpoMEFsyNAUuhUgqygzA6ppl
-         F9A9otVKxhESo1/uy9WyOYILhBG3Cgt6hE555xQafhrdCOiVWGhJ7Sbidox20cyLS3Zq
-         LAQ6ahssk9FCrTXi/bK2hki2RPlJbPq3hy7OLkle8O1qIfmMB+/vAzltSc0mp9ptjvTX
-         GpO78EjhUJCv3I33Cvf3aQcgYKCxTBrJfbhM4ZVlLyT5MW7sa1n0NG0KW4x3q0DBBFf1
-         /d7g==
+        bh=/iGXLwFtJb/ikFg1cYTajKxo15m1ntUjHJP3AtJxPHQ=;
+        b=dzjo8FojeRcnufXLfXC0KBxuYEA22LD3hfHOwXg4ZDuLKLv0BrqZuH8SGOB++jp5uO
+         wzKiYKHcGFS22nfktsiZ/0soliO+6KwkV1F/CT4cSacQXjZNHJvQslYLfkfOySySRtSC
+         8UjaZJDHoN+NS64WsDBJKuPA3FJoVOmbNNpbeSntaVz+MYmRbJtjWSbb0awzzHpNTzQM
+         iMrORsenLXTKP1MfGL3i50980w+juwmbTsihGPxC1TFAomikj8sy7z3tZ5zOxuVobKLf
+         PO/dJlkFK4Nme80wJtwvZuMrtkTbpTOttq+0KOfxO/f5tg65WVxizgRj349mCeC4zcqw
+         YAGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684129784; x=1686721784;
+        d=1e100.net; s=20221208; t=1684129791; x=1686721791;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rfepdXJdsq6ohX2AkAAGDRO8NQz+5w0XQmMbJfl5w48=;
-        b=POtLHtfuyAadfWesl2UKJeTZrFv1XyKkJs0kXWcCMHrdkvJBCfaRqARk7M1vASV3mK
-         0BGLU6r4kyVG+hy7GoUnvGNwLgLYmOwdRdoZ7xGGLdIL+GkzxyPMjXy5zOgfXZeH5pk5
-         q04CNJVMjon5Pr8X78vBuHKVBcxlujiW5bSB0IIvpI/F5yAk8tPz0QrlIpsUoj6yf+KA
-         fI2b66rMew56XfOxK7LlDs9bBKbgAuLYFsHAtLR4b+QFifBPTrr5Epd2JEQ64l+Ez/Qz
-         RnK5dEcYCkctRrmzzOPeIAmlIufWkEf/YvIC4dVk3xSjSNM/r9WjFU6BfyJQZ1m77+q+
-         F7Gw==
-X-Gm-Message-State: AC+VfDxneXvscWuCzOx7oa3aAak8oPPkbGOTFI6X1JQ+176pcKcHeGhH
-	UCk2ROg082I6kl4YklYwt7YXPw==
-X-Google-Smtp-Source: ACHHUZ60Bn8aXfOJxmjZ+b6wNx+tjPWbD4NXCzp9i69pk0qeKeo90gXjsK0vstRnw9C/Wioy6rg0Yw==
-X-Received: by 2002:a17:903:2448:b0:1ac:63b6:f1ca with SMTP id l8-20020a170903244800b001ac63b6f1camr36172090pls.0.1684129784583;
-        Sun, 14 May 2023 22:49:44 -0700 (PDT)
+        bh=/iGXLwFtJb/ikFg1cYTajKxo15m1ntUjHJP3AtJxPHQ=;
+        b=XA/YRfeyA3goluT27TBvE0AFH9Y5sDHCsxNbCHPJDypm0JAjivV4xtRQq6uc64VD51
+         lvqNLMe9nSIz7t5q1hjj+23fiQe4lsptAxbfCk66E2WVVIY2BOfUpmOvlUfL1GtM1RA1
+         manW72sAt7S6U2CQHHQTcBc32kiLJMfO91stKi9+htfLwo6xH0o9mfUNN5GDVz1lLLHh
+         Bt7EyUCmEusQcb6WhpzS07U7u6SzO9KOb9D7vessMPLOJu/zAhq7FQZUcOjCWgoL3SmZ
+         0fIHYB/Cu559OSMQgJCi9ksDKxrA/uf+lCIVNI/hkmvnv05I4H80Y+6C96BT5Z52CWq3
+         dDZg==
+X-Gm-Message-State: AC+VfDyyOCUpuTdtxql/jgKFHHRVBJswee6VZryieSlHpRBy8Gnk4ULE
+	5WeNuz8QM5J6zkeyu5JiTxxomQ==
+X-Google-Smtp-Source: ACHHUZ5Z2n4/ARSq3kgTidyaSTNrk+RwN40D33bxOlnfkr8ZPEoD5Bs6K7sM3BLGphGdcRXft9Eprw==
+X-Received: by 2002:a17:902:e5cf:b0:1ad:e3a8:3bf with SMTP id u15-20020a170902e5cf00b001ade3a803bfmr12750021plf.21.1684129790858;
+        Sun, 14 May 2023 22:49:50 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.191.118])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.49.38
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm12423277plt.290.2023.05.14.22.49.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 22:49:44 -0700 (PDT)
+        Sun, 14 May 2023 22:49:50 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -65,13 +65,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Mark Gross <markgross@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH V6 01/21] riscv: move sbi_init() earlier before jump_label_init()
-Date: Mon, 15 May 2023 11:19:08 +0530
-Message-Id: <20230515054928.2079268-2-sunilvl@ventanamicro.com>
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH V6 02/21] platform/surface: Disable for RISC-V
+Date: Mon, 15 May 2023 11:19:09 +0530
+Message-Id: <20230515054928.2079268-3-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
 References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
@@ -83,75 +80,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Jisheng Zhang <jszhang@kernel.org>
+With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
+in allmodconfig build. However, RISC-V doesn't support sub-word
+atomics which is used by this driver and hence allmodconfig
+build will fail.
 
-We call jump_label_init() in setup_arch() is to use static key
-mechanism earlier, but riscv jump label relies on the sbi functions,
-If we enable static key before sbi_init(), the code path looks like:
-  static_branch_enable()
-    ..
-      arch_jump_label_transform()
-        patch_text_nosync()
-          flush_icache_range()
-            flush_icache_all()
-              sbi_remote_fence_i() for CONFIG_RISCV_SBI case
-                __sbi_rfence()
+There is currently no plan to support this driver for RISC-V. So,
+disable this driver for RISC-V even when ACPI is enabled.
 
-Since sbi isn't initialized, so NULL deference! Here is a typical
-panic log:
-
-[    0.000000] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[    0.000000] Oops [#1]
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc7+ #79
-[    0.000000] Hardware name: riscv-virtio,qemu (DT)
-[    0.000000] epc : 0x0
-[    0.000000]  ra : sbi_remote_fence_i+0x1e/0x26
-[    0.000000] epc : 0000000000000000 ra : ffffffff80005826 sp : ffffffff80c03d50
-[    0.000000]  gp : ffffffff80ca6178 tp : ffffffff80c0ad80 t0 : 6200000000000000
-[    0.000000]  t1 : 0000000000000000 t2 : 62203a6b746e6972 s0 : ffffffff80c03d60
-[    0.000000]  s1 : ffffffff80001af6 a0 : 0000000000000000 a1 : 0000000000000000
-[    0.000000]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-[    0.000000]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000080200
-[    0.000000]  s2 : ffffffff808b3e48 s3 : ffffffff808bf698 s4 : ffffffff80cb2818
-[    0.000000]  s5 : 0000000000000001 s6 : ffffffff80c9c345 s7 : ffffffff80895aa0
-[    0.000000]  s8 : 0000000000000001 s9 : 000000000000007f s10: 0000000000000000
-[    0.000000]  s11: 0000000000000000 t3 : ffffffff80824d08 t4 : 0000000000000022
-[    0.000000]  t5 : 000000000000003d t6 : 0000000000000000
-[    0.000000] status: 0000000000000100 badaddr: 0000000000000000 cause: 000000000000000c
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-[    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-
-Fix this issue by moving sbi_init() earlier before jump_label_init()
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
- arch/riscv/kernel/setup.c | 2 +-
+ drivers/platform/surface/aggregator/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 36b026057503..9fb839074e16 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -270,6 +270,7 @@ void __init setup_arch(char **cmdline_p)
- 	*cmdline_p = boot_command_line;
- 
- 	early_ioremap_setup();
-+	sbi_init();
- 	jump_label_init();
- 	parse_early_param();
- 
-@@ -283,7 +284,6 @@ void __init setup_arch(char **cmdline_p)
- 	misc_mem_init();
- 
- 	init_resources();
--	sbi_init();
- 
- #ifdef CONFIG_KASAN
- 	kasan_init();
+diff --git a/drivers/platform/surface/aggregator/Kconfig b/drivers/platform/surface/aggregator/Kconfig
+index c114f9dd5fe1..88afc38ffdc5 100644
+--- a/drivers/platform/surface/aggregator/Kconfig
++++ b/drivers/platform/surface/aggregator/Kconfig
+@@ -4,7 +4,7 @@
+ menuconfig SURFACE_AGGREGATOR
+ 	tristate "Microsoft Surface System Aggregator Module Subsystem and Drivers"
+ 	depends on SERIAL_DEV_BUS
+-	depends on ACPI
++	depends on ACPI && !RISCV
+ 	select CRC_CCITT
+ 	help
+ 	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
 -- 
 2.34.1
 
