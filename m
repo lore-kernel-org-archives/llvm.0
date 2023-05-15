@@ -1,142 +1,147 @@
-Received: from DM4PR02CU001.outbound.protection.outlook.com (mail-centralusazon11012006.outbound.protection.outlook.com [52.101.63.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2166C2EE;
-	Mon, 15 May 2023 11:35:31 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cydSSSl/eVM734c9PmcOP6IjShpLKekmQ7ZfH5tphuvAyP6sFYeh7dHNEGlyCaeniuhKA8DOXQxIT0TlhVugcecXIUuwd7nIqoo0CY50exRUeqFVkhXGLipa/vhUxcgTXRINHKPa5/Hq5cDa+JeEc7Pux+2wLt00bRMwpL5uMjNpySZTypf7rcImYmHP6QaWeSZ5Ro14LWKohNHPV3QsOrJ6JT29sdcYePtuyIUAivvfPjymIcnM7WX1nxh3VP0bnO/B/B6DmZqE29rASloWdy7UZsJ17RS/sD54K8rDbgudDhjgkAYxXEm6CLBZsaD8w+YNxHj869CRQCVF/75c8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oi7GTupPW2stxNxhyYR0GR887uYJ+TAImZC9lluFQUk=;
- b=YkapL3+CKAeyAhb6s/9P9iMHF95QGCS4DRpREujEUYnz1IErejNd9j0v7r4j1lEgqa2EWn/TIieSEkJtcEK8Ld0ym/Ou/Vt88TMWNT8wbOQLnOzXevunAydSoQVvTMSem49rcSCAiCb0XkjzMi7YDR262OWohcx7Hsi7PqU0FmWXmZGFq4pcuFqxBnuSHwQDNM0i9dSB5RJndtsz237fa24w0M2C0JzUg9wUdjR/wG7soNQZsV2lj6Ox91RV31mkKmlkTst3Gq92axDbx/0xarIJornpdpA2OvNO9rZ0f3bF/0kAOrKXOwSyTk/IB8kRrnaG7JMBHRnFw0mxOFtZCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oi7GTupPW2stxNxhyYR0GR887uYJ+TAImZC9lluFQUk=;
- b=xMNuUY4kJHVoJjWCdAUEXVlQoMQW2WQO5vOwYvUpLunYA5KEcVnvyj7gcZAQAF6kYXB3U6DvkPZJddfvsxDRC7Q7HJVNnLKHbHx6EAHV+BkmbQBcnVv7QpfXoG6w8zNvbfjX2kVkoW2QzgywMs1dQMTA4gNPySCzToeN/aHJsy4=
-Received: from MW4PR05MB8699.namprd05.prod.outlook.com (2603:10b6:303:12a::12)
- by CY4PR05MB3639.namprd05.prod.outlook.com (2603:10b6:910:59::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.28; Mon, 15 May
- 2023 11:35:20 +0000
-Received: from MW4PR05MB8699.namprd05.prod.outlook.com
- ([fe80::e109:9b20:9985:a286]) by MW4PR05MB8699.namprd05.prod.outlook.com
- ([fe80::e109:9b20:9985:a286%5]) with mapi id 15.20.6387.028; Mon, 15 May 2023
- 11:35:20 +0000
-From: Ajay Kaher <akaher@vmware.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-CC: kernel test robot <lkp@intel.com>, "mhiramat@kernel.org"
-	<mhiramat@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"chinglinyu@google.com" <chinglinyu@google.com>, Nadav Amit
-	<namit@vmware.com>, "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>, Alexey
- Makhalov <amakhalov@vmware.com>, Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-	Tapas Kundu <tkundu@vmware.com>, "er.ajay.kaher@gmail.com"
-	<er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Thread-Topic: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Thread-Index:
- AQHZfOilHbAIv3gBO0Sfrm8lUvOVTK9HSCgAgAr9/YD//+uAgIABNMGAgAPqiQCAA/fagA==
-Date: Mon, 15 May 2023 11:35:20 +0000
-Message-ID: <BD75F325-8347-4334-A62B-C38864933504@vmware.com>
-References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
- <202305030116.Gu6yyvKj-lkp@intel.com>
- <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
- <20230509124559.0d5557ad@rorschach.local.home>
- <400E4466-629C-4306-86B1-E8BA0CB5EF66@vmware.com>
- <20230512185916.22bda1a5@rorschach.local.home>
-In-Reply-To: <20230512185916.22bda1a5@rorschach.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Apple Mail (2.3731.500.231)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW4PR05MB8699:EE_|CY4PR05MB3639:EE_
-x-ms-office365-filtering-correlation-id: 023ee593-ddd6-4a13-5e77-08db553876f3
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 7EVNwC6uV18XF8cC0Ob+e5IC9Z10qMVO3HFmsUQJJGmqiwV2LQRChyXWksbbqOyQmJhTAvmdjgQLY2cFs5NupF+3pHaozOSOJEAKdGixNYaCA0cJrDDyUbp9GCfqKKCHvjhH9DxWYgcwOHH85zsPzFNRRA9T3zq2kVJcUY+F7iy6w39L7Bm8MhJDZ8CSjSXt+PTFJGeEjQPeKFR9t2WHHIBfu19ACUa8+oNINlaFxoYd8fu1ovex+3lfHsoWKMUvVMQULOldAHFm5FfADz41n/uuj5Er232apVYSrkHg7YZedw1hLvCXYQHdX7MBsmopmgIkRnEKaoMjBHYfKKDsdxZkWBucNtaK5P8qnwQkqhGeUbgi4j5gnS0YaHTXqLakzIBxoNtwtSZPSMvG8RppdQROreMXYu7H/S7J/etIJ6n+97lFggsk8otRLbMRDaJi9TyGQmszWnMxjeSDPSkvWrXtMRGTC2X9dbv82GpE9hzX21Kh36Ld4OhOzXvKbR9f7yfallpYFnZ8822/HNnex6UPgl20PEejOFLwh/+PaScV3Kenu3H3f3ht34gS+b1EtmMS4BvUrtflH2lVAC45jmIhXUuQbQm6hQlBjmj8lFm488N6BIBOl1S2gnFvrPHFiHUHYYGDJW3u1YTONtON6Q==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR05MB8699.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199021)(4326008)(316002)(6916009)(41300700001)(36756003)(38070700005)(2906002)(38100700002)(122000001)(53546011)(6506007)(6486002)(26005)(6512007)(478600001)(66446008)(66946007)(66476007)(64756008)(66556008)(76116006)(2616005)(91956017)(5660300002)(4744005)(33656002)(8936002)(8676002)(54906003)(86362001)(186003)(71200400001)(7416002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?OPCQw4sovzO790OuHAhkYWhSmWWenw0HtT5/fwCQ1PcObq8z9pxHJaUTbcST?=
- =?us-ascii?Q?QRQ3kamtciq+eIKfJBBOT4/6BI1JJ72RfBeevAtHv08LvDdfBHUJ/aEWlDm1?=
- =?us-ascii?Q?ABYdjAum/RoKQWYTl+J0WMNfgTqeyx5nBWdyn2NA2nMmZPDEVjdoVLAZTVsG?=
- =?us-ascii?Q?4WuWvZ2wuKzsZOg8OTp/N9wcvzISqowYFzjTrRf4ltK8RtJnOHR42fe+jW+7?=
- =?us-ascii?Q?fJbM9utMEycFk56fFLBcG+TiCWdQK7iDOkTO0j98kx3S6c6Wd53J2yREMXO7?=
- =?us-ascii?Q?z+v/mH/fQIfutYt7dCpNX6t12T/S3NrIJKuSoyl61FJWHkGAGAuhmLs+O2Rt?=
- =?us-ascii?Q?HMSrjgHW0xQ3NBAsq9EtlTumgS7A2xLNem3eT7N9N5R8aMNmEyJYMTUaRecU?=
- =?us-ascii?Q?2K22CBUCvUJlq2TOXR8ASQ20TIFEDItjBzuDybqTewIiU5Fs7X4Mc0PmLkHl?=
- =?us-ascii?Q?LDhCvfuxFIgvZLEGDVDG436494YNmFHzHvzOC6NVXzC2wZgMEPEbnDfybYX9?=
- =?us-ascii?Q?a1EOXbf1TYygTmmYcHEKBX1HlQRq0rM5rf3+L0kn9Yb7fv5p6X5A6aDg62pK?=
- =?us-ascii?Q?MAV/JYaVwkWv6+ki2FZwdSNJsOtvmJNQZLVjy4MZBVmcvXS7rFG11Cmb1YbP?=
- =?us-ascii?Q?hyxbPMfo/niPGyKAiQWvOZbg9VyTfemflR8xprEaJhEBLqOb76tpinRY3/zB?=
- =?us-ascii?Q?dKMeTaboj+q6Q0HlIa5l0BOzqheI+zjGaynGuRbYuSyOfPHx+q8y6v4iXfG5?=
- =?us-ascii?Q?R0Kajimf+V9QYidyxoQXil+PuHr0INiSlEMrTxxugkUeCE4ZH/0DOiGjqspz?=
- =?us-ascii?Q?KJkrmDfTmGrIwUjXrIH9cpdtToCGsUgSX9nk3UfY1m7d0P759Lvljlkzp80W?=
- =?us-ascii?Q?fmDGfnrS5AfsUSUenvc3J4kfzkDHkLDdT9QemQns0QhsDPHmuVkm/RdqYAYP?=
- =?us-ascii?Q?DmOQy3/KPp+AQJIP6pf3OtYOV/NADVUyyLjphPXlfSWfwWQqPr+6ylDMHdiL?=
- =?us-ascii?Q?41vvJmtqn9Lci7bu6K9F2q+8vO63AT0cSqvkaiTzMB56MtgViLzypecDeRFn?=
- =?us-ascii?Q?BVbqsWtIqKii9lBdCP9+9ICaT4/8C+BnyNnh7jSzlcpjIyXc2NfX/ZBAEC8B?=
- =?us-ascii?Q?Ee9QKq7s8k1V9EHWs36xoCCc986fLckSySpkdMM8689h5jmd4/cGMV08Hz/I?=
- =?us-ascii?Q?T6JiADCqsLRISXUuVptatqiIxQLaIwen6mo+m7d+aGVNntQhlgSHRBCyPD9+?=
- =?us-ascii?Q?ldNvUJZTgO+rz6J8iVJUETOmdg4RWOo3gRSt5sRPPf6Px7BCgEkH9BVZ5Ygk?=
- =?us-ascii?Q?PWcFjZCqsevOjEKTNZIiGvDIPYnFNcpeIV+vAHJyS2msh+SH42rTSNRMIRWJ?=
- =?us-ascii?Q?td5hZPgDMvJxcKVKh87sjbwAkoeNKGf/LWeG330SccenbEXfIYMplw52TgxF?=
- =?us-ascii?Q?365SANHMoj/IqEDyBWdKjz1jYQmL9ni1j00Wfeso3ddPcd7UKLq7pgyuQDk5?=
- =?us-ascii?Q?lKNQrxD4ZEpBpQxL/rJiYolrGl9vJBpF0viG9Nbg8i7u2CfRt+ncz3sFsdzl?=
- =?us-ascii?Q?hExouSPvSB6HI9A/IVl2Q4gnnE6DZlYYG50J8eQz?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <098E2006ADA42E48898AB43F88B025AE@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAD7C8CB;
+	Mon, 15 May 2023 12:26:51 +0000 (UTC)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-3f41b73104eso32808001cf.3;
+        Mon, 15 May 2023 05:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684153610; x=1686745610;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=frVvBnuP2+i1aJfoXn+uOQ4Dz2/3JLy5AwDGkoiWkAA=;
+        b=fHaGi/NwOVxcobMw6IFO5ss/FvKw2r+7FXIEJ85Odymwvh1N649DR1PnMuPFs/755N
+         8aE+UKy6gqPCSoh6fUUCmr5XSvycsKRwa8ALWDUlN4t7TT9FeaOO1KLD9m1PAEH2+kOW
+         OHWALp9MR6n95db+1TPk+5JG1AdHFqy2zery0rj0/3cgPe7zgs5ifehXM5t0SFE8Oi7H
+         qjnEffPyLYFbb5+1esjlFWScYEvF0TvOfQhRUkuAFtByu0fF6s6OyxnviCKQlyGmGDyg
+         w3ZNjxaVlTiKUZL7t7l5C3alt95WvCedpHaGf8sadF03BKjW26Iz1KHM3Yxfk2xfKReS
+         t+bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684153610; x=1686745610;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=frVvBnuP2+i1aJfoXn+uOQ4Dz2/3JLy5AwDGkoiWkAA=;
+        b=j7ysipj6tyjrmZDX6cTnfrvOQb3TKZ9b8UEbdTfYFY7hL7jwPnCj2Vb1L7nPNAts+r
+         pYbnaU+mBDyq3HWCntoZRtAGKc2GDHagevEyO2vvL7n0S21ETH8b1vSQZRcF5Fya2BDR
+         9xtuu8fmhbHEN+KIfPogDnVcKbwPmgtv4Pr9A1JmjV8rgVpXlmpbFEAre4QtgbyafxYQ
+         BnomS00RZJHr9sVv5hBEqa9rMcxPpTpmd6rwAKwQom0ck8Ux8RhfWry8uRSZdPHiEq5R
+         EgPdMDS7PhAFxPKvVyzpK5+fk2ydLkjKH07Zi5ogeAJF1EHQTTWU9giukO6fUY5dmlYp
+         IEbw==
+X-Gm-Message-State: AC+VfDzT4jUWWGumseO9zOs6Avs1NTZcbpeUMSxhF9sZa+8ShgIwvLit
+	FmoBLg/8xVwaw5e2R1kGkZA=
+X-Google-Smtp-Source: ACHHUZ6UVQqt/Q5Q7FdQgoJCVn2vJlZj9ekfWfTM2bVhtPYCZhqh96pfA590HhUR4eBOOfm4HFeeHQ==
+X-Received: by 2002:a05:622a:414:b0:3f3:895b:6161 with SMTP id n20-20020a05622a041400b003f3895b6161mr44618826qtx.65.1684153610369;
+        Mon, 15 May 2023 05:26:50 -0700 (PDT)
+Received: from tian-Alienware-15-R4.fios-router.home (pool-173-77-254-84.nycmny.fios.verizon.net. [173.77.254.84])
+        by smtp.gmail.com with ESMTPSA id m24-20020aed27d8000000b003f364778b2bsm5395733qtg.4.2023.05.15.05.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 05:26:49 -0700 (PDT)
+From: Tian Lan <tilan7663@gmail.com>
+To: hare@suse.de
+Cc: axboe@kernel.dk,
+	horms@kernel.org,
+	linux-block@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	ming.lei@redhat.com,
+	oe-kbuild-all@lists.linux.dev,
+	tian.lan@twosigma.com,
+	tilan7663@gmail.com
+Subject: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
+Date: Mon, 15 May 2023 08:26:43 -0400
+Message-Id: <20230515122643.597546-1-tilan7663@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
+References: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR05MB8699.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 023ee593-ddd6-4a13-5e77-08db553876f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 11:35:20.4907
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5AkLwpPuRfZ9f5pQ2vq5BGNQylYNOeW+RhPnOFG3eHWCTAkmfukgEWAgP2ZO17SM24aT/X9zBikcJiWOiDZhZw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR05MB3639
+Content-Transfer-Encoding: 8bit
 
+From: Tian Lan <tian.lan@twosigma.com>
 
+The nr_active counter continues to increase over time which causes the
+blk_mq_get_tag to hang until the thread is rescheduled to a different
+core despite there are still tags available.
 
-> On 13-May-2023, at 4:29 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
->=20
-> !! External Email
->=20
-> On Wed, 10 May 2023 11:11:15 +0000
-> Ajay Kaher <akaher@vmware.com> wrote:
->=20
->> Sounds good. Thanks Steve :)
->> Once you will merge below patch, I will rebase this patch in v3.
->=20
-> Feel free to just add it at the start of your queue. You just need to
-> keep the "From" line and it will be added as my patch.
+kernel-stack
 
-Ok, I will include in v3.
+  INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
+  Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+    Call Trace:
+    <TASK>
+    __schedule+0x351/0xa20
+    scheduler+0x5d/0xe0
+    io_schedule+0x42/0x70
+    blk_mq_get_tag+0x11a/0x2a0
+    ? dequeue_task_stop+0x70/0x70
+    __blk_mq_alloc_requests+0x191/0x2e0
 
--Ajay
+kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+__blk_mq_free_request being called.
+
+  320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
+         b'__blk_mq_free_request+0x1 [kernel]'
+         b'bt_iter+0x50 [kernel]'
+         b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+         b'blk_mq_timeout_work+0x7c [kernel]'
+         b'process_one_work+0x1c4 [kernel]'
+         b'worker_thread+0x4d [kernel]'
+         b'kthread+0xe6 [kernel]'
+         b'ret_from_fork+0x1f [kernel]'
+
+The issue is caused by the difference between blk_mq_free_request() and
+blk_mq_end_request_batch() wrt. when to call __blk_mq_dec_active_requests().
+The former does it before calling req_ref_put_and_test(), and the latter
+decreases the active request after req_ref_put_and_test().
+
+- Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
+
+Signed-off-by: Tian Lan <tian.lan@twosigma.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+---
+ block/blk-mq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index f6dad0886a2f..850bfb844ed2 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -683,6 +683,10 @@ static void __blk_mq_free_request(struct request *rq)
+ 	blk_crypto_free_request(rq);
+ 	blk_pm_mark_last_busy(rq);
+ 	rq->mq_hctx = NULL;
++
++	if (rq->rq_flags & RQF_MQ_INFLIGHT)
++		__blk_mq_dec_active_requests(hctx);
++
+ 	if (rq->tag != BLK_MQ_NO_TAG)
+ 		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
+ 	if (sched_tag != BLK_MQ_NO_TAG)
+@@ -694,15 +698,11 @@ static void __blk_mq_free_request(struct request *rq)
+ void blk_mq_free_request(struct request *rq)
+ {
+ 	struct request_queue *q = rq->q;
+-	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
+ 
+ 	if ((rq->rq_flags & RQF_ELVPRIV) &&
+ 	    q->elevator->type->ops.finish_request)
+ 		q->elevator->type->ops.finish_request(rq);
+ 
+-	if (rq->rq_flags & RQF_MQ_INFLIGHT)
+-		__blk_mq_dec_active_requests(hctx);
+-
+ 	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
+ 		laptop_io_completion(q->disk->bdi);
+ 
+-- 
+2.25.1
+
