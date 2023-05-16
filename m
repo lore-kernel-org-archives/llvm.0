@@ -1,108 +1,73 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from bues.ch (bues.ch [80.190.117.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A74101D7
-	for <llvm@lists.linux.dev>; Tue, 16 May 2023 17:45:37 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id CD2DB5C01A6;
-	Tue, 16 May 2023 13:45:36 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 16 May 2023 13:45:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
-	//pK6kKY=; b=tf1fA1FFYUbqAZixRp8n3F6FYjwLml0yhRx02Mc+jQx1fXN3meF
-	BOchr8HHmmt8N3tVVX5/REOIq4MqC96in9Gssin1m/pgpMma1vHzyKmNyNd046ud
-	/kaCW9N485Z8n2jm4ABp2v64TEyTtgvADgwkzPXss96AcVTE03BU8TD3ViZqsMiZ
-	b9n9NeMCzKQPGl/XFG0WkVa3PH8SOa7iM3+0FJUYMMkWBVm6BAKovQdF/STR5ZtM
-	viCu6pc+oMJk94JleK6TW54nvY+99ZZu0lJfRBKdvBIVjzd9QWPN2/tYjFMONVbR
-	6hZU0k5Q57S5ftGCGR5fDDmPMTMdU9JHttA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
-	//pK6kKY=; b=HJT5rvzrsM8s9tPzR6nci6ldrk5LDTxA9hdX+pqi9vE41/Fu2AD
-	Gx2d0ih/RJPuU4BVqp7Y8z3uLn+yebQ5yujB+lPaZj7S27YX81E7Bshh/mevR0RF
-	7CtBx8O2ZT8GKs1Js6s+mBJ5Eqa0SLNYd0WguZJ55efojjjbntGhDfAIH5e8GuE5
-	Ss7egnenBo1YK34RNxNUGUPcxBw9zL08P0b6KSbKFBaqGSBEU70vK8qjW6TFiizQ
-	dQlmK0DbScTWTQaT9CpZAfJGgshN6KfiR7BeJthEPuRuRTeFdAXaERbAvpi2QVXp
-	ektRqGCslWB7Cw72p3wU5O/zLSmd5b3AwMQ==
-X-ME-Sender: <xms:QMFjZMoAK2OPNcQm_1u0VC3EvO7oghx7gHlmPm8Cewapqx6EmNMnVw>
-    <xme:QMFjZCruMgoq74UzUanNSr42TBdBQkRsqec395hH2h93kSSKHr-Wg2Pqk74VIT3LR
-    ujrqb2DiAAmNf9CMCY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
-    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QMFjZBN8wQu2db93aF2AsslCg4m3O6XSlktv_KnD_80zcmxh4JNAsA>
-    <xmx:QMFjZD5SQvdlsWY4df01KrZ4kUD-ZjCgKnloS6dgqGYXPP0K_KVe3Q>
-    <xmx:QMFjZL58jK6CwjPRQ3srZpxvMjPKm9mY98DHfQjssPpD-YYDN5voxQ>
-    <xmx:QMFjZDy2N_zTcpTAXLo6ta_tuOQ82FHVnQWlKuMnaHU1boX7gVR-BA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 848A2B60089; Tue, 16 May 2023 13:45:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752F4101D7
+	for <llvm@lists.linux.dev>; Tue, 16 May 2023 17:48:37 +0000 (UTC)
+Received: by bues.ch with esmtpsa (Exim 4.94.2)
+	(envelope-from <m@bues.ch>)
+	id 1pyymf-000LJS-3V; Tue, 16 May 2023 19:48:24 +0200
+Date: Tue, 16 May 2023 19:47:52 +0200
+From: Michael =?UTF-8?B?QsO8c2No?= <m@bues.ch>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "Kalle Valo" <kvalo@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org, Netdev
+ <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: b43: fix incorrect __packed annotation
+Message-ID: <20230516194752.50ae12db@barney>
+In-Reply-To: <b53f3673-f6b1-4071-9bcf-9ae5815593eb@app.fastmail.com>
+References: <20230516074554.1674536-1-arnd@kernel.org>
+	<20230516191245.4149c51a@barney>
+	<b53f3673-f6b1-4071-9bcf-9ae5815593eb@app.fastmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <b53f3673-f6b1-4071-9bcf-9ae5815593eb@app.fastmail.com>
-In-Reply-To: <20230516191245.4149c51a@barney>
-References: <20230516074554.1674536-1-arnd@kernel.org>
- <20230516191245.4149c51a@barney>
-Date: Tue, 16 May 2023 19:45:16 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Michael_B=C3=BCsch?= <m@bues.ch>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Kalle Valo" <kvalo@kernel.org>, "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] wifi: b43: fix incorrect __packed annotation
-Content-Type: text/plain;charset=utf-8
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/LydMZaBgIzo3HKHo7_xf/iA";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+
+--Sig_/LydMZaBgIzo3HKHo7_xf/iA
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 16, 2023, at 19:12, Michael B=C3=BCsch wrote:
-> On Tue, 16 May 2023 09:45:42 +0200
-> Arnd Bergmann <arnd@kernel.org> wrote:
->
->> b43_iv { union {
->>  		__be16 d16;
->>  		__be32 d32;
->> -	} data __packed;
->> +	} __packed data;
->>  } __packed;
->> =20
->> =20
->
-> Oh, interesting. This has probably been there forever.
-> Did you check if the b43legacy driver has the same issue?
+On Tue, 16 May 2023 19:45:16 +0200
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-I had not checked, but I see that it does have the same bug.
+> Should I resend this as a combined patch for both drivers?
 
-I only sent this one because the build bot (incorrectly)
-blamed one of my recent patches for a regression here.
-Which reminds me that I was missing:
+I think that would be fine, yes.
+Thank you for checking.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202305160749.ay1HAoyP-lkp@in=
-tel.com/
+--=20
+Michael B=C3=BCsch
+https://bues.ch/
 
-Should I resend this as a combined patch for both drivers?
+--Sig_/LydMZaBgIzo3HKHo7_xf/iA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-   Arnd
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEihRzkKVZOnT2ipsS9TK+HZCNiw4FAmRjwcgACgkQ9TK+HZCN
+iw5T+g/8DVJ2wyaO2Xg8k2CkNMDjP5bFJVvaUnLUQoYFT22CY2Rlkop53SsVpkgL
+A7/SxrptKK4vPNgO0QjwN8+Nl8KbL320XH+YEFi+f64uJUBrpAusuVOmK5BZ13Il
+V5ljNaJCWQyAVuYV7YlHFoe/EfSOZI5Ca/KVGzmJbcjCbt9vs9MiRIG8ClBdCS39
+NHCDvWw+o7HzmExK9dfeO2puN9dHW54U6Np7sDQ9CBLrM3PDB6STBiIVSNnDvG1Q
+b2M9mQEcK382pf53+6IJP6xuXppT94TDihTWTzeAmlRIQyMKAkDA7PgSYxr3T6+m
+U4vPiCjq9mFZO1Mw8BZbLoVkG0JrX3ffO1LisjKqrLw7y6V4CischbnV4Ye6hTaH
+dw8Fx2QPIsAIjb3kLgEY3BezcURQbRqLb3GPRdFHAS+pi8QbE9Hg5epbkxqW7iLS
+ff9VDUXftth7fdv0+bMQ8YUuox5unQno/Dc0xaKXshxE4LpXowMlm1RIl+/CyUJ+
++eG1+cdd/NIt6Qw+ped8XxDOCEDeXfwWTrsjMK0WHMUnzItLKeFBJy6yDW9qj+6Y
+RikXtPHZkrgJA3+Cfc8HWnuo8WFhIQvawGBjqenbVyI0FnuIFnzpys/ukNe/TiQd
+g7yDBD5EJtNoyK0ez+/NJHOKt0lmcUKselAFpE7DZisStWWnLRs=
+=syVX
+-----END PGP SIGNATURE-----
+
+--Sig_/LydMZaBgIzo3HKHo7_xf/iA--
