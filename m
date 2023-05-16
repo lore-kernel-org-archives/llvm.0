@@ -1,112 +1,108 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59950847F
-	for <llvm@lists.linux.dev>; Tue, 16 May 2023 17:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Reply-To:Content-ID:Content-Description;
-	bh=LcDzUZgb62SqJv2CsZRf1DXv52dMoUFQ0IMKsoDbAa0=; b=OvCIdYHrmvIK6DhkxUN0vWBNic
-	WkgI3z/+JNyzIKmC1S8Tvsyx5V5HeYfavCFENeCWXJnRn87AO/6GwU/bhuQSQBTqd7rmS7jdk1jut
-	R7zlAJEa37/SuN3flgyTUrevMXYt/oDLWPbmqMlxmod6CMJf68K8bqbpj57KFkjdUKMJaJMF8P2oE
-	UDAgWlNbCWavjv2k/DaK2/dWRiRFfGAZCHwbrRBBr5jeifIdFH3Br2JvY0MvA8r+aEUAtVxkMY/pB
-	bAhEGn0bFPzxVDc0A+eIuPPVnKJ1S7EsAEYEyXFqTB3WWXzGBhqmyp1A3bLyKV4m4O21CkdyOP66a
-	jvtzFHdg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	(Exim 4.94.2)
-	(envelope-from <sylvestre@debian.org>)
-	id 1pyyNV-002hQZ-Hu; Tue, 16 May 2023 17:22:25 +0000
-Message-ID: <9a82866d-2d28-a956-8e01-30bf5b215f84@debian.org>
-Date: Tue, 16 May 2023 19:22:23 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A74101D7
+	for <llvm@lists.linux.dev>; Tue, 16 May 2023 17:45:37 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id CD2DB5C01A6;
+	Tue, 16 May 2023 13:45:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 16 May 2023 13:45:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
+	//pK6kKY=; b=tf1fA1FFYUbqAZixRp8n3F6FYjwLml0yhRx02Mc+jQx1fXN3meF
+	BOchr8HHmmt8N3tVVX5/REOIq4MqC96in9Gssin1m/pgpMma1vHzyKmNyNd046ud
+	/kaCW9N485Z8n2jm4ABp2v64TEyTtgvADgwkzPXss96AcVTE03BU8TD3ViZqsMiZ
+	b9n9NeMCzKQPGl/XFG0WkVa3PH8SOa7iM3+0FJUYMMkWBVm6BAKovQdF/STR5ZtM
+	viCu6pc+oMJk94JleK6TW54nvY+99ZZu0lJfRBKdvBIVjzd9QWPN2/tYjFMONVbR
+	6hZU0k5Q57S5ftGCGR5fDDmPMTMdU9JHttA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
+	//pK6kKY=; b=HJT5rvzrsM8s9tPzR6nci6ldrk5LDTxA9hdX+pqi9vE41/Fu2AD
+	Gx2d0ih/RJPuU4BVqp7Y8z3uLn+yebQ5yujB+lPaZj7S27YX81E7Bshh/mevR0RF
+	7CtBx8O2ZT8GKs1Js6s+mBJ5Eqa0SLNYd0WguZJ55efojjjbntGhDfAIH5e8GuE5
+	Ss7egnenBo1YK34RNxNUGUPcxBw9zL08P0b6KSbKFBaqGSBEU70vK8qjW6TFiizQ
+	dQlmK0DbScTWTQaT9CpZAfJGgshN6KfiR7BeJthEPuRuRTeFdAXaERbAvpi2QVXp
+	ektRqGCslWB7Cw72p3wU5O/zLSmd5b3AwMQ==
+X-ME-Sender: <xms:QMFjZMoAK2OPNcQm_1u0VC3EvO7oghx7gHlmPm8Cewapqx6EmNMnVw>
+    <xme:QMFjZCruMgoq74UzUanNSr42TBdBQkRsqec395hH2h93kSSKHr-Wg2Pqk74VIT3LR
+    ujrqb2DiAAmNf9CMCY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
+    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:QMFjZBN8wQu2db93aF2AsslCg4m3O6XSlktv_KnD_80zcmxh4JNAsA>
+    <xmx:QMFjZD5SQvdlsWY4df01KrZ4kUD-ZjCgKnloS6dgqGYXPP0K_KVe3Q>
+    <xmx:QMFjZL58jK6CwjPRQ3srZpxvMjPKm9mY98DHfQjssPpD-YYDN5voxQ>
+    <xmx:QMFjZDy2N_zTcpTAXLo6ta_tuOQ82FHVnQWlKuMnaHU1boX7gVR-BA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 848A2B60089; Tue, 16 May 2023 13:45:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: debian builds of clang-17 stale
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>
-References: <CAKwvOdn7S61csn2aCYiBVKKz497QyRsF6O2kqSH49zC_TVR2uw@mail.gmail.com>
-From: Sylvestre Ledru <sylvestre@debian.org>
-Autocrypt: addr=sylvestre@debian.org; keydata=
- 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
-In-Reply-To: <CAKwvOdn7S61csn2aCYiBVKKz497QyRsF6O2kqSH49zC_TVR2uw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Debian-User: sylvestre
+Mime-Version: 1.0
+Message-Id: <b53f3673-f6b1-4071-9bcf-9ae5815593eb@app.fastmail.com>
+In-Reply-To: <20230516191245.4149c51a@barney>
+References: <20230516074554.1674536-1-arnd@kernel.org>
+ <20230516191245.4149c51a@barney>
+Date: Tue, 16 May 2023 19:45:16 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Michael_B=C3=BCsch?= <m@bues.ch>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Kalle Valo" <kvalo@kernel.org>, "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+ Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: b43: fix incorrect __packed annotation
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello
-
-
-Le 16/05/2023 à 19:17, Nick Desaulniers a écrit :
-> Hi Sylvestre,
-> Our CI has been alerting to clang-17 builds being 8 days behind ToT.
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4986657460/jobs/8927651456#step:4:9
+On Tue, May 16, 2023, at 19:12, Michael B=C3=BCsch wrote:
+> On Tue, 16 May 2023 09:45:42 +0200
+> Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> I know the GCP stuff had some recent issues; is that all resolved now?
+>> b43_iv { union {
+>>  		__be16 d16;
+>>  		__be32 d32;
+>> -	} data __packed;
+>> +	} __packed data;
+>>  } __packed;
+>> =20
+>> =20
 >
-Yes, this part is fixed. it is now a long list of regression...
+> Oh, interesting. This has probably been there forever.
+> Did you check if the b43legacy driver has the same issue?
 
-https://github.com/llvm/llvm-project/issues/62733
+I had not checked, but I see that it does have the same bug.
 
-https://github.com/llvm/llvm-project/issues/62523
+I only sent this one because the build bot (incorrectly)
+blamed one of my recent patches for a regression here.
+Which reminds me that I was missing:
 
-https://github.com/llvm/llvm-project/issues/62461
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305160749.ay1HAoyP-lkp@in=
+tel.com/
 
-https://github.com/llvm/llvm-project/issues/62454
+Should I resend this as a combined patch for both drivers?
 
-(and an issue with llvm spirv)
-
-Not all of them impact unstable but they have been keeping me busy
-
-Cheers
-
-Sylvestre
-
-PS: please use sylvestre@debian.org :)
-
+   Arnd
