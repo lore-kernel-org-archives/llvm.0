@@ -1,1707 +1,330 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A1D17E0
-	for <llvm@lists.linux.dev>; Wed, 17 May 2023 03:18:52 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so10154297b3a.0
-        for <llvm@lists.linux.dev>; Tue, 16 May 2023 20:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684293532; x=1686885532;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+P4VrLV82o1D4xp+Oc2hVhdUawRtDlU/Nll4+p3GUg=;
-        b=TTeRYdcr7yujRrhwOqW5iH73n2d7g5cg+SLu8nuH55a1uT8cxqmYN8RIuIwGEFenOX
-         IOa3gskDQST83fgSUdeAbwpHiI2nLr3XzDHohIPhYe5Q+GiCCj2pU1mg7IMlR4OMdmfH
-         nE9Dh3aLAoKNDkFOByxFn2HvvwE08f2INwhj79oo5zlbSEWO6DtvxxKyO0DFdX/RWHm4
-         FiUwtVVvU/2+VCEerC16d/TeQzThCYzGZ+DXJ8lFW+o6mK0q6ZaEgW49STD/yLAG/lZT
-         Oy/WynP+mjOfdtOBR/6dKg0fuOW/JDY5k0YJOd+o5aYgUC+7ZvIfqIKA//sDKzpqJieL
-         Vu4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684293532; x=1686885532;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+P4VrLV82o1D4xp+Oc2hVhdUawRtDlU/Nll4+p3GUg=;
-        b=P27MfTvYULnBqPC5XoVOv9+nB6Qf3fBtAdGDPOGIP1VBW2c8NtA0LRIOuYoIsyulLx
-         PgVEqm4OmMohN0bPa5HA8P0+vcAGj8s2w1gp+qreR7C4v1APrV1Vj63bZ2IZx+K836jc
-         Z1cejtXLg9X7cWjMMfblxqYr2kL64/qownqTf11tkxAJGiqbwXfYNSW1BTi+pPqOsiz7
-         yjG+BwXXWdZLgM19Ui9lOZTHho6WAJfirmsFVtDrtQcjsHKFr44saePYeox3vTPm9zeh
-         J5T/uNln+O3NDOxExqQ7qKLCmJ6tDcr0lttu+Rb7qTvCsZKYvekBts8cz751a60J0fpj
-         CkiQ==
-X-Gm-Message-State: AC+VfDyVetquPTWNfJPJvlCkufhhtD3phq5bZps1rRlMh1dha2zoJmms
-	3iqj7uIYoMY7HmqVrPTIXkmWTOGkTuacBgRzn/GDpQ==
-X-Google-Smtp-Source: ACHHUZ6DIcDcZZ6t1aAuCQUvDoMsqJo+IHs6tUI3XpQWBBum+SM1slXZGsa3nC9gIlp3LAmgYzfYiw==
-X-Received: by 2002:a17:902:da82:b0:1ac:92db:9677 with SMTP id j2-20020a170902da8200b001ac92db9677mr933325plx.28.1684293531061;
-        Tue, 16 May 2023 20:18:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ix10-20020a170902f80a00b001a6d4ea7301sm16229318plb.251.2023.05.16.20.18.50
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 20:18:50 -0700 (PDT)
-Message-ID: <6464479a.170a0220.d5ea.0c6d@mx.google.com>
-Date: Tue, 16 May 2023 20:18:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4551844;
+	Wed, 17 May 2023 03:56:43 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L2YQhtAXVumrI3BMjxOMoeWRg+cAqm4UuofBLVPV46tU9OL5/tLfA1XhLkxsGw97RROjW1KyvV76NMKJvrxEONJxx3jDXP6RiWkvwvjWYdCrBpzvAh+vpUhiNos7JggSTWP+9OJ2CzOlFgWJxP9EhJDA1u6oVjBBXZtgFD5H3ysgBtF7mnybVfKvzdHMcfZT8mkJNeH2A+QlrA1IqCj3RcAexvugjMFUNVyNnOsJOdLix087cqGusXMQ1TmaiX6hKvuLkH8v2d6Nc2QnOzgPyhRk5fi8yLkDUlfMZqlP32g74lWIVIpZInfE1UGpFwj2nNm6JtYE3AkjJhqJk8bYFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O9bVhGTXEwaHQyUFcOQ1Cyu8H3DZW6PdPShNCNVYoxU=;
+ b=Sjb9HelafbYGjorgepeMVp2188Z+wrXzDsr0IXWpPicdU4qz5ati+7gnGY0Uqdt/pBPs9vNtG2v0gQT5wklnqcwRGZUCoeym4vkmPKlLjxgdGTgtlUByuAVZz6sVRJjVGqTVKh3AJhwNMKzHbx/pWucCAurDM5EXJFNOe1rVPZQO2f54r95L9CckaBIcqLKNrFw6NvugJn8bGQZPYCBjH6s74gESHl1jtH/mDsj3JZ9GbJj2/eW6MgMlJEaDavrxsuRUfdjpU9l5qagxUW9Whpx+5BpuCRMPzbeq+jkVgihEwbmNOoOdeQ+lUaVWQHS4zIk+jm1BNQ33CDWf8wjRGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O9bVhGTXEwaHQyUFcOQ1Cyu8H3DZW6PdPShNCNVYoxU=;
+ b=CjGFjP65kPVz1jE1GRS2Wfd0SwSYjbsRDPfCpCzoZjM1qE8SGtJs96/ytUjoK+tB5kejJQrkN9GMmlC8bNcsCW0y8Zp02OPdRYdA0RqkrtwTfsievoaSvTQLSKs/cadEBGisZ+7Y9frIREzx+viExC/jX0qFNYlMo9tj8Ti7CNY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB6583.namprd12.prod.outlook.com (2603:10b6:8:d1::12) by
+ MW4PR12MB7262.namprd12.prod.outlook.com (2603:10b6:303:228::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
+ 2023 03:56:38 +0000
+Received: from DS0PR12MB6583.namprd12.prod.outlook.com
+ ([fe80::fc3e:a5b4:7568:82bc]) by DS0PR12MB6583.namprd12.prod.outlook.com
+ ([fe80::fc3e:a5b4:7568:82bc%5]) with mapi id 15.20.6411.017; Wed, 17 May 2023
+ 03:56:39 +0000
+Message-ID: <236e3324-8518-12aa-5792-f91124ec0e11@amd.com>
+Date: Tue, 16 May 2023 20:56:34 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v6 virtio 11/11] pds_vdpa: pds_vdps.rst and Kconfig
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, jasowang@redhat.com, mst@redhat.com,
+ virtualization@lists.linux-foundation.org, brett.creeley@amd.com,
+ netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ simon.horman@corigine.com, drivers@pensando.io
+References: <20230516025521.43352-12-shannon.nelson@amd.com>
+ <202305171042.aJUkaxnH-lkp@intel.com>
+From: Shannon Nelson <shannon.nelson@amd.com>
+In-Reply-To: <202305171042.aJUkaxnH-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PH8PR22CA0014.namprd22.prod.outlook.com
+ (2603:10b6:510:2d1::29) To DS0PR12MB6583.namprd12.prod.outlook.com
+ (2603:10b6:8:d1::12)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230517
-X-Kernelci-Report-Type: build
-Subject: next/master build: 190 builds: 8 failed, 182 passed, 12 errors,
- 129 warnings (next-20230517)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 190 builds: 8 failed, 182 passed, 12 errors, 129 warning=
-s (next-20230517)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230517/
-
-Tree: next
-Branch: master
-Git Describe: next-20230517
-Git Commit: 065efa589871e93b6610c70c1e9de274ef1f1ba2
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-17) FAIL
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy: (gcc-10) FAIL
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (gcc-10) FAIL
-
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
-IL
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
-3) FAIL
-    allmodconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 error, 1 warning
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 1 error
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 error, 1 warning
-
-arm:
-    allmodconfig (gcc-10): 1 error, 1 warning
-    am200epdkit_defconfig (gcc-10): 1 warning
-    aspeed_g4_defconfig (gcc-10): 1 warning
-    aspeed_g5_defconfig (clang-17): 2 warnings
-    aspeed_g5_defconfig (gcc-10): 1 warning
-    assabet_defconfig (gcc-10): 1 warning
-    at91_dt_defconfig (gcc-10): 1 warning
-    axm55xx_defconfig (gcc-10): 1 warning
-    bcm2835_defconfig (gcc-10): 1 warning
-    collie_defconfig (gcc-10): 1 warning
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
-error
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 1 error
-    davinci_all_defconfig (gcc-10): 1 warning
-    exynos_defconfig (gcc-10): 1 warning
-    footbridge_defconfig (gcc-10): 1 warning
-    gemini_defconfig (gcc-10): 1 warning
-    h3600_defconfig (gcc-10): 1 warning
-    hisi_defconfig (gcc-10): 1 warning
-    imx_v4_v5_defconfig (gcc-10): 1 warning
-    imx_v6_v7_defconfig (gcc-10): 1 warning
-    integrator_defconfig (gcc-10): 1 warning
-    ixp4xx_defconfig (gcc-10): 1 warning
-    jornada720_defconfig (gcc-10): 1 warning
-    keystone_defconfig (gcc-10): 1 warning
-    lpc32xx_defconfig (gcc-10): 1 warning
-    milbeaut_m10v_defconfig (gcc-10): 1 warning
-    mmp2_defconfig (gcc-10): 2 warnings
-    moxart_defconfig (gcc-10): 1 warning
-    multi_v4t_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-17): 2 warnings
-    multi_v5_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    mvebu_v5_defconfig (gcc-10): 1 warning
-    mvebu_v7_defconfig (gcc-10): 1 warning
-    mxs_defconfig (gcc-10): 1 warning
-    neponset_defconfig (gcc-10): 1 warning
-    netwinder_defconfig (gcc-10): 1 warning
-    nhk8815_defconfig (gcc-10): 1 warning
-    omap2plus_defconfig (gcc-10): 1 warning
-    orion5x_defconfig (gcc-10): 1 warning
-    pxa168_defconfig (gcc-10): 2 warnings
-    pxa3xx_defconfig (gcc-10): 2 warnings
-    pxa910_defconfig (gcc-10): 2 warnings
-    pxa_defconfig (gcc-10): 1 warning
-    qcom_defconfig (gcc-10): 1 warning
-    realview_defconfig (gcc-10): 1 warning
-    rpc_defconfig (gcc-10): 2 errors, 1 warning
-    s3c6400_defconfig (gcc-10): 1 warning
-    s5pv210_defconfig (gcc-10): 1 warning
-    sama5_defconfig (gcc-10): 1 warning
-    sama7_defconfig (gcc-10): 1 warning
-    shmobile_defconfig (gcc-10): 1 warning
-    socfpga_defconfig (gcc-10): 1 warning
-    sp7021_defconfig (gcc-10): 1 warning
-    spear13xx_defconfig (gcc-10): 1 warning
-    spear3xx_defconfig (gcc-10): 1 warning
-    spear6xx_defconfig (gcc-10): 1 warning
-    spitz_defconfig (gcc-10): 1 warning
-    sunxi_defconfig (gcc-10): 1 warning
-    tegra_defconfig (gcc-10): 1 warning
-    u8500_defconfig (gcc-10): 1 warning
-    versatile_defconfig (gcc-10): 1 warning
-    vexpress_defconfig (gcc-10): 1 warning
-    vt8500_v6_v7_defconfig (gcc-10): 1 warning
-    wpcm450_defconfig (gcc-10): 1 warning
-
-i386:
-
-mips:
-    fuloong2e_defconfig (gcc-10): 1 error
-    ip27_defconfig (gcc-10): 1 warning
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    rbtx49xx_defconfig (gcc-10): 1 warning
-
-riscv:
-    defconfig (clang-17): 2 warnings
-    defconfig (gcc-10): 1 warning
-    defconfig+debug (gcc-10): 1 warning
-    rv32_defconfig (gcc-10): 1 warning
-    rv32_defconfig (clang-17): 2 warnings
-
-sparc:
-    allnoconfig (gcc-10): 2 warnings
-    sparc32_defconfig (gcc-10): 3 warnings
-    sparc64_defconfig (gcc-10): 5 warnings
-    sparc64_defconfig+debug (gcc-10): 3 warnings
-    sparc64_defconfig+kselftest (gcc-10): 3 warnings
-    tinyconfig (gcc-10): 2 warnings
-
-x86_64:
-    allnoconfig (gcc-10): 3 warnings
-    x86_64_defconfig (gcc-10): 3 warnings
-    x86_64_defconfig+crypto (gcc-10): 3 warnings
-    x86_64_defconfig+ima (gcc-10): 3 warnings
-    x86_64_defconfig+kselftest (gcc-10): 3 warnings
-    x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
-    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
-    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 3 warnings
-    x86_64_defconfig+x86_kvm_guest (gcc-10): 3 warnings
-
-Errors summary:
-
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    mm/memory.c:5608:8: error: unused variable 'ret' [-Werror,-Wunused=
--variable]
-    1    mm/memory.c:5608:8: error: unused variable =E2=80=98ret=E2=80=99 [=
--Werror=3Dunused-variable]
-    1    mm/huge_memory.c:470:2: error: call to '__compiletime_assert_471' =
-declared with 'error' attribute: BUILD_BUG_ON failed: (((16 - 3) * (4 - (2)=
-) + 3)-16) > 10
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=
-=98__compiletime_assert_471=E2=80=99 declared with attribute error: BUILD_B=
-UG_ON failed: (((16 - 3) * (4 - (2)) + 3)-16) > 10
-    1    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=
-=98__compiletime_assert_471=E2=80=99 declared with attribute error: BUILD_B=
-UG_ON failed: (((14 - 3) * (4 - (2)) + 3)-14) > 10
-
-Warnings summary:
-
-    73   mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99=
- [-Wunused-variable]
-    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    8    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    8    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    6    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallb=
-ack=E2=80=99 defined but not used [-Wunused-variable]
-    5    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redunda=
-nt UACCESS disable
-    4    mm/memory.c:5608:8: warning: unused variable 'ret' [-Wunused-varia=
-ble]
-    4    1 warning generated.
-    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ea8: redunda=
-nt UACCESS disable
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x18db: redunda=
-nt UACCESS disable
-    1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
-py_iovec_from_user.part.0() with UACCESS enabled
-    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to co=
-py_iovec_from_user.part.0() with UACCESS enabled
-    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
-ndant UACCESS disable
-    1    include/asm-generic/div64.h:46:20: warning: conversion from =E2=80=
-=98long unsigned int=E2=80=99 to =E2=80=98uint32_t=E2=80=99 {aka =E2=80=98u=
-nsigned int=E2=80=99} changes value from =E2=80=9868719476736=E2=80=99 to =
-=E2=80=980=E2=80=99 [-Woverflow]
-    1    include/asm-generic/div64.h:46:20: warning: conversion from =E2=80=
-=98long unsigned int=E2=80=99 to =E2=80=98uint32_t=E2=80=99 {aka =E2=80=98u=
-nsigned int=E2=80=99} changes value from =E2=80=984398046511104=E2=80=99 to=
- =E2=80=980=E2=80=99 [-Woverflow]
-    1    cc1: all warnings being treated as errors
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    mm/memory.c:5608:8: error: unused variable =E2=80=98ret=E2=80=99 [-Werr=
-or=3Dunused-variable]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
- UACCESS disable
-    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable 'ret' [-Wunused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
-
-Errors:
-    mm/memory.c:5608:8: error: unused variable 'ret' [-Werror,-Wunused-vari=
-able]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
-
-Errors:
-    mm/memory.c:5608:8: error: unused variable 'ret' [-Werror,-Wunused-vari=
-able]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable 'ret' [-Wunused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 FAIL, 1 erro=
-r, 1 warning, 0 section mismatches
-
-Errors:
-    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=98__c=
-ompiletime_assert_471=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: (((14 - 3) * (4 - (2)) + 3)-14) > 10
-
-Warnings:
-    include/asm-generic/div64.h:46:20: warning: conversion from =E2=80=98lo=
-ng unsigned int=E2=80=99 to =E2=80=98uint32_t=E2=80=99 {aka =E2=80=98unsign=
-ed int=E2=80=99} changes value from =E2=80=9868719476736=E2=80=99 to =E2=80=
-=980=E2=80=99 [-Woverflow]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 FAIL, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    mm/huge_memory.c:470:2: error: call to '__compiletime_assert_471' decla=
-red with 'error' attribute: BUILD_BUG_ON failed: (((16 - 3) * (4 - (2)) + 3=
-)-16) > 10
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 FAIL, 1 erro=
-r, 1 warning, 0 section mismatches
-
-Errors:
-    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=98__c=
-ompiletime_assert_471=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: (((16 - 3) * (4 - (2)) + 3)-16) > 10
-
-Warnings:
-    include/asm-generic/div64.h:46:20: warning: conversion from =E2=80=98lo=
-ng unsigned int=E2=80=99 to =E2=80=98uint32_t=E2=80=99 {aka =E2=80=98unsign=
-ed int=E2=80=99} changes value from =E2=80=984398046511104=E2=80=99 to =E2=
-=80=980=E2=80=99 [-Woverflow]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable 'ret' [-Wunused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    net/ipv4/ipconfig.c:177:12: warning: =E2=80=98ic_nameservers_fallback=
-=E2=80=99 defined but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 section =
-mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable 'ret' [-Wunused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/memory.c:5608:8: warning: unused variable =E2=80=98ret=E2=80=99 [-Wu=
-nused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
-gs, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18db: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
- 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
-nings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ea8: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-3 warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 3 warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 3 warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ea8: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
- warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----
-For more info write to <info@kernelci.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6583:EE_|MW4PR12MB7262:EE_
+X-MS-Office365-Filtering-Correlation-Id: 685f6959-40f6-4f57-8c05-08db568ab790
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	KuXl+r2rOiN7DEMRWCK7VRzQ8xH6VWBLVg1qHEpufzU5sT4FNgFczwA930/DhJGEqM6+Tv4pg+0dvWLgv/r8jPiMIrwB2lYZFaVJClnxMvut45W2LU4buVhrrAUX6hHvlOK7+1mjTjKeAGyzhiaPyovMRkrijGNB54uZGMu5lX4wenxxC4EaBp4HlnYHlajRDQwqtR2Fe7Ct0MLwev/nYwn4GgwK8qZogUlUtcN45yK8UbGb74NyvIGpLvobUZNcc7mKNZs4EBS9PdlV9bgCh+MKhKOTl4jo4wa/UY8qYkHrpFXiwaWdDxlIkNyLBAUBTdKVB4DvbySFNSFDifXeymwlQB1JaYKDbtkqPojqVKCLrDzBwctjJWQQ/CzoKYP0O4EGdjryztech9BlFjX1c7AUz5/YYYNTs7vhVoYDykJG4loveLZW3NHzo0Ss2Cam13q2l3dVCfmUwg8/lnUAg5jiN7fhPAx2IXSbz3aWbHzVeoaIEHSfeH13LyEaZm2oOciGPq0+/j2Vp2e8CdDH7gOnEjSRFpve5Uel6UxxW0WfJWlHBhDMBTEunsyGOkejZeOZxlb9V+lrVpFxD0w/ziaxF5jh7L2RIfaLQxaLrTRBZDEYmACZ2rxgdg5V7l7Idx/Cf8XLckyMsKj8CVY8uLSz1Gv7twk7o0PdT5sJKpU82AB0OfiWAVpvbehvI8ka
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6583.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199021)(30864003)(2906002)(31686004)(44832011)(38100700002)(5660300002)(8676002)(8936002)(41300700001)(36756003)(316002)(4326008)(66556008)(66476007)(66946007)(2616005)(83380400001)(86362001)(31696002)(6506007)(26005)(6666004)(53546011)(186003)(6512007)(966005)(478600001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SmtrcWFOS2tpak9qaGtjVWxMZzViV2hlMVBVRUxOVDF3OVA2enhrUXh5R1dx?=
+ =?utf-8?B?RE9mKzRaUUJ1eEV5YjBGdEVRRnZpa3N6M3plTEpzcTVnRWxPR0JqOTBBRURM?=
+ =?utf-8?B?UHpnUHU2NEhPdXdrRG9PMmV3blZUb1Y4cVk0K3VDSFRPME1oK1dMSTQweUN4?=
+ =?utf-8?B?NWFTNklHeFpBTm1wVFVNTUVHQm1tcXhZQmtNMS91bFhXclkyOVZXNWNNNzR1?=
+ =?utf-8?B?MkxMUER6ejJGb3RUQnc5ZkdrSW5mTllreWJyalh1KzBDcFliUW1LNnJBZVho?=
+ =?utf-8?B?UnowNndoZXVERHZUNlFCeENiOXNGYjEzZTFGMWtYQXJzdzJqRlNpV3VxTnlr?=
+ =?utf-8?B?NG1XTFN5S2Zpc01McWhtOTVaTXk0K2dJSzhMZkFVS3VEbG5oVzFEYUVLYXZG?=
+ =?utf-8?B?cjlsb0VwbXBZREY4NmsyMTRhdkxtSXBlV0h2VkRZZ3VmdWZmZGlKTnI4ckty?=
+ =?utf-8?B?dlE1Ty8wcDZyWGJVWmVUMUR6U0R3T0F6TW8vYk8zajhOTjhLVGgvdmdMNVQ1?=
+ =?utf-8?B?TGZqUHNMWWpwcWRaaUd2Y2lrQk9IQnpBdjVjdGE5c2NBQWNTOE5ZZ1ZCdlZp?=
+ =?utf-8?B?TC8rMEZodXg5bDJEeWFMMFI3KzZEYjRRRTRURmpWdldtVlkrQk84TWVwbzhR?=
+ =?utf-8?B?c2hxSDNKWUZjaXhMei8yRkFwWDhuSVlwb3ExMW1CYVpDNHB6MmdyM2JrUzZm?=
+ =?utf-8?B?SUdTMkNLOVNVczhjWXpSa0twWGpzcW5FTE1ESFhHVTM3NXZsVlR3SU9oOTQ4?=
+ =?utf-8?B?UE90Zlc4SkNTd0R3VDBBTGkrNWJQU1VtajltU29icktKWTkwakc1cW1GSWFQ?=
+ =?utf-8?B?bnlmVEptZEM3SFg5cm93bHVOVzdZNlo0WGRwVFBma2U3UVdoam54amFHWnVY?=
+ =?utf-8?B?ZE5YZGppK2Rjekl2eGp0YWxuNFo0amU0KzNHT3Z1YXczdmNlSlBBRURRUno2?=
+ =?utf-8?B?WHRvRDZVcW44SWRBUVlYWU1INVVkTGRyelFHU3VhaktWVTlERUM4VVgwRHZH?=
+ =?utf-8?B?Q2FNR08rb2pOMlY1MWFYeHo1RVpKRlQvTzlLUElhK2dIaHU1eWtQMTZCb1Vq?=
+ =?utf-8?B?OTlpN1BSaFhFemJQT25lRVFvdU15RmMrOEFxNU85WHRjMFdRQXZMdXdWQ0Z5?=
+ =?utf-8?B?UTlTN3dGUys4djVwMjk3UmZPNzRUNDBUOXg2bEpxYjVqK1ZMY0dqenFmVUFS?=
+ =?utf-8?B?Y0UzbGorNUFIQmZOdDZtSFFFUjdrU3VTLzlCK3BNQUVXN2RaMVBpeWtHcC9l?=
+ =?utf-8?B?NWpvR2dWUjZRL2lNb1RGMHJwaDIrYTBYcDI5UDB2NGYrU3IrSW1YWG1iamFV?=
+ =?utf-8?B?WVdDNmkvaHVldHRONUtZV3gwSXFKay9XK3pqOWhKQjJGVXhrNFVVOVdnNXdo?=
+ =?utf-8?B?a0hFaUlodFRYV2dpc3liS0tUOUR1R2R2RlZaVDNTdXF0UHp3dXphZjJyYmcw?=
+ =?utf-8?B?OUNDd2hsMEJnNFRwZjZZZ1puU0hiUWZFUEIwQ25aSm9mUnVpMmw5cmp5MGVF?=
+ =?utf-8?B?WVBhTjkyd3ozeG16ZWhOekx6MG9RTy9KNzFVdHU2cHdxa2FBQVVqYUFJeDd4?=
+ =?utf-8?B?aTFnUVJMbFJWMGFnWkVWTkNRdmNqMVRnYmdkcGljZEo3cEg2OCt2bXcrWFYz?=
+ =?utf-8?B?VmhHZFFESnZKcUMxajJWMWRwUGVGZVcwOVRqc1BxeGtuWUFqRkgvZksrYzBt?=
+ =?utf-8?B?SFlMbnRiZzBuaERuTjQxRkRUaGZLZEtHWmYzaWE3U0J5b1BsWXBISnlsK3R4?=
+ =?utf-8?B?N0JtcFJ6ODJxOTF3aXNtZU9Tdkc5RUowWDJndTlLQ1RiVCtFa3BSdzFCWmUz?=
+ =?utf-8?B?UzJxTXpHaVB5eTZBa1Zpcm1ES1ozY2FWZnBzZmtjcDBRRHJLTkV0T1U3UEp0?=
+ =?utf-8?B?akN0VmJUbXpzbVZ6bHR2NnB6NmM5Z0ZCMnZaM0lETHFLMWlON1lIVVNRaUlF?=
+ =?utf-8?B?SDBKWnZYNytSVUtxMHdWVW9ndlFUMGNWV3Q5RXNsL0U3Mmpnd1FQeUpkM2NC?=
+ =?utf-8?B?WlpUcFJnbGdhTk1zSXNqSFl1elJZTFRRQnJVWFdhaDBQQ1hiQTBTVXZFSzdV?=
+ =?utf-8?B?UW1IaE4vRFB3R0dBWEYrUlY5Y09GcnpJUnl6SkZiSjg0Z2RoWEJXL2tScUV4?=
+ =?utf-8?Q?HEgcEjUUBXf3/hLcBC5aLyB9e?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 685f6959-40f6-4f57-8c05-08db568ab790
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6583.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 03:56:39.0785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qibs8S4rUpp7XxL7TdvnqwqL6dNm3b13s/Ld6QAKqU2nKZw509yaw0p4r2sNzyX+77pMTvkQ61HLmWDGKQSh1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7262
+
+On 5/16/23 7:24 PM, kernel test robot wrote:
+> 
+> Hi Shannon,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on v6.4-rc2 next-20230516]
+> [cannot apply to mst-vhost/linux-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Shannon-Nelson/virtio-allow-caller-to-override-device-id-in-vp_modern/20230516-110049
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20230516025521.43352-12-shannon.nelson%40amd.com
+> patch subject: [PATCH v6 virtio 11/11] pds_vdpa: pds_vdps.rst and Kconfig
+> config: arm64-allmodconfig
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install arm64 cross compiling tool for clang build
+>          # apt-get install binutils-aarch64-linux-gnu
+>          # https://github.com/intel-lab-lkp/linux/commit/4942556344e0c7cdf4719dfbd0e17c0f2b620b30
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Shannon-Nelson/virtio-allow-caller-to-override-device-id-in-vp_modern/20230516-110049
+>          git checkout 4942556344e0c7cdf4719dfbd0e17c0f2b620b30
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/acpi/ drivers/infiniband/sw/rxe/ drivers/staging/media/deprecated/atmel/ drivers/vdpa/pds/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305171042.aJUkaxnH-lkp@intel.com/
+
+Thank you, Mr. Kernel Test Robot, I have this on my list.
+
+sln
+
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/vdpa/pds/vdpa_dev.c:568:7: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>                     if (unsupp_features) {
+>                         ^~~~~~~~~~~~~~~
+>     drivers/vdpa/pds/vdpa_dev.c:669:9: note: uninitialized use occurs here
+>             return err;
+>                    ^~~
+>     drivers/vdpa/pds/vdpa_dev.c:568:3: note: remove the 'if' if its condition is always false
+>                     if (unsupp_features) {
+>                     ^~~~~~~~~~~~~~~~~~~~~~
+>     drivers/vdpa/pds/vdpa_dev.c:536:9: note: initialize the variable 'err' to silence this warning
+>             int err;
+>                    ^
+>                     = 0
+>     1 warning generated.
+> 
+> 
+> vim +568 drivers/vdpa/pds/vdpa_dev.c
+> 
+> 8b05d813374db7 Shannon Nelson 2023-05-15  524
+> 8b05d813374db7 Shannon Nelson 2023-05-15  525  static int pds_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 8b05d813374db7 Shannon Nelson 2023-05-15  526                       const struct vdpa_dev_set_config *add_config)
+> 8b05d813374db7 Shannon Nelson 2023-05-15  527  {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  528   struct pds_vdpa_aux *vdpa_aux;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  529   struct pds_vdpa_device *pdsv;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  530   struct vdpa_mgmt_dev *mgmt;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  531   u16 fw_max_vqs, vq_pairs;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  532   struct device *dma_dev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  533   struct pci_dev *pdev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  534   struct device *dev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  535   u8 mac[ETH_ALEN];
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  536   int err;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  537   int i;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  538
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  539   vdpa_aux = container_of(mdev, struct pds_vdpa_aux, vdpa_mdev);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  540   dev = &vdpa_aux->padev->aux_dev.dev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  541   mgmt = &vdpa_aux->vdpa_mdev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  542
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  543   if (vdpa_aux->pdsv) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  544           dev_warn(dev, "Multiple vDPA devices on a VF is not supported.\n");
+> 8b05d813374db7 Shannon Nelson 2023-05-15  545           return -EOPNOTSUPP;
+> 8b05d813374db7 Shannon Nelson 2023-05-15  546   }
+> 8b05d813374db7 Shannon Nelson 2023-05-15  547
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  548   pdsv = vdpa_alloc_device(struct pds_vdpa_device, vdpa_dev,
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  549                            dev, &pds_vdpa_ops, 1, 1, name, false);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  550   if (IS_ERR(pdsv)) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  551           dev_err(dev, "Failed to allocate vDPA structure: %pe\n", pdsv);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  552           return PTR_ERR(pdsv);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  553   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  554
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  555   vdpa_aux->pdsv = pdsv;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  556   pdsv->vdpa_aux = vdpa_aux;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  557
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  558   pdev = vdpa_aux->padev->vf_pdev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  559   dma_dev = &pdev->dev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  560   pdsv->vdpa_dev.dma_dev = dma_dev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  561
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  562   pdsv->supported_features = mgmt->supported_features;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  563
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  564   if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  565           u64 unsupp_features =
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  566                   add_config->device_features & ~mgmt->supported_features;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  567
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15 @568           if (unsupp_features) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  569                   dev_err(dev, "Unsupported features: %#llx\n", unsupp_features);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  570                   goto err_unmap;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  571           }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  572
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  573           pdsv->supported_features = add_config->device_features;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  574   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  575
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  576   err = pds_vdpa_cmd_reset(pdsv);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  577   if (err) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  578           dev_err(dev, "Failed to reset hw: %pe\n", ERR_PTR(err));
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  579           goto err_unmap;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  580   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  581
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  582   err = pds_vdpa_init_hw(pdsv);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  583   if (err) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  584           dev_err(dev, "Failed to init hw: %pe\n", ERR_PTR(err));
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  585           goto err_unmap;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  586   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  587
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  588   fw_max_vqs = le16_to_cpu(pdsv->vdpa_aux->ident.max_vqs);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  589   vq_pairs = fw_max_vqs / 2;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  590
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  591   /* Make sure we have the queues being requested */
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  592   if (add_config->mask & (1 << VDPA_ATTR_DEV_NET_CFG_MAX_VQP))
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  593           vq_pairs = add_config->net.max_vq_pairs;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  594
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  595   pdsv->num_vqs = 2 * vq_pairs;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  596   if (pdsv->supported_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ))
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  597           pdsv->num_vqs++;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  598
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  599   if (pdsv->num_vqs > fw_max_vqs) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  600           dev_err(dev, "%s: queue count requested %u greater than max %u\n",
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  601                   __func__, pdsv->num_vqs, fw_max_vqs);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  602           err = -ENOSPC;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  603           goto err_unmap;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  604   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  605
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  606   if (pdsv->num_vqs != fw_max_vqs) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  607           err = pds_vdpa_cmd_set_max_vq_pairs(pdsv, vq_pairs);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  608           if (err) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  609                   dev_err(dev, "Failed to set max_vq_pairs: %pe\n",
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  610                           ERR_PTR(err));
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  611                   goto err_unmap;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  612           }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  613   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  614
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  615   /* Set a mac, either from the user config if provided
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  616    * or set a random mac if default is 00:..:00
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  617    */
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  618   if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR)) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  619           ether_addr_copy(mac, add_config->net.mac);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  620           pds_vdpa_cmd_set_mac(pdsv, mac);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  621   } else {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  622           struct virtio_net_config __iomem *vc;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  623
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  624           vc = pdsv->vdpa_aux->vd_mdev.device;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  625           memcpy_fromio(mac, vc->mac, sizeof(mac));
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  626           if (is_zero_ether_addr(mac)) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  627                   eth_random_addr(mac);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  628                   dev_info(dev, "setting random mac %pM\n", mac);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  629                   pds_vdpa_cmd_set_mac(pdsv, mac);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  630           }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  631   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  632
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  633   for (i = 0; i < pdsv->num_vqs; i++) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  634           pdsv->vqs[i].qid = i;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  635           pdsv->vqs[i].pdsv = pdsv;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  636           pdsv->vqs[i].irq = VIRTIO_MSI_NO_VECTOR;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  637           pdsv->vqs[i].notify = vp_modern_map_vq_notify(&pdsv->vdpa_aux->vd_mdev,
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  638                                                         i, &pdsv->vqs[i].notify_pa);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  639   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  640
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  641   pdsv->vdpa_dev.mdev = &vdpa_aux->vdpa_mdev;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  642
+> 10cd19d8803330 Shannon Nelson 2023-05-15  643   err = pds_vdpa_register_event_handler(pdsv);
+> 10cd19d8803330 Shannon Nelson 2023-05-15  644   if (err) {
+> 10cd19d8803330 Shannon Nelson 2023-05-15  645           dev_err(dev, "Failed to register for PDS events: %pe\n", ERR_PTR(err));
+> 10cd19d8803330 Shannon Nelson 2023-05-15  646           goto err_unmap;
+> 10cd19d8803330 Shannon Nelson 2023-05-15  647   }
+> 10cd19d8803330 Shannon Nelson 2023-05-15  648
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  649   /* We use the _vdpa_register_device() call rather than the
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  650    * vdpa_register_device() to avoid a deadlock because our
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  651    * dev_add() is called with the vdpa_dev_lock already set
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  652    * by vdpa_nl_cmd_dev_add_set_doit()
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  653    */
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  654   err = _vdpa_register_device(&pdsv->vdpa_dev, pdsv->num_vqs);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  655   if (err) {
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  656           dev_err(dev, "Failed to register to vDPA bus: %pe\n", ERR_PTR(err));
+> 10cd19d8803330 Shannon Nelson 2023-05-15  657           goto err_unevent;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  658   }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  659
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  660   pds_vdpa_debugfs_add_vdpadev(vdpa_aux);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  661
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  662   return 0;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  663
+> 10cd19d8803330 Shannon Nelson 2023-05-15  664  err_unevent:
+> 10cd19d8803330 Shannon Nelson 2023-05-15  665   pds_vdpa_unregister_event_handler(pdsv);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  666  err_unmap:
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  667   put_device(&pdsv->vdpa_dev.dev);
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  668   vdpa_aux->pdsv = NULL;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  669   return err;
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  670  }
+> c4cc9ee57a0c5b Shannon Nelson 2023-05-15  671
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
