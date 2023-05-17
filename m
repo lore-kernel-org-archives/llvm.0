@@ -1,51 +1,52 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6DD31EFE
-	for <llvm@lists.linux.dev>; Wed, 17 May 2023 19:09:10 +0000 (UTC)
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-3f38824a025so38301cf.0
-        for <llvm@lists.linux.dev>; Wed, 17 May 2023 12:09:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862F831EFE
+	for <llvm@lists.linux.dev>; Wed, 17 May 2023 19:09:47 +0000 (UTC)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-3f396606ab0so36161cf.0
+        for <llvm@lists.linux.dev>; Wed, 17 May 2023 12:09:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684350549; x=1686942549;
+        d=google.com; s=20221208; t=1684350586; x=1686942586;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wTCrNF1k6eLvgjFBEtoVOllbYMzqAXAFq2VPdBNe0PU=;
-        b=1RbKqgNlFVDn38jbjn+Xyf9v2PZkmr8NlkChy47jOU4d/MCsfICl4HNWXWC54W/pIG
-         1dofWJXAUWTCZsLtED0n1ndgNbYBCSAPo29fdxJKDrBAtQLgOX9f4pwZf9kS3ghxthb2
-         N0cN9RM3ETTW9YLxhlOsJZe46DUn6ZX78QPySHArvwB3zQoi3yo5ttMISt8BFPmlw110
-         S2XVBIeCofavikgM7slybu8BTtRWgBDobDNS6+35+preNvJmtRz207zhxdU79kZEcZuJ
-         wKIH702z053O+wSyqnfucxGZO8MfVQbrjAHBqACNkUsgYmu7+zNA5DF9+/qkjRd2vMvk
-         XikQ==
+        bh=+sfDGNxFljLZPwjQlmmmYoY6SbW+JgmdsgpLXcsCH5Y=;
+        b=0MvIVpu2NgSI501OvzcIRQfAWlfFh7IoDuwZnbku8+cdXhaFdzbKEfjNN/VKul/mZn
+         URKug3mfuS6JaTu5ojMXMT7+kKu9uiNFP0cnWqZUQJ49e9KwRGORJDFlPTfxNatgipeZ
+         Vgk+/vIlqdtEk+wmhus1K7LMgVqIdzKI3DvVuOMDgi79B1Rem50C/RmW/jYSX0G3i/zJ
+         WOiri7zt1F3RiHPjBIVcY26RtfboStBMhcPiP6HZXfy/9Qn+p4ZcTXmqmFGPxjPplVLk
+         TXWJmQW5KaljSVGcWaIIMIFS8eR7yaBJkgU+qUn+Bhfw0Ocdwm5GrWpiMIcIJtMP0XWo
+         K2ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350549; x=1686942549;
+        d=1e100.net; s=20221208; t=1684350586; x=1686942586;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wTCrNF1k6eLvgjFBEtoVOllbYMzqAXAFq2VPdBNe0PU=;
-        b=jICeWyqkAZs0L7quHtHDRmJelofedtvCI0fds/lkKX5T0jqaWJCyzp00CzUU3ORS+Y
-         vXPogYoesglt7AusQz48auiEFXA7pP22G5nAbHHxcvq/OOjWUupsO2PGIXpk8/Kix6kC
-         H66AxNNSnd/TMScenuu7WOrxfZeeWxhKgsvmG1jbAzAynJqPxcquyNvVBAtNKA8x06dv
-         Y/Fi0KF7gf8bHAygHqBz92Cb8oG1+wiOjfbLx4TVhx0JMLbcygDgY4dPCYpboxGrAFlx
-         gQ3lVuDqN+2DfqChjvMu93ZC7tMKi+zet2KBpP4SBcTN5RwSYz4xOa/S+57SsfWAjITd
-         uWbg==
-X-Gm-Message-State: AC+VfDz9En5EAEV2edH0mtCRTkcXvyG++6UH5KLnqGiMaSikNEZP/DhK
-	6laRucCfQhjDKilNU0lgjorgqys9zU6hqXI8MDieqw==
-X-Google-Smtp-Source: ACHHUZ4vHFPYr3XteL6OVBxr3sfjSsd2NrUvpo8AQLiFMWwfzIDeniQtS3efGU7DsGoHFylfwTLFONOliqHDKMSojjg=
-X-Received: by 2002:a05:622a:181b:b0:3ef:3083:a437 with SMTP id
- t27-20020a05622a181b00b003ef3083a437mr34609qtc.18.1684350549567; Wed, 17 May
- 2023 12:09:09 -0700 (PDT)
+        bh=+sfDGNxFljLZPwjQlmmmYoY6SbW+JgmdsgpLXcsCH5Y=;
+        b=Aum39O8ZIuszaftQhPo6aycK53mUmxTXOqnGJHxtCKgbpxkmeZTQDkrHcHTfHH9QPj
+         eqHC8Co5HxPo42u66Yc+dcAOZISWilGhmot1hnOaAIU6iqmWSsv2wxGDHw4OE77Phzgi
+         MJWz9YwLvruL0ygcLo2I0qPsI9HqHYYpZCJSb2UiHwlEpKEPMbxoicqQwczSAprQQWzK
+         Hir13SitvKzbHfTG+HJ2r9BrDFB/rkBCREIHeqErlxvrCvQmqZTciuyYTaBOlWmllplM
+         HSQCzTmbWRj2XN6L0oSa4DWoLw39ek0FIHzM7cz5j8nMHWq9UNPiiOY9EEYo/ZQRPSQM
+         c1dA==
+X-Gm-Message-State: AC+VfDyn7llOZcg8PWjMB84VYAzrb0ViJ/RMsvslpcpoQUxzCyhxJMEM
+	h7Dduw/hO8n1BEre+C5VqX72JuO89BRVx7TyvgComQ==
+X-Google-Smtp-Source: ACHHUZ4xH8p2xAR9gogsMMo1l6go0T7O3blGg6ngP+XOlJcsKmi78F6t5pYwE2bb/x8i7L2vXtL9Yv+uOHHEhdQulvA=
+X-Received: by 2002:a05:622a:188f:b0:3ed:86f6:6eab with SMTP id
+ v15-20020a05622a188f00b003ed86f66eabmr19628qtc.14.1684350586364; Wed, 17 May
+ 2023 12:09:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230407215406.768464-1-ndesaulniers@google.com> <168435014337.2056649.7592777028793700479.b4-ty@chromium.org>
-In-Reply-To: <168435014337.2056649.7592777028793700479.b4-ty@chromium.org>
+References: <20230407215406.768464-1-ndesaulniers@google.com>
+ <168435014337.2056649.7592777028793700479.b4-ty@chromium.org> <CAFP8O3L_RsaTMJvT7hmjD6ON49uob9Fb4mWg8ZUav_Y-FCgTMA@mail.gmail.com>
+In-Reply-To: <CAFP8O3L_RsaTMJvT7hmjD6ON49uob9Fb4mWg8ZUav_Y-FCgTMA@mail.gmail.com>
 From: Fangrui Song <maskray@google.com>
-Date: Wed, 17 May 2023 12:08:58 -0700
-Message-ID: <CAFP8O3L_RsaTMJvT7hmjD6ON49uob9Fb4mWg8ZUav_Y-FCgTMA@mail.gmail.com>
+Date: Wed, 17 May 2023 12:09:35 -0700
+Message-ID: <CAFP8O3JivZh+AAV7N90Nk7U2BHRNST6MRP0zHtfQ-Vj0m4+pDA@mail.gmail.com>
 Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
 To: Kees Cook <keescook@chromium.org>
 Cc: ndesaulniers@google.com, masahiroy@kernel.org, 
@@ -56,38 +57,41 @@ Cc: ndesaulniers@google.com, masahiroy@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 17, 2023 at 12:02=E2=80=AFPM Kees Cook <keescook@chromium.org> =
+On Wed, May 17, 2023 at 12:08=E2=80=AFPM Fangrui Song <maskray@google.com> =
 wrote:
 >
-> On Fri, 7 Apr 2023 14:54:06 -0700, Nick Desaulniers wrote:
-> > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
-> > Clang 3.2.  The minimum supported version of these according to
-> > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
-> > this cc-option check.
+> On Wed, May 17, 2023 at 12:02=E2=80=AFPM Kees Cook <keescook@chromium.org=
+> wrote:
+> >
+> > On Fri, 7 Apr 2023 14:54:06 -0700, Nick Desaulniers wrote:
+> > > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 a=
+nd
+> > > Clang 3.2.  The minimum supported version of these according to
+> > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Dro=
+p
+> > > this cc-option check.
+> > >
+> > >
+> >
+> > Applied to for-next/hardening, thanks!
+> >
+> > [1/1] ubsan: remove cc-option test for UBSAN_TRAP
+> >       https://git.kernel.org/kees/c/08e4044243a6
+> >
+> > --
+> > Kees Cook
 > >
 > >
 >
-> Applied to for-next/hardening, thanks!
+> For this -fsanitize-undefined-trap-on-error, I think we need a v2 patch t=
+hat
+> tries -fsanitize-trap=3Dall as well.
+
+Correction: -fsanitize-trap=3Dundefined
+
+> -fsanitize-undefined-trap-on-error has been deprecated in Clang for 8
+> years, and at some point we will remove the option.
 >
-> [1/1] ubsan: remove cc-option test for UBSAN_TRAP
->       https://git.kernel.org/kees/c/08e4044243a6
->
-> --
-> Kees Cook
->
->
-
-For this -fsanitize-undefined-trap-on-error, I think we need a v2 patch tha=
-t
-tries -fsanitize-trap=3Dall as well.
-
--fsanitize-undefined-trap-on-error has been deprecated in Clang for 8
-years, and at some point we will remove the option.
-
-GCC implements -fsanitize-trap=3Dall later, but
--fsanitize-undefined-trap-on-error is documented as deprecated as
-well.
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+> GCC implements -fsanitize-trap=3Dall later, but
+> -fsanitize-undefined-trap-on-error is documented as deprecated as
+> well.
