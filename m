@@ -1,253 +1,164 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA40182AF;
-	Thu, 18 May 2023 11:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA9517AB8;
+	Thu, 18 May 2023 12:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684409072; x=1715945072;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=al9UgHWaWCE02QPQwggsoC4N6W9WmQdyKbu1pRS2yYY=;
-  b=nBClHiGtQLT7MwwE+GGHZFFtOd1xguCMvfkhUehDwRBfEO3gFWltI+7c
-   A3BHxGN1vR6QV4V8FW5RnzEmreaGLC5QfkQS3mAjigbuiBIOGrXRJ5LZO
-   DmlEPke0S8y9RRsA0ORBXKpTdp3SokVFPNY3FcZRdjFWVgcKcFL6KK4b8
-   tBFI8CwA+OvnUSTND+p6G8/5rAKgc472wcBPphwnkqRjM7aZTmJwE0D37
-   xg3/Akrcl2NnGdnkMZZaMjfOTvHSFj2WyFdPT4gssbkFTXM4ORhtQoCSZ
-   7h4PkfEb+EU8R//nbsyur73HcBY9VRgcOPAtN06YeykFjG/3hiqLjVMlj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="415466627"
+  t=1684412374; x=1715948374;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a8qhN0YME6E3Azl6/XjjNNeJNI6Wz3PLypn8JkJn7G0=;
+  b=QgxV9p9iIVNtUylu6zFXmEx/+abeS0AG8jocjuu3qH5MJNQs1y+I4d6x
+   6vDbMZzkVktFv8/uF53icsjJFfdUw9t8L4GoQvhPv+cZZEViVHLfG0GR5
+   MU3iAsqVsXeZ6k4Fu7W8c/GaCoxccP0hW02EtFudNJilh7MxtpNcjRYFa
+   eYhb/HEUb4kqUo79iZK9Ub4kDLakQwz+Z9+wSqhjtW45QTMUD83gJKW4m
+   ZRTamRRsLi3/JBggwfzIc/7y7RrXZG/m6QRA7jkEtdo4c2KErhbD22LWz
+   E9FF1pJkzDntUx0xObfscI96DHgmKxUwxsc088QU3jKRRdKgjcqp/1HXK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="380254544"
 X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="415466627"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 04:24:31 -0700
+   d="scan'208";a="380254544"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 05:18:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652612865"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="679660496"
 X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="652612865"
+   d="scan'208";a="679660496"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 May 2023 04:24:28 -0700
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2023 05:18:29 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pzbkB-000A04-0N;
-	Thu, 18 May 2023 11:24:27 +0000
-Date: Thu, 18 May 2023 19:23:54 +0800
+	id 1pzcaS-000A2S-2f;
+	Thu, 18 May 2023 12:18:28 +0000
+Date: Thu, 18 May 2023 20:18:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 83/97] usb: xhci-plat: Convert to platform remove
- callback returning void
-Message-ID: <202305181906.Vau9RKnr-lkp@intel.com>
-References: <20230517230239.187727-84-u.kleine-koenig@pengutronix.de>
+To: Tejun Heo <tj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tj-wq:affinity-scopes-v1 29/32] kernel/workqueue.c:1126:27: error:
+ no member named 'wake_cpu' in 'struct task_struct'
+Message-ID: <202305181906.A9uPEkmd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="KcMGj4wfo2aHgcuK"
+Content-Type: multipart/mixed; boundary="pFbQJZx5dkZeQScY"
 Content-Disposition: inline
-In-Reply-To: <20230517230239.187727-84-u.kleine-koenig@pengutronix.de>
 
 
---KcMGj4wfo2aHgcuK
+--pFbQJZx5dkZeQScY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Uwe,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on ac9a78681b921877518763ba0e89202254349d1b]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/usb-c67x00-drv-Convert-to-platform-remove-callback-returning-void/20230518-070939
-base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230517230239.187727-84-u.kleine-koenig%40pengutronix.de
-patch subject: [PATCH 83/97] usb: xhci-plat: Convert to platform remove callback returning void
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scopes-v1
+head:   e8f3505e69a526cc5fe40a4da5d443b7f9231016
+commit: 53892e99fab5df00e74124f115c611b1546ed52e [29/32] workqueue: Implement non-strict affinity scope for unbound workqueues
 config: x86_64-randconfig-x062
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a15d372314b8d59dad452c251a3a72b9fc2d7cf8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Uwe-Kleine-K-nig/usb-c67x00-drv-Convert-to-platform-remove-callback-returning-void/20230518-070939
-        git checkout a15d372314b8d59dad452c251a3a72b9fc2d7cf8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/commit/?id=53892e99fab5df00e74124f115c611b1546ed52e
+        git remote add tj-wq https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git
+        git fetch --no-tags tj-wq affinity-scopes-v1
+        git checkout 53892e99fab5df00e74124f115c611b1546ed52e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305181906.Vau9RKnr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305181906.A9uPEkmd-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/host/xhci-plat.c:402:6: error: conflicting types for 'xhci_plat_remove'
-   void xhci_plat_remove(struct platform_device *dev)
-        ^
-   drivers/usb/host/xhci-plat.h:28:5: note: previous declaration is here
-   int xhci_plat_remove(struct platform_device *dev);
-       ^
->> drivers/usb/host/xhci-plat.c:531:16: error: incompatible function pointer types initializing 'void (*)(struct platform_device *)' with an expression of type 'int (struct platform_device *)' [-Werror,-Wincompatible-function-pointer-types]
-           .remove_new = xhci_plat_remove,
-                         ^~~~~~~~~~~~~~~~
-   2 errors generated.
+>> kernel/workqueue.c:1126:27: error: no member named 'wake_cpu' in 'struct task_struct'
+               !cpumask_test_cpu(p->wake_cpu, pool->attrs->__pod_cpumask)) {
+                                 ~  ^
+   kernel/workqueue.c:1127:6: error: no member named 'wake_cpu' in 'struct task_struct'
+                   p->wake_cpu = cpumask_any_distribute(pool->attrs->__pod_cpumask);
+                   ~  ^
+   kernel/workqueue.c:3771:27: warning: no previous prototype for function 'wqattrs_pod_type' [-Wmissing-prototypes]
+   const struct wq_pod_type *wqattrs_pod_type(const struct workqueue_attrs *attrs)
+                             ^
+   kernel/workqueue.c:3771:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct wq_pod_type *wqattrs_pod_type(const struct workqueue_attrs *attrs)
+         ^
+   static 
+   kernel/workqueue.c:6611:32: error: implicit declaration of function 'cpu_smt_mask' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return cpumask_test_cpu(cpu0, cpu_smt_mask(cpu1));
+                                         ^
+   kernel/workqueue.c:6611:32: note: did you mean 'cpu_cpu_mask'?
+   include/linux/topology.h:243:37: note: 'cpu_cpu_mask' declared here
+   static inline const struct cpumask *cpu_cpu_mask(int cpu)
+                                       ^
+   kernel/workqueue.c:6611:32: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const struct cpumask *' [-Wint-conversion]
+           return cpumask_test_cpu(cpu0, cpu_smt_mask(cpu1));
+                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:502:77: note: passing argument to parameter 'cpumask' here
+   static __always_inline bool cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
+                                                                               ^
+   2 warnings and 3 errors generated.
 
 
-vim +/xhci_plat_remove +402 drivers/usb/host/xhci-plat.c
+vim +1126 kernel/workqueue.c
 
-   401	
- > 402	void xhci_plat_remove(struct platform_device *dev)
-   403	{
-   404		struct usb_hcd	*hcd = platform_get_drvdata(dev);
-   405		struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-   406		struct clk *clk = xhci->clk;
-   407		struct clk *reg_clk = xhci->reg_clk;
-   408		struct usb_hcd *shared_hcd = xhci->shared_hcd;
-   409	
-   410		pm_runtime_get_sync(&dev->dev);
-   411		xhci->xhc_state |= XHCI_STATE_REMOVING;
-   412	
-   413		if (shared_hcd) {
-   414			usb_remove_hcd(shared_hcd);
-   415			xhci->shared_hcd = NULL;
-   416		}
-   417	
-   418		usb_phy_shutdown(hcd->usb_phy);
-   419	
-   420		usb_remove_hcd(hcd);
-   421	
-   422		if (shared_hcd)
-   423			usb_put_hcd(shared_hcd);
-   424	
-   425		clk_disable_unprepare(clk);
-   426		clk_disable_unprepare(reg_clk);
-   427		reset_control_assert(xhci->reset);
-   428		usb_put_hcd(hcd);
-   429	
-   430		pm_runtime_disable(&dev->dev);
-   431		pm_runtime_put_noidle(&dev->dev);
-   432		pm_runtime_set_suspended(&dev->dev);
-   433	}
-   434	EXPORT_SYMBOL_GPL(xhci_plat_remove);
-   435	
-   436	static int __maybe_unused xhci_plat_suspend(struct device *dev)
-   437	{
-   438		struct usb_hcd	*hcd = dev_get_drvdata(dev);
-   439		struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-   440		int ret;
-   441	
-   442		if (pm_runtime_suspended(dev))
-   443			pm_runtime_resume(dev);
-   444	
-   445		ret = xhci_priv_suspend_quirk(hcd);
-   446		if (ret)
-   447			return ret;
-   448		/*
-   449		 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
-   450		 * to do wakeup during suspend.
-   451		 */
-   452		ret = xhci_suspend(xhci, device_may_wakeup(dev));
-   453		if (ret)
-   454			return ret;
-   455	
-   456		if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
-   457			clk_disable_unprepare(xhci->clk);
-   458			clk_disable_unprepare(xhci->reg_clk);
-   459		}
-   460	
-   461		return 0;
-   462	}
-   463	
-   464	static int __maybe_unused xhci_plat_resume(struct device *dev)
-   465	{
-   466		struct usb_hcd	*hcd = dev_get_drvdata(dev);
-   467		struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-   468		int ret;
-   469	
-   470		if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
-   471			clk_prepare_enable(xhci->clk);
-   472			clk_prepare_enable(xhci->reg_clk);
-   473		}
-   474	
-   475		ret = xhci_priv_resume_quirk(hcd);
-   476		if (ret)
-   477			return ret;
-   478	
-   479		ret = xhci_resume(xhci, 0);
-   480		if (ret)
-   481			return ret;
-   482	
-   483		pm_runtime_disable(dev);
-   484		pm_runtime_set_active(dev);
-   485		pm_runtime_enable(dev);
-   486	
-   487		return 0;
-   488	}
-   489	
-   490	static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
-   491	{
-   492		struct usb_hcd  *hcd = dev_get_drvdata(dev);
-   493		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-   494		int ret;
-   495	
-   496		ret = xhci_priv_suspend_quirk(hcd);
-   497		if (ret)
-   498			return ret;
-   499	
-   500		return xhci_suspend(xhci, true);
-   501	}
-   502	
-   503	static int __maybe_unused xhci_plat_runtime_resume(struct device *dev)
-   504	{
-   505		struct usb_hcd  *hcd = dev_get_drvdata(dev);
-   506		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-   507	
-   508		return xhci_resume(xhci, 0);
-   509	}
-   510	
-   511	const struct dev_pm_ops xhci_plat_pm_ops = {
-   512		SET_SYSTEM_SLEEP_PM_OPS(xhci_plat_suspend, xhci_plat_resume)
-   513	
-   514		SET_RUNTIME_PM_OPS(xhci_plat_runtime_suspend,
-   515				   xhci_plat_runtime_resume,
-   516				   NULL)
-   517	};
-   518	EXPORT_SYMBOL_GPL(xhci_plat_pm_ops);
-   519	
-   520	#ifdef CONFIG_ACPI
-   521	static const struct acpi_device_id usb_xhci_acpi_match[] = {
-   522		/* XHCI-compliant USB Controller */
-   523		{ "PNP0D10", },
-   524		{ }
-   525	};
-   526	MODULE_DEVICE_TABLE(acpi, usb_xhci_acpi_match);
-   527	#endif
-   528	
-   529	static struct platform_driver usb_generic_xhci_driver = {
-   530		.probe	= xhci_generic_plat_probe,
- > 531		.remove_new = xhci_plat_remove,
-   532		.shutdown = usb_hcd_platform_shutdown,
-   533		.driver	= {
-   534			.name = "xhci-hcd",
-   535			.pm = &xhci_plat_pm_ops,
-   536			.of_match_table = of_match_ptr(usb_xhci_of_match),
-   537			.acpi_match_table = ACPI_PTR(usb_xhci_acpi_match),
-   538		},
-   539	};
-   540	MODULE_ALIAS("platform:xhci-hcd");
-   541	
+  1087	
+  1088	/**
+  1089	 * kick_pool - wake up an idle worker if necessary
+  1090	 * @pool: pool to kick
+  1091	 *
+  1092	 * @pool may have pending work items. Wake up worker if necessary. Returns
+  1093	 * whether a worker was woken up.
+  1094	 */
+  1095	static bool kick_pool(struct worker_pool *pool)
+  1096	{
+  1097		struct worker *worker = first_idle_worker(pool);
+  1098		struct work_struct *work = list_first_entry(&pool->worklist,
+  1099							    struct work_struct, entry);
+  1100		struct task_struct *p;
+  1101	
+  1102		lockdep_assert_held(&pool->lock);
+  1103	
+  1104		if (!need_more_worker(pool) || !worker)
+  1105			return false;
+  1106	
+  1107		p = worker->task;
+  1108	
+  1109		/*
+  1110		 * Idle @worker is about to execute @work and waking up provides an
+  1111		 * opportunity to migrate @worker at a lower cost by setting the task's
+  1112		 * wake_cpu field. Let's see if we want to move @worker to improve
+  1113		 * execution locality.
+  1114		 *
+  1115		 * We're waking the worker that went idle the latest and there's some
+  1116		 * chance that @worker is marked idle but hasn't gone off CPU yet. If
+  1117		 * so, setting the wake_cpu won't do anything. As this is a best-effort
+  1118		 * optimization and the race window is narrow, let's leave as-is for
+  1119		 * now. If this becomes pronounced, we can skip over workers which are
+  1120		 * still on cpu when picking an idle worker.
+  1121		 *
+  1122		 * If @pool has non-strict affinity, @worker might have ended up outside
+  1123		 * its affinity scope. Repatriate.
+  1124		 */
+  1125		if (!pool->attrs->affn_strict &&
+> 1126		    !cpumask_test_cpu(p->wake_cpu, pool->attrs->__pod_cpumask)) {
+  1127			p->wake_cpu = cpumask_any_distribute(pool->attrs->__pod_cpumask);
+  1128			get_work_pwq(work)->stats[PWQ_STAT_REPATRIATED]++;
+  1129		}
+  1130	
+  1131		wake_up_process(worker->task);
+  1132		return true;
+  1133	}
+  1134	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
 
---KcMGj4wfo2aHgcuK
+--pFbQJZx5dkZeQScY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -5506,6 +5417,7 @@ CONFIG_DETECT_HUNG_TASK=y
 CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=480
 # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
 CONFIG_WQ_WATCHDOG=y
+# CONFIG_WQ_CPU_INTENSIVE_REPORT is not set
 # CONFIG_TEST_LOCKUP is not set
 # end of Debug Oops, Lockups and Hangs
 
@@ -5711,4 +5623,4 @@ CONFIG_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---KcMGj4wfo2aHgcuK--
+--pFbQJZx5dkZeQScY--
