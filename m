@@ -1,68 +1,83 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA9517AB8;
-	Thu, 18 May 2023 12:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA9628C20;
+	Thu, 18 May 2023 12:32:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684412374; x=1715948374;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a8qhN0YME6E3Azl6/XjjNNeJNI6Wz3PLypn8JkJn7G0=;
-  b=QgxV9p9iIVNtUylu6zFXmEx/+abeS0AG8jocjuu3qH5MJNQs1y+I4d6x
-   6vDbMZzkVktFv8/uF53icsjJFfdUw9t8L4GoQvhPv+cZZEViVHLfG0GR5
-   MU3iAsqVsXeZ6k4Fu7W8c/GaCoxccP0hW02EtFudNJilh7MxtpNcjRYFa
-   eYhb/HEUb4kqUo79iZK9Ub4kDLakQwz+Z9+wSqhjtW45QTMUD83gJKW4m
-   ZRTamRRsLi3/JBggwfzIc/7y7RrXZG/m6QRA7jkEtdo4c2KErhbD22LWz
-   E9FF1pJkzDntUx0xObfscI96DHgmKxUwxsc088QU3jKRRdKgjcqp/1HXK
+  t=1684413153; x=1715949153;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NvNayvZ8SPUzRfY7RvfQpb0PwaxZT8unZ7m49foENkg=;
+  b=TqaB2EFvwo7Y3MPKH3BoeXPNSGA6KJx4PQqMC2Pdsk33XFcFG2QJ62tl
+   VSkl2tqID77yBeF2sfraZu1Ib3JQsmr/T0wm5v/m78SwbbVunvoEmcCwg
+   4pc4wHmStB4XPljR0hheZY5GRFXGSdGEj1swdopFbcWst1TCJVbSEStvB
+   nTORa3uAWuOBgHOhT0goL5WHoYJWmxSD5uUdMKy46+oG7oEtI+/YFlh1O
+   RafJXvbsZ73wXvHyGqFEllNrHg375tf+MAbKBpWJQE/h8BQtusr0Z1ORo
+   RiiDcB/TCZFiSugJXHHzaM/bPor4d9c+7ALj7OfnDqcWrIhsbKFq7jZZU
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="380254544"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="352067169"
 X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="380254544"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 05:18:31 -0700
+   d="scan'208";a="352067169"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 05:32:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="679660496"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="814306464"
 X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="679660496"
+   d="scan'208";a="814306464"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 May 2023 05:18:29 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 May 2023 05:32:29 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pzcaS-000A2S-2f;
-	Thu, 18 May 2023 12:18:28 +0000
-Date: Thu, 18 May 2023 20:18:13 +0800
+	id 1pzco1-000A34-1B;
+	Thu, 18 May 2023 12:32:29 +0000
+Date: Thu, 18 May 2023 20:31:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tejun Heo <tj@kernel.org>
+To: Mike Christie <michael.christie@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tj-wq:affinity-scopes-v1 29/32] kernel/workqueue.c:1126:27: error:
- no member named 'wake_cpu' in 'struct task_struct'
-Message-ID: <202305181906.A9uPEkmd-lkp@intel.com>
+Subject: Re: [RFC PATCH 8/8] fork/vhost_task: remove no_files
+Message-ID: <202305182032.8v5j8qlA-lkp@intel.com>
+References: <20230518000920.191583-9-michael.christie@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="pFbQJZx5dkZeQScY"
+Content-Type: multipart/mixed; boundary="1/1cbhIzIK9Iolsw"
 Content-Disposition: inline
+In-Reply-To: <20230518000920.191583-9-michael.christie@oracle.com>
 
 
---pFbQJZx5dkZeQScY
+--1/1cbhIzIK9Iolsw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scopes-v1
-head:   e8f3505e69a526cc5fe40a4da5d443b7f9231016
-commit: 53892e99fab5df00e74124f115c611b1546ed52e [29/32] workqueue: Implement non-strict affinity scope for unbound workqueues
+Hi Mike,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc2 next-20230518]
+[cannot apply to mst-vhost/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Christie/signal-Dequeue-SIGKILL-even-if-SIGNAL_GROUP_EXIT-group_exec_task-is-set/20230518-081200
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230518000920.191583-9-michael.christie%40oracle.com
+patch subject: [RFC PATCH 8/8] fork/vhost_task: remove no_files
 config: x86_64-randconfig-x062
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/commit/?id=53892e99fab5df00e74124f115c611b1546ed52e
-        git remote add tj-wq https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git
-        git fetch --no-tags tj-wq affinity-scopes-v1
-        git checkout 53892e99fab5df00e74124f115c611b1546ed52e
+        # https://github.com/intel-lab-lkp/linux/commit/d18f7c90da8b141f82ec5a17a21a58ce6af1b977
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mike-Christie/signal-Dequeue-SIGKILL-even-if-SIGNAL_GROUP_EXIT-group_exec_task-is-set/20230518-081200
+        git checkout d18f7c90da8b141f82ec5a17a21a58ce6af1b977
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
@@ -70,101 +85,79 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305181906.A9uPEkmd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305182032.8v5j8qlA-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/workqueue.c:1126:27: error: no member named 'wake_cpu' in 'struct task_struct'
-               !cpumask_test_cpu(p->wake_cpu, pool->attrs->__pod_cpumask)) {
-                                 ~  ^
-   kernel/workqueue.c:1127:6: error: no member named 'wake_cpu' in 'struct task_struct'
-                   p->wake_cpu = cpumask_any_distribute(pool->attrs->__pod_cpumask);
-                   ~  ^
-   kernel/workqueue.c:3771:27: warning: no previous prototype for function 'wqattrs_pod_type' [-Wmissing-prototypes]
-   const struct wq_pod_type *wqattrs_pod_type(const struct workqueue_attrs *attrs)
-                             ^
-   kernel/workqueue.c:3771:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const struct wq_pod_type *wqattrs_pod_type(const struct workqueue_attrs *attrs)
-         ^
-   static 
-   kernel/workqueue.c:6611:32: error: implicit declaration of function 'cpu_smt_mask' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return cpumask_test_cpu(cpu0, cpu_smt_mask(cpu1));
-                                         ^
-   kernel/workqueue.c:6611:32: note: did you mean 'cpu_cpu_mask'?
-   include/linux/topology.h:243:37: note: 'cpu_cpu_mask' declared here
-   static inline const struct cpumask *cpu_cpu_mask(int cpu)
-                                       ^
-   kernel/workqueue.c:6611:32: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const struct cpumask *' [-Wint-conversion]
-           return cpumask_test_cpu(cpu0, cpu_smt_mask(cpu1));
-                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/cpumask.h:502:77: note: passing argument to parameter 'cpumask' here
-   static __always_inline bool cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
-                                                                               ^
-   2 warnings and 3 errors generated.
+>> kernel/vhost_task.c:99:35: warning: incompatible integer to pointer conversion initializing 'int *' with an expression of type 'int' [-Wint-conversion]
+                                     CLONE_THREAD | CLONE_FILES, CLONE_SIGHAND,
+                                                                 ^~~~~~~~~~~~~
+   include/uapi/linux/sched.h:14:23: note: expanded from macro 'CLONE_SIGHAND'
+   #define CLONE_SIGHAND   0x00000800      /* set if signal handlers and blocked signals shared */
+                           ^~~~~~~~~~
+   1 warning generated.
 
 
-vim +1126 kernel/workqueue.c
+vim +99 kernel/vhost_task.c
 
-  1087	
-  1088	/**
-  1089	 * kick_pool - wake up an idle worker if necessary
-  1090	 * @pool: pool to kick
-  1091	 *
-  1092	 * @pool may have pending work items. Wake up worker if necessary. Returns
-  1093	 * whether a worker was woken up.
-  1094	 */
-  1095	static bool kick_pool(struct worker_pool *pool)
-  1096	{
-  1097		struct worker *worker = first_idle_worker(pool);
-  1098		struct work_struct *work = list_first_entry(&pool->worklist,
-  1099							    struct work_struct, entry);
-  1100		struct task_struct *p;
-  1101	
-  1102		lockdep_assert_held(&pool->lock);
-  1103	
-  1104		if (!need_more_worker(pool) || !worker)
-  1105			return false;
-  1106	
-  1107		p = worker->task;
-  1108	
-  1109		/*
-  1110		 * Idle @worker is about to execute @work and waking up provides an
-  1111		 * opportunity to migrate @worker at a lower cost by setting the task's
-  1112		 * wake_cpu field. Let's see if we want to move @worker to improve
-  1113		 * execution locality.
-  1114		 *
-  1115		 * We're waking the worker that went idle the latest and there's some
-  1116		 * chance that @worker is marked idle but hasn't gone off CPU yet. If
-  1117		 * so, setting the wake_cpu won't do anything. As this is a best-effort
-  1118		 * optimization and the race window is narrow, let's leave as-is for
-  1119		 * now. If this becomes pronounced, we can skip over workers which are
-  1120		 * still on cpu when picking an idle worker.
-  1121		 *
-  1122		 * If @pool has non-strict affinity, @worker might have ended up outside
-  1123		 * its affinity scope. Repatriate.
-  1124		 */
-  1125		if (!pool->attrs->affn_strict &&
-> 1126		    !cpumask_test_cpu(p->wake_cpu, pool->attrs->__pod_cpumask)) {
-  1127			p->wake_cpu = cpumask_any_distribute(pool->attrs->__pod_cpumask);
-  1128			get_work_pwq(work)->stats[PWQ_STAT_REPATRIATED]++;
-  1129		}
-  1130	
-  1131		wake_up_process(worker->task);
-  1132		return true;
-  1133	}
-  1134	
+    83	
+    84	/**
+    85	 * vhost_task_create - create a copy of a process to be used by the kernel
+    86	 * @fn: thread stack
+    87	 * @arg: data to be passed to fn
+    88	 * @name: the thread's name
+    89	 *
+    90	 * This returns a specialized task for use by the vhost layer or NULL on
+    91	 * failure. The returned task is inactive, and the caller must fire it up
+    92	 * through vhost_task_start().
+    93	 */
+    94	struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg,
+    95					     const char *name)
+    96	{
+    97		struct kernel_clone_args args = {
+    98			.flags		= CLONE_FS | CLONE_UNTRACED | CLONE_VM |
+  > 99					  CLONE_THREAD | CLONE_FILES, CLONE_SIGHAND,
+   100			.exit_signal	= 0,
+   101			.fn		= vhost_task_fn,
+   102			.name		= name,
+   103			.user_worker	= 1,
+   104			.block_signals	= 1,
+   105		};
+   106		struct vhost_task *vtsk;
+   107		struct task_struct *tsk;
+   108	
+   109		vtsk = kzalloc(sizeof(*vtsk), GFP_KERNEL);
+   110		if (!vtsk)
+   111			return NULL;
+   112		init_completion(&vtsk->exited);
+   113		vtsk->data = arg;
+   114		vtsk->fn = fn;
+   115	
+   116		args.fn_arg = vtsk;
+   117	
+   118		tsk = copy_process(NULL, 0, NUMA_NO_NODE, &args);
+   119		if (IS_ERR(tsk)) {
+   120			kfree(vtsk);
+   121			return NULL;
+   122		}
+   123	
+   124		vtsk->task = tsk;
+   125		return vtsk;
+   126	}
+   127	EXPORT_SYMBOL_GPL(vhost_task_create);
+   128	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
 
---pFbQJZx5dkZeQScY
+--1/1cbhIzIK9Iolsw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 6.4.0-rc1 Kernel Configuration
+# Linux/x86_64 6.4.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -637,7 +630,6 @@ CONFIG_ACPI_DPTF=y
 # CONFIG_DPTF_POWER is not set
 CONFIG_DPTF_PCH_FIVR=y
 CONFIG_ACPI_WATCHDOG=y
-# CONFIG_ACPI_EXTLOG is not set
 CONFIG_ACPI_CONFIGFS=m
 CONFIG_ACPI_PFRUT=m
 # CONFIG_ACPI_PCC is not set
@@ -999,6 +991,7 @@ CONFIG_NET=y
 CONFIG_COMPAT_NETLINK_MESSAGES=y
 CONFIG_NET_INGRESS=y
 CONFIG_NET_EGRESS=y
+CONFIG_SKB_EXTENSIONS=y
 
 #
 # Networking options
@@ -1061,7 +1054,9 @@ CONFIG_IPV6_NDISC_NODETYPE=y
 # CONFIG_IPV6_RPL_LWTUNNEL is not set
 # CONFIG_IPV6_IOAM6_LWTUNNEL is not set
 # CONFIG_NETLABEL is not set
-# CONFIG_MPTCP is not set
+CONFIG_MPTCP=y
+CONFIG_INET_MPTCP_DIAG=y
+CONFIG_MPTCP_IPV6=y
 CONFIG_NETWORK_SECMARK=y
 CONFIG_NET_PTP_CLASSIFY=y
 CONFIG_NETWORK_PHY_TIMESTAMPING=y
@@ -2145,7 +2140,7 @@ CONFIG_SERIO_LIBPS2=y
 # CONFIG_USERIO is not set
 CONFIG_GAMEPORT=m
 # CONFIG_GAMEPORT_NS558 is not set
-CONFIG_GAMEPORT_L4=m
+# CONFIG_GAMEPORT_L4 is not set
 # CONFIG_GAMEPORT_EMU10K1 is not set
 # CONFIG_GAMEPORT_FM801 is not set
 # end of Hardware I/O ports
@@ -2386,7 +2381,6 @@ CONFIG_PINCTRL_MCP23S08_I2C=m
 CONFIG_PINCTRL_MCP23S08=m
 # CONFIG_PINCTRL_MICROCHIP_SGPIO is not set
 CONFIG_PINCTRL_OCELOT=m
-CONFIG_PINCTRL_RK805=m
 CONFIG_PINCTRL_SINGLE=y
 # CONFIG_PINCTRL_STMFX is not set
 
@@ -2597,7 +2591,6 @@ CONFIG_CHARGER_BQ2515X=m
 CONFIG_CHARGER_BQ25890=m
 CONFIG_CHARGER_BQ25980=m
 # CONFIG_CHARGER_BQ256XX is not set
-CONFIG_CHARGER_RK817=m
 CONFIG_CHARGER_SMB347=m
 CONFIG_BATTERY_GAUGE_LTC2941=m
 CONFIG_BATTERY_GOLDFISH=m
@@ -3033,7 +3026,7 @@ CONFIG_PCF50633_GPIO=m
 # CONFIG_MFD_RT4831 is not set
 CONFIG_MFD_RT5033=m
 CONFIG_MFD_RT5120=m
-CONFIG_MFD_RK808=m
+# CONFIG_MFD_RK808 is not set
 # CONFIG_MFD_RN5T618 is not set
 CONFIG_MFD_SI476X_CORE=m
 CONFIG_MFD_SIMPLE_MFD_I2C=m
@@ -3135,7 +3128,6 @@ CONFIG_REGULATOR_PFUZE100=m
 CONFIG_REGULATOR_QCOM_SPMI=y
 CONFIG_REGULATOR_QCOM_USB_VBUS=m
 CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY=m
-CONFIG_REGULATOR_RK808=m
 CONFIG_REGULATOR_RT4801=m
 # CONFIG_REGULATOR_RT4803 is not set
 CONFIG_REGULATOR_RT5033=m
@@ -4122,18 +4114,7 @@ CONFIG_MEMSTICK_REALTEK_USB=m
 # CONFIG_INFINIBAND is not set
 CONFIG_EDAC_ATOMIC_SCRUB=y
 CONFIG_EDAC_SUPPORT=y
-CONFIG_EDAC=m
-CONFIG_EDAC_LEGACY_SYSFS=y
-# CONFIG_EDAC_DEBUG is not set
-# CONFIG_EDAC_E752X is not set
-# CONFIG_EDAC_I82975X is not set
-# CONFIG_EDAC_I3000 is not set
-# CONFIG_EDAC_I3200 is not set
-# CONFIG_EDAC_IE31200 is not set
-# CONFIG_EDAC_X38 is not set
-# CONFIG_EDAC_I5400 is not set
-# CONFIG_EDAC_I5100 is not set
-# CONFIG_EDAC_I7300 is not set
+# CONFIG_EDAC is not set
 CONFIG_RTC_LIB=y
 CONFIG_RTC_MC146818_LIB=y
 # CONFIG_RTC_CLASS is not set
@@ -4194,64 +4175,12 @@ CONFIG_COMEDI_MISC_DRIVERS=y
 # CONFIG_COMEDI_BOND is not set
 # CONFIG_COMEDI_TEST is not set
 # CONFIG_COMEDI_PARPORT is not set
-CONFIG_COMEDI_ISA_DRIVERS=y
-# CONFIG_COMEDI_PCL711 is not set
-CONFIG_COMEDI_PCL724=y
-CONFIG_COMEDI_PCL726=m
-CONFIG_COMEDI_PCL730=m
-CONFIG_COMEDI_PCL812=m
-CONFIG_COMEDI_PCL816=y
-CONFIG_COMEDI_PCL818=y
-CONFIG_COMEDI_PCM3724=y
-CONFIG_COMEDI_AMPLC_DIO200_ISA=m
-CONFIG_COMEDI_AMPLC_PC236_ISA=y
-CONFIG_COMEDI_AMPLC_PC263_ISA=y
-CONFIG_COMEDI_RTI800=m
-# CONFIG_COMEDI_RTI802 is not set
-CONFIG_COMEDI_DAC02=m
-CONFIG_COMEDI_DAS16M1=m
-CONFIG_COMEDI_DAS08_ISA=m
-CONFIG_COMEDI_DAS16=m
-CONFIG_COMEDI_DAS800=y
-# CONFIG_COMEDI_DAS1800 is not set
-# CONFIG_COMEDI_DAS6402 is not set
-CONFIG_COMEDI_DT2801=y
-CONFIG_COMEDI_DT2811=m
-CONFIG_COMEDI_DT2814=m
-# CONFIG_COMEDI_DT2815 is not set
-# CONFIG_COMEDI_DT2817 is not set
-CONFIG_COMEDI_DT282X=m
-CONFIG_COMEDI_DMM32AT=m
-CONFIG_COMEDI_FL512=y
-# CONFIG_COMEDI_AIO_AIO12_8 is not set
-CONFIG_COMEDI_AIO_IIRO_16=y
-CONFIG_COMEDI_II_PCI20KC=m
-CONFIG_COMEDI_C6XDIGIO=y
-CONFIG_COMEDI_MPC624=y
-CONFIG_COMEDI_ADQ12B=m
-# CONFIG_COMEDI_NI_AT_A2150 is not set
-CONFIG_COMEDI_NI_AT_AO=y
-CONFIG_COMEDI_NI_ATMIO=m
-CONFIG_COMEDI_NI_ATMIO16D=y
-CONFIG_COMEDI_NI_LABPC_ISA=y
-# CONFIG_COMEDI_PCMAD is not set
-# CONFIG_COMEDI_PCMDA12 is not set
-# CONFIG_COMEDI_PCMMIO is not set
-# CONFIG_COMEDI_PCMUIO is not set
-# CONFIG_COMEDI_MULTIQ3 is not set
-CONFIG_COMEDI_S526=y
+# CONFIG_COMEDI_ISA_DRIVERS is not set
 # CONFIG_COMEDI_PCI_DRIVERS is not set
 # CONFIG_COMEDI_USB_DRIVERS is not set
-CONFIG_COMEDI_8254=y
-CONFIG_COMEDI_8255=y
+CONFIG_COMEDI_8255=m
 CONFIG_COMEDI_8255_SA=m
 CONFIG_COMEDI_KCOMEDILIB=y
-CONFIG_COMEDI_AMPLC_DIO200=m
-CONFIG_COMEDI_AMPLC_PC236=y
-CONFIG_COMEDI_DAS08=m
-CONFIG_COMEDI_NI_LABPC=y
-CONFIG_COMEDI_NI_TIO=m
-CONFIG_COMEDI_NI_ROUTING=m
 # CONFIG_COMEDI_TESTS is not set
 CONFIG_STAGING=y
 # CONFIG_RTL8192U is not set
@@ -4299,7 +4228,6 @@ CONFIG_HAVE_CLK=y
 CONFIG_HAVE_CLK_PREPARE=y
 CONFIG_COMMON_CLK=y
 # CONFIG_COMMON_CLK_MAX9485 is not set
-CONFIG_COMMON_CLK_RK808=m
 CONFIG_COMMON_CLK_SI5341=m
 CONFIG_COMMON_CLK_SI5351=m
 # CONFIG_COMMON_CLK_SI514 is not set
@@ -5417,7 +5345,6 @@ CONFIG_DETECT_HUNG_TASK=y
 CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=480
 # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
 CONFIG_WQ_WATCHDOG=y
-# CONFIG_WQ_CPU_INTENSIVE_REPORT is not set
 # CONFIG_TEST_LOCKUP is not set
 # end of Debug Oops, Lockups and Hangs
 
@@ -5623,4 +5550,4 @@ CONFIG_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---pFbQJZx5dkZeQScY--
+--1/1cbhIzIK9Iolsw--
