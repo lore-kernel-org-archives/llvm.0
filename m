@@ -1,116 +1,107 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7DC6AA0
-	for <llvm@lists.linux.dev>; Fri, 19 May 2023 10:16:40 +0000 (UTC)
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-4570b867188so106869e0c.2
-        for <llvm@lists.linux.dev>; Fri, 19 May 2023 03:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684491399; x=1687083399;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6EiwrUrF4SSUt0Q7+CJ+0Cng8L06giBO4JipeTmDbM4=;
-        b=BzJjHDZ0p3kCCtmYeR4Y99no05o/MBH8iAAHa421lYBped9U2fjZX4pWh2dmqbob8Z
-         IRyz7gdfFpRHFCvnMiUCbdTrHErz1xMq5fwcp1Xm2Ei8EeneVaqvFB4dQx2eD/uYP6L4
-         ztGema4DUjoRFrO8lKFBz/ATASsAYKLcRn5FHztp6kJFriiprPMuqe2nbPN5Qd5FK7gh
-         EqHHg0XPtBtRXyVZ6Gj6nOpCNjVjlUmdNTfv4kC8xcGtlCMJKe0JOQBQr9e69EpnOFFk
-         kQWX2cQFDlJwFpl/dNJ1+euHp6XH7IgaFueZQRYOpHQA6lcdK9ti7cRyQUx/pmAaayr/
-         TIMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684491399; x=1687083399;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6EiwrUrF4SSUt0Q7+CJ+0Cng8L06giBO4JipeTmDbM4=;
-        b=gx0P4948WXVSFYNSDus3CUkklzRm+Z7mODV4eAF2KLQIkG73A0cLMBRa3BI17Md14c
-         yvJvqbOw7iIuXwdkbqPV4Dv4DI7xULR6hHMItpXXcuKolNUFtZ22jpGe2brFbhDkASaH
-         SModojYhTAJDutGDUuJu7nmOYnIs5FEZLpUK9aWQCEh7p3sspWu4+hVgyDBpMhawwh0Y
-         /ILHk8vEmWYWwY81EH8LUV4xDGwJbPp+AgNBTJTFrwhpXR4bPe1JvqbDtBCtGZm3J4dZ
-         +7yNbejg8NCpPCic8sM+ncOpdsLeK9ryjIw2usyUCGUE06Wn03CbMLSulLQnjAo2JUvr
-         a2OA==
-X-Gm-Message-State: AC+VfDxn0hYdXEznpLwNojKmqSJuhgVfw9biMImCIn6igtRsjxBaH01B
-	Ds/fqbtw/ipLVXHUVUNZs1xncd5AY7jUmrnSwMr2xw==
-X-Google-Smtp-Source: ACHHUZ7x4mBNByf3+rpGGd6sFR6V+BIlYdbvd5WOQ84S7rvSyIqyXvmZTc8VI0Z2B7UaHBIGhRN+w6w7IN/diFRUNtQ=
-X-Received: by 2002:a1f:3d84:0:b0:456:f0d8:fe9c with SMTP id
- k126-20020a1f3d84000000b00456f0d8fe9cmr321888vka.3.1684491399387; Fri, 19 May
- 2023 03:16:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3247472;
+	Fri, 19 May 2023 10:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684492931; x=1716028931;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cwrw2O0CqzHPAgpSKiKFwvRjhkbA86gWP8t7USzkjto=;
+  b=RvN9grou+GS4HJLJZMtyKS7d4r6V3Zy2xqrcdXwllaZ4Qyg05qUu8Jdh
+   aigduTcdbyf2w2TFzpFZdbv5ml2BZm6VRKRjOXT7tAQO/S26syO1gbFPa
+   WDDHMYyDwijyy0pnww9TH4Y5S86RtQSeds4HjcsYO2FoJaixSZyBQdWHK
+   M83X3ttmidloynI18w7WkcAFdrJfSEfgUlGpukKZSnTDafIWWP/M3K1rH
+   oollBVG4Z90RQG0gjxxZf5nlQ/OQPj+WfsV2CFaZPUmfEsQvSKxW+BwMN
+   Vq/h4/TXSQnWQB6kIxIs8WRMu5Bje+SZzGjj8lEUspY7NEtsXlnhHXuJD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="332704855"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="332704855"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 03:42:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="680011208"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="680011208"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 May 2023 03:42:07 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pzxYk-000AmW-2C;
+	Fri, 19 May 2023 10:42:06 +0000
+Date: Fri, 19 May 2023 18:41:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-raid@vger.kernel.org
+Subject: [song-md:module_alloc_test 5/6] arch/powerpc/kernel/module.c:108:8:
+ error: unused variable 'ptr'
+Message-ID: <202305191808.4xsaLKSZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 19 May 2023 15:46:28 +0530
-Message-ID: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
-Subject: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
-To: open list <linux-kernel@vger.kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Linux next 6.4.0-rc2-next-20230519 fails intermittently on qemu-x86_64
-with the following kernel warning. The occurrence is 3 times out of 100 times.
-Noticed with gcc-12 and clang-17 built kernels.
+Hi Song,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Boot log:
------------
-<4>[    2.460214] ------------[ cut here ]------------
-<4>[    2.460602] WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
-worker_enter_idle+0xb2/0xc0
-<4>[    2.462163] Modules linked in:
-<4>[    2.463401] CPU: 0 PID: 63 Comm: kworker/0:2 Not tainted
-6.4.0-rc2-next-20230519 #1
-<4>[    2.463771] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-BIOS 1.14.0-2 04/01/2014
-<4>[    2.465127] Workqueue:  0x0 (events)
-<4>[    2.465678] RIP: 0010:worker_enter_idle+0xb2/0xc0
-<4>[    2.466095] Code: e0 93 04 00 48 03 35 7d 59 bc 01 e8 48 1e 0a
-00 8b 43 3c 39 43 38 75 06 83 7b 24 00 75 0c 5b 5d c3 cc cc cc cc cc
-0f 0b eb f4 <0f> 0b eb f0 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90
-90 90 90
-<4>[    2.467476] RSP: 0000:ffffa44a4042feb0 EFLAGS: 00000086
-<4>[    2.468003] RAX: 0000000000000003 RBX: ffff8d71bbc2b000 RCX:
-0000000050480000
-<4>[    2.468470] RDX: 000000010000087f RSI: 0000000000000086 RDI:
-0000000000000001
-<4>[    2.468900] RBP: ffffa44a4042feb8 R08: 0000000000100000 R09:
-0000000000000001
-<4>[    2.469608] R10: ffff8d7140882d80 R11: 0000000000000000 R12:
-ffff8d71bbc2b028
-<4>[    2.470204] R13: ffff8d7140882d00 R14: ffff8d71bbc2b000 R15:
-ffff8d71413df700
-<4>[    2.470720] FS:  0000000000000000(0000)
-GS:ffff8d71bbc00000(0000) knlGS:0000000000000000
-<4>[    2.471248] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[    2.471648] CR2: ffff8d71bffff000 CR3: 0000000123e40000 CR4:
-00000000000006f0
-<4>[    2.472614] Call Trace:
-<4>[    2.473152]  <TASK>
-<4>[    2.474182]  worker_thread+0x71/0x430
-<4>[    2.474992]  ? _raw_spin_unlock_irqrestore+0x28/0x50
-<4>[    2.475263]  kthread+0x103/0x120
-<4>[    2.475493]  ? __pfx_worker_thread+0x10/0x10
-<4>[    2.476355]  ? __pfx_kthread+0x10/0x10
-<4>[    2.476635]  ret_from_fork+0x2c/0x50
-<4>[    2.477051]  </TASK>
-<4>[    2.477785] ---[ end trace 0000000000000000 ]---
-<6>[    2.748347] tsc: Refined TSC clocksource calibration: 2899.874 MHz
-<6>[    2.749124] clocksource: tsc: mask: 0xffffffffffffffff
-max_cycles: 0x29cccc5071e, max_idle_ns: 440795322437 ns
-<6>[    2.751064] clocksource: Switched to clocksource tsc
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git module_alloc_test
+head:   7b05e9e4784401342805814b52f3dab621fdb1d1
+commit: d4dbd22faf1717ce798327b60fc98cd5b7628ec8 [5/6] powerpc/module: use module_alloc_type
+config: powerpc-mpc836x_rdk_defconfig (https://download.01.org/0day-ci/archive/20230519/202305191808.4xsaLKSZ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=d4dbd22faf1717ce798327b60fc98cd5b7628ec8
+        git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
+        git fetch --no-tags song-md module_alloc_test
+        git checkout d4dbd22faf1717ce798327b60fc98cd5b7628ec8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-log:
------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/log
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305191808.4xsaLKSZ-lkp@intel.com/
 
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/details/
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/kernel/module.c:108:8: error: unused variable 'ptr' [-Werror,-Wunused-variable]
+           void *ptr = NULL;
+                 ^
+   1 error generated.
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+vim +/ptr +108 arch/powerpc/kernel/module.c
+
+d4dbd22faf1717 Song Liu         2023-05-17   98  
+d4dbd22faf1717 Song Liu         2023-05-17   99  void __init module_alloc_type_init(struct mod_allocators *allocators)
+2ec13df167040c Christophe Leroy 2021-04-01  100  {
+4fcc636615b1a3 Jordan Niethe    2021-06-09  101  	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
+d4dbd22faf1717 Song Liu         2023-05-17  102  	struct mod_alloc_params *params = &powerpc_mod_type_allocator.params;
+d4dbd22faf1717 Song Liu         2023-05-17  103  	struct vmalloc_params *vmp = &params->vmp[0];
+d4dbd22faf1717 Song Liu         2023-05-17  104  	int i;
+4fcc636615b1a3 Jordan Niethe    2021-06-09  105  
+8abddd968a303d Nicholas Piggin  2021-05-03  106  #ifdef MODULES_VADDR
+2ec13df167040c Christophe Leroy 2021-04-01  107  	unsigned long limit = (unsigned long)_etext - SZ_32M;
+2ec13df167040c Christophe Leroy 2021-04-01 @108  	void *ptr = NULL;
+
+:::::: The code at line 108 was first introduced by commit
+:::::: 2ec13df167040cd153c25c4d96d0ffc573ac4c40 powerpc/modules: Load modules closer to kernel text
+
+:::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
