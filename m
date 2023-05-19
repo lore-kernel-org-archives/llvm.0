@@ -1,88 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E29569C;
-	Fri, 19 May 2023 09:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E2FEC433EF;
-	Fri, 19 May 2023 09:28:09 +0000 (UTC)
-Date: Fri, 19 May 2023 10:28:06 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [arm64:devel/kmalloc-minalign 14/15] mm/slab_common.c:872:6:
- error: use of undeclared identifier 'io_tlb_default_mem'
-Message-ID: <ZGdBJl2VUURUWA0J@arm.com>
-References: <202305191155.zjUXPrvO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7DC6AA0
+	for <llvm@lists.linux.dev>; Fri, 19 May 2023 10:16:40 +0000 (UTC)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-4570b867188so106869e0c.2
+        for <llvm@lists.linux.dev>; Fri, 19 May 2023 03:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684491399; x=1687083399;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6EiwrUrF4SSUt0Q7+CJ+0Cng8L06giBO4JipeTmDbM4=;
+        b=BzJjHDZ0p3kCCtmYeR4Y99no05o/MBH8iAAHa421lYBped9U2fjZX4pWh2dmqbob8Z
+         IRyz7gdfFpRHFCvnMiUCbdTrHErz1xMq5fwcp1Xm2Ei8EeneVaqvFB4dQx2eD/uYP6L4
+         ztGema4DUjoRFrO8lKFBz/ATASsAYKLcRn5FHztp6kJFriiprPMuqe2nbPN5Qd5FK7gh
+         EqHHg0XPtBtRXyVZ6Gj6nOpCNjVjlUmdNTfv4kC8xcGtlCMJKe0JOQBQr9e69EpnOFFk
+         kQWX2cQFDlJwFpl/dNJ1+euHp6XH7IgaFueZQRYOpHQA6lcdK9ti7cRyQUx/pmAaayr/
+         TIMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684491399; x=1687083399;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6EiwrUrF4SSUt0Q7+CJ+0Cng8L06giBO4JipeTmDbM4=;
+        b=gx0P4948WXVSFYNSDus3CUkklzRm+Z7mODV4eAF2KLQIkG73A0cLMBRa3BI17Md14c
+         yvJvqbOw7iIuXwdkbqPV4Dv4DI7xULR6hHMItpXXcuKolNUFtZ22jpGe2brFbhDkASaH
+         SModojYhTAJDutGDUuJu7nmOYnIs5FEZLpUK9aWQCEh7p3sspWu4+hVgyDBpMhawwh0Y
+         /ILHk8vEmWYWwY81EH8LUV4xDGwJbPp+AgNBTJTFrwhpXR4bPe1JvqbDtBCtGZm3J4dZ
+         +7yNbejg8NCpPCic8sM+ncOpdsLeK9ryjIw2usyUCGUE06Wn03CbMLSulLQnjAo2JUvr
+         a2OA==
+X-Gm-Message-State: AC+VfDxn0hYdXEznpLwNojKmqSJuhgVfw9biMImCIn6igtRsjxBaH01B
+	Ds/fqbtw/ipLVXHUVUNZs1xncd5AY7jUmrnSwMr2xw==
+X-Google-Smtp-Source: ACHHUZ7x4mBNByf3+rpGGd6sFR6V+BIlYdbvd5WOQ84S7rvSyIqyXvmZTc8VI0Z2B7UaHBIGhRN+w6w7IN/diFRUNtQ=
+X-Received: by 2002:a1f:3d84:0:b0:456:f0d8:fe9c with SMTP id
+ k126-20020a1f3d84000000b00456f0d8fe9cmr321888vka.3.1684491399387; Fri, 19 May
+ 2023 03:16:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305191155.zjUXPrvO-lkp@intel.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Fri, 19 May 2023 15:46:28 +0530
+Message-ID: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
+Subject: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
+To: open list <linux-kernel@vger.kernel.org>, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, May 19, 2023 at 12:21:57PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git devel/kmalloc-minalign
-> head:   fb23b58c4b9af85f4be40fda6918fb03c558f052
-> commit: c6bfb3f07647d9d3e454ff481dfd10ddb3d925f7 [14/15] mm: slab: Reduce the kmalloc() minimum alignment if DMA bouncing possible
-> config: arm-randconfig-r025-20230517
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=c6bfb3f07647d9d3e454ff481dfd10ddb3d925f7
->         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->         git fetch --no-tags arm64 devel/kmalloc-minalign
->         git checkout c6bfb3f07647d9d3e454ff481dfd10ddb3d925f7
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305191155.zjUXPrvO-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> mm/slab_common.c:872:6: error: use of undeclared identifier 'io_tlb_default_mem'
->                io_tlb_default_mem.nslabs == 0)
->                ^
->    1 error generated.
+Linux next 6.4.0-rc2-next-20230519 fails intermittently on qemu-x86_64
+with the following kernel warning. The occurrence is 3 times out of 100 times.
+Noticed with gcc-12 and clang-17 built kernels.
 
-Ah, I forgot that not all arches have the SWIOTLB enabled. I'll fold the
-hunk below in the next update. Thanks for the report.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 84e5a5e435d6..a57aa1a7e7de 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -864,6 +864,7 @@ void __init setup_kmalloc_cache_index_table(void)
- 	}
- }
- 
-+#ifdef CONFIG_SWIOTLB
- static unsigned int __kmalloc_minalign(void)
- {
- 	int cache_align = dma_get_cache_alignment();
-@@ -874,6 +875,12 @@ static unsigned int __kmalloc_minalign(void)
- 
- 	return ARCH_KMALLOC_MINALIGN;
- }
-+#else
-+static unsigned int __kmalloc_minalign(void)
-+{
-+	return dma_get_cache_alignment();
-+}
-+#endif
- 
- void __init
- new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+Boot log:
+-----------
+<4>[    2.460214] ------------[ cut here ]------------
+<4>[    2.460602] WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
+worker_enter_idle+0xb2/0xc0
+<4>[    2.462163] Modules linked in:
+<4>[    2.463401] CPU: 0 PID: 63 Comm: kworker/0:2 Not tainted
+6.4.0-rc2-next-20230519 #1
+<4>[    2.463771] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS 1.14.0-2 04/01/2014
+<4>[    2.465127] Workqueue:  0x0 (events)
+<4>[    2.465678] RIP: 0010:worker_enter_idle+0xb2/0xc0
+<4>[    2.466095] Code: e0 93 04 00 48 03 35 7d 59 bc 01 e8 48 1e 0a
+00 8b 43 3c 39 43 38 75 06 83 7b 24 00 75 0c 5b 5d c3 cc cc cc cc cc
+0f 0b eb f4 <0f> 0b eb f0 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90
+90 90 90
+<4>[    2.467476] RSP: 0000:ffffa44a4042feb0 EFLAGS: 00000086
+<4>[    2.468003] RAX: 0000000000000003 RBX: ffff8d71bbc2b000 RCX:
+0000000050480000
+<4>[    2.468470] RDX: 000000010000087f RSI: 0000000000000086 RDI:
+0000000000000001
+<4>[    2.468900] RBP: ffffa44a4042feb8 R08: 0000000000100000 R09:
+0000000000000001
+<4>[    2.469608] R10: ffff8d7140882d80 R11: 0000000000000000 R12:
+ffff8d71bbc2b028
+<4>[    2.470204] R13: ffff8d7140882d00 R14: ffff8d71bbc2b000 R15:
+ffff8d71413df700
+<4>[    2.470720] FS:  0000000000000000(0000)
+GS:ffff8d71bbc00000(0000) knlGS:0000000000000000
+<4>[    2.471248] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+<4>[    2.471648] CR2: ffff8d71bffff000 CR3: 0000000123e40000 CR4:
+00000000000006f0
+<4>[    2.472614] Call Trace:
+<4>[    2.473152]  <TASK>
+<4>[    2.474182]  worker_thread+0x71/0x430
+<4>[    2.474992]  ? _raw_spin_unlock_irqrestore+0x28/0x50
+<4>[    2.475263]  kthread+0x103/0x120
+<4>[    2.475493]  ? __pfx_worker_thread+0x10/0x10
+<4>[    2.476355]  ? __pfx_kthread+0x10/0x10
+<4>[    2.476635]  ret_from_fork+0x2c/0x50
+<4>[    2.477051]  </TASK>
+<4>[    2.477785] ---[ end trace 0000000000000000 ]---
+<6>[    2.748347] tsc: Refined TSC clocksource calibration: 2899.874 MHz
+<6>[    2.749124] clocksource: tsc: mask: 0xffffffffffffffff
+max_cycles: 0x29cccc5071e, max_idle_ns: 440795322437 ns
+<6>[    2.751064] clocksource: Switched to clocksource tsc
 
--- 
-Catalin
+log:
+-----
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/log
+
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230519/testrun/17078554/suite/boot/test/clang-nightly-lkftconfig/details/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
