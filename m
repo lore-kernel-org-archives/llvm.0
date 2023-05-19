@@ -1,43 +1,43 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED24A10942
-	for <llvm@lists.linux.dev>; Fri, 19 May 2023 14:48:27 +0000 (UTC)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-965ddb2093bso537782966b.2
-        for <llvm@lists.linux.dev>; Fri, 19 May 2023 07:48:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAED10942
+	for <llvm@lists.linux.dev>; Fri, 19 May 2023 14:48:30 +0000 (UTC)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-96f0678de80so610589566b.3
+        for <llvm@lists.linux.dev>; Fri, 19 May 2023 07:48:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684507706; x=1687099706;
+        d=chromium.org; s=google; t=1684507708; x=1687099708;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BD6qB7twnufisotyY5nBfpaakG3WUms/sLLcs5/qPcg=;
-        b=JDuBiVDj8o8HaMzkIB840oZkGv5wJJi7TNtUIrYqKhMie/96QidOGQDjQXE7b5+5S9
-         tK8GWP5SEiIeHDVPjC3T2ENDFCeYqLi5SHh6A0hgK/rjIefTVUgKtRZiA8w7MSYtyRXh
-         R0aHFCTNuZeLm/jFjl0vcQ1z/eRP+0aN//K8c=
+        bh=tXwbVblZO4SjZiyR2RJlU+1lPwt65C7sEIHn8p960bg=;
+        b=VaD18pvaYOrPW92cQcoX/NEFyAia0fIgR3ptOsuxx7KqL2m3/Fogz3ohdrjtw8jIAf
+         /EDDCPYx2T0p21USc97DaVoXS6yaR7TsMgEpNMeajTXb8D6rWvFbDapW+nC79TBs8v+N
+         rMi14ZDfRFVBtp/DNGdIPfZ3+MAQ50UYsHPYQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684507706; x=1687099706;
+        d=1e100.net; s=20221208; t=1684507708; x=1687099708;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BD6qB7twnufisotyY5nBfpaakG3WUms/sLLcs5/qPcg=;
-        b=A+oxxpSvFUFtEnOiH/qw4F+/r1Mg6NxOv+e2Q7SBfVQBSa3Vi9jr3XAhM1YtLh9+GN
-         km2InBqlGu0WaJGlFfilQAsKh6Ks9YQ4SK+fhv3rrx2F0q2accnGhKUEb4oefIErFKAv
-         wcEoghec9G53/Oi8aL4vhtcYFQ2DFxIUoyeJ+WMYjPVeQT/f3Jka3YouhBgEl3vzeA16
-         MgzPuLwohZ90ttw2Cww7sf0wevangxHnBfE262fhIr+DiUlYNaQ0kIyd1ZKrNJ0lcOY5
-         9dEYxevWuAbd4GjKn1SflAlTlcC/0FFGDObmrxRXZWXsrF3QRecEl1bHEGbdc1CTGpHE
-         0YyA==
-X-Gm-Message-State: AC+VfDzvIByMDptzTFhgaLfoIqMLUkpqx/MlEjX2ZiDDP48Bbzuurdtm
-	OjZ3+QoRhlYJZeXTLdwXZUhdlw==
-X-Google-Smtp-Source: ACHHUZ6OprUYGsS72ehmUtvrfFocAu2GyTDDqdde/uRgkGX7E/HjFZLPkMJjnA4KZkxfiwtIcIB0dw==
-X-Received: by 2002:a17:907:1609:b0:94f:1c90:cb71 with SMTP id hb9-20020a170907160900b0094f1c90cb71mr2302378ejc.65.1684507706237;
-        Fri, 19 May 2023 07:48:26 -0700 (PDT)
+        bh=tXwbVblZO4SjZiyR2RJlU+1lPwt65C7sEIHn8p960bg=;
+        b=YkCan91O6MArxNLspROE2onuJaROBP7IoY+WzNvDp/yorw4JcTgXc5/j+mi07QwhZk
+         kMijOmGkO0q+7QV5/kIxmPpiW0nPEqx33Mnwe1OWvU6HNnQmAGqsr12epraQjVLzdRt2
+         C2T/bgVkdpSBQ6zATnPrTQ9J/bqUnA7qEvzE7WRQhPCD1MMLDqPt8Gz24eExcdj2FJpp
+         9ENSTZWtN939WHHhxH1biL24goO4BXvfDFG5eWX1ndeI+3VUKWnHT19O6UOufQ+ogMRL
+         os7jBaxdkHY1Dph2rIg9Io++vvzTKXSpo5wTQcUBefKn2GxAJX19UcrerwsyW9TywhIN
+         u/OA==
+X-Gm-Message-State: AC+VfDzlo2MvocA8kvX1nNaQ8LHrAeK4cag+3858V/CF5YMpNBOrmV4+
+	UxDE5PnxzSdwzhTR4BjHif3R5w==
+X-Google-Smtp-Source: ACHHUZ6IJYry1zbpAYrsb/Nt01gDEwYVyd3RcsdkRiDkcM4NVXli57Wi75rvrU+p/H5SVbhZnecZhA==
+X-Received: by 2002:a17:906:5d09:b0:948:a1ae:b2c4 with SMTP id g9-20020a1709065d0900b00948a1aeb2c4mr2454616ejt.6.1684507708255;
+        Fri, 19 May 2023 07:48:28 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:62fd:274b:c2ab:69bb])
-        by smtp.gmail.com with ESMTPSA id a2-20020a17090680c200b0096a68648329sm2349437ejx.214.2023.05.19.07.48.24
+        by smtp.gmail.com with ESMTPSA id a2-20020a17090680c200b0096a68648329sm2349437ejx.214.2023.05.19.07.48.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:48:25 -0700 (PDT)
+        Fri, 19 May 2023 07:48:27 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Fri, 19 May 2023 16:47:37 +0200
-Subject: [PATCH v7 2/4] x86/purgatory: Remove PGO flags
+Date: Fri, 19 May 2023 16:47:38 +0200
+Subject: [PATCH v7 3/4] powerpc/purgatory: Remove PGO flags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,7 +46,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230321-kexec_clang16-v7-2-b05c520b7296@chromium.org>
+Message-Id: <20230321-kexec_clang16-v7-3-b05c520b7296@chromium.org>
 References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
 In-Reply-To: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
 To: Eric Biederman <ebiederm@xmission.com>, 
@@ -68,20 +68,20 @@ Cc: Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
  linux-riscv@lists.infradead.org, Ricardo Ribalda <ribalda@chromium.org>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1218; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ZdKmKWLc9TEOfphmrnN/WwYYNZStN7R/TxB0+Zjd8HY=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkZ4wxpLapFX/30sji37lAIaagKHpP8BO2TaX+/
- sJHabfFQk2JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZGeMMQAKCRDRN9E+zzrE
- iBOhEACRW3xOCPLHp71KLmHTYNCd71GtWrKjkfxklAL33OghFmTvUpYrsF9LpYB/m7hEcL/ThHl
- hL85+iGqortM23o+IHkavb1dGe2lPjzhRrAlOP3VRhZdMb4Z30GB9soPtsVB1wTkIHAffgMXlXl
- OX9TTvAAdTwiK3QpxHsQTI7Zrwd7j4F5PLFwLvF1EJ5B9vHk24k8qUliTckaIUupc8s90pL+blD
- 76ekelf8r6J/OuHnqjwfBNPIN+L5PKM1Qnvc+nhDbVClbug/NZoYEOQncnJUQzy4+pPlgWMhh1n
- jSBpPsZLhRFaaAvgOmnCFcJ4QK855FrYlgSZ62gNGa18oujDvo8M/P3rMJl+ZptFWkJHg4ftqjk
- d2p50qqwa36cAZSdv5xiIorPYJAvQcKnfbLTa/33NmhdJsRmYKEIBmzoJJMVV1WM2GQ1GoS3iqQ
- xsIbbnRtyfu5Oj+092A0UrmjBv44l9VFL0GioJ/h1dybPyj/xRudpeipiBI5UHl+PsrthS0eXyR
- BEhiiCDkPPQVspdv9HGVTw7RtC+jrD2P59F2ZJdHKAj43rczvbjLU1aFhLmXOsvEzExQ7jdyhrD
- dtwIMAsWCKWuA82FW3a1RMjpQzwZn57XSc6vVKzBJhtayoAZ/RnFP3+dNNhzAJAuESXOXu/+Yc9
- KoQnpw6oiVlAnVA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1118; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=nWZ2BYP6i2Y8oRo+uF2PHambNY95ZiGn4TiaTAGbKto=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkZ4wyHkNCHhezyfivzJzrNGMs0K4vUNQRc3pJJ
+ kWHuaNU3qOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZGeMMgAKCRDRN9E+zzrE
+ iP+cEACcWHC3j1LmIzpKx/SEOuyu+T8juc3Qsp240gztvu/viz42y8/iBia84BlsRwErLK2OL0F
+ 3ajW94BvdF+hTyHozZEgIagItfSauWAbew6wVa0Qzfv2fr5mU42KfHptzq1l42en7K2rPbcBmLI
+ I2P1/oqo/f6jOgRfm+rkNph26o3SqzcGwOrNJxLkICIjOt2ryabXBD6m79TkrzdPaB9SoChGJac
+ O79LnGL81Pw+Yncu0mYsV4I5Rjw5ZeyFHdpQ7Fz5EA8wvSDDG6odoFxcqf4yE6+bmUv/49AELSz
+ 4dxJdTvbEKZro9lHA0iSPkRPv/S0GQJu/n8ilKFXAYPfqAfDYAN86mjt4xRWsDrK/m2U5bJyQDO
+ y1Bsea8Nuec1BFMA7YRXUDVC9wxgK6i5U1QYeDdEOWjG8KsrN7aDk6FT7Vs5HVZVFlpaYzxI1Qy
+ OuCwULJN4OB++Blq1pndCgv3Enk4iWEnD3tV8M5ZGZEkwnZmi1PxTzTAUZrdHBuiBcGUJURHEal
+ /D5/1Q6A+bUxW980Yzwcu1tPuxwKe1lCW0boDcrNi3inwoNG0wyymcZvtfl/+IKzenjCXxuZ8c4
+ 54evV8xE1nlppSTiE5EscgwFuFxb6elq+Frz99s4912olrL9bjc84OFEQ1brCORAnz/ZbTuENqO
+ ZuH2pEvCDHPT0rw==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 
@@ -93,25 +93,25 @@ Cc: stable@vger.kernel.org
 Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- arch/x86/purgatory/Makefile | 5 +++++
+ arch/powerpc/purgatory/Makefile | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 82fec66d46d2..42abd6af1198 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -14,6 +14,11 @@ $(obj)/sha256.o: $(srctree)/lib/crypto/sha256.c FORCE
+diff --git a/arch/powerpc/purgatory/Makefile b/arch/powerpc/purgatory/Makefile
+index 6f5e2727963c..78473d69cd2b 100644
+--- a/arch/powerpc/purgatory/Makefile
++++ b/arch/powerpc/purgatory/Makefile
+@@ -5,6 +5,11 @@ KCSAN_SANITIZE := n
  
- CFLAGS_sha256.o := -D__DISABLE_EXPORTS
+ targets += trampoline_$(BITS).o purgatory.ro
  
 +# When profile-guided optimization is enabled, llvm emits two different
 +# overlapping text sections, which is not supported by kexec. Remove profile
 +# optimization flags.
 +KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
 +
- # When linking purgatory.ro with -r unresolved symbols are not checked,
- # also link a purgatory.chk binary without -r to check for unresolved symbols.
- PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+ LDFLAGS_purgatory.ro := -e purgatory_start -r --no-undefined
+ 
+ $(obj)/purgatory.ro: $(obj)/trampoline_$(BITS).o FORCE
 
 -- 
 2.40.1.698.g37aff9b760-goog
