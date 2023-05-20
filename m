@@ -1,84 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1300363
-	for <llvm@lists.linux.dev>; Sat, 20 May 2023 04:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684557605;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=e9J3KZfBjzU8nvPY35e0bNB8KZV0h3567azs3+qZcb0=;
-	b=HfGUYmBwgNwc2RcJMe4gCBrerm7oRmNavbH9SZr0beMbQu+dcqbNEYHaW8eUNKL2Mls3aj
-	iIm6Z7iOh8+RgC6tbKDIdUuMEvAzOI34epPrR1fA5AwISYMgs62tkg9Gbz14cYNQThruMp
-	MKwDIahZ0nXFnXil2E3QdHOj82xWXoc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-XRAJ0Aj-OWK3uuDUmkycBA-1; Sat, 20 May 2023 00:40:04 -0400
-X-MC-Unique: XRAJ0Aj-OWK3uuDUmkycBA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B515E101A52C
-	for <llvm@lists.linux.dev>; Sat, 20 May 2023 04:40:03 +0000 (UTC)
-Received: from [172.64.15.20] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A368B492B0A;
-	Sat, 20 May 2023 04:40:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc2,
- mainline.kernel.org-clang, d635f6cc)
-Date: Sat, 20 May 2023 04:40:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF29D652;
+	Sat, 20 May 2023 05:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1684559083; i=deller@gmx.de;
+	bh=7KKUgWt0aRVOrqshl6auDWoRNkMtVlTSaqoGlnGU3Vs=;
+	h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=oB/xc9OGSiDnnzdgfFBjBaRCrX7BDj0fWlufgvTVAA/VMsRJmAtCeEZ5BLbq/H384
+	 AE58VWTtgEnPvgJsKdAcSeRwqgRLju16/R+GKIOiXmZtivonarjAqAhtAIEtWsqvlS
+	 w+0s9wsrpbRd4+hhhtAPBugTDSydq/rwZW8dXZjcX7pWI5o+UCbSjSM1droRY/WxVe
+	 fm772MFQSf8X5+4PPnRCwz9Ov3ybleDRg2XCszzD+KO+h7YlNJSfLFSRCaT/oSUSYI
+	 3AWrCq4qYO1SuNd1SOHAzsrldT33aJLW1j87ERpe56ZFOGhamGn+BSPK9AaKRNBXFZ
+	 gk67npu5G0WrA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.147.136]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1wq3-1q7DvO2NEv-012G6r; Sat, 20
+ May 2023 07:04:43 +0200
+Message-ID: <37e1b7f8-ba94-b5ca-37d1-4c63f146bb22@gmx.de>
+Date: Sat, 20 May 2023 07:04:42 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <26718.123052000400400161@us-mta-251.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [deller-fbdev:for-next 2/5]
+ drivers/video/fbdev/core/fbmem.c:1499:23: error: incompatible function
+ pointer types initializing 'unsigned long (*)(struct file *, unsigned long,
+ unsigned long, unsigned long, unsigned long)' with an expression of type
+ 'long (struct file *, unsigned long...
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <a48e12ghrolqo6163q6p6on7.1684533009589@email.android.com>
+In-Reply-To: <a48e12ghrolqo6163q6p6on7.1684533009589@email.android.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FYH5VMT49ByuADsqAWoQXtu5Yj2V+rjwHMnK2hbAUzf0FNeMLD/
+ x+/t3p7/njc6cl9jKOCEUVa536Q09NaTl1mDwP64F+3BHtUNa7+qh9dRcy6KvCtLaWaMmSY
+ 74zUNrUQm7xODaJoZhSzH5C+Ldf0gvlB8PI0ucJA8qOBTYe5L8pI6iw/n0tCFj0hqE7ziBG
+ 9cM09sg1dEnUWL5HjnQsg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:oFRduNkOOdY=;hkhIxeR1FNTvl8UHJFSCBhW/NYe
+ MDFVXThHFID6PAL/aTgRPaAH86l5h3ig0d4Fuj0h67HL+kdGLTIv7fVBYQi9WgRlSjiCyf/e0
+ dLrO7P9l2zhg8PMC4r7rjnwkjF28o6q0vJUKfLg5qkgJILvXapfzqcOzXNeV6z42vURzxRx/J
+ MOb5C7kt3xxqKlueUmy42v50POVLnVSLwFxYFP0x3L9X8alsvnOrZAqQTphKQL5jMUI2MrC/9
+ b3T2gaXSRgbEd2y47vwKCjZgFuy2+Iv6PFDjhAyNz93WuVAapV17j/TZec+mvOSQeSaEnXvgk
+ HQxBbjFMik0JW5BXvWUiIZchyAurNB8fve9p3alp3l2YARkfTxHBV0Wnz9AxmPW8kwFkIddSb
+ Eaz2AKfwaPTSpylbTOzGvig4jYe3Bs+CQtT+HsWv1zsHtonAcYzjWHRexqDxG7GJkE1k4Dfoh
+ 5GZ6vPQ23x3QsZmfuSzVYxTC5/8UhkDIDM5WOY31bMocjZ/rZcFpsF58AnvY2DHI0ZRqRgkAB
+ xJ+x5j/zBAWr3LyHwyOJEzmRE6s1T+pWnCZ6ZwIa9girN65C5tp6HNo7wTT+d2PhsgvFrSjNI
+ M3ygYL9Bi4WioQ6vrGSlLb00X79ld71c2dtQQm+/6MompaAAaS6ZJzNETILJw/n7gPY8Yp1os
+ 1L6ecOhowtxcqttlt9EZOUxSz/MqVfVzZ3XwOpOkD9PORIrlgLonnJZY1cjeGg+S8LmShdf2X
+ 1L3SGbirYbMO5mjfe8LAJq+qvXZUFFGBqA9fihYS71EX2fWOx+i6Uq1/j5q/SUJUUI028Z7Df
+ lEVAfccXVtyG6mE1nxr90YbqO3RfkBLaP3SOF54uq9BBAj8xkl6TAkaSY8/9I+KlI2h6WtQ9A
+ LoqOLoje81/Ax8ezb3l2v8hPpKd40XrSVXmCVtTuDzo0HiaW4+mdhKaEpgekAZQ7kc3jl6w54
+ OM/d0Q==
 
-Hi, we tested your kernel and here are the results:
+>  >> drivers/video/fbdev/core/fbmem.c:1499:23: error: incompatible functi=
+on pointer types initializing 'unsigned long (*)(struct file *, unsigned l=
+ong, unsigned long, unsigned long, unsigned long)' with an expression of t=
+ype 'long (struct file *, unsigned long, unsigned long, unsigned long, uns=
+igned long)' [-Wincompatible-function-pointer-types]
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .get_unmap=
+ped_area =3D get_fb_unmapped_area,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+fixed now it git.
+Arnd's patch was correct and was broken by me.
 
-
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-05-20' of git://anongit.freed=
-esktop.org/drm/drm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/89593
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35241=
-9
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Helge
 
