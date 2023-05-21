@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4C07EA
-	for <llvm@lists.linux.dev>; Sun, 21 May 2023 22:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF802596
+	for <llvm@lists.linux.dev>; Sun, 21 May 2023 22:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684707609;
+	s=mimecast20190719; t=1684708807;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=+Cfi2W8rlxcaqiqOp1QDTuLSawZSLQdoU8dplwn1njA=;
-	b=YX/VpjGhBozh2/geNwB7oRxq4hHiBSbyNGYkRWWG15kcBzeDJRySgWwzPxXf29OSDjM6vZ
-	9BQ10J9uPtzeiEacoU6GrVlmRbyH7nHVwz/gkfSqJdalZ+6gJ52e7Qh8eTHX7cVqmYILTa
-	COejKUAi/Ju+s409YFUJxg0a/eE8Py4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=2IQNj1vzY/Bn9YPDeZDGPsaEgfKpDy59CxedU0hLXzg=;
+	b=WZ68BZO83Tmt1Ynt0hsDq0tHbF7Lr/mqRAu8l3M6c8tr6EYkSafmtJDup2dPmW72cuDKkG
+	BhvM3Vubr8GaWOnNaCfV7w00d8qis5gYekY1tvQ9drDQNjCPpR7+BOaAsqOXgnTt6DiYuz
+	xEtt5EJu1m4kTl9nVWXGshSUU16lY50=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-353-pJzBIaPwO8KYnuy1mwsE9A-1; Sun, 21 May 2023 18:20:07 -0400
-X-MC-Unique: pJzBIaPwO8KYnuy1mwsE9A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-210-CabjKb0lNMeLvfw1K_Bz6w-1; Sun, 21 May 2023 18:40:05 -0400
+X-MC-Unique: CabjKb0lNMeLvfw1K_Bz6w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7966929AB3F6
-	for <llvm@lists.linux.dev>; Sun, 21 May 2023 22:20:07 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4149585A5A8
+	for <llvm@lists.linux.dev>; Sun, 21 May 2023 22:40:05 +0000 (UTC)
 Received: from [172.64.15.20] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5F26B2166B25;
-	Sun, 21 May 2023 22:20:07 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2E601200B673;
+	Sun, 21 May 2023 22:40:05 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc2,
- mainline.kernel.org-clang, fa4fe8ce)
-Date: Sun, 21 May 2023 22:20:07 -0000
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
+ mainline.kernel.org-clang, 44c026a7)
+Date: Sun, 21 May 2023 22:40:05 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <99163.123052118200700105@us-mta-353.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <87655.123052118400500261@us-mta-210.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,16 +52,15 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'uml-for-linus-6.4-rc3' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/uml/linux
+    Commit message: Linux 6.4-rc3
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/89621
+    https://datawarehouse.cki-project.org/kcidb/checkouts/89624
 
 One or more kernel builds failed:
     Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35253=
-0
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35254=
+5
 
 
 If you find a failure unrelated to your changes, please ask the test mainta=
