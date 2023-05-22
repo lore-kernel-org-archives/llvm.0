@@ -1,289 +1,187 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2045.outbound.protection.outlook.com [40.107.102.45])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A9D16406;
-	Mon, 22 May 2023 18:37:43 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KGYagv3YXZy0neCzWM1EPPr+Efm0BxLU+KG0raHGzOWP07SvYpUFkLNdc2IpfwjGxE/rseokQ6PkXHRyfcoeJCP783Qqox+iciYz2sPEliLXW4s9wY3ns/RUunh/56bYsL7vz/Pac1wLOvLTTFnpLn6wbierBCnUW2fchBC/AbAk7VYGH4ZHze/MKaL7UyVmSRN6iIqagGEhBi1//EArFB8D8h78J3UAHKIfJJI6ukxI3TCc6wFo12kLOpMo6/Ajj5FlJNoUkFFw8sUL4Bz8jgC5NB78sN5fy9wNHdRuzLPKqj2dqVAtSzp/YK3boJrCR9pt3Z+Tu/psOKWfFw0pRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hRf3chsvECMppMtFEcc49xI7tNcwVOdOxEMrn7OMDZw=;
- b=CtAFS6ZUBHVjNPcGyss8Ilv97Hcfh0EhZhyoAeDYHGTtkkhqASdYlcD+s/MC7/Y91j8eXDhNZrVbkhJZhNaTE5VwCsAR+YK0O/9Q3s5tKHsMSG3jVkVnhntO2cGjJIb/tTW3XGZ/SbRvUtGPuX+FchZ71QThs2AwjszyER+Wlswnt1wLOynkHrnLM84e2tkNLZw0hOCbtvOdwSVFiyGxu7169aS3ap3c2Ih91X67PAynKe4LOR9F8V1uKRlInKuSDXwlY7wxgckhkGhJvwM71GuwE4hPLBSpBFWrrLSS/mcVZHwNpRJhPL5mB/X/57cUS3IutTJ/nm8BS+S0HOomqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hRf3chsvECMppMtFEcc49xI7tNcwVOdOxEMrn7OMDZw=;
- b=VcvFIhlZPSmOq3baNJlDKpafKxE2FZps3ZYWgNczIMUVMe+IcTfu9sXvinhaN2BsEPsb2xpVnHN119O+rKpM16oUljItE+642xOZKU72VC0CFBO5eD3QVFaYob3q/91RZuwkBDBGDtjqBFDGLh6gmxsu9yflXIJkGDfemPN7gKma9mVCvx8yohfnzngQG98BzNqa1hMP//xW0LyaQ6n13+QVkSPtcQaIL6DStXYDHK5TBdEUt+CXEcLuaAGoHbPCTmZ2ykUVS0AXr1xPe6bBqZnuYNKP91lLnglmjLoPcn07lpfZT1Ta7vOqZwQwguPeAH0/7aXgbfz1FAw3dIyoSQ==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by CY8PR12MB7196.namprd12.prod.outlook.com (2603:10b6:930:58::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 18:37:40 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::92c6:4b21:586d:dabc]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::92c6:4b21:586d:dabc%4]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 18:37:40 +0000
-From: Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To: kernel test robot <lkp@intel.com>, "oe-kbuild-all@lists.linux.dev"
-	<oe-kbuild-all@lists.linux.dev>, Sasha Levin <sashal@kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-CC: Damien Le Moal <dlemoal@kernel.org>, Ming Lei <ming.lei@redhat.com>,
-	Nitesh Shetty <nj.shetty@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Subject: Re: [linux-stable-rc:queue/4.14 22/46]
- drivers/block/null_blk.c:1785:3: error: void function 'null_validate_conf'
- should not return a value
-Thread-Topic: [linux-stable-rc:queue/4.14 22/46]
- drivers/block/null_blk.c:1785:3: error: void function 'null_validate_conf'
- should not return a value
-Thread-Index: AQHZjNc7f7U9RvPzNkiyc7o/97peA69mn0qA
-Date: Mon, 22 May 2023 18:37:40 +0000
-Message-ID: <1a41d6c4-bd5e-eabc-d548-4bb531f3918a@nvidia.com>
-References: <202305230134.IWLqX1Hz-lkp@intel.com>
-In-Reply-To: <202305230134.IWLqX1Hz-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|CY8PR12MB7196:EE_
-x-ms-office365-filtering-correlation-id: 93797264-f970-471e-1556-08db5af39f68
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- QewjjPyqlU1RMUFuEDD9KEtBJsfP9R3QdFqtPavrJuyGEqePkkMSt8RycjydZe4RBpdfYuM9tuT+vc8w+YGt2tVLf2bjX8DEpvVXF/6cyuwxKZx9CKlwqpo+UeREuKZC7sWNz++O4L3GN0YY062sRCcem97FreoA9dc1JinjS3aFbgtnGTcEDRjwSGeTKFlM5gEhYJYjXFYnDzNd5wBLOl7vfozm7JBTPsappqvuXcznWp9M/8yW8MibWJjWXQh8kYl7W384ushM6NYmEYGBSkEWH0oPnAbSKDq1pnH++FKFOiqgpH+Vdbf3723Z5AoAuN9w6cSdZtx9JkFH3BWQVl5wsVPjU5r8nwd+aUwynE3+NsO/gv7/V/mvYNjQjS7IxjUKQpuMPsitwoMqyW7VMcPd8mOzi09AsnPmiCLtnqeXOwLTN+4kBr+yR2FEtVXcmpDe6Xsqf5egNrx7pUNDAtc+stMML2oCXWy+YFv6UVttC/+lujeXXLXLnLq35Ru58xxo2pisOoilQlunbO0BdxQf+0CLXVx4b9xwnkn+yipGHOjPLun+VJOtKlmxB6qxewY9kWNDugfXWTNqg4Sd1/CfB0rkzjWO8jRgsK9fY+wkkod1snzFKMFj5DJ39VH5AVq8/jvoqyTshIxZc4E6/qC+bQd8kk1Nq7beHBtpJSg+73f9j4OV7ZYXiycrdmIRbIHvSbZGvInX5Z+7G94YJw==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(136003)(39860400002)(396003)(451199021)(8936002)(8676002)(5660300002)(83380400001)(186003)(6506007)(6512007)(53546011)(31696002)(86362001)(107886003)(2616005)(26005)(122000001)(38100700002)(71200400001)(38070700005)(41300700001)(91956017)(6486002)(64756008)(966005)(66446008)(66476007)(66946007)(66556008)(76116006)(316002)(4326008)(36756003)(478600001)(110136005)(54906003)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?a0FRS0lVd24vMmRuVWRPWGtKV3VubSsvT3p5dDRuZW9na0ZTZFo1WHU2Vm54?=
- =?utf-8?B?RENmMDBjZXlTNmRYMURyNFd2RWwybWZET0VCV3hiVHZxcWlpYnJ2aDd0MTcy?=
- =?utf-8?B?R1BUckVLQkRHNWxuUWF1a3c2bFJaUHNGZFgyZXVCTTlubWRNNDJxVlE1RXJi?=
- =?utf-8?B?c09Sd3FyT0RIdVNrdXpEMVN3RUJ6c2krVjlQcjFDS3IrVXhjeFFBNlJzWVBz?=
- =?utf-8?B?TkFSWDQ1VlNxZ0NlcDJRWmI0cGh3a0RZWWdSNDB6dzZZanl4ak4zdE5kU3Qz?=
- =?utf-8?B?TzMzbytjcVpCR3RZSkFUcVVxcE1CSW80RS9uODJCU3RwSnhkcnRaaTBJbTdK?=
- =?utf-8?B?NGFYN0I2YmNRQ3NLV2VHYjEyNStjTlNtU0VEcHdPTUczUmFzc2I4ZU5OSWJY?=
- =?utf-8?B?SEMrRXZtQTQveGN6OTc5WUtob1NEbDlJSUVXOVZKclhmRHVVV09mbTJMYVly?=
- =?utf-8?B?dGs1aTB4M2hCSC9zU3NyZng2WmhPclZ2UTN4cVpFS0FIemsyZGpHL2hJelU4?=
- =?utf-8?B?dVZlRHNKbW8vci9rS1JZOUNXUnFUblhWbVVIcmRkUFZLbnVpVFE0VUtDYWRJ?=
- =?utf-8?B?TDVvSnVzMWJmYStodk8yZ0FlV3NxTlAwNGxrYjJLanN1dnhaUFU4TnZhOVg3?=
- =?utf-8?B?K1pBSGgxeEdPUENoVzZJQ0JMRjUyRWV1a05TQnZDUFY0bS8wNHUxMkxRUFJu?=
- =?utf-8?B?bnlRNW5iRXRybkUxcmRSVHpsMHB0a1ZaaXArd1BNN2ROS0ZVS3VRTFZOUTlt?=
- =?utf-8?B?c2lidi9yUjh5OTBhYVJXNkMvWjFKYnlaanFKZUUyRlUweHlBUnRRNFUwemRr?=
- =?utf-8?B?QmpQNDczSnVRaEYxRUl6eTYySnpjVDhwd2ROTVBqdnNveWJJWlBaU29OZzdG?=
- =?utf-8?B?Y2pvMEpIeDVyeHk3ZGRPRnV0Zm05Q0VtNmxmc0I2eFdXeEgvK09WUm9zelN2?=
- =?utf-8?B?Qk0wK3Zad1VmNGJrK3VWRmgvVFZ1MDVzaFhaMTlSS1pUOUp6T2dIVS9iVVBQ?=
- =?utf-8?B?YTFpTWhuNmI2NGRnQzAwS1ZuOW41cG5nM1I2akxkSzdGYkE5SS80YXZGWjc5?=
- =?utf-8?B?a3RKUExybnJDREtvTlAyeGVvc214VUZ5ZkhEMU5PUCtHR2Y2ai8rcElMRjRC?=
- =?utf-8?B?eWxjbyt0VjlyRXNsQjI3Nlp6QVZPWElEaTlHN3J0ZUo5NTZaQXdhdlVtVlds?=
- =?utf-8?B?VkY4VVJGVXg5dkY4Vk9VTUZ3bGVIRnViVzh6WS9MS2t4RjF4RGUwazZveUhh?=
- =?utf-8?B?VjVzV1ZEREdOT2lZN3pKUlVTSnNnMDZPS0cvcmdCM015VGdzMDlkUlFrb0JF?=
- =?utf-8?B?cnRIMmdpS0lzcU8zOFUrK1I1Tm45dDBrQjlIdXVhOGtnMFphaWl0b0JDMmhJ?=
- =?utf-8?B?MThEZWxaMVp6RmdBMFdQZHlxWEFTcTAvQTczY1BabVZocGZnVU16NEM2VVFo?=
- =?utf-8?B?Q1Q1UEh3U0FlZlorZHNMZ2NGeDJPMHZLcmFMRFFxSjJpSGNxNlRpVUVTRi9B?=
- =?utf-8?B?dGFmQkxCOWFmczlOSXJFVGg3K1p3dGpybzJ0dXd4RDhDdkMvR3FrbSs5d0Q0?=
- =?utf-8?B?dE9rVEcycmpxUkhLY2Fxb1l3by8ySWxsU3VMTUQwTUlxUDc2NG5DS0FOOExY?=
- =?utf-8?B?UWpuSHJuNUxaVnF4VS9hN2tnRWNYUDQvdHJKTnB3UFNrRTBlR0VaWGdxMURk?=
- =?utf-8?B?V254QmV1TWxrMUk3ODhwRFRRRm1RSTBZbFNnRUU2OXF0cG9rR094RTg5MGlS?=
- =?utf-8?B?TytYeUlYdXRQOEZIb2RMbFNrTG1NS3U4NzlOb3c4SEpuUUhmb1lISktpRFhx?=
- =?utf-8?B?TlpoM29pMHhBUlVmMDhMbGNlWXZEZFJCYit5MW52U2tMOGpsSWIrZ1NBVE5Q?=
- =?utf-8?B?bnhoMUJXZU1QSVRLNTJVUER2MitkbDBPbjFwVnQvT0tZNERKaWNzbHlCVXhS?=
- =?utf-8?B?NHR5LysyTnVucFhGU2QrdHAzd2d3cUpBUFlndTI2SWtWVjZjRlBMUHhpbkVN?=
- =?utf-8?B?LzI1dnFKa01QTk5Na21lSnNpeXNUdXhCc1dyS1B0dGY4OVEvVU82WnptSUhL?=
- =?utf-8?B?cEczeklDQnE2d0FTak9DUU5BQlVNckZyM1pWbzZXcjRleXhLYlZPK2dSOFBQ?=
- =?utf-8?Q?dK20OBafJwnDKdGo7vGzo8ngR?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CDFE89D9A14E404A8A2C9142D6BEBA34@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F031D13AE5;
+	Mon, 22 May 2023 19:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684782074; x=1716318074;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sM2uaj11psN2Luzn177V6CNeRqQHcsdr13KAfBiWtMU=;
+  b=nWpJ6aatz/Co2RTbPqljgalR4hWuxK9ZUgAWUJVQSEYLx2WFU4MQKv0M
+   AO2ru8ssctJQWCNEQQLlu4oqdJ5G813NfoMD7jIoYsbk7bEx+ukKRt2UZ
+   KdocSNj9KcsWxYWao1KO/ubel0hVvgTr9SwNn5U0auwPC2BbNXUFtzd8O
+   LVLbrEgC5QbvD0CxSS3R14pWcW2fLMJLFIQWBKOfPbjHG4DyKZ33NCeju
+   d0YRuox6LjU2537M1auRpzOl8cb3gzSEaLg9/A4Ph0YJbTcESL0U7HDVX
+   Y2Fz3qs0cc+Gp64O5YdrbhM3bovm6Mg+9lZJgHuGnuaBqkcjI+psuex18
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="355361167"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="355361167"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 12:01:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="793444365"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="793444365"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 May 2023 12:01:13 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q1AmO-000D55-3D;
+	Mon, 22 May 2023 19:01:13 +0000
+Date: Tue, 23 May 2023 03:00:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but
+ not used
+Message-ID: <202305230231.3Wb7Q68G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93797264-f970-471e-1556-08db5af39f68
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2023 18:37:40.0728
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WysrhfKWpwQQxa8RUn1ZP5cF8k1/VnsLtTtlaO4xk05nrBNujdItelcLr4RRyMhjGDSqD+7a6aN/byN/jWBcKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7196
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-T24gNS8yMi8yMyAxMDo1OSwga2VybmVsIHRlc3Qgcm9ib3Qgd3JvdGU6DQo+IHRyZWU6ICAgaHR0
-cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4
-LXN0YWJsZS1yYy5naXQgcXVldWUvNC4xNA0KPiBoZWFkOiAgIDg0MGZlNWM1NTcwMDNiN2I3MGRk
-MWM1ZTZiZDZiMDU3ZjhmNjcxYTINCj4gY29tbWl0OiAxNDcyZDU4MDg5NGZlODMxZmY0YTIyNzRi
-YTc3YTNhYmU2NWFhZjM3IFsyMi80Nl0gbnVsbF9ibGs6IEFsd2F5cyBjaGVjayBxdWV1ZSBtb2Rl
-IHNldHRpbmcgZnJvbSBjb25maWdmcw0KPiBjb25maWc6IG1pcHMtcmFuZGNvbmZpZy1yMDM2LTIw
-MjMwNTIyIChodHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyMzA1MjMv
-MjAyMzA1MjMwMTM0LklXTHFYMUh6LWxrcEBpbnRlbC5jb20vY29uZmlnKQ0KPiBjb21waWxlcjog
-Y2xhbmcgdmVyc2lvbiAxNy4wLjAgKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVj
-dCBiMGZiOTgyMjdjOTBhZGYyNTM2YzlhZDY0NGE3NGQ1ZTkyOTYxMTExKQ0KPiByZXByb2R1Y2Ug
-KHRoaXMgaXMgYSBXPTEgYnVpbGQpOg0KPiAgICAgICAgICB3Z2V0IGh0dHBzOi8vcmF3LmdpdGh1
-YnVzZXJjb250ZW50LmNvbS9pbnRlbC9sa3AtdGVzdHMvbWFzdGVyL3NiaW4vbWFrZS5jcm9zcyAt
-TyB+L2Jpbi9tYWtlLmNyb3NzDQo+ICAgICAgICAgIGNobW9kICt4IH4vYmluL21ha2UuY3Jvc3MN
-Cj4gICAgICAgICAgIyBpbnN0YWxsIG1pcHMgY3Jvc3MgY29tcGlsaW5nIHRvb2wgZm9yIGNsYW5n
-IGJ1aWxkDQo+ICAgICAgICAgICMgYXB0LWdldCBpbnN0YWxsIGJpbnV0aWxzLW1pcHNlbC1saW51
-eC1nbnUNCj4gICAgICAgICAgIyBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC9zdGFibGUvbGludXgtc3RhYmxlLXJjLmdpdC9jb21taXQvP2lkPTE0NzJkNTgw
-ODk0ZmU4MzFmZjRhMjI3NGJhNzdhM2FiZTY1YWFmMzcNCj4gICAgICAgICAgZ2l0IHJlbW90ZSBh
-ZGQgbGludXgtc3RhYmxlLXJjIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
-ZXJuZWwvZ2l0L3N0YWJsZS9saW51eC1zdGFibGUtcmMuZ2l0DQo+ICAgICAgICAgIGdpdCBmZXRj
-aCAtLW5vLXRhZ3MgbGludXgtc3RhYmxlLXJjIHF1ZXVlLzQuMTQNCj4gICAgICAgICAgZ2l0IGNo
-ZWNrb3V0IDE0NzJkNTgwODk0ZmU4MzFmZjRhMjI3NGJhNzdhM2FiZTY1YWFmMzcNCj4gICAgICAg
-ICAgIyBzYXZlIHRoZSBjb25maWcgZmlsZQ0KPiAgICAgICAgICBta2RpciBidWlsZF9kaXIgJiYg
-Y3AgY29uZmlnIGJ1aWxkX2Rpci8uY29uZmlnDQo+ICAgICAgICAgIENPTVBJTEVSX0lOU1RBTExf
-UEFUSD0kSE9NRS8wZGF5IENPTVBJTEVSPWNsYW5nIG1ha2UuY3Jvc3MgVz0xIE89YnVpbGRfZGly
-IEFSQ0g9bWlwcyBvbGRkZWZjb25maWcNCj4gICAgICAgICAgQ09NUElMRVJfSU5TVEFMTF9QQVRI
-PSRIT01FLzBkYXkgQ09NUElMRVI9Y2xhbmcgbWFrZS5jcm9zcyBXPTEgTz1idWlsZF9kaXIgQVJD
-SD1taXBzIFNIRUxMPS9iaW4vYmFzaCBkcml2ZXJzL2Jsb2NrLw0KPg0KPiBJZiB5b3UgZml4IHRo
-ZSBpc3N1ZSwga2luZGx5IGFkZCBmb2xsb3dpbmcgdGFnIHdoZXJlIGFwcGxpY2FibGUNCj4gfCBS
-ZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+IHwgQ2xvc2Vz
-OiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxsLzIwMjMwNTIzMDEzNC5JV0xx
-WDFIei1sa3BAaW50ZWwuY29tLw0KPg0KPiBBbGwgZXJyb3JzIChuZXcgb25lcyBwcmVmaXhlZCBi
-eSA+Pik6DQo+DQo+Pj4gZHJpdmVycy9ibG9jay9udWxsX2Jsay5jOjE3ODU6MzogZXJyb3I6IHZv
-aWQgZnVuY3Rpb24gJ251bGxfdmFsaWRhdGVfY29uZicgc2hvdWxkIG5vdCByZXR1cm4gYSB2YWx1
-ZSBbLVdyZXR1cm4tdHlwZV0NCj4gICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsN
-Cj4gICAgICAgICAgICAgICAgICAgICBeICAgICAgfn5+fn5+fg0KPiAgICAgMSBlcnJvciBnZW5l
-cmF0ZWQuDQo+DQo+DQo+IHZpbSArL251bGxfdmFsaWRhdGVfY29uZiArMTc4NSBkcml2ZXJzL2Js
-b2NrL251bGxfYmxrLmMNCj4NCj4gICAgMTc4MAkNCj4gICAgMTc4MQlzdGF0aWMgdm9pZCBudWxs
-X3ZhbGlkYXRlX2NvbmYoc3RydWN0IG51bGxiX2RldmljZSAqZGV2KQ0KPiAgICAxNzgyCXsNCj4g
-ICAgMTc4MwkJaWYgKGRldi0+cXVldWVfbW9kZSA9PSBOVUxMX1FfUlEpIHsNCj4gICAgMTc4NAkJ
-CXByX2VycigibGVnYWN5IElPIHBhdGggaXMgbm8gbG9uZ2VyIGF2YWlsYWJsZVxuIik7DQo+PiAx
-Nzg1CQkJcmV0dXJuIC1FSU5WQUw7DQo+ICAgIDE3ODYJCX0NCj4gICANCg0KaW4gY3VycmVudCBs
-aW51eC1ibG9jay9mb3ItbmV4dCB0cmVlIEkndmUgdGhpcyBbMV0uDQpteSBwYXRjaCB0aGF0IGFk
-ZHMgYWJvdmUgY2hlY2sgaXMgWzJdLg0KDQpJJ20gbm90IHN1cmUgaG93IHRoaXMgcGF0Y2ggZ290
-IGFwcGxpZWQgb24gbnVsbF92YWxpZGF0ZV9jb25mKCkNCndoZW4gaXQgaGFkIHZvaWQgcmV0dXJu
-IHZhbHVlIC4uLg0KDQppZiB5b3UgaGF2ZSBhbnkgaWRlYSBwbGVhc2UgbGV0IG1lIGtub3csIGVs
-c2Ugd2lsbCBrZWVwIGxvb2tpbmcgdG8NCmZpeCB0aGlzIC4uLg0KDQotY2sNCg0KDQpbMV0NCjIw
-MDANCjIwMDEgc3RhdGljIGludCBudWxsX3ZhbGlkYXRlX2NvbmYoc3RydWN0IG51bGxiX2Rldmlj
-ZSAqZGV2KQ0KMjAwMiB7DQoyMDAzwqDCoMKgwqDCoMKgwqDCoCBpZiAoZGV2LT5xdWV1ZV9tb2Rl
-ID09IE5VTExfUV9SUSkgew0KMjAwNMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBy
-X2VycigibGVnYWN5IElPIHBhdGggaXMgbm8gbG9uZ2VyIGF2YWlsYWJsZVxuIik7DQoyMDA1wqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FSU5WQUw7DQoyMDA2wqDCoMKg
-wqDCoMKgwqDCoCB9DQoyMDA3DQoyMDA4wqDCoMKgwqDCoMKgwqDCoCBkZXYtPmJsb2Nrc2l6ZSA9
-IHJvdW5kX2Rvd24oZGV2LT5ibG9ja3NpemUsIDUxMik7DQoyMDA5wqDCoMKgwqDCoMKgwqDCoCBk
-ZXYtPmJsb2Nrc2l6ZSA9IGNsYW1wX3QodW5zaWduZWQgaW50LCBkZXYtPmJsb2Nrc2l6ZSwgNTEy
-LCANCjQwOTYpOw0KMjAxMA0KMjAxMcKgwqDCoMKgwqDCoMKgwqAgaWYgKGRldi0+cXVldWVfbW9k
-ZSA9PSBOVUxMX1FfTVEgJiYgZGV2LT51c2VfcGVyX25vZGVfaGN0eCkgew0KMjAxMsKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChkZXYtPnN1Ym1pdF9xdWV1ZXMgIT0gbnJfb25s
-aW5lX25vZGVzKQ0KMjAxM8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBkZXYtPnN1Ym1pdF9xdWV1ZXMgPSBucl9vbmxpbmVfbm9kZXM7DQoyMDE0wqDCoMKg
-wqDCoMKgwqDCoCB9IGVsc2UgaWYgKGRldi0+c3VibWl0X3F1ZXVlcyA+IG5yX2NwdV9pZHMpDQoy
-MDE1wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2LT5zdWJtaXRfcXVldWVzID0g
-bnJfY3B1X2lkczsNCjIwMTbCoMKgwqDCoMKgwqDCoMKgIGVsc2UgaWYgKGRldi0+c3VibWl0X3F1
-ZXVlcyA9PSAwKQ0KMjAxN8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldi0+c3Vi
-bWl0X3F1ZXVlcyA9IDE7DQoyMDE4wqDCoMKgwqDCoMKgwqDCoCBkZXYtPnByZXZfc3VibWl0X3F1
-ZXVlcyA9IGRldi0+c3VibWl0X3F1ZXVlczsNCjIwMTkNCjIwMjDCoMKgwqDCoMKgwqDCoMKgIGlm
-IChkZXYtPnBvbGxfcXVldWVzID4gZ19wb2xsX3F1ZXVlcykNCjIwMjHCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBkZXYtPnBvbGxfcXVldWVzID0gZ19wb2xsX3F1ZXVlczsNCjIwMjLC
-oMKgwqDCoMKgwqDCoMKgIGRldi0+cHJldl9wb2xsX3F1ZXVlcyA9IGRldi0+cG9sbF9xdWV1ZXM7
-DQoyMDIzDQoyMDI0wqDCoMKgwqDCoMKgwqDCoCBkZXYtPnF1ZXVlX21vZGUgPSBtaW5fdCh1bnNp
-Z25lZCBpbnQsIGRldi0+cXVldWVfbW9kZSwgDQpOVUxMX1FfTVEpOw0KMjAyNcKgwqDCoMKgwqDC
-oMKgwqAgZGV2LT5pcnFtb2RlID0gbWluX3QodW5zaWduZWQgaW50LCBkZXYtPmlycW1vZGUsIA0K
-TlVMTF9JUlFfVElNRVIpOw0KMjAyNg0KMjAyN8KgwqDCoMKgwqDCoMKgwqAgLyogRG8gbWVtb3J5
-IGFsbG9jYXRpb24sIHNvIHNldCBibG9ja2luZyAqLw0KMjAyOMKgwqDCoMKgwqDCoMKgwqAgaWYg
-KGRldi0+bWVtb3J5X2JhY2tlZCkNCjIwMjnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBkZXYtPmJsb2NraW5nID0gdHJ1ZTsNCjIwMzDCoMKgwqDCoMKgwqDCoMKgIGVsc2UgLyogY2Fj
-aGUgaXMgbWVhbmluZ2xlc3MgKi8NCjIwMzHCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBkZXYtPmNhY2hlX3NpemUgPSAwOw0KMjAzMsKgwqDCoMKgwqDCoMKgwqAgZGV2LT5jYWNoZV9z
-aXplID0gbWluX3QodW5zaWduZWQgbG9uZywgVUxPTkdfTUFYIC8gMTAyNCAvIDEwMjQsDQoyMDMz
-IGRldi0+Y2FjaGVfc2l6ZSk7DQoyMDM0wqDCoMKgwqDCoMKgwqDCoCBkZXYtPm1icHMgPSBtaW5f
-dCh1bnNpZ25lZCBpbnQsIDEwMjQgKiA0MCwgZGV2LT5tYnBzKTsNCjIwMzXCoMKgwqDCoMKgwqDC
-oMKgIC8qIGNhbiBub3Qgc3RvcCBhIHF1ZXVlICovDQoyMDM2wqDCoMKgwqDCoMKgwqDCoCBpZiAo
-ZGV2LT5xdWV1ZV9tb2RlID09IE5VTExfUV9CSU8pDQoyMDM3wqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgZGV2LT5tYnBzID0gMDsNCjIwMzgNCjIwMznCoMKgwqDCoMKgwqDCoMKgIGlm
-IChkZXYtPnpvbmVkICYmDQoyMDQwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICghZGV2LT56b25l
-X3NpemUgfHwgIWlzX3Bvd2VyX29mXzIoZGV2LT56b25lX3NpemUpKSkgew0KMjA0McKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHByX2Vycigiem9uZV9zaXplIG11c3QgYmUgcG93ZXIt
-b2YtdHdvXG4iKTsNCjIwNDLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4g
-LUVJTlZBTDsNCjIwNDPCoMKgwqDCoMKgwqDCoMKgIH0NCjIwNDQNCjIwNDXCoMKgwqDCoMKgwqDC
-oMKgIHJldHVybiAwOw0KMjA0NiB9DQoNCg0KDQpbMl0NCmxpbnV4LWJsb2NrIChmb3ItbmV4dCkg
-IyBnaXQgZm9ybWF0LXBhdGNoIDYzZjg3OTNlZTYwNTEgLTENCjAwMDEtbnVsbF9ibGstQWx3YXlz
-LWNoZWNrLXF1ZXVlLW1vZGUtc2V0dGluZy1mcm9tLWNvbmZpZy5wYXRjaA0KbGludXgtYmxvY2sg
-KGZvci1uZXh0KSAjIGNhdCANCjAwMDEtbnVsbF9ibGstQWx3YXlzLWNoZWNrLXF1ZXVlLW1vZGUt
-c2V0dGluZy1mcm9tLWNvbmZpZy5wYXRjaA0KIEZyb20gNjNmODc5M2VlNjA1MTNhMDlmMTEwZWE0
-NjBhNmZmMmMzMzgxMWNkYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDENCkZyb206IENoYWl0YW55
-YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQpEYXRlOiBTdW4sIDE2IEFwciAyMDIzIDE1OjAz
-OjM5IC0wNzAwDQpTdWJqZWN0OiBbUEFUQ0hdIG51bGxfYmxrOiBBbHdheXMgY2hlY2sgcXVldWUg
-bW9kZSBzZXR0aW5nIGZyb20gY29uZmlnZnMNCg0KTWFrZSBzdXJlIHRvIGNoZWNrIGRldmljZSBx
-dWV1ZSBtb2RlIGluIHRoZSBudWxsX3ZhbGlkYXRlX2NvbmYoKSBhbmQNCnJldHVybiBlcnJvciBm
-b3IgTlVMTF9RX1JRIGFzIHdlIGRvbid0IGFsbG93IGxlZ2FjeSBJL08gcGF0aCwgd2l0aG91dA0K
-dGhpcyBwYXRjaCB3ZSBnZXQgT09QcyB3aGVuIHF1ZXVlIG1vZGUgaXMgc2V0IHRvIDEgZnJvbSBj
-b25maWdmcywNCmZvbGxvd2luZyBhcmUgcmVwcm8gc3RlcHMgOi0NCg0KbW9kcHJvYmUgbnVsbF9i
-bGsgbnJfZGV2aWNlcz0wDQpta2RpciBjb25maWcvbnVsbGIvbnVsbGIwDQplY2hvIDEgPiBjb25m
-aWcvbnVsbGIvbnVsbGIwL21lbW9yeV9iYWNrZWQNCmVjaG8gNDA5NiA+IGNvbmZpZy9udWxsYi9u
-dWxsYjAvYmxvY2tzaXplDQplY2hvIDIwNDgwID4gY29uZmlnL251bGxiL251bGxiMC9zaXplDQpl
-Y2hvIDEgPiBjb25maWcvbnVsbGIvbnVsbGIwL3F1ZXVlX21vZGUNCmVjaG8gMSA+IGNvbmZpZy9u
-dWxsYi9udWxsYjAvcG93ZXINCg0KRW50ZXJpbmcga2RiIChjdXJyZW50PTB4ZmZmZjg4ODEwYWNk
-ZDA4MCwgcGlkIDIzNzIpIG9uIHByb2Nlc3NvciA0MiANCk9vcHM6IChudWxsKQ0KZHVlIHRvIG9v
-cHMgQCAweGZmZmZmZmZmYzA0MWMzMjkNCkNQVTogNDIgUElEOiAyMzcyIENvbW06IHNoIFRhaW50
-ZWQ6IEfCoMKgwqDCoMKgwqDCoMKgwqDCoCBPwqDCoMKgwqAgTiA2LjMuMC1yYzVsYmxrKyAjNQ0K
-SGFyZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJWCwgMTk5NiksIEJJ
-T1MgDQpyZWwtMS4xNC4wLTAtZzE1NTgyMWExOTkwYi1wcmVidWlsdC5xZW11Lm9yZyAwNC8wMS8y
-MDE0DQpSSVA6IDAwMTA6bnVsbF9hZGRfZGV2LnBhcnQuMCsweGQ5LzB4NzIwIFtudWxsX2Jsa10N
-CkNvZGU6IDAxIDAwIDAwIDg1IGQyIDBmIDg1IGExIDAzIDAwIDAwIDQ4IDgzIGJiIDA4IDAxIDAw
-IDAwIDAwIDBmIDg1IGY3IA0KMDMgMDAgMDAgODAgYmIgNjIgMDEgMDAgMDAgMDAgNDggOGIgNzUg
-MjAgMGYgODUgNmQgMDIgMDAgMDAgPDQ4PiA4OSA2ZSANCjYwIDQ4IDhiIDc1IDIwIGJmIDA2IDAw
-IDAwIDAwIGU4IGY1IDM3IDJjIGMxIDQ4IDhiIDc1IDIwDQpSU1A6IDAwMTg6ZmZmZmM5MDAwNTJj
-YmRlMCBFRkxBR1M6IDAwMDEwMjQ2DQpSQVg6IDAwMDAwMDAwMDAwMDAwMDEgUkJYOiBmZmZmODg4
-MTEwODRkODAwIFJDWDogMDAwMDAwMDAwMDAwMDAwMQ0KUkRYOiAwMDAwMDAwMDAwMDAwMDAwIFJT
-STogMDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ODgxMDAwNDJlMDANClJCUDogZmZmZjg4ODEw
-NTNkODIwMCBSMDg6IGZmZmZjOTAwMDUyY2JkNjggUjA5OiBmZmZmODg4MTA1ZGIyMDAwDQpSMTA6
-IDAwMDAwMDAwMDAwMDAwMDEgUjExOiAwMDAwMDAwMDAwMDAwMDAwIFIxMjogMDAwMDAwMDAwMDAw
-MDAwMg0KUjEzOiBmZmZmODg4MTA0NzY1MjAwIFIxNDogZmZmZjg4ODEwZWVjMTc0OCBSMTU6IGZm
-ZmY4ODgxMGVlYzE3NDANCkZTOsKgIDAwMDA3ZmQ0NDVmZDE3NDAoMDAwMCkgR1M6ZmZmZjg4OTdk
-ZmM4MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQpDUzrCoCAwMDEwIERTOiAwMDAw
-IEVTOiAwMDAwIENSMDogMDAwMDAwMDA4MDA1MDAzMw0KQ1IyOiAwMDAwMDAwMDAwMDAwMDYwIENS
-MzogMDAwMDAwMDE2NmEwMDAwMCBDUjQ6IDAwMDAwMDAwMDAzNTBlZTANCkRSMDogZmZmZmZmZmY4
-NDM3YTQ4OCBEUjE6IGZmZmZmZmZmODQzN2E0ODkgRFIyOiBmZmZmZmZmZjg0MzdhNDhhDQpEUjM6
-IGZmZmZmZmZmODQzN2E0OGIgRFI2OiAwMDAwMDAwMGZmZmYwZmYwIERSNzogMDAwMDAwMDAwMDAw
-MDQwMA0KQ2FsbCBUcmFjZToNCiDCoDxUQVNLPg0KIMKgbnVsbGJfZGV2aWNlX3Bvd2VyX3N0b3Jl
-KzB4ZDEvMHgxMjAgW251bGxfYmxrXQ0KIMKgY29uZmlnZnNfd3JpdGVfaXRlcisweGI0LzB4MTIw
-DQogwqB2ZnNfd3JpdGUrMHgyYmEvMHgzYzANCiDCoGtzeXNfd3JpdGUrMHg1Zi8weGUwDQogwqBk
-b19zeXNjYWxsXzY0KzB4M2IvMHg5MA0KIMKgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1l
-KzB4NzIvMHhkYw0KUklQOiAwMDMzOjB4N2ZkNDQ2MGM1N2E3DQpDb2RlOiAwZCAwMCBmNyBkOCA2
-NCA4OSAwMiA0OCBjNyBjMCBmZiBmZiBmZiBmZiBlYiBiNyAwZiAxZiAwMCBmMyAwZiAxZSANCmZh
-IDY0IDhiIDA0IDI1IDE4IDAwIDAwIDAwIDg1IGMwIDc1IDEwIGI4IDAxIDAwIDAwIDAwIDBmIDA1
-IDw0OD4gM2QgMDAgDQpmMCBmZiBmZiA3NyA1MSBjMyA0OCA4MyBlYyAyOCA0OCA4OSA1NCAyNCAx
-OCA0OCA4OSA3NCAyNA0KUlNQOiAwMDJiOjAwMDA3ZmZkMzc5MmE0YTggRUZMQUdTOiAwMDAwMDI0
-NiBPUklHX1JBWDogMDAwMDAwMDAwMDAwMDAwMQ0KUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDog
-MDAwMDAwMDAwMDAwMDAwMiBSQ1g6IDAwMDA3ZmQ0NDYwYzU3YTcNClJEWDogMDAwMDAwMDAwMDAw
-MDAwMiBSU0k6IDAwMDA1NWI0M2MwMmU0YzAgUkRJOiAwMDAwMDAwMDAwMDAwMDAxDQpSQlA6IDAw
-MDA1NWI0M2MwMmU0YzAgUjA4OiAwMDAwMDAwMDAwMDAwMDBhIFIwOTogMDAwMDdmZDQ0NjE1YjRl
-MA0KUjEwOiAwMDAwN2ZkNDQ2MTViM2UwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDAw
-MDAwMDAwMDAwMDINClIxMzogMDAwMDdmZDQ0NjE5ODUyMCBSMTQ6IDAwMDAwMDAwMDAwMDAwMDIg
-UjE1OiAwMDAwN2ZkNDQ2MTk4NzAwDQogwqA8L1RBU0s+DQoNClNpZ25lZC1vZmYtYnk6IENoYWl0
-YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQpSZXZpZXdlZC1ieTogRGFtaWVuIExlIE1v
-YWwgPGRsZW1vYWxAa2VybmVsLm9yZz4NClJldmlld2VkLWJ5OiBNaW5nIExlaSA8bWluZy5sZWlA
-cmVkaGF0LmNvbT4NClJldmlld2VkLWJ5OiBOaXRlc2ggU2hldHR5IDxuai5zaGV0dHlAc2Ftc3Vu
-Zy5jb20+DQpMaW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjMwNDE2MjIwMzM5LjQz
-ODQ1LTEta2NoQG52aWRpYS5jb20NClNpZ25lZC1vZmYtYnk6IEplbnMgQXhib2UgPGF4Ym9lQGtl
-cm5lbC5kaz4NCi0tLQ0KIMKgZHJpdmVycy9ibG9jay9udWxsX2Jsay9tYWluLmMgfCA1ICsrKysr
-DQogwqAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2Jsb2NrL251bGxfYmxrL21haW4uYyBiL2RyaXZlcnMvYmxvY2svbnVsbF9ibGsvbWFpbi5j
-DQppbmRleCA5YTdlNTY5OTM2OWUuLmZjYjYxZjFkNTQzNyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
-YmxvY2svbnVsbF9ibGsvbWFpbi5jDQorKysgYi9kcml2ZXJzL2Jsb2NrL251bGxfYmxrL21haW4u
-Yw0KQEAgLTIwMDEsNiArMjAwMSwxMSBAQCBzdGF0aWMgaW50IG51bGxfaW5pdF90YWdfc2V0KHN0
-cnVjdCBudWxsYiAqbnVsbGIsIA0Kc3RydWN0IGJsa19tcV90YWdfc2V0ICpzZXQpDQoNCiDCoHN0
-YXRpYyBpbnQgbnVsbF92YWxpZGF0ZV9jb25mKHN0cnVjdCBudWxsYl9kZXZpY2UgKmRldikNCiDC
-oHsNCivCoMKgwqAgaWYgKGRldi0+cXVldWVfbW9kZSA9PSBOVUxMX1FfUlEpIHsNCivCoMKgwqAg
-wqDCoMKgIHByX2VycigibGVnYWN5IElPIHBhdGggaXMgbm8gbG9uZ2VyIGF2YWlsYWJsZVxuIik7
-DQorwqDCoMKgIMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCivCoMKgwqAgfQ0KKw0KIMKgwqDCoMKg
-IGRldi0+YmxvY2tzaXplID0gcm91bmRfZG93bihkZXYtPmJsb2Nrc2l6ZSwgNTEyKTsNCiDCoMKg
-wqDCoCBkZXYtPmJsb2Nrc2l6ZSA9IGNsYW1wX3QodW5zaWduZWQgaW50LCBkZXYtPmJsb2Nrc2l6
-ZSwgNTEyLCA0MDk2KTsNCg0KLS0gDQoyLjQwLjANCg0KbGludXgtYmxvY2sgKGZvci1uZXh0KSAj
-DQoNCg==
+Hi Christophe,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   44c026a73be8038f03dbdeef028b642880cf1511
+commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
+date:   9 months ago
+config: powerpc-randconfig-r022-20230522 (https://download.01.org/0day-ci/archive/20230523/202305230231.3Wb7Q68G-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7245fc5bb7a966852d5bd7779d1f5855530b461a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7245fc5bb7a966852d5bd7779d1f5855530b461a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/math-emu/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305230231.3Wb7Q68G-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but not used [-Wunused-but-set-variable]
+           FP_DECL_D(A);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:124:1: note: expanded from here
+   A_c
+   ^
+>> arch/powerpc/math-emu/fcmpu.c:14:2: warning: variable 'B_c' set but not used [-Wunused-but-set-variable]
+           FP_DECL_D(B);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:130:1: note: expanded from here
+   B_c
+   ^
+>> arch/powerpc/math-emu/fcmpu.c:15:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fcmpu.c:11:1: warning: no previous prototype for function 'fcmpu' [-Wmissing-prototypes]
+   fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+   ^
+   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   4 warnings generated.
+--
+>> arch/powerpc/math-emu/fctiw.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiw.c:11:1: warning: no previous prototype for function 'fctiw' [-Wmissing-prototypes]
+   fctiw(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 warnings generated.
+--
+>> arch/powerpc/math-emu/fctiwz.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiwz.c:11:1: warning: no previous prototype for function 'fctiwz' [-Wmissing-prototypes]
+   fctiwz(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 warnings generated.
+--
+>> arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fsel.c:11:1: warning: no previous prototype for function 'fsel' [-Wmissing-prototypes]
+   fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
+   ^
+   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/A_c +13 arch/powerpc/math-emu/fcmpu.c
+
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16   9  
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  10  int
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  12  {
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @13  	FP_DECL_D(A);
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @14  	FP_DECL_D(B);
+d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 @15  	FP_DECL_EX;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  16  	int code[4] = { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  17  	long cmp;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  18  
+
+:::::: The code at line 13 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
