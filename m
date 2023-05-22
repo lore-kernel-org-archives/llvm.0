@@ -1,84 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FA71642B
-	for <llvm@lists.linux.dev>; Mon, 22 May 2023 20:51:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684788663;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lHKgz2EDe0gp7BQNyRis8VGY8T5co7X0AfEygGWeGyA=;
-	b=WsQMGi2r+elBlkmnCqx76WWi6lKigdhoNfGX/MupIFFLzIUHsJSh2iKL9uDoUBD3twv0FE
-	MxmOy8YyiwzJDc+H03kSXnY9q+Y1SmK7j5e+9FRbtmUFiN76OniZUIXZN3uw5htEjKWHQY
-	yejlct6l0CD1U7PhtdqKeDK5KfzOc7Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-MFinE_PKPMGsSVG43of0tA-1; Mon, 22 May 2023 16:51:01 -0400
-X-MC-Unique: MFinE_PKPMGsSVG43of0tA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA0B33C0F364
-	for <llvm@lists.linux.dev>; Mon, 22 May 2023 20:51:01 +0000 (UTC)
-Received: from [172.64.14.43] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8C89720296C6;
-	Mon, 22 May 2023 20:51:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
- mainline.kernel.org-clang, 421ca22e)
-Date: Mon, 22 May 2023 20:51:01 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D748F7A
+	for <llvm@lists.linux.dev>; Mon, 22 May 2023 21:12:10 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso3533557a12.1
+        for <llvm@lists.linux.dev>; Mon, 22 May 2023 14:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=k1K1HyzvnqnBe8r2Rpb2ATAXebNjQ+9Bj004eYb67TIX3qkCYFzgQYrfbfof/qs3fV
+         E3bOOixQ4DIcMdIMfzpQ4RfAjXDQoDqAOGWrbfUxf2/ZNc+KM0OYHZ9lU2A+SK8usHdg
+         dc/ZvHPzmHRsXxUFogSaI7+kAzu1XXJiiGb5QhVJAxWHDSGYx4O/aRabFYIT9yYBpg0S
+         oDgmbR7SKYkH53aRuo/PUAuGIz7l4rya+8MXmoqmBJbDcvBs40ChsEt9FeVe2iBICoBa
+         Dvl/vll4zbsfzri82BmGt63uVS0Ge5oAnStn/7nZqW4C8ZRrmMwWkd/j5S4GA/kkWEc7
+         iHgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=RCMzfW1lrATUa97SVOy9iJsLbO3rS+IvAUK3voyz29AEMhpF6StVnreb17y1n8wZqr
+         EH9c8vNjQJY9k7fgBr0yzo8eiGp0xkDJBrchU2SrMopWrDU7mBmwbJCyoPs/PI2ne4pY
+         ZTx+C2glrrAAhtKDTAlbZ5WTwc1jYYEqN27VCgf/bd4cHMDKNmLc670LK/hoYEYpTWnu
+         3wGe5JafJl6FkAct6dbkSKNLAjTRLW0hJWzkz9Y/4YV75OPMeGgeJyCktCxFkuiaawns
+         F9p20speHeux8tj3xVcS5OEzm7kSnjqW9NA5QVzNXOFoD/IXBONQ5o9Ydmev0i1V6Q2V
+         +X7Q==
+X-Gm-Message-State: AC+VfDwzTubh+HGEfW2dBitSGYC6c8S5cQGzaAJi4ohIrHYaMZ7FlcYi
+	wjxYoKD51m9lUkccjocX5KA=
+X-Google-Smtp-Source: ACHHUZ60CLOp7DtHkbt5u0VTx8QiCC05myGgdTMUzzuhOr29K4CA9z9bUTYJaQhqyLyPqXt0bMuqYA==
+X-Received: by 2002:a05:6a20:7295:b0:103:ef39:a832 with SMTP id o21-20020a056a20729500b00103ef39a832mr12188478pzk.23.1684789929229;
+        Mon, 22 May 2023 14:12:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id lt11-20020a17090b354b00b0024df400a9e6sm4556611pjb.37.2023.05.22.14.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 14:12:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Mon, 22 May 2023 11:12:07 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Z qiang <qiang.zhang1211@gmail.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
+ worker_enter_idle+0xb2/0xc0
+Message-ID: <ZGvap5qi0OKAOfqX@slm.duckdns.org>
+References: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
+ <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
+ <ZGuydp0KToLf55vY@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <29671.123052216510103050@us-mta-650.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGuydp0KToLf55vY@slm.duckdns.org>
 
-Hi, we tested your kernel and here are the results:
+On Mon, May 22, 2023 at 08:20:38AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, May 22, 2023 at 09:24:09PM +0800, Z qiang wrote:
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index 9c5c1cfa478f..f8d739fef311 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
+> >          * and leave with an unexpected pool->nr_running == 1 on the newly
+> > unbound
+> >          * pool. Protect against such race.
+> >          */
+> > -       preempt_disable();
+> > +       local_irq_disable();
+> >         if (!(worker->flags & WORKER_NOT_RUNNING))
+> >                 worker->pool->nr_running++;
+> > -       preempt_enable();
+> > 
+> >         /*
+> >          * CPU intensive auto-detection cares about how long a work item
+> > hogged
+> > @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
+> >         worker->current_at = worker->task->se.sum_exec_runtime;
+> > 
+> >         worker->sleeping = 0;
+> > +       local_irq_enable();
+> >  }
+> 
+> Ah, yeah, this is correct. Now we're modifying nr_running from timer tick
+> too, so if don't block irq, the timer tick can ruin the not-irq-protected
+> read-write-modify nr_running update from wq_worker_running(). Naresh, can
+> you please confirm the fix?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Z qiang, while waiting for Naresh's test result, can you send the fix as a
+proper signed-off-patch?
 
+Thanks.
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.4-2' of git://git.linux-nfs.org/pr=
-ojects/anna/linux-nfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/89768
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35301=
-6
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+tejun
