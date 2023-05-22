@@ -1,216 +1,279 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D671429C
-	for <llvm@lists.linux.dev>; Mon, 22 May 2023 16:53:10 +0000 (UTC)
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-3f6b20ad49dso4924411cf.2
-        for <llvm@lists.linux.dev>; Mon, 22 May 2023 09:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684774389; x=1687366389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6VpKPrQUojHXQp+pgVX7i9L1lzyUv3HTNaZR3lXx5cA=;
-        b=qRyoPL8x6jZBeaTd2V+SSG09Qnklx1PF0l7svjFhXVRm1mFsEE6vlsfiW1KgQ3B9dM
-         RlDK4O0aL1qn48bAfjX4VygjC0ve/GZXgvf+ealDdMg0LZf5O0/6xejMtSsuwXoVgUYv
-         74xhMqK+pngnbgHMirUxr6BiBfrOLH/CcziBtq71OSQASEFtyaNJLId9Gw7j6lxI+rPt
-         tiX3tfzPS0ttwunU4HnugAtAXkM6fx67dEEPm9HQbYwvD8Ug5dUM/UBrKgQ58frKj49q
-         o2AU3sJL4KEHbuFYXZ2Uf2wfktSVqOq3eB9CowwhqMM6+VE9ZFT4IpFAMZvvaWlv8fkm
-         mtcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684774389; x=1687366389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6VpKPrQUojHXQp+pgVX7i9L1lzyUv3HTNaZR3lXx5cA=;
-        b=a4aMa53ha+VJFnGrxe+Wl8vhVE8kZcW73yGAmPOFrRbUQEOmhfkKQHxGC7joyfHcMo
-         jI2M9NaoCWXzeZtVl0t516Wrr5t3BrLld6ZFSgc0GD1HQWXgzGYdoBJXhGkk+tZcnm1G
-         gEorAnrr//0+JcrQ0UOni39LuE3npyBo+ksTUfC9f1jWGikNRUFZPnz1QziAB9tbOi3B
-         Kid/9EPnWAAyTc0l2PwQXIWxcsXj39zm8HTQuJLBwx2c6NgOmvYD6DJmfSmV1kbnDi6A
-         imREK2RzXFqvGeehN+dVMBCInkvYo9f2rWkxnrc2yXwcgG3QYqsGNjnoNRSBgtkvIiZN
-         lm8g==
-X-Gm-Message-State: AC+VfDzxdDRsUOB3AgJ+2ZLBtfu45Hwjw+vsxw/RJ1vHHS2WpcmH3D8T
-	R7RsYQAlUdOPOjQLoKkp6Rbj9K4Z7OjgiIB6iru+WQ==
-X-Google-Smtp-Source: ACHHUZ7B3DOrs6v3mHQcjLvZZouxq+ew3WRDpgvyUnbt9WaBI/qcq6m+vyEnhdpLuxYt70jFRN+g1i58RyQMSwyYeTs=
-X-Received: by 2002:a05:622a:387:b0:3f5:2d80:e5f0 with SMTP id
- j7-20020a05622a038700b003f52d80e5f0mr19990833qtx.40.1684774389531; Mon, 22
- May 2023 09:53:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AFC16414;
+	Mon, 22 May 2023 17:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684777796; x=1716313796;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9aj5d8YshLRN49LQIbdHq+0co56CTQCROEIBvpVm97Q=;
+  b=HIMuLnZkX47rT6uPTWK1AN1QTy+kCfWdAiUqnml23yvy0jAZfa39sYSh
+   1SnWv8ToG4JZGoRbnxGaOkHAMJZdQbh7XnALb+cMM8D0KbPhkSIE5Qyqy
+   tO7MY1OTpS6ozdTSZuDIV1PgCjMv4epDFYzdTexg+TbjQ1C/u4Z1BLmSK
+   JP4a8nX6DX55hpbaNqzB0Lhkwdo5V4+QM9/N4AvrFf7d0OkKMiw7onJy0
+   47cxi6qiQ1syhoW9mVV57VLP1+loCJm5PUAlj4C3O6jFs/B1QHu+vzYld
+   frdnUO3YIkCSb5ytcRHHJwPT6JaloB7KzT4/K6VOU93vyR7aSFyUYGSxu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="337580497"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="337580497"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 10:49:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="706636827"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="706636827"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 May 2023 10:49:53 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q19fM-000D2J-0g;
+	Mon, 22 May 2023 17:49:52 +0000
+Date: Tue, 23 May 2023 01:48:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arun R Murthy <arun.r.murthy@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Animesh Manna <animesh.manna@intel.com>,
+	Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Subject: [drm-intel:for-linux-next 1/1]
+ drivers/gpu/drm/i915/display/intel_display.c:6012:3: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202305230153.lce5jQM9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202305210810.njuOWlC1-lkp@intel.com> <61f75542-0bb2-e601-60b3-cdefa08cba28@gmail.com>
-In-Reply-To: <61f75542-0bb2-e601-60b3-cdefa08cba28@gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 22 May 2023 09:52:58 -0700
-Message-ID: <CAKwvOdnaL-kNLLjLFG0irYc5ROqShcUWnfSsQESeAvquKsULzQ@mail.gmail.com>
-Subject: Re: [linux-stable-rc:queue/5.15 78/106] drivers/staging/rtl8192e/rtl8192e/rtl_core.c:29:33:
- warning: unused variable 'rtl819xp_ops'
-To: Philipp Hortmann <philipp.g.hortmann@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Philipp, below is my interpretation of this report:
+tree:   git://anongit.freedesktop.org/drm-intel for-linux-next
+head:   937859485aefed1d9df72feb6ea74a84ff5cfa46
+commit: 937859485aefed1d9df72feb6ea74a84ff5cfa46 [1/1] drm/i915: Support Async Flip on Linear buffers
+config: x86_64-randconfig-a012-20230522 (https://download.01.org/0day-ci/archive/20230523/202305230153.lce5jQM9-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-intel git://anongit.freedesktop.org/drm-intel
+        git fetch --no-tags drm-intel for-linux-next
+        git checkout 937859485aefed1d9df72feb6ea74a84ff5cfa46
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-On Sun, May 21, 2023 at 2:10=E2=80=AFAM Philipp Hortmann
-<philipp.g.hortmann@gmail.com> wrote:
->
-> On 5/21/23 02:59, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able-rc.git queue/5.15
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305230153.lce5jQM9-lkp@intel.com/
 
-^ So Greg and Sasha are cherry picking patches to linux-5.15.y branch
-of stable...
+All warnings (new ones prefixed by >>):
 
-> > head:   632aeb02f8e831197a9a01b1e93cb00b4363be05
-> > commit: f13ecbca1796208fa2f888843223ea289f8e2b39 [78/106] staging: rtl8=
-192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE
-
-^ ...of the 106 patches picked up f13ecbca179620 is introducing a new failu=
-re...
-
-> > config: x86_64-allyesconfig
-
-^ ...in allyesconfig builds...
-
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f2=
-8c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=3D1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/=
-sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux=
--stable-rc.git/commit/?id=3Df13ecbca1796208fa2f888843223ea289f8e2b39
-> >          git remote add linux-stable-rc https://git.kernel.org/pub/scm/=
-linux/kernel/git/stable/linux-stable-rc.git
-> >          git fetch --no-tags linux-stable-rc queue/5.15
-> >          git checkout f13ecbca1796208fa2f888843223ea289f8e2b39
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/platform/x86/ =
-drivers/staging/rtl8192e/rtl8192e/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305210810.njuOWlC1-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >>> drivers/staging/rtl8192e/rtl8192e/rtl_core.c:29:33: warning: unused v=
-ariable 'rtl819xp_ops' [-Wunused-const-variable]
-
-^ ... does Greg or Sasha need to pick up
-commit 5e2b6593f270 ("staging: rtl8192e: Remove empty struct rtl819x_ops")
-for linux-5.15.y in addition to f13ecbca1796208fa2f888843223ea289f8e2b39?
-
-5e2b6593f270 lacks a fixes tag, so it's probably not obvious to them
-or their automation.
-
-> >     static const struct rtl819x_ops rtl819xp_ops =3D {
-> >                                     ^
-> >     1 warning generated.
-> >
-> >
-> > vim +/rtl819xp_ops +29 drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> >
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  27
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  28
-> > 1c099ed63f8363 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Julia Lawal=
-l       2016-09-11 @29  static const struct rtl819x_ops rtl819xp_ops =3D {
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  30         .nic_type                       =3D NIC_8192=
-E,
-> > b095be37004f91 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  31         .get_eeprom_size                =3D rtl92e_g=
-et_eeprom_size,
-> > df85a1313fee7d drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  32         .init_adapter_variable          =3D rtl92e_i=
-nit_variables,
-> > 460266292de1c3 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  33         .initialize_adapter             =3D rtl92e_s=
-tart_adapter,
-> > b974b289c4cb8a drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  34         .link_change                    =3D rtl92e_l=
-ink_change,
-> > 072b3948d473f8 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  35         .tx_fill_descriptor             =3D rtl92e_f=
-ill_tx_desc,
-> > 63b544a17c63c0 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  36         .tx_fill_cmd_descriptor         =3D rtl92e_f=
-ill_tx_cmd_desc,
-> > 7897285ceb2864 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  37         .rx_query_status_descriptor     =3D rtl92e_g=
-et_rx_stats,
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  38         .rx_command_packet_handler =3D NULL,
-> > fe99c77b44e41c drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  39         .stop_adapter                   =3D rtl92e_s=
-top_adapter,
-> > 575d48c5753246 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  40         .update_ratr_table              =3D rtl92e_u=
-pdate_ratr_table,
-> > 6d99c68e6f5024 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  41         .irq_enable                     =3D rtl92e_e=
-nable_irq,
-> > baadea565daae4 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  42         .irq_disable                    =3D rtl92e_d=
-isable_irq,
-> > dc578b417facae drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  43         .irq_clear                      =3D rtl92e_c=
-lear_irq,
-> > 78c352b2b22348 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  44         .rx_enable                      =3D rtl92e_e=
-nable_rx,
-> > 6af7a8b662f6bb drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  45         .tx_enable                      =3D rtl92e_e=
-nable_tx,
-> > a57165d15dae6f drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  46         .interrupt_recognized           =3D rtl92e_a=
-ck_irq,
-> > c9cf5e78f3b28e drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  47         .TxCheckStuckHandler            =3D rtl92e_i=
-s_tx_stuck,
-> > 4d73bd2636f51a drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kul=
-ikowski 2015-07-19  48         .RxCheckStuckHandler            =3D rtl92e_i=
-s_rx_stuck,
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  49  };
-> > 94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finge=
-r       2011-08-23  50
-> >
-> > :::::: The code at line 29 was first introduced by commit
-> > :::::: 1c099ed63f8363228a0b075a25511c9feb90e03f staging: rtl8192e: cons=
-tify local structures
-> >
-> > :::::: TO: Julia Lawall <Julia.Lawall@lip6.fr>
-> > :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
->
-> Hi,
->
-> if anybody needs my help please let me know.
->
-> I do not know what to do with this message.
->
-> Thanks for your support.
->
-> Bye Philipp
->
->
->
+>> drivers/gpu/drm/i915/display/intel_display.c:6012:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   case I915_FORMAT_MOD_X_TILED:
+                   ^
+   drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert 'break;' to avoid fall-through
+                   case I915_FORMAT_MOD_X_TILED:
+                   ^
+                   break; 
+   1 warning generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +6012 drivers/gpu/drm/i915/display/intel_display.c
+
+b0b2bed2a1305c Ville Syrjälä         2022-02-14  5931  
+b0b2bed2a1305c Ville Syrjälä         2022-02-14  5932  static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct intel_crtc *crtc)
+30ff93af9e19db Karthik B S           2020-09-21  5933  {
+30ff93af9e19db Karthik B S           2020-09-21  5934  	struct drm_i915_private *i915 = to_i915(state->base.dev);
+30ff93af9e19db Karthik B S           2020-09-21  5935  	const struct intel_crtc_state *old_crtc_state, *new_crtc_state;
+30ff93af9e19db Karthik B S           2020-09-21  5936  	const struct intel_plane_state *new_plane_state, *old_plane_state;
+30ff93af9e19db Karthik B S           2020-09-21  5937  	struct intel_plane *plane;
+30ff93af9e19db Karthik B S           2020-09-21  5938  	int i;
+30ff93af9e19db Karthik B S           2020-09-21  5939  
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5940  	old_crtc_state = intel_atomic_get_old_crtc_state(state, crtc);
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5941  	new_crtc_state = intel_atomic_get_new_crtc_state(state, crtc);
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5942  
+b0b2bed2a1305c Ville Syrjälä         2022-02-14  5943  	if (!new_crtc_state->uapi.async_flip)
+b0b2bed2a1305c Ville Syrjälä         2022-02-14  5944  		return 0;
+b0b2bed2a1305c Ville Syrjälä         2022-02-14  5945  
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5946  	if (!new_crtc_state->hw.active) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5947  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5948  			    "[CRTC:%d:%s] not active\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5949  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  5950  		return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  5951  	}
+30ff93af9e19db Karthik B S           2020-09-21  5952  
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5953  	if (intel_crtc_needs_modeset(new_crtc_state)) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5954  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5955  			    "[CRTC:%d:%s] modeset required\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5956  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  5957  		return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  5958  	}
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5959  
+30ff93af9e19db Karthik B S           2020-09-21  5960  	if (old_crtc_state->active_planes != new_crtc_state->active_planes) {
+30ff93af9e19db Karthik B S           2020-09-21  5961  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5962  			    "[CRTC:%d:%s] Active planes cannot be in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  5963  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  5964  		return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  5965  	}
+30ff93af9e19db Karthik B S           2020-09-21  5966  
+30ff93af9e19db Karthik B S           2020-09-21  5967  	for_each_oldnew_intel_plane_in_state(state, plane, old_plane_state,
+30ff93af9e19db Karthik B S           2020-09-21  5968  					     new_plane_state, i) {
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5969  		if (plane->pipe != crtc->pipe)
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5970  			continue;
+0826edb6a5e5b3 José Roberto de Souza 2021-10-29  5971  
+30ff93af9e19db Karthik B S           2020-09-21  5972  		/*
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5973  		 * Only async flip capable planes should be in the state
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5974  		 * if we're really about to ask the hardware to perform
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5975  		 * an async flip. We should never get this far otherwise.
+30ff93af9e19db Karthik B S           2020-09-21  5976  		 */
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5977  		if (drm_WARN_ON(&i915->drm,
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5978  				new_crtc_state->do_async_flip && !plane->async_flip))
+30ff93af9e19db Karthik B S           2020-09-21  5979  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  5980  
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5981  		/*
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5982  		 * Only check async flip capable planes other planes
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5983  		 * may be involved in the initial commit due to
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5984  		 * the wm0/ddb optimization.
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5985  		 *
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5986  		 * TODO maybe should track which planes actually
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5987  		 * were requested to do the async flip...
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5988  		 */
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5989  		if (!plane->async_flip)
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5990  			continue;
+2e08437160d1e8 Ville Syrjälä         2022-02-14  5991  
+30ff93af9e19db Karthik B S           2020-09-21  5992  		/*
+30ff93af9e19db Karthik B S           2020-09-21  5993  		 * FIXME: This check is kept generic for all platforms.
+244dba4cb59637 Lucas De Marchi       2021-07-28  5994  		 * Need to verify this for all gen9 platforms to enable
+30ff93af9e19db Karthik B S           2020-09-21  5995  		 * this selectively if required.
+30ff93af9e19db Karthik B S           2020-09-21  5996  		 */
+30ff93af9e19db Karthik B S           2020-09-21  5997  		switch (new_plane_state->hw.fb->modifier) {
+937859485aefed Arun R Murthy         2022-09-06  5998  		case DRM_FORMAT_MOD_LINEAR:
+937859485aefed Arun R Murthy         2022-09-06  5999  			/*
+937859485aefed Arun R Murthy         2022-09-06  6000  			 * FIXME: Async on Linear buffer is supported on ICL as
+937859485aefed Arun R Murthy         2022-09-06  6001  			 * but with additional alignment and fbc restrictions
+937859485aefed Arun R Murthy         2022-09-06  6002  			 * need to be taken care of. These aren't applicable for
+937859485aefed Arun R Murthy         2022-09-06  6003  			 * gen12+.
+937859485aefed Arun R Murthy         2022-09-06  6004  			 */
+937859485aefed Arun R Murthy         2022-09-06  6005  			if (DISPLAY_VER(i915) < 12) {
+937859485aefed Arun R Murthy         2022-09-06  6006  				drm_dbg_kms(&i915->drm,
+937859485aefed Arun R Murthy         2022-09-06  6007  					    "[PLANE:%d:%s] Modifier does not support async flips\n",
+937859485aefed Arun R Murthy         2022-09-06  6008  					    plane->base.base.id, plane->base.name);
+937859485aefed Arun R Murthy         2022-09-06  6009  				return -EINVAL;
+937859485aefed Arun R Murthy         2022-09-06  6010  			}
+937859485aefed Arun R Murthy         2022-09-06  6011  
+30ff93af9e19db Karthik B S           2020-09-21 @6012  		case I915_FORMAT_MOD_X_TILED:
+30ff93af9e19db Karthik B S           2020-09-21  6013  		case I915_FORMAT_MOD_Y_TILED:
+30ff93af9e19db Karthik B S           2020-09-21  6014  		case I915_FORMAT_MOD_Yf_TILED:
+072ce4164f973b Stanislav Lisovskiy   2022-01-18  6015  		case I915_FORMAT_MOD_4_TILED:
+30ff93af9e19db Karthik B S           2020-09-21  6016  			break;
+30ff93af9e19db Karthik B S           2020-09-21  6017  		default:
+30ff93af9e19db Karthik B S           2020-09-21  6018  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6019  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6020  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6021  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6022  		}
+30ff93af9e19db Karthik B S           2020-09-21  6023  
+aaec72ee90bccc Ville Syrjälä         2021-10-18  6024  		if (new_plane_state->hw.fb->format->num_planes > 1) {
+aaec72ee90bccc Ville Syrjälä         2021-10-18  6025  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6026  				    "[PLANE:%d:%s] Planar formats do not support async flips\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6027  				    plane->base.base.id, plane->base.name);
+aaec72ee90bccc Ville Syrjälä         2021-10-18  6028  			return -EINVAL;
+aaec72ee90bccc Ville Syrjälä         2021-10-18  6029  		}
+aaec72ee90bccc Ville Syrjälä         2021-10-18  6030  
+be6c1dd5ac074d Imre Deak             2021-10-27  6031  		if (old_plane_state->view.color_plane[0].mapping_stride !=
+be6c1dd5ac074d Imre Deak             2021-10-27  6032  		    new_plane_state->view.color_plane[0].mapping_stride) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6033  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6034  				    "[PLANE:%d:%s] Stride cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6035  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6036  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6037  		}
+30ff93af9e19db Karthik B S           2020-09-21  6038  
+30ff93af9e19db Karthik B S           2020-09-21  6039  		if (old_plane_state->hw.fb->modifier !=
+30ff93af9e19db Karthik B S           2020-09-21  6040  		    new_plane_state->hw.fb->modifier) {
+30ff93af9e19db Karthik B S           2020-09-21  6041  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6042  				    "[PLANE:%d:%s] Modifier cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6043  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6044  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6045  		}
+30ff93af9e19db Karthik B S           2020-09-21  6046  
+30ff93af9e19db Karthik B S           2020-09-21  6047  		if (old_plane_state->hw.fb->format !=
+30ff93af9e19db Karthik B S           2020-09-21  6048  		    new_plane_state->hw.fb->format) {
+30ff93af9e19db Karthik B S           2020-09-21  6049  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6050  				    "[PLANE:%d:%s] Pixel format cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6051  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6052  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6053  		}
+30ff93af9e19db Karthik B S           2020-09-21  6054  
+30ff93af9e19db Karthik B S           2020-09-21  6055  		if (old_plane_state->hw.rotation !=
+30ff93af9e19db Karthik B S           2020-09-21  6056  		    new_plane_state->hw.rotation) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6057  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6058  				    "[PLANE:%d:%s] Rotation cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6059  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6060  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6061  		}
+30ff93af9e19db Karthik B S           2020-09-21  6062  
+30ff93af9e19db Karthik B S           2020-09-21  6063  		if (!drm_rect_equals(&old_plane_state->uapi.src, &new_plane_state->uapi.src) ||
+30ff93af9e19db Karthik B S           2020-09-21  6064  		    !drm_rect_equals(&old_plane_state->uapi.dst, &new_plane_state->uapi.dst)) {
+30ff93af9e19db Karthik B S           2020-09-21  6065  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6066  				    "[PLANE:%d:%s] Size/co-ordinates cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6067  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6068  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6069  		}
+30ff93af9e19db Karthik B S           2020-09-21  6070  
+30ff93af9e19db Karthik B S           2020-09-21  6071  		if (old_plane_state->hw.alpha != new_plane_state->hw.alpha) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6072  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6073  				    "[PLANES:%d:%s] Alpha value cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6074  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6075  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6076  		}
+30ff93af9e19db Karthik B S           2020-09-21  6077  
+30ff93af9e19db Karthik B S           2020-09-21  6078  		if (old_plane_state->hw.pixel_blend_mode !=
+30ff93af9e19db Karthik B S           2020-09-21  6079  		    new_plane_state->hw.pixel_blend_mode) {
+30ff93af9e19db Karthik B S           2020-09-21  6080  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6081  				    "[PLANE:%d:%s] Pixel blend mode cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6082  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6083  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6084  		}
+30ff93af9e19db Karthik B S           2020-09-21  6085  
+30ff93af9e19db Karthik B S           2020-09-21  6086  		if (old_plane_state->hw.color_encoding != new_plane_state->hw.color_encoding) {
+30ff93af9e19db Karthik B S           2020-09-21  6087  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6088  				    "[PLANE:%d:%s] Color encoding cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6089  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6090  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6091  		}
+30ff93af9e19db Karthik B S           2020-09-21  6092  
+30ff93af9e19db Karthik B S           2020-09-21  6093  		if (old_plane_state->hw.color_range != new_plane_state->hw.color_range) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6094  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6095  				    "[PLANE:%d:%s] Color range cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6096  				    plane->base.base.id, plane->base.name);
+30ff93af9e19db Karthik B S           2020-09-21  6097  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6098  		}
+ef6ba31dd38405 Anshuman Gupta        2021-09-24  6099  
+ef6ba31dd38405 Anshuman Gupta        2021-09-24  6100  		/* plane decryption is allow to change only in synchronous flips */
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6101  		if (old_plane_state->decrypt != new_plane_state->decrypt) {
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6102  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6103  				    "[PLANE:%d:%s] Decryption cannot be changed in async flip\n",
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6104  				    plane->base.base.id, plane->base.name);
+ef6ba31dd38405 Anshuman Gupta        2021-09-24  6105  			return -EINVAL;
+30ff93af9e19db Karthik B S           2020-09-21  6106  		}
+6b4e414ce8dab7 Ville Syrjälä         2022-02-14  6107  	}
+30ff93af9e19db Karthik B S           2020-09-21  6108  
+30ff93af9e19db Karthik B S           2020-09-21  6109  	return 0;
+30ff93af9e19db Karthik B S           2020-09-21  6110  }
+30ff93af9e19db Karthik B S           2020-09-21  6111  
+
+:::::: The code at line 6012 was first introduced by commit
+:::::: 30ff93af9e19dbe88ff8b5e711e05b26b991eec0 drm/i915: Add checks specific to async flips
+
+:::::: TO: Karthik B S <karthik.b.s@intel.com>
+:::::: CC: Ville Syrjälä <ville.syrjala@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
