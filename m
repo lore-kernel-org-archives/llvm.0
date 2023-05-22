@@ -1,72 +1,94 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6A9A94C;
-	Mon, 22 May 2023 10:09:45 +0000 (UTC)
-Received: from localhost (unknown [IPv6:2a0c:5a83:9203:ad00:c068:e703:1301:7049])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: rcn)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 96EB36605706;
-	Mon, 22 May 2023 11:09:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1684750177;
-	bh=6rimz3xbCtOIAsgtzqTRf5vqJmiKmuivxmZtfJtFqCI=;
-	h=From:To:Cc:Subject:References:In-reply-to:Date:From;
-	b=BSK1xoZm/IlfL0P2CI3I3YbJsUU8lZSAIrGKGgUQiJ7odBhMH22zguUC+xNsHcdVO
-	 2LCJXoaTEATkpK/ZlNsSisuMThoQdIRp75V85qbkBbXcH5EpULVkY0z6L5vfP4q3rZ
-	 LOGRmm+cAQUZFNyeaFkKHi1ANHYn7dF7tscSTYc1hMFgYCwUadXkmfkbrsKMkQdDhU
-	 MQrjFsEKl60dR9U0IGPkc4HCUtRhMtSwp4rs7R676LQc7nY2ZahVmAdNmfR/xBuuW8
-	 rIowwyVVqaBa4c/ha/RZaffma63e7jl6O1PTm0uj4o3Yp7Z6Mx4iXmOWrwqyZAsUIS
-	 RLihHMT+ezdOg==
-From: Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Shreeya Patel <shreeya.patel@collabora.com>, Michal Marek <michal.lkml@markovi.net>, Masahiro Yamada <masahiroy@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev, "gustavo.padovan\@collabora.com" <gustavo.padovan@collabora.com>, Guillaume Charles Tucker <guillaume.tucker@collabora.com>, denys.f@collabora.com, kernelci@lists.linux.dev, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with compiler-specific macros
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com> <20220919170828.3718437-1-ndesaulniers@google.com> <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com> <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com> <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com> <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com> <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com> <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com> <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com> <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com> <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me> <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com> <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me> <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
-In-reply-to: <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
-Date: Mon, 22 May 2023 12:09:34 +0200
-Message-ID: <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6635614AAA;
+	Mon, 22 May 2023 15:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684769852; x=1716305852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3vkAkGR1H0Odi36ga9DiWtTDEHZIWL7hLa3OCts4M1s=;
+  b=NUHcT7Wf3HThgu3+FSjEbbR/KNGg6BeNl2+d6wQSyN5theZJbOz+qZSX
+   OZWyTJDD//HXpmU//QeJEVEp/6U2sgfVnsqSCTDTm8V0Tw7gbwZ3pu2Jh
+   pd+5K6mBR4Y4DuZgwLeOB8eY+EK0/VTEkU/OHZ+tHApewjtETjkpUjb8L
+   s/QWChXKGiAzjhiyPScCEkv8Hvu5pANt5FngOgUWHks1n2s/YBSxZJz8Z
+   a3jhKh2weoZBBJtNrROkQuXMVL/rxqpFPY+LS0z00q8pFAOX1dDE6arXv
+   uysFcwavJKDbvh4yZCkC5pymiX1yRRUcPr1YPnf19Y/JLmQpdapJ/afgt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="355303534"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="355303534"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 08:37:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="773408587"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="773408587"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 May 2023 08:36:48 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q17aZ-000CxD-1R;
+	Mon, 22 May 2023 15:36:47 +0000
+Date: Mon, 22 May 2023 23:35:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: ndesaulniers@google.com, David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>, keyrings@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] certs: buffer stderr from openssl unless error
+Message-ID: <202305222321.45ezNpB8-lkp@intel.com>
+References: <20230517-genkey-v1-1-b887424da4a8@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517-genkey-v1-1-b887424da4a8@google.com>
 
-On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> It could be; if the link order was changed, it's possible that this
-> target may be hitting something along the lines of:
-> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
-> initialization order fiasco"
->
-> I'm struggling to think of how this appears in C codebases, but I
-> swear years ago I had a discussion with GKH (maybe?) about this. I
-> think I was playing with converting Kbuild to use Ninja rather than
-> Make; the resulting kernel image wouldn't boot because I had modified
-> the order the object files were linked in.  If you were to randomly
-> shuffle the object files in the kernel, I recall some hazard that may
-> prevent boot.
+Hi,
 
-I thought that was specifically a C++ problem? But then again, the
-kernel docs explicitly say that the ordering of obj-y goals in kbuild is
-significant in some instances [1]:
+kernel test robot noticed the following build errors:
 
-    --- 3.2 Built-in object goals - obj-y
+[auto build test ERROR on f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6]
 
-    [...]
+url:    https://github.com/intel-lab-lkp/linux/commits/ndesaulniers-google-com/certs-buffer-stderr-from-openssl-unless-error/20230518-004753
+base:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+patch link:    https://lore.kernel.org/r/20230517-genkey-v1-1-b887424da4a8%40google.com
+patch subject: [PATCH] certs: buffer stderr from openssl unless error
+config: arm-randconfig-r046-20230521 (https://download.01.org/0day-ci/archive/20230522/202305222321.45ezNpB8-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/0e437a41fdb41c84834de6776bf38951b197792a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review ndesaulniers-google-com/certs-buffer-stderr-from-openssl-unless-error/20230518-004753
+        git checkout 0e437a41fdb41c84834de6776bf38951b197792a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-    Link order is significant, because certain functions (module_init()
-    / __initcall) will be called during boot in the order they
-    appear. So keep in mind that changing the link order may e.g. change
-    the order in which your SCSI controllers are detected, and thus your
-    disks are renumbered.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305222321.45ezNpB8-lkp@intel.com/
 
-We'll dig deeper into this. Thanks for your insight.
+All errors (new ones prefixed by >>):
 
-Cheers,
-Ricardo
+   At main.c:152:
+   - SSL error:FFFFFFFF80000002:system library::No such file or directory: ../crypto/bio/bss_file.c:67
+   - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c:75
+>> extract-cert: certs/signing_key.pem: No such file or directory
 
-[1]: https://www.kernel.org/doc/Documentation/kbuild/makefiles.txt
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
