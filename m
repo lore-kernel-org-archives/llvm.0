@@ -1,96 +1,105 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42412154A9
-	for <llvm@lists.linux.dev>; Mon, 22 May 2023 16:29:52 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-64d3578c25bso3966332b3a.3
-        for <llvm@lists.linux.dev>; Mon, 22 May 2023 09:29:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA529D309
+	for <llvm@lists.linux.dev>; Mon, 22 May 2023 16:36:07 +0000 (UTC)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-19a16355c51so4476974fac.0
+        for <llvm@lists.linux.dev>; Mon, 22 May 2023 09:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684772991; x=1687364991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAkKcxK0XGy2Mfzb+3G4ZZig1suIGlcPXW3ZGdiAVSA=;
-        b=gKMZ7XX4R2VVh8UsICMu0Rsyke0XrW2c+iRdHHRt3WLWOycJO32Iy04zCNODgFfd4R
-         D4saMqcStc+sMP83KAqZHxF2yw/+92d97pUSNL7+DK5dQh/BOcnBAvDWU4hq8cJ8XihR
-         OQLsKlHjjTFnvdXZubmLG44LfUVnxjSa3p52hs0BL3K4cwahT81s2Hx9+Bdv0qu7aLbF
-         ypDYOKDI/6neL9kriVO66DUnXuCexjPu/JMQ3Be9CuN3HLdNfGmSa68Haud473dFlm6G
-         uHkL8p193PWUoqP27x/gjhz+62Sa43tbwWREDY4bohSEJx4mwzjNkV4JO3kgrnBTjdwE
-         e0yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684772991; x=1687364991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684773367; x=1687365367;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FAkKcxK0XGy2Mfzb+3G4ZZig1suIGlcPXW3ZGdiAVSA=;
-        b=IY1c2AuJ9Ecoi/Dfz4/ajd4qsPZo0WWTZuMStk5AJZ87XVah480VTDaoZjN2hdysA0
-         3bYgBvv8/nvDVV88JhOTQkOElyMg4rciIRX/FDlk4/s3sUT/9DmVVV07gCuBpPW5EgAu
-         vtSOMhRE6bSgv+zIcuc9jPGcRQOCv451C2yhbmgdeqP+nSkoKz7XSXE3Trj+vFFj/DAu
-         RZVAA/2Sk4i4clMjkfNiZTYrSVhuXtwWW4jUDcFzCQeJ2f9iqEZSDSpToyeqt5bQsVlD
-         yLteKhODPFWgjCiM1VW+kmnzpEjLpEz994KJGnrbbizMwX5z9+GWbqR2S22rKlqPM5vW
-         czsQ==
-X-Gm-Message-State: AC+VfDxqlk8k7bIX7FbvQAXjroDendlRhAH7dQaeDCJXdqdZcP91pXnB
-	5BTK1TwXlW4EjDJixQhpnY6d4g==
-X-Google-Smtp-Source: ACHHUZ5GdkVEPhjfb0wo1cG4veSdeV7NVtA9Usryrtr3shd7i6atVl1mHOPkqK3UwqkqrLKZFvovrA==
-X-Received: by 2002:a05:6a00:1307:b0:64b:256:204c with SMTP id j7-20020a056a00130700b0064b0256204cmr14436082pfu.20.1684772991208;
-        Mon, 22 May 2023 09:29:51 -0700 (PDT)
-Received: from google.com ([2620:15c:2d1:203:f7a6:d766:a921:add2])
-        by smtp.gmail.com with ESMTPSA id r14-20020a63514e000000b0050f93a3586fsm4597933pgl.37.2023.05.22.09.29.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 09:29:50 -0700 (PDT)
-Date: Mon, 22 May 2023 09:29:44 -0700
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Alex Deucher <alexander.deucher@amd.com>
-Cc: Alex Deucher <alexdeucher@gmail.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Felix Kuehling <Felix.Kuehling@amd.com>,
-	Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-	Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <ZGuYeDA9jDlxzfZN@google.com>
-References: <20230522171557.32027acf@canb.auug.org.au>
+        bh=gE6VEcd6SehC09OLRuj4spGCMv2zTi9X2ZUJCimN/cs=;
+        b=qXdboosidh2M1j9oJmWe2Vzv5zswW5Ta90fX/3QP4glyDrkjOQ1uDu+ghyYwnWa5od
+         Qh1n+VgXDY44q/AmQvJWADGHdU7sAdQLubfxKSi7HDEkrEgN+yr2e6r1HqeCWXnZ8OIy
+         MRRiCa9SPdionSCLe26ou5pHylT2HKDb69XeJdUTcjIjCa2S6EqvJnXwnNyPeoRuWmpA
+         NGD3vMOzZkV6Ay5aUTr4y5b7f0SaeMFL97RGaJ50A/Rqbk3AicN2McLe9AVMiPqjkp3c
+         4JJBq3v3lBKizJ3t/1qrAbvIoBOphCFVzx/3v+R8c1ECmKJDXIXbGXXOPRauY9refL8e
+         yw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684773367; x=1687365367;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gE6VEcd6SehC09OLRuj4spGCMv2zTi9X2ZUJCimN/cs=;
+        b=kgyPvd+4tuhTJmRgjgeFWabwbIzHc2ma3QTm5JjJL+VwRbBN3kF9UEwEfQJ6RF3dKT
+         w/ObGT5G+ATqpv1dD40YZvm/spUaqsAV1V55YiMdG0mbqb1MyuhPj/tZRyDAB+dZqS/1
+         S8ksHkoAB+6JPU/+cUBhDjAmsaMDCcr9DYIcV+45zgYHw1eTUaIxwM7XHkf/tZ696U45
+         z2PZss3jA4xWSGJweGAA3feero02Gtvu41zEhjJprZDVwnsapT0jl/88vT+/EGVCQDln
+         lEeJW2j2VeAvQRPOAKIBJ0KQWxJQq4CqURjgXPtqykI6z6fgzkZYWgLnEIqcPvJxA+Kf
+         PVOA==
+X-Gm-Message-State: AC+VfDxCCYmr8o++XMdVxnHooQpcf/oGULjrV1PG05OkcOVu3fnWqHem
+	25BQncK313bJkf3LvJKuEWlvEMLaw0WEVGBgdP0=
+X-Google-Smtp-Source: ACHHUZ5Q2A3P446/ClvG0cbEyqJw5C98bhbbV/2l1fuktu3rGaOBg+8fbLOO5RN66inW4ZDkM7KG57e8jxOpWY0meHE=
+X-Received: by 2002:a05:6870:6183:b0:192:736c:ae28 with SMTP id
+ a3-20020a056870618300b00192736cae28mr4686856oah.58.1684773366819; Mon, 22 May
+ 2023 09:36:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522171557.32027acf@canb.auug.org.au>
+References: <20230522171557.32027acf@canb.auug.org.au> <ZGuYeDA9jDlxzfZN@google.com>
+In-Reply-To: <ZGuYeDA9jDlxzfZN@google.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 22 May 2023 12:35:55 -0400
+Message-ID: <CADnq5_OoGDVWX5UwV_hQQBfPorBuE2jJymMA-hW+Y3+7ni0f5g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Felix Kuehling <Felix.Kuehling@amd.com>, 
+	Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>, 
+	Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 22, 2023 at 05:15:57PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the amdgpu tree, today's linux-next build (arm allmodconfig
-> clang-17) failed like this:
-> 
-> drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c:146:54: error: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Werror,-Wformat]
-> 
-> Caused by commit
-> 
->   d020a29b6b58 ("drm/amdgpu: Allocate GART table in RAM for AMD APU")
-> 
-> Reported by the kernelci.org bot.
+On Mon, May 22, 2023 at 12:29=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, May 22, 2023 at 05:15:57PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > After merging the amdgpu tree, today's linux-next build (arm allmodconf=
+ig
+> > clang-17) failed like this:
+> >
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c:146:54: error: format specifie=
+s type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'un=
+signed int') [-Werror,-Wformat]
+> >
+> > Caused by commit
+> >
+> >   d020a29b6b58 ("drm/amdgpu: Allocate GART table in RAM for AMD APU")
+> >
+> > Reported by the kernelci.org bot.
+>
+> Alex,
+> This is the third report of linux-next being broken for clang due to the
+> AMDGPU tree.
+> 1. https://lore.kernel.org/lkml/20230522171557.32027acf@canb.auug.org.au/
+> 2. https://lore.kernel.org/lkml/20230522171145.38a8bd4d@canb.auug.org.au/
+> 3. https://lore.kernel.org/lkml/20230522170031.5fb87a64@canb.auug.org.au/
+>
+> Our CI is red as a result.
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5=
+045716034/jobs/9053211936
+>
+> When will AMD start testing their kernels with Clang?
 
-Alex,
-This is the third report of linux-next being broken for clang due to the
-AMDGPU tree.
-1. https://lore.kernel.org/lkml/20230522171557.32027acf@canb.auug.org.au/
-2. https://lore.kernel.org/lkml/20230522171145.38a8bd4d@canb.auug.org.au/
-3. https://lore.kernel.org/lkml/20230522170031.5fb87a64@canb.auug.org.au/
+We have clang as part of our CI system and have had it for a while.
+I'm not sure why it didn't catch these.  Our CI clang builds are
+currently passing.
 
-Our CI is red as a result.
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5045716034/jobs/9053211936
+Alex
 
-When will AMD start testing their kernels with Clang?
-
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-Thanks for reporting these, Stephen.
+>
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+>
+> Thanks for reporting these, Stephen.
