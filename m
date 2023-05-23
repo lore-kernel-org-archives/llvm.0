@@ -1,34 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2642108F;
-	Tue, 23 May 2023 17:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA6DC433D2;
-	Tue, 23 May 2023 17:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9198209B5
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 17:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF95C433EF;
+	Tue, 23 May 2023 17:49:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684863927;
-	bh=WDbsACUQd1IF+k1hIhlvOW4slr9SiGw/AoALXjeIN2w=;
+	s=k20201202; t=1684864155;
+	bh=WulWyTLsl5PkcQrddm9jfceGIGntrpe2tN+xa+us7bo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kvu06m8uR/gzHmaMeZ8yskr2pkb8aQ7wjeZgR2gLxnQYsiOBECwlSWO6svIkSzWth
-	 Uxg6SfRCkjiME5QNfMVkwh6vNddIO1LFud6Vkbyn9ybAz29qKSYWi5j97gtXjacsWi
-	 lcKTtCj1prN+eriMBCCgEGRoECtNkxJQR8vCGQDdf3ainf/r9jeaTOGJkS9Vxsguj9
-	 Y7vulhJUb43smwWq6/hum2HXnSaR7ITnKcocAi+iN5R+4QPGr6jBypWluBwV+YsuHq
-	 aPJViChOY61wplkuN5tJ68cIR2l4OCWRouhOQvxQj8aabWwh38HiwYW63SLZcz2KLs
-	 FRsDD3RMLCVQg==
-Date: Tue, 23 May 2023 10:45:25 -0700
+	b=cX2tItOE1A1Jntu+R2QwFXn1l2foJFtg3vTP5UqBKoyZAx1yIVSFWvsSppTEK/EOP
+	 lN7uZmcVpfDnJLrPAK6p60xdJr60YQkvTKJ9egHit5rKTgaVtlfC5DrIIcVuVa1PFF
+	 q1Rgb8mF6vjH0jYHR6CmpB5cz3pG5RY46o+x53evUnUB2rCdD4iCI7gCRQZHsgiqA2
+	 KwyIutNcCQl9ndkkDPM89DD6D+5+/8NAiqoAUZuwyjrrjqs0bnFJc7HxI/H/oHPED7
+	 K2Hu1Wx4MD5Ad4NUkal8QwWsuF0f1J8vGR9nTjgaKW8lAvglCsQTkZQ8a3n3daoFjQ
+	 tIlPVx23OT0Gg==
+Date: Tue, 23 May 2023 10:49:13 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Kees Cook <keescook@chromium.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [stable:linux-5.15.y 36/9999] arch/s390/kernel/vtime.c:132:2:
- error: expected absolute expression
-Message-ID: <20230523174525.GA1388474@dev-arch.thelio-3990X>
-References: <202305111705.8j4cTm2s-lkp@intel.com>
- <202305111519.04845F7@keescook>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+	Qing Zhao <qing.zhao@oracle.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+Message-ID: <20230523174913.GB1388474@dev-arch.thelio-3990X>
+References: <20230517190841.gonna.796-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,34 +35,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202305111519.04845F7@keescook>
+In-Reply-To: <20230517190841.gonna.796-kees@kernel.org>
 
-On Thu, May 11, 2023 at 03:21:01PM -0700, Kees Cook wrote:
-> On Thu, May 11, 2023 at 05:14:16PM +0800, kernel test robot wrote:
-> > FYI, the error/warning still remains.
-> > 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-> > head:   8a7f2a5c5aa1648edb4f2029c6ec33870afb7a95
-> > commit: 33db9912ff7c491f839c89a08e98f755aa09598f [36/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-> > [...]
-> > >> arch/s390/kernel/vtime.c:132:2: error: cpu alternatives does not support instructions blocks > 254 bytes
-> >            alternative_io("stpt %0\n .insn s,0xb2050000,%1\n",
-> >            ^
+On Wed, May 17, 2023 at 12:08:44PM -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
 > 
-> Thanks for the report! I don't think the new errors are related to this
-> removal, though. This patch was just disabling a potential build config.
+> Even though the attribute is under development, we can start the
+> annotation process in the kernel. This requires defining a macro for
+> it, even if we have to change the name of the actual attribute later.
+> Since it is likely that this attribute may change its name to "counted_by"
+> in the future (to better align with a future total bytes "sized_by"
+> attribute), name the wrapper macro "__counted_by", which also reads more
+> clearly (and concisely) in structure definitions.
+> 
+> [1] https://reviews.llvm.org/D148381
+> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> 
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Qing Zhao <qing.zhao@oracle.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Right, I am not really sure how the robot landed on this (perhaps there
-was another error that was being exposed by CONFIG_UBSAN_OBJECT_SIZE
-that disappeared with its removal?) but this is a problem with s390
-specific code and clang's integrated assembler. I suspect it would be
-fixed with one of the patches from this series that landed in 5.19 but I
-have not looked too closely:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-https://lore.kernel.org/20220511120532.2228616-1-hca@linux.ibm.com/
-https://lore.kernel.org/Yot+xzLZETNTxNo+@osiris/
-
-We use LLVM_IAS=0 for s390 on 5.15 in CI, hence why we do not see this.
-
-Cheers,
-Nathan
+> ---
+> v2: - update "Optional" comments
+> v1: https://lore.kernel.org/all/20230504181636.never.222-kees@kernel.org/
+> ---
+>  include/linux/compiler_attributes.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..a92d8887e8f0 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -123,6 +123,19 @@
+>  # define __designated_init
+>  #endif
+>  
+> +/*
+> + * Optional: only supported since gcc >= 14
+> + * Optional: only supported since clang >= 17
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__element_count__)
+> +# define __counted_by(member)		__attribute__((__element_count__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since clang >= 14.0
+>   *
+> -- 
+> 2.34.1
+> 
