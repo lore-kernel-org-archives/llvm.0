@@ -1,119 +1,87 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7661A1E501;
-	Tue, 23 May 2023 10:27:19 +0000 (UTC)
-Received: from [IPV6:2405:201:0:21ea:e49:10dd:40c0:e842] (unknown [IPv6:2405:201:0:21ea:e49:10dd:40c0:e842])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: shreeya)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FE4A6606E75;
-	Tue, 23 May 2023 11:27:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1684837632;
-	bh=/cZpY/DKk5fAZOo6SiYRERzxSUjyx353F4endTRRSo4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=btnZAAQPlKxgroncGmTp3yjgSRL5MgT6cZvPcPX4larqhFPob0jvaz5BeIOl18OPl
-	 PZd+Pbf8QIJY5xSHJ6y57ZzWy3167LwYDoLqg3ENVXMBaBsDVZ5R3fJBJDu+ePfeKi
-	 Frh1Mc313r6OdfIUrP1trhhPaqCXTlOWfwecZgDZwd3tkNNp36VndrF8XXwgYVYMGc
-	 MjoDNgU78Aza3z8wgCJhMaffnZFAWFhqdDVzLFYgmivitI403nWwNZbb2oNXJeQKDG
-	 ZLUcrBeZT51Pw5gLMhdvqLf60ndM2RWjKiSgmILIOKmpI7cU/v+nf5+KAw3wn1SGmQ
-	 3fyLvdowXCRyw==
-Message-ID: <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
-Date: Tue, 23 May 2023 15:57:06 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0AC4A840
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 12:01:13 +0000 (UTC)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso1457706a12.2
+        for <llvm@lists.linux.dev>; Tue, 23 May 2023 05:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1684843271; x=1687435271;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
+        b=UlTc6dBhYhV5+FwOb+RSPI2rk8Q3qpFgLR3evPzNE3qoSA/1Tv938oYhaUah40zsTJ
+         f5TXQMK2Cs079ySx+YpwdRWznI362VlsBkVu90B+Ov9nuERDJwdJYMfohfmTSI2+kDdI
+         scPtnFlwU4iUXY9LM6WpBfRQbFpdHeGc4hMcAFqULPVX1fZW3lDlnnbfO1JqByHkrWWK
+         3iO8KQPZs0CPPK/LLdsYu6zc5ox+KJMKgleV+yRLT7U3LAyno33h5A9o/0CfapwLHQDI
+         veiFgFew6wafBYy17ZumPHmrNo9K9VFsHBpJb7AfKpU3Gm3sGMXUvay7WEwp5nxFryVv
+         cQlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684843271; x=1687435271;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
+        b=LQR7OfQ/0GFAErJyX5ImZ3FEpGdGoB747CmKEprdPUBd84/rBZ/yiJgNyhZO1t1fWa
+         DLMu0k/BUjBALrT2F4dNi1UjFfQmAARXWLCATh5ufJtVKUOg2wnClHhgmwULukpKFbIG
+         zGkwKKuVM/7vw3hGNq9TayW62Nd2J7nFvJrIh+Tz+Slc9k0yGFIoVGC/rUV60wQ6VrHg
+         uc+9ovf3fN6fsE7aws745lyxFXAVzU+Z2Iq89tCTUxbLU8niBXToKfmmeaR86ZQ9f9Zj
+         TjLAVEOKfR+jnAaqD5I7yf4tP0JTJNBXuIsjQfQJFdHDVE+0QPaQWFxfrbikFHmF7rN/
+         yTfg==
+X-Gm-Message-State: AC+VfDz1CucBaagVhPVAMtPz2UiXzREZa335aFuh2PWF7zRrTxAdnfWu
+	iRQuIUiOWGBGiR0aDWawQ2SDhA==
+X-Google-Smtp-Source: ACHHUZ40CX09dMi0e735PDRKFRNtfgI4LS6imtI87HuWDsDYP/q8KqRU12dipkCjnKzQegYx3Zmfiw==
+X-Received: by 2002:a17:906:d550:b0:966:4bb3:df63 with SMTP id cr16-20020a170906d55000b009664bb3df63mr15157840ejc.63.1684843271141;
+        Tue, 23 May 2023 05:01:11 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id t20-20020a17090616d400b009662c57b4ffsm4397666ejd.96.2023.05.23.05.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 05:01:10 -0700 (PDT)
+Date: Tue, 23 May 2023 14:01:09 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Tom Rix <trix@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
+	Mark Gross <markgross@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Zhou Wang <wangzhou1@hisilicon.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Thomas Gleixner <tglx@linutronix.de>, Maximilian Luz <luzmaximilian@gmail.com>, 
+	"David S . Miller" <davem@davemloft.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH V6 09/21] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <20230523-7263e5220667fd82a462afc7@orel>
+References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+ <20230515054928.2079268-10-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Greg KH
- <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, kernelci@lists.linux.dev
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com>
- <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
- <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
- <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
-From: Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515054928.2079268-10-sunilvl@ventanamicro.com>
 
-Hi Nick and Masahiro,
-
-On 23/05/23 01:22, Nick Desaulniers wrote:
-> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
->>>> It could be; if the link order was changed, it's possible that this
->>>> target may be hitting something along the lines of:
->>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
->>>> initialization order fiasco"
->>>>
->>>> I'm struggling to think of how this appears in C codebases, but I
->>>> swear years ago I had a discussion with GKH (maybe?) about this. I
->>>> think I was playing with converting Kbuild to use Ninja rather than
->>>> Make; the resulting kernel image wouldn't boot because I had modified
->>>> the order the object files were linked in.  If you were to randomly
->>>> shuffle the object files in the kernel, I recall some hazard that may
->>>> prevent boot.
->>> I thought that was specifically a C++ problem? But then again, the
->>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
->>> significant in some instances [1]:
->> Yes, it matters, you can not change it.  If you do, systems will break.
->> It is the only way we have of properly ordering our init calls within
->> the same "level".
-> Ah, right it was the initcall ordering. Thanks for the reminder.
->
-> (There's a joke in there similar to the use of regexes to solve a
-> problem resulting in two new problems; initcalls have levels for
-> ordering, but we still have (unexpressed) dependencies between calls
-> of the same level; brittle!).
->
-> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->
-> Ricardo,
-> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
-> mentions that there's a kernel command line param `initcall_debug`.
-> Perhaps that can be used to see if
-> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
-> ordering, resulting in a config that cannot boot?
+On Mon, May 15, 2023 at 11:19:16AM +0530, Sunil V L wrote:
+> RINTC structures in the MADT provide mapping between the hartid
+> and the CPU. This is required many times even at run time like
+> cpuinfo. So, instead of parsing the ACPI table every time, cache
+> the RINTC structures and provide a function to get the correct
+> RINTC structure for a given cpu.
+> 
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  arch/riscv/include/asm/acpi.h | 10 ++++++++
+>  arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/setup.c     |  4 ++++
+>  3 files changed, 59 insertions(+)
 
 
-Here are the links to Lava jobs ran with initcall_debug added to the 
-kernel command line.
-
-1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
-https://lava.collabora.dev/scheduler/job/10417706
-<https://lava.collabora.dev/scheduler/job/10417706>
-
-2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
-https://lava.collabora.dev/scheduler/job/10418012 
-<https://lava.collabora.dev/scheduler/job/10418012>
-
-
-Thanks,
-Shreeya Patel
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
