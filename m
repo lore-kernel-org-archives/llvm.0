@@ -1,126 +1,74 @@
-Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214161C744;
+	Tue, 23 May 2023 06:16:32 +0000 (UTC)
+Received: from 8bytes.org (p200300c2773e310086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:773e:3100:86ad:4f9d:2505:dd0d])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872D11B8EF
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 05:18:53 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VjIIOXp_1684811830;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VjIIOXp_1684811830)
-          by smtp.aliyun-inc.com;
-          Tue, 23 May 2023 11:17:13 +0800
-From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To: alexander.deucher@amd.com
-Cc: christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	sumit.semwal@linaro.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/amdgpu: Modify mismatched function name
-Date: Tue, 23 May 2023 11:17:09 +0800
-Message-Id: <20230523031709.19673-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+	by mail.8bytes.org (Postfix) with ESMTPSA id 8903B248122;
+	Tue, 23 May 2023 08:16:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+	s=default; t=1684822591;
+	bh=WOV2n4U1XIMeZwJcbGdXD+StZYMmpOBGIf0HW/AhkoM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yOsIw/HNKRz7NZTV+Dz+GAALftR2NsDkqjh619hMmQ76AwVH0DeVdfiGYiWnd/u5X
+	 3rpqnp1Px2m8aAuuh0iU3izkPYg1TR2XsekjUA8LGHgWDRmiAj6/MN57WhbNHNvRAB
+	 NBkNHAzNGXHU9Pd7lsrNAPhYY0/xiUk2n8wFmtztA5uavRPxGKYGghc5qsOgZjCnwg
+	 ePWz3dsvfYBVekareKjDEp/tmkdpT0qPq6jcR9v+mf6IVxRUUMev94vXsmUckdQVNH
+	 0Llzz0TZeyArieW0KT8EpU1Xecph7v/FJ3/eQVJzOuuWFF8qO5s+VsKARoB1h4bH/q
+	 xlDLkbDb46v+A==
+Date: Tue, 23 May 2023 08:16:30 +0200
+From: Joerg Roedel <joro@8bytes.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: iommu@lists.linux.dev, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+	Will Deacon <will@kernel.org>, Lu Baolu <baolu.lu@linux.intel.com>,
+	Heiko Stuebner <heiko@sntech.de>, Kevin Tian <kevin.tian@intel.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: Re: [PATCH v5 00/17] Consolidate the error handling around device
+ attachment
+Message-ID: <ZGxaPkMNCnwVN5QZ@8bytes.org>
+References: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
 
-No functional modification involved.
+On Thu, May 11, 2023 at 01:41:58AM -0300, Jason Gunthorpe wrote:
+> Jason Gunthorpe (17):
+>   iommu: Replace iommu_group_device_count() with list_count_nodes()
+>   iommu: Add for_each_group_device()
+>   iommu: Make __iommu_group_set_domain() handle error unwind
+>   iommu: Use __iommu_group_set_domain() for __iommu_attach_group()
+>   iommu: Use __iommu_group_set_domain() in iommu_change_dev_def_domain()
+>   iommu: Replace __iommu_group_dma_first_attach() with set_domain
+>   iommu: Remove iommu_group_do_dma_first_attach() from
+>     iommu_group_add_device()
+>   iommu: Replace iommu_group_do_dma_first_attach with
+>     __iommu_device_set_domain
+>   iommu: Fix iommu_probe_device() to attach the right domain
+>   iommu: Do iommu_group_create_direct_mappings() before attach
+>   iommu: Remove the assignment of group->domain during default domain
+>     alloc
+>   iommu: Consolidate the code to calculate the target default domain
+>     type
+>   iommu: Revise iommu_group_alloc_default_domain()
+>   iommu: Consolidate the default_domain setup to one function
+>   iommu: Allow IOMMU_RESV_DIRECT to work on ARM
+>   iommu: Remove __iommu_group_for_each_dev()
+>   iommu: Tidy the control flow in iommu_group_store_type()
+> 
+>  .clang-format         |   1 +
+>  drivers/iommu/iommu.c | 683 +++++++++++++++++++++---------------------
+>  2 files changed, 345 insertions(+), 339 deletions(-)
 
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:426: warning: expecting prototype for sdma_v4_4_2_gfx_stop(). Prototype was for sdma_v4_4_2_inst_gfx_stop() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:457: warning: expecting prototype for sdma_v4_4_2_rlc_stop(). Prototype was for sdma_v4_4_2_inst_rlc_stop() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:470: warning: expecting prototype for sdma_v4_4_2_page_stop(). Prototype was for sdma_v4_4_2_inst_page_stop() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:506: warning: expecting prototype for sdma_v4_4_2_ctx_switch_enable(). Prototype was for sdma_v4_4_2_inst_ctx_switch_enable() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:561: warning: expecting prototype for sdma_v4_4_2_enable(). Prototype was for sdma_v4_4_2_inst_enable() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:798: warning: expecting prototype for sdma_v4_4_2_rlc_resume(). Prototype was for sdma_v4_4_2_inst_rlc_resume() instead.
-drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c:814: warning: expecting prototype for sdma_v4_4_2_load_microcode(). Prototype was for sdma_v4_4_2_inst_load_microcode() instead.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=5283
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c b/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c
-index bf47eb33c12e..590b08585901 100644
---- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c
-+++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c
-@@ -415,7 +415,7 @@ static void sdma_v4_4_2_ring_emit_fence(struct amdgpu_ring *ring, u64 addr, u64
- 
- 
- /**
-- * sdma_v4_4_2_gfx_stop - stop the gfx async dma engines
-+ * sdma_v4_4_2_inst_gfx_stop - stop the gfx async dma engines
-  *
-  * @adev: amdgpu_device pointer
-  *
-@@ -446,7 +446,7 @@ static void sdma_v4_4_2_inst_gfx_stop(struct amdgpu_device *adev,
- }
- 
- /**
-- * sdma_v4_4_2_rlc_stop - stop the compute async dma engines
-+ * sdma_v4_4_2_inst_rlc_stop - stop the compute async dma engines
-  *
-  * @adev: amdgpu_device pointer
-  *
-@@ -459,7 +459,7 @@ static void sdma_v4_4_2_inst_rlc_stop(struct amdgpu_device *adev,
- }
- 
- /**
-- * sdma_v4_4_2_page_stop - stop the page async dma engines
-+ * sdma_v4_4_2_inst_page_stop - stop the page async dma engines
-  *
-  * @adev: amdgpu_device pointer
-  *
-@@ -494,7 +494,7 @@ static void sdma_v4_4_2_inst_page_stop(struct amdgpu_device *adev,
- }
- 
- /**
-- * sdma_v4_4_2_ctx_switch_enable - stop the async dma engines context switch
-+ * sdma_v4_4_2_inst_ctx_switch_enable - stop the async dma engines context switch
-  *
-  * @adev: amdgpu_device pointer
-  * @enable: enable/disable the DMA MEs context switch.
-@@ -548,7 +548,7 @@ static void sdma_v4_4_2_inst_ctx_switch_enable(struct amdgpu_device *adev,
- }
- 
- /**
-- * sdma_v4_4_2_enable - stop the async dma engines
-+ * sdma_v4_4_2_inst_enable - stop the async dma engines
-  *
-  * @adev: amdgpu_device pointer
-  * @enable: enable/disable the DMA MEs.
-@@ -786,7 +786,7 @@ static void sdma_v4_4_2_init_pg(struct amdgpu_device *adev)
- }
- 
- /**
-- * sdma_v4_4_2_rlc_resume - setup and start the async dma engines
-+ * sdma_v4_4_2_inst_rlc_resume - setup and start the async dma engines
-  *
-  * @adev: amdgpu_device pointer
-  *
-@@ -802,7 +802,7 @@ static int sdma_v4_4_2_inst_rlc_resume(struct amdgpu_device *adev,
- }
- 
- /**
-- * sdma_v4_4_2_load_microcode - load the sDMA ME ucode
-+ * sdma_v4_4_2_inst_load_microcode - load the sDMA ME ucode
-  *
-  * @adev: amdgpu_device pointer
-  *
--- 
-2.20.1.7.g153144c
-
+Applied, thanks Jason.
