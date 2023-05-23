@@ -1,124 +1,90 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5873C4A85A
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 13:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684848398; x=1716384398;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=mlzsDVTQ49ZT9Ot+UB3j8Va0JllC8yQ20xKDPFFUyu0=;
-  b=aaR+XTjFDtlQuSKDfNHwoq/O+x1dKQiJC4zjSFaiAcWVWbok63CLwybi
-   /6H4syiWaUePyQAquaQFif1htGU/i18exiIeQyRVjc/ZHQuks/uFkBkn8
-   gis/rm+XyvyjVYo32HDvSBpIq1877t9ZBzPSx7u3Et7U8hnVS4jv0YN/d
-   Pzcxf23WX/ZO5p14DFPrybvF1Ke9HjONxGDXrhSL+X+xGtWmubzM1pciW
-   CVwjseVNLT9KtkcMQer8uXwXFnjelZigBCkohP59+3ewAzIlEElcCcRAU
-   fJFyenEj1WmBy65kz5AoJ9SdWqO+xyrRUx2Uyg9in1dYYHybWwgCGM5LK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="342693228"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="342693228"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 06:26:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="878204268"
-X-IronPort-AV: E=Sophos;i="6.00,186,1681196400"; 
-   d="scan'208";a="878204268"
-Received: from chauvina-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.70])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 06:26:32 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Tom Rix <trix@redhat.com>, joonas.lahtinen@linux.intel.com,
- rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, airlied@gmail.com,
- daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
- ville.syrjala@linux.intel.com, imre.deak@intel.com,
- arun.r.murthy@intel.com, lucas.demarchi@intel.com
-Cc: intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Tom Rix
- <trix@redhat.com>
-Subject: Re: [PATCH] drm/i915: simplify switch to if-elseif
-In-Reply-To: <20230523125116.1669057-1-trix@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230523125116.1669057-1-trix@redhat.com>
-Date: Tue, 23 May 2023 16:26:29 +0300
-Message-ID: <874jo3kwl6.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250ED1F92A
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 15:56:46 +0000 (UTC)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NFT3JM026262;
+	Tue, 23 May 2023 15:56:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=R05m8COYzrgCWL+/yCx5qzMmm3WKfUMyhZcRluJdZ0s=;
+ b=In037dwq79LL7DsKeQHBhFAxEzu+Zu3P4nJorM1yxZNKuvZBNZpsqVwQ6K+tFuHbXNL3
+ rJKth3MtvChzfj9NVaBGcwtdqDgusaycmWN84YUi4cLZBgq/YQcLsriMItUA2iqgqkV9
+ IaWQwC5w1U6Hqx4pNUMTLzZ6u2LTEZGY3C2MWAdpBw3+yxZcaczdagxd22qIZi4SNmhQ
+ S9H0GrDnyDhksXY3jnCwjxpOuZd2AMvT0Oo2r4Ibm4Owyie1RRT/glk56P2zIaIao2Sp
+ +AoplqjKV37Oe03JZNC7BrEUutSM7YT0+Sd85wRwdDpiuqq9xKEyW9sHSa8yMCUeZjbc ag== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs05s82aa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 May 2023 15:56:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34NFuHeu031157
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 May 2023 15:56:18 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 23 May
+ 2023 08:56:16 -0700
+Message-ID: <cd8192e3-7d7d-5976-d795-05d4459cffea@quicinc.com>
+Date: Tue, 23 May 2023 09:56:16 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] accel/qaic: initialize ret variable to 0
+Content-Language: en-US
+To: <trix@redhat.com>, <ogabbay@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <jacek.lawrynowicz@linux.intel.com>,
+        <quic_carlv@quicinc.com>, <stanislaw.gruszka@linux.intel.com>,
+        <quic_pkanojiy@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vRPIXW_3rH41R8uWhGdmgdytuArGKGfS
+X-Proofpoint-ORIG-GUID: vRPIXW_3rH41R8uWhGdmgdytuArGKGfS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-23_10,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305230126
 
-On Tue, 23 May 2023, Tom Rix <trix@redhat.com> wrote:
-> clang with W=1 reports
-> drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated
->   fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->                 case I915_FORMAT_MOD_X_TILED:
->                 ^
->
-> Only one case and the default does anything in this switch, so it should
-> be changed to an if-elseif.
-
-Thanks for the patch.
-
-If I wanted to fix this quickly, I'd just add the break in there.
-
-If I wanted to fix this properly, I'd add a function
-modifier_supports_async_flips() or something, and replace the switch
-with:
-
-	if (!modifier_supports_async_flips(i915, new_plane_state->hw.fb->modifier)) {
-		drm_dbg_kms(&i915->drm, "[PLANE:%d:%s] Modifier does not support async flips\n",
-			plane->base.base.id, plane->base.name);
-		return -EINVAL;
-	}
-
-But I wouldn't just replace the switch with if-elseif. It doesn't help
-with the overall feeling that intel_async_flip_check_hw() is too long.
-
-BR,
-Jani.
-
-
->
+On 5/17/2023 10:56 AM, Jeffrey Hugo wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> clang static analysis reports
+> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+>    value returned to caller [core.uninitialized.UndefReturn]
+>          return ret;
+>          ^~~~~~~~~~
+> 
+>  From a code analysis of the function, the ret variable is only set some
+> of the time but is always returned.  This suggests ret can return
+> uninitialized garbage. However BO allocation will ensure ret is always
+> set in reality.
+> 
+> Initialize ret to 0 to silence the warning.
+> 
+> Fixes: ff13be830333 ("accel/qaic: Add datapath")
 > Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/i915/display/intel_display.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
-> index 0490c6412ab5..1f852e49fc20 100644
-> --- a/drivers/gpu/drm/i915/display/intel_display.c
-> +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> @@ -5994,8 +5994,7 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
->  		 * Need to verify this for all gen9 platforms to enable
->  		 * this selectively if required.
->  		 */
-> -		switch (new_plane_state->hw.fb->modifier) {
-> -		case DRM_FORMAT_MOD_LINEAR:
-> +		if (new_plane_state->hw.fb->modifier == DRM_FORMAT_MOD_LINEAR) {
->  			/*
->  			 * FIXME: Async on Linear buffer is supported on ICL as
->  			 * but with additional alignment and fbc restrictions
-> @@ -6008,13 +6007,10 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
->  					    plane->base.base.id, plane->base.name);
->  				return -EINVAL;
->  			}
-> -
-> -		case I915_FORMAT_MOD_X_TILED:
-> -		case I915_FORMAT_MOD_Y_TILED:
-> -		case I915_FORMAT_MOD_Yf_TILED:
-> -		case I915_FORMAT_MOD_4_TILED:
-> -			break;
-> -		default:
-> +		} else if (!(new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_X_TILED ||
-> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Y_TILED ||
-> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Yf_TILED ||
-> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_4_TILED)) {
->  			drm_dbg_kms(&i915->drm,
->  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
->  				    plane->base.base.id, plane->base.name);
+> [jhugo: Reword commit text]
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Pushed to drm-misc-fixes
