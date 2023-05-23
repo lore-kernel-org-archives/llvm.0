@@ -1,87 +1,127 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0AC4A840
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 12:01:13 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso1457706a12.2
-        for <llvm@lists.linux.dev>; Tue, 23 May 2023 05:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684843271; x=1687435271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
-        b=UlTc6dBhYhV5+FwOb+RSPI2rk8Q3qpFgLR3evPzNE3qoSA/1Tv938oYhaUah40zsTJ
-         f5TXQMK2Cs079ySx+YpwdRWznI362VlsBkVu90B+Ov9nuERDJwdJYMfohfmTSI2+kDdI
-         scPtnFlwU4iUXY9LM6WpBfRQbFpdHeGc4hMcAFqULPVX1fZW3lDlnnbfO1JqByHkrWWK
-         3iO8KQPZs0CPPK/LLdsYu6zc5ox+KJMKgleV+yRLT7U3LAyno33h5A9o/0CfapwLHQDI
-         veiFgFew6wafBYy17ZumPHmrNo9K9VFsHBpJb7AfKpU3Gm3sGMXUvay7WEwp5nxFryVv
-         cQlQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090544A84C
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 12:51:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1684846286;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bAprbvbicDzO/i64xE13RGPcGm8TJil9TJRhodKNwUQ=;
+	b=hVhRB8enzylof6R4Ig1i3YHEyc4XslDvvqKip/RvEgOazSohscBp03djEdFUT9YdPJuIEa
+	S/mqJgilESy2+BW0UXbpPxcoQOg0nRmF7NLwrLdW3sSY3AtEkSOHoDwhc1KOJQlu1NBGaA
+	LE/0WbN+STxjdRp0QF6zuJ+PDoAbY6o=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-66-5p6GDfpoPIyRykbLBT_MUg-1; Tue, 23 May 2023 08:51:23 -0400
+X-MC-Unique: 5p6GDfpoPIyRykbLBT_MUg-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-75788e0b1d3so580063085a.1
+        for <llvm@lists.linux.dev>; Tue, 23 May 2023 05:51:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684843271; x=1687435271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
-        b=LQR7OfQ/0GFAErJyX5ImZ3FEpGdGoB747CmKEprdPUBd84/rBZ/yiJgNyhZO1t1fWa
-         DLMu0k/BUjBALrT2F4dNi1UjFfQmAARXWLCATh5ufJtVKUOg2wnClHhgmwULukpKFbIG
-         zGkwKKuVM/7vw3hGNq9TayW62Nd2J7nFvJrIh+Tz+Slc9k0yGFIoVGC/rUV60wQ6VrHg
-         uc+9ovf3fN6fsE7aws745lyxFXAVzU+Z2Iq89tCTUxbLU8niBXToKfmmeaR86ZQ9f9Zj
-         TjLAVEOKfR+jnAaqD5I7yf4tP0JTJNBXuIsjQfQJFdHDVE+0QPaQWFxfrbikFHmF7rN/
-         yTfg==
-X-Gm-Message-State: AC+VfDz1CucBaagVhPVAMtPz2UiXzREZa335aFuh2PWF7zRrTxAdnfWu
-	iRQuIUiOWGBGiR0aDWawQ2SDhA==
-X-Google-Smtp-Source: ACHHUZ40CX09dMi0e735PDRKFRNtfgI4LS6imtI87HuWDsDYP/q8KqRU12dipkCjnKzQegYx3Zmfiw==
-X-Received: by 2002:a17:906:d550:b0:966:4bb3:df63 with SMTP id cr16-20020a170906d55000b009664bb3df63mr15157840ejc.63.1684843271141;
-        Tue, 23 May 2023 05:01:11 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id t20-20020a17090616d400b009662c57b4ffsm4397666ejd.96.2023.05.23.05.01.10
+        d=1e100.net; s=20221208; t=1684846283; x=1687438283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bAprbvbicDzO/i64xE13RGPcGm8TJil9TJRhodKNwUQ=;
+        b=RpnIaOJjK2X8gxRWec3i0s47Eu5MHgjbXMOE8SfIuwctgFKsMIakQ5tdd1yYeM9HoL
+         wwOKU9dUowwjWIwAE4ZTTs2507EhqnigAMcCb7wtfCyqFrqbU2RHv1ShBpLBuZsC2MrJ
+         kPYCYmssbWfLLSe3m1LyJ+oTiGPHGEtFfiQM7tCem5fsAR/0GoOHWpYjwhfB5/RKseeb
+         BGT63RqT0cfPVY8rG97eHgdJsNa6JHyThZdxJyPsJuPFJrXjtlimUARiQDFehjQABEEc
+         VElykP99LPKFDTP+hS4RJigU23IKW9DqeVwgmjUk4v8a8sU46bmd3cAEcHAIChehZbmr
+         t9+g==
+X-Gm-Message-State: AC+VfDyQ0Z7H+shNxSWDGV9I2CYzKvWN3tx2dYsH5jhx1H/geFhLUyqZ
+	ttM1tIjawgHEXD+WLY9sElcRZP1lie1RUk0phnQsY/e6pxu7yo6eqDRToFW2u0ne4EAr27S+CR+
+	JXuiqUIowz7/h1g==
+X-Received: by 2002:a37:88f:0:b0:75b:23a0:e7ed with SMTP id 137-20020a37088f000000b0075b23a0e7edmr3850977qki.78.1684846282951;
+        Tue, 23 May 2023 05:51:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7GUZvQqUqL8jnjS5iId8YX67qOidNHrEO9Bxwn07WXAbE7b7d2NbJu1BrYJ46XQnyjQLxqgg==
+X-Received: by 2002:a37:88f:0:b0:75b:23a0:e7ed with SMTP id 137-20020a37088f000000b0075b23a0e7edmr3850948qki.78.1684846282675;
+        Tue, 23 May 2023 05:51:22 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id c3-20020ae9e203000000b0075b35e72a21sm7626qkc.86.2023.05.23.05.51.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 05:01:10 -0700 (PDT)
-Date: Tue, 23 May 2023 14:01:09 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Tom Rix <trix@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
-	Mark Gross <markgross@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Zhou Wang <wangzhou1@hisilicon.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Thomas Gleixner <tglx@linutronix.de>, Maximilian Luz <luzmaximilian@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH V6 09/21] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <20230523-7263e5220667fd82a462afc7@orel>
-References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
- <20230515054928.2079268-10-sunilvl@ventanamicro.com>
+        Tue, 23 May 2023 05:51:21 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: jani.nikula@linux.intel.com,
+	joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com,
+	tvrtko.ursulin@linux.intel.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	ville.syrjala@linux.intel.com,
+	imre.deak@intel.com,
+	arun.r.murthy@intel.com,
+	lucas.demarchi@intel.com
+Cc: intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/i915: simplify switch to if-elseif
+Date: Tue, 23 May 2023 08:51:16 -0400
+Message-Id: <20230523125116.1669057-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515054928.2079268-10-sunilvl@ventanamicro.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Mon, May 15, 2023 at 11:19:16AM +0530, Sunil V L wrote:
-> RINTC structures in the MADT provide mapping between the hartid
-> and the CPU. This is required many times even at run time like
-> cpuinfo. So, instead of parsing the ACPI table every time, cache
-> the RINTC structures and provide a function to get the correct
-> RINTC structure for a given cpu.
-> 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  arch/riscv/include/asm/acpi.h | 10 ++++++++
->  arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
->  arch/riscv/kernel/setup.c     |  4 ++++
->  3 files changed, 59 insertions(+)
+clang with W=1 reports
+drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated
+  fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+                case I915_FORMAT_MOD_X_TILED:
+                ^
 
+Only one case and the default does anything in this switch, so it should
+be changed to an if-elseif.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/i915/display/intel_display.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+index 0490c6412ab5..1f852e49fc20 100644
+--- a/drivers/gpu/drm/i915/display/intel_display.c
++++ b/drivers/gpu/drm/i915/display/intel_display.c
+@@ -5994,8 +5994,7 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
+ 		 * Need to verify this for all gen9 platforms to enable
+ 		 * this selectively if required.
+ 		 */
+-		switch (new_plane_state->hw.fb->modifier) {
+-		case DRM_FORMAT_MOD_LINEAR:
++		if (new_plane_state->hw.fb->modifier == DRM_FORMAT_MOD_LINEAR) {
+ 			/*
+ 			 * FIXME: Async on Linear buffer is supported on ICL as
+ 			 * but with additional alignment and fbc restrictions
+@@ -6008,13 +6007,10 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
+ 					    plane->base.base.id, plane->base.name);
+ 				return -EINVAL;
+ 			}
+-
+-		case I915_FORMAT_MOD_X_TILED:
+-		case I915_FORMAT_MOD_Y_TILED:
+-		case I915_FORMAT_MOD_Yf_TILED:
+-		case I915_FORMAT_MOD_4_TILED:
+-			break;
+-		default:
++		} else if (!(new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_X_TILED ||
++			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Y_TILED ||
++			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Yf_TILED ||
++			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_4_TILED)) {
+ 			drm_dbg_kms(&i915->drm,
+ 				    "[PLANE:%d:%s] Modifier does not support async flips\n",
+ 				    plane->base.base.id, plane->base.name);
+-- 
+2.27.0
+
