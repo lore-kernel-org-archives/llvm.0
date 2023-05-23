@@ -1,116 +1,119 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F381D2A8
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 09:25:40 +0000 (UTC)
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-4572fc781daso906091e0c.2
-        for <llvm@lists.linux.dev>; Tue, 23 May 2023 02:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684833939; x=1687425939;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uN17lpJppLHyVvY0f+t4p7dd0oKu5S+/bhEzLex37ec=;
-        b=bjDycL63N88EGlG+VX8Yx8Montns5WyvjfTAETehrRtpMHEdbJ9l5ha5ciCAWI5yEF
-         c/Gae83DGvRDomSt0mP9Dh5YizBIcdkDGwpOjGKSEsnKrzQJ/lfcLoxnjJLK4r5rlVG3
-         n0g4Ga9qLHcSnPOAueKzgXPaY63+fihE9RVTrx3jCrvwXkuZ787f5RI8JEDKmsPyAOJ2
-         nbZCz1ItMzhQZwfheO/z7HA/GgaM56Go/jDV15kQfGyHPRp3aHijezl3djSLN2jqmlY/
-         mMh7Hgay2ZxvLPSm8Ip2L9/ZYcpMmpahhMw//++tG2BYqVPQdTvANjoljJ9dw9NEZB2B
-         Pg/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684833939; x=1687425939;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uN17lpJppLHyVvY0f+t4p7dd0oKu5S+/bhEzLex37ec=;
-        b=FiuByT/IjfnrNmXOYsj1ZoD4MANEZAauD35WJklktqv0Ff0IPFqcbBAt073tNjwwr9
-         b6mC+Z/BTuzsu4oaQnBxEzMVV6Bvf6R6SaA8q0rwgRLAYzF7i/m7nE5Nn5UUZt9N/7rB
-         IMOSurwE/7aS2eNS1BtyEG0XyOOnJ7PprFpgWQhhbUyEVf6+C0kb5MO7BY6p7yDeyCjG
-         +mPwy9JWLX3twTdOmiHNMD5l7GLgH8WlU1NwG3gp1Zv92R2LKzSq7K3VIyPZOOKDqwz8
-         23xBwocDeRcqlffgdV16glMBmgVRwYNa+E3K1AUVOCh/6j2swaws4b5na16VUIP5D/9D
-         FemA==
-X-Gm-Message-State: AC+VfDzImrld5k1y+B3XUVNs2k6SiyYA/sYrVjFcpWeQjd+Mzb91twRC
-	NIn6LXHP7HDbn6TEl4MuaSlH/YaLGZoiGrdXZhcL3A==
-X-Google-Smtp-Source: ACHHUZ7ny/5EqZ30sVNJAfPXNTsNLZu4nr4f64yMukVnu/zcnPUCISy1uz6X5BezKtD1XxrPR6AVVXA83L9hha8txto=
-X-Received: by 2002:a1f:3f88:0:b0:457:1a8:9ea4 with SMTP id
- m130-20020a1f3f88000000b0045701a89ea4mr4738542vka.3.1684833939092; Tue, 23
- May 2023 02:25:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7661A1E501;
+	Tue, 23 May 2023 10:27:19 +0000 (UTC)
+Received: from [IPV6:2405:201:0:21ea:e49:10dd:40c0:e842] (unknown [IPv6:2405:201:0:21ea:e49:10dd:40c0:e842])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: shreeya)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FE4A6606E75;
+	Tue, 23 May 2023 11:27:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1684837632;
+	bh=/cZpY/DKk5fAZOo6SiYRERzxSUjyx353F4endTRRSo4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=btnZAAQPlKxgroncGmTp3yjgSRL5MgT6cZvPcPX4larqhFPob0jvaz5BeIOl18OPl
+	 PZd+Pbf8QIJY5xSHJ6y57ZzWy3167LwYDoLqg3ENVXMBaBsDVZ5R3fJBJDu+ePfeKi
+	 Frh1Mc313r6OdfIUrP1trhhPaqCXTlOWfwecZgDZwd3tkNNp36VndrF8XXwgYVYMGc
+	 MjoDNgU78Aza3z8wgCJhMaffnZFAWFhqdDVzLFYgmivitI403nWwNZbb2oNXJeQKDG
+	 ZLUcrBeZT51Pw5gLMhdvqLf60ndM2RWjKiSgmILIOKmpI7cU/v+nf5+KAw3wn1SGmQ
+	 3fyLvdowXCRyw==
+Message-ID: <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
+Date: Tue, 23 May 2023 15:57:06 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
- <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
- <ZGuydp0KToLf55vY@slm.duckdns.org> <ZGvap5qi0OKAOfqX@slm.duckdns.org>
-In-Reply-To: <ZGvap5qi0OKAOfqX@slm.duckdns.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 23 May 2023 14:55:27 +0530
-Message-ID: <CA+G9fYs8Oa8sS97H8LdAOv=k9tJVuikekbqh_E57vEUVcvk_4A@mail.gmail.com>
-Subject: Re: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999 worker_enter_idle+0xb2/0xc0
-To: Tejun Heo <tj@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
-Cc: Z qiang <qiang.zhang1211@gmail.com>, open list <linux-kernel@vger.kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Greg KH
+ <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
+ =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
+ "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+ Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+ denys.f@collabora.com, kernelci@lists.linux.dev
+References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com>
+ <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+ <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
+ <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
+ <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+ <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <2023052247-bobtail-factsheet-d104@gregkh>
+ <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+From: Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 23 May 2023 at 02:42, Tejun Heo <tj@kernel.org> wrote:
+Hi Nick and Masahiro,
+
+On 23/05/23 01:22, Nick Desaulniers wrote:
+> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
+>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>>>> It could be; if the link order was changed, it's possible that this
+>>>> target may be hitting something along the lines of:
+>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
+>>>> initialization order fiasco"
+>>>>
+>>>> I'm struggling to think of how this appears in C codebases, but I
+>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
+>>>> think I was playing with converting Kbuild to use Ninja rather than
+>>>> Make; the resulting kernel image wouldn't boot because I had modified
+>>>> the order the object files were linked in.  If you were to randomly
+>>>> shuffle the object files in the kernel, I recall some hazard that may
+>>>> prevent boot.
+>>> I thought that was specifically a C++ problem? But then again, the
+>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
+>>> significant in some instances [1]:
+>> Yes, it matters, you can not change it.  If you do, systems will break.
+>> It is the only way we have of properly ordering our init calls within
+>> the same "level".
+> Ah, right it was the initcall ordering. Thanks for the reminder.
 >
-> On Mon, May 22, 2023 at 08:20:38AM -1000, Tejun Heo wrote:
-> > Hello,
-> >
-> > On Mon, May 22, 2023 at 09:24:09PM +0800, Z qiang wrote:
-> > > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > > index 9c5c1cfa478f..f8d739fef311 100644
-> > > --- a/kernel/workqueue.c
-> > > +++ b/kernel/workqueue.c
-> > > @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
-> > >          * and leave with an unexpected pool->nr_running == 1 on the newly
-> > > unbound
-> > >          * pool. Protect against such race.
-> > >          */
-> > > -       preempt_disable();
-> > > +       local_irq_disable();
-> > >         if (!(worker->flags & WORKER_NOT_RUNNING))
-> > >                 worker->pool->nr_running++;
-> > > -       preempt_enable();
-> > >
-> > >         /*
-> > >          * CPU intensive auto-detection cares about how long a work item
-> > > hogged
-> > > @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
-> > >         worker->current_at = worker->task->se.sum_exec_runtime;
-> > >
-> > >         worker->sleeping = 0;
-> > > +       local_irq_enable();
-> > >  }
-> >
-> > Ah, yeah, this is correct. Now we're modifying nr_running from timer tick
-> > too, so if don't block irq, the timer tick can ruin the not-irq-protected
-> > read-write-modify nr_running update from wq_worker_running(). Naresh, can
-> > you please confirm the fix?
+> (There's a joke in there similar to the use of regexes to solve a
+> problem resulting in two new problems; initcalls have levels for
+> ordering, but we still have (unexpressed) dependencies between calls
+> of the same level; brittle!).
 >
-> Z qiang, while waiting for Naresh's test result, can you send the fix as a
-> proper signed-off-patch?
-
-
-The proposed patch applied on top of Linux next and boot tested for
-more than 100 times and is still running in a loop by Anders.
-
-The reported warning did not reproduce again.
-
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-- Naresh
-
-
+> +Maksim, since that might be relevant info for the BOLT+Kernel work.
 >
-> Thanks.
+> Ricardo,
+> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
+> mentions that there's a kernel command line param `initcall_debug`.
+> Perhaps that can be used to see if
+> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
+> ordering, resulting in a config that cannot boot?
 
 
->
-> --
-> tejun
+Here are the links to Lava jobs ran with initcall_debug added to the 
+kernel command line.
+
+1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
+https://lava.collabora.dev/scheduler/job/10417706
+<https://lava.collabora.dev/scheduler/job/10417706>
+
+2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+https://lava.collabora.dev/scheduler/job/10418012 
+<https://lava.collabora.dev/scheduler/job/10418012>
+
+
+Thanks,
+Shreeya Patel
+
