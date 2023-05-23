@@ -1,196 +1,84 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884E62068F
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 18:56:06 +0000 (UTC)
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-75b0df81142so23558885a.2
-        for <llvm@lists.linux.dev>; Tue, 23 May 2023 11:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684868165; x=1687460165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Torc+RRBwrMl/4jmZLvvQbAFAwY2zQuLJ8o+xlyegK0=;
-        b=JrayKQAx+iq3P4KuA15TeG0bbOwSpOariGIARcODSsUXAyBzU33fkgohgX6e6qfBB5
-         /t4eU5Tb198lbjYnvO4kmYxyWk/TWoArF/Jl2TJdthKl9hjVBfqGiqqoQVxt05FWsyzW
-         l50niMQ62caEcgvj+pyuKXy31K3l95kdx+/XisAxLS5LEyJkG5KDtm60dnhwlwO5QD2I
-         u76jyWiaEfQFf36wNpMHVhmeRE4EQXiOV+oVcIVY7Wgq30C4PahFCvI6c7s2n24iF4Od
-         guUMOzeJmPf36AFn7ydYRY+0/wBthIWsZhfFHmhW7UOfsaheu/PzBVx9t+F9+tUhR5R7
-         vN4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684868165; x=1687460165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Torc+RRBwrMl/4jmZLvvQbAFAwY2zQuLJ8o+xlyegK0=;
-        b=XAweb37qwyK22LBEW56wW5gH6m8+adPX/v2vPXYu7wDp/r4co1iurVO7OpLyZYy1Li
-         RFu2cmAJTx/QLVCyZu8alV9hEsbPYE7oPx2IEkvNBsSKlFS6WTfu72JXxPJgbQjt++Ek
-         VtvJvoOFOsyCv5NN0oHsOo71tZwOjQR5cZ6NnNvBXCmIIQihijCTi7QYjs6tSgnz0EJ7
-         5c05ZrsamyPT6u6lsF0qlroF2rtK3U3mvdVaWamY7602pooVbOpuI+XyaYhUHgi/JFM/
-         Em4m5skQr3skxSdMR3xCopp7NM1MJYJC0v73RiI1OsqhWBgS3pzcCdGOWVj1EZ/V/zaD
-         RwiA==
-X-Gm-Message-State: AC+VfDyR8uRDmHKdNgSugvvDhbJ+UaBhfXamPmEFr4L3fzFMIpN7Kn56
-	nK8b01PZIkgFw4IftIrnFf1UcQ4fACqngMR72Lo5uA==
-X-Google-Smtp-Source: ACHHUZ4FgHH+PZualQxKJX5p0MwAh/JwSqTCFPxfJIDo5xYTpik7c1LA2wKLgB+VLN4ieuO3ZyTppIOXrmot6W+ZGr0=
-X-Received: by 2002:a05:6214:c2e:b0:621:8ca6:2ac8 with SMTP id
- a14-20020a0562140c2e00b006218ca62ac8mr23562201qvd.16.1684868165161; Tue, 23
- May 2023 11:56:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0781F934
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 19:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1684870865;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iVHNxAuh5OEYjMFAsiS2ZVtIUToQz5P7940rncwq2Gs=;
+	b=ITVKn97NyHnnkxZpyMppBMwYStI5E8ftYBu9FNMH9lYRO+fTlmocJ/rkbZKLTmkxZYYfEM
+	A83YdYb5BtTDTY0o6OL/yJXugVRuPJZtyHIBXoOW4K6YmozbMhCzVcn2ZLVK9CiWHKAWhM
+	YaczRaeW93SiLB/P1xyWQnOZakgnxvg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-UyHROdIQNfOaFfujJJqgig-1; Tue, 23 May 2023 15:41:04 -0400
+X-MC-Unique: UyHROdIQNfOaFfujJJqgig-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD567803902
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 19:41:03 +0000 (UTC)
+Received: from [172.64.14.43] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A3E1D2166B26;
+	Tue, 23 May 2023 19:41:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
+ mainline.kernel.org-clang, 5fe326b4)
+Date: Tue, 23 May 2023 19:41:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202305210504.yw7qgOom-lkp@intel.com> <MW4PR84MB19703614A2DB230AD0BAF63CA8409@MW4PR84MB1970.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <MW4PR84MB19703614A2DB230AD0BAF63CA8409@MW4PR84MB1970.NAMPRD84.PROD.OUTLOOK.COM>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 23 May 2023 11:55:54 -0700
-Message-ID: <CAKwvOdnjXD4K6284znWQ7FdshZFYdqNUTN4U79h1pA+xPJ6vCA@mail.gmail.com>
-Subject: Re: [linux-stable-rc:queue/5.15 105/106] drivers/platform/x86/hp/hp-wmi.c:342:24:
- warning: cast to smaller integer type 'enum hp_wmi_radio' from 'void *'
-To: Hans de Goede <hdegoede@redhat.com>, Greg KH <gregkh@linuxfoundation.org>, 
-	Sasha Levin <sashal@kernel.org>
-Cc: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, "# 3.4.x" <stable@vger.kernel.org>, 
-	"Lopez, Jorge A (Security)" <jorge.lopez2@hp.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <49174.123052315410400111@us-mta-10.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 23, 2023 at 11:31=E2=80=AFAM Lopez, Jorge A (Security)
-<jorge.lopez2@hp.com> wrote:
->
-> I investigate the compile failure and appears the latest patch reverted t=
-he code to an older version.
-> The latest code shows the proper implementation and compiling the code do=
-es not report any failures.
->
->             enum hp_wmi_radio r =3D (long)data;
->
-> instead of
->
->                enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
+Hi, we tested your kernel and here are the results:
 
-Looks like
-commit ce95010ef62d ("platform/x86: hp-wmi: Fix cast to smaller
-integer type warning")
-
-is the fixup necessary for 5.15.y.
-
-Dear stable kernel maintainers, please consider cherry-picking the
-above commit to linux-5.15.y to avoid the new compiler diagnostic
-introduced by
-commit 6e9b8992b122 ("platform/x86: Move existing HP drivers to a new
-hp subdir")
-
-Hans, thanks for the fix.  You may need to additionally add Fixes tag
-to such commits to help out automation for stable. (or perhaps
-ce95010ef62d failed to apply to linux-5.15.y? I think an email gets
-sent when that's the case).
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
->
->
->
-> Regards,
->
-> Jorge Lopez
->
->
-> Regards,
->
-> Jorge Lopez
-> HP Inc
->
-> "Once you stop learning, you start dying"
-> Albert Einstein
->
-> From: kernel test robot <lkp@intel.com>
-> Sent: Saturday, May 20, 2023 4:30 PM
-> To: Lopez, Jorge A (Security) <jorge.lopez2@hp.com>
-> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; Sasha Levin <sas=
-hal@kernel.org>; Hans de Goede <hdegoede@redhat.com>
-> Subject: [linux-stable-rc:queue/5.15 105/106] drivers/platform/x86/hp/hp-=
-wmi.c:342:24: warning: cast to smaller integer type 'enum hp_wmi_radio' fro=
-m 'void *'
->
-> CAUTION: External Email
-> tree: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git queue/5.15
-> head: 632aeb02f8e831197a9a01b1e93cb00b4363be05
-> commit: 8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54 [105/106] platform/x86: =
-Move existing HP drivers to a new hp subdir
-> config: x86_64-randconfig-x052
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
-> wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.c=
-ross -O ~/bin/make.cross
-> chmod +x ~/bin/make.cross
-> # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.=
-git/commit/?id=3D8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54
-> git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kerne=
-l/git/stable/linux-stable-rc.git
-> git fetch --no-tags linux-stable-rc queue/5.15
-> git checkout 8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54
-> # save the config file
-> mkdir build_dir && cp config build_dir/.config
-> COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D1 O=3D=
-build_dir ARCH=3Dx86_64 olddefconfig
-> COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D1 O=3D=
-build_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/platform/x86/hp/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <mailto:lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305210504.yw7qgOom-lkp=
-@intel.com
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/platform/x86/hp/hp-wmi.c:342:24: warning: cast to smaller inte=
-ger type 'enum hp_wmi_radio' from 'void *' [-Wvoid-pointer-to-enum-cast]
-> enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
-> ^~~~~~~~~~~~~~~~~~~~~~~~
-> 1 warning generated.
->
->
-> vim +342 drivers/platform/x86/hp/hp-wmi.c
->
-> f82bdd0d77b6bf drivers/platform/x86/hp-wmi.c Kyle Evans 2014-06-09 339
-> 19d337dff95cbf drivers/platform/x86/hp-wmi.c Johannes Berg 2009-06-02 340=
- static int hp_wmi_set_block(void *data, bool blocked)
-> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 341 {
-> e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins 2009-07-21 @342=
- enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
-> e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins 2009-07-21 343 =
-int query =3D BIT(r + 8) | ((!blocked) << r);
-> 6d96e00cef3503 drivers/platform/x86/hp-wmi.c Thomas Renninger 2010-05-21 =
-344 int ret;
-> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 345
-> d8193cff33906e drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
-19 346) ret =3D hp_wmi_perform_query(HPWMI_WIRELESS_QUERY, HPWMI_WRITE,
-> c3021ea1beeeb1 drivers/platform/x86/hp-wmi.c Anssi Hannula 2011-02-20 347=
- &query, sizeof(query), 0);
-> 527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
-19 348)
-> 527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
-19 349) return ret <=3D 0 ? ret : -EINVAL;
-> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 350 }
-> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 351
->
-> :::::: The code at line 342 was first introduced by commit
-> :::::: e5fbba85a7acc2626d4fe14501816811d702f3e9 hp-wmi: improve rfkill su=
-pport
->
-> :::::: TO: Alan Jenkins <mailto:alan-jenkins@tuffmail.co.uk>
-> :::::: CC: Len Brown <mailto:len.brown@intel.com>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
->
->
+Kernel information:
+    Commit message: Merge tag 'erofs-for-6.4-rc4-fixes' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/xiang/erofs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/89953
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35359=
+6
 
 
---=20
-Thanks,
-~Nick Desaulniers
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
