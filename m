@@ -1,120 +1,196 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436D61F93C;
-	Tue, 23 May 2023 18:37:01 +0000 (UTC)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso108856366b.0;
-        Tue, 23 May 2023 11:37:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884E62068F
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 18:56:06 +0000 (UTC)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-75b0df81142so23558885a.2
+        for <llvm@lists.linux.dev>; Tue, 23 May 2023 11:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684867019; x=1687459019;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ByLgtaiEsa0QeTXW3DyarZcxNKiXD9fuD3SlHYwW9RE=;
-        b=U8s9gMhkkj5uSixf0kHzMJ83OPGdJfYE0ce0nBc7rLwEeN9IBFNouqn/yFCPkZXjYs
-         f684sBdk4xrneSEPzX4+hYUrZiuVTDZM9NusdLgBT3jayM8BuJ0YCDirpg7m+d2X56YQ
-         8i/sLK8FqsQJn9v04N1lLp2JVqxtcE4m8L485Y/AsDpA9K3NPmOEqFO24IRqdtYzvibN
-         QlHdI2CMntchi8SvVOhjVZqM4Gk0nzR7aL0J6XYeCan7W/PlH57nbBGbntEF5nv+8/r3
-         Cwg5JE01qJMVxx0RD8PUTppWctTWoqtxZvUfCAqaeMUuwoHDB1BGybnEFgTtyWRvrGBV
-         ZFcw==
+        d=google.com; s=20221208; t=1684868165; x=1687460165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Torc+RRBwrMl/4jmZLvvQbAFAwY2zQuLJ8o+xlyegK0=;
+        b=JrayKQAx+iq3P4KuA15TeG0bbOwSpOariGIARcODSsUXAyBzU33fkgohgX6e6qfBB5
+         /t4eU5Tb198lbjYnvO4kmYxyWk/TWoArF/Jl2TJdthKl9hjVBfqGiqqoQVxt05FWsyzW
+         l50niMQ62caEcgvj+pyuKXy31K3l95kdx+/XisAxLS5LEyJkG5KDtm60dnhwlwO5QD2I
+         u76jyWiaEfQFf36wNpMHVhmeRE4EQXiOV+oVcIVY7Wgq30C4PahFCvI6c7s2n24iF4Od
+         guUMOzeJmPf36AFn7ydYRY+0/wBthIWsZhfFHmhW7UOfsaheu/PzBVx9t+F9+tUhR5R7
+         vN4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684867019; x=1687459019;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByLgtaiEsa0QeTXW3DyarZcxNKiXD9fuD3SlHYwW9RE=;
-        b=eQTAGSjKTE/gsMaNVz8yIYboYIB4vmvwrCL6ttA8bb+n3FK2FHHMIW6z9ehbPy6Cm7
-         z5j0cOgBiwMPXdKMPrqPMwlJtqtc4xvthU7PWOHbv31EIxdjzeFEwXSmkfKf3ZJxAqaW
-         qyiJ7+q42HtCrjI51iLRRKRU+xvmOCqcxh/jbkMkN0vtPgZmetpPfHoRCBb/Q5iIiOXR
-         gC3jHs4aJT5sdlNRZI7imeWj+Ki1G9tPF0w2+9YJVMJBmEGLvlA/J/++rk8jBeDaz0cV
-         czDDerGBkd671HVFnDia4u7zX/AQQPHNboNNzItSY6ykipEzd0BcqB5SXtccI7f1eQhT
-         mGiA==
-X-Gm-Message-State: AC+VfDzZ0CblFAmp2QYuFDwzA2G6dma1AvyzVIohx3ADpVTUofcZ2fjC
-	sv8PZ8ocmZI3TwIeFYUdYHY=
-X-Google-Smtp-Source: ACHHUZ70btunfl1oIGBuhq1ZkRmBuiUgVGNHzQzLqzHKw5OVv4hk4ecaKeID1OeN2JXaxdasPfGfsg==
-X-Received: by 2002:a17:906:1019:b0:96f:4cd0:56a1 with SMTP id 25-20020a170906101900b0096f4cd056a1mr13227386ejm.5.1684867019119;
-        Tue, 23 May 2023 11:36:59 -0700 (PDT)
-Received: from [192.168.0.105] (p57935e01.dip0.t-ipconnect.de. [87.147.94.1])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1709060e9700b0096b3f72b1a0sm4687469ejf.107.2023.05.23.11.36.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 11:36:58 -0700 (PDT)
-Message-ID: <60c698b9-83e0-2408-de6e-2922e78842a0@gmail.com>
-Date: Tue, 23 May 2023 20:36:57 +0200
+        d=1e100.net; s=20221208; t=1684868165; x=1687460165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Torc+RRBwrMl/4jmZLvvQbAFAwY2zQuLJ8o+xlyegK0=;
+        b=XAweb37qwyK22LBEW56wW5gH6m8+adPX/v2vPXYu7wDp/r4co1iurVO7OpLyZYy1Li
+         RFu2cmAJTx/QLVCyZu8alV9hEsbPYE7oPx2IEkvNBsSKlFS6WTfu72JXxPJgbQjt++Ek
+         VtvJvoOFOsyCv5NN0oHsOo71tZwOjQR5cZ6NnNvBXCmIIQihijCTi7QYjs6tSgnz0EJ7
+         5c05ZrsamyPT6u6lsF0qlroF2rtK3U3mvdVaWamY7602pooVbOpuI+XyaYhUHgi/JFM/
+         Em4m5skQr3skxSdMR3xCopp7NM1MJYJC0v73RiI1OsqhWBgS3pzcCdGOWVj1EZ/V/zaD
+         RwiA==
+X-Gm-Message-State: AC+VfDyR8uRDmHKdNgSugvvDhbJ+UaBhfXamPmEFr4L3fzFMIpN7Kn56
+	nK8b01PZIkgFw4IftIrnFf1UcQ4fACqngMR72Lo5uA==
+X-Google-Smtp-Source: ACHHUZ4FgHH+PZualQxKJX5p0MwAh/JwSqTCFPxfJIDo5xYTpik7c1LA2wKLgB+VLN4ieuO3ZyTppIOXrmot6W+ZGr0=
+X-Received: by 2002:a05:6214:c2e:b0:621:8ca6:2ac8 with SMTP id
+ a14-20020a0562140c2e00b006218ca62ac8mr23562201qvd.16.1684868165161; Tue, 23
+ May 2023 11:56:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [linux-stable-rc:queue/5.15 78/106]
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c:29:33: warning: unused variable
- 'rtl819xp_ops'
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sasha Levin <sashal@kernel.org>
-Cc: "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <202305210810.njuOWlC1-lkp@intel.com>
- <61f75542-0bb2-e601-60b3-cdefa08cba28@gmail.com>
- <CAKwvOdnaL-kNLLjLFG0irYc5ROqShcUWnfSsQESeAvquKsULzQ@mail.gmail.com>
-From: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <CAKwvOdnaL-kNLLjLFG0irYc5ROqShcUWnfSsQESeAvquKsULzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <202305210504.yw7qgOom-lkp@intel.com> <MW4PR84MB19703614A2DB230AD0BAF63CA8409@MW4PR84MB1970.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <MW4PR84MB19703614A2DB230AD0BAF63CA8409@MW4PR84MB1970.NAMPRD84.PROD.OUTLOOK.COM>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 23 May 2023 11:55:54 -0700
+Message-ID: <CAKwvOdnjXD4K6284znWQ7FdshZFYdqNUTN4U79h1pA+xPJ6vCA@mail.gmail.com>
+Subject: Re: [linux-stable-rc:queue/5.15 105/106] drivers/platform/x86/hp/hp-wmi.c:342:24:
+ warning: cast to smaller integer type 'enum hp_wmi_radio' from 'void *'
+To: Hans de Goede <hdegoede@redhat.com>, Greg KH <gregkh@linuxfoundation.org>, 
+	Sasha Levin <sashal@kernel.org>
+Cc: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, "# 3.4.x" <stable@vger.kernel.org>, 
+	"Lopez, Jorge A (Security)" <jorge.lopez2@hp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/22/23 18:52, Nick Desaulniers wrote:
-> Hi Philipp, below is my interpretation of this report:
-> 
-> On Sun, May 21, 2023 at 2:10 AM Philipp Hortmann
-> <philipp.g.hortmann@gmail.com>  wrote:
->> On 5/21/23 02:59, kernel test robot wrote:
->>> tree:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git  queue/5.15
-> ^ So Greg and Sasha are cherry picking patches to linux-5.15.y branch
-> of stable...
-> 
->>> head:   632aeb02f8e831197a9a01b1e93cb00b4363be05
->>> commit: f13ecbca1796208fa2f888843223ea289f8e2b39 [78/106] staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE
-> ^ ...of the 106 patches picked up f13ecbca179620 is introducing a new failure...
-> 
->>> config: x86_64-allyesconfig
-> ^ ...in allyesconfig builds...
-> 
->>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project  f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>> reproduce (this is a W=1 build):
->>>           wgethttps://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross  -O ~/bin/make.cross
->>>           chmod +x ~/bin/make.cross
->>>           #https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f13ecbca1796208fa2f888843223ea289f8e2b39
->>>           git remote add linux-stable-rchttps://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->>>           git fetch --no-tags linux-stable-rc queue/5.15
->>>           git checkout f13ecbca1796208fa2f888843223ea289f8e2b39
->>>           # save the config file
->>>           mkdir build_dir && cp config build_dir/.config
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/ drivers/staging/rtl8192e/rtl8192e/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot<lkp@intel.com>
->>> | Closes:https://lore.kernel.org/oe-kbuild-all/202305210810.njuOWlC1-lkp@intel.com/
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>>> drivers/staging/rtl8192e/rtl8192e/rtl_core.c:29:33: warning: unused variable 'rtl819xp_ops' [-Wunused-const-variable]
-> ^ ... does Greg or Sasha need to pick up
-> commit 5e2b6593f270 ("staging: rtl8192e: Remove empty struct rtl819x_ops")
-> for linux-5.15.y in addition to f13ecbca1796208fa2f888843223ea289f8e2b39?
-> 
-> 5e2b6593f270 lacks a fixes tag, so it's probably not obvious to them
-> or their automation.
-> 
-Hi Nick,
+On Tue, May 23, 2023 at 11:31=E2=80=AFAM Lopez, Jorge A (Security)
+<jorge.lopez2@hp.com> wrote:
+>
+> I investigate the compile failure and appears the latest patch reverted t=
+he code to an older version.
+> The latest code shows the proper implementation and compiling the code do=
+es not report any failures.
+>
+>             enum hp_wmi_radio r =3D (long)data;
+>
+> instead of
+>
+>                enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
 
-thanks for your response. The fix they applied does also not contain a
-fixes tag. If they want to get quit of this message they need to apply
-the patch you mentioned.
+Looks like
+commit ce95010ef62d ("platform/x86: hp-wmi: Fix cast to smaller
+integer type warning")
 
-Thanks
+is the fixup necessary for 5.15.y.
 
-Bye Philipp
+Dear stable kernel maintainers, please consider cherry-picking the
+above commit to linux-5.15.y to avoid the new compiler diagnostic
+introduced by
+commit 6e9b8992b122 ("platform/x86: Move existing HP drivers to a new
+hp subdir")
+
+Hans, thanks for the fix.  You may need to additionally add Fixes tag
+to such commits to help out automation for stable. (or perhaps
+ce95010ef62d failed to apply to linux-5.15.y? I think an email gets
+sent when that's the case).
+
+
+>
+>
+>
+> Regards,
+>
+> Jorge Lopez
+>
+>
+> Regards,
+>
+> Jorge Lopez
+> HP Inc
+>
+> "Once you stop learning, you start dying"
+> Albert Einstein
+>
+> From: kernel test robot <lkp@intel.com>
+> Sent: Saturday, May 20, 2023 4:30 PM
+> To: Lopez, Jorge A (Security) <jorge.lopez2@hp.com>
+> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; Sasha Levin <sas=
+hal@kernel.org>; Hans de Goede <hdegoede@redhat.com>
+> Subject: [linux-stable-rc:queue/5.15 105/106] drivers/platform/x86/hp/hp-=
+wmi.c:342:24: warning: cast to smaller integer type 'enum hp_wmi_radio' fro=
+m 'void *'
+>
+> CAUTION: External Email
+> tree: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git queue/5.15
+> head: 632aeb02f8e831197a9a01b1e93cb00b4363be05
+> commit: 8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54 [105/106] platform/x86: =
+Move existing HP drivers to a new hp subdir
+> config: x86_64-randconfig-x052
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
+006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=3D1 build):
+> wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.c=
+ross -O ~/bin/make.cross
+> chmod +x ~/bin/make.cross
+> # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.=
+git/commit/?id=3D8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54
+> git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kerne=
+l/git/stable/linux-stable-rc.git
+> git fetch --no-tags linux-stable-rc queue/5.15
+> git checkout 8d6ed410e942fa6f60e434729e1cbbc9ce0ccd54
+> # save the config file
+> mkdir build_dir && cp config build_dir/.config
+> COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D1 O=3D=
+build_dir ARCH=3Dx86_64 olddefconfig
+> COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D1 O=3D=
+build_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/platform/x86/hp/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <mailto:lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305210504.yw7qgOom-lkp=
+@intel.com
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/platform/x86/hp/hp-wmi.c:342:24: warning: cast to smaller inte=
+ger type 'enum hp_wmi_radio' from 'void *' [-Wvoid-pointer-to-enum-cast]
+> enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
+> ^~~~~~~~~~~~~~~~~~~~~~~~
+> 1 warning generated.
+>
+>
+> vim +342 drivers/platform/x86/hp/hp-wmi.c
+>
+> f82bdd0d77b6bf drivers/platform/x86/hp-wmi.c Kyle Evans 2014-06-09 339
+> 19d337dff95cbf drivers/platform/x86/hp-wmi.c Johannes Berg 2009-06-02 340=
+ static int hp_wmi_set_block(void *data, bool blocked)
+> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 341 {
+> e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins 2009-07-21 @342=
+ enum hp_wmi_radio r =3D (enum hp_wmi_radio) data;
+> e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins 2009-07-21 343 =
+int query =3D BIT(r + 8) | ((!blocked) << r);
+> 6d96e00cef3503 drivers/platform/x86/hp-wmi.c Thomas Renninger 2010-05-21 =
+344 int ret;
+> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 345
+> d8193cff33906e drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
+19 346) ret =3D hp_wmi_perform_query(HPWMI_WIRELESS_QUERY, HPWMI_WRITE,
+> c3021ea1beeeb1 drivers/platform/x86/hp-wmi.c Anssi Hannula 2011-02-20 347=
+ &query, sizeof(query), 0);
+> 527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
+19 348)
+> 527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware 2017-04-=
+19 349) return ret <=3D 0 ? ret : -EINVAL;
+> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 350 }
+> 62ec30d45ecbb8 drivers/misc/hp-wmi.c Matthew Garrett 2008-07-25 351
+>
+> :::::: The code at line 342 was first introduced by commit
+> :::::: e5fbba85a7acc2626d4fe14501816811d702f3e9 hp-wmi: improve rfkill su=
+pport
+>
+> :::::: TO: Alan Jenkins <mailto:alan-jenkins@tuffmail.co.uk>
+> :::::: CC: Len Brown <mailto:len.brown@intel.com>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
