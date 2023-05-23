@@ -1,84 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0781F934
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 19:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684870865;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iVHNxAuh5OEYjMFAsiS2ZVtIUToQz5P7940rncwq2Gs=;
-	b=ITVKn97NyHnnkxZpyMppBMwYStI5E8ftYBu9FNMH9lYRO+fTlmocJ/rkbZKLTmkxZYYfEM
-	A83YdYb5BtTDTY0o6OL/yJXugVRuPJZtyHIBXoOW4K6YmozbMhCzVcn2ZLVK9CiWHKAWhM
-	YaczRaeW93SiLB/P1xyWQnOZakgnxvg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-UyHROdIQNfOaFfujJJqgig-1; Tue, 23 May 2023 15:41:04 -0400
-X-MC-Unique: UyHROdIQNfOaFfujJJqgig-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD567803902
-	for <llvm@lists.linux.dev>; Tue, 23 May 2023 19:41:03 +0000 (UTC)
-Received: from [172.64.14.43] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A3E1D2166B26;
-	Tue, 23 May 2023 19:41:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
- mainline.kernel.org-clang, 5fe326b4)
-Date: Tue, 23 May 2023 19:41:03 -0000
-To: llvm@lists.linux.dev
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846B11F957
+	for <llvm@lists.linux.dev>; Tue, 23 May 2023 20:13:23 +0000 (UTC)
+Received: (from willy@localhost)
+	by mail.home.local (8.17.1/8.17.1/Submit) id 34NKCcxC014675;
+	Tue, 23 May 2023 22:12:38 +0200
+Date: Tue, 23 May 2023 22:12:38 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Zhangjin Wu <falcon@tinylab.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
+Message-ID: <ZG0eNtYH1VvXdLBN@1wt.eu>
+References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
+ <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <49174.123052315410400111@us-mta-10.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
 
-Hi, we tested your kernel and here are the results:
+Hi Thomas, Zhangjin,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+I merged and pushed this series on top of the previous series, it's in
+branch 20230523-nolibc-rv32+stkp3.
 
+However, Thomas, I found an issue with this last patch that I partially
+reverted in a last patch I pushed as well so that we can discuss it:
 
-Kernel information:
-    Commit message: Merge tag 'erofs-for-6.4-rc4-fixes' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/xiang/erofs
+On Sun, May 21, 2023 at 11:36:35AM +0200, Thomas Weißschuh wrote:
+>  
+> -CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+> -			$(call cc-option,-mstack-protector-guard=global) \
+> -			$(call cc-option,-fstack-protector-all)
+> -CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
+> +CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
+>  CFLAGS_s390 = -m64
+>  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+>  		$(call cc-option,-fno-stack-protector) \
+> +		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
+>  		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/89953
+By doing so, we reintroduce the forced stack-protector mechanism
+that cannot be disabled anymore. The ability to disable it was the
+main point of the options above. In fact checking __SSP__* was a
+solution to save the user from having to set -DNOLIBC_STACKPROTECTOR
+to match their compiler's flags, but here in the nolibc-test we still
+want to be able to forcefully disable stkp for a run (at least to
+unbreak gcc-9, and possibly to confirm that non-stkp builds still
+continue to work when your local toolchain has it by default).
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35359=
-6
+So I reverted that part and only dropped -DNOLIBC_STACKPROTECTOR.
+This way I could run the test on all archs with gcc-9 by forcing
+CFLAGS_STACKPROTECTOR= and verified it was still possible to
+disable it for a specific arch only by setting CFLAGS_STKP_$ARCH.
 
+If you're fine with this we can squash this one into your cleanup
+patch.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Zhangjin I think this branch should work well enough for you to
+serve as a base for your upcoming series. We'll clean it up later
+once we all agree on the stat() replacement for syscall() and on
+the various remaining points including your time32 alternatives.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Thanks to you both,
+Willy
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+PS: we're still carrying a long CC list of individuals who are likely
+    not that much interested in our discussion, I propose that we trim
+    it on next exchanges and only keep us 3 and the lists, in order to
+    remove some of their e-mail pollution.
 
