@@ -1,102 +1,110 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A695A18C19
-	for <llvm@lists.linux.dev>; Wed, 24 May 2023 15:41:24 +0000 (UTC)
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2537909d28cso304332a91.0
-        for <llvm@lists.linux.dev>; Wed, 24 May 2023 08:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684942884; x=1687534884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qcbUUGVfTv0206jjEB8o4zl0tBTpQPMIXhfv9powgIA=;
-        b=JUoEUqL9GCgT64YKyjTsSQLQyssCo2s5DjVICCVLyGVKEPYbtva9Ge94Hou/lv8gyq
-         ekATbbNOC0VO/PyLa2Ep7VjZXnnzTvur5bs2GALGrLH+HNpQIycHn2U2iN8xzbm6NCGs
-         N6TEpy93B1shn1wbe+dPvnPBcSVNJH89RxOyalT3qgkSP2YttLq7MLe7J6bDG6eqvfd0
-         tUv7oIdZ0U+r2cqKzOceAj+u6Uw8rLTTdGRLVYycyweaWQ+P/ZwFbTXoyYulKXCTILzk
-         9P6YeOun9KmQDSvlhV76rsTPsaBCf6kmxtvkRt+8Zx/BxB6hJ6jWIKhFZZsYELImuZRh
-         x6Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684942884; x=1687534884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qcbUUGVfTv0206jjEB8o4zl0tBTpQPMIXhfv9powgIA=;
-        b=kL0vvvuv/ROYctGJj1lZy2Gft9GUQF3+9XWBMJNtZ2xkuDopzAXFlcauyRQo/3U+OZ
-         1U4LZqQhhvB1paT6uoj5sc6HWshjs8CRJYuyMgy2aKXx0s660DmgDecPea2kFk/p9q1p
-         HisMMYyljptjF6HIc16Qp59AvwfBUdMVJdID3aiskC6g16aXb4fvNOq950ASQaAvFsqf
-         8Kh6ltpfTM27MX2K3b+WsZgezltLHyDsiBue+3Zy1QZ4bU75jrZRWg/qKF333cIJJPlq
-         tJGniS34rqvzky7OPrzbsZIMp+Q4ObDulqYUIuTieQ3C1ZLdfsTgoV2S6pK6/mABlG8Q
-         Wx9g==
-X-Gm-Message-State: AC+VfDz7ZsQWa3t1QHqGMkHiHE1EBfrCnoVsZD/yE03uobmftVeDDS+X
-	DzK2GTC7wM6BNI6X1zMUssXwTGMIIJiTEGe1DfkMvA==
-X-Google-Smtp-Source: ACHHUZ5dswG3Tqnl2xznNJrUJTgaWJumpj8L1ig619SMi30QFXbZx6bqoCnlMVQEF4vymExc6hDQ1r5IL1lElyMkZog=
-X-Received: by 2002:a17:90a:b389:b0:255:a1db:346d with SMTP id
- e9-20020a17090ab38900b00255a1db346dmr6718829pjr.25.1684942884011; Wed, 24 May
- 2023 08:41:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38321951F;
+	Wed, 24 May 2023 15:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684943877; x=1716479877;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=V0ppXZqwuxAU/Bg5FfSiFhkz0C7dZFMzhNEHqaFV3kc=;
+  b=kD6bAILyVW/TqijsdwqRr941SHB9YeX5aLtESd3A5j2gOpTjSmjPfn/v
+   JVtCK8ytljKW23z5/HwJYmu/6a3StCyrTvmDoB8veTSmwBb2+i5EYMECI
+   zYsmx6yzuzBmZxX8G5B6CLtIJJnIiXrtiy/4cUMxcT4C8JwG75Xu3plET
+   yjBpuzQqClV6YYuAkusx22EttZU2JjfME8paHnix636m7ojsS2aJBLtr+
+   iRJZkCkeuyWBC/1ec9wOxdbId4ePi9LSFJuvl7ZAJpFeQ1riR6jduBq6f
+   ezdC7jP4ZyTUWOsLvaNhPQgjb0d3RX8lTmOy4nk04gpfMszXKFbCj2ke0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343073508"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="343073508"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 08:57:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="737375787"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="737375787"
+Received: from davidbel-mobl.ger.corp.intel.com (HELO localhost) ([10.252.44.5])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 08:57:52 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>, joonas.lahtinen@linux.intel.com,
+ rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com
+Cc: ndesaulniers@google.com, trix@redhat.com,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, kernel test robot
+ <lkp@intel.com>, Naresh Kamboju <naresh.kamboju@linaro.org>, Nathan
+ Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] drm/i915: Fix clang -Wimplicit-fallthrough in
+ intel_async_flip_check_hw()
+In-Reply-To: <20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org>
+Date: Wed, 24 May 2023 18:57:49 +0300
+Message-ID: <87mt1tk9he.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=QFNuDoE_J2Zu-g@mail.gmail.com>
- <20230524153918.GA869320@dev-arch.thelio-3990X>
-In-Reply-To: <20230524153918.GA869320@dev-arch.thelio-3990X>
-From: =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date: Wed, 24 May 2023 09:41:12 -0600
-Message-ID: <CAEUSe7-PUh4cDs_pQR6kp6GvAfz6qoqdPaOxRMMHz6YeXRuxAA@mail.gmail.com>
-Subject: Re: next: clang: x86_64: /intel_display.c:6012:3: error: unannotated
- fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>, arun.r.murthy@intel.com, 
-	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hello!
-
-On Wed, 24 May 2023 at 09:39, Nathan Chancellor <nathan@kernel.org> wrote:
-> Hi Naresh,
+On Wed, 24 May 2023, Nathan Chancellor <nathan@kernel.org> wrote:
+> Clang warns:
 >
-> On Wed, May 24, 2023 at 12:32:24PM +0530, Naresh Kamboju wrote:
-> > Linux next-20230523 and next-20230524 the x86_64 and i386 builds failed
-> > with clang.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > make --silent --keep-going \
-> >   --jobs=3D8 O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=3Dx8=
-6_64 \
-> >   SRCARCH=3Dx86 CROSS_COMPILE=3Dx86_64-linux-gnu- \
-> >   'HOSTCC=3Dsccache clang' 'CC=3Dsccache clang' \
-> >    LLVM=3D1 LLVM_IAS=3D1
-> >
-> > drivers/gpu/drm/i915/display/intel_display.c:6012:3: error:
-> > unannotated fall-through between switch labels
-> > [-Werror,-Wimplicit-fallthrough]
-> >                 case I915_FORMAT_MOD_X_TILED:
-> >                 ^
-> > drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert
-> > 'break;' to avoid fall-through
-> >                 case I915_FORMAT_MOD_X_TILED:
-> >                 ^
-> >                 break;
-> > 1 error generated.
+>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>                   case I915_FORMAT_MOD_X_TILED:
+>                   ^
+>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert 'break;' to avoid fall-through
+>                   case I915_FORMAT_MOD_X_TILED:
+>                   ^
+>                   break;
+>   1 error generated.
 >
-> Thanks for the report, I have sent
-> https://lore.kernel.org/20230524-intel_async_flip_check_hw-implicit-fallt=
-hrough-v1-1-83de89e376a1@kernel.org/
-> for this.
+> Clang is a little more pedantic than GCC, which does not warn when
+> falling through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst, which
+> states that all switch/case blocks must end in either break,
+> fallthrough, continue, goto, or return. Add the missing break to silence
+> the warning.
+>
+> Fixes: 937859485aef ("drm/i915: Support Async Flip on Linear buffers")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/202305241902.UvHtMoxa-lkp@intel.com/
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Closes: https://lore.kernel.org/CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=QFNuDoE_J2Zu-g@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Better link: https://lore.kernel.org/dri-devel/20230524-intel_async_flip_ch=
-eck_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org/
+Yeah, I think this is the right quick fix. See also [1].
 
-Greetings!
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+[1] https://lore.kernel.org/r/874jo3kwl6.fsf@intel.com
+
+
+> ---
+>  drivers/gpu/drm/i915/display/intel_display.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+> index 0490c6412ab5..6d49e0ab3e85 100644
+> --- a/drivers/gpu/drm/i915/display/intel_display.c
+> +++ b/drivers/gpu/drm/i915/display/intel_display.c
+> @@ -6008,6 +6008,7 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
+>  					    plane->base.base.id, plane->base.name);
+>  				return -EINVAL;
+>  			}
+> +			break;
+>  
+>  		case I915_FORMAT_MOD_X_TILED:
+>  		case I915_FORMAT_MOD_Y_TILED:
+>
+> ---
+> base-commit: 9a2cb1b31c040e2f1b313e2f7921f0f5e6b66d82
+> change-id: 20230524-intel_async_flip_check_hw-implicit-fallthrough-c4c40b03802f
+>
+> Best regards,
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
