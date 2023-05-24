@@ -1,125 +1,130 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D0619523
-	for <llvm@lists.linux.dev>; Wed, 24 May 2023 19:10:41 +0000 (UTC)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-625482282e0so828906d6.3
-        for <llvm@lists.linux.dev>; Wed, 24 May 2023 12:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684955440; x=1687547440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h81XEzBPwR4bI9NqqVxiHNHCxTZ8a1gTVYdXg+UM5xQ=;
-        b=BCkFJNEfqgC5o4MydkQjO1+VvUNTJJxl/2jIOyYf3Q031h+Jh/cKOcO4HR1pCebfEU
-         XqOr+bjRo4im00dAadyUH54RrVp3c76JL2bj2MME1R4FLTIvYT5Bhlp30AWmGVfECOHt
-         /9WZbU2YlqPbW9fAq1duV5Ho4uVvRKeGXfKsZ7mpjUJ1e1VAwCCzOBMmNlJevsaxrwVn
-         LC5HiTiC/yu/oFTpdddUnMxd1Xahz8yUKj0OYw+ySZkCP5RhMVWYfH0y4Ikrqdj4NYhj
-         fnJd7JzdWHY9Uty+/+fFX6Cj7Dj7kez55LA8qXBUeLTeAiWIaW8sGsXI+ADdBBniPjDP
-         0sjA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2648360862
+	for <llvm@lists.linux.dev>; Wed, 24 May 2023 19:44:21 +0000 (UTC)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-763da06540aso214525239f.3
+        for <llvm@lists.linux.dev>; Wed, 24 May 2023 12:44:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684955440; x=1687547440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h81XEzBPwR4bI9NqqVxiHNHCxTZ8a1gTVYdXg+UM5xQ=;
-        b=FHes2Rulz4IKbwT9+uSM0v21RJ9XQXoF11FA05aZFTdOJo+yRL5LAUdFQrQYyv5ohW
-         6L+G0NUBkXKUiGbIJVk9nIumCyKQWgNWuUuv+gU4gMJPHSbnfOvjF6yVreSSYrs5rHZK
-         sgV8d732zMHrlJOTlbqEZrKaWZjsLMJyw24e1tAPfE/0UpJLvDb53d1QzqWZAVG61A6C
-         q3Md5XOSczS/C6HOH6WEGGmLYhsO0d/MVxfneJPXsHOgWoNgs/PxQxMkPX6TAsyXPzf8
-         pBmPKUpK2HQIoyPNxWTo3EXQ23+9Q5bz1pRIDOOn3b6lJsy1CHKE5C4xynJQDi5yHk3x
-         r82Q==
-X-Gm-Message-State: AC+VfDxjeNqXOPZnJNa5QYEILu8w5X/QMruAGIekkTTPiHHZ/6p/ez6E
-	D5a72n6LUDKVpRmcl9L0TS7zIQ9o12dlkJK1CqTm9A==
-X-Google-Smtp-Source: ACHHUZ4PZykgO+qAt/GfVYRFXAXR9glmVwU0iD12ZrZiZ030lBrpghOBZTNusAA1GBGj9IHhm9gGjwRb0C2xhmLxQWg=
-X-Received: by 2002:ad4:5f0b:0:b0:625:88f5:7c5f with SMTP id
- fo11-20020ad45f0b000000b0062588f57c5fmr14530999qvb.31.1684955440288; Wed, 24
- May 2023 12:10:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684957460; x=1687549460;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GXM0OJBa2Xe7YCAQJqSdK/TYdEJX3LTPFYVv2SjRziU=;
+        b=Xob6AbFGbMynirxdKS38GSsPAb45qWbH3VGoBYLf+/gtebR/J2LQe9NzUAvRMOipIE
+         5y2FampxHf5n36es/1tI8Pp9CHdOS+uF6DPssXXwGaNTHJc6hmAbWI9Nw5OAkzBh/CWs
+         mXcLTcDP1EOk1DyILkcz1UPGCze4S3NZjd8Vgzp8+TO2kQrJ4juebIZsH3udIX6lCl9g
+         5IATL3nUJutVw8Be53jTQYyQaFJSQuFQ0oaQCcZSqwpG3hq4jBkwd/Cn5bvBQGuOZr52
+         9abMIb2dLMWNYEFBU8QCTGVnj1lYdrYgQ3tukgprYS0cKPwht/HjjphseyQP7H/CZsL0
+         A67Q==
+X-Gm-Message-State: AC+VfDy5u0o5LbCwQzVLYvHuh2eBYLDNcXK0eXu51Uel5zrWKKUhzy5o
+	6gcAOlkmuMngBH2mH6bzz8WPXkYr4j5PbtK2/g4VI/DPxtrx
+X-Google-Smtp-Source: ACHHUZ5AaKXnI1J1H+PH8SthQs4AC6Rc+pFC3KEwRguEG7pGu6xa0diRM/rUzLHYh0RRXdQtOAuql2wUl2OfGeX36t/Idoyzq9Ny
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <TYCP286MB2066DEF0E1810E8BC36F533EC07B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYCP286MB2066DEF0E1810E8BC36F533EC07B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 24 May 2023 12:10:29 -0700
-Message-ID: <CAKwvOdm6diEmc+utBNxQ4ftx3Ai2SD8q32TxRgeZ-rpGoL2Bjg@mail.gmail.com>
-Subject: Re: [PATCH] gen_compile_commands: include targets not end with .o
-To: Hu Weiwen <huww98@outlook.com>
-Cc: llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Hu Weiwen <sehuww@mail.scut.edu.cn>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
+X-Received: by 2002:a02:9625:0:b0:416:5075:372f with SMTP id
+ c34-20020a029625000000b004165075372fmr9389784jai.3.1684957460223; Wed, 24 May
+ 2023 12:44:20 -0700 (PDT)
+Date: Wed, 24 May 2023 12:44:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e0df8d05fc75ba86@google.com>
+Subject: [syzbot] [bpf?] WARNING in btf_type_id_size (2)
+From: syzbot <syzbot+958967f249155967d42a@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 14, 2023 at 3:19=E2=80=AFAM Hu Weiwen <huww98@outlook.com> wrot=
-e:
->
-> From: Hu Weiwen <sehuww@mail.scut.edu.cn>
+Hello,
 
-Hi Hu,
-Sorry, for the delay. I'm usually faster to respond to patches. It was
-my mistake this fell through the cracks, and thank you for the patch.
+syzbot found the following issue on:
 
-I received this email from <huww98@outlook.com>. Do you mind resending
-with your signed off by tag set to the email address from which you
-are sending patches?  This patch looks benign to me, but it makes me a
-little uneasy when author !=3D sender.
+HEAD commit:    0613d8ca9ab3 bpf: Fix mask generation for 32-bit narrow lo..
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12d7f219280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
+dashboard link: https://syzkaller.appspot.com/bug?extid=958967f249155967d42a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162a2555280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129ce341280000
 
-Please also cc
-- Masahiro Yamada <masahiroy@kernel.org>
-- linux-kbuild@vger.kernel.org
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d08fd262c806/disk-0613d8ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/43cddf0d3788/vmlinux-0613d8ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e2583f3d15eb/bzImage-0613d8ca.xz
 
-As this would go in via the kbuild tree.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+958967f249155967d42a@syzkaller.appspotmail.com
 
->
-> Currently, we only extract commands for targets end with '.o'. But we
-
-s/end/ending/
-
-
-With this patch applies\d, I get the same word count for
-compile_commands.json when running:
-$ make LLVM=3D1 -j128 defconfig compile_commands.json
-
-on my x86_64 host. Is that expected?  Is there a specific arch or set
-of configs for which such .c files produce executables directly?
-
-> also have many standalone executables built in-tree.
->
-> Remove this restriction. And to avoid some false matching, exclude
-> targets end with '.c' or '.h' when directly walking the directory.
->
-> Signed-off-by: Hu Weiwen <sehuww@mail.scut.edu.cn>
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 15ba56527acd..6e88c7e166fc 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -18,8 +18,8 @@ import sys
->  _DEFAULT_OUTPUT =3D 'compile_commands.json'
->  _DEFAULT_LOG_LEVEL =3D 'WARNING'
->
-> -_FILENAME_PATTERN =3D r'^\..*\.cmd$'
-> -_LINE_PATTERN =3D r'^savedcmd_[^ ]*\.o :=3D (.* )([^ ]*\.c) *(;|$)'
-> +_FILENAME_PATTERN =3D r'^\..*(?<!\.(c|h))\.cmd$'
-> +_LINE_PATTERN =3D r'^savedcmd_[^ ]* :=3D (.* )([^ ]*\.c) *(;|$)'
->  _VALID_LOG_LEVELS =3D ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
->  # The tools/ directory adopts a different build system, and produces .cm=
-d
->  # files in a different format. Do not support it.
-> --
-> 2.25.1
->
->
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5005 at kernel/bpf/btf.c:1988 btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
+Modules linked in:
+CPU: 0 PID: 5005 Comm: syz-executor387 Not tainted 6.4.0-rc1-syzkaller-00096-g0613d8ca9ab3 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+RIP: 0010:btf_type_id_size+0x2d9/0x9d0 kernel/bpf/btf.c:1988
+Code: ef e8 6b 58 e2 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 f9 5b e2 ff 44 89 fe bf 0e 00 00 00 e8 0c 58 e2 ff e8 e7 5b e2 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 d2 5b e2 ff 44
+RSP: 0018:ffffc90003a9fb68 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801f7ebb80 RSI: ffffffff81a1e8f9 RDI: 0000000000000005
+RBP: ffff888020813400 R08: 0000000000000005 R09: 000000000000000e
+R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000011 R14: ffff88802101f418 R15: 0000000000000011
+FS:  00005555567b2300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000001a4b398 CR3: 000000002c9c3000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ map_check_btf kernel/bpf/syscall.c:1024 [inline]
+ map_create+0x1157/0x1860 kernel/bpf/syscall.c:1198
+ __sys_bpf+0x127f/0x5420 kernel/bpf/syscall.c:5040
+ __do_sys_bpf kernel/bpf/syscall.c:5162 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5160 [inline]
+ __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5160
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f379d511d09
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffea061b348 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f379d511d09
+RDX: 0000000000000048 RSI: 0000000020000180 RDI: 0000000000000000
+RBP: 00007f379d4d5eb0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f379d4d5f40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
---=20
-Thanks,
-~Nick Desaulniers
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
