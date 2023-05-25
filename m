@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9884923C9B
-	for <llvm@lists.linux.dev>; Thu, 25 May 2023 18:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB832C433D2;
-	Thu, 25 May 2023 18:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B33423C9A
+	for <llvm@lists.linux.dev>; Thu, 25 May 2023 18:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69D6C433EF;
+	Thu, 25 May 2023 18:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685040143;
+	s=k20201202; t=1685040223;
 	bh=ODzEe5MTMPERDf+zXbuLdOTQOBegDNhuK6ZJ0a/0Ze4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KcAZSQqGX+VjlkQ/vXkCCwrzvmaUqnbP5sBUwoFVpvFmgmFMUpR7zeIGzxbOWl9Q5
-	 1mhMmmQJ0IJPYuTIvOjwhGPi9GzLU6VcpoRCxVjv/7eqZjoDoRQaBDuvE1aRBM0O4K
-	 vXkShnCXAlsDFAmmyHGI+CCQoZfQqrAh/L9ZtCyx8KbKZWFjbg3p9+B6wXGJE5tAlW
-	 Cj8X1TfHlL3REd7+vcJGkCgoY8+oH18nVtQgTgXeHBroRVlhpOT1gF1fZ4TwGddxRc
-	 nlDuklIp3o9xwtzfeQH3pdGGMt69ytACjuTY97FRyTzrlpvqAXlgmHtunN85x6QJlN
-	 qWtUXTR7gSlzA==
+	b=UGFYXzNfBZtr9YlhBRqOMkscEE0JLRZmtuLWWgKjNIsO6hIqfBEqucoEoVWVZa5b1
+	 fZycht2qRt4hl0x7zyMsuKUwzDPA/vaEAe6Q4glA069gDzYkmVm1UAhaV1wX/a+PZ4
+	 kcfdjkmdK6pklfOW+h27JIhqiv77ugxp5+WeT5fyG1+dP3ttN3xvHOsT+B4zc4CjMc
+	 Xmm87kAiBcW6Mj8r0ORKp/2ZTonsMDtqnf8JlLgW7yohoSA2GKRGzo4dRE05PUyg+x
+	 oRRTbfRCpfIZyodGCSj9ZNPEgcmLlqpyIJP/KbQEtwnd3X61eUREbBrsxOO193qb6E
+	 GLdlwGtJqi9hw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -30,12 +30,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-wireless@vger.kernel.org,
 	b43-dev@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 26/31] wifi: b43: fix incorrect __packed annotation
-Date: Thu, 25 May 2023 14:40:57 -0400
-Message-Id: <20230525184105.1909399-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 23/27] wifi: b43: fix incorrect __packed annotation
+Date: Thu, 25 May 2023 14:42:32 -0400
+Message-Id: <20230525184238.1943072-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
-References: <20230525184105.1909399-1-sashal@kernel.org>
+In-Reply-To: <20230525184238.1943072-1-sashal@kernel.org>
+References: <20230525184238.1943072-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
