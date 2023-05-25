@@ -1,86 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA7F24E81
-	for <llvm@lists.linux.dev>; Thu, 25 May 2023 20:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6894CC433D2;
-	Thu, 25 May 2023 20:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685045682;
-	bh=c9RYj0+T+0idw1Qy78csQBqrvbedfd4wjKYCGYBBYrg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q1esTd0qvQJc7TabmbiYhEBwa0xNKAeKW7a84pfVHnWhu/iA29rxP1T9hxs59SbsX
-	 eUk+QNURpIP86mhVgJ4oEo0KOALxuVfwQjbVXuzv0VEILEnClglckuNPQlH4U89aQr
-	 KNRuq/zeefVuy3pkin9GdjC4JvGbRuPulhBLk+u25Xzfr7xveS4YsIgknyTVIHJjew
-	 EYr3l206f7r3O/V+3LaWNHJQfIX6j7CiMn4L3D/nrGJ3UDeWG9Qzw38YxudMhoF90W
-	 EMOPCgOC+stBd2u4eMe4LVwNqTNF6uH+2IuI2Lk1sZwoCsZ8aySOoW2/sOLKv0rK0z
-	 J+4mVPPhfua3A==
-Date: Thu, 25 May 2023 13:14:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tom Rix <trix@redhat.com>
-Cc: Felix.Kuehling@amd.com, alexander.deucher@amd.com,
-	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-	daniel@ffwll.ch, ndesaulniers@google.com,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/amdkfd: remove unused function
- get_reserved_sdma_queues_bitmap
-Message-ID: <20230525201439.GA2741545@dev-arch.thelio-3990X>
-References: <20230525200759.3214525-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C35318E
+	for <llvm@lists.linux.dev>; Thu, 25 May 2023 20:30:01 +0000 (UTC)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3f6042d605dso228585e9.2
+        for <llvm@lists.linux.dev>; Thu, 25 May 2023 13:30:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1685046600; x=1687638600;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KpMGG8xImlDkqBATRluOoCQ+0G0nxNJZCtKY+pxwMpA=;
+        b=NL0EX6/H88L3/duJLGNldX6FVc864XY+R00ohvr+ICNoEIX6CkE9Z12+2Pn21sYWz1
+         fqEfxKmu8b17oJLFja8/HxbTX7/13X/d3jvliRnKcCL5o0gu7HMoz/3qHMtZEvPltVqA
+         wkoRjWENQ7+GFman8KVYBQnz295yByLuabrGeRAy63hZWE4HQ/WXDjjWRUdF6cBHkEc1
+         jri0vXDscHWWc86+fjc6eIDXXtCcJXgAryO/gMactDAeMMauaUQFqPU4wPykpxFyyIr6
+         JYLh8Gj8skPhNs6zH1xj14mKcX0EEDCNldNz90BGNWDVXfC6rhSazgG/9N0vuzcxtFaQ
+         nNgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685046600; x=1687638600;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KpMGG8xImlDkqBATRluOoCQ+0G0nxNJZCtKY+pxwMpA=;
+        b=M8gdgNh3adtoW4riCzIh2Nt6sX6JfLzFHrzbve1mE+l5wOvzoHZXxo06LSGB2C9ZdO
+         CuMe/WZgk+K/ZaOIamSbocbM/5sLhXqEYUktuEUbU4JS6Ez5cVZHj7ULXpQyWbOLuSFe
+         Qe0u398VwheUimRQUsekvjuy1KsCALjXVX3XS6pHqLK4tVQPmKYFg+BfnKZvBlrSR56y
+         2QcusKhPa/VuQ17ENoxBtI3cCK4mO11PkXM4EEXIzQU8nxU9W3zPEMMvWNvJEFmnncLo
+         1W0ZBZVxRGY7848bz2AxDq5GHS5K71vwZhlDZ8Vrkl+bGEXpY+lEZb/3hO+t3znOsm1C
+         PWfQ==
+X-Gm-Message-State: AC+VfDxthGIchIi+sxvpRFlFbel/6zeV2/ogsPIeZiDxLUNhmG6ncln3
+	pSmbuZCxYBufWjon2gpKSjNZWA==
+X-Google-Smtp-Source: ACHHUZ4PexvjlMAM/TtsIgybNpAfwmX0zkAmpQB0DP94UjoG/L9hVa0OrqzyLg4x+TSxOSgSUCOgYA==
+X-Received: by 2002:a05:600c:2111:b0:3f6:fb2:add4 with SMTP id u17-20020a05600c211100b003f60fb2add4mr3086171wml.33.1685046600132;
+        Thu, 25 May 2023 13:30:00 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:bb9d:a59a:c33b:e36? ([2a02:578:8593:1200:bb9d:a59a:c33b:e36])
+        by smtp.gmail.com with ESMTPSA id y12-20020a1c4b0c000000b003f4290720d0sm6602440wma.47.2023.05.25.13.29.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 13:29:59 -0700 (PDT)
+Message-ID: <39da7e41-dd07-b8bc-57b9-19b05fdfbeac@tessares.net>
+Date: Thu, 25 May 2023 22:29:58 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525200759.3214525-1-trix@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/i915: Fix clang -Wimplicit-fallthrough in
+ intel_async_flip_check_hw()
+Content-Language: en-GB
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+ rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, trix@redhat.com,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ kernel test robot <lkp@intel.com>, Naresh Kamboju
+ <naresh.kamboju@linaro.org>,
+ Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+ Joe Perches <joe@perches.com>
+References: <20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org>
+ <CAKwvOd=jZJouuNMd3Rvc--goA0EXPHcf6cHXUA6W1kXJg2ay2w@mail.gmail.com>
+ <20230524184103.GA324296@dev-arch.thelio-3990X>
+ <CAKwvOdm=Zk8YhrPptN3k7UQo+1n7Ws=Qox=BwTR9bbjPJJYz8A@mail.gmail.com>
+From: Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <CAKwvOdm=Zk8YhrPptN3k7UQo+1n7Ws=Qox=BwTR9bbjPJJYz8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 25, 2023 at 04:07:59PM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:122:24: error:
->   unused function 'get_reserved_sdma_queues_bitmap' [-Werror,-Wunused-function]
-> static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
->                        ^
-> This function is not used so remove it.
+Hi Nick,
+
+On 24/05/2023 20:56, Nick Desaulniers wrote:
+> On Wed, May 24, 2023 at 11:41 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Wed, May 24, 2023 at 11:32:32AM -0700, Nick Desaulniers wrote:
+>>> On Wed, May 24, 2023 at 8:38 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>>>
+>>>> Clang warns:
+>>>>
+>>>>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>>>>                   case I915_FORMAT_MOD_X_TILED:
+>>>>                   ^
+>>>>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert 'break;' to avoid fall-through
+>>>>                   case I915_FORMAT_MOD_X_TILED:
+>>>>                   ^
+>>>>                   break;
+>>>>   1 error generated.
+>>>>
+>>>> Clang is a little more pedantic than GCC, which does not warn when
+>>>> falling through to a case that is just break or return. Clang's version
+>>>> is more in line with the kernel's own stance in deprecated.rst, which
+>>>> states that all switch/case blocks must end in either break,
+>>>> fallthrough, continue, goto, or return. Add the missing break to silence
+>>>> the warning.
+>>>>
+>>>> Fixes: 937859485aef ("drm/i915: Support Async Flip on Linear buffers")
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>> Closes: https://lore.kernel.org/202305241902.UvHtMoxa-lkp@intel.com/
+>>>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>>>> Closes: https://lore.kernel.org/CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=QFNuDoE_J2Zu-g@mail.gmail.com/
+>>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>>
+>>> Thanks for the patch! I've never seen the closes tag before, that's
+>>> new to me. Can you tell me more about it?
+>>
+>> It is new to me (at least in the context of the kernel) as well. I only
+>> used it over Link: because checkpatch.pl told me to:
+>>
+>> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
+>> #26:
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>>
+>> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
+>> #27:
+>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>
+>> It was Link: for a bit but commit 44c31888098a ("checkpatch: allow
+>> Closes tags with links") changed it to Closes:. Looks odd to me but
+>> whatever the linter says I suppose.
+>>
+>> Thanks for the review!
+>>
+>> Cheers,
+>> Nathan
+>>
+>>> A few more tags
+>>>
+>>> Reported-by: Tom Rix <trix@redhat.com>
+>>> Link: https://lore.kernel.org/all/20230523125116.1669057-1-trix@redhat.com/
+>>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Caused by commit 09a95a85cf3e ("drm/amdkfd: Update SDMA queue management
-for GFX9.4.3") it seems.
-
-You can actually go a step farther and remove the
-reserved_sdma_queues_bitmap member from 'struct kfd_device_info' because
-it is now only assigned, never read.
-
-$ git grep reserved_sdma_queues_bitmap next-20230525
-next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device.c:        kfd->device_info.reserved_sdma_queues_bitmap = 0xFULL;
-next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device.c:        kfd->device_info.reserved_sdma_queues_bitmap = 0x3ULL;
-next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c:static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
-next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c:    return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
-next:20230525:drivers/gpu/drm/amd/amdkfd/kfd_priv.h:    uint64_t reserved_sdma_queues_bitmap;
-
-> ---
->  drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c | 5 -----
->  1 file changed, 5 deletions(-)
+> Ah then I guess my link tag should have been
 > 
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> index 493b4b66f180..2fbd0a96424f 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> @@ -119,11 +119,6 @@ unsigned int get_num_xgmi_sdma_queues(struct device_queue_manager *dqm)
->  		dqm->dev->kfd->device_info.num_sdma_queues_per_engine;
->  }
->  
-> -static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
-> -{
-> -	return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
-> -}
-> -
->  static void init_sdma_bitmaps(struct device_queue_manager *dqm)
->  {
->  	bitmap_zero(dqm->sdma_bitmap, KFD_MAX_SDMA_QUEUES);
-> -- 
-> 2.27.0
+> Closes: https://lore.kernel.org/all/20230523125116.1669057-1-trix@redhat.com/
 > 
+> I hope the author of
+> commit 44c31888098a ("checkpatch: allow Closes tags with links")
+> has coordinated with the maintainer of b4, so that b4 recognizes Closes tags.
+> b4 v0.12.2 does not pick up Closes tags.
+
+I'm sorry for the troubles caused by this series, that was not the
+intension.
+
+When looking at modifying b4 to support the Closes tag, I realised the
+Link tag from your previous message [1] was not taken as well. Was it
+just me?
+
+If no, I just sent patches for b4, see [2]. I hope it will help!
+
+Cheers,
+Matt
+
+[1]
+https://lore.kernel.org/all/CAKwvOd=jZJouuNMd3Rvc--goA0EXPHcf6cHXUA6W1kXJg2ay2w@mail.gmail.com/
+[2]
+https://lore.kernel.org/tools/20230525-closes-tags-v1-0-ed41b1773cb6@tessares.net/T/
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
