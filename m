@@ -1,160 +1,191 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2044.outbound.protection.outlook.com [40.107.220.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130A21EA8B
-	for <llvm@lists.linux.dev>; Thu, 25 May 2023 21:10:14 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GK8ZSCepihEqnJ8TTWxU4oLfYH3cMhoPh3+oqioMcn2/NBRyKHqWbiDezU+5h07rqrW3g1943vm8Jnag+8dXg3dyvQPmCpagk4RZvYEelwc229XOSi9ZrkyasqnzZCzeoCI9o1JXGEXfOM6Cymq1sMLVewn1t42mjOrnKH6dMpw08SS5aVWVmDHeIv5oHzM05cksPxWlNdEjRVi8ifQuUG6w2g+C444uC7azhPHqHArS61swgleUtWXChj4w6CErpuEPC8pTlJitVMuCuehGckE0obbw0ug182spkikQFlwmjxxQ3zo+ltvlHqaJdlenScgLFXfTW3s0b3QV26QpOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7kVw0slFKWd5YNM4QbZgJjnwJsnRya0EWp+yLsbqioU=;
- b=gACX8ZIssYoVTvyJRVpkhr/Hhb6n67zsqLnM5pJ2J5//T6dcTzSoqL3Ja14W3ouxWAc5ABV6eF9/7MZXc7rCQTev73JU0NievzZZB6+tIA+bpM/lYN5TQYX76FPNQxS2h23B+93TSeV+UFw92wNtDpGL/LlUyyrz9MT1eZOJ8JOh6QZljx2ifrEN7vQwD85RO30L7M4CRdOP6XJ0ePYqWi1WRpjIZ5VHdtJUzyAJzOFzuM7ibMHk/cC9dAOzv6nj+3lH8VZP70myv5bpdhwn8AKDgsiPd8NkSxyHTkgCV2PXIa+gxkAyc3nwDf/cPpk/7rE2x+IGgtrNXfuaukjqeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7kVw0slFKWd5YNM4QbZgJjnwJsnRya0EWp+yLsbqioU=;
- b=dMhDjCqKZ8ZioPBAiM5WFGB7QF1wF0sHhDEOhRTIcKYw7DbRwZXLZ2QL9fJe3zbFRgnL7cTxqciQFO9pvaXFLRjEVbo3BKzGd+5xOzZ5Y9I2kZntRODXqtsVGgGFGnTh9bkUFJHexy8sOV+bmAwGFKI39OY9ETWLUZwPWPZd9J8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by CY5PR12MB6060.namprd12.prod.outlook.com (2603:10b6:930:2b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Thu, 25 May
- 2023 21:10:12 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::943e:32fb:5204:a343]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::943e:32fb:5204:a343%3]) with mapi id 15.20.6433.016; Thu, 25 May 2023
- 21:10:12 +0000
-Message-ID: <af7eab96-fc2b-0bbc-107c-35f83dc46022@amd.com>
-Date: Thu, 25 May 2023 17:10:09 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amdkfd: remove unused function
- get_reserved_sdma_queues_bitmap
-To: Tom Rix <trix@redhat.com>, alexander.deucher@amd.com,
- christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
- daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
- "Joshi, Mukul" <Mukul.Joshi@amd.com>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230525200759.3214525-1-trix@redhat.com>
-Content-Language: en-US
-From: Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-In-Reply-To: <20230525200759.3214525-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: QB1P288CA0002.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c00:2d::15) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C032224E9F
+	for <llvm@lists.linux.dev>; Thu, 25 May 2023 21:21:36 +0000 (UTC)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-62576fa52b4so2534086d6.0
+        for <llvm@lists.linux.dev>; Thu, 25 May 2023 14:21:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685049695; x=1687641695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nAreeB289hYqC9QkPIJw+jIvSwYuYqhQWcJOMaksQhw=;
+        b=CbkF07UtHGKUGe6rDMeSjcCMfSB6XhcwOYlyDm3YwvUumB++KKg0hnm5wvNepdYmyw
+         j+u2opNahlZ/d5/NLun990nr/07DYVmh0s0yf85aY7McEFjWH4V2ByqDQ30kh2+EiGc3
+         dJamghQW0tltlOHm5H1c5xqZh+bGM+mSyZF1eO8TyOKKu5Qa3wEmVoEQbVHLSpCrfP91
+         1WqukHcCj1gD41BS2NrcLKFU0r4ie5QA5cdz/iRKMNaBfTxojpQJC11L62KgMIvQrw+3
+         VEEyraz8ButHyoWGOJiFrp94aYUSpsiTL/W5VoPapxVAAbLRZU3v+jqQ8vNzvjzGy3ZX
+         DINg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685049695; x=1687641695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nAreeB289hYqC9QkPIJw+jIvSwYuYqhQWcJOMaksQhw=;
+        b=h5hc7IPIpwozHRQ1eVzxQ3CAcRi/9LtSR9BErJKjzH7joNp0ByU/DVJm0kTo/qMJbo
+         /i0rOvybYZ06mx+LcS9ShdlniQEdM+lzFdQQ42v59WtZHH3OPuA4nhilD76FFwOwVYdj
+         MCDmep6tX9iZ2KQiUmgN83wxkXs14pTOR0MKD640NE4orAZEWmTCSYo16wLHHbUX01x/
+         Ptfp9ytWQ0Jrs+rOwZHQQkBir9u8TZuRlkcaWojDdzfbitwTBmM07rCS9Vl+6klJV0le
+         hIsc6Gkxe3jXZdh2/ARNeE1BBv57Ty0C0UpEettw9sHpB/5UVMXTrabV+VHIFfLs68lI
+         BORQ==
+X-Gm-Message-State: AC+VfDw4Vdr6PE1sZYDD9UqTf9elhsdJkCvInb5EEo99zh7zu0VNNNFt
+	CmUI91CaFCOxwdWSq5alHzBlopQr5UMGqYeV/OMkPg==
+X-Google-Smtp-Source: ACHHUZ5QYAKLu8momFty5fDZLtzcgf2/3Mj0oobvvXC46YBHLdX2N4LMW3h8YhaPw3qoCtNeVK3Ozixa/KV5/GHonyY=
+X-Received: by 2002:a05:6214:490:b0:625:b3a2:f637 with SMTP id
+ pt16-20020a056214049000b00625b3a2f637mr3100923qvb.8.1685049695480; Thu, 25
+ May 2023 14:21:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|CY5PR12MB6060:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23c6b1c3-0339-4673-6f0b-08db5d646db8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Zz0wm02GUSKupkI1Ee9YC3OPr7lwhjRS9jIypWwwWdbmzLaRzQPe90/nObrR2e4TKkwZ7ARmN3Zj6dX9GaNbKIGW5hw7QIlp/aIDesb4zx2Ws+3oQfv0e1xacCSWhOW2PdIi6DKKdl9n8abo9NlmjWdkIQHkik6qWlJz8nbVSSisQy7F9eckzGQ5j2L8pREIIAIMgVphvFMHV1iPLyObU7FgL9wiU0NU9cNhm2/iEXLqMD/EfeEX66cqnEppSt4e6tFoFC7566s/bX1sYoIgGC4T6nJK4gMHQqWiEa7gZdqJ72H5CrpeOy7SDvp+W6tFgyvkAH5Ix87bJNKNUOnSVj/ZRsOMq8TD4Cke0YL9oEU0j4gho7NAREsQd1+cQlpZHJs9xUb6Y55qjURnA8q+N+hudddEFmvX79ZcbbAQ4tASWg4a7W1mdInnEn7rlPJtsfOr5rWXt4c+kgaeJ0y7DVvQIB9qb2Np+aSraHbAignZ/eUo4hziCXLm0abtNXn+ymvwRbj00ezNwxJkaLuSXR1A3JzfYlRgm7DZmCaAfMcxqpVjUIGgP721PnOxMJHuc3wiL7sP90hupb4vRScO7CSnt5w6GajnXkCz6M0RpM2QechIWinP88TgUPoQ/idRtS9WDLDjcan8FHR80Ti1Kr67skId4RMT0h2+RNUlPSg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199021)(31696002)(86362001)(36756003)(36916002)(110136005)(4326008)(6636002)(316002)(66556008)(66946007)(66476007)(478600001)(6486002)(6666004)(5660300002)(8936002)(8676002)(2906002)(44832011)(38100700002)(921005)(53546011)(26005)(186003)(6506007)(6512007)(83380400001)(41300700001)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T1JINWFRMWpROUkrS3E3aWlRSERVejVJdStLVU8rM3M1WlBIbTIvNjFHQ0Vh?=
- =?utf-8?B?Z3hHNXZGaFM2NE10UVZjZFBBeVlHdW1lNldJTTNOeDJQc3A0QWF3dlUyVDdQ?=
- =?utf-8?B?ZEJrUGZsTVoyUVpQYVhlcFY0Zkp0YzNNNjhMcWw1b3o3MG45REtqblRYckd6?=
- =?utf-8?B?Vys4V1dVdmlDRk5WYnRWRVIwVTZIcWQvNFZYM216OXJ5b0JhU1c2dzZFeU93?=
- =?utf-8?B?MUNpRU1FeEEvSzRlL0ZZYS9BL0NSZk9ZZWtnTzNEVUQ5Q1RJK1ZGelJuc3hp?=
- =?utf-8?B?enpjR1NQK05Ic0RjR29mYmtPdSs4ZjY4NmIzRGFwUm92VlAzVlFoR0FndVd4?=
- =?utf-8?B?RlNsY21zYVJLSEdOWDJQcTgvSktLMVJjNFg5TTcvV29SSVhVOEw3cTlSUjNK?=
- =?utf-8?B?d2dxSXpqVkZKMEFHcVRQdzBpK0hvOWM2Q2ZKMkFOb0tyL280RE1OTmlrL2V0?=
- =?utf-8?B?VmEyd29DRVlKaDVqeDVaa1hnRWU5RzZyY0dGZ1J5OTNqY3lIUGlCYzltZmJY?=
- =?utf-8?B?OE9tQzhCZU1oWnd2ZzYwVjUrbW9MLzh0ZUQwdDRhTTZNMlV6Zk9waVFwMVJJ?=
- =?utf-8?B?aUtDdWx0YU9oZVRxc0NFTnRzUThqTFJXd1Z5cElrK25UWGRxdGFwclR4cmkr?=
- =?utf-8?B?VlROQmpqSng0QmFjOTZEVHdrbHA5aXI4QUlXZndUZ1JnUW8rUk9udEZCa3Fy?=
- =?utf-8?B?b1lWcG10T2ZvTFl5WXd6WmIraHBEOVU5clFtNnhTMGpkZUNBMVhLdERHZ01k?=
- =?utf-8?B?Q29Zd0NySDNod3kzSElQdmFHcmlqS00yZFl4K2RkK3Jsdm5KNExFYlhnRDh5?=
- =?utf-8?B?REhiQ3lyZmQ5ekhScC81eXcrTzBZVXhxbmdoWDRqbTdNY1JrRlAyLzhqQXpu?=
- =?utf-8?B?NUtuQi9OWldjK0FLSjRPWnQzTTEvQXlwVC9qa1ZoeTNFSFBsdDFMZEZ0RHM1?=
- =?utf-8?B?WkV3OWx4enZoVnlOMWFKZTRpT2NNVEV4Z3IvRlAwcG1HT3BvSUVCajRtd3ps?=
- =?utf-8?B?SDJqY3BIKzFGd0ZiWExXNkNHamtRNXQxUDIvOGhLRTZGb2Z5Qk1FK1pRRGlI?=
- =?utf-8?B?UEI0UXcyalRVTlgyNmo4ZHVFdFF4MEVrRSswUjFQOXpoblcrbGRYbHQ5SHlQ?=
- =?utf-8?B?RVgxKzNrLy9zbGNVOC83cXc5RVF1NjB0K1FaL0oySHoybVMvaE1sRWYzOVpI?=
- =?utf-8?B?blZESlhtd2o3dnYwalk3N0RybFBiNkE1c3VMdWRTS0F3U2VRcFZ4WWxoWUpm?=
- =?utf-8?B?V2VYaDByQStrdmVzTHc5YnhHY2NiQnoxVEg4Q1BDSUNqemJKY0s0NWdWRitC?=
- =?utf-8?B?alk0T2pzZXp4SlRRK1NmUm9peWQyVDhZRHJzU1RKcFArZVNES1hHUzlxdVh6?=
- =?utf-8?B?LzNCQjNrNkJSK0kzRXlDYmpVNzl2UE9IbXJhMElKczc1RTlMN1I4NSsrQkJy?=
- =?utf-8?B?ME1rYis3UlFvUnIwQTJ0QzdDMDRVb3UrdmNjdW1uTDgrZ1lyTW9WTThDaVd6?=
- =?utf-8?B?OGoyRHB5bVNuZHFBa1Z0OW51MFhrL1c2VHY2bms2SVlZTzhab3JQUFdpek9t?=
- =?utf-8?B?bmsycHhDYnorTWhxbEx1aW00RXd3b1ltelN2NEw2VVZjdW1NdkJtbkR6SWJ6?=
- =?utf-8?B?dWRtRC9CS1NUeDFwejBFTHR3ZDA1dGJYd3NSVGZLQ0czeTA4c3F2MTFONDFO?=
- =?utf-8?B?ZjN4ajlzWTJlbVZuLzlTYTdDR1FZdWo3VnlwTmRUbGtkUjB1dEswWklKZjkx?=
- =?utf-8?B?MGUvdit6SnNaR1VQeCtmdkptYzl1d0FDd0tUcEJOaG1XZndiWG9VVk81dUZ3?=
- =?utf-8?B?dTEzV3BFVXdCc0NhN2JWa3h3Z3RvV3c5dGlZWjVsdXo5THJIalBaUDFpeWth?=
- =?utf-8?B?NzJjdTFUTmxnU0VzanRTZEs5MlFuM2VKcFEzcXdWZEp1ZnVkK3JkM1BWN1ZU?=
- =?utf-8?B?TE9XbENDZElSS0VYZmtjOHZkdm02TnNnODNLSzJlZVdBblpIZnVuaUlrcVhj?=
- =?utf-8?B?Y04yWEc3ZXY4QTdjV2lxd0s5NjBWaU9kcTJLcTVyQXlaUEdkTGlWaEdHQVJQ?=
- =?utf-8?B?eHIxY0crWGNKSGJYSnJvN2xUeVJpcVRZT05mZmNBU0Z4NlJndWJOL0RkeHNl?=
- =?utf-8?Q?keVMKUF/VaijCe8Lerd6wwSRF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23c6b1c3-0339-4673-6f0b-08db5d646db8
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 21:10:12.4855
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 65+RxHWmUskL282OaMEdORB4crFeTRBWjoCT0LjU3/wrDmAFzd9XGiHfFfrEQjIjDSaVQ7b4l13IueF9m0opdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6060
+References: <202305251508.iFEInYVW-lkp@intel.com>
+In-Reply-To: <202305251508.iFEInYVW-lkp@intel.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 25 May 2023 14:21:24 -0700
+Message-ID: <CAKwvOd=QY_QNWP2+nofvowbCD66noajsY8q1xe-MamV_gF3TPA@mail.gmail.com>
+Subject: Re: [stable:linux-4.19.y 984/6017] ld.lld: error: drivers/usb/dwc2/platform.o:
+ contains a compressed section, but zlib is not available
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, John Keeping <john@metanate.com>, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[+Mukul]
-
-Looks like this problem was introduced by Mukul's patch "drm/amdkfd: 
-Update SDMA queue management for GFX9.4.3". Could this be a merge error 
-between GFX 9.4.3 and GFX11 branches? I think the 
-reserved_sdma_queues_bitmap was introduced after the 9.4.3 branch was 
-created. Mukul, you worked on both, so you're probably in the best 
-position to resolve this.
-
-Regards,
-   Felix
-
-
-On 2023-05-25 16:07, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:122:24: error:
->    unused function 'get_reserved_sdma_queues_bitmap' [-Werror,-Wunused-function]
-> static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
->                         ^
-> This function is not used so remove it.
+On Thu, May 25, 2023 at 12:44=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
 >
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c | 5 -----
->   1 file changed, 5 deletions(-)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
+le.git linux-4.19.y
+> head:   3f57fb8b1bd06b277556601133823bec370d723f
+> commit: c964b1bbf179a163084b1ec8ad094b8c8dce28c8 [984/6017] usb: dwc2: hc=
+d_queue: Fix use of floating point literal
+> config: x86_64-randconfig-x093-20230524
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
+006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
+able.git/commit/?id=3Dc964b1bbf179a163084b1ec8ad094b8c8dce28c8
+>         git remote add stable https://git.kernel.org/pub/scm/linux/kernel=
+/git/stable/linux-stable.git
+>         git fetch --no-tags stable linux-4.19.y
+>         git checkout c964b1bbf179a163084b1ec8ad094b8c8dce28c8
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/usb/
 >
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> index 493b4b66f180..2fbd0a96424f 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-> @@ -119,11 +119,6 @@ unsigned int get_num_xgmi_sdma_queues(struct device_queue_manager *dqm)
->   		dqm->dev->kfd->device_info.num_sdma_queues_per_engine;
->   }
->   
-> -static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
-> -{
-> -	return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
-> -}
-> -
->   static void init_sdma_bitmaps(struct device_queue_manager *dqm)
->   {
->   	bitmap_zero(dqm->sdma_bitmap, KFD_MAX_SDMA_QUEUES);
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305251508.iFEInYVW-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+
+Hmmm...that's surprising to see on 4.19.  I didn't add support for
+compressed debug info until:
+
+commit 10e68b02c861 ("Makefile: support compressed debug info")
+
+which landed in v5.8-rc1 and AFAIK was never backported.
+
+I wasn't able to reproduce this with ToT LLVM (clang-17); I wonder if
+this is an issue with clang-14?
+
+Just tried and could not reproduce.  Has this issue been seen elsewhere?
+
+Ah, we have
+
+https://lore.kernel.org/llvm/?q=3Dcontains+a+compressed+section%2C+but+zlib=
++is+not+available
+https://lore.kernel.org/llvm/20230404161735.GA1703291@dev-arch.thelio-3990X=
+/
+
+So since 10e68b02c861 is in v5.8-rc1, then for 4.14, 4.19, and 5.4 we
+probably want a stable-only patch for -gz=3Dnone.
+
+GCC didn't support -gz=3Dnone until 5.1, so that might be an issue for
+older branches of stable which might still support older GCC versions.
+4.19.y still supports gcc 4.6.
+
+```
+diff --git a/Makefile b/Makefile
+index 71416fde7348..e6754300021c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -756,6 +756,7 @@ KBUILD_AFLAGS       +=3D -g
+ else
+ KBUILD_AFLAGS  +=3D -Wa,-gdwarf-2
+ endif
++KBUILD_CFLAGS  +=3D $(call cc-option, -gz=3Dnone)
+ endif
+
+ ifdef CONFIG_DEBUG_INFO_DWARF4
+```
+
+Godbolt only binutils v2.27+, but 4.19 supported v2.20+ (so I can't
+check --compress-debug-sections=3Dnone assembler support quickly).
+
+
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section,=
+ but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+>    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed sec=
+tion, but zlib is not available
+> >> ld.lld: error: drivers/usb/dwc2/platform.o: contains a compressed sect=
+ion, but zlib is not available
+>    ld.lld: error: too many errors emitted, stopping now (use -error-limit=
+=3D0 to see all errors)
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
