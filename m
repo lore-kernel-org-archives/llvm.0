@@ -1,102 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7F817F5
-	for <llvm@lists.linux.dev>; Thu, 25 May 2023 02:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684980761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TeTp35xCF/Zw31mWFIk0j/31+kkQUEqxUlQdZLnVNag=;
-	b=LiUIpdMtQUqU5Q2d7HdWB4V6X1AdP3Ga8AFPGgwm2qPsmZnmq7IFV8avNVY9hGEJY9sloW
-	YO10NL9X/kdvs7WGfc9nX1jF1iZraAx2XgjQPAOI9Rxn92nmrywiraZpWMB08Nduq04M+T
-	BC5XGLw1yDBa/AyDFI6EUVMZkrEMIcs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-QqZ-wcvNPzuU5_3kiz7YaA-1; Wed, 24 May 2023 22:12:37 -0400
-X-MC-Unique: QqZ-wcvNPzuU5_3kiz7YaA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15BCE800B2A;
-	Thu, 25 May 2023 02:12:37 +0000 (UTC)
-Received: from ovpn-8-21.pek2.redhat.com (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id CE7BB492B00;
-	Thu, 25 May 2023 02:12:31 +0000 (UTC)
-Date: Thu, 25 May 2023 10:12:26 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Tian Lan <tilan7663@gmail.com>
-Cc: hare@suse.de, axboe@kernel.dk, horms@kernel.org,
-	linux-block@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, tian.lan@twosigma.com
-Subject: Re: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
-Message-ID: <ZG7ECteMoJah+UqU@ovpn-8-21.pek2.redhat.com>
-References: <1c9fc9df-817c-e6cb-1375-2013c0c5a9bb@suse.de>
- <20230515122643.597546-1-tilan7663@gmail.com>
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A5B17C7;
+	Thu, 25 May 2023 02:26:43 +0000 (UTC)
+Received: from loongson.cn (unknown [10.20.42.35])
+	by gateway (Coremail) with SMTP id _____8DxqvJhx25kcrcAAA--.1748S3;
+	Thu, 25 May 2023 10:26:41 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_8tex25keBB2AA--.64483S3;
+	Thu, 25 May 2023 10:26:39 +0800 (CST)
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, zhuyinbo@loongson.cn
+References: <20230522071030.5193-3-zhuyinbo@loongson.cn>
+ <202305241914.oPbPV8Lz-lkp@intel.com>
+From: zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <a358a5c6-f9a6-d8c0-2d2b-9a4bfe910ae6@loongson.cn>
+Date: Thu, 25 May 2023 10:26:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515122643.597546-1-tilan7663@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-
-On Mon, May 15, 2023 at 08:26:43AM -0400, Tian Lan wrote:
-> From: Tian Lan <tian.lan@twosigma.com>
-> 
-> The nr_active counter continues to increase over time which causes the
-> blk_mq_get_tag to hang until the thread is rescheduled to a different
-> core despite there are still tags available.
-> 
-> kernel-stack
-> 
->   INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
->   Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
->   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->   task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
->     Call Trace:
->     <TASK>
->     __schedule+0x351/0xa20
->     scheduler+0x5d/0xe0
->     io_schedule+0x42/0x70
->     blk_mq_get_tag+0x11a/0x2a0
->     ? dequeue_task_stop+0x70/0x70
->     __blk_mq_alloc_requests+0x191/0x2e0
-> 
-> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
-> __blk_mq_free_request being called.
-> 
->   320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
->          b'__blk_mq_free_request+0x1 [kernel]'
->          b'bt_iter+0x50 [kernel]'
->          b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
->          b'blk_mq_timeout_work+0x7c [kernel]'
->          b'process_one_work+0x1c4 [kernel]'
->          b'worker_thread+0x4d [kernel]'
->          b'kthread+0xe6 [kernel]'
->          b'ret_from_fork+0x1f [kernel]'
-> 
-> The issue is caused by the difference between blk_mq_free_request() and
-> blk_mq_end_request_batch() wrt. when to call __blk_mq_dec_active_requests().
-> The former does it before calling req_ref_put_and_test(), and the latter
-> decreases the active request after req_ref_put_and_test().
-> 
-> - Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
-> 
-> Signed-off-by: Tian Lan <tian.lan@twosigma.com>
-> Reviewed-by: Ming Lei <ming.lei@redhat.com>
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-
-Hello Jens,
-
-Looks this fix is missed, can you take a look?
+In-Reply-To: <202305241914.oPbPV8Lz-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Dx_8tex25keBB2AA--.64483S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGFW3WF1fKFy3tF4kZFyUtrb_yoW5tw1rpa
+	15uwsxGrs5Xr18C395Ga9rZa1Yq395JwnrXayayr45uFZFva4qqr1xKF45ArsFkF1vgFyU
+	XFy8WrZ5K3WDWw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+	qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+	bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+	kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+	F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+	Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+	8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+	x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
+	CI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
+	42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+	80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1t8n5UUUUU==
 
 
-Thanks,
-Ming
+
+在 2023/5/24 下午8:07, kernel test robot 写道:
+> Hi Yinbo,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on broonie-spi/for-next]
+> [also build test WARNING on robh/for-next krzk-dt/for-next]
+> [cannot apply to linus/master v6.4-rc3 next-20230524]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230522-151320
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> patch link:    https://lore.kernel.org/r/20230522071030.5193-3-zhuyinbo%40loongson.cn
+> patch subject: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson spi controller
+> config: arm-randconfig-r005-20230524
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+> reproduce (this is a W=1 build):
+>          mkdir -p ~/bin
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install arm cross compiling tool for clang build
+>          # apt-get install binutils-arm-linux-gnueabi
+>          # https://github.com/intel-lab-lkp/linux/commit/5be581a056498d3c9b4265dd4f3a3925b7f6b339
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230522-151320
+>          git checkout 5be581a056498d3c9b4265dd4f3a3925b7f6b339
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/spi/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305241914.oPbPV8Lz-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/spi/spi-loongson-core.c:80:6: warning: variable 'hz' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>             if (t)
+>                 ^
+>     drivers/spi/spi-loongson-core.c:83:6: note: uninitialized use occurs here
+>             if (hz && loongson_spi->hz != hz)
+>                 ^~
+>     drivers/spi/spi-loongson-core.c:80:2: note: remove the 'if' if its condition is always true
+>             if (t)
+>             ^~~~~~
+>     drivers/spi/spi-loongson-core.c:78:17: note: initialize the variable 'hz' to silence this warning
+>             unsigned int hz;
+>                            ^
+>                             = 0
+>     1 warning generated.
+
+
+This warning was due to hz uninitialized and I will fix it.
+
+Thanks.
+Yinbo
+> 
+> 
+> vim +80 drivers/spi/spi-loongson-core.c
+> 
+>      74	
+>      75	static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>      76					struct spi_device *spi, struct spi_transfer *t)
+>      77	{
+>      78		unsigned int hz;
+>      79	
+>    > 80		if (t)
+>      81			hz = t->speed_hz;
+>      82	
+>      83		if (hz && loongson_spi->hz != hz)
+>      84			loongson_spi_set_clk(loongson_spi, hz);
+>      85	
+>      86		if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
+>      87			loongson_spi_set_mode(loongson_spi, spi);
+>      88	
+>      89		return 0;
+>      90	}
+>      91	
+> 
 
