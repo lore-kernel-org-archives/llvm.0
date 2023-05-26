@@ -1,80 +1,107 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B2428E8
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 18:56:56 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ae3ed1b08eso10857595ad.0
-        for <llvm@lists.linux.dev>; Fri, 26 May 2023 11:56:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514DE29115
+	for <llvm@lists.linux.dev>; Fri, 26 May 2023 19:48:50 +0000 (UTC)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso1411a12.0
+        for <llvm@lists.linux.dev>; Fri, 26 May 2023 12:48:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685127415; x=1687719415;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DSj23Ygy/LeYNL160hb36OKyVMmbtWslUUZxoLYre8k=;
-        b=WV6iS7vdC0UyPONyu3GoVHaX/teq0aAOLnDLc+HEfVRIqo2rwUOqFmyu8lYG+LEDp+
-         miDg5XiFHrFiQhKLHYOcDDEXAK8nC1kgJCnPN+6gR8NM0kgXbiHLvy7dSHZo8znmSUpz
-         3vOP/Eka5f9wGc0ieRzLs6SstQEZDpzEEhfJc=
+        d=google.com; s=20221208; t=1685130528; x=1687722528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lf4RRkiPUcNUs6sAKxHRjbAkQ4OPhmS/ejzXep+9w6w=;
+        b=CKJONIHYBHoJ36pk3behUlnsORLM/bdJ0rKRwmtMPp0jrr/61zx3jD87TcrsYqy7zg
+         k3biIDnQctHE5hJlWcQwUoZNxiDhYsAjQw9EkmEs47vBwpPKETPNuW5TQY/kHezVhRG5
+         +AEfGjsfL0QOFBMYQqDqo/12R+BmNy9QDg1/Ks8RYLufZoToWmyDVjZ9zNaJoOQ6tSbD
+         mkgN8Z+SQU/8xDSa7AfpFhM5yJiD0fDLr2W5b6q2WasXfoN5IHW3BEgVmKiSxiK3ELxR
+         G27OzqOCQh2nquF0d43d717kdH0nfRAkmnqFWwOZNIE5Ka6tq4XteFx/StgpU26cggge
+         QN4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685127415; x=1687719415;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DSj23Ygy/LeYNL160hb36OKyVMmbtWslUUZxoLYre8k=;
-        b=fI0py/aIq2IY6cF0hFgot3LhgAsR9SsiKc1TQ18C4U80CG+KzkF2KFlZBcykL3yaCG
-         1Q+iLph0F5Kjq//OT7AP17u/3J4/I8gFS+mHkLQvfFGOE39Ua1wwIesne4yOe55UDb2H
-         zzCpj1cmya6a7U2JMA6MrR6TwAADVCTvNRmT/iTRp3kPiwwUpUvt033n58nsHPd7m9yK
-         u3H3J4sq02WlNWNppQwKCWKZII+gX21qvcw7DRna0Bbz+YoGkG4mbxGq3xK+hYmUBp2m
-         M54+lNgsPh14Az7lGxrckEX7Sl9v7j0pM86RI+DwyuZh80YVEWVCDFvJVZmQ65F4yqIV
-         V5TQ==
-X-Gm-Message-State: AC+VfDyKyqUrXE7/aVrJzEAx4Des2ssTXQu94TNO+qPe9TOu0nMnndd8
-	oJRbedoIQIdbuIcMXc+6Cuiy0g==
-X-Google-Smtp-Source: ACHHUZ4pa9oCfs3Tr2WIutfaZtF57hm+Ea83Uk/wzE0Jj+t+Z+a87Gy1lY5t1tm19stAI9Hngey7OQ==
-X-Received: by 2002:a17:902:e806:b0:1af:d00c:7f04 with SMTP id u6-20020a170902e80600b001afd00c7f04mr4614891plg.12.1685127415577;
-        Fri, 26 May 2023 11:56:55 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902820100b001ac5896e96esm3565658pln.207.2023.05.26.11.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 11:56:55 -0700 (PDT)
-Date: Fri, 26 May 2023 11:56:54 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: ojeda@kernel.org, qing.zhao@oracle.com, morbo@google.com,
-	llvm@lists.linux.dev, trix@redhat.com, linux-kernel@vger.kernel.org,
-	nathan@kernel.org, linux-hardening@vger.kernel.org,
-	gustavoars@kernel.org, ndesaulniers@google.com
-Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
-Message-ID: <202305261156.67CDEE933D@keescook>
-References: <20230517190841.gonna.796-kees@kernel.org>
- <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
- <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1685130528; x=1687722528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lf4RRkiPUcNUs6sAKxHRjbAkQ4OPhmS/ejzXep+9w6w=;
+        b=g3kczdS+YN2GajUQmL3Bsay9Hm7QcGuZuZpaSGOWfesRJpIsLvXmsCDkMr4L9Zr8YQ
+         gk5Q3BPhoymakTSNWj1h0qQzU8PkxdkcbkQcd4zqDDKckAwHrqyXe8iOeccHa7exPbDa
+         NEJoaVyx+54VTHxrEyif+Qm2IYJCI0UYHkEh4wr1hkyD5EGo9ZjZiPZzs5RKGtEcQ7uD
+         zNDTxjoHiHmEvuRsuC/mJcFOw8+CAM3OmnzHU03b4F4PMU/1dU73fyRYz+Xv/10BKWim
+         6x5QLQf+eAuzV+1Fr9jUI18u7wtx5AonXQCdQAiHx8v01rSYFDF/vbw6R5MLPooRhdID
+         HKZA==
+X-Gm-Message-State: AC+VfDw/zNP29q4Bd0wSd9lC1fxZ1uNI29KyPGxIZufvD5F27REAXf1X
+	Byic9NLmLBNXux+uSzGWXXUf5Ht44TyHMGTVtqdhpg==
+X-Google-Smtp-Source: ACHHUZ6CxetlS1s0rTKhE7K29Vp+fVoMB7NYpov6+cDO8gK7BapHTfvlv5vmr5u3w5Oi3ADVrOxX4qb1dXamvqZdzWs=
+X-Received: by 2002:a50:aa93:0:b0:50b:c48c:8a25 with SMTP id
+ q19-20020a50aa93000000b0050bc48c8a25mr19788edc.6.1685130528276; Fri, 26 May
+ 2023 12:48:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com>
+References: <20230517190841.gonna.796-kees@kernel.org> <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
+ <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com> <202305261156.67CDEE933D@keescook>
+In-Reply-To: <202305261156.67CDEE933D@keescook>
+From: Fangrui Song <maskray@google.com>
+Date: Fri, 26 May 2023 12:48:26 -0700
+Message-ID: <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+To: Kees Cook <keescook@chromium.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org, qing.zhao@oracle.com, 
+	morbo@google.com, llvm@lists.linux.dev, trix@redhat.com, 
+	linux-kernel@vger.kernel.org, nathan@kernel.org, 
+	linux-hardening@vger.kernel.org, gustavoars@kernel.org, 
+	ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 26, 2023 at 07:47:03PM +0200, Miguel Ojeda wrote:
-> On Fri, May 26, 2023 at 7:16 PM Kees Cook <keescook@chromium.org> wrote:
+On Fri, May 26, 2023 at 11:56=E2=80=AFAM Kees Cook <keescook@chromium.org> =
+wrote:
+>
+> On Fri, May 26, 2023 at 07:47:03PM +0200, Miguel Ojeda wrote:
+> > On Fri, May 26, 2023 at 7:16=E2=80=AFPM Kees Cook <keescook@chromium.or=
+g> wrote:
+> > >
+> > > FYI, applied to for-next/hardening:
+> > >
+> > > [1/1] Compiler Attributes: Add __counted_by macro
+> > >       https://git.kernel.org/kees/c/86a76e91cbab
 > >
-> > FYI, applied to for-next/hardening:
+> > Sorry, I was going to apply it soon -- in case you want it:
 > >
-> > [1/1] Compiler Attributes: Add __counted_by macro
-> >       https://git.kernel.org/kees/c/86a76e91cbab
-> 
-> Sorry, I was going to apply it soon -- in case you want it:
-> 
->     Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> >     Acked-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> Thanks!
+>
+> > And thanks Nathan for resubmitting the `Reviewed-by` from v1!
+>
+> Yes, apologies for missing this in my v2 submission!
+>
+> --
+> Kees Cook
+>
 
-Thanks!
+https://discourse.llvm.org/t/rfc-enforcing-bounds-safety-in-c-fbounds-safet=
+y/70854
+proposes a macro __counted_by as well.
+This patch uses the same name:
 
-> And thanks Nathan for resubmitting the `Reviewed-by` from v1!
+> # define __counted_by(member)          __attribute__((__element_count__(m=
+ember)))
 
-Yes, apologies for missing this in my v2 submission!
+I wonder whether the two use cases are compatible so that using the
+same macro name will be fine.
 
--- 
-Kees Cook
+#if defined(__has_feature) && __has_feature(bounds_safety)
+#define __counted_by(T) __attribute__((__counted_by__(T)))
+// ... other bounds annotations
+#else
+#define __counted_by(T) // defined as nothing // ... other bounds annotatio=
+ns
+#endif
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
