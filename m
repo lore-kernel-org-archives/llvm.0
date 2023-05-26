@@ -1,205 +1,159 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A075D171B1;
-	Fri, 26 May 2023 12:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685103753; x=1716639753;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WoAHVXyuE6np/EKIFTHT4tNOz1b9QNRjA+bAUCpRqjM=;
-  b=g7AeT6LgxrMJJpMFFAHly+02/uslUWuTGxjG4uw58CcDsyuCSU59ovmD
-   mlu3nhu9ZbCCJwzCC92CCu8mA4Z8zimId5OIiRFbNIYNV5jtl6uboLwpV
-   M9g4yfaz1RGotlJYaif39gWutCsST6N7sxFuc6AMbyjzo+HeF6eKZTXAq
-   d7gz2kAEvY+iCUO/svl1i+Jou+b/SwVRbPxVtpjpMvG/7CHwo8XsrQ1BS
-   xFoKzRxlIScvJNWV/dtltjzm3okSUkw3pzTz1kb0Hqk7sld2AABcqpnOY
-   Ayw0PkUvUzKp9B4dNg4DY+hhn8HObPJ18IRvBUzfmNuJsUHBBis1nOKW1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="354204787"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="354204787"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:22:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="735990589"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="735990589"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 May 2023 05:22:31 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q2WSk-000JKW-1B;
-	Fri, 26 May 2023 12:22:30 +0000
-Date: Fri, 26 May 2023 20:22:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Noah Goldstein <goldstein.w.n@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [tip:x86/misc 1/1] arch/x86/lib/csum-partial_64.c:74:20: warning:
- variable 'result' is uninitialized when used here
-Message-ID: <202305262039.3HUYjWJk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DE8848B;
+	Fri, 26 May 2023 15:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE4AC433EF;
+	Fri, 26 May 2023 15:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685114700;
+	bh=MGPYVWTyfzxHlvWypAeb9b789VZlSWcYKk8mJrmf1oo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PbNKvKC3ZdT4BtjyYdi4o5bZwl67wlYwTnBwwi0SgSjCvBgmthz21up7nhqmSPZdX
+	 O3CBpS+BEay8bm/WDPrOqA+UKCSfRnq3p5UdEwnMUTqLKe6q/UQWN42B9dEk+r4QS+
+	 sbTbJRurpVVQxpLnSfrF1cq+ecwvA/aq+u4FNvqNwreaAqdxvsvkyvoiFcSW7YehSB
+	 qsH3En8CxP4CSYRwEABtmGiJrs8Nrdj/eaa2DpZqJn6Z0xschKjO1jAaHPa+ppA2wI
+	 /chGQ1JbrsrGEJNgnxN1smxhKqlIRv+VpZOu3mWhcLIydSBnnUTprLRrpyvUC6gNKp
+	 oiaK+W6iONZug==
+Date: Fri, 26 May 2023 08:24:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	John Keeping <john@metanate.com>, llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [stable:linux-4.19.y 984/6017] ld.lld: error:
+ drivers/usb/dwc2/platform.o: contains a compressed section, but zlib is not
+ available
+Message-ID: <20230526152458.GA395537@dev-arch.thelio-3990X>
+References: <202305251508.iFEInYVW-lkp@intel.com>
+ <CAKwvOd=QY_QNWP2+nofvowbCD66noajsY8q1xe-MamV_gF3TPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=QY_QNWP2+nofvowbCD66noajsY8q1xe-MamV_gF3TPA@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
-head:   688eb8191b475db5acfd48634600b04fd3dda9ad
-commit: 688eb8191b475db5acfd48634600b04fd3dda9ad [1/1] x86/csum: Improve performance of `csum_partial`
-config: x86_64-randconfig-x073-20230525 (https://download.01.org/0day-ci/archive/20230526/202305262039.3HUYjWJk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=688eb8191b475db5acfd48634600b04fd3dda9ad
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/misc
-        git checkout 688eb8191b475db5acfd48634600b04fd3dda9ad
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Thu, May 25, 2023 at 02:21:24PM -0700, Nick Desaulniers wrote:
+> On Thu, May 25, 2023 at 12:44 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+> > head:   3f57fb8b1bd06b277556601133823bec370d723f
+> > commit: c964b1bbf179a163084b1ec8ad094b8c8dce28c8 [984/6017] usb: dwc2: hcd_queue: Fix use of floating point literal
+> > config: x86_64-randconfig-x093-20230524
+> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > reproduce (this is a W=1 build):
+> >         mkdir -p ~/bin
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c964b1bbf179a163084b1ec8ad094b8c8dce28c8
+> >         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+> >         git fetch --no-tags stable linux-4.19.y
+> >         git checkout c964b1bbf179a163084b1ec8ad094b8c8dce28c8
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305251508.iFEInYVW-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> 
+> Hmmm...that's surprising to see on 4.19.  I didn't add support for
+> compressed debug info until:
+> 
+> commit 10e68b02c861 ("Makefile: support compressed debug info")
+> 
+> which landed in v5.8-rc1 and AFAIK was never backported.
+> 
+> I wasn't able to reproduce this with ToT LLVM (clang-17); I wonder if
+> this is an issue with clang-14?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305262039.3HUYjWJk-lkp@intel.com/
+Something I was thinking about yesterday is that binutils has a bunch of
+configure flags to control default behavior and one of those is
+compressed debug sections on by default:
 
-All warnings (new ones prefixed by >>):
+  --enable-compressed-debug-sections={all,gas,gold,ld,none}
+                          Enable compressed debug sections for gas, gold or ld
+                          by default
 
->> arch/x86/lib/csum-partial_64.c:74:20: warning: variable 'result' is uninitialized when used here [-Wuninitialized]
-                   return csum_tail(result, temp64, odd);
-                                    ^~~~~~
-   arch/x86/lib/csum-partial_64.c:48:22: note: initialize the variable 'result' to silence this warning
-           unsigned odd, result;
-                               ^
-                                = 0
-   1 warning generated.
+Is it possible that the version of binutils that the kernel test robot
+uses has compressed debug sections enabled by default for gas? Although,
+if I am reading make.cross correctly (linked above), it seems like the
+integrated assembler should be used in this case... It would be really
+helpful to have the exact make command that the robot used in the report
+to know for sure. I do not see a similar switch available for LLVM and
+even then, I would not expect to see the same issue because we should
+not even have the ability to generate a compressed debug section if zlib
+was not available.
 
+> Just tried and could not reproduce.  Has this issue been seen elsewhere?
+> 
+> Ah, we have
+> 
+> https://lore.kernel.org/llvm/?q=contains+a+compressed+section%2C+but+zlib+is+not+available
+> https://lore.kernel.org/llvm/20230404161735.GA1703291@dev-arch.thelio-3990X/
+> 
+> So since 10e68b02c861 is in v5.8-rc1, then for 4.14, 4.19, and 5.4 we
+> probably want a stable-only patch for -gz=none.
+> 
+> GCC didn't support -gz=none until 5.1, so that might be an issue for
+> older branches of stable which might still support older GCC versions.
+> 4.19.y still supports gcc 4.6.
+> 
+> ```
+> diff --git a/Makefile b/Makefile
+> index 71416fde7348..e6754300021c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -756,6 +756,7 @@ KBUILD_AFLAGS       += -g
+>  else
+>  KBUILD_AFLAGS  += -Wa,-gdwarf-2
+>  endif
+> +KBUILD_CFLAGS  += $(call cc-option, -gz=none)
+>  endif
+> 
+>  ifdef CONFIG_DEBUG_INFO_DWARF4
+> ```
+> 
+> Godbolt only binutils v2.27+, but 4.19 supported v2.20+ (so I can't
+> check --compress-debug-sections=none assembler support quickly).
 
-vim +/result +74 arch/x86/lib/csum-partial_64.c
+You could do
 
-    33	
-    34	/*
-    35	 * Do a checksum on an arbitrary memory area.
-    36	 * Returns a 32bit checksum.
-    37	 *
-    38	 * This isn't as time critical as it used to be because many NICs
-    39	 * do hardware checksumming these days.
-    40	 *
-    41	 * Still, with CHECKSUM_COMPLETE this is called to compute
-    42	 * checksums on IPv6 headers (40 bytes) and other small parts.
-    43	 * it's best to have buff aligned on a 64-bit boundary
-    44	 */
-    45	__wsum csum_partial(const void *buff, int len, __wsum sum)
-    46	{
-    47		u64 temp64 = (__force u64)sum;
-    48		unsigned odd, result;
-    49	
-    50		odd = 1 & (unsigned long) buff;
-    51		if (unlikely(odd)) {
-    52			if (unlikely(len == 0))
-    53				return sum;
-    54			temp64 = ror32((__force u32)sum, 8);
-    55			temp64 += (*(unsigned char *)buff << 8);
-    56			len--;
-    57			buff++;
-    58		}
-    59	
-    60		/*
-    61		 * len == 40 is the hot case due to IPv6 headers, but annotating it likely()
-    62		 * has noticeable negative affect on codegen for all other cases with
-    63		 * minimal performance benefit here.
-    64		 */
-    65		if (len == 40) {
-    66			asm("addq 0*8(%[src]),%[res]\n\t"
-    67			    "adcq 1*8(%[src]),%[res]\n\t"
-    68			    "adcq 2*8(%[src]),%[res]\n\t"
-    69			    "adcq 3*8(%[src]),%[res]\n\t"
-    70			    "adcq 4*8(%[src]),%[res]\n\t"
-    71			    "adcq $0,%[res]"
-    72			    : [res] "+r"(temp64)
-    73			    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
-  > 74			return csum_tail(result, temp64, odd);
-    75		}
-    76		if (unlikely(len >= 64)) {
-    77			/*
-    78			 * Extra accumulators for better ILP in the loop.
-    79			 */
-    80			u64 tmp_accum, tmp_carries;
-    81	
-    82			asm("xorl %k[tmp_accum],%k[tmp_accum]\n\t"
-    83			    "xorl %k[tmp_carries],%k[tmp_carries]\n\t"
-    84			    "subl $64, %[len]\n\t"
-    85			    "1:\n\t"
-    86			    "addq 0*8(%[src]),%[res]\n\t"
-    87			    "adcq 1*8(%[src]),%[res]\n\t"
-    88			    "adcq 2*8(%[src]),%[res]\n\t"
-    89			    "adcq 3*8(%[src]),%[res]\n\t"
-    90			    "adcl $0,%k[tmp_carries]\n\t"
-    91			    "addq 4*8(%[src]),%[tmp_accum]\n\t"
-    92			    "adcq 5*8(%[src]),%[tmp_accum]\n\t"
-    93			    "adcq 6*8(%[src]),%[tmp_accum]\n\t"
-    94			    "adcq 7*8(%[src]),%[tmp_accum]\n\t"
-    95			    "adcl $0,%k[tmp_carries]\n\t"
-    96			    "addq $64, %[src]\n\t"
-    97			    "subl $64, %[len]\n\t"
-    98			    "jge 1b\n\t"
-    99			    "addq %[tmp_accum],%[res]\n\t"
-   100			    "adcq %[tmp_carries],%[res]\n\t"
-   101			    "adcq $0,%[res]"
-   102			    : [tmp_accum] "=&r"(tmp_accum),
-   103			      [tmp_carries] "=&r"(tmp_carries), [res] "+r"(temp64),
-   104			      [len] "+r"(len), [src] "+r"(buff)
-   105			    : "m"(*(const char *)buff));
-   106		}
-   107	
-   108		if (len & 32) {
-   109			asm("addq 0*8(%[src]),%[res]\n\t"
-   110			    "adcq 1*8(%[src]),%[res]\n\t"
-   111			    "adcq 2*8(%[src]),%[res]\n\t"
-   112			    "adcq 3*8(%[src]),%[res]\n\t"
-   113			    "adcq $0,%[res]"
-   114			    : [res] "+r"(temp64)
-   115			    : [src] "r"(buff), "m"(*(const char(*)[32])buff));
-   116			buff += 32;
-   117		}
-   118		if (len & 16) {
-   119			asm("addq 0*8(%[src]),%[res]\n\t"
-   120			    "adcq 1*8(%[src]),%[res]\n\t"
-   121			    "adcq $0,%[res]"
-   122			    : [res] "+r"(temp64)
-   123			    : [src] "r"(buff), "m"(*(const char(*)[16])buff));
-   124			buff += 16;
-   125		}
-   126		if (len & 8) {
-   127			asm("addq 0*8(%[src]),%[res]\n\t"
-   128			    "adcq $0,%[res]"
-   129			    : [res] "+r"(temp64)
-   130			    : [src] "r"(buff), "m"(*(const char(*)[8])buff));
-   131			buff += 8;
-   132		}
-   133		if (len & 7) {
-   134			unsigned int shift = (-len << 3) & 63;
-   135			unsigned long trail;
-   136	
-   137			trail = (load_unaligned_zeropad(buff) << shift) >> shift;
-   138	
-   139			asm("addq %[trail],%[res]\n\t"
-   140			    "adcq $0,%[res]"
-   141			    : [res] "+r"(temp64)
-   142			    : [trail] "r"(trail));
-   143		}
-   144		return csum_tail(result, temp64, odd);
-   145	}
-   146	EXPORT_SYMBOL(csum_partial);
-   147	
+  KBUILD_AFLAGS   += $(as-option, -Wa$(comma)--compress-debug-sections=none)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+no?
+
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: drivers/usb/dwc2/core_intr.o: contains a compressed section, but zlib is not available
+> > >> ld.lld: error: drivers/usb/dwc2/platform.o: contains a compressed section, but zlib is not available
+> >    ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+
+Cheers,
+Nathan
