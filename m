@@ -1,187 +1,82 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A477261E0
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 16:51:38 +0000 (UTC)
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-625482282e0so9778516d6.3
-        for <llvm@lists.linux.dev>; Fri, 26 May 2023 09:51:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29332CA6
+	for <llvm@lists.linux.dev>; Fri, 26 May 2023 17:16:47 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so916606b3a.1
+        for <llvm@lists.linux.dev>; Fri, 26 May 2023 10:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685119897; x=1687711897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1685121407; x=1687713407;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B0EcAbr12Tz3JaIJZGOfuX6nKlF7eHCwWePp0l1EnR0=;
-        b=ZQAf4LUZzgLtNI1iuErVfrDk5RtwHd5YprqowAtUBbv7Kz6xOQfmdZi/1o5/n30lQE
-         /tpfYmZDRVi4NoxJIuNvdO9aqoj4c9kwfIW1rEqzNszwi76gHAD+BGX2cV/Zd3s+NTMZ
-         E4LKP1wu9x8pSzqzw57xxLCOhqzW+XL9oX/UQsKnneky5T2OfUWG5XoKACPfuYsoe8Uz
-         OLVd8dGzB0x+YRg7KmLHG59ArbV8g7o7IlHkeiBGwa9sKUG7yGRVlrMm1uYGu+qlM1LL
-         RGjTDUiCcBQEZsGuPruFUneQF+eACEbsKJDXp5xVByVgYkV3VN6qQGHsL9fuVdYTAyeH
-         GMNw==
+        bh=tt/68vR6SyeC2sLBcDQmwXBv1ANp28ndmxJPUsWE9hM=;
+        b=LnkvrIlQ8Tok1eY3MzXaVX3kUwG4iQ/TiKFyN8pB9xmQgyIk1TWe7Rhr0DTtyZlcDs
+         eVfyKux69riINbAJ3ut36H1rVoRrwRJT4yCWqFMFjVVbBMYEs2dxvwSjolS7rd4aewK5
+         xwaoXlV1TqZNJcLRm1EvoAdemOvEOa/ETWhKc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685119897; x=1687711897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685121407; x=1687713407;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B0EcAbr12Tz3JaIJZGOfuX6nKlF7eHCwWePp0l1EnR0=;
-        b=EBNHq1RxRm6BuSJFZEUucwjklWZxyQAhRC6CVBkHm/9qI/yiwKGJaml8pLMsEUAqy0
-         QXvir58gn+0DxVI2betkmavaRSw3OR9oepbQSNSz/w04ZXcReyOp1g9uomlSq/DnqtbA
-         4YBCsecP84y3bGz6N2Je80kkZG8VXXgwPLn7EaCteg/3NVckf6M2yyufmFA4aIbB5lca
-         q2Nu4tEvhEhHiXf1KoDv+P1ReiPN6PLIXqtTjl5jY5LEsNXaU0l2EgvCjq6aTRyvtyut
-         IfK9fMuvo7uhyx4+TdZjB+nA6x7U8N4FRBn222bWxtJkrb8VfZBrIXKJAioLuxOpeGDr
-         aXEw==
-X-Gm-Message-State: AC+VfDxGJiY+3GvrUuz9ztckh1Hikv20yB+laijOjabuRUmFk8ksOQgm
-	wQfbowQ1dqQKZAg1hAOxPECeU1KA1YTOU3iESL5q/g==
-X-Google-Smtp-Source: ACHHUZ7zNVT9E5+KkqBP+ZTyfqvDGI2d6bY2hRADL+qOK3dL+ftIEtrLh4N7cS11/o6IrVHRuLLfI56tUId+yu2rsJQ=
-X-Received: by 2002:ad4:5ce6:0:b0:625:e039:5b03 with SMTP id
- iv6-20020ad45ce6000000b00625e0395b03mr3237442qvb.54.1685119897248; Fri, 26
- May 2023 09:51:37 -0700 (PDT)
+        bh=tt/68vR6SyeC2sLBcDQmwXBv1ANp28ndmxJPUsWE9hM=;
+        b=Z6QaEu2f4txLbpdag1DTv4xn9fWqCmXFnPv4A7LN244hB5zZG0IFDk/V+ueQf36+nK
+         SyjUARBmSzxgLmrgr3TXBL9nh9/zazj8TtM6uz+F4Wex/hLWI7icDNofAPL6M7Awssbk
+         IKHKCccP+8DSsabwAdkMjZZmM+b7o5kClzUWVRX7cW7+47quh+sLWpw3Jz8piCvsEb4L
+         IHJyVsQTtYPxachQfrtOeewrFGngHC5Kqce81wMLGO4r/tc2V2Evwjo2pv2mDS6PC+Tr
+         nUog0kENI01+ZMTYewtBFQURDptFNVyu4SaQFFDzjQ14oPaGZTl6zRNbQHqpp+X5Cyi2
+         3N1A==
+X-Gm-Message-State: AC+VfDy+qDtgcjHNba8IrIUP5YnZr7p+inrJOQSh7kDjVSFzF2rZiul3
+	yVVnphPF/NNqIZjC9fPwP+7SDQ==
+X-Google-Smtp-Source: ACHHUZ5x1UtHJq0vBgeGLgQxf+Iim5Mb2xwowdl86d42mrNau8iDDUGU9hQVFxLDmRhXDrvIjkEZwQ==
+X-Received: by 2002:a17:903:10c:b0:1ac:8062:4f0b with SMTP id y12-20020a170903010c00b001ac80624f0bmr2720843plc.59.1685121407089;
+        Fri, 26 May 2023 10:16:47 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p23-20020a170902a41700b001aaecc0b6ffsm3490147plq.160.2023.05.26.10.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 10:16:46 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: ojeda@kernel.org,
+	keescook@chromium.org
+Cc: qing.zhao@oracle.com,
+	morbo@google.com,
+	llvm@lists.linux.dev,
+	trix@redhat.com,
+	linux-kernel@vger.kernel.org,
+	nathan@kernel.org,
+	linux-hardening@vger.kernel.org,
+	gustavoars@kernel.org,
+	ndesaulniers@google.com
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+Date: Fri, 26 May 2023 10:16:29 -0700
+Message-Id: <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517190841.gonna.796-kees@kernel.org>
+References: <20230517190841.gonna.796-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org>
- <CAKwvOd=jZJouuNMd3Rvc--goA0EXPHcf6cHXUA6W1kXJg2ay2w@mail.gmail.com>
- <20230524184103.GA324296@dev-arch.thelio-3990X> <CAKwvOdm=Zk8YhrPptN3k7UQo+1n7Ws=Qox=BwTR9bbjPJJYz8A@mail.gmail.com>
- <39da7e41-dd07-b8bc-57b9-19b05fdfbeac@tessares.net>
-In-Reply-To: <39da7e41-dd07-b8bc-57b9-19b05fdfbeac@tessares.net>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 26 May 2023 09:51:26 -0700
-Message-ID: <CAKwvOdkFxUU4AM9WbcRK9FYHq0cK2H-x4i5_x7oYiE7=DjghhQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Fix clang -Wimplicit-fallthrough in intel_async_flip_check_hw()
-To: Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, jani.nikula@linux.intel.com, 
-	joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com, 
-	tvrtko.ursulin@linux.intel.com, trix@redhat.com, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>, Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 25, 2023 at 1:30=E2=80=AFPM Matthieu Baerts
-<matthieu.baerts@tessares.net> wrote:
->
-> Hi Nick,
->
-> On 24/05/2023 20:56, Nick Desaulniers wrote:
-> > On Wed, May 24, 2023 at 11:41=E2=80=AFAM Nathan Chancellor <nathan@kern=
-el.org> wrote:
-> >>
-> >> On Wed, May 24, 2023 at 11:32:32AM -0700, Nick Desaulniers wrote:
-> >>> On Wed, May 24, 2023 at 8:38=E2=80=AFAM Nathan Chancellor <nathan@ker=
-nel.org> wrote:
-> >>>>
-> >>>> Clang warns:
-> >>>>
-> >>>>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unanno=
-tated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-> >>>>                   case I915_FORMAT_MOD_X_TILED:
-> >>>>                   ^
-> >>>>   drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert =
-'break;' to avoid fall-through
-> >>>>                   case I915_FORMAT_MOD_X_TILED:
-> >>>>                   ^
-> >>>>                   break;
-> >>>>   1 error generated.
-> >>>>
-> >>>> Clang is a little more pedantic than GCC, which does not warn when
-> >>>> falling through to a case that is just break or return. Clang's vers=
-ion
-> >>>> is more in line with the kernel's own stance in deprecated.rst, whic=
-h
-> >>>> states that all switch/case blocks must end in either break,
-> >>>> fallthrough, continue, goto, or return. Add the missing break to sil=
-ence
-> >>>> the warning.
-> >>>>
-> >>>> Fixes: 937859485aef ("drm/i915: Support Async Flip on Linear buffers=
-")
-> >>>> Reported-by: kernel test robot <lkp@intel.com>
-> >>>> Closes: https://lore.kernel.org/202305241902.UvHtMoxa-lkp@intel.com/
-> >>>> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> >>>> Closes: https://lore.kernel.org/CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=
-=3DQFNuDoE_J2Zu-g@mail.gmail.com/
-> >>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >>>
-> >>> Thanks for the patch! I've never seen the closes tag before, that's
-> >>> new to me. Can you tell me more about it?
-> >>
-> >> It is new to me (at least in the context of the kernel) as well. I onl=
-y
-> >> used it over Link: because checkpatch.pl told me to:
-> >>
-> >> WARNING: Reported-by: should be immediately followed by Closes: with a=
- URL to the report
-> >> #26:
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> >>
-> >> WARNING: Reported-by: should be immediately followed by Closes: with a=
- URL to the report
-> >> #27:
-> >> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> >> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >>
-> >> It was Link: for a bit but commit 44c31888098a ("checkpatch: allow
-> >> Closes tags with links") changed it to Closes:. Looks odd to me but
-> >> whatever the linter says I suppose.
-> >>
-> >> Thanks for the review!
-> >>
-> >> Cheers,
-> >> Nathan
-> >>
-> >>> A few more tags
-> >>>
-> >>> Reported-by: Tom Rix <trix@redhat.com>
-> >>> Link: https://lore.kernel.org/all/20230523125116.1669057-1-trix@redha=
-t.com/
-> >>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > Ah then I guess my link tag should have been
-> >
-> > Closes: https://lore.kernel.org/all/20230523125116.1669057-1-trix@redha=
-t.com/
-> >
-> > I hope the author of
-> > commit 44c31888098a ("checkpatch: allow Closes tags with links")
-> > has coordinated with the maintainer of b4, so that b4 recognizes Closes=
- tags.
-> > b4 v0.12.2 does not pick up Closes tags.
->
-> I'm sorry for the troubles caused by this series, that was not the
-> intension.
->
-> When looking at modifying b4 to support the Closes tag, I realised the
-> Link tag from your previous message [1] was not taken as well. Was it
-> just me?
+On Wed, 17 May 2023 12:08:44 -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
+> 
+> [...]
 
-oh? good find!
+FYI, applied to for-next/hardening:
 
->
-> If no, I just sent patches for b4, see [2]. I hope it will help!
+[1/1] Compiler Attributes: Add __counted_by macro
+      https://git.kernel.org/kees/c/86a76e91cbab
 
-appreciated! Thank you.
+-- 
+Kees Cook
 
->
-> Cheers,
-> Matt
->
-> [1]
-> https://lore.kernel.org/all/CAKwvOd=3DjZJouuNMd3Rvc--goA0EXPHcf6cHXUA6W1k=
-XJg2ay2w@mail.gmail.com/
-> [2]
-> https://lore.kernel.org/tools/20230525-closes-tags-v1-0-ed41b1773cb6@tess=
-ares.net/T/
-> --
-> Tessares | Belgium | Hybrid Access Solutions
-> www.tessares.net
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
