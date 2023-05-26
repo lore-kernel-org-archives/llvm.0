@@ -1,82 +1,73 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29332CA6
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 17:16:47 +0000 (UTC)
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so916606b3a.1
-        for <llvm@lists.linux.dev>; Fri, 26 May 2023 10:16:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5ED15BD
+	for <llvm@lists.linux.dev>; Fri, 26 May 2023 17:47:15 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bad1ae90c2eso1093910276.2
+        for <llvm@lists.linux.dev>; Fri, 26 May 2023 10:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685121407; x=1687713407;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685123234; x=1687715234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tt/68vR6SyeC2sLBcDQmwXBv1ANp28ndmxJPUsWE9hM=;
-        b=LnkvrIlQ8Tok1eY3MzXaVX3kUwG4iQ/TiKFyN8pB9xmQgyIk1TWe7Rhr0DTtyZlcDs
-         eVfyKux69riINbAJ3ut36H1rVoRrwRJT4yCWqFMFjVVbBMYEs2dxvwSjolS7rd4aewK5
-         xwaoXlV1TqZNJcLRm1EvoAdemOvEOa/ETWhKc=
+        bh=6CgerKgLDb+oz0xSGVFgair4y7BOc3TVieOSwAdfKBY=;
+        b=jzReXWnsrfCVm/qRO2GA0IRNZFsfmNELIqi6GYheR6lx3tlEdWHPfk8rmaPzVoDauF
+         6gAndj9bJiGl6Mziv5QWOqfJghfXRHGzxqfepSG2vaL5L5UXRmos/wwf2VU5mpiUfmzq
+         ysOU+bRjvnxfYcT1EgyNIQIme/exlG++FdbpJ7U+BkDnbPQmCo6PG3XSm+KichSQx4B1
+         YT0SImUYx9XJws5H8j6YK3WsNRMN58YZK3XYChGgR7j/AzYpLFMbYh3JAA846iLtH9kc
+         LFCrRE0J7HSbAQCfS4TbhmPDZnPfmJzn5RewGV/2WqVxzhAZclyON5u2TcfiZttRkq2/
+         tgrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685121407; x=1687713407;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685123234; x=1687715234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tt/68vR6SyeC2sLBcDQmwXBv1ANp28ndmxJPUsWE9hM=;
-        b=Z6QaEu2f4txLbpdag1DTv4xn9fWqCmXFnPv4A7LN244hB5zZG0IFDk/V+ueQf36+nK
-         SyjUARBmSzxgLmrgr3TXBL9nh9/zazj8TtM6uz+F4Wex/hLWI7icDNofAPL6M7Awssbk
-         IKHKCccP+8DSsabwAdkMjZZmM+b7o5kClzUWVRX7cW7+47quh+sLWpw3Jz8piCvsEb4L
-         IHJyVsQTtYPxachQfrtOeewrFGngHC5Kqce81wMLGO4r/tc2V2Evwjo2pv2mDS6PC+Tr
-         nUog0kENI01+ZMTYewtBFQURDptFNVyu4SaQFFDzjQ14oPaGZTl6zRNbQHqpp+X5Cyi2
-         3N1A==
-X-Gm-Message-State: AC+VfDy+qDtgcjHNba8IrIUP5YnZr7p+inrJOQSh7kDjVSFzF2rZiul3
-	yVVnphPF/NNqIZjC9fPwP+7SDQ==
-X-Google-Smtp-Source: ACHHUZ5x1UtHJq0vBgeGLgQxf+Iim5Mb2xwowdl86d42mrNau8iDDUGU9hQVFxLDmRhXDrvIjkEZwQ==
-X-Received: by 2002:a17:903:10c:b0:1ac:8062:4f0b with SMTP id y12-20020a170903010c00b001ac80624f0bmr2720843plc.59.1685121407089;
-        Fri, 26 May 2023 10:16:47 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p23-20020a170902a41700b001aaecc0b6ffsm3490147plq.160.2023.05.26.10.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:16:46 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: ojeda@kernel.org,
-	keescook@chromium.org
-Cc: qing.zhao@oracle.com,
-	morbo@google.com,
-	llvm@lists.linux.dev,
-	trix@redhat.com,
-	linux-kernel@vger.kernel.org,
-	nathan@kernel.org,
-	linux-hardening@vger.kernel.org,
-	gustavoars@kernel.org,
-	ndesaulniers@google.com
-Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
-Date: Fri, 26 May 2023 10:16:29 -0700
-Message-Id: <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517190841.gonna.796-kees@kernel.org>
-References: <20230517190841.gonna.796-kees@kernel.org>
+        bh=6CgerKgLDb+oz0xSGVFgair4y7BOc3TVieOSwAdfKBY=;
+        b=c9WLI1e/xjff+yMaylJ4yDSiH+OXrq34BqT+iqruhsHEj3lHveN51zm8ELrFapv1zY
+         OHZGpqE2caOQKE0mvQ4ClEJ1C9SeOl7eq1vNN0jLHXrh81FUVTGBtP1lplPUmH/Etwz7
+         nqrO52VFpyCPsKBFzN2f64c/Ya9vIUcXsELLOygEHXFRXPEDzx+qwFhjAAYGGW1CKwek
+         i8uFpD+5hD65yvVvBGWlVJnuE5+LcWyIg2nzE9C4LZd8idHXEDs/zdoguADyUVJeKVha
+         KgXiJtKfXoykmevWRnocF0tpZBMP+3fddk1k2HCFRT4E1NtJ5bym7pWR1yWJ0V8xPjj0
+         B1SQ==
+X-Gm-Message-State: AC+VfDzsPF6aCfb9bdlDz3IdPab06E/0Z5L82Seyu+lyoNSJNzMPhxHk
+	cYn0BO6/mBm+PHOyrxKjCCpXraXzfOeFiMGn2Ss=
+X-Google-Smtp-Source: ACHHUZ4zZdQ1OyE283XyEGqpTqmrswifJPDYZ7nrTVJ9mPxQUh0rJPLTrj29G3HM3uhWCePyDZnMZuCQnfenstG2dk8=
+X-Received: by 2002:a0d:e805:0:b0:555:d983:f4f0 with SMTP id
+ r5-20020a0de805000000b00555d983f4f0mr2753497ywe.24.1685123234701; Fri, 26 May
+ 2023 10:47:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230517190841.gonna.796-kees@kernel.org> <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
+In-Reply-To: <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 26 May 2023 19:47:03 +0200
+Message-ID: <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com>
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+To: Kees Cook <keescook@chromium.org>
+Cc: ojeda@kernel.org, qing.zhao@oracle.com, morbo@google.com, 
+	llvm@lists.linux.dev, trix@redhat.com, linux-kernel@vger.kernel.org, 
+	nathan@kernel.org, linux-hardening@vger.kernel.org, gustavoars@kernel.org, 
+	ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 17 May 2023 12:08:44 -0700, Kees Cook wrote:
-> In an effort to annotate all flexible array members with their run-time
-> size information, the "element_count" attribute is being introduced by
-> Clang[1] and GCC[2] in future releases. This annotation will provide
-> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
-> to perform run-time bounds checking on otherwise unknown-size flexible
-> arrays.
-> 
-> [...]
+On Fri, May 26, 2023 at 7:16=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> FYI, applied to for-next/hardening:
+>
+> [1/1] Compiler Attributes: Add __counted_by macro
+>       https://git.kernel.org/kees/c/86a76e91cbab
 
-FYI, applied to for-next/hardening:
+Sorry, I was going to apply it soon -- in case you want it:
 
-[1/1] Compiler Attributes: Add __counted_by macro
-      https://git.kernel.org/kees/c/86a76e91cbab
+    Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
--- 
-Kees Cook
+And thanks Nathan for resubmitting the `Reviewed-by` from v1!
 
+Cheers,
+Miguel
