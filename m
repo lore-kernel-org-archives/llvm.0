@@ -1,152 +1,277 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A1D539E;
-	Fri, 26 May 2023 07:04:18 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-b9daef8681fso409987276.1;
-        Fri, 26 May 2023 00:04:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685084657; x=1687676657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hP5Hjf1luQydJ9DLMKusibQhr4NEmLhV7a5C7xBBU3o=;
-        b=E0/gdd/ekD92G0WsbmDpB2MfsSQ4TlDjqrxx0LHYPWT0QQRj4BQcZ1GELgzvxRZNlh
-         lDK8P1i/jvQVZNQzTsIu9kcjMoUliFWBjpALwQf5p9TxqMpv9ysJmuXgVw0/AN0LQ/yd
-         VZQmw0rpClYhF/x+w6kUX1r/SDq4uDPwEItQb/pb+pjSWbHm0dxTEMK2uS/as4FwfscT
-         DDBFy8+97ig4suPIuHe5XBwfP5XoHcwJw1BDzhCg8jumXQFZtMWyzzM+fbTKfrlERTBL
-         gLiUvSVa5CqEy6DV0HXlfnMmbnmXj+FF4oVu9KVj94P2lVLC+YwycSGlp0GOwN3LT2h5
-         9DLQ==
-X-Gm-Message-State: AC+VfDw9yguthn5dNHRizmD00H9398+QbRO9Btkv0vwc1deCEDk3bKHx
-	tsiX8lzD1fRY/dCM9F5/NTLr4y2wyf8l8Q==
-X-Google-Smtp-Source: ACHHUZ7YkZmfmOrIwGB76O8V7NqGd1BcZdbxIM6tpvtFhD8Vp2Z3y9xDtUzQv3uZVepIUAt6Gpuplg==
-X-Received: by 2002:a25:8087:0:b0:ba6:cf6f:960b with SMTP id n7-20020a258087000000b00ba6cf6f960bmr735694ybk.27.1685084656802;
-        Fri, 26 May 2023 00:04:16 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 205-20020a2514d6000000b00ba87e9b5bf9sm842244ybu.45.2023.05.26.00.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 00:04:15 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-563b1e5f701so4796017b3.3;
-        Fri, 26 May 2023 00:04:15 -0700 (PDT)
-X-Received: by 2002:a0d:cb83:0:b0:561:d21d:8ce4 with SMTP id
- n125-20020a0dcb83000000b00561d21d8ce4mr1048307ywd.19.1685084654815; Fri, 26
- May 2023 00:04:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7D6749D;
+	Fri, 26 May 2023 07:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685085626; x=1716621626;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lNgEdCfNUEraK1mHFPX0QaG0cCW/Tg8XiCz83h0NIIg=;
+  b=ayAG2d7gR8VF2GVN10TBuwrWz9fzXAdd4bFP1tbzHlPFmoDmnDP25SZ+
+   G1cP0VrKE8dsIO29VBicrC48w6Efp+vyIh/lcg1SN3H3HW7i2x9X4J1Br
+   sLPE96PVxSoqFxl4UkjlGhquymokRGTYeUam0+ZeH+VGT5LwvOKMSWT/6
+   z1PMymUsRvHB3p1NJx13BquDRNTOTEsNu4co3AZY5SK2gb+RKEAqYeMdl
+   zXCNdkTu7ICXLj9dbguSGZtQvsWZxOfOprmPVg2GDQqdVxMcqCozkH0Zt
+   xniODQFTXSkwMxv0Op4SMwIO/8pEcakW7+ug4sLXyG6lNGj9+f6TTi+Kh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="356523690"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="356523690"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 00:20:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="738152276"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="738152276"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2023 00:20:22 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q2RkL-000J95-3C;
+	Fri, 26 May 2023 07:20:21 +0000
+Date: Fri, 26 May 2023 15:20:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm64:devel/kmalloc-minalign 13/15]
+ include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in
+ 'struct scatterlist'
+Message-ID: <202305261555.rLVUFPtf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202305260739.yrWlFZTF-lkp@intel.com>
-In-Reply-To: <202305260739.yrWlFZTF-lkp@intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 26 May 2023 09:04:02 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV3wFeBBK64Q5-pGcRVP12Smhmaon-Em0cQREjj2duLEg@mail.gmail.com>
-Message-ID: <CAMuHMdV3wFeBBK64Q5-pGcRVP12Smhmaon-Em0cQREjj2duLEg@mail.gmail.com>
-Subject: Re: [stable:linux-5.4.y 1809/9999] ld.lld: error: lib/fonts/font_sun8x16.o:
- contains a compressed section, but zlib is not available
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Damien Le Moal <damien.lemoal@wdc.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, May 26, 2023 at 1:24=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
-> FYI, the error/warning was bisected to this commit, please ignore it if i=
-t's irrelevant.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le.git linux-5.4.y
-> head:   f53660ec669f60c772fdf7d75d1c24d288547cee
-> commit: 11420c32c1b49d0f900c4b20bc77c963c54086ce [1809/9999] efi: EFI_EAR=
-LYCON should depend on EFI
-> config: x86_64-randconfig-x071-20230525
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able.git/commit/?id=3D11420c32c1b49d0f900c4b20bc77c963c54086ce
->         git remote add stable https://git.kernel.org/pub/scm/linux/kernel=
-/git/stable/linux-stable.git
->         git fetch --no-tags stable linux-5.4.y
->         git checkout 11420c32c1b49d0f900c4b20bc77c963c54086ce
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash lib/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305260739.yrWlFZTF-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
->    ld.lld: error: lib/fonts/fonts.o: contains a compressed section, but z=
-lib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun8x16.o: contains a compressed section=
-, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun12x22.o: contains a compressed sectio=
-n, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun12x22.o: contains a compressed sectio=
-n, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun12x22.o: contains a compressed sectio=
-n, but zlib is not available
-> >> ld.lld: error: lib/fonts/font_sun12x22.o: contains a compressed sectio=
-n, but zlib is not available
->    ld.lld: error: too many errors emitted, stopping now (use -error-limit=
-=3D0 to see all errors)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git devel/kmalloc-minalign
+head:   d929a28c8da3f1bc095e4aa0d1b811972929351a
+commit: f0b92f544e6b440500c3823c7c47b542816cb4cd [13/15] iommu/dma: Force bouncing if the size is not cacheline-aligned
+config: x86_64-randconfig-x064-20230524 (https://download.01.org/0day-ci/archive/20230526/202305261555.rLVUFPtf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=f0b92f544e6b440500c3823c7c47b542816cb4cd
+        git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+        git fetch --no-tags arm64 devel/kmalloc-minalign
+        git checkout f0b92f544e6b440500c3823c7c47b542816cb4cd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-This looks like a toolchain issue to me: the fonts themselves do not
-contain compressed data, but perhaps they do contain some data that
-coincidentally matches a zlib compressed-data signature?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305261555.rLVUFPtf-lkp@intel.com/
 
-Gr{oetje,eeting}s,
+All errors (new ones prefixed by >>):
 
-                        Geert
+   In file included from drivers/hid/hid-core.c:33:
+   In file included from include/linux/hid-debug.h:14:
+   In file included from include/linux/kfifo.h:42:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   2 errors generated.
+--
+   In file included from drivers/gpu/drm/vgem/vgem_drv.c:33:
+   In file included from include/linux/dma-buf.h:19:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/gpu/drm/vgem/vgem_drv.c:144:10: warning: shift count >= width of type [-Wshift-count-overflow]
+                                        DMA_BIT_MASK(64));
+                                        ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/most/most_cdev.c:15:
+   In file included from include/linux/kfifo.h:42:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/most/most_cdev.c:449:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           INIT_KFIFO(c->fifo);
+           ^~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:69: note: expanded from macro 'INIT_KFIFO'
+           __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
+                         ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/net/ethernet/intel/e1000/e1000_main.c:4:
+   In file included from drivers/net/ethernet/intel/e1000/e1000.h:16:
+   In file included from include/linux/pci.h:1591:
+   In file included from include/linux/dmapool.h:14:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/net/ethernet/intel/e1000/e1000_main.c:1002:45: warning: shift count >= width of type [-Wshift-count-overflow]
+               !dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64))) {
+                                                      ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/virtio/virtio_mmio.c:58:
+   In file included from include/linux/dma-mapping.h:10:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/virtio/virtio_mmio.c:666:33: warning: shift count >= width of type [-Wshift-count-overflow]
+                   rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+                                                 ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   drivers/virtio/virtio_mmio.c:675:46: warning: shift count >= width of type [-Wshift-count-overflow]
+                   rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+                                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   2 warnings and 2 errors generated.
+--
+   In file included from drivers/vdpa/vdpa.c:13:
+   In file included from include/linux/vdpa.h:9:
+   In file included from include/linux/virtio_net.h:5:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/vdpa/vdpa.c:43:37: warning: shift count >= width of type [-Wshift-count-overflow]
+           ret = dma_set_mask_and_coherent(d, DMA_BIT_MASK(64));
+                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/vdpa/vdpa_sim/vdpa_sim.c:16:
+   In file included from include/linux/dma-map-ops.h:9:
+   In file included from include/linux/dma-mapping.h:10:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/vdpa/vdpa_sim/vdpa_sim.c:238:37: warning: shift count >= width of type [-Wshift-count-overflow]
+           if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
+                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/tty/tty_port.c:8:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/tty/tty_port.c:266:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           INIT_KFIFO(port->xmit_fifo);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:69: note: expanded from macro 'INIT_KFIFO'
+           __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
+                         ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/gpu/drm/drm_gem.c:28:
+   In file included from include/linux/dma-buf.h:19:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   In file included from drivers/gpu/drm/drm_gem.c:34:
+   include/linux/mman.h:154:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:132:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/dma-buf/udmabuf.c:4:
+   In file included from include/linux/dma-buf.h:19:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/dma-buf/udmabuf.c:414:9: warning: shift count >= width of type [-Wshift-count-overflow]
+                                              DMA_BIT_MASK(64));
+                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/mmc/core/sd.c:16:
+>> include/linux/scatterlist.h:257:13: error: no member named 'dma_flags' in 'struct scatterlist'
+           return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+                  ~~  ^
+   include/linux/scatterlist.h:262:6: error: no member named 'dma_flags' in 'struct scatterlist'
+           sg->dma_flags |= SG_DMA_USE_SWIOTLB;
+           ~~  ^
+   drivers/mmc/core/sd.c:106:22: warning: shift count >= width of type [-Wshift-count-overflow]
+           card->cid.serial                = UNSTUFF_BITS(resp, 24, 32);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd.c:61:39: note: expanded from macro 'UNSTUFF_BITS'
+                   const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1; \
+                                                       ^  ~~~~~~
+   1 warning and 2 errors generated.
+..
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+vim +257 include/linux/scatterlist.h
+
+   253	
+   254	#ifdef CONFIG_SWIOTLB
+   255	static inline bool sg_is_dma_use_swiotlb(struct scatterlist *sg)
+   256	{
+ > 257		return sg->dma_flags & SG_DMA_USE_SWIOTLB;
+   258	}
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
