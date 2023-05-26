@@ -1,115 +1,92 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364092CA9
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 20:47:25 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ae50da739dso7906945ad.1
-        for <llvm@lists.linux.dev>; Fri, 26 May 2023 13:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685134044; x=1687726044;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lfp02npkh0h/YWUAgBDsalIo85iCBRV6d/ctWRGEdlM=;
-        b=HWXQYRLK7ntwWtvuKa8oeGsD27iRIjXFFB3NKRgYTo6AbUXgLPeW3qK0kjBQERZ3A+
-         hpLbk5UD6xB7CAzhW10l0+DRI1R3CwdWx4tRagyUtmf6xVPsqRG9KuB8vBWnMxVh0omE
-         +Y+ZQrk4EVBT1bEzkphBCFItOUN81ElbIBCLY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685134044; x=1687726044;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lfp02npkh0h/YWUAgBDsalIo85iCBRV6d/ctWRGEdlM=;
-        b=ZC6FLsXZrmJkDHv5P1rH1JfVLmMelaYPWhPvi6Het/u49hgAXW+IoiX6pwk538JI/V
-         hy4mmpuClTJF7E0GCQsO7NsaV1LUaaS+zXrDecxmYhrroaZ562foCXlbr8xnd6HwyOlr
-         FE/O/EN770LJQ4qKuR9af08VAbsVZj0cTI46lM4Tg7vk37sw+6mqjcaSG8Lab3J3hQJC
-         /3AoxntESK6cjvP1DbtjH5a/9cz4VaENqU4oLMQMloje+sJlt6qOCu7Pt49/j0dEobOE
-         wcZl2BTJlOYqV2AfVpJinBNYcuVNQdY0Cfb8E9Qz3Cyuy0AFRogzv9FkVUwUAFYdpyrB
-         ttSg==
-X-Gm-Message-State: AC+VfDzQXZF7tOd+o0dRPRvzuhrKNnLzp0X8VkHdlj2pm2ezN6btV593
-	V7BbI3jV+syk/67dxKyHBjqsGw==
-X-Google-Smtp-Source: ACHHUZ74jsM1296cY4bBvBCOf7HyRaDBLdiJgwSaoNdaJ9O57iSahTuW8wR3toOlGsGaHRgpudK/nQ==
-X-Received: by 2002:a17:903:27c3:b0:1ac:a02f:c9a4 with SMTP id km3-20020a17090327c300b001aca02fc9a4mr3542847plb.4.1685134044683;
-        Fri, 26 May 2023 13:47:24 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f54900b001ac7c725c1asm3650623plf.6.2023.05.26.13.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 13:47:24 -0700 (PDT)
-Date: Fri, 26 May 2023 13:47:23 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Fangrui Song <maskray@google.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org,
-	qing.zhao@oracle.com, morbo@google.com, llvm@lists.linux.dev,
-	trix@redhat.com, linux-kernel@vger.kernel.org, nathan@kernel.org,
-	linux-hardening@vger.kernel.org, gustavoars@kernel.org,
-	ndesaulniers@google.com
-Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
-Message-ID: <202305261344.A938E07789@keescook>
-References: <20230517190841.gonna.796-kees@kernel.org>
- <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
- <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com>
- <202305261156.67CDEE933D@keescook>
- <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74DD2CA9;
+	Fri, 26 May 2023 20:55:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEA9C433D2;
+	Fri, 26 May 2023 20:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685134533;
+	bh=wNFS8qMpN9xjGkOy46fougDPohwpIn+vlopjqdB2Sr8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QoyYdGl7arYEizSVYRRLhQ4r35A4aBdNP+dWXfwtrMdRlgKHyFslPBQH38lz9HCCG
+	 4dGnTzHSxH6YCZgMYEtgbWEwRPido3Ff869pggt9FMU/wrGuXMkdJvo1wWfdHCQ3SF
+	 D3Ia0rj187W93RTKZXe/hfrvJiF2JLdW8EtWFx2NGLTpWBan6zGUjHD9UHrmBLnedO
+	 3W/3sUen9JZGepNHkwuHoERxPfjv7laOaxjxNxC0Iy1fGKosXBWbV22h0B2yMI0WhV
+	 vnw09r1avVxeSHxVIFwxYjhUtmmuaEf5SRyM2L+eltnKysbD0xpWnyVfQnRRo5UdO2
+	 S8cLnY9kEcurg==
+Date: Fri, 26 May 2023 13:59:20 -0700
+From: Bjorn Andersson <andersson@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+	konrad.dybcio@linaro.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	tglx@linutronix.de, maz@kernel.org, will@kernel.org,
+	robin.murphy@arm.com, joro@8bytes.org, robimarko@gmail.com,
+	quic_gurus@quicinc.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+	Imran Shaik <quic_imrashai@quicinc.com>
+Subject: Re: [PATCH 6/8] arm64: dts: qcom: Add support for GCC and RPMHCC for
+ SDX75
+Message-ID: <20230526205920.vxibspqj7cbizxq7@ripper>
+References: <1684487350-30476-7-git-send-email-quic_rohiagar@quicinc.com>
+ <202305201743.PsMD38Vz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
+In-Reply-To: <202305201743.PsMD38Vz-lkp@intel.com>
 
-On Fri, May 26, 2023 at 12:48:26PM -0700, Fangrui Song wrote:
-> On Fri, May 26, 2023 at 11:56 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, May 26, 2023 at 07:47:03PM +0200, Miguel Ojeda wrote:
-> > > On Fri, May 26, 2023 at 7:16 PM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > FYI, applied to for-next/hardening:
-> > > >
-> > > > [1/1] Compiler Attributes: Add __counted_by macro
-> > > >       https://git.kernel.org/kees/c/86a76e91cbab
-> > >
-> > > Sorry, I was going to apply it soon -- in case you want it:
-> > >
-> > >     Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> >
-> > Thanks!
-> >
-> > > And thanks Nathan for resubmitting the `Reviewed-by` from v1!
-> >
-> > Yes, apologies for missing this in my v2 submission!
-> >
-> > --
-> > Kees Cook
-> >
+On Sat, May 20, 2023 at 06:08:25PM +0800, kernel test robot wrote:
+> Hi Rohit,
 > 
-> https://discourse.llvm.org/t/rfc-enforcing-bounds-safety-in-c-fbounds-safety/70854
-> proposes a macro __counted_by as well.
-> This patch uses the same name:
+> kernel test robot noticed the following build errors:
 > 
-> > # define __counted_by(member)          __attribute__((__element_count__(member)))
+> [auto build test ERROR on robh/for-next]
+> [also build test ERROR on tip/irq/core joro-iommu/next linus/master v6.4-rc2 next-20230519]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> I wonder whether the two use cases are compatible so that using the
-> same macro name will be fine.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Rohit-Agarwal/dt-bindings-arm-qcom-Document-SDX75-platform-and-boards/20230519-171116
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> patch link:    https://lore.kernel.org/r/1684487350-30476-7-git-send-email-quic_rohiagar%40quicinc.com
+> patch subject: [PATCH 6/8] arm64: dts: qcom: Add support for GCC and RPMHCC for SDX75
+> config: arm64-randconfig-r006-20230517
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/768f74f2345d9af657bd58a98e7ade22b7a5c3e2
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Rohit-Agarwal/dt-bindings-arm-qcom-Document-SDX75-platform-and-boards/20230519-171116
+>         git checkout 768f74f2345d9af657bd58a98e7ade22b7a5c3e2
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305201743.PsMD38Vz-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/arm64/boot/dts/qcom/sdx75-idp.dts:8:
+> >> arch/arm64/boot/dts/qcom/sdx75.dtsi:10:10: fatal error: 'dt-bindings/clock/qcom,sdx75-gcc.h' file not found
+>    #include <dt-bindings/clock/qcom,sdx75-gcc.h>
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yeah, I have suggest the name change for the GCC proposal. However,
-given that there is still no code to test for -fbounds-safety, I'm
-sticking with __element_count for the moment, as there is code
-implementing that name in both GCC and Clang today.
+This error can be ignored, I will fix the problem when applying the
+updated patches.
 
-> #if defined(__has_feature) && __has_feature(bounds_safety)
-> #define __counted_by(T) __attribute__((__counted_by__(T)))
-> // ... other bounds annotations
-> #else
-> #define __counted_by(T) // defined as nothing // ... other bounds annotations
-> #endif
-
-Right. My main consideration for getting __counted_by defined by the
-kernel at all is so that annotation can begin. We can adjust the
-define's contents as needed. :)
-
--- 
-Kees Cook
+Regards,
+Bjorn
