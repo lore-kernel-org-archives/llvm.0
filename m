@@ -1,42 +1,46 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43F619900;
-	Sat, 27 May 2023 23:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CFF19902;
+	Sat, 27 May 2023 23:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685230710; x=1716766710;
+  t=1685230712; x=1716766712;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PGjTqxrTCZLR4IqO1wL5PGxZ8YB2DrLjMcyeY0HcXrU=;
-  b=RuyTJormMdp7BQi9AYhrwrPEytp2lUd2oGhpHgaQRO9Juyv+cljyMikI
-   7pGCGvNR6scEhxpiVgbZgiRESBaFJK3OhYuAXfBmrWCm/l7NL6n3mGLqK
-   vtzeHMgqaj6Lin+Y8qFI7ilXrPy9OxtMLr30gmjCTgB/GsLYbec9Q0jnc
-   4YDKyZfXRRuX+lAKn6Sct60ttKavkzWtnW0J5ZdQDf1y7W3ETozjZ/4Ze
-   aGFqHObJhfZy0lFZeqaZGV2zDsaeYqFibY+D4T/0Du9GJWJa7EE1GPwUS
-   nHMu7hFEqdV/QnAbn0b7EZYsF8lIKjjSfDRF+9MVKdVA/7fG3Yk1PZ3Ov
+  bh=agBI6GmZWjSS8VbTsbdQ65xvBco0PZrRd+r5Nx3xwcA=;
+  b=m8o9AikD8hoqxbUZOgxSzpjHDXPMn/RDYhu29atB93oMGaFt7P/73H9v
+   AJtfc38h59aIWehXllCfeFzm1sIU5IdjQr8uuKaPa9PhGY4tCNulve46h
+   uQvRvqbISmhnLFubU/+fQnXonGKJU7WwsL25mkeIK8zh6YNstg0Tv8M75
+   U2M4GJZVehdI5U9v+mx4VXz724c13KmkI9FiESDbPpq7FMJEp9ThX4AWV
+   9pHn5wwfcHy5IqIZH73KyGM2oB7bJjNOOhPTroYy59X/u3i3fuHbCU/8R
+   mVa4I5hBSewIpoCCESpGbqqSMkVlYvQkZpx4RcHbrKVsEzcw3GTwMs7pV
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="353300481"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="382709700"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="353300481"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 16:38:30 -0700
+   d="scan'208";a="382709700"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 16:38:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="738666234"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="795472733"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="738666234"
+   d="scan'208";a="795472733"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 May 2023 16:38:28 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 27 May 2023 16:38:28 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q33US-000KFq-0W;
+	id 1q33US-000KFy-0n;
 	Sat, 27 May 2023 23:38:28 +0000
-Date: Sun, 28 May 2023 07:37:43 +0800
+Date: Sun, 28 May 2023 07:37:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:uprobe_multi_2 1/22] kernel/trace/bpf_trace.c:3041:16:
- warning: variable 'inode' set but not used
-Message-ID: <202305280743.W2Qij9if-lkp@intel.com>
+To: Yimin Gu <ustcymgu@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Jesse Taube <Mr.Bossman075@gmail.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: drivers/comedi/drivers/das1800.c:343:2: warning: performing pointer
+ arithmetic on a null pointer has undefined behavior
+Message-ID: <202305280723.RB6YR0Ot-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,106 +50,165 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi_2
-head:   c8f1191093bc581ca849b4e106d98b69bdc3a9fd
-commit: cd4ef19c217089e0b5af3754c9b5915780926c9b [1/22] bpf: Add multi uprobe link
-config: x86_64-randconfig-x063-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280743.W2Qij9if-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Yimin,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4e893b5aa4ac2c8a56a40d18fe87e9d2295e5dcf
+commit: b5e2c507b06c9d36411845149162a804ae7b04a9 riscv: Kconfig: Allow RV32 to build with no MMU
+date:   9 weeks ago
+config: riscv-randconfig-r042-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280723.RB6YR0Ot-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=cd4ef19c217089e0b5af3754c9b5915780926c9b
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf uprobe_multi_2
-        git checkout cd4ef19c217089e0b5af3754c9b5915780926c9b
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b5e2c507b06c9d36411845149162a804ae7b04a9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b5e2c507b06c9d36411845149162a804ae7b04a9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/comedi/drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305280743.W2Qij9if-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280723.RB6YR0Ot-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/bpf_trace.c:3041:16: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode *inode, *old_inode;
-                         ^
->> kernel/trace/bpf_trace.c:3092:12: warning: variable 'old_inode' is uninitialized when used here [-Wuninitialized]
-                           inode = old_inode;
-                                   ^~~~~~~~~
-   kernel/trace/bpf_trace.c:3041:33: note: initialize the variable 'old_inode' to silence this warning
-           struct inode *inode, *old_inode;
-                                          ^
-                                           = NULL
-   2 warnings generated.
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/comedi/drivers/das1800.c:73:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/comedi/drivers/das1800.c:343:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(dev->iobase + DAS1800_FIFO, devpriv->fifo_buf, nsamples);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   14 warnings generated.
 
 
-vim +/inode +3041 kernel/trace/bpf_trace.c
+vim +343 drivers/comedi/drivers/das1800.c
 
-  3032	
-  3033	int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-  3034	{
-  3035		void __user **upaths, __user *upath, __user *old_upath = NULL;
-  3036		unsigned long __user *uref_ctr_offsets, ref_ctr_offset = 0;
-  3037		struct bpf_uprobe_multi_link *link = NULL;
-  3038		unsigned long __user *uoffsets, offset;
-  3039		struct bpf_link_primer link_primer;
-  3040		struct bpf_uprobe *uprobes = NULL;
-> 3041		struct inode *inode, *old_inode;
-  3042		u32 flags, cnt, i;
-  3043		struct path path;
-  3044		int err;
-  3045	
-  3046		/* no support for 32bit archs yet */
-  3047		if (sizeof(u64) != sizeof(void *))
-  3048			return -EOPNOTSUPP;
-  3049	
-  3050		if (prog->expected_attach_type != BPF_TRACE_UPROBE_MULTI)
-  3051			return -EINVAL;
-  3052	
-  3053		flags = attr->link_create.uprobe_multi.flags;
-  3054		if (flags & ~BPF_F_UPROBE_MULTI_RETURN)
-  3055			return -EINVAL;
-  3056	
-  3057		upaths = u64_to_user_ptr(attr->link_create.uprobe_multi.paths);
-  3058		uoffsets = u64_to_user_ptr(attr->link_create.uprobe_multi.offsets);
-  3059		if (!!upaths != !!uoffsets)
-  3060			return -EINVAL;
-  3061	
-  3062		uref_ctr_offsets = u64_to_user_ptr(attr->link_create.uprobe_multi.ref_ctr_offsets);
-  3063	
-  3064		cnt = attr->link_create.uprobe_multi.cnt;
-  3065		if (!cnt)
-  3066			return -EINVAL;
-  3067	
-  3068		uprobes = kvcalloc(cnt, sizeof(*uprobes), GFP_KERNEL);
-  3069		if (!uprobes)
-  3070			return -ENOMEM;
-  3071	
-  3072		link = kzalloc(sizeof(*link), GFP_KERNEL);
-  3073		if (!link) {
-  3074			err = -ENOMEM;
-  3075			goto error;
-  3076		}
-  3077	
-  3078		for (i = 0; i < cnt; i++) {
-  3079			if (uref_ctr_offsets && __get_user(ref_ctr_offset, uref_ctr_offsets + i)) {
-  3080				err = -EFAULT;
-  3081				goto error_path_put;
-  3082			}
-  3083			if (__get_user(offset, uoffsets + i)) {
-  3084				err = -EFAULT;
-  3085				goto error_path_put;
-  3086			}
-  3087			if (__get_user(upath, upaths + i)) {
-  3088				err = -EFAULT;
-  3089				goto error_path_put;
-  3090			}
-  3091			if (i && old_upath == upath) {
-> 3092				inode = old_inode;
+a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  336  
+73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  337  static void das1800_handle_fifo_half_full(struct comedi_device *dev,
+73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  338  					  struct comedi_subdevice *s)
+73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  339  {
+9a1a6cf8ae5ca5 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-10-15  340  	struct das1800_private *devpriv = dev->private;
+605d76f6eb007a drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2014-11-05  341  	unsigned int nsamples = comedi_nsamples_left(s, FIFO_SIZE / 2);
+a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  342  
+1f190a73590ce0 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2015-01-12 @343  	insw(dev->iobase + DAS1800_FIFO, devpriv->fifo_buf, nsamples);
+1f190a73590ce0 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2015-01-12  344  	comedi_buf_write_samples(s, devpriv->fifo_buf, nsamples);
+a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  345  }
+a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  346  
+
+:::::: The code at line 343 was first introduced by commit
+:::::: 1f190a73590ce0070d6a5b6ee0d50e076aafebd6 staging: comedi: das1800: separate AI FIFO bounce buffer from DMA buffer
+
+:::::: TO: H Hartley Sweeten <hsweeten@visionengravers.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
