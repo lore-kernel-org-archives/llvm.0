@@ -1,115 +1,137 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9203379;
-	Sat, 27 May 2023 09:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9D9134CA;
+	Sat, 27 May 2023 16:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685179319; x=1716715319;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l4N5q4a2Oi7+/vwLavERirEGaUeymmpTBhcf/gAKXWE=;
-  b=SftUiKtdVXcvfXva50e3XXHCAp07iUYyVH12IyTiF7XOC7o2Kxig+amk
-   5Hixemlz9yZNmsy/uDTQNZhrYKMsLNYvL3hyH43tH86JnLSz+tzz2T7GO
-   mjj4mnrtu0O84Sqo89Af5p4cNNcpzz+c+H/ejCYv+Jga+ASyqCBoqxRnA
-   mU8zXvYyBaMF0yU5GWC89/A/4f8+na705JPACZdvHwO/75U3P+wR5CdLx
-   SzUnB86qmcQJJnKPowWRyLzreDY1gEfgxJqpYQXRm4s1YJGP50ddciuXN
-   fWNDZApVO0NTcRgeCbMTRGv2Us1N4DPVaE6Jt44992tWthfd3ifB7JeGg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="356760672"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="356760672"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 02:21:59 -0700
+  t=1685203992; x=1716739992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=HRz+uuIx0+xElN7wrpO41PLA0XnkoBsOOVf57+jeZVs=;
+  b=ZZMBbPpx1urJOoHlk0vM/AqUaNE/ODOB4pvalvXDp3HJGbYuu+Wyfkdf
+   yUPy06tqRlWatytujwB7wmoMia3wY6CmDVwg/hr+XYbAtch5r3CB1moca
+   q/BYabtFaq30THFruo1zQLoB/8uRO2DTYlxVYV1souoeQJSolfIhME59Q
+   8HRgRffyep8c8bL1axPH5+gCay7vQWTo30uMVZmpwnwpOu+V0LnZoZzhd
+   j74nJfD7tQmfmODr73d+mPiR0jmtLCnkEZj3R43xpziy2p/aDeRmOYwtf
+   RSdUPoRkQlB+jtTI+4JBKhf7Nfp9idVPiabVAqjhf7AGcSySlOEd1zFp9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="356796431"
+X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
+   d="scan'208";a="356796431"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 09:13:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="655911618"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="655911618"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="1035682343"
+X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
+   d="scan'208";a="1035682343"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 May 2023 02:21:58 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 27 May 2023 09:13:06 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q2q7Z-000Jsg-18;
-	Sat, 27 May 2023 09:21:57 +0000
-Date: Sat, 27 May 2023 17:21:09 +0800
+	id 1q2wXS-000K3U-0t;
+	Sat, 27 May 2023 16:13:06 +0000
+Date: Sun, 28 May 2023 00:12:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-versatile/versatile.c:56:14: warning: no previous
- prototype for function 'mmc_status'
-Message-ID: <202305271705.tpnbJxpk-lkp@intel.com>
+	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+	daniel@ffwll.ch, sumit.semwal@linaro.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH] drm/radeon: fix race condition UAF in
+ radeon_gem_set_domain_ioctl
+Message-ID: <202305272311.JHzuoUJZ-lkp@intel.com>
+References: <20230526123753.16160-1-lm0963hack@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230526123753.16160-1-lm0963hack@gmail.com>
 
-Hi Arnd,
+Hi Min,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   49572d5361298711207ab387a6c318407deb963a
-commit: d7445676e86900f8dc363825033ff62416c216e0 ARM: versatile: move integrator/realview/vexpress to versatile
-date:   1 year, 2 months ago
-config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20230527/202305271705.tpnbJxpk-lkp@intel.com/config)
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.4-rc3 next-20230525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230526123753.16160-1-lm0963hack%40gmail.com
+patch subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
+config: riscv-randconfig-r042-20230526 (https://download.01.org/0day-ci/archive/20230527/202305272311.JHzuoUJZ-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d7445676e86900f8dc363825033ff62416c216e0
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/66fb975494d21e80b90235b7d8bf0953990c5c89
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
+        git checkout 66fb975494d21e80b90235b7d8bf0953990c5c89
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/radeon/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271705.tpnbJxpk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305272311.JHzuoUJZ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-   unsigned int mmc_status(struct device *dev)
-                ^
-   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int mmc_status(struct device *dev)
-   ^
-   static 
+>> drivers/gpu/drm/radeon/radeon_gem.c:462:20: warning: variable 'robj' set but not used [-Wunused-but-set-variable]
+           struct radeon_bo *robj;
+                             ^
    1 warning generated.
 
 
-vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
+vim +/robj +462 drivers/gpu/drm/radeon/radeon_gem.c
 
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
-
-:::::: The code at line 56 was first introduced by commit
-:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
-
-:::::: TO: Rob Herring <robh@kernel.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+f72a113a71ab08 Christian König 2014-08-07  453  
+771fe6b912fca5 Jerome Glisse   2009-06-05  454  int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
+771fe6b912fca5 Jerome Glisse   2009-06-05  455  				struct drm_file *filp)
+771fe6b912fca5 Jerome Glisse   2009-06-05  456  {
+771fe6b912fca5 Jerome Glisse   2009-06-05  457  	/* transition the BO to a domain -
+771fe6b912fca5 Jerome Glisse   2009-06-05  458  	 * just validate the BO into a certain domain */
+dee53e7fb3ee01 Jerome Glisse   2012-07-02  459  	struct radeon_device *rdev = dev->dev_private;
+771fe6b912fca5 Jerome Glisse   2009-06-05  460  	struct drm_radeon_gem_set_domain *args = data;
+771fe6b912fca5 Jerome Glisse   2009-06-05  461  	struct drm_gem_object *gobj;
+4c7886791264f0 Jerome Glisse   2009-11-20 @462  	struct radeon_bo *robj;
+771fe6b912fca5 Jerome Glisse   2009-06-05  463  	int r;
+771fe6b912fca5 Jerome Glisse   2009-06-05  464  
+771fe6b912fca5 Jerome Glisse   2009-06-05  465  	/* for now if someone requests domain CPU -
+771fe6b912fca5 Jerome Glisse   2009-06-05  466  	 * just make sure the buffer is finished with */
+dee53e7fb3ee01 Jerome Glisse   2012-07-02  467  	down_read(&rdev->exclusive_lock);
+771fe6b912fca5 Jerome Glisse   2009-06-05  468  
+771fe6b912fca5 Jerome Glisse   2009-06-05  469  	/* just do a BO wait for now */
+a8ad0bd84f9860 Chris Wilson    2016-05-09  470  	gobj = drm_gem_object_lookup(filp, args->handle);
+771fe6b912fca5 Jerome Glisse   2009-06-05  471  	if (gobj == NULL) {
+dee53e7fb3ee01 Jerome Glisse   2012-07-02  472  		up_read(&rdev->exclusive_lock);
+bf79cb914dbfe8 Chris Wilson    2010-08-04  473  		return -ENOENT;
+771fe6b912fca5 Jerome Glisse   2009-06-05  474  	}
+7e4d15d90afe46 Daniel Vetter   2011-02-18  475  	robj = gem_to_radeon_bo(gobj);
+771fe6b912fca5 Jerome Glisse   2009-06-05  476  
+771fe6b912fca5 Jerome Glisse   2009-06-05  477  	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
+771fe6b912fca5 Jerome Glisse   2009-06-05  478  
+f11fb66ae92193 Emil Velikov    2020-05-15  479  	drm_gem_object_put(gobj);
+dee53e7fb3ee01 Jerome Glisse   2012-07-02  480  	up_read(&rdev->exclusive_lock);
+66fb975494d21e Min Li          2023-05-26  481  	r = radeon_gem_handle_lockup(rdev, r);
+771fe6b912fca5 Jerome Glisse   2009-06-05  482  	return r;
+771fe6b912fca5 Jerome Glisse   2009-06-05  483  }
+771fe6b912fca5 Jerome Glisse   2009-06-05  484  
 
 -- 
 0-DAY CI Kernel Test Service
