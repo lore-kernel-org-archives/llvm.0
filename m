@@ -1,44 +1,43 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C72F1C04;
-	Sat, 27 May 2023 08:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9203379;
+	Sat, 27 May 2023 09:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685177999; x=1716713999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=icqsCyU+FSgeqlc9F3DL/1oMG9EXyjYxm7MQIgi7k9w=;
-  b=BzeYNph2prZB/pVxeG8NRfTPEx5xJuu/L3Edb7MHELb9KMdSq0X0BREc
-   9a6uv/zbcZOTeSWwq1n8+QD3NACMOvyTiIrrKVNk4QXCEUNNyxpzciPYS
-   aDNoGtOaobm+i8B8tlMeCvJlSUg6f5v+U3LDZDEmrKLUrRbwPwJMDQ3A8
-   kYk3ncgz+tG2UefY0ibb1zEsFjNFdartcOWYCwzTT0lxEQ05ZvEJyuM70
-   WKWwSP0ZAoplN3IG9WMQSdFBTKNQVYSBCVQc2KFzgdl7mf08L02ABbMba
-   sCpBxifDnbo+/lr3pFSswbDeKM/Kt0qbCMcgIFJMOeBcAUDLrJUslttRo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="356759214"
+  t=1685179319; x=1716715319;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l4N5q4a2Oi7+/vwLavERirEGaUeymmpTBhcf/gAKXWE=;
+  b=SftUiKtdVXcvfXva50e3XXHCAp07iUYyVH12IyTiF7XOC7o2Kxig+amk
+   5Hixemlz9yZNmsy/uDTQNZhrYKMsLNYvL3hyH43tH86JnLSz+tzz2T7GO
+   mjj4mnrtu0O84Sqo89Af5p4cNNcpzz+c+H/ejCYv+Jga+ASyqCBoqxRnA
+   mU8zXvYyBaMF0yU5GWC89/A/4f8+na705JPACZdvHwO/75U3P+wR5CdLx
+   SzUnB86qmcQJJnKPowWRyLzreDY1gEfgxJqpYQXRm4s1YJGP50ddciuXN
+   fWNDZApVO0NTcRgeCbMTRGv2Us1N4DPVaE6Jt44992tWthfd3ifB7JeGg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="356760672"
 X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="356759214"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 01:59:58 -0700
+   d="scan'208";a="356760672"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 02:21:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="879785640"
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="655911618"
 X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="879785640"
+   d="scan'208";a="655911618"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2023 01:59:57 -0700
+  by orsmga003.jf.intel.com with ESMTP; 27 May 2023 02:21:58 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q2pmH-000JsI-01;
-	Sat, 27 May 2023 08:59:57 +0000
-Date: Sat, 27 May 2023 16:59:47 +0800
+	id 1q2q7Z-000Jsg-18;
+	Sat, 27 May 2023 09:21:57 +0000
+Date: Sat, 27 May 2023 17:21:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 4/7] drm/i915/huc: differentiate the 2 steps of the
- MTL HuC auth flow
-Message-ID: <202305271643.4lrHpkZs-lkp@intel.com>
-References: <20230527005242.1346093-5-daniele.ceraolospurio@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-versatile/versatile.c:56:14: warning: no previous
+ prototype for function 'mmc_status'
+Message-ID: <202305271705.tpnbJxpk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,68 +46,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230527005242.1346093-5-daniele.ceraolospurio@intel.com>
 
-Hi Daniele,
+Hi Arnd,
 
-kernel test robot noticed the following build errors:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniele-Ceraolo-Spurio/drm-i915-uc-perma-pin-firmwares/20230527-085429
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230527005242.1346093-5-daniele.ceraolospurio%40intel.com
-patch subject: [PATCH v3 4/7] drm/i915/huc: differentiate the 2 steps of the MTL HuC auth flow
-config: x86_64-randconfig-x056-20230526 (https://download.01.org/0day-ci/archive/20230527/202305271643.4lrHpkZs-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   49572d5361298711207ab387a6c318407deb963a
+commit: d7445676e86900f8dc363825033ff62416c216e0 ARM: versatile: move integrator/realview/vexpress to versatile
+date:   1 year, 2 months ago
+config: arm-multi_v5_defconfig (https://download.01.org/0day-ci/archive/20230527/202305271705.tpnbJxpk-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5e7ad1c45a6cbb80d8b9f71212d410d19bbe96d9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniele-Ceraolo-Spurio/drm-i915-uc-perma-pin-firmwares/20230527-085429
-        git checkout 5e7ad1c45a6cbb80d8b9f71212d410d19bbe96d9
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d7445676e86900f8dc363825033ff62416c216e0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271643.4lrHpkZs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305271705.tpnbJxpk-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c:199:54: error: too few arguments to function call, expected 2, have 1
-           if (intel_huc_is_authenticated(&pxp->ctrl_gt->uc.huc) &&
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~                      ^
-   drivers/gpu/drm/i915/gt/uc/intel_huc.h:60:6: note: 'intel_huc_is_authenticated' declared here
-   bool intel_huc_is_authenticated(struct intel_huc *huc,
-        ^
-   1 error generated.
+>> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
+   unsigned int mmc_status(struct device *dev)
+                ^
+   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int mmc_status(struct device *dev)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +199 drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c
+vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
 
-dc9ac125d81faf Alan Previn 2023-05-11  188  
-99afb7cc8c4457 Alan Previn 2023-05-11  189  bool intel_pxp_gsccs_is_ready_for_sessions(struct intel_pxp *pxp)
-99afb7cc8c4457 Alan Previn 2023-05-11  190  {
-99afb7cc8c4457 Alan Previn 2023-05-11  191  	/*
-99afb7cc8c4457 Alan Previn 2023-05-11  192  	 * GSC-fw loading, HuC-fw loading, HuC-fw authentication and
-99afb7cc8c4457 Alan Previn 2023-05-11  193  	 * GSC-proxy init flow (requiring an mei component driver)
-99afb7cc8c4457 Alan Previn 2023-05-11  194  	 * must all occur first before we can start requesting for PXP
-99afb7cc8c4457 Alan Previn 2023-05-11  195  	 * sessions. Checking for completion on HuC authentication and
-99afb7cc8c4457 Alan Previn 2023-05-11  196  	 * gsc-proxy init flow (the last set of dependencies that
-99afb7cc8c4457 Alan Previn 2023-05-11  197  	 * are out of order) will suffice.
-99afb7cc8c4457 Alan Previn 2023-05-11  198  	 */
-99afb7cc8c4457 Alan Previn 2023-05-11 @199  	if (intel_huc_is_authenticated(&pxp->ctrl_gt->uc.huc) &&
-99afb7cc8c4457 Alan Previn 2023-05-11  200  	    intel_gsc_uc_fw_proxy_init_done(&pxp->ctrl_gt->uc.gsc))
-99afb7cc8c4457 Alan Previn 2023-05-11  201  		return true;
-99afb7cc8c4457 Alan Previn 2023-05-11  202  
-99afb7cc8c4457 Alan Previn 2023-05-11  203  	return false;
-99afb7cc8c4457 Alan Previn 2023-05-11  204  }
-99afb7cc8c4457 Alan Previn 2023-05-11  205  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
+a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
+
+:::::: The code at line 56 was first introduced by commit
+:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
+
+:::::: TO: Rob Herring <robh@kernel.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
 0-DAY CI Kernel Test Service
