@@ -1,84 +1,173 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A3A2A9EF
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 23:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685144462;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dSB9+fKGEmsjSjbk/5KO0E2PluSaXtQZlIMor7zuuEI=;
-	b=M4qu9L5G11B8XoLRYa6svBeXgktisubXB/Own9UvbVa9Y9zXhwtm4Up5qwhvb9yPqnBR+B
-	mhBsaa81A16fqoGJMEjl37PQpBGRhqUCulLJwDGtlxcDYEMorCctb8X6TLBC3i/UMQppAW
-	VVRRNz1qptyj8dbjUrrtokxLOfdJO6g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-nQ8gynN6OniTy1HvhkQKjw-1; Fri, 26 May 2023 19:41:01 -0400
-X-MC-Unique: nQ8gynN6OniTy1HvhkQKjw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DFDBD38117EA
-	for <llvm@lists.linux.dev>; Fri, 26 May 2023 23:41:00 +0000 (UTC)
-Received: from [172.64.0.126] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CD9C540C6CCC;
-	Fri, 26 May 2023 23:41:00 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
- mainline.kernel.org-clang, a92c9ab6)
-Date: Fri, 26 May 2023 23:41:00 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0627E;
+	Sat, 27 May 2023 00:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685147330; x=1716683330;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=TOL6hyiWiO3MgUT+DspcqArIrWW1xuonaiyqnX1/mQw=;
+  b=j4qXff7MH8dOYCEQRwLhaadx8nI7tUwpE6NCoUHtob/ttqNtF6qA4eMM
+   1AHHXegJFZ3BTyBdLo3XmIlNFrTkQr4gSHQDc2sQZ776fwhmYuHfr5Dkl
+   mn+jvMKI0OZYWndUKK1D+SDN+X0MIGex2NQYrSrBYOp4YMZ+xf5Dg5WN1
+   +qKaL2MPuPO3XbkWu3Ceu92DFzIxmBkrppSn8Z4xTCSEBdFU4VRjamnHc
+   KyRlBVF4tIx3Nzmm8dk1U3wlkTc5ldn/ikrWaQxd9c6SQd1ZDSjIYyQMZ
+   bRP38EgKHQtSdEFM5Nf44yUU53pMhEmIC0n/19mGvwdMlzN4vGOP61Nc7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="357589186"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="357589186"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 17:28:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="655815722"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="655815722"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 May 2023 17:28:47 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q2hnb-000JgA-0N;
+	Sat, 27 May 2023 00:28:47 +0000
+Date: Sat, 27 May 2023 08:27:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jani.nikula@intel.com
+Subject: Re: [Intel-gfx] [PATCH 01/15] drm/i915/plane: warn on non-zero plane
+ offset
+Message-ID: <202305270846.ZA7bj1cg-lkp@intel.com>
+References: <0988d237e56c56568f035053da8e2e2308a17d3a.1685119007.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <63692.123052619410100439@us-mta-271.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0988d237e56c56568f035053da8e2e2308a17d3a.1685119007.git.jani.nikula@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jani,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-i915-plane-warn-on-non-zero-plane-offset/20230527-003951
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/0988d237e56c56568f035053da8e2e2308a17d3a.1685119007.git.jani.nikula%40intel.com
+patch subject: [Intel-gfx] [PATCH 01/15] drm/i915/plane: warn on non-zero plane offset
+config: x86_64-randconfig-x056-20230526 (https://download.01.org/0day-ci/archive/20230527/202305270846.ZA7bj1cg-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/40c3d9e9221e230ab6f0b2e3051b6c4566a1e852
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jani-Nikula/drm-i915-plane-warn-on-non-zero-plane-offset/20230527-003951
+        git checkout 40c3d9e9221e230ab6f0b2e3051b6c4566a1e852
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305270846.ZA7bj1cg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/i9xx_plane.c:1027:13: error: variable 'offset' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+           } else if (DISPLAY_VER(dev_priv) >= 4) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_drv.h:433:27: note: expanded from macro 'DISPLAY_VER'
+   #define DISPLAY_VER(i915)       (DISPLAY_RUNTIME_INFO(i915)->ip.ver)
+                                   ^
+   drivers/gpu/drm/i915/display/i9xx_plane.c:1040:30: note: uninitialized use occurs here
+           drm_WARN_ON(&dev_priv->drm, offset != 0);
+                                       ^~~~~~
+   include/drm/drm_print.h:630:19: note: expanded from macro 'drm_WARN_ON'
+           drm_WARN((drm), (x), "%s",                                      \
+                            ^
+   include/drm/drm_print.h:620:7: note: expanded from macro 'drm_WARN'
+           WARN(condition, "%s %s: " format,                               \
+                ^~~~~~~~~
+   include/asm-generic/bug.h:131:25: note: expanded from macro 'WARN'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/gpu/drm/i915/display/i9xx_plane.c:1027:9: note: remove the 'if' if its condition is always true
+           } else if (DISPLAY_VER(dev_priv) >= 4) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/i9xx_plane.c:983:23: note: initialize the variable 'offset' to silence this warning
+           u32 val, base, offset;
+                                ^
+                                 = 0
+   1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'block-6.4-2023-05-26' of git://git.kernel.dk=
-/linux
+vim +1027 drivers/gpu/drm/i915/display/i9xx_plane.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/90500
+2a3014490cd18a Dave Airlie   2021-02-05   973  
+2a3014490cd18a Dave Airlie   2021-02-05   974  void
+2a3014490cd18a Dave Airlie   2021-02-05   975  i9xx_get_initial_plane_config(struct intel_crtc *crtc,
+2a3014490cd18a Dave Airlie   2021-02-05   976  			      struct intel_initial_plane_config *plane_config)
+2a3014490cd18a Dave Airlie   2021-02-05   977  {
+2a3014490cd18a Dave Airlie   2021-02-05   978  	struct drm_device *dev = crtc->base.dev;
+2a3014490cd18a Dave Airlie   2021-02-05   979  	struct drm_i915_private *dev_priv = to_i915(dev);
+2a3014490cd18a Dave Airlie   2021-02-05   980  	struct intel_plane *plane = to_intel_plane(crtc->base.primary);
+2a3014490cd18a Dave Airlie   2021-02-05   981  	enum i9xx_plane_id i9xx_plane = plane->i9xx_plane;
+2a3014490cd18a Dave Airlie   2021-02-05   982  	enum pipe pipe;
+2a3014490cd18a Dave Airlie   2021-02-05   983  	u32 val, base, offset;
+2a3014490cd18a Dave Airlie   2021-02-05   984  	int fourcc, pixel_format;
+2a3014490cd18a Dave Airlie   2021-02-05   985  	unsigned int aligned_height;
+2a3014490cd18a Dave Airlie   2021-02-05   986  	struct drm_framebuffer *fb;
+2a3014490cd18a Dave Airlie   2021-02-05   987  	struct intel_framebuffer *intel_fb;
+2a3014490cd18a Dave Airlie   2021-02-05   988  
+2a3014490cd18a Dave Airlie   2021-02-05   989  	if (!plane->get_hw_state(plane, &pipe))
+2a3014490cd18a Dave Airlie   2021-02-05   990  		return;
+2a3014490cd18a Dave Airlie   2021-02-05   991  
+2a3014490cd18a Dave Airlie   2021-02-05   992  	drm_WARN_ON(dev, pipe != crtc->pipe);
+2a3014490cd18a Dave Airlie   2021-02-05   993  
+2a3014490cd18a Dave Airlie   2021-02-05   994  	intel_fb = kzalloc(sizeof(*intel_fb), GFP_KERNEL);
+2a3014490cd18a Dave Airlie   2021-02-05   995  	if (!intel_fb) {
+2a3014490cd18a Dave Airlie   2021-02-05   996  		drm_dbg_kms(&dev_priv->drm, "failed to alloc fb\n");
+2a3014490cd18a Dave Airlie   2021-02-05   997  		return;
+2a3014490cd18a Dave Airlie   2021-02-05   998  	}
+2a3014490cd18a Dave Airlie   2021-02-05   999  
+2a3014490cd18a Dave Airlie   2021-02-05  1000  	fb = &intel_fb->base;
+2a3014490cd18a Dave Airlie   2021-02-05  1001  
+2a3014490cd18a Dave Airlie   2021-02-05  1002  	fb->dev = dev;
+2a3014490cd18a Dave Airlie   2021-02-05  1003  
+2a3014490cd18a Dave Airlie   2021-02-05  1004  	val = intel_de_read(dev_priv, DSPCNTR(i9xx_plane));
+2a3014490cd18a Dave Airlie   2021-02-05  1005  
+005e95377249cb Matt Roper    2021-03-19  1006  	if (DISPLAY_VER(dev_priv) >= 4) {
+428cb15d5b0031 Ville Syrjälä 2022-01-21  1007  		if (val & DISP_TILED) {
+2a3014490cd18a Dave Airlie   2021-02-05  1008  			plane_config->tiling = I915_TILING_X;
+2a3014490cd18a Dave Airlie   2021-02-05  1009  			fb->modifier = I915_FORMAT_MOD_X_TILED;
+2a3014490cd18a Dave Airlie   2021-02-05  1010  		}
+2a3014490cd18a Dave Airlie   2021-02-05  1011  
+428cb15d5b0031 Ville Syrjälä 2022-01-21  1012  		if (val & DISP_ROTATE_180)
+2a3014490cd18a Dave Airlie   2021-02-05  1013  			plane_config->rotation = DRM_MODE_ROTATE_180;
+2a3014490cd18a Dave Airlie   2021-02-05  1014  	}
+2a3014490cd18a Dave Airlie   2021-02-05  1015  
+2a3014490cd18a Dave Airlie   2021-02-05  1016  	if (IS_CHERRYVIEW(dev_priv) && pipe == PIPE_B &&
+428cb15d5b0031 Ville Syrjälä 2022-01-21  1017  	    val & DISP_MIRROR)
+2a3014490cd18a Dave Airlie   2021-02-05  1018  		plane_config->rotation |= DRM_MODE_REFLECT_X;
+2a3014490cd18a Dave Airlie   2021-02-05  1019  
+428cb15d5b0031 Ville Syrjälä 2022-01-21  1020  	pixel_format = val & DISP_FORMAT_MASK;
+2a3014490cd18a Dave Airlie   2021-02-05  1021  	fourcc = i9xx_format_to_fourcc(pixel_format);
+2a3014490cd18a Dave Airlie   2021-02-05  1022  	fb->format = drm_format_info(fourcc);
+2a3014490cd18a Dave Airlie   2021-02-05  1023  
+2a3014490cd18a Dave Airlie   2021-02-05  1024  	if (IS_HASWELL(dev_priv) || IS_BROADWELL(dev_priv)) {
+2a3014490cd18a Dave Airlie   2021-02-05  1025  		offset = intel_de_read(dev_priv, DSPOFFSET(i9xx_plane));
+428cb15d5b0031 Ville Syrjälä 2022-01-21  1026  		base = intel_de_read(dev_priv, DSPSURF(i9xx_plane)) & DISP_ADDR_MASK;
+005e95377249cb Matt Roper    2021-03-19 @1027  	} else if (DISPLAY_VER(dev_priv) >= 4) {
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35527=
-5
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
