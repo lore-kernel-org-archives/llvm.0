@@ -1,119 +1,84 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1941078A;
-	Sat, 27 May 2023 17:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685207773; x=1716743773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eI4v3Kbvvfcjabeh6H6ktAqjlUA5edg4THJ0FK8h8A8=;
-  b=e5AHF406cXxJ/QgVpJedtDqEJD61J7z96j6Ak7rGmbLf+0ni7eAX9uWj
-   7s9gdLaXeg9Trq6ZnMJ5vS6WOgnh1USGEF+ibhoBln9M0Wj0NTZOSg4EX
-   nsllYVkjgJauRfvyaVeQc2F59lA0uw1cd4OAj65e/TwmHt96O7a79zPgl
-   n7249uBboHqhPiOQFYuBcBuRylyROv+mHOocIaU2rq/EA7pvlkYtoXIFJ
-   Ka+RVQ4pY+g25+wTieHNGnZBKCd7F9/fYIHiJLp5mzo+stTnQUJ5wyxAg
-   3jxz69lYnc194VSXi9QfSDwlkUfjLT63O0YbzjFgBMs+Uu+gTPlBmar6x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="334046265"
-X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="334046265"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 10:16:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="879868893"
-X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="879868893"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2023 10:16:11 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q2xWU-000K5w-04;
-	Sat, 27 May 2023 17:16:10 +0000
-Date: Sun, 28 May 2023 01:15:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dai Ngo <dai.ngo@oracle.com>, chuck.lever@oracle.com,
-	jlayton@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/2] NFSD: add counter for write delegation recall due to
- conflict with GETATTR
-Message-ID: <202305280121.3RAeAt4l-lkp@intel.com>
-References: <1685122722-18287-3-git-send-email-dai.ngo@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E98134C1
+	for <llvm@lists.linux.dev>; Sat, 27 May 2023 17:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685209866;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T9AuxFMftg8L1b2nX4LtIMPE1nTswaTq5lNXCp2OaLs=;
+	b=OmO/QAc+Mi6LcdQVtj6lgGy6n8pU2KDh4YCtjzEblqNnJIrrPhkmaOUF297iIACl3fH75I
+	bmArafc71TnLJLuSaD46ycprBlL4SU2oHeFXXCB6g/TqW+ByhMpdtq33HyY0beMI32uyZZ
+	v8157T+ztr04rxI+0btpvCzff+Ry5O0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-5pDK_Hh7M8ORizbmB5S-Hg-1; Sat, 27 May 2023 13:51:05 -0400
+X-MC-Unique: 5pDK_Hh7M8ORizbmB5S-Hg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B16BE85A5A8
+	for <llvm@lists.linux.dev>; Sat, 27 May 2023 17:51:04 +0000 (UTC)
+Received: from [172.64.0.126] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 99DA2492B00;
+	Sat, 27 May 2023 17:51:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc3,
+ mainline.kernel.org-clang, 957f3f8e)
+Date: Sat, 27 May 2023 17:51:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685122722-18287-3-git-send-email-dai.ngo@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <32972.123052713510500101@us-mta-1.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dai,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dai-Ngo/NFSD-handle-GETATTR-conflict-with-write-delegation/20230527-013936
-base:   linus/master
-patch link:    https://lore.kernel.org/r/1685122722-18287-3-git-send-email-dai.ngo%40oracle.com
-patch subject: [PATCH 2/2] NFSD: add counter for write delegation recall due to conflict with GETATTR
-config: i386-randconfig-i074-20230526 (https://download.01.org/0day-ci/archive/20230528/202305280121.3RAeAt4l-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a90d0ca71c9459b76f9faa8c704c029ac8066d00
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dai-Ngo/NFSD-handle-GETATTR-conflict-with-write-delegation/20230527-013936
-        git checkout a90d0ca71c9459b76f9faa8c704c029ac8066d00
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305280121.3RAeAt4l-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:17:
-   In file included from fs/nfsd/xdr4.h:40:
-   In file included from fs/nfsd/state.h:42:
-   In file included from fs/nfsd/nfsd.h:28:
->> fs/nfsd/stats.h:99:40: error: use of undeclared identifier 'NFSD_STATS_WDELEG_GETATTR'
-           percpu_counter_inc(&nfsdstats.counter[NFSD_STATS_WDELEG_GETATTR]);
-                                                 ^
-   1 error generated.
---
-   In file included from fs/nfsd/export.c:21:
-   In file included from fs/nfsd/nfsd.h:28:
->> fs/nfsd/stats.h:99:40: error: use of undeclared identifier 'NFSD_STATS_WDELEG_GETATTR'
-           percpu_counter_inc(&nfsdstats.counter[NFSD_STATS_WDELEG_GETATTR]);
-                                                 ^
-   fs/nfsd/export.c:1005:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode            *inode;
-                                    ^
-   1 warning and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/NFSD_STATS_WDELEG_GETATTR +99 fs/nfsd/stats.h
+Kernel information:
+    Commit message: Merge tag 'char-misc-6.4-rc4' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/gregkh/char-misc
 
-    96	
-    97	static inline void nfsd_stats_wdeleg_getattr_inc(void)
-    98	{
-  > 99		percpu_counter_inc(&nfsdstats.counter[NFSD_STATS_WDELEG_GETATTR]);
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/90540
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/35540=
+4
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
