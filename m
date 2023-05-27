@@ -1,137 +1,267 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9D9134CA;
-	Sat, 27 May 2023 16:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C47E;
+	Sat, 27 May 2023 16:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685203992; x=1716739992;
+  t=1685205852; x=1716741852;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HRz+uuIx0+xElN7wrpO41PLA0XnkoBsOOVf57+jeZVs=;
-  b=ZZMBbPpx1urJOoHlk0vM/AqUaNE/ODOB4pvalvXDp3HJGbYuu+Wyfkdf
-   yUPy06tqRlWatytujwB7wmoMia3wY6CmDVwg/hr+XYbAtch5r3CB1moca
-   q/BYabtFaq30THFruo1zQLoB/8uRO2DTYlxVYV1souoeQJSolfIhME59Q
-   8HRgRffyep8c8bL1axPH5+gCay7vQWTo30uMVZmpwnwpOu+V0LnZoZzhd
-   j74nJfD7tQmfmODr73d+mPiR0jmtLCnkEZj3R43xpziy2p/aDeRmOYwtf
-   RSdUPoRkQlB+jtTI+4JBKhf7Nfp9idVPiabVAqjhf7AGcSySlOEd1zFp9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="356796431"
+   mime-version:in-reply-to;
+  bh=Vljc/Pd6Io02Ai7XcnqcqUOa6Gb26xpAfOgGNEwIJt0=;
+  b=UOKWhAZd/73bxZJd1uTydAyi1qC5G/1StHbrrvM7bdtD4VDcCuh2YOo0
+   p1SZasme0hvDD2NoijHQt5Ddjwti2+n8g/dozpx8VXEHERTKqSzwYxNGj
+   B1zWidQzyZDkHer+dIf6UdEZfrdhL3kC64Gwj+3YPvIENMlO8tWL2+5xV
+   WkA1HDmD4WbKDfB4CoTMiMf924SAfbYKB8Bxhc155htHYCAUPXKF/4q+w
+   qFrpoTRJed6EKO5AJHBN0OqBW4YIzjYE4yTEffDCNFRQLZp7BD/nWCeGS
+   NNJXDxaGhYh58bYiFZnGTcYucUN1bP+Nwv3nkXktdh/RlUJLlrmu8q1jT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="351922437"
 X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="356796431"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 09:13:10 -0700
+   d="scan'208";a="351922437"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 09:44:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="1035682343"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="795420700"
 X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="1035682343"
+   d="scan'208";a="795420700"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 May 2023 09:13:06 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 27 May 2023 09:44:07 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q2wXS-000K3U-0t;
-	Sat, 27 May 2023 16:13:06 +0000
-Date: Sun, 28 May 2023 00:12:32 +0800
+	id 1q2x1S-000K4o-3B;
+	Sat, 27 May 2023 16:44:06 +0000
+Date: Sun, 28 May 2023 00:43:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
+To: Mao Jinlong <quic_jinlmao@quicinc.com>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-	daniel@ffwll.ch, sumit.semwal@linaro.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] drm/radeon: fix race condition UAF in
- radeon_gem_set_domain_ioctl
-Message-ID: <202305272311.JHzuoUJZ-lkp@intel.com>
-References: <20230526123753.16160-1-lm0963hack@gmail.com>
+	Mao Jinlong <quic_jinlmao@quicinc.com>, coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	Tingwei Zhang <quic_tingweiz@quicinc.com>,
+	Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+	Tao Zhang <quic_taozha@quicinc.com>,
+	Hao Zhang <quic_hazha@quicinc.com>
+Subject: Re: [PATCH v1 2/3] coresight-tmc: byte-cntr: Add support for
+ streaming interface for ETR
+Message-ID: <202305280032.8rkzzoXH-lkp@intel.com>
+References: <20230526153508.6208-3-quic_jinlmao@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526123753.16160-1-lm0963hack@gmail.com>
+In-Reply-To: <20230526153508.6208-3-quic_jinlmao@quicinc.com>
 
-Hi Min,
+Hi Mao,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.4-rc3 next-20230525]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230526123753.16160-1-lm0963hack%40gmail.com
-patch subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-config: riscv-randconfig-r042-20230526 (https://download.01.org/0day-ci/archive/20230527/202305272311.JHzuoUJZ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mao-Jinlong/Coresight-Add-driver-to-support-for-CSR/20230526-233705
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230526153508.6208-3-quic_jinlmao%40quicinc.com
+patch subject: [PATCH v1 2/3] coresight-tmc: byte-cntr: Add support for streaming interface for ETR
+config: arm-randconfig-r034-20230526 (https://download.01.org/0day-ci/archive/20230528/202305280032.8rkzzoXH-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/66fb975494d21e80b90235b7d8bf0953990c5c89
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/3c44cc3f9a93e12d206b9428b5ed959c46cf08b5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-        git checkout 66fb975494d21e80b90235b7d8bf0953990c5c89
+        git fetch --no-tags linux-review Mao-Jinlong/Coresight-Add-driver-to-support-for-CSR/20230526-233705
+        git checkout 3c44cc3f9a93e12d206b9428b5ed959c46cf08b5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/radeon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305272311.JHzuoUJZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280032.8rkzzoXH-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/radeon/radeon_gem.c:462:20: warning: variable 'robj' set but not used [-Wunused-but-set-variable]
-           struct radeon_bo *robj;
-                             ^
-   1 warning generated.
+>> drivers/hwtracing/coresight/coresight-tmc-core.c:527:9: error: call to undeclared function 'of_get_coresight_csr_name'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = of_get_coresight_csr_name(adev->dev.of_node, &drvdata->csr_name);
+                         ^
+   1 error generated.
+--
+>> drivers/hwtracing/coresight/coresight-byte-cntr.c:139:48: error: too few arguments to function call, expected 3, have 2
+           coresight_csr_set_byte_cntr(tmcdrvdata->csr, 0);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   ^
+   drivers/hwtracing/coresight/coresight-csr.h:53:20: note: 'coresight_csr_set_byte_cntr' declared here
+   static inline void coresight_csr_set_byte_cntr(struct coresight_csr *csr, int irqctrl_offset,
+                      ^
+   drivers/hwtracing/coresight/coresight-byte-cntr.c:154:49: error: too few arguments to function call, expected 3, have 2
+                   coresight_csr_set_byte_cntr(tmcdrvdata->csr, 0);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   ^
+   drivers/hwtracing/coresight/coresight-csr.h:53:20: note: 'coresight_csr_set_byte_cntr' declared here
+   static inline void coresight_csr_set_byte_cntr(struct coresight_csr *csr, int irqctrl_offset,
+                      ^
+   drivers/hwtracing/coresight/coresight-byte-cntr.c:187:79: error: too few arguments to function call, expected 3, have 2
+           coresight_csr_set_byte_cntr(tmcdrvdata->csr, (byte_cntr_data->block_size) / 8);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                  ^
+   drivers/hwtracing/coresight/coresight-csr.h:53:20: note: 'coresight_csr_set_byte_cntr' declared here
+   static inline void coresight_csr_set_byte_cntr(struct coresight_csr *csr, int irqctrl_offset,
+                      ^
+>> drivers/hwtracing/coresight/coresight-byte-cntr.c:297:6: warning: no previous prototype for function 'byte_cntr_remove' [-Wmissing-prototypes]
+   void byte_cntr_remove(struct byte_cntr *byte_cntr_data)
+        ^
+   drivers/hwtracing/coresight/coresight-byte-cntr.c:297:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void byte_cntr_remove(struct byte_cntr *byte_cntr_data)
+   ^
+   static 
+   1 warning and 3 errors generated.
 
 
-vim +/robj +462 drivers/gpu/drm/radeon/radeon_gem.c
+vim +/of_get_coresight_csr_name +527 drivers/hwtracing/coresight/coresight-tmc-core.c
 
-f72a113a71ab08 Christian König 2014-08-07  453  
-771fe6b912fca5 Jerome Glisse   2009-06-05  454  int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
-771fe6b912fca5 Jerome Glisse   2009-06-05  455  				struct drm_file *filp)
-771fe6b912fca5 Jerome Glisse   2009-06-05  456  {
-771fe6b912fca5 Jerome Glisse   2009-06-05  457  	/* transition the BO to a domain -
-771fe6b912fca5 Jerome Glisse   2009-06-05  458  	 * just validate the BO into a certain domain */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  459  	struct radeon_device *rdev = dev->dev_private;
-771fe6b912fca5 Jerome Glisse   2009-06-05  460  	struct drm_radeon_gem_set_domain *args = data;
-771fe6b912fca5 Jerome Glisse   2009-06-05  461  	struct drm_gem_object *gobj;
-4c7886791264f0 Jerome Glisse   2009-11-20 @462  	struct radeon_bo *robj;
-771fe6b912fca5 Jerome Glisse   2009-06-05  463  	int r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  464  
-771fe6b912fca5 Jerome Glisse   2009-06-05  465  	/* for now if someone requests domain CPU -
-771fe6b912fca5 Jerome Glisse   2009-06-05  466  	 * just make sure the buffer is finished with */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  467  	down_read(&rdev->exclusive_lock);
-771fe6b912fca5 Jerome Glisse   2009-06-05  468  
-771fe6b912fca5 Jerome Glisse   2009-06-05  469  	/* just do a BO wait for now */
-a8ad0bd84f9860 Chris Wilson    2016-05-09  470  	gobj = drm_gem_object_lookup(filp, args->handle);
-771fe6b912fca5 Jerome Glisse   2009-06-05  471  	if (gobj == NULL) {
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  472  		up_read(&rdev->exclusive_lock);
-bf79cb914dbfe8 Chris Wilson    2010-08-04  473  		return -ENOENT;
-771fe6b912fca5 Jerome Glisse   2009-06-05  474  	}
-7e4d15d90afe46 Daniel Vetter   2011-02-18  475  	robj = gem_to_radeon_bo(gobj);
-771fe6b912fca5 Jerome Glisse   2009-06-05  476  
-771fe6b912fca5 Jerome Glisse   2009-06-05  477  	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
-771fe6b912fca5 Jerome Glisse   2009-06-05  478  
-f11fb66ae92193 Emil Velikov    2020-05-15  479  	drm_gem_object_put(gobj);
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  480  	up_read(&rdev->exclusive_lock);
-66fb975494d21e Min Li          2023-05-26  481  	r = radeon_gem_handle_lockup(rdev, r);
-771fe6b912fca5 Jerome Glisse   2009-06-05  482  	return r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  483  }
-771fe6b912fca5 Jerome Glisse   2009-06-05  484  
+   481	
+   482	static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
+   483	{
+   484		int ret = 0;
+   485		u32 devid;
+   486		void __iomem *base;
+   487		struct device *dev = &adev->dev;
+   488		struct coresight_platform_data *pdata = NULL;
+   489		struct tmc_drvdata *drvdata;
+   490		struct resource *res = &adev->res;
+   491		struct coresight_desc desc = { 0 };
+   492		struct coresight_dev_list *dev_list = NULL;
+   493	
+   494		ret = -ENOMEM;
+   495		drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+   496		if (!drvdata)
+   497			goto out;
+   498	
+   499		dev_set_drvdata(dev, drvdata);
+   500	
+   501		/* Validity for the resource is already checked by the AMBA core */
+   502		base = devm_ioremap_resource(dev, res);
+   503		if (IS_ERR(base)) {
+   504			ret = PTR_ERR(base);
+   505			goto out;
+   506		}
+   507	
+   508		drvdata->base = base;
+   509		desc.access = CSDEV_ACCESS_IOMEM(base);
+   510	
+   511		spin_lock_init(&drvdata->spinlock);
+   512	
+   513		devid = readl_relaxed(drvdata->base + CORESIGHT_DEVID);
+   514		drvdata->config_type = BMVAL(devid, 6, 7);
+   515		drvdata->memwidth = tmc_get_memwidth(devid);
+   516		/* This device is not associated with a session */
+   517		drvdata->pid = -1;
+   518	
+   519		if (drvdata->config_type == TMC_CONFIG_TYPE_ETR) {
+   520			drvdata->size = tmc_etr_get_default_buffer_size(dev);
+   521			drvdata->max_burst_size = tmc_etr_get_max_burst_size(dev);
+   522		} else {
+   523			drvdata->size = readl_relaxed(drvdata->base + TMC_RSZ) * 4;
+   524		}
+   525	
+   526		if (drvdata->config_type == TMC_CONFIG_TYPE_ETR) {
+ > 527			ret = of_get_coresight_csr_name(adev->dev.of_node, &drvdata->csr_name);
+   528			if (ret)
+   529				dev_dbg(dev, "No csr data\n");
+   530			else {
+   531				drvdata->csr = coresight_csr_get(drvdata->csr_name);
+   532				if (IS_ERR(drvdata->csr)) {
+   533					dev_dbg(dev, "failed to get csr, defer probe\n");
+   534					return -EPROBE_DEFER;
+   535				}
+   536	
+   537			}
+   538	
+   539		}
+   540	
+   541		desc.dev = dev;
+   542		desc.groups = coresight_tmc_groups;
+   543	
+   544		switch (drvdata->config_type) {
+   545		case TMC_CONFIG_TYPE_ETB:
+   546			desc.type = CORESIGHT_DEV_TYPE_SINK;
+   547			desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
+   548			desc.ops = &tmc_etb_cs_ops;
+   549			dev_list = &etb_devs;
+   550			break;
+   551		case TMC_CONFIG_TYPE_ETR:
+   552			desc.type = CORESIGHT_DEV_TYPE_SINK;
+   553			desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_SYSMEM;
+   554			desc.ops = &tmc_etr_cs_ops;
+   555			ret = tmc_etr_setup_caps(dev, devid,
+   556						 coresight_get_uci_data(id));
+   557			if (ret)
+   558				goto out;
+   559			idr_init(&drvdata->idr);
+   560			drvdata->byte_cntr = byte_cntr_init(adev, drvdata);
+   561			mutex_init(&drvdata->idr_mutex);
+   562			dev_list = &etr_devs;
+   563			break;
+   564		case TMC_CONFIG_TYPE_ETF:
+   565			desc.type = CORESIGHT_DEV_TYPE_LINKSINK;
+   566			desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
+   567			desc.subtype.link_subtype = CORESIGHT_DEV_SUBTYPE_LINK_FIFO;
+   568			desc.ops = &tmc_etf_cs_ops;
+   569			dev_list = &etf_devs;
+   570			break;
+   571		default:
+   572			pr_err("%s: Unsupported TMC config\n", desc.name);
+   573			ret = -EINVAL;
+   574			goto out;
+   575		}
+   576	
+   577		desc.name = coresight_alloc_device_name(dev_list, dev);
+   578		if (!desc.name) {
+   579			ret = -ENOMEM;
+   580			goto out;
+   581		}
+   582	
+   583		pdata = coresight_get_platform_data(dev);
+   584		if (IS_ERR(pdata)) {
+   585			ret = PTR_ERR(pdata);
+   586			goto out;
+   587		}
+   588		adev->dev.platform_data = pdata;
+   589		desc.pdata = pdata;
+   590	
+   591		drvdata->csdev = coresight_register(&desc);
+   592		if (IS_ERR(drvdata->csdev)) {
+   593			ret = PTR_ERR(drvdata->csdev);
+   594			goto out;
+   595		}
+   596	
+   597		drvdata->miscdev.name = desc.name;
+   598		drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
+   599		drvdata->miscdev.fops = &tmc_fops;
+   600		ret = misc_register(&drvdata->miscdev);
+   601		if (ret)
+   602			coresight_unregister(drvdata->csdev);
+   603		else
+   604			pm_runtime_put(&adev->dev);
+   605	out:
+   606		return ret;
+   607	}
+   608	
 
 -- 
 0-DAY CI Kernel Test Service
