@@ -1,50 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44C018D;
-	Sun, 28 May 2023 00:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534F87C;
+	Sun, 28 May 2023 00:29:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685232572; x=1716768572;
+  t=1685233774; x=1716769774;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=a9gIudvxnsEuKt6ByRRnLGP+BwC0R1njnXJ4h3gya0I=;
-  b=WnQtGpu3hG8Is0fvpwd66kWIFqeou+d53Ka9ogVJv6IJyrE1Zbohi10I
-   K62FDvFi9iNnLkbUfom9BQhO9Pcp5acrS4PybaJPMNtcZ60FO+W5aNddW
-   +TbiqCEsreABIePCnU+QWCmI3LLiZeHnSyGZgg0dQZBvVIn4XRr+9HS03
-   34CXkd4D44btJdLVGXeePF9pYIfYTBc9iKa/oBq1TRtOxwkcn7VkBK9dp
-   pWEbnN5GTm9aXFRVpNFrsCS6ToP0q2HXHv3zAO5JmhF4/TkAsbGX8bPIz
-   Q7X34PjQorQUngmwraPLQ+Y0hI+gskgae72ZkF6HHuVX+HdvXETZELZbL
+  bh=WJyLpbPSiq9iQbioHTmtxePZ0MD6E1ztH3GAQk12b70=;
+  b=CYHYID0ToY3w05khdHEQTDxYPi86q5duyqmcYAt07u6wLeYZctmOvwEN
+   yEE/0MBufATGCrp9brLwRYCudjmxpQKF/YV8BetKr2KJEvxIFPQKj4ZKw
+   VbOo1fnemaG8LqbnVh2hGqIukXiTS1EwoA8USu96R7vVyZhwp0IQhBUle
+   ZDFKNYBxEjdYUrjNgu1Wuc7KCtIgJMPMR5r3++qjMiW6RhKGks6GzEW0F
+   uqOXhHljt1R/vYOjyoTzD1D5hQziSzMHQX6mJ0JPyKxIkaGw8/XdO/iAq
+   uF4P/asCdhoCbvatbBBzMlPmE5ZDkAjBJ3ucmiWqZx/agxZK4jGGG/Cyv
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="334815478"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="354474621"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="334815478"
+   d="scan'208";a="354474621"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 17:09:32 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 17:29:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="849932954"
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="849936448"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="849932954"
+   d="scan'208";a="849936448"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 May 2023 17:09:29 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 27 May 2023 17:29:30 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q33yS-000KGk-2t;
-	Sun, 28 May 2023 00:09:28 +0000
-Date: Sun, 28 May 2023 08:08:51 +0800
+	id 1q34Hp-000KHM-3D;
+	Sun, 28 May 2023 00:29:29 +0000
+Date: Sun, 28 May 2023 08:29:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhen Lei <thunder.leizhen@huawei.com>,
-	Eric Biederman <ebiederm@xmission.com>, Baoquan He <bhe@redhat.com>,
-	kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+To: Miaohe Lin <linmiaohe@huawei.com>, mingo@redhat.com,
+	peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Zhen Lei <thunder.leizhen@huawei.com>,
-	Michael Holzheu <holzheu@linux.vnet.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Amerigo Wang <amwang@redhat.com>
-Subject: Re: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
-Message-ID: <202305280717.Pw06aLkz-lkp@intel.com>
-References: <20230527123439.772-6-thunder.leizhen@huawei.com>
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	linux-kernel@vger.kernel.org, linmiaohe@huawei.com
+Subject: Re: [PATCH] sched/fair: remove unneeded header files
+Message-ID: <202305280847.ss7JHZEe-lkp@intel.com>
+References: <20230527173727.1669047-1-linmiaohe@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,85 +51,210 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230527123439.772-6-thunder.leizhen@huawei.com>
+In-Reply-To: <20230527173727.1669047-1-linmiaohe@huawei.com>
 
-Hi Zhen,
+Hi Miaohe,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v6.4-rc3 next-20230525]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230527123439.772-6-thunder.leizhen%40huawei.com
-patch subject: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
-config: riscv-randconfig-r042-20230526 (https://download.01.org/0day-ci/archive/20230528/202305280717.Pw06aLkz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/sched-fair-remove-unneeded-header-files/20230527-174628
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20230527173727.1669047-1-linmiaohe%40huawei.com
+patch subject: [PATCH] sched/fair: remove unneeded header files
+config: x86_64-randconfig-a012-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280847.ss7JHZEe-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/dea97cef503d26e05d0e11818ae44176056ddf64
+        # https://github.com/intel-lab-lkp/linux/commit/653731fdd11d1ecb757fe4b90484ef4a777fb584
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
-        git checkout dea97cef503d26e05d0e11818ae44176056ddf64
+        git fetch --no-tags linux-review Miaohe-Lin/sched-fair-remove-unneeded-header-files/20230527-174628
+        git checkout 653731fdd11d1ecb757fe4b90484ef4a777fb584
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305280717.Pw06aLkz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280847.ss7JHZEe-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/kexec_core.c:1108:5: warning: no previous prototype for function '__crash_shrink_memory' [-Wmissing-prototypes]
-   int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
-       ^
-   kernel/kexec_core.c:1108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
+>> kernel/sched/fair.c:1585:7: error: implicit declaration of function 'node_is_toptier' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+               !node_is_toptier(src_nid)) {
+                ^
+   kernel/sched/fair.c:2844:7: error: implicit declaration of function 'node_is_toptier' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!node_is_toptier(mem_node) &&
+                ^
+>> kernel/sched/fair.c:3014:8: error: implicit declaration of function 'vma_migratable' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (!vma_migratable(vma) || !vma_policy_mof(vma) ||
+                        ^
+>> kernel/sched/fair.c:3014:32: error: implicit declaration of function 'vma_policy_mof' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (!vma_migratable(vma) || !vma_policy_mof(vma) ||
+                                                ^
+>> kernel/sched/fair.c:3015:4: error: implicit declaration of function 'is_vm_hugetlb_page' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           is_vm_hugetlb_page(vma) || (vma->vm_flags & VM_MIXEDMAP)) {
+                           ^
+   kernel/sched/fair.c:6159:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+        ^
+   kernel/sched/fair.c:6159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
    ^
    static 
-   1 warning generated.
+   kernel/sched/fair.c:11973:6: warning: no previous prototype for function 'task_vruntime_update' [-Wmissing-prototypes]
+   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+        ^
+   kernel/sched/fair.c:11973:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+   ^
+   static 
+   kernel/sched/fair.c:12595:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
+   void free_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12595:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void free_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12597:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+       ^
+   kernel/sched/fair.c:12597:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+   ^
+   static 
+   kernel/sched/fair.c:12602:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
+   void online_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12602:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void online_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12604:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
+   void unregister_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12604:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   6 warnings and 5 errors generated.
 
 
-vim +/__crash_shrink_memory +1108 kernel/kexec_core.c
+vim +/node_is_toptier +1585 kernel/sched/fair.c
 
-  1107	
-> 1108	int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
-  1109	{
-  1110		struct resource *ram_res;
-  1111	
-  1112		ram_res = kzalloc(sizeof(*ram_res), GFP_KERNEL);
-  1113		if (!ram_res)
-  1114			return -ENOMEM;
-  1115	
-  1116		ram_res->start = old_res->start + new_size;
-  1117		ram_res->end   = old_res->end;
-  1118		ram_res->flags = IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM;
-  1119		ram_res->name  = "System RAM";
-  1120	
-  1121		if (!new_size) {
-  1122			release_resource(old_res);
-  1123			old_res->start = 0;
-  1124			old_res->end   = 0;
-  1125		} else {
-  1126			crashk_res.end = ram_res->start - 1;
-  1127		}
-  1128	
-  1129		crash_free_reserved_phys_range(ram_res->start, ram_res->end);
-  1130		insert_resource(&iomem_resource, ram_res);
-  1131	
-  1132		return 0;
-  1133	}
-  1134	
+c959924b0dc53b Huang Ying        2022-07-13  1572  
+10f39042711ba2 Rik van Riel      2014-01-27  1573  bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+10f39042711ba2 Rik van Riel      2014-01-27  1574  				int src_nid, int dst_cpu)
+10f39042711ba2 Rik van Riel      2014-01-27  1575  {
+cb361d8cdef699 Jann Horn         2019-07-16  1576  	struct numa_group *ng = deref_curr_numa_group(p);
+10f39042711ba2 Rik van Riel      2014-01-27  1577  	int dst_nid = cpu_to_node(dst_cpu);
+10f39042711ba2 Rik van Riel      2014-01-27  1578  	int last_cpupid, this_cpupid;
+10f39042711ba2 Rik van Riel      2014-01-27  1579  
+33024536bafd91 Huang Ying        2022-07-13  1580  	/*
+33024536bafd91 Huang Ying        2022-07-13  1581  	 * The pages in slow memory node should be migrated according
+33024536bafd91 Huang Ying        2022-07-13  1582  	 * to hot/cold instead of private/shared.
+33024536bafd91 Huang Ying        2022-07-13  1583  	 */
+33024536bafd91 Huang Ying        2022-07-13  1584  	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+33024536bafd91 Huang Ying        2022-07-13 @1585  	    !node_is_toptier(src_nid)) {
+33024536bafd91 Huang Ying        2022-07-13  1586  		struct pglist_data *pgdat;
+c959924b0dc53b Huang Ying        2022-07-13  1587  		unsigned long rate_limit;
+c959924b0dc53b Huang Ying        2022-07-13  1588  		unsigned int latency, th, def_th;
+33024536bafd91 Huang Ying        2022-07-13  1589  
+33024536bafd91 Huang Ying        2022-07-13  1590  		pgdat = NODE_DATA(dst_nid);
+c959924b0dc53b Huang Ying        2022-07-13  1591  		if (pgdat_free_space_enough(pgdat)) {
+c959924b0dc53b Huang Ying        2022-07-13  1592  			/* workload changed, reset hot threshold */
+c959924b0dc53b Huang Ying        2022-07-13  1593  			pgdat->nbp_threshold = 0;
+33024536bafd91 Huang Ying        2022-07-13  1594  			return true;
+c959924b0dc53b Huang Ying        2022-07-13  1595  		}
+33024536bafd91 Huang Ying        2022-07-13  1596  
+c959924b0dc53b Huang Ying        2022-07-13  1597  		def_th = sysctl_numa_balancing_hot_threshold;
+c959924b0dc53b Huang Ying        2022-07-13  1598  		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
+c959924b0dc53b Huang Ying        2022-07-13  1599  			(20 - PAGE_SHIFT);
+c959924b0dc53b Huang Ying        2022-07-13  1600  		numa_promotion_adjust_threshold(pgdat, rate_limit, def_th);
+c959924b0dc53b Huang Ying        2022-07-13  1601  
+c959924b0dc53b Huang Ying        2022-07-13  1602  		th = pgdat->nbp_threshold ? : def_th;
+33024536bafd91 Huang Ying        2022-07-13  1603  		latency = numa_hint_fault_latency(page);
+33024536bafd91 Huang Ying        2022-07-13  1604  		if (latency >= th)
+33024536bafd91 Huang Ying        2022-07-13  1605  			return false;
+33024536bafd91 Huang Ying        2022-07-13  1606  
+c6833e10008f97 Huang Ying        2022-07-13  1607  		return !numa_promotion_rate_limit(pgdat, rate_limit,
+c6833e10008f97 Huang Ying        2022-07-13  1608  						  thp_nr_pages(page));
+33024536bafd91 Huang Ying        2022-07-13  1609  	}
+33024536bafd91 Huang Ying        2022-07-13  1610  
+10f39042711ba2 Rik van Riel      2014-01-27  1611  	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1612  	last_cpupid = page_cpupid_xchg_last(page, this_cpupid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1613  
+33024536bafd91 Huang Ying        2022-07-13  1614  	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+33024536bafd91 Huang Ying        2022-07-13  1615  	    !node_is_toptier(src_nid) && !cpupid_valid(last_cpupid))
+33024536bafd91 Huang Ying        2022-07-13  1616  		return false;
+33024536bafd91 Huang Ying        2022-07-13  1617  
+37355bdc5a1298 Mel Gorman        2018-10-01  1618  	/*
+37355bdc5a1298 Mel Gorman        2018-10-01  1619  	 * Allow first faults or private faults to migrate immediately early in
+37355bdc5a1298 Mel Gorman        2018-10-01  1620  	 * the lifetime of a task. The magic number 4 is based on waiting for
+37355bdc5a1298 Mel Gorman        2018-10-01  1621  	 * two full passes of the "multi-stage node selection" test that is
+37355bdc5a1298 Mel Gorman        2018-10-01  1622  	 * executed below.
+37355bdc5a1298 Mel Gorman        2018-10-01  1623  	 */
+98fa15f34cb379 Anshuman Khandual 2019-03-05  1624  	if ((p->numa_preferred_nid == NUMA_NO_NODE || p->numa_scan_seq <= 4) &&
+37355bdc5a1298 Mel Gorman        2018-10-01  1625  	    (cpupid_pid_unset(last_cpupid) || cpupid_match_pid(p, last_cpupid)))
+37355bdc5a1298 Mel Gorman        2018-10-01  1626  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1627  
+10f39042711ba2 Rik van Riel      2014-01-27  1628  	/*
+10f39042711ba2 Rik van Riel      2014-01-27  1629  	 * Multi-stage node selection is used in conjunction with a periodic
+10f39042711ba2 Rik van Riel      2014-01-27  1630  	 * migration fault to build a temporal task<->page relation. By using
+10f39042711ba2 Rik van Riel      2014-01-27  1631  	 * a two-stage filter we remove short/unlikely relations.
+10f39042711ba2 Rik van Riel      2014-01-27  1632  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1633  	 * Using P(p) ~ n_p / n_t as per frequentist probability, we can equate
+10f39042711ba2 Rik van Riel      2014-01-27  1634  	 * a task's usage of a particular page (n_p) per total usage of this
+10f39042711ba2 Rik van Riel      2014-01-27  1635  	 * page (n_t) (in a given time-span) to a probability.
+10f39042711ba2 Rik van Riel      2014-01-27  1636  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1637  	 * Our periodic faults will sample this probability and getting the
+10f39042711ba2 Rik van Riel      2014-01-27  1638  	 * same result twice in a row, given these samples are fully
+10f39042711ba2 Rik van Riel      2014-01-27  1639  	 * independent, is then given by P(n)^2, provided our sample period
+10f39042711ba2 Rik van Riel      2014-01-27  1640  	 * is sufficiently short compared to the usage pattern.
+10f39042711ba2 Rik van Riel      2014-01-27  1641  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1642  	 * This quadric squishes small probabilities, making it less likely we
+10f39042711ba2 Rik van Riel      2014-01-27  1643  	 * act on an unlikely task<->page relation.
+10f39042711ba2 Rik van Riel      2014-01-27  1644  	 */
+10f39042711ba2 Rik van Riel      2014-01-27  1645  	if (!cpupid_pid_unset(last_cpupid) &&
+10f39042711ba2 Rik van Riel      2014-01-27  1646  				cpupid_to_nid(last_cpupid) != dst_nid)
+10f39042711ba2 Rik van Riel      2014-01-27  1647  		return false;
+10f39042711ba2 Rik van Riel      2014-01-27  1648  
+10f39042711ba2 Rik van Riel      2014-01-27  1649  	/* Always allow migrate on private faults */
+10f39042711ba2 Rik van Riel      2014-01-27  1650  	if (cpupid_match_pid(p, last_cpupid))
+10f39042711ba2 Rik van Riel      2014-01-27  1651  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1652  
+10f39042711ba2 Rik van Riel      2014-01-27  1653  	/* A shared fault, but p->numa_group has not been set up yet. */
+10f39042711ba2 Rik van Riel      2014-01-27  1654  	if (!ng)
+10f39042711ba2 Rik van Riel      2014-01-27  1655  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1656  
+10f39042711ba2 Rik van Riel      2014-01-27  1657  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1658  	 * Destination node is much more heavily used than the source
+4142c3ebb685bb Rik van Riel      2016-01-25  1659  	 * node? Allow migration.
+10f39042711ba2 Rik van Riel      2014-01-27  1660  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1661  	if (group_faults_cpu(ng, dst_nid) > group_faults_cpu(ng, src_nid) *
+4142c3ebb685bb Rik van Riel      2016-01-25  1662  					ACTIVE_NODE_FRACTION)
+10f39042711ba2 Rik van Riel      2014-01-27  1663  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1664  
+10f39042711ba2 Rik van Riel      2014-01-27  1665  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1666  	 * Distribute memory according to CPU & memory use on each node,
+4142c3ebb685bb Rik van Riel      2016-01-25  1667  	 * with 3/4 hysteresis to avoid unnecessary memory migrations:
+4142c3ebb685bb Rik van Riel      2016-01-25  1668  	 *
+4142c3ebb685bb Rik van Riel      2016-01-25  1669  	 * faults_cpu(dst)   3   faults_cpu(src)
+4142c3ebb685bb Rik van Riel      2016-01-25  1670  	 * --------------- * - > ---------------
+4142c3ebb685bb Rik van Riel      2016-01-25  1671  	 * faults_mem(dst)   4   faults_mem(src)
+10f39042711ba2 Rik van Riel      2014-01-27  1672  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1673  	return group_faults_cpu(ng, dst_nid) * group_faults(p, src_nid) * 3 >
+4142c3ebb685bb Rik van Riel      2016-01-25  1674  	       group_faults_cpu(ng, src_nid) * group_faults(p, dst_nid) * 4;
+10f39042711ba2 Rik van Riel      2014-01-27  1675  }
+10f39042711ba2 Rik van Riel      2014-01-27  1676  
 
 -- 
 0-DAY CI Kernel Test Service
