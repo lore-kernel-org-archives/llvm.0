@@ -1,227 +1,142 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4216E5686;
-	Sun, 28 May 2023 20:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685305277; x=1716841277;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WVdQHDVOPlOkQn+8IBIehdsbUsP/EBl6EUmKEeMdepA=;
-  b=LRTK/NuJE2fblum92PQGJ7fKKRL8Lc5dVB5XLGt7CnuufI/aT/DLM4eS
-   /WlJJtI7uwMMITTRo659bwDzMr13Gw5fqUqLOgOoKpfD5JbDF8kH+skzc
-   U10LT8+OaOoOpaMYjQt7/750kD9oBOdfh0i8RnsAFLaiGZso7dEbRMZ7P
-   tCRSLLYKgj//20IT7r9q2GOAf1DoQwXg+zK1d3FoZDj0o4aCdAjHyiJJS
-   wVVBGJK5xk1A2+iEe1PFEWzVfiATpGMOP5l8NcbGIN6lgmsThpt6JKtGn
-   pUU8cQTvdGBEvOlod3/OraG8bT+r6itGJuZ62cjv6y5k2u9bdzVp+TU2m
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357805980"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="357805980"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 13:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="775704447"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="775704447"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 May 2023 13:21:14 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q3Mt8-000KjO-13;
-	Sun, 28 May 2023 20:21:14 +0000
-Date: Mon, 29 May 2023 04:20:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:gpu/rust-wip 69/229] rust/helpers.c:342:9: error:
- implicit declaration of function 'of_node_is_root' is invalid in C99
-Message-ID: <202305290436.KGrKf4Lf-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845E223B8
+	for <llvm@lists.linux.dev>; Sun, 28 May 2023 23:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685317867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2hR7gmPm1cMgqHBsMPACrNFCFEWCnTXDkMrbEiN6/CI=;
+	b=T3ClzPoXX+AQ71+azGGsO61VXCcHWitdyeWCH4a7qcaGLMI9yVL8CysAyHcGKPdtT8nU5L
+	IhDsK6J9EMzTawTL4TJ7XJ7CtWnDJ+NT3QhruInZ2Mx2ntmU+Smw+LO6x/xaEVPDNv4VeC
+	bH1BEdnULRjrXQBaHVzAOgUJ8P5Vcf0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-KI_ssaAVNrWorX5jxnAfbA-1; Sun, 28 May 2023 19:51:05 -0400
+X-MC-Unique: KI_ssaAVNrWorX5jxnAfbA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 217FE101A59B
+	for <llvm@lists.linux.dev>; Sun, 28 May 2023 23:51:05 +0000 (UTC)
+Received: from [172.64.0.126] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 08C99492B00;
+	Sun, 28 May 2023 23:51:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 35 of 346): Test report for master
+ (6.4.0-rc3, mainline.kernel.org-clang, f8b2507c)
+Date: Sun, 28 May 2023 23:51:04 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <59713.123052819510500162@us-mta-517.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Asahi,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/AsahiLinux/linux gpu/rust-wip
-head:   98f5852ba1f7bc80f0f575fa9175ceb19aa5c8d5
-commit: c6d23800776bb644812a4a684bf05b031cc8085f [69/229] rust: of: Add OF node abstraction
-config: x86_64-randconfig-r022-20230528 (https://download.01.org/0day-ci/archive/20230529/202305290436.KGrKf4Lf-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/c6d23800776bb644812a4a684bf05b031cc8085f
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux gpu/rust-wip
-        git checkout c6d23800776bb644812a4a684bf05b031cc8085f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305290436.KGrKf4Lf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   rust/helpers.c:204:9: error: implicit declaration of function 'ioremap' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:204:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
-   rust/helpers.c:210:9: error: implicit declaration of function 'readb' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:216:9: error: implicit declaration of function 'readw' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:222:9: error: implicit declaration of function 'readl' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:229:9: error: implicit declaration of function 'readq' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:236:2: error: implicit declaration of function 'writeb' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:242:2: error: implicit declaration of function 'writew' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:248:2: error: implicit declaration of function 'writel' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:255:2: error: implicit declaration of function 'writeq' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:262:9: error: implicit declaration of function 'readb_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:268:9: error: implicit declaration of function 'readw_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:274:9: error: implicit declaration of function 'readl_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:281:9: error: implicit declaration of function 'readq_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:288:2: error: implicit declaration of function 'writeb_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:294:2: error: implicit declaration of function 'writew_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:300:2: error: implicit declaration of function 'writel_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:307:2: error: implicit declaration of function 'writeq_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:314:2: error: implicit declaration of function 'memcpy_fromio' is invalid in C99 [-Wimplicit-function-declaration]
->> rust/helpers.c:342:9: error: implicit declaration of function 'of_node_is_root' is invalid in C99 [-Wimplicit-function-declaration]
-   rust/helpers.c:204:9: error: implicit declaration of function 'ioremap' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:204:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion], err: false
-   rust/helpers.c:210:9: error: implicit declaration of function 'readb' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:216:9: error: implicit declaration of function 'readw' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:222:9: error: implicit declaration of function 'readl' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:229:9: error: implicit declaration of function 'readq' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:236:2: error: implicit declaration of function 'writeb' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:242:2: error: implicit declaration of function 'writew' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:248:2: error: implicit declaration of function 'writel' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:255:2: error: implicit declaration of function 'writeq' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:262:9: error: implicit declaration of function 'readb_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:268:9: error: implicit declaration of function 'readw_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:274:9: error: implicit declaration of function 'readl_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:281:9: error: implicit declaration of function 'readq_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:288:2: error: implicit declaration of function 'writeb_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:294:2: error: implicit declaration of function 'writew_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:300:2: error: implicit declaration of function 'writel_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:307:2: error: implicit declaration of function 'writeq_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   rust/helpers.c:314:2: error: implicit declaration of function 'memcpy_fromio' is invalid in C99 [-Wimplicit-function-declaration], err: true
->> rust/helpers.c:342:9: error: implicit declaration of function 'of_node_is_root' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   thread 'main' panicked at 'Unable to generate bindings: ()', /opt/cross/rustc-1.66.0-bindgen-0.56.0/cargo/registry/src/github.com-1ecc6299db9ec823/bindgen-0.56.0/src/main.rs:54:36
-   stack backtrace:
-      0: rust_begin_unwind
-                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/std/src/panicking.rs:575:5
-      1: core::panicking::panic_fmt
-                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/core/src/panicking.rs:65:14
-      2: core::result::unwrap_failed
-                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/core/src/result.rs:1791:5
-      3: bindgen::main
-   note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
-   make[2]: *** [rust/Makefile:330: rust/bindings/bindings_helpers_generated.rs] Error 1
-   make[2]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
-   make[2]: Target 'rust/' not remade because of errors.
-   make[1]: *** [Makefile:1292: prepare] Error 2
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/of_node_is_root +342 rust/helpers.c
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2023-05-28' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-   259	
-   260	u8 rust_helper_readb_relaxed(const volatile void __iomem *addr)
-   261	{
- > 262		return readb_relaxed(addr);
-   263	}
-   264	EXPORT_SYMBOL_GPL(rust_helper_readb_relaxed);
-   265	
-   266	u16 rust_helper_readw_relaxed(const volatile void __iomem *addr)
-   267	{
-   268		return readw_relaxed(addr);
-   269	}
-   270	EXPORT_SYMBOL_GPL(rust_helper_readw_relaxed);
-   271	
-   272	u32 rust_helper_readl_relaxed(const volatile void __iomem *addr)
-   273	{
-   274		return readl_relaxed(addr);
-   275	}
-   276	EXPORT_SYMBOL_GPL(rust_helper_readl_relaxed);
-   277	
-   278	#ifdef CONFIG_64BIT
-   279	u64 rust_helper_readq_relaxed(const volatile void __iomem *addr)
-   280	{
-   281		return readq_relaxed(addr);
-   282	}
-   283	EXPORT_SYMBOL_GPL(rust_helper_readq_relaxed);
-   284	#endif
-   285	
-   286	void rust_helper_writeb_relaxed(u8 value, volatile void __iomem *addr)
-   287	{
-   288		writeb_relaxed(value, addr);
-   289	}
-   290	EXPORT_SYMBOL_GPL(rust_helper_writeb_relaxed);
-   291	
-   292	void rust_helper_writew_relaxed(u16 value, volatile void __iomem *addr)
-   293	{
-   294		writew_relaxed(value, addr);
-   295	}
-   296	EXPORT_SYMBOL_GPL(rust_helper_writew_relaxed);
-   297	
-   298	void rust_helper_writel_relaxed(u32 value, volatile void __iomem *addr)
-   299	{
-   300		writel_relaxed(value, addr);
-   301	}
-   302	EXPORT_SYMBOL_GPL(rust_helper_writel_relaxed);
-   303	
-   304	#ifdef CONFIG_64BIT
-   305	void rust_helper_writeq_relaxed(u64 value, volatile void __iomem *addr)
-   306	{
-   307		writeq_relaxed(value, addr);
-   308	}
-   309	EXPORT_SYMBOL_GPL(rust_helper_writeq_relaxed);
-   310	#endif
-   311	
-   312	void rust_helper_memcpy_fromio(void *to, const volatile void __iomem *from, long count)
-   313	{
-   314		memcpy_fromio(to, from, count);
-   315	}
-   316	EXPORT_SYMBOL_GPL(rust_helper_memcpy_fromio);
-   317	
-   318	void *
-   319	rust_helper_platform_get_drvdata(const struct platform_device *pdev)
-   320	{
-   321		return platform_get_drvdata(pdev);
-   322	}
-   323	EXPORT_SYMBOL_GPL(rust_helper_platform_get_drvdata);
-   324	
-   325	void
-   326	rust_helper_platform_set_drvdata(struct platform_device *pdev,
-   327					 void *data)
-   328	{
-   329		platform_set_drvdata(pdev, data);
-   330	}
-   331	EXPORT_SYMBOL_GPL(rust_helper_platform_set_drvdata);
-   332	
-   333	const struct of_device_id *rust_helper_of_match_device(
-   334			const struct of_device_id *matches, const struct device *dev)
-   335	{
-   336		return of_match_device(matches, dev);
-   337	}
-   338	EXPORT_SYMBOL_GPL(rust_helper_of_match_device);
-   339	
-   340	bool rust_helper_of_node_is_root(const struct device_node *np)
-   341	{
- > 342		return of_node_is_root(np);
-   343	}
-   344	EXPORT_SYMBOL_GPL(rust_helper_of_node_is_root);
-   345	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/90570
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8310474
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8310530
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8310534
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8310537
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
