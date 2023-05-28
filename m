@@ -1,60 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AB95683;
-	Sun, 28 May 2023 18:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2E610E8;
+	Sun, 28 May 2023 19:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685297180; x=1716833180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n1G3073duu9zebJvOfP4bDW93rS2yyqVqrYzBTqEQVI=;
-  b=jQ90sIwZIlwjALUGXww/OFIpRVV+nntbOxFOjc56XoltrzA4/mw+VlYM
-   nrjX/yU8rN6mD0JUKSLefQ30L4cK3pn+kGvFhHUFFIHEk6kJ3OshTu4/U
-   c5oTpwQqREFfIvkbCzeIsM/2NIA+I6snLtgCluPJqd2USt8h+ldE0mnY4
-   OorCwMnefsHj1pQDbheRiMDF+uvFbbN5QU/pcsWh7++cVdFq0elu01Gfv
-   QhZxim5Sv5IWgK3+rOtJHwosSFm5bFA0axURvbtyCssUTMF9rjr4DKz+F
-   nkZTIX1tN0IBvpm1TQRuVQsuJ1+XWyQxzNfSJ72Sgx8akdMxsttl5ddaG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="420302753"
+  t=1685300896; x=1716836896;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tUTKitJO4IY5CViS0fx1R6Ukg+LtFDsc2lxtY6qJ0pY=;
+  b=U1L9JDobK/MBiCZp7IUrTaUubuDZtGLJRAIH8D0HE1mPw9XWRSS0Ypa8
+   qY0WYhH7H+/XGxVdiP6tpH1oLd9RuGVcJdb1MZQhBmzZ+1oebYMtxSGYd
+   LU5iXXaOMMUmfTgGqgQ49sKHape4t0mbRpcOpXO0rx/PcHhKNQcfefMSv
+   q2kKCEcIsS7sGwJ74I+KQi0G/bYxqHjcU+Wo9j0eIZQud0xhG78cC6FWP
+   ltPQXvfg6SSeDTnJQhTOvCpRHm2uMED3IcDOFSefbdEY1sk5SXdi3QNGV
+   bsuykj2ntDIaYr7RaN4QxX01Ioxs4SXizKTL5AyHG15erJXghEj+LmAzd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="440906688"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="420302753"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 11:06:19 -0700
+   d="scan'208";a="440906688"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 12:08:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="738897686"
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="705816557"
 X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="738897686"
+   d="scan'208";a="705816557"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 May 2023 11:06:13 -0700
+  by orsmga002.jf.intel.com with ESMTP; 28 May 2023 12:08:14 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q3KmS-000KhW-1C;
-	Sun, 28 May 2023 18:06:12 +0000
-Date: Mon, 29 May 2023 02:05:23 +0800
+	id 1q3LkT-000Kig-1k;
+	Sun, 28 May 2023 19:08:13 +0000
+Date: Mon, 29 May 2023 03:07:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Stefan Schmidt <stefan@datenfreihafen.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Matthieu Baerts <matthieu.baerts@tessares.net>,
-	Mat Martineau <martineau@kernel.org>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, leit@fb.com, axboe@kernel.dk,
-	asml.silence@gmail.com, linux-kernel@vger.kernel.org,
-	dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
-	mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <202305290107.hs8sbfYc-lkp@intel.com>
-References: <20230525125503.400797-1-leitao@debian.org>
+To: Asahi Lina <lina@asahilina.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:gpu/rust-wip 65/229] thread 'main' panicked at 'Unable
+ to generate bindings: ()',
+ /opt/cross/rustc-1.66.0-bindgen-0.56.0/cargo/registry/src/github.com-1ecc6299db9ec823/bindgen-0.56.0/src/main.rs:54:36
+Message-ID: <202305290330.F58aYgvP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,67 +46,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
 
-Hi Breno,
+Hi Asahi,
 
-kernel test robot noticed the following build errors:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230525125503.400797-1-leitao%40debian.org
-patch subject: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol ioctl callbacks
-config: i386-randconfig-i061-20230525 (https://download.01.org/0day-ci/archive/20230529/202305290107.hs8sbfYc-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux gpu/rust-wip
+head:   98f5852ba1f7bc80f0f575fa9175ceb19aa5c8d5
+commit: 8f5537727cf10e320bc6f82a059797cd9965d60a [65/229] *RFL import: kernel::io_mem
+config: x86_64-randconfig-r022-20230528 (https://download.01.org/0day-ci/archive/20230529/202305290330.F58aYgvP-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dbeb44f8503d11da0219fc6ef8a56c28cfde1511
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
-        git checkout dbeb44f8503d11da0219fc6ef8a56c28cfde1511
+        # https://github.com/AsahiLinux/linux/commit/8f5537727cf10e320bc6f82a059797cd9965d60a
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux gpu/rust-wip
+        git checkout 8f5537727cf10e320bc6f82a059797cd9965d60a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/phonet/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305290107.hs8sbfYc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305290330.F58aYgvP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/phonet/af_phonet.c:43:5: error: redefinition of 'phonet_sk_ioctl'
-   int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-       ^
-   include/net/phonet/phonet.h:125:19: note: previous definition is here
-   static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-                     ^
-   1 error generated.
-
-
-vim +/phonet_sk_ioctl +43 net/phonet/af_phonet.c
-
-    42	
-  > 43	int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-    44	{
-    45		int karg;
-    46	
-    47		switch (cmd) {
-    48		case SIOCPNADDRESOURCE:
-    49		case SIOCPNDELRESOURCE:
-    50			if (get_user(karg, (int __user *)arg))
-    51				return -EFAULT;
-    52	
-    53			return sk->sk_prot->ioctl(sk, cmd, &karg);
-    54		}
-    55		/* A positive return value means that the ioctl was not processed */
-    56		return 1;
-    57	}
-    58	
+   rust/helpers.c:201:9: error: implicit declaration of function 'ioremap' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:201:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
+   rust/helpers.c:207:9: error: implicit declaration of function 'readb' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:213:9: error: implicit declaration of function 'readw' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:219:9: error: implicit declaration of function 'readl' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:226:9: error: implicit declaration of function 'readq' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:233:2: error: implicit declaration of function 'writeb' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:239:2: error: implicit declaration of function 'writew' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:245:2: error: implicit declaration of function 'writel' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:252:2: error: implicit declaration of function 'writeq' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:259:9: error: implicit declaration of function 'readb_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:265:9: error: implicit declaration of function 'readw_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:271:9: error: implicit declaration of function 'readl_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:278:9: error: implicit declaration of function 'readq_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:285:2: error: implicit declaration of function 'writeb_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:291:2: error: implicit declaration of function 'writew_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:297:2: error: implicit declaration of function 'writel_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:304:2: error: implicit declaration of function 'writeq_relaxed' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:311:2: error: implicit declaration of function 'memcpy_fromio' is invalid in C99 [-Wimplicit-function-declaration]
+   rust/helpers.c:201:9: error: implicit declaration of function 'ioremap' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:201:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion], err: false
+   rust/helpers.c:207:9: error: implicit declaration of function 'readb' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:213:9: error: implicit declaration of function 'readw' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:219:9: error: implicit declaration of function 'readl' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:226:9: error: implicit declaration of function 'readq' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:233:2: error: implicit declaration of function 'writeb' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:239:2: error: implicit declaration of function 'writew' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:245:2: error: implicit declaration of function 'writel' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:252:2: error: implicit declaration of function 'writeq' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:259:9: error: implicit declaration of function 'readb_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:265:9: error: implicit declaration of function 'readw_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:271:9: error: implicit declaration of function 'readl_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:278:9: error: implicit declaration of function 'readq_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:285:2: error: implicit declaration of function 'writeb_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:291:2: error: implicit declaration of function 'writew_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:297:2: error: implicit declaration of function 'writel_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:304:2: error: implicit declaration of function 'writeq_relaxed' is invalid in C99 [-Wimplicit-function-declaration], err: true
+   rust/helpers.c:311:2: error: implicit declaration of function 'memcpy_fromio' is invalid in C99 [-Wimplicit-function-declaration], err: true
+>> thread 'main' panicked at 'Unable to generate bindings: ()', /opt/cross/rustc-1.66.0-bindgen-0.56.0/cargo/registry/src/github.com-1ecc6299db9ec823/bindgen-0.56.0/src/main.rs:54:36
+   stack backtrace:
+      0: rust_begin_unwind
+                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/std/src/panicking.rs:575:5
+      1: core::panicking::panic_fmt
+                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/core/src/panicking.rs:65:14
+      2: core::result::unwrap_failed
+                at /rustc/69f9c33d71c871fc16ac445211281c6e7a340943/library/core/src/result.rs:1791:5
+      3: bindgen::main
+   note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+   make[2]: *** [rust/Makefile:330: rust/bindings/bindings_helpers_generated.rs] Error 1
+   make[2]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
+   make[2]: Target 'rust/' not remade because of errors.
+   make[1]: *** [Makefile:1292: prepare] Error 2
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
