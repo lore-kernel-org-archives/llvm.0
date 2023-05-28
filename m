@@ -1,81 +1,93 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32017366;
-	Sun, 28 May 2023 06:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685254620; x=1716790620;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ck1F/EYbQ7XSH+rvtIluPIYwhJ8G6x/365FHCVQevsQ=;
-  b=hVS7wrvFyRnEYdV4/3w44JLH7RnHtjzXJyaGrRZqWEv+vYsJJtxVLMmm
-   CssOJPfqGUEyUqhYSHYhvVTKyH4ko+9AyDrC9Siy+3FVdm9w47Wiz+2MA
-   dM/FZRcqTRmTpQ0O6zvtDL5UdcuATAp/mjhznl/fR6V6oehzjommYDGEI
-   GlYxODwu5Ht59OWY3xWZ+tbXOkpA2JhvLsgNcr6llnCZoXnQPZPtJZjS7
-   M7iQUMeZNFE2D8h0NKnnHpDHfsSYCfzARWqJ35Hv06SEuzbllTjTnK7l+
-   i6lECC46Qn4G0q7na42jIYtowXUoWWMoJg2RK9jxSLcHLnhyLtqcVEirk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="420247512"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="420247512"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 23:16:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="699853190"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="699853190"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 May 2023 23:16:56 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q39i4-000KSs-0G;
-	Sun, 28 May 2023 06:16:56 +0000
-Date: Sun, 28 May 2023 14:16:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:gpu/rust-wip 228/229] warning: associated function
- `lock` is never used
-Message-ID: <202305281418.SqRyhgHY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9BF1384
+	for <llvm@lists.linux.dev>; Sun, 28 May 2023 13:21:02 +0000 (UTC)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-3f6b20ad49dso12364151cf.2
+        for <llvm@lists.linux.dev>; Sun, 28 May 2023 06:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685280061; x=1687872061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=akn0AE9vZX3RUwIDlCTRF2LZpWprpBuLBZTHq39XBig=;
+        b=JBw3AojYSTklvJ6xiPAG2k+keaiXutzjPJbOl2oI0HkreXVMZ7dUwFaTxEMoRyM9hg
+         nJFbQqhLpkRNkuC0MnnssGB4gme25TAdjuPMiLyTCSncytmlvE2jMPX3Z47zBQeQWCBB
+         M9GAR/N6Q/0vIt1yfeXsi4XQ3xyXmBHCpNzfVwmPygZQlvDrRkl5mK/BfhaLYxcil5Jo
+         PWV/xmdOrUlzxqHq9VCWJBvDyi6+vnJW9NnUQYMDrR+/2Ox2MOT9ljWFi8GCCRHBLYBH
+         r1p1FBuUMWnCw5zSWAqgobYZz4JpCbuNCveq+Waju2EUSzwaB5MlEkKQqOkRZPuTb1PQ
+         a4Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685280061; x=1687872061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=akn0AE9vZX3RUwIDlCTRF2LZpWprpBuLBZTHq39XBig=;
+        b=O6R7GV+WVWgxS8NF1sbgGEnn5pKcMd4kroBOVoUQnUcrq3KB9BtdsJiG+CyexYwSlP
+         8zqJb6i7jzx7oBorlWxMKelf+FHI5RXiYZzEMfZv487asrpzfD5gbsmj15UfXBm2V+rp
+         HMFXw/vF3oCjmjKZHm56dbxxbEJWw0TR31SttvTzUYL2qMcUn6n/LsdGEXiyms+XXr8C
+         jZNS3nubdMZ6E9QPKh4LmSQ2/g9GMZA4njBZ1BOQweIrx+TY9m7IAjpKR1bby+SMyYEN
+         jCIRxUXxIYWfAz5la+k1y1nHsUZ6uNpcmkPhN2qqiEFKo+0llwZF1Xx00tpLqYANt9hT
+         8pKg==
+X-Gm-Message-State: AC+VfDzhHYnFQBxCZYZUT2TAvMkOBDifRlS5kRGQVyaXU2ADSEA0Y+g3
+	GhSk1CE1lWmB8MeVoUtQ4N8=
+X-Google-Smtp-Source: ACHHUZ5XS2rAH9OMWmDO3CuoXmoGucKRX7XvOLPY2e5l3GbsmpudomJZrrkaQHpKd/Muy97e7/XMaA==
+X-Received: by 2002:a05:6214:e62:b0:5ef:8ae8:9adb with SMTP id jz2-20020a0562140e6200b005ef8ae89adbmr7067556qvb.37.1685280060963;
+        Sun, 28 May 2023 06:21:00 -0700 (PDT)
+Received: from localhost.localdomain (2603-6000-8100-7fd4-0000-0000-0000-0619.res6.spectrum.com. [2603:6000:8100:7fd4::619])
+        by smtp.gmail.com with ESMTPSA id x5-20020ad44585000000b005dd8b9345b9sm87190qvu.81.2023.05.28.06.20.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 06:21:00 -0700 (PDT)
+From: "Ethan D. Twardy" <ethan.twardy@gmail.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Miguel Cano <macanroj@gmail.com>,
+	Finn Behrens <me@kloenk.de>,
+	Tiago Lam <tiagolam@gmail.com>,
+	rust-for-linux@vger.kernel.org (open list:RUST),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
+Cc: "Ethan D. Twardy" <ethan.twardy@gmail.com>
+Subject: [PATCH v2 0/1] Fix libclang version check for rustavailable
+Date: Sun, 28 May 2023 08:18:01 -0500
+Message-Id: <20230528131802.6390-1-ethan.twardy@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/AsahiLinux/linux gpu/rust-wip
-head:   d1b1887f265d507158eee935115bd5527c857074
-commit: a2d99171005ce93995b3e5414002d888990c3758 [228/229] rust: sync: Add LockdepMap abstraction
-config: x86_64-randconfig-a011-20230528 (https://download.01.org/0day-ci/archive/20230528/202305281418.SqRyhgHY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/a2d99171005ce93995b3e5414002d888990c3758
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux gpu/rust-wip
-        git checkout a2d99171005ce93995b3e5414002d888990c3758
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
+This series contains just one two-line patch, to fix a small issue
+in scripts/rust_is_available.sh. This issue is currently affecting
+kernel builds with Rust on Gentoo Linux (and potentially other
+distributions/workflows where the kernel source path contains a
+version string).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305281418.SqRyhgHY-lkp@intel.com/
+Changes from v1:
+* Patch formatting. I believe there were some serious issues with the
+  formatting that caused it to be lost/ignored by the mailing list.
+  I sincerely hope that the formatting of this patch is acceptable,
+  this is my first contribution to the kernel so I haven't mastered
+  the patch workflow yet.
 
-All warnings (new ones prefixed by >>):
+Ethan D. Twardy (1):
+  scripts/rust_is_available: Fix clang version check
 
->> warning: associated function `lock` is never used
-   --> rust/kernel/sync/lockdep.rs:221:19
-   |
-   221 |     pub(crate) fn lock(&self) -> LockdepGuard<'_> {
-   |                   ^^^^
+ scripts/rust_is_available.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.40.1
+
