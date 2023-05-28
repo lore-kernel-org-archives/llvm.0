@@ -1,89 +1,130 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBAB7C
-	for <llvm@lists.linux.dev>; Sun, 28 May 2023 14:39:39 +0000 (UTC)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6af713338ccso1021613a34.0
-        for <llvm@lists.linux.dev>; Sun, 28 May 2023 07:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685284778; x=1687876778;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zqwAEtWjCPT8dGp7Hg7XLpqKdzj6HDs5vCuNUoe3jXY=;
-        b=oC4dgXq5JL56+5e6LQPqolZoKF28dXEppYncf52s5VGYpuuP480KIoe2w3NO7sdpSN
-         4h4eCP/jlUst3C1JHGKwir/s5b2LDtwR3ZbtMJPunUaJnw5PiJOfywUOJftuz+Owrv8O
-         u05FmRg3d18D76IWldMwZZIAMDxsV4BuxY4knZ9WTNJLPn72Kkw9tGtnhCY9r3qFHK41
-         W6MODjaBromzN8gMFlRCAtIiaozmxCzfMp189Y/64YziL9Gg+Kf4eqTzE6ArrtOkXvWc
-         XrrrUBPSXbRw3aShePlzZ7EdDd25YdPFrxI1aVjZf9ywRJvWiALbZvv5i2O9lksvCAaV
-         Wm1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685284778; x=1687876778;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqwAEtWjCPT8dGp7Hg7XLpqKdzj6HDs5vCuNUoe3jXY=;
-        b=ANfeWXotI8W/vPPOnLR51b8M62uZ/DTaV3/Cka4tuQyuIyk1s9eR+dRU+nuPICCv+v
-         I7GhOMptZCxVCZR610bRfQ4t8E2PqozQ+M89TBgZPS2i1ZAgBB7jzIUuGGmeuRsWl2tb
-         2La5oWVrqAicimxa19Ve8jsSPVK2HWuDsDT8jdh8vIQc3rXNPSTv0VaAVXygIa5zOzWZ
-         cqPnf5d1CFVBTqhUlmkeZjeNIfK5jsVSTBuUytxO0dGf+3L3zj0ggkBdu6y1WAZ7pwLS
-         LbifeMoiKBHdurdpizna3BAkogfgS/l4gzWBebn/6GKco0vqua+6q464zaVgTf3AIgSD
-         oGNw==
-X-Gm-Message-State: AC+VfDzBkhTfG2zcL/x0jcrKS7RDfRZuJ0vvl0xFgvuTGs0S3dZa73Yc
-	89fGVRF9TJe4DcU6oUrx7T0=
-X-Google-Smtp-Source: ACHHUZ5Dwd/WEqOatrum1wODC6I6Zd0zd+J7X7PsjIvPXaoJbkkCMmdC04e9U8BkvLBnUlq1CfGnFQ==
-X-Received: by 2002:a05:6830:4dc:b0:6a4:2ad5:9aa0 with SMTP id s28-20020a05683004dc00b006a42ad59aa0mr4087810otd.20.1685284778088;
-        Sun, 28 May 2023 07:39:38 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id y23-20020a0568301d9700b006a662e9f074sm3647708oti.58.2023.05.28.07.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 May 2023 07:39:37 -0700 (PDT)
-Message-ID: <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
-Date: Sun, 28 May 2023 11:39:32 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AB95683;
+	Sun, 28 May 2023 18:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685297180; x=1716833180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n1G3073duu9zebJvOfP4bDW93rS2yyqVqrYzBTqEQVI=;
+  b=jQ90sIwZIlwjALUGXww/OFIpRVV+nntbOxFOjc56XoltrzA4/mw+VlYM
+   nrjX/yU8rN6mD0JUKSLefQ30L4cK3pn+kGvFhHUFFIHEk6kJ3OshTu4/U
+   c5oTpwQqREFfIvkbCzeIsM/2NIA+I6snLtgCluPJqd2USt8h+ldE0mnY4
+   OorCwMnefsHj1pQDbheRiMDF+uvFbbN5QU/pcsWh7++cVdFq0elu01Gfv
+   QhZxim5Sv5IWgK3+rOtJHwosSFm5bFA0axURvbtyCssUTMF9rjr4DKz+F
+   nkZTIX1tN0IBvpm1TQRuVQsuJ1+XWyQxzNfSJ72Sgx8akdMxsttl5ddaG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="420302753"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="420302753"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 11:06:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="738897686"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="738897686"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 May 2023 11:06:13 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q3KmS-000KhW-1C;
+	Sun, 28 May 2023 18:06:12 +0000
+Date: Mon, 29 May 2023 02:05:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	Remi Denis-Courmont <courmisch@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Matthieu Baerts <matthieu.baerts@tessares.net>,
+	Mat Martineau <martineau@kernel.org>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, leit@fb.com, axboe@kernel.dk,
+	asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+	dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
+	mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <202305290107.hs8sbfYc-lkp@intel.com>
+References: <20230525125503.400797-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
-To: "Ethan D. Twardy" <ethan.twardy@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, Tiago Lam <tiagolam@gmail.com>,
- Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>,
- "open list:RUST" <rust-for-linux@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
-References: <20230528131802.6390-1-ethan.twardy@gmail.com>
- <20230528131802.6390-2-ethan.twardy@gmail.com>
-Content-Language: en-US
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230528131802.6390-2-ethan.twardy@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
 
-On 5/28/23 10:18, Ethan D. Twardy wrote:
-> [...]
-> --- a/scripts/rust_is_available.sh
-> +++ b/scripts/rust_is_available.sh
-> @@ -102,8 +102,8 @@ fi
->   # Check that the `libclang` used by the Rust bindings generator is suitable.
->   bindgen_libclang_version=$( \
->   	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
-> -		| grep -F 'clang version ' \
-> -		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
-> +		| grep -oE 'clang version [0-9]+\.[0-9]+\.[0-9]+' \
-> +		| cut -d' ' -f3 \
->   		| head -n 1 \
->   )
->   bindgen_libclang_min_version=$($min_tool_version llvm)
+Hi Breno,
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230525125503.400797-1-leitao%40debian.org
+patch subject: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol ioctl callbacks
+config: i386-randconfig-i061-20230525 (https://download.01.org/0day-ci/archive/20230529/202305290107.hs8sbfYc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/dbeb44f8503d11da0219fc6ef8a56c28cfde1511
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
+        git checkout dbeb44f8503d11da0219fc6ef8a56c28cfde1511
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/phonet/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305290107.hs8sbfYc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/phonet/af_phonet.c:43:5: error: redefinition of 'phonet_sk_ioctl'
+   int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+       ^
+   include/net/phonet/phonet.h:125:19: note: previous definition is here
+   static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+                     ^
+   1 error generated.
+
+
+vim +/phonet_sk_ioctl +43 net/phonet/af_phonet.c
+
+    42	
+  > 43	int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+    44	{
+    45		int karg;
+    46	
+    47		switch (cmd) {
+    48		case SIOCPNADDRESOURCE:
+    49		case SIOCPNDELRESOURCE:
+    50			if (get_user(karg, (int __user *)arg))
+    51				return -EFAULT;
+    52	
+    53			return sk->sk_prot->ioctl(sk, cmd, &karg);
+    54		}
+    55		/* A positive return value means that the ioctl was not processed */
+    56		return 1;
+    57	}
+    58	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
