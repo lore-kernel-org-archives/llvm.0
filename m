@@ -1,130 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D84E211A
-	for <llvm@lists.linux.dev>; Sun, 28 May 2023 13:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685281263;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MhivLP95ZHOuAS/oMiYOpHlz0mtoRZZoJ6XKLczX2u0=;
-	b=SekA/4T9/GnCiGdQ5OZAqOF/UNhO26f3af3pNDiaF/gRk3IAgdSeThECY8YC4bQFleESKS
-	N/v7yGrU00U+tohvrAjVNV5Iksta30i+C3JuLgMDGY/1NFj6eIfoMrqiw4M2kEVkWKDphs
-	vhB32YajfTqCC52XHl3JA2kc9ZpVzSc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-Q2C9OIVPMg2h9TYtcXYoGw-1; Sun, 28 May 2023 09:41:02 -0400
-X-MC-Unique: Q2C9OIVPMg2h9TYtcXYoGw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D687F3802AD4
-	for <llvm@lists.linux.dev>; Sun, 28 May 2023 13:41:01 +0000 (UTC)
-Received: from [172.64.0.126] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BC32540CF8EE;
-	Sun, 28 May 2023 13:41:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 38 of 346): Test report for master
- (6.4.0-rc3, mainline.kernel.org-clang, 41683902)
-Date: Sun, 28 May 2023 13:41:01 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBAB7C
+	for <llvm@lists.linux.dev>; Sun, 28 May 2023 14:39:39 +0000 (UTC)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6af713338ccso1021613a34.0
+        for <llvm@lists.linux.dev>; Sun, 28 May 2023 07:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685284778; x=1687876778;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zqwAEtWjCPT8dGp7Hg7XLpqKdzj6HDs5vCuNUoe3jXY=;
+        b=oC4dgXq5JL56+5e6LQPqolZoKF28dXEppYncf52s5VGYpuuP480KIoe2w3NO7sdpSN
+         4h4eCP/jlUst3C1JHGKwir/s5b2LDtwR3ZbtMJPunUaJnw5PiJOfywUOJftuz+Owrv8O
+         u05FmRg3d18D76IWldMwZZIAMDxsV4BuxY4knZ9WTNJLPn72Kkw9tGtnhCY9r3qFHK41
+         W6MODjaBromzN8gMFlRCAtIiaozmxCzfMp189Y/64YziL9Gg+Kf4eqTzE6ArrtOkXvWc
+         XrrrUBPSXbRw3aShePlzZ7EdDd25YdPFrxI1aVjZf9ywRJvWiALbZvv5i2O9lksvCAaV
+         Wm1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685284778; x=1687876778;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zqwAEtWjCPT8dGp7Hg7XLpqKdzj6HDs5vCuNUoe3jXY=;
+        b=ANfeWXotI8W/vPPOnLR51b8M62uZ/DTaV3/Cka4tuQyuIyk1s9eR+dRU+nuPICCv+v
+         I7GhOMptZCxVCZR610bRfQ4t8E2PqozQ+M89TBgZPS2i1ZAgBB7jzIUuGGmeuRsWl2tb
+         2La5oWVrqAicimxa19Ve8jsSPVK2HWuDsDT8jdh8vIQc3rXNPSTv0VaAVXygIa5zOzWZ
+         cqPnf5d1CFVBTqhUlmkeZjeNIfK5jsVSTBuUytxO0dGf+3L3zj0ggkBdu6y1WAZ7pwLS
+         LbifeMoiKBHdurdpizna3BAkogfgS/l4gzWBebn/6GKco0vqua+6q464zaVgTf3AIgSD
+         oGNw==
+X-Gm-Message-State: AC+VfDzBkhTfG2zcL/x0jcrKS7RDfRZuJ0vvl0xFgvuTGs0S3dZa73Yc
+	89fGVRF9TJe4DcU6oUrx7T0=
+X-Google-Smtp-Source: ACHHUZ5Dwd/WEqOatrum1wODC6I6Zd0zd+J7X7PsjIvPXaoJbkkCMmdC04e9U8BkvLBnUlq1CfGnFQ==
+X-Received: by 2002:a05:6830:4dc:b0:6a4:2ad5:9aa0 with SMTP id s28-20020a05683004dc00b006a42ad59aa0mr4087810otd.20.1685284778088;
+        Sun, 28 May 2023 07:39:38 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id y23-20020a0568301d9700b006a662e9f074sm3647708oti.58.2023.05.28.07.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 May 2023 07:39:37 -0700 (PDT)
+Message-ID: <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
+Date: Sun, 28 May 2023 11:39:32 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <00202.123052809410200119@us-mta-110.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
+To: "Ethan D. Twardy" <ethan.twardy@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, Tiago Lam <tiagolam@gmail.com>,
+ Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>,
+ "open list:RUST" <rust-for-linux@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
+References: <20230528131802.6390-1-ethan.twardy@gmail.com>
+ <20230528131802.6390-2-ethan.twardy@gmail.com>
+Content-Language: en-US
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230528131802.6390-2-ethan.twardy@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 5/28/23 10:18, Ethan D. Twardy wrote:
+> [...]
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -102,8 +102,8 @@ fi
+>   # Check that the `libclang` used by the Rust bindings generator is suitable.
+>   bindgen_libclang_version=$( \
+>   	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
+> -		| grep -F 'clang version ' \
+> -		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +		| grep -oE 'clang version [0-9]+\.[0-9]+\.[0-9]+' \
+> +		| cut -d' ' -f3 \
+>   		| head -n 1 \
+>   )
+>   bindgen_libclang_min_version=$($min_tool_version llvm)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.4-3' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/powerpc/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/90544
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8308724
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage blktests - nvmeof-mp: Timeout
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2014813
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
