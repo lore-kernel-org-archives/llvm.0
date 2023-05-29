@@ -1,131 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4EA17FEE
-	for <llvm@lists.linux.dev>; Mon, 29 May 2023 12:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685363475;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MeNdwPHf5itq25nOFQsI31aL5s9Zi11H2awA6aDBUe4=;
-	b=C34heNlsAPumHhcKbddkcVbg08VBJIeE9UjTZQNPNt0t5EVJ9Mm9P4TDob66pNvLCPbY0W
-	R4LJKj96RZL34URRVctQDi+ZQ19d7nt5MtZ1OdaPMzxs9Adg6kmNL/dJzsJHwLAkrMU2eA
-	6wsg2CPYovf7TuWhuAlzjOW6o8LDewY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-HlMDsie6NSiKnnp151b9mQ-1; Mon, 29 May 2023 08:31:12 -0400
-X-MC-Unique: HlMDsie6NSiKnnp151b9mQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 696523C0CEE6
-	for <llvm@lists.linux.dev>; Mon, 29 May 2023 12:31:12 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4D597C154D1;
-	Mon, 29 May 2023 12:31:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 11 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, e338142b)
-Date: Mon, 29 May 2023 12:31:06 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE9E3D60;
+	Mon, 29 May 2023 13:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685365930; x=1716901930;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SQ2OVp0QljR5baDEtU4HsmwJbaoW64/YHR9On/0jnoA=;
+  b=ebytcL4GzgMFQKWu5VbyHFJ/6lw7Xk5JcfyMGjwOfv5DLx3imm56ZfUa
+   PuJ+3879TpuifsBAFnR+lt/8UpIddP2V0AAaNbxm1l6YYnDm4NLB94/Sj
+   w8Rzr/a9YVCyn4BL1Q2qvDfjB2cXN47BwI19mmizdB/pLNwIyxsJhZ5nz
+   ob9Fg6R7Cf/XTFUqUvv9ld5Kwdj6bayRXFuxf6qaRCypIHQs7qSWoZZxz
+   0m8W50j7xoUVXTw5eIRCPXhNskmjQBciItuwAtqS51FrDgySzCR8EPcWh
+   GhBPV54d8B7aVxVoqZPBBMO+nuk3rns1npTxWUWeDaaQdNqphrGsEf+/e
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="420459045"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="420459045"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 06:12:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="1036219812"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="1036219812"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 May 2023 06:12:07 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q3cfP-000L09-1C;
+	Mon, 29 May 2023 13:12:07 +0000
+Date: Mon, 29 May 2023 21:11:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [intel-tdx:kvm-upstream-workaround 319/327]
+ arch/arm64/kvm/../../../virt/kvm/kvm_main.c:1979:12: warning: no previous
+ prototype for function 'kvm_arch_required_alignment'
+Message-ID: <202305292058.bSTEzaTY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <18394.123052908311200208@us-mta-422.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   148ce77f987a3cf12193c1f81baa78f41cf13154
+commit: f9628fde0c623c76992345cebbf4cefdcc6bb542 [319/327] KVM: Relax alignment check for restricted mem
+config: arm64-buildonly-randconfig-r002-20230529 (https://download.01.org/0day-ci/archive/20230529/202305292058.bSTEzaTY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel/tdx/commit/f9628fde0c623c76992345cebbf4cefdcc6bb542
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout f9628fde0c623c76992345cebbf4cefdcc6bb542
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305292058.bSTEzaTY-lkp@intel.com/
 
+All error/warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'phy-fixes-6.4' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/phy/linux-phy
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/90581
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8312505
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+>> arch/arm64/kvm/../../../virt/kvm/kvm_main.c:1981:19: error: expected ';' after return statement
+           return PAGE_SHIFT
+                            ^
+                            ;
+>> arch/arm64/kvm/../../../virt/kvm/kvm_main.c:1979:12: warning: no previous prototype for function 'kvm_arch_required_alignment' [-Wmissing-prototypes]
+   __weak int kvm_arch_required_alignment(u64 gpa)
+              ^
+   arch/arm64/kvm/../../../virt/kvm/kvm_main.c:1979:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak int kvm_arch_required_alignment(u64 gpa)
+          ^
+          static 
+   1 warning and 1 error generated.
 
 
+vim +/kvm_arch_required_alignment +1979 arch/arm64/kvm/../../../virt/kvm/kvm_main.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1977	
+  1978	#ifndef kvm_arch_required_alignment
+> 1979	__weak int kvm_arch_required_alignment(u64 gpa)
+  1980	{
+> 1981		return PAGE_SHIFT
+  1982	}
+  1983	#endif
+  1984	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
