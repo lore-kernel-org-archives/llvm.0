@@ -1,104 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396FD7C
-	for <llvm@lists.linux.dev>; Mon, 29 May 2023 10:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E401EC4339C
-	for <llvm@lists.linux.dev>; Mon, 29 May 2023 10:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685355263;
-	bh=lFADNYKkbWj0shwnbHBkVzpXd5KWwGFsFd1Wv3SDaa8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jS0HhFamicitfEXhwm96fveg14nyYnuHawqKJMxJSQKoeUjxmKo7+Q9OIJz//eQtW
-	 Qu6hWYv7jjxzMJ5/reAQEex7zv1QeNiq09ZwWuTwUynVmtxOkCWVm0WK+SnkX4JkiR
-	 9LQMKDyYwlrBwWymVU06zLNaNhAZPn6hdaZ3IL/gAoFH/eHc/bHPKoZoxzk3Fk5of2
-	 IGh2E4ecDMrXL8FbADfxZbXDIxbTZqOgpbPl0eoJfQ5UVxCyhr4PDwDEeWw19xFFxi
-	 yr/N7LI7aPjMidIv51OFEdzmIAe+lRbwouEXOq7Z2ExJ4+l/JQrIrwTp+JQ1hir45J
-	 tlbEHnS/YW8ww==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-556d7ac7c7eso691971eaf.0
-        for <llvm@lists.linux.dev>; Mon, 29 May 2023 03:14:23 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyLqGhcfi2xgFjXdVKtmZeMvEWUVEppTNFzycTZwtQgPumvVgdj
-	ER6+A03bIG1ipEJAMIixBRNgZ91rmy9ni6BR+U4=
-X-Google-Smtp-Source: ACHHUZ7gAElbn2rPz8Q6ZZWixuxKJxoOpCne/kbQHulPb3hRSAQzCL3AGhw3cZLXiNrcSaAVidz9Fxerq3jVdOPOB/0=
-X-Received: by 2002:a05:6808:b0a:b0:398:587c:835a with SMTP id
- s10-20020a0568080b0a00b00398587c835amr4741453oij.10.1685355263137; Mon, 29
- May 2023 03:14:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4EA17FEE
+	for <llvm@lists.linux.dev>; Mon, 29 May 2023 12:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685363475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MeNdwPHf5itq25nOFQsI31aL5s9Zi11H2awA6aDBUe4=;
+	b=C34heNlsAPumHhcKbddkcVbg08VBJIeE9UjTZQNPNt0t5EVJ9Mm9P4TDob66pNvLCPbY0W
+	R4LJKj96RZL34URRVctQDi+ZQ19d7nt5MtZ1OdaPMzxs9Adg6kmNL/dJzsJHwLAkrMU2eA
+	6wsg2CPYovf7TuWhuAlzjOW6o8LDewY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-422-HlMDsie6NSiKnnp151b9mQ-1; Mon, 29 May 2023 08:31:12 -0400
+X-MC-Unique: HlMDsie6NSiKnnp151b9mQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 696523C0CEE6
+	for <llvm@lists.linux.dev>; Mon, 29 May 2023 12:31:12 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4D597C154D1;
+	Mon, 29 May 2023 12:31:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 11 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, e338142b)
+Date: Mon, 29 May 2023 12:31:06 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <TYCP286MB2066DEF0E1810E8BC36F533EC07B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
- <OSZP286MB20611C35BF36F4EB69FD3DF6C0469@OSZP286MB2061.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <OSZP286MB20611C35BF36F4EB69FD3DF6C0469@OSZP286MB2061.JPNP286.PROD.OUTLOOK.COM>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 29 May 2023 19:13:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATz8xDmf5SuApGnrbkxvWPJNG1HTuQSrw2v_Ox5sXQO2A@mail.gmail.com>
-Message-ID: <CAK7LNATz8xDmf5SuApGnrbkxvWPJNG1HTuQSrw2v_Ox5sXQO2A@mail.gmail.com>
-Subject: Re: [PATCH v2] gen_compile_commands: include targets not ending with .o
-To: Hu Weiwen <huww98@outlook.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <18394.123052908311200208@us-mta-422.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 25, 2023 at 9:21=E2=80=AFPM Hu Weiwen <huww98@outlook.com> wrot=
-e:
->
-> Currently, we only extract commands for targets ending with '.o'. But we
-> also have many standalone executables built in-tree.
->
-> Remove this restriction. And to avoid some false matching, exclude
-> targets end with '.c' or '.h' when directly walking the directory.
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Can you give me some examples of false matching?
+Kernel information:
+    Commit message: Merge tag 'phy-fixes-6.4' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/phy/linux-phy
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/90581
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8312505
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
 
 
-Also, this patch would pick up *.i, *.s, *.lst, etc.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Does it make sense to parse cmd files for those?
-I guess the answer is no.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-
->
-> To really generate compile_commands.json that includes such target, call
-> this script directly with no arguments.  `make compile_commands.json`
-> will not include them.
->
-> Signed-off-by: Hu Weiwen <huww98@outlook.com>
-> ---
-> Since V1: Only commit message is updated.
->
->  scripts/clang-tools/gen_compile_commands.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 15ba56527acd..6e88c7e166fc 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -18,8 +18,8 @@ import sys
->  _DEFAULT_OUTPUT =3D 'compile_commands.json'
->  _DEFAULT_LOG_LEVEL =3D 'WARNING'
->
-> -_FILENAME_PATTERN =3D r'^\..*\.cmd$'
-> -_LINE_PATTERN =3D r'^savedcmd_[^ ]*\.o :=3D (.* )([^ ]*\.c) *(;|$)'
-> +_FILENAME_PATTERN =3D r'^\..*(?<!\.(c|h))\.cmd$'
-> +_LINE_PATTERN =3D r'^savedcmd_[^ ]* :=3D (.* )([^ ]*\.c) *(;|$)'
->  _VALID_LOG_LEVELS =3D ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
->  # The tools/ directory adopts a different build system, and produces .cm=
-d
->  # files in a different format. Do not support it.
-> --
-> 2.25.1
->
-
-
---=20
-Best Regards
-Masahiro Yamada
