@@ -1,44 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9877613B;
-	Mon, 29 May 2023 22:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC3FC8DC;
+	Mon, 29 May 2023 22:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685399986; x=1716935986;
+  t=1685400708; x=1716936708;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ad+w7ZQ1UhUO+JXbUyMN/JBHsU7LlsFoNw6kWuoySog=;
-  b=U50f6XuM8suTmCINWyH8Vw313c2ACdcdFaEllMv/EbihFR8N9LygM3bi
-   eK7YS4DuzfP96QGp/PqyWvF3jh2JucX7C0x+ZtgMtWhlWXij3M58pdX1w
-   5f2SmlsXaCiRJIUQBmJOgKnco5TBV4YxGv1Cgo1qWQklRuNwvkpeAUTA6
-   d4FBGMJOUaV+QrAApk5/+5F6rLiO+h0EY7jL9n+1PtNfQzawrAwf43FsF
-   rSsy+v4WdUzekxYUKxdzKJzFRazdTwsTzSVWGkV9HBTC8d4d9PsUECogF
-   ECzwyy0jLofrJBvCjuRNa1k/rsWdpHnCtKP8BnEYwgHbVI28MegzQVSOa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="354791566"
+  bh=E/YUwGh6QjdHb1tKBcFxLBX53uMnE8n6TNvJYJORbmY=;
+  b=j2MXlbwuqGloNlK8NdnmGB5uKnH/QXAJYjtdowqUnRyf74fM35isWhlZ
+   DofdeM1gDJ88OL7G1hqw5sXZvVIl1Jd/CeULTDOJpliwSOdK/bCnPX0j3
+   rnt5NGrq6y0iYiBpjWsksbJVvuYIQpGn701omPfcX37pNEiMUCQO9hEGS
+   Up50JYIkmF0Hdr7v8LCc8GENeuOvwzXzaxDdg1toJJM6EqmbZloi244i2
+   SEUW2UntySv+St36lrC8z+VO09FFNuVSKrjq6zC4Kahx/2yFCQ34tOizf
+   lJG1O+WjW3nWYQwlihrtFSn8w0YXEaLhc7JadoVbTAaJD38jAoJ4m81GT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="335129236"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="354791566"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 15:39:45 -0700
+   d="scan'208";a="335129236"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 15:51:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="880539906"
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="706193666"
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="880539906"
+   d="scan'208";a="706193666"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 May 2023 15:39:44 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 May 2023 15:51:44 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q3lWh-000L9q-1A;
-	Mon, 29 May 2023 22:39:43 +0000
-Date: Tue, 30 May 2023 06:39:41 +0800
+	id 1q3liJ-000LAG-2L;
+	Mon, 29 May 2023 22:51:43 +0000
+Date: Tue, 30 May 2023 06:51:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 2/327]
- arch/powerpc/include/asm/kvm_ppc.h:287:50: warning: declaration of 'struct
- kvm_gfn_range' will not be visible outside of this function
-Message-ID: <202305300650.AJuQinzC-lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [avpatel:riscv_timer_imp_v1 41/45]
+ drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of
+ type
+Message-ID: <202305300611.oM1vfXbw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,138 +47,185 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   148ce77f987a3cf12193c1f81baa78f41cf13154
-commit: 91ea849f8daf52b1900724535ef5352bb2b1ac22 [2/327] KVM: Convert KVM_ARCH_WANT_MMU_NOTIFIER to CONFIG_KVM_GENERIC_MMU_NOTIFIER
-config: powerpc-mvme5100_defconfig (https://download.01.org/0day-ci/archive/20230530/202305300650.AJuQinzC-lkp@intel.com/config)
+Hi Anup,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/avpatel/linux.git riscv_timer_imp_v1
+head:   e4b53ebc211c359452cf0197ae0efb9b36c26589
+commit: 3e63cb1bd92da3161809e39d854d8f4e978579f0 [41/45] RISC-V: Select APLIC and IMSIC drivers
+config: riscv-randconfig-r001-20230529 (https://download.01.org/0day-ci/archive/20230530/202305300611.oM1vfXbw-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel/tdx/commit/91ea849f8daf52b1900724535ef5352bb2b1ac22
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 91ea849f8daf52b1900724535ef5352bb2b1ac22
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/3e63cb1bd92da3161809e39d854d8f4e978579f0
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_timer_imp_v1
+        git checkout 3e63cb1bd92da3161809e39d854d8f4e978579f0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305300650.AJuQinzC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305300611.oM1vfXbw-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/asm-offsets.c:36:
-   In file included from arch/powerpc/include/asm/dbell.h:17:
->> arch/powerpc/include/asm/kvm_ppc.h:287:50: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                           ^
-   arch/powerpc/include/asm/kvm_ppc.h:288:42: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                   ^
-   arch/powerpc/include/asm/kvm_ppc.h:289:47: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   arch/powerpc/include/asm/kvm_ppc.h:290:47: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   4 warnings generated.
---
-   In file included from arch/powerpc/kernel/asm-offsets.c:36:
-   In file included from arch/powerpc/include/asm/dbell.h:17:
->> arch/powerpc/include/asm/kvm_ppc.h:287:50: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                           ^
-   arch/powerpc/include/asm/kvm_ppc.h:288:42: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                   ^
-   arch/powerpc/include/asm/kvm_ppc.h:289:47: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   arch/powerpc/include/asm/kvm_ppc.h:290:47: warning: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Wvisibility]
-           bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   4 warnings generated.
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of type [-Wshift-count-overflow]
+                   valH = (priv->msicfg.base_ppn >> 32) &
+                                                 ^  ~~
+   14 warnings generated.
 
 
-vim +287 arch/powerpc/include/asm/kvm_ppc.h
+vim +331 drivers/irqchip/irq-riscv-aplic.c
 
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  260  
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  261  struct kvmppc_ops {
-cbbc58d4fdfab1a Aneesh Kumar K.V     2013-10-07  262  	struct module *owner;
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  263  	int (*get_sregs)(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  264  	int (*set_sregs)(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  265  	int (*get_one_reg)(struct kvm_vcpu *vcpu, u64 id,
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  266  			   union kvmppc_one_reg *val);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  267  	int (*set_one_reg)(struct kvm_vcpu *vcpu, u64 id,
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  268  			   union kvmppc_one_reg *val);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  269  	void (*vcpu_load)(struct kvm_vcpu *vcpu, int cpu);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  270  	void (*vcpu_put)(struct kvm_vcpu *vcpu);
-87a45e07a5abfec Nicholas Piggin      2019-10-02  271  	void (*inject_interrupt)(struct kvm_vcpu *vcpu, int vec, u64 srr1_flags);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  272  	void (*set_msr)(struct kvm_vcpu *vcpu, u64 msr);
-8c99d34578628b5 Tianjia Zhang        2020-04-27  273  	int (*vcpu_run)(struct kvm_vcpu *vcpu);
-ff030fdf5573226 Sean Christopherson  2019-12-18  274  	int (*vcpu_create)(struct kvm_vcpu *vcpu);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  275  	void (*vcpu_free)(struct kvm_vcpu *vcpu);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  276  	int (*check_requests)(struct kvm_vcpu *vcpu);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  277  	int (*get_dirty_log)(struct kvm *kvm, struct kvm_dirty_log *log);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  278  	void (*flush_memslot)(struct kvm *kvm, struct kvm_memory_slot *memslot);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  279  	int (*prepare_memory_region)(struct kvm *kvm,
-537a17b31493009 Sean Christopherson  2021-12-06  280  				     const struct kvm_memory_slot *old,
-537a17b31493009 Sean Christopherson  2021-12-06  281  				     struct kvm_memory_slot *new,
-82307e676f9d885 Sean Christopherson  2020-02-18  282  				     enum kvm_mr_change change);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  283  	void (*commit_memory_region)(struct kvm *kvm,
-537a17b31493009 Sean Christopherson  2021-12-06  284  				     struct kvm_memory_slot *old,
-f032b73459eed48 Bharata B Rao        2018-12-12  285  				     const struct kvm_memory_slot *new,
-f032b73459eed48 Bharata B Rao        2018-12-12  286  				     enum kvm_mr_change change);
-b1c5356e873cc4f Sean Christopherson  2021-04-01 @287  	bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4f Sean Christopherson  2021-04-01  288  	bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4f Sean Christopherson  2021-04-01  289  	bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4f Sean Christopherson  2021-04-01  290  	bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-e96c81ee89d80e1 Sean Christopherson  2020-02-18  291  	void (*free_memslot)(struct kvm_memory_slot *slot);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  292  	int (*init_vm)(struct kvm *kvm);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  293  	void (*destroy_vm)(struct kvm *kvm);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  294  	int (*get_smmu_info)(struct kvm *kvm, struct kvm_ppc_smmu_info *info);
-8c99d34578628b5 Tianjia Zhang        2020-04-27  295  	int (*emulate_op)(struct kvm_vcpu *vcpu,
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  296  			  unsigned int inst, int *advance);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  297  	int (*emulate_mtspr)(struct kvm_vcpu *vcpu, int sprn, ulong spr_val);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  298  	int (*emulate_mfspr)(struct kvm_vcpu *vcpu, int sprn, ulong *spr_val);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  299  	void (*fast_vcpu_kick)(struct kvm_vcpu *vcpu);
-67c48662e2b5539 Thomas Huth          2023-02-08  300  	int (*arch_vm_ioctl)(struct file *filp, unsigned int ioctl,
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  301  			     unsigned long arg);
-ae2113a4f1a6cd5 Paul Mackerras       2014-06-02  302  	int (*hcall_implemented)(unsigned long hcall);
-9576730d0e6e301 Suresh Warrier       2016-08-19  303  	int (*irq_bypass_add_producer)(struct irq_bypass_consumer *,
-9576730d0e6e301 Suresh Warrier       2016-08-19  304  				       struct irq_bypass_producer *);
-9576730d0e6e301 Suresh Warrier       2016-08-19  305  	void (*irq_bypass_del_producer)(struct irq_bypass_consumer *,
-9576730d0e6e301 Suresh Warrier       2016-08-19  306  					struct irq_bypass_producer *);
-c92701322711682 Paul Mackerras       2017-01-30  307  	int (*configure_mmu)(struct kvm *kvm, struct kvm_ppc_mmuv3_cfg *cfg);
-c92701322711682 Paul Mackerras       2017-01-30  308  	int (*get_rmmu_info)(struct kvm *kvm, struct kvm_ppc_rmmu_info *info);
-3c313524605a6af Paul Mackerras       2017-02-06  309  	int (*set_smt_mode)(struct kvm *kvm, unsigned long mode,
-3c313524605a6af Paul Mackerras       2017-02-06  310  			    unsigned long flags);
-2e6baa46b4ae785 Simon Guo            2018-05-21  311  	void (*giveup_ext)(struct kvm_vcpu *vcpu, ulong msr);
-aa069a996951f3e Paul Mackerras       2018-09-21  312  	int (*enable_nested)(struct kvm *kvm);
-dceadcf91b2e097 Suraj Jitindar Singh 2018-12-14  313  	int (*load_from_eaddr)(struct kvm_vcpu *vcpu, ulong *eaddr, void *ptr,
-dceadcf91b2e097 Suraj Jitindar Singh 2018-12-14  314  			       int size);
-dceadcf91b2e097 Suraj Jitindar Singh 2018-12-14  315  	int (*store_to_eaddr)(struct kvm_vcpu *vcpu, ulong *eaddr, void *ptr,
-dceadcf91b2e097 Suraj Jitindar Singh 2018-12-14  316  			      int size);
-9a5788c615f52f6 Paul Mackerras       2020-03-19  317  	int (*enable_svm)(struct kvm *kvm);
-22945688acd4d0e Bharata B Rao        2019-11-25  318  	int (*svm_off)(struct kvm *kvm);
-d9a47edabc4f948 Ravi Bangoria        2020-12-16  319  	int (*enable_dawr1)(struct kvm *kvm);
-a722076e947023a Fabiano Rosas        2021-02-05  320  	bool (*hash_v3_possible)(void);
-faf01aef0570757 Alexey Kardashevskiy 2022-01-11  321  	int (*create_vm_debugfs)(struct kvm *kvm);
-faf01aef0570757 Alexey Kardashevskiy 2022-01-11  322  	int (*create_vcpu_debugfs)(struct kvm_vcpu *vcpu, struct dentry *debugfs_dentry);
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  323  };
-3a167beac07cba5 Aneesh Kumar K.V     2013-10-07  324  
+dfefa35d9d9c31e Anup Patel 2022-01-18  322  
+dfefa35d9d9c31e Anup Patel 2022-01-18  323  static void aplic_init_hw_global(struct aplic_priv *priv)
+dfefa35d9d9c31e Anup Patel 2022-01-18  324  {
+dfefa35d9d9c31e Anup Patel 2022-01-18  325  	u32 val;
+dfefa35d9d9c31e Anup Patel 2022-01-18  326  #ifdef CONFIG_RISCV_M_MODE
+dfefa35d9d9c31e Anup Patel 2022-01-18  327  	u32 valH;
+dfefa35d9d9c31e Anup Patel 2022-01-18  328  
+dfefa35d9d9c31e Anup Patel 2022-01-18  329  	if (!priv->nr_idcs) {
+dfefa35d9d9c31e Anup Patel 2022-01-18  330  		val = priv->msicfg.base_ppn;
+dfefa35d9d9c31e Anup Patel 2022-01-18 @331  		valH = (priv->msicfg.base_ppn >> 32) &
+dfefa35d9d9c31e Anup Patel 2022-01-18  332  			APLIC_xMSICFGADDRH_BAPPN_MASK;
+dfefa35d9d9c31e Anup Patel 2022-01-18  333  		valH |= (priv->msicfg.lhxw & APLIC_xMSICFGADDRH_LHXW_MASK)
+dfefa35d9d9c31e Anup Patel 2022-01-18  334  			<< APLIC_xMSICFGADDRH_LHXW_SHIFT;
+dfefa35d9d9c31e Anup Patel 2022-01-18  335  		valH |= (priv->msicfg.hhxw & APLIC_xMSICFGADDRH_HHXW_MASK)
+dfefa35d9d9c31e Anup Patel 2022-01-18  336  			<< APLIC_xMSICFGADDRH_HHXW_SHIFT;
+dfefa35d9d9c31e Anup Patel 2022-01-18  337  		valH |= (priv->msicfg.lhxs & APLIC_xMSICFGADDRH_LHXS_MASK)
+dfefa35d9d9c31e Anup Patel 2022-01-18  338  			<< APLIC_xMSICFGADDRH_LHXS_SHIFT;
+dfefa35d9d9c31e Anup Patel 2022-01-18  339  		valH |= (priv->msicfg.hhxs & APLIC_xMSICFGADDRH_HHXS_MASK)
+dfefa35d9d9c31e Anup Patel 2022-01-18  340  			<< APLIC_xMSICFGADDRH_HHXS_SHIFT;
+dfefa35d9d9c31e Anup Patel 2022-01-18  341  		writel(val, priv->regs + APLIC_xMSICFGADDR);
+dfefa35d9d9c31e Anup Patel 2022-01-18  342  		writel(valH, priv->regs + APLIC_xMSICFGADDRH);
+dfefa35d9d9c31e Anup Patel 2022-01-18  343  	}
+dfefa35d9d9c31e Anup Patel 2022-01-18  344  #endif
+dfefa35d9d9c31e Anup Patel 2022-01-18  345  
+dfefa35d9d9c31e Anup Patel 2022-01-18  346  	/* Setup APLIC domaincfg register */
+dfefa35d9d9c31e Anup Patel 2022-01-18  347  	val = readl(priv->regs + APLIC_DOMAINCFG);
+dfefa35d9d9c31e Anup Patel 2022-01-18  348  	val |= APLIC_DOMAINCFG_IE;
+dfefa35d9d9c31e Anup Patel 2022-01-18  349  	if (!priv->nr_idcs)
+dfefa35d9d9c31e Anup Patel 2022-01-18  350  		val |= APLIC_DOMAINCFG_DM;
+dfefa35d9d9c31e Anup Patel 2022-01-18  351  	writel(val, priv->regs + APLIC_DOMAINCFG);
+dfefa35d9d9c31e Anup Patel 2022-01-18  352  	if (readl(priv->regs + APLIC_DOMAINCFG) != val)
+dfefa35d9d9c31e Anup Patel 2022-01-18  353  		pr_warn("%pfwP: unable to write 0x%x in domaincfg\n",
+dfefa35d9d9c31e Anup Patel 2022-01-18  354  			priv->fwnode, val);
+dfefa35d9d9c31e Anup Patel 2022-01-18  355  }
+dfefa35d9d9c31e Anup Patel 2022-01-18  356  
 
-:::::: The code at line 287 was first introduced by commit
-:::::: b1c5356e873cc4fcbb8f58965e0cd910f3ee37a9 KVM: PPC: Convert to the gfn-based MMU notifier callbacks
+:::::: The code at line 331 was first introduced by commit
+:::::: dfefa35d9d9c31eb256197a9e93c5d69288e3afc irqchip: Add RISC-V advanced PLIC driver
 
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+:::::: TO: Anup Patel <apatel@ventanamicro.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
 
 -- 
 0-DAY CI Kernel Test Service
