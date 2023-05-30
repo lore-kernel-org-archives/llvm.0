@@ -1,227 +1,280 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BD319924;
-	Tue, 30 May 2023 19:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B5621CE6;
+	Tue, 30 May 2023 20:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685473713; x=1717009713;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=C35Vkhl0AGVCS95ZbYWfUqOjXMnVsCJGtwi1oIahTBc=;
-  b=XDGH2E2nYDSpAmn9Bzgx7u5bAnXxEgq0r64FJrK9u0DTogBat4qr6iBJ
-   EFGsk8pSDZMbZC6tTeNGWZnx5vJAfCXwreDDa8cKheW+Ds4VxsMTJGyei
-   l352S6zZMYptBP8HTVuHBfVUqNWnUbI2Fr1ul+sRuQSxr8inb1HJo2ZUE
-   IM04VPIGeI71aUn61m7FaLWahtVsrk4ER9MwcT/MQh13fKTBmfAMsVNOt
-   VLl31Iy0BU2UblxI3w9/cOWBRPol0cNaD5pgfyVQNLuzFk3oCUPaKiYJK
-   DvtC6MLGoYsnNy6YVVub/tTCxkJUd9+hXtiQGZj8lD93cCmf7HcLWg/HH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="352519116"
+  t=1685480270; x=1717016270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9bNOXk/HVApVPX4X1SAT6PoKY5ux32Fki/nfbA/DCTk=;
+  b=LH4zwNsCEV/fApByIF5ByXYY4T7yuvpxPwQZFQ4+FGdiS5S+35BHf1gJ
+   6A+ReJqMRHwgpvlCP8Nc7k00A5nfbdsjePzsW+QfYDO1s4MQP06cg1ZK6
+   VcAJuo15OlFKQKMf2BvSkWxJm4yqUPPXyGLeGJmNtxzhzTclml46GVpAf
+   rI9miFARwdmV7gus+RuEE9AXhZiGE18e2ZPcDnSgoL343qWGmxXH5RR3W
+   sxxgzX99gcEAfCFX/uoyXovscmJ9smlZ3pmxbBZIyUAG3cRfIPmDU0rZV
+   qSxj4bXsY5/sCceRGgw6p3RKppLCT2s4SDtrwouUvZMdzCjh91IuRMATc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383306535"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="352519116"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 12:08:32 -0700
+   d="scan'208";a="383306535"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 13:57:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="771679891"
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="706588497"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="771679891"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 30 May 2023 12:08:32 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 12:08:32 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 12:08:31 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 12:08:31 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 30 May 2023 12:08:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DK9vmtNTCdYXStYyBePZfXC63ZcIFisEtoFGupE4XJEG6VJSo4AuJ+vk3D0cz0lGtPiLRVisNPyVw5bt1d0QFw9iJhdROvgPypa0jcwJNFfnUq8yEq0gDR9ADEudToucMKmwPB8N50eOO5+anQ8FOwvs6t0BbMtP8NgFoKI0zF/YK2G3OCwtI8VKem8hjWP54U4cfwV+p+2ocPDpAQ1jYzxGCECMZICd48qfHRaG4V+v0N0WY01m775/yfs39Vk8/c8mcvct/BsHxblBA1XkzrTNO1FQsnYfJhwXID/Mwdt16LPnnoj7JeMFClx1IO/w+iNfKymyJjGW6QAkYHjwYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C35Vkhl0AGVCS95ZbYWfUqOjXMnVsCJGtwi1oIahTBc=;
- b=gnnDkA9R1Wj+q0yXGx0sZYbCPhn77BcIIptr6IcAkchXN7Iw2ls132UfUIq47gGZ5ZE/19CZMPX1sx3LWAV/FJLpDAvVi+5KbwInKuUHMtuFJCsJSMe2cqk87i6z5NNaeCuLgYfsJWlzrAw6VrdkVZINvd4TlPFWTN61p622imSoDmW71oQUkFLRuO16UuQhjafy4u9Hz8pNGOaWsxqPFhE7/PdaI5Do8oUPJV5gi3td+QwvneZ0t7Gor+YRidZm4z4pKPS8eD0sDMq9rFbraF/fvuXBO9HawxynQz/nfcys+f0jNAvVa0B6MX1UTPPmhujwOGA1zTic56nA0/pxTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB2567.namprd11.prod.outlook.com (2603:10b6:a02:c5::32)
- by CY8PR11MB7361.namprd11.prod.outlook.com (2603:10b6:930:84::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 19:08:28 +0000
-Received: from BYAPR11MB2567.namprd11.prod.outlook.com
- ([fe80::8ec1:2f24:6309:c008]) by BYAPR11MB2567.namprd11.prod.outlook.com
- ([fe80::8ec1:2f24:6309:c008%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 19:08:28 +0000
-From: "Yang, Fei" <fei.yang@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, "jani.nikula@linux.intel.com"
-	<jani.nikula@linux.intel.com>, "joonas.lahtinen@linux.intel.com"
-	<joonas.lahtinen@linux.intel.com>, "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-	"tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>
-CC: "ndesaulniers@google.com" <ndesaulniers@google.com>, "Rix, Tom"
-	<trix@redhat.com>, "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>
-Subject: RE: [PATCH 2/2] drm/i915/gt: Fix parameter in
- gmch_ggtt_insert_{entries,page}()
-Thread-Topic: [PATCH 2/2] drm/i915/gt: Fix parameter in
- gmch_ggtt_insert_{entries,page}()
-Thread-Index: AQHZkyQdMixrfatcwE2NiKIrA7ApTa9zLTSQ
-Date: Tue, 30 May 2023 19:08:28 +0000
-Message-ID: <BYAPR11MB2567202F9CA1A2725F19BB639A4B9@BYAPR11MB2567.namprd11.prod.outlook.com>
-References: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
- <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-2-54501d598229@kernel.org>
-In-Reply-To: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-2-54501d598229@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB2567:EE_|CY8PR11MB7361:EE_
-x-ms-office365-filtering-correlation-id: 76fd5dde-1937-4053-3540-08db6141407e
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AoCdCrQPMA1otXBS90IpmICzIfCJ9o2Z61xbO//GRf3kS7xM9de2TB79gxi6iQV4/qv1z/ZWUZneH353yjLT5CD4l51xAKgejkgU1Sex4TgNNyc87hLbaexeJvEU99jAsIN+2uLREwWvXAE7/i7rMKfTwOu3QHoxoJMk+LX+dmTIkfGvRN4mKzo5OhLPRpsnnWox7mXb6A4kmOssyfv9EHwW7EkM4ZSJnfJK9sCcZx6uuUCmtpkgCXzBQKYbGdN90nkBfWyiZkqdEsB+DDwuP0I5sD/KxbIVTlTqL0oA9kf06pZ2HCBgAg62++jjEpJvKh2gcv5dhNrZ3AHiGs6RX9dpC9rKpzpwq3zj3vBV3Nf99DwzbT4DW5yyDBXmve0kuMRneco/IduRpO3t9i1wcG2RS1zNalNFEBK5qA7RhHRzzdPKybN4y0dsfZLLlxQq6L5tkxf2MnIN3UdG2N6x944CzL81Ujop48i3IcBAC+g9YmchYay1TKcu+hja04CTpEAMt16njfXSX/Cc6WDijBLcREQVLKPWUAd63JbQ53eXD6kfJ9SdI7+YPYL5B1cytbwyVevnlc9tNyIoMJVamr5W+4J/dMBUa+JKYKcEdh1DCdEswE/Ld/VuXzeb8fbJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2567.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199021)(71200400001)(478600001)(110136005)(54906003)(8676002)(5660300002)(8936002)(7416002)(52536014)(86362001)(2906002)(33656002)(38070700005)(4326008)(64756008)(122000001)(66556008)(66446008)(82960400001)(66946007)(76116006)(66476007)(316002)(55016003)(38100700002)(41300700001)(186003)(6506007)(9686003)(26005)(7696005)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dW9ZekFHTHpZazRnK084cE9zQjQ1YlJrSVBIVytXUDdZYlYyUUUzQVlxdGxp?=
- =?utf-8?B?dW5aNWVaU1JGa2lkR2FpV3lMY1lNcHNvak45TjhJaUFWOU9kRjhUOStmd3Bw?=
- =?utf-8?B?OG5hOXB3QlZYRUxOZjhFYkV1NFlXcmxvN2x2R3F1bnEvWEgzM3Z5WjNTMFZJ?=
- =?utf-8?B?R3cvTkVjQU1zZnFWRHpvQitqOWpDZU9PRS9mdzlOajNmOXpIcGVXT2Y1bDB3?=
- =?utf-8?B?MUJMVXhxUlhKMHFUS1h3Qmw2NFlhQ3dWWHBSOFFFdGFIQ1NIN0JZcTR4aUhD?=
- =?utf-8?B?Vmh0SjFDM2N1WXpvWEkwMHFvYVN2bUdIYWxpaWNybjFCbVZpSEU5SDVrWjZZ?=
- =?utf-8?B?WHpHUm1TelJ4bkNYMXk4K1A5UjB6bWREMkpRd3J0RVd0M1RxZGhiZE5SOTho?=
- =?utf-8?B?ZEhvN3RYbVlHaGtuM0JEWkFYY25FdStxUlZGN3ZsUCs1VVhJT25DR1pzTkJZ?=
- =?utf-8?B?WnlFamhlWEFmeTIwbk9pR09oTGVVUzNEM3BSanZ5MkNXVjFYSm9qbitrNHRw?=
- =?utf-8?B?ZU01ZUVFSy85Y1AwaElPYU01MEVtWmdqZ3hLWEZKekJsT01CT2R3THY0OElX?=
- =?utf-8?B?T2RvYmRLYjVqMTdxenlMSlA5SklkRy9mWHQySGZDdmVuZ1M4SWJoanQwekIx?=
- =?utf-8?B?dUlOeTM2TVAreCtsQXpyNUhiR0h4VlZaWEhoYUhBSWpHQlBKMldSVzlpM1Ax?=
- =?utf-8?B?V1dLa0FWNWxKRHNYRm5haDJ6R0dUTlppQkY2eXBIbzUza3JaVEg5MGRqOTVN?=
- =?utf-8?B?MGlVdEl2djdwVUNscXJrRGtqU21qNTFTK20zY3RlS2ZHUFZoZDZKdkNKYU1n?=
- =?utf-8?B?SzdJTW5vSVdrL1VFYXM5NDJEaUV2SlFtbi9WWDYvNld0THBaaDIwdzdNOVd5?=
- =?utf-8?B?cnRKVDg1ZGkyUllWejRFK3NBOE1Ob0tmek50anJBcVdBempXei9RVWwzQXZr?=
- =?utf-8?B?L1FYTU9TWmVPMmlYWVFxYnl1dHNBMTFIY3BMNENnTENENVZrWjh1T1dCV2o2?=
- =?utf-8?B?WE9oYXRMNXN2VjZGTC9pTVJJdElhN1BCT0ZWSGsxK2loaEVnZk5URnZ4YTFR?=
- =?utf-8?B?VFBqdUpXSEVPNDFlY2dneU1aTk1rZUpzQkhFVnFsQUVHVXRyV0dOS1JVMDJj?=
- =?utf-8?B?Z0RvM2xWUFNqMk5QRXpFcVVEaGtaZ0NCdmZUd3NRRzIvK1J0YWFVcDFtUDd5?=
- =?utf-8?B?dENNT0s5MkRHRG16OVBNQlFSK3g0eld6clJNZ1FqOW41NkFvcXhMMkIySENH?=
- =?utf-8?B?TXRCakl2bDRlcmdMMzBodWZLMDBUdnhaUDRtbGFRbDc2Q2M4ZldxQWw1M2tC?=
- =?utf-8?B?WHFNV2hSL1FrQklKaEV5eklZWlFRVG5CUjNuSFZudDFEa3dJdDUzQXFTRzd2?=
- =?utf-8?B?Njd4Nkg3Y0lIQ1BxUTBBOU9ZdUlVQ2YvbUhCamY3amZxbGZnSmJha2FBb2dW?=
- =?utf-8?B?NVYxbTJoYlIvbUlJRGppdTdJVVFEOTE0ZnVxR0VCOHY0NHREUnpLbTB4VCt2?=
- =?utf-8?B?ZVF6Zzd5ZFlRNkkwTUh0Z3RxUmJSbFY0cEZ6NzROeE50dHRycVF0aEc5MTRt?=
- =?utf-8?B?YVB3TkxoeFc1czJiVkNQRDJYSWljb1V3U1lNTTY3U2ZpakRZcytPcDluaVEw?=
- =?utf-8?B?WFd4TWhPWmZKQ0Uwck1VNy9DVFFkeGN2d0k5NnhVdkhDZDgxeitKVFptUkV2?=
- =?utf-8?B?M2VjdEdRaVZxc0cyMHlyYk1aR1YwdmZHblg2QldEQkd2aUxLbFVhVUNudkRt?=
- =?utf-8?B?d0pRandEdlZCM1pEWlFOam5rTGtpb3VVQjN1V3BwLzlUVkNGVmhWc09YYTdN?=
- =?utf-8?B?MDhJRkVCSTFySUlSdFlTU1NUcm5nMUJpMUJzZTB0Nkk5azJpanZxTUpraXpB?=
- =?utf-8?B?ZHc5NlhTSTh3dFFMVmhkakIzbXlQelhoNFJGWjlIQzBKVWdwVCtNQVoydjZR?=
- =?utf-8?B?LzhISHllOW1FYnFxTktCcXMrYkZkNlRud0g1b0xFRFc2amlyZVh0YndGTXZh?=
- =?utf-8?B?OWNsQnY1cURXMWxYZXVNRHlxdkgwQ3lrNEdBbXJweXhFbHZCei9zUmVGc2JJ?=
- =?utf-8?B?THlXVmNpSkxxd1pHRk8wcklvR0lmMW1zQ1RkNktJU0k0UlBjN0dUVTVseVNW?=
- =?utf-8?Q?+R50=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="706588497"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 30 May 2023 13:57:43 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q46PX-0000o3-2E;
+	Tue, 30 May 2023 20:57:43 +0000
+Date: Wed, 31 May 2023 04:56:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tommaso Merciai <tomm.merciai@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+	martin.hecht@avnet.eu, linuxfancy@googlegroups.com,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Shawn Tu <shawnx.tu@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
+Message-ID: <202305310436.Hwvw8IB9-lkp@intel.com>
+References: <20230526173955.797226-3-tomm.merciai@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2567.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76fd5dde-1937-4053-3540-08db6141407e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2023 19:08:28.5253
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h3riaFIChODspc7MIlA6bJWRJc76HRYjvErOfAwXuuttBkBv+cJGqdGNLpFfCD+7SdihL/MY1v8uUDhCTHykew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7361
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526173955.797226-3-tomm.merciai@gmail.com>
 
-PiBTdWJqZWN0OiBbUEFUQ0ggMi8yXSBkcm0vaTkxNS9ndDogRml4IHBhcmFtZXRlciBpbiBnbWNo
-X2dndHRfaW5zZXJ0X3tlbnRyaWVzLHBhZ2V9KCkNCj4NCj4gV2hlbiBidWlsZGluZyB3aXRoIGNs
-YW5nJ3MgLVdpbmNvbXBhdGlibGUtZnVuY3Rpb24tcG9pbnRlci10eXBlcy1zdHJpY3QsDQo+IHRo
-ZSBmb2xsb3dpbmcgd2FybmluZ3Mgb2NjdXI6DQo+DQo+ICAgZHJpdmVycy9ncHUvZHJtL2k5MTUv
-Z3QvaW50ZWxfZ2d0dF9nbWNoLmM6MTAyOjIzOiBlcnJvcjogaW5jb21wYXRpYmxlIGZ1bmN0aW9u
-IHBvaW50ZXIgdHlwZXMgYXNzaWduaW5nIHRvICd2b2lkICgqKShzdHJ1Y3QgaTkxNV9hZGRyZXNz
-X3NwYWNlICosIGRtYV9hZGRyX3QsIHU2NCwgdW5zaWduZWQgaW50LCB1MzIpJyAoYWthICd2b2lk
-ICgqKShzdHJ1Y3QgaTkxNV9hZGRyZXNzX3NwYWNlICosIHVuc2lnbmVkIGludCwgdW5zaWduZWQg
-bG9uZyBsb25nLCB1bnNpZ25lZCBpbnQsIHVuc2lnbmVkIGludCknKSBmcm9tICd2b2lkIChzdHJ1
-Y3QgaTkxNV9hZGRyZXNzX3NwYWNlICosIGRtYV9hZGRyX3QsIHU2NCwgZW51bSBpOTE1X2NhY2hl
-X2xldmVsLCB1MzIpJyAoYWthICd2b2lkIChzdHJ1Y3QgaTkxNV9hZGRyZXNzX3NwYWNlICosIHVu
-c2lnbmVkIGludCwgdW5zaWduZWQgbG9uZyBsb25nLCBlbnVtIGk5MTVfY2FjaGVfbGV2ZWwsIHVu
-c2lnbmVkIGludCknKSBbLVdlcnJvciwtV2luY29tcGF0aWJsZS1mdW5jdGlvbi1wb2ludGVyLXR5
-cGVzLXN0cmljdF0NCj4gICAgICAgICAgIGdndHQtPnZtLmluc2VydF9wYWdlID0gZ21jaF9nZ3R0
-X2luc2VydF9wYWdlOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXiB+fn5+fn5+
-fn5+fn5+fn5+fn5+fn4NCj4gICBkcml2ZXJzL2dwdS9kcm0vaTkxNS9ndC9pbnRlbF9nZ3R0X2dt
-Y2guYzoxMDM6MjY6IGVycm9yOiBpbmNvbXBhdGlibGUgZnVuY3Rpb24gcG9pbnRlciB0eXBlcyBh
-c3NpZ25pbmcgdG8gJ3ZvaWQgKCopKHN0cnVjdCBpOTE1X2FkZHJlc3Nfc3BhY2UgKiwgc3RydWN0
-IGk5MTVfdm1hX3Jlc291cmNlICosIHVuc2lnbmVkIGludCwgdTMyKScgKGFrYSAndm9pZCAoKiko
-c3RydWN0IGk5MTVfYWRkcmVzc19zcGFjZSAqLCBzdHJ1Y3QgaTkxNV92bWFfcmVzb3VyY2UgKiwg
-dW5zaWduZWQgaW50LCB1bnNpZ25lZCBpbnQpJykgZnJvbSAndm9pZCAoc3RydWN0IGk5MTVfYWRk
-cmVzc19zcGFjZSAqLCBzdHJ1Y3QgaTkxNV92bWFfcmVzb3VyY2UgKiwgZW51bSBpOTE1X2NhY2hl
-X2xldmVsLCB1MzIpJyAoYWthICd2b2lkIChzdHJ1Y3QgaTkxNV9hZGRyZXNzX3NwYWNlICosIHN0
-cnVjdCBpOTE1X3ZtYV9yZXNvdXJjZSAqLCBlbnVtIGk5MTVfY2FjaGVfbGV2ZWwsIHVuc2lnbmVk
-IGludCknKSBbLVdlcnJvciwgLVdpbmNvbXBhdGlibGUtZnVuY3Rpb24tcG9pbnRlci10eXBlcy1z
-dHJpY3RdDQo+ICAgICAgICAgICBnZ3R0LT52bS5pbnNlcnRfZW50cmllcyA9IGdtY2hfZ2d0dF9p
-bnNlcnRfZW50cmllczsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4gfn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+ICAgMiBlcnJvcnMgZ2VuZXJhdGVkLg0KPg0KPiBUaGUg
-d2FybmluZyBpcyBwb2ludGluZyBvdXQgdGhhdCB3aGlsZSAnZW51bSBpOTE1X2NhY2hlX2xldmVs
-JyBhbmQgJ3Vuc2lnbmVkIGludCcgYXJlIEFCSSBjb21wYXRpYmxlLCB0aGVzZSBpbmRpcmVjdCBj
-YWxscyB3aWxsIGZhaWwgY2xhbmcncyBrZXJuZWwgQ29udHJvbCBGbG93IEludGVncml0eSAoa0NG
-SSkgY2hlY2tzLCBhcyB0aGUgY2FsbGJhY2sncyBzaWduYXR1cmUgZG9lcyBub3QgZXhhY3RseSBt
-YXRjaCB0aGUgcHJvdG90eXBlJ3Mgc2lnbmF0dXJlLg0KPg0KPiBUbyBmaXggdGhpcywgcmVwbGFj
-ZSB0aGUgY2FjaGVfbGV2ZWwgcGFyYW1ldGVyIHdpdGggcGF0X2luZGV4LCBhcyB3YXMgZG9uZSBp
-biBvdGhlciBwbGFjZXMgd2l0aGluIGk5MTUgd2hlcmUgdGhlcmUgaXMgbm8gZGlmZmVyZW5jZSBi
-ZXR3ZWVuIGNhY2hlX2xldmVsIGFuZCBwYXRfaW5kZXggb24gY2VydGFpbiBnZW5lcmF0aW9ucy4N
-Cj4NCj4gRml4ZXM6IDkyNzUyNzdkNTMyNCAoImRybS9pOTE1OiB1c2UgcGF0X2luZGV4IGluc3Rl
-YWQgb2YgY2FjaGVfbGV2ZWwiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBOYXRoYW4gQ2hhbmNlbGxvciA8
-bmF0aGFuQGtlcm5lbC5vcmc+DQoNClJldmlld2VkLWJ5OiBGZWkgWWFuZyA8ZmVpLnlhbmdAaW50
-ZWwuY29tPg0KDQo+IC0tLQ0KPiAgZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3QvaW50ZWxfZ2d0dF9n
-bWNoLmMgfCA4ICsrKystLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0
-IGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Qv
-aW50ZWxfZ2d0dF9nbWNoLmMgYi9kcml2ZXJzL2dwdS9kcm0vaTkxNS9ndC9pbnRlbF9nZ3R0X2dt
-Y2guYw0KPiBpbmRleCBkNmE3NGFlMjUyN2IuLjg2NmM0MTZhZmI3MyAxMDA2NDQNCj4gLS0tIGEv
-ZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3QvaW50ZWxfZ2d0dF9nbWNoLmMNCj4gKysrIGIvZHJpdmVy
-cy9ncHUvZHJtL2k5MTUvZ3QvaW50ZWxfZ2d0dF9nbWNoLmMNCj4gQEAgLTE4LDEwICsxOCwxMCBA
-QA0KPiAgc3RhdGljIHZvaWQgZ21jaF9nZ3R0X2luc2VydF9wYWdlKHN0cnVjdCBpOTE1X2FkZHJl
-c3Nfc3BhY2UgKnZtLA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRtYV9hZGRy
-X3QgYWRkciwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1NjQgb2Zmc2V0LA0K
-PiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVudW0gaTkxNV9jYWNoZV9sZXZlbCBj
-YWNoZV9sZXZlbCwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1bnNpZ25lZCBp
-bnQgcGF0X2luZGV4LA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHUzMiB1bnVz
-ZWQpDQo+ICB7DQo+IC0gICAgIHVuc2lnbmVkIGludCBmbGFncyA9IChjYWNoZV9sZXZlbCA9PSBJ
-OTE1X0NBQ0hFX05PTkUpID8NCj4gKyAgICAgdW5zaWduZWQgaW50IGZsYWdzID0gKHBhdF9pbmRl
-eCA9PSBJOTE1X0NBQ0hFX05PTkUpID8NCj4gICAgICAgICAgICAgICBBR1BfVVNFUl9NRU1PUlkg
-OiBBR1BfVVNFUl9DQUNIRURfTUVNT1JZOw0KPg0KPiAgICAgICBpbnRlbF9nbWNoX2d0dF9pbnNl
-cnRfcGFnZShhZGRyLCBvZmZzZXQgPj4gUEFHRV9TSElGVCwgZmxhZ3MpOyBAQCAtMjksMTAgKzI5
-LDEwIEBAIHN0YXRpYyB2b2lkIGdtY2hfZ2d0dF9pbnNlcnRfcGFnZShzdHJ1Y3QgaTkxNV9hZGRy
-ZXNzX3NwYWNlICp2bSwNCj4NCj4gIHN0YXRpYyB2b2lkIGdtY2hfZ2d0dF9pbnNlcnRfZW50cmll
-cyhzdHJ1Y3QgaTkxNV9hZGRyZXNzX3NwYWNlICp2bSwNCj4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBzdHJ1Y3QgaTkxNV92bWFfcmVzb3VyY2UgKnZtYV9yZXMsDQo+IC0gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZW51bSBpOTE1X2NhY2hlX2xldmVsIGNhY2hl
-X2xldmVsLA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGlu
-dCBwYXRfaW5kZXgsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdTMyIHVu
-dXNlZCkNCj4gIHsNCj4gLSAgICAgdW5zaWduZWQgaW50IGZsYWdzID0gKGNhY2hlX2xldmVsID09
-IEk5MTVfQ0FDSEVfTk9ORSkgPw0KPiArICAgICB1bnNpZ25lZCBpbnQgZmxhZ3MgPSAocGF0X2lu
-ZGV4ID09IEk5MTVfQ0FDSEVfTk9ORSkgPw0KPiAgICAgICAgICAgICAgIEFHUF9VU0VSX01FTU9S
-WSA6IEFHUF9VU0VSX0NBQ0hFRF9NRU1PUlk7DQo+DQo+ICAgICAgIGludGVsX2dtY2hfZ3R0X2lu
-c2VydF9zZ19lbnRyaWVzKHZtYV9yZXMtPmJpLnBhZ2VzLCB2bWFfcmVzLT5zdGFydCA+PiBQQUdF
-X1NISUZULA0KPg0KPiAtLQ0KPiAyLjQwLjENCg==
+Hi Tommaso,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v6.4-rc4 next-20230530]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/media-dt-bindings-alvium-add-document-YAML-binding/20230527-014222
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230526173955.797226-3-tomm.merciai%40gmail.com
+patch subject: [PATCH v2 2/2] media: i2c: Add support for alvium camera
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230531/202305310436.Hwvw8IB9-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0777ad1510dd41fdb7f183ade7607af6b2fe36a8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tommaso-Merciai/media-dt-bindings-alvium-add-document-YAML-binding/20230527-014222
+        git checkout 0777ad1510dd41fdb7f183ade7607af6b2fe36a8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/i2c/ fs/xfs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305310436.Hwvw8IB9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/i2c/alvium.c:559:6: warning: no previous prototype for function 'alvium_print_avail_mipi_fmt' [-Wmissing-prototypes]
+   void alvium_print_avail_mipi_fmt(struct alvium_dev *alvium)
+        ^
+   drivers/media/i2c/alvium.c:559:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void alvium_print_avail_mipi_fmt(struct alvium_dev *alvium)
+   ^
+   static 
+>> drivers/media/i2c/alvium.c:603:6: warning: no previous prototype for function 'alvium_print_avail_feat' [-Wmissing-prototypes]
+   void alvium_print_avail_feat(struct alvium_dev *alvium)
+        ^
+   drivers/media/i2c/alvium.c:603:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void alvium_print_avail_feat(struct alvium_dev *alvium)
+   ^
+   static 
+>> drivers/media/i2c/alvium.c:647:6: warning: no previous prototype for function 'alvium_print_avail_bayer' [-Wmissing-prototypes]
+   void alvium_print_avail_bayer(struct alvium_dev *alvium)
+        ^
+   drivers/media/i2c/alvium.c:647:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void alvium_print_avail_bayer(struct alvium_dev *alvium)
+   ^
+   static 
+>> drivers/media/i2c/alvium.c:1957:2: warning: switch condition has boolean value [-Wswitch-bool]
+           switch (on) {
+           ^       ~~
+   drivers/media/i2c/alvium.c:2040:2: warning: switch condition has boolean value [-Wswitch-bool]
+           switch (on) {
+           ^       ~~
+   drivers/media/i2c/alvium.c:2099:2: warning: switch condition has boolean value [-Wswitch-bool]
+           switch (on) {
+           ^       ~~
+   drivers/media/i2c/alvium.c:2228:2: warning: switch condition has boolean value [-Wswitch-bool]
+           switch (on) {
+           ^       ~~
+   drivers/media/i2c/alvium.c:2303:7: warning: variable 'red_max' set but not used [-Wunused-but-set-variable]
+                   u64 red_max;
+                       ^
+   drivers/media/i2c/alvium.c:2304:7: warning: variable 'red_min' set but not used [-Wunused-but-set-variable]
+                   u64 red_min;
+                       ^
+   drivers/media/i2c/alvium.c:2305:7: warning: variable 'blue_max' set but not used [-Wunused-but-set-variable]
+                   u64 blue_max;
+                       ^
+   drivers/media/i2c/alvium.c:2306:7: warning: variable 'blue_min' set but not used [-Wunused-but-set-variable]
+                   u64 blue_min;
+                       ^
+   drivers/media/i2c/alvium.c:2721:14: warning: variable 'min_fr' set but not used [-Wunused-but-set-variable]
+           u64 req_fr, min_fr, max_fr;
+                       ^
+   drivers/media/i2c/alvium.c:2721:22: warning: variable 'max_fr' set but not used [-Wunused-but-set-variable]
+           u64 req_fr, min_fr, max_fr;
+                               ^
+>> drivers/media/i2c/alvium.c:2788:6: warning: variable 'num_formats' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (alvium_is_csi2(alvium)) {
+               ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/alvium.c:2793:21: note: uninitialized use occurs here
+           if (code->index >= num_formats)
+                              ^~~~~~~~~~~
+   drivers/media/i2c/alvium.c:2788:2: note: remove the 'if' if its condition is always true
+           if (alvium_is_csi2(alvium)) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/alvium.c:2786:26: note: initialize the variable 'num_formats' to silence this warning
+           unsigned int num_formats;
+                                   ^
+                                    = 0
+   drivers/media/i2c/alvium.c:2943:26: warning: variable 'crop' set but not used [-Wunused-but-set-variable]
+           const struct v4l2_rect *crop;
+                                   ^
+   15 warnings generated.
+
+
+vim +/alvium_print_avail_mipi_fmt +559 drivers/media/i2c/alvium.c
+
+   558	
+ > 559	void alvium_print_avail_mipi_fmt(struct alvium_dev *alvium)
+   560	{
+   561		struct device *dev = &alvium->i2c_client->dev;
+   562	
+   563		dev_dbg(dev, "avail mipi_fmt yuv420_8_leg: %u\n",
+   564			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_8_LEG]);
+   565		dev_dbg(dev, "avail mipi_fmt yuv420_8: %u\n",
+   566			   alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_8]);
+   567		dev_dbg(dev, "avail mipi_fmt yuv420_10: %u\n",
+   568			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_10]);
+   569		dev_dbg(dev, "avail mipi_fmt yuv420_8_csps: %u\n",
+   570			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_8_CSPS]);
+   571		dev_dbg(dev, "avail mipi_fmt yuv420_10_csps: %u\n",
+   572			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_10_CSPS]);
+   573		dev_dbg(dev, "avail mipi_fmt yuv422_8: %u\n",
+   574			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV422_8]);
+   575		dev_dbg(dev, "avail mipi_fmt yuv422_10: %u\n",
+   576			   alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV422_10]);
+   577		dev_dbg(dev, "avail mipi_fmt rgb888: %u\n",
+   578			   alvium->is_mipi_fmt_avail[ALVIUM_BIT_RGB888]);
+   579		dev_dbg(dev, "avail mipi_fmt rgb666: %u\n",
+   580			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RGB666]);
+   581		dev_dbg(dev, "avail mipi_fmt rgb565: %u\n",
+   582			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RGB565]);
+   583		dev_dbg(dev, "avail mipi_fmt rgb555: %u\n",
+   584			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RGB555]);
+   585		dev_dbg(dev, "avail mipi_fmt rgb444: %u\n",
+   586			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RGB444]);
+   587		dev_dbg(dev, "avail mipi_fmt raw6: %u\n",
+   588			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW6]);
+   589		dev_dbg(dev, "avail mipi_fmt raw7: %u\n",
+   590			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW7]);
+   591		dev_dbg(dev, "avail mipi_fmt raw8: %u\n",
+   592			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW8]);
+   593		dev_dbg(dev, "avail mipi_fmt raw10: %u\n",
+   594			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW10]);
+   595		dev_dbg(dev, "avail mipi_fmt raw12: %u\n",
+   596			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW12]);
+   597		dev_dbg(dev, "avail mipi_fmt raw14: %u\n",
+   598			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_RAW14]);
+   599		dev_dbg(dev, "avail mipi_fmt jpeg: %u\n",
+   600			  alvium->is_mipi_fmt_avail[ALVIUM_BIT_JPEG]);
+   601	}
+   602	
+ > 603	void alvium_print_avail_feat(struct alvium_dev *alvium)
+   604	{
+   605		struct device *dev = &alvium->i2c_client->dev;
+   606	
+   607		dev_dbg(dev, "feature rev_x: %u\n",
+   608			  alvium->avail_ft.rev_x);
+   609		dev_dbg(dev, "feature rev_y: %u\n",
+   610			  alvium->avail_ft.rev_y);
+   611		dev_dbg(dev, "feature int_autop: %u\n",
+   612			  alvium->avail_ft.int_autop);
+   613		dev_dbg(dev, "feature black_lvl: %u\n",
+   614			  alvium->avail_ft.black_lvl);
+   615		dev_dbg(dev, "feature gain: %u\n",
+   616			  alvium->avail_ft.gain);
+   617		dev_dbg(dev, "feature gamma: %u\n",
+   618			  alvium->avail_ft.gamma);
+   619		dev_dbg(dev, "feature contrast: %u\n",
+   620			  alvium->avail_ft.contrast);
+   621		dev_dbg(dev, "feature sat: %u\n",
+   622			  alvium->avail_ft.sat);
+   623		dev_dbg(dev, "feature hue: %u\n",
+   624			  alvium->avail_ft.hue);
+   625		dev_dbg(dev, "feature whiteb: %u\n",
+   626			  alvium->avail_ft.whiteb);
+   627		dev_dbg(dev, "feature sharp: %u\n",
+   628			  alvium->avail_ft.sharp);
+   629		dev_dbg(dev, "feature auto_exp: %u\n",
+   630			  alvium->avail_ft.auto_exp);
+   631		dev_dbg(dev, "feature auto_gain: %u\n",
+   632			  alvium->avail_ft.auto_gain);
+   633		dev_dbg(dev, "feature auto_whiteb: %u\n",
+   634			  alvium->avail_ft.auto_whiteb);
+   635		dev_dbg(dev, "feature dev_temp: %u\n",
+   636			  alvium->avail_ft.dev_temp);
+   637		dev_dbg(dev, "feature acq_abort: %u\n",
+   638			  alvium->avail_ft.acq_abort);
+   639		dev_dbg(dev, "feature acq_fr: %u\n",
+   640			  alvium->avail_ft.acq_fr);
+   641		dev_dbg(dev, "feature fr_trigger: %u\n",
+   642			  alvium->avail_ft.fr_trigger);
+   643		dev_dbg(dev, "feature exp_acq_line: %u\n",
+   644			  alvium->avail_ft.exp_acq_line);
+   645	}
+   646	
+ > 647	void alvium_print_avail_bayer(struct alvium_dev *alvium)
+   648	{
+   649		struct device *dev = &alvium->i2c_client->dev;
+   650	
+   651		dev_dbg(dev, "avail bayer mono: %u\n",
+   652			  alvium->is_bay_avail[ALVIUM_BIT_BAY_MONO]);
+   653		dev_dbg(dev, "avail bayer gr: %u\n",
+   654			  alvium->is_bay_avail[ALVIUM_BIT_BAY_GR]);
+   655		dev_dbg(dev, "avail bayer rg: %u\n",
+   656			  alvium->is_bay_avail[ALVIUM_BIT_BAY_RG]);
+   657		dev_dbg(dev, "avail bayer gb: %u\n",
+   658			  alvium->is_bay_avail[ALVIUM_BIT_BAY_GB]);
+   659		dev_dbg(dev, "avail bayer bg: %u\n",
+   660			  alvium->is_bay_avail[ALVIUM_BIT_BAY_BG]);
+   661	}
+   662	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
