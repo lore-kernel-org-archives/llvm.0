@@ -1,108 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E219C1EA76;
-	Tue, 30 May 2023 18:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E97C4339B;
-	Tue, 30 May 2023 18:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685471111;
-	bh=VmL0B498WZtZEUKPXA6hoQdYba2NyQU/o+jprbyH8AU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZJyXV66AvjE0t107ogjn5M3q9TiuL4akjPneuMN4PzDvea2O5DLNWg+M1BvZYXxfE
-	 fNqx3lkAcJxjnh2KzW+hxNt87zhUIJn0M+ZDkjjbPlPbVgEOXCno/AjQRB2T/npJiw
-	 zIuLMsl9BNFUFHorFBi50z1LuRE3t6aewzGg69jPebh0ZSM4mVH4U7rNsEwoup002S
-	 nDWiHbPbYgzyY0ox0c2HMBOfjOU7BLm12GS9LRi+u6JucA3lmwLqzindsXunipBayN
-	 i7UeEcJVO8m1wvUTDvld0366kRUa5ZqBd994+RrEGjeliuv+0Yqm9zU5uosCpYMhLS
-	 zVZsQm4N0j6mg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 30 May 2023 11:24:39 -0700
-Subject: [PATCH 2/2] drm/i915/gt: Fix parameter in
- gmch_ggtt_insert_{entries,page}()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0642819924;
+	Tue, 30 May 2023 18:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685472848; x=1717008848;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0kulKMLy7Yg0yE/BDh7sWLThl83dTtSuMe48DHfeets=;
+  b=IuL/bkgXQhAIh4IEZho/w9SWhQ+FaFChrwkMlTijfnPshTjOG85T5Qp6
+   cdl7aMFd/VsA9RgQMxh6AxQoNz9bbZGbE0XEqPGH34ms2443Pe8dYiBlT
+   3igrNBUAbhpV3+ZBGk9VUK5A4RUI7HL9EX8EOp8WmXLI0hoNpzgeCOb+z
+   PsEnynsasNCHBsPfq2j93zKLVb51pdW3dOgXRsoM3rGFwc5Uc/+VvL0qW
+   SyUAnOBFxUEr9z1kiOzG25EDVXlGX8zBs80hALvk28Fif6ew+mftDP4H1
+   10n2gJJLtboa0lRpV7sj5Ae08Th+xw8QjViYxsf9wJmmR5zfsU74hxkfs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="418504062"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="418504062"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 11:54:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="796381521"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="796381521"
+Received: from amyachev-mobl3.ccr.corp.intel.com (HELO intel.com) ([10.252.53.184])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 11:54:04 -0700
+Date: Tue, 30 May 2023 20:54:01 +0200
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	ndesaulniers@google.com, trix@redhat.com,
+	andi.shyti@linux.intel.com, fei.yang@intel.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 1/2] drm/i915/gt: Fix second parameter type of pre-gen8
+ pte_encode callbacks
+Message-ID: <ZHZGSbiIG3PNAfCQ@ashyti-mobl2.lan>
+References: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
+ <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-1-54501d598229@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-2-54501d598229@kernel.org>
-References: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
-In-Reply-To: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
-To: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com, 
- rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com
-Cc: ndesaulniers@google.com, trix@redhat.com, andi.shyti@linux.intel.com, 
- fei.yang@intel.com, intel-gfx@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3464; i=nathan@kernel.org;
- h=from:subject:message-id; bh=VmL0B498WZtZEUKPXA6hoQdYba2NyQU/o+jprbyH8AU=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCll9i3RLZy5js0hS9/IuoT8T9HZePeOQrLCzgOPPjzbE
- 3R6vaheRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIyFdGhk9l0+17TArOT9rW
- 2f1W60DKZbUfEXq2BqZKPeeMTywv+sTIMFWuxSj3+myRDPtf0w9b2ttvvLzeI+KGNU+wsZ9D7ZW
- NXAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-1-54501d598229@kernel.org>
 
-When building with clang's -Wincompatible-function-pointer-types-strict,
-the following warnings occur:
+Hi Nathan,
 
-  drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c:102:23: error: incompatible function pointer types assigning to 'void (*)(struct i915_address_space *, dma_addr_t, u64, unsigned int, u32)' (aka 'void (*)(struct i915_address_space *, unsigned int, unsigned long long, unsigned int, unsigned int)') from 'void (struct i915_address_space *, dma_addr_t, u64, enum i915_cache_level, u32)' (aka 'void (struct i915_address_space *, unsigned int, unsigned long long, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-          ggtt->vm.insert_page = gmch_ggtt_insert_page;
-                               ^ ~~~~~~~~~~~~~~~~~~~~~
-  drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c:103:26: error: incompatible function pointer types assigning to 'void (*)(struct i915_address_space *, struct i915_vma_resource *, unsigned int, u32)' (aka 'void (*)(struct i915_address_space *, struct i915_vma_resource *, unsigned int, unsigned int)') from 'void (struct i915_address_space *, struct i915_vma_resource *, enum i915_cache_level, u32)' (aka 'void (struct i915_address_space *, struct i915_vma_resource *, enum i915_cache_level, unsigned int)') [-Werror, -Wincompatible-function-pointer-types-strict]
-          ggtt->vm.insert_entries = gmch_ggtt_insert_entries;
-                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~
-  2 errors generated.
+On Tue, May 30, 2023 at 11:24:38AM -0700, Nathan Chancellor wrote:
+> When booting a kernel compiled with CONFIG_CFI_CLANG (kCFI), there is a
+> CFI failure in ggtt_probe_common() when trying to call hsw_pte_encode()
+> via an indirect call:
+> 
+>   [    5.030027] CFI failure at ggtt_probe_common+0xd1/0x130 [i915] (target: hsw_pte_encode+0x0/0x30 [i915]; expected type: 0xf5c1d0fc)
+> 
+> With kCFI, indirect calls are validated against their expected type
+> versus actual type and failures occur when the two types do not match.
+> 
+> clang's -Wincompatible-function-pointer-types-strict can catch this at
+> compile time but it is not enabled for the kernel yet:
+> 
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c:1155:23: error: incompatible function pointer types assigning to 'u64 (*)(dma_addr_t, unsigned int, u32)' (aka 'unsigned long long (*)(unsigned int, unsigned int, unsigned int)') from 'u64 (dma_addr_t,
+>   enum i915_cache_level, u32)' (aka 'unsigned long long (unsigned int, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>                   ggtt->vm.pte_encode = iris_pte_encode;
+>                                       ^ ~~~~~~~~~~~~~~~
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c:1157:23: error: incompatible function pointer types assigning to 'u64 (*)(dma_addr_t, unsigned int, u32)' (aka 'unsigned long long (*)(unsigned int, unsigned int, unsigned int)') from 'u64 (dma_addr_t,
+>   enum i915_cache_level, u32)' (aka 'unsigned long long (unsigned int, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>                   ggtt->vm.pte_encode = hsw_pte_encode;
+>                                       ^ ~~~~~~~~~~~~~~
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c:1159:23: error: incompatible function pointer types assigning to 'u64 (*)(dma_addr_t, unsigned int, u32)' (aka 'unsigned long long (*)(unsigned int, unsigned int, unsigned int)') from 'u64 (dma_addr_t,
+>   enum i915_cache_level, u32)' (aka 'unsigned long long (unsigned int, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>                   ggtt->vm.pte_encode = byt_pte_encode;
+>                                       ^ ~~~~~~~~~~~~~~
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c:1161:23: error: incompatible function pointer types assigning to 'u64 (*)(dma_addr_t, unsigned int, u32)' (aka 'unsigned long long (*)(unsigned int, unsigned int, unsigned int)') from 'u64 (dma_addr_t,
+>   enum i915_cache_level, u32)' (aka 'unsigned long long (unsigned int, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>                   ggtt->vm.pte_encode = ivb_pte_encode;
+>                                       ^ ~~~~~~~~~~~~~~
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c:1163:23: error: incompatible function pointer types assigning to 'u64 (*)(dma_addr_t, unsigned int, u32)' (aka 'unsigned long long (*)(unsigned int, unsigned int, unsigned int)') from 'u64 (dma_addr_t,
+>   enum i915_cache_level, u32)' (aka 'unsigned long long (unsigned int, enum i915_cache_level, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>                   ggtt->vm.pte_encode = snb_pte_encode;
+>                                       ^ ~~~~~~~~~~~~~~
+>   5 errors generated.
+> 
+> In this case, the pre-gen8 pte_encode functions have a second parameter
+> type of 'enum i915_cache_level' whereas the function pointer prototype
+> in 'struct i915_address_space' expects a second parameter type of
+> 'unsigned int'.
+> 
+> Update the second parameter of the callbacks and the comment above them
+> noting that these statements are still valid, which matches other
+> functions and files, to clear up the kCFI failures at run time.
+> 
+> Fixes: 9275277d5324 ("drm/i915: use pat_index instead of cache_level")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-The warning is pointing out that while 'enum i915_cache_level' and
-'unsigned int' are ABI compatible, these indirect calls will fail
-clang's kernel Control Flow Integrity (kCFI) checks, as the callback's
-signature does not exactly match the prototype's signature.
+That's correct!
 
-To fix this, replace the cache_level parameter with pat_index, as was
-done in other places within i915 where there is no difference between
-cache_level and pat_index on certain generations.
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
 
-Fixes: 9275277d5324 ("drm/i915: use pat_index instead of cache_level")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c b/drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c
-index d6a74ae2527b..866c416afb73 100644
---- a/drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c
-+++ b/drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c
-@@ -18,10 +18,10 @@
- static void gmch_ggtt_insert_page(struct i915_address_space *vm,
- 				  dma_addr_t addr,
- 				  u64 offset,
--				  enum i915_cache_level cache_level,
-+				  unsigned int pat_index,
- 				  u32 unused)
- {
--	unsigned int flags = (cache_level == I915_CACHE_NONE) ?
-+	unsigned int flags = (pat_index == I915_CACHE_NONE) ?
- 		AGP_USER_MEMORY : AGP_USER_CACHED_MEMORY;
- 
- 	intel_gmch_gtt_insert_page(addr, offset >> PAGE_SHIFT, flags);
-@@ -29,10 +29,10 @@ static void gmch_ggtt_insert_page(struct i915_address_space *vm,
- 
- static void gmch_ggtt_insert_entries(struct i915_address_space *vm,
- 				     struct i915_vma_resource *vma_res,
--				     enum i915_cache_level cache_level,
-+				     unsigned int pat_index,
- 				     u32 unused)
- {
--	unsigned int flags = (cache_level == I915_CACHE_NONE) ?
-+	unsigned int flags = (pat_index == I915_CACHE_NONE) ?
- 		AGP_USER_MEMORY : AGP_USER_CACHED_MEMORY;
- 
- 	intel_gmch_gtt_insert_sg_entries(vma_res->bi.pages, vma_res->start >> PAGE_SHIFT,
-
--- 
-2.40.1
-
+Thanks,
+Andi
