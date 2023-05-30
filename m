@@ -1,105 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F190D21076
-	for <llvm@lists.linux.dev>; Tue, 30 May 2023 14:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685456525;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IaNRJCmDjWU8/6DXmsxqc7rHWPn8lAenVzUVcNnxOjU=;
-	b=Sva+4y1B8HzZN1+lFooKT10XRE1u4wYxG7tXwmescDVh+dPKmkj/9FuNlTA6l9AvkTW6ZS
-	NTNDEZbB9vcLPDfoQgnhtZ7/2SQvQMvIZG6d1n59sE7WqgoqZa/jpkqSLhKLJ9/BtPmfD6
-	OWV1J36hAEia9gz02r8scVwGGmVadxk=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-cnXh-6gcNkKKBkjOnMJkHg-1; Tue, 30 May 2023 10:22:01 -0400
-X-MC-Unique: cnXh-6gcNkKKBkjOnMJkHg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f392b106b8so67555501cf.1
-        for <llvm@lists.linux.dev>; Tue, 30 May 2023 07:21:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685456517; x=1688048517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IaNRJCmDjWU8/6DXmsxqc7rHWPn8lAenVzUVcNnxOjU=;
-        b=XAWR2s2Gmw5Ml5JEkipcIbXzalk0zkxja12PYeWaWsWzzgAnJBPufDkhmm3GNUSrUI
-         ZtpoFajo63fTb4MD6aLBYaphxJ2TRmWze5TqKISbd5JfrXtOi/mpdlFxUHXEK5bSDfo+
-         5MULlNURNF5cy3dab4L15iPyJ4kbxXk78forvIdr1zSMmw88G3dXwOGwwy16jnjO9zJv
-         ADapstlVwpgnKl1UMFTc2tTr+fRFM+GqRLGXtqq6TgcaWj00SKRpVCuKgoHxef/jSwLj
-         8zun/41PbQyal+g3nc/MaH6+dfRYkgCpkDfu64sSEQ8V/LTRnDaNtDtbVJSO9LSvNO/0
-         /h+g==
-X-Gm-Message-State: AC+VfDzj2gGmmRXUywUmRjsDz1RaUq0gctZQCXG4RT4a83IaEoRoJZns
-	mV60Zi72o+wWxRLau1e2IZFSUC4Fjz+g/o/6ks2vo8m4ZaeqcMlG7qqL2wZcmHcWT3xiz4Tzw3n
-	zf6wUerMHJ45RQw==
-X-Received: by 2002:a05:622a:1787:b0:3f8:20a:1c6a with SMTP id s7-20020a05622a178700b003f8020a1c6amr1912804qtk.40.1685456517403;
-        Tue, 30 May 2023 07:21:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7yvPRFJ6QfVfk1/1OEdvl2Lu3bQMAfd0qtXiTSv1WBwMYtf1F4J8MySyj03BE8wXZx/eMRPw==
-X-Received: by 2002:a05:622a:1787:b0:3f8:20a:1c6a with SMTP id s7-20020a05622a178700b003f8020a1c6amr1912788qtk.40.1685456517195;
-        Tue, 30 May 2023 07:21:57 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i26-20020ac871da000000b003f394decd08sm4652992qtp.62.2023.05.30.07.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:21:56 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: clm@fb.com,
-	josef@toxicpanda.com,
-	dsterba@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] btrfs: remove unused variable pages_processed
-Date: Tue, 30 May 2023 10:21:54 -0400
-Message-Id: <20230530142154.3341677-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45AE17AD4
+	for <llvm@lists.linux.dev>; Tue, 30 May 2023 15:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA54C433D2;
+	Tue, 30 May 2023 15:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685460018;
+	bh=aLPX3PSOw/E88e7TFUeDuK2/gbHOlb5J/baDelX6riE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lmggXXhRMDcRxte+RzkEIylCRuhOKU1BlJz27xtHfjwU+4rHLMD7qDBmYm7w0MAp4
+	 6pY2GhpDXn0QpIwWL+1S4+RoiQ9/y8XIBWcQne/mgc+7dvTYn35wS8RgEwXN7CAInq
+	 k9VG5iVrgCVAKxfgG/ITWXLnQpZMccZ41UHEllLuOzixKnmnP2gbmJayQLJzNW8bRn
+	 6mPf74goHA42qkUMzr/8nVaOXP9iyWl+b5TrRQibKK9Rd+5Y5IbfadebHxJOIaeyD8
+	 yJBe63Otg1q67bgB14yO017SZnWNOl0B+s/pjsD1+mMAi4I0CamzTQ7nvKRyHZDzZ0
+	 Vf+q6wLQHjhJA==
+Date: Tue, 30 May 2023 08:20:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, hpa@zytor.com, ndesaulniers@google.com,
+	goldstein.w.n@gmail.com, x86@kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/csum: Move csum_tail result parameter to a local
+ variable.
+Message-ID: <20230530152016.GA3503416@dev-arch.thelio-3990X>
+References: <20230530135953.3341174-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530135953.3341174-1-trix@redhat.com>
 
-clang with W=1 reports
-fs/btrfs/extent_io.c:230:16: error: variable
-  'pages_processed' set but not used [-Werror,-Wunused-but-set-variable]
-        unsigned long pages_processed = 0;
-                      ^
-This variable is not used so remove it.
+Hi Tom,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/btrfs/extent_io.c | 2 --
- 1 file changed, 2 deletions(-)
+On Tue, May 30, 2023 at 09:59:53AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> arch/x86/lib/csum-partial_64.c:74:20: error: variable
+>   'result' is uninitialized when used here [-Werror,-Wuninitialized]
+>                 return csum_tail(result, temp64, odd);
+>                                  ^~~~~~
+> This is a false positive, but there is never an intermediate value
+> of result to pass into csum_trail, so move the parameter result to
+> a local variable.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 89e093ae1c33..6919409c1183 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -227,7 +227,6 @@ static void __process_pages_contig(struct address_space *mapping,
- 	pgoff_t start_index = start >> PAGE_SHIFT;
- 	pgoff_t end_index = end >> PAGE_SHIFT;
- 	pgoff_t index = start_index;
--	unsigned long pages_processed = 0;
- 	struct folio_batch fbatch;
- 	int i;
- 
-@@ -242,7 +241,6 @@ static void __process_pages_contig(struct address_space *mapping,
- 
- 			process_one_page(fs_info, &folio->page, locked_page,
- 					 page_ops, start, end);
--			pages_processed += folio_nr_pages(folio);
- 		}
- 		folio_batch_release(&fbatch);
- 		cond_resched();
--- 
-2.27.0
+Thanks for the patch. I sent the same one last Friday, which should be
+in your inbox:
 
+https://lore.kernel.org/20230526-csum_partial-wuninitialized-v1-1-ebc0108dcec1@kernel.org/
+
+Dave picked it up yesterday, I guess -tip's auto-latest was not
+refreshed for today's -next:
+
+https://git.kernel.org/tip/2fe1e67e6987b6f05329740da79c8150a2205b0d
+
+Cheers,
+Nathan
+
+> ---
+>  arch/x86/lib/csum-partial_64.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+> index fe5861951b15..cea25ca8b8cf 100644
+> --- a/arch/x86/lib/csum-partial_64.c
+> +++ b/arch/x86/lib/csum-partial_64.c
+> @@ -21,8 +21,10 @@ static inline unsigned short from32to16(unsigned a)
+>  	return b;
+>  }
+>  
+> -static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+> +static inline __wsum csum_tail(u64 temp64, int odd)
+>  {
+> +	unsigned int result;
+> +
+>  	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+>  	if (unlikely(odd)) {
+>  		result = from32to16(result);
+> @@ -45,7 +47,7 @@ static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+>  __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  {
+>  	u64 temp64 = (__force u64)sum;
+> -	unsigned odd, result;
+> +	unsigned odd;
+>  
+>  	odd = 1 & (unsigned long) buff;
+>  	if (unlikely(odd)) {
+> @@ -71,7 +73,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  		    "adcq $0,%[res]"
+>  		    : [res] "+r"(temp64)
+>  		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+> -		return csum_tail(result, temp64, odd);
+> +		return csum_tail(temp64, odd);
+>  	}
+>  	if (unlikely(len >= 64)) {
+>  		/*
+> @@ -141,7 +143,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  		    : [res] "+r"(temp64)
+>  		    : [trail] "r"(trail));
+>  	}
+> -	return csum_tail(result, temp64, odd);
+> +	return csum_tail(temp64, odd);
+>  }
+>  EXPORT_SYMBOL(csum_partial);
+>  
+> -- 
+> 2.27.0
+> 
