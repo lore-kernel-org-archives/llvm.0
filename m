@@ -1,153 +1,133 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C24817FE6;
-	Tue, 30 May 2023 11:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685447116; x=1716983116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N9gqQUcAzrA8qNhbodeR78gbdmMGM5+vNUxV7suCQAQ=;
-  b=FE5+vs0N6hYklh+MukFPk/UAKpcPYm9KQyZN7Zp71XNfw/tB9Vf3pvrS
-   8dqo8zKRnU7Mw9ea3tSe/tzFsmvT5OzHFsXS+HTpCN2ywzvNqmI3KoeTu
-   tOVA7PwFYlXosP0WKFQOyoBBo24HTkKvpWXR1Z/yMFop9GqcD9dYXViW6
-   zwkqWHKBtpb/SEut55UKla9ntZgLLoA/oJ6roBTMknpCeCoyWfdttedia
-   VbAUIA+QhB7dxK6F82EeXp5lxWvQRA7py8xKyiZLWxus6QoEMH/dLJuje
-   lIU7ccY+DqcYPNDqm4Iw7iyDHTk1g0X1VdHCtmuqXo/EOP7E8ofCe3ewC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="420649847"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="420649847"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 04:44:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="776299109"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="776299109"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 30 May 2023 04:44:53 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q3xmX-0000AO-0u;
-	Tue, 30 May 2023 11:44:53 +0000
-Date: Tue, 30 May 2023 19:44:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel
- memory as user memory
-Message-ID: <202305301907.KVm9YudP-lkp@intel.com>
-References: <20230530020133.235765-1-jarkko@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FC51993C
+	for <llvm@lists.linux.dev>; Tue, 30 May 2023 14:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685455199;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4RT388VnQCYZW3nYzowL+p8Lhxi1vKrwW2Bk6UlbFw4=;
+	b=eL50lmbu0V9YsFr4juQfNkwX2r9h01sufiFYpg+33uVpFzWfzF8ONaJnbRLpS/T4SJ7l8K
+	WEt15k/e+F36YOo6fz45lhqRKLdjiCBCJrnrJej3Bwp0bHKCYtJ46IBEJ8DWEtWkyPdhz3
+	fBHl4m1CJ2aCSsyipsRZR9Yc/NKBhx0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-581-ifJ-jz4EMrCQ0ldxRnZvZg-1; Tue, 30 May 2023 09:59:58 -0400
+X-MC-Unique: ifJ-jz4EMrCQ0ldxRnZvZg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b17aa340fso604653185a.3
+        for <llvm@lists.linux.dev>; Tue, 30 May 2023 06:59:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685455198; x=1688047198;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4RT388VnQCYZW3nYzowL+p8Lhxi1vKrwW2Bk6UlbFw4=;
+        b=NF1bmWDAcwA7lV8GHndMXnpa4716i77ISSi9nSZJYAHy2d9omg7cap8K8AqOfyfDc/
+         t4PGipbRCOtwHYRBVttLR43lAVZzbNkmCg+LkHMPrmJo2oLPCPeAHnRHQfiMBmXKzEiA
+         451NEHe2sgwP79GHNgQFxtq22QZKxvtp5kaZGVlGASCPjJHPHM3EoNqKX1VMfQM6u+Fx
+         +1qOCCJq0a4Z7G99A86AErEgVFXctwSUqgGaFn8rh7gbnk2ihxgZVa2Zf1TWtq0aKROH
+         8Jr39ThLVqwCzp0MbEd2YccPqmWaWUjWJG6Y49rumDXrh7E8d+VONa/+2Tdkp+1JmWBU
+         39RA==
+X-Gm-Message-State: AC+VfDyrV2YIe8iVbf2gh9rJVc33fdALudbhGQIXo8Tr3oMBTgjelA6a
+	JdrUQbkNiHqtprOSiO2hWSHO8/9uYhKr+vu9borwlka16kKqYz7Wc33vSiYHsb4A6WlzrT9dFLR
+	8b321cB+TA3LYWg==
+X-Received: by 2002:a05:620a:1b96:b0:75b:23a1:456 with SMTP id dv22-20020a05620a1b9600b0075b23a10456mr2095116qkb.28.1685455197830;
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4KhIBZdP1fPs6CXWxZOvyl5jXEFHI2OcLhwSX183uedbOKNfq0+qZi8wwa+CtWgI+VJcheRg==
+X-Received: by 2002:a05:620a:1b96:b0:75b:23a1:456 with SMTP id dv22-20020a05620a1b9600b0075b23a10456mr2095096qkb.28.1685455197619;
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0075cdad9648dsm2179295qki.25.2023.05.30.06.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	goldstein.w.n@gmail.com
+Cc: x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] x86/csum: Move csum_tail result parameter to a local variable.
+Date: Tue, 30 May 2023 09:59:53 -0400
+Message-Id: <20230530135953.3341174-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530020133.235765-1-jarkko@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Jarkko,
+clang with W=1 reports
+arch/x86/lib/csum-partial_64.c:74:20: error: variable
+  'result' is uninitialized when used here [-Werror,-Wuninitialized]
+                return csum_tail(result, temp64, odd);
+                                 ^~~~~~
+This is a false positive, but there is never an intermediate value
+of result to pass into csum_trail, so move the parameter result to
+a local variable.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ arch/x86/lib/csum-partial_64.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc4 next-20230530]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/tpm-tpm_vtpm_proxy-do-not-reference-kernel-memory-as-user-memory/20230530-100537
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20230530020133.235765-1-jarkko%40kernel.org
-patch subject: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel memory as user memory
-config: arm64-randconfig-r034-20230530 (https://download.01.org/0day-ci/archive/20230530/202305301907.KVm9YudP-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/919bd177830a9508a5a67fc17014cd10047d8c2f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jarkko-Sakkinen/tpm-tpm_vtpm_proxy-do-not-reference-kernel-memory-as-user-memory/20230530-100537
-        git checkout 919bd177830a9508a5a67fc17014cd10047d8c2f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/char/tpm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305301907.KVm9YudP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/char/tpm/tpm_vtpm_proxy.c:24:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
->> drivers/char/tpm/tpm_vtpm_proxy.c:77:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (buf)
-               ^~~
-   drivers/char/tpm/tpm_vtpm_proxy.c:83:7: note: uninitialized use occurs here
-           if (!rc)
-                ^~
-   drivers/char/tpm/tpm_vtpm_proxy.c:77:2: note: remove the 'if' if its condition is always true
-           if (buf)
-           ^~~~~~~~
-   drivers/char/tpm/tpm_vtpm_proxy.c:64:8: note: initialize the variable 'rc' to silence this warning
-           int rc;
-                 ^
-                  = 0
-   2 warnings generated.
-
-
-vim +77 drivers/char/tpm/tpm_vtpm_proxy.c
-
-    55	
-    56	/*
-    57	 * Functions related to 'server side'
-    58	 */
-    59	
-    60	static ssize_t __vtpm_proxy_read_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
-    61						  size_t count)
-    62	{
-    63		size_t len;
-    64		int rc;
-    65	
-    66		if (!(proxy_dev->state & STATE_OPENED_FLAG))
-    67			return -EPIPE;
-    68	
-    69		len = proxy_dev->req_len;
-    70	
-    71		if (count < len || len > sizeof(proxy_dev->buffer)) {
-    72			pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
-    73				 count, len);
-    74			return -EIO;
-    75		}
-    76	
-  > 77		if (buf)
-    78			rc = copy_to_user(buf, proxy_dev->buffer, len);
-    79	
-    80		memset(proxy_dev->buffer, 0, len);
-    81		proxy_dev->req_len = 0;
-    82	
-    83		if (!rc)
-    84			proxy_dev->state |= STATE_WAIT_RESPONSE_FLAG;
-    85	
-    86		if (rc)
-    87			return -EFAULT;
-    88	
-    89		return len;
-    90	}
-    91	
-
+diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+index fe5861951b15..cea25ca8b8cf 100644
+--- a/arch/x86/lib/csum-partial_64.c
++++ b/arch/x86/lib/csum-partial_64.c
+@@ -21,8 +21,10 @@ static inline unsigned short from32to16(unsigned a)
+ 	return b;
+ }
+ 
+-static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
++static inline __wsum csum_tail(u64 temp64, int odd)
+ {
++	unsigned int result;
++
+ 	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+ 	if (unlikely(odd)) {
+ 		result = from32to16(result);
+@@ -45,7 +47,7 @@ static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ {
+ 	u64 temp64 = (__force u64)sum;
+-	unsigned odd, result;
++	unsigned odd;
+ 
+ 	odd = 1 & (unsigned long) buff;
+ 	if (unlikely(odd)) {
+@@ -71,7 +73,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    "adcq $0,%[res]"
+ 		    : [res] "+r"(temp64)
+ 		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+-		return csum_tail(result, temp64, odd);
++		return csum_tail(temp64, odd);
+ 	}
+ 	if (unlikely(len >= 64)) {
+ 		/*
+@@ -141,7 +143,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    : [res] "+r"(temp64)
+ 		    : [trail] "r"(trail));
+ 	}
+-	return csum_tail(result, temp64, odd);
++	return csum_tail(temp64, odd);
+ }
+ EXPORT_SYMBOL(csum_partial);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.27.0
+
