@@ -1,232 +1,146 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC3FC8DC;
-	Mon, 29 May 2023 22:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685400708; x=1716936708;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E/YUwGh6QjdHb1tKBcFxLBX53uMnE8n6TNvJYJORbmY=;
-  b=j2MXlbwuqGloNlK8NdnmGB5uKnH/QXAJYjtdowqUnRyf74fM35isWhlZ
-   DofdeM1gDJ88OL7G1hqw5sXZvVIl1Jd/CeULTDOJpliwSOdK/bCnPX0j3
-   rnt5NGrq6y0iYiBpjWsksbJVvuYIQpGn701omPfcX37pNEiMUCQO9hEGS
-   Up50JYIkmF0Hdr7v8LCc8GENeuOvwzXzaxDdg1toJJM6EqmbZloi244i2
-   SEUW2UntySv+St36lrC8z+VO09FFNuVSKrjq6zC4Kahx/2yFCQ34tOizf
-   lJG1O+WjW3nWYQwlihrtFSn8w0YXEaLhc7JadoVbTAaJD38jAoJ4m81GT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="335129236"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="335129236"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 15:51:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="706193666"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="706193666"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 May 2023 15:51:44 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q3liJ-000LAG-2L;
-	Mon, 29 May 2023 22:51:43 +0000
-Date: Tue, 30 May 2023 06:51:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_timer_imp_v1 41/45]
- drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of
- type
-Message-ID: <202305300611.oM1vfXbw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B76636
+	for <llvm@lists.linux.dev>; Tue, 30 May 2023 00:51:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685407868;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GrGdeI9PKBVjg0m1h5Aed9C48snML5clXDfeamIaejI=;
+	b=IrKU/oc7h6YCFHnT0xqn+BSG9RdYi/HzEWZjmpeFqpxHyPdr7IY3ZS4tsZn5VsN0h3pLRG
+	ROm7ajECYTUT+9rv/CVlcv+OYNAZTGDNsfaMX4ygP39zX+Kfz9eqtSH0uvXQv99/DDQpEV
+	JWu0kOBVpSFtZovEylQGA2e/hROiEsQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-601-sVKEk-KWOUWmcmobEjMoRQ-1; Mon, 29 May 2023 20:51:06 -0400
+X-MC-Unique: sVKEk-KWOUWmcmobEjMoRQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9297580120A
+	for <llvm@lists.linux.dev>; Tue, 30 May 2023 00:51:06 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 712632166B2B;
+	Tue, 30 May 2023 00:51:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 6 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, ac2263b5)
+Date: Tue, 30 May 2023 00:51:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <10349.123052920510600161@us-mta-601.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Anup,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://github.com/avpatel/linux.git riscv_timer_imp_v1
-head:   e4b53ebc211c359452cf0197ae0efb9b36c26589
-commit: 3e63cb1bd92da3161809e39d854d8f4e978579f0 [41/45] RISC-V: Select APLIC and IMSIC drivers
-config: riscv-randconfig-r001-20230529 (https://download.01.org/0day-ci/archive/20230530/202305300611.oM1vfXbw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/3e63cb1bd92da3161809e39d854d8f4e978579f0
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_timer_imp_v1
-        git checkout 3e63cb1bd92da3161809e39d854d8f4e978579f0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/irqchip/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305300611.oM1vfXbw-lkp@intel.com/
+Kernel information:
+    Commit message: Revert "module: error out early on concurrent load of t=
+he same module file"
 
-All warnings (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/90637
 
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/irqchip/irq-riscv-aplic.c:10:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/irqchip/irq-riscv-aplic.c:331:33: warning: shift count >= width of type [-Wshift-count-overflow]
-                   valH = (priv->msicfg.base_ppn >> 32) &
-                                                 ^  ~~
-   14 warnings generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream][s390x] NETDEV WATCHDOG: ens5953 (mlx5_core): tran=
+smit queue 1 timed out -  WARNING: CPU: 0 PID: 0 at net/sched/sch_generic.c=
+:526 dev_watchdog+0x3fa/0x440
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/8310534
+            Affected tests:
+                   s390x - Boot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage blktests - nvmeof-mp: Timeout
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2014813
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +331 drivers/irqchip/irq-riscv-aplic.c
 
-dfefa35d9d9c31e Anup Patel 2022-01-18  322  
-dfefa35d9d9c31e Anup Patel 2022-01-18  323  static void aplic_init_hw_global(struct aplic_priv *priv)
-dfefa35d9d9c31e Anup Patel 2022-01-18  324  {
-dfefa35d9d9c31e Anup Patel 2022-01-18  325  	u32 val;
-dfefa35d9d9c31e Anup Patel 2022-01-18  326  #ifdef CONFIG_RISCV_M_MODE
-dfefa35d9d9c31e Anup Patel 2022-01-18  327  	u32 valH;
-dfefa35d9d9c31e Anup Patel 2022-01-18  328  
-dfefa35d9d9c31e Anup Patel 2022-01-18  329  	if (!priv->nr_idcs) {
-dfefa35d9d9c31e Anup Patel 2022-01-18  330  		val = priv->msicfg.base_ppn;
-dfefa35d9d9c31e Anup Patel 2022-01-18 @331  		valH = (priv->msicfg.base_ppn >> 32) &
-dfefa35d9d9c31e Anup Patel 2022-01-18  332  			APLIC_xMSICFGADDRH_BAPPN_MASK;
-dfefa35d9d9c31e Anup Patel 2022-01-18  333  		valH |= (priv->msicfg.lhxw & APLIC_xMSICFGADDRH_LHXW_MASK)
-dfefa35d9d9c31e Anup Patel 2022-01-18  334  			<< APLIC_xMSICFGADDRH_LHXW_SHIFT;
-dfefa35d9d9c31e Anup Patel 2022-01-18  335  		valH |= (priv->msicfg.hhxw & APLIC_xMSICFGADDRH_HHXW_MASK)
-dfefa35d9d9c31e Anup Patel 2022-01-18  336  			<< APLIC_xMSICFGADDRH_HHXW_SHIFT;
-dfefa35d9d9c31e Anup Patel 2022-01-18  337  		valH |= (priv->msicfg.lhxs & APLIC_xMSICFGADDRH_LHXS_MASK)
-dfefa35d9d9c31e Anup Patel 2022-01-18  338  			<< APLIC_xMSICFGADDRH_LHXS_SHIFT;
-dfefa35d9d9c31e Anup Patel 2022-01-18  339  		valH |= (priv->msicfg.hhxs & APLIC_xMSICFGADDRH_HHXS_MASK)
-dfefa35d9d9c31e Anup Patel 2022-01-18  340  			<< APLIC_xMSICFGADDRH_HHXS_SHIFT;
-dfefa35d9d9c31e Anup Patel 2022-01-18  341  		writel(val, priv->regs + APLIC_xMSICFGADDR);
-dfefa35d9d9c31e Anup Patel 2022-01-18  342  		writel(valH, priv->regs + APLIC_xMSICFGADDRH);
-dfefa35d9d9c31e Anup Patel 2022-01-18  343  	}
-dfefa35d9d9c31e Anup Patel 2022-01-18  344  #endif
-dfefa35d9d9c31e Anup Patel 2022-01-18  345  
-dfefa35d9d9c31e Anup Patel 2022-01-18  346  	/* Setup APLIC domaincfg register */
-dfefa35d9d9c31e Anup Patel 2022-01-18  347  	val = readl(priv->regs + APLIC_DOMAINCFG);
-dfefa35d9d9c31e Anup Patel 2022-01-18  348  	val |= APLIC_DOMAINCFG_IE;
-dfefa35d9d9c31e Anup Patel 2022-01-18  349  	if (!priv->nr_idcs)
-dfefa35d9d9c31e Anup Patel 2022-01-18  350  		val |= APLIC_DOMAINCFG_DM;
-dfefa35d9d9c31e Anup Patel 2022-01-18  351  	writel(val, priv->regs + APLIC_DOMAINCFG);
-dfefa35d9d9c31e Anup Patel 2022-01-18  352  	if (readl(priv->regs + APLIC_DOMAINCFG) != val)
-dfefa35d9d9c31e Anup Patel 2022-01-18  353  		pr_warn("%pfwP: unable to write 0x%x in domaincfg\n",
-dfefa35d9d9c31e Anup Patel 2022-01-18  354  			priv->fwnode, val);
-dfefa35d9d9c31e Anup Patel 2022-01-18  355  }
-dfefa35d9d9c31e Anup Patel 2022-01-18  356  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-:::::: The code at line 331 was first introduced by commit
-:::::: dfefa35d9d9c31eb256197a9e93c5d69288e3afc irqchip: Add RISC-V advanced PLIC driver
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: TO: Anup Patel <apatel@ventanamicro.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
