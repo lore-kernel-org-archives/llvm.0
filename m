@@ -1,174 +1,110 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1044A3E
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 06:22:20 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1b0201d9a9eso4627435ad.0
-        for <llvm@lists.linux.dev>; Tue, 30 May 2023 23:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1685514139; x=1688106139;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gPCHJw6uiidg13w8mLV6+BRcnhzZLwl+A5RxGxHlMaI=;
-        b=IOplZlGjA7KHXer71VbrNZ/0LN5C8DOf1zxqF0b364WVQiUPcIoAnHwq4yChkLvNHl
-         ikrM6dTOQC+UW2+wtUtakL38aXkRMCFcPDH5qnwYZuiRpDjZisflnR9gkFC8pikTyh9C
-         WLOoOAv/VJ7JHVZ9IR2TysK6PUJhbELuJ+EwgLF5OUG8drO32DUVbF/kRPYcdZNxk2HP
-         0EO8Uz9CImeMud2Hs2wGXk3tbuUQPf2OsGuM9Htba7mRLhfVXulpqJCE7tgRyLNe5Ig3
-         EAh6VJmtB4n7i6ApSEb6zyeIozhW1w7p1BRthPrCiHC7F11MX9V1642wQS60LxpNYauf
-         rW5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685514139; x=1688106139;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gPCHJw6uiidg13w8mLV6+BRcnhzZLwl+A5RxGxHlMaI=;
-        b=W8wPm/K70prUKQsovaebIZqCU/lRpuGCh/qFs3x09W+fI2pJrrAwIct1un7vDA6OXr
-         xYklE/aqydVJpDpaQI6dostEuXkO36oLyEk2hI/PlEyRZGirARpOGNT/eeVX0gA3hSIN
-         jRzaO9vWZ+bKU1JleKHzDCX+XrG2y/+/bm9t2DxN5Tk7Ln7+fQxr+7OStUAT3R3Cnvts
-         gYgtGB/QWzq6KxoOZAXIs34vKiCKp4mcLA+t8l5Ej0CDZBfePkax5pVsN32JdD/F1hj8
-         uTxcTOy/q//eBlVT4UXrdnBoNHqWbKlFicdkJk1oA4/gTxVR9jnhyNOOCCyEMK37Vgwn
-         FVLg==
-X-Gm-Message-State: AC+VfDyehLMY+fsABQxE3lpSXJCprat9H9yfm0zyPMRBgQwRUvNxSV6+
-	Czc5NqwlLeCV80BjCjh5hr21dPE9zkHNFFS7GjaMig==
-X-Google-Smtp-Source: ACHHUZ7yPgZmr+57g35gN7DemXaV5CHn75zYmTLD3deaC8g2ROiyXesd3bI/zUITltfFjYFqevzExg==
-X-Received: by 2002:a17:903:41c5:b0:1ac:8835:b881 with SMTP id u5-20020a17090341c500b001ac8835b881mr5207262ple.17.1685514139390;
-        Tue, 30 May 2023 23:22:19 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902d2c600b001b02162c866sm441461plc.44.2023.05.30.23.22.18
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 23:22:18 -0700 (PDT)
-Message-ID: <6476e79a.170a0220.7c63.0c63@mx.google.com>
-Date: Tue, 30 May 2023 23:22:18 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516B712B8E
+	for <llvm@lists.linux.dev>; Wed, 31 May 2023 10:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685527867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=itLIIhbonV9+kCM6X/9XwVYNZ8Il9Fcyvm1vRxQ34MU=;
+	b=K3WDb6LBX0r0hS5oDIxZb4RYsDTdVyl6ZsMGhnICDL55aux2vPGMvWyJpzzXwt4K8dsg6N
+	Vt3jgHe8lTpFbs9I9niXmCUR0RFLuJzqbKxK81m8lfD/CzK7HnzVuIceORHB4CaI9UA4ZL
+	uGAmniMvmlwcXsxK6XAwfmvAX8OXSJM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-9xsugCrBOOekfSXOy3JpuA-1; Wed, 31 May 2023 06:11:05 -0400
+X-MC-Unique: 9xsugCrBOOekfSXOy3JpuA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59B62858F18
+	for <llvm@lists.linux.dev>; Wed, 31 May 2023 10:11:04 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3228A202696C;
+	Wed, 31 May 2023 10:11:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 38 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, 48b1320a)
+Date: Wed, 31 May 2023 10:11:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <30411.123053106110502983@us-mta-558.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230531
-X-Kernelci-Report-Type: build
-Subject: next/master build: 13 builds: 0 failed, 13 passed,
- 2 warnings (next-20230531)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master build: 13 builds: 0 failed, 13 passed, 2 warnings (next-2023053=
-1)
+Hi, we tested your kernel and here are the results:
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230531/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Tree: next
-Branch: master
-Git Describe: next-20230531
-Git Commit: d4cee89031c80066ec461bb77b5e13a4f37d5fd2
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Warnings Detected:
+Kernel information:
+    Commit message: Merge tag 'for-6.4-rc4-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-arm64:
-    defconfig+arm64-chromebook (clang-13): 2 warnings
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/90838
 
-arm:
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
+tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
+ error: 503
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
 
-x86_64:
 
 
-Warnings summary:
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-    1    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' s=
-et but not used [-Wunused-but-set-variable]
-    1    1 warning generated.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 2 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' set bu=
-t not used [-Wunused-but-set-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
