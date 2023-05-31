@@ -1,128 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FED2C8ED
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 11:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685531466;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=w1Gw4BKZ/R0sObY6fVGQ1fJScEOkvDIPXb36zhPxJcw=;
-	b=Yy5ABPkso0Vcck8NPK38Fz4RqkvCKTwpACumH8u2iRW6HNh69VKxErW/xV8OcHqX9BsvHv
-	PHB5vJYjU/gSRqiQssd8h1mZGJKaCwG3PoH8t1Z4W+QB4XxgNcOM7KdTc4FwOcpnDXkyhO
-	WO+eQM1tUSB7hhty+ORGfykD4vaNLtc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-zyZ6bWwlN-yCWhwCz-GElQ-1; Wed, 31 May 2023 07:11:05 -0400
-X-MC-Unique: zyZ6bWwlN-yCWhwCz-GElQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E247B185A78F
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 11:11:04 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CBDF8112132C;
-	Wed, 31 May 2023 11:11:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, afead42f)
-Date: Wed, 31 May 2023 11:11:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EB81428A;
+	Wed, 31 May 2023 12:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685535259; x=1717071259;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c+3ELCwsKWSp16IufrALk7rMkIvBjHSpjrxmjqta4CE=;
+  b=C9RMS5m9ouYOmcDL5HcLOCCe86LJf7zmKeHXLbNznAPN/IAmgLpP9tcH
+   Lsk2rW/2XHes5U8Buo/PyL+PdB2pIPkybMViaom8mnxq0wUTtOroz3RBv
+   3UtrEwc0ajY3xNNUrq47V1JjG+BFPLKCMjJ4GULNaF+tEIBhk7E85xld7
+   J7xhE3qMRAf2T4oEMzssUVDvQEOtewucGS8hyF9WI5GEGtnJHAMog+ook
+   p2ErV8rjgMk3uNZlrkAjvQj2gMeokxrJ/so2aGEmZNAduHnBStQvnpFP9
+   FRVK/7khjsyTJPyqeoAkoeWpWvduoR+VtzfgRcdRox97bct9y1SStKloP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="418710881"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="418710881"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 05:14:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736647459"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="736647459"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 31 May 2023 05:14:17 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q4KiX-0001Ig-0E;
+	Wed, 31 May 2023 12:14:17 +0000
+Date: Wed, 31 May 2023 20:14:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [ammarfaizi2-block:testing/af/home 3/8] kernel/workqueue.c:4421:5:
+ warning: no previous prototype for function 'set_workqueue_cpumask'
+Message-ID: <202305312023.upvkP9at-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <41661.123053107110500247@us-mta-493.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/ammarfaizi2/linux-block testing/af/home
+head:   51fb2efd62ae52dc061dbca301fb823357fb3f80
+commit: 6436622d20b564a334e4bc0bc5019c82a592dd08 [3/8] workqueue: Add set_workqueue_cpumask() helper function
+config: hexagon-randconfig-r041-20230531 (https://download.01.org/0day-ci/archive/20230531/202305312023.upvkP9at-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/6436622d20b564a334e4bc0bc5019c82a592dd08
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block testing/af/home
+        git checkout 6436622d20b564a334e4bc0bc5019c82a592dd08
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305312023.upvkP9at-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'perf-tools-fixes-for-v6.4-2-2023-05-30' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/90837
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-
+   In file included from kernel/workqueue.c:39:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/workqueue.c:39:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/workqueue.c:39:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/workqueue.c:4421:5: warning: no previous prototype for function 'set_workqueue_cpumask' [-Wmissing-prototypes]
+   int set_workqueue_cpumask(struct workqueue_struct *wq, const cpumask_var_t mask)
+       ^
+   kernel/workqueue.c:4421:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int set_workqueue_cpumask(struct workqueue_struct *wq, const cpumask_var_t mask)
+   ^
+   static 
+   7 warnings generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +/set_workqueue_cpumask +4421 kernel/workqueue.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  4420	
+> 4421	int set_workqueue_cpumask(struct workqueue_struct *wq, const cpumask_var_t mask)
+  4422	{
+  4423		struct workqueue_attrs *tmp_attrs;
+  4424		int ret;
+  4425	
+  4426		tmp_attrs = alloc_workqueue_attrs();
+  4427		if (!tmp_attrs)
+  4428			return -ENOMEM;
+  4429	
+  4430		apply_wqattrs_lock();
+  4431		copy_workqueue_attrs(tmp_attrs, wq->unbound_attrs);
+  4432		cpumask_copy(tmp_attrs->cpumask, mask);
+  4433		ret = apply_workqueue_attrs_locked(wq, tmp_attrs);
+  4434		apply_wqattrs_unlock();
+  4435		free_workqueue_attrs(tmp_attrs);
+  4436		return ret;
+  4437	}
+  4438	EXPORT_SYMBOL_GPL(set_workqueue_cpumask);
+  4439	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
