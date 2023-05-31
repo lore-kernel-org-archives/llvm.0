@@ -1,45 +1,45 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EB17F1;
-	Wed, 31 May 2023 22:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C791731EFD;
+	Wed, 31 May 2023 22:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685573420; x=1717109420;
+  t=1685573421; x=1717109421;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MsdM9yJzdDs+ceeDJGK2lKP0KKBzO24WPvqiakSUvCo=;
-  b=U2ecdlBywu+Qh97F2iY/LT0s/Nt/ujhpLhPMF+9t3M94+bInXT9vwwjM
-   6M1QWhWBEJn/MBku2WwS3KMSAMRJEwRpXJk17f8Io7VmN9mR5RqWJO4+Y
-   Mi1biIgLdGAo7VHh0clhsUbD2AskXasuELkkJxCw+/y8gd+iFTX9aBqq0
-   aqFYo467JLWcTxI2zmfTixa0XITND/OOcCn/lTqh02TBAEcRX6yVfycAM
-   LGJSzcdhmOISnVc1MrmAoWbX7qYoN5stZ3AgojA+neGoU/6O96/YEco3/
-   cQJaQyrbB7pj8C+nXOv1D8LiQG0bMsPvZi3yrIuQdnG/2UnZ0bFfcpFPQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357783436"
+  bh=GCGnfNkNmVJpT81I6vQFpA8lm+I6CPYcmRFVM8LbQgE=;
+  b=aJFCjundfgX6kFzam/kyXLzhVXydgL/bUcgL5rds0Wnn/QNKNfhYzqhA
+   9OgBfw35PUqA3JDToFvxWNqgK4bNrEyUjQvSgVbcahsv7qDvZhb32ZVf8
+   J3FKtkKc4h5ZadI3+zsv568XU8FwLYW6C8qdRQM6vlcBNk2UfIqu5Trhr
+   Ra1FkzS2zwFVwI+iiqFaTmKDyJwgk0+Le0a49ZvnA0Abflinnktz/t66Q
+   e87tCcI4AJxdGwfTUPb8opVp1F0swkoFlWf0AK0Z+y7YL8A+w21iHaX7a
+   KSdmq3Dv0bvDOgAyTp4aZMz5MXnZ5MR6tRa7cLEdNSRF01tfKVFLSx/WO
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357783424"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="357783436"
+   d="scan'208";a="357783424"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 15:48:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831360344"
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831360343"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="831360344"
+   d="scan'208";a="831360343"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
   by orsmga004.jf.intel.com with ESMTP; 31 May 2023 15:48:44 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q4UcV-0001ez-0q;
+	id 1q4UcV-0001ex-0m;
 	Wed, 31 May 2023 22:48:43 +0000
-Date: Thu, 1 Jun 2023 06:48:18 +0800
+Date: Thu, 1 Jun 2023 06:48:19 +0800
 From: kernel test robot <lkp@intel.com>
 To: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
 	Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [axboe-block:for-6.5/block 65/74] drivers/md/raid1.c:1151:4:
- warning: incompatible pointer to integer conversion passing 'struct page *'
- to parameter of type 'unsigned long'
-Message-ID: <202306010645.FwU3ziRx-lkp@intel.com>
+Subject: [axboe-block:for-6.5/block 65/74] drivers/md/raid1.c:1151:4: error:
+ incompatible pointer to integer conversion passing 'struct page *' to
+ parameter of type 'unsigned long'
+Message-ID: <202306010613.CU3wImBk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,8 +52,8 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.5/block
 head:   8e8fedab1194ef90e007636eb3d224c4f8e979a7
 commit: 6473bc325644b9c8473e6c92bfb520a68dce1e12 [65/74] md: check for failure when adding pages in alloc_behind_master_bio
-config: x86_64-randconfig-a013-20230531 (https://download.01.org/0day-ci/archive/20230601/202306010645.FwU3ziRx-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: hexagon-randconfig-r006-20230531 (https://download.01.org/0day-ci/archive/20230601/202306010613.CU3wImBk-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -64,16 +64,73 @@ reproduce (this is a W=1 build):
         git checkout 6473bc325644b9c8473e6c92bfb520a68dce1e12
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/md/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306010645.FwU3ziRx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306010613.CU3wImBk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/md/raid1.c:1151:4: warning: incompatible pointer to integer conversion passing 'struct page *' to parameter of type 'unsigned long' [-Wint-conversion]
+   In file included from drivers/md/raid1.c:28:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/md/raid1.c:28:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/md/raid1.c:28:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/md/raid1.c:1151:4: error: incompatible pointer to integer conversion passing 'struct page *' to parameter of type 'unsigned long' [-Wint-conversion]
                            free_page(page);
                            ^~~~~~~~~~~~~~~
    include/linux/gfp.h:320:36: note: expanded from macro 'free_page'
@@ -82,7 +139,7 @@ All warnings (new ones prefixed by >>):
    include/linux/gfp.h:303:38: note: passing argument to parameter 'addr' here
    extern void free_pages(unsigned long addr, unsigned int order);
                                         ^
-   1 warning generated.
+   6 warnings and 1 error generated.
 
 
 vim +1151 drivers/md/raid1.c
