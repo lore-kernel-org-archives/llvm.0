@@ -1,31 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109403D3AC
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 21:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12BE1C433EF;
-	Wed, 31 May 2023 21:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685568801;
-	bh=h+y0cHYshxYDyUqi8jMQww3RoC+yaMerNeilVKWV3J8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h8Z/EBi7d1y0GwIJpptTpZZ9jyfElmAqg8q79C6VyGjdQGuKSL7dQC61gVo2oI5KE
-	 qIBt4bNrVoNn7nUBMCfJRYkQG38/06JRgX7HsvRFEDHSVNaE1dRa/XQUpgFXEJ5YGB
-	 tGDKHGzcBOa5ItIoXSIhVnsGJCp67i3kKYSWIcUyHaGjgfTGbtyNgWPPDAY461trH3
-	 UG4MMhQNMjXaatYsJvw3rfPUtbHDfwa+WXbSOzvv6m7aOnhxjcuHspGTbkMFSanFgK
-	 4rXl00d+K/jIxpr+zUzXhgTO2Oa/uj/XEDlhINa/5iwyo9TZHslwWHOpYRzr6yA1OM
-	 ZJ3PSwDz36D/g==
-Date: Wed, 31 May 2023 14:33:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tom Rini <trini@konsulko.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-Message-ID: <20230531213319.GA2201875@dev-arch.thelio-3990X>
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EB17F1;
+	Wed, 31 May 2023 22:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685573420; x=1717109420;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MsdM9yJzdDs+ceeDJGK2lKP0KKBzO24WPvqiakSUvCo=;
+  b=U2ecdlBywu+Qh97F2iY/LT0s/Nt/ujhpLhPMF+9t3M94+bInXT9vwwjM
+   6M1QWhWBEJn/MBku2WwS3KMSAMRJEwRpXJk17f8Io7VmN9mR5RqWJO4+Y
+   Mi1biIgLdGAo7VHh0clhsUbD2AskXasuELkkJxCw+/y8gd+iFTX9aBqq0
+   aqFYo467JLWcTxI2zmfTixa0XITND/OOcCn/lTqh02TBAEcRX6yVfycAM
+   LGJSzcdhmOISnVc1MrmAoWbX7qYoN5stZ3AgojA+neGoU/6O96/YEco3/
+   cQJaQyrbB7pj8C+nXOv1D8LiQG0bMsPvZi3yrIuQdnG/2UnZ0bFfcpFPQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357783436"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="357783436"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 15:48:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831360344"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="831360344"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 May 2023 15:48:44 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q4UcV-0001ez-0q;
+	Wed, 31 May 2023 22:48:43 +0000
+Date: Thu, 1 Jun 2023 06:48:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [axboe-block:for-6.5/block 65/74] drivers/md/raid1.c:1151:4:
+ warning: incompatible pointer to integer conversion passing 'struct page *'
+ to parameter of type 'unsigned long'
+Message-ID: <202306010645.FwU3ziRx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,89 +48,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230409145358.2538266-1-masahiroy@kernel.org>
 
-Hi Masahiro,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.5/block
+head:   8e8fedab1194ef90e007636eb3d224c4f8e979a7
+commit: 6473bc325644b9c8473e6c92bfb520a68dce1e12 [65/74] md: check for failure when adding pages in alloc_behind_master_bio
+config: x86_64-randconfig-a013-20230531 (https://download.01.org/0day-ci/archive/20230601/202306010645.FwU3ziRx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=6473bc325644b9c8473e6c92bfb520a68dce1e12
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block for-6.5/block
+        git checkout 6473bc325644b9c8473e6c92bfb520a68dce1e12
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
 
-On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
-> not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> 
-> As a result, the linker script is preprocessed with predefined macros
-> for the build host instead of the target.
-> 
-> Assuming you use an x86 build machine, compare the following:
-> 
->  $ clang -dM -E -x c /dev/null
->  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> 
-> There is no actual problem presumably because our linker scripts do not
-> rely on such predefined macros, but it is better to define correct ones.
-> 
-> Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
-> will be processed with the proper target triple.
-> 
-> Reported-by: Tom Rini <trini@konsulko.com>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  scripts/Makefile.clang | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 70b354fa1cb4..93ca059cc3b8 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -38,6 +38,5 @@ CLANG_FLAGS	+= -Werror=unknown-warning-option
->  CLANG_FLAGS	+= -Werror=ignored-optimization-argument
->  CLANG_FLAGS	+= -Werror=option-ignored
->  CLANG_FLAGS	+= -Werror=unused-command-line-argument
-> -KBUILD_CFLAGS	+= $(CLANG_FLAGS)
-> -KBUILD_AFLAGS	+= $(CLANG_FLAGS)
-> +KBUILD_CPPFLAGS	+= $(CLANG_FLAGS)
->  export CLANG_FLAGS
-> -- 
-> 2.37.2
-> 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306010645.FwU3ziRx-lkp@intel.com/
 
-I am doubling back to this change, as the lack of '--target' in
-KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new change
-that rejects '-mbig-endian' and '-mlittle-endian' when not supported by
-the target, which breaks the arm64 vDSO build when preprocessing its
-linker script:
+All warnings (new ones prefixed by >>):
 
-  # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-  $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=build mrproper virtconfig menuconfig arch/arm64/kernel/vdso/
-  ...
-  clang: error: unsupported option '-mbig-endian' for target 'x86_64-pc-linux-gnu'
-  make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vdso/vdso.lds] Error 1
-  ...
+>> drivers/md/raid1.c:1151:4: warning: incompatible pointer to integer conversion passing 'struct page *' to parameter of type 'unsigned long' [-Wint-conversion]
+                           free_page(page);
+                           ^~~~~~~~~~~~~~~
+   include/linux/gfp.h:320:36: note: expanded from macro 'free_page'
+   #define free_page(addr) free_pages((addr), 0)
+                                      ^~~~~~
+   include/linux/gfp.h:303:38: note: passing argument to parameter 'addr' here
+   extern void free_pages(unsigned long addr, unsigned int order);
+                                        ^
+   1 warning generated.
 
-  https://github.com/llvm/llvm-project/commit/d81ce04587c006b6731198956c522c93d0df1050
-  https://github.com/ClangBuiltLinux/linux/issues/1859
 
-This change resolves that issue. I was able to figure out why those new
-warnings appeared for ARCH=mips, it is the shell invocation for
-CHECKFLAGS. The following diff resolves it for me:
+vim +1151 drivers/md/raid1.c
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index a7a4ee66a9d3..ef7b05ae92ce 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -346,7 +346,7 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
- KBUILD_LDFLAGS		+= -m $(ld-emul)
- 
- ifdef CONFIG_MIPS
--CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
-+CHECKFLAGS += $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
- 	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
- 	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
- endif
+  1122	
+  1123	static void alloc_behind_master_bio(struct r1bio *r1_bio,
+  1124						   struct bio *bio)
+  1125	{
+  1126		int size = bio->bi_iter.bi_size;
+  1127		unsigned vcnt = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
+  1128		int i = 0;
+  1129		struct bio *behind_bio = NULL;
+  1130	
+  1131		behind_bio = bio_alloc_bioset(NULL, vcnt, 0, GFP_NOIO,
+  1132					      &r1_bio->mddev->bio_set);
+  1133		if (!behind_bio)
+  1134			return;
+  1135	
+  1136		/* discard op, we don't support writezero/writesame yet */
+  1137		if (!bio_has_data(bio)) {
+  1138			behind_bio->bi_iter.bi_size = size;
+  1139			goto skip_copy;
+  1140		}
+  1141	
+  1142		while (i < vcnt && size) {
+  1143			struct page *page;
+  1144			int len = min_t(int, PAGE_SIZE, size);
+  1145	
+  1146			page = alloc_page(GFP_NOIO);
+  1147			if (unlikely(!page))
+  1148				goto free_pages;
+  1149	
+  1150			if (!bio_add_page(behind_bio, page, len, 0)) {
+> 1151				free_page(page);
+  1152				goto free_pages;
+  1153			}
+  1154	
+  1155			size -= len;
+  1156			i++;
+  1157		}
+  1158	
+  1159		bio_copy_data(behind_bio, bio);
+  1160	skip_copy:
+  1161		r1_bio->behind_master_bio = behind_bio;
+  1162		set_bit(R1BIO_BehindIO, &r1_bio->state);
+  1163	
+  1164		return;
+  1165	
+  1166	free_pages:
+  1167		pr_debug("%dB behind alloc failed, doing sync I/O\n",
+  1168			 bio->bi_iter.bi_size);
+  1169		bio_free_pages(behind_bio);
+  1170		bio_put(behind_bio);
+  1171	}
+  1172	
 
-I will run this change plus that diff through my build matrix to see if
-any other issues pop up. If not, I will respond with some tags and
-perhaps this could be taken as a fix for 6.4 so that it could
-potentially be backported?
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
