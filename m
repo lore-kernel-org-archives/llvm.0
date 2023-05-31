@@ -1,199 +1,122 @@
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E854E1F190
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 19:32:56 +0000 (UTC)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7603d830533so22418239f.1
-        for <llvm@lists.linux.dev>; Wed, 31 May 2023 12:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561576; x=1688153576;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5LyvodTfh7mDgMBZGR3/haPvA2HxKEHZOZ0+VgxD6Y4=;
-        b=ToamEE42d17jRS7eq0tEsmcM7o/ry0YDUv3fALFdEnqoVBlSk8kdHgzLBjcAGN+nPo
-         hKejU+IiNr5DriHUZ+/PsEgKoBvI0pQuHs6C2KF0VzSHasnjlRs4Uh+boNfIBMgKN6s6
-         2bznlevFSpRrnnZMObcRO+4VtUohbSc6YV68dZSh4EY+aMJMSqHhNQxeXTd+4cetfcee
-         X6JzGzV/+3M7O17Jt1KqDmTsV9gR1tFQn6gqIPdiWG6752VTCOykdysMLI1hLu7sIS55
-         sWg36+TsboiMjmSY12NVihtUeRX+ctDcsFtWj4vPbGyX1KRzKB8GawDI/jR6OLT7x7mS
-         Nxfw==
-X-Gm-Message-State: AC+VfDzT0eqQ23ReHwCjOn8VKD5YUrSoYa+pLECGhwO96MneGNf0HMy9
-	YjZO3633ntYhZbKxYLS8jKcjk6PMfXXsnYbUvuevf0tyfEUG
-X-Google-Smtp-Source: ACHHUZ5jv021XOgfOmq2aWrpQjH44Z2mlMPVF3tsbqSe9rSHM0VGb8lHM0mbMioaRhKeGdvtvtiOAGCEyC7PcAbh+r+qAtks5PTd
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109403D3AC
+	for <llvm@lists.linux.dev>; Wed, 31 May 2023 21:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12BE1C433EF;
+	Wed, 31 May 2023 21:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685568801;
+	bh=h+y0cHYshxYDyUqi8jMQww3RoC+yaMerNeilVKWV3J8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h8Z/EBi7d1y0GwIJpptTpZZ9jyfElmAqg8q79C6VyGjdQGuKSL7dQC61gVo2oI5KE
+	 qIBt4bNrVoNn7nUBMCfJRYkQG38/06JRgX7HsvRFEDHSVNaE1dRa/XQUpgFXEJ5YGB
+	 tGDKHGzcBOa5ItIoXSIhVnsGJCp67i3kKYSWIcUyHaGjgfTGbtyNgWPPDAY461trH3
+	 UG4MMhQNMjXaatYsJvw3rfPUtbHDfwa+WXbSOzvv6m7aOnhxjcuHspGTbkMFSanFgK
+	 4rXl00d+K/jIxpr+zUzXhgTO2Oa/uj/XEDlhINa/5iwyo9TZHslwWHOpYRzr6yA1OM
+	 ZJ3PSwDz36D/g==
+Date: Wed, 31 May 2023 14:33:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Tom Rini <trini@konsulko.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+Message-ID: <20230531213319.GA2201875@dev-arch.thelio-3990X>
+References: <20230409145358.2538266-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3713:b0:774:8680:b95b with SMTP id
- bh19-20020a056602371300b007748680b95bmr8079663iob.1.1685561575975; Wed, 31
- May 2023 12:32:55 -0700 (PDT)
-Date: Wed, 31 May 2023 12:32:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fbaee205fd026244@google.com>
-Subject: [syzbot] [ntfs3?] possible deadlock in mark_as_free_ex
-From: syzbot <syzbot+e94d98936a0ed08bde43@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230409145358.2538266-1-masahiroy@kernel.org>
 
-Hello,
+Hi Masahiro,
 
-syzbot found the following issue on:
+On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
+> not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> 
+> As a result, the linker script is preprocessed with predefined macros
+> for the build host instead of the target.
+> 
+> Assuming you use an x86 build machine, compare the following:
+> 
+>  $ clang -dM -E -x c /dev/null
+>  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> 
+> There is no actual problem presumably because our linker scripts do not
+> rely on such predefined macros, but it is better to define correct ones.
+> 
+> Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
+> will be processed with the proper target triple.
+> 
+> Reported-by: Tom Rini <trini@konsulko.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  scripts/Makefile.clang | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 70b354fa1cb4..93ca059cc3b8 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -38,6 +38,5 @@ CLANG_FLAGS	+= -Werror=unknown-warning-option
+>  CLANG_FLAGS	+= -Werror=ignored-optimization-argument
+>  CLANG_FLAGS	+= -Werror=option-ignored
+>  CLANG_FLAGS	+= -Werror=unused-command-line-argument
+> -KBUILD_CFLAGS	+= $(CLANG_FLAGS)
+> -KBUILD_AFLAGS	+= $(CLANG_FLAGS)
+> +KBUILD_CPPFLAGS	+= $(CLANG_FLAGS)
+>  export CLANG_FLAGS
+> -- 
+> 2.37.2
+> 
 
-HEAD commit:    48b1320a674e Merge tag 'for-6.4-rc4-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ccb25d280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
-dashboard link: https://syzkaller.appspot.com/bug?extid=e94d98936a0ed08bde43
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+I am doubling back to this change, as the lack of '--target' in
+KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new change
+that rejects '-mbig-endian' and '-mlittle-endian' when not supported by
+the target, which breaks the arm64 vDSO build when preprocessing its
+linker script:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+  # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+  $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=build mrproper virtconfig menuconfig arch/arm64/kernel/vdso/
+  ...
+  clang: error: unsupported option '-mbig-endian' for target 'x86_64-pc-linux-gnu'
+  make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vdso/vdso.lds] Error 1
+  ...
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1bdd53056bc4/disk-48b1320a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/82950e95464f/vmlinux-48b1320a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8a58eb21a7a7/bzImage-48b1320a.xz
+  https://github.com/llvm/llvm-project/commit/d81ce04587c006b6731198956c522c93d0df1050
+  https://github.com/ClangBuiltLinux/linux/issues/1859
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e94d98936a0ed08bde43@syzkaller.appspotmail.com
+This change resolves that issue. I was able to figure out why those new
+warnings appeared for ARCH=mips, it is the shell invocation for
+CHECKFLAGS. The following diff resolves it for me:
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc4-syzkaller-00051-g48b1320a674e #0 Not tainted
-------------------------------------------------------
-kworker/u4:0/15666 is trying to acquire lock:
-ffff88802d146268 (&wnd->rw_lock){++++}-{3:3}, at: mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index a7a4ee66a9d3..ef7b05ae92ce 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -346,7 +346,7 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ KBUILD_LDFLAGS		+= -m $(ld-emul)
+ 
+ ifdef CONFIG_MIPS
+-CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
++CHECKFLAGS += $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
+ 	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+ 	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
+ endif
 
-but task is already holding lock:
-ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1141 [inline]
-ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x167/0x10c0 fs/ntfs3/frecord.c:3252
+I will run this change plus that diff through my build matrix to see if
+any other issues pop up. If not, I will respond with some tags and
+perhaps this could be taken as a fix for 6.4 so that it could
+potentially be backported?
 
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&ni->ni_lock){+.+.}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
-       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
-       ntfs_set_state+0x212/0x730 fs/ntfs3/fsntfs.c:945
-       mark_as_free_ex+0x6e/0x330 fs/ntfs3/fsntfs.c:2466
-       run_deallocate_ex+0x244/0x5f0 fs/ntfs3/attrib.c:122
-       attr_set_size+0x1684/0x4290 fs/ntfs3/attrib.c:750
-       ntfs_truncate fs/ntfs3/file.c:393 [inline]
-       ntfs3_setattr+0x556/0xb00 fs/ntfs3/file.c:682
-       notify_change+0xc8b/0xf40 fs/attr.c:483
-       do_truncate+0x220/0x300 fs/open.c:66
-       handle_truncate fs/namei.c:3295 [inline]
-       do_open fs/namei.c:3640 [inline]
-       path_openat+0x294e/0x3170 fs/namei.c:3791
-       do_filp_open+0x234/0x490 fs/namei.c:3818
-       do_sys_openat2+0x13f/0x500 fs/open.c:1356
-       do_sys_open fs/open.c:1372 [inline]
-       __do_sys_creat fs/open.c:1448 [inline]
-       __se_sys_creat fs/open.c:1442 [inline]
-       __x64_sys_creat+0x123/0x160 fs/open.c:1442
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&wnd->rw_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3113 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
-       validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
-       __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
-       down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
-       mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
-       run_deallocate+0x13b/0x230 fs/ntfs3/fsntfs.c:2534
-       ni_try_remove_attr_list+0x1558/0x1930 fs/ntfs3/frecord.c:773
-       ni_write_inode+0xd14/0x10c0 fs/ntfs3/frecord.c:3318
-       write_inode fs/fs-writeback.c:1456 [inline]
-       __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
-       writeback_sb_inodes+0x8e3/0x11d0 fs/fs-writeback.c:1894
-       wb_writeback+0x458/0xc70 fs/fs-writeback.c:2068
-       wb_do_writeback fs/fs-writeback.c:2211 [inline]
-       wb_workfn+0x400/0xff0 fs/fs-writeback.c:2251
-       process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
-       worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
-       kthread+0x2b8/0x350 kernel/kthread.c:379
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&ni->ni_lock);
-                               lock(&wnd->rw_lock);
-                               lock(&ni->ni_lock);
-  lock(&wnd->rw_lock);
-
- *** DEADLOCK ***
-
-3 locks held by kworker/u4:0/15666:
- #0: ffff888019e63938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x77e/0x10e0 kernel/workqueue.c:2378
- #1: ffffc9000ae5fd20 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x7c8/0x10e0 kernel/workqueue.c:2380
- #2: ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1141 [inline]
- #2: ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x167/0x10c0 fs/ntfs3/frecord.c:3252
-
-stack backtrace:
-CPU: 1 PID: 15666 Comm: kworker/u4:0 Not tainted 6.4.0-rc4-syzkaller-00051-g48b1320a674e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Workqueue: writeback wb_workfn (flush-7:2)
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3113 [inline]
- check_prevs_add kernel/locking/lockdep.c:3232 [inline]
- validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
- __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
- down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
- mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
- run_deallocate+0x13b/0x230 fs/ntfs3/fsntfs.c:2534
- ni_try_remove_attr_list+0x1558/0x1930 fs/ntfs3/frecord.c:773
- ni_write_inode+0xd14/0x10c0 fs/ntfs3/frecord.c:3318
- write_inode fs/fs-writeback.c:1456 [inline]
- __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
- writeback_sb_inodes+0x8e3/0x11d0 fs/fs-writeback.c:1894
- wb_writeback+0x458/0xc70 fs/fs-writeback.c:2068
- wb_do_writeback fs/fs-writeback.c:2211 [inline]
- wb_workfn+0x400/0xff0 fs/fs-writeback.c:2251
- process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
- worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
- kthread+0x2b8/0x350 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-BTRFS info (device loop3): qgroup scan completed (inconsistency flag cleared)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Cheers,
+Nathan
