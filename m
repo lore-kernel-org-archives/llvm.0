@@ -1,160 +1,214 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D631950E
-	for <llvm@lists.linux.dev>; Wed, 31 May 2023 18:17:06 +0000 (UTC)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-19f31d6b661so79148fac.0
-        for <llvm@lists.linux.dev>; Wed, 31 May 2023 11:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685557026; x=1688149026;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IKE7gLneboHzBYpBQs2sbluEvJxYw167pBbu10odVYc=;
-        b=WjgN/rQ6A6sy6x1UGKx0hZUiHK/3aru6qw39NAaT7SV65yJHIjt1fXFfINdMz3mftd
-         E/Yoxh5e7Wgu3nPlRvoONaHNk6EusOa4m2eJsQRkct/wBtqwjMeunwyesJB7clFCTGHj
-         YedMkxyg/Knxb/6S3I04JD9Y9RH7xAbJDIabn/iNLahoES7UKHhV0/SNPHOgWbmzIuA6
-         WcJ/eVeNPltZjtt+0SITiVCOvAiWODUJdDZ9fUlXIzpg9aBp1Kd7+HLe1RNZKpWbXFmz
-         uC1ssYRLUn7kfdI2SsSE7kyv4e6huTnGCnfYfe6Mn9m2/LbPaVCENEdZSW0EoM9w12Fk
-         LCug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685557026; x=1688149026;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IKE7gLneboHzBYpBQs2sbluEvJxYw167pBbu10odVYc=;
-        b=GsN6RzcqWsAiIEyFE5HqGjd/C20mrVTZNnHMCtA7ax2o2t8aH9BAcr/k5HleNZyGUf
-         Z5/TCKBT+I3Dcit2mmZepblKuRPKMYb5xU5KAwHTdSDnycoun/h1ul8b2J8PFt16LRpU
-         FsxR7dSsVOAeNqDQkiu+mtl0pdREJ4raDPi0T333eUPiYeD6nGTKmCHsBRKer8f+PfzA
-         QpGyusCRJhnmjJQxjxvTdcn9yUTYTIq0d9D5rHBPE67DZ92EA0tniuiEfPB7zO6sE/Ir
-         KnvuT2EuqR24dGSuPxoX+iVVxsHuImaKpe8srtYUl8pUYwg82qeoVPTf302PFHQ7tuKu
-         pr1A==
-X-Gm-Message-State: AC+VfDwzscPtpwcOWP96nQQh3aakjg9+pxQfxIwXTW8UIcAQZYeCWZg5
-	9nZH+uBUqOcBf9Tph41iWsT9Pv7IXR1SB2VG/WY=
-X-Google-Smtp-Source: ACHHUZ6cLe1ZQVM8glQY1J5ntv8EYVB9R8yV7noymkqrytZ5v9UmE1VzoQp4Yp73YfIKYBX8LGitTg1kRp59ixYa7RQ=
-X-Received: by 2002:a05:6870:e19:b0:199:a7f5:61fa with SMTP id
- mp25-20020a0568700e1900b00199a7f561famr3510327oab.58.1685557025625; Wed, 31
- May 2023 11:17:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A6E805;
+	Wed, 31 May 2023 18:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685558570; x=1717094570;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I3BvlvjyOr+rtYJ0KX6lxgCWrWTw0o2Nm5WFL6FLaNg=;
+  b=g/HPJFCCHlNzOTzOnFwf/M2p7b2g83FBq4/YVfiCmn9WNz/YOiV0E+cB
+   ktxyLbljDzkd7OyEk75tVTR6a54Y7gCrpO6SxaLCa7iUydv5lurpMcEPP
+   uCL2eTnbbFq8v+W8+FTLSnFXWlL+oTb588kuPC9yTTEYwGDGqKE89WNAa
+   ytn1uFZjQbbFv8k1HOb8Mbx/HtlnAwd2wGl2Fygl5VSsa4agl0q7+HwiS
+   fTb7m0mTD6HjpV6JePehiAfikcGqalUVyIOD/A8kKEDTEtN60tfWGltIY
+   Tt2PhKxvSV22jpMxRI/KSXc2a9zXoS4VZkcdRTdZFShfNUjTsTvIXQQXk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357719332"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="357719332"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 11:42:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="740080920"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="740080920"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2023 11:42:36 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q4QmJ-0001Xf-1d;
+	Wed, 31 May 2023 18:42:35 +0000
+Date: Thu, 1 Jun 2023 02:41:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:perm_alloc/v0 9/13] arch/x86/kernel/ftrace.c:418:44: warning:
+ variable 'npages' is uninitialized when used here
+Message-ID: <202306010220.wZPmbp7W-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230330152040.1838353-1-trix@redhat.com> <6dac0c4b-a792-849b-97be-31ad3a527e7b@amd.com>
- <CY8PR12MB743581364ACB8E28AB149A48858E9@CY8PR12MB7435.namprd12.prod.outlook.com>
-In-Reply-To: <CY8PR12MB743581364ACB8E28AB149A48858E9@CY8PR12MB7435.namprd12.prod.outlook.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Wed, 31 May 2023 14:16:54 -0400
-Message-ID: <CADnq5_NP=bGpe6cih7pnYauNWccLzetzZxvg2zAiaWrJRJQG9w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: remove unused sq_int_priv variable
-To: "Kim, Jonathan" <Jonathan.Kim@amd.com>
-Cc: "Kuehling, Felix" <Felix.Kuehling@amd.com>, Tom Rix <trix@redhat.com>, 
-	"Deucher, Alexander" <Alexander.Deucher@amd.com>, "Koenig, Christian" <Christian.Koenig@amd.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, "airlied@gmail.com" <airlied@gmail.com>, 
-	"daniel@ffwll.ch" <daniel@ffwll.ch>, "nathan@kernel.org" <nathan@kernel.org>, 
-	"ndesaulniers@google.com" <ndesaulniers@google.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Mar 30, 2023 at 12:04=E2=80=AFPM Kim, Jonathan <Jonathan.Kim@amd.co=
-m> wrote:
->
-> [Public]
->
-> Hi Felix,
->
-> That is correct.  The debugger will need sq_int_priv to work.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git perm_alloc/v0
+head:   a92ef5aa5306aeaadefc1625e1a48c6832aa0a26
+commit: b99e562f2ff2ff567b283d6502986246ab698544 [9/13] x86: prepare to allocate exectuatble memory as ROX
+config: x86_64-randconfig-a011-20230531 (https://download.01.org/0day-ci/archive/20230601/202306010220.wZPmbp7W-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=b99e562f2ff2ff567b283d6502986246ab698544
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt perm_alloc/v0
+        git checkout b99e562f2ff2ff567b283d6502986246ab698544
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-I'll just apply this for now.  We can squash the revert into the
-debugger changes once those land.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306010220.wZPmbp7W-lkp@intel.com/
 
-Alex
+All warnings (new ones prefixed by >>):
 
->
-> Thanks,
->
-> Jon
->
-> > -----Original Message-----
-> > From: Kuehling, Felix <Felix.Kuehling@amd.com>
-> > Sent: Thursday, March 30, 2023 11:39 AM
-> > To: Tom Rix <trix@redhat.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Koenig, Christian
-> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> > airlied@gmail.com; daniel@ffwll.ch; nathan@kernel.org;
-> > ndesaulniers@google.com; Kim, Jonathan <Jonathan.Kim@amd.com>
-> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; lin=
-ux-
-> > kernel@vger.kernel.org; llvm@lists.linux.dev
-> > Subject: Re: [PATCH] drm/amdkfd: remove unused sq_int_priv variable
-> >
-> > Am 2023-03-30 um 11:20 schrieb Tom Rix:
-> > > clang with W=3D1 reports
-> > > drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38:
-> > error: variable
-> > >    'sq_int_priv' set but not used [-Werror,-Wunused-but-set-variable]
-> > >          uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-> > >                                              ^
-> > > This variable is not used so remove it.
-> >
-> > Hi Jon,
-> >
-> > I think your debugger patches are going to start using this. Can you
-> > comment?
-> >
-> > I'd prefer not to apply this patch now, as Jon's patches are expected t=
-o
-> > land soon, once Alex is done upstreaming GFX 9.4.3 support.
-> >
-> > Regards,
-> >    Felix
-> >
-> >
-> > >
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c | 9 +--------
-> > >   1 file changed, 1 insertion(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-> > b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-> > > index 0d53f6067422..bbd646c0dee7 100644
-> > > --- a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-> > > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-> > > @@ -279,7 +279,7 @@ static void event_interrupt_wq_v11(struct kfd_dev
-> > *dev,
-> > >   {
-> > >     uint16_t source_id, client_id, ring_id, pasid, vmid;
-> > >     uint32_t context_id0, context_id1;
-> > > -   uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-> > > +   uint8_t sq_int_enc, sq_int_errtype;
-> > >     struct kfd_vm_fault_info info =3D {0};
-> > >     struct kfd_hsa_memory_exception_data exception_data;
-> > >
-> > > @@ -348,13 +348,6 @@ static void event_interrupt_wq_v11(struct kfd_de=
-v
-> > *dev,
-> > >                             break;
-> > >                     case SQ_INTERRUPT_WORD_ENCODING_INST:
-> > >                             print_sq_intr_info_inst(context_id0,
-> > context_id1);
-> > > -                           sq_int_priv =3D REG_GET_FIELD(context_id0=
-,
-> > > -
-> >       SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
-> > > -                           /*if (sq_int_priv &&
-> > (kfd_set_dbg_ev_from_interrupt(dev, pasid,
-> > > -
-> >       KFD_CTXID0_DOORBELL_ID(context_id0),
-> > > -
-> >       KFD_CTXID0_TRAP_CODE(context_id0),
-> > > -                                           NULL, 0)))
-> > > -                                   return;*/
-> > >                             break;
-> > >                     case SQ_INTERRUPT_WORD_ENCODING_ERROR:
-> > >                             print_sq_intr_info_error(context_id0,
-> > context_id1);
+>> arch/x86/kernel/ftrace.c:418:44: warning: variable 'npages' is uninitialized when used here [-Wuninitialized]
+           set_memory_rox((unsigned long)trampoline, npages);
+                                                     ^~~~~~
+   arch/x86/kernel/ftrace.c:316:22: note: initialize the variable 'npages' to silence this warning
+           unsigned long npages;
+                               ^
+                                = 0
+   1 warning generated.
+
+
+vim +/npages +418 arch/x86/kernel/ftrace.c
+
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  306) 
+aec0be2d6e9f02 Steven Rostedt (Red Hat  2014-11-18  307) static unsigned long
+aec0be2d6e9f02 Steven Rostedt (Red Hat  2014-11-18  308) create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  309) {
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  310) 	unsigned long start_offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  311) 	unsigned long end_offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  312) 	unsigned long op_offset;
+768ae4406a5cab Peter Zijlstra           2019-08-26  313  	unsigned long call_offset;
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  314) 	unsigned long jmp_offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  315) 	unsigned long offset;
+3c0dab44e22782 Nadav Amit               2019-04-25  316  	unsigned long npages;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  317) 	unsigned long size;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  318) 	unsigned long *ptr;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  319) 	void *trampoline;
+ee3e2469b3463d Peter Zijlstra           2022-09-15  320  	void *ip, *dest;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  321) 	/* 48 8b 15 <offset> is movq <offset>(%rip), %rdx */
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  322) 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
+e52fc2cf3f6628 Peter Zijlstra           2022-03-08  323  	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  324) 	union ftrace_op_code_union op_ptr;
+b99e562f2ff2ff Song Liu                 2023-05-25  325  	void *ret;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  326) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  327) 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  328) 		start_offset = (unsigned long)ftrace_regs_caller;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  329) 		end_offset = (unsigned long)ftrace_regs_caller_end;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  330) 		op_offset = (unsigned long)ftrace_regs_caller_op_ptr;
+768ae4406a5cab Peter Zijlstra           2019-08-26  331  		call_offset = (unsigned long)ftrace_regs_call;
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  332) 		jmp_offset = (unsigned long)ftrace_regs_caller_jmp;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  333) 	} else {
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  334) 		start_offset = (unsigned long)ftrace_caller;
+0298739b7983cf Peter Zijlstra           2020-04-01  335  		end_offset = (unsigned long)ftrace_caller_end;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  336) 		op_offset = (unsigned long)ftrace_caller_op_ptr;
+768ae4406a5cab Peter Zijlstra           2019-08-26  337  		call_offset = (unsigned long)ftrace_call;
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  338) 		jmp_offset = 0;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  339) 	}
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  340) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  341) 	size = end_offset - start_offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  342) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  343) 	/*
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  344) 	 * Allocate enough size to store the ftrace_caller code,
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  345) 	 * the iret , as well as the address of the ftrace_ops this
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  346) 	 * trampoline is used for.
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  347) 	 */
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  348) 	trampoline = alloc_tramp(size + RET_SIZE + sizeof(void *));
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  349) 	if (!trampoline)
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  350) 		return 0;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  351) 
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  352) 	*tramp_size = size + RET_SIZE + sizeof(void *);
+aec0be2d6e9f02 Steven Rostedt (Red Hat  2014-11-18  353) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  354) 	/* Copy ftrace_caller onto the trampoline memory */
+b99e562f2ff2ff Song Liu                 2023-05-25  355  	ret = text_poke_copy(trampoline, (void *)start_offset, size);
+b99e562f2ff2ff Song Liu                 2023-05-25  356  	if (WARN_ON(!ret))
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  357) 		goto fail;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  358) 
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  359) 	ip = trampoline + size;
+1f001e9da6bbf4 Peter Zijlstra           2022-06-14  360  	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+770ae1b709528a Peter Zijlstra           2022-09-15  361  		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, x86_return_thunk, JMP32_INSN_SIZE);
+1f001e9da6bbf4 Peter Zijlstra           2022-06-14  362  	else
+b99e562f2ff2ff Song Liu                 2023-05-25  363  		text_poke_copy(ip, retq, sizeof(retq));
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  364) 
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  365) 	/* No need to test direct calls on created trampolines */
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  366) 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  367) 		/* NOP the jnz 1f; but make sure it's a 2 byte jnz */
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  368) 		ip = trampoline + (jmp_offset - start_offset);
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  369) 		if (WARN_ON(*(char *)ip != 0x75))
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  370) 			goto fail;
+b99e562f2ff2ff Song Liu                 2023-05-25  371  		if (!text_poke_copy(ip, x86_nops[2], 2))
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  372) 			goto fail;
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  373) 	}
+fe58acefd5a66d Steven Rostedt (VMware   2020-04-22  374) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  375) 	/*
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  376) 	 * The address of the ftrace_ops that is used for this trampoline
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  377) 	 * is stored at the end of the trampoline. This will be used to
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  378) 	 * load the third parameter for the callback. Basically, that
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  379) 	 * location at the end of the trampoline takes the place of
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  380) 	 * the global function_trace_op variable.
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  381) 	 */
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  382) 
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  383) 	ptr = (unsigned long *)(trampoline + size + RET_SIZE);
+b99e562f2ff2ff Song Liu                 2023-05-25  384  	text_poke_copy(ptr, &ops, sizeof(unsigned long));
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  385) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  386) 	op_offset -= start_offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  387) 	memcpy(&op_ptr, trampoline + op_offset, OP_REF_SIZE);
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  388) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  389) 	/* Are we pointing to the reference? */
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  390) 	if (WARN_ON(memcmp(op_ptr.op, op_ref, 3) != 0))
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  391) 		goto fail;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  392) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  393) 	/* Load the contents of ptr into the callback parameter */
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  394) 	offset = (unsigned long)ptr;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  395) 	offset -= (unsigned long)trampoline + op_offset + OP_REF_SIZE;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  396) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  397) 	op_ptr.offset = offset;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  398) 
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  399) 	/* put in the new offset to the ftrace_ops */
+b99e562f2ff2ff Song Liu                 2023-05-25  400  	text_poke_copy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  401) 
+768ae4406a5cab Peter Zijlstra           2019-08-26  402  	/* put in the call to the function */
+768ae4406a5cab Peter Zijlstra           2019-08-26  403  	mutex_lock(&text_mutex);
+768ae4406a5cab Peter Zijlstra           2019-08-26  404  	call_offset -= start_offset;
+ee3e2469b3463d Peter Zijlstra           2022-09-15  405  	/*
+ee3e2469b3463d Peter Zijlstra           2022-09-15  406  	 * No need to translate into a callthunk. The trampoline does
+ee3e2469b3463d Peter Zijlstra           2022-09-15  407  	 * the depth accounting before the call already.
+ee3e2469b3463d Peter Zijlstra           2022-09-15  408  	 */
+ee3e2469b3463d Peter Zijlstra           2022-09-15  409  	dest = ftrace_ops_get_func(ops);
+b99e562f2ff2ff Song Liu                 2023-05-25  410  	text_poke_copy_locked(trampoline + call_offset,
+ee3e2469b3463d Peter Zijlstra           2022-09-15  411  	      text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
+b99e562f2ff2ff Song Liu                 2023-05-25  412  	      CALL_INSN_SIZE, false);
+768ae4406a5cab Peter Zijlstra           2019-08-26  413  	mutex_unlock(&text_mutex);
+768ae4406a5cab Peter Zijlstra           2019-08-26  414  
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  415) 	/* ALLOC_TRAMP flags lets us know we created it */
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  416) 	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  417) 
+d48567c9a0d1e6 Peter Zijlstra           2022-10-26 @418  	set_memory_rox((unsigned long)trampoline, npages);
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  419) 	return (unsigned long)trampoline;
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  420) fail:
+7fdfe1e40b225b Rick Edgecombe           2019-04-25  421  	tramp_free(trampoline);
+d2a68c4effd821 Steven Rostedt (VMware   2018-12-08  422) 	return 0;
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  423) }
+f3bea49115b21e Steven Rostedt (Red Hat  2014-07-02  424) 
+
+:::::: The code at line 418 was first introduced by commit
+:::::: d48567c9a0d1e605639f8a8705a61bbb55fb4e84 mm: Introduce set_memory_rox()
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Dave Hansen <dave.hansen@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
