@@ -1,108 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456CF2342E
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 15:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C525FC4339C;
-	Thu,  1 Jun 2023 15:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A9F23400;
+	Thu,  1 Jun 2023 15:26:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7334C433D2;
+	Thu,  1 Jun 2023 15:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685632727;
-	bh=zt7KZMmx/oJBYdfFdtNG8ZQh916ADU8eGaXVMVWxHLE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lOsYcDeZ6FDbxshIu7kdv+ump9fNlSvRpNRm6K6kLV3mxZKqoX7/SeZaOn5gv9gYd
-	 jUGbk6YWUoRlA6uXYqUPeKRY+B/G7Gtt6DRjGqb/rofNXy1cgD4lv6tend69ihuddC
-	 /Xs5cKYacjSj7o/Ch3PcbC+S5wqM/cwEt5cNvibv8wmRxcg74v43euAPEUPlY7fG5a
-	 I0xFlAuT7pGfRRlcmRdc3Ln/9JyPCzJ1R8eqd4eYbhqcuvyFxOQPjvsczQhU1vqyNd
-	 nWIyEt9HR0ur9SlpXBuqSzw77gRjWK2aT6fdvn0eK1AeOTk3eXPGF0sk7UpCqBMB8s
-	 Un4YXvEvE8kcg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: kasan-dev@googlegroups.com,
-	ryabinin.a.a@gmail.com
-Cc: glider@google.com,
-	andreyknvl@gmail.com,
-	dvyukov@google.com,
-	vincenzo.frascino@arm.com,
-	elver@google.com,
-	linux-media@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	herbert@gondor.apana.org.au,
-	ardb@kernel.org,
-	mchehab@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on broken gcc
-Date: Thu,  1 Jun 2023 17:18:11 +0200
-Message-Id: <20230601151832.3632525-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=k20201202; t=1685633190;
+	bh=ZEqKq2MGPwE7UmZkmGx9PfcvEwEnm43p6Kqjn+YHD54=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pJlEQRFcI1KzDRh4BpUI27GOM3eku6JhOS/Ayy53bJhJuapS07hiAcwnTvVmzm33U
+	 xcN5uXQprcvLy/XkjzidhfE2B4FreQ0htuC9/gQs/EVlPMnvWuKcOZHsV8AfAb8N2c
+	 Alezdo7LrD/SWzCggR89nYqDOgVt0l2KJpYZxfZvguVFKriRy/RHb443PFZJAjCYX5
+	 dx02TK8eJkab4dvfDANuTuj8A0SBrDOvg4oGVKZ39QeRciohsdasVqsLNkQJc6sHPe
+	 EAWqSSSXEitfwpYOds4m2XqtbPYUlZ5slVRsm1ZWdf5kNzEEf731l2k3+lRzuswRUI
+	 qtIpPYzOROyCA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 01 Jun 2023 08:26:16 -0700
+Subject: [PATCH] zswap: Avoid uninitialized use of ret in
+ zswap_frontswap_store()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230601-zswap-cgroup-wsometimes-uninitialized-v1-1-35debdd19293@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJe4eGQC/x2OywrCMBAAf6Xk7EIao6K/Ih7y2LQLJg3Z1EpL/
+ 93U4zAwzCYYCyGLR7eJgh9imlKD/tQJN5o0IJBvLJRUZ3mVPay8mAxuKNOcYeEpYqWIDHOiRJX
+ Mm1b0YC/6HoJW+oZetJY1jGCLSW48atFwxXKIXDDQ9z/wfO37D9EgKUOQAAAA
+To: akpm@linux-foundation.org, sjenning@redhat.com, ddstreet@ieee.org, 
+ vitaly.wool@konsulko.com
+Cc: ndesaulniers@google.com, trix@redhat.com, nphamcs@gmail.com, 
+ linux-mm@kvack.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2147; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ZEqKq2MGPwE7UmZkmGx9PfcvEwEnm43p6Kqjn+YHD54=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkVO5bed5S7uD8+/sOyRdGsao9Xmk2Yvnz1dOWbW/bWC
+ /dotL071FHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmYsbHyNDCZ6By9rVc22rm
+ aT/vpyya/5YhwNDziVVFTOyV9S+z9/Mw/E+oFVHuYWPSKJ54UmRy+7anmQLf/JJuO3uE3j7OoeD
+ 3mgkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Arnd Bergmann <arnd@arndb.de>
+Clang warns:
 
-Combining UBSAN and GCOV in randconfig builds results in a number of
-stack frame size warnings, such as:
+  mm/zswap.c:1183:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+   1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
+        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  mm/zswap.c:1327:9: note: uninitialized use occurs here
+   1327 |         return ret;
+        |                ^~~
+  mm/zswap.c:1183:2: note: remove the 'if' if its condition is always false
+   1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1184 |                 goto reject;
+        | ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  mm/zswap.c:1158:9: note: initialize the variable 'ret' to silence this warning
+   1158 |         int ret;
+        |                ^
+        |                 = 0
+  1 error generated.
 
-crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
-drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+Set ret to -EINVAL, which seems to best match the situation the comment
+mentions and matches an earlier bailout due to an unsupported type or
+situation.
 
-I managed to track this down to the -fsanitize=bounds option clashing
-with the -fprofile-arcs option, which leads a lot of spilled temporary
-variables in generated instrumentation code.
-
-Hopefully this can be addressed in future gcc releases the same way
-that clang handles the combination, but for existing compiler releases,
-it seems best to disable one of the two flags. This can be done either
-globally by just not passing both at the same time, or locally using
-the no_sanitize or no_instrument_function attributes in the affected
-functions.
-
-Try the simplest approach here, and turn off -fsanitize=bounds on
-gcc when GCOV is enabled, leaving the rest of UBSAN working. Doing
-this globally also helps avoid inefficient code from the same
-problem that did not push the build over the warning limit.
-
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Link: https://lore.kernel.org/stable/6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain/
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-Link: https://godbolt.org/z/zvf7YqK5K
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 6804144bf1cf ("zswap: do not shrink if cgroup may not zswap")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/202306011435.2BxsHFUE-lkp@intel.com/
+Closes: https://lore.kernel.org/202306012152.o4FL7Y6J-lkp@intel.com/
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1861
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- lib/Kconfig.ubsan | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/zswap.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index f7cbbad2bb2f4..8f71ff8f27576 100644
---- a/lib/Kconfig.ubsan
-+++ b/lib/Kconfig.ubsan
-@@ -29,6 +29,8 @@ config UBSAN_TRAP
+diff --git a/mm/zswap.c b/mm/zswap.c
+index cff93643a6ab..e8313e2f5807 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -1180,8 +1180,10 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
+ 	 * local cgroup limits.
+ 	 */
+ 	objcg = get_obj_cgroup_from_page(page);
+-	if (objcg && !obj_cgroup_may_zswap(objcg))
++	if (objcg && !obj_cgroup_may_zswap(objcg)) {
++		ret = -EINVAL;
+ 		goto reject;
++	}
  
- config CC_HAS_UBSAN_BOUNDS_STRICT
- 	def_bool $(cc-option,-fsanitize=bounds-strict)
-+	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-+	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
- 	help
- 	  The -fsanitize=bounds-strict option is only available on GCC,
- 	  but uses the more strict handling of arrays that includes knowledge
+ 	/* reclaim space if needed */
+ 	if (zswap_is_full()) {
+
+---
+base-commit: b2424568bd9b947b2698b693ff24fec63bb4b36a
+change-id: 20230601-zswap-cgroup-wsometimes-uninitialized-b549ff4247ed
+
+Best regards,
 -- 
-2.39.2
+Nathan Chancellor <nathan@kernel.org>
 
