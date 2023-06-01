@@ -1,229 +1,147 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0BC23400;
-	Thu,  1 Jun 2023 15:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685633613; x=1717169613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s+Y19gC8Hjb03qGTU291+6b1qsc+Qr5QoRUVeyRcaMg=;
-  b=iwD48+1kE9XIaa4NrrJGxXaYW0E1UGIHCVK0wTyP5M3xLjSN6JolUMYx
-   S8u0tKbL6YszyZ5gBy9AeuJjIK3Z7ul60ECPnZ5gkVyxJMW2pOwFlvyD6
-   h034GhH3IxkYbcd26DwrvG9QDVz6ZRHtcJOJA1zNplzp2QFu58J/pad78
-   AVl6NLYNIjAzkdEWfM1kbVMh3mKv/wBgfbA9wno02erjGms7WrZj8Ezbh
-   GABaRrLv6u/OZHCURCUMA6ZL3Smne+a+vtLXKN0qEpFtfaZp5CZIsQmTT
-   JdslwxnO5dz+5XIHqghsy+rmejPOxPQSfzH04170Gzz5iKNGASPnrr26k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="421402507"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="421402507"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 08:32:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="740400916"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="740400916"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2023 08:32:27 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q4kHq-0002Q6-2u;
-	Thu, 01 Jun 2023 15:32:26 +0000
-Date: Thu, 1 Jun 2023 23:31:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nikita Shubin <nikita.shubin@maquefel.me>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Peters <mpeters@embeddedts.com>,
-	Kris Bahnsen <kris@embeddedts.com>, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 28/43] input: keypad: ep93xx: add DT support for
- Cirrus EP93xx
-Message-ID: <202306012327.f8AIwhqv-lkp@intel.com>
-References: <20230601054549.10843-10-nikita.shubin@maquefel.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FC623400
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 15:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E0BC433D2;
+	Thu,  1 Jun 2023 15:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685634063;
+	bh=7xY+u4JxmBE6NT/YTHi3IL1X1Lgg7woZjL73nmOBOnU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qCFsc6RCloNkVlMfcUoDOwSCGeYHgmOnqTtFxLj9omS1r7XEk+SSHCF7owrpZAv33
+	 wiYZPZ0XH6r/Xp/p4XCPPWQpnoODOcnHdnKn78Xhv3hT7rbrO7RcHAorVeTpN6fLqM
+	 XCnXp1jkUliSdID0oPET9ocblTY5mvGoqQ8MjEfNJau5w6I0u3VVkrqj5MsTHrjVI3
+	 FIQn4rz5pL8HFtBjgNXcr1k7Q0fwhAmwr30dYa26GpzymzmTMDdgf1rZj1Ht0u2EO/
+	 Gg6jWugKIbTtz5HlBmN0Md6ro6199VPQ+XGHRlD9vzLHqrgOeBKT+dSbzl3eVE/cca
+	 dmE28sECzdjLw==
+Date: Thu, 1 Jun 2023 08:41:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Stuart Yoder <stuyoder@gmail.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Leo Li <leoyang.li@nxp.com>
+Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Message-ID: <20230601154101.GA2368233@dev-arch.thelio-3990X>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230601054549.10843-10-nikita.shubin@maquefel.me>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
 
-Hi Nikita,
+Hi Uwe,
 
-kernel test robot noticed the following build errors:
+On Fri, Mar 10, 2023 at 11:41:26PM +0100, Uwe Kleine-König wrote:
+> Instead of silently returning an error in the remove callback (which yields
+> a generic and little informing error message), annotate each error path of
+> fsl_mc_resource_pool_remove_device() with an error message and return zero
+> in the remove callback to suppress the error message.
+> 
+> Note that changing the return value has no other effect than suppressing
+> the error message by the fsl_mc bus driver.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linusw-pinctrl/devel linusw-pinctrl/for-next linus/master v6.4-rc4 next-20230601]
-[cannot apply to soc/for-next robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I apologize if this has already been reported or fixed somewhere, I did
+a search of lore.kernel.org and did not find anything. This change as
+commit b3134039c5b3 ("bus: fsl-mc: fsl-mc-allocator: Improve error
+reporting") causes the following warning/error with clang:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikita-Shubin/dt-bindings-soc-Add-Cirrus-EP93xx/20230601-143415
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230601054549.10843-10-nikita.shubin%40maquefel.me
-patch subject: [PATCH v1 28/43] input: keypad: ep93xx: add DT support for Cirrus EP93xx
-config: hexagon-randconfig-r045-20230531 (https://download.01.org/0day-ci/archive/20230601/202306012327.f8AIwhqv-lkp@intel.com/config)
-compiler: clang version 15.0.4 (https://github.com/llvm/llvm-project 5c68a1cb123161b54b72ce90e7975d95a8eaf2a4)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/79136093fef692a2db3c48c2d30e37310599131f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nikita-Shubin/dt-bindings-soc-Add-Cirrus-EP93xx/20230601-143415
-        git checkout 79136093fef692a2db3c48c2d30e37310599131f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/keyboard/
+  drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: error: variable 'mc_bus_dev' is uninitialized when used here [-Werror,-Wuninitialized]
+    108 |                 dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+        |                          ^~~~~~~~~~
+  include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+    144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+        |                                                   ^~~
+  include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+    110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+        |                         ^~~
+  drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the variable 'mc_bus_dev' to silence this warning
+    100 |         struct fsl_mc_device *mc_bus_dev;
+        |                                         ^
+        |                                          = NULL
+  1 error generated.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306012327.f8AIwhqv-lkp@intel.com/
+Should this be using mc_dev->dev or is there a different fix?
 
-All errors (new ones prefixed by >>):
+diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+index 0ad68099684e..867ac3bbeae6 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
++++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+@@ -105,7 +105,7 @@ static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+ 
+ 	resource = mc_dev->resource;
+ 	if (!resource || resource->data != mc_dev) {
+-		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
++		dev_err(&mc_dev->dev, "resource mismatch\n");
+ 		goto out;
+ 	}
+ 
 
-   In file included from drivers/input/keyboard/ep93xx_keypad.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/input/keyboard/ep93xx_keypad.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/input/keyboard/ep93xx_keypad.c:24:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/input/keyboard/ep93xx_keypad.c:262:2: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           of_property_read_u32(np, "cirrus,debounce-delay-ms", &keypad->debounce);
-           ^
-   6 warnings and 1 error generated.
+Cheers,
+Nathan
 
-
-vim +/of_property_read_u32 +262 drivers/input/keyboard/ep93xx_keypad.c
-
-   233	
-   234	static DEFINE_SIMPLE_DEV_PM_OPS(ep93xx_keypad_pm_ops,
-   235					ep93xx_keypad_suspend, ep93xx_keypad_resume);
-   236	
-   237	static int ep93xx_keypad_probe(struct platform_device *pdev)
-   238	{
-   239		struct device_node *np = pdev->dev.of_node;
-   240		struct ep93xx_keypad *keypad;
-   241		struct input_dev *input_dev;
-   242		int err;
-   243	
-   244		keypad = devm_kzalloc(&pdev->dev, sizeof(*keypad), GFP_KERNEL);
-   245		if (!keypad)
-   246			return -ENOMEM;
-   247	
-   248		keypad->irq = platform_get_irq(pdev, 0);
-   249		if (keypad->irq < 0)
-   250			return keypad->irq;
-   251	
-   252		keypad->mmio_base = devm_platform_ioremap_resource(pdev, 0);
-   253		if (IS_ERR(keypad->mmio_base))
-   254			return PTR_ERR(keypad->mmio_base);
-   255	
-   256		keypad->clk = devm_clk_get(&pdev->dev, NULL);
-   257		if (IS_ERR(keypad->clk))
-   258			return PTR_ERR(keypad->clk);
-   259	
-   260		keypad->flags = ep93xx_keypad_flags;
-   261	
- > 262		of_property_read_u32(np, "cirrus,debounce-delay-ms", &keypad->debounce);
-   263		of_property_read_u32(np, "cirrus,prescale", &keypad->prescale);
-   264	
-   265		input_dev = devm_input_allocate_device(&pdev->dev);
-   266		if (!input_dev)
-   267			return -ENOMEM;
-   268	
-   269		keypad->input_dev = input_dev;
-   270	
-   271		input_dev->name = pdev->name;
-   272		input_dev->id.bustype = BUS_HOST;
-   273		input_dev->open = ep93xx_keypad_open;
-   274		input_dev->close = ep93xx_keypad_close;
-   275	
-   276		err = matrix_keypad_build_keymap(NULL, NULL,
-   277						 EP93XX_MATRIX_ROWS, EP93XX_MATRIX_COLS,
-   278						 keypad->keycodes, input_dev);
-   279		if (err)
-   280			return err;
-   281	
-   282		if (keypad->flags & EP93XX_KEYPAD_AUTOREPEAT)
-   283			__set_bit(EV_REP, input_dev->evbit);
-   284		input_set_drvdata(input_dev, keypad);
-   285	
-   286		err = devm_request_irq(&pdev->dev, keypad->irq,
-   287				       ep93xx_keypad_irq_handler,
-   288				       0, pdev->name, keypad);
-   289		if (err)
-   290			return err;
-   291	
-   292		err = input_register_device(input_dev);
-   293		if (err)
-   294			return err;
-   295	
-   296		platform_set_drvdata(pdev, keypad);
-   297	
-   298		device_init_wakeup(&pdev->dev, 1);
-   299		err = dev_pm_set_wake_irq(&pdev->dev, keypad->irq);
-   300		if (err)
-   301			dev_warn(&pdev->dev, "failed to set up wakeup irq: %d\n", err);
-   302	
-   303		return 0;
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/bus/fsl-mc/fsl-mc-allocator.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> index e60faf8edaa1..36f70e5e418b 100644
+> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> @@ -104,22 +104,30 @@ static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+>  	int error = -EINVAL;
+>  
+>  	resource = mc_dev->resource;
+> -	if (!resource || resource->data != mc_dev)
+> +	if (!resource || resource->data != mc_dev) {
+> +		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+>  		goto out;
+> +	}
+>  
+>  	mc_bus_dev = to_fsl_mc_device(mc_dev->dev.parent);
+>  	mc_bus = to_fsl_mc_bus(mc_bus_dev);
+>  	res_pool = resource->parent_pool;
+> -	if (res_pool != &mc_bus->resource_pools[resource->type])
+> +	if (res_pool != &mc_bus->resource_pools[resource->type]) {
+> +		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
+>  		goto out;
+> +	}
+>  
+>  	mutex_lock(&res_pool->mutex);
+>  
+> -	if (res_pool->max_count <= 0)
+> +	if (res_pool->max_count <= 0) {
+> +		dev_err(&mc_bus_dev->dev, "max_count underflow\n");
+>  		goto out_unlock;
+> +	}
+>  	if (res_pool->free_count <= 0 ||
+> -	    res_pool->free_count > res_pool->max_count)
+> +	    res_pool->free_count > res_pool->max_count) {
+> +		dev_err(&mc_bus_dev->dev, "free_count mismatch\n");
+>  		goto out_unlock;
+> +	}
+>  
+>  	/*
+>  	 * If the device is currently allocated, its resource is not
+> @@ -613,7 +621,7 @@ static int fsl_mc_allocator_remove(struct fsl_mc_device *mc_dev)
+>  	if (mc_dev->resource) {
+>  		error = fsl_mc_resource_pool_remove_device(mc_dev);
+>  		if (error < 0)
+> -			return error;
+> +			return 0;
+>  	}
+>  
+>  	dev_dbg(&mc_dev->dev,
+> -- 
+> 2.39.1
+> 
