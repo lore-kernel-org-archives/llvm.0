@@ -1,43 +1,59 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DE2BA2F;
-	Thu,  1 Jun 2023 16:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685635460; x=1717171460;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ONiRBD+4hRflOQwlhSxxTdfvpTF2t0Qt/Up3daTp3OU=;
-  b=ig6nqeCf3AF3oFQoyiM8R41fzgCYUDiTB9nNPkQgC0H7LvixlM2Gndzi
-   OcROdmmjD8E4m4f2WoubH84MEHMHBILoqYfittc9VcmEGCTV+NuCmT+YK
-   VasexPQ7ky+6vNIvpVtYwsNbzzzJZrIKnsnhTjDQOipLD/FDc/PaAaCq8
-   LH0eoSu/ct1J2VO9vsFPw32wdVFGIK5rsO6fRnDxtAOrViZmhXR2nY/3s
-   S/7RV5hz3aakLCM8rAX3TvZn/rSCtOTz+ZzllrAuiu+iBohvcf+svbPe6
-   kLJ72eR9cINPafdh306EXo42laQyCzribd2B5FkklBs6ZjUwMyXD0widN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="354456277"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="354456277"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:03:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="831629581"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="831629581"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2023 09:03:30 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q4klt-0002SC-1h;
-	Thu, 01 Jun 2023 16:03:29 +0000
-Date: Fri, 2 Jun 2023 00:03:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:sched/core 25/25] kernel/sched/core.c:4053:24: error:
- call to undeclared function '__task_state_match'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202306012322.qZLstogi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E4E22D77
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:14:54 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b05e96dabbso5940815ad.2
+        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685636094; x=1688228094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
+        b=BLOJsskDJTv8yn+ZTSU8DPbhPH9VAEpQcNphr4RmScmbAmgWrp0GukfjFro2r265wS
+         6nmFRGSXXGa7RcbInQP2zovN07D4+fErz4lNsHF1JQiB5r265YWCLnVrXvfV9fIuuPKD
+         bp9H8NF/OqTzmF7dGtp2dpe9nzNFgZX5Yid94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685636094; x=1688228094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
+        b=IHhagzBFkFRFOKnZdbaPR9o2uh9dx0Peq0Wpf0nggDKmUz7gveQwmfdzFCb3pRMzfV
+         kykDXJNwhgo6kFyrDo38G3v3/ZTwe8wIySRJj+If7GVrJSF3Xm6RjRQvOAtDALyuAXKm
+         KiXacUgPcpqKBd7UF5D6uE6qRrwzVfNOIDnzz3ZfardQbko8l8Pjcm4khIAxq/X6KByj
+         86d5GrBe9dOI2BqkdOtup3+U7ppdlQ9ezmM7HAJcqImeLGivzsB1GYuxayPGO0KHylWm
+         0ieDxEJmJFBoNeyEQHQLshI3rVYSIWZvYFd6fP+KUVoLxBmQaPCeeeGJriAmH37QY0s5
+         IVrA==
+X-Gm-Message-State: AC+VfDyKqc+OMcYpo6WXA7thD2dqMSgVoHaqdBXp4rioKC/2DtQ0XEuo
+	pbkT9+tTOY2D3nWxBT9uyT8NKw==
+X-Google-Smtp-Source: ACHHUZ6ljnrlP3/ilIjQD+BaM7rS5m1dEr3AyuNBWAGikj0kydZDXi/vDU4GxazSWUNgX9O+Y6PY3A==
+X-Received: by 2002:a17:902:c20d:b0:1ac:6d4c:c24b with SMTP id 13-20020a170902c20d00b001ac6d4cc24bmr6045835pll.3.1685636094447;
+        Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001b176ba9f17sm3680035plq.149.2023.06.01.09.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 09:14:53 -0700 (PDT)
+Date: Thu, 1 Jun 2023 09:14:53 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: kasan-dev@googlegroups.com, ryabinin.a.a@gmail.com, glider@google.com,
+	andreyknvl@gmail.com, dvyukov@google.com, vincenzo.frascino@arm.com,
+	elver@google.com, linux-media@vger.kernel.org,
+	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
+	ardb@kernel.org, mchehab@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on
+ broken gcc
+Message-ID: <202306010909.89C4BED@keescook>
+References: <20230601151832.3632525-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,76 +62,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230601151832.3632525-1-arnd@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-head:   1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
-commit: 1fd7ac28685ef6c242cc8689f97bc7014ae82ca5 [25/25] sched: Consider task_struct::saved_state in wait_task_inactive()
-config: riscv-randconfig-r042-20230531 (https://download.01.org/0day-ci/archive/20230601/202306012322.qZLstogi-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/core
-        git checkout 1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/sched/
+On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Combining UBSAN and GCOV in randconfig builds results in a number of
+> stack frame size warnings, such as:
+> 
+> crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
+> drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+> drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> 
+> I managed to track this down to the -fsanitize=bounds option clashing
+> with the -fprofile-arcs option, which leads a lot of spilled temporary
+> variables in generated instrumentation code.
+> 
+> Hopefully this can be addressed in future gcc releases the same way
+> that clang handles the combination, but for existing compiler releases,
+> it seems best to disable one of the two flags. This can be done either
+> globally by just not passing both at the same time, or locally using
+> the no_sanitize or no_instrument_function attributes in the affected
+> functions.
+> 
+> Try the simplest approach here, and turn off -fsanitize=bounds on
+> gcc when GCOV is enabled, leaving the rest of UBSAN working. Doing
+> this globally also helps avoid inefficient code from the same
+> problem that did not push the build over the warning limit.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Link: https://lore.kernel.org/stable/6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain/
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
+> Link: https://godbolt.org/z/zvf7YqK5K
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306012322.qZLstogi-lkp@intel.com/
+I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
+(e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
+so I'd prefer we maintain all*config coverage for the more commonly
+used config.
 
-All errors (new ones prefixed by >>):
+> ---
+>  lib/Kconfig.ubsan | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index f7cbbad2bb2f4..8f71ff8f27576 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -29,6 +29,8 @@ config UBSAN_TRAP
+>  
+>  config CC_HAS_UBSAN_BOUNDS_STRICT
+>  	def_bool $(cc-option,-fsanitize=bounds-strict)
+> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
+> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
+>  	help
+>  	  The -fsanitize=bounds-strict option is only available on GCC,
+>  	  but uses the more strict handling of arrays that includes knowledge
 
->> kernel/sched/core.c:4053:24: error: call to undeclared function '__task_state_match'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           *success = !!(match = __task_state_match(p, state));
-                                 ^
-   kernel/sched/core.c:6815:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
-   asmlinkage __visible void __sched schedule_user(void)
-                                     ^
-   kernel/sched/core.c:6815:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void __sched schedule_user(void)
-                        ^
-                        static 
-   1 warning and 1 error generated.
+Alternatively, how about falling back to -fsanitize=bounds instead, as
+that (which has less coverage) wasn't triggering the stack frame
+warnings?
 
-
-vim +/__task_state_match +4053 kernel/sched/core.c
-
-  4028	
-  4029	/*
-  4030	 * Invoked from try_to_wake_up() to check whether the task can be woken up.
-  4031	 *
-  4032	 * The caller holds p::pi_lock if p != current or has preemption
-  4033	 * disabled when p == current.
-  4034	 *
-  4035	 * The rules of PREEMPT_RT saved_state:
-  4036	 *
-  4037	 *   The related locking code always holds p::pi_lock when updating
-  4038	 *   p::saved_state, which means the code is fully serialized in both cases.
-  4039	 *
-  4040	 *   The lock wait and lock wakeups happen via TASK_RTLOCK_WAIT. No other
-  4041	 *   bits set. This allows to distinguish all wakeup scenarios.
-  4042	 */
-  4043	static __always_inline
-  4044	bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
-  4045	{
-  4046		int match;
-  4047	
-  4048		if (IS_ENABLED(CONFIG_DEBUG_PREEMPT)) {
-  4049			WARN_ON_ONCE((state & TASK_RTLOCK_WAIT) &&
-  4050				     state != TASK_RTLOCK_WAIT);
-  4051		}
-  4052	
-> 4053		*success = !!(match = __task_state_match(p, state));
-  4054	
+i.e. fall back through these:
+	-fsanitize=array-bounds (Clang)
+	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
+	-fsanitize=bounds
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
