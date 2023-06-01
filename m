@@ -1,114 +1,61 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7201313AC3
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:42:13 +0000 (UTC)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351FHZik010627;
-	Thu, 1 Jun 2023 17:56:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=J2XhhDlTFWe9QBoqWhVSk0LMiIjX30rM1uG7DPXXW5A=;
- b=klyqao+EHAhU8SFZOwnVtxMsM6VugNVH/EObvuG5duZlvFM74gJ285xS8cuur170CBNc
- 2UHC6W0gWtouEYboUdW/5CjV9XWv7lk2ipt7DjdAsSk2naih4ChgFu9ykAL2q7Utv+Lt
- bm/JHqZOYdU9pVct3SmDtZGUh/ftCglDjL62ZCgCbsMkP9liRq9FUB97R/l7uSV4dSu1
- s/4LI9tzJP3x4X09dFF7PCPDBbqaxltt1iCKePet8ENQyfe52vJsZJHp+MidNHE4EQVA
- Vh2GE46fICar2lG87CQ8E38xPM9BaVjSin7h5q+XTTlxRniBUEfu0WsrPQBYNtjU6SZM Kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx31524mj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Jun 2023 17:56:32 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A2FA310002A;
-	Thu,  1 Jun 2023 17:56:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 97D6325AEE2;
-	Thu,  1 Jun 2023 17:56:30 +0200 (CEST)
-Received: from localhost (10.48.0.39) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 1 Jun
- 2023 17:56:30 +0200
-From: Antonio Borneo <antonio.borneo@foss.st.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick
- Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>
-CC: Antonio Borneo <antonio.borneo@foss.st.com>
-Subject: [PATCH] irqchip/stm32-exti: Fix warning on initialized field overwritten
-Date: Thu, 1 Jun 2023 17:56:14 +0200
-Message-ID: <20230601155614.34490-1-antonio.borneo@foss.st.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A600942512
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:58:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685638717; x=1717174717;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rQr060zH9KUjmdwUDYfSZFTdHmf4ecv0Iqn3RGTCXWg=;
+  b=gDryejiLcRPdmSR5wV2sffj3BA6IxcexnaIDRgLiICzMEjD0QhUpJnGk
+   +cRfX1cLf7kqZzF4Dcvmi+D5R6TGzWkrSoKg1uPUO3bz/BPTz0Pir2dYH
+   WV8llLim64w6F0TV2uFLWgZi3w105tR82EySlu9UtIdOAzQ4dIQCZC0Vv
+   yMSYwFWGBdMP5k64GNc9EjRkRoetS2pS8Gk+K6a/Cpw9wzeiL7qEtLExx
+   Nw8J6wpv0QAa3lvZHHNj6yZP80//9cLRJRhsXQiUXk1+krL6TSJ47SMs+
+   pMom05AAgquDr4GbSldfeMZahYTfP1RSDL/APEu68Cl4MfA9z09bIl5NM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="340238064"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="340238064"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:58:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737182158"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="737182158"
+Received: from jdboswor-mobl.amr.corp.intel.com (HELO [10.212.227.45]) ([10.212.227.45])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:58:36 -0700
+Message-ID: <b8b118ef-d250-f331-fd8f-9853bf72d102@intel.com>
+Date: Thu, 1 Jun 2023 09:58:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.39]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/csum: Move csum_tail result parameter to a local
+ variable.
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, hpa@zytor.com, ndesaulniers@google.com,
+ goldstein.w.n@gmail.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230530135953.3341174-1-trix@redhat.com>
+ <20230530152016.GA3503416@dev-arch.thelio-3990X>
+From: Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230530152016.GA3503416@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-While compiling with W=1, both gcc and clang complain about a
-tricky way to initialize an array by filling it with a non-zero
-value and then overrride some of the array elements.
-In this case the override is intentional, so just disable the
-specific warning for only this part of the code.
+On 5/30/23 08:20, Nathan Chancellor wrote:
+> Dave picked it up yesterday, I guess -tip's auto-latest was not
+> refreshed for today's -next:
+> 
+> https://git.kernel.org/tip/2fe1e67e6987b6f05329740da79c8150a2205b0d
 
-Note: the flag "-Woverride-init" is recognized by both compilers,
-but the warning msg from clang reports "-Winitializer-overrides".
-The doc of clang clarifies that the two flags are synonyms, so use
-here only the flag name common on both compilers.
-
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-Fixes: c297493336b7 ("irqchip/stm32-exti: Simplify irq description table")
----
- drivers/irqchip/irq-stm32-exti.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
-index 6a3f7498ea8e..8bbb2b114636 100644
---- a/drivers/irqchip/irq-stm32-exti.c
-+++ b/drivers/irqchip/irq-stm32-exti.c
-@@ -173,6 +173,16 @@ static struct irq_chip stm32_exti_h_chip_direct;
- #define EXTI_INVALID_IRQ       U8_MAX
- #define STM32MP1_DESC_IRQ_SIZE (ARRAY_SIZE(stm32mp1_exti_banks) * IRQS_PER_BANK)
- 
-+/*
-+ * Use some intentionally tricky logic here to initialize the whole array to
-+ * EXTI_INVALID_IRQ, but then override certain fields, requiring us to indicate
-+ * that we "know" that there are overrides in this structure, and we'll need to
-+ * disable that warning from W=1 builds.
-+ */
-+__diag_push();
-+__diag_ignore_all("-Woverride-init",
-+		  "logic to initialize all and then override some is OK");
-+
- static const u8 stm32mp1_desc_irq[] = {
- 	/* default value */
- 	[0 ... (STM32MP1_DESC_IRQ_SIZE - 1)] = EXTI_INVALID_IRQ,
-@@ -266,6 +276,8 @@ static const u8 stm32mp13_desc_irq[] = {
- 	[70] = 98,
- };
- 
-+__diag_pop();
-+
- static const struct stm32_exti_drv_data stm32mp1_drv_data = {
- 	.exti_banks = stm32mp1_exti_banks,
- 	.bank_nr = ARRAY_SIZE(stm32mp1_exti_banks),
-
-base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
--- 
-2.40.1
-
+BTW, thank you _both_ for the patches!
