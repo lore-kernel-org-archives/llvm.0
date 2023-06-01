@@ -1,51 +1,48 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8D617748;
-	Thu,  1 Jun 2023 06:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3AF539B;
+	Thu,  1 Jun 2023 07:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685601028; x=1717137028;
+  t=1685603473; x=1717139473;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Z668EnpKrSGrlD56vE6qiil0fRmPsI7NbSqs14itwR8=;
-  b=ZawUBSAb0ll59+NluAqGWDiPGBJb3GERMGpEHRe8CsbJskbHjYBAW/RT
-   DgwSkrfKGXa3MKk+N/ROz//FQd6/LsUq/YryvJkPexTF3QihcLRV4vti1
-   Ro/wSNE/n2NYBn4OAGYfiR4jNEGtuKB+N4bZflTZRao06myBaEtmg5Cz4
-   zUpyR7jkPpyhFS1j+vkZotcaBT9CNDhtAzzu4eQEUT4c2+9AVL69wr1yp
-   LFEvizwiwuoxkdjkr6PPzhppo2HvRuWZStjcmAzLmL5v7GMjniCmOVuy4
-   N/3N2UrYkE2iFwbHE4I/fSmmOYvsJWjh7SkSfI+OsV2dZxW1UbkJeeziK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="352966992"
+  bh=7QwTtXWCLrgrgBxa4hvrg0tIDMBH8BxqCxL0wocVc3o=;
+  b=eoszDThIFV6knaRsQhCEvcyCUWb9xfDakML2ZbgRN2iENJZfdueriz1U
+   wrVZH/ldLXRMj3dC15rdl2GyJoHFmeYVYtr1lYsRnVkvyOJTucsys7fL5
+   upqOFtvPBKrvazCxRKTTCmA2P/Jmi9Nuq6fePfXSXVHGo654W+lRJm5nj
+   tqbdEaytmWQYgxIq0N5GB4rUy2t2QeRAowVZXhh5IGEWfbKISe4UDP+5p
+   /yvMhI6JyoVckIgghnwEyhXcEZeVTQ59yT75d+gM4OpJ1+ewduGFMm8x8
+   UV9JsA/GhCw8I5RQL2JJG0pg/5+1A0gPJENkYXY2guPTftHyIHkU37FuN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357875337"
 X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="352966992"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 23:30:10 -0700
+   d="scan'208";a="357875337"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 00:11:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="881499754"
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="1037371609"
 X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="881499754"
+   d="scan'208";a="1037371609"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 31 May 2023 23:30:07 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2023 00:11:09 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q4bp0-00020L-2m;
-	Thu, 01 Jun 2023 06:30:06 +0000
-Date: Thu, 1 Jun 2023 14:29:14 +0800
+	id 1q4cSj-00022M-0B;
+	Thu, 01 Jun 2023 07:11:09 +0000
+Date: Thu, 1 Jun 2023 15:10:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: beomsu kim <beomsu7.kim@samsung.com>,
-	"jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-	"chao@kernel.org" <chao@kernel.org>,
-	"linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+To: Bongkyu Kim <bongkyu7.kim@samsung.com>, peterz@infradead.org,
+	mingo@redhat.com, will@kernel.org, longman@redhat.com,
+	boqun.feng@gmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yonggil Song <yonggil.song@samsung.com>,
-	Seokhwan Kim <sukka.kim@samsung.com>,
-	Daejun Park <daejun7.park@samsung.com>,
-	Seonghun Kim <seonghun-sui.kim@samsung.com>
-Subject: Re: [PATCH] f2fs: including waf data in f2fs status information
-Message-ID: <202306011410.W02TPFn1-lkp@intel.com>
-References: <20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc@epcms2p2>
+	linux-kernel@vger.kernel.org, jwook1.kim@samsung.com,
+	lakkyung.jung@samsung.com, Bongkyu Kim <bongkyu7.kim@samsung.com>
+Subject: Re: [PATCH] locking/rwsem: Optionally re-enable reader optimistic
+ spinning
+Message-ID: <202306011420.8opqhG4p-lkp@intel.com>
+References: <20230531003436.7082-1-bongkyu7.kim@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,144 +51,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc@epcms2p2>
+In-Reply-To: <20230531003436.7082-1-bongkyu7.kim@samsung.com>
 
-Hi beomsu,
+Hi Bongkyu,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on v6.4-rc4]
-[also build test ERROR on linus/master next-20230601]
-[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev]
+[auto build test WARNING on tip/locking/core]
+[also build test WARNING on linus/master v6.4-rc4 next-20230601]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/beomsu-kim/f2fs-including-waf-data-in-f2fs-status-information/20230531-162208
-base:   7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-patch link:    https://lore.kernel.org/r/20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc%40epcms2p2
-patch subject: [PATCH] f2fs: including waf data in f2fs status information
-config: x86_64-randconfig-x065-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011410.W02TPFn1-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bongkyu-Kim/locking-rwsem-Optionally-re-enable-reader-optimistic-spinning/20230531-083658
+base:   tip/locking/core
+patch link:    https://lore.kernel.org/r/20230531003436.7082-1-bongkyu7.kim%40samsung.com
+patch subject: [PATCH] locking/rwsem: Optionally re-enable reader optimistic spinning
+config: x86_64-randconfig-x063-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011420.8opqhG4p-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3a2228fdedf76cc8448b358d07b77eb26d1299a4
+        # https://github.com/intel-lab-lkp/linux/commit/8c4098eb89be5b82aded3d17b22f78013454d058
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review beomsu-kim/f2fs-including-waf-data-in-f2fs-status-information/20230531-162208
-        git checkout 3a2228fdedf76cc8448b358d07b77eb26d1299a4
+        git fetch --no-tags linux-review Bongkyu-Kim/locking-rwsem-Optionally-re-enable-reader-optimistic-spinning/20230531-083658
+        git checkout 8c4098eb89be5b82aded3d17b22f78013454d058
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/events/ arch/x86/kernel/fpu/ drivers/of/ drivers/usb/host/ kernel/locking/ kernel/sched/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306011410.W02TPFn1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011420.8opqhG4p-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/f2fs/iostat.c:37:30: error: implicit declaration of function 'F2FS_STAT' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                                       ^
->> fs/f2fs/iostat.c:37:25: warning: incompatible integer to pointer conversion initializing 'struct f2fs_stat_info *' with an expression of type 'int' [-Wint-conversion]
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                                  ^    ~~~~~~~~~~~~~~
->> fs/f2fs/iostat.c:46:32: error: incomplete definition of type 'struct f2fs_stat_info'
-                   data_written_to_storage += si->sbi->iostat_bytes[j];
-                                              ~~^
-   fs/f2fs/iostat.c:37:9: note: forward declaration of 'struct f2fs_stat_info'
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                  ^
-   fs/f2fs/iostat.c:48:29: error: incomplete definition of type 'struct f2fs_stat_info'
-                   data_written_by_user += si->sbi->iostat_bytes[j];
-                                           ~~^
-   fs/f2fs/iostat.c:37:9: note: forward declaration of 'struct f2fs_stat_info'
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                  ^
-   1 warning and 3 errors generated.
+>> kernel/locking/rwsem.c:1163:24: warning: incompatible pointer to integer conversion passing 'struct rw_semaphore *' to parameter of type 'int' [-Wint-conversion]
+               rwsem_no_spinners(sem)) {
+                                 ^~~
+   kernel/locking/rwsem.c:332:1: warning: unused function 'rwsem_owner_flags' [-Wunused-function]
+   rwsem_owner_flags(struct rw_semaphore *sem, unsigned long *pflags)
+   ^
+   2 warnings generated.
 
 
-vim +/F2FS_STAT +37 fs/f2fs/iostat.c
+vim +1163 kernel/locking/rwsem.c
 
-    26	
-    27	#define IOSTAT_INFO_SHOW(name, type)					\
-    28		seq_printf(seq, "%-23s %-16llu %-16llu %-16llu\n",		\
-    29				name":", sbi->iostat_bytes[type],		\
-    30				sbi->iostat_count[type],			\
-    31				iostat_get_avg_bytes(sbi, type))
-    32	
-    33	int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
-    34	{
-    35		struct super_block *sb = seq->private;
-    36		struct f2fs_sb_info *sbi = F2FS_SB(sb);
-  > 37		struct f2fs_stat_info *si = F2FS_STAT(sbi);
-    38		int j;
-    39		unsigned long long waf = 0;
-    40		unsigned long long data_written_to_storage = 0, data_written_by_user = 0;
-    41	
-    42		if (!sbi->iostat_enable)
-    43			return 0;
-    44	
-    45		for (j = FS_DATA_IO; j <= FS_CP_META_IO; j++)
-  > 46			data_written_to_storage += si->sbi->iostat_bytes[j];
-    47		for (j = FS_DATA_IO; j <= FS_CDATA_IO; j++)
-    48			data_written_by_user += si->sbi->iostat_bytes[j];
-    49	
-    50		if (data_written_by_user > 0)
-    51			waf = data_written_to_storage * 100 / data_written_by_user;
-    52	
-    53		seq_printf(seq, "time:		%-16llu\n", ktime_get_real_seconds());
-    54		seq_printf(seq, "\t\t\t%-16s %-16s %-16s\n",
-    55					"io_bytes", "count", "avg_bytes");
-    56	
-    57		/* print app write IOs */
-    58		seq_puts(seq, "[WRITE]\n");
-    59		IOSTAT_INFO_SHOW("app buffered data", APP_BUFFERED_IO);
-    60		IOSTAT_INFO_SHOW("app direct data", APP_DIRECT_IO);
-    61		IOSTAT_INFO_SHOW("app mapped data", APP_MAPPED_IO);
-    62		IOSTAT_INFO_SHOW("app buffered cdata", APP_BUFFERED_CDATA_IO);
-    63		IOSTAT_INFO_SHOW("app mapped cdata", APP_MAPPED_CDATA_IO);
-    64	
-    65		/* print fs write IOs */
-    66		IOSTAT_INFO_SHOW("fs data", FS_DATA_IO);
-    67		IOSTAT_INFO_SHOW("fs cdata", FS_CDATA_IO);
-    68		IOSTAT_INFO_SHOW("fs node", FS_NODE_IO);
-    69		IOSTAT_INFO_SHOW("fs meta", FS_META_IO);
-    70		IOSTAT_INFO_SHOW("fs gc data", FS_GC_DATA_IO);
-    71		IOSTAT_INFO_SHOW("fs gc node", FS_GC_NODE_IO);
-    72		IOSTAT_INFO_SHOW("fs cp data", FS_CP_DATA_IO);
-    73		IOSTAT_INFO_SHOW("fs cp node", FS_CP_NODE_IO);
-    74		IOSTAT_INFO_SHOW("fs cp meta", FS_CP_META_IO);
-    75	
-    76		/* print app read IOs */
-    77		seq_puts(seq, "[READ]\n");
-    78		IOSTAT_INFO_SHOW("app buffered data", APP_BUFFERED_READ_IO);
-    79		IOSTAT_INFO_SHOW("app direct data", APP_DIRECT_READ_IO);
-    80		IOSTAT_INFO_SHOW("app mapped data", APP_MAPPED_READ_IO);
-    81		IOSTAT_INFO_SHOW("app buffered cdata", APP_BUFFERED_CDATA_READ_IO);
-    82		IOSTAT_INFO_SHOW("app mapped cdata", APP_MAPPED_CDATA_READ_IO);
-    83	
-    84		/* print fs read IOs */
-    85		IOSTAT_INFO_SHOW("fs data", FS_DATA_READ_IO);
-    86		IOSTAT_INFO_SHOW("fs gc data", FS_GDATA_READ_IO);
-    87		IOSTAT_INFO_SHOW("fs cdata", FS_CDATA_READ_IO);
-    88		IOSTAT_INFO_SHOW("fs node", FS_NODE_READ_IO);
-    89		IOSTAT_INFO_SHOW("fs meta", FS_META_READ_IO);
-    90	
-    91		/* print other IOs */
-    92		seq_puts(seq, "[OTHER]\n");
-    93		IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
-    94		IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
-    95	
-    96		/* print waf */
-    97		seq_puts(seq, "[WAF]\n");
-    98		seq_printf(seq, "fs waf:		%llu.%02llu\n", waf / 100, waf % 100);
-    99	
-   100		return 0;
-   101	}
-   102	
+  1133	
+  1134	/*
+  1135	 * Wait for the read lock to be granted
+  1136	 */
+  1137	static struct rw_semaphore __sched *
+  1138	rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int state)
+  1139	{
+  1140		long owner, adjustment = -RWSEM_READER_BIAS;
+  1141		long rcnt = (count >> RWSEM_READER_SHIFT);
+  1142		struct rwsem_waiter waiter;
+  1143		DEFINE_WAKE_Q(wake_q);
+  1144	
+  1145		/*
+  1146		 * To prevent a constant stream of readers from starving a sleeping
+  1147		 * waiter, don't attempt optimistic spinning if the lock is currently
+  1148		 * owned by readers.
+  1149		 */
+  1150		owner = atomic_long_read(&sem->owner);
+  1151		if ((owner & RWSEM_READER_OWNED) && (rcnt > 1) &&
+  1152		   !(count & RWSEM_WRITER_LOCKED))
+  1153			goto queue;
+  1154	
+  1155		/*
+  1156		 * Reader optimistic lock stealing
+  1157		 *
+  1158		 * We can take the read lock directly without doing
+  1159		 * rwsem_optimistic_spin() if the conditions are right.
+  1160		 * Also wake up other readers if it is the first reader.
+  1161		 */
+  1162		if (!(count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF)) &&
+> 1163		    rwsem_no_spinners(sem)) {
+  1164			rwsem_set_reader_owned(sem);
+  1165			lockevent_inc(rwsem_rlock_steal);
+  1166			if (rcnt == 1)
+  1167				goto wake_readers;
+  1168			return sem;
+  1169		}
+  1170	
 
 -- 
 0-DAY CI Kernel Test Service
