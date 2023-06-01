@@ -1,44 +1,61 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA9521CC0;
-	Thu,  1 Jun 2023 14:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BEA23422;
+	Thu,  1 Jun 2023 14:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685630069; x=1717166069;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G2fITaAQcPOKVyBWIL5jwIWJNQ9L1kTv7bMFXdZhz40=;
-  b=Xr4Th4E0sl7J5JfSMcST+xDPYykumTqtnxZNcuEkr40ii4DnHV2MBx5D
-   FjX6SgnzGl77xajweFDhUJP2ytR04aBqb4Mu9u7HRgALL/rX+5t6z+Kiz
-   Ok4sT/I/nl5XFgtgESTZ/rC0Ne0l0FuAaueEhOS6r5Vr1Ji8Z+QPbvbkI
-   XcAuLo47+WsE0YFChWpzxG3fEGGc+UuZ2ZJQNeFzb58B7EoWCevfgnYG5
-   jhKvIXzed8RMekblKmEiMT0DaGj+7qVnlRhoEYG2Kyhff1aAi4nnNWUxD
-   fa3jJiufp79HIuRgPji5+qWGxrXEnQPao/uD9QapgNx0Tb76f/kAfB6Wh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="355585930"
+  t=1685630070; x=1717166070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yx9pzRaQEin3davLHT3yVs5az5zF6szxcDCwUgtT/+Q=;
+  b=effcC22Xa9aZfcqUcEW0EUyrE9EjeJ1BlP9hi9sXyHTJ/T4vEUbdlupk
+   GiYM/8vwlW3MmnBbYpBCiSBvRNdx5IRhPW06KDDCLYlR15vUu/RGYbByw
+   PuKQ/iRUZgwEWTTg2AHbkR+jnIniP2+Jk4ICU+3xa20A1kFHUkhS6Xcty
+   44T7f5RgWAawwKogTb72qIszitBtVTzCJ1F90aKL+vnaGp6zNmP6d8kVS
+   0mb/e6yq4GpZn+E9eE+FrzE4Wwz+fTw5Tf73J2f00WcxAZ0FuNf8LsnYB
+   w8j1oqegX/mmgHD51ckWnGozRO6HSzCMeqshTGMA2u9ALEt+hw0o5DBjf
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="355585961"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="355585930"
+   d="scan'208";a="355585961"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:34:24 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:34:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737123548"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737123553"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="737123548"
+   d="scan'208";a="737123553"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
   by orsmga008.jf.intel.com with ESMTP; 01 Jun 2023 07:34:22 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q4jNd-0002ND-33;
-	Thu, 01 Jun 2023 14:34:21 +0000
-Date: Thu, 1 Jun 2023 22:33:55 +0800
+	id 1q4jNe-0002NG-07;
+	Thu, 01 Jun 2023 14:34:22 +0000
+Date: Thu, 1 Jun 2023 22:33:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nhat Pham <nphamcs@gmail.com>
+To: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 23/209] mm/zswap.c:1183:6: warning: variable
- 'ret' is used uninitialized whenever 'if' condition is true
-Message-ID: <202306012152.o4FL7Y6J-lkp@intel.com>
+	Connor O'Brien <connoro@google.com>,
+	Joel Fernandes <joelaf@google.com>,
+	Qais Yousef <qyousef@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Zimuzo Ezeozue <zezeozue@google.com>,
+	Youssef Esmat <youssefesmat@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com,
+	John Stultz <jstultz@google.com>
+Subject: Re: [PATCH v4 12/13] sched: Attempt to fix rt/dl load balancing via
+ chain level balance
+Message-ID: <202306012038.LYIa7RLC-lkp@intel.com>
+References: <20230601055846.2349566-13-jstultz@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,32 +64,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230601055846.2349566-13-jstultz@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   b5db6565ff3efc5906d35f587ff56ac701d99d90
-commit: 6804144bf1cfa3978ad98e625d8a1d2a4b80cbee [23/209] zswap: do not shrink if cgroup may not zswap
-config: hexagon-randconfig-r032-20230531 (https://download.01.org/0day-ci/archive/20230601/202306012152.o4FL7Y6J-lkp@intel.com/config)
+Hi John,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on tip/locking/core tip/master tip/auto-latest linus/master v6.4-rc4 next-20230601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/sched-Unify-runtime-accounting-across-classes/20230601-140200
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20230601055846.2349566-13-jstultz%40google.com
+patch subject: [PATCH v4 12/13] sched: Attempt to fix rt/dl load balancing via chain level balance
+config: hexagon-randconfig-r013-20230531 (https://download.01.org/0day-ci/archive/20230601/202306012038.LYIa7RLC-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=6804144bf1cfa3978ad98e625d8a1d2a4b80cbee
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 6804144bf1cfa3978ad98e625d8a1d2a4b80cbee
+        # https://github.com/intel-lab-lkp/linux/commit/82593266398c6feaed3ed5ec458986d8e16b6b74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review John-Stultz/sched-Unify-runtime-accounting-across-classes/20230601-140200
+        git checkout 82593266398c6feaed3ed5ec458986d8e16b6b74
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306012152.o4FL7Y6J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306012038.LYIa7RLC-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from mm/zswap.c:18:
+   In file included from kernel/sched/core.c:9:
    In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
@@ -89,7 +118,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
                                                      ^
-   In file included from mm/zswap.c:18:
+   In file included from kernel/sched/core.c:9:
    In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
@@ -103,7 +132,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
                                                      ^
-   In file included from mm/zswap.c:18:
+   In file included from kernel/sched/core.c:9:
    In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
@@ -120,223 +149,127 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
->> mm/zswap.c:1183:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (objcg && !obj_cgroup_may_zswap(objcg))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/zswap.c:1327:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   mm/zswap.c:1183:2: note: remove the 'if' if its condition is always false
-           if (objcg && !obj_cgroup_may_zswap(objcg))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/zswap.c:1158:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   7 warnings generated.
+   kernel/sched/core.c:3858:30: error: no member named 'cpu' in 'struct rq'
+                   set_task_cpu(task, dst_rq->cpu);
+                                      ~~~~~~  ^
+>> kernel/sched/core.c:3838:6: warning: no previous prototype for function 'push_task_chain' [-Wmissing-prototypes]
+   void push_task_chain(struct rq *rq, struct rq *dst_rq, struct task_struct *task)
+        ^
+   kernel/sched/core.c:3838:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void push_task_chain(struct rq *rq, struct rq *dst_rq, struct task_struct *task)
+   ^
+   static 
+>> kernel/sched/core.c:3870:21: warning: no previous prototype for function 'find_exec_ctx' [-Wmissing-prototypes]
+   struct task_struct *find_exec_ctx(struct rq *rq, struct task_struct *p)
+                       ^
+   kernel/sched/core.c:3870:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct task_struct *find_exec_ctx(struct rq *rq, struct task_struct *p)
+   ^
+   static 
+>> kernel/sched/core.c:3898:5: warning: no previous prototype for function 'pushable_chain' [-Wmissing-prototypes]
+   int pushable_chain(struct rq *rq, struct task_struct *p, int cpu)
+       ^
+   kernel/sched/core.c:3898:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pushable_chain(struct rq *rq, struct task_struct *p, int cpu)
+   ^
+   static 
+   9 warnings and 1 error generated.
 
 
-vim +1183 mm/zswap.c
+vim +/push_task_chain +3838 kernel/sched/core.c
 
-a85f878b443f8d Srividya Desireddy  2018-01-31  1144  
-2b2811178e8555 Seth Jennings       2013-07-10  1145  /*********************************
-2b2811178e8555 Seth Jennings       2013-07-10  1146  * frontswap hooks
-2b2811178e8555 Seth Jennings       2013-07-10  1147  **********************************/
-2b2811178e8555 Seth Jennings       2013-07-10  1148  /* attempts to compress and store an single page */
-2b2811178e8555 Seth Jennings       2013-07-10  1149  static int zswap_frontswap_store(unsigned type, pgoff_t offset,
-2b2811178e8555 Seth Jennings       2013-07-10  1150  				struct page *page)
-2b2811178e8555 Seth Jennings       2013-07-10  1151  {
-2b2811178e8555 Seth Jennings       2013-07-10  1152  	struct zswap_tree *tree = zswap_trees[type];
-2b2811178e8555 Seth Jennings       2013-07-10  1153  	struct zswap_entry *entry, *dupentry;
-1ec3b5fe6eec78 Barry Song          2020-12-14  1154  	struct scatterlist input, output;
-1ec3b5fe6eec78 Barry Song          2020-12-14  1155  	struct crypto_acomp_ctx *acomp_ctx;
-f4840ccfca25db Johannes Weiner     2022-05-19  1156  	struct obj_cgroup *objcg = NULL;
-f4840ccfca25db Johannes Weiner     2022-05-19  1157  	struct zswap_pool *pool;
-2b2811178e8555 Seth Jennings       2013-07-10  1158  	int ret;
-9c3760eb80880f Yu Zhao             2018-01-31  1159  	unsigned int hlen, dlen = PAGE_SIZE;
-a85f878b443f8d Srividya Desireddy  2018-01-31  1160  	unsigned long handle, value;
-2b2811178e8555 Seth Jennings       2013-07-10  1161  	char *buf;
-2b2811178e8555 Seth Jennings       2013-07-10  1162  	u8 *src, *dst;
-9c3760eb80880f Yu Zhao             2018-01-31  1163  	struct zswap_header zhdr = { .swpentry = swp_entry(type, offset) };
-d2fcd82bb83aab Hui Zhu             2019-09-23  1164  	gfp_t gfp;
-2b2811178e8555 Seth Jennings       2013-07-10  1165  
-7ba716698cc53f Huang Ying          2018-02-21  1166  	/* THP isn't supported */
-7ba716698cc53f Huang Ying          2018-02-21  1167  	if (PageTransHuge(page)) {
-7ba716698cc53f Huang Ying          2018-02-21  1168  		ret = -EINVAL;
-7ba716698cc53f Huang Ying          2018-02-21  1169  		goto reject;
-7ba716698cc53f Huang Ying          2018-02-21  1170  	}
-7ba716698cc53f Huang Ying          2018-02-21  1171  
-c00ed16a9eb98a Dan Streetman       2015-06-25  1172  	if (!zswap_enabled || !tree) {
-2b2811178e8555 Seth Jennings       2013-07-10  1173  		ret = -ENODEV;
-2b2811178e8555 Seth Jennings       2013-07-10  1174  		goto reject;
-2b2811178e8555 Seth Jennings       2013-07-10  1175  	}
-2b2811178e8555 Seth Jennings       2013-07-10  1176  
-6804144bf1cfa3 Nhat Pham           2023-05-30  1177  	/*
-6804144bf1cfa3 Nhat Pham           2023-05-30  1178  	 * XXX: zswap reclaim does not work with cgroups yet. Without a
-6804144bf1cfa3 Nhat Pham           2023-05-30  1179  	 * cgroup-aware entry LRU, we will push out entries system-wide based on
-6804144bf1cfa3 Nhat Pham           2023-05-30  1180  	 * local cgroup limits.
-6804144bf1cfa3 Nhat Pham           2023-05-30  1181  	 */
-f4840ccfca25db Johannes Weiner     2022-05-19  1182  	objcg = get_obj_cgroup_from_page(page);
-f4840ccfca25db Johannes Weiner     2022-05-19 @1183  	if (objcg && !obj_cgroup_may_zswap(objcg))
-6804144bf1cfa3 Nhat Pham           2023-05-30  1184  		goto reject;
-f4840ccfca25db Johannes Weiner     2022-05-19  1185  
-2b2811178e8555 Seth Jennings       2013-07-10  1186  	/* reclaim space if needed */
-2b2811178e8555 Seth Jennings       2013-07-10  1187  	if (zswap_is_full()) {
-2b2811178e8555 Seth Jennings       2013-07-10  1188  		zswap_pool_limit_hit++;
-45190f01dd4021 Vitaly Wool         2020-01-30  1189  		zswap_pool_reached_full = true;
-f4840ccfca25db Johannes Weiner     2022-05-19  1190  		goto shrink;
-2b2811178e8555 Seth Jennings       2013-07-10  1191  	}
-16e536ef47f567 Li Wang             2018-07-26  1192  
-45190f01dd4021 Vitaly Wool         2020-01-30  1193  	if (zswap_pool_reached_full) {
-45190f01dd4021 Vitaly Wool         2020-01-30  1194  	       if (!zswap_can_accept()) {
-16e536ef47f567 Li Wang             2018-07-26  1195  			ret = -ENOMEM;
-16e536ef47f567 Li Wang             2018-07-26  1196  			goto reject;
-45190f01dd4021 Vitaly Wool         2020-01-30  1197  		} else
-45190f01dd4021 Vitaly Wool         2020-01-30  1198  			zswap_pool_reached_full = false;
-2b2811178e8555 Seth Jennings       2013-07-10  1199  	}
-2b2811178e8555 Seth Jennings       2013-07-10  1200  
-2b2811178e8555 Seth Jennings       2013-07-10  1201  	/* allocate entry */
-2b2811178e8555 Seth Jennings       2013-07-10  1202  	entry = zswap_entry_cache_alloc(GFP_KERNEL);
-2b2811178e8555 Seth Jennings       2013-07-10  1203  	if (!entry) {
-2b2811178e8555 Seth Jennings       2013-07-10  1204  		zswap_reject_kmemcache_fail++;
-2b2811178e8555 Seth Jennings       2013-07-10  1205  		ret = -ENOMEM;
-2b2811178e8555 Seth Jennings       2013-07-10  1206  		goto reject;
-2b2811178e8555 Seth Jennings       2013-07-10  1207  	}
-2b2811178e8555 Seth Jennings       2013-07-10  1208  
-a85f878b443f8d Srividya Desireddy  2018-01-31  1209  	if (zswap_same_filled_pages_enabled) {
-a85f878b443f8d Srividya Desireddy  2018-01-31  1210  		src = kmap_atomic(page);
-a85f878b443f8d Srividya Desireddy  2018-01-31  1211  		if (zswap_is_page_same_filled(src, &value)) {
-a85f878b443f8d Srividya Desireddy  2018-01-31  1212  			kunmap_atomic(src);
-a85f878b443f8d Srividya Desireddy  2018-01-31  1213  			entry->offset = offset;
-a85f878b443f8d Srividya Desireddy  2018-01-31  1214  			entry->length = 0;
-a85f878b443f8d Srividya Desireddy  2018-01-31  1215  			entry->value = value;
-a85f878b443f8d Srividya Desireddy  2018-01-31  1216  			atomic_inc(&zswap_same_filled_pages);
-a85f878b443f8d Srividya Desireddy  2018-01-31  1217  			goto insert_entry;
-a85f878b443f8d Srividya Desireddy  2018-01-31  1218  		}
-a85f878b443f8d Srividya Desireddy  2018-01-31  1219  		kunmap_atomic(src);
-a85f878b443f8d Srividya Desireddy  2018-01-31  1220  	}
-a85f878b443f8d Srividya Desireddy  2018-01-31  1221  
-cb325ddde56162 Maciej S. Szmigiero 2022-03-22  1222  	if (!zswap_non_same_filled_pages_enabled) {
-cb325ddde56162 Maciej S. Szmigiero 2022-03-22  1223  		ret = -EINVAL;
-cb325ddde56162 Maciej S. Szmigiero 2022-03-22  1224  		goto freepage;
-cb325ddde56162 Maciej S. Szmigiero 2022-03-22  1225  	}
-cb325ddde56162 Maciej S. Szmigiero 2022-03-22  1226  
-f1c54846ee4504 Dan Streetman       2015-09-09  1227  	/* if entry is successfully added, it keeps the reference */
-f1c54846ee4504 Dan Streetman       2015-09-09  1228  	entry->pool = zswap_pool_current_get();
-f1c54846ee4504 Dan Streetman       2015-09-09  1229  	if (!entry->pool) {
-f1c54846ee4504 Dan Streetman       2015-09-09  1230  		ret = -EINVAL;
-f1c54846ee4504 Dan Streetman       2015-09-09  1231  		goto freepage;
-f1c54846ee4504 Dan Streetman       2015-09-09  1232  	}
-f1c54846ee4504 Dan Streetman       2015-09-09  1233  
-2b2811178e8555 Seth Jennings       2013-07-10  1234  	/* compress */
-1ec3b5fe6eec78 Barry Song          2020-12-14  1235  	acomp_ctx = raw_cpu_ptr(entry->pool->acomp_ctx);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1236  
-1ec3b5fe6eec78 Barry Song          2020-12-14  1237  	mutex_lock(acomp_ctx->mutex);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1238  
-1ec3b5fe6eec78 Barry Song          2020-12-14  1239  	dst = acomp_ctx->dstmem;
-1ec3b5fe6eec78 Barry Song          2020-12-14  1240  	sg_init_table(&input, 1);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1241  	sg_set_page(&input, page, PAGE_SIZE, 0);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1242  
-1ec3b5fe6eec78 Barry Song          2020-12-14  1243  	/* zswap_dstmem is of size (PAGE_SIZE * 2). Reflect same in sg_list */
-1ec3b5fe6eec78 Barry Song          2020-12-14  1244  	sg_init_one(&output, dst, PAGE_SIZE * 2);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1245  	acomp_request_set_params(acomp_ctx->req, &input, &output, PAGE_SIZE, dlen);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1246  	/*
-1ec3b5fe6eec78 Barry Song          2020-12-14  1247  	 * it maybe looks a little bit silly that we send an asynchronous request,
-1ec3b5fe6eec78 Barry Song          2020-12-14  1248  	 * then wait for its completion synchronously. This makes the process look
-1ec3b5fe6eec78 Barry Song          2020-12-14  1249  	 * synchronous in fact.
-1ec3b5fe6eec78 Barry Song          2020-12-14  1250  	 * Theoretically, acomp supports users send multiple acomp requests in one
-1ec3b5fe6eec78 Barry Song          2020-12-14  1251  	 * acomp instance, then get those requests done simultaneously. but in this
-1ec3b5fe6eec78 Barry Song          2020-12-14  1252  	 * case, frontswap actually does store and load page by page, there is no
-1ec3b5fe6eec78 Barry Song          2020-12-14  1253  	 * existing method to send the second page before the first page is done
-1ec3b5fe6eec78 Barry Song          2020-12-14  1254  	 * in one thread doing frontswap.
-1ec3b5fe6eec78 Barry Song          2020-12-14  1255  	 * but in different threads running on different cpu, we have different
-1ec3b5fe6eec78 Barry Song          2020-12-14  1256  	 * acomp instance, so multiple threads can do (de)compression in parallel.
-1ec3b5fe6eec78 Barry Song          2020-12-14  1257  	 */
-1ec3b5fe6eec78 Barry Song          2020-12-14  1258  	ret = crypto_wait_req(crypto_acomp_compress(acomp_ctx->req), &acomp_ctx->wait);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1259  	dlen = acomp_ctx->req->dlen;
-1ec3b5fe6eec78 Barry Song          2020-12-14  1260  
-2b2811178e8555 Seth Jennings       2013-07-10  1261  	if (ret) {
-2b2811178e8555 Seth Jennings       2013-07-10  1262  		ret = -EINVAL;
-f1c54846ee4504 Dan Streetman       2015-09-09  1263  		goto put_dstmem;
-2b2811178e8555 Seth Jennings       2013-07-10  1264  	}
-2b2811178e8555 Seth Jennings       2013-07-10  1265  
-2b2811178e8555 Seth Jennings       2013-07-10  1266  	/* store */
-9c3760eb80880f Yu Zhao             2018-01-31  1267  	hlen = zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
-d2fcd82bb83aab Hui Zhu             2019-09-23  1268  	gfp = __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
-d2fcd82bb83aab Hui Zhu             2019-09-23  1269  	if (zpool_malloc_support_movable(entry->pool->zpool))
-d2fcd82bb83aab Hui Zhu             2019-09-23  1270  		gfp |= __GFP_HIGHMEM | __GFP_MOVABLE;
-d2fcd82bb83aab Hui Zhu             2019-09-23  1271  	ret = zpool_malloc(entry->pool->zpool, hlen + dlen, gfp, &handle);
-2b2811178e8555 Seth Jennings       2013-07-10  1272  	if (ret == -ENOSPC) {
-2b2811178e8555 Seth Jennings       2013-07-10  1273  		zswap_reject_compress_poor++;
-f1c54846ee4504 Dan Streetman       2015-09-09  1274  		goto put_dstmem;
-2b2811178e8555 Seth Jennings       2013-07-10  1275  	}
-2b2811178e8555 Seth Jennings       2013-07-10  1276  	if (ret) {
-2b2811178e8555 Seth Jennings       2013-07-10  1277  		zswap_reject_alloc_fail++;
-f1c54846ee4504 Dan Streetman       2015-09-09  1278  		goto put_dstmem;
-2b2811178e8555 Seth Jennings       2013-07-10  1279  	}
-ae34af1f11d0a6 Miaohe Lin          2021-06-30  1280  	buf = zpool_map_handle(entry->pool->zpool, handle, ZPOOL_MM_WO);
-9c3760eb80880f Yu Zhao             2018-01-31  1281  	memcpy(buf, &zhdr, hlen);
-9c3760eb80880f Yu Zhao             2018-01-31  1282  	memcpy(buf + hlen, dst, dlen);
-f1c54846ee4504 Dan Streetman       2015-09-09  1283  	zpool_unmap_handle(entry->pool->zpool, handle);
-1ec3b5fe6eec78 Barry Song          2020-12-14  1284  	mutex_unlock(acomp_ctx->mutex);
-2b2811178e8555 Seth Jennings       2013-07-10  1285  
-2b2811178e8555 Seth Jennings       2013-07-10  1286  	/* populate entry */
-2b2811178e8555 Seth Jennings       2013-07-10  1287  	entry->offset = offset;
-2b2811178e8555 Seth Jennings       2013-07-10  1288  	entry->handle = handle;
-2b2811178e8555 Seth Jennings       2013-07-10  1289  	entry->length = dlen;
-2b2811178e8555 Seth Jennings       2013-07-10  1290  
-a85f878b443f8d Srividya Desireddy  2018-01-31  1291  insert_entry:
-f4840ccfca25db Johannes Weiner     2022-05-19  1292  	entry->objcg = objcg;
-f4840ccfca25db Johannes Weiner     2022-05-19  1293  	if (objcg) {
-f4840ccfca25db Johannes Weiner     2022-05-19  1294  		obj_cgroup_charge_zswap(objcg, entry->length);
-f4840ccfca25db Johannes Weiner     2022-05-19  1295  		/* Account before objcg ref is moved to tree */
-f4840ccfca25db Johannes Weiner     2022-05-19  1296  		count_objcg_event(objcg, ZSWPOUT);
-f4840ccfca25db Johannes Weiner     2022-05-19  1297  	}
-f4840ccfca25db Johannes Weiner     2022-05-19  1298  
-2b2811178e8555 Seth Jennings       2013-07-10  1299  	/* map */
-2b2811178e8555 Seth Jennings       2013-07-10  1300  	spin_lock(&tree->lock);
-2b2811178e8555 Seth Jennings       2013-07-10  1301  	do {
-2b2811178e8555 Seth Jennings       2013-07-10  1302  		ret = zswap_rb_insert(&tree->rbroot, entry, &dupentry);
-2b2811178e8555 Seth Jennings       2013-07-10  1303  		if (ret == -EEXIST) {
-2b2811178e8555 Seth Jennings       2013-07-10  1304  			zswap_duplicate_entry++;
-2b2811178e8555 Seth Jennings       2013-07-10  1305  			/* remove from rbtree */
-0ab0abcf511545 Weijie Yang         2013-11-12  1306  			zswap_rb_erase(&tree->rbroot, dupentry);
-0ab0abcf511545 Weijie Yang         2013-11-12  1307  			zswap_entry_put(tree, dupentry);
-2b2811178e8555 Seth Jennings       2013-07-10  1308  		}
-2b2811178e8555 Seth Jennings       2013-07-10  1309  	} while (ret == -EEXIST);
-2b2811178e8555 Seth Jennings       2013-07-10  1310  	spin_unlock(&tree->lock);
-2b2811178e8555 Seth Jennings       2013-07-10  1311  
-2b2811178e8555 Seth Jennings       2013-07-10  1312  	/* update stats */
-2b2811178e8555 Seth Jennings       2013-07-10  1313  	atomic_inc(&zswap_stored_pages);
-f1c54846ee4504 Dan Streetman       2015-09-09  1314  	zswap_update_total_size();
-f6498b776d280b Johannes Weiner     2022-05-19  1315  	count_vm_event(ZSWPOUT);
-2b2811178e8555 Seth Jennings       2013-07-10  1316  
-2b2811178e8555 Seth Jennings       2013-07-10  1317  	return 0;
-2b2811178e8555 Seth Jennings       2013-07-10  1318  
-f1c54846ee4504 Dan Streetman       2015-09-09  1319  put_dstmem:
-1ec3b5fe6eec78 Barry Song          2020-12-14  1320  	mutex_unlock(acomp_ctx->mutex);
-f1c54846ee4504 Dan Streetman       2015-09-09  1321  	zswap_pool_put(entry->pool);
-f1c54846ee4504 Dan Streetman       2015-09-09  1322  freepage:
-2b2811178e8555 Seth Jennings       2013-07-10  1323  	zswap_entry_cache_free(entry);
-2b2811178e8555 Seth Jennings       2013-07-10  1324  reject:
-f4840ccfca25db Johannes Weiner     2022-05-19  1325  	if (objcg)
-f4840ccfca25db Johannes Weiner     2022-05-19  1326  		obj_cgroup_put(objcg);
-2b2811178e8555 Seth Jennings       2013-07-10  1327  	return ret;
-f4840ccfca25db Johannes Weiner     2022-05-19  1328  
-f4840ccfca25db Johannes Weiner     2022-05-19  1329  shrink:
-f4840ccfca25db Johannes Weiner     2022-05-19  1330  	pool = zswap_pool_last_get();
-f4840ccfca25db Johannes Weiner     2022-05-19  1331  	if (pool)
-f4840ccfca25db Johannes Weiner     2022-05-19  1332  		queue_work(shrink_wq, &pool->shrink_work);
-f4840ccfca25db Johannes Weiner     2022-05-19  1333  	ret = -ENOMEM;
-f4840ccfca25db Johannes Weiner     2022-05-19  1334  	goto reject;
-2b2811178e8555 Seth Jennings       2013-07-10  1335  }
-2b2811178e8555 Seth Jennings       2013-07-10  1336  
-
-:::::: The code at line 1183 was first introduced by commit
-:::::: f4840ccfca25db225b3371a8f7b5770febee87c5 zswap: memcg accounting
-
-:::::: TO: Johannes Weiner <hannes@cmpxchg.org>
-:::::: CC: akpm <akpm@linux-foundation.org>
+  3837	
+> 3838	void push_task_chain(struct rq *rq, struct rq *dst_rq, struct task_struct *task)
+  3839	{
+  3840		struct task_struct *owner;
+  3841	
+  3842		lockdep_assert_rq_held(rq);
+  3843		lockdep_assert_rq_held(dst_rq);
+  3844	
+  3845		BUG_ON(!task_queued_on_rq(rq, task));
+  3846		BUG_ON(task_current_selected(rq, task));
+  3847	
+  3848		while (task) {
+  3849			if (!task_queued_on_rq(rq, task) || task_current_selected(rq, task))
+  3850				break;
+  3851	
+  3852			if (task_is_blocked(task))
+  3853				owner = __mutex_owner(task->blocked_on);
+  3854			else
+  3855				owner = NULL;
+  3856	
+  3857			deactivate_task(rq, task, 0);
+  3858			set_task_cpu(task, dst_rq->cpu);
+  3859			activate_task(dst_rq, task, 0);
+  3860			if (task == owner)
+  3861				break;
+  3862			task = owner;
+  3863		}
+  3864	}
+  3865	
+  3866	/*
+  3867	 * Returns the unblocked task at the end of the blocked chain starting with p
+  3868	 * if that chain is composed entirely of tasks enqueued on rq, or NULL otherwise.
+  3869	 */
+> 3870	struct task_struct *find_exec_ctx(struct rq *rq, struct task_struct *p)
+  3871	{
+  3872		struct task_struct *exec_ctx, *owner;
+  3873		struct mutex *mutex;
+  3874	
+  3875		lockdep_assert_rq_held(rq);
+  3876	
+  3877		for (exec_ctx = p; task_is_blocked(exec_ctx) && !task_on_cpu(rq, exec_ctx);
+  3878								exec_ctx = owner) {
+  3879			mutex = exec_ctx->blocked_on;
+  3880			owner = __mutex_owner(mutex);
+  3881			if (owner == exec_ctx)
+  3882				break;
+  3883	
+  3884			if (!task_queued_on_rq(rq, owner) || task_current_selected(rq, owner)) {
+  3885				exec_ctx = NULL;
+  3886				break;
+  3887			}
+  3888		}
+  3889		return exec_ctx;
+  3890	}
+  3891	
+  3892	/*
+  3893	 * Returns:
+  3894	 * 1 if chain is pushable and affinity does not prevent pushing to cpu
+  3895	 * 0 if chain is unpushable
+  3896	 * -1 if chain is pushable but affinity blocks running on cpu.
+  3897	 */
+> 3898	int pushable_chain(struct rq *rq, struct task_struct *p, int cpu)
+  3899	{
+  3900		struct task_struct *exec_ctx;
+  3901	
+  3902		lockdep_assert_rq_held(rq);
+  3903	
+  3904		if (task_rq(p) != rq || !task_on_rq_queued(p))
+  3905			return 0;
+  3906	
+  3907		exec_ctx = find_exec_ctx(rq, p);
+  3908		/*
+  3909		 * Chain leads off the rq, we're free to push it anywhere.
+  3910		 *
+  3911		 * One wrinkle with relying on find_exec_ctx is that when the chain
+  3912		 * leads to a task currently migrating to rq, we see the chain as
+  3913		 * pushable & push everything prior to the migrating task. Even if
+  3914		 * we checked explicitly for this case, we could still race with a
+  3915		 * migration after the check.
+  3916		 * This shouldn't permanently produce a bad state though, as proxy()
+  3917		 * will send the chain back to rq and by that point the migration
+  3918		 * should be complete & a proper push can occur.
+  3919		 */
+  3920		if (!exec_ctx)
+  3921			return 1;
+  3922	
+  3923		if (task_on_cpu(rq, exec_ctx) || exec_ctx->nr_cpus_allowed <= 1)
+  3924			return 0;
+  3925	
+  3926		return cpumask_test_cpu(cpu, &exec_ctx->cpus_mask) ? 1 : -1;
+  3927	}
+  3928	
 
 -- 
 0-DAY CI Kernel Test Service
