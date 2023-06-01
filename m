@@ -1,147 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FC623400
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 15:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E0BC433D2;
-	Thu,  1 Jun 2023 15:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685634063;
-	bh=7xY+u4JxmBE6NT/YTHi3IL1X1Lgg7woZjL73nmOBOnU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qCFsc6RCloNkVlMfcUoDOwSCGeYHgmOnqTtFxLj9omS1r7XEk+SSHCF7owrpZAv33
-	 wiYZPZ0XH6r/Xp/p4XCPPWQpnoODOcnHdnKn78Xhv3hT7rbrO7RcHAorVeTpN6fLqM
-	 XCnXp1jkUliSdID0oPET9ocblTY5mvGoqQ8MjEfNJau5w6I0u3VVkrqj5MsTHrjVI3
-	 FIQn4rz5pL8HFtBjgNXcr1k7Q0fwhAmwr30dYa26GpzymzmTMDdgf1rZj1Ht0u2EO/
-	 Gg6jWugKIbTtz5HlBmN0Md6ro6199VPQ+XGHRlD9vzLHqrgOeBKT+dSbzl3eVE/cca
-	 dmE28sECzdjLw==
-Date: Thu, 1 Jun 2023 08:41:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Stuart Yoder <stuyoder@gmail.com>,
-	Laurentiu Tudor <laurentiu.tudor@nxp.com>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Leo Li <leoyang.li@nxp.com>
-Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
- reporting
-Message-ID: <20230601154101.GA2368233@dev-arch.thelio-3990X>
-References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
- <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DE2BA2F;
+	Thu,  1 Jun 2023 16:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685635460; x=1717171460;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ONiRBD+4hRflOQwlhSxxTdfvpTF2t0Qt/Up3daTp3OU=;
+  b=ig6nqeCf3AF3oFQoyiM8R41fzgCYUDiTB9nNPkQgC0H7LvixlM2Gndzi
+   OcROdmmjD8E4m4f2WoubH84MEHMHBILoqYfittc9VcmEGCTV+NuCmT+YK
+   VasexPQ7ky+6vNIvpVtYwsNbzzzJZrIKnsnhTjDQOipLD/FDc/PaAaCq8
+   LH0eoSu/ct1J2VO9vsFPw32wdVFGIK5rsO6fRnDxtAOrViZmhXR2nY/3s
+   S/7RV5hz3aakLCM8rAX3TvZn/rSCtOTz+ZzllrAuiu+iBohvcf+svbPe6
+   kLJ72eR9cINPafdh306EXo42laQyCzribd2B5FkklBs6ZjUwMyXD0widN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="354456277"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="354456277"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:03:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="831629581"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="831629581"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2023 09:03:30 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q4klt-0002SC-1h;
+	Thu, 01 Jun 2023 16:03:29 +0000
+Date: Fri, 2 Jun 2023 00:03:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:sched/core 25/25] kernel/sched/core.c:4053:24: error:
+ call to undeclared function '__task_state_match'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202306012322.qZLstogi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
 
-Hi Uwe,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
+commit: 1fd7ac28685ef6c242cc8689f97bc7014ae82ca5 [25/25] sched: Consider task_struct::saved_state in wait_task_inactive()
+config: riscv-randconfig-r042-20230531 (https://download.01.org/0day-ci/archive/20230601/202306012322.qZLstogi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/core
+        git checkout 1fd7ac28685ef6c242cc8689f97bc7014ae82ca5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/sched/
 
-On Fri, Mar 10, 2023 at 11:41:26PM +0100, Uwe Kleine-König wrote:
-> Instead of silently returning an error in the remove callback (which yields
-> a generic and little informing error message), annotate each error path of
-> fsl_mc_resource_pool_remove_device() with an error message and return zero
-> in the remove callback to suppress the error message.
-> 
-> Note that changing the return value has no other effect than suppressing
-> the error message by the fsl_mc bus driver.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306012322.qZLstogi-lkp@intel.com/
 
-I apologize if this has already been reported or fixed somewhere, I did
-a search of lore.kernel.org and did not find anything. This change as
-commit b3134039c5b3 ("bus: fsl-mc: fsl-mc-allocator: Improve error
-reporting") causes the following warning/error with clang:
+All errors (new ones prefixed by >>):
 
-  drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: error: variable 'mc_bus_dev' is uninitialized when used here [-Werror,-Wuninitialized]
-    108 |                 dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-        |                          ^~~~~~~~~~
-  include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
-    144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-        |                                                   ^~~
-  include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-    110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-        |                         ^~~
-  drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the variable 'mc_bus_dev' to silence this warning
-    100 |         struct fsl_mc_device *mc_bus_dev;
-        |                                         ^
-        |                                          = NULL
-  1 error generated.
+>> kernel/sched/core.c:4053:24: error: call to undeclared function '__task_state_match'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           *success = !!(match = __task_state_match(p, state));
+                                 ^
+   kernel/sched/core.c:6815:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
+   asmlinkage __visible void __sched schedule_user(void)
+                                     ^
+   kernel/sched/core.c:6815:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void __sched schedule_user(void)
+                        ^
+                        static 
+   1 warning and 1 error generated.
 
-Should this be using mc_dev->dev or is there a different fix?
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-index 0ad68099684e..867ac3bbeae6 100644
---- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-@@ -105,7 +105,7 @@ static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
- 
- 	resource = mc_dev->resource;
- 	if (!resource || resource->data != mc_dev) {
--		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-+		dev_err(&mc_dev->dev, "resource mismatch\n");
- 		goto out;
- 	}
- 
+vim +/__task_state_match +4053 kernel/sched/core.c
 
-Cheers,
-Nathan
+  4028	
+  4029	/*
+  4030	 * Invoked from try_to_wake_up() to check whether the task can be woken up.
+  4031	 *
+  4032	 * The caller holds p::pi_lock if p != current or has preemption
+  4033	 * disabled when p == current.
+  4034	 *
+  4035	 * The rules of PREEMPT_RT saved_state:
+  4036	 *
+  4037	 *   The related locking code always holds p::pi_lock when updating
+  4038	 *   p::saved_state, which means the code is fully serialized in both cases.
+  4039	 *
+  4040	 *   The lock wait and lock wakeups happen via TASK_RTLOCK_WAIT. No other
+  4041	 *   bits set. This allows to distinguish all wakeup scenarios.
+  4042	 */
+  4043	static __always_inline
+  4044	bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
+  4045	{
+  4046		int match;
+  4047	
+  4048		if (IS_ENABLED(CONFIG_DEBUG_PREEMPT)) {
+  4049			WARN_ON_ONCE((state & TASK_RTLOCK_WAIT) &&
+  4050				     state != TASK_RTLOCK_WAIT);
+  4051		}
+  4052	
+> 4053		*success = !!(match = __task_state_match(p, state));
+  4054	
 
-> ---
->  drivers/bus/fsl-mc/fsl-mc-allocator.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> index e60faf8edaa1..36f70e5e418b 100644
-> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> @@ -104,22 +104,30 @@ static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
->  	int error = -EINVAL;
->  
->  	resource = mc_dev->resource;
-> -	if (!resource || resource->data != mc_dev)
-> +	if (!resource || resource->data != mc_dev) {
-> +		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
->  		goto out;
-> +	}
->  
->  	mc_bus_dev = to_fsl_mc_device(mc_dev->dev.parent);
->  	mc_bus = to_fsl_mc_bus(mc_bus_dev);
->  	res_pool = resource->parent_pool;
-> -	if (res_pool != &mc_bus->resource_pools[resource->type])
-> +	if (res_pool != &mc_bus->resource_pools[resource->type]) {
-> +		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
->  		goto out;
-> +	}
->  
->  	mutex_lock(&res_pool->mutex);
->  
-> -	if (res_pool->max_count <= 0)
-> +	if (res_pool->max_count <= 0) {
-> +		dev_err(&mc_bus_dev->dev, "max_count underflow\n");
->  		goto out_unlock;
-> +	}
->  	if (res_pool->free_count <= 0 ||
-> -	    res_pool->free_count > res_pool->max_count)
-> +	    res_pool->free_count > res_pool->max_count) {
-> +		dev_err(&mc_bus_dev->dev, "free_count mismatch\n");
->  		goto out_unlock;
-> +	}
->  
->  	/*
->  	 * If the device is currently allocated, its resource is not
-> @@ -613,7 +621,7 @@ static int fsl_mc_allocator_remove(struct fsl_mc_device *mc_dev)
->  	if (mc_dev->resource) {
->  		error = fsl_mc_resource_pool_remove_device(mc_dev);
->  		if (error < 0)
-> -			return error;
-> +			return 0;
->  	}
->  
->  	dev_dbg(&mc_dev->dev,
-> -- 
-> 2.39.1
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
