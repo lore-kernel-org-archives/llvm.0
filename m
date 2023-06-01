@@ -1,67 +1,29 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100EB47017
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 18:28:12 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b041cceb16so10330875ad.2
-        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 11:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685644092; x=1688236092;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZLQgV5OTogJ1ylkCDiOjxfc1T+CJXFQFeKoN9hX3ug=;
-        b=ac+D7llpyM/BXxwdJaEuWvmMQMeui0FxZcRRZfnSpxqEIcArtXlCuZLwdqvfE3qGok
-         4YJ2vXhKuTgstjkSaUUfSn4yhgRW5lkYVmqdpxgsomkqIhx3z9M67ufAL1kVHNnkKSkr
-         AnBhc03iHLRfh7oBDG/8KKFHGAinTY75WMNeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685644092; x=1688236092;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZLQgV5OTogJ1ylkCDiOjxfc1T+CJXFQFeKoN9hX3ug=;
-        b=KEr5VgvFH1mhAg0hC4aRhp+fU4d+UOYUhvMSHEnslbq1saxjcXH/1DndT+8xBU6Wku
-         OrAP117vTxyxHoNQosN/R5eds/pxYHUXr5053tnWipyDfELT4z8qGIRQeByLFz4F6Znt
-         B9mGw0W+XWQwumfhLHuSev9VAz+55stcvwXybRkhbLhXbcH15ltZW155M2W1eprFRogt
-         begmQEXo/Y1yNJJzpTB5S/6diJvIoPYdXBfDyteRVa6ChnCC/5mlVPe4lTuA2MFATiuO
-         cZw3D+b3xFUULsQtZZypzYq3k0vl/z4nlTknU2mr0O7jMLnsB2YT9nsx14ggJR0AmZqB
-         8u5Q==
-X-Gm-Message-State: AC+VfDxlegDUTcSvWg9K0KkYaY3UpyoWw19nT/UQ9avEcSiltkMHvcPE
-	Lazo58f/anT5sHHehc6J8vTHuA==
-X-Google-Smtp-Source: ACHHUZ6VsAWG8Oi4STZkNdzz+9GCCgAqrG0b/8X2yp5U2lZsp1m4pLUb6tcFZsc1F6+QClxMAWQwkQ==
-X-Received: by 2002:a17:903:2286:b0:1b0:1036:608c with SMTP id b6-20020a170903228600b001b01036608cmr261752plh.25.1685644092279;
-        Thu, 01 Jun 2023 11:28:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b001ac4e316b51sm3833178plh.109.2023.06.01.11.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 11:28:11 -0700 (PDT)
-Date: Thu, 1 Jun 2023 11:28:11 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, kasan-dev@googlegroups.com,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Marco Elver <elver@google.com>, linux-media@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on
- broken gcc
-Message-ID: <202306011127.B801968@keescook>
-References: <20230601151832.3632525-1-arnd@kernel.org>
- <202306010909.89C4BED@keescook>
- <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B638F47017
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 18:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5194C433D2;
+	Thu,  1 Jun 2023 18:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685644200;
+	bh=UKT2wYQFWgvPbCbqBLMp8QEpivL9N56qu2Yss1i+ZVo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M1BM/CroNCh2R0eax14T9KqzLie9WGDtS1GCw551HpQqmYREtKmxLtR0E8WDDDOBi
+	 TPksTHiSnmWFBZyxbs3omQZjX/u4USJV4h1kIcNzkQ9Ar4XPxPeVCfffWoiCPQsmOW
+	 E1k5Kz/AtjSGlVXxbxjgGCgGORnb/IW9/o2GtfRTq8KWMc/k1sUo9at1liSi4VFQvE
+	 yFg47Ny6an38UFxF2hPjPhaMUnKjYE4uRkZDGJILHJOvi6p3ZyhTjBMyp4e7S6fSz/
+	 sq20o1pBYZ3Oy9ATv8UQmsHbTVbHbfcs99n9ynthg5urlpnZ+l1KqgPBQsly8Y0pYm
+	 ePCMQTbu434xA==
+Date: Thu, 1 Jun 2023 11:29:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+	ndesaulniers@google.com, linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] btrfs: remove unused variable pages_processed
+Message-ID: <20230601182957.GA3028824@dev-arch.thelio-3990X>
+References: <20230530142154.3341677-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,42 +32,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
+In-Reply-To: <20230530142154.3341677-1-trix@redhat.com>
 
-On Thu, Jun 01, 2023 at 07:50:38PM +0200, Arnd Bergmann wrote:
-> On Thu, Jun 1, 2023, at 18:14, Kees Cook wrote:
-> > On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
-> >
-> > I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
-> > (e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
-> > so I'd prefer we maintain all*config coverage for the more commonly
-> > used config.
+On Tue, May 30, 2023 at 10:21:54AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> fs/btrfs/extent_io.c:230:16: error: variable
+>   'pages_processed' set but not used [-Werror,-Wunused-but-set-variable]
+>         unsigned long pages_processed = 0;
+>                       ^
+> This variable is not used so remove it.
 > 
-> Fair enough, I can send that as v2, but let's see what the others
-> think first.
-> 
-> >>  config CC_HAS_UBSAN_BOUNDS_STRICT
-> >>  	def_bool $(cc-option,-fsanitize=bounds-strict)
-> >> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-> >> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
-> >>  	help
-> >>  	  The -fsanitize=bounds-strict option is only available on GCC,
-> >>  	  but uses the more strict handling of arrays that includes knowledge
-> >
-> > Alternatively, how about falling back to -fsanitize=bounds instead, as
-> > that (which has less coverage) wasn't triggering the stack frame
-> > warnings?
-> >
-> > i.e. fall back through these:
-> > 	-fsanitize=array-bounds (Clang)
-> > 	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
-> > 	-fsanitize=bounds
-> 
-> From what I can tell, -fsanitize=bounds has the same problem
-> as -fsanitize=bounds-strict, so that would not help.
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Ah, did something change with GCOV? This (bounds vs bounds-strict) is
-the only recent change to CONFIG_UBSAN_BOUNDS...
+Caused by commit 6d6a31e7fc99 ("btrfs: split page locking out of
+__process_pages_contig").
 
--- 
-Kees Cook
+It is worth noting that while -Wunused-but-set-variable is normally
+under W=1, btrfs explicitly enables it in their Makefile, so this
+warning is visible during a normal build, which breaks the build with
+CONFIG_WERROR.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  fs/btrfs/extent_io.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+> index 89e093ae1c33..6919409c1183 100644
+> --- a/fs/btrfs/extent_io.c
+> +++ b/fs/btrfs/extent_io.c
+> @@ -227,7 +227,6 @@ static void __process_pages_contig(struct address_space *mapping,
+>  	pgoff_t start_index = start >> PAGE_SHIFT;
+>  	pgoff_t end_index = end >> PAGE_SHIFT;
+>  	pgoff_t index = start_index;
+> -	unsigned long pages_processed = 0;
+>  	struct folio_batch fbatch;
+>  	int i;
+>  
+> @@ -242,7 +241,6 @@ static void __process_pages_contig(struct address_space *mapping,
+>  
+>  			process_one_page(fs_info, &folio->page, locked_page,
+>  					 page_ops, start, end);
+> -			pages_processed += folio_nr_pages(folio);
+>  		}
+>  		folio_batch_release(&fbatch);
+>  		cond_resched();
+> -- 
+> 2.27.0
+> 
