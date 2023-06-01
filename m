@@ -1,170 +1,190 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAD513AC3
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:59:53 +0000 (UTC)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4leP-0002af-DF; Thu, 01 Jun 2023 18:59:49 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4leO-004OaX-Fd; Thu, 01 Jun 2023 18:59:48 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4leN-00ADTs-Oz; Thu, 01 Jun 2023 18:59:47 +0200
-Date: Thu, 1 Jun 2023 18:59:45 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Cc: Stuart Yoder <stuyoder@gmail.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-	Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
- reporting
-Message-ID: <20230601165945.f7itlyso4rbp2nbb@pengutronix.de>
-References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
- <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
- <20230601154101.GA2368233@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E6140795;
+	Thu,  1 Jun 2023 17:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685639800; x=1717175800;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S2Hf7YDn2rfm6E4b7h2+0osQy8pvbHeKqZIOK8qQ1a0=;
+  b=agtkBN+hbJj6P5hhMQxOBvev716uzx/+ZxntyIAOKWfziziNzS/gRiIG
+   9Qg0y6n4RKHlRONIrx/uZ6sf3RlET2Xkx+EVD9OOTDFuaYv9iDuRoh0FT
+   inQFrldo3wlzqN38oZK5mlpbPtReaD8hqFtuNZGWnHHQTXCuxw576dUjO
+   D1cpd9jlTnD7luMLd2lttE7V3o4YJ6oVyV263zA2K9zjD2Mt2BaDffgXC
+   ghNBs4Is5SkF2uz0crO/S+aI34Bb0cfbJ6TZKUMVP51BqeR0LMM96SnbA
+   JLk+UKpIIEl1ycVw0QWklwh2ZnsCuBXVStRcINM39YMvnQBoxrxQWYDFp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="335244920"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="335244920"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 10:16:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="1037583744"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="1037583744"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2023 10:16:33 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q4lua-0002WP-2p;
+	Thu, 01 Jun 2023 17:16:32 +0000
+Date: Fri, 2 Jun 2023 01:15:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC net-next v3 4/8] vsock: make vsock bind reusable
+Message-ID: <202306020103.SKP4Pz6Z-lkp@intel.com>
+References: <20230413-b4-vsock-dgram-v3-4-c2414413ef6a@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tfj3idh2h2hzi5yp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601154101.GA2368233@dev-arch.thelio-3990X>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+In-Reply-To: <20230413-b4-vsock-dgram-v3-4-c2414413ef6a@bytedance.com>
+
+Hi Bobby,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on ed72bd5a6790a0c3747cb32b0427f921bd03bb71]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/vsock-dgram-generalize-recvmsg-and-drop-transport-dgram_dequeue/20230531-084049
+base:   ed72bd5a6790a0c3747cb32b0427f921bd03bb71
+patch link:    https://lore.kernel.org/r/20230413-b4-vsock-dgram-v3-4-c2414413ef6a%40bytedance.com
+patch subject: [PATCH RFC net-next v3 4/8] vsock: make vsock bind reusable
+config: s390-randconfig-r044-20230531 (https://download.01.org/0day-ci/archive/20230602/202306020103.SKP4Pz6Z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f69c7f6d6d618c47334134277ad9a2d3877020f5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bobby-Eshleman/vsock-dgram-generalize-recvmsg-and-drop-transport-dgram_dequeue/20230531-084049
+        git checkout f69c7f6d6d618c47334134277ad9a2d3877020f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash net/vmw_vsock/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306020103.SKP4Pz6Z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/vmw_vsock/af_vsock.c:93:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from net/vmw_vsock/af_vsock.c:93:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from net/vmw_vsock/af_vsock.c:93:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> net/vmw_vsock/af_vsock.c:233:14: warning: no previous prototype for function 'vsock_find_bound_socket_common' [-Wmissing-prototypes]
+   struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+                ^
+   net/vmw_vsock/af_vsock.c:233:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+   ^
+   static 
+>> net/vmw_vsock/af_vsock.c:652:5: warning: no previous prototype for function 'vsock_bind_common' [-Wmissing-prototypes]
+   int vsock_bind_common(struct vsock_sock *vsk,
+       ^
+   net/vmw_vsock/af_vsock.c:652:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vsock_bind_common(struct vsock_sock *vsk,
+   ^
+   static 
+>> net/vmw_vsock/af_vsock.c:720:5: warning: no previous prototype for function 'vsock_bind_stream' [-Wmissing-prototypes]
+   int vsock_bind_stream(struct vsock_sock *vsk,
+       ^
+   net/vmw_vsock/af_vsock.c:720:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vsock_bind_stream(struct vsock_sock *vsk,
+   ^
+   static 
+   15 warnings generated.
 
 
---tfj3idh2h2hzi5yp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +/vsock_find_bound_socket_common +233 net/vmw_vsock/af_vsock.c
 
-Hello,
+   232	
+ > 233	struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+   234						    struct list_head *bind_table)
+   235	{
+   236		struct vsock_sock *vsk;
+   237	
+   238		list_for_each_entry(vsk, bind_table, bound_table) {
+   239			if (vsock_addr_equals_addr(addr, &vsk->local_addr))
+   240				return sk_vsock(vsk);
+   241	
+   242			if (addr->svm_port == vsk->local_addr.svm_port &&
+   243			    (vsk->local_addr.svm_cid == VMADDR_CID_ANY ||
+   244			     addr->svm_cid == VMADDR_CID_ANY))
+   245				return sk_vsock(vsk);
+   246		}
+   247	
+   248		return NULL;
+   249	}
+   250	
 
-On Thu, Jun 01, 2023 at 08:41:01AM -0700, Nathan Chancellor wrote:
-> On Fri, Mar 10, 2023 at 11:41:26PM +0100, Uwe Kleine-K=F6nig wrote:
-> > Instead of silently returning an error in the remove callback (which yi=
-elds
-> > a generic and little informing error message), annotate each error path=
- of
-> > fsl_mc_resource_pool_remove_device() with an error message and return z=
-ero
-> > in the remove callback to suppress the error message.
-> >=20
-> > Note that changing the return value has no other effect than suppressing
-> > the error message by the fsl_mc bus driver.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> I apologize if this has already been reported or fixed somewhere, I did
-> a search of lore.kernel.org and did not find anything. This change as
-> commit b3134039c5b3 ("bus: fsl-mc: fsl-mc-allocator: Improve error
-> reporting") causes the following warning/error with clang:
->=20
->   drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: error: variable 'mc_bus_d=
-ev' is uninitialized when used here [-Werror,-Wuninitialized]
->     108 |                 dev_err(&mc_bus_dev->dev, "resource mismatch\n"=
-);
->         |                          ^~~~~~~~~~
->   include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
->     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(=
-fmt), ##__VA_ARGS__)
->         |                                                   ^~~
->   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_print=
-k_index_wrap'
->     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);              =
-         \
->         |                         ^~~
->   drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the vari=
-able 'mc_bus_dev' to silence this warning
->     100 |         struct fsl_mc_device *mc_bus_dev;
->         |                                         ^
->         |                                          =3D NULL
->   1 error generated.
->=20
-> Should this be using mc_dev->dev or is there a different fix?
->=20
-> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/f=
-sl-mc-allocator.c
-> index 0ad68099684e..867ac3bbeae6 100644
-> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> @@ -105,7 +105,7 @@ static int __must_check fsl_mc_resource_pool_remove_d=
-evice(struct fsl_mc_device
-> =20
->  	resource =3D mc_dev->resource;
->  	if (!resource || resource->data !=3D mc_dev) {
-> -		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-> +		dev_err(&mc_dev->dev, "resource mismatch\n");
->  		goto out;
->  	}
-
-Hmm, clang seems to be right, and I just confirmed that gcc
-(arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0) doesn't emit a
-warning. :-\
-
-My approach would be:
-
-diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl=
--mc-allocator.c
-index 0ad68099684e..991273f956ce 100644
---- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-@@ -103,14 +103,15 @@ static int __must_check fsl_mc_resource_pool_remove_d=
-evice(struct fsl_mc_device
- 	struct fsl_mc_resource *resource;
- 	int error =3D -EINVAL;
-=20
-+	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
-+	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
-+
- 	resource =3D mc_dev->resource;
- 	if (!resource || resource->data !=3D mc_dev) {
- 		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
- 		goto out;
- 	}
-=20
--	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
--	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
- 	res_pool =3D resource->parent_pool;
- 	if (res_pool !=3D &mc_bus->resource_pools[resource->type]) {
- 		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
-
-
-Should I prepare a proper patch, or is it possible to squash this change
-into b3134039c5b3cf879841e3ec84c8cbf7675554ec?
-
-@Li Yang: Please advice.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---tfj3idh2h2hzi5yp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR4zoAACgkQj4D7WH0S
-/k4QJAgAgdhaTtOuFP51jFN3ZH49AOfxtFWNhYohXkIJK59a/qYtCpdfO3jtAdlo
-A6JrBlz+poU6mhAOltyPYAtfH5KlISTWD5o2Bqj89VMXQwR/c4+1sZxO36DZeSan
-rKk2w0betyejdn/b9H1eo7rWtUJ5egW8c/d3fnY6X/639ViW0g+h/kSfZ7ddBIVz
-ZAgXM5dUy9sAZlJNMhCi0E1ry6BAn10jiLBU+iRZOY9vvfQuuKasflS+qmvDmiiK
-eaNck34AopK9yDvdb6UhPJBLms3oMkjTdAkqRjOVCRRQhyNtxZtU0OQtWVX346sX
-xTP7T769ESHQ50fVAwtQsSYROvIQqQ==
-=4z1g
------END PGP SIGNATURE-----
-
---tfj3idh2h2hzi5yp--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
