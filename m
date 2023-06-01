@@ -1,118 +1,127 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C51442501
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 17:51:04 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 5FF8832006F5;
-	Thu,  1 Jun 2023 13:51:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 01 Jun 2023 13:51:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1685641861; x=1685728261; bh=rI
-	kHOu2cJZ+vhgMgLgXQFIzSc/FfETBAe+GmKBqE/d8=; b=YsbtSfmNvp2eXNoM+R
-	izu+ChEdBnznPH+LsBdjf2+h6LdAHRujYmHDAet9DAX1gmlHLKguMCLBwmLdAHEO
-	D+UVABb2eTTzqr0726+/7NHAOtmHqLCAXINuJsiG1IDxhjaITt017WqUNsBVChzh
-	D90g8W2yX8ZoFDket0s7THCrhtfyEuY5C0Ndajkk/+9tv8wElxHd4U/Gn7Ea7xEx
-	XbVfxHdS58S6O5Mq/yj2OHukD1a2RvVB62BOr0d3rvYg6DdO9l1EU2kX/KReg33O
-	fPR6tKEUO0F7F771g7sulSQlHpOBfGP9yais1MeBS4eMz09WTiPZ3dXkonAtsOj3
-	MpDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1685641861; x=1685728261; bh=rIkHOu2cJZ+vh
-	gMgLgXQFIzSc/FfETBAe+GmKBqE/d8=; b=x278PMWMnWwyz8MB2+Pq6j4xDniu0
-	TlaDyapGkeiQFJNSM0ckJ1vVqYHPh1dpmpNaqeJMLl7g8wk5al2PlkQc7NvB9v+b
-	GnN6504fYOB+Hl1GRaqPa+18Zkb5vE0BQjoUe3wngRik4cKBXar65yZzHfpoMhTt
-	qksemY29jYOi6hdi0fsHGM5w4bTXLGf859Bz8PCzkDPKVPKbejaWAQPDdVsLH/fK
-	p6meRZqBmViLevJg6759hN/hDoAdYDzWXmViGsF+HwJAAA/2GYyXAVdAVpvsFx8m
-	N21D6im9GWBMQvaasV8H05L7MAuS6ST5q8RBgJocWC9hR3Er14DmqCocw==
-X-ME-Sender: <xms:hNp4ZEB47iSnUPOggsaPyqB3htwwzNbBYiP2c2CDEU-GAelh2g8d0g>
-    <xme:hNp4ZGjPiJzGYKEOKXF8ZVG6qJObsay-XWlXTArfI2edvCGmlHvO6H8hcnSw2yE8S
-    M_zWTR4S9o1_3Selek>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeeigfeiieeiheejjeeiudekleevvddvffetieehteeikeeigeeiffdttdef
-    tdeggfenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hNp4ZHkX2OtLDMVwiM9pUSRildLjmx7b470Z9Ca5GPuJafo5YZtD1A>
-    <xmx:hNp4ZKwgiGYOpOdmKAbTAywxVof93l8RU1AQtJKMm8M8XxQ-KJalsw>
-    <xmx:hNp4ZJQ1JHiPxb1I71yRvpM9eN-KRrOUQGwapN-tDspykREevQDiyg>
-    <xmx:hdp4ZICyxJxKWz4v3ZWf754mlZqb1XGQlvWDQ_AdPqLkWWJ3D8psOg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 38825B60086; Thu,  1 Jun 2023 13:51:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B07B4823B
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 18:10:27 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-96fbe7fbdd4so163970066b.3
+        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 11:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685643025; x=1688235025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fN4dOkqKjC6yYa0WCy0PPXkew6vDz5s8phQTNj9Uuro=;
+        b=LMamD9ZGqhsd796VPhVqGOUsh95L92VoivoPgRU5UCTYTQFubX9A+mz4OvotmLxtp5
+         UP7BcmGvfxEEmXDFfkfYvpewgcnSFAhne6LHWjRUcMPkk68fb+yrkTlMOpX+31hwPIi9
+         DPdSsC0DMD8A9Xa4ujsuEECTBLUi8zMGCrpSkdqjt3AWwQn8K7KuYZ2KobXr9sGbAaXX
+         eIuEmthfQKrdS07eUYRYVkQx45iLu1tNIUSsos8pJ7yi8IlD5SGmmm5i7+chGKRztc5o
+         UuO+b8qsb6vi7FwIEczQpLjmUk012qzSET9RVVVVQIxNDz/pb3kfKKQfXGXl1cg/LNpu
+         WWLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685643025; x=1688235025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fN4dOkqKjC6yYa0WCy0PPXkew6vDz5s8phQTNj9Uuro=;
+        b=lLDFIWMAwP0419QgGz9tYQE/RJkxferrIQiZXt+TLHZG6Za3mwjzF89fcfRC2quk1y
+         NQ4UxETQyJBOZNF9HxNyxsA8ruau4VpS79Vz4oKUco6QOuhFxzgxmNu28b4NCIj9Uk7T
+         J9zri9ddd4pWq5XTSY6bw67J42437WTh/Yx61v+qO2bKLJFmhmElLO68TywTXU25qlYR
+         PXR1cybcMTb/rUNyD3hXdyljrHgYR5/gQP7TVC2o3xTMtOGnnFIBEZhJshMqqDNwXGnI
+         okrYMqHy4FPunkuCmHe+QDJwKwq3DNJDXK2xXe4G7k5FUz16y+R1WfYrhU1C1NTOc7nN
+         cVxA==
+X-Gm-Message-State: AC+VfDzqQZqz5FyxXxGmlgvGdhmCGfYNFpZgVg1OXPeVAvBOohYWINWz
+	frkksnhvjy6WtEQyjMiErxkfeSc1l212sKfd6HjpcQ==
+X-Google-Smtp-Source: ACHHUZ7igvhtiibQfA61bCZ+csGUB2mQgm5JSsigI+IF4r18gJt2/M9hdQNEH7zPfMRhvLmhwccp2hTEPWr+q9TRMIo=
+X-Received: by 2002:a17:907:7293:b0:966:1984:9d21 with SMTP id
+ dt19-20020a170907729300b0096619849d21mr8288661ejc.9.1685643025187; Thu, 01
+ Jun 2023 11:10:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
-In-Reply-To: <202306010909.89C4BED@keescook>
-References: <20230601151832.3632525-1-arnd@kernel.org>
- <202306010909.89C4BED@keescook>
-Date: Thu, 01 Jun 2023 19:50:38 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kees Cook" <keescook@chromium.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: kasan-dev@googlegroups.com, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>,
- "Andrey Konovalov" <andreyknvl@gmail.com>,
- "Dmitry Vyukov" <dvyukov@google.com>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Marco Elver" <elver@google.com>, linux-media@vger.kernel.org,
- linux-crypto@vger.kernel.org, "Herbert Xu" <herbert@gondor.apana.org.au>,
- "Ard Biesheuvel" <ardb@kernel.org>,
- "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Matthias Brugger" <matthias.bgg@gmail.com>,
- "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on broken gcc
-Content-Type: text/plain
+MIME-Version: 1.0
+References: <20230601-zswap-cgroup-wsometimes-uninitialized-v1-1-35debdd19293@kernel.org>
+In-Reply-To: <20230601-zswap-cgroup-wsometimes-uninitialized-v1-1-35debdd19293@kernel.org>
+From: Yosry Ahmed <yosryahmed@google.com>
+Date: Thu, 1 Jun 2023 11:09:48 -0700
+Message-ID: <CAJD7tkYZxbEyP6-yjcobws_6Cvjib9c9YnBQRBjhwrK3KaHs7A@mail.gmail.com>
+Subject: Re: [PATCH] zswap: Avoid uninitialized use of ret in zswap_frontswap_store()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, sjenning@redhat.com, ddstreet@ieee.org, 
+	vitaly.wool@konsulko.com, ndesaulniers@google.com, trix@redhat.com, 
+	nphamcs@gmail.com, linux-mm@kvack.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 1, 2023, at 18:14, Kees Cook wrote:
-> On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
+On Thu, Jun 1, 2023 at 8:26=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
 >
-> I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
-> (e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
-> so I'd prefer we maintain all*config coverage for the more commonly
-> used config.
-
-Fair enough, I can send that as v2, but let's see what the others
-think first.
-
->>  config CC_HAS_UBSAN_BOUNDS_STRICT
->>  	def_bool $(cc-option,-fsanitize=bounds-strict)
->> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
->> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
->>  	help
->>  	  The -fsanitize=bounds-strict option is only available on GCC,
->>  	  but uses the more strict handling of arrays that includes knowledge
+> Clang warns:
 >
-> Alternatively, how about falling back to -fsanitize=bounds instead, as
-> that (which has less coverage) wasn't triggering the stack frame
-> warnings?
+>   mm/zswap.c:1183:6: error: variable 'ret' is used uninitialized whenever=
+ 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>    1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   mm/zswap.c:1327:9: note: uninitialized use occurs here
+>    1327 |         return ret;
+>         |                ^~~
+>   mm/zswap.c:1183:2: note: remove the 'if' if its condition is always fal=
+se
+>    1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1184 |                 goto reject;
+>         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   mm/zswap.c:1158:9: note: initialize the variable 'ret' to silence this =
+warning
+>    1158 |         int ret;
+>         |                ^
+>         |                 =3D 0
+>   1 error generated.
 >
-> i.e. fall back through these:
-> 	-fsanitize=array-bounds (Clang)
-> 	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
-> 	-fsanitize=bounds
+> Set ret to -EINVAL, which seems to best match the situation the comment
+> mentions and matches an earlier bailout due to an unsupported type or
+> situation.
 
-From what I can tell, -fsanitize=bounds has the same problem
-as -fsanitize=bounds-strict, so that would not help.
+Shouldn't this be -ENOMEM? I think this was the error code returned in
+this situation before 6804144bf1cf.
 
-     Arnd
+>
+> Fixes: 6804144bf1cf ("zswap: do not shrink if cgroup may not zswap")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/202306011435.2BxsHFUE-lkp@intel.com/
+> Closes: https://lore.kernel.org/202306012152.o4FL7Y6J-lkp@intel.com/
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1861
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  mm/zswap.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index cff93643a6ab..e8313e2f5807 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -1180,8 +1180,10 @@ static int zswap_frontswap_store(unsigned type, pg=
+off_t offset,
+>          * local cgroup limits.
+>          */
+>         objcg =3D get_obj_cgroup_from_page(page);
+> -       if (objcg && !obj_cgroup_may_zswap(objcg))
+> +       if (objcg && !obj_cgroup_may_zswap(objcg)) {
+> +               ret =3D -EINVAL;
+>                 goto reject;
+> +       }
+>
+>         /* reclaim space if needed */
+>         if (zswap_is_full()) {
+>
+> ---
+> base-commit: b2424568bd9b947b2698b693ff24fec63bb4b36a
+> change-id: 20230601-zswap-cgroup-wsometimes-uninitialized-b549ff4247ed
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
