@@ -1,135 +1,114 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E4E22D77
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:14:54 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b05e96dabbso5940815ad.2
-        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685636094; x=1688228094;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
-        b=BLOJsskDJTv8yn+ZTSU8DPbhPH9VAEpQcNphr4RmScmbAmgWrp0GukfjFro2r265wS
-         6nmFRGSXXGa7RcbInQP2zovN07D4+fErz4lNsHF1JQiB5r265YWCLnVrXvfV9fIuuPKD
-         bp9H8NF/OqTzmF7dGtp2dpe9nzNFgZX5Yid94=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685636094; x=1688228094;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
-        b=IHhagzBFkFRFOKnZdbaPR9o2uh9dx0Peq0Wpf0nggDKmUz7gveQwmfdzFCb3pRMzfV
-         kykDXJNwhgo6kFyrDo38G3v3/ZTwe8wIySRJj+If7GVrJSF3Xm6RjRQvOAtDALyuAXKm
-         KiXacUgPcpqKBd7UF5D6uE6qRrwzVfNOIDnzz3ZfardQbko8l8Pjcm4khIAxq/X6KByj
-         86d5GrBe9dOI2BqkdOtup3+U7ppdlQ9ezmM7HAJcqImeLGivzsB1GYuxayPGO0KHylWm
-         0ieDxEJmJFBoNeyEQHQLshI3rVYSIWZvYFd6fP+KUVoLxBmQaPCeeeGJriAmH37QY0s5
-         IVrA==
-X-Gm-Message-State: AC+VfDyKqc+OMcYpo6WXA7thD2dqMSgVoHaqdBXp4rioKC/2DtQ0XEuo
-	pbkT9+tTOY2D3nWxBT9uyT8NKw==
-X-Google-Smtp-Source: ACHHUZ6ljnrlP3/ilIjQD+BaM7rS5m1dEr3AyuNBWAGikj0kydZDXi/vDU4GxazSWUNgX9O+Y6PY3A==
-X-Received: by 2002:a17:902:c20d:b0:1ac:6d4c:c24b with SMTP id 13-20020a170902c20d00b001ac6d4cc24bmr6045835pll.3.1685636094447;
-        Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001b176ba9f17sm3680035plq.149.2023.06.01.09.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 09:14:53 -0700 (PDT)
-Date: Thu, 1 Jun 2023 09:14:53 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: kasan-dev@googlegroups.com, ryabinin.a.a@gmail.com, glider@google.com,
-	andreyknvl@gmail.com, dvyukov@google.com, vincenzo.frascino@arm.com,
-	elver@google.com, linux-media@vger.kernel.org,
-	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
-	ardb@kernel.org, mchehab@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on
- broken gcc
-Message-ID: <202306010909.89C4BED@keescook>
-References: <20230601151832.3632525-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7201313AC3
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 16:42:13 +0000 (UTC)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351FHZik010627;
+	Thu, 1 Jun 2023 17:56:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=J2XhhDlTFWe9QBoqWhVSk0LMiIjX30rM1uG7DPXXW5A=;
+ b=klyqao+EHAhU8SFZOwnVtxMsM6VugNVH/EObvuG5duZlvFM74gJ285xS8cuur170CBNc
+ 2UHC6W0gWtouEYboUdW/5CjV9XWv7lk2ipt7DjdAsSk2naih4ChgFu9ykAL2q7Utv+Lt
+ bm/JHqZOYdU9pVct3SmDtZGUh/ftCglDjL62ZCgCbsMkP9liRq9FUB97R/l7uSV4dSu1
+ s/4LI9tzJP3x4X09dFF7PCPDBbqaxltt1iCKePet8ENQyfe52vJsZJHp+MidNHE4EQVA
+ Vh2GE46fICar2lG87CQ8E38xPM9BaVjSin7h5q+XTTlxRniBUEfu0WsrPQBYNtjU6SZM Kw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx31524mj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Jun 2023 17:56:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A2FA310002A;
+	Thu,  1 Jun 2023 17:56:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 97D6325AEE2;
+	Thu,  1 Jun 2023 17:56:30 +0200 (CEST)
+Received: from localhost (10.48.0.39) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 1 Jun
+ 2023 17:56:30 +0200
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>
+CC: Antonio Borneo <antonio.borneo@foss.st.com>
+Subject: [PATCH] irqchip/stm32-exti: Fix warning on initialized field overwritten
+Date: Thu, 1 Jun 2023 17:56:14 +0200
+Message-ID: <20230601155614.34490-1-antonio.borneo@foss.st.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601151832.3632525-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.39]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
 
-On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Combining UBSAN and GCOV in randconfig builds results in a number of
-> stack frame size warnings, such as:
-> 
-> crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
-> drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> 
-> I managed to track this down to the -fsanitize=bounds option clashing
-> with the -fprofile-arcs option, which leads a lot of spilled temporary
-> variables in generated instrumentation code.
-> 
-> Hopefully this can be addressed in future gcc releases the same way
-> that clang handles the combination, but for existing compiler releases,
-> it seems best to disable one of the two flags. This can be done either
-> globally by just not passing both at the same time, or locally using
-> the no_sanitize or no_instrument_function attributes in the affected
-> functions.
-> 
-> Try the simplest approach here, and turn off -fsanitize=bounds on
-> gcc when GCOV is enabled, leaving the rest of UBSAN working. Doing
-> this globally also helps avoid inefficient code from the same
-> problem that did not push the build over the warning limit.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Link: https://lore.kernel.org/stable/6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain/
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-> Link: https://godbolt.org/z/zvf7YqK5K
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+While compiling with W=1, both gcc and clang complain about a
+tricky way to initialize an array by filling it with a non-zero
+value and then overrride some of the array elements.
+In this case the override is intentional, so just disable the
+specific warning for only this part of the code.
 
-I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
-(e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
-so I'd prefer we maintain all*config coverage for the more commonly
-used config.
+Note: the flag "-Woverride-init" is recognized by both compilers,
+but the warning msg from clang reports "-Winitializer-overrides".
+The doc of clang clarifies that the two flags are synonyms, so use
+here only the flag name common on both compilers.
 
-> ---
->  lib/Kconfig.ubsan | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index f7cbbad2bb2f4..8f71ff8f27576 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -29,6 +29,8 @@ config UBSAN_TRAP
->  
->  config CC_HAS_UBSAN_BOUNDS_STRICT
->  	def_bool $(cc-option,-fsanitize=bounds-strict)
-> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
->  	help
->  	  The -fsanitize=bounds-strict option is only available on GCC,
->  	  but uses the more strict handling of arrays that includes knowledge
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Fixes: c297493336b7 ("irqchip/stm32-exti: Simplify irq description table")
+---
+ drivers/irqchip/irq-stm32-exti.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Alternatively, how about falling back to -fsanitize=bounds instead, as
-that (which has less coverage) wasn't triggering the stack frame
-warnings?
+diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
+index 6a3f7498ea8e..8bbb2b114636 100644
+--- a/drivers/irqchip/irq-stm32-exti.c
++++ b/drivers/irqchip/irq-stm32-exti.c
+@@ -173,6 +173,16 @@ static struct irq_chip stm32_exti_h_chip_direct;
+ #define EXTI_INVALID_IRQ       U8_MAX
+ #define STM32MP1_DESC_IRQ_SIZE (ARRAY_SIZE(stm32mp1_exti_banks) * IRQS_PER_BANK)
+ 
++/*
++ * Use some intentionally tricky logic here to initialize the whole array to
++ * EXTI_INVALID_IRQ, but then override certain fields, requiring us to indicate
++ * that we "know" that there are overrides in this structure, and we'll need to
++ * disable that warning from W=1 builds.
++ */
++__diag_push();
++__diag_ignore_all("-Woverride-init",
++		  "logic to initialize all and then override some is OK");
++
+ static const u8 stm32mp1_desc_irq[] = {
+ 	/* default value */
+ 	[0 ... (STM32MP1_DESC_IRQ_SIZE - 1)] = EXTI_INVALID_IRQ,
+@@ -266,6 +276,8 @@ static const u8 stm32mp13_desc_irq[] = {
+ 	[70] = 98,
+ };
+ 
++__diag_pop();
++
+ static const struct stm32_exti_drv_data stm32mp1_drv_data = {
+ 	.exti_banks = stm32mp1_exti_banks,
+ 	.bank_nr = ARRAY_SIZE(stm32mp1_exti_banks),
 
-i.e. fall back through these:
-	-fsanitize=array-bounds (Clang)
-	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
-	-fsanitize=bounds
-
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
 -- 
-Kees Cook
+2.40.1
+
