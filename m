@@ -1,151 +1,111 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FC751800
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 18:26:34 +0000 (UTC)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96f5685f902so163014566b.2
-        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 11:26:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100EB47017
+	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 18:28:12 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b041cceb16so10330875ad.2
+        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 11:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685643992; x=1688235992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oYKP8X4gWjJxyCtHS6ykuTOjFxBhcKNgMGvxxqoTk1c=;
-        b=mpivmLWeT2XXwXzvLHfqx+6grbH7Ah1Cef2/9rsLjrH8+dv7e4Hw8MCy4n69enjGw6
-         rDSb2wUvrKdOGLImrg99vSkOtRxY4OYiqdaqutPbbjU4oVTHkmR6jZS77Sjhi42LesM9
-         y3MeBPPlbknIjqpNpS8Vh1fI6gfFtJQWn1aAmDPl4gGrSrwmbcz2iPPQI6T4YaI7MV42
-         7Njga6jXZi4l6g1LMXdBWaAFaJ4V02mGk69WRwTqt4dRIg/ABQMSn8xh74lWG+2enFaR
-         ocABxCbmijjNB9QkFBp+WbhHY7Udhw4HMkmFdBYRV3khdxF1bfUd36Wtn7PZJPHuy1P1
-         jqCQ==
+        d=chromium.org; s=google; t=1685644092; x=1688236092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZLQgV5OTogJ1ylkCDiOjxfc1T+CJXFQFeKoN9hX3ug=;
+        b=ac+D7llpyM/BXxwdJaEuWvmMQMeui0FxZcRRZfnSpxqEIcArtXlCuZLwdqvfE3qGok
+         4YJ2vXhKuTgstjkSaUUfSn4yhgRW5lkYVmqdpxgsomkqIhx3z9M67ufAL1kVHNnkKSkr
+         AnBhc03iHLRfh7oBDG/8KKFHGAinTY75WMNeA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685643992; x=1688235992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oYKP8X4gWjJxyCtHS6ykuTOjFxBhcKNgMGvxxqoTk1c=;
-        b=WBUfj9vKgTjXDX5B40T0O8xfB0F7lMyHDyQ0aM1DHlbJ7BvJcZKTaZaK2b+xjC99lF
-         01EwlRw3Vggs1XUstkrj9VOcPLluDEbStzfRS8CWFcIEYt/Q9hIQQ793aCwceXxUXygw
-         Zi/KGjrZvFc/xKdHC71VG+0z0iThg5sNxIW6POecmqgpVd8ZI7tRSm9bh2FiZrOpBV0f
-         ERn1DJ5Y/yFXk+96ZqHW5eG+rUKs8Ynw2zzQ2qrt6xqUEIVqJ8Qq50LPthKqcdW4KHyd
-         Dr7N/l5lB+sx1HQy1Ap9jdnFMhsA+UTlODa3FvHqSvD8V4Dgw8MitMbKIsWpdqcPuGer
-         7HqA==
-X-Gm-Message-State: AC+VfDy2q0Y3EACGvUuV3rSKOpC2mbgl2N3hvp5TWrFY5vmA7G3GkAFj
-	/95LAFJGLDEnZA7mYs3jfyur0G8CJFNqm+mSRiFUt23JY57BkFZ66v8=
-X-Google-Smtp-Source: ACHHUZ4+VwIgSX0cU0yNNOSKDeYqdM9TOoBQfm9J5ytzdxeTZK7wvojLZQXwlIxJcjpjnaUnnVdSLHHbecMLtAmbFBA=
-X-Received: by 2002:a17:907:1c22:b0:94b:cd7c:59f4 with SMTP id
- nc34-20020a1709071c2200b0094bcd7c59f4mr9718734ejc.16.1685643992479; Thu, 01
- Jun 2023 11:26:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685644092; x=1688236092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZZLQgV5OTogJ1ylkCDiOjxfc1T+CJXFQFeKoN9hX3ug=;
+        b=KEr5VgvFH1mhAg0hC4aRhp+fU4d+UOYUhvMSHEnslbq1saxjcXH/1DndT+8xBU6Wku
+         OrAP117vTxyxHoNQosN/R5eds/pxYHUXr5053tnWipyDfELT4z8qGIRQeByLFz4F6Znt
+         B9mGw0W+XWQwumfhLHuSev9VAz+55stcvwXybRkhbLhXbcH15ltZW155M2W1eprFRogt
+         begmQEXo/Y1yNJJzpTB5S/6diJvIoPYdXBfDyteRVa6ChnCC/5mlVPe4lTuA2MFATiuO
+         cZw3D+b3xFUULsQtZZypzYq3k0vl/z4nlTknU2mr0O7jMLnsB2YT9nsx14ggJR0AmZqB
+         8u5Q==
+X-Gm-Message-State: AC+VfDxlegDUTcSvWg9K0KkYaY3UpyoWw19nT/UQ9avEcSiltkMHvcPE
+	Lazo58f/anT5sHHehc6J8vTHuA==
+X-Google-Smtp-Source: ACHHUZ6VsAWG8Oi4STZkNdzz+9GCCgAqrG0b/8X2yp5U2lZsp1m4pLUb6tcFZsc1F6+QClxMAWQwkQ==
+X-Received: by 2002:a17:903:2286:b0:1b0:1036:608c with SMTP id b6-20020a170903228600b001b01036608cmr261752plh.25.1685644092279;
+        Thu, 01 Jun 2023 11:28:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b001ac4e316b51sm3833178plh.109.2023.06.01.11.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 11:28:11 -0700 (PDT)
+Date: Thu, 1 Jun 2023 11:28:11 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>, kasan-dev@googlegroups.com,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Marco Elver <elver@google.com>, linux-media@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on
+ broken gcc
+Message-ID: <202306011127.B801968@keescook>
+References: <20230601151832.3632525-1-arnd@kernel.org>
+ <202306010909.89C4BED@keescook>
+ <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230601-zswap-cgroup-wsometimes-uninitialized-v1-1-35debdd19293@kernel.org>
- <CAJD7tkYZxbEyP6-yjcobws_6Cvjib9c9YnBQRBjhwrK3KaHs7A@mail.gmail.com> <20230601181849.GA1528196@dev-arch.thelio-3990X>
-In-Reply-To: <20230601181849.GA1528196@dev-arch.thelio-3990X>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Thu, 1 Jun 2023 11:25:55 -0700
-Message-ID: <CAJD7tkZHfmY_0-Many96y5YCb2K_+nfoe2WHkPDPXb2x3hBRdQ@mail.gmail.com>
-Subject: Re: [PATCH] zswap: Avoid uninitialized use of ret in zswap_frontswap_store()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: akpm@linux-foundation.org, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, ndesaulniers@google.com, trix@redhat.com, 
-	nphamcs@gmail.com, linux-mm@kvack.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
 
-On Thu, Jun 1, 2023 at 11:18=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Thu, Jun 01, 2023 at 11:09:48AM -0700, Yosry Ahmed wrote:
-> > On Thu, Jun 1, 2023 at 8:26=E2=80=AFAM Nathan Chancellor <nathan@kernel=
-.org> wrote:
-> > >
-> > > Clang warns:
-> > >
-> > >   mm/zswap.c:1183:6: error: variable 'ret' is used uninitialized when=
-ever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-> > >    1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
-> > >         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   mm/zswap.c:1327:9: note: uninitialized use occurs here
-> > >    1327 |         return ret;
-> > >         |                ^~~
-> > >   mm/zswap.c:1183:2: note: remove the 'if' if its condition is always=
- false
-> > >    1183 |         if (objcg && !obj_cgroup_may_zswap(objcg))
-> > >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    1184 |                 goto reject;
-> > >         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   mm/zswap.c:1158:9: note: initialize the variable 'ret' to silence t=
-his warning
-> > >    1158 |         int ret;
-> > >         |                ^
-> > >         |                 =3D 0
-> > >   1 error generated.
-> > >
-> > > Set ret to -EINVAL, which seems to best match the situation the comme=
-nt
-> > > mentions and matches an earlier bailout due to an unsupported type or
-> > > situation.
+On Thu, Jun 01, 2023 at 07:50:38PM +0200, Arnd Bergmann wrote:
+> On Thu, Jun 1, 2023, at 18:14, Kees Cook wrote:
+> > On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
 > >
-> > Shouldn't this be -ENOMEM? I think this was the error code returned in
-> > this situation before 6804144bf1cf.
->
-> Sure, I can update this to be -ENOMEM if that is appropriate. I am not
-> sure it actually matters though, since as far as I can tell, this
-> function is only called via the ->store() call in __frontswap_store(),
-> which is only called by frontswap_store(), which in turn is only called b=
-y
-> swap_writepage() and its return value is only checked against 0, no
-> other error values. I could be missing a macro call though.
->
-> If I should send a v2, please let me know.
+> > I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
+> > (e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
+> > so I'd prefer we maintain all*config coverage for the more commonly
+> > used config.
+> 
+> Fair enough, I can send that as v2, but let's see what the others
+> think first.
+> 
+> >>  config CC_HAS_UBSAN_BOUNDS_STRICT
+> >>  	def_bool $(cc-option,-fsanitize=bounds-strict)
+> >> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
+> >> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
+> >>  	help
+> >>  	  The -fsanitize=bounds-strict option is only available on GCC,
+> >>  	  but uses the more strict handling of arrays that includes knowledge
+> >
+> > Alternatively, how about falling back to -fsanitize=bounds instead, as
+> > that (which has less coverage) wasn't triggering the stack frame
+> > warnings?
+> >
+> > i.e. fall back through these:
+> > 	-fsanitize=array-bounds (Clang)
+> > 	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
+> > 	-fsanitize=bounds
+> 
+> From what I can tell, -fsanitize=bounds has the same problem
+> as -fsanitize=bounds-strict, so that would not help.
 
-You are right that no one actually checks the error code now, but it
-would be nice to stay consistent, just in case we want to do proper
-error handling at some point :)
+Ah, did something change with GCOV? This (bounds vs bounds-strict) is
+the only recent change to CONFIG_UBSAN_BOUNDS...
 
->
-> Cheers,
-> Nathan
->
-> > > Fixes: 6804144bf1cf ("zswap: do not shrink if cgroup may not zswap")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/202306011435.2BxsHFUE-lkp@intel.com/
-> > > Closes: https://lore.kernel.org/202306012152.o4FL7Y6J-lkp@intel.com/
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/1861
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  mm/zswap.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/zswap.c b/mm/zswap.c
-> > > index cff93643a6ab..e8313e2f5807 100644
-> > > --- a/mm/zswap.c
-> > > +++ b/mm/zswap.c
-> > > @@ -1180,8 +1180,10 @@ static int zswap_frontswap_store(unsigned type=
-, pgoff_t offset,
-> > >          * local cgroup limits.
-> > >          */
-> > >         objcg =3D get_obj_cgroup_from_page(page);
-> > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
-> > > +       if (objcg && !obj_cgroup_may_zswap(objcg)) {
-> > > +               ret =3D -EINVAL;
-> > >                 goto reject;
-> > > +       }
-> > >
-> > >         /* reclaim space if needed */
-> > >         if (zswap_is_full()) {
-> > >
-> > > ---
-> > > base-commit: b2424568bd9b947b2698b693ff24fec63bb4b36a
-> > > change-id: 20230601-zswap-cgroup-wsometimes-uninitialized-b549ff4247e=
-d
-> > >
-> > > Best regards,
-> > > --
-> > > Nathan Chancellor <nathan@kernel.org>
-> > >
-> > >
+-- 
+Kees Cook
