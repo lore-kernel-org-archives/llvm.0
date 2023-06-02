@@ -1,183 +1,114 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FFA19509;
-	Fri,  2 Jun 2023 13:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685713901; x=1717249901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c/07fBv2e57QftVltVTK+v/AFpok7g468L/WXtTWLpI=;
-  b=EsVjboJxR48dmc2vHgiMxFF2+7AOi70c0emFxpvuo+WNEpyFvKRUVGL9
-   b47dY8DGkRSp78G0jQH8XeqRw/lMmvD0eI2wsFb8N+fuobZ7CqwGL11Vt
-   gJVoh6TKuKsiqz6G8xdgHJBMUiiAoN1CRnp+t34h2CUOBUJ8uldpJ/rqj
-   ySShxa2Fig5NczkGNHZJmuiczcK/9DQc6kHDVlfoYirsc6Q3k4GyqfYXy
-   IqhvMwVGfHCrYzDilR6DxA6U9BzSdtR2aN5McgnZ/12MVo9TfMNz04LwL
-   9g5Do8S57ukLf8x01NcJOmdWvbAKd1lKfFc6CIcn+s4NtHvVSMxXqh0m0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="336235033"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="336235033"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 06:51:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="772890379"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="772890379"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2023 06:51:34 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q55Bl-0000Vd-1f;
-	Fri, 02 Jun 2023 13:51:33 +0000
-Date: Fri, 2 Jun 2023 21:51:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Magnus Damm <magnus.damm@gmail.com>, Joerg Roedel <joro@8bytes.org>,
-	Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Dejin Zheng <zhengdejin5@gmail.com>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Russell King <linux@armlinux.org.uk>,
-	John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Tony Lindgren <tony@atomide.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Tero Kristo <tero.kristo@linux.intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev
-Subject: Re: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to
- readl_poll_timeout_atomic()
-Message-ID: <202306022137.eAP4Q3hL-lkp@intel.com>
-References: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A60258F
+	for <llvm@lists.linux.dev>; Fri,  2 Jun 2023 15:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71A95C433A1;
+	Fri,  2 Jun 2023 15:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685718025;
+	bh=pa+sw7piReDEjInKXKqjGINHz86IV7DvHVj4nDWYvdg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bi1ioK3XvJ+q3Rle2fRqVnvW64r4HT8l9zsDWx2N6bHMb5QqsnpQCIOMcyY9Hw848
+	 Xqg2oqOYe6wkErfYpqyvP8jlZPPlmo0Wumcgle7dFw27lEz/gaQbCj2gaKCdGVzaFf
+	 uvJ0LWXz2QpSe9R+7XtwbPIRUxs5EI23BhpgxxrDiAAjqpaGhhGknFjehuO/54fMUE
+	 sd7S43jlfkmhLMf+L7AjrFZT70ek2YzNkN/kEZnOIsOyREwA0veeqVsD1k256/LjFB
+	 RUi29jySWu1mxRgDYpEgjof6CwLCXLIWY+mywg/AOpAjR1ItHueuzhqH8nbkHuvZFL
+	 65Hw2cciOpK4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 421D5C395E5;
+	Fri,  2 Jun 2023 15:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V6 00/21] Add basic ACPI support for RISC-V
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <168571802526.11683.10109882495660507850.git-patchwork-notify@kernel.org>
+Date: Fri, 02 Jun 2023 15:00:25 +0000
+References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ llvm@lists.linux.dev, qianweili@huawei.com, aou@eecs.berkeley.edu,
+ daniel.lezcano@linaro.org, trix@redhat.com, rafael@kernel.org,
+ maz@kernel.org, corbet@lwn.net, ndesaulniers@google.com,
+ markgross@kernel.org, hdegoede@redhat.com, wangzhou1@hisilicon.com,
+ palmer@dabbelt.com, paul.walmsley@sifive.com, herbert@gondor.apana.org.au,
+ tglx@linutronix.de, luzmaximilian@gmail.com, davem@davemloft.net,
+ nathan@kernel.org, lenb@kernel.org
 
-Hi Geert,
+Hello:
 
-kernel test robot noticed the following build warnings:
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-[auto build test WARNING on geert-renesas-drivers/renesas-clk]
-[also build test WARNING on joro-iommu/next clk/clk-next linus/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Mon, 15 May 2023 11:19:07 +0530 you wrote:
+> This patch series enables the basic ACPI infrastructure for RISC-V.
+> Supporting external interrupt controllers is in progress and hence it is
+> tested using poll based HVC SBI console and RAM disk.
+> 
+> The first patch in this series is one of the patch from Jisheng's
+> series [1] which is not merged yet. This patch is required to support
+> ACPI since efi_init() which gets called before sbi_init() can enable
+> static branches and hits a panic.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Geert-Uytterhoeven/iopoll-Call-cpu_relax-in-busy-loops/20230602-165454
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-clk
-patch link:    https://lore.kernel.org/r/ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert%2Brenesas%40glider.be
-patch subject: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to readl_poll_timeout_atomic()
-config: hexagon-randconfig-r031-20230531 (https://download.01.org/0day-ci/archive/20230602/202306022137.eAP4Q3hL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2198e2f3fd21eb62861b6ada08eeec7d6f420ee3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Geert-Uytterhoeven/iopoll-Call-cpu_relax-in-busy-loops/20230602-165454
-        git checkout 2198e2f3fd21eb62861b6ada08eeec7d6f420ee3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/renesas/
+Here is the summary with links:
+  - [V6,01/21] riscv: move sbi_init() earlier before jump_label_init()
+    https://git.kernel.org/riscv/c/24fc18087f42
+  - [V6,02/21] platform/surface: Disable for RISC-V
+    https://git.kernel.org/riscv/c/7f2e20459b28
+  - [V6,03/21] crypto: hisilicon/qm: Fix to enable build with RISC-V clang
+    https://git.kernel.org/riscv/c/fbb995a7b27c
+  - [V6,04/21] ACPI: tables: Print RINTC information when MADT is parsed
+    https://git.kernel.org/riscv/c/4d02d88d2b92
+  - [V6,05/21] ACPI: OSL: Make should_use_kmap() 0 for RISC-V
+    https://git.kernel.org/riscv/c/214c236223b8
+  - [V6,06/21] RISC-V: Add support to build the ACPI core
+    https://git.kernel.org/riscv/c/a91a9ffbd3a5
+  - [V6,07/21] ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
+    https://git.kernel.org/riscv/c/8b7809e28952
+  - [V6,08/21] RISC-V: Add ACPI initialization in setup_arch()
+    https://git.kernel.org/riscv/c/724f4c0df766
+  - [V6,09/21] RISC-V: ACPI: Cache and retrieve the RINTC structure
+    https://git.kernel.org/riscv/c/f99561199470
+  - [V6,10/21] drivers/acpi: RISC-V: Add RHCT related code
+    https://git.kernel.org/riscv/c/e6b9d8eddb17
+  - [V6,11/21] RISC-V: smpboot: Create wrapper setup_smp()
+    https://git.kernel.org/riscv/c/61946127ab49
+  - [V6,12/21] RISC-V: smpboot: Add ACPI support in setup_smp()
+    https://git.kernel.org/riscv/c/ce92546cd637
+  - [V6,13/21] RISC-V: only iterate over possible CPUs in ISA string parser
+    https://git.kernel.org/riscv/c/914d6f44fc50
+  - [V6,14/21] RISC-V: cpufeature: Add ACPI support in riscv_fill_hwcap()
+    https://git.kernel.org/riscv/c/396c018332a1
+  - [V6,15/21] RISC-V: cpu: Enable cpuinfo for ACPI systems
+    https://git.kernel.org/riscv/c/0b144c818989
+  - [V6,16/21] irqchip/riscv-intc: Add ACPI support
+    https://git.kernel.org/riscv/c/7023b9d83f03
+  - [V6,17/21] clocksource/timer-riscv: Refactor riscv_timer_init_dt()
+    https://git.kernel.org/riscv/c/cd12d206685a
+  - [V6,18/21] clocksource/timer-riscv: Add ACPI support
+    https://git.kernel.org/riscv/c/21f4f92410dc
+  - [V6,19/21] RISC-V: time.c: Add ACPI support for time_init()
+    https://git.kernel.org/riscv/c/714aa1d1c8ca
+  - [V6,20/21] RISC-V: Enable ACPI in defconfig
+    https://git.kernel.org/riscv/c/0b8e15ca0082
+  - [V6,21/21] MAINTAINERS: Add entry for drivers/acpi/riscv
+    https://git.kernel.org/riscv/c/cc9e654a7e81
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306022137.eAP4Q3hL-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/soc/renesas/rmobile-sysc.c:78:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   return ret;
-                          ^~~
-   drivers/soc/renesas/rmobile-sysc.c:75:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   7 warnings generated.
-
-
-vim +/ret +78 drivers/soc/renesas/rmobile-sysc.c
-
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  71  
-445aeb081bc713 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2018-11-29  72  static int __rmobile_pd_power_up(struct rmobile_pm_domain *rmobile_pd)
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  73  {
-2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  74  	unsigned int val, mask = BIT(rmobile_pd->bit_shift);
-2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  75  	int ret;
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  76  
-8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  77  	if (readl(rmobile_pd->base + PSTR) & mask)
-445aeb081bc713 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2018-11-29 @78  		return ret;
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  79  
-8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  80  	writel(mask, rmobile_pd->base + SWUCR);
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  81  
-2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  82  	ret = readl_poll_timeout_atomic(rmobile_pd->base + SWUCR, val,
-2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  83  					(val & mask), PSTR_DELAY_US,
-2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  84  					PSTR_RETRIES * PSTR_DELAY_US);
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  85  
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  86  	pr_debug("%s: Power on, 0x%08x -> PSTR = 0x%08x\n",
-25717b85736076 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  87  		 rmobile_pd->genpd.name, mask,
-8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  88  		 readl(rmobile_pd->base + PSTR));
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  89  
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  90  	return ret;
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  91  }
-8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  92  
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
