@@ -1,173 +1,172 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663178466;
-	Fri,  2 Jun 2023 11:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685706750; x=1717242750;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TjmBRBoV95Y63ZKfkcH6wm4kQQZkDzhlCWhtfqPoa/s=;
-  b=ZNfN9X0rWICmbAeVQOVjVl7WdUU1QqhBZb7qoldJIMWbewgCcOA1/hXw
-   7P3vleMgTtFFuWGFB3zGfcXFNlv9bJ/b6JHQQfMyPW698Kee83i9/E+eQ
-   itxJZ+uQ6H//1C5MDYaW1ShS+3XTPxdSzKiedRIWjz5ysUoF4SbdMEqz2
-   OKjoaNciKQTEewlbeCdt9X+ImAe8gNMvJ4P6Woq0TYk5q3OzFBhy8iZRa
-   ja5Nt5qIyYllH5SpeI3R9XMbkylMA0WkuUKtMk/ujZJaOrqhsPStR+Au1
-   9UgDEzUXcplqKojCHax1CPLMe1u4h7/tTkt2Ge7waxS+0JRt9VAE3C31E
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353345858"
-X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="353345858"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="710931689"
-X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="710931689"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jun 2023 04:52:27 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q53KV-0000PE-07;
-	Fri, 02 Jun 2023 11:52:27 +0000
-Date: Fri, 2 Jun 2023 19:52:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Li Yang <leoyang.li@nxp.com>, Ioana Ciornei <ioana.ciornei@nxp.com>,
-	Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Subject: [linux-next:master 5699/6849]
- drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev'
- is uninitialized when used here
-Message-ID: <202306021936.OktTcMAT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A90111B8
+	for <llvm@lists.linux.dev>; Fri,  2 Jun 2023 13:04:52 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1b02fcde49aso11245185ad.0
+        for <llvm@lists.linux.dev>; Fri, 02 Jun 2023 06:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1685711091; x=1688303091;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrZOkmIe7NtY37zIRS4OLCoF6q/xS3nMCKjuHH4Jdu4=;
+        b=QpZ8ktPUzZHX1SbyZUyrdhOIQlFmk9BsE4W5gybFkuQ1qZmVJGRPdzxz9T287vD6kY
+         nIAIK/ZyiT5iSwmsEMm68M76UCVOZs4as1US3nZe2JsVOM9EITtqZT0X9ndenXPtDl2o
+         3LX2TIEgBHOIxO0Be+z6f4W7Jjj6ZntzCdttyxFe6JhkKYDxs0eQa3LmuKy6Jkm4uR/0
+         sON8H1VgDSYLXSttumgqseHb+QvsFf4uPkLEoEJNoEpOnSBuoUjJNxqNQ4AxkmvyBp5I
+         ofRRvB73/4c0q6uJws3m3pMS+RyevNGONuTZ37Vk7IVPgv4PHrXwbyzNLrHmZCj9oiMx
+         fUTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685711091; x=1688303091;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YrZOkmIe7NtY37zIRS4OLCoF6q/xS3nMCKjuHH4Jdu4=;
+        b=KKvpkClJY2TC4zoer5TWGHwvNg++ybsNJiitXS1dOB4cfCvC1P8fsCM0YM4+KGTSkN
+         U3Y47qlWU18u2ojiKc1+Y/TcNpiNW/oW27tD+c5EkAcrOc916GcP2vz0kyBiHS0QeYsD
+         8awrQ785opOWHrp5HK6u8LFlb0APZRpwBV08D2vhLD9VFlLFlNAtJmx8b20edXwyZ2X7
+         ApyngfN8BeigA7MXmH6hkuylcLq8q406PNMOHNfAyUSq8BSQZMVjfGjO4XU0NuLrDRW1
+         VmxeCxNFgt2cEKJqtX8ME8+Jp5c/zqgLB79lL8RS2oeY/zE4Aw/I1MOSuWzaWSM/MSei
+         WFBw==
+X-Gm-Message-State: AC+VfDwWcDVnbNic5RUgoYdfHcbCLElRM6xUaHHWSvyais8Rb6zHbOKH
+	U2UVRPvyKzh0Z6fUXcpa10XAvQXmBi9RQVIfzU6FFg==
+X-Google-Smtp-Source: ACHHUZ4zm52EcrjgKSNuVeCjOHuUxAg8czM4QbFymKTOr2gaU4O7yyQ/RZokE2vkkbeQr2JCM/e4OQ==
+X-Received: by 2002:a17:903:2615:b0:1ac:8384:a7fb with SMTP id jd21-20020a170903261500b001ac8384a7fbmr1071144plb.66.1685711091349;
+        Fri, 02 Jun 2023 06:04:51 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902820700b001a1b66af22fsm1330626pln.62.2023.06.02.06.04.50
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 06:04:50 -0700 (PDT)
+Message-ID: <6479e8f2.170a0220.9d430.1f8f@mx.google.com>
+Date: Fri, 02 Jun 2023 06:04:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20230602
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 11 builds: 0 failed, 11 passed,
+ 5 warnings (next-20230602)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   bc708bbd8260ee4eb3428b0109f5f3be661fae46
-commit: b3134039c5b3cf879841e3ec84c8cbf7675554ec [5699/6849] bus: fsl-mc: fsl-mc-allocator: Improve error reporting
-config: arm64-randconfig-r012-20230602 (https://download.01.org/0day-ci/archive/20230602/202306021936.OktTcMAT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b3134039c5b3cf879841e3ec84c8cbf7675554ec
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout b3134039c5b3cf879841e3ec84c8cbf7675554ec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bus/fsl-mc/
+next/master build: 11 builds: 0 failed, 11 passed, 5 warnings (next-2023060=
+2)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230602/
 
-All warnings (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230602
+Git Commit: bc708bbd8260ee4eb3428b0109f5f3be661fae46
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
->> drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
-                   dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-                            ^~~~~~~~~~
-   include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                     ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                           ^~~
-   drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the variable 'mc_bus_dev' to silence this warning
-           struct fsl_mc_device *mc_bus_dev;
-                                           ^
-                                            = NULL
-   drivers/bus/fsl-mc/fsl-mc-allocator.c:565:6: warning: variable 'free_count' set but not used [-Wunused-but-set-variable]
-           int free_count = 0;
-               ^
-   2 warnings generated.
+Warnings Detected:
+
+arm64:
+    defconfig+arm64-chromebook (clang-13): 5 warnings
+
+arm:
+
+x86_64:
 
 
-vim +/mc_bus_dev +108 drivers/bus/fsl-mc/fsl-mc-allocator.c
+Warnings summary:
 
-    87	
-    88	/**
-    89	 * fsl_mc_resource_pool_remove_device - remove an allocatable device from a
-    90	 * resource pool
-    91	 *
-    92	 * @mc_dev: pointer to allocatable fsl-mc device
-    93	 *
-    94	 * It permanently removes an allocatable fsl-mc device from the resource
-    95	 * pool. It's an error if the device is in use.
-    96	 */
-    97	static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
-    98									   *mc_dev)
-    99	{
-   100		struct fsl_mc_device *mc_bus_dev;
-   101		struct fsl_mc_bus *mc_bus;
-   102		struct fsl_mc_resource_pool *res_pool;
-   103		struct fsl_mc_resource *resource;
-   104		int error = -EINVAL;
-   105	
-   106		resource = mc_dev->resource;
-   107		if (!resource || resource->data != mc_dev) {
- > 108			dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-   109			goto out;
-   110		}
-   111	
-   112		mc_bus_dev = to_fsl_mc_device(mc_dev->dev.parent);
-   113		mc_bus = to_fsl_mc_bus(mc_bus_dev);
-   114		res_pool = resource->parent_pool;
-   115		if (res_pool != &mc_bus->resource_pools[resource->type]) {
-   116			dev_err(&mc_bus_dev->dev, "pool mismatch\n");
-   117			goto out;
-   118		}
-   119	
-   120		mutex_lock(&res_pool->mutex);
-   121	
-   122		if (res_pool->max_count <= 0) {
-   123			dev_err(&mc_bus_dev->dev, "max_count underflow\n");
-   124			goto out_unlock;
-   125		}
-   126		if (res_pool->free_count <= 0 ||
-   127		    res_pool->free_count > res_pool->max_count) {
-   128			dev_err(&mc_bus_dev->dev, "free_count mismatch\n");
-   129			goto out_unlock;
-   130		}
-   131	
-   132		/*
-   133		 * If the device is currently allocated, its resource is not
-   134		 * in the free list and thus, the device cannot be removed.
-   135		 */
-   136		if (list_empty(&resource->node)) {
-   137			error = -EBUSY;
-   138			dev_err(&mc_bus_dev->dev,
-   139				"Device %s cannot be removed from resource pool\n",
-   140				dev_name(&mc_dev->dev));
-   141			goto out_unlock;
-   142		}
-   143	
-   144		list_del_init(&resource->node);
-   145		res_pool->free_count--;
-   146		res_pool->max_count--;
-   147	
-   148		devm_kfree(&mc_bus_dev->dev, resource);
-   149		mc_dev->resource = NULL;
-   150		error = 0;
-   151	out_unlock:
-   152		mutex_unlock(&res_pool->mutex);
-   153	out:
-   154		return error;
-   155	}
-   156	
+    2    1 warning generated.
+    1    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' s=
+et but not used [-Wunused-but-set-variable]
+    1    drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'm=
+c_bus_dev' is uninitialized when used here [-Wuninitialized]
+    1    drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the=
+ variable 'mc_bus_dev' to silence this warning
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 5 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus=
+_dev' is uninitialized when used here [-Wuninitialized]
+    drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the vari=
+able 'mc_bus_dev' to silence this warning
+    1 warning generated.
+    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' set bu=
+t not used [-Wunused-but-set-variable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
