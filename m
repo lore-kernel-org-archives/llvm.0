@@ -1,172 +1,183 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A90111B8
-	for <llvm@lists.linux.dev>; Fri,  2 Jun 2023 13:04:52 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1b02fcde49aso11245185ad.0
-        for <llvm@lists.linux.dev>; Fri, 02 Jun 2023 06:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1685711091; x=1688303091;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YrZOkmIe7NtY37zIRS4OLCoF6q/xS3nMCKjuHH4Jdu4=;
-        b=QpZ8ktPUzZHX1SbyZUyrdhOIQlFmk9BsE4W5gybFkuQ1qZmVJGRPdzxz9T287vD6kY
-         nIAIK/ZyiT5iSwmsEMm68M76UCVOZs4as1US3nZe2JsVOM9EITtqZT0X9ndenXPtDl2o
-         3LX2TIEgBHOIxO0Be+z6f4W7Jjj6ZntzCdttyxFe6JhkKYDxs0eQa3LmuKy6Jkm4uR/0
-         sON8H1VgDSYLXSttumgqseHb+QvsFf4uPkLEoEJNoEpOnSBuoUjJNxqNQ4AxkmvyBp5I
-         ofRRvB73/4c0q6uJws3m3pMS+RyevNGONuTZ37Vk7IVPgv4PHrXwbyzNLrHmZCj9oiMx
-         fUTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711091; x=1688303091;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YrZOkmIe7NtY37zIRS4OLCoF6q/xS3nMCKjuHH4Jdu4=;
-        b=KKvpkClJY2TC4zoer5TWGHwvNg++ybsNJiitXS1dOB4cfCvC1P8fsCM0YM4+KGTSkN
-         U3Y47qlWU18u2ojiKc1+Y/TcNpiNW/oW27tD+c5EkAcrOc916GcP2vz0kyBiHS0QeYsD
-         8awrQ785opOWHrp5HK6u8LFlb0APZRpwBV08D2vhLD9VFlLFlNAtJmx8b20edXwyZ2X7
-         ApyngfN8BeigA7MXmH6hkuylcLq8q406PNMOHNfAyUSq8BSQZMVjfGjO4XU0NuLrDRW1
-         VmxeCxNFgt2cEKJqtX8ME8+Jp5c/zqgLB79lL8RS2oeY/zE4Aw/I1MOSuWzaWSM/MSei
-         WFBw==
-X-Gm-Message-State: AC+VfDwWcDVnbNic5RUgoYdfHcbCLElRM6xUaHHWSvyais8Rb6zHbOKH
-	U2UVRPvyKzh0Z6fUXcpa10XAvQXmBi9RQVIfzU6FFg==
-X-Google-Smtp-Source: ACHHUZ4zm52EcrjgKSNuVeCjOHuUxAg8czM4QbFymKTOr2gaU4O7yyQ/RZokE2vkkbeQr2JCM/e4OQ==
-X-Received: by 2002:a17:903:2615:b0:1ac:8384:a7fb with SMTP id jd21-20020a170903261500b001ac8384a7fbmr1071144plb.66.1685711091349;
-        Fri, 02 Jun 2023 06:04:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902820700b001a1b66af22fsm1330626pln.62.2023.06.02.06.04.50
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 06:04:50 -0700 (PDT)
-Message-ID: <6479e8f2.170a0220.9d430.1f8f@mx.google.com>
-Date: Fri, 02 Jun 2023 06:04:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FFA19509;
+	Fri,  2 Jun 2023 13:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685713901; x=1717249901;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c/07fBv2e57QftVltVTK+v/AFpok7g468L/WXtTWLpI=;
+  b=EsVjboJxR48dmc2vHgiMxFF2+7AOi70c0emFxpvuo+WNEpyFvKRUVGL9
+   b47dY8DGkRSp78G0jQH8XeqRw/lMmvD0eI2wsFb8N+fuobZ7CqwGL11Vt
+   gJVoh6TKuKsiqz6G8xdgHJBMUiiAoN1CRnp+t34h2CUOBUJ8uldpJ/rqj
+   ySShxa2Fig5NczkGNHZJmuiczcK/9DQc6kHDVlfoYirsc6Q3k4GyqfYXy
+   IqhvMwVGfHCrYzDilR6DxA6U9BzSdtR2aN5McgnZ/12MVo9TfMNz04LwL
+   9g5Do8S57ukLf8x01NcJOmdWvbAKd1lKfFc6CIcn+s4NtHvVSMxXqh0m0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="336235033"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="336235033"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 06:51:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="772890379"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="772890379"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2023 06:51:34 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q55Bl-0000Vd-1f;
+	Fri, 02 Jun 2023 13:51:33 +0000
+Date: Fri, 2 Jun 2023 21:51:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Magnus Damm <magnus.damm@gmail.com>, Joerg Roedel <joro@8bytes.org>,
+	Robin Murphy <robin.murphy@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Dejin Zheng <zhengdejin5@gmail.com>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Russell King <linux@armlinux.org.uk>,
+	John Stultz <jstultz@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tony Lindgren <tony@atomide.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Tero Kristo <tero.kristo@linux.intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+	iommu@lists.linux.dev
+Subject: Re: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to
+ readl_poll_timeout_atomic()
+Message-ID: <202306022137.eAP4Q3hL-lkp@intel.com>
+References: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20230602
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master build: 11 builds: 0 failed, 11 passed,
- 5 warnings (next-20230602)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
 
-next/master build: 11 builds: 0 failed, 11 passed, 5 warnings (next-2023060=
-2)
+Hi Geert,
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230602/
+kernel test robot noticed the following build warnings:
 
-Tree: next
-Branch: master
-Git Describe: next-20230602
-Git Commit: bc708bbd8260ee4eb3428b0109f5f3be661fae46
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+[auto build test WARNING on geert-renesas-drivers/renesas-clk]
+[also build test WARNING on joro-iommu/next clk/clk-next linus/master v6.4-rc4 next-20230602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Warnings Detected:
+url:    https://github.com/intel-lab-lkp/linux/commits/Geert-Uytterhoeven/iopoll-Call-cpu_relax-in-busy-loops/20230602-165454
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-clk
+patch link:    https://lore.kernel.org/r/ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert%2Brenesas%40glider.be
+patch subject: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to readl_poll_timeout_atomic()
+config: hexagon-randconfig-r031-20230531 (https://download.01.org/0day-ci/archive/20230602/202306022137.eAP4Q3hL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2198e2f3fd21eb62861b6ada08eeec7d6f420ee3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Geert-Uytterhoeven/iopoll-Call-cpu_relax-in-busy-loops/20230602-165454
+        git checkout 2198e2f3fd21eb62861b6ada08eeec7d6f420ee3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/renesas/
 
-arm64:
-    defconfig+arm64-chromebook (clang-13): 5 warnings
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306022137.eAP4Q3hL-lkp@intel.com/
 
-arm:
+All warnings (new ones prefixed by >>):
 
-x86_64:
+   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/soc/renesas/rmobile-sysc.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/soc/renesas/rmobile-sysc.c:78:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   return ret;
+                          ^~~
+   drivers/soc/renesas/rmobile-sysc.c:75:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   7 warnings generated.
 
 
-Warnings summary:
+vim +/ret +78 drivers/soc/renesas/rmobile-sysc.c
 
-    2    1 warning generated.
-    1    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' s=
-et but not used [-Wunused-but-set-variable]
-    1    drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'm=
-c_bus_dev' is uninitialized when used here [-Wuninitialized]
-    1    drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the=
- variable 'mc_bus_dev' to silence this warning
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  71  
+445aeb081bc713 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2018-11-29  72  static int __rmobile_pd_power_up(struct rmobile_pm_domain *rmobile_pd)
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  73  {
+2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  74  	unsigned int val, mask = BIT(rmobile_pd->bit_shift);
+2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  75  	int ret;
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  76  
+8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  77  	if (readl(rmobile_pd->base + PSTR) & mask)
+445aeb081bc713 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2018-11-29 @78  		return ret;
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  79  
+8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  80  	writel(mask, rmobile_pd->base + SWUCR);
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  81  
+2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  82  	ret = readl_poll_timeout_atomic(rmobile_pd->base + SWUCR, val,
+2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  83  					(val & mask), PSTR_DELAY_US,
+2198e2f3fd21eb drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2023-06-02  84  					PSTR_RETRIES * PSTR_DELAY_US);
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  85  
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  86  	pr_debug("%s: Power on, 0x%08x -> PSTR = 0x%08x\n",
+25717b85736076 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  87  		 rmobile_pd->genpd.name, mask,
+8b6bed678428b6 drivers/soc/renesas/rmobile-sysc.c  Geert Uytterhoeven 2020-11-19  88  		 readl(rmobile_pd->base + PSTR));
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  89  
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  90  	return ret;
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  91  }
+8f45b112fc66ef arch/arm/mach-shmobile/pm-rmobile.c Kuninori Morimoto  2012-07-05  92  
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 5 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus=
-_dev' is uninitialized when used here [-Wuninitialized]
-    drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the vari=
-able 'mc_bus_dev' to silence this warning
-    1 warning generated.
-    fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' set bu=
-t not used [-Wunused-but-set-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
