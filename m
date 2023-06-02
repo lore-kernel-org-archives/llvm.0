@@ -1,44 +1,47 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF8A15AA;
-	Fri,  2 Jun 2023 02:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD7815B2;
+	Fri,  2 Jun 2023 03:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685673538; x=1717209538;
+  t=1685675406; x=1717211406;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=N6BjYBr66PMZ3TTYpsDsPKuIcgLumfCSe7y6iDeZGsw=;
-  b=OY2Vgb4dyDgcY5i+jXp/yx8W3xrFTYLnYzPUr88PGOw6iMuPe/pnJYxN
-   2jqioEeRXow7A5qzhi7NWc6ht86jkNnHMMQS7P+mA+eCZYycAs6oiMuxk
-   oI3ju9K4bLYxkvXabqlAdiEv6ZC5edxmzEKfzF/8jhnYkuvRSuQSBtdCr
-   Z2u7DSxEtAjjDLRwo1mPjovoceIGCDSxCrB3KsCAvyRpreuoXTw1hV/Dd
-   6qRw6e0/vuWUFqLL5e8V981labgPkTDR81SVUVH86SvYIKrzxteWOs+3Q
-   Gwjp90PdMI/FNeW3ONuQe5En1scv+wl4rqCvuFGjVlVW/RtatzkgCGtAO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419273930"
+  bh=9Gt8st/ryKSg8qnsIEF7QXkgeLEpi4pVanUVqfCBXlI=;
+  b=jlQBSDe9w/BeRHnCN69Xs9sJ4txhaVNGyP0g6F9lNBGPyxXoRD+1Fyfq
+   pE47Zj1veZBiSoD7RwaIssgXYpT5F4teCCXwQy5a2DbIPoTwsdQBfIQlr
+   xEQihOsQFUEZBrHTcsajDO4Z8QzijaVb0UbNTanCCxy/UCu0gi2/s7+ZF
+   NjRfphsnn4XpmrnR5m82A6l7S2vcXiSQGAjQycHHqzn9XOcxZK2o4pf79
+   TKYqxuBtdTtXeCJSf5s/vTh32piEH+KNDPA2bKrbGjmJ3kc+FfKLiwDTF
+   +NoMslqvcZFx6jmNJHqg7ZJXvjs1c81kkr1jcO5IjxLtNUm9/Xn3zYRqM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353246166"
 X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="419273930"
+   d="scan'208";a="353246166"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 19:38:57 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 20:10:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="954276976"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="954284983"
 X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="954276976"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Jun 2023 19:38:56 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+   d="scan'208";a="954284983"
+Received: from lkp-server01.sh.intel.com (HELO d1d49124694e) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Jun 2023 20:10:00 -0700
+Received: from kbuild by d1d49124694e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q4ugp-0002we-1j;
-	Fri, 02 Jun 2023 02:38:55 +0000
-Date: Fri, 2 Jun 2023 10:38:30 +0800
+	id 1q4vAu-00001o-11;
+	Fri, 02 Jun 2023 03:10:00 +0000
+Date: Fri, 2 Jun 2023 11:09:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] fs: Rename put_and_unmap_page() to
- unmap_and_put_page()
-Message-ID: <202306021044.B12tl43B-lkp@intel.com>
-References: <20230601132317.13606-1-fmdefrancesco@gmail.com>
+To: Saravanan Vajravel <saravanan.vajravel@broadcom.com>,
+	selvin.xavier@broadcom.com, jgg@ziepe.ca, leon@kernel.org,
+	sagi@grimberg.me
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-rdma@vger.kernel.org,
+	Saravanan Vajravel <saravanan.vajravel@broadcom.com>
+Subject: Re: [PATCH for-rc 1/3] IB/isert: Fix dead lock in ib_isert
+Message-ID: <202306021038.ms6aIjpB-lkp@intel.com>
+References: <20230601094220.64810-2-saravanan.vajravel@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,152 +50,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601132317.13606-1-fmdefrancesco@gmail.com>
+In-Reply-To: <20230601094220.64810-2-saravanan.vajravel@broadcom.com>
 
-Hi Fabio,
+Hi Saravanan,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on vfs-idmapping/for-next]
+[auto build test ERROR on rdma/for-next]
 [also build test ERROR on linus/master v6.4-rc4 next-20230601]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-Rename-put_and_unmap_page-to-unmap_and_put_page/20230601-220353
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git for-next
-patch link:    https://lore.kernel.org/r/20230601132317.13606-1-fmdefrancesco%40gmail.com
-patch subject: [RFC PATCH] fs: Rename put_and_unmap_page() to unmap_and_put_page()
-config: hexagon-randconfig-r014-20230601 (https://download.01.org/0day-ci/archive/20230602/202306021044.B12tl43B-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Saravanan-Vajravel/IB-isert-Fix-dead-lock-in-ib_isert/20230601-225628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/20230601094220.64810-2-saravanan.vajravel%40broadcom.com
+patch subject: [PATCH for-rc 1/3] IB/isert: Fix dead lock in ib_isert
+config: arm64-randconfig-r025-20230531 (https://download.01.org/0day-ci/archive/20230602/202306021038.ms6aIjpB-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e5e2b8aebe19674f6389f850dedf4dd6cabb434f
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c7031144a2a9b6f14201977b35600ab80ee30e09
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-Rename-put_and_unmap_page-to-unmap_and_put_page/20230601-220353
-        git checkout e5e2b8aebe19674f6389f850dedf4dd6cabb434f
+        git fetch --no-tags linux-review Saravanan-Vajravel/IB-isert-Fix-dead-lock-in-ib_isert/20230601-225628
+        git checkout c7031144a2a9b6f14201977b35600ab80ee30e09
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/sysv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/infiniband/ulp/isert/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306021044.B12tl43B-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306021038.ms6aIjpB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/sysv/dir.c:17:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/sysv/dir.c:17:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/sysv/dir.c:17:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/sysv/dir.c:329:2: error: call to undeclared function 'unmap_iand_put_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           unmap_iand_put_page(page, kaddr);
-           ^
-   fs/sysv/dir.c:329:2: note: did you mean 'unmap_and_put_page'?
-   include/linux/highmem.h:510:20: note: 'unmap_and_put_page' declared here
-   static inline void unmap_and_put_page(struct page *page, void *addr)
-                      ^
-   6 warnings and 1 error generated.
+>> drivers/infiniband/ulp/isert/ib_isert.c:2454:54: error: expected ';' after expression
+                           list_move_tail(&isert_conn->node, &drop_conn_list)
+                                                                             ^
+                                                                             ;
+   1 error generated.
 
 
-vim +/unmap_iand_put_page +329 fs/sysv/dir.c
+vim +2454 drivers/infiniband/ulp/isert/ib_isert.c
 
-   288	
-   289	/*
-   290	 * routine to check that the specified directory is empty (for rmdir)
-   291	 */
-   292	int sysv_empty_dir(struct inode * inode)
-   293	{
-   294		struct super_block *sb = inode->i_sb;
-   295		struct page *page = NULL;
-   296		unsigned long i, npages = dir_pages(inode);
-   297		char *kaddr;
-   298	
-   299		for (i = 0; i < npages; i++) {
-   300			struct sysv_dir_entry *de;
-   301	
-   302			kaddr = dir_get_page(inode, i, &page);
-   303			if (IS_ERR(kaddr))
-   304				continue;
-   305	
-   306			de = (struct sysv_dir_entry *)kaddr;
-   307			kaddr += PAGE_SIZE-SYSV_DIRSIZE;
-   308	
-   309			for ( ;(char *)de <= kaddr; de++) {
-   310				if (!de->inode)
-   311					continue;
-   312				/* check for . and .. */
-   313				if (de->name[0] != '.')
-   314					goto not_empty;
-   315				if (!de->name[1]) {
-   316					if (de->inode == cpu_to_fs16(SYSV_SB(sb),
-   317								inode->i_ino))
-   318						continue;
-   319					goto not_empty;
-   320				}
-   321				if (de->name[1] != '.' || de->name[2])
-   322					goto not_empty;
-   323			}
-   324			unmap_and_put_page(page, kaddr);
-   325		}
-   326		return 1;
-   327	
-   328	not_empty:
- > 329		unmap_iand_put_page(page, kaddr);
-   330		return 0;
-   331	}
-   332	
+  2428	
+  2429	static void
+  2430	isert_free_np(struct iscsi_np *np)
+  2431	{
+  2432		struct isert_np *isert_np = np->np_context;
+  2433		struct isert_conn *isert_conn, *n;
+  2434		LIST_HEAD(drop_conn_list);
+  2435	
+  2436		if (isert_np->cm_id)
+  2437			rdma_destroy_id(isert_np->cm_id);
+  2438	
+  2439		/*
+  2440		 * FIXME: At this point we don't have a good way to insure
+  2441		 * that at this point we don't have hanging connections that
+  2442		 * completed RDMA establishment but didn't start iscsi login
+  2443		 * process. So work-around this by cleaning up what ever piled
+  2444		 * up in accepted and pending lists.
+  2445		 */
+  2446		mutex_lock(&isert_np->mutex);
+  2447		if (!list_empty(&isert_np->pending)) {
+  2448			isert_info("Still have isert pending connections\n");
+  2449			list_for_each_entry_safe(isert_conn, n,
+  2450						 &isert_np->pending,
+  2451						 node) {
+  2452				isert_info("cleaning isert_conn %p state (%d)\n",
+  2453					   isert_conn, isert_conn->state);
+> 2454				list_move_tail(&isert_conn->node, &drop_conn_list)
+  2455			}
+  2456		}
+  2457	
+  2458		if (!list_empty(&isert_np->accepted)) {
+  2459			isert_info("Still have isert accepted connections\n");
+  2460			list_for_each_entry_safe(isert_conn, n,
+  2461						 &isert_np->accepted,
+  2462						 node) {
+  2463				isert_info("cleaning isert_conn %p state (%d)\n",
+  2464					   isert_conn, isert_conn->state);
+  2465				list_move_tail(&isert_conn->node, &drop_conn_list);
+  2466			}
+  2467		}
+  2468		mutex_unlock(&isert_np->mutex);
+  2469	
+  2470		list_for_each_entry_safe(isert_conn, n, &drop_conn_list, node) {
+  2471			list_del_init(&isert_conn->node);
+  2472			isert_connect_release(isert_conn);
+  2473		}
+  2474	
+  2475		np->np_context = NULL;
+  2476		kfree(isert_np);
+  2477	}
+  2478	
 
 -- 
 0-DAY CI Kernel Test Service
