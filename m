@@ -1,105 +1,74 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8105E40797
-	for <llvm@lists.linux.dev>; Thu,  1 Jun 2023 20:21:19 +0000 (UTC)
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-62621035d15so12675306d6.2
-        for <llvm@lists.linux.dev>; Thu, 01 Jun 2023 13:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685650878; x=1688242878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/NSeCOlTDExo4zcaSAqJrFjHD08QpEBcHkkE7zzxDQ=;
-        b=SorOR2XOiQjrKzC5bhxHX+nqnc4dr6TlCm/pwq9bzgNx2blML/gFUZviTGv11U3kVu
-         K4hJmG7yaZ/KjutZyHaJLkC85NccnPRayMsNMXrjy98HfVWvhKYOMCv9oGxci1/94KeI
-         JXDueucFnCKdNsOVrEpmorKhKIJvC+9UtI9Ii1fIK5P9/npVYQiKgpv791cp8evHqObp
-         DuCYbFQvTgUylTlUinDXwFcvJES8rC2B2nTE+y1rOp95O5crqTj4SPxY/wCvbslTmPeJ
-         8MpWNiPTCeo7OQPzgmj7kfLLnDw3k4Hswdo73l68FmlHICHC7pRcTv9F3jm3CUqoDHkN
-         S5NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685650878; x=1688242878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P/NSeCOlTDExo4zcaSAqJrFjHD08QpEBcHkkE7zzxDQ=;
-        b=CCtmA4gjAswRnMgK8fPYb32QRufu2eCKERQfDYufGzrFpCbJqsUqgWQRYQYsMrJhJ7
-         WtHiun2EmCVeMFMgz5/gXC0DsLEAUTuZPBsNTIG2rQavzIHzpUmned5l+905khlFo0fK
-         Vxr/48ixyVx5vYdVxJXZdBqCSrUbcwC5HgsiWrTBrt97Y7Nw+DGhBji+TOYnrt1Y/be0
-         kobVyLgeMkdghzLh7+uhI28AkXPm2kkoWcz6qtoIFRjS6tyEOZdHPCbYWjAvYDwXNG4e
-         qeuWHcqdeS+zO3CLWXMbPvDcoHQLOJxwvniF0eZ3ycYmG8C7m4TyDHDsmpP3ks4nV8Bi
-         gtgA==
-X-Gm-Message-State: AC+VfDwxeAf4qFcEDdpaqxDlrOnqBQXJlFSW/2pYecU8cz4Yc5G6i1rl
-	dFNPEiiqWUd765x3sDae+PsCguDMBVsbUIk2IOAByw==
-X-Google-Smtp-Source: ACHHUZ7f7n3S8qrpy3XzePkS7Ff+dUptThKF5cmS4t5oOS2RXdJhWOKhEoltevZqB3H5j+4urRuTK+GYD3EV3Q1439A=
-X-Received: by 2002:a05:6214:1310:b0:626:1b8f:4940 with SMTP id
- pn16-20020a056214131000b006261b8f4940mr13380674qvb.23.1685650878100; Thu, 01
- Jun 2023 13:21:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D2A10E3;
+	Fri,  2 Jun 2023 01:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685667803; x=1717203803;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UzCJ2xtSvIRGsRHhm9t1YVI8nd1QRoXT2ZxHMUiLcKQ=;
+  b=nhUawYSM9kSK02FWCNOvMcXIF+BKSFFzRxmGRtB3b0qMsm+Vx3sTNKbT
+   lSmS6kSahOCuHjROQsfEGrQOxYvoVR7GuuWlCKWXy9hSHZYK6uHqipUDm
+   PlI3JIm4nTatcgKI0PDuxF5oJMu33PWxBDvKH5f2xRrvqD6I/YVtEp0//
+   +EHmBlO/oBUiGsMSUclfXYhl/3zkFdb9++H0Rl1Fg3B/Ai8JqVY+TVi9g
+   KmKvmUz4+FxvLkUk/YMBJhu9krQ5m+qsNCoelLGIfGvk1HQ6KnmXSzg6G
+   PR+Jl4qKLPAc4qvGjcYY+Gj0yFdZywdlF0KQpy/MxeAMurF3K6Q2muvIC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419257238"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="419257238"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 18:03:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="1037721020"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="1037721020"
+Received: from gsavorni-mobl1.ger.corp.intel.com (HELO intel.com) ([10.251.210.46])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 18:03:17 -0700
+Date: Fri, 2 Jun 2023 03:03:14 +0200
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	ndesaulniers@google.com, trix@redhat.com,
+	andi.shyti@linux.intel.com, fei.yang@intel.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 0/2] drm/i915/gt: Fix recent kCFI violations
+Message-ID: <ZHk/0iN9uwphaC+1@ashyti-mobl2.lan>
+References: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306011435.2BxsHFUE-lkp@intel.com> <20230601131949.e6ff7f41ac3fec6875b16e8c@linux-foundation.org>
-In-Reply-To: <20230601131949.e6ff7f41ac3fec6875b16e8c@linux-foundation.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 1 Jun 2023 13:21:07 -0700
-Message-ID: <CAKwvOd=eefnzgvgaihuuE_ii9VP8MWQ=XdOkWY8mJvzYxs4+JQ@mail.gmail.com>
-Subject: Re: [linux-next:master 5938/6538] mm/zswap.c:1183:6: warning:
- variable 'ret' is used uninitialized whenever 'if' condition is true
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, Nhat Pham <nphamcs@gmail.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530-i915-gt-cache_level-wincompatible-function-pointer-types-strict-v1-0-54501d598229@kernel.org>
 
-On Thu, Jun 1, 2023 at 1:19=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Thu, 1 Jun 2023 14:29:13 +0800 kernel test robot <lkp@intel.com> wrote=
-:
->
-> >            if (objcg && !obj_cgroup_may_zswap(objcg))
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    mm/zswap.c:1327:9: note: uninitialized use occurs here
-> >            return ret;
-> >                   ^~~
-> >    mm/zswap.c:1183:2: note: remove the 'if' if its condition is always =
-false
-> >            if (objcg && !obj_cgroup_may_zswap(objcg))
-> >            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    mm/zswap.c:1158:9: note: initialize the variable 'ret' to silence th=
-is warning
-> >            int ret;
-> >                   ^
->
-> Thanks.  I did the below.  Maybe ENOMEM would be more appropriate...
+Hi Nathan,
 
-https://lore.kernel.org/llvm/20230601-zswap-cgroup-wsometimes-uninitialized=
--v2-1-84912684ac35@kernel.org/
+On Tue, May 30, 2023 at 11:24:37AM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> This series fixes a few clang kernel Control Flow Integrity (kCFI)
+> violations that appear after commit 9275277d5324 ("drm/i915: use
+> pat_index instead of cache_level"). They were found between run time
+> testing on real hardware and compile time testing with
+> -Wincompatible-function-pointer-types-strict (which is not yet enabled
+> for the kernel but I build with it locally to catch new instances).
+> 
+> If there are any problems or questions, please let me know.
+> 
+> ---
+> Nathan Chancellor (2):
+>       drm/i915/gt: Fix second parameter type of pre-gen8 pte_encode callbacks
+>       drm/i915/gt: Fix parameter in gmch_ggtt_insert_{entries,page}()
 
->
-> --- a/mm/zswap.c~zswap-do-not-shrink-if-cgroup-may-not-zswap-fix
-> +++ a/mm/zswap.c
-> @@ -1180,8 +1180,10 @@ static int zswap_frontswap_store(unsigne
->          * local cgroup limits.
->          */
->         objcg =3D get_obj_cgroup_from_page(page);
-> -       if (objcg && !obj_cgroup_may_zswap(objcg))
-> +       if (objcg && !obj_cgroup_may_zswap(objcg)) {
-> +               ret =3D -ENOSPC;
->                 goto reject;
-> +       }
->
->         /* reclaim space if needed */
->         if (zswap_is_full()) {
-> _
->
->
+pushed in drm-intel-gt-next.
 
-
---=20
-Thanks,
-~Nick Desaulniers
+Thank you,
+Andi
