@@ -1,113 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE93617AA2
-	for <llvm@lists.linux.dev>; Fri,  2 Jun 2023 09:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427E0C4339C
-	for <llvm@lists.linux.dev>; Fri,  2 Jun 2023 09:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685698720;
-	bh=Vqi/MACemCggxlqO17uN6VZlX/q7HkWg0XU5JvIeJSw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=N4rrAHSe51CFm9uHpfyFRCT8wZXuLk+w08qgTDN32MYanLpQvf6hZ+cEYOoYO6mFM
-	 htnG9FFD6DpqnyJFYyi9gSiu3vCEJ9OJrmZnKZs5LLz3fTJuBXqJrTPX1Aw4Yd+POO
-	 pGkELke8I4UNEtvqpO1C5TvPpfpF4ThImXFLt1JTOo5edUEe7LpktXcPcIjIP2OqQM
-	 ryr4QYSoFGxv/1dI5W70FxtQQ0DCXQL4gj6UGzBqTtvgya0GMBS/i48zIl5KivBTGV
-	 L1NuOLnILG7ibBTYfcBk76PJFeb0uaLdcPCZwbuvfCZzi82wpnxVSNT6hui2wulS0x
-	 L1BEz1fIUCgcQ==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-39a505b901dso1617397b6e.0
-        for <llvm@lists.linux.dev>; Fri, 02 Jun 2023 02:38:40 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxhSRn4A5MrcGTrFCP5dUZLVthAKioaCHUN12i4Ah+S6Mn0ljv7
-	FOlMDwezRgNmWJq+v368xwvCkPUETspDLhsVHfE=
-X-Google-Smtp-Source: ACHHUZ6NI6W/9hWUScOKBzEJwOuBknqklyXwSSIHNUrud+dR00zUFqycmoVyD2S8wu5pB96JOHzmx8gYv5op43LjpKM=
-X-Received: by 2002:a05:6808:5cd:b0:399:b7bd:903c with SMTP id
- d13-20020a05680805cd00b00399b7bd903cmr1817547oij.40.1685698719453; Fri, 02
- Jun 2023 02:38:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663178466;
+	Fri,  2 Jun 2023 11:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685706750; x=1717242750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TjmBRBoV95Y63ZKfkcH6wm4kQQZkDzhlCWhtfqPoa/s=;
+  b=ZNfN9X0rWICmbAeVQOVjVl7WdUU1QqhBZb7qoldJIMWbewgCcOA1/hXw
+   7P3vleMgTtFFuWGFB3zGfcXFNlv9bJ/b6JHQQfMyPW698Kee83i9/E+eQ
+   itxJZ+uQ6H//1C5MDYaW1ShS+3XTPxdSzKiedRIWjz5ysUoF4SbdMEqz2
+   OKjoaNciKQTEewlbeCdt9X+ImAe8gNMvJ4P6Woq0TYk5q3OzFBhy8iZRa
+   ja5Nt5qIyYllH5SpeI3R9XMbkylMA0WkuUKtMk/ujZJaOrqhsPStR+Au1
+   9UgDEzUXcplqKojCHax1CPLMe1u4h7/tTkt2Ge7waxS+0JRt9VAE3C31E
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353345858"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="353345858"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:52:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="710931689"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="710931689"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Jun 2023 04:52:27 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q53KV-0000PE-07;
+	Fri, 02 Jun 2023 11:52:27 +0000
+Date: Fri, 2 Jun 2023 19:52:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Li Yang <leoyang.li@nxp.com>, Ioana Ciornei <ioana.ciornei@nxp.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: [linux-next:master 5699/6849]
+ drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev'
+ is uninitialized when used here
+Message-ID: <202306021936.OktTcMAT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <TYCP286MB2066DEF0E1810E8BC36F533EC07B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
- <OSZP286MB20611C35BF36F4EB69FD3DF6C0469@OSZP286MB2061.JPNP286.PROD.OUTLOOK.COM>
- <CAK7LNATz8xDmf5SuApGnrbkxvWPJNG1HTuQSrw2v_Ox5sXQO2A@mail.gmail.com> <TYCP286MB2066563135B12E064AA59976C04B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYCP286MB2066563135B12E064AA59976C04B9@TYCP286MB2066.JPNP286.PROD.OUTLOOK.COM>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 2 Jun 2023 18:38:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR1m2_mjRMp0nk+7CQUCefPdY-+rAZo4SNBAL5C+MJVNQ@mail.gmail.com>
-Message-ID: <CAK7LNAR1m2_mjRMp0nk+7CQUCefPdY-+rAZo4SNBAL5C+MJVNQ@mail.gmail.com>
-Subject: Re: [PATCH v2] gen_compile_commands: include targets not ending with .o
-To: =?UTF-8?B?6IOh546u5paH?= <huww98@outlook.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, May 30, 2023 at 6:04=E2=80=AFPM =E8=83=A1=E7=8E=AE=E6=96=87 <huww98=
-@outlook.com> wrote:
->
-> On Mon, May 29, 2023 at 07:13:46PM +0900, Masahiro Yamada wrote:
-> > On Thu, May 25, 2023 at 9:21=E2=80=AFPM Hu Weiwen <huww98@outlook.com> =
-wrote:
-> > >
-> > > Currently, we only extract commands for targets ending with '.o'. But=
- we
-> > > also have many standalone executables built in-tree.
-> > >
-> > > Remove this restriction. And to avoid some false matching, exclude
-> > > targets end with '.c' or '.h' when directly walking the directory.
-> >
-> >
-> > Can you give me some examples of false matching?
->
-> Examples:
-> - drivers/scsi/scsi_devinfo_tbl.c: generated by
->   sed -n 's/.*define *BLIST_\\([A-Z0-9_]*\\) *.*/BLIST_FLAG_NAME(\\1),/p'=
- include/scsi/scsi_devinfo.h > drivers/scsi/scsi_devinfo_tbl.c
->
-> - arch/x86/entry/vdso/vdso-image-32.c: generated by
->   arch/x86/entry/vdso/vdso2c arch/x86/entry/vdso/vdso32.so.dbg arch/x86/e=
-ntry/vdso/vdso32.so arch/x86/entry/vdso/vdso-image-32.c
->
-> I think only .c file targets would have false matching, because the cmd
-> must ends with '.c' to be matched.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   bc708bbd8260ee4eb3428b0109f5f3be661fae46
+commit: b3134039c5b3cf879841e3ec84c8cbf7675554ec [5699/6849] bus: fsl-mc: fsl-mc-allocator: Improve error reporting
+config: arm64-randconfig-r012-20230602 (https://download.01.org/0day-ci/archive/20230602/202306021936.OktTcMAT-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b3134039c5b3cf879841e3ec84c8cbf7675554ec
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout b3134039c5b3cf879841e3ec84c8cbf7675554ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bus/fsl-mc/
 
-I see.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
->
-> >
-> > Also, this patch would pick up *.i, *.s, *.lst, etc.
-> >
-> > Does it make sense to parse cmd files for those?
-> > I guess the answer is no.
->
-> We are already parsing cmd files for those before this patch.
-
-True, but they are excluded by _LINE_PATTERN.
+>> drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
+                   dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+                            ^~~~~~~~~~
+   include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                     ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/bus/fsl-mc/fsl-mc-allocator.c:100:34: note: initialize the variable 'mc_bus_dev' to silence this warning
+           struct fsl_mc_device *mc_bus_dev;
+                                           ^
+                                            = NULL
+   drivers/bus/fsl-mc/fsl-mc-allocator.c:565:6: warning: variable 'free_count' set but not used [-Wunused-but-set-variable]
+           int free_count = 0;
+               ^
+   2 warnings generated.
 
 
-> I use more
-> strict `_FILENAME_PATTERN'. But it may be hard to exclude all of these
-> by filename.
+vim +/mc_bus_dev +108 drivers/bus/fsl-mc/fsl-mc-allocator.c
 
-I think so.
+    87	
+    88	/**
+    89	 * fsl_mc_resource_pool_remove_device - remove an allocatable device from a
+    90	 * resource pool
+    91	 *
+    92	 * @mc_dev: pointer to allocatable fsl-mc device
+    93	 *
+    94	 * It permanently removes an allocatable fsl-mc device from the resource
+    95	 * pool. It's an error if the device is in use.
+    96	 */
+    97	static int __must_check fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+    98									   *mc_dev)
+    99	{
+   100		struct fsl_mc_device *mc_bus_dev;
+   101		struct fsl_mc_bus *mc_bus;
+   102		struct fsl_mc_resource_pool *res_pool;
+   103		struct fsl_mc_resource *resource;
+   104		int error = -EINVAL;
+   105	
+   106		resource = mc_dev->resource;
+   107		if (!resource || resource->data != mc_dev) {
+ > 108			dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+   109			goto out;
+   110		}
+   111	
+   112		mc_bus_dev = to_fsl_mc_device(mc_dev->dev.parent);
+   113		mc_bus = to_fsl_mc_bus(mc_bus_dev);
+   114		res_pool = resource->parent_pool;
+   115		if (res_pool != &mc_bus->resource_pools[resource->type]) {
+   116			dev_err(&mc_bus_dev->dev, "pool mismatch\n");
+   117			goto out;
+   118		}
+   119	
+   120		mutex_lock(&res_pool->mutex);
+   121	
+   122		if (res_pool->max_count <= 0) {
+   123			dev_err(&mc_bus_dev->dev, "max_count underflow\n");
+   124			goto out_unlock;
+   125		}
+   126		if (res_pool->free_count <= 0 ||
+   127		    res_pool->free_count > res_pool->max_count) {
+   128			dev_err(&mc_bus_dev->dev, "free_count mismatch\n");
+   129			goto out_unlock;
+   130		}
+   131	
+   132		/*
+   133		 * If the device is currently allocated, its resource is not
+   134		 * in the free list and thus, the device cannot be removed.
+   135		 */
+   136		if (list_empty(&resource->node)) {
+   137			error = -EBUSY;
+   138			dev_err(&mc_bus_dev->dev,
+   139				"Device %s cannot be removed from resource pool\n",
+   140				dev_name(&mc_dev->dev));
+   141			goto out_unlock;
+   142		}
+   143	
+   144		list_del_init(&resource->node);
+   145		res_pool->free_count--;
+   146		res_pool->max_count--;
+   147	
+   148		devm_kfree(&mc_bus_dev->dev, resource);
+   149		mc_dev->resource = NULL;
+   150		error = 0;
+   151	out_unlock:
+   152		mutex_unlock(&res_pool->mutex);
+   153	out:
+   154		return error;
+   155	}
+   156	
 
-
-> Should we use a more strict `_LINE_PATTERN'? e.g., require the cmd to
-> begin with a compiler, not `sed' or something else. But we don't know
-> the compiler name, adding a parameter for compiler name may break the
-> existing usage.
-
-
-Standalone executables are host programs.
-I do not think it is worthwhile complicating the code.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
