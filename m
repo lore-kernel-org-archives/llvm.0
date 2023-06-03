@@ -1,138 +1,152 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B9FC2E9
-	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 22:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685829668;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=x7dB1cuYHOwCYgk6yT2IBYS+b0nUf3tFqQFxGJfw+pk=;
-	b=ZMa+xBnjmbZK/BSCs6bN7jDzor9BhwJkflQmgAO7QDCY7WlbagaJYRBn2bptO0dDcoGKTe
-	wpSxNrKZJSJuye9ew7b9+8Q6s2KE65iBTQ05qwU3Nagtn5khrjg26rPuRmlWbGQCnxwgxy
-	Gt2x660bK9cwFkKGxL5TtCxtgdP9f8Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-5-xp5dY9MTOPyhs9uiQG45sQ-1; Sat, 03 Jun 2023 18:01:05 -0400
-X-MC-Unique: xp5dY9MTOPyhs9uiQG45sQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27F9C802A55
-	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 22:01:05 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0F5652166B25;
-	Sat,  3 Jun 2023 22:01:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 18 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, 51f269a6)
-Date: Sat, 03 Jun 2023 22:01:05 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CD31FB4;
+	Sat,  3 Jun 2023 22:39:19 +0000 (UTC)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-75d50f25cc9so31388285a.1;
+        Sat, 03 Jun 2023 15:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685831958; x=1688423958;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uMF+jXCPQw0LKYviejsLmEDSnGWZk4ESqZbZb2scmOM=;
+        b=N2g9yTJW4EpuLzTsO8Sw7FCKBYr3vKlUfybb28EdfE4+nJQSZjrvczkp5Qxj3PdndZ
+         Qh4jhMoHda6pE3jbBzKqmiJVo7Mpf30Y7pyOGv52WwxNT1KpjsPAB61l2Nx5jPZv0IUe
+         8NiVf++QeUwLNkT2J7jh+9I2cdPnlgAPaTfD2TBQeBI0lcMFukdtNhQkHEs3NUM3KBKG
+         4fXoRlvzSZ+4FNCLBBy7A+r3SgdDimL5QB3wHVy4qdjb6I5SxFw8GQB47rdi2mPD8pAG
+         JEfbrBOq5ci2dlxKmtI7LPzT3CiECqjCAs5HN/l/F3FiimlwzuIU0yXyBJxl1FZ02B5t
+         kv1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685831958; x=1688423958;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uMF+jXCPQw0LKYviejsLmEDSnGWZk4ESqZbZb2scmOM=;
+        b=NJfcTFn/4TN8NalVM2i4uZsI2T6fBNYRRc/lSErtRoMhgzva7AhtM4c4n58Lh9re4b
+         cxDUa+JaSXSQZ4GqmkvU8bNhIZg/Ib/cAl2vGS4Nyuwm6IUly+HRhAqB7Dc1lCLZEciW
+         /xofCxc6Kls4IzXYW3GtpVuoqKroTBy0jZUX5iLOwyY0iBtH3zw3noRE4RwO0hgSN07J
+         FcUvWP13WDZGVgHx+CeWIu+QBgAaVajsHZMYbEvPSz3//A1noi6EYoQzXgFdkB+q4gZR
+         tQm0CD9Q6lvC2ZzPO4Hgck59HsUidgCjqzbC3kmOvJBSMe0XkxLEpnRxl3d6a9sy8hM+
+         WXyw==
+X-Gm-Message-State: AC+VfDwxVyL0bbGmCKKcHmYLPDZY8ILFMgPJUX+Ib6mST9EQ6sUV9H5I
+	LY/ekUyMovGJmDR/+icSMaw=
+X-Google-Smtp-Source: ACHHUZ7GMrl810w4H/hJZ5jaYjmaCzLABh0nLnuzVTcicYQLuQBcKZ4dQkihUCTLNult04ZMseYd9w==
+X-Received: by 2002:a37:a88:0:b0:75d:52f9:f812 with SMTP id 130-20020a370a88000000b0075d52f9f812mr685812qkk.20.1685831958213;
+        Sat, 03 Jun 2023 15:39:18 -0700 (PDT)
+Received: from tian-Alienware-15-R4.fios-router.home (pool-173-77-254-84.nycmny.fios.verizon.net. [173.77.254.84])
+        by smtp.gmail.com with ESMTPSA id k9-20020a05620a142900b0075b06ea03aasm2282727qkj.80.2023.06.03.15.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jun 2023 15:39:17 -0700 (PDT)
+From: Tian Lan <tilan7663@gmail.com>
+To: axboe@kernel.dk
+Cc: horms@kernel.org,
+	linux-block@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	ming.lei@redhat.com,
+	oe-kbuild-all@lists.linux.dev,
+	tian.lan@twosigma.com,
+	tilan7663@gmail.com,
+	Hannes Reinecke <hare@suse.de>,
+	stable@vger.kernel.org
+Subject: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
+Date: Sat,  3 Jun 2023 18:39:12 -0400
+Message-Id: <20230603223912.827913-1-tilan7663@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <da0ae57e-71c2-9ad5-1134-c12309032402@kernel.dk>
+References: <da0ae57e-71c2-9ad5-1134-c12309032402@kernel.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <46543.123060318010500505@us-mta-5.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Tian Lan <tian.lan@twosigma.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The nr_active counter continues to increase over time which causes the
+blk_mq_get_tag to hang until the thread is rescheduled to a different
+core despite there are still tags available.
 
+kernel-stack
 
-Kernel information:
-    Commit message: Merge tag 'probes-fixes-6.4-rc4' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/trace/linux-trace
+  INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
+  Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+    Call Trace:
+    <TASK>
+    __schedule+0x351/0xa20
+    scheduler+0x5d/0xe0
+    io_schedule+0x42/0x70
+    blk_mq_get_tag+0x11a/0x2a0
+    ? dequeue_task_stop+0x70/0x70
+    __blk_mq_alloc_requests+0x191/0x2e0
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/91177
+kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+__blk_mq_free_request being called.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8364798
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8364831
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8364835
+  320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
+         b'__blk_mq_free_request+0x1 [kernel]'
+         b'bt_iter+0x50 [kernel]'
+         b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+         b'blk_mq_timeout_work+0x7c [kernel]'
+         b'process_one_work+0x1c4 [kernel]'
+         b'worker_thread+0x4d [kernel]'
+         b'kthread+0xe6 [kernel]'
+         b'ret_from_fork+0x1f [kernel]'
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+This issue arises when both bt_iter() and blk_mq_end_request_batch()
+are iterating on the same request. The leak happens when
+blk_mq_find_and_get_req() is executed(from bt_iter) before
+req_ref_put_and_test() gets called by blk_mq_end_request_batch().
+And because non-flush request freed by blk_mq_put_rq_ref() bypasses the
+active request tracking, the counter would slowly leak overtime.
 
+Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
+Fixes: 2e315dc07df0 ("blk-mq: grab rq->refcount before calling ->fn in blk_mq_tagset_busy_iter")
 
+Signed-off-by: Tian Lan <tian.lan@twosigma.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Cc: stable@vger.kernel.org
+---
+ block/blk-mq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index f6dad0886a2f..850bfb844ed2 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -683,6 +683,10 @@ static void __blk_mq_free_request(struct request *rq)
+ 	blk_crypto_free_request(rq);
+ 	blk_pm_mark_last_busy(rq);
+ 	rq->mq_hctx = NULL;
++
++	if (rq->rq_flags & RQF_MQ_INFLIGHT)
++		__blk_mq_dec_active_requests(hctx);
++
+ 	if (rq->tag != BLK_MQ_NO_TAG)
+ 		blk_mq_put_tag(hctx->tags, ctx, rq->tag);
+ 	if (sched_tag != BLK_MQ_NO_TAG)
+@@ -694,15 +698,11 @@ static void __blk_mq_free_request(struct request *rq)
+ void blk_mq_free_request(struct request *rq)
+ {
+ 	struct request_queue *q = rq->q;
+-	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
+ 
+ 	if ((rq->rq_flags & RQF_ELVPRIV) &&
+ 	    q->elevator->type->ops.finish_request)
+ 		q->elevator->type->ops.finish_request(rq);
+ 
+-	if (rq->rq_flags & RQF_MQ_INFLIGHT)
+-		__blk_mq_dec_active_requests(hctx);
+-
+ 	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
+ 		laptop_io_completion(q->disk->bdi);
+ 
+-- 
+2.25.1
 
