@@ -1,128 +1,158 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9A13330C
-	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 10:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685788866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ggxgebmZNk+lbylqc7GnQZvhncNn9U6eb843IFzXp8E=;
-	b=Bgw7rUHENNwJVLluALYyAGIrz5evQdVPOGSA+FcJ4Pwx9HDC3RFU0ZFgawQihjeoTwUJox
-	e665Jwy8yQ/twkTG+zqDqoHWZxpz+agF/KQx5+KmAQ03GFOQuPXoSZLuljYi3U/+tPvFmD
-	W1nkiVnKMvIRyig1OLLKpCH22Eq9/Cw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-LYMlVFw_PGuu3lGOaLXLvw-1; Sat, 03 Jun 2023 06:41:04 -0400
-X-MC-Unique: LYMlVFw_PGuu3lGOaLXLvw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 820A5811E92
-	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 10:41:04 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 697E153BB;
-	Sat,  3 Jun 2023 10:41:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 6 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, 4ecd704a)
-Date: Sat, 03 Jun 2023 10:41:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FCF8BE8
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 16:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149D3C433A0
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 16:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685809426;
+	bh=DObsz3X+0kn7tZFIPV9cliWFhjZ6iUIjxIfHma3XYL0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UCFgp98SdKOVsIR1BxEP/Dzd22rz0GDezMPMQsX/SvJER7775F19V7zXsYQvrRmNf
+	 OLOtbGWex39BrLMhqXW4HzdGvxb/hMEyQ/cx8JlF+V0HODERyWEWfBKxyfrzGn+CCe
+	 xw8vq+8G7RRoKbIXD40gNGtuHD9LonU98pJi76Bir+osx8MOCR4tZJUPZspU/jHoMA
+	 F7rfb+cMgiRUgXbOStsKn203sg4dZ1fgfEXeGCFMW/LbhOCR1qn+zaGLxKAc5E45po
+	 TsAoGgamclTE0lQZEEMYgs0et2nWQPc03a9C4vq8U0dbRcAxQ93k3zwqMA1LYt5yel
+	 nF7OU7HwCdgkg==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-39aa8a055e0so50316b6e.0
+        for <llvm@lists.linux.dev>; Sat, 03 Jun 2023 09:23:46 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxOBp1KoPgy9Zllhn25jKPU4okegBb4oVOLs6U83uo6GsT6bF4J
+	uxUrTA/dnrqmZa6OGzPk3AlzFCDOJFWymBr2chs=
+X-Google-Smtp-Source: ACHHUZ6hpsnGhpLz5li3DNJ1xqZ+qYnxy/iQ6EoGUJb9CJqHof4FygP0R3CUvd7v2nFld3aY5CKwjJEL8ZPOXyU4kpI=
+X-Received: by 2002:aca:120d:0:b0:39a:a65c:42a2 with SMTP id
+ 13-20020aca120d000000b0039aa65c42a2mr397218ois.49.1685809425224; Sat, 03 Jun
+ 2023 09:23:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <93460.123060306410401464@us-mta-610.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230409145358.2538266-1-masahiroy@kernel.org> <20230531213319.GA2201875@dev-arch.thelio-3990X>
+In-Reply-To: <20230531213319.GA2201875@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 4 Jun 2023 01:23:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASeNAx5a1P9fkf+8+Fj4HFujPN=57fWtAoc7XL97LdkxA@mail.gmail.com>
+Message-ID: <CAK7LNASeNAx5a1P9fkf+8+Fj4HFujPN=57fWtAoc7XL97LdkxA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Tom Rini <trini@konsulko.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Thu, Jun 1, 2023 at 6:33=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> Hi Masahiro,
+>
+> On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
+> > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> >
+> > As a result, the linker script is preprocessed with predefined macros
+> > for the build host instead of the target.
+> >
+> > Assuming you use an x86 build machine, compare the following:
+> >
+> >  $ clang -dM -E -x c /dev/null
+> >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> >
+> > There is no actual problem presumably because our linker scripts do not
+> > rely on such predefined macros, but it is better to define correct ones=
+.
+> >
+> > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
+> > will be processed with the proper target triple.
+> >
+> > Reported-by: Tom Rini <trini@konsulko.com>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/Makefile.clang | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 70b354fa1cb4..93ca059cc3b8 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -38,6 +38,5 @@ CLANG_FLAGS +=3D -Werror=3Dunknown-warning-option
+> >  CLANG_FLAGS  +=3D -Werror=3Dignored-optimization-argument
+> >  CLANG_FLAGS  +=3D -Werror=3Doption-ignored
+> >  CLANG_FLAGS  +=3D -Werror=3Dunused-command-line-argument
+> > -KBUILD_CFLAGS        +=3D $(CLANG_FLAGS)
+> > -KBUILD_AFLAGS        +=3D $(CLANG_FLAGS)
+> > +KBUILD_CPPFLAGS      +=3D $(CLANG_FLAGS)
+> >  export CLANG_FLAGS
+> > --
+> > 2.37.2
+> >
+>
+> I am doubling back to this change, as the lack of '--target' in
+> KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new change
+> that rejects '-mbig-endian' and '-mlittle-endian' when not supported by
+> the target, which breaks the arm64 vDSO build when preprocessing its
+> linker script:
+>
+>   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+>   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper virtconf=
+ig menuconfig arch/arm64/kernel/vdso/
+>   ...
+>   clang: error: unsupported option '-mbig-endian' for target 'x86_64-pc-l=
+inux-gnu'
+>   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vdso/vd=
+so.lds] Error 1
+>   ...
+>
+>   https://github.com/llvm/llvm-project/commit/d81ce04587c006b6731198956c5=
+22c93d0df1050
+>   https://github.com/ClangBuiltLinux/linux/issues/1859
+>
+> This change resolves that issue.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: tpm, tpm_tis: correct tpm_tis_flags enumeration values
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/91162
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+Ah. Now we have a good reason to apply this patch.
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+> I was able to figure out why those new
+> warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> CHECKFLAGS. The following diff resolves it for me:
+>
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index a7a4ee66a9d3..ef7b05ae92ce 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tables
+>  KBUILD_LDFLAGS         +=3D -m $(ld-emul)
+>
+>  ifdef CONFIG_MIPS
+> -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
+> +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E=
+ -x c /dev/null | \
+>         grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+>         sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\$$=
+/&&/g')
+>  endif
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Agree. This is the right fix because this $(shell ...) retrieves
+the predefined macros of the compiler.
+So, KBUILD_CPPFLAGS is correct.
 
+
+
+> I will run this change plus that diff through my build matrix to see if
+> any other issues pop up. If not, I will respond with some tags and
+> perhaps this could be taken as a fix for 6.4 so that it could
+> potentially be backported?
+>
+> Cheers,
+> Nathan
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
