@@ -1,240 +1,138 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E85290B;
-	Sat,  3 Jun 2023 18:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685815849; x=1717351849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PiVxAOBplKPVqLeSZYeQJUUaCvkuH2sLLrPQWUz/1zU=;
-  b=kw8NX4N+2teN7OzI2RHRO/hu4yh2jFUqF8MmqZUGW86GlQkUIDwLJiAP
-   crgKZlc348vDeV5PCgPNnNQtMeeuIJ4IPTtUYwQKCRKhGY9Q9W47P83Uc
-   aCZaTavGigqP40VfXU8c2DWY3vz+nbiTnSpBhsRj8EmOw2T/zxNUaUzAn
-   CWiYkOaCGtuSlb/IY9QUYV0g13fh4Fz7LOxlVXiwW0z8eVU7HUF3Fx/W6
-   EtnM9GcN4LIcGEo/+gjgm1wvuxQRFiN15tEK/jBfp0R9ROef+qzcpiAoM
-   kCR7YR55iAL6/7sWcX6HhGcsdz4pae1+kJjFzAL/PDLKkVOQTPDi2ulXi
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="340735528"
-X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="340735528"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 11:10:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="882422250"
-X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="882422250"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 Jun 2023 11:10:46 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q5ViA-0001sF-0b;
-	Sat, 03 Jun 2023 18:10:46 +0000
-Date: Sun, 4 Jun 2023 02:10:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wang Jianjian <wangjianjian0@foxmail.com>, linux-ext4@vger.kernel.org,
-	tytso@mit.edu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wangjianjian0@foxmail.com
-Subject: Re: [PATCH] ext4: Add correct group descriptors and reserved GDT
- blocks to system zone
-Message-ID: <202306040223.dXAuRONL-lkp@intel.com>
-References: <tencent_4A474CC049B9E77D0F172468991EED5B9105@qq.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B9FC2E9
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 22:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685829668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=x7dB1cuYHOwCYgk6yT2IBYS+b0nUf3tFqQFxGJfw+pk=;
+	b=ZMa+xBnjmbZK/BSCs6bN7jDzor9BhwJkflQmgAO7QDCY7WlbagaJYRBn2bptO0dDcoGKTe
+	wpSxNrKZJSJuye9ew7b9+8Q6s2KE65iBTQ05qwU3Nagtn5khrjg26rPuRmlWbGQCnxwgxy
+	Gt2x660bK9cwFkKGxL5TtCxtgdP9f8Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-xp5dY9MTOPyhs9uiQG45sQ-1; Sat, 03 Jun 2023 18:01:05 -0400
+X-MC-Unique: xp5dY9MTOPyhs9uiQG45sQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27F9C802A55
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 22:01:05 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0F5652166B25;
+	Sat,  3 Jun 2023 22:01:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 18 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, 51f269a6)
+Date: Sat, 03 Jun 2023 22:01:05 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_4A474CC049B9E77D0F172468991EED5B9105@qq.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <46543.123060318010500505@us-mta-5.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wang,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wang-Jianjian/ext4-Add-correct-group-descriptors-and-reserved-GDT-blocks-to-system-zone/20230604-003439
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/tencent_4A474CC049B9E77D0F172468991EED5B9105%40qq.com
-patch subject: [PATCH] ext4: Add correct group descriptors and reserved GDT blocks to system zone
-config: hexagon-randconfig-r041-20230604 (https://download.01.org/0day-ci/archive/20230604/202306040223.dXAuRONL-lkp@intel.com/config)
-compiler: clang version 15.0.4 (https://github.com/llvm/llvm-project 5c68a1cb123161b54b72ce90e7975d95a8eaf2a4)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/54ea70d6b1189628ed4017129457d77e0bfa7fde
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wang-Jianjian/ext4-Add-correct-group-descriptors-and-reserved-GDT-blocks-to-system-zone/20230604-003439
-        git checkout 54ea70d6b1189628ed4017129457d77e0bfa7fde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306040223.dXAuRONL-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from fs/ext4/block_validity.c:16:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/ext4/block_validity.c:16:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/ext4/block_validity.c:16:
-   In file included from include/linux/buffer_head.h:12:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/ext4/block_validity.c:228:44: error: no member named 'es' in 'struct ext4_sb_info'
-                   unsigned int rsvd_gdt = le16_to_cpu(sbi->es->s_reserved_gdt_blocks);
-                                                       ~~~  ^
-   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
-   #define le16_to_cpu __le16_to_cpu
-                       ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
->> fs/ext4/block_validity.c:226:16: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   unsigned int sb_num = ext4_bg_has_super(sb, i);
-                                ^
-   7 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +228 fs/ext4/block_validity.c
+Kernel information:
+    Commit message: Merge tag 'probes-fixes-6.4-rc4' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/trace/linux-trace
 
-   201	
-   202	/*
-   203	 * Build system zone rbtree which is used for block validity checking.
-   204	 *
-   205	 * The update of system_blks pointer in this function is protected by
-   206	 * sb->s_umount semaphore. However we have to be careful as we can be
-   207	 * racing with ext4_inode_block_valid() calls reading system_blks rbtree
-   208	 * protected only by RCU. That's why we first build the rbtree and then
-   209	 * swap it in place.
-   210	 */
-   211	int ext4_setup_system_zone(struct super_block *sb)
-   212	{
-   213		ext4_group_t ngroups = ext4_get_groups_count(sb);
-   214		struct ext4_sb_info *sbi = EXT4_SB(sb);
-   215		struct ext4_system_blocks *system_blks;
-   216		struct ext4_group_desc *gdp;
-   217		ext4_group_t i;
-   218		int ret;
-   219	
-   220		system_blks = kzalloc(sizeof(*system_blks), GFP_KERNEL);
-   221		if (!system_blks)
-   222			return -ENOMEM;
-   223	
-   224		for (i=0; i < ngroups; i++) {
-   225			cond_resched();
- > 226			unsigned int sb_num = ext4_bg_has_super(sb, i);
-   227			unsigned long gdb_num = ext4_bg_num_gdb(sb, i);
- > 228			unsigned int rsvd_gdt = le16_to_cpu(sbi->es->s_reserved_gdt_blocks);
-   229	
-   230			if (sb_num != 0 || gdb_num != 0) {
-   231				ret = add_system_zone(system_blks,
-   232						ext4_group_first_block_no(sb, i),
-   233						sb_num + gdb_num + rsvd_gdt, 0);
-   234				if (ret)
-   235					goto err;
-   236			}
-   237			gdp = ext4_get_group_desc(sb, i, NULL);
-   238			ret = add_system_zone(system_blks,
-   239					ext4_block_bitmap(sb, gdp), 1, 0);
-   240			if (ret)
-   241				goto err;
-   242			ret = add_system_zone(system_blks,
-   243					ext4_inode_bitmap(sb, gdp), 1, 0);
-   244			if (ret)
-   245				goto err;
-   246			ret = add_system_zone(system_blks,
-   247					ext4_inode_table(sb, gdp),
-   248					sbi->s_itb_per_group, 0);
-   249			if (ret)
-   250				goto err;
-   251		}
-   252		if (ext4_has_feature_journal(sb) && sbi->s_es->s_journal_inum) {
-   253			ret = ext4_protect_reserved_inode(sb, system_blks,
-   254					le32_to_cpu(sbi->s_es->s_journal_inum));
-   255			if (ret)
-   256				goto err;
-   257		}
-   258	
-   259		/*
-   260		 * System blks rbtree complete, announce it once to prevent racing
-   261		 * with ext4_inode_block_valid() accessing the rbtree at the same
-   262		 * time.
-   263		 */
-   264		rcu_assign_pointer(sbi->s_system_blks, system_blks);
-   265	
-   266		if (test_opt(sb, DEBUG))
-   267			debug_print_tree(sbi);
-   268		return 0;
-   269	err:
-   270		release_system_zone(system_blks);
-   271		kfree(system_blks);
-   272		return ret;
-   273	}
-   274	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91177
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8364798
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8364831
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8364835
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
