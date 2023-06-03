@@ -1,219 +1,144 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828BF259A;
-	Sat,  3 Jun 2023 05:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685771783; x=1717307783;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OH9x1fFzy1O6DdldqBpam4C5AuoGAgCEPJBE4lDD5ik=;
-  b=KSQBLHIEKyn1qgKbDZeAJGgFxIU08VDnUSqBdjAapCeNsin8Y23/s3Fa
-   tvkgT3UfNI84bG0WKRQBZ75S+18bA1alUY52+42onG9U7dMlL0S9dgX/e
-   JjFhhlSxWw8UwktnnvfGDmc1/+lmAArVeICdb9S1AYZo0yVgLq6tZjBZP
-   jfBuHvWCozF9YVqtmBKmUtRsP5ILSgnuBq2ndefmo5RWAURGFxYXfTHYk
-   cRSPyRDQwm/QVe1xBfIAUPzk3zu8uNiPXZ5jPswwgNiSsNd2SdGy0x+nU
-   lvt/1k0i4eBS+0W9Uiy1SoP46/uU/QVOBAacG1xFikGPiwHsMHZbyTUi9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="356051385"
-X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
-   d="scan'208";a="356051385"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 22:56:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="777929534"
-X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
-   d="scan'208";a="777929534"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Jun 2023 22:56:21 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q5KFQ-0001M3-1x;
-	Sat, 03 Jun 2023 05:56:20 +0000
-Date: Sat, 3 Jun 2023 13:55:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kevin Lund <kglund@google.com>, johannes@sipsolutions.net,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kevin Lund <kglund@google.com>
-Subject: Re: [PATCH 1/2] wifi: cfg80211: Reject (re-)association to the same
- BSSID
-Message-ID: <202306031354.S6fuhpkH-lkp@intel.com>
-References: <20230602225751.164525-1-kglund@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5335179E0
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 07:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685775665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rbvJaN5rpD/C7jXoeDs4KEEYsXI6A5YnuDl+5RDIv3w=;
+	b=PLkOK0mtX+w5lNLYa49DHEEHBtvBzT0Zklt7oFYEoYxv2A01vsNU01bzZEdBiWc0J5htsB
+	I5keZMAH/r+yP8gzs84luwIRbIqgY6qLiLsSn5jfN96S9xaZ6Q8OwklJmBl4/MymuQnmRb
+	0xhSb0qtvoeHDeLQDRfWpI3HlESg7/U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-440-zL2FtU_jMgm0EIEPWAWrAQ-1; Sat, 03 Jun 2023 03:01:04 -0400
+X-MC-Unique: zL2FtU_jMgm0EIEPWAWrAQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 233698032EF
+	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 07:01:04 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 09BFD140E918;
+	Sat,  3 Jun 2023 07:01:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 22 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, 9e87b63e)
+Date: Sat, 03 Jun 2023 07:01:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602225751.164525-1-kglund@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <51447.123060303010400286@us-mta-440.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kevin,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kevin-Lund/wifi-mwifiex-Stop-rejecting-connection-attempts-while-connected/20230603-065907
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20230602225751.164525-1-kglund%40google.com
-patch subject: [PATCH 1/2] wifi: cfg80211: Reject (re-)association to the same BSSID
-config: mips-ath79_defconfig (https://download.01.org/0day-ci/archive/20230603/202306031354.S6fuhpkH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/09f9fe87fe3588d03dafcaf05b36b3e931f8c8eb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kevin-Lund/wifi-mwifiex-Stop-rejecting-connection-attempts-while-connected/20230603-065907
-        git checkout 09f9fe87fe3588d03dafcaf05b36b3e931f8c8eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/wireless/
+Kernel information:
+    Commit message: Merge tag 'fbdev-for-6.4-rc5' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/deller/linux-fbdev
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306031354.S6fuhpkH-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91070
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Aborting task xxxx from recipe xxxx as system expects to run=
+ tests for recipe xxxx
+            URL: https://gitlab.com/cki-project/upt/-/issues/99
+            Affected tests:
+                  x86_64 (debug) - SELinux Custom Module Setup
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> net/wireless/sme.c:1454:30: error: no member named 'current_bss' in 'struct wireless_dev'
-                   if (ether_addr_equal(wdev->current_bss->pub.bssid,
-                                        ~~~~  ^
-   1 error generated.
 
 
-vim +1454 net/wireless/sme.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  1418	
-  1419	/*
-  1420	 * API calls for nl80211/wext compatibility code
-  1421	 */
-  1422	int cfg80211_connect(struct cfg80211_registered_device *rdev,
-  1423			     struct net_device *dev,
-  1424			     struct cfg80211_connect_params *connect,
-  1425			     struct cfg80211_cached_keys *connkeys,
-  1426			     const u8 *prev_bssid)
-  1427	{
-  1428		struct wireless_dev *wdev = dev->ieee80211_ptr;
-  1429		int err;
-  1430	
-  1431		ASSERT_WDEV_LOCK(wdev);
-  1432	
-  1433		/*
-  1434		 * If we have an ssid_len, we're trying to connect or are
-  1435		 * already connected, so reject a new SSID unless it's the
-  1436		 * same (which is the case for re-association.)
-  1437		 */
-  1438		if (wdev->u.client.ssid_len &&
-  1439		    (wdev->u.client.ssid_len != connect->ssid_len ||
-  1440		     memcmp(wdev->u.client.ssid, connect->ssid, wdev->u.client.ssid_len)))
-  1441			return -EALREADY;
-  1442	
-  1443		/*
-  1444		 * If connected, reject (re-)association unless prev_bssid
-  1445		 * matches the current BSSID. Also reject if the current BSSID matches
-  1446		 * the desired BSSID.
-  1447		 */
-  1448		if (wdev->connected) {
-  1449			if (!prev_bssid)
-  1450				return -EALREADY;
-  1451			if (!ether_addr_equal(prev_bssid,
-  1452					      wdev->u.client.connected_addr))
-  1453				return -ENOTCONN;
-> 1454			if (ether_addr_equal(wdev->current_bss->pub.bssid,
-  1455					     connect->bssid))
-  1456				return -EALREADY;
-  1457		}
-  1458	
-  1459		/*
-  1460		 * Reject if we're in the process of connecting with WEP,
-  1461		 * this case isn't very interesting and trying to handle
-  1462		 * it would make the code much more complex.
-  1463		 */
-  1464		if (wdev->connect_keys)
-  1465			return -EINPROGRESS;
-  1466	
-  1467		cfg80211_oper_and_ht_capa(&connect->ht_capa_mask,
-  1468					  rdev->wiphy.ht_capa_mod_mask);
-  1469		cfg80211_oper_and_vht_capa(&connect->vht_capa_mask,
-  1470					   rdev->wiphy.vht_capa_mod_mask);
-  1471	
-  1472		if (connkeys && connkeys->def >= 0) {
-  1473			int idx;
-  1474			u32 cipher;
-  1475	
-  1476			idx = connkeys->def;
-  1477			cipher = connkeys->params[idx].cipher;
-  1478			/* If given a WEP key we may need it for shared key auth */
-  1479			if (cipher == WLAN_CIPHER_SUITE_WEP40 ||
-  1480			    cipher == WLAN_CIPHER_SUITE_WEP104) {
-  1481				connect->key_idx = idx;
-  1482				connect->key = connkeys->params[idx].key;
-  1483				connect->key_len = connkeys->params[idx].key_len;
-  1484	
-  1485				/*
-  1486				 * If ciphers are not set (e.g. when going through
-  1487				 * iwconfig), we have to set them appropriately here.
-  1488				 */
-  1489				if (connect->crypto.cipher_group == 0)
-  1490					connect->crypto.cipher_group = cipher;
-  1491	
-  1492				if (connect->crypto.n_ciphers_pairwise == 0) {
-  1493					connect->crypto.n_ciphers_pairwise = 1;
-  1494					connect->crypto.ciphers_pairwise[0] = cipher;
-  1495				}
-  1496			}
-  1497		} else {
-  1498			if (WARN_ON(connkeys))
-  1499				return -EINVAL;
-  1500	
-  1501			/* connect can point to wdev->wext.connect which
-  1502			 * can hold key data from a previous connection
-  1503			 */
-  1504			connect->key = NULL;
-  1505			connect->key_len = 0;
-  1506			connect->key_idx = 0;
-  1507		}
-  1508	
-  1509		wdev->connect_keys = connkeys;
-  1510		memcpy(wdev->u.client.ssid, connect->ssid, connect->ssid_len);
-  1511		wdev->u.client.ssid_len = connect->ssid_len;
-  1512	
-  1513		wdev->conn_bss_type = connect->pbss ? IEEE80211_BSS_TYPE_PBSS :
-  1514						      IEEE80211_BSS_TYPE_ESS;
-  1515	
-  1516		if (!rdev->ops->connect)
-  1517			err = cfg80211_sme_connect(wdev, connect, prev_bssid);
-  1518		else
-  1519			err = rdev_connect(rdev, dev, connect);
-  1520	
-  1521		if (err) {
-  1522			wdev->connect_keys = NULL;
-  1523			/*
-  1524			 * This could be reassoc getting refused, don't clear
-  1525			 * ssid_len in that case.
-  1526			 */
-  1527			if (!wdev->connected)
-  1528				wdev->u.client.ssid_len = 0;
-  1529			return err;
-  1530		}
-  1531	
-  1532		return 0;
-  1533	}
-  1534	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
