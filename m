@@ -1,106 +1,129 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C115817C8
-	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 00:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8201D1FD6
+	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 05:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685839658;
+	s=mimecast20190719; t=1685857264;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XL9m4/QrEyoU43AAPUnZxDdKBE2GdTGoILFW1/x9cuo=;
-	b=dekco/RjQGSXt6udNlOUyyRf2IVYXuCeogxObJBi7grwerZnx19Rxl1fF3pPaXqQVZ2LYu
-	dZRnOVE0wGqP0cgd0D1VcTPyfl2jXkoWEySTyD/gFAAjqvpzufXmsX9QNYatXTQTmGRPAj
-	nUN19AAJoHSjNTYRV9vT7D0JHdUIiHc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=J8Uazq9vTRBRAV67hkF0B/x454RMU9y1w/jmUZiwq20=;
+	b=XFETXakqfKX2Vx8ph3uzGdoRD8hcV9Wpl/cvFp9LK+UVT6YskW1pxIvWpQ5R/WglGJ35V5
+	P9ecMvTslKqA28I8AbHaLlhvXf/8eWY2F7mqktZtrXU9gnE9wH5tQYuth4/2GdthiDjuFw
+	66+chahktIxZGXEpShxmNOXmfjCVSmI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-MhiJLfrENMunlBSWq1YHXg-1; Sat, 03 Jun 2023 20:47:35 -0400
-X-MC-Unique: MhiJLfrENMunlBSWq1YHXg-1
+ us-mta-488-R8yWNS0oOKaN8rIx9Jjlmg-1; Sun, 04 Jun 2023 01:41:03 -0400
+X-MC-Unique: R8yWNS0oOKaN8rIx9Jjlmg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B4250380673B;
-	Sun,  4 Jun 2023 00:47:34 +0000 (UTC)
-Received: from ovpn-8-19.pek2.redhat.com (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 5C5052166B25;
-	Sun,  4 Jun 2023 00:47:28 +0000 (UTC)
-Date: Sun, 4 Jun 2023 08:47:24 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Tian Lan <tilan7663@gmail.com>
-Cc: axboe@kernel.dk, horms@kernel.org, linux-block@vger.kernel.org,
-	lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tian.lan@twosigma.com, Hannes Reinecke <hare@suse.de>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
-Message-ID: <ZHvfHPC1veSs0w4r@ovpn-8-19.pek2.redhat.com>
-References: <da0ae57e-71c2-9ad5-1134-c12309032402@kernel.dk>
- <20230603223912.827913-1-tilan7663@gmail.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B1F811E88
+	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 05:41:03 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3C3AE2166B25;
+	Sun,  4 Jun 2023 05:41:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 6 of 346): Test report for master
+ (6.4.0-rc4, mainline.kernel.org-clang, e5282a7d)
+Date: Sun, 04 Jun 2023 05:41:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603223912.827913-1-tilan7663@gmail.com>
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <41075.123060401410300107@us-mta-488.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 03, 2023 at 06:39:12PM -0400, Tian Lan wrote:
-> From: Tian Lan <tian.lan@twosigma.com>
-> 
-> The nr_active counter continues to increase over time which causes the
-> blk_mq_get_tag to hang until the thread is rescheduled to a different
-> core despite there are still tags available.
-> 
-> kernel-stack
-> 
->   INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
->   Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
->   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->   task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
->     Call Trace:
->     <TASK>
->     __schedule+0x351/0xa20
->     scheduler+0x5d/0xe0
->     io_schedule+0x42/0x70
->     blk_mq_get_tag+0x11a/0x2a0
->     ? dequeue_task_stop+0x70/0x70
->     __blk_mq_alloc_requests+0x191/0x2e0
-> 
-> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
-> __blk_mq_free_request being called.
-> 
->   320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
->          b'__blk_mq_free_request+0x1 [kernel]'
->          b'bt_iter+0x50 [kernel]'
->          b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
->          b'blk_mq_timeout_work+0x7c [kernel]'
->          b'process_one_work+0x1c4 [kernel]'
->          b'worker_thread+0x4d [kernel]'
->          b'kthread+0xe6 [kernel]'
->          b'ret_from_fork+0x1f [kernel]'
-> 
-> This issue arises when both bt_iter() and blk_mq_end_request_batch()
-> are iterating on the same request. The leak happens when
-> blk_mq_find_and_get_req() is executed(from bt_iter) before
-> req_ref_put_and_test() gets called by blk_mq_end_request_batch().
-> And because non-flush request freed by blk_mq_put_rq_ref() bypasses the
-> active request tracking, the counter would slowly leak overtime.
-> 
-> Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
+Hi, we tested your kernel and here are the results:
 
-f794f3351f26 is merged to v5.16, and the leak starts.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> Fixes: 2e315dc07df0 ("blk-mq: grab rq->refcount before calling ->fn in blk_mq_tagset_busy_iter")
+Tested-by: CKI Project <cki-project@redhat.com>
 
-2e315dc07df0 is merged to v5.14, when everything is just fine.
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-Both two aren't marked as -stable, so 'Fixes: 2e315dc07df0' is actually
-not correct.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91190
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-thanks,
-Ming
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
