@@ -1,66 +1,55 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67413101EF
-	for <llvm@lists.linux.dev>; Sat,  3 Jun 2023 23:20:16 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-256200b49cdso433164a91.1
-        for <llvm@lists.linux.dev>; Sat, 03 Jun 2023 16:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685834416; x=1688426416;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h/ltOYCrz5Gre+gjDsbk1Be4DpGcOqJcdi+9ePuaFY4=;
-        b=z8NX9JHNofAWnIVC2N7/YrvOeLd1Oi+//P9hf+0F3xTS4mvG1K3eHfE88EAWRTS4AS
-         yzBNGDqWGQEfASUNhk/LqE4g6FwcqvvFvsfGVsBpL9ZOCnFxIMARrQQrT861W70wcbdC
-         ppjX3q20vO6Z7dIwhiRpaLXfus2+EYqRHUtZrCGoo7i2nqs4z3GUS3gut5SH8uilwQtv
-         SomCR7sCBFeVWNLQvO7SJ15oPSd2eJ/p4UPYNsUi4tS/yKe+Se/qStLE2Vb+/UGugh0w
-         D6iOACUgWuaJAXiKQIiDyYQKozafpdIWgT/cYmpylyJHCo0dJL+Cg2oZ9zOIt7s8tLMA
-         Z/sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685834416; x=1688426416;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h/ltOYCrz5Gre+gjDsbk1Be4DpGcOqJcdi+9ePuaFY4=;
-        b=L731HqjoXzY/z12b4nNJO9WeL9a5PhcgcVrJDbWeuhA2EFHKnwRf71L1QtKq3HtDzw
-         en7+MENx9LvLr6U+u+j9ddzNed2SmSAgqBtzLSgQH1lGWxP05Q7LhfOkOTGnN2ROPevD
-         TpsJdPCgZpThwAdbcf4oSo8z7mbocew7svSMy6LsRlPea6BgQiIpsR+xkoObtenUU9qb
-         VTbiH/jrYtKicluVEhmKUHGKmNQ+tVNGYiMl1z4lDx1R7TTM87lTOoL67l5jodNkSMPT
-         1qqETIRTV0E66lQdS0Lfr4ntZ8fIJ8B/H744MuYNY1o8ZYTlEGbNj1w8H01DvH1TYWyH
-         vC/A==
-X-Gm-Message-State: AC+VfDz6bVe6ZUI4BL8jm9PSGDe7wbRp/H6Ygtq5U7zGONAcsxJ0VSxg
-	7eEaMrD9SDZOvYg84FtGdDS+xw==
-X-Google-Smtp-Source: ACHHUZ7kDTOOZTJhM+DY91mb4utzbmrJBKlaQ0Rn/Z6XlhWzjp5MWzNDOBoL1N7Ed5epc5Crew+f1A==
-X-Received: by 2002:a17:902:d4c8:b0:1a9:581b:fbaa with SMTP id o8-20020a170902d4c800b001a9581bfbaamr13664596plg.2.1685834416255;
-        Sat, 03 Jun 2023 16:20:16 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902758600b001a260b5319bsm3708556pll.91.2023.06.03.16.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jun 2023 16:20:15 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C115817C8
+	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 00:47:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685839658;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XL9m4/QrEyoU43AAPUnZxDdKBE2GdTGoILFW1/x9cuo=;
+	b=dekco/RjQGSXt6udNlOUyyRf2IVYXuCeogxObJBi7grwerZnx19Rxl1fF3pPaXqQVZ2LYu
+	dZRnOVE0wGqP0cgd0D1VcTPyfl2jXkoWEySTyD/gFAAjqvpzufXmsX9QNYatXTQTmGRPAj
+	nUN19AAJoHSjNTYRV9vT7D0JHdUIiHc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-18-MhiJLfrENMunlBSWq1YHXg-1; Sat, 03 Jun 2023 20:47:35 -0400
+X-MC-Unique: MhiJLfrENMunlBSWq1YHXg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B4250380673B;
+	Sun,  4 Jun 2023 00:47:34 +0000 (UTC)
+Received: from ovpn-8-19.pek2.redhat.com (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 5C5052166B25;
+	Sun,  4 Jun 2023 00:47:28 +0000 (UTC)
+Date: Sun, 4 Jun 2023 08:47:24 +0800
+From: Ming Lei <ming.lei@redhat.com>
 To: Tian Lan <tilan7663@gmail.com>
-Cc: horms@kernel.org, linux-block@vger.kernel.org, lkp@intel.com, 
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tian.lan@twosigma.com
-In-Reply-To: <20230513221227.497327-1-tilan7663@gmail.com>
-References: <892f5292-884b-42ef-fe24-05cfac56e527@kernel.dk>
- <20230513221227.497327-1-tilan7663@gmail.com>
-Subject: Re: [PATCH 1/1] blk-mq: fix blk_mq_hw_ctx active request
- accounting
-Message-Id: <168583441458.548598.9269465063341391809.b4-ty@kernel.dk>
-Date: Sat, 03 Jun 2023 17:20:14 -0600
+Cc: axboe@kernel.dk, horms@kernel.org, linux-block@vger.kernel.org,
+	lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tian.lan@twosigma.com, Hannes Reinecke <hare@suse.de>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] blk-mq: fix blk_mq_hw_ctx active request accounting
+Message-ID: <ZHvfHPC1veSs0w4r@ovpn-8-19.pek2.redhat.com>
+References: <da0ae57e-71c2-9ad5-1134-c12309032402@kernel.dk>
+ <20230603223912.827913-1-tilan7663@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603223912.827913-1-tilan7663@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 
-
-On Sat, 13 May 2023 18:12:27 -0400, Tian Lan wrote:
+On Sat, Jun 03, 2023 at 06:39:12PM -0400, Tian Lan wrote:
+> From: Tian Lan <tian.lan@twosigma.com>
+> 
 > The nr_active counter continues to increase over time which causes the
 > blk_mq_get_tag to hang until the thread is rescheduled to a different
 > core despite there are still tags available.
@@ -70,7 +59,7 @@ On Sat, 13 May 2023 18:12:27 -0400, Tian Lan wrote:
 >   INFO: task inboundIOReacto:3014879 blocked for more than 2 seconds
 >   Not tainted 6.1.15-amd64 #1 Debian 6.1.15~debian11
 >   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->   task:inboundIOReacto state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
+>   task:inboundIORe state:D stack:0  pid:3014879 ppid:4557 flags:0x00000000
 >     Call Trace:
 >     <TASK>
 >     __schedule+0x351/0xa20
@@ -80,16 +69,38 @@ On Sat, 13 May 2023 18:12:27 -0400, Tian Lan wrote:
 >     ? dequeue_task_stop+0x70/0x70
 >     __blk_mq_alloc_requests+0x191/0x2e0
 > 
-> [...]
+> kprobe output showing RQF_MQ_INFLIGHT bit is not cleared before
+> __blk_mq_free_request being called.
+> 
+>   320    320  kworker/29:1H __blk_mq_free_request rq_flags 0x220c0
+>          b'__blk_mq_free_request+0x1 [kernel]'
+>          b'bt_iter+0x50 [kernel]'
+>          b'blk_mq_queue_tag_busy_iter+0x318 [kernel]'
+>          b'blk_mq_timeout_work+0x7c [kernel]'
+>          b'process_one_work+0x1c4 [kernel]'
+>          b'worker_thread+0x4d [kernel]'
+>          b'kthread+0xe6 [kernel]'
+>          b'ret_from_fork+0x1f [kernel]'
+> 
+> This issue arises when both bt_iter() and blk_mq_end_request_batch()
+> are iterating on the same request. The leak happens when
+> blk_mq_find_and_get_req() is executed(from bt_iter) before
+> req_ref_put_and_test() gets called by blk_mq_end_request_batch().
+> And because non-flush request freed by blk_mq_put_rq_ref() bypasses the
+> active request tracking, the counter would slowly leak overtime.
+> 
+> Fixes: f794f3351f26 ("block: add support for blk_mq_end_request_batch()")
 
-Applied, thanks!
+f794f3351f26 is merged to v5.16, and the leak starts.
 
-[1/1] blk-mq: fix blk_mq_hw_ctx active request accounting
-      commit: ddad59331a4e16088468ca0ad228a9fe32d7955a
+> Fixes: 2e315dc07df0 ("blk-mq: grab rq->refcount before calling ->fn in blk_mq_tagset_busy_iter")
 
-Best regards,
--- 
-Jens Axboe
+2e315dc07df0 is merged to v5.14, when everything is just fine.
+
+Both two aren't marked as -stable, so 'Fixes: 2e315dc07df0' is actually
+not correct.
 
 
+thanks,
+Ming
 
