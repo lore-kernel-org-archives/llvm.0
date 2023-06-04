@@ -1,129 +1,173 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8201D1FD6
-	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 05:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685857264;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J8Uazq9vTRBRAV67hkF0B/x454RMU9y1w/jmUZiwq20=;
-	b=XFETXakqfKX2Vx8ph3uzGdoRD8hcV9Wpl/cvFp9LK+UVT6YskW1pxIvWpQ5R/WglGJ35V5
-	P9ecMvTslKqA28I8AbHaLlhvXf/8eWY2F7mqktZtrXU9gnE9wH5tQYuth4/2GdthiDjuFw
-	66+chahktIxZGXEpShxmNOXmfjCVSmI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-488-R8yWNS0oOKaN8rIx9Jjlmg-1; Sun, 04 Jun 2023 01:41:03 -0400
-X-MC-Unique: R8yWNS0oOKaN8rIx9Jjlmg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B1F811E88
-	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 05:41:03 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3C3AE2166B25;
-	Sun,  4 Jun 2023 05:41:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 6 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, e5282a7d)
-Date: Sun, 04 Jun 2023 05:41:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E3B23C6;
+	Sun,  4 Jun 2023 14:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685887244; x=1717423244;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1R5svHdBoVb/5Xj0dzt6ySEAujV5v2nEOuHBZ2KiB3Q=;
+  b=XV0YjgXl+O/U2HbRwPqPdY2wTlWOUoY/p+x24sA3mOWSSdU9BruQw7yB
+   aPio6mIQIB3OIhs1AfJwatFY3OIjQvsCBdzYm3DQkQ96mlN+p6XFb4Wa1
+   +06yy+ma6M/etrkie/c9J6VLoA+pWN9zHL7DCubZCZCEf2KsoghVP+EG+
+   D7A63WHRft5KaSlz4xtPj7xjwchg+VWIT0EfwNAvUCdvwkVM/kbxsUnny
+   FL2r2NdM1NLqiAxeyeZXazpCy2BKH2bjG7IpKNvChpWA5pdAAzHQ+4WOL
+   Bqnajc2N2pQa2TJuXmX4t1B8D/MiuZxEY4Pc2w64fn9UDez4dQ+pLO6YE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="358629983"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="358629983"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 07:00:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="832522614"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="832522614"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2023 07:00:42 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q5oHh-0002nv-2m;
+	Sun, 04 Jun 2023 14:00:41 +0000
+Date: Sun, 4 Jun 2023 22:00:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:bits/220-tso 1/4] arch/arm64/kernel/process.c:378:14:
+ error: no member named 'actlr' in 'struct thread_struct'
+Message-ID: <202306042103.Qj1L3nOJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <41075.123060401410300107@us-mta-488.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/AsahiLinux/linux bits/220-tso
+head:   38015ad2af19088e66e0c81f7efd5a8b51814026
+commit: 1d9d900b53057adf79ba22257f2bd551bf5dfed7 [1/4] arm64: Introduce scaffolding to add ACTLR_EL1 to thread state
+config: arm64-randconfig-r012-20230604 (https://download.01.org/0day-ci/archive/20230604/202306042103.Qj1L3nOJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/1d9d900b53057adf79ba22257f2bd551bf5dfed7
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/220-tso
+        git checkout 1d9d900b53057adf79ba22257f2bd551bf5dfed7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306042103.Qj1L3nOJ-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/91190
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> arch/arm64/kernel/process.c:378:14: error: no member named 'actlr' in 'struct thread_struct'
+                           p->thread.actlr = read_sysreg(actlr_el1);
+                           ~~~~~~~~~ ^
+   arch/arm64/kernel/process.c:531:18: error: no member named 'actlr' in 'struct thread_struct'
+           current->thread.actlr = read_sysreg(actlr_el1);
+           ~~~~~~~~~~~~~~~ ^
+   arch/arm64/kernel/process.c:532:28: error: no member named 'actlr' in 'struct thread_struct'
+           write_sysreg(next->thread.actlr, actlr_el1);
+                        ~~~~~~~~~~~~ ^
+   arch/arm64/include/asm/sysreg.h:832:20: note: expanded from macro 'write_sysreg'
+           u64 __val = (u64)(v);                                   \
+                             ^
+   3 errors generated.
 
 
+vim +378 arch/arm64/kernel/process.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   344	
+   345	int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+   346	{
+   347		unsigned long clone_flags = args->flags;
+   348		unsigned long stack_start = args->stack;
+   349		unsigned long tls = args->tls;
+   350		struct pt_regs *childregs = task_pt_regs(p);
+   351	
+   352		memset(&p->thread.cpu_context, 0, sizeof(struct cpu_context));
+   353	
+   354		/*
+   355		 * In case p was allocated the same task_struct pointer as some
+   356		 * other recently-exited task, make sure p is disassociated from
+   357		 * any cpu that may have run that now-exited task recently.
+   358		 * Otherwise we could erroneously skip reloading the FPSIMD
+   359		 * registers for p.
+   360		 */
+   361		fpsimd_flush_task_state(p);
+   362	
+   363		ptrauth_thread_init_kernel(p);
+   364	
+   365		if (likely(!args->fn)) {
+   366			*childregs = *current_pt_regs();
+   367			childregs->regs[0] = 0;
+   368	
+   369			/*
+   370			 * Read the current TLS pointer from tpidr_el0 as it may be
+   371			 * out-of-sync with the saved value.
+   372			 */
+   373			*task_user_tls(p) = read_sysreg(tpidr_el0);
+   374			if (system_supports_tpidr2())
+   375				p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+   376	
+   377			if (system_has_actlr_state())
+ > 378				p->thread.actlr = read_sysreg(actlr_el1);
+   379	
+   380			if (stack_start) {
+   381				if (is_compat_thread(task_thread_info(p)))
+   382					childregs->compat_sp = stack_start;
+   383				else
+   384					childregs->sp = stack_start;
+   385			}
+   386	
+   387			/*
+   388			 * If a TLS pointer was passed to clone, use it for the new
+   389			 * thread.  We also reset TPIDR2 if it's in use.
+   390			 */
+   391			if (clone_flags & CLONE_SETTLS) {
+   392				p->thread.uw.tp_value = tls;
+   393				p->thread.tpidr2_el0 = 0;
+   394			}
+   395		} else {
+   396			/*
+   397			 * A kthread has no context to ERET to, so ensure any buggy
+   398			 * ERET is treated as an illegal exception return.
+   399			 *
+   400			 * When a user task is created from a kthread, childregs will
+   401			 * be initialized by start_thread() or start_compat_thread().
+   402			 */
+   403			memset(childregs, 0, sizeof(struct pt_regs));
+   404			childregs->pstate = PSR_MODE_EL1h | PSR_IL_BIT;
+   405	
+   406			p->thread.cpu_context.x19 = (unsigned long)args->fn;
+   407			p->thread.cpu_context.x20 = (unsigned long)args->fn_arg;
+   408		}
+   409		p->thread.cpu_context.pc = (unsigned long)ret_from_fork;
+   410		p->thread.cpu_context.sp = (unsigned long)childregs;
+   411		/*
+   412		 * For the benefit of the unwinder, set up childregs->stackframe
+   413		 * as the final frame for the new task.
+   414		 */
+   415		p->thread.cpu_context.fp = (unsigned long)childregs->stackframe;
+   416	
+   417		ptrace_hw_copy_thread(p);
+   418	
+   419		return 0;
+   420	}
+   421	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
