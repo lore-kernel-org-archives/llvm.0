@@ -1,118 +1,130 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311D223A5;
-	Sun,  4 Jun 2023 17:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685898789; x=1717434789;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NmPXmCME2KnTFk1lfHckpe4FSW0HVErwpchsu8i6lH4=;
-  b=LsiRby8T4L+9nlZrXgMHVpdpW9kIUFDelCgoDGzHwNfO6Eg5pVidA/qY
-   S9/7eJ1/f9S7XEs8imthc29g3ydmvee5BNvWVCzEoBFN84GXa6Oj0xtnn
-   WjeroFrN0PHcYmYPcc3HomiQQl9kY4VcRFax6ttl8Cmni3P95Z4zoDsFb
-   TdajedkbkZ9cgDkOZa0pQdhxv0vki+FAPLNza2syrfK3WJqdqZa0wD7cR
-   XQL3fq10wc2Rpi9/9rGEuNCBR1rFnEMQYJAP2oWo5rZuLLguPBBJ0Zz/j
-   KpWZJiRFIWjkIf1ck+JTFpDULeNY8y0PD238nkZSlJIP6Hc6ZT+txfyqM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="358655031"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="358655031"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 10:13:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="685874942"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="685874942"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2023 10:13:05 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q5rHs-0003EX-2P;
-	Sun, 04 Jun 2023 17:13:04 +0000
-Date: Mon, 5 Jun 2023 01:12:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/220-tso 4/4]
- arch/arm64/kernel/cpufeature_impdef.c:12:6: warning: no previous prototype
- for function 'has_apple_feature'
-Message-ID: <202306050128.UF4gkCm6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E70910947
+	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 22:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685917265;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4eIqH1R/7ZSWQV1CBcotCFnDYpML0ksNEV7zzaLdPH8=;
+	b=YugP1Qp8S0YpIl84T6+x68Dn7ZgIsHl8wnyEkc9/TdBQ4zqY/TcThDFDxKzj8+oVMeBT6D
+	RICrPHXDCJ3UdO6wsxgS0+QQOL2wyIzN0WY54LkfJyAbW2oc8etnAj1EuuP+WM0x+P1473
+	L041mb3B4UwKftySmBxJ4a1Dequg1Ew=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-113-fzIN0i7MNLac7hxMicykQw-1; Sun, 04 Jun 2023 18:21:03 -0400
+X-MC-Unique: fzIN0i7MNLac7hxMicykQw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E9E485A5A8
+	for <llvm@lists.linux.dev>; Sun,  4 Jun 2023 22:21:03 +0000 (UTC)
+Received: from [172.64.2.80] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 87B0A40CFD46;
+	Sun,  4 Jun 2023 22:21:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 51 of 346): Test report for master
+ (6.4.0-rc5, mainline.kernel.org-clang, 9561de3a)
+Date: Sun, 04 Jun 2023 22:21:03 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <81850.123060418210300271@us-mta-113.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/220-tso
-head:   38015ad2af19088e66e0c81f7efd5a8b51814026
-commit: 38015ad2af19088e66e0c81f7efd5a8b51814026 [4/4] arm64: Implement Apple IMPDEF TSO memory model control
-config: arm64-randconfig-r011-20230604 (https://download.01.org/0day-ci/archive/20230605/202306050128.UF4gkCm6-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/38015ad2af19088e66e0c81f7efd5a8b51814026
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/220-tso
-        git checkout 38015ad2af19088e66e0c81f7efd5a8b51814026
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306050128.UF4gkCm6-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/cpufeature_impdef.c:12:6: warning: no previous prototype for function 'has_apple_feature' [-Wmissing-prototypes]
-   bool has_apple_feature(const struct arm64_cpu_capabilities *entry, int scope)
-        ^
-   arch/arm64/kernel/cpufeature_impdef.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool has_apple_feature(const struct arm64_cpu_capabilities *entry, int scope)
-   ^
-   static 
-   arch/arm64/kernel/cpufeature_impdef.c:24:6: warning: no previous prototype for function 'has_tso_fixed' [-Wmissing-prototypes]
-   bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
-        ^
-   arch/arm64/kernel/cpufeature_impdef.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
-   ^
-   static 
-   arch/arm64/kernel/cpufeature_impdef.c:59:13: warning: no previous prototype for function 'init_cpu_hwcaps_indirect_list_impdef' [-Wmissing-prototypes]
-   void __init init_cpu_hwcaps_indirect_list_impdef(void)
-               ^
-   arch/arm64/kernel/cpufeature_impdef.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_cpu_hwcaps_indirect_list_impdef(void)
-   ^
-   static 
-   3 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/has_apple_feature +12 arch/arm64/kernel/cpufeature_impdef.c
+Kernel information:
+    Commit message: Linux 6.4-rc5
 
-    11	
-  > 12	bool has_apple_feature(const struct arm64_cpu_capabilities *entry, int scope)
-    13	{
-    14		u64 val;
-    15		WARN_ON(scope != SCOPE_SYSTEM);
-    16	
-    17		if (read_cpuid_implementor() != ARM_CPU_IMP_APPLE)
-    18			return false;
-    19	
-    20		val = read_sysreg(aidr_el1);
-    21		return feature_matches(val, entry);
-    22	}
-    23	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91217
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8370049
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8370056
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: Storage blktests - nvmeof-mp: Timeout
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2014813
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
