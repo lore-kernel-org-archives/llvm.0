@@ -1,44 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F24C1C752;
-	Mon,  5 Jun 2023 22:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0F2C2F5;
+	Mon,  5 Jun 2023 22:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686004051; x=1717540051;
+  t=1686004711; x=1717540711;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=60tS7ufVPG6OAsS41ttnhSA8BcqMg9ReN4URLShoTmM=;
-  b=gx0Ked2haRE1CcvgQHavv7osRWj+IPOpDA5rjlkR8yW7RQBqfEeHMgX/
-   8oOx1HxddAa7vABVva0C4llvqTkhqC3WSNR6yMuHxvbhL8uWTao3EbAvW
-   gc8wMnFEY+/y+YHRUP1DmxVOK3FaFpvnrjL7F0tmEX2jBmr0bpS2PXKwj
-   zKbtMzhbVxVeXTn2KBval5vlkpqqznRcHYjTdgcSj8nfzv+dm0FxAHVKb
-   Bu7p+403XI/QYGcGW7BFuXH6kGRXFJT9sZRWw5DY8eFAil6uvfaGmKpGg
-   YxkLCcNC9PQHh84l6f8BROZDwvyVGLuJtp9YNnT+gJriIl+oh8Zr3kl/A
+  bh=LqOBzGUF/ig7ymEXy7eew8beh61DQfT0AV43emlgyR4=;
+  b=QYr3QYizDY4xeWMiBl9WQ9F6dfPyYwKf2/D7HtlvhtsvrMV542HfZgcv
+   5nITu7EPRig7c7+AZ28/xrNi2IYWmni92GHcDRSDMRO6H6/EVH+GAaINi
+   6UB7gB9xWfOO3cA4bT97SeUVnfZMs/ydWH+jqxYPEVAG0pLSBmZyM7FwH
+   PGBwg4RGHRgsiQFSAXAyiH5BsnJPG3AQMen2tOuU2JFtDj/vYHKAB6Uzf
+   HF78JI8HT0Q6Fhj7feRvO5Oy40d9FPycyurdretrJO0nfr028JuQqZMx0
+   5e3V0rOFB05zjDAhMGl1V3rPLbBunujG21cLRygpZYZ9w37BfipMhkJDe
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355351807"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341139297"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="355351807"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:27:30 -0700
+   d="scan'208";a="341139297"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:38:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="659282696"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821347435"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="659282696"
+   d="scan'208";a="821347435"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jun 2023 15:27:28 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2023 15:38:29 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q6Iff-0004UB-2H;
-	Mon, 05 Jun 2023 22:27:27 +0000
-Date: Tue, 6 Jun 2023 06:27:22 +0800
+	id 1q6IqK-0004UZ-13;
+	Mon, 05 Jun 2023 22:38:28 +0000
+Date: Tue, 6 Jun 2023 06:37:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Ogness <john.ogness@linutronix.de>
+To: Vlastimil Babka <vbabka@suse.cz>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-6.4.y-rt-rebase 46/79]
- kernel/printk/printk.c:3361:6: warning: no previous prototype for function
- 'console_bkl_kthread_create'
-Message-ID: <202306060658.sq3c4uqM-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Christoph Lameter <cl@linux-foundation.org>
+Subject: drivers/scsi/csiostor/csio_lnode.o: warning: objtool:
+ csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
+Message-ID: <202306060605.uO2QarfW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,78 +48,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.4.y-rt-rebase
-head:   0576a708b07124cac8205893c9ed734ee41f64a9
-commit: 094c02761170c2bb60bfd8203fde8c553e30871c [46/79] printk: Add threaded printing support for BKL consoles.
-config: riscv-randconfig-r002-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060658.sq3c4uqM-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f8dba31b0a826e691949cd4fdfa5c30defaac8c5
+commit: e240e53ae0abb0896e0f399bdfef41c69cec3123 mm, slub: add CONFIG_SLUB_TINY
+date:   6 months ago
+config: x86_64-randconfig-a011-20230606 (https://download.01.org/0day-ci/archive/20230606/202306060605.uO2QarfW-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=094c02761170c2bb60bfd8203fde8c553e30871c
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-6.4.y-rt-rebase
-        git checkout 094c02761170c2bb60bfd8203fde8c553e30871c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e240e53ae0abb0896e0f399bdfef41c69cec3123
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e240e53ae0abb0896e0f399bdfef41c69cec3123
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/printk/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/crypto/ drivers/scsi/csiostor/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060658.sq3c4uqM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060605.uO2QarfW-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
-   void console_bkl_kthread_create(void)
-        ^
-   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void console_bkl_kthread_create(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
-
-  3360	
-> 3361	void console_bkl_kthread_create(void)
-  3362	{
-  3363		struct task_struct *kt;
-  3364		struct console *c;
-  3365	
-  3366		lockdep_assert_held(&console_mutex);
-  3367	
-  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-  3369			return;
-  3370	
-  3371		if (!printk_threads_enabled || console_bkl_kthread)
-  3372			return;
-  3373	
-  3374		for_each_console(c) {
-  3375			if (c->flags & CON_BOOT)
-  3376				return;
-  3377		}
-  3378	
-  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
-  3380		if (IS_ERR(kt)) {
-  3381			pr_err("unable to start BKL printing thread\n");
-  3382			return;
-  3383		}
-  3384	
-  3385		console_bkl_kthread = kt;
-  3386	
-  3387		/*
-  3388		 * It is important that console printing threads are scheduled
-  3389		 * shortly after a printk call and with generous runtime budgets.
-  3390		 */
-  3391		sched_set_normal(console_bkl_kthread, -20);
-  3392	}
-  3393	
+>> drivers/scsi/csiostor/csio_lnode.o: warning: objtool: csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
 
 -- 
 0-DAY CI Kernel Test Service
