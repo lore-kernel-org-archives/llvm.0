@@ -1,136 +1,83 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022EE443A;
-	Mon,  5 Jun 2023 11:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685962806; x=1717498806;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EP+17NXEO4Ztl9FMitikZBW0xJsxetUCXOZuhNErMOw=;
-  b=PGgkyL9Kk40T8LPNzrmWVLLh59Q80T+GKrh0rOKtKte5tzDjO+NOKSI3
-   2PDSzX1fhHFjhgGn6km34P6i/FwTUqQZeK1y+3tkyTnKwSbr49VDhGaMj
-   VGzXsYUNt64irn5BFd04+o16CygxuUTidp8sea9h6aXjMMfGGnSk2RncH
-   f4BpzSYs+i4xfovwC2hxrueWQxOa2hXFw//nYsvRFhX95y8nkEsaFd2fl
-   pH3Aka9Rx8ffZcrdiZ7Tq20bp6JY6H65iRS5sI+ljkm7pF1waatRtV9/a
-   VuiTKZxGmhSCdH98upio5QmgMFkAfhGDAeRC6JKwbSBc/AWG/EA0kXkF6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="358787371"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="358787371"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 04:00:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="955294125"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="955294125"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Jun 2023 04:00:01 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q67wO-00048B-3A;
-	Mon, 05 Jun 2023 11:00:00 +0000
-Date: Mon, 5 Jun 2023 18:59:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vlad Buslov <vladbu@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Pirko <jiri@nvidia.com>, Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.4.y 3300/8640] net/sched/cls_flower.c:296:12:
- warning: stack frame size (1040) exceeds limit (1024) in 'fl_classify'
-Message-ID: <202306051816.mO3hqt7d-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE263525E
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 11:20:44 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q68GL-0003m7-1F; Mon, 05 Jun 2023 13:20:37 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q68GK-005G7T-8j; Mon, 05 Jun 2023 13:20:36 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q68GJ-00BNMc-Ds; Mon, 05 Jun 2023 13:20:35 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Stuart Yoder <stuyoder@gmail.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Li Yang <leoyang.li@nxp.com>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel@pengutronix.de,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH 2/2] bus: fsl-mc: fsl-mc-allocator: Drop a write-only variable
+Date: Mon,  5 Jun 2023 13:20:25 +0200
+Message-Id: <20230605112025.80061-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230605112025.80061-1-u.kleine-koenig@pengutronix.de>
+References: <20230605112025.80061-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1288; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=IJ00ftvoF4KpMt+khd8bCZwZpgR9G0ts4hygng4azwM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkfcT4WOdhDVRk82cH1JiPa87MycoeYk+kNi8KX hO55xgDPV+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZH3E+AAKCRCPgPtYfRL+ TtacB/9pYQ7zT/pzgXzmjlgkrclwA0SUlDmxRZhyXuHopzL43YsNN0ekTUxUmjB5l8MoOhcSREA o9vD8BUzEItIiFH6txPxpdVbS2YR+fiaP/RCLPkw/r+uD6uWpKzC9CxVXlANT4j4sAS3/qlAyO4 yf+7orgi1UR5UMc8t4Gs/WbT57kDUvwcWuosck6sV+5VO9GRkAQS5njM5juh/M3ZoYk0OElC17n 6MkyVbHjAmcwTOnThYLepum7fNDPd8fHP5Ccb5AtHwmjMkDuP4OQid+uXS8yKcrn5p35b5NALZZ Y8wynVd/IAd6xk3T1BRTViqDHyNeZ/uln4p3pOHpotavHKSM
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-Hi Vlad,
+Fixes a clang compiler warning:
 
-First bad commit (maybe != root cause):
+   drivers/bus/fsl-mc/fsl-mc-allocator.c:565:6: warning: variable 'free_count' set but not used [-Wunused-but-set-variable]
+           int free_count = 0;
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-head:   cf0b1e5482eaeb4db15c9e703267483dba88b575
-commit: 5f2e54391893c67b709a64b280417ca0318adb73 [3300/8640] net/sched: flower: fix parsing of ethertype following VLAN header
-config: mips-randconfig-r013-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051816.mO3hqt7d-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=5f2e54391893c67b709a64b280417ca0318adb73
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.4.y
-        git checkout 5f2e54391893c67b709a64b280417ca0318adb73
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/sched/
+Fixes: d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_ONs")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+---
+ drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306051816.mO3hqt7d-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/sched/cls_flower.c:296:12: warning: stack frame size (1040) exceeds limit (1024) in 'fl_classify' [-Wframe-larger-than]
-   static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
-              ^
-   1 warning generated.
-
-
-vim +/fl_classify +296 net/sched/cls_flower.c
-
-e0ace68af2acfe Paul Blakey            2019-07-09  295  
-77b9900ef53ae0 Jiri Pirko             2015-05-12 @296  static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
-77b9900ef53ae0 Jiri Pirko             2015-05-12  297  		       struct tcf_result *res)
-77b9900ef53ae0 Jiri Pirko             2015-05-12  298  {
-77b9900ef53ae0 Jiri Pirko             2015-05-12  299  	struct cls_fl_head *head = rcu_dereference_bh(tp->root);
-77b9900ef53ae0 Jiri Pirko             2015-05-12  300  	struct fl_flow_key skb_mkey;
-e0ace68af2acfe Paul Blakey            2019-07-09  301  	struct fl_flow_key skb_key;
-e0ace68af2acfe Paul Blakey            2019-07-09  302  	struct fl_flow_mask *mask;
-e0ace68af2acfe Paul Blakey            2019-07-09  303  	struct cls_fl_filter *f;
-77b9900ef53ae0 Jiri Pirko             2015-05-12  304  
-05cd271fd61a0b Paul Blakey            2018-04-30  305  	list_for_each_entry_rcu(mask, &head->masks, list) {
-50acd32ea7f682 Jason Baron            2020-02-17  306  		flow_dissector_init_keys(&skb_key.control, &skb_key.basic);
-05cd271fd61a0b Paul Blakey            2018-04-30  307  		fl_clear_masked_range(&skb_key, mask);
-bc3103f1ed405d Amir Vadai             2016-09-08  308  
-8212ed777f40c7 Jiri Pirko             2019-06-19  309  		skb_flow_dissect_meta(skb, &mask->dissector, &skb_key);
-05cd271fd61a0b Paul Blakey            2018-04-30  310  		/* skb_flow_dissect() does not set n_proto in case an unknown
-05cd271fd61a0b Paul Blakey            2018-04-30  311  		 * protocol, so do it rather here.
-77b9900ef53ae0 Jiri Pirko             2015-05-12  312  		 */
-9b7fd81cf9b6ca Toke Høiland-Jørgensen 2020-07-03  313  		skb_key.basic.n_proto = skb_protocol(skb, false);
-05cd271fd61a0b Paul Blakey            2018-04-30  314  		skb_flow_dissect_tunnel_info(skb, &mask->dissector, &skb_key);
-e0ace68af2acfe Paul Blakey            2019-07-09  315  		skb_flow_dissect_ct(skb, &mask->dissector, &skb_key,
-e0ace68af2acfe Paul Blakey            2019-07-09  316  				    fl_ct_info_to_flower_map,
-e0ace68af2acfe Paul Blakey            2019-07-09  317  				    ARRAY_SIZE(fl_ct_info_to_flower_map));
-05cd271fd61a0b Paul Blakey            2018-04-30  318  		skb_flow_dissect(skb, &mask->dissector, &skb_key, 0);
-77b9900ef53ae0 Jiri Pirko             2015-05-12  319  
-05cd271fd61a0b Paul Blakey            2018-04-30  320  		fl_set_masked_key(&skb_mkey, &skb_key, mask);
-77b9900ef53ae0 Jiri Pirko             2015-05-12  321  
-5c72299fba9df4 Amritha Nambiar        2018-11-12  322  		f = fl_lookup(mask, &skb_mkey, &skb_key);
-e8eb36cd8ca93f Amir Vadai             2016-06-13  323  		if (f && !tc_skip_sw(f->flags)) {
-77b9900ef53ae0 Jiri Pirko             2015-05-12  324  			*res = f->res;
-77b9900ef53ae0 Jiri Pirko             2015-05-12  325  			return tcf_exts_exec(skb, &f->exts, res);
-77b9900ef53ae0 Jiri Pirko             2015-05-12  326  		}
-05cd271fd61a0b Paul Blakey            2018-04-30  327  	}
-77b9900ef53ae0 Jiri Pirko             2015-05-12  328  	return -1;
-77b9900ef53ae0 Jiri Pirko             2015-05-12  329  }
-77b9900ef53ae0 Jiri Pirko             2015-05-12  330  
-
-:::::: The code at line 296 was first introduced by commit
-:::::: 77b9900ef53ae047e36a37d13a2aa33bb2d60641 tc: introduce Flower classifier
-
-:::::: TO: Jiri Pirko <jiri@resnulli.us>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
+diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+index 991273f956ce..b5e8c021fa1f 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
++++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+@@ -563,12 +563,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_mc_device *mc_bus_dev,
+ 	struct fsl_mc_bus *mc_bus = to_fsl_mc_bus(mc_bus_dev);
+ 	struct fsl_mc_resource_pool *res_pool =
+ 					&mc_bus->resource_pools[pool_type];
+-	int free_count = 0;
+ 
+-	list_for_each_entry_safe(resource, next, &res_pool->free_list, node) {
+-		free_count++;
++	list_for_each_entry_safe(resource, next, &res_pool->free_list, node)
+ 		devm_kfree(&mc_bus_dev->dev, resource);
+-	}
+ }
+ 
+ void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
