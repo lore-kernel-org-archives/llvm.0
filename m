@@ -1,129 +1,241 @@
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2052.outbound.protection.outlook.com [40.107.100.52])
+Received: from dormouse.elm.relay.mailchannels.net (dormouse.elm.relay.mailchannels.net [23.83.212.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4E923D59
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 18:30:47 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O+9NnUvFL0EoW9tjtoDo4IV/fFjEcjbxQ4ZXZgWv2xgf3plVQMvVRcUC8paNgnwJxWVMWUYDqpEe7svVc+dvQeSxwR/4noyUNJcUxsfaHnAm6vdP1Qbtcpfjg8YHcsrq51IM+51DhR+1r93ncIu8FAS/bHLfZlJg+tVEpeDEDEjg7vrQZNBzx4DWlEdBOiEzgZw6pEy5cPb2yb9gzCCJiG5XokKTnoB1fT15guSN2bPhODYEJLLFQdsorGOvJB5BhbXzwS4BGZd7xdTBIn/8/bMLAmcXv9MMVVmfVJVIzh4dBtr9x6emH6oU9QTXPALmUFPmdM8afw2eiCk4JOVZDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pppZ9m01uGrkWk8pix1ay+7Y+tLg7NlvaxtIw9LKlVw=;
- b=QvvVe0ZHyof6FcciGDfVOeoqJzYXp8mn80fXDw0cVcRQYSKTPvkOgvLHXwwwfPYDYUeRYleOR+oFP1Us/vEQF9jneFTWSqnP3j8oCCRpgAv4SI29Fkzm4x1vRO4Zsdw9egAX5W9ZE4FAAjcpVBaYW/znfScG6/EmjYLlsH7C5h9W823KuwoD1nh3V4bK0JlDpyPaTuNEdWzvB0OxX91BdklzKQqxAJu1R0/wx0Uo+c6cjGXomOH0XPHLRdiS/ZpSLRgtjyiPf8eyeb7bwr9+7v3chzOCRAw+c8/T4kqluGLlNcvnM/S6X2IVfkKJAyruARogs3NHLqC59DIeGhM8Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pppZ9m01uGrkWk8pix1ay+7Y+tLg7NlvaxtIw9LKlVw=;
- b=2KHgmptyNE8yN4+ff/ZDz4ZI5759KkQmljzKTDXtEFA1PirTLJFepdi2kLH1T4fH55Mp/43YygPA/h6WqhQBcO2bHIxw3v8oVKWjCMhgpCYN2pnRrkaeFEFLgVWqcU8OkZpz0G7hjvp91dIhI/J8bPkkoxWJMzF8PR00S7fm6xE=
-Received: from DM6PR06CA0019.namprd06.prod.outlook.com (2603:10b6:5:120::32)
- by DM4PR12MB6062.namprd12.prod.outlook.com (2603:10b6:8:b2::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Mon, 5 Jun 2023 18:30:43 +0000
-Received: from DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::cb) by DM6PR06CA0019.outlook.office365.com
- (2603:10b6:5:120::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 18:30:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT113.mail.protection.outlook.com (10.13.173.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 18:30:43 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
- 2023 13:30:41 -0500
-From: Hamza Mahfooz <hamza.mahfooz@amd.com>
-To: <amd-gfx@lists.freedesktop.org>
-CC: Hamza Mahfooz <hamza.mahfooz@amd.com>, Harry Wentland
-	<harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira
-	<Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>, "Pan, Xinhui"
-	<Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, Daniel Vetter
-	<daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, Charlene Liu
-	<Charlene.Liu@amd.com>, Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-	"Paul Hsieh" <Paul.Hsieh@amd.com>, Aric Cyr <aric.cyr@amd.com>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>, Nicholas Kazlauskas
-	<Nicholas.Kazlauskas@amd.com>, Jun Lei <Jun.Lei@amd.com>, Qingqing Zhuo
-	<qingqing.zhuo@amd.com>, <dri-devel@lists.freedesktop.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [PATCH 2/2] drm/amd/display: mark dml314's UseMinimumDCFCLK() as noinline_for_stack
-Date: Mon, 5 Jun 2023 14:30:05 -0400
-Message-ID: <20230605183007.204399-2-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230605183007.204399-1-hamza.mahfooz@amd.com>
-References: <20230605183007.204399-1-hamza.mahfooz@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88812DDC0
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 20:18:02 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id D01E9761631
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 16:49:59 +0000 (UTC)
+Received: from pdx1-sub0-mail-a246.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 659D3760C50
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 16:49:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1685983799; a=rsa-sha256;
+	cv=none;
+	b=Ufr6vS2/UgHb2suWjQ7YPC/e6B5Ll2JO90f2ZRWurB390gGYXrOK0yxznfn0KcXVpLT6xU
+	tx30z0FeqadK0E35n1WXUFylfRQBzNXKpZ+aKm7Subrxqat74UcvJFFBrl4V7vMAmMSYVV
+	64xs3a2VKKEyI2QCi1pbkV98GuBvK52/UOvNK4aUORFgIoRsZ90zO3HTn5cEQsGEecX/EP
+	+hQa9/9MqtB3RQvKXTN/cgGvlKXChFGjeZTTrcvzPbWV4+pQF/8/5soF/k8hcuEjWYY5Zy
+	3HAmf+EwtFlfzRiJlOQMig8hYgak8nDOibBIGHWFYTy7R1OCAKGQy7vL4tsNcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1685983799;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
+	b=yESzd6E7asq8w/7CKbH4q7Hv4HH/zgQB/5QnBLiWek0cHU54dSP71CZ9spoqG2sd+tHG7A
+	u/2Sv468Dh1VdU611BpHpfp/DPnGkNQ7WEWCrd3DUWibqG9XZmxUyJ6NHe+d4hUhm02CCu
+	lPDLh4EzKAyvk9xLD9zvu5TbjPK6vENFkWFe+BUbuibIlsE690So1IDDx9dpOS3EtBqYID
+	TiE90Ya2OGL8PiUbfqfHSx2y5LPLd5tWkpI9xzUYVvGHmyIfdcHFalSOuNNsn+Z89/tPT6
+	Au71avCLuUVmlglgnv4PDZByfnWvynRwqVtXgGXfSrofd+1hAJGYmg4z+uPvYw==
+ARC-Authentication-Results: i=1;
+	rspamd-56648fb6f9-fqmnr;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Abaft-Abaft: 2693b1665f48a5e0_1685983799635_1838579305
+X-MC-Loop-Signature: 1685983799635:801477052
+X-MC-Ingress-Time: 1685983799635
+Received: from pdx1-sub0-mail-a246.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.119.120.12 (trex/6.8.1);
+	Mon, 05 Jun 2023 16:49:59 +0000
+Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kjlx@templeofstupid.com)
+	by pdx1-sub0-mail-a246.dreamhost.com (Postfix) with ESMTPSA id 4QZfjL40x3zvb
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 09:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+	s=dreamhost; t=1685983798;
+	bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=GRh1O24h56VOD69FVspvvFrfKJDz125mN0N07VKMg7XGYe/cfg041XaIe60pBCdUq
+	 6Y4me79JxShLfWOPtV+UvBSMGH62zQS/kzw0ic+Ir5FQPqiuVOuqoC5/h8szQysweq
+	 rOun9wLRRodw/T2HjeAgqIk0/lRTPf56fQF0UA80=
+Received: from johansen (uid 1000)
+	(envelope-from kjlx@templeofstupid.com)
+	id e0044
+	by kmjvbox (DragonFly Mail Agent v0.12);
+	Mon, 05 Jun 2023 09:49:55 -0700
+Date: Mon, 5 Jun 2023 09:49:55 -0700
+From: Krister Johansen <kjlx@templeofstupid.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH bpf] bpf: search_bpf_extables should search subprogram
+ extables
+Message-ID: <20230605164955.GA1977@templeofstupid.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT113:EE_|DM4PR12MB6062:EE_
-X-MS-Office365-Filtering-Correlation-Id: e407c002-ce7e-4afc-5c13-08db65f2f8ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	eGLibnA3SNv38TYgXc9CR/CbnCnLXNTC5fwvBRo60CVfht3+xvAVDnlGDe2YzXgWki45KVnnvxDwrn4sKhhhyMC1zRiw+CqVVKOo4SgRtwvs0HwdDUQ5ASiSASDRXKHsEW4GjcT1qTTJCW5zSwCqG85dcia+c2i4HKT+sK8/3gHH3s67/A6oMLkqQkjkWZm51/rc2zZnhe3Q10bVALlO8Ef7oTPXEjpRghEl25lRbxFh5sFVbhUPogSDyWmTpapkzIdh3wsIi1MtsGekV2ntiOC5ag7joPyvnbp8EF2DI2XEbkK0bbh8O4F4BobpR/iOPscNJ1FWh2mFGNDR2mAZFPC0IJGbkGdUhsf7jMOHmjuDFF2EIOQODSrhQ7ShPlsxvh3ff8+3EHBgiPxbLWCS5837ifIC3GPElUa3xZunF3j8/KpCa7qKY22K19utt+dxsThB34WKAHt8alt3buc1XLPkTwHePwuCsvcLVivhZOrf7sEk5MZZGP+y3wWo63WUHN2Kaa5gUbG3LH/V+5qUV9r3bcPmrQWiZDLtMx22NxTbkNlSusi9zgziIStHDP7B4VdloQN7SEGeIWJ3Rc2dftWlnv/rnRgVHCAtiEH0oDd60AkIlzqAteIoEQof3rNd5oGo+IHtwOu+JSW4lWSA5cYTp0adyNXsW+kQzxvzzpnLzu+jmHjrr8/DaVyzrlYZPWnyt2eJdU9MKpeopYnPenrsn4L7GNLa7u4PA1W1sDyshSUU/p4TQD5WgRCEtdhsBj9rMZCOFnDlHAJ4zPnlmpNvsyJEklBFZgElr6gAtSqY9X8g7f/cAY9gsNm5Xkod
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199021)(40470700004)(46966006)(36840700001)(83380400001)(186003)(40460700003)(47076005)(336012)(426003)(2906002)(2616005)(36756003)(86362001)(82310400005)(81166007)(356005)(82740400003)(36860700001)(40480700001)(316002)(41300700001)(6666004)(5660300002)(8936002)(8676002)(54906003)(478600001)(6916009)(4326008)(70586007)(70206006)(26005)(1076003)(16526019)(7416002)(44832011)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:30:43.5072
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e407c002-ce7e-4afc-5c13-08db65f2f8ed
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6062
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang reports:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c:3892:6: error: stack frame size (2632) exceeds limit (2048) in 'dml314_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
- 3892 | void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-      |      ^
-1 error generated.
+JIT'd bpf programs that have subprograms can have a postive value for
+num_extentries but a NULL value for extable.  This is problematic if one of
+these bpf programs encounters a fault during its execution.  The fault
+handlers correctly identify that the faulting IP belongs to a bpf program.
+However, performing a search_extable call on a NULL extable leads to a
+second fault.
 
-So, since UseMinimumDCFCLK() consumes a lot of stack space, mark it as
-noinline_for_stack to prevent it from blowing up
-dml314_ModeSupportAndSystemConfigurationFull()'s stack size.
+Fix up by refusing to search a NULL extable, and by checking the
+subprograms' extables if the umbrella program has subprograms configured.
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Once I realized what was going on, I was able to use the following bpf
+program to get an oops from this failure:
+
+   #include "vmlinux.h"
+   #include <bpf/bpf_helpers.h>
+   #include <bpf/bpf_tracing.h>
+   
+   char LICENSE[] SEC("license") = "Dual BSD/GPL";
+   
+   #define PATH_MAX 4096
+   
+   struct callback_ctx {
+           u8 match;
+   };
+   
+   struct filter_value {
+           char prefix[PATH_MAX];
+   };
+   struct {
+           __uint(type, BPF_MAP_TYPE_ARRAY);
+           __uint(max_entries, 256);
+           __type(key, int);
+           __type(value, struct filter_value);
+   } test_filter SEC(".maps");
+   
+   static __u64 test_filter_cb(struct bpf_map *map, __u32 *key,
+                               struct filter_value *val,
+                               struct callback_ctx *data)
+   {
+       return 1;
+   }
+   
+   SEC("fentry/__sys_bind")
+   int BPF_PROG(__sys_bind, int fd, struct sockaddr *umyaddr, int addrlen)
+   {
+     pid_t pid;
+   
+     struct callback_ctx cx = { .match = 0 };
+     pid = bpf_get_current_pid_tgid() >> 32;
+     bpf_for_each_map_elem(&test_filter, test_filter_cb, &cx, 0);
+     bpf_printk("fentry: pid = %d, family = %llx\n", pid, umyaddr->sa_family);
+     return 0;
+   }
+
+And then the following code to actually trigger a failure:
+
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <unistd.h>
+  #include <sys/socket.h>
+  #include <netinet/in.h>
+  #include <netinet/ip.h>
+  
+  int
+  main(int argc, char *argv[])
+  {
+    int sfd, rc;
+    struct sockaddr *sockptr = (struct sockaddr *)0x900000000000;
+  
+    sfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sfd < 0) {
+      perror("socket");
+      exit(EXIT_FAILURE);
+    }
+  
+    while (1) {
+      rc = bind(sfd, (struct sockaddr *) sockptr, sizeof(struct sockaddr_in));
+      if (rc < 0) {
+        perror("bind");
+        sleep(5);
+      } else {
+        break;
+      }
+    }
+  
+    return 0;
+  }
+
+I was able to validate that this problem does not occur when subprograms
+are not in use, or when the direct pointer accesses are replaced with
+bpf_probe_read calls.  I further validated that this did not break the
+extable handling in existing bpf programs.  The same program caused no
+failures when subprograms were removed, but the exception was still
+injected.
+
+Cc: stable@vger.kernel.org
+Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
+Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
 ---
- .../gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/core.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-index 27b83162ae45..1532a7e0ed6c 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-@@ -7061,7 +7061,7 @@ static double CalculateUrgentLatency(
- 	return ret;
- }
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7421487422d4..0e12238e4340 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -736,15 +736,33 @@ const struct exception_table_entry *search_bpf_extables(unsigned long addr)
+ {
+ 	const struct exception_table_entry *e = NULL;
+ 	struct bpf_prog *prog;
++	struct bpf_prog_aux *aux;
++	int i;
  
--static void UseMinimumDCFCLK(
-+static noinline_for_stack void UseMinimumDCFCLK(
- 		struct display_mode_lib *mode_lib,
- 		int MaxPrefetchMode,
- 		int ReorderingBytes)
+ 	rcu_read_lock();
+ 	prog = bpf_prog_ksym_find(addr);
+ 	if (!prog)
+ 		goto out;
+-	if (!prog->aux->num_exentries)
++	aux = prog->aux;
++	if (!aux->num_exentries)
+ 		goto out;
+ 
+-	e = search_extable(prog->aux->extable, prog->aux->num_exentries, addr);
++	/* prog->aux->extable can be NULL if subprograms are in use. In that
++	 * case, check each sub-function's aux->extables to see if it has a
++	 * matching entry.
++	 */
++	if (aux->extable != NULL) {
++		e = search_extable(prog->aux->extable,
++		    prog->aux->num_exentries, addr);
++	} else {
++		for (i = 0; (i < aux->func_cnt) && (e == NULL); i++) {
++			if (!aux->func[i]->aux->num_exentries ||
++			    aux->func[i]->aux->extable == NULL)
++				continue;
++			e = search_extable(aux->func[i]->aux->extable,
++			    aux->func[i]->aux->num_exentries, addr);
++		}
++	}
+ out:
+ 	rcu_read_unlock();
+ 	return e;
 -- 
-2.40.1
+2.25.1
 
