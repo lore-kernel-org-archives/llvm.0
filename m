@@ -1,100 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7221323E;
-	Mon,  5 Jun 2023 21:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE844C433D2;
-	Mon,  5 Jun 2023 21:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685999720;
-	bh=WpgQiMJgnt6HBcNQNIb/5Xa2UnrztLQBfn1ZUDQLobI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=OGbUcy8KpJRebsXetgYi9snsvx0EUtJyXpxRM2HAsn0xfwrkOv76KEPjcUIQIf7VN
-	 jXZpmuP+Y+MUdft1KftTa0XRRv45DH9itbYVEgxqhyuAt7ZVXg5wKTS9jZuNI6w3Vn
-	 VTx67iJpp2NdCwpcDPESGusAw9UuJGeVCFSqjmFxBm+FKARvs/GCxWRNeQ1xPxcLQL
-	 C4sGthQsGiGBBwiEoyacAbT8JRh0kSGId3Z3jZrV34QsJ/88ittkXEvEaviffrH2mD
-	 jDzaWf3AxnlSOzVJSxqumz16JhPPeXSKEv28SNTx856g6xNS+Mg79shDntPN82p0s0
-	 7AaAeQRZ1vw5w==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 05 Jun 2023 14:15:08 -0700
-Subject: [PATCH 6.3] riscv: vmlinux.lds.S: Explicitly handle '.got' section
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C08BE59;
+	Mon,  5 Jun 2023 21:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686001590; x=1717537590;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VFMj0R5xssTi49SMy256biw2lktzNYXCNpkrvHTLzHw=;
+  b=DiYRCJqon+3d9uUquepNoHoNL81RS08PJXDefrgrRhIDoKiSdAmuTi4h
+   aj8gQgdS0P2FStnPCCyuXDxHa+b1REagL2WAaXbcheTWXNcCXedJN+B3Q
+   wjmQoc4qogZ/l8zKoviwXpMs7yaplbarWVjceT5bcISNG9evz9OYgOnZ0
+   8Y0xAbVmnXzq1hbHOunPYSZZR41ZfKA61IajMNLCvOUpIKkYaSnzNHaRa
+   I6K/6nk6Ys0OI6mm2Y81IVoNS0imAH4Jfi7M63fL6FabUrDQ+LOfEB59O
+   hjqNvqE5ciegpXKt1obnqp3GNwaJjKYgAqf73kJb880fjzk/q11XGLBBV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341128476"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="341128476"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 14:46:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821327834"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="821327834"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2023 14:46:25 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6I1x-0004T9-0j;
+	Mon, 05 Jun 2023 21:46:25 +0000
+Date: Tue, 6 Jun 2023 05:45:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
+	javierm@redhat.com, sam@ravnborg.org, deller@gmx.de,
+	geert+renesas@glider.be, lee@kernel.org, daniel.thompson@linaro.org,
+	jingoohan1@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fbdev@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	Thomas Zimmermann <tzimmermann@suse.de>, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 30/30] fbdev: Make support for userspace interfaces
+ configurable
+Message-ID: <202306060547.528pADrX-lkp@intel.com>
+References: <20230605144812.15241-31-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-6-3-riscv-got-orphan-warning-llvm-17-v1-1-72c4f11e020f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFtQfmQC/yVO3Q6CIBR+lXauO6Vo6nqV1hwg4lkIDIzanO8e2
- uX3/60QVSAV4X5aIahEkZzNoDyfQE7caoU0ZAysYFXRFDdssMJAUSbUbkEXfHbhhwdLVqMxaca
- yxU7WohAtYx3jkKsEjwpF4FZOe5mory/xJjPg7JJCafJQPxquIy4O/1IvvT+oPe+DGul73HxAc
- 6nguW0/1XED9LsAAAA=
-To: gregkh@linuxfoundation.org, sashal@kernel.org, palmer@dabbelt.com, 
- conor@kernel.org
-Cc: paul.walmsley@sifive.com, aou@eecs.berkeley.edu, 
- ndesaulniers@google.com, trix@redhat.com, stable@vger.kernel.org, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1875; i=nathan@kernel.org;
- h=from:subject:message-id; bh=WpgQiMJgnt6HBcNQNIb/5Xa2UnrztLQBfn1ZUDQLobI=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCl1Ael//Pbt0ClzWZLUfrM5KVHtae8Hx4yT9pMTOv97d
- xXM9XzZUcrCIMbBICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACYy6zrDP92NC6ZkOu7zMTiz
- 4VDiIs859RZbpd2P7lSVunjq3MOrouUM/wx0gxTzpec8E7z//3CT5Z6pEhYd9yMf5F0RnhX181x
- IJjsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230605144812.15241-31-tzimmermann@suse.de>
 
-This patch is for linux-6.3.y only, it has no direct mainline
-equivalent.
+Hi Thomas,
 
-LLVM 17 will now use the GOT for extern weak symbols when using the
-medany model, which causes a linker orphan section warning on
-linux-6.3.y:
+kernel test robot noticed the following build errors:
 
-  ld.lld: warning: <internal>:(.got) is being placed in '.got'
+[auto build test ERROR on next-20230605]
+[cannot apply to drm-misc/drm-misc-next lee-backlight/for-backlight-next staging/staging-testing staging/staging-next staging/staging-linus linus/master lee-backlight/for-backlight-fixes v6.4-rc5 v6.4-rc4 v6.4-rc3 v6.4-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This is not an issue in mainline because handling of the .got section
-was added by commit 39b33072941f ("riscv: Introduce CONFIG_RELOCATABLE")
-and further extended by commit 26e7aacb83df ("riscv: Allow to downgrade
-paging mode from the command line") in 6.4-rc1. Neither of these changes
-are suitable for stable, so add explicit handling of the .got section in
-a standalone change to align 6.3 and mainline, which addresses the
-warning.
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/backlight-bd6107-Compare-against-struct-fb_info-device/20230605-225002
+base:   next-20230605
+patch link:    https://lore.kernel.org/r/20230605144812.15241-31-tzimmermann%40suse.de
+patch subject: [PATCH 30/30] fbdev: Make support for userspace interfaces configurable
+config: powerpc-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060547.528pADrX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d309f36af8a1ee56ef56e54287ca6d2bf7d239de
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Zimmermann/backlight-bd6107-Compare-against-struct-fb_info-device/20230605-225002
+        git checkout d309f36af8a1ee56ef56e54287ca6d2bf7d239de
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/video/fbdev/mb862xx/
 
-This is only an issue for 6.3 because commit f4b71bff8d85 ("riscv:
-select ARCH_WANT_LD_ORPHAN_WARN for !XIP_KERNEL") landed in 6.3-rc1, so
-earlier releases will not see this warning because it will not be
-enabled.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060547.528pADrX-lkp@intel.com/
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1865
-Link: https://github.com/llvm/llvm-project/commit/a178ba9fbd0a27057dc2fa4cb53c76caa013caac
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/kernel/vmlinux.lds.S | 2 ++
- 1 file changed, 2 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index 53a8ad65b255..db56c38f0e19 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -129,6 +129,8 @@ SECTIONS
- 		*(.sdata*)
- 	}
- 
-+	.got : { *(.got*) }
-+
- #ifdef CONFIG_EFI
- 	.pecoff_edata_padding : { BYTE(0); . = ALIGN(PECOFF_FILE_ALIGNMENT); }
- 	__pecoff_data_raw_size = ABSOLUTE(. - __pecoff_text_end);
+>> drivers/video/fbdev/mb862xx/mb862xxfbdrv.c:793:15: error: no member named 'dev' in 'struct fb_info'
+           dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
+                   ~~~  ^
+   include/linux/dev_printk.h:163:26: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                          ^~~
+   include/linux/dev_printk.h:129:22: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                      ^~~
+   1 error generated.
 
----
-base-commit: abfd9cf1c3d4d143a889b76af835078897e46c55
-change-id: 20230605-6-3-riscv-got-orphan-warning-llvm-17-8c4b0b72282a
 
-Best regards,
+vim +793 drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
+
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  785  
+3a2ab02ddfacb0 drivers/video/fbdev/mb862xx/mb862xxfbdrv.c Uwe Kleine-König   2023-03-19  786  static void of_platform_mb862xx_remove(struct platform_device *ofdev)
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  787  {
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  788  	struct fb_info *fbi = dev_get_drvdata(&ofdev->dev);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  789  	struct mb862xxfb_par *par = fbi->par;
+28f65c11f2ffb3 drivers/video/mb862xx/mb862xxfbdrv.c       Joe Perches        2011-06-09  790  	resource_size_t res_size = resource_size(par->res);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  791  	unsigned long reg;
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  792  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06 @793  	dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  794  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  795  	/* display off */
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  796  	reg = inreg(disp, GC_DCM1);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  797  	reg &= ~(GC_DCM01_DEN | GC_DCM01_L0E);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  798  	outreg(disp, GC_DCM1, reg);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  799  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  800  	/* disable interrupts */
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  801  	outreg(host, GC_IMASK, 0);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  802  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  803  	free_irq(par->irq, (void *)par);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  804  	irq_dispose_mapping(par->irq);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  805  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  806  	device_remove_file(&ofdev->dev, &dev_attr_dispregs);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  807  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  808  	unregister_framebuffer(fbi);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  809  	fb_dealloc_cmap(&fbi->cmap);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  810  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  811  	iounmap(par->mmio_base);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  812  	iounmap(par->fb_base);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  813  
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  814  	release_mem_region(par->res->start, res_size);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  815  	framebuffer_release(fbi);
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  816  }
+17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  817  
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
