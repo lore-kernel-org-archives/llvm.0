@@ -1,180 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493EC1F93A
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 15:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3209EC433D2;
-	Mon,  5 Jun 2023 15:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94A21F943;
+	Mon,  5 Jun 2023 15:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF37BC433EF;
+	Mon,  5 Jun 2023 15:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685978511;
-	bh=lYZqsbnPrs/FmfMVfVHt9BCTjFX2fQxtdVtHAZDJjYA=;
+	s=k20201202; t=1685979131;
+	bh=/zpqSE4gUjpXEtF+L5LZW4BAfle97VNcHCoem4jwPEE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZW0a4jkgwUt4DsNKwureoiivkmO+JoqqfaU/QzDRpwayNvMAVuYTlY9CJY1/LedwF
-	 u8ROv33zcFe8MzdkTWcvgg20NhwSW+MdkkjPEcoDKbz/LGLx8b6r16fSDjWl23ddrP
-	 0QeBqpvpyC2g9JLFqXdJwouExRZ6Isr/4/LcdZBc+sKu0sR1WZeomOBXW3vM1ZNCaK
-	 /20MsIXvUm/N7PjOnKIT80ud076Bl2I8AItemnV12Bocc9WLQIg9rtlRBvVueM9fqf
-	 uO8jXaAMLsrWk0c59TMlQ7+9xqoULu7N08S9GBiVa+1IuctZaQkSFCDd9RhrV7KAEe
-	 wV+5dV0t7Vjpg==
-Date: Mon, 5 Jun 2023 08:21:49 -0700
+	b=sitJe26AWMuofiTGuKBcczj/MIlv54KNtU8ZErgAOnPjw45MbPeSXuFcOaQOzJq2m
+	 680dtlpLekbYdIa+Qq1XACY5nlwjs2abCOcjuTHzHRiRcI8XjMws0jxp6u4nuNK72e
+	 TRGIjiz4YarYiK6zajCPcRrtwDx0hZ47cOLjr36brOVAaGKVxgmH71SSAR0915USph
+	 8xhOMHEf4XY9LtOJbHx4+nqZU1oU06pLsyKD7EsyIuqn56uaDMlOUazAfpJ3xBFd2f
+	 skBGLSrL0GZXv7p4SSGGkR77DT3FxWa0XEDRQ3F68RpZcpArH3eJI4hTutgo3n78Nj
+	 Em+9LBwPa/2PA==
+Date: Mon, 5 Jun 2023 08:32:09 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tom Rini <trini@konsulko.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-Message-ID: <20230605152149.GA2476659@dev-arch.thelio-3990X>
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <20230531213319.GA2201875@dev-arch.thelio-3990X>
- <20230602152519.GA3007575@dev-arch.thelio-3990X>
- <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
+To: Vlad Buslov <vladbu@nvidia.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Pirko <jiri@nvidia.com>, Sasha Levin <sashal@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [stable:linux-5.4.y 3300/8640] net/sched/cls_flower.c:296:12:
+ warning: stack frame size (1040) exceeds limit (1024) in 'fl_classify'
+Message-ID: <20230605153209.GA2480995@dev-arch.thelio-3990X>
+References: <202306051816.mO3hqt7d-lkp@intel.com>
+ <873536xfus.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
+In-Reply-To: <873536xfus.fsf@nvidia.com>
 
-On Sun, Jun 04, 2023 at 01:32:21AM +0900, Masahiro Yamada wrote:
-> On Sat, Jun 3, 2023 at 12:25â€¯AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, Jun 05, 2023 at 03:11:24PM +0300, Vlad Buslov wrote:
+> On Mon 05 Jun 2023 at 18:59, kernel test robot <lkp@intel.com> wrote:
+> > Hi Vlad,
 > >
-> > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
-> > > Hi Masahiro,
-> > >
-> > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
-> > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> > > >
-> > > > As a result, the linker script is preprocessed with predefined macros
-> > > > for the build host instead of the target.
-> > > >
-> > > > Assuming you use an x86 build machine, compare the following:
-> > > >
-> > > >  $ clang -dM -E -x c /dev/null
-> > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> > > >
-> > > > There is no actual problem presumably because our linker scripts do not
-> > > > rely on such predefined macros, but it is better to define correct ones.
-> > > >
-> > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
-> > > > will be processed with the proper target triple.
-> > > >
-> > > > Reported-by: Tom Rini <trini@konsulko.com>
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > ---
-> > > >
-> > > >  scripts/Makefile.clang | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > > index 70b354fa1cb4..93ca059cc3b8 100644
-> > > > --- a/scripts/Makefile.clang
-> > > > +++ b/scripts/Makefile.clang
-> > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       += -Werror=unknown-warning-option
-> > > >  CLANG_FLAGS        += -Werror=ignored-optimization-argument
-> > > >  CLANG_FLAGS        += -Werror=option-ignored
-> > > >  CLANG_FLAGS        += -Werror=unused-command-line-argument
-> > > > -KBUILD_CFLAGS      += $(CLANG_FLAGS)
-> > > > -KBUILD_AFLAGS      += $(CLANG_FLAGS)
-> > > > +KBUILD_CPPFLAGS    += $(CLANG_FLAGS)
-> > > >  export CLANG_FLAGS
-> > > > --
-> > > > 2.37.2
-> > > >
-> > >
-> > > I am doubling back to this change, as the lack of '--target' in
-> > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new change
-> > > that rejects '-mbig-endian' and '-mlittle-endian' when not supported by
-> > > the target, which breaks the arm64 vDSO build when preprocessing its
-> > > linker script:
-> > >
-> > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-> > >   $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=build mrproper virtconfig menuconfig arch/arm64/kernel/vdso/
-> > >   ...
-> > >   clang: error: unsupported option '-mbig-endian' for target 'x86_64-pc-linux-gnu'
-> > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vdso/vdso.lds] Error 1
-> > >   ...
-> > >
-> > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b6731198956c522c93d0df1050
-> > >   https://github.com/ClangBuiltLinux/linux/issues/1859
-> > >
-> > > This change resolves that issue. I was able to figure out why those new
-> > > warnings appeared for ARCH=mips, it is the shell invocation for
-> > > CHECKFLAGS. The following diff resolves it for me:
-> > >
-> > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> > > index a7a4ee66a9d3..ef7b05ae92ce 100644
-> > > --- a/arch/mips/Makefile
-> > > +++ b/arch/mips/Makefile
-> > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-> > >  KBUILD_LDFLAGS               += -m $(ld-emul)
-> > >
-> > >  ifdef CONFIG_MIPS
-> > > -CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
-> > > +CHECKFLAGS += $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
-> > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> > >       sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
-> > >  endif
-> > >
-> > > I will run this change plus that diff through my build matrix to see if
-> > > any other issues pop up. If not, I will respond with some tags and
-> > > perhaps this could be taken as a fix for 6.4 so that it could
-> > > potentially be backported?
+> > First bad commit (maybe != root cause):
 > >
-> > I found two more issues lurking in PowerPC. I have attached suggested
-> > patches for all the issues I have uncovered to this email, please feel
-> > free to use them or do something different if you feel there is a better
-> > fix. With those issues resolved in one way or another, consider the
-> > original change:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+> > head:   cf0b1e5482eaeb4db15c9e703267483dba88b575
+> > commit: 5f2e54391893c67b709a64b280417ca0318adb73 [3300/8640] net/sched: flower: fix parsing of ethertype following VLAN header
+> > config: mips-randconfig-r013-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051816.mO3hqt7d-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+> > reproduce (this is a W=1 build):
+> >         mkdir -p ~/bin
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mipsel-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=5f2e54391893c67b709a64b280417ca0318adb73
+> >         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+> >         git fetch --no-tags stable linux-5.4.y
+> >         git checkout 5f2e54391893c67b709a64b280417ca0318adb73
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/sched/
 > >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306051816.mO3hqt7d-lkp@intel.com/
 > >
-> > If it would work better for you, I am more than happy to take over this
-> > series as well.
+> > All warnings (new ones prefixed by >>):
 > >
-> > Cheers,
-> > Nathan
+> >>> net/sched/cls_flower.c:296:12: warning: stack frame size (1040) exceeds limit (1024) in 'fl_classify' [-Wframe-larger-than]
+> >    static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
+> >               ^
+> >    1 warning generated.
+> >
+> >
+> > vim +/fl_classify +296 net/sched/cls_flower.c
+> >
+> > e0ace68af2acfe Paul Blakey            2019-07-09  295  
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12 @296  static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  297  		       struct tcf_result *res)
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  298  {
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  299  	struct cls_fl_head *head = rcu_dereference_bh(tp->root);
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  300  	struct fl_flow_key skb_mkey;
 > 
-> Thanks. All the three patches look good to me.
+> The stack usage of fl_classify() has already been addressed in later
+> kernels by commit 0af413bd3e2d ("flow_dissector: work around stack frame
+> size warning") which moved mkey into fl_mask_lookup(). Not sure what
+> else can be done since my commit just adds a new flow dissector fields
+> that are needed to correctly parse packets with multiple VLAN headers.
+
+0af413bd3e2d seems like a reasonable cherry-pick for linux-5.4.y to me
+if the warning is showing up there, which seems like the only thing that
+needs to be done for this report.
+
+> > e0ace68af2acfe Paul Blakey            2019-07-09  301  	struct fl_flow_key skb_key;
+> > e0ace68af2acfe Paul Blakey            2019-07-09  302  	struct fl_flow_mask *mask;
+> > e0ace68af2acfe Paul Blakey            2019-07-09  303  	struct cls_fl_filter *f;
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  304  
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  305  	list_for_each_entry_rcu(mask, &head->masks, list) {
+> > 50acd32ea7f682 Jason Baron            2020-02-17  306  		flow_dissector_init_keys(&skb_key.control, &skb_key.basic);
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  307  		fl_clear_masked_range(&skb_key, mask);
+> > bc3103f1ed405d Amir Vadai             2016-09-08  308  
+> > 8212ed777f40c7 Jiri Pirko             2019-06-19  309  		skb_flow_dissect_meta(skb, &mask->dissector, &skb_key);
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  310  		/* skb_flow_dissect() does not set n_proto in case an unknown
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  311  		 * protocol, so do it rather here.
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  312  		 */
+> > 9b7fd81cf9b6ca Toke Høiland-Jørgensen 2020-07-03  313  		skb_key.basic.n_proto = skb_protocol(skb, false);
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  314  		skb_flow_dissect_tunnel_info(skb, &mask->dissector, &skb_key);
+> > e0ace68af2acfe Paul Blakey            2019-07-09  315  		skb_flow_dissect_ct(skb, &mask->dissector, &skb_key,
+> > e0ace68af2acfe Paul Blakey            2019-07-09  316  				    fl_ct_info_to_flower_map,
+> > e0ace68af2acfe Paul Blakey            2019-07-09  317  				    ARRAY_SIZE(fl_ct_info_to_flower_map));
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  318  		skb_flow_dissect(skb, &mask->dissector, &skb_key, 0);
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  319  
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  320  		fl_set_masked_key(&skb_mkey, &skb_key, mask);
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  321  
+> > 5c72299fba9df4 Amritha Nambiar        2018-11-12  322  		f = fl_lookup(mask, &skb_mkey, &skb_key);
+> > e8eb36cd8ca93f Amir Vadai             2016-06-13  323  		if (f && !tc_skip_sw(f->flags)) {
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  324  			*res = f->res;
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  325  			return tcf_exts_exec(skb, &f->exts, res);
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  326  		}
+> > 05cd271fd61a0b Paul Blakey            2018-04-30  327  	}
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  328  	return -1;
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  329  }
+> > 77b9900ef53ae0 Jiri Pirko             2015-05-12  330  
+> >
+> > :::::: The code at line 296 was first introduced by commit
+> > :::::: 77b9900ef53ae047e36a37d13a2aa33bb2d60641 tc: introduce Flower classifier
+> >
+> > :::::: TO: Jiri Pirko <jiri@resnulli.us>
+> > :::::: CC: David S. Miller <davem@davemloft.net>
 > 
-> I will apply them, then mine on top.
-
-Thanks, sounds like a good plan!
-
-> A nit:
 > 
-> The first patch for mips will introduce the warning
-> as $(KBUILD_CPPFLAGS) does not contain $(CLANG_FLAGS)
-> at this point.
-> Then, it will be fixed again when my patch is applied.
-> 
-> The two must be squashed together to avoid the regression,
-> but I think it is OK as-is.
-
-Hmmm, what warning would be introduced? KBUILD_CPPFLAGS is being added
-to the CHECKFLAGS invocation, rather than replacing KBUILD_CFLAGS, so
-'--target' should always be present (first via KBUILD_CFLAGS then via
-KBUILD_CPPFLAGS), right?
-
-> The second patch for powerpc reminded me of
-> converting $(CC) to $(LD) for linking vDSO.
-> I do not remember why powerpc vDSO still uses $(CC).
-
-Nick tried to make the conversion some time ago but ran into issues with
-GNU ld crashing:
-
-https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google.com/
-https://lore.kernel.org/lkml/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup.eu/
-
-It might be easier to do this now that the PowerPC vDSO has been
-combined into one directory, but we have not had time to sit down and
-actually work on it.
-
-Cheers,
-Nathan
