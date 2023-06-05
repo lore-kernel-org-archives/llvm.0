@@ -1,112 +1,243 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E705328C0A;
-	Mon,  5 Jun 2023 23:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686007834; x=1717543834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LQ/YmNHaOqxHB3zFE5Dw/U8hbSjvEZuD9JaXPGLULFQ=;
-  b=juFPoSiVZzsbiQfM2F3dAc62SoYTW8rDNAqtu8AxSDQdl5Nz5QI2N93q
-   slIlKRpTSZhN48Cyza2tnhiEntSWGNHNxuUTbwl/0TY4NwP+wEKwtdsvm
-   +mRlBckRzXdJtl/VU6CzH0qYXDnP94yUUbSpJjQSi9TM2LF6bUATUajVB
-   qaLVE3joBmw36uRD6NeGzpVejzL717B2NCrlB5kzOZ4PqXUoxAbXz0kW0
-   teEmAl527kDae/+rPj3SmKSB06WlZJ5qZiBSpJpnNbje0U1hC6An53i48
-   mK5w5ItSijhTVLp33Y+LlSkcRC03Ek2/aCR86EazGBJqKilQG8Y8Airtc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="359826342"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="359826342"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 16:30:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="738531797"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="738531797"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 Jun 2023 16:30:31 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q6Jeg-0004Xx-1a;
-	Mon, 05 Jun 2023 23:30:30 +0000
-Date: Tue, 6 Jun 2023 07:29:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Richard Weinberger <richard@nod.at>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-mtd@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 4/4] ubifs: Convert do_writepage() to take a folio
-Message-ID: <202306060727.jUL92Co4-lkp@intel.com>
-References: <20230605165029.2908304-5-willy@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C592428C09
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 23:30:43 +0000 (UTC)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b1afe57bdfso50187861fa.0
+        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 16:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686007841; x=1688599841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DlmpFDEmcxHsnSAtrkjHRWbVNt7ra8EBiqAvJ7+G6UM=;
+        b=M9aMrRskDsFPhGK6WdTxx38xeN3fozVsmcEN4p+M/mSfcQKDicvDjSlD/Txrui2oPf
+         HDnYaCqBswhWa2BctIRcAzcB/zYAKd0NNn+RSl2MZWj1JHxoVSnB8E9GdTH9VPVpwnwI
+         XnLyWNEfKB20R+MC2rQeStvaJUQf9gPeFCzxCxUDKcdHHnDLl0mg87AHBG4e+NjtzOrp
+         XK9RrkyJUfHA5BI3xZhOoQ3NoHBW3pMjT5m3a4zPblYljagPOGXDpfxt4Zu/qxkyKRjK
+         cXyVQLZxTv0ImYIdztULa2AeozuQOXdzh8rkbmtzBWVCQ/8wCjXXUXNSQ/M2Ibgx3yBm
+         Tylg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686007841; x=1688599841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DlmpFDEmcxHsnSAtrkjHRWbVNt7ra8EBiqAvJ7+G6UM=;
+        b=WGjUJIoZDbKgPW6BAIaGsrmyABZTuOOk1yGl4FjTchuQZe0CSZn9BMPzo+2r0SpfPc
+         iCIPcXqOYT6CwvtkxkTbwSbFv0SpWd2p23g8dJ6HxtBNJlijCBhQK7hP7N6kNUykZzUe
+         bF3Sq5ZZSoEIuy5fgWjqBTm7Kb5du4o44OZ9rGD07XFTipi15xgS5uovIDOakZPzxGT1
+         SwdvsUmZ9TL1b1oIvwt/OV93TDtj/nUDHjlVDggm2ClqH+Rwfbkef7jr5Gzt/Lg/2HxA
+         guL3I6LUPw52v+hYdBXCePYdJpkHfTDnt50v9+dZlyUUadDL5kQ5N09jYEdbrBKFqvjJ
+         JBVA==
+X-Gm-Message-State: AC+VfDx8/KxzPzc56hpSBuGTw5pvbaSzG9Bi8uTwY/I5h81zgbuucfbF
+	lt09iRgipeOw9sVp3sXZM13EeAoHmH7/nk80YFs=
+X-Google-Smtp-Source: ACHHUZ4sj1ih+CkariNV5M0zDhUe1cFYW5PMBvQD/6OiIGS0ztojmDNTuxZ39lQbKupwhtGzz7S79/zGfzxVm4QiD5w=
+X-Received: by 2002:a2e:380b:0:b0:2af:2231:94ba with SMTP id
+ f11-20020a2e380b000000b002af223194bamr403224lja.3.1686007841409; Mon, 05 Jun
+ 2023 16:30:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605165029.2908304-5-willy@infradead.org>
+References: <20230605164955.GA1977@templeofstupid.com>
+In-Reply-To: <20230605164955.GA1977@templeofstupid.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 5 Jun 2023 16:30:29 -0700
+Message-ID: <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram extables
+To: Krister Johansen <kjlx@templeofstupid.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew,
+On Mon, Jun 5, 2023 at 9:50=E2=80=AFAM Krister Johansen <kjlx@templeofstupi=
+d.com> wrote:
+>
+> JIT'd bpf programs that have subprograms can have a postive value for
+> num_extentries but a NULL value for extable.  This is problematic if one =
+of
+> these bpf programs encounters a fault during its execution.  The fault
+> handlers correctly identify that the faulting IP belongs to a bpf program=
+.
+> However, performing a search_extable call on a NULL extable leads to a
+> second fault.
+>
+> Fix up by refusing to search a NULL extable, and by checking the
+> subprograms' extables if the umbrella program has subprograms configured.
+>
+> Once I realized what was going on, I was able to use the following bpf
+> program to get an oops from this failure:
+>
+>    #include "vmlinux.h"
+>    #include <bpf/bpf_helpers.h>
+>    #include <bpf/bpf_tracing.h>
+>
+>    char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
+>
+>    #define PATH_MAX 4096
+>
+>    struct callback_ctx {
+>            u8 match;
+>    };
+>
+>    struct filter_value {
+>            char prefix[PATH_MAX];
+>    };
+>    struct {
+>            __uint(type, BPF_MAP_TYPE_ARRAY);
+>            __uint(max_entries, 256);
+>            __type(key, int);
+>            __type(value, struct filter_value);
+>    } test_filter SEC(".maps");
+>
+>    static __u64 test_filter_cb(struct bpf_map *map, __u32 *key,
+>                                struct filter_value *val,
+>                                struct callback_ctx *data)
+>    {
+>        return 1;
+>    }
+>
+>    SEC("fentry/__sys_bind")
+>    int BPF_PROG(__sys_bind, int fd, struct sockaddr *umyaddr, int addrlen=
+)
+>    {
+>      pid_t pid;
+>
+>      struct callback_ctx cx =3D { .match =3D 0 };
+>      pid =3D bpf_get_current_pid_tgid() >> 32;
+>      bpf_for_each_map_elem(&test_filter, test_filter_cb, &cx, 0);
+>      bpf_printk("fentry: pid =3D %d, family =3D %llx\n", pid, umyaddr->sa=
+_family);
 
-kernel test robot noticed the following build warnings:
+Instead of printk please do a volatile read of umyaddr->sa_family.
 
-[auto build test WARNING on rw-ubifs/next]
-[also build test WARNING on linus/master v6.4-rc5 next-20230605]
-[cannot apply to rw-ubifs/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please convert this commit log to a test in selftest/bpf/
+and resubmit as two patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/ubifs-Convert-from-writepage-to-writepages/20230606-005309
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git next
-patch link:    https://lore.kernel.org/r/20230605165029.2908304-5-willy%40infradead.org
-patch subject: [PATCH 4/4] ubifs: Convert do_writepage() to take a folio
-config: i386-randconfig-i001-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060727.jUL92Co4-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4f6ac0962f61cc07c95177f78cf1f3b03e79d822
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/ubifs-Convert-from-writepage-to-writepages/20230606-005309
-        git checkout 4f6ac0962f61cc07c95177f78cf1f3b03e79d822
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ubifs/
+Also see bpf_testmod_return_ptr() and
+SEC("fexit/bpf_testmod_return_ptr") in progs/test_module_attach.c.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060727.jUL92Co4-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/ubifs/file.c:905:15: warning: variable 'i' set but not used [-Wunused-but-set-variable]
-           int err = 0, i, blen;
-                        ^
-   1 warning generated.
+Probably easier to tweak that test for subprogs instead
+of adding your own SEC("fentry/__sys_bind") test and triggering bind()
+from user space.
 
 
-vim +/i +905 fs/ubifs/file.c
+>      return 0;
+>    }
+>
+> And then the following code to actually trigger a failure:
+>
+>   #include <stdio.h>
+>   #include <stdlib.h>
+>   #include <unistd.h>
+>   #include <sys/socket.h>
+>   #include <netinet/in.h>
+>   #include <netinet/ip.h>
+>
+>   int
+>   main(int argc, char *argv[])
+>   {
+>     int sfd, rc;
+>     struct sockaddr *sockptr =3D (struct sockaddr *)0x900000000000;
+>
+>     sfd =3D socket(AF_INET, SOCK_STREAM, 0);
+>     if (sfd < 0) {
+>       perror("socket");
+>       exit(EXIT_FAILURE);
+>     }
+>
+>     while (1) {
+>       rc =3D bind(sfd, (struct sockaddr *) sockptr, sizeof(struct sockadd=
+r_in));
+>       if (rc < 0) {
+>         perror("bind");
+>         sleep(5);
+>       } else {
+>         break;
+>       }
+>     }
+>
+>     return 0;
+>   }
+>
+> I was able to validate that this problem does not occur when subprograms
+> are not in use, or when the direct pointer accesses are replaced with
+> bpf_probe_read calls.  I further validated that this did not break the
+> extable handling in existing bpf programs.  The same program caused no
+> failures when subprograms were removed, but the exception was still
+> injected.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function progra=
+ms")
+> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> ---
+>  kernel/bpf/core.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 7421487422d4..0e12238e4340 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -736,15 +736,33 @@ const struct exception_table_entry *search_bpf_exta=
+bles(unsigned long addr)
+>  {
+>         const struct exception_table_entry *e =3D NULL;
+>         struct bpf_prog *prog;
+> +       struct bpf_prog_aux *aux;
+> +       int i;
+>
+>         rcu_read_lock();
+>         prog =3D bpf_prog_ksym_find(addr);
+>         if (!prog)
+>                 goto out;
+> -       if (!prog->aux->num_exentries)
+> +       aux =3D prog->aux;
+> +       if (!aux->num_exentries)
+>                 goto out;
+>
+> -       e =3D search_extable(prog->aux->extable, prog->aux->num_exentries=
+, addr);
+> +       /* prog->aux->extable can be NULL if subprograms are in use. In t=
+hat
+> +        * case, check each sub-function's aux->extables to see if it has=
+ a
+> +        * matching entry.
+> +        */
+> +       if (aux->extable !=3D NULL) {
+> +               e =3D search_extable(prog->aux->extable,
+> +                   prog->aux->num_exentries, addr);
+> +       } else {
+> +               for (i =3D 0; (i < aux->func_cnt) && (e =3D=3D NULL); i++=
+) {
 
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  902  
-4f6ac0962f61cc Matthew Wilcox (Oracle  2023-06-05  903) static int do_writepage(struct folio *folio, size_t len)
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  904  {
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14 @905  	int err = 0, i, blen;
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  906  	unsigned int block;
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  907  	void *addr;
-4f6ac0962f61cc Matthew Wilcox (Oracle  2023-06-05  908) 	size_t offset = 0;
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  909  	union ubifs_key key;
-4f6ac0962f61cc Matthew Wilcox (Oracle  2023-06-05  910) 	struct inode *inode = folio->mapping->host;
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  911  	struct ubifs_info *c = inode->i_sb->s_fs_info;
-1e51764a3c2ac0 Artem Bityutskiy        2008-07-14  912  
+() are redundant.
+!e is preferred over e =3D=3D NULL
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +                       if (!aux->func[i]->aux->num_exentries ||
+> +                           aux->func[i]->aux->extable =3D=3D NULL)
+> +                               continue;
+> +                       e =3D search_extable(aux->func[i]->aux->extable,
+> +                           aux->func[i]->aux->num_exentries, addr);
+> +               }
+> +       }
+
+something odd here.
+We do bpf_prog_kallsyms_add(func[i]); for each subprog.
+So bpf_prog_ksym_find() in search_bpf_extables()
+should be finding ksym and extable of the subprog
+and not the main prog.
+The bug is probably elsewhere.
+
+Once you respin with a selftest we can help debugging.
