@@ -1,145 +1,125 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C08BE59;
-	Mon,  5 Jun 2023 21:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F24C1C752;
+	Mon,  5 Jun 2023 22:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686001590; x=1717537590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VFMj0R5xssTi49SMy256biw2lktzNYXCNpkrvHTLzHw=;
-  b=DiYRCJqon+3d9uUquepNoHoNL81RS08PJXDefrgrRhIDoKiSdAmuTi4h
-   aj8gQgdS0P2FStnPCCyuXDxHa+b1REagL2WAaXbcheTWXNcCXedJN+B3Q
-   wjmQoc4qogZ/l8zKoviwXpMs7yaplbarWVjceT5bcISNG9evz9OYgOnZ0
-   8Y0xAbVmnXzq1hbHOunPYSZZR41ZfKA61IajMNLCvOUpIKkYaSnzNHaRa
-   I6K/6nk6Ys0OI6mm2Y81IVoNS0imAH4Jfi7M63fL6FabUrDQ+LOfEB59O
-   hjqNvqE5ciegpXKt1obnqp3GNwaJjKYgAqf73kJb880fjzk/q11XGLBBV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341128476"
+  t=1686004051; x=1717540051;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=60tS7ufVPG6OAsS41ttnhSA8BcqMg9ReN4URLShoTmM=;
+  b=gx0Ked2haRE1CcvgQHavv7osRWj+IPOpDA5rjlkR8yW7RQBqfEeHMgX/
+   8oOx1HxddAa7vABVva0C4llvqTkhqC3WSNR6yMuHxvbhL8uWTao3EbAvW
+   gc8wMnFEY+/y+YHRUP1DmxVOK3FaFpvnrjL7F0tmEX2jBmr0bpS2PXKwj
+   zKbtMzhbVxVeXTn2KBval5vlkpqqznRcHYjTdgcSj8nfzv+dm0FxAHVKb
+   Bu7p+403XI/QYGcGW7BFuXH6kGRXFJT9sZRWw5DY8eFAil6uvfaGmKpGg
+   YxkLCcNC9PQHh84l6f8BROZDwvyVGLuJtp9YNnT+gJriIl+oh8Zr3kl/A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355351807"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="341128476"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 14:46:29 -0700
+   d="scan'208";a="355351807"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:27:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821327834"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="659282696"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="821327834"
+   d="scan'208";a="659282696"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2023 14:46:25 -0700
+  by orsmga003.jf.intel.com with ESMTP; 05 Jun 2023 15:27:28 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q6I1x-0004T9-0j;
-	Mon, 05 Jun 2023 21:46:25 +0000
-Date: Tue, 6 Jun 2023 05:45:33 +0800
+	id 1q6Iff-0004UB-2H;
+	Mon, 05 Jun 2023 22:27:27 +0000
+Date: Tue, 6 Jun 2023 06:27:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, daniel@ffwll.ch,
-	javierm@redhat.com, sam@ravnborg.org, deller@gmx.de,
-	geert+renesas@glider.be, lee@kernel.org, daniel.thompson@linaro.org,
-	jingoohan1@gmail.com
+To: John Ogness <john.ogness@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fbdev@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-staging@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>, linux-omap@vger.kernel.org
-Subject: Re: [PATCH 30/30] fbdev: Make support for userspace interfaces
- configurable
-Message-ID: <202306060547.528pADrX-lkp@intel.com>
-References: <20230605144812.15241-31-tzimmermann@suse.de>
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-6.4.y-rt-rebase 46/79]
+ kernel/printk/printk.c:3361:6: warning: no previous prototype for function
+ 'console_bkl_kthread_create'
+Message-ID: <202306060658.sq3c4uqM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230605144812.15241-31-tzimmermann@suse.de>
 
-Hi Thomas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20230605]
-[cannot apply to drm-misc/drm-misc-next lee-backlight/for-backlight-next staging/staging-testing staging/staging-next staging/staging-linus linus/master lee-backlight/for-backlight-fixes v6.4-rc5 v6.4-rc4 v6.4-rc3 v6.4-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/backlight-bd6107-Compare-against-struct-fb_info-device/20230605-225002
-base:   next-20230605
-patch link:    https://lore.kernel.org/r/20230605144812.15241-31-tzimmermann%40suse.de
-patch subject: [PATCH 30/30] fbdev: Make support for userspace interfaces configurable
-config: powerpc-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060547.528pADrX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.4.y-rt-rebase
+head:   0576a708b07124cac8205893c9ed734ee41f64a9
+commit: 094c02761170c2bb60bfd8203fde8c553e30871c [46/79] printk: Add threaded printing support for BKL consoles.
+config: riscv-randconfig-r002-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060658.sq3c4uqM-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/d309f36af8a1ee56ef56e54287ca6d2bf7d239de
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Zimmermann/backlight-bd6107-Compare-against-struct-fb_info-device/20230605-225002
-        git checkout d309f36af8a1ee56ef56e54287ca6d2bf7d239de
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=094c02761170c2bb60bfd8203fde8c553e30871c
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-6.4.y-rt-rebase
+        git checkout 094c02761170c2bb60bfd8203fde8c553e30871c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/video/fbdev/mb862xx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/printk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060547.528pADrX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060658.sq3c4uqM-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/video/fbdev/mb862xx/mb862xxfbdrv.c:793:15: error: no member named 'dev' in 'struct fb_info'
-           dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
-                   ~~~  ^
-   include/linux/dev_printk.h:163:26: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                          ^~~
-   include/linux/dev_printk.h:129:22: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                      ^~~
-   1 error generated.
+>> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
+   void console_bkl_kthread_create(void)
+        ^
+   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void console_bkl_kthread_create(void)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +793 drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
+vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
 
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  785  
-3a2ab02ddfacb0 drivers/video/fbdev/mb862xx/mb862xxfbdrv.c Uwe Kleine-König   2023-03-19  786  static void of_platform_mb862xx_remove(struct platform_device *ofdev)
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  787  {
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  788  	struct fb_info *fbi = dev_get_drvdata(&ofdev->dev);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  789  	struct mb862xxfb_par *par = fbi->par;
-28f65c11f2ffb3 drivers/video/mb862xx/mb862xxfbdrv.c       Joe Perches        2011-06-09  790  	resource_size_t res_size = resource_size(par->res);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  791  	unsigned long reg;
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  792  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06 @793  	dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  794  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  795  	/* display off */
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  796  	reg = inreg(disp, GC_DCM1);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  797  	reg &= ~(GC_DCM01_DEN | GC_DCM01_L0E);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  798  	outreg(disp, GC_DCM1, reg);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  799  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  800  	/* disable interrupts */
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  801  	outreg(host, GC_IMASK, 0);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  802  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  803  	free_irq(par->irq, (void *)par);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  804  	irq_dispose_mapping(par->irq);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  805  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  806  	device_remove_file(&ofdev->dev, &dev_attr_dispregs);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  807  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  808  	unregister_framebuffer(fbi);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  809  	fb_dealloc_cmap(&fbi->cmap);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  810  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  811  	iounmap(par->mmio_base);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  812  	iounmap(par->fb_base);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  813  
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  814  	release_mem_region(par->res->start, res_size);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  815  	framebuffer_release(fbi);
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  816  }
-17a1217e12d8c8 drivers/video/mb862xx/mb862xxfb.c          Anatolij Gustschin 2008-11-06  817  
+  3360	
+> 3361	void console_bkl_kthread_create(void)
+  3362	{
+  3363		struct task_struct *kt;
+  3364		struct console *c;
+  3365	
+  3366		lockdep_assert_held(&console_mutex);
+  3367	
+  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  3369			return;
+  3370	
+  3371		if (!printk_threads_enabled || console_bkl_kthread)
+  3372			return;
+  3373	
+  3374		for_each_console(c) {
+  3375			if (c->flags & CON_BOOT)
+  3376				return;
+  3377		}
+  3378	
+  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
+  3380		if (IS_ERR(kt)) {
+  3381			pr_err("unable to start BKL printing thread\n");
+  3382			return;
+  3383		}
+  3384	
+  3385		console_bkl_kthread = kt;
+  3386	
+  3387		/*
+  3388		 * It is important that console printing threads are scheduled
+  3389		 * shortly after a printk call and with generous runtime budgets.
+  3390		 */
+  3391		sched_set_normal(console_bkl_kthread, -20);
+  3392	}
+  3393	
 
 -- 
 0-DAY CI Kernel Test Service
