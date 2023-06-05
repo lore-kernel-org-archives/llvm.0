@@ -1,167 +1,296 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD59F194;
-	Mon,  5 Jun 2023 07:10:09 +0000 (UTC)
-Received: from localhost (unknown [IPv6:2a0c:5a83:9203:ad00:105c:4a2e:21cc:9510])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: rcn)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id B720066056AA;
-	Mon,  5 Jun 2023 08:10:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1685949001;
-	bh=ttQxumYxsI9wbZv28D/0f3/5CjJMvIirydWesENCOKM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F5uwEPdhDs8khscGqYuK+hxleRSjKtruKjMzRuvtFXZON0RYuuNPWnYpZenuB3ohn
-	 7DGlGAmjoWdEVh+OKWAQ+2ZLxyySKYnPhB6MPsU2hKtLYlxs3LQqgJOmrg7bYYbOlm
-	 R1x7IerBE8I57Ewe+nGePwcH3DooLWoUSlE5EI6bROMCt4X6Iq7HLFsT7dXFys+gnK
-	 lwlX037XplxXsHzSu2FmqBrPMG9BZ+vmKtQ2W5Yq+xomx0V9ruIE8DohcofWY7C2ei
-	 PLOU36DNewYb8pxs8Q0H5r0l887R7y8+xb0cQ0eNrSQRYEI5OWDS6aJGDbAzNPMJNg
-	 pK31f6HLB46+A==
-Date: Mon, 5 Jun 2023 09:09:59 +0200
-From: Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
-	Will Deacon <will@kernel.org>, Lu Baolu <baolu.lu@linux.intel.com>,
-	Heiko Stuebner <heiko@sntech.de>, Kevin Tian <kevin.tian@intel.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: Re: [PATCH v5 10/17] iommu: Do iommu_group_create_direct_mappings()
- before attach
-Message-ID: <20230605070959.moupivvi7wr4nibu@rcn-XPS-13-9305>
-References: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
- <10-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB2F3D84;
+	Mon,  5 Jun 2023 08:43:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685954638; x=1717490638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZKd1hojcEofK8WgGk5N5pRnS4q4s9sbyMNImCRd9UFk=;
+  b=laU5qhTZn9X/761+Wz1PRl2zg9C5sTkhHaLGgRDgM96MI2/gpMdED2pt
+   jRCFBsS+F8Ujqh7zqU225XhgcQOjvP7KIluGFtGrZ5FyjIYFv8DSiE0UK
+   IJXkyt9O8b9JqOeBURRTwXocMKCuuHBY5wc7LRwL7NdQA83MtETEdGwSc
+   m9hUjD/FG7TW37hkgU9FHaxlGVI/AgvdC11UuH/L2HB5r//X+0ydUvkMB
+   A3F96eGNNQAXRRghRvZu9DuHR5ME4ipIpM75H6+kEQDFXe2onKyTRaAch
+   Y5LYA0n48nc1Zrfc1ZS7Q4PxO253u75E9U1CNtYGNOHPp7nmQ4Q95mPHA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="356327449"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="356327449"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 01:43:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="798340337"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="798340337"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jun 2023 01:43:54 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q65of-00042B-25;
+	Mon, 05 Jun 2023 08:43:53 +0000
+Date: Mon, 5 Jun 2023 16:43:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenbin Mei <wenbin.mei@mediatek.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chaotian Jing <chaotian.jing@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ritesh Harjani <riteshh@codeaurora.org>,
+	Asutosh Das <asutoshd@codeaurora.org>, linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Wenbin Mei <wenbin.mei@mediatek.com>
+Subject: Re: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
+Message-ID: <202306051634.orHLaQ9t-lkp@intel.com>
+References: <20230605060107.22044-1-wenbin.mei@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
+In-Reply-To: <20230605060107.22044-1-wenbin.mei@mediatek.com>
 
-Hi Jason,
+Hi Wenbin,
 
-On jue 11-05-2023 01:42:08, Jason Gunthorpe wrote:
-> The iommu_probe_device() path calls iommu_create_device_direct_mappings()
-> after attaching the device.
-> 
-> IOMMU_RESV_DIRECT maps need to be continually in place, so if a hotplugged
-> device has new ranges the should have been mapped into the default domain
-> before it is attached.
+kernel test robot noticed the following build errors:
 
-This patch seems to introduce a regression in `hana` Chromebooks
-(MT8173), this was detected by the KernelCI bot [1].
+[auto build test ERROR on linus/master]
+[also build test ERROR on ulf-hansson-mmc-mirror/next v6.4-rc5 next-20230605]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This is an excerpt of the kernel log when the failure happens:
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenbin-Mei/mmc-mtk-sd-reduce-CIT-for-better-performance/20230605-140238
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230605060107.22044-1-wenbin.mei%40mediatek.com
+patch subject: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
+config: x86_64-randconfig-a004-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051634.orHLaQ9t-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/225e46f420d48f7ad73253636a0553bd5f986435
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Wenbin-Mei/mmc-mtk-sd-reduce-CIT-for-better-performance/20230605-140238
+        git checkout 225e46f420d48f7ad73253636a0553bd5f986435
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/host/
 
-============================================================
-[   16.051893] mediatek-disp-rdma 14010000.rdma: Adding to iommu group 0
-[   16.092921] Bluetooth: vendor=0x2df, device=0x912e, class=255, fn=2
-[   16.094140] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000018
-[   16.098392] usbcore: registered new interface driver uvcvideo
-[   16.120447] mwifiex_sdio mmc2:0001:1: Direct firmware load for mrvl/sd8897_uapsta.bin failed with error -2
-[   16.126182] Mem abort info:
-[   16.126185]   ESR = 0x0000000096000006
-[   16.126187]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   16.126189]   SET = 0, FnV = 0
-[   16.126191]   EA = 0, S1PTW = 0
-[   16.126193]   FSC = 0x06: level 2 translation fault
-[   16.126196] Data abort info:
-[   16.126197]   ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000
-[   16.126208]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[   16.126210]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[   16.126213] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000107b6f000
-[   16.126238] [0000000000000018] pgd=0800000107bac003, p4d=0800000107bac003, pud=0800000107bad003, pmd=0000000000000000
-[   16.126248] Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-[   16.126251] Modules linked in: mwifiex_sdio(+) uvcvideo mtk_mdp uvc videobuf2_vmalloc v4l2_mem2mem videobuf2_dma_contig mwifiex videobuf2_memops btmrvl_sdio(+) mediatek_drm(+) videobuf2_v4l2 btmrvl r8152(+) mtk_mutex hid_multitouch mtk_mmsys cfg80211 videodev videobuf2_common bluetooth mc ecdh_generic ecc rfkill sbs_battery elan_i2c elants_i2c cros_ec_sensors cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf cros_ec_chardev auxadc_thermal mediatek_drm_hdmi
-[   16.136728] mwifiex_sdio mmc2:0001:1: Failed to get firmware mrvl/sd8897_uapsta.bin
-[   16.141848]  mt6577_auxadc mtk_vpu phy_mtk_hdmi_drv phy_mtk_mipi_dsi_drv display_connector
-[   16.141859] CPU: 2 PID: 126 Comm: udevd Not tainted 6.4.0-rc4-next-20230530-dirty #1
-[   16.141863] Hardware name: Google Hana (DT)
-[   16.141865] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   16.141869] pc : mtk_iommu_flush_iotlb_all+0x18/0x70
-[   16.141881] lr : iommu_create_device_direct_mappings.part.0+0x13c/0x21c
-[   16.141886] sp : ffff80000b4e3640
-[   16.141888] x29: ffff80000b4e3640 x28: ffff80000b4e36d8 x27: 0000000000001000
-[   16.141894] x26: ffff0000c966e268 x25: ffff80000aa0d874 x24: 0000000000000000
-[   16.141900] x23: ffff0000c08c5c10 x22: ffff80000b4e36d8
-[   16.155999] mwifiex_sdio mmc2:0001:1: info: _mwifiex_fw_dpc: unregister device
-[   16.157791]  x21: 0000000000000000
-[   16.157795] x20: ffff0000c966e148 x19: ffff0000c966e268 x18: 00000000fffffffe
-[   16.157800] x17: 5f6272616c5f696d x16: 735f6b746d207370 x15: 0000000000000020
-[   16.157806] x14: 00000000000002f3 x13: 0000000000000001 x12: 0000000000000000
-[   16.157812] x11: 0000000000000000 x10: ffff0000c08c5c10
-[   16.168820] r8152 2-1.1:1.0: Direct firmware load for rtl_nic/rtl8153b-2.fw failed with error -2
-[   16.170416]  x9 : 0000000000000000
-[   16.173730] r8152 2-1.1:1.0: unable to load firmware patch rtl_nic/rtl8153b-2.fw (-2)
-[   16.177107] x8 : ffff0000c084f400 x7 : ffff80000957b028 x6 : ffff0000c966cc00
-[   16.177113] x5 : 0000000000000040 x4 : ffff80000957b4a8 x3 : ffff80000957b4a8
-[   16.228229] btmrvl_sdio mmc2:0001:2: Direct firmware load for mrvl/sd8897_uapsta.bin failed with error -2
-[   16.267586] 
-[   16.267588] x2 : 0000000000000000 x1 : ffff800008883548 x0 : 0000000000000000
-[   16.267594] Call trace:
-[   16.267597]  mtk_iommu_flush_iotlb_all+0x18/0x70
-[   16.267603]  iommu_create_device_direct_mappings.part.0+0x13c/0x21c
-[   16.267608]  iommu_setup_default_domain+0x27c/0x430
-[   16.267611]  iommu_probe_device+0x7c/0x144
-[   16.267615]  of_iommu_configure+0x114/0x200
-[   16.267619]  of_dma_configure_id+0x1e0/0x3b4
-[   16.275567] Bluetooth: request_firmware(firmware) failed, error code = -2
-[   16.275604] r8152 2-1.1:1.0 eth0: v1.12.13
-[   16.276104] usbcore: registered new interface driver r8152
-[   16.284034]  platform_dma_configure+0x30/0xc0
-[   16.284039]  really_probe+0x70/0x2b4
-[   16.284044]  __driver_probe_device+0x78/0x12c
-[   16.284049]  driver_probe_device+0xd8/0x15c
-[   16.284054]  __driver_attach+0x94/0x19c
-[   16.292076] Bluetooth: Failed to download firmware!
-[   16.296474]  bus_for_each_dev+0x74/0xd4
-[   16.296479]  driver_attach+0x24/0x30
-[   16.296483]  bus_add_driver+0xe4/0x1e8
-[   16.296488]  driver_register+0x60/0x128
-[   16.296490]  __platform_register_drivers+0x64/0xe8
-[   16.296494]  mtk_drm_init+0x24/0x1000 [mediatek_drm]
-[   16.303720] Bluetooth: Downloading firmware failed!
-[   16.308914]  do_one_initcall+0x6c/0x1b0
-[   16.308919]  do_init_module+0x58/0x1e4
-[   16.308924]  load_module+0x18f4/0x1a98
-[   16.552552]  __do_sys_finit_module+0xb8/0x10c
-[   16.557162]  __arm64_sys_finit_module+0x20/0x2c
-[   16.561945]  invoke_syscall+0x48/0x114
-[   16.565947]  el0_svc_common.constprop.0+0x44/0xec
-[   16.570902]  do_el0_svc+0x38/0xa4
-[   16.574469]  el0_svc+0x2c/0x84
-[   16.577777]  el0t_64_sync_handler+0xb8/0xbc
-[   16.582211]  el0t_64_sync+0x190/0x194
-[   16.586126] Code: 910003fd a90153f3 f90013f5 f85f8000 (f9400c15) 
-[   16.592470] ---[ end trace 0000000000000000 ]---
-============================================================
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306051634.orHLaQ9t-lkp@intel.com/
 
-I reproduced the bug running the same test with a kernel containing the
-patch: https://lava.collabora.dev/scheduler/job/10563738
+All errors (new ones prefixed by >>):
 
-and I checked that reverting the patch fixes the problem:
-https://lava.collabora.dev/scheduler/job/10564507
+>> drivers/mmc/host/mtk-sd.c:2489:4: error: expected expression
+           } else {
+             ^
+>> drivers/mmc/host/mtk-sd.c:2495:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2513:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2539:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2549:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/mmc/host/mtk-sd.c:2577:20: error: use of undeclared identifier 'msdc_cqe_enable'
+           .enable         = msdc_cqe_enable,
+                             ^
+>> drivers/mmc/host/mtk-sd.c:2578:20: error: use of undeclared identifier 'msdc_cqe_disable'
+           .disable        = msdc_cqe_disable,
+                             ^
+>> drivers/mmc/host/mtk-sd.c:2579:16: error: use of undeclared identifier 'msdc_cqe_pre_enable'; did you mean 'msdc_cqe_cit_cal'?
+           .pre_enable = msdc_cqe_pre_enable,
+                         ^~~~~~~~~~~~~~~~~~~
+                         msdc_cqe_cit_cal
+   drivers/mmc/host/mtk-sd.c:2454:13: note: 'msdc_cqe_cit_cal' declared here
+   static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
+               ^
+>> drivers/mmc/host/mtk-sd.c:2580:18: error: use of undeclared identifier 'msdc_cqe_post_disable'
+           .post_disable = msdc_cqe_post_disable,
+                           ^
+   drivers/mmc/host/mtk-sd.c:2585:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2616:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2668:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2892:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2920:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2947:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2978:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2997:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:3016:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:3041:1: error: function definition is not allowed here
+   {
+   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
-In order to run these tests I used kci_build [2] to build the kernels,
-dtbs and modules, and ran the same LAVA jobs definitions than the
-original test run using the generated kernels.
 
-This doesn't seem to be affecting other targets supported by KernelCI.
+vim +2489 drivers/mmc/host/mtk-sd.c
 
-[1] https://groups.io/g/kernelci-results/message/42976
-[2] https://github.com/kernelci/kernelci-core/blob/main/doc/kci_build.md
+  2453	
+  2454	static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
+  2455	{
+  2456		struct mmc_host *mmc = mmc_from_priv(host);
+  2457		struct cqhci_host *cq_host = mmc->cqe_private;
+  2458		u8 itcfmul;
+  2459		u32 hclk_freq;
+  2460		u64 value;
+  2461	
+  2462		/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+  2463		 * frequency to get the actual time for CIT.
+  2464		 */
+  2465		if (host->h_clk) {
+  2466			hclk_freq = clk_get_rate(host->h_clk);
+  2467			itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
+  2468			switch (itcfmul) {
+  2469			case 0x0:
+  2470				do_div(hclk_freq, 1000);
+  2471				break;
+  2472			case 0x1:
+  2473				do_div(hclk_freq, 100);
+  2474				break;
+  2475			case 0x2:
+  2476				do_div(hclk_freq, 10);
+  2477				break;
+  2478			case 0x3:
+  2479				break;
+  2480			case 0x4:
+  2481				hclk_freq = hclk_freq * 10;
+  2482				break;
+  2483			default:
+  2484				host->cq_ssc1_time = 0x40;
+  2485				return;
+  2486			value = hclk_freq * timer_ns;
+  2487			do_div(value, 1000000000ULL);
+  2488			host->cq_ssc1_time = value;
+> 2489		} else {
+  2490			host->cq_ssc1_time = 0x40;
+  2491		}
+  2492	}
+  2493	
+  2494	static void msdc_cqe_enable(struct mmc_host *mmc)
+> 2495	{
+  2496		struct msdc_host *host = mmc_priv(mmc);
+  2497		struct cqhci_host *cq_host = mmc->cqe_private;
+  2498	
+  2499		/* enable cmdq irq */
+  2500		writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+  2501		/* enable busy check */
+  2502		sdr_set_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
+  2503		/* default write data / busy timeout 20s */
+  2504		msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+  2505		/* default read data timeout 1s */
+  2506		msdc_set_timeout(host, 1000000000ULL, 0);
+  2507	
+  2508		/* Set the send status command idle timer */
+  2509		cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+  2510	}
+  2511	
+  2512	static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+  2513	{
+  2514		struct msdc_host *host = mmc_priv(mmc);
+  2515		unsigned int val = 0;
+  2516	
+  2517		/* disable cmdq irq */
+  2518		sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INT_CMDQ);
+  2519		/* disable busy check */
+  2520		sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
+  2521	
+  2522		val = readl(host->base + MSDC_INT);
+  2523		writel(val, host->base + MSDC_INT);
+  2524	
+  2525		if (recovery) {
+  2526			sdr_set_field(host->base + MSDC_DMA_CTRL,
+  2527				      MSDC_DMA_CTRL_STOP, 1);
+  2528			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
+  2529				!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
+  2530				return;
+  2531			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+  2532				!(val & MSDC_DMA_CFG_STS), 1, 3000)))
+  2533				return;
+  2534			msdc_reset_hw(host);
+  2535		}
+  2536	}
+  2537	
+  2538	static void msdc_cqe_pre_enable(struct mmc_host *mmc)
+  2539	{
+  2540		struct cqhci_host *cq_host = mmc->cqe_private;
+  2541		u32 reg;
+  2542	
+  2543		reg = cqhci_readl(cq_host, CQHCI_CFG);
+  2544		reg |= CQHCI_ENABLE;
+  2545		cqhci_writel(cq_host, reg, CQHCI_CFG);
+  2546	}
+  2547	
+  2548	static void msdc_cqe_post_disable(struct mmc_host *mmc)
+  2549	{
+  2550		struct cqhci_host *cq_host = mmc->cqe_private;
+  2551		u32 reg;
+  2552	
+  2553		reg = cqhci_readl(cq_host, CQHCI_CFG);
+  2554		reg &= ~CQHCI_ENABLE;
+  2555		cqhci_writel(cq_host, reg, CQHCI_CFG);
+  2556	}
+  2557	
+  2558	static const struct mmc_host_ops mt_msdc_ops = {
+  2559		.post_req = msdc_post_req,
+  2560		.pre_req = msdc_pre_req,
+  2561		.request = msdc_ops_request,
+  2562		.set_ios = msdc_ops_set_ios,
+  2563		.get_ro = mmc_gpio_get_ro,
+  2564		.get_cd = msdc_get_cd,
+  2565		.hs400_enhanced_strobe = msdc_hs400_enhanced_strobe,
+  2566		.enable_sdio_irq = msdc_enable_sdio_irq,
+  2567		.ack_sdio_irq = msdc_ack_sdio_irq,
+  2568		.start_signal_voltage_switch = msdc_ops_switch_volt,
+  2569		.card_busy = msdc_card_busy,
+  2570		.execute_tuning = msdc_execute_tuning,
+  2571		.prepare_hs400_tuning = msdc_prepare_hs400_tuning,
+  2572		.execute_hs400_tuning = msdc_execute_hs400_tuning,
+  2573		.card_hw_reset = msdc_hw_reset,
+  2574	};
+  2575	
+  2576	static const struct cqhci_host_ops msdc_cmdq_ops = {
+> 2577		.enable         = msdc_cqe_enable,
+> 2578		.disable        = msdc_cqe_disable,
+> 2579		.pre_enable = msdc_cqe_pre_enable,
+> 2580		.post_disable = msdc_cqe_post_disable,
+  2581	};
+  2582	
 
-#regzbot introduced 152431e4fe7f
-#regzbot title iommu: NULL pointer dereference in Hana Chromebook
-
-Cheers,
-Ricardo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
