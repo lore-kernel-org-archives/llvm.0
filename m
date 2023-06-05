@@ -1,296 +1,105 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB2F3D84;
-	Mon,  5 Jun 2023 08:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685954638; x=1717490638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZKd1hojcEofK8WgGk5N5pRnS4q4s9sbyMNImCRd9UFk=;
-  b=laU5qhTZn9X/761+Wz1PRl2zg9C5sTkhHaLGgRDgM96MI2/gpMdED2pt
-   jRCFBsS+F8Ujqh7zqU225XhgcQOjvP7KIluGFtGrZ5FyjIYFv8DSiE0UK
-   IJXkyt9O8b9JqOeBURRTwXocMKCuuHBY5wc7LRwL7NdQA83MtETEdGwSc
-   m9hUjD/FG7TW37hkgU9FHaxlGVI/AgvdC11UuH/L2HB5r//X+0ydUvkMB
-   A3F96eGNNQAXRRghRvZu9DuHR5ME4ipIpM75H6+kEQDFXe2onKyTRaAch
-   Y5LYA0n48nc1Zrfc1ZS7Q4PxO253u75E9U1CNtYGNOHPp7nmQ4Q95mPHA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="356327449"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="356327449"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 01:43:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="798340337"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="798340337"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Jun 2023 01:43:54 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q65of-00042B-25;
-	Mon, 05 Jun 2023 08:43:53 +0000
-Date: Mon, 5 Jun 2023 16:43:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wenbin Mei <wenbin.mei@mediatek.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chaotian Jing <chaotian.jing@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ritesh Harjani <riteshh@codeaurora.org>,
-	Asutosh Das <asutoshd@codeaurora.org>, linux-mmc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Wenbin Mei <wenbin.mei@mediatek.com>
-Subject: Re: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
-Message-ID: <202306051634.orHLaQ9t-lkp@intel.com>
-References: <20230605060107.22044-1-wenbin.mei@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D08C3D84
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 08:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B90C433EF;
+	Mon,  5 Jun 2023 08:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685954676;
+	bh=MMkMH+tpsZ3PyspKggeYX/FCSlvfVaRWIsEuKzoAkE0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZJVnwLy3axTBEVeWVjc5fOAJ1d57eqjtisr0rdsZicXK1WqndHzK/+04Fqw46XxMG
+	 SQN4cW7nxQ01v6cjxkSjq6t4J5ImWPXirJIrcSofQHLkgGMuHJhE1eus5/m2E5rfkT
+	 Qmu7OnHFh6yx/JytJde04mm6MhT+8uAfCZTpIdREtycKCxjvrafwrif0HvuHYhvqno
+	 Y1aOamQXvtJoWBOaoxVbw09gbi4Ldmnyfz73PdS79YsQlCGOI0lF2nUHm2OSATtpdB
+	 KWyHTBR/S9LP58HVwcjPNJUD0p4Ka2MT8K51Pf2WCMsIzzaoxT5mCk1JEUJLdOIJqT
+	 gN79yfr6coi9w==
+Date: Mon, 5 Jun 2023 10:44:33 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: mchp-pci1xxxx: Avoid cast to incompatible function
+ type
+Message-ID: <ZH2gcekxad9JPrjJ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+	llvm@lists.linux.dev
+References: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EdPn873a/5CanpDf"
+Content-Disposition: inline
+In-Reply-To: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
+
+
+--EdPn873a/5CanpDf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230605060107.22044-1-wenbin.mei@mediatek.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wenbin,
+On Wed, May 10, 2023 at 02:32:17PM +0200, Simon Horman wrote:
+> Rather than casting pci1xxxx_i2c_shutdown to an incompatible function typ=
+e,
+> update the type to match that expected by __devm_add_action.
+>=20
+> Reported by clang-16 with W-1:
+>=20
+>  .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1x=
+xxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-=
+Werror,-Wcast-function-type-strict]
+>          ret =3D devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shut=
+down, i2c);
+>                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~
+>  ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_act=
+ion'
+>          __devm_add_action(release, action, data, #action)
+>                                    ^~~~~~
+>=20
+> No functional change intended.
+> Compile tested only.
+>=20
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on ulf-hansson-mmc-mirror/next v6.4-rc5 next-20230605]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenbin-Mei/mmc-mtk-sd-reduce-CIT-for-better-performance/20230605-140238
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230605060107.22044-1-wenbin.mei%40mediatek.com
-patch subject: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
-config: x86_64-randconfig-a004-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051634.orHLaQ9t-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/225e46f420d48f7ad73253636a0553bd5f986435
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wenbin-Mei/mmc-mtk-sd-reduce-CIT-for-better-performance/20230605-140238
-        git checkout 225e46f420d48f7ad73253636a0553bd5f986435
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/host/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306051634.orHLaQ9t-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/mmc/host/mtk-sd.c:2489:4: error: expected expression
-           } else {
-             ^
->> drivers/mmc/host/mtk-sd.c:2495:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2513:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2539:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2549:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/mmc/host/mtk-sd.c:2577:20: error: use of undeclared identifier 'msdc_cqe_enable'
-           .enable         = msdc_cqe_enable,
-                             ^
->> drivers/mmc/host/mtk-sd.c:2578:20: error: use of undeclared identifier 'msdc_cqe_disable'
-           .disable        = msdc_cqe_disable,
-                             ^
->> drivers/mmc/host/mtk-sd.c:2579:16: error: use of undeclared identifier 'msdc_cqe_pre_enable'; did you mean 'msdc_cqe_cit_cal'?
-           .pre_enable = msdc_cqe_pre_enable,
-                         ^~~~~~~~~~~~~~~~~~~
-                         msdc_cqe_cit_cal
-   drivers/mmc/host/mtk-sd.c:2454:13: note: 'msdc_cqe_cit_cal' declared here
-   static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
-               ^
->> drivers/mmc/host/mtk-sd.c:2580:18: error: use of undeclared identifier 'msdc_cqe_post_disable'
-           .post_disable = msdc_cqe_post_disable,
-                           ^
-   drivers/mmc/host/mtk-sd.c:2585:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2616:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2668:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2892:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2920:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2947:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2978:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:2997:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:3016:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/mmc/host/mtk-sd.c:3041:1: error: function definition is not allowed here
-   {
-   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+Applied to for-current, thanks!
 
 
-vim +2489 drivers/mmc/host/mtk-sd.c
+--EdPn873a/5CanpDf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  2453	
-  2454	static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
-  2455	{
-  2456		struct mmc_host *mmc = mmc_from_priv(host);
-  2457		struct cqhci_host *cq_host = mmc->cqe_private;
-  2458		u8 itcfmul;
-  2459		u32 hclk_freq;
-  2460		u64 value;
-  2461	
-  2462		/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
-  2463		 * frequency to get the actual time for CIT.
-  2464		 */
-  2465		if (host->h_clk) {
-  2466			hclk_freq = clk_get_rate(host->h_clk);
-  2467			itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
-  2468			switch (itcfmul) {
-  2469			case 0x0:
-  2470				do_div(hclk_freq, 1000);
-  2471				break;
-  2472			case 0x1:
-  2473				do_div(hclk_freq, 100);
-  2474				break;
-  2475			case 0x2:
-  2476				do_div(hclk_freq, 10);
-  2477				break;
-  2478			case 0x3:
-  2479				break;
-  2480			case 0x4:
-  2481				hclk_freq = hclk_freq * 10;
-  2482				break;
-  2483			default:
-  2484				host->cq_ssc1_time = 0x40;
-  2485				return;
-  2486			value = hclk_freq * timer_ns;
-  2487			do_div(value, 1000000000ULL);
-  2488			host->cq_ssc1_time = value;
-> 2489		} else {
-  2490			host->cq_ssc1_time = 0x40;
-  2491		}
-  2492	}
-  2493	
-  2494	static void msdc_cqe_enable(struct mmc_host *mmc)
-> 2495	{
-  2496		struct msdc_host *host = mmc_priv(mmc);
-  2497		struct cqhci_host *cq_host = mmc->cqe_private;
-  2498	
-  2499		/* enable cmdq irq */
-  2500		writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
-  2501		/* enable busy check */
-  2502		sdr_set_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
-  2503		/* default write data / busy timeout 20s */
-  2504		msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
-  2505		/* default read data timeout 1s */
-  2506		msdc_set_timeout(host, 1000000000ULL, 0);
-  2507	
-  2508		/* Set the send status command idle timer */
-  2509		cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
-  2510	}
-  2511	
-  2512	static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
-  2513	{
-  2514		struct msdc_host *host = mmc_priv(mmc);
-  2515		unsigned int val = 0;
-  2516	
-  2517		/* disable cmdq irq */
-  2518		sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INT_CMDQ);
-  2519		/* disable busy check */
-  2520		sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
-  2521	
-  2522		val = readl(host->base + MSDC_INT);
-  2523		writel(val, host->base + MSDC_INT);
-  2524	
-  2525		if (recovery) {
-  2526			sdr_set_field(host->base + MSDC_DMA_CTRL,
-  2527				      MSDC_DMA_CTRL_STOP, 1);
-  2528			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
-  2529				!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
-  2530				return;
-  2531			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
-  2532				!(val & MSDC_DMA_CFG_STS), 1, 3000)))
-  2533				return;
-  2534			msdc_reset_hw(host);
-  2535		}
-  2536	}
-  2537	
-  2538	static void msdc_cqe_pre_enable(struct mmc_host *mmc)
-  2539	{
-  2540		struct cqhci_host *cq_host = mmc->cqe_private;
-  2541		u32 reg;
-  2542	
-  2543		reg = cqhci_readl(cq_host, CQHCI_CFG);
-  2544		reg |= CQHCI_ENABLE;
-  2545		cqhci_writel(cq_host, reg, CQHCI_CFG);
-  2546	}
-  2547	
-  2548	static void msdc_cqe_post_disable(struct mmc_host *mmc)
-  2549	{
-  2550		struct cqhci_host *cq_host = mmc->cqe_private;
-  2551		u32 reg;
-  2552	
-  2553		reg = cqhci_readl(cq_host, CQHCI_CFG);
-  2554		reg &= ~CQHCI_ENABLE;
-  2555		cqhci_writel(cq_host, reg, CQHCI_CFG);
-  2556	}
-  2557	
-  2558	static const struct mmc_host_ops mt_msdc_ops = {
-  2559		.post_req = msdc_post_req,
-  2560		.pre_req = msdc_pre_req,
-  2561		.request = msdc_ops_request,
-  2562		.set_ios = msdc_ops_set_ios,
-  2563		.get_ro = mmc_gpio_get_ro,
-  2564		.get_cd = msdc_get_cd,
-  2565		.hs400_enhanced_strobe = msdc_hs400_enhanced_strobe,
-  2566		.enable_sdio_irq = msdc_enable_sdio_irq,
-  2567		.ack_sdio_irq = msdc_ack_sdio_irq,
-  2568		.start_signal_voltage_switch = msdc_ops_switch_volt,
-  2569		.card_busy = msdc_card_busy,
-  2570		.execute_tuning = msdc_execute_tuning,
-  2571		.prepare_hs400_tuning = msdc_prepare_hs400_tuning,
-  2572		.execute_hs400_tuning = msdc_execute_hs400_tuning,
-  2573		.card_hw_reset = msdc_hw_reset,
-  2574	};
-  2575	
-  2576	static const struct cqhci_host_ops msdc_cmdq_ops = {
-> 2577		.enable         = msdc_cqe_enable,
-> 2578		.disable        = msdc_cqe_disable,
-> 2579		.pre_enable = msdc_cqe_pre_enable,
-> 2580		.post_disable = msdc_cqe_post_disable,
-  2581	};
-  2582	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9oHEACgkQFA3kzBSg
+KbaAyQ/+OcGmcDOvDD+tEiGwpTJ0aIlH8fRUmehZtJKptN8zyIEY6Qd38K+ijWvJ
+2BPHHVCBO8kzfrorqE6y5K0YOVLo9mNoBfeTlv4FwihFjuIAN2J/ytmgkgeQvAGO
+x6WQQFliQrop9nJ7j/K2RSKjBkePGfYufOlYE0NvlqeHlUruQGJ3mle7oxJvqZ2H
+FXk+qngY6eQa55CwO8l+Vb/osS9AlrlNg1FRA4rkTiDwjY9uwAsFYIwiJovUMb+L
+AUGCJy55iTCLRjH3a/qZ4PJXTmdaH1Mriz+/2ipiOIMxg9hTi0EJWE1gfQunbEq1
+58hyx6LShSHV6KsZ/dO8P4d7D/7qA04xCmmOnDARrG5G8q2tEcbahYTfQQ4as6x8
+yDd2jaFWEgfQYbyTTRYxZJYkE82dHEz73ylIMbEmXtal9hjLQmXH3K7ljQfV34Hq
+ukdMI0RELbSM9hllF+f9LVekTBasoNczShgMZFMYaDMt1DuWr9YoMvR7vAgCWxjG
+KInW8756qnBqdPjdgZnfIM4VEYg8qhMW0R8+LsPyGH5IFX0LKAuIVAsP/3M3+hiC
+PqAwl/xX2btMNNGJ9g7o0xXiLeEw/AI7Ba3YxUTJNtKuuw3qxapyKqZrJwgf1Rkm
+gsQo47W4sZGPnaft/s/ZLeJAg+I7YuYFMvVEwOOtokCN6h7udu8=
+=FCEv
+-----END PGP SIGNATURE-----
+
+--EdPn873a/5CanpDf--
