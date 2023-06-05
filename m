@@ -1,218 +1,156 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A550525E;
-	Mon,  5 Jun 2023 12:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CD3134BE;
+	Mon,  5 Jun 2023 13:47:23 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ULqD+5H88mfmbzVWsnl6jP7EAqFgDzhKZYZpbJnq30DSh0B7PBiONqRUmbWMw2Dc/svhp87lVP3QDUJSetQn8Y0sBmzHGPHOqQasqvy1sylfiXh6M/5mGA/8ZHPAEmNmZePHYeDa6t1rwnl8PqmoboUVKx2RzIxw9577GmGhhyu+ATRgsAHigxgWAKbPiZ05B7vfMMo4FzBfbsw0qovOvoMxIbxOFpOIU9cYb7Yksdjx5upDvDjT43NM4LnPbHntEuTPN432ZDAxxMOTBIFdCUNMNXc7KOW6aCztviIsbhU0YDDKYB5F0PeIo722Vd6EMDN5jxexCDTfzVKcMWqfbw==
+ b=SFUsLXkfZQ061pDNWVPEtnWXF4T67GfY5JU+tL6LHGGd0NhteDAG0aEzXnRAHh8zePRNw4f/mimDB+W5rGah7/mI0pvvqEYeMV6c/gHMBsLO3JP8BWwWaVborDI1Fm0klZqYfuvGKbY7lKDDNufQncJXWezmsTbPl1RzbuZsLhFyuIZh7ZXqzEjEAJMyBmocYe2XYFqyqsAqU02F/XpjgJi7FBtIxVWGXR0Vqlikn6JegZbc8jnf6idzFgiF35dduerv6dJZCzDIj7LbXwrGaCMVMMcpbVKyYPOnjA9HLX3S4+c2AP/98Og0Uwy7OI6DJQnUVIWBWvgMdhrr3dZJ9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i44w0V/2Z4feNn9RKUAavBWCxB5AlB/2FwoxXKqAUUo=;
- b=GT0y/CsUoB2nu64sCm0UJLZY8EJ6dZIDeNuogjDFhjPdG/exnsrSTYlzk3iVqLn64asMqvOd3/DDRTv+3skqDny5S6vxtkZORb2UdqANoIidQxA0eU27lHjzl0zRg/p1+FqgXlipnJxbN/QwQWqJDHO8LTksJWeeFYCp1922p7VKjSk0/HX9LHbw+fwQwoWCPicXdC7jlbvTiInhQs1KKYo1LkoyO65vPgb8pNmmJmuBybjgRALSGA0aPasUz1mL7Io9qphVGVb9yAW/PihHXkaBdt5u/gCEg5tKMdUvUXbqiUCnoaSbvGMhbETuCM01CzmrjBy2FtVycAXzhM07AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
+ bh=QxSyp8e7wYT6L91/rQMHv//Ck4GQsW5SdkRGsKDAP6E=;
+ b=N7/ClIO108tmGf4T6UOwzEOpQB+kOXitQpJfYD7TUYn2gsqW87j710I9bi7axVU7kWRCZ+1jkGnvzgT0u35BPUZGQJ+ELetgNf6LobnKgtCu95YOcEsBslKfalNtVA3BFqej8/mWuyyDYK42GQe5m0JkWDOvnEc8IQPfQLH9+ACPYKe2loFzSHLDxDPajjOY4pWOdsf5hZu726lAy+A1J6aHvhRixJa4QLYpOV8/C3IfB1X7qBqPFppRwbDGBQ4OkrnKmjJMv9qP7gTsbzwgc5n2j5VZP47L0NfxSC06s1iY/7kiJ1Oda+dYRWlThe/t6Dta9bXB7mlNi0xXfWnc6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i44w0V/2Z4feNn9RKUAavBWCxB5AlB/2FwoxXKqAUUo=;
- b=HyA8wW0jUgF89pV3aGl3GN2LEzilSV7bYPdWVUVLhn9R9myQCammIMmD5yWh4sbe2Xw7CLiS+84iMz5noEofc4ibVbbihrBlJFqAiIHtlxec62b2S43CTzuu7PYPTYMGUw9BLo4Lq9okyNvi35Ee6ueG+XvE1wdMSVE+cr3Qnt4D4nh/JvQdzHb43l14CzSIE57M2QV6L3jrSDHN2Q6wthwK2W9PNxyPoRHfNKd6ipK5eR0yEru5ASDJoh6JLl/iCU4LrlTR8Jh7iK1+oHM/xXOCh5OTnGmmDXNRF7FTfsRZ6IvHdHOBTULSejgljw31I+8cHQufFWUj0VR+l/0jSw==
-Received: from BN9PR03CA0312.namprd03.prod.outlook.com (2603:10b6:408:112::17)
- by IA0PR12MB8645.namprd12.prod.outlook.com (2603:10b6:208:48f::7) with
+ bh=QxSyp8e7wYT6L91/rQMHv//Ck4GQsW5SdkRGsKDAP6E=;
+ b=orvtJ7M8p6Mm6zwdsBazqyNqLmrovykbdD/Xu5RI/GYt1qKnO9ufNFbXmF/FZWwUrz5RITJ6ceSkthdbieL+Gogj0gmCqT5rLZJX32BmFw9EZUI3M5EX8EvLt4RAPmMvyJin+kv03lf5PuQZVwfsAH41VfaeqIvdsRXAU1qsC3L+7+Dqz/Q9xM9vQ1jeX2SsS5D+3s2PGUvsOnXD4lw0KhqILgOgkx/SDQcrcXivK4XctkYgQp5/PSk3a4Hr5lav9dQknrXgIsQpq7Ls0DTrrtF7Qxvft+InBUVgtIubOqZg61SAl22R8g5ch/hyASBcisnmLH+MGzEriAD/DVs6ag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH0PR12MB7982.namprd12.prod.outlook.com (2603:10b6:510:28d::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
- 2023 12:18:20 +0000
-Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:112:cafe::fb) by BN9PR03CA0312.outlook.office365.com
- (2603:10b6:408:112::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 12:18:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 12:18:19 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
- 05:18:07 -0700
-Received: from fedora.nvidia.com (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
- 05:18:06 -0700
-References: <202306051816.mO3hqt7d-lkp@intel.com>
-User-agent: mu4e 1.8.11; emacs 28.2
-From: Vlad Buslov <vladbu@nvidia.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Pirko
-	<jiri@nvidia.com>, Sasha Levin <sashal@kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
-Subject: Re: [stable:linux-5.4.y 3300/8640] net/sched/cls_flower.c:296:12:
- warning: stack frame size (1040) exceeds limit (1024) in 'fl_classify'
-Date: Mon, 5 Jun 2023 15:11:24 +0300
-In-Reply-To: <202306051816.mO3hqt7d-lkp@intel.com>
-Message-ID: <873536xfus.fsf@nvidia.com>
+ 2023 13:47:12 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6455.028; Mon, 5 Jun 2023
+ 13:47:12 +0000
+Date: Mon, 5 Jun 2023 10:47:09 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+	Yong Wu <yong.wu@mediatek.com>, linux-mediatek@lists.infradead.org
+Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+	Will Deacon <will@kernel.org>, Lu Baolu <baolu.lu@linux.intel.com>,
+	Heiko Stuebner <heiko@sntech.de>, Kevin Tian <kevin.tian@intel.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: Re: [PATCH v5 10/17] iommu: Do iommu_group_create_direct_mappings()
+ before attach
+Message-ID: <ZH3nXbVFR6JfUKpV@nvidia.com>
+References: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
+ <10-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
+ <20230605070959.moupivvi7wr4nibu@rcn-XPS-13-9305>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230605070959.moupivvi7wr4nibu@rcn-XPS-13-9305>
+X-ClientProxiedBy: SJ0PR13CA0031.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::6) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT093:EE_|IA0PR12MB8645:EE_
-X-MS-Office365-Filtering-Correlation-Id: dde00925-d1df-4bbe-bc61-08db65bef33b
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7982:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e08b654-43ba-4de4-f86f-08db65cb5d59
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	efxUb6NqJl83NJxJ0JGaZim568lwbCk6Ya3qLl3Wo2FCsInBGX5ZOVL0xI0JcePumN4mOwYjVei335/hKn5C4/RpJr2K1XlsZpHrFKp7MW5TxIKSA2o0w5FRf829ntNZB8ZigNNU9TgNOL6FGABglw0Sv1LTVXO1CWm6gySlir0ttJKRthgaukcjcXqdCN5zw8NR5rByVnwGXF1SIIkOpNJU3oVDiHFYv0IVewqYALUJBs9YDvp7Fq5ttYXSXWSrxAlmdFFtqgIoZD9uE+OHBpS5Yh6FTFxMhzZoAIhGGsH6iyBJgW/HdfWbqVCSJ22RrSjtnNVSkRA4c5gIe9aKALky95uYi4ZcsEkJz0qrZOLujOWXbAmf5YomrNXqGp/yG8o1KHiZ6StbSmnY4rXahUN+B3Q9aW1aeQe1g3YtlaU5WYfPrvVgCPWGEtayjPAg/yX+tb+njRlv3/3qDJr2AKihLP4eZbrscivEzN/u3p18dcx7eO/CNG4BIx+fEe47X4vC0pJh1rE7HicU641UmMXsocTz1oaHxIxFPIJopT+S83voZed6m+VRQtuVj0urODi+QZrenRNSgE/jo+jkwZAc/WDf5peybixgUI1mv0c4ORUVCsqFvFYP7J0bEE0AXYRvwciIH0YqcgyfaEDdbkzG4mJWHFm/jHSHehT2TfEtl3YVTv1QAnVRhS8QodHeCe+xJbxIsmlmEKq6PESLAH89WCUuY39QshxK7Rl/Jo8neB+0F7D7W+hFyZPlqpwaDSqdVtGeQ4JQYPoOexpaAA==
+	B5Xp/O0Iwbmth2lbSVkRPcfHxi7GuYGBImk62rLuy11XxFwiLtqVEByHQnHqEzDnbAHTLM2iVJkpCWSCS3rTkVrVqc/iUnze7pTouKDta91swqfwPh+J0YsWpDvdW9yua1mR45LZAfodRnw+wnyVYzq2CfMaaPxxlHbsUQQyUpC/nUDCtXQVblnIR2QdWgjt8WYAtFpiM0kQDi2AyZ9DA6x8nurk5tre15tBcjTN5obV5S0GWos7RaZRD9+4rwKPP9zqClMrvgGIJzezdv8Lm5xMiZy3TZC7S8lXr0r2Ht88SDWsgIvYAsXFgLirAsi61/j7bGg0vgiap0gf+54sarYjSnQi+rYhhKGzkwGbI52SpqbPRTgAf2Z3UQRL6zvAALxb3zZeIx936UD7MU1g4gCcmcOhznBf3ZKCCdYOTca+pootObqJC42afDmgRUIoUN9ULr4QInxRtof1fiaFAu5zXFrAsYf4RL+kfnAJgy9vHZ3gu12an6PeXM9wMxfN4u2M8FsZyQ4rFYw37bpQHim4GI43dZtzN7nSNamEgNrLB+AXk3p9s7dHb2aOTfTS
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199021)(36840700001)(40470700004)(46966006)(36860700001)(66574015)(47076005)(83380400001)(40480700001)(86362001)(82310400005)(40460700003)(82740400003)(7636003)(356005)(478600001)(54906003)(110136005)(6666004)(7696005)(966005)(5660300002)(8676002)(8936002)(70206006)(70586007)(4326008)(2906002)(4001150100001)(316002)(41300700001)(2616005)(426003)(336012)(26005)(36756003)(16526019)(186003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(451199021)(6486002)(6666004)(26005)(6512007)(6506007)(83380400001)(66574015)(186003)(36756003)(2616005)(86362001)(38100700002)(7416002)(110136005)(54906003)(5660300002)(316002)(41300700001)(8936002)(8676002)(4326008)(66946007)(66556008)(66476007)(478600001)(2906002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aDFPU3lnUGYzRWVSdWh5QitOMXRpZURoUFovNkE1QTR0QU84UHJPQXFBTHM3?=
+ =?utf-8?B?S2lPMmRORTJaUTFoc2lXaW5TVHpRUGsramdwUkN0Wmd5OHpXbnVPZTEwY09x?=
+ =?utf-8?B?VVo2QzJSbk8vUmtXSnRXaVJGMDdWOUR3aFFoZkJ4SjNjNGZHcWF4ZjFPU2JP?=
+ =?utf-8?B?Z1NiWHQ2MnJ2NkFVT0dISFRXMXJRMG1JbVFmaERoVFIwSFhDcEdxb0k2YVpE?=
+ =?utf-8?B?ditPNmlLM3lFWHplY2lENjc4ZzZxL3R5TmlTMCtLOC9uTmtHdVpFc2VvaVRH?=
+ =?utf-8?B?SWt2akFGY0FEZXZqWTNnM3NrdEhIOUFRK2NFUkc3WlFxMjRFbmhNR2w1cU92?=
+ =?utf-8?B?NU1oOXN3UUd1cjY5WGhwSHhnNWxFUHYrMlJwZ0hEeFpaUDhnVGVKanhoMzdl?=
+ =?utf-8?B?UzVIOFNXTlNKWmM4Y3Ayc3I1MUpnNVYzOGpkNTBzZVRoMzl1S3RaMW9xVlMy?=
+ =?utf-8?B?QjNpZVpENklTSlhDN0VZS3I5QkVNTHBzN3QrTUkvQm00N3FwalZLbXVwQytK?=
+ =?utf-8?B?eHRSY3hHU0Vla2kydkc1c041U2F4QXFMLzA4RDJnSm4rM1V6U2hWNXZHZmhP?=
+ =?utf-8?B?Mk9pRllkcWNINWFtT1RIbTU2NXVMdGwyZlJKaTdUL0ZWT0djRkZlYVdlZzdp?=
+ =?utf-8?B?bnZURXhkWDJ2MFlkSk5yTEVML3ViL1ZkL0xIbVREWU53S3hqcVlHNkRPMm5L?=
+ =?utf-8?B?OTQyMzBMS3lhdDN4VC9HNC9DdlIzS2JNMnNPazRKbTMreGRwTy81aDR3K0F0?=
+ =?utf-8?B?alZ5cGtHMWdLcGdraWQ4RlNVOS90MkI4RnNDU3IreVQ1cDVQdWFkUHFuQlhT?=
+ =?utf-8?B?MGZ2L3RSbW0yamJOZVN0MTZ2MXdxL1ppRENQaVV6ZlJBMWFNZi9JMFZOcis5?=
+ =?utf-8?B?ZzQvRnRDeUhsbkIrZkwzT0hTWGEzWmNMdmNLRHNBTmVWVFVqeGl3TnJwWmRE?=
+ =?utf-8?B?d1pUSGU0T2JTU0N2cnBScjM3UjJaaWtoZXZTaCs2bGFxbjRHOFN4WTVQMUpD?=
+ =?utf-8?B?YjUrbFloQVlKRUFiTnJyaVRCVVo3bGVCTnVCMlZQZE5ZVDB1SEZCVlFtQVd4?=
+ =?utf-8?B?Zy9xWm5xbGpaSDR2dldQTVFFSDFIZENsbGNPWVVPQ1FkQitYWkFmK1IxZnRw?=
+ =?utf-8?B?NTlSZUk0VHVwUlR3WEJ3WVhxTzhiZjFyaThSSDIzcmdzRmpENmQ3TEJzcXl6?=
+ =?utf-8?B?M21ZemlaenpOL2FNR21yWkhhR2JTVlFDRUdDbmNzck5xUVdnOTU5MWFiRE1p?=
+ =?utf-8?B?V2tJandnMU9MNFhaTVZPdDBLdStYMngyQmJrRmJDdU1ONThUNURqWGFmS29L?=
+ =?utf-8?B?TGIrZGdoQVI4dTNWRnhsRE5rVVFOV2g3RXF6QnZ6c2pHaFI0YUZiNHIxMy8z?=
+ =?utf-8?B?eWdWclFjZHlic0szQ3ZEeDNjUlg1aXgwbjFtRUVsUVZJemREZkxYVmNjcDlH?=
+ =?utf-8?B?bkZicHZ1cUozZTlxQ2RtbUQ4UjNablR4bENySnB3emNZbmcrL1NpY0plZlJv?=
+ =?utf-8?B?STlmUEV2N1hXUzZZaHZtT2ZoSU9PcVN6V0NycUNWTlFocWtzRXpycHNQWmdv?=
+ =?utf-8?B?VjVtNzUzYkZrc2lIZkJ2cnYxMWpPSXZzR0RqRUxvL3JCdGZMcDArVHQzU2M5?=
+ =?utf-8?B?SnR6dDJIODRHTE44RmtsV3JPZURsdUpaUkhDMWc0LzJxQ0VXTTg5ZldLMXdn?=
+ =?utf-8?B?RnFUVUlaQ2dYZGc3TGptS3RUdjZtQVl5RGZGMVZyVFRrZ0FEY3p4SmhKSEFU?=
+ =?utf-8?B?SVdQam9HVXpGdGt1Q0t3TnYzTENadmFIa1BMNkd5b3k0RVAzNlJDY2lQd2tP?=
+ =?utf-8?B?SWJvSGlJdUdGSlV0alhVRnI0QXRFQnJLZFljdm1RT1Z4Y1FRamYwazNoemdJ?=
+ =?utf-8?B?cklKTmlRMmxyMHRaMWRGdGJjN2IwQU45WjIySzdSQTFpNlIxSTVWQy9MUXNT?=
+ =?utf-8?B?VzJ2V2FSRUJvZUV1UnEzQzJndG1Id0Y0MHhPWWwwa0tqVVJpd1VZa2crYkFK?=
+ =?utf-8?B?STc1aVpPZlJTT0ZlZEp0aEpMTHZaaGYrdSs5ejNaLzdIWEN1ZjltVWJHem9E?=
+ =?utf-8?B?V1dsdFcxZHZvZEhadHlDU1FUOVJiazh1a0IzbVE5VEVVTTRtL2dDZ1FTTWFD?=
+ =?utf-8?Q?UT5o=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 12:18:19.9996
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e08b654-43ba-4de4-f86f-08db65cb5d59
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 13:47:12.3382
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dde00925-d1df-4bbe-bc61-08db65bef33b
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8645
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ReLtKGvNnyMqs9gUsivt3G6CTL5sOlbsrxTnwnpFqy1/u0LmH3QI6etcoqUUJNyb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7982
 
-On Mon 05 Jun 2023 at 18:59, kernel test robot <lkp@intel.com> wrote:
-> Hi Vlad,
->
-> First bad commit (maybe !=3D root cause):
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le.git linux-5.4.y
-> head:   cf0b1e5482eaeb4db15c9e703267483dba88b575
-> commit: 5f2e54391893c67b709a64b280417ca0318adb73 [3300/8640] net/sched: f=
-lower: fix parsing of ethertype following VLAN header
-> config: mips-randconfig-r013-20230605 (https://download.01.org/0day-ci/ar=
-chive/20230605/202306051816.mO3hqt7d-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf=
-3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-> reproduce (this is a W=3D1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able.git/commit/?id=3D5f2e54391893c67b709a64b280417ca0318adb73
->         git remote add stable https://git.kernel.org/pub/scm/linux/kernel=
-/git/stable/linux-stable.git
->         git fetch --no-tags stable linux-5.4.y
->         git checkout 5f2e54391893c67b709a64b280417ca0318adb73
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dmips olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash net/sched/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306051816.mO3hqt7d-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> net/sched/cls_flower.c:296:12: warning: stack frame size (1040) exceeds=
- limit (1024) in 'fl_classify' [-Wframe-larger-than]
->    static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
->               ^
->    1 warning generated.
->
->
-> vim +/fl_classify +296 net/sched/cls_flower.c
->
-> e0ace68af2acfe Paul Blakey            2019-07-09  295=20=20
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12 @296  static int fl_clas=
-sify(struct sk_buff *skb, const struct tcf_proto *tp,
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  297  		       struct tc=
-f_result *res)
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  298  {
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  299  	struct cls_fl_hea=
-d *head =3D rcu_dereference_bh(tp->root);
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  300  	struct fl_flow_ke=
-y skb_mkey;
+On Mon, Jun 05, 2023 at 09:09:59AM +0200, Ricardo Cañuelo wrote:
+> [   16.267594] Call trace:
+> [   16.267597]  mtk_iommu_flush_iotlb_all+0x18/0x70
+> [   16.267603]  iommu_create_device_direct_mappings.part.0+0x13c/0x21c
+> [   16.267608]  iommu_setup_default_domain+0x27c/0x430
+> [   16.267611]  iommu_probe_device+0x7c/0x144
+> [   16.267615]  of_iommu_configure+0x114/0x200
+> [   16.267619]  of_dma_configure_id+0x1e0/0x3b4
 
-The stack usage of fl_classify() has already been addressed in later
-kernels by commit 0af413bd3e2d ("flow_dissector: work around stack frame
-size warning") which moved mkey into fl_mask_lookup(). Not sure what
-else can be done since my commit just adds a new flow dissector fields
-that are needed to correctly parse packets with multiple VLAN headers.
+This is definitely some problem in the mtk driver.. But I can't guess
+what is wrong:
 
-> e0ace68af2acfe Paul Blakey            2019-07-09  301  	struct fl_flow_ke=
-y skb_key;
-> e0ace68af2acfe Paul Blakey            2019-07-09  302  	struct fl_flow_ma=
-sk *mask;
-> e0ace68af2acfe Paul Blakey            2019-07-09  303  	struct cls_fl_fil=
-ter *f;
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  304=20=20
-> 05cd271fd61a0b Paul Blakey            2018-04-30  305  	list_for_each_ent=
-ry_rcu(mask, &head->masks, list) {
-> 50acd32ea7f682 Jason Baron            2020-02-17  306  		flow_dissector_i=
-nit_keys(&skb_key.control, &skb_key.basic);
-> 05cd271fd61a0b Paul Blakey            2018-04-30  307  		fl_clear_masked_=
-range(&skb_key, mask);
-> bc3103f1ed405d Amir Vadai             2016-09-08  308=20=20
-> 8212ed777f40c7 Jiri Pirko             2019-06-19  309  		skb_flow_dissect=
-_meta(skb, &mask->dissector, &skb_key);
-> 05cd271fd61a0b Paul Blakey            2018-04-30  310  		/* skb_flow_diss=
-ect() does not set n_proto in case an unknown
-> 05cd271fd61a0b Paul Blakey            2018-04-30  311  		 * protocol, so =
-do it rather here.
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  312  		 */
-> 9b7fd81cf9b6ca Toke H=C3=B8iland-J=C3=B8rgensen 2020-07-03  313  		skb_ke=
-y.basic.n_proto =3D skb_protocol(skb, false);
-> 05cd271fd61a0b Paul Blakey            2018-04-30  314  		skb_flow_dissect=
-_tunnel_info(skb, &mask->dissector, &skb_key);
-> e0ace68af2acfe Paul Blakey            2019-07-09  315  		skb_flow_dissect=
-_ct(skb, &mask->dissector, &skb_key,
-> e0ace68af2acfe Paul Blakey            2019-07-09  316  				    fl_ct_info=
-_to_flower_map,
-> e0ace68af2acfe Paul Blakey            2019-07-09  317  				    ARRAY_SIZE=
-(fl_ct_info_to_flower_map));
-> 05cd271fd61a0b Paul Blakey            2018-04-30  318  		skb_flow_dissect=
-(skb, &mask->dissector, &skb_key, 0);
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  319=20=20
-> 05cd271fd61a0b Paul Blakey            2018-04-30  320  		fl_set_masked_ke=
-y(&skb_mkey, &skb_key, mask);
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  321=20=20
-> 5c72299fba9df4 Amritha Nambiar        2018-11-12  322  		f =3D fl_lookup(=
-mask, &skb_mkey, &skb_key);
-> e8eb36cd8ca93f Amir Vadai             2016-06-13  323  		if (f && !tc_ski=
-p_sw(f->flags)) {
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  324  			*res =3D f->res;
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  325  			return tcf_exts=
-_exec(skb, &f->exts, res);
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  326  		}
-> 05cd271fd61a0b Paul Blakey            2018-04-30  327  	}
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  328  	return -1;
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  329  }
-> 77b9900ef53ae0 Jiri Pirko             2015-05-12  330=20=20
->
-> :::::: The code at line 296 was first introduced by commit
-> :::::: 77b9900ef53ae047e36a37d13a2aa33bb2d60641 tc: introduce Flower clas=
-sifier
->
-> :::::: TO: Jiri Pirko <jiri@resnulli.us>
-> :::::: CC: David S. Miller <davem@davemloft.net>
+static void mtk_iommu_flush_iotlb_all(struct iommu_domain *domain)
+{
+	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
 
+	if (dom->bank)
+		mtk_iommu_tlb_flush_all(dom->bank->parent_data);
+}
+
+We know domain != NULL since the caller checked (and de-ref'd)
+it.
+
+dom->bank should either be NULL (if pre-finalize) or a devm tracked
+pointer.
+
+parent_data is always valid if bank is valid.
+
+So I'm at a loss.. Can you debug a bit more and find out where mtk is
+crashing?
+
+Thanks,
+Jason
