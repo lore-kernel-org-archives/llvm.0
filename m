@@ -1,110 +1,167 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0330E19B
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 02:01:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1685930463;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2+5scoDUPWpIO0ZAVbqWN70NLIOyxvr4rYScvdij+Fc=;
-	b=by7wAD/B7LMFiSdza6Nrjmqbtu/BuU0rt4VJvsIQcJg9fDlSOrBbLykXbmATIWfkaJ+iOw
-	/U/VeLTaRslCVcKUn19sKE30R1ufo1szyGbUFYXdt3e/bwL5xEkLJcG9qfLs0elEjO0Y7v
-	rVwSf+ifcWkJyg8g4sFoxKvgr9WWUoA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-IyRNgY8oMNqpDr64sxtkVw-1; Sun, 04 Jun 2023 22:01:02 -0400
-X-MC-Unique: IyRNgY8oMNqpDr64sxtkVw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18B953C01C2C
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 02:01:02 +0000 (UTC)
-Received: from [172.64.2.80] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 040862026D49;
-	Mon,  5 Jun 2023 02:01:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 75 of 346): Test report for master
- (6.4.0-rc4, mainline.kernel.org-clang, 5e89d62e)
-Date: Mon, 05 Jun 2023 02:01:01 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F7F37D;
+	Mon,  5 Jun 2023 03:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685936862; x=1717472862;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e1yFbeQsmUovoPcmvs82Hv88TELDGSWPJongEZryTN0=;
+  b=AK4/ec0PY/qM+WX/otBDIDaGOz8rMKZRrKVZzzRi3+Xt7wPqy4LU7Upp
+   kXsxMcW2AP4lJL7WyH3BZd56GgN7L05RGSpqONs8njN2/4LN3rN5nsV9w
+   8JdZePVYAuEoNR4Vh6CmyJKH9O7KDdCSfDrHw8MOC+FDXFNraWqt2hCVS
+   6kfegBpEq8HnSpKVGQzPDNmL2fVgteAmdVgf7YabwstJQWtCTOFbio+zt
+   ApsDj678lxCqFvLRORDKMoeAE0/7hQxNC0HKLs0BZ1/QAIEZ2d0pmFOB2
+   pnrcY7rkp0G+XelvSxcYz26tSz6snrZZNvqZu1fHe3nsg2WHMrKnukXn0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="419815775"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="419815775"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 20:47:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="738225031"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="738225031"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Jun 2023 20:47:39 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q61Bz-0003nv-0M;
+	Mon, 05 Jun 2023 03:47:39 +0000
+Date: Mon, 5 Jun 2023 11:46:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [brgl:gpio/for-next 22/22] drivers/gpio/gpio-delay.c:79:34: error:
+ no member named 'of_gpio_n_cells' in 'struct gpio_chip'
+Message-ID: <202306051102.FyJLV3OH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <86134.123060422010200369@us-mta-93.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+head:   cf5dec80c4e23ac1677b8ef9aafe5a7b87bb18c3
+commit: cf5dec80c4e23ac1677b8ef9aafe5a7b87bb18c3 [22/22] gpio: Add gpio delay driver
+config: i386-buildonly-randconfig-r003-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051102.FyJLV3OH-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/commit/?id=cf5dec80c4e23ac1677b8ef9aafe5a7b87bb18c3
+        git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+        git fetch --no-tags brgl gpio/for-next
+        git checkout cf5dec80c4e23ac1677b8ef9aafe5a7b87bb18c3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpio/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306051102.FyJLV3OH-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'media/v6.4-4' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/mchehab/linux-media
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/91212
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/gpio/gpio-delay.c:79:34: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
+           if (gpiospec->args_count != gc->of_gpio_n_cells)
+                                       ~~  ^
+>> drivers/gpio/gpio-delay.c:133:11: error: no member named 'of_xlate' in 'struct gpio_chip'
+           priv->gc.of_xlate = gpio_delay_of_xlate;
+           ~~~~~~~~ ^
+   drivers/gpio/gpio-delay.c:134:11: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
+           priv->gc.of_gpio_n_cells = 3;
+           ~~~~~~~~ ^
+   3 errors generated.
 
 
+vim +79 drivers/gpio/gpio-delay.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    70	
+    71	static int gpio_delay_of_xlate(struct gpio_chip *gc,
+    72				       const struct of_phandle_args *gpiospec,
+    73				       u32 *flags)
+    74	{
+    75		struct gpio_delay_priv *priv = gpiochip_get_data(gc);
+    76		struct gpio_delay_timing *timings;
+    77		u32 line;
+    78	
+  > 79		if (gpiospec->args_count != gc->of_gpio_n_cells)
+    80			return -EINVAL;
+    81	
+    82		line = gpiospec->args[0];
+    83		if (line >= gc->ngpio)
+    84			return -EINVAL;
+    85	
+    86		timings = &priv->delay_timings[line];
+    87		timings->ramp_up_delay_us = gpiospec->args[1];
+    88		timings->ramp_down_delay_us = gpiospec->args[2];
+    89	
+    90		return line;
+    91	}
+    92	
+    93	static bool gpio_delay_can_sleep(const struct gpio_delay_priv *priv)
+    94	{
+    95		int i;
+    96	
+    97		for (i = 0; i < priv->input_gpio->ndescs; i++)
+    98			if (gpiod_cansleep(priv->input_gpio->desc[i]))
+    99				return true;
+   100	
+   101		return false;
+   102	}
+   103	
+   104	static int gpio_delay_probe(struct platform_device *pdev)
+   105	{
+   106		struct gpio_delay_priv *priv;
+   107	
+   108		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+   109		if (!priv)
+   110			return -ENOMEM;
+   111	
+   112		priv->input_gpio = devm_gpiod_get_array(&pdev->dev, NULL, GPIOD_OUT_LOW);
+   113		if (IS_ERR(priv->input_gpio))
+   114			return dev_err_probe(&pdev->dev, PTR_ERR(priv->input_gpio),
+   115					     "Failed to get input-gpios");
+   116	
+   117		priv->delay_timings = devm_kcalloc(&pdev->dev,
+   118						   priv->input_gpio->ndescs,
+   119						   sizeof(*priv->delay_timings),
+   120						   GFP_KERNEL);
+   121		if (!priv->delay_timings)
+   122			return -ENOMEM;
+   123	
+   124		if (gpio_delay_can_sleep(priv)) {
+   125			priv->gc.can_sleep = true;
+   126			priv->gc.set = gpio_delay_set_can_sleep;
+   127		} else {
+   128			priv->gc.can_sleep = false;
+   129			priv->gc.set = gpio_delay_set;
+   130		}
+   131	
+   132		priv->gc.get_direction = gpio_delay_get_direction;
+ > 133		priv->gc.of_xlate = gpio_delay_of_xlate;
+   134		priv->gc.of_gpio_n_cells = 3;
+   135		priv->gc.ngpio = priv->input_gpio->ndescs;
+   136		priv->gc.owner = THIS_MODULE;
+   137		priv->gc.base = -1;
+   138		priv->gc.parent = &pdev->dev;
+   139	
+   140		platform_set_drvdata(pdev, priv);
+   141	
+   142		return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
+   143	}
+   144	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
