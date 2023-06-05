@@ -1,80 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F34520698
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 15:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC14C433D2;
-	Mon,  5 Jun 2023 15:41:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685979688;
-	bh=+WQQuLVMz0dVlwh4gz6ce/VTv4FW4L+Vcxee8MeZteg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XQQ95xeeJteSYArjXKbL6Y7mfg2Kz9Dn04aVgJQg7f3UGL5EM8kLg97nECoBqhWwg
-	 eBjLjgE0rAvfVkwGKysPRPSv4qAuXUamw1nFE8TxHlMMhleDNYojHgAJ43tU6Wq5W5
-	 CLgRujVLKctujLgVIRlfezUhoSk6RUcHMI/UjiTFDZEDfQ7xViOoJJon0zlE6/Gi7+
-	 Ncl5JTST1IeNVHvvdeLnX1tZefc24b7gfgREJ2oE6HeeHnlLHtDSdba1qm9/bGNK/Z
-	 6iIuuRRBtPXE4GSYKmJgAVC7UzNG5ft9DmCWP3yJB9QaU9qJ5XBFdtAqnO9VOQa5t0
-	 AELOVhiFsikbw==
-Date: Mon, 5 Jun 2023 08:41:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Stuart Yoder <stuyoder@gmail.com>,
-	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Li Yang <leoyang.li@nxp.com>,
-	Ioana Ciornei <ioana.ciornei@nxp.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel@pengutronix.de,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 2/2] bus: fsl-mc: fsl-mc-allocator: Drop a write-only
- variable
-Message-ID: <20230605154126.GC2480995@dev-arch.thelio-3990X>
-References: <20230605112025.80061-1-u.kleine-koenig@pengutronix.de>
- <20230605112025.80061-2-u.kleine-koenig@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9DEAD2E;
+	Mon,  5 Jun 2023 18:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685988945; x=1717524945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=huUH1HR4fszCoZuJr8Gz9MUwSwCUYWIuZ3BKksRCNQE=;
+  b=nTG8cgvFTGV0HpKLRPLN3oEKtdvg8R/+2Tc4kBxPNPR/NEmnLec/nlFq
+   0JVqHRIVtqJwP/CLqd9mXodxJjC3CCxA+YSlRFI7k9xKVHAXV51Oubei0
+   ZNY29XQPyA9Qimj892xDfdDxChbtcHBgXkzJnP5tDmMNYBJadtoWT6PIw
+   QY8NXKDeHTf+8u0h2xG/cFHtJ3hEQUjFYEEbv6iUP3i6Yo75+hQ4a9zKI
+   rJeiBTOy+JEzmB1hZbRB7n5fi8xM+jqWcYOHHYizwMmzzU1AaisQCqslu
+   cubQnY224g6Ts4iBqmJykTm7MXIT95mXvKy/J2/c0ec0ZBp/W9Ukf4DUs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355295417"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="355295417"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:15:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778658998"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="778658998"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 11:15:17 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6Ejc-0004Kd-2R;
+	Mon, 05 Jun 2023 18:15:16 +0000
+Date: Tue, 6 Jun 2023 02:14:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:timers/core 19/21] kernel/time/posix-timers.c:385:18: error:
+ use of undeclared identifier 'TICK_NSECS'
+Message-ID: <202306060236.yHWiRzTI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230605112025.80061-2-u.kleine-koenig@pengutronix.de>
 
-On Mon, Jun 05, 2023 at 01:20:25PM +0200, Uwe Kleine-König wrote:
-> Fixes a clang compiler warning:
-> 
->    drivers/bus/fsl-mc/fsl-mc-allocator.c:565:6: warning: variable 'free_count' set but not used [-Wunused-but-set-variable]
->            int free_count = 0;
-> 
-> Fixes: d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_ONs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+head:   1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
+commit: 63dede13d09850a8ace210f8e4227ac5a6b309ae [19/21] posix-timers: Clarify posix_timer_fn() comments
+config: hexagon-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060236.yHWiRzTI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=63dede13d09850a8ace210f8e4227ac5a6b309ae
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip timers/core
+        git checkout 63dede13d09850a8ace210f8e4227ac5a6b309ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060236.yHWiRzTI-lkp@intel.com/
 
-> ---
->  drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> index 991273f956ce..b5e8c021fa1f 100644
-> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> @@ -563,12 +563,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_mc_device *mc_bus_dev,
->  	struct fsl_mc_bus *mc_bus = to_fsl_mc_bus(mc_bus_dev);
->  	struct fsl_mc_resource_pool *res_pool =
->  					&mc_bus->resource_pools[pool_type];
-> -	int free_count = 0;
->  
-> -	list_for_each_entry_safe(resource, next, &res_pool->free_list, node) {
-> -		free_count++;
-> +	list_for_each_entry_safe(resource, next, &res_pool->free_list, node)
->  		devm_kfree(&mc_bus_dev->dev, resource);
-> -	}
->  }
->  
->  void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
-> -- 
-> 2.39.2
-> 
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/time/posix-timers.c:385:18: error: use of undeclared identifier 'TICK_NSECS'
+                                   ktime_t kj = TICK_NSECS;
+                                                ^
+   6 warnings and 1 error generated.
+
+
+vim +/TICK_NSECS +385 kernel/time/posix-timers.c
+
+   327	
+   328	/*
+   329	 * This function gets called when a POSIX.1b interval timer expires from
+   330	 * the HRTIMER interrupt (soft interrupt on RT kernels).
+   331	 *
+   332	 * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
+   333	 * based timers.
+   334	 */
+   335	static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+   336	{
+   337		struct k_itimer *timr;
+   338		unsigned long flags;
+   339		int si_private = 0;
+   340		enum hrtimer_restart ret = HRTIMER_NORESTART;
+   341	
+   342		timr = container_of(timer, struct k_itimer, it.real.timer);
+   343		spin_lock_irqsave(&timr->it_lock, flags);
+   344	
+   345		timr->it_active = 0;
+   346		if (timr->it_interval != 0)
+   347			si_private = ++timr->it_requeue_pending;
+   348	
+   349		if (posix_timer_event(timr, si_private)) {
+   350			/*
+   351			 * The signal was not queued due to SIG_IGN. As a
+   352			 * consequence the timer is not going to be rearmed from
+   353			 * the signal delivery path. But as a real signal handler
+   354			 * can be installed later the timer must be rearmed here.
+   355			 */
+   356			if (timr->it_interval != 0) {
+   357				ktime_t now = hrtimer_cb_get_time(timer);
+   358	
+   359				/*
+   360				 * FIXME: What we really want, is to stop this
+   361				 * timer completely and restart it in case the
+   362				 * SIG_IGN is removed. This is a non trivial
+   363				 * change to the signal handling code.
+   364				 *
+   365				 * For now let timers with an interval less than a
+   366				 * jiffie expire every jiffie and recheck for a
+   367				 * valid signal handler.
+   368				 *
+   369				 * This avoids interrupt starvation in case of a
+   370				 * very small interval, which would expire the
+   371				 * timer immediately again.
+   372				 *
+   373				 * Moving now ahead of time by one jiffie tricks
+   374				 * hrtimer_forward() to expire the timer later,
+   375				 * while it still maintains the overrun accuracy
+   376				 * for the price of a slight inconsistency in the
+   377				 * timer_gettime() case. This is at least better
+   378				 * than a timer storm.
+   379				 *
+   380				 * Only required when high resolution timers are
+   381				 * enabled as the periodic tick based timers are
+   382				 * automatically aligned to the next tick.
+   383				 */
+   384				if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
+ > 385					ktime_t kj = TICK_NSECS;
+   386	
+   387					if (timr->it_interval < kj)
+   388						now = ktime_add(now, kj);
+   389				}
+   390	
+   391				timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
+   392				ret = HRTIMER_RESTART;
+   393				++timr->it_requeue_pending;
+   394				timr->it_active = 1;
+   395			}
+   396		}
+   397	
+   398		unlock_timer(timr, flags);
+   399		return ret;
+   400	}
+   401	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
