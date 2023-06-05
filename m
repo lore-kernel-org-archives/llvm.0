@@ -1,44 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0F2C2F5;
-	Mon,  5 Jun 2023 22:38:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25525256;
+	Mon,  5 Jun 2023 22:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686004711; x=1717540711;
+  t=1686005311; x=1717541311;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LqOBzGUF/ig7ymEXy7eew8beh61DQfT0AV43emlgyR4=;
-  b=QYr3QYizDY4xeWMiBl9WQ9F6dfPyYwKf2/D7HtlvhtsvrMV542HfZgcv
-   5nITu7EPRig7c7+AZ28/xrNi2IYWmni92GHcDRSDMRO6H6/EVH+GAaINi
-   6UB7gB9xWfOO3cA4bT97SeUVnfZMs/ydWH+jqxYPEVAG0pLSBmZyM7FwH
-   PGBwg4RGHRgsiQFSAXAyiH5BsnJPG3AQMen2tOuU2JFtDj/vYHKAB6Uzf
-   HF78JI8HT0Q6Fhj7feRvO5Oy40d9FPycyurdretrJO0nfr028JuQqZMx0
-   5e3V0rOFB05zjDAhMGl1V3rPLbBunujG21cLRygpZYZ9w37BfipMhkJDe
+  bh=gG4UZz+H3FxxUASHJuEkzYCv8IA0IqjTmFp3k4VLKng=;
+  b=hSYx+fwDT3E3aPdxhKmm9ydhSEvo16yuG8RO+MKu96L5K0AN3ayCbnhy
+   1aWIWNbAt8Qdfj8a4zYsMj83uDc+MGLaSSBcIn+4/3FKNUUJ5/O44Adwf
+   EmGlfAAUB842Q1rDouen1gH/HB+oT+wZaOiUVqIbop6vSbUslKmSICdio
+   7Ovc+KqUwKODnxVDERymy6uLFlbMI3xJsCOxfQ3mKYPZLygK2IbtN6OZQ
+   scpxvnS4x4zmkemQInUWUHMzOoZpPnNuJYz87Kf42pHALFAZPg2whiRUd
+   brS+zmK3iRcV1IEYK1JryaWkqdwriptn/Lwf5nmHQQ8jlOZIUvBvRhZFY
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341139297"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422329150"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="341139297"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:38:30 -0700
+   d="scan'208";a="422329150"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:48:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821347435"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="659286949"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="821347435"
+   d="scan'208";a="659286949"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2023 15:38:29 -0700
+  by orsmga003.jf.intel.com with ESMTP; 05 Jun 2023 15:48:29 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q6IqK-0004UZ-13;
-	Mon, 05 Jun 2023 22:38:28 +0000
-Date: Tue, 6 Jun 2023 06:37:34 +0800
+	id 1q6J00-0004VH-2R;
+	Mon, 05 Jun 2023 22:48:28 +0000
+Date: Tue, 6 Jun 2023 06:47:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
+To: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Christoph Lameter <cl@linux-foundation.org>
-Subject: drivers/scsi/csiostor/csio_lnode.o: warning: objtool:
- csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
-Message-ID: <202306060605.uO2QarfW-lkp@intel.com>
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Subject: [mic:next 8/12] security/landlock/net.c:165:50: error: expected ';'
+ after top level declarator
+Message-ID: <202306060602.Grdt8eev-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,32 +47,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f8dba31b0a826e691949cd4fdfa5c30defaac8c5
-commit: e240e53ae0abb0896e0f399bdfef41c69cec3123 mm, slub: add CONFIG_SLUB_TINY
-date:   6 months ago
-config: x86_64-randconfig-a011-20230606 (https://download.01.org/0day-ci/archive/20230606/202306060605.uO2QarfW-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git next
+head:   33ccf2aa61758ef2887862301b574f5d9a77553c
+commit: 6d0bfdb25ce6a9652a68ea095d9a9fdacc25aa27 [8/12] landlock: Add network rules and TCP hooks support
+config: x86_64-randconfig-a001-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060602.Grdt8eev-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e240e53ae0abb0896e0f399bdfef41c69cec3123
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e240e53ae0abb0896e0f399bdfef41c69cec3123
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/commit/?id=6d0bfdb25ce6a9652a68ea095d9a9fdacc25aa27
+        git remote add mic git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git
+        git fetch --no-tags mic next
+        git checkout 6d0bfdb25ce6a9652a68ea095d9a9fdacc25aa27
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/crypto/ drivers/scsi/csiostor/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash security/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060605.uO2QarfW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060602.Grdt8eev-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/scsi/csiostor/csio_lnode.o: warning: objtool: csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
+>> security/landlock/net.c:165:50: error: expected ';' after top level declarator
+   static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+                                                    ^
+                                                    ;
+>> security/landlock/net.c:172:37: error: invalid application of 'sizeof' to an incomplete type 'struct security_hook_list[]'
+           security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:56:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   security/landlock/net.c:165:34: warning: tentative array definition assumed to have one element
+   static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+                                    ^
+   1 warning and 2 errors generated.
+
+
+vim +165 security/landlock/net.c
+
+   164	
+ > 165	static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+   166		LSM_HOOK_INIT(socket_bind, hook_socket_bind),
+   167		LSM_HOOK_INIT(socket_connect, hook_socket_connect),
+   168	};
+   169	
+   170	__init void landlock_add_net_hooks(void)
+   171	{
+ > 172		security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
 
 -- 
 0-DAY CI Kernel Test Service
