@@ -1,90 +1,43 @@
-Received: from dormouse.elm.relay.mailchannels.net (dormouse.elm.relay.mailchannels.net [23.83.212.50])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88812DDC0
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 20:18:02 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id D01E9761631
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 16:49:59 +0000 (UTC)
-Received: from pdx1-sub0-mail-a246.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 659D3760C50
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 16:49:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1685983799; a=rsa-sha256;
-	cv=none;
-	b=Ufr6vS2/UgHb2suWjQ7YPC/e6B5Ll2JO90f2ZRWurB390gGYXrOK0yxznfn0KcXVpLT6xU
-	tx30z0FeqadK0E35n1WXUFylfRQBzNXKpZ+aKm7Subrxqat74UcvJFFBrl4V7vMAmMSYVV
-	64xs3a2VKKEyI2QCi1pbkV98GuBvK52/UOvNK4aUORFgIoRsZ90zO3HTn5cEQsGEecX/EP
-	+hQa9/9MqtB3RQvKXTN/cgGvlKXChFGjeZTTrcvzPbWV4+pQF/8/5soF/k8hcuEjWYY5Zy
-	3HAmf+EwtFlfzRiJlOQMig8hYgak8nDOibBIGHWFYTy7R1OCAKGQy7vL4tsNcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1685983799;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 dkim-signature; bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
-	b=yESzd6E7asq8w/7CKbH4q7Hv4HH/zgQB/5QnBLiWek0cHU54dSP71CZ9spoqG2sd+tHG7A
-	u/2Sv468Dh1VdU611BpHpfp/DPnGkNQ7WEWCrd3DUWibqG9XZmxUyJ6NHe+d4hUhm02CCu
-	lPDLh4EzKAyvk9xLD9zvu5TbjPK6vENFkWFe+BUbuibIlsE690So1IDDx9dpOS3EtBqYID
-	TiE90Ya2OGL8PiUbfqfHSx2y5LPLd5tWkpI9xzUYVvGHmyIfdcHFalSOuNNsn+Z89/tPT6
-	Au71avCLuUVmlglgnv4PDZByfnWvynRwqVtXgGXfSrofd+1hAJGYmg4z+uPvYw==
-ARC-Authentication-Results: i=1;
-	rspamd-56648fb6f9-fqmnr;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Abaft-Abaft: 2693b1665f48a5e0_1685983799635_1838579305
-X-MC-Loop-Signature: 1685983799635:801477052
-X-MC-Ingress-Time: 1685983799635
-Received: from pdx1-sub0-mail-a246.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.119.120.12 (trex/6.8.1);
-	Mon, 05 Jun 2023 16:49:59 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kjlx@templeofstupid.com)
-	by pdx1-sub0-mail-a246.dreamhost.com (Postfix) with ESMTPSA id 4QZfjL40x3zvb
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 09:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-	s=dreamhost; t=1685983798;
-	bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=GRh1O24h56VOD69FVspvvFrfKJDz125mN0N07VKMg7XGYe/cfg041XaIe60pBCdUq
-	 6Y4me79JxShLfWOPtV+UvBSMGH62zQS/kzw0ic+Ir5FQPqiuVOuqoC5/h8szQysweq
-	 rOun9wLRRodw/T2HjeAgqIk0/lRTPf56fQF0UA80=
-Received: from johansen (uid 1000)
-	(envelope-from kjlx@templeofstupid.com)
-	id e0044
-	by kmjvbox (DragonFly Mail Agent v0.12);
-	Mon, 05 Jun 2023 09:49:55 -0700
-Date: Mon, 5 Jun 2023 09:49:55 -0700
-From: Krister Johansen <kjlx@templeofstupid.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH bpf] bpf: search_bpf_extables should search subprogram
- extables
-Message-ID: <20230605164955.GA1977@templeofstupid.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C51261CC;
+	Mon,  5 Jun 2023 20:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685996489; x=1717532489;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5dlz/aAMnE+zmlUskuGjjrJznWNjFCm23V27aqchxys=;
+  b=SGfzS/6OHJ+dw3/CRbohG00g5Y1Ijf4dAnBLSBdC9awD9C2lVVWs3tD9
+   al7RA+AzzgY36GLcY87TT0qSCFIEmIMsIOS7KPOYvhGmUwQwUfGUwSQy3
+   uvK2UvTSyiw3Vd+jcqXqjpnsRIyAloCMiyXf8yyYtrjdpYnTebbZ5VPSZ
+   rriaLsIw4BQ4TxmLk7LsKQOgo5tGik2+CK1QdO2nFtIctI4xBub3zsm3i
+   t0RTIXYtxNw7z8JXkMcCwMyM4CEcULPMKN8uownPubjquviorm3CPRtS6
+   ghXEgBfHQAHd8oVy5qxmD+rqQ4wV9ipy/P4u3rTVLInp+LAsuAzGbrhjT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355326354"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="355326354"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 13:21:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="773857152"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="773857152"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jun 2023 13:21:22 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6Ghe-0004Pj-07;
+	Mon, 05 Jun 2023 20:21:22 +0000
+Date: Tue, 6 Jun 2023 04:21:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Simon Horman <simon.horman@corigine.com>
+Subject: [net-next:main 5/19] ERROR: modpost: "lynx_pcs_destroy"
+ [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
+Message-ID: <202306060415.KGGf0EG0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -94,148 +47,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-JIT'd bpf programs that have subprograms can have a postive value for
-num_extentries but a NULL value for extable.  This is problematic if one of
-these bpf programs encounters a fault during its execution.  The fault
-handlers correctly identify that the faulting IP belongs to a bpf program.
-However, performing a search_extable call on a NULL extable leads to a
-second fault.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git main
+head:   69da40ac3481993d6f599c98e84fcdbbf0bcd7e0
+commit: 5d1f3fe7d2d54d04b44aa5b9b62b305fdcf653ec [5/19] net: stmmac: dwmac-sogfpga: use the lynx pcs driver
+config: i386-randconfig-i061-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060415.KGGf0EG0-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/commit/?id=5d1f3fe7d2d54d04b44aa5b9b62b305fdcf653ec
+        git remote add net-next https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+        git fetch --no-tags net-next main
+        git checkout 5d1f3fe7d2d54d04b44aa5b9b62b305fdcf653ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Fix up by refusing to search a NULL extable, and by checking the
-subprograms' extables if the umbrella program has subprograms configured.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060415.KGGf0EG0-lkp@intel.com/
 
-Once I realized what was going on, I was able to use the following bpf
-program to get an oops from this failure:
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   #include "vmlinux.h"
-   #include <bpf/bpf_helpers.h>
-   #include <bpf/bpf_tracing.h>
-   
-   char LICENSE[] SEC("license") = "Dual BSD/GPL";
-   
-   #define PATH_MAX 4096
-   
-   struct callback_ctx {
-           u8 match;
-   };
-   
-   struct filter_value {
-           char prefix[PATH_MAX];
-   };
-   struct {
-           __uint(type, BPF_MAP_TYPE_ARRAY);
-           __uint(max_entries, 256);
-           __type(key, int);
-           __type(value, struct filter_value);
-   } test_filter SEC(".maps");
-   
-   static __u64 test_filter_cb(struct bpf_map *map, __u32 *key,
-                               struct filter_value *val,
-                               struct callback_ctx *data)
-   {
-       return 1;
-   }
-   
-   SEC("fentry/__sys_bind")
-   int BPF_PROG(__sys_bind, int fd, struct sockaddr *umyaddr, int addrlen)
-   {
-     pid_t pid;
-   
-     struct callback_ctx cx = { .match = 0 };
-     pid = bpf_get_current_pid_tgid() >> 32;
-     bpf_for_each_map_elem(&test_filter, test_filter_cb, &cx, 0);
-     bpf_printk("fentry: pid = %d, family = %llx\n", pid, umyaddr->sa_family);
-     return 0;
-   }
+>> ERROR: modpost: "lynx_pcs_destroy" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
 
-And then the following code to actually trigger a failure:
-
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <unistd.h>
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-  #include <netinet/ip.h>
-  
-  int
-  main(int argc, char *argv[])
-  {
-    int sfd, rc;
-    struct sockaddr *sockptr = (struct sockaddr *)0x900000000000;
-  
-    sfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sfd < 0) {
-      perror("socket");
-      exit(EXIT_FAILURE);
-    }
-  
-    while (1) {
-      rc = bind(sfd, (struct sockaddr *) sockptr, sizeof(struct sockaddr_in));
-      if (rc < 0) {
-        perror("bind");
-        sleep(5);
-      } else {
-        break;
-      }
-    }
-  
-    return 0;
-  }
-
-I was able to validate that this problem does not occur when subprograms
-are not in use, or when the direct pointer accesses are replaced with
-bpf_probe_read calls.  I further validated that this did not break the
-extable handling in existing bpf programs.  The same program caused no
-failures when subprograms were removed, but the exception was still
-injected.
-
-Cc: stable@vger.kernel.org
-Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- kernel/bpf/core.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7421487422d4..0e12238e4340 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -736,15 +736,33 @@ const struct exception_table_entry *search_bpf_extables(unsigned long addr)
- {
- 	const struct exception_table_entry *e = NULL;
- 	struct bpf_prog *prog;
-+	struct bpf_prog_aux *aux;
-+	int i;
- 
- 	rcu_read_lock();
- 	prog = bpf_prog_ksym_find(addr);
- 	if (!prog)
- 		goto out;
--	if (!prog->aux->num_exentries)
-+	aux = prog->aux;
-+	if (!aux->num_exentries)
- 		goto out;
- 
--	e = search_extable(prog->aux->extable, prog->aux->num_exentries, addr);
-+	/* prog->aux->extable can be NULL if subprograms are in use. In that
-+	 * case, check each sub-function's aux->extables to see if it has a
-+	 * matching entry.
-+	 */
-+	if (aux->extable != NULL) {
-+		e = search_extable(prog->aux->extable,
-+		    prog->aux->num_exentries, addr);
-+	} else {
-+		for (i = 0; (i < aux->func_cnt) && (e == NULL); i++) {
-+			if (!aux->func[i]->aux->num_exentries ||
-+			    aux->func[i]->aux->extable == NULL)
-+				continue;
-+			e = search_extable(aux->func[i]->aux->extable,
-+			    aux->func[i]->aux->num_exentries, addr);
-+		}
-+	}
- out:
- 	rcu_read_unlock();
- 	return e;
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
