@@ -1,105 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D08C3D84
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 08:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B90C433EF;
-	Mon,  5 Jun 2023 08:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685954676;
-	bh=MMkMH+tpsZ3PyspKggeYX/FCSlvfVaRWIsEuKzoAkE0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZJVnwLy3axTBEVeWVjc5fOAJ1d57eqjtisr0rdsZicXK1WqndHzK/+04Fqw46XxMG
-	 SQN4cW7nxQ01v6cjxkSjq6t4J5ImWPXirJIrcSofQHLkgGMuHJhE1eus5/m2E5rfkT
-	 Qmu7OnHFh6yx/JytJde04mm6MhT+8uAfCZTpIdREtycKCxjvrafwrif0HvuHYhvqno
-	 Y1aOamQXvtJoWBOaoxVbw09gbi4Ldmnyfz73PdS79YsQlCGOI0lF2nUHm2OSATtpdB
-	 KWyHTBR/S9LP58HVwcjPNJUD0p4Ka2MT8K51Pf2WCMsIzzaoxT5mCk1JEUJLdOIJqT
-	 gN79yfr6coi9w==
-Date: Mon, 5 Jun 2023 10:44:33 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] i2c: mchp-pci1xxxx: Avoid cast to incompatible function
- type
-Message-ID: <ZH2gcekxad9JPrjJ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F17134DD;
+	Mon,  5 Jun 2023 09:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685958423; x=1717494423;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v/+LgTrwo+Lelaz5gHvZDSoOIGxhoEQ87vO5F8p1ayo=;
+  b=H9wlxSIdT8mjDaBgbYv4CEty5Kkl0jC5x0GNmxWIuyRtNZUacA55uC4G
+   57lw5lOmkqs48m5KNevJGqSz8plXj4hmNTiWGHMqcCNd2ICWbyIOrXCnZ
+   KWiB8vXrepaZ0rF+SWwaaUxxDNC3YIz5cVUo4OGYqqZ2Nl+ZcORRfdHr8
+   sLroedWXPUksjITHPN8FEeY0sjBoWFn6mN0I+HRJ2BrAB/+eRwuirNoyd
+   3xjgfzAwMwgj/vkQqW1pQ4DMtiicvnZ8+NboKXuWG5kBAWmGFQGJDTooi
+   YFlb960ULORAAoH3kyWl2CNMFbn0mZqtz2JVnE147p9G6IfxEAXUwi5KP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="358775289"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="358775289"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 02:47:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="882842499"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="882842499"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2023 02:46:57 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q66ng-00044l-3A;
+	Mon, 05 Jun 2023 09:46:56 +0000
+Date: Mon, 5 Jun 2023 17:46:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v5] hv_netvsc: Allocate rx indirection table size
+ dynamically
+Message-ID: <202306051725.FOGcInnl-lkp@intel.com>
+References: <1685949196-16175-1-git-send-email-shradhagupta@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EdPn873a/5CanpDf"
-Content-Disposition: inline
-In-Reply-To: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
-
-
---EdPn873a/5CanpDf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1685949196-16175-1-git-send-email-shradhagupta@linux.microsoft.com>
 
-On Wed, May 10, 2023 at 02:32:17PM +0200, Simon Horman wrote:
-> Rather than casting pci1xxxx_i2c_shutdown to an incompatible function typ=
-e,
-> update the type to match that expected by __devm_add_action.
->=20
-> Reported by clang-16 with W-1:
->=20
->  .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1x=
-xxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-=
-Werror,-Wcast-function-type-strict]
->          ret =3D devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shut=
-down, i2c);
->                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~
->  ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_act=
-ion'
->          __devm_add_action(release, action, data, #action)
->                                    ^~~~~~
->=20
-> No functional change intended.
-> Compile tested only.
->=20
-> Signed-off-by: Simon Horman <horms@kernel.org>
+Hi Shradha,
 
-Applied to for-current, thanks!
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on horms-ipvs/master v6.4-rc5 next-20230605]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shradha-Gupta/hv_netvsc-Allocate-rx-indirection-table-size-dynamically/20230605-151438
+base:   linus/master
+patch link:    https://lore.kernel.org/r/1685949196-16175-1-git-send-email-shradhagupta%40linux.microsoft.com
+patch subject: [PATCH v5] hv_netvsc: Allocate rx indirection table size dynamically
+config: i386-randconfig-r002-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051725.FOGcInnl-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cd4dda15951edad50a4ffd51e084863ef2f50bd3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shradha-Gupta/hv_netvsc-Allocate-rx-indirection-table-size-dynamically/20230605-151438
+        git checkout cd4dda15951edad50a4ffd51e084863ef2f50bd3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/hyperv/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306051725.FOGcInnl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/hyperv/rndis_filter.c:1612:47: error: use of undeclared identifier 'net'
+           struct net_device_context *ndc = netdev_priv(net);
+                                                        ^
+   1 error generated.
 
 
---EdPn873a/5CanpDf
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/net +1612 drivers/net/hyperv/rndis_filter.c
 
------BEGIN PGP SIGNATURE-----
+  1607	
+  1608	void rndis_filter_device_remove(struct hv_device *dev,
+  1609					struct netvsc_device *net_dev)
+  1610	{
+  1611		struct rndis_device *rndis_dev = net_dev->extension;
+> 1612		struct net_device_context *ndc = netdev_priv(net);
+  1613		struct net_device *net = hv_get_drvdata(dev);
+  1614	
+  1615		/* Halt and release the rndis device */
+  1616		rndis_filter_halt_device(net_dev, rndis_dev);
+  1617	
+  1618		netvsc_device_remove(dev);
+  1619	
+  1620		ndc->rx_table_sz = 0;
+  1621		kfree(ndc->rx_table);
+  1622		ndc->rx_table = NULL;
+  1623	}
+  1624	
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9oHEACgkQFA3kzBSg
-KbaAyQ/+OcGmcDOvDD+tEiGwpTJ0aIlH8fRUmehZtJKptN8zyIEY6Qd38K+ijWvJ
-2BPHHVCBO8kzfrorqE6y5K0YOVLo9mNoBfeTlv4FwihFjuIAN2J/ytmgkgeQvAGO
-x6WQQFliQrop9nJ7j/K2RSKjBkePGfYufOlYE0NvlqeHlUruQGJ3mle7oxJvqZ2H
-FXk+qngY6eQa55CwO8l+Vb/osS9AlrlNg1FRA4rkTiDwjY9uwAsFYIwiJovUMb+L
-AUGCJy55iTCLRjH3a/qZ4PJXTmdaH1Mriz+/2ipiOIMxg9hTi0EJWE1gfQunbEq1
-58hyx6LShSHV6KsZ/dO8P4d7D/7qA04xCmmOnDARrG5G8q2tEcbahYTfQQ4as6x8
-yDd2jaFWEgfQYbyTTRYxZJYkE82dHEz73ylIMbEmXtal9hjLQmXH3K7ljQfV34Hq
-ukdMI0RELbSM9hllF+f9LVekTBasoNczShgMZFMYaDMt1DuWr9YoMvR7vAgCWxjG
-KInW8756qnBqdPjdgZnfIM4VEYg8qhMW0R8+LsPyGH5IFX0LKAuIVAsP/3M3+hiC
-PqAwl/xX2btMNNGJ9g7o0xXiLeEw/AI7Ba3YxUTJNtKuuw3qxapyKqZrJwgf1Rkm
-gsQo47W4sZGPnaft/s/ZLeJAg+I7YuYFMvVEwOOtokCN6h7udu8=
-=FCEv
------END PGP SIGNATURE-----
-
---EdPn873a/5CanpDf--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
