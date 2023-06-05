@@ -1,208 +1,128 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2040.outbound.protection.outlook.com [40.107.244.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9DEAD2E;
-	Mon,  5 Jun 2023 18:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685988945; x=1717524945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=huUH1HR4fszCoZuJr8Gz9MUwSwCUYWIuZ3BKksRCNQE=;
-  b=nTG8cgvFTGV0HpKLRPLN3oEKtdvg8R/+2Tc4kBxPNPR/NEmnLec/nlFq
-   0JVqHRIVtqJwP/CLqd9mXodxJjC3CCxA+YSlRFI7k9xKVHAXV51Oubei0
-   ZNY29XQPyA9Qimj892xDfdDxChbtcHBgXkzJnP5tDmMNYBJadtoWT6PIw
-   QY8NXKDeHTf+8u0h2xG/cFHtJ3hEQUjFYEEbv6iUP3i6Yo75+hQ4a9zKI
-   rJeiBTOy+JEzmB1hZbRB7n5fi8xM+jqWcYOHHYizwMmzzU1AaisQCqslu
-   cubQnY224g6Ts4iBqmJykTm7MXIT95mXvKy/J2/c0ec0ZBp/W9Ukf4DUs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355295417"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="355295417"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:15:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778658998"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="778658998"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 11:15:17 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q6Ejc-0004Kd-2R;
-	Mon, 05 Jun 2023 18:15:16 +0000
-Date: Tue, 6 Jun 2023 02:14:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:timers/core 19/21] kernel/time/posix-timers.c:385:18: error:
- use of undeclared identifier 'TICK_NSECS'
-Message-ID: <202306060236.yHWiRzTI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC7823D50
+	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 18:30:44 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MvGkE3yjVtsOfLUuJ/Xzk9+cWcw07fIUS4coOB8r3e9gn6W9KnHkV2F1QLC+okQOabcC+fUZGYYXs+ZsvsycRWgBjaYwTzgn6esoknm4cufEC1pqKrMyycei28FKTw4m/HS+njxWLyQtkzbAiluJ0Tap3bGrNQM09T7eiHZbuXq7iCelZ0dHjkR9NXgZaWY6UOddW0PvQ2TRCUQ073CmYUbnhl6fHNt2I1THamiYFOw1g/lCkY+5EYQYBqmgqTy0P/sctciB7uEJUQUAC9c6BuufZhYD0WikTD7VyVZau0wev2L7vpm7Lb/kemMFN7Z2QX3y1N00IUeqUYytDJs8Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3kzE+nv2w3IJ6pA6dosaCMc5GFlUjjXxgTDlJ4osg6E=;
+ b=anGjcpRaUMTkR5kj7IXJV0zSXiXj410k83RySphuA6eXSB4bJa3Tw02j9Cx9AtYGogncyRghkucxwRMW576X8zXtHtZfpa4ykxizdGpoLla5QKsSm4RjTq2lCE6GLqsrPsf8+zCJV7Mh3UDHJ/VjiwwbeGY1Pc+8eqTI/pCNubDnBwGmEpbJn/kwaf0oUOsvLDg1ZRYAdk8vUSH8UnrfrvLEe9m337OIGEn5QobLjS6RbtAcNr2lQAZFP37QdpkN2Zz6G53HBsuwOPsApG0r5RZ842IKxi4Qmv872TUddiu2dcnlIZJz+J1kcEiSC5rRz1HXlJgeOoUiSfDfdhycUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3kzE+nv2w3IJ6pA6dosaCMc5GFlUjjXxgTDlJ4osg6E=;
+ b=nCJHIYQ2GcshyeLwttoewaJcvkbDWPFBHrsftS+jQM5Eu1N3oHKLcm6l5J0RP9tAtdb6vscU383M4vl5lIZfwmQFpl5kGld57LIFTpBtYk6cp/7pH9pNQQF8DenJDVtX65OtpWWFP1JNZQkCAzxIKz+aGaoHTsJVbMiufRFl/DQ=
+Received: from DS7PR03CA0072.namprd03.prod.outlook.com (2603:10b6:5:3bb::17)
+ by CYYPR12MB8921.namprd12.prod.outlook.com (2603:10b6:930:c7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 18:30:42 +0000
+Received: from DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3bb:cafe::2e) by DS7PR03CA0072.outlook.office365.com
+ (2603:10b6:5:3bb::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 18:30:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT038.mail.protection.outlook.com (10.13.173.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 18:30:42 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
+ 2023 13:30:36 -0500
+From: Hamza Mahfooz <hamza.mahfooz@amd.com>
+To: <amd-gfx@lists.freedesktop.org>
+CC: Hamza Mahfooz <hamza.mahfooz@amd.com>, Harry Wentland
+	<harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira
+	<Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>, "Pan, Xinhui"
+	<Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, Daniel Vetter
+	<daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, Charlene Liu
+	<Charlene.Liu@amd.com>, Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+	"Paul Hsieh" <Paul.Hsieh@amd.com>, Yang Li <yang.lee@linux.alibaba.com>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>, Nicholas Kazlauskas
+	<Nicholas.Kazlauskas@amd.com>, Jun Lei <Jun.Lei@amd.com>, Pavle Kotarac
+	<Pavle.Kotarac@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [PATCH 1/2] drm/amd/display: mark dml31's UseMinimumDCFCLK() as noinline_for_stack
+Date: Mon, 5 Jun 2023 14:30:04 -0400
+Message-ID: <20230605183007.204399-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT038:EE_|CYYPR12MB8921:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81f05a18-d0ed-488f-b125-08db65f2f841
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	EvTBFpUG9ZGfEMneAAX0da6Wzm/hVhPT4XWRhY12dU5l6BeB0Ujcyg76MjRpszsh+tdkZGoGcNvR7M8wU2zO/0Q3va3/HNM/9SwhamycHUSGZc3PAP3gROtkUMP3dEM+BQ04GWsGwsVa6YydOmL3gf4XBqR/5RlzawVzZrAhv6SNpO1hXKlzt0jB3WoHlSGkcFw8z7gKXuNRm0sJuHpdxANf1DBdnSZeyVJKsIOBvfJXph332SXUEqcF1f5XNec2fVep4T2PFrK5DG/q0wuFvBPA69tiJ5oUMKzZ3ZODXtP6ifRWMMyG6CS17gXSxTfRB18SRHgmhfDbUdZCaMPwVXrKI7DOMFYZ16PnpIfIhmQaOxgvXzpmnYPHTWG+hN0ryQiu9nNRTRCvzvlWFMAJujpxK/TGrJAWNzgO6KGbxUgxiL0s0AHHhmHijFRdZ91TiOHcY55zQb+cu1nfSEZsl0PmuuPSqA5WnHKL9oeAc1/m/aaHKVbEB9KyMNSA8fRofeVv3V+JYnmwQNL1RqvgWVlno4D/OJEZXecMTQzOA3ID7PrO//dc43YzLZm2/0U6ElB8wKAEX18Fwmmy4oZbu+Rx0Jzdrfp2EzIeuihWtVHseeKUPho8WI82xDFeV1KZjTPEKMIh/oOpqANJfax25dmYQKs9YDosf/lL0cYVWzIanFn9Z+rHvsov7fAw4o+J3kwu1iX4EiusMI013xe2Rsi6c/ujI5MbUGcFY+YfKv20brbi8OIMbiqKC3aqJQaTFi42ZX6BmBR6MxGxfLNc2ji6URr+2eUMTznsoueo/A0Ob+WEIvSxpnC+LXUIwOGj
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199021)(46966006)(40470700004)(36840700001)(8936002)(8676002)(478600001)(54906003)(41300700001)(5660300002)(6666004)(316002)(1076003)(16526019)(26005)(44832011)(7416002)(186003)(4326008)(70206006)(70586007)(6916009)(2616005)(83380400001)(40460700003)(2906002)(47076005)(336012)(426003)(81166007)(356005)(82740400003)(40480700001)(36860700001)(82310400005)(86362001)(36756003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:30:42.3821
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81f05a18-d0ed-488f-b125-08db65f2f841
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8921
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-head:   1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
-commit: 63dede13d09850a8ace210f8e4227ac5a6b309ae [19/21] posix-timers: Clarify posix_timer_fn() comments
-config: hexagon-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060236.yHWiRzTI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=63dede13d09850a8ace210f8e4227ac5a6b309ae
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip timers/core
-        git checkout 63dede13d09850a8ace210f8e4227ac5a6b309ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
+clang reports:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3797:6: error: stack frame size (2632) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+ 3797 | void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+      |      ^
+1 error generated.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060236.yHWiRzTI-lkp@intel.com/
+So, since UseMinimumDCFCLK() consumes a lot of stack space, mark it as
+noinline_for_stack to prevent it from blowing up
+dml31_ModeSupportAndSystemConfigurationFull()'s stack size.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> kernel/time/posix-timers.c:385:18: error: use of undeclared identifier 'TICK_NSECS'
-                                   ktime_t kj = TICK_NSECS;
-                                                ^
-   6 warnings and 1 error generated.
-
-
-vim +/TICK_NSECS +385 kernel/time/posix-timers.c
-
-   327	
-   328	/*
-   329	 * This function gets called when a POSIX.1b interval timer expires from
-   330	 * the HRTIMER interrupt (soft interrupt on RT kernels).
-   331	 *
-   332	 * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
-   333	 * based timers.
-   334	 */
-   335	static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
-   336	{
-   337		struct k_itimer *timr;
-   338		unsigned long flags;
-   339		int si_private = 0;
-   340		enum hrtimer_restart ret = HRTIMER_NORESTART;
-   341	
-   342		timr = container_of(timer, struct k_itimer, it.real.timer);
-   343		spin_lock_irqsave(&timr->it_lock, flags);
-   344	
-   345		timr->it_active = 0;
-   346		if (timr->it_interval != 0)
-   347			si_private = ++timr->it_requeue_pending;
-   348	
-   349		if (posix_timer_event(timr, si_private)) {
-   350			/*
-   351			 * The signal was not queued due to SIG_IGN. As a
-   352			 * consequence the timer is not going to be rearmed from
-   353			 * the signal delivery path. But as a real signal handler
-   354			 * can be installed later the timer must be rearmed here.
-   355			 */
-   356			if (timr->it_interval != 0) {
-   357				ktime_t now = hrtimer_cb_get_time(timer);
-   358	
-   359				/*
-   360				 * FIXME: What we really want, is to stop this
-   361				 * timer completely and restart it in case the
-   362				 * SIG_IGN is removed. This is a non trivial
-   363				 * change to the signal handling code.
-   364				 *
-   365				 * For now let timers with an interval less than a
-   366				 * jiffie expire every jiffie and recheck for a
-   367				 * valid signal handler.
-   368				 *
-   369				 * This avoids interrupt starvation in case of a
-   370				 * very small interval, which would expire the
-   371				 * timer immediately again.
-   372				 *
-   373				 * Moving now ahead of time by one jiffie tricks
-   374				 * hrtimer_forward() to expire the timer later,
-   375				 * while it still maintains the overrun accuracy
-   376				 * for the price of a slight inconsistency in the
-   377				 * timer_gettime() case. This is at least better
-   378				 * than a timer storm.
-   379				 *
-   380				 * Only required when high resolution timers are
-   381				 * enabled as the periodic tick based timers are
-   382				 * automatically aligned to the next tick.
-   383				 */
-   384				if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
- > 385					ktime_t kj = TICK_NSECS;
-   386	
-   387					if (timr->it_interval < kj)
-   388						now = ktime_add(now, kj);
-   389				}
-   390	
-   391				timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
-   392				ret = HRTIMER_RESTART;
-   393				++timr->it_requeue_pending;
-   394				timr->it_active = 1;
-   395			}
-   396		}
-   397	
-   398		unlock_timer(timr, flags);
-   399		return ret;
-   400	}
-   401	
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index 01603abd75bb..43016c462251 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -7032,7 +7032,7 @@ static double CalculateUrgentLatency(
+ 	return ret;
+ }
+ 
+-static void UseMinimumDCFCLK(
++static noinline_for_stack void UseMinimumDCFCLK(
+ 		struct display_mode_lib *mode_lib,
+ 		int MaxPrefetchMode,
+ 		int ReorderingBytes)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.40.1
+
