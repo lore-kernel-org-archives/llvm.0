@@ -1,193 +1,197 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F95294F0
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 09:39:25 +0000 (UTC)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1a27ffe9dcdso5581295fac.2
-        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 02:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686044365; x=1688636365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wkn+HZKrKRvjZDeKyoBSF6uuTA952duEKPUjrTbetXc=;
-        b=Xk98Lq63ARoE6wByWmP5TRbFLyEczW5OgMxZqZdrkN0xhQmBTDBvHky6C2JFWtS0EP
-         t1k6AgtIqbbaNDEPOk9sVx6QN9364Gs48mHxkPxM9Q+e8jSEs8ry5JnHQq4iPKbWa68v
-         dDN7dkOnic56zybeWXpVUMZdYO8QL8xXC7oZdFtb6DKE8T9lCunlOuqSaguUxhbhUkoo
-         H2QyCwGTHT+f8fT16z+JvnaUJUpSuNdBmm5BOBgKAGZyxv23yEx+VoNc1cdunZQFXt63
-         LEHR06oLfVuRM8riNXPsTYE0pKHi4y6umjoMTLXrY5tc1boeJg+mR/hWZHgPwS6UFGdL
-         46LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044365; x=1688636365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wkn+HZKrKRvjZDeKyoBSF6uuTA952duEKPUjrTbetXc=;
-        b=HSP7/LsB48F7SzezJFKWQPTipvD0c+5WHf9F8otsHvCG1uOjXkPLdPoKiek5ar4iIF
-         Jnvt76o7fSejPSLaV9svvAm4Dfgt30hMwJo0hZRcRHj5QrfqgUF/FhxLi0daMZL8J1Pb
-         gu96ZDTVrc+fHfUz5C3vc02jxem2cQWsg43Os/b9+lGKk17dciSfMqbfLkZI+N1Tl58z
-         B0lDcYox+xnFwO/arPMcuDmQRY//aoEDPkNIbHH3EjQXjazDukODK94fYDJjh57m1TVy
-         dL6kvP1DaeArYaIvyZyLj97Nq1sDGf8jArgFMGNHe0dBg3RTOd+ibKy92uHmzbA7K+Dl
-         2anw==
-X-Gm-Message-State: AC+VfDyY4mJl3HHrBUGFbrpQdYDYecBN3jahCB0D3sW8YWsI7BrUQ4px
-	FwYHm41BboM1DPuqQ/BlDV45pzzhjMVMSOPjqYj52/i6GBpbWg==
-X-Google-Smtp-Source: ACHHUZ7RlRqtk6XhCDIyyvV5f8xnVmgsCHWmmdKU+g3Rzq8HCG+ezOvRdvmsSn67PDqPLmMXNIE0/9Xh3slMMxMFays=
-X-Received: by 2002:a05:6870:b7b3:b0:19f:45a1:b5a2 with SMTP id
- ed51-20020a056870b7b300b0019f45a1b5a2mr2054969oab.49.1686044364808; Tue, 06
- Jun 2023 02:39:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF60E294DC;
+	Tue,  6 Jun 2023 09:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686045055; x=1717581055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3cNnMr81VZ0I0o8WZIbb8MszLRP+Xq3U1TWFpdzHIS8=;
+  b=n5gYZELRa3ufv4v9ltCoXDnjtVODyjA1ZeSbK426SWtAwXt6BLvMKEyV
+   XXlj5aRaiCGUGK3g/nkKYs+QMnSgxLd0rTYr58wBLGyhlxeoFZ5SqSSNH
+   11XWLgGrQ4Rh1UJD7JBh/s+t+wnlF0+ItN93xk8Tch+5xtpq3B8xxLrfR
+   vvgVgzQrHV3S5CdfGy1YHl36YyKy/gaoamp3UUKW5/wKy6WpepxIFNBkb
+   i4EPmCMPad5Nx8pO8pLBUdnU1F6GhQZlLnvWQDL7G6323bLI/lY5hDyih
+   vu5kjVERKFaGU85Ml20FvDARNqe5GuznrO5AQd0KQ/6+o641ZwVclj+xq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="356630036"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="356630036"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 02:50:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="709016088"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="709016088"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jun 2023 02:50:13 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6TKP-00056l-0o;
+	Tue, 06 Jun 2023 09:50:13 +0000
+Date: Tue, 6 Jun 2023 17:49:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Grant Grundler <grundler@chromium.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O 'Halloran <oohall@gmail.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>,
+	Grant Grundler <grundler@chromium.org>
+Subject: Re: [PATCHv3 pci-next 2/2] PCI/AER: Rate limit the reporting of the
+ correctable errors
+Message-ID: <202306061710.tDjm3jHD-lkp@intel.com>
+References: <20230606035442.2886343-2-grundler@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20200721041940.4029552-1-maskray@google.com> <6576b5c0-ff42-4d12-be68-bc66dce268a5n@googlegroups.com>
- <CAKwvOd=QDy02=USKKYQAr16M2YWVFwcZutEWmFWpJcS7sZemxg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=QDy02=USKKYQAr16M2YWVFwcZutEWmFWpJcS7sZemxg@mail.gmail.com>
-From: Thomas-topway-it <thomas.topway.it@gmail.com>
-Date: Tue, 6 Jun 2023 13:39:14 +0400
-Message-ID: <CA+wrm5DCJzM0mfy9eZhjz1gGWrEsg4fr28WqgYJ49f_6iM8nPg@mail.gmail.com>
-Subject: Re: [PATCH v2] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606035442.2886343-2-grundler@chromium.org>
 
-hello Nick,
-    thanks a lot, I've added the new list as 'cc'.
-So yes, after a lot of researches I also identified
-the issue as such. However, shouldn't it be handled
-automatically by Android Studio ?
-Clang fails indeed because it is not provided with the
-right target. Unless there is an easy way to add
-it in the build.gradle, could it be related to the following ?
+Hi Grant,
 
-"To better model how GCC's -B/--prefix takes in effect in practice, newer
-Clang (since
-https://github.com/llvm/llvm-project/commit/3452a0d8c17f7166f479706b293caf6=
-ac76ffd90)
-only searches for $(prefix)$needle. Currently it will find /usr/bin/as
-instead of /usr/bin/aarch64-linux-gnu-as."
+kernel test robot noticed the following build errors:
 
-https://groups.google.com/g/clang-built-linux/c/RbwKbwkBok8/m/rGUo8gUWBgAJ
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.4-rc5 next-20230606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Anyone has experience of the same issue with the CFlag '-no-integrated-as'
-on Ubuntu 22 and up ?
-(Thomas)
+url:    https://github.com/intel-lab-lkp/linux/commits/Grant-Grundler/PCI-AER-Rate-limit-the-reporting-of-the-correctable-errors/20230606-115515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230606035442.2886343-2-grundler%40chromium.org
+patch subject: [PATCHv3 pci-next 2/2] PCI/AER: Rate limit the reporting of the correctable errors
+config: x86_64-randconfig-x051-20230606 (https://download.01.org/0day-ci/archive/20230606/202306061710.tDjm3jHD-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add pci https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+        git fetch pci next
+        git checkout pci/next
+        b4 shazam https://lore.kernel.org/r/20230606035442.2886343-2-grundler@chromium.org
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/pcie/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306061710.tDjm3jHD-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/pci/pcie/aer.c:717:30: error: expected ';' after expression
+                   pci_err(dev, "%s", aer_msg):
+                                              ^
+                                              ;
+>> drivers/pci/pcie/aer.c:746:28: warning: data argument not used by format string [-Wformat-extra-args]
+                           aer_error_layer[layer], aer_agent_string[agent],
+                           ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pci.h:2600:65: note: expanded from macro 'pci_err'
+   #define pci_err(pdev, fmt, arg...)      dev_err(&(pdev)->dev, fmt, ##arg)
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^
+   1 warning and 1 error generated.
 
 
-On Mon, 5 Jun 2023 at 20:25, Nick Desaulniers <ndesaulniers@google.com> wro=
-te:
->
-> On Sat, Jun 3, 2023 at 11:46=E2=80=AFAM Thomas-topway-it
-> <thomas.topway.it@gmail.com> wrote:
-> >
-> > hello,  I'm trying to compile a c++ library on Android Studio,
-> > on Ubuntu 22.10, Clang 15.0.7, with CFlag '-no-integrated-as'.
-> > I think I experience the issue here described
-> > /usr/bin/as: unrecognized option '-EL'
-> > (this also setting manually the path of
-> > aarch64-linux-android-as)
-> > I've tried to downgrade to Clang 11 but no luck with
-> > this also. (it compiles x86 and x86_64, but not
-> > armeabi and arm64 for the same cause)
-> > Is there a way to set the prefix at Android Studio
-> > level instead than manually in the mk of
-> > all the libraries? Or is there a solution
-> > for the latest version of Ubuntu ?
-> > I'm not sure if this is the right place to
-> > ask this question, but perhaps you are able to
-> > give some suggestions.
->
-> Hi Thomas,
-> This mailing list was used for discussion building the linux kernel with =
-clang.
-> https://clangbuiltlinux.github.io/
-> We now use llvm@lists.linux.dev instead and this ML is inactive.
->
-> I've never used Android Studio, so I can't help you with UI questions,
-> but I know that the (host) assembler (probably x86_64) is complaining
-> that it doesn't recognize the command line flag (`-EL`; endianness
-> little) because x86_64 is not bi-endian (it's always LE) and that
-> assembler flag was probably meant for the target assembler (aarch64?
-> arm?).  That's a familiar failure when clang is not given a target
-> triple on the command line, like `--target=3Daarch64-linux-gnu`, during
-> cross compilation. I'm guessing you'd want a triple with `android`
-> somewhere in the string.
->
-> Hope this helps!
->
-> > Thanks a lot
-> >
-> >
-> > On Tuesday, 21 July 2020 at 08:20:05 UTC+4 Fangrui Song wrote:
-> >>
-> >> When CROSS_COMPILE is set (e.g. aarch64-linux-gnu-), if
-> >> $(CROSS_COMPILE)elfedit is found at /usr/bin/aarch64-linux-gnu-elfedit=
-,
-> >> GCC_TOOLCHAIN_DIR will be set to /usr/bin/. --prefix=3D will be set to
-> >> /usr/bin/ and Clang as of 11 will search for both
-> >> $(prefix)aarch64-linux-gnu-$needle and $(prefix)$needle.
-> >>
-> >> GCC searchs for $(prefix)aarch64-linux-gnu/$version/$needle,
-> >> $(prefix)aarch64-linux-gnu/$needle and $(prefix)$needle. In practice,
-> >> $(prefix)aarch64-linux-gnu/$needle rarely contains executables.
-> >>
-> >> To better model how GCC's -B/--prefix takes in effect in practice, new=
-er
-> >> Clang (since
-> >> https://github.com/llvm/llvm-project/commit/3452a0d8c17f7166f479706b29=
-3caf6ac76ffd90)
-> >> only searches for $(prefix)$needle. Currently it will find /usr/bin/as
-> >> instead of /usr/bin/aarch64-linux-gnu-as.
-> >>
-> >> Set --prefix=3D to $(GCC_TOOLCHAIN_DIR)$(CROSS_COMPILE)
-> >> (/usr/bin/aarch64-linux-gnu-) so that newer Clang can find the
-> >> appropriate cross compiling GNU as (when -no-integrated-as is in
-> >> effect).
-> >>
-> >> Reported-by: Nathan Chancellor <natecha...@gmail.com>
-> >> Signed-off-by: Fangrui Song <mas...@google.com>
-> >> Reviewed-by: Nathan Chancellor <natecha...@gmail.com>
-> >> Tested-by: Nathan Chancellor <natecha...@gmail.com>
-> >> Tested-by: Nick Desaulniers <ndesau...@google.com>
-> >> Link: https://github.com/ClangBuiltLinux/linux/issues/1099
-> >> ---
-> >> Changes in v2:
-> >> * Updated description to add tags and the llvm-project commit link.
-> >> * Fixed a typo.
-> >> ---
-> >> Makefile | 2 +-
-> >> 1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/Makefile b/Makefile
-> >> index 0b5f8538bde5..3ac83e375b61 100644
-> >> --- a/Makefile
-> >> +++ b/Makefile
-> >> @@ -567,7 +567,7 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | =
-grep clang),)
-> >> ifneq ($(CROSS_COMPILE),)
-> >> CLANG_FLAGS +=3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
-> >> GCC_TOOLCHAIN_DIR :=3D $(dir $(shell which $(CROSS_COMPILE)elfedit))
-> >> -CLANG_FLAGS +=3D --prefix=3D$(GCC_TOOLCHAIN_DIR)
-> >> +CLANG_FLAGS +=3D --prefix=3D$(GCC_TOOLCHAIN_DIR)$(CROSS_COMPILE)
-> >> GCC_TOOLCHAIN :=3D $(realpath $(GCC_TOOLCHAIN_DIR)/..)
-> >> endif
-> >> ifneq ($(GCC_TOOLCHAIN),)
-> >> --
-> >> 2.28.0.rc0.105.gf9edc3c819-goog
-> >>
-> > --
-> > You received this message because you are subscribed to the Google Grou=
-ps "Clang Built Linux" group.
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to clang-built-linux+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/ms=
-gid/clang-built-linux/6576b5c0-ff42-4d12-be68-bc66dce268a5n%40googlegroups.=
-com.
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+vim +717 drivers/pci/pcie/aer.c
+
+   684	
+   685	static void __aer_print_error(struct pci_dev *dev,
+   686				      struct aer_err_info *info)
+   687	{
+   688		const char **strings;
+   689		char aer_msg[512];
+   690		unsigned long status = info->status & ~info->mask;
+   691		int i;
+   692	
+   693		memset(aer_msg, 0, sizeof(*aer_msg));
+   694		snprintf(aer_msg, sizeof(*aer_msg), "aer_status: 0x%08x, aer_mask: 0x%08x\n",
+   695				info->status, info->mask);
+   696	
+   697		strings = (info->severity == AER_CORRECTABLE) ?
+   698			aer_correctable_error_string : aer_uncorrectable_error_string;
+   699	
+   700		for_each_set_bit(i, &status, 32) {
+   701			const char *errmsg = strings[i];
+   702			char bitmsg[64];
+   703			memset(bitmsg, 0, sizeof(*bitmsg));
+   704	
+   705			if (!errmsg)
+   706				errmsg = "Unknown Error Bit";
+   707	
+   708			snprintf(bitmsg, sizeof(*bitmsg), "   [%2d] %-22s%s\n", i, errmsg,
+   709				    info->first_error == i ? " (First)" : "");
+   710	
+   711			strlcat(aer_msg, bitmsg, sizeof(*aer_msg));
+   712		}
+   713	
+   714		if (info->severity == AER_CORRECTABLE)
+   715			pci_info_ratelimited(dev, "%s", aer_msg);
+   716		else
+ > 717			pci_err(dev, "%s", aer_msg):
+   718	
+   719		pci_dev_aer_stats_incr(dev, info);
+   720	}
+   721	
+   722	void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+   723	{
+   724		int layer, agent;
+   725		int id = ((dev->bus->number << 8) | dev->devfn);
+   726	
+   727		if (!info->status) {
+   728			pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
+   729				aer_error_severity_string[info->severity]);
+   730			goto out;
+   731		}
+   732	
+   733		layer = AER_GET_LAYER_ERROR(info->severity, info->status);
+   734		agent = AER_GET_AGENT(info->severity, info->status);
+   735	
+   736		if (info->severity == AER_CORRECTABLE) {
+   737			pci_info_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n"
+   738					"  device [%04x:%04x] error status/mask=%08x/%08x\n",
+   739					     aer_error_severity_string[info->severity],
+   740					     aer_error_layer[layer], aer_agent_string[agent],
+   741					     dev->vendor, dev->device, info->status, info->mask);
+   742		} else {
+   743			pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
+   744				"  device [%04x:%04x] error status/mask=%08x/%08x\n",
+   745				aer_error_severity_string[info->severity],
+ > 746				aer_error_layer[layer], aer_agent_string[agent],
+   747				dev->vendor, dev->device, info->status, info->mask);
+   748		}
+   749	
+   750		__aer_print_error(dev, info);
+   751	
+   752		if (info->tlp_header_valid)
+   753			__print_tlp_header(dev, &info->tlp);
+   754	
+   755	out:
+   756		if (info->id && info->error_dev_num > 1 && info->id == id)
+   757			pci_err(dev, "  Error of this Agent is reported first\n");
+   758	
+   759		trace_aer_event(dev_name(&dev->dev), (info->status & ~info->mask),
+   760				info->severity, info->tlp_header_valid, &info->tlp);
+   761	}
+   762	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
