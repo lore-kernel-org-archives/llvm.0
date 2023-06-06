@@ -1,128 +1,118 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D2D5660
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 08:27:58 +0000 (UTC)
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-43b4c99e90bso718266137.2
-        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 01:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686040078; x=1688632078;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=u5Wgtn8/rnttwldo7obcCR9XRckr5E/5NgOb/WDxxmk=;
-        b=uYmXqLBUM6COwzxPGWhxC80Z4S5Ueyve4gOf03PfkM2pb9oYz57n+NZOpZoAfnDWGn
-         uJzgQmKapRZYGWW2lt8wjB/owY8Qrk3wpSWiidDbo3pWTqdNgH/7WhjA1vtBYBL49mdl
-         rgRzRlyvps7GN8UFd9wlsjv/pe39VwivjSSWYFeUULgdSg/BhRe6ZU7mRxb3msVeaop2
-         0lyWfcVmM22umdTyAbBmdZrQhncxM5qvTKRIt9YYd+zSysDylXJ9uU9N6aPE8ZHizlSU
-         HFeBPXcMNMBIzMcsvqwDudUSkTebD6cyg4yfFOajSTLWc2RCydKNHW9H4KfYc1Y9gcpR
-         D0Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686040078; x=1688632078;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u5Wgtn8/rnttwldo7obcCR9XRckr5E/5NgOb/WDxxmk=;
-        b=G/5vQAnqL7NQR5lbgwS+bLNKXCneWG2NtEmD8/rEbZoMaXVjQ0CHHIGKO3G+oKsSt5
-         TGaLl/p7sRPDkyJ9RyMIcOIK6OuaN7KTJrtDnC5NEg8zbhxxzIOWNg+ckw8fSdS3Lbm6
-         6+LBqx3dtOdk7qHllTsgFte7LRIj/qS3/37SgggMzoLQ8mbJzFK4zc1rO6ZrNHerjO/a
-         AMvR26NzwJ80IUO7hHK+lSkemAKOMqW6AOs/He5jw2CehOnknzcw/qU19WAnHXPjyrd7
-         rwhzOnGFEUQlaQiKSD7OsWvRG0B6CXTgTbCJyc29bXn+YRfQjvwpXQ08/Z4LqPTRcI/q
-         NVfA==
-X-Gm-Message-State: AC+VfDwaj9scrcM1o0/xlRhsuvhmslHiwzRjSaFG8Kyc8XOUn5F36HOS
-	vpzlhfgI/yfLLlEVNu4yGdye5E3vhvrDxjM/8gyVlw==
-X-Google-Smtp-Source: ACHHUZ7FhlaYW8/uts+Qhj1091fZM7B1bAspzmTHZ2wmYJbOtdOEhf3V09FOQbaFNwAS3YHOZhWo06WEul9kKe8eXSw=
-X-Received: by 2002:a67:f655:0:b0:437:d75e:1f3e with SMTP id
- u21-20020a67f655000000b00437d75e1f3emr781142vso.32.1686040077838; Tue, 06 Jun
- 2023 01:27:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E72818;
+	Tue,  6 Jun 2023 08:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686040694; x=1717576694;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8CDLDbaQjRRAeD9OKphzQRvzSYMKHtFq7GRXrxsXejc=;
+  b=D4WhqStG/bEEPxRdEjiWtgyWPMKsSI58xH8evucovkEmhp90foTQFt2G
+   GGESBDonlbMUd5MCwAf/1eN8sBA8fcG+FoCB9PN8eJRJ23EMWPiZ4/kpg
+   1X1rI95dbuAm1B5HWzMkuZT2D/ofsI/AS4b1efq/N/hRJe7ZkorUGGuyl
+   I8DfdavMZOVXsBTDeSzh+XIHKu+MbX018z2bNA0wFB90a1cInbgh0Szs5
+   Affoi4vIsZxBja+6TJHdPWDgpbgJUsH1yO60Og6HAdV7B+iT/URRuAk7m
+   Thctk8rkVK05D+7Id5lLyyn5eeLKaBE3DkDB9x/oBzekmTF//2A6XkS29
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422430960"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="422430960"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 01:38:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="659430174"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="659430174"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 Jun 2023 01:38:11 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6SCg-00052h-19;
+	Tue, 06 Jun 2023 08:38:10 +0000
+Date: Tue, 6 Jun 2023 16:37:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-rolling-lts 3567/3903]
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c:28:33: warning: unused variable
+ 'rtl819xp_ops'
+Message-ID: <202306061620.pKDPd9DB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 6 Jun 2023 13:57:46 +0530
-Message-ID: <CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com>
-Subject: powerpc: clang: arch/powerpc/kernel/exceptions-64s.S:2976: Error:
- junk at end of line: `0b01010'
-To: open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	lkft-triage@lists.linaro.org
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Linux next-20230606 powerpc build failed.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-rolling-lts
+head:   eaf8bf7b2c945057aa386c9a5b92deb7c0295ce7
+commit: ec310591cf839653a5b2c1fcf6b8a110c3f2485c [3567/3903] staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE
+config: powerpc-randconfig-r021-20230606 (https://download.01.org/0day-ci/archive/20230606/202306061620.pKDPd9DB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=ec310591cf839653a5b2c1fcf6b8a110c3f2485c
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-rolling-lts
+        git checkout ec310591cf839653a5b2c1fcf6b8a110c3f2485c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/staging/rtl8192e/rtl8192e/
 
-Regressions found on powerpc:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306061620.pKDPd9DB-lkp@intel.com/
 
- - build/clang-16-maple_defconfig
- - build/clang-nightly-maple_defconfig
- - build/clang-16-defconfig
- - build/clang-nightly-defconfig
- - build/clang-nightly-cell_defconfig
- - build/clang-16-cell_defconfig
+All warnings (new ones prefixed by >>):
 
-Boot:
-=====
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc
- CROSS_COMPILE=powerpc64le-linux-gnu-
- HOSTCC=clang
- CC=clang
- LLVM=1
- LLVM_IAS=0
- LD=powerpc64le-linux-gnu-ld
+>> drivers/staging/rtl8192e/rtl8192e/rtl_core.c:28:33: warning: unused variable 'rtl819xp_ops' [-Wunused-const-variable]
+      28 | static const struct rtl819x_ops rtl819xp_ops = {
+         |                                 ^
+   1 warning generated.
 
-arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
-arch/powerpc/kernel/exceptions-64s.S:2976: Error: junk at end of line: `0b01010'
-arch/powerpc/kernel/exceptions-64s.S:2996: Error: junk at end of line: `0b01010'
-arch/powerpc/kernel/exceptions-64s.S:3011: Error: junk at end of line: `0b01010'
-arch/powerpc/kernel/exceptions-64s.S:3029: Error: junk at end of line: `0b01010'
-arch/powerpc/kernel/exceptions-64s.S:3049: Error: junk at end of line: `0b01010'
-arch/powerpc/kernel/exceptions-64s.S:3096: Error: junk at end of line: `0b01010'
-clang: error: assembler command failed with exit code 1 (use -v to see
-invocation)
-make[4]: *** [scripts/Makefile.build:374: arch/powerpc/kernel/head_64.o] Error 1
-arch/powerpc/kernel/entry_64.S: Assembler messages:
-arch/powerpc/kernel/entry_64.S:174: Error: junk at end of line: `0b01010'
-clang: error: assembler command failed with exit code 1 (use -v to see
-invocation)
-make[4]: *** [scripts/Makefile.build:374:
-arch/powerpc/kernel/entry_64.o] Error 1
-make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
-make[3]: *** [scripts/Makefile.build:494: arch/powerpc/kernel] Error 2
-arch/powerpc/lib/copyuser_power7.S: Assembler messages:
-arch/powerpc/lib/copyuser_power7.S:305: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/copyuser_power7.S:306: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/copyuser_power7.S:308: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/copyuser_power7.S:309: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/copyuser_power7.S:311: Error: junk at end of line: `0b01010'
-clang: error: assembler command failed with exit code 1 (use -v to see
-invocation)
-make[4]: *** [scripts/Makefile.build:374:
-arch/powerpc/lib/copyuser_power7.o] Error 1
-arch/powerpc/lib/copypage_power7.S: Assembler messages:
-arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
-clang: error: assembler command failed with exit code 1 (use -v to see
-invocation)
-make[4]: *** [scripts/Makefile.build:374:
-arch/powerpc/lib/copypage_power7.o] Error 1
-arch/powerpc/lib/memcpy_power7.S: Assembler messages:
-arch/powerpc/lib/memcpy_power7.S:250: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/memcpy_power7.S:251: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/memcpy_power7.S:252: Error: junk at end of line: `0b01000'
-arch/powerpc/lib/memcpy_power7.S:253: Error: junk at end of line: `0b01010'
-arch/powerpc/lib/memcpy_power7.S:255: Error: junk at end of line: `0b01010'
-clang: error: assembler command failed with exit code 1 (use -v to see
-invocation)
-make[4]: *** [scripts/Makefile.build:374:
-arch/powerpc/lib/memcpy_power7.o] Error 1
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+vim +/rtl819xp_ops +28 drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 
---
-Linaro LKFT
-https://lkft.linaro.org
+94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finger       2011-08-23  27  
+1c099ed63f8363 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Julia Lawall       2016-09-11 @28  static const struct rtl819x_ops rtl819xp_ops = {
+94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finger       2011-08-23  29  	.nic_type			= NIC_8192E,
+b095be37004f91 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  30  	.get_eeprom_size		= rtl92e_get_eeprom_size,
+df85a1313fee7d drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  31  	.init_adapter_variable		= rtl92e_init_variables,
+460266292de1c3 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  32  	.initialize_adapter		= rtl92e_start_adapter,
+b974b289c4cb8a drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  33  	.link_change			= rtl92e_link_change,
+072b3948d473f8 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  34  	.tx_fill_descriptor		= rtl92e_fill_tx_desc,
+63b544a17c63c0 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  35  	.tx_fill_cmd_descriptor		= rtl92e_fill_tx_cmd_desc,
+7897285ceb2864 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  36  	.rx_query_status_descriptor	= rtl92e_get_rx_stats,
+94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finger       2011-08-23  37  	.rx_command_packet_handler = NULL,
+fe99c77b44e41c drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  38  	.stop_adapter			= rtl92e_stop_adapter,
+575d48c5753246 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  39  	.update_ratr_table		= rtl92e_update_ratr_table,
+6d99c68e6f5024 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  40  	.irq_enable			= rtl92e_enable_irq,
+baadea565daae4 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  41  	.irq_disable			= rtl92e_disable_irq,
+dc578b417facae drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  42  	.irq_clear			= rtl92e_clear_irq,
+78c352b2b22348 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  43  	.rx_enable			= rtl92e_enable_rx,
+6af7a8b662f6bb drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  44  	.tx_enable			= rtl92e_enable_tx,
+a57165d15dae6f drivers/staging/rtl8192e/rtl8192e/rtl_core.c Mateusz Kulikowski 2015-07-19  45  	.interrupt_recognized		= rtl92e_ack_irq,
+254d6fca9d38f9 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Philipp Hortmann   2022-08-24  46  	.tx_check_stuck_handler	= rtl92e_is_tx_stuck,
+254d6fca9d38f9 drivers/staging/rtl8192e/rtl8192e/rtl_core.c Philipp Hortmann   2022-08-24  47  	.rx_check_stuck_handler	= rtl92e_is_rx_stuck,
+94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finger       2011-08-23  48  };
+94a799425eee82 drivers/staging/rtl8192e/rtl_core.c          Larry Finger       2011-08-23  49  
+
+:::::: The code at line 28 was first introduced by commit
+:::::: 1c099ed63f8363228a0b075a25511c9feb90e03f staging: rtl8192e: constify local structures
+
+:::::: TO: Julia Lawall <Julia.Lawall@lip6.fr>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
