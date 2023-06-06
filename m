@@ -1,104 +1,140 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0A137B71
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 14:02:56 +0000 (UTC)
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-39a4eb67c5fso4000641b6e.0
-        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 07:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686060175; x=1688652175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKfMxnlTG/tbmuksWuOGZWrrvfs8QjlyYN4r2hnIpWo=;
-        b=VA42Clb/LLV7nHqt/y8/XVxTan46RsgI8crf9vhzZRuiychWUTwqv0bsNXuz1rz7xu
-         MlGWultN0RTL1m/HaT5y1hLhfLRp+ea9eGpqaJ04pgBw9o1VxDlkbNsj5SGtYpKtnE3R
-         u0gs7e3qAIZZy3JfBBWI/huXTusyPeG55EBuAYrFTrVJs0YnBVt8dHEaa5otkZFA+8x4
-         MsgphfPGBFX3hxHFZUie4K7a/KcGSIN0xizFUxP+75ax6WzzD/0WJtLpBXhaDJtvVqky
-         f6vxhN6ghr+kGS6VBHc13JH9560ANfmpjy0ygTVrMklQVdZIWOEjfOV+N03omHKgc5ZH
-         +87w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686060175; x=1688652175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uKfMxnlTG/tbmuksWuOGZWrrvfs8QjlyYN4r2hnIpWo=;
-        b=LYlL9zXn7W1BKhIwzvcoCoS0fBN6AngEbVPHZt8ZHwzg4DV7uKunZ45buBJq9b+HRr
-         gV4a3SucUfAonpMKuyxtT6bKkRxbWCvtyC8sJSl+dBwtYkqGNWpiNRgnMduPnOoUosvk
-         ymtZxWwGiYHOJEr1McLlmArTXJuVP+K+j+oOI/+ve0sfuxxIOpyb/GZq3ko49yZIi4Hd
-         pWiBocyel9c/RZfGZz5BxNfPL/nbvrDafNW5DuRJXP0gWz+wBdeni/LJVBTAwzVO9yfz
-         22shB1BW//T1/gqhx5NeqJUv7SxiNWdHynuqquM22TZIArVh1+rCxy4s9eBnTgho0CvO
-         2vJQ==
-X-Gm-Message-State: AC+VfDygi0pmkJHG/3Dvc8ImJ142sIBVYEBJK9kOOlgTWDeCxt+i0646
-	9K3OEAHfqgHAKRX/xPwFX0aPvFSEQJaM/H1WB6w=
-X-Google-Smtp-Source: ACHHUZ7ElSN1h6Nn2Mycq3M2NnCpSv8PBO/3dsGRn7+ApEUjV4I+bf369hsLA1VMW49PWCrORbuNPG4AeB/CJ+Hvhys=
-X-Received: by 2002:a05:6808:98b:b0:398:2b78:5a53 with SMTP id
- a11-20020a056808098b00b003982b785a53mr1067410oic.40.1686060175306; Tue, 06
- Jun 2023 07:02:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321E37B97
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 15:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B57C433EF;
+	Tue,  6 Jun 2023 15:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686065512;
+	bh=24AUyPfBFJqlvaX/w0MXpBX88SvjMMONuaYLEQpGUxE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mz37zLzXPEJw+IdodP/nthr7nSGPwX4H+Tz6aijiukT7l20v7vj4a1u9D5t69btMD
+	 GB8BYSfCGDsFzUutfnho1KFq89x1GTygIwRGOaue15EQMHi9fhKN+SjcjMOcHjLjhn
+	 +RTTHPdJyQ96kiN4PpHekRvpCsZM1LFUk4ZYc5X/m7QPIrHB+s7LhiDaVyYJsxh8p8
+	 /SH71JXab9TSeW8OJDTDFDYRT6g9ViFo1gUw+OQv8K7yWiz5zVVepcEdso5a/dc8pd
+	 jMr0vTS45LlY7SEV25ixmN2FNGmS79OiLNiY7T8db/RuohixBvCRGAyvR3HCk9Wwe8
+	 OGHabjXV+BzwA==
+Date: Tue, 6 Jun 2023 08:31:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	lkft-triage@lists.linaro.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: powerpc: clang: arch/powerpc/kernel/exceptions-64s.S:2976:
+ Error: junk at end of line: `0b01010'
+Message-ID: <20230606153150.GA128872@dev-arch.thelio-3990X>
+References: <CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230605183007.204399-1-hamza.mahfooz@amd.com> <20230605183007.204399-2-hamza.mahfooz@amd.com>
-In-Reply-To: <20230605183007.204399-2-hamza.mahfooz@amd.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 6 Jun 2023 10:02:44 -0400
-Message-ID: <CADnq5_N72yxvjVNT5jEe496J36L8x9bZKaWHZ1X6=qwMPW8_rw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/amd/display: mark dml314's UseMinimumDCFCLK() as noinline_for_stack
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: amd-gfx@lists.freedesktop.org, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>, 
-	Jun Lei <Jun.Lei@amd.com>, Charlene Liu <Charlene.Liu@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Paul Hsieh <Paul.Hsieh@amd.com>, 
-	Qingqing Zhuo <qingqing.zhuo@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com>
 
-Series is:
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Hi Naresh,
 
-On Mon, Jun 5, 2023 at 2:30=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.com=
-> wrote:
->
-> clang reports:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.=
-c:3892:6: error: stack frame size (2632) exceeds limit (2048) in 'dml314_Mo=
-deSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->  3892 | void dml314_ModeSupportAndSystemConfigurationFull(struct display_=
-mode_lib *mode_lib)
->       |      ^
-> 1 error generated.
->
-> So, since UseMinimumDCFCLK() consumes a lot of stack space, mark it as
-> noinline_for_stack to prevent it from blowing up
-> dml314_ModeSupportAndSystemConfigurationFull()'s stack size.
->
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> ---
->  .../gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_3=
-14.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-> index 27b83162ae45..1532a7e0ed6c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-> @@ -7061,7 +7061,7 @@ static double CalculateUrgentLatency(
->         return ret;
->  }
->
-> -static void UseMinimumDCFCLK(
-> +static noinline_for_stack void UseMinimumDCFCLK(
->                 struct display_mode_lib *mode_lib,
->                 int MaxPrefetchMode,
->                 int ReorderingBytes)
-> --
-> 2.40.1
->
+On Tue, Jun 06, 2023 at 01:57:46PM +0530, Naresh Kamboju wrote:
+> Linux next-20230606 powerpc build failed.
+> 
+> Regressions found on powerpc:
+> 
+>  - build/clang-16-maple_defconfig
+>  - build/clang-nightly-maple_defconfig
+>  - build/clang-16-defconfig
+>  - build/clang-nightly-defconfig
+>  - build/clang-nightly-cell_defconfig
+>  - build/clang-16-cell_defconfig
+> 
+> Boot:
+> =====
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc
+>  CROSS_COMPILE=powerpc64le-linux-gnu-
+>  HOSTCC=clang
+>  CC=clang
+>  LLVM=1
+>  LLVM_IAS=0
+>  LD=powerpc64le-linux-gnu-ld
+> 
+> arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
+> arch/powerpc/kernel/exceptions-64s.S:2976: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:2996: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3011: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3029: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3049: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3096: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:374: arch/powerpc/kernel/head_64.o] Error 1
+> arch/powerpc/kernel/entry_64.S: Assembler messages:
+> arch/powerpc/kernel/entry_64.S:174: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:374:
+> arch/powerpc/kernel/entry_64.o] Error 1
+> make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
+> make[3]: *** [scripts/Makefile.build:494: arch/powerpc/kernel] Error 2
+> arch/powerpc/lib/copyuser_power7.S: Assembler messages:
+> arch/powerpc/lib/copyuser_power7.S:305: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copyuser_power7.S:306: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copyuser_power7.S:308: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copyuser_power7.S:309: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copyuser_power7.S:311: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:374:
+> arch/powerpc/lib/copyuser_power7.o] Error 1
+> arch/powerpc/lib/copypage_power7.S: Assembler messages:
+> arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:374:
+> arch/powerpc/lib/copypage_power7.o] Error 1
+> arch/powerpc/lib/memcpy_power7.S: Assembler messages:
+> arch/powerpc/lib/memcpy_power7.S:250: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/memcpy_power7.S:251: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/memcpy_power7.S:252: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/memcpy_power7.S:253: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/memcpy_power7.S:255: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:374:
+> arch/powerpc/lib/memcpy_power7.o] Error 1
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Thank you for the report, this is caused by the move of CLANG_FLAGS from
+KBUILD_{A,C}FLAGS to KBUILD_CPPFLAGS, as as-option does not contain
+KBUILD_CPPFLAGS, so we fail to pass necessary flags to the assembler.
+The following diff resolves this particular issue for me, can you test
+it to make sure it works for you?  I will write up a changelog and sent
+along a formal patch later today.
+
+Cheers,
+Nathan
+
+diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+index 437013f8def3..e31f18625fcf 100644
+--- a/scripts/Makefile.compiler
++++ b/scripts/Makefile.compiler
+@@ -32,7 +32,7 @@ try-run = $(shell set -e;		\
+ # Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+ 
+ as-option = $(call try-run,\
+-	$(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
++	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
+ 
+ # as-instr
+ # Usage: aflags-y += $(call as-instr,instr,option1,option2)
