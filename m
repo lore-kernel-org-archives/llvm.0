@@ -1,191 +1,164 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8D022E52;
-	Tue,  6 Jun 2023 20:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CD81ED36;
+	Tue,  6 Jun 2023 20:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686082240; x=1717618240;
+  t=1686083834; x=1717619834;
   h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=w1Y4uBY6dDruwpH5JXQ4BrjAxUy6xyTyb7b9lMc1d4c=;
-  b=QwWj/HvbD+YY8scPbByQnWAyvfvT/IgHw47/5+BEM2QgXGKFdUeyb4h2
-   CFYqdbHRu8Ceaj1KYGVF9H62aV4FWU4PKkkYJac676Fu+LP9mQcoS00Z7
-   +iZnDTa6LDzXsooowS8iH2bARHduW6V8DN8A0y5kDN32IpYlNs4yF5TyO
-   bmLW1UCTGtx5FTgRQLL2hI27F81bCspBn6coKrhYPiMCdiVTjs5RHPdzh
-   clAWqnZ8RVNfOgRM6KKZWsEeH3MYmBD5SIvbU+EvJokCuF9ZXj6+1Ws1t
-   +YOGSTiPhpETBbwj1XPir3zilMSB4jWw7VoQGX4YcqpAVjQk2ZEFp8TEv
+   mime-version:in-reply-to;
+  bh=ngE5tkLL3OUbO5pflDl4gRt6pQd57kpEElEHSkEOFKE=;
+  b=W56JPoJjiobEshZ9okgloytPmpzU4VsupQuYRy7Vu7/Ce6XPDvDy8F6y
+   scXAjCrevdud8IMH0QR2k11sXhMajwWhGOOHBDqqgv1V+lhJ7rHSI5G5E
+   Dta1t6Vw0LYh3cIf9L1sxiAsxeMemSoTevWVYEj7LktqGeVBTfr7Mxnpj
+   fneDN+rPbBm6fOZjZ+rcbGtuYuBMiPxOsd8jAZ8VSnfNRAR61P24I4iL+
+   S9vWVo3CuM346Kv7BMW3aAivlK6ORcrHxRVdDILip5OReb0ey9FoGSI/U
+   bun1sfvs/JDMz3oFNBC3LrqZHdMmvgrL+9H+ZNApLtXrzw5yIGvH4OuOU
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="385102933"
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="359258315"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="385102933"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 13:10:37 -0700
+   d="scan'208";a="359258315"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 13:37:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="853567908"
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="703341919"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="853567908"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2023 13:10:37 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 13:10:37 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 13:10:36 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 6 Jun 2023 13:10:36 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 6 Jun 2023 13:10:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ETvoyvzGsOxyirF2iLOJPF+oXsgJyIuonKu+1Bs6BSEhk0m94ipVuLhVNvLBVp6omHc6GpG/8T8Jleg8a1pqLNeaQBcNr0aZUz69cvZI2tirPmNM30dr3/drCmka1w7H7apvWV9TfzjXjVeyL5Y065ZoMNoJbvpL0ShCJxzEvSx8s1ETqRjcQrESh9U9R4E75u6jozlwoYhtVj1T8Nqdi5dJI1j6vKxEltMiz0C1C9bHoUSy+vxrHU538btXojJIHC/hzHbeGMyj6EIJOxYvqWZfpiyPa+3BDq3xsH4xdY2v8cKRUIYGmdRsCHYBibKXVHJCz7R2TiyRONDVkW7FYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kibLYAp4CcyjCUgeihNdZFpLgAJ2DEbxOdnTIOPUXOM=;
- b=YhI/+GIlo4kpknDQ9Ttpe/fiyoDnQJ54t8cv/iVmBNECIidFvpWW4Wfp25dXEyc0FndVeV5fbE0tYt+uEVK7UL1ERD7h/A+frNOh89tc5V3IyGFgu9wz2nddoezX5pgovm/WN7h911rMAjqbdDvpid7+RvydwJwRhOIooF7KMRX0HnkSHH8YQPCbyg1s4iY0TcYKbdMH2C2Dqutnw2OlOCmmc4rM7nXk70xILVzs0BJ1djEgWOl98VD/fQXG1nHph1OUHY3I+NXXe2VSf4YxmJaXrPlLJhkzlfxgxHoucrT32cAASjTr7CWZTqTvygvLxm6y2Wvl0yThRdzTr3Cf1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by PH8PR11MB6658.namprd11.prod.outlook.com (2603:10b6:510:1c1::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Tue, 6 Jun
- 2023 20:10:29 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 20:10:28 +0000
-Date: Tue, 6 Jun 2023 13:10:26 -0700
-From: Dan Williams <dan.j.williams@intel.com>
-To: kernel test robot <lkp@intel.com>, Dan Williams <dan.j.williams@intel.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
-Subject: Re: [PATCH 06/19] cxl/hdm: Default CXL_DEVTYPE_DEVMEM decoders to
- CXL_DECODER_DEVMEM
-Message-ID: <647f92b2a6189_1433ac29417@dwillia2-xfh.jf.intel.com.notmuch>
-References: <168592153054.1948938.12344684637653088842.stgit@dwillia2-xfh.jf.intel.com>
- <202306050926.zKn5BTKk-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202306050926.zKn5BTKk-lkp@intel.com>
-X-ClientProxiedBy: SJ0PR05CA0060.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::35) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+   d="scan'208";a="703341919"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2023 13:37:12 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6dQV-0005iB-1p;
+	Tue, 06 Jun 2023 20:37:11 +0000
+Date: Wed, 7 Jun 2023 04:37:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Florian Westphal <fw@strlen.de>
+Subject: Re: [PATCH nf-next] netfilter: snat: evict closing tcp entries on
+ reply tuple collision
+Message-ID: <202306070406.KtN7gaNL-lkp@intel.com>
+References: <20230606125421.15487-1-fw@strlen.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH8PR11MB6658:EE_
-X-MS-Office365-Filtering-Correlation-Id: afd50fe2-d063-4352-ff77-08db66ca129e
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: //AOY3QB8+lZ8QJ4qE/HDRbWEKF2r3qyKK/77TrF9zGu46wt0yRRnBDhIIVIh5BDdRn1MOcj8nV6yheKIHj0UO52//tlEk+vshv2rARe0X1rhfqC7BlWheapWQnZbTjoV7/py1RWtg0lg0pOT3zmQ1Hozvvb7P+43YtEqMK74zVirzoEq8h5XTh4iCuIrIM5Vnhu4xm+Ghw+of/yxCleFNMMqR+HE31MjdqQFHEzfzXzJWM+HF+1Fxzcn08gfy8TNE6YVjgwOBOOxUHiK7jmP3DOFtnbvLzjqu7ABSdSfYj/iy5BeiO0Mi2LUOiQwqZxygJHrivdqamWEd1yyaRmms2RGl3AorAp5XI097+78bfwxFX4FbP0snaYzh+ql8uAJiWlB7rGHrVLzrSjNG74w9f0Q+flKXyqxgKE/hOAOzBFpfHLdmM+GqWeVQtGj3Z20Uq5zxjGSgsJMY3gZQUATSS14SpNDFgc3RXXzyIVygX5MIg5X5Td6mYZUZnz+54iMHvi0CKfNk30lytzjYhyh9aDD7XgBnKHVFxN+Wfo8wUUlgyXzEGo0OOqetu8g/SjassXmL4lOd3416h9Kl1iZA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199021)(110136005)(478600001)(66556008)(8936002)(8676002)(86362001)(2906002)(4326008)(66946007)(66476007)(450100002)(316002)(82960400001)(5660300002)(38100700002)(41300700001)(83380400001)(6506007)(9686003)(6512007)(26005)(186003)(6486002)(966005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TGa65PjHZCFmqEJpCKQYhs9asowz2C71lry4DwdykP98hQu3h5NUeMRwhNY7?=
- =?us-ascii?Q?x79j4/vVDZ5UhG4XQs+wpZkLgVjIWZX6s19+5OymudbbFjjKyl/K7L1sNQX8?=
- =?us-ascii?Q?4+y0Xkpq8ddOCB749LQ4JVtM7/BAZGMZPSTg0ogA+p9v8bqr1lOBmbZ7JCdy?=
- =?us-ascii?Q?Aqof6fZQ5OwH7ayKg7LN/1TESZVyJp5lOXQPLaSc1QxOspfslssQkoyWsSuK?=
- =?us-ascii?Q?RWG9dqhGpU7xvqbrA3o/0MEikY/AaNrDHZLG4Snc0Pv/XLOaFb96u+/rzSXY?=
- =?us-ascii?Q?2hRnCXL32+RvnOCqXsc8vXaakj1VCu0c5SBYwKA3uZ9IH7/DNaYvzuhNmhDS?=
- =?us-ascii?Q?fVY4ukfwaolplW51WqUvs2uiKLMMpYFOlsVYdMeseIKOOWx1Mct5ChOsxOff?=
- =?us-ascii?Q?cR2Pham8cOcV3cWn2xHNCgJv37NyVWNGWfYknRU0Hv2OeO6AuaFQdpy1rNMv?=
- =?us-ascii?Q?bbu+kZIPcu1TOghsYUhefSncRyyTJ7o2fEN8qI5HTaUhOQWlfLBqledeZ+xC?=
- =?us-ascii?Q?HZkrAkQofvPqjWBqQg5Xh2xAjoyYuhJB7lRAsJlgBMAW6jAwEPrYLaFFH8Mn?=
- =?us-ascii?Q?o57UGRQ9Iu6QWldD3OZVFl4vSocaM5Hvpw3kahLYiJBHaIiq4nyj+XO7A5AK?=
- =?us-ascii?Q?r0DFHiNKuLUNv74vLTTh3WPDg1th0Eqy2UDR/AZ0yEQ9LaivVh6IezXHgHYD?=
- =?us-ascii?Q?qxPKv4cGp8KLyw6mAwgRng59f7UCm/qXjpemM6urggIfzt+0udRO1YF9k+S3?=
- =?us-ascii?Q?o52Iiz38M+ybM8qOV54Ijn5uYUi9tIjhNtJ6yupFHwSjLLH/MXJw58pfSnrh?=
- =?us-ascii?Q?yZKVz6mh1jBIeR0/w+IM9EDKxLROXU42olA54Ph8iJFeXQ+2AZSNeue1V+ue?=
- =?us-ascii?Q?QfelD9itmeGnNqgMC9hgUZAagJer4yRttTmVIy5HolVgQ6F/H5xtiRvhHFN2?=
- =?us-ascii?Q?ameEy4NQAVh+E/tpA8wHkVA6WhASAkc4BuiUunH8h7OLJlcg/AMhL0Qv9jVC?=
- =?us-ascii?Q?YoU7Tc7f8CyQLbn66WvKTvz8QDxrGP1IJOU6fwXhv58y733Qzixic/vtyNfB?=
- =?us-ascii?Q?q/BAZggpDEO9eJnPXj7JKA9aqVUSNS0qt+02Ebgv60vHjO0wmDCSKHsqq094?=
- =?us-ascii?Q?ge7tVn4+HqZvPp7ysFByiMD/+mdihXWwmrKkcRBM8tXkX5iJl8RIEqHZB/GD?=
- =?us-ascii?Q?IwbNT2mCJEayYcP5oqES2h3TyOOdQL8uL2QznXNh4Am8JOMoQX6aeDTcHY0v?=
- =?us-ascii?Q?xZWhVqAvyxdejJ0wVAYkLa0xghMM9XgARdZ53zUUcoAOYkdDdYqdfJZEDqbg?=
- =?us-ascii?Q?rk8PXaVpUXSEgJJEeS7rrEBedw9FnUhZSUCJvnTk+uT7yHnMYcyffWuQ2HHk?=
- =?us-ascii?Q?rTi1cCDxPtjHMgeD422GaxBoiYy5dlMdWjgamBOS5hJu++k4xGI3dXirdLkX?=
- =?us-ascii?Q?wA/zeHaeI9i2x/YZp4MsK2FZocBq++v7g+SaVd47aQc4BPiS13W6IsTkooKt?=
- =?us-ascii?Q?z3S0evOCY3w3L7jx9tCH08uYVmUbKE06TFiE0sBq2cccaoWzSPddrqm5IGVs?=
- =?us-ascii?Q?Gxh7y7JA0S71yMQguzkNJDQHIp8OFB5C1IgavKQm3w/snFYhoIo3jrGEQewE?=
- =?us-ascii?Q?LQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: afd50fe2-d063-4352-ff77-08db66ca129e
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 20:10:28.6292
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a9/0/JE8qx3VuBT7rrUxUjOfc7lX7Lsegm2+1aXsuZrv6U2TrPRqDgYhUX3JpgWpVN0Fxc4x5V9EhzIOOcD01uMSZLwiBEVv/eu4Ky2/Xi4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6658
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606125421.15487-1-fw@strlen.de>
 
-kernel test robot wrote:
-> Hi Dan,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on 9561de3a55bed6bdd44a12820ba81ec416e705a7]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Williams/cxl-regs-Clarify-when-a-struct-cxl_register_map-is-input-vs-output/20230605-073402
-> base:   9561de3a55bed6bdd44a12820ba81ec416e705a7
-> patch link:    https://lore.kernel.org/r/168592153054.1948938.12344684637653088842.stgit%40dwillia2-xfh.jf.intel.com
-> patch subject: [PATCH 06/19] cxl/hdm: Default CXL_DEVTYPE_DEVMEM decoders to CXL_DECODER_DEVMEM
+Hi Florian,
 
-Will fold in this change:
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
-index ca3b99c6eacf..be81fcbb4755 100644
---- a/drivers/cxl/core/hdm.c
-+++ b/drivers/cxl/core/hdm.c
-@@ -793,8 +793,8 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
- 			    int *target_map, void __iomem *hdm, int which,
- 			    u64 *dpa_base, struct cxl_endpoint_dvsec_info *info)
- {
-+	struct cxl_endpoint_decoder *cxled = NULL;
- 	u64 size, base, skip, dpa_size, lo, hi;
--	struct cxl_endpoint_decoder *cxled;
- 	bool committed;
- 	u32 remainder;
- 	int i, rc;
-@@ -827,6 +827,8 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
- 		return -ENXIO;
- 	}
- 
-+	if (info)
-+		cxled = to_cxl_endpoint_decoder(&cxld->dev);
- 	cxld->hpa_range = (struct range) {
- 		.start = base,
- 		.end = base + size - 1,
-@@ -890,7 +892,7 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
- 		port->id, cxld->id, cxld->hpa_range.start, cxld->hpa_range.end,
- 		cxld->interleave_ways, cxld->interleave_granularity);
- 
--	if (!info) {
-+	if (!cxled) {
- 		lo = readl(hdm + CXL_HDM_DECODER0_TL_LOW(which));
- 		hi = readl(hdm + CXL_HDM_DECODER0_TL_HIGH(which));
- 		target_list.value = (hi << 32) + lo;
-@@ -913,7 +915,6 @@ static int init_hdm_decoder(struct cxl_port *port, struct cxl_decoder *cxld,
- 	lo = readl(hdm + CXL_HDM_DECODER0_SKIP_LOW(which));
- 	hi = readl(hdm + CXL_HDM_DECODER0_SKIP_HIGH(which));
- 	skip = (hi << 32) + lo;
--	cxled = to_cxl_endpoint_decoder(&cxld->dev);
- 	rc = devm_cxl_dpa_reserve(cxled, *dpa_base + skip, dpa_size, skip);
- 	if (rc) {
- 		dev_err(&port->dev,
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc5 next-20230606]
+[cannot apply to nf-next/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/netfilter-snat-evict-closing-tcp-entries-on-reply-tuple-collision/20230606-205654
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230606125421.15487-1-fw%40strlen.de
+patch subject: [PATCH nf-next] netfilter: snat: evict closing tcp entries on reply tuple collision
+config: x86_64-randconfig-a014-20230606 (https://download.01.org/0day-ci/archive/20230607/202306070406.KtN7gaNL-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout linus/master
+        b4 shazam https://lore.kernel.org/r/20230606125421.15487-1-fw@strlen.de
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/netfilter/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306070406.KtN7gaNL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/netfilter/nf_nat_core.c:262:6: warning: variable 'ct' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (thash->tuple.dst.dir == IP_CT_DIR_ORIGINAL)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nf_nat_core.c:280:12: note: uninitialized use occurs here
+           nf_ct_put(ct);
+                     ^~
+   net/netfilter/nf_nat_core.c:262:2: note: remove the 'if' if its condition is always false
+           if (thash->tuple.dst.dir == IP_CT_DIR_ORIGINAL)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netfilter/nf_nat_core.c:239:20: note: initialize the variable 'ct' to silence this warning
+           struct nf_conn *ct;
+                             ^
+                              = NULL
+   1 warning generated.
+
+
+vim +262 net/netfilter/nf_nat_core.c
+
+   228	
+   229	static int
+   230	nf_nat_used_tuple_harder(const struct nf_conntrack_tuple *tuple,
+   231				 const struct nf_conn *ignored_conntrack,
+   232				 unsigned int attempts_left)
+   233	{
+   234		static const unsigned long flags_offload = IPS_OFFLOAD | IPS_HW_OFFLOAD;
+   235		struct nf_conntrack_tuple_hash *thash;
+   236		const struct nf_conntrack_zone *zone;
+   237		struct nf_conntrack_tuple reply;
+   238		unsigned long flags;
+   239		struct nf_conn *ct;
+   240		bool taken = true;
+   241		struct net *net;
+   242	
+   243		nf_ct_invert_tuple(&reply, tuple);
+   244	
+   245		if (attempts_left > NF_NAT_HARDER_THRESH ||
+   246		    tuple->dst.protonum != IPPROTO_TCP ||
+   247		    ignored_conntrack->proto.tcp.state != TCP_CONNTRACK_SYN_SENT)
+   248			return nf_conntrack_tuple_taken(&reply, ignored_conntrack);
+   249	
+   250		/* :ast few attempts to find a free tcp port. Destructive
+   251		 * action: evict colliding if its in timewait state and the
+   252		 * tcp sequence number has advanced past the one used by the
+   253		 * old entry.
+   254		 */
+   255		net = nf_ct_net(ignored_conntrack);
+   256		zone = nf_ct_zone(ignored_conntrack);
+   257	
+   258		thash = nf_conntrack_find_get(net, zone, &reply);
+   259		if (!thash)
+   260			return false;
+   261	
+ > 262		if (thash->tuple.dst.dir == IP_CT_DIR_ORIGINAL)
+   263			goto out;
+   264	
+   265		ct = nf_ct_tuplehash_to_ctrack(thash);
+   266		if (WARN_ON_ONCE(ct == ignored_conntrack))
+   267			goto out;
+   268	
+   269		flags = READ_ONCE(ct->status);
+   270		if (!nf_nat_may_kill(ct, flags))
+   271			goto out;
+   272	
+   273		if (!nf_seq_has_advanced(ct, ignored_conntrack))
+   274			goto out;
+   275	
+   276		/* Even if we can evict do not reuse if entry is offloaded. */
+   277		if (nf_ct_kill(ct))
+   278			taken = flags & flags_offload;
+   279	out:
+   280		nf_ct_put(ct);
+   281		return taken;
+   282	}
+   283	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
