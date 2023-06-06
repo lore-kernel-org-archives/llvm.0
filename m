@@ -1,259 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95CE7F
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF53C433A1
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:29:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686014984;
-	bh=C0DDZu22AqHPphiQCzwpTPnx6kZVphyanDDks3Ob+wI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pmdxcfBoDLu2PNR7rr73koQ18T7ToCFDWXwT99Yjo/AUDPfcGOd6sWJZr9BMLHG/y
-	 lm2MPuB9wH/Jsd5rdDOeADB1ww/2I+lf7eiXyDmwUeCFyyMXSbo9iR3W6t66pnSdeb
-	 NRkdOxCdhu07JI9pWWMXOUyhlWVAcGPnJj+KcNKWf/XeFL/sYr9iUDZpOi7Eyg/o1/
-	 18CcLcuCkRcHV0xNYftuL1vRnACT9T5ClmQiY/L+WM63xdkw4iWz5sNAgVjlqTqctg
-	 jDEg3342wLGEQgLbENAew3J0Baiawb3tpuXAUKeZ2R3Ve8LsEysf1ZdrFaRgfT9qIh
-	 m/miKnXg+0RAw==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1a1fa977667so5850616fac.1
-        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 18:29:44 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxX9l6qidwyMm27vWnZijGeEHTg5fBVnOLRvuLwonwNklRYJ0X8
-	S0HEgQ0j5lPKl+94/tZC9dRwlD2JHtSopgjA+k0=
-X-Google-Smtp-Source: ACHHUZ60sg0dzOOGNZIIJ+bH/VEhUE4AnmEm3IFgco5rKbUOFpspxPteTOfCSgkr+3F8uFTspjUyQvMzstCuBJBtGbs=
-X-Received: by 2002:a05:6870:c79c:b0:19f:9f91:fa4a with SMTP id
- dy28-20020a056870c79c00b0019f9f91fa4amr669334oab.55.1686014983373; Mon, 05
- Jun 2023 18:29:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F157F
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:32:10 +0000 (UTC)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so3588876e87.1
+        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 18:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686015129; x=1688607129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
+        b=seM8DoJuA+l2/qluDMFHOqVY2TU0LJEsce5E3zY3BfHXHqYaAoQIn0CcRJVxEiYkeX
+         ueig2x+BcON7b3hxf82SBc6l8PbMtq4dUUcKED2ECulGGEw8YTmbReZY5raJxynbLWYH
+         J9JeYjQuOEvrKBuDThQR39KCrrrmOCQSwS492duLcJ/KfwdyKnVK2MqZaLe2qCpWlreh
+         ATkJkwBLHbj51yPzGh1iKBuit1jUH4WrNFzJ8d/tHdPVOvbrSvBkuBk5fBD/5hjx7tZB
+         hvNmbxkl4kAJgOqDogjNztOz6Dw1NyYjYumFZpe26RxkMpJWsTkFj25n9Bjoa3LU72b6
+         okpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686015129; x=1688607129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
+        b=Q+esxUaVnOPNWPaPKgR4ANv/8UrtJujecH+mg1Rt5VrSw1KgVcDAXRry9Xzk111E0q
+         c0TZGzR9xkCTZrMA24Ls+o9rZcO6+kyZScBOnRYSXvpNnPv6YBr2bG4+XhG9SV8YvYwp
+         8d97H3tLwx6Eg9o319iTrGttp6il4j7F7FTRXZ+uRQp7+HwfMBdIdrEUQB4irgOeLhh7
+         USVKp71n0npk7ctb8TSXOm7rJZ6rTqX6Vx7QV3H5+QVWqNL5VPq+mroxpnom7+xcr0QA
+         wpkecNIl4LiM/u1y22T0Oh/GKIZEn0QMewvo/NHAw7GANgRe+NCxwmO0CSo95GWXVvDz
+         NJ5Q==
+X-Gm-Message-State: AC+VfDym+ZAxD7QxGjrZPPSsMi+h9hX04IPNN7liUhR4Mhw7Bf/4keSc
+	3tXpBl6VZFXyysZmLea/b2YkSW0DbDHWa+zywrU=
+X-Google-Smtp-Source: ACHHUZ4CSyaN+1CA8HNujlJTstB9XfEYJXvLicNt50Ql/A2r+8dDz8Zj9rIXpCiTUQYHEpEA2sDAUBbj+rGoJvM5mI4=
+X-Received: by 2002:a2e:7219:0:b0:2b1:c389:c424 with SMTP id
+ n25-20020a2e7219000000b002b1c389c424mr648772ljc.12.1686015128552; Mon, 05 Jun
+ 2023 18:32:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
- <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <20230605152149.GA2476659@dev-arch.thelio-3990X>
-In-Reply-To: <20230605152149.GA2476659@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 6 Jun 2023 10:29:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR2KwypUvsn+WTJRLAkmjvNQA3=aD9f4tfHYCR7TonbjQ@mail.gmail.com>
-Message-ID: <CAK7LNAR2KwypUvsn+WTJRLAkmjvNQA3=aD9f4tfHYCR7TonbjQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Tom Rini <trini@konsulko.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+References: <20230605164955.GA1977@templeofstupid.com> <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
+ <20230606004139.GE1977@templeofstupid.com>
+In-Reply-To: <20230606004139.GE1977@templeofstupid.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 5 Jun 2023 18:31:57 -0700
+Message-ID: <CAADnVQLhqCVRcPuJ8JEZfd5ii+-TsSs4+AsJC0sbjwPMv7LX_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram extables
+To: Krister Johansen <kjlx@templeofstupid.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 6, 2023 at 12:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Mon, Jun 5, 2023 at 5:46=E2=80=AFPM Krister Johansen <kjlx@templeofstupi=
+d.com> wrote:
 >
-> On Sun, Jun 04, 2023 at 01:32:21AM +0900, Masahiro Yamada wrote:
-> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
-> > > > Hi Masahiro,
-> > > >
-> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
- is
-> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> > > > >
-> > > > > As a result, the linker script is preprocessed with predefined ma=
-cros
-> > > > > for the build host instead of the target.
-> > > > >
-> > > > > Assuming you use an x86 build machine, compare the following:
-> > > > >
-> > > > >  $ clang -dM -E -x c /dev/null
-> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> > > > >
-> > > > > There is no actual problem presumably because our linker scripts =
-do not
-> > > > > rely on such predefined macros, but it is better to define correc=
-t ones.
-> > > > >
-> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
-.lds.S
-> > > > > will be processed with the proper target triple.
-> > > > >
-> > > > > Reported-by: Tom Rini <trini@konsulko.com>
-> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > > ---
-> > > > >
-> > > > >  scripts/Makefile.clang | 3 +--
-> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
-> > > > > --- a/scripts/Makefile.clang
-> > > > > +++ b/scripts/Makefile.clang
-> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
-g-option
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
-> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
-> > > > >  export CLANG_FLAGS
-> > > > > --
-> > > > > 2.37.2
-> > > > >
-> > > >
-> > > > I am doubling back to this change, as the lack of '--target' in
-> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
-nge
-> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
-d by
-> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
-s
-> > > > linker script:
-> > > >
-> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
-rtconfig menuconfig arch/arm64/kernel/vdso/
-> > > >   ...
-> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
-4-pc-linux-gnu'
-> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
-dso/vdso.lds] Error 1
-> > > >   ...
-> > > >
-> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
-8956c522c93d0df1050
-> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
-> > > >
-> > > > This change resolves that issue. I was able to figure out why those=
- new
-> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
-> > > > CHECKFLAGS. The following diff resolves it for me:
-> > > >
-> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
-> > > > --- a/arch/mips/Makefile
-> > > > +++ b/arch/mips/Makefile
-> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
-les
-> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
-> > > >
-> > > >  ifdef CONFIG_MIPS
-> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
-ll | \
-> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
--dM -E -x c /dev/null | \
-> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
-/\$$/&&/g')
-> > > >  endif
-> > > >
-> > > > I will run this change plus that diff through my build matrix to se=
-e if
-> > > > any other issues pop up. If not, I will respond with some tags and
-> > > > perhaps this could be taken as a fix for 6.4 so that it could
-> > > > potentially be backported?
-> > >
-> > > I found two more issues lurking in PowerPC. I have attached suggested
-> > > patches for all the issues I have uncovered to this email, please fee=
-l
-> > > free to use them or do something different if you feel there is a bet=
-ter
-> > > fix. With those issues resolved in one way or another, consider the
-> > > original change:
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > If it would work better for you, I am more than happy to take over th=
-is
-> > > series as well.
-> > >
-> > > Cheers,
-> > > Nathan
+> On Mon, Jun 05, 2023 at 04:30:29PM -0700, Alexei Starovoitov wrote:
+> > On Mon, Jun 5, 2023 at 9:50=E2=80=AFAM Krister Johansen <kjlx@templeofs=
+tupid.com> wrote:
+> > > +                       if (!aux->func[i]->aux->num_exentries ||
+> > > +                           aux->func[i]->aux->extable =3D=3D NULL)
+> > > +                               continue;
+> > > +                       e =3D search_extable(aux->func[i]->aux->extab=
+le,
+> > > +                           aux->func[i]->aux->num_exentries, addr);
+> > > +               }
+> > > +       }
 > >
-> > Thanks. All the three patches look good to me.
-> >
-> > I will apply them, then mine on top.
+> > something odd here.
+> > We do bpf_prog_kallsyms_add(func[i]); for each subprog.
+> > So bpf_prog_ksym_find() in search_bpf_extables()
+> > should be finding ksym and extable of the subprog
+> > and not the main prog.
+> > The bug is probably elsewhere.
 >
-> Thanks, sounds like a good plan!
+> I have a kdump (or more) of this bug so if there's additional state
+> you'd like me to share, let me know.
+
+Please convert the test into selftest.
+Then everyone will be able to reproduce easily
+and it will serve us later to make sure we don't regress.
+
+> With your comments in mind, I took
+> another look at the ksym fields in the aux structs.  I have this in the
+> main program:
 >
-> > A nit:
-> >
-> > The first patch for mips will introduce the warning
-> > as $(KBUILD_CPPFLAGS) does not contain $(CLANG_FLAGS)
-> > at this point.
-> > Then, it will be fixed again when my patch is applied.
-> >
-> > The two must be squashed together to avoid the regression,
-> > but I think it is OK as-is.
+>   ksym =3D {
+>     start =3D 18446744072638420852,
+>     end =3D 18446744072638423040,
+>     name =3D <...>
+>     lnode =3D {
+>       next =3D 0xffff88d9c1065168,
+>       prev =3D 0xffff88da91609168
+>     },
+>     tnode =3D {
+>       node =3D {{
+>           __rb_parent_color =3D 18446613068361611640,
+>           rb_right =3D 0xffff88da91609178,
+>           rb_left =3D 0xffff88d9f0c5a578
+>         }, {
+>           __rb_parent_color =3D 18446613068361611664,
+>           rb_right =3D 0xffff88da91609190,
+>           rb_left =3D 0xffff88d9f0c5a590
+>         }}
+>     },
+>     prog =3D true
+>   },
 >
-> Hmmm, what warning would be introduced? KBUILD_CPPFLAGS is being added
-> to the CHECKFLAGS invocation, rather than replacing KBUILD_CFLAGS, so
-> '--target' should always be present (first via KBUILD_CFLAGS then via
-> KBUILD_CPPFLAGS), right?
-
-
-
-Sorry, I wrongly read your code.
-
-You are right, you added $(KBUILD_CPPFLAGS)
-in addition to $(KBUILD_CFLAGS).
-
-
-
-
-Maybe, we can drop $(KBUILD_CFLAGS) (as a follow-up)
-because this $(shell ) invocation is only interested
-in preprocessor macros.
-
-
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index ef7b05ae92ce..e563cca6b663 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tables
- KBUILD_LDFLAGS         +=3D -m $(ld-emul)
-
- ifdef CONFIG_MIPS
--CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM
--E -x c /dev/null | \
-+CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) -dM -E -x c /dev/null | \
-        grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-        sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\$$/&=
-&/g')
- endif
-
-
-
-
-
-
-
-
-
+> and this in the func[0] subprogram:
 >
-> > The second patch for powerpc reminded me of
-> > converting $(CC) to $(LD) for linking vDSO.
-> > I do not remember why powerpc vDSO still uses $(CC).
+>   ksym =3D {
+>     start =3D 18446744072638420852,
+>     end =3D 18446744072638423040,
+>     name =3D <...>
+>     lnode =3D {
+>       next =3D 0xffff88da91609168,
+>       prev =3D 0xffffffff981f8990 <bpf_kallsyms>
+>     },
+>     tnode =3D {
+>       node =3D {{
+>           __rb_parent_color =3D 18446613068361606520,
+>           rb_right =3D 0x0,
+>           rb_left =3D 0x0
+>         }, {
+>           __rb_parent_color =3D 18446613068361606544,
+>           rb_right =3D 0x0,
+>           rb_left =3D 0x0
+>         }}
+>     },
+>     prog =3D true
+>   },
 >
-> Nick tried to make the conversion some time ago but ran into issues with
-> GNU ld crashing:
->
-> https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google=
-.com/
-> https://lore.kernel.org/lkml/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup=
-.eu/
->
-> It might be easier to do this now that the PowerPC vDSO has been
-> combined into one directory, but we have not had time to sit down and
-> actually work on it.
->
-> Cheers,
-> Nathan
+> That sure looks like func[0] is a leaf in the rbtree and the main
+> program is an intermediate node with leaves.  If that's the case, then
+> bpf_prog_ksym_find may have found the main program instead of the
+> subprogram.  In that case, do you think it's better to skip the main
+> program's call to bpf_prog_ksym_set_addr() if it has subprograms instead
+> of searching for subprograms if the main program is found?
 
+I see.
+Looks like we're doing double bpf_prog_kallsyms_add().
+First in in jit_subprogs():
+        for (i =3D 0; i < env->subprog_cnt; i++) {
+                bpf_prog_lock_ro(func[i]);
+                bpf_prog_kallsyms_add(func[i]);
+        }
+and then again:
+bpf_prog_kallsyms_add(prog);
+in bpf_prog_load().
 
+because func[0] is the main prog.
 
---=20
-Best Regards
-Masahiro Yamada
+We are also doing double bpf_prog_lock_ro() for main prog,
+but that's not causing harm.
+
+The fix is probably just this:
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1e38584d497c..89266dac9c12 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17633,7 +17633,7 @@ static int jit_subprogs(struct bpf_verifier_env *en=
+v)
+        /* finally lock prog and jit images for all functions and
+         * populate kallsysm
+         */
+-       for (i =3D 0; i < env->subprog_cnt; i++) {
++       for (i =3D 1; i < env->subprog_cnt; i++) {
+                bpf_prog_lock_ro(func[i]);
+                bpf_prog_kallsyms_add(func[i]);
+        }
