@@ -1,182 +1,150 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F157F
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:32:10 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so3588876e87.1
-        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 18:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686015129; x=1688607129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
-        b=seM8DoJuA+l2/qluDMFHOqVY2TU0LJEsce5E3zY3BfHXHqYaAoQIn0CcRJVxEiYkeX
-         ueig2x+BcON7b3hxf82SBc6l8PbMtq4dUUcKED2ECulGGEw8YTmbReZY5raJxynbLWYH
-         J9JeYjQuOEvrKBuDThQR39KCrrrmOCQSwS492duLcJ/KfwdyKnVK2MqZaLe2qCpWlreh
-         ATkJkwBLHbj51yPzGh1iKBuit1jUH4WrNFzJ8d/tHdPVOvbrSvBkuBk5fBD/5hjx7tZB
-         hvNmbxkl4kAJgOqDogjNztOz6Dw1NyYjYumFZpe26RxkMpJWsTkFj25n9Bjoa3LU72b6
-         okpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686015129; x=1688607129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
-        b=Q+esxUaVnOPNWPaPKgR4ANv/8UrtJujecH+mg1Rt5VrSw1KgVcDAXRry9Xzk111E0q
-         c0TZGzR9xkCTZrMA24Ls+o9rZcO6+kyZScBOnRYSXvpNnPv6YBr2bG4+XhG9SV8YvYwp
-         8d97H3tLwx6Eg9o319iTrGttp6il4j7F7FTRXZ+uRQp7+HwfMBdIdrEUQB4irgOeLhh7
-         USVKp71n0npk7ctb8TSXOm7rJZ6rTqX6Vx7QV3H5+QVWqNL5VPq+mroxpnom7+xcr0QA
-         wpkecNIl4LiM/u1y22T0Oh/GKIZEn0QMewvo/NHAw7GANgRe+NCxwmO0CSo95GWXVvDz
-         NJ5Q==
-X-Gm-Message-State: AC+VfDym+ZAxD7QxGjrZPPSsMi+h9hX04IPNN7liUhR4Mhw7Bf/4keSc
-	3tXpBl6VZFXyysZmLea/b2YkSW0DbDHWa+zywrU=
-X-Google-Smtp-Source: ACHHUZ4CSyaN+1CA8HNujlJTstB9XfEYJXvLicNt50Ql/A2r+8dDz8Zj9rIXpCiTUQYHEpEA2sDAUBbj+rGoJvM5mI4=
-X-Received: by 2002:a2e:7219:0:b0:2b1:c389:c424 with SMTP id
- n25-20020a2e7219000000b002b1c389c424mr648772ljc.12.1686015128552; Mon, 05 Jun
- 2023 18:32:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F526633;
+	Tue,  6 Jun 2023 02:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686017924; x=1717553924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qQV6D5rwdATUjpxlTo7BXB0mFd/BI/2oTMrcdGFwysY=;
+  b=IgS41lXj7kTF0coJGfaOXKV7Ko+Icv/ZJ+jmODKpYeRUXvKbuGldvfuS
+   qPueFVp9ivxPhBKb3GR69tpvNuWVocP3OhGRA0obwTroNHjK2ZDsIWQ8F
+   W3a43r88xQURNkOnlJizpKKg4DTrX6cLvh6zT4hwfG6Ns1yvg6J9lKaoJ
+   lJrEe6HttopHGLSFzq293ACPLCHxXexBGmRp0ErYq/SRep8QQ1PrQZkEl
+   hIBznoSSE9LSoaKOAoebkeNSzLNSOiE6dM+pUYKjAmhwUVxOwPYW9tyeC
+   fHouNdWfnUgxQyz8tUm7l4ukC1bhSbYhgILSWXHilnBzKl7DcTt5Xl4Gu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="358994385"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="358994385"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 19:18:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="773951635"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="773951635"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jun 2023 19:18:39 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q6MHP-0004hl-0r;
+	Tue, 06 Jun 2023 02:18:39 +0000
+Date: Tue, 6 Jun 2023 10:17:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:timers/posix 22/61] init/init_task.c:31:33: error:
+ expected '}'
+Message-ID: <202306061012.xWzgDSg0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230605164955.GA1977@templeofstupid.com> <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
- <20230606004139.GE1977@templeofstupid.com>
-In-Reply-To: <20230606004139.GE1977@templeofstupid.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 5 Jun 2023 18:31:57 -0700
-Message-ID: <CAADnVQLhqCVRcPuJ8JEZfd5ii+-TsSs4+AsJC0sbjwPMv7LX_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram extables
-To: Krister Johansen <kjlx@templeofstupid.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 5, 2023 at 5:46=E2=80=AFPM Krister Johansen <kjlx@templeofstupi=
-d.com> wrote:
->
-> On Mon, Jun 05, 2023 at 04:30:29PM -0700, Alexei Starovoitov wrote:
-> > On Mon, Jun 5, 2023 at 9:50=E2=80=AFAM Krister Johansen <kjlx@templeofs=
-tupid.com> wrote:
-> > > +                       if (!aux->func[i]->aux->num_exentries ||
-> > > +                           aux->func[i]->aux->extable =3D=3D NULL)
-> > > +                               continue;
-> > > +                       e =3D search_extable(aux->func[i]->aux->extab=
-le,
-> > > +                           aux->func[i]->aux->num_exentries, addr);
-> > > +               }
-> > > +       }
-> >
-> > something odd here.
-> > We do bpf_prog_kallsyms_add(func[i]); for each subprog.
-> > So bpf_prog_ksym_find() in search_bpf_extables()
-> > should be finding ksym and extable of the subprog
-> > and not the main prog.
-> > The bug is probably elsewhere.
->
-> I have a kdump (or more) of this bug so if there's additional state
-> you'd like me to share, let me know.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers/posix
+head:   16a20adb1e0ae19ad42041a7d1b5583e4705ca0c
+commit: 2e9a3527e7a51ba24410e43a2d0d1d10d62ae1b1 [22/61] posix-timers: Convert timer list to hlist
+config: riscv-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306061012.xWzgDSg0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=2e9a3527e7a51ba24410e43a2d0d1d10d62ae1b1
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel timers/posix
+        git checkout 2e9a3527e7a51ba24410e43a2d0d1d10d62ae1b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/proc/ init/ kernel/
 
-Please convert the test into selftest.
-Then everyone will be able to reproduce easily
-and it will serve us later to make sure we don't regress.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306061012.xWzgDSg0-lkp@intel.com/
 
-> With your comments in mind, I took
-> another look at the ksym fields in the aux structs.  I have this in the
-> main program:
->
->   ksym =3D {
->     start =3D 18446744072638420852,
->     end =3D 18446744072638423040,
->     name =3D <...>
->     lnode =3D {
->       next =3D 0xffff88d9c1065168,
->       prev =3D 0xffff88da91609168
->     },
->     tnode =3D {
->       node =3D {{
->           __rb_parent_color =3D 18446613068361611640,
->           rb_right =3D 0xffff88da91609178,
->           rb_left =3D 0xffff88d9f0c5a578
->         }, {
->           __rb_parent_color =3D 18446613068361611664,
->           rb_right =3D 0xffff88da91609190,
->           rb_left =3D 0xffff88d9f0c5a590
->         }}
->     },
->     prog =3D true
->   },
->
-> and this in the func[0] subprogram:
->
->   ksym =3D {
->     start =3D 18446744072638420852,
->     end =3D 18446744072638423040,
->     name =3D <...>
->     lnode =3D {
->       next =3D 0xffff88da91609168,
->       prev =3D 0xffffffff981f8990 <bpf_kallsyms>
->     },
->     tnode =3D {
->       node =3D {{
->           __rb_parent_color =3D 18446613068361606520,
->           rb_right =3D 0x0,
->           rb_left =3D 0x0
->         }, {
->           __rb_parent_color =3D 18446613068361606544,
->           rb_right =3D 0x0,
->           rb_left =3D 0x0
->         }}
->     },
->     prog =3D true
->   },
->
-> That sure looks like func[0] is a leaf in the rbtree and the main
-> program is an intermediate node with leaves.  If that's the case, then
-> bpf_prog_ksym_find may have found the main program instead of the
-> subprogram.  In that case, do you think it's better to skip the main
-> program's call to bpf_prog_ksym_set_addr() if it has subprograms instead
-> of searching for subprograms if the main program is found?
+All errors (new ones prefixed by >>):
 
-I see.
-Looks like we're doing double bpf_prog_kallsyms_add().
-First in in jit_subprogs():
-        for (i =3D 0; i < env->subprog_cnt; i++) {
-                bpf_prog_lock_ro(func[i]);
-                bpf_prog_kallsyms_add(func[i]);
-        }
-and then again:
-bpf_prog_kallsyms_add(prog);
-in bpf_prog_load().
+>> init/init_task.c:31:33: error: expected '}'
+           .posix_timers   = HLIST_HEAD_INIT(),
+                                            ^
+   init/init_task.c:18:44: note: to match this '{'
+   static struct signal_struct init_signals = {
+                                              ^
+   1 error generated.
+--
+>> fs/proc/base.c:2464:24: error: incompatible pointer types passing 'struct hlist_head *' to parameter of type 'struct list_head *' [-Werror,-Wincompatible-pointer-types]
+           return seq_list_start(&tp->task->signal->posix_timers, *pos);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/seq_file.h:273:59: note: passing argument to parameter 'head' here
+   extern struct list_head *seq_list_start(struct list_head *head,
+                                                             ^
+   fs/proc/base.c:2470:26: error: incompatible pointer types passing 'struct hlist_head *' to parameter of type 'struct list_head *' [-Werror,-Wincompatible-pointer-types]
+           return seq_list_next(v, &tp->task->signal->posix_timers, pos);
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/seq_file.h:277:67: note: passing argument to parameter 'head' here
+   extern struct list_head *seq_list_next(void *v, struct list_head *head,
+                                                                     ^
+>> fs/proc/base.c:2499:10: error: static assertion failed due to requirement '__builtin_types_compatible_p(struct list_head, struct hlist_node) || __builtin_types_compatible_p(struct list_head, void)': pointer type mismatch in container_of()
+           timer = list_entry((struct list_head *)v, struct k_itimer, list);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/list.h:520:2: note: expanded from macro 'list_entry'
+           container_of(ptr, type, member)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:20:16: note: expanded from macro 'container_of'
+           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:338:27: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                             ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+   3 errors generated.
 
-because func[0] is the main prog.
 
-We are also doing double bpf_prog_lock_ro() for main prog,
-but that's not causing harm.
+vim +31 init/init_task.c
 
-The fix is probably just this:
+    17	
+    18	static struct signal_struct init_signals = {
+    19		.nr_threads	= 1,
+    20		.thread_head	= LIST_HEAD_INIT(init_task.thread_node),
+    21		.wait_chldexit	= __WAIT_QUEUE_HEAD_INITIALIZER(init_signals.wait_chldexit),
+    22		.shared_pending	= {
+    23			.list = LIST_HEAD_INIT(init_signals.shared_pending.list),
+    24			.signal =  {{0}}
+    25		},
+    26		.multiprocess	= HLIST_HEAD_INIT,
+    27		.rlim		= INIT_RLIMITS,
+    28		.cred_guard_mutex = __MUTEX_INITIALIZER(init_signals.cred_guard_mutex),
+    29		.exec_update_lock = __RWSEM_INITIALIZER(init_signals.exec_update_lock),
+    30	#ifdef CONFIG_POSIX_TIMERS
+  > 31		.posix_timers	= HLIST_HEAD_INIT(),
+    32		.cputimer	= {
+    33			.cputime_atomic	= INIT_CPUTIME_ATOMIC,
+    34		},
+    35	#endif
+    36		INIT_CPU_TIMERS(init_signals)
+    37		.pids = {
+    38			[PIDTYPE_PID]	= &init_struct_pid,
+    39			[PIDTYPE_TGID]	= &init_struct_pid,
+    40			[PIDTYPE_PGID]	= &init_struct_pid,
+    41			[PIDTYPE_SID]	= &init_struct_pid,
+    42		},
+    43		INIT_PREV_CPUTIME(init_signals)
+    44	};
+    45	
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1e38584d497c..89266dac9c12 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17633,7 +17633,7 @@ static int jit_subprogs(struct bpf_verifier_env *en=
-v)
-        /* finally lock prog and jit images for all functions and
-         * populate kallsysm
-         */
--       for (i =3D 0; i < env->subprog_cnt; i++) {
-+       for (i =3D 1; i < env->subprog_cnt; i++) {
-                bpf_prog_lock_ro(func[i]);
-                bpf_prog_kallsyms_add(func[i]);
-        }
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
