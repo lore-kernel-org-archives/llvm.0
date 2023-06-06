@@ -1,138 +1,104 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6079937B71;
-	Tue,  6 Jun 2023 13:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686059442; x=1717595442;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I3+kJBG1ObK30+MuR2tQyHodqlxIFHSuii8lJUDW0y4=;
-  b=h7rzqEkHaXLCpqXIF+E07Hkbi72gbTP0EHt8LkBtbSqVq63NSeCc2jL/
-   eKqWWsFlTOWrzxZ7sLHBnkYW1jbDM2k7Zt7hGgZiE64YOiIL1e8rayVSg
-   8ApCsog+5ZzaxK5dlhU/dfHKM6auFvwcjbiFARjHK6ciBCBdtG4cLU3gG
-   OrFUaFfLrJPR8SWYFW05rlBRfYZTg3FRA3UKMPB8RFvNDWQi+yWwyZJFx
-   HSe+XrU0whTmA74M+FoVz94zJ38mbBwvdj8BG2IOEW9FOvekeeBTRMrPJ
-   2ghnT2LR2msQ1iEQVnZYIBd4347eYXYtCEkL1nqlDUmJEOwwPTmJWWe/W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355530697"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="355530697"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 06:50:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="709077754"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="709077754"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jun 2023 06:50:31 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q6X4w-0005JT-06;
-	Tue, 06 Jun 2023 13:50:30 +0000
-Date: Tue, 6 Jun 2023 21:50:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:timers/posix 58/61] kernel/signal.c:2097:48: error: no
- member named 'list' in 'struct kernel_siginfo'
-Message-ID: <202306062137.desNbLij-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0A137B71
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 14:02:56 +0000 (UTC)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-39a4eb67c5fso4000641b6e.0
+        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 07:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686060175; x=1688652175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uKfMxnlTG/tbmuksWuOGZWrrvfs8QjlyYN4r2hnIpWo=;
+        b=VA42Clb/LLV7nHqt/y8/XVxTan46RsgI8crf9vhzZRuiychWUTwqv0bsNXuz1rz7xu
+         MlGWultN0RTL1m/HaT5y1hLhfLRp+ea9eGpqaJ04pgBw9o1VxDlkbNsj5SGtYpKtnE3R
+         u0gs7e3qAIZZy3JfBBWI/huXTusyPeG55EBuAYrFTrVJs0YnBVt8dHEaa5otkZFA+8x4
+         MsgphfPGBFX3hxHFZUie4K7a/KcGSIN0xizFUxP+75ax6WzzD/0WJtLpBXhaDJtvVqky
+         f6vxhN6ghr+kGS6VBHc13JH9560ANfmpjy0ygTVrMklQVdZIWOEjfOV+N03omHKgc5ZH
+         +87w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686060175; x=1688652175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uKfMxnlTG/tbmuksWuOGZWrrvfs8QjlyYN4r2hnIpWo=;
+        b=LYlL9zXn7W1BKhIwzvcoCoS0fBN6AngEbVPHZt8ZHwzg4DV7uKunZ45buBJq9b+HRr
+         gV4a3SucUfAonpMKuyxtT6bKkRxbWCvtyC8sJSl+dBwtYkqGNWpiNRgnMduPnOoUosvk
+         ymtZxWwGiYHOJEr1McLlmArTXJuVP+K+j+oOI/+ve0sfuxxIOpyb/GZq3ko49yZIi4Hd
+         pWiBocyel9c/RZfGZz5BxNfPL/nbvrDafNW5DuRJXP0gWz+wBdeni/LJVBTAwzVO9yfz
+         22shB1BW//T1/gqhx5NeqJUv7SxiNWdHynuqquM22TZIArVh1+rCxy4s9eBnTgho0CvO
+         2vJQ==
+X-Gm-Message-State: AC+VfDygi0pmkJHG/3Dvc8ImJ142sIBVYEBJK9kOOlgTWDeCxt+i0646
+	9K3OEAHfqgHAKRX/xPwFX0aPvFSEQJaM/H1WB6w=
+X-Google-Smtp-Source: ACHHUZ7ElSN1h6Nn2Mycq3M2NnCpSv8PBO/3dsGRn7+ApEUjV4I+bf369hsLA1VMW49PWCrORbuNPG4AeB/CJ+Hvhys=
+X-Received: by 2002:a05:6808:98b:b0:398:2b78:5a53 with SMTP id
+ a11-20020a056808098b00b003982b785a53mr1067410oic.40.1686060175306; Tue, 06
+ Jun 2023 07:02:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230605183007.204399-1-hamza.mahfooz@amd.com> <20230605183007.204399-2-hamza.mahfooz@amd.com>
+In-Reply-To: <20230605183007.204399-2-hamza.mahfooz@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Tue, 6 Jun 2023 10:02:44 -0400
+Message-ID: <CADnq5_N72yxvjVNT5jEe496J36L8x9bZKaWHZ1X6=qwMPW8_rw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/amd/display: mark dml314's UseMinimumDCFCLK() as noinline_for_stack
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc: amd-gfx@lists.freedesktop.org, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev, 
+	dri-devel@lists.freedesktop.org, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>, 
+	Jun Lei <Jun.Lei@amd.com>, Charlene Liu <Charlene.Liu@amd.com>, 
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Paul Hsieh <Paul.Hsieh@amd.com>, 
+	Qingqing Zhuo <qingqing.zhuo@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers/posix
-head:   16a20adb1e0ae19ad42041a7d1b5583e4705ca0c
-commit: 3ef2ce19cb1200cb49c61f9b3cef58c4b8a3a10d [58/61] signal: Add list to track ignored posix timers
-config: riscv-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306062137.desNbLij-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=3ef2ce19cb1200cb49c61f9b3cef58c4b8a3a10d
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel timers/posix
-        git checkout 3ef2ce19cb1200cb49c61f9b3cef58c4b8a3a10d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Series is:
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306062137.desNbLij-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/signal.c:2097:48: error: no member named 'list' in 'struct kernel_siginfo'
-    2097 |                 if (WARN_ON_ONCE(!list_empty(&tmr->sigq.info.list)))
-         |                                               ~~~~~~~~~~~~~~ ^
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON_ONCE'
-     110 |         int __ret_warn_on = !!(condition);                      \
-         |                                ^~~~~~~~~
-   1 error generated.
-
-
-vim +2097 kernel/signal.c
-
-  2067	
-  2068	static void posixtimer_sig_unignore(struct task_struct *tsk, int sig)
-  2069	{
-  2070		struct hlist_head *head = &tsk->signal->ignored_posix_timers;
-  2071		struct hlist_node *tmp;
-  2072		struct k_itimer *tmr;
-  2073	
-  2074		if (likely(hlist_empty(head)))
-  2075			return;
-  2076	
-  2077		/*
-  2078		 * Rearming a timer with sighand lock held is not possible due to
-  2079		 * lock ordering vs. tmr::it_lock. Just stick the sigqueue back and
-  2080		 * let the signal delivery path deal with it whether it needs to be
-  2081		 * rearmed or not. This cannot be decided here w/o dropping sighand
-  2082		 * lock and creating a loop retry horror show.
-  2083		 */
-  2084		hlist_for_each_entry_safe(tmr, tmp , head, ignored_list) {
-  2085			struct task_struct *target;
-  2086	
-  2087			/*
-  2088			 * tmr::sigq.info.si_signo is immutable, so accessing it
-  2089			 * without holding tmr::it_lock is safe.
-  2090			 */
-  2091			if (tmr->sigq.info.si_signo != sig)
-  2092				continue;
-  2093	
-  2094			hlist_del_init(&tmr->ignored_list);
-  2095	
-  2096			/* This should never happen and leaks a reference count */
-> 2097			if (WARN_ON_ONCE(!list_empty(&tmr->sigq.info.list)))
-  2098				continue;
-  2099	
-  2100			/*
-  2101			 * Get the target for the signal. If target is a thread and
-  2102			 * has exited by now, drop the reference count.
-  2103			 */
-  2104			target = posixtimer_get_target(tmr);
-  2105			if (target)
-  2106				posixtimer_queue_sigqueue(&tmr->sigq, target, tmr->it_pid_type);
-  2107			else
-  2108				posixtimer_putref(tmr);
-  2109		}
-  2110	}
-  2111	#else /* CONFIG_POSIX_TIMERS */
-  2112	static inline void posixtimer_sig_ignore(struct task_struct *tsk, struct sigqueue *q) { }
-  2113	static inline void posixtimer_sig_unignore(struct task_struct *tsk, int sig) { }
-  2114	#endif /* !CONFIG_POSIX_TIMERS */
-  2115	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Mon, Jun 5, 2023 at 2:30=E2=80=AFPM Hamza Mahfooz <hamza.mahfooz@amd.com=
+> wrote:
+>
+> clang reports:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.=
+c:3892:6: error: stack frame size (2632) exceeds limit (2048) in 'dml314_Mo=
+deSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+>  3892 | void dml314_ModeSupportAndSystemConfigurationFull(struct display_=
+mode_lib *mode_lib)
+>       |      ^
+> 1 error generated.
+>
+> So, since UseMinimumDCFCLK() consumes a lot of stack space, mark it as
+> noinline_for_stack to prevent it from blowing up
+> dml314_ModeSupportAndSystemConfigurationFull()'s stack size.
+>
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> ---
+>  .../gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_3=
+14.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> index 27b83162ae45..1532a7e0ed6c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> @@ -7061,7 +7061,7 @@ static double CalculateUrgentLatency(
+>         return ret;
+>  }
+>
+> -static void UseMinimumDCFCLK(
+> +static noinline_for_stack void UseMinimumDCFCLK(
+>                 struct display_mode_lib *mode_lib,
+>                 int MaxPrefetchMode,
+>                 int ReorderingBytes)
+> --
+> 2.40.1
+>
