@@ -1,84 +1,110 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA212A6EA;
-	Tue,  6 Jun 2023 10:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686046337; x=1717582337;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ii+7LbAApVLTdesqin/mYoEUUUeioUO8TAp4lcFng5Y=;
-  b=c0eZkFxT/56skxvM8J64TZnygFOMRPF1da/19r1vApxfhH/v1MDi0tuV
-   YvJ9etP5T6BwLgpm2hqgxhkt0jr2MmLtcvsNwLoMWPEkeOHm1/B9GrkJq
-   oZSh8gioqKL5OYzY48xrFIPYuPs+SIrv4+1BFHmSWFH6IS1C3xTRNyRa4
-   FKv5afvfymvh36dBMQejgCT62SnH+ZCU9NuHL/IemPiNM668VfHcGPJOJ
-   O+uS8LssaI7POW2oKuQwE3MZveswM4F64pLJoyTFs3sXu9hEg9Mi387V8
-   n1O25Cu90itv85gFUPXARBYSZk6jAwmkNCslCFmPye/PqlO0VeT6EXDR8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="443002682"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="443002682"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 03:12:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="703099424"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="703099424"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2023 03:12:14 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q6Tfh-00057X-2M;
-	Tue, 06 Jun 2023 10:12:13 +0000
-Date: Tue, 6 Jun 2023 18:11:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 2309/7345] net/netfilter/ipvs/ip_vs_proto.o:
- warning: objtool: .init.text: unexpected end of section
-Message-ID: <202306061802.DUh27KMQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D6C28C3A
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 10:21:41 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 24A315C00E7;
+	Tue,  6 Jun 2023 06:21:40 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 06:21:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1686046900; x=1686133300; bh=L3ruZsoNMC24z4nGykitqEHJTk2DsiwNv4s
+	+KpsYVhY=; b=cQOuzlDf954AAyZ3fzxsKHPzmBWUkFvc3RXIqqWBI/wrO4YMxnv
+	J7qNOoaOPr5wV1oqdJM/llje3mIq8KRspBJaVxERBS+b2+rw0Oj4MMyT/KLObsTN
+	QS63NRHm3R3LLzKIJR0ZVbpVsx3iSDfhdF8GKCA1VjjwN3rmqW68+Crd1Gtxz+9G
+	q1QSANnaa0GblJdG1jIvdH5sDSwrVyNtE1k90zB95g3whfUa8qEOP66nS6mIkqO+
+	e7G6rPvOZM6LG0TnLHGG0WaqJh6XTs4on4GgLHCqC5IyUGUc5DjDhmeIwuMvbF0C
+	FejzDhLWxkREtP9iNonG7sx8JOsFloPwhFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1686046900; x=1686133300; bh=L3ruZsoNMC24z4nGykitqEHJTk2DsiwNv4s
+	+KpsYVhY=; b=dxRD7YCXiG0YFmIuM4qLgZDdJdSPLTjqo34GjbSDf31hOGGimjM
+	gMLF0S4VyAiJd0YI0Kb9iNLcRu2H0rIuD1OuRI0pbQFof2/cIURVaoXRce+L3Nos
+	Exe+pyH1a9Nc3Gu6dCL+qXvOgmlLjoVrs8gFC0PE6LiunqjO1NLUzimxYP5EgyJs
+	9IDTHHK4w/M1ztSSAY6xUvPeoRPCQ0zcHb7YRW/5Wg1Rg2eaIveJNouw+Heli7oY
+	Efwk25hRdjDZWfPGtiRiKS8+GE9wSWLAkLPLR9dNrIP4RkEKtMDf4NrMxQGBDs7q
+	xXhBna5hbt/HA/LUaotTU5qzycoMHFQ/a1Q==
+X-ME-Sender: <xms:swh_ZIerVh8YrXlcEfBC2gujAG41LN4dPnkcGdhWlP5wJE-elY5kWg>
+    <xme:swh_ZKNubLBJcezfmiTb6XjR-Fpa4yDqozu7D86B4o4MA0UIVCenBWBQTOrAs73so
+    8JyZjc-Hx0TE8Zju4Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:swh_ZJjlNdk1P4DlvVwACsmevoraICw3-7MJh0RZ8oxsO1bQee8gng>
+    <xmx:swh_ZN-9PKXwv5MTNFf_MdRVNfgoxFyuWatLpP5OflGoLZxG_SrfjQ>
+    <xmx:swh_ZEv2SpW6dFgZLRCw4ZyriV9xQWSQvo1zN_MYihjbjbw_3yvX5A>
+    <xmx:tAh_ZETaEEXMmRB5DBpTmf61rBpFJssAO0XpZrkAnurEBdIEcxk2QA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 9405FB60086; Tue,  6 Jun 2023 06:21:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-Id: <8db9886f-e24f-44ee-8f8a-880dc3e4bf75@app.fastmail.com>
+In-Reply-To: 
+ <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
+References: 
+ <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+ <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+ <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
+ <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
+Date: Tue, 06 Jun 2023 12:21:19 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ "open list" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org,
+ clang-built-linux <llvm@lists.linux.dev>,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+ "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+ Netdev <netdev@vger.kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, maxime.chevallier@bootlin.com,
+ "Simon Horman" <simon.horman@corigine.com>
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6db29e14f4fb7bce9eb5290288e71b05c2b0d118
-commit: 55c84a5cf2c72a821719823ef2ebef01b119025b [2309/7345] fortify: strcat: Move definition to use fortified strlcat()
-config: x86_64-randconfig-x062-20230606 (https://download.01.org/0day-ci/archive/20230606/202306061802.DUh27KMQ-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=55c84a5cf2c72a821719823ef2ebef01b119025b
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 55c84a5cf2c72a821719823ef2ebef01b119025b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/netfilter/
+On Tue, Jun 6, 2023, at 11:28, Geert Uytterhoeven wrote:
+> On Tue, Jun 6, 2023 at 11:16=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
+>>
+>> This won't work when PCS_LYNX is a loadable module and
+>> STMMAC is built-in. I think we should just select PCS_LYNX
+>
+> Oops, you're right, forgot about that case.
+> What about using IS_REACHABLE() instead?
+> No, that won't work either, as DWMAC_SOCFPGA can be modular,
+> with STMMAC builtin.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306061802.DUh27KMQ-lkp@intel.com/
+It would work because of the 'select PCS_LYNX' below DWMAC_SOCFPGA,
+but I think that's too fragile and would easily break when another
+dwmac front-end starts using PCS_LYNX without have the same select
+statement. I think we should always avoid IS_REACHABLE().
 
-All warnings (new ones prefixed by >>):
-
->> net/netfilter/ipvs/ip_vs_proto.o: warning: objtool: .init.text: unexpected end of section
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CRYPTO_CRC32C_INTEL
-   Depends on [n]: CRYPTO [=y] && !KMSAN [=y] && X86 [=y]
-   Selected by [m]:
-   - ISCSI_TARGET [=m] && TARGET_CORE [=m] && INET [=y] && X86 [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
