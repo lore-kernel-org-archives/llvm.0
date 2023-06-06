@@ -1,66 +1,124 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947BF360;
-	Tue,  6 Jun 2023 05:33:36 +0000 (UTC)
-Received: from [IPV6:2a0c:5a83:9203:ad00:6f2e:82dd:9a04:a2e5] (unknown [IPv6:2a0c:5a83:9203:ad00:6f2e:82dd:9a04:a2e5])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C342119
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 06:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686031809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7xLVlredGFBm8dE84HX7G8qb2y8/OyU2eivSfWBMLmE=;
+	b=AmL7priN3U7Bjn56U80V20ZPeJ2ZubfPlarkWUrQhDaYlMwpMqKhRBL7i61ygto0h8VL38
+	zDgZVpRzz6TnBlmUR+IDbFwzDka/gumMBOCzRsAvU1LOyPNV07QO8oTMF0xdGAzidkgIxR
+	7eoYUrcoMa7bnwCmnRvQUH1uevYjtDc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-42-_PxJKiTDOrWC3BnpdW-_sw-1; Tue, 06 Jun 2023 02:10:07 -0400
+X-MC-Unique: _PxJKiTDOrWC3BnpdW-_sw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: rcn)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 964B666003B1;
-	Tue,  6 Jun 2023 06:33:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1686029614;
-	bh=jW2QzKdWyriO8SRFnigos0KPZxwCwcXsEMTvj9Md6oI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZRbuJWBWca2FwsExoZmlnThqAcRp/hU91IPhB2QDUuHdsyh7E6zMjKG82D19xYuKh
-	 pH3zfzJEJFawm6vvVh5NOf/oC0NFFdHgpyOTeeXjt/u4+uhzxhnYNkAdhm7r4bC0gW
-	 HC2dAgEdbcETm3LJqwrAiaAIcys4TKkhBc78dky9RtemIzANITTVeC6NaXHCmVmoev
-	 HoOehKq6SwJJUxTCXMCREatoNJaYh3NrxAhV+eqgKACRE3Qq9j734RUB9bfFrk94fJ
-	 diHB5L5+mDgyUKzC/vYkNZxExG5t6NqFTKdHxf67wcc2IXgrVdBPXIl/k4lRLXShyo
-	 YHzEQeQ5qh0Hg==
-Message-ID: <6561c295-f98b-8930-9368-1a225acdca16@collabora.com>
-Date: Tue, 6 Jun 2023 07:33:30 +0200
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABDB685A5B5
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 06:10:07 +0000 (UTC)
+Received: from [172.64.4.83] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 99C6B1121314;
+	Tue,  6 Jun 2023 06:10:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 28 of 346): Test report for master
+ (6.4.0-rc5, mainline.kernel.org-clang, f8dba31b)
+Date: Tue, 06 Jun 2023 06:10:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 10/17] iommu: Do iommu_group_create_direct_mappings()
- before attach
-Content-Language: en-US
-To: Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Yong Wu <yong.wu@mediatek.com>, linux-mediatek@lists.infradead.org
-Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
- Lu Baolu <baolu.lu@linux.intel.com>, Heiko Stuebner <heiko@sntech.de>,
- Kevin Tian <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>,
- Niklas Schnelle <schnelle@linux.ibm.com>
-References: <0-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
- <10-v5-1b99ae392328+44574-iommu_err_unwind_jgg@nvidia.com>
- <20230605070959.moupivvi7wr4nibu@rcn-XPS-13-9305>
- <ZH3nXbVFR6JfUKpV@nvidia.com> <01dee34c-5663-22f4-0d88-90f87b1fe879@arm.com>
-From: =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
-In-Reply-To: <01dee34c-5663-22f4-0d88-90f87b1fe879@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <30214.123060602100800115@us-mta-42.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi, we tested your kernel and here are the results:
 
-On 5/6/23 16:00, Robin Murphy wrote:
-> The log says it's next-20230530 - the fix you're seeing there from commit b3fc95709c54 landed 2 days later :)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thanks for checking that out Robin, KernelCI still hasn't run
-that build but I tested it manually and the issue is not there
-anymore.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-#regzbot fix: b3fc95709c54
+Kernel information:
+    Commit message: Merge tag 'asym-keys-fix-for-linus-v6.4-rc5' of https:/=
+/github.com/robertosassu/linux
 
-Cheers,
-Ricardo
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91353
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Aborting task xxxx from recipe xxxx as system expects to run=
+ tests for recipe xxxx
+            URL: https://gitlab.com/cki-project/upt/-/issues/99
+            Affected tests:
+                   s390x - Boot test
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                   s390x - Reboot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
