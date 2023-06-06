@@ -1,105 +1,134 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413E328C07
-	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 09:01:59 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so6056387276.0
-        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 02:01:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042118; x=1688634118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JsblPXknZ5GIdBcvT6axVzmA1IISIV/7YdlNXuNCOIg=;
-        b=kuC5LQwCOii9NzR1hv4SWsZZw0tCQuKVDIKatm90lFNck2lHluUsBLSPbV2/9tQCx8
-         PoEl8jcWi3ggjBjWchqXhK016d7Cq7PRK/4+r/ViBT0jl19x9hgzw2/z4F+/rk6nYQQG
-         /AGXlGC6/V1nPmVmwzjqbF2j88Wo++2M+m80McIh8jKq+nK5pZS+JqVE+aOtK9TPEIGb
-         x+8H344adTSkTC2UO+USdQrxVna0yx9t9eu5fp4FOrCmZsuF6TFcQ12JndCD8L4w6cWC
-         RRgUVn0PT8Gq4OFiUvtQXj/tXckcZGH8eHYLaK0ZTIHv/UqfkSqhujU6zwC4FyIdmXC6
-         k9pg==
-X-Gm-Message-State: AC+VfDyyDfH6CgdCjHSt4nC1+sejlZnrzChEnyVpywq67b7Dqmm/3N3+
-	9Embx8C6/BEX5XqfOEfICU6H4OsU+1p8wA==
-X-Google-Smtp-Source: ACHHUZ5RtnEEUa5pQZuf8wIz6ksRP+atXyEJaxv1t1Xowbuz6hHtGmMVBaduTiVC+gyQydPYcmoT/w==
-X-Received: by 2002:a25:e006:0:b0:ba7:7cbe:1080 with SMTP id x6-20020a25e006000000b00ba77cbe1080mr1590092ybg.62.1686042117777;
-        Tue, 06 Jun 2023 02:01:57 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id b64-20020a253443000000b00bb0cb0fe17csm3112242yba.41.2023.06.06.02.01.56
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:01:56 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so6035877276.2
-        for <llvm@lists.linux.dev>; Tue, 06 Jun 2023 02:01:56 -0700 (PDT)
-X-Received: by 2002:a0d:df90:0:b0:55a:26cf:33e with SMTP id
- i138-20020a0ddf90000000b0055a26cf033emr1300837ywe.42.1686042115920; Tue, 06
- Jun 2023 02:01:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B53290EA
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 09:16:03 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 2EA875C00D6;
+	Tue,  6 Jun 2023 05:16:03 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 05:16:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1686042963; x=1686129363; bh=jUtfdkZ/azepFvSYCIZ/2GxgimiuSucyPTh
+	w7nBP7F4=; b=LCmLbZWfkuLfRl1mPHTB2HMg4Zk5tS4Hc2oGueG6TXIuQaYzuxj
+	zBDWqMRe8e7wXjjyatIF/7u6NioHOS24/EACjLdE6VMGYmybgAlz8rKql6ZF+AL4
+	9oLlKIi/fsMWbTqduw0CXeXAapOEguGzt5Ac4eczmiGbBsXkkuJYmIS+bqfeUU5g
+	A9qWh5kapCDkvRa+hVn4hVnif676moVzUT2DJTw1qhLNeT5qxzLcriqX9jIzS5Ja
+	ZMEEmwZEM9hKXuVGduS9L7BlTQVKgnh7ZPhu5bdRuCSb0TJokWG1+bLwkPGg+aiz
+	i+ND/ce1G/GHiUh0XPqIZXucI6wdPwjqRZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1686042963; x=1686129363; bh=jUtfdkZ/azepFvSYCIZ/2GxgimiuSucyPTh
+	w7nBP7F4=; b=OVvU1rB/IUV1V+Tir3aGFvlYRfACHozlpZBVLOvWe+gwqDjzcLF
+	VG3tFZ3Fu9+yjP2GsLZotGkDzeUy4VkD5plA4HjFECn3HuLP9yY7rB2kvtEOP0YP
+	jzrghR32c00umejZjSHcLbrIAHlLKtH0lKewuVG7MJjCZ3ASAeCJyfCzksbaRU6J
+	/xhwzSr3UlPMiRbiRZgtoPu1jqFLqn9JWyFAKUIQLVdVifHn+h0ajt3WCQFxEaf1
+	pDE0Gw/eUKDhJP8oGWCUUP1S/xEsrZVQ6qGbQPtwWCQIL1GfsVDYSf2tC2Ncka/8
+	orubpGGHHVF2kPusJpJgXzO0XbZjeh9deng==
+X-ME-Sender: <xms:Uvl-ZAoExjB4Tw5ycehQJoFfp5DYQ0suSSA434qzcD6j8J5M0BiYVw>
+    <xme:Uvl-ZGrQHlmQFaa7PjhvB4jBdLATrgN31FX8PaVAiyBMHgQrprmOs81VQnGB46WqM
+    P5AXRfdqCYhCDr6nNM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Uvl-ZFNRdqYjvHzma7kszNb8noYVzTvB6WsvhG9Se2ZmV5PZLQ6SAw>
+    <xmx:Uvl-ZH6e2GQwKUg-3XFd7uF48imD6xAt4HVJKXyhGPfYClTXvYf8Ow>
+    <xmx:Uvl-ZP5zDCsoBN3_bkFjtIoDKGugKaMWKlQj-Znm6gkqQPR_DgjgsQ>
+    <xmx:U_l-ZIPtCu9ftgUOo6o8pir-Uft3tWJcQSibYy1Gci7O3ra0Q5OBag>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B690AB60086; Tue,  6 Jun 2023 05:16:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+Mime-Version: 1.0
+Message-Id: <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
+In-Reply-To: 
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+References: 
+ <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
  <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
-In-Reply-To: <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 6 Jun 2023 11:01:44 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
-Message-ID: <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+Date: Tue, 06 Jun 2023 11:15:42 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc: "open list" <linux-kernel@vger.kernel.org>,
+ linux-next <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org,
+ clang-built-linux <llvm@lists.linux.dev>,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+ "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+ Netdev <netdev@vger.kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, maxime.chevallier@bootlin.com,
+ "Simon Horman" <simon.horman@corigine.com>
 Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Netdev <netdev@vger.kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, maxime.chevallier@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Naresh,
-
-On Tue, Jun 6, 2023 at 10:53=E2=80=AFAM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
-> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> w=
-rote:
-> > Following build regressions found while building arm shmobile_defconfig=
- on
-> > Linux next-20230606.
-> >
-> > Regressions found on arm:
-> >
-> >  - build/clang-16-shmobile_defconfig
-> >  - build/gcc-8-shmobile_defconfig
-> >  - build/gcc-12-shmobile_defconfig
-> >  - build/clang-nightly-shmobile_defconfig
+On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
+> Hi Naresh,
 >
-> And mips defconfig builds failed.
-> Regressions found on mips:
+> On Tue, Jun 6, 2023 at 10:53=E2=80=AFAM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>> > Following build regressions found while building arm shmobile_defco=
+nfig on
+>> > Linux next-20230606.
+>> >
+>> > Regressions found on arm:
+>> >
+>> >  - build/clang-16-shmobile_defconfig
+>> >  - build/gcc-8-shmobile_defconfig
+>> >  - build/gcc-12-shmobile_defconfig
+>> >  - build/clang-nightly-shmobile_defconfig
+>>
+>> And mips defconfig builds failed.
+>> Regressions found on mips:
+>>
+>>   - build/clang-16-defconfig
+>>   - build/gcc-12-defconfig
+>>   - build/gcc-8-defconfig
+>>   - build/clang-nightly-defconfig
 >
->   - build/clang-16-defconfig
->   - build/gcc-12-defconfig
->   - build/gcc-8-defconfig
->   - build/clang-nightly-defconfig
+> Please give my fix a try:
+> https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b=
+37d268512195.1686039915.git.geert+renesas@glider.be
+>
 
-Please give my fix a try:
-https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d26=
-8512195.1686039915.git.geert+renesas@glider.be
+This won't work when PCS_LYNX is a loadable module and
+STMMAC is built-in. I think we should just select PCS_LYNX
+unconditionally from stmmac even if no front-end driver
+using it is enabled.
 
-Thanks!
+I tried to come up with a way to move the dependency into
+the altera specific front-end, but couldn't find an obvious
+or simple way to do this.
 
-Gr{oetje,eeting}s,
+Having a proper abstraction for PCS drivers instead of
+directly calling into exported driver symbols might help
+here, but that would add complexity elsewhere.
 
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+     Arnd
