@@ -1,243 +1,259 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C592428C09
-	for <llvm@lists.linux.dev>; Mon,  5 Jun 2023 23:30:43 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b1afe57bdfso50187861fa.0
-        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 16:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686007841; x=1688599841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DlmpFDEmcxHsnSAtrkjHRWbVNt7ra8EBiqAvJ7+G6UM=;
-        b=M9aMrRskDsFPhGK6WdTxx38xeN3fozVsmcEN4p+M/mSfcQKDicvDjSlD/Txrui2oPf
-         HDnYaCqBswhWa2BctIRcAzcB/zYAKd0NNn+RSl2MZWj1JHxoVSnB8E9GdTH9VPVpwnwI
-         XnLyWNEfKB20R+MC2rQeStvaJUQf9gPeFCzxCxUDKcdHHnDLl0mg87AHBG4e+NjtzOrp
-         XK9RrkyJUfHA5BI3xZhOoQ3NoHBW3pMjT5m3a4zPblYljagPOGXDpfxt4Zu/qxkyKRjK
-         cXyVQLZxTv0ImYIdztULa2AeozuQOXdzh8rkbmtzBWVCQ/8wCjXXUXNSQ/M2Ibgx3yBm
-         Tylg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686007841; x=1688599841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DlmpFDEmcxHsnSAtrkjHRWbVNt7ra8EBiqAvJ7+G6UM=;
-        b=WGjUJIoZDbKgPW6BAIaGsrmyABZTuOOk1yGl4FjTchuQZe0CSZn9BMPzo+2r0SpfPc
-         iCIPcXqOYT6CwvtkxkTbwSbFv0SpWd2p23g8dJ6HxtBNJlijCBhQK7hP7N6kNUykZzUe
-         bF3Sq5ZZSoEIuy5fgWjqBTm7Kb5du4o44OZ9rGD07XFTipi15xgS5uovIDOakZPzxGT1
-         SwdvsUmZ9TL1b1oIvwt/OV93TDtj/nUDHjlVDggm2ClqH+Rwfbkef7jr5Gzt/Lg/2HxA
-         guL3I6LUPw52v+hYdBXCePYdJpkHfTDnt50v9+dZlyUUadDL5kQ5N09jYEdbrBKFqvjJ
-         JBVA==
-X-Gm-Message-State: AC+VfDx8/KxzPzc56hpSBuGTw5pvbaSzG9Bi8uTwY/I5h81zgbuucfbF
-	lt09iRgipeOw9sVp3sXZM13EeAoHmH7/nk80YFs=
-X-Google-Smtp-Source: ACHHUZ4sj1ih+CkariNV5M0zDhUe1cFYW5PMBvQD/6OiIGS0ztojmDNTuxZ39lQbKupwhtGzz7S79/zGfzxVm4QiD5w=
-X-Received: by 2002:a2e:380b:0:b0:2af:2231:94ba with SMTP id
- f11-20020a2e380b000000b002af223194bamr403224lja.3.1686007841409; Mon, 05 Jun
- 2023 16:30:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95CE7F
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF53C433A1
+	for <llvm@lists.linux.dev>; Tue,  6 Jun 2023 01:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686014984;
+	bh=C0DDZu22AqHPphiQCzwpTPnx6kZVphyanDDks3Ob+wI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pmdxcfBoDLu2PNR7rr73koQ18T7ToCFDWXwT99Yjo/AUDPfcGOd6sWJZr9BMLHG/y
+	 lm2MPuB9wH/Jsd5rdDOeADB1ww/2I+lf7eiXyDmwUeCFyyMXSbo9iR3W6t66pnSdeb
+	 NRkdOxCdhu07JI9pWWMXOUyhlWVAcGPnJj+KcNKWf/XeFL/sYr9iUDZpOi7Eyg/o1/
+	 18CcLcuCkRcHV0xNYftuL1vRnACT9T5ClmQiY/L+WM63xdkw4iWz5sNAgVjlqTqctg
+	 jDEg3342wLGEQgLbENAew3J0Baiawb3tpuXAUKeZ2R3Ve8LsEysf1ZdrFaRgfT9qIh
+	 m/miKnXg+0RAw==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1a1fa977667so5850616fac.1
+        for <llvm@lists.linux.dev>; Mon, 05 Jun 2023 18:29:44 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxX9l6qidwyMm27vWnZijGeEHTg5fBVnOLRvuLwonwNklRYJ0X8
+	S0HEgQ0j5lPKl+94/tZC9dRwlD2JHtSopgjA+k0=
+X-Google-Smtp-Source: ACHHUZ60sg0dzOOGNZIIJ+bH/VEhUE4AnmEm3IFgco5rKbUOFpspxPteTOfCSgkr+3F8uFTspjUyQvMzstCuBJBtGbs=
+X-Received: by 2002:a05:6870:c79c:b0:19f:9f91:fa4a with SMTP id
+ dy28-20020a056870c79c00b0019f9f91fa4amr669334oab.55.1686014983373; Mon, 05
+ Jun 2023 18:29:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230605164955.GA1977@templeofstupid.com>
-In-Reply-To: <20230605164955.GA1977@templeofstupid.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 5 Jun 2023 16:30:29 -0700
-Message-ID: <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram extables
-To: Krister Johansen <kjlx@templeofstupid.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, stable <stable@vger.kernel.org>
+References: <20230409145358.2538266-1-masahiroy@kernel.org>
+ <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
+ <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <20230605152149.GA2476659@dev-arch.thelio-3990X>
+In-Reply-To: <20230605152149.GA2476659@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 6 Jun 2023 10:29:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR2KwypUvsn+WTJRLAkmjvNQA3=aD9f4tfHYCR7TonbjQ@mail.gmail.com>
+Message-ID: <CAK7LNAR2KwypUvsn+WTJRLAkmjvNQA3=aD9f4tfHYCR7TonbjQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Tom Rini <trini@konsulko.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 5, 2023 at 9:50=E2=80=AFAM Krister Johansen <kjlx@templeofstupi=
-d.com> wrote:
+On Tue, Jun 6, 2023 at 12:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> JIT'd bpf programs that have subprograms can have a postive value for
-> num_extentries but a NULL value for extable.  This is problematic if one =
-of
-> these bpf programs encounters a fault during its execution.  The fault
-> handlers correctly identify that the faulting IP belongs to a bpf program=
-.
-> However, performing a search_extable call on a NULL extable leads to a
-> second fault.
+> On Sun, Jun 04, 2023 at 01:32:21AM +0900, Masahiro Yamada wrote:
+> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
+> > > > Hi Masahiro,
+> > > >
+> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
+ is
+> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> > > > >
+> > > > > As a result, the linker script is preprocessed with predefined ma=
+cros
+> > > > > for the build host instead of the target.
+> > > > >
+> > > > > Assuming you use an x86 build machine, compare the following:
+> > > > >
+> > > > >  $ clang -dM -E -x c /dev/null
+> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> > > > >
+> > > > > There is no actual problem presumably because our linker scripts =
+do not
+> > > > > rely on such predefined macros, but it is better to define correc=
+t ones.
+> > > > >
+> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
+.lds.S
+> > > > > will be processed with the proper target triple.
+> > > > >
+> > > > > Reported-by: Tom Rini <trini@konsulko.com>
+> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > ---
+> > > > >
+> > > > >  scripts/Makefile.clang | 3 +--
+> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
+> > > > > --- a/scripts/Makefile.clang
+> > > > > +++ b/scripts/Makefile.clang
+> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
+g-option
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
+> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
+> > > > >  export CLANG_FLAGS
+> > > > > --
+> > > > > 2.37.2
+> > > > >
+> > > >
+> > > > I am doubling back to this change, as the lack of '--target' in
+> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
+nge
+> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
+d by
+> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
+s
+> > > > linker script:
+> > > >
+> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
+rtconfig menuconfig arch/arm64/kernel/vdso/
+> > > >   ...
+> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
+4-pc-linux-gnu'
+> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
+dso/vdso.lds] Error 1
+> > > >   ...
+> > > >
+> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
+8956c522c93d0df1050
+> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
+> > > >
+> > > > This change resolves that issue. I was able to figure out why those=
+ new
+> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> > > > CHECKFLAGS. The following diff resolves it for me:
+> > > >
+> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
+> > > > --- a/arch/mips/Makefile
+> > > > +++ b/arch/mips/Makefile
+> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
+les
+> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
+> > > >
+> > > >  ifdef CONFIG_MIPS
+> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
+ll | \
+> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
+-dM -E -x c /dev/null | \
+> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
+/\$$/&&/g')
+> > > >  endif
+> > > >
+> > > > I will run this change plus that diff through my build matrix to se=
+e if
+> > > > any other issues pop up. If not, I will respond with some tags and
+> > > > perhaps this could be taken as a fix for 6.4 so that it could
+> > > > potentially be backported?
+> > >
+> > > I found two more issues lurking in PowerPC. I have attached suggested
+> > > patches for all the issues I have uncovered to this email, please fee=
+l
+> > > free to use them or do something different if you feel there is a bet=
+ter
+> > > fix. With those issues resolved in one way or another, consider the
+> > > original change:
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > If it would work better for you, I am more than happy to take over th=
+is
+> > > series as well.
+> > >
+> > > Cheers,
+> > > Nathan
+> >
+> > Thanks. All the three patches look good to me.
+> >
+> > I will apply them, then mine on top.
 >
-> Fix up by refusing to search a NULL extable, and by checking the
-> subprograms' extables if the umbrella program has subprograms configured.
+> Thanks, sounds like a good plan!
 >
-> Once I realized what was going on, I was able to use the following bpf
-> program to get an oops from this failure:
+> > A nit:
+> >
+> > The first patch for mips will introduce the warning
+> > as $(KBUILD_CPPFLAGS) does not contain $(CLANG_FLAGS)
+> > at this point.
+> > Then, it will be fixed again when my patch is applied.
+> >
+> > The two must be squashed together to avoid the regression,
+> > but I think it is OK as-is.
 >
->    #include "vmlinux.h"
->    #include <bpf/bpf_helpers.h>
->    #include <bpf/bpf_tracing.h>
->
->    char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
->
->    #define PATH_MAX 4096
->
->    struct callback_ctx {
->            u8 match;
->    };
->
->    struct filter_value {
->            char prefix[PATH_MAX];
->    };
->    struct {
->            __uint(type, BPF_MAP_TYPE_ARRAY);
->            __uint(max_entries, 256);
->            __type(key, int);
->            __type(value, struct filter_value);
->    } test_filter SEC(".maps");
->
->    static __u64 test_filter_cb(struct bpf_map *map, __u32 *key,
->                                struct filter_value *val,
->                                struct callback_ctx *data)
->    {
->        return 1;
->    }
->
->    SEC("fentry/__sys_bind")
->    int BPF_PROG(__sys_bind, int fd, struct sockaddr *umyaddr, int addrlen=
-)
->    {
->      pid_t pid;
->
->      struct callback_ctx cx =3D { .match =3D 0 };
->      pid =3D bpf_get_current_pid_tgid() >> 32;
->      bpf_for_each_map_elem(&test_filter, test_filter_cb, &cx, 0);
->      bpf_printk("fentry: pid =3D %d, family =3D %llx\n", pid, umyaddr->sa=
-_family);
+> Hmmm, what warning would be introduced? KBUILD_CPPFLAGS is being added
+> to the CHECKFLAGS invocation, rather than replacing KBUILD_CFLAGS, so
+> '--target' should always be present (first via KBUILD_CFLAGS then via
+> KBUILD_CPPFLAGS), right?
 
-Instead of printk please do a volatile read of umyaddr->sa_family.
-
-Please convert this commit log to a test in selftest/bpf/
-and resubmit as two patches.
-
-Also see bpf_testmod_return_ptr() and
-SEC("fexit/bpf_testmod_return_ptr") in progs/test_module_attach.c.
-
-Probably easier to tweak that test for subprogs instead
-of adding your own SEC("fentry/__sys_bind") test and triggering bind()
-from user space.
 
 
->      return 0;
->    }
->
-> And then the following code to actually trigger a failure:
->
->   #include <stdio.h>
->   #include <stdlib.h>
->   #include <unistd.h>
->   #include <sys/socket.h>
->   #include <netinet/in.h>
->   #include <netinet/ip.h>
->
->   int
->   main(int argc, char *argv[])
->   {
->     int sfd, rc;
->     struct sockaddr *sockptr =3D (struct sockaddr *)0x900000000000;
->
->     sfd =3D socket(AF_INET, SOCK_STREAM, 0);
->     if (sfd < 0) {
->       perror("socket");
->       exit(EXIT_FAILURE);
->     }
->
->     while (1) {
->       rc =3D bind(sfd, (struct sockaddr *) sockptr, sizeof(struct sockadd=
-r_in));
->       if (rc < 0) {
->         perror("bind");
->         sleep(5);
->       } else {
->         break;
->       }
->     }
->
->     return 0;
->   }
->
-> I was able to validate that this problem does not occur when subprograms
-> are not in use, or when the direct pointer accesses are replaced with
-> bpf_probe_read calls.  I further validated that this did not break the
-> extable handling in existing bpf programs.  The same program caused no
-> failures when subprograms were removed, but the exception was still
-> injected.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function progra=
-ms")
-> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> ---
->  kernel/bpf/core.c | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 7421487422d4..0e12238e4340 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -736,15 +736,33 @@ const struct exception_table_entry *search_bpf_exta=
-bles(unsigned long addr)
->  {
->         const struct exception_table_entry *e =3D NULL;
->         struct bpf_prog *prog;
-> +       struct bpf_prog_aux *aux;
-> +       int i;
->
->         rcu_read_lock();
->         prog =3D bpf_prog_ksym_find(addr);
->         if (!prog)
->                 goto out;
-> -       if (!prog->aux->num_exentries)
-> +       aux =3D prog->aux;
-> +       if (!aux->num_exentries)
->                 goto out;
->
-> -       e =3D search_extable(prog->aux->extable, prog->aux->num_exentries=
-, addr);
-> +       /* prog->aux->extable can be NULL if subprograms are in use. In t=
-hat
-> +        * case, check each sub-function's aux->extables to see if it has=
- a
-> +        * matching entry.
-> +        */
-> +       if (aux->extable !=3D NULL) {
-> +               e =3D search_extable(prog->aux->extable,
-> +                   prog->aux->num_exentries, addr);
-> +       } else {
-> +               for (i =3D 0; (i < aux->func_cnt) && (e =3D=3D NULL); i++=
-) {
+Sorry, I wrongly read your code.
 
-() are redundant.
-!e is preferred over e =3D=3D NULL
+You are right, you added $(KBUILD_CPPFLAGS)
+in addition to $(KBUILD_CFLAGS).
 
-> +                       if (!aux->func[i]->aux->num_exentries ||
-> +                           aux->func[i]->aux->extable =3D=3D NULL)
-> +                               continue;
-> +                       e =3D search_extable(aux->func[i]->aux->extable,
-> +                           aux->func[i]->aux->num_exentries, addr);
-> +               }
-> +       }
 
-something odd here.
-We do bpf_prog_kallsyms_add(func[i]); for each subprog.
-So bpf_prog_ksym_find() in search_bpf_extables()
-should be finding ksym and extable of the subprog
-and not the main prog.
-The bug is probably elsewhere.
 
-Once you respin with a selftest we can help debugging.
+
+Maybe, we can drop $(KBUILD_CFLAGS) (as a follow-up)
+because this $(shell ) invocation is only interested
+in preprocessor macros.
+
+
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index ef7b05ae92ce..e563cca6b663 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tables
+ KBUILD_LDFLAGS         +=3D -m $(ld-emul)
+
+ ifdef CONFIG_MIPS
+-CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM
+-E -x c /dev/null | \
++CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) -dM -E -x c /dev/null | \
+        grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+        sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\$$/&=
+&/g')
+ endif
+
+
+
+
+
+
+
+
+
+>
+> > The second patch for powerpc reminded me of
+> > converting $(CC) to $(LD) for linking vDSO.
+> > I do not remember why powerpc vDSO still uses $(CC).
+>
+> Nick tried to make the conversion some time ago but ran into issues with
+> GNU ld crashing:
+>
+> https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google=
+.com/
+> https://lore.kernel.org/lkml/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup=
+.eu/
+>
+> It might be easier to do this now that the PowerPC vDSO has been
+> combined into one directory, but we have not had time to sit down and
+> actually work on it.
+>
+> Cheers,
+> Nathan
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
