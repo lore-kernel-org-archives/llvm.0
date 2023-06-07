@@ -1,107 +1,122 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C56D6FDF;
-	Wed,  7 Jun 2023 07:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686124792; x=1717660792;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NoFlxkcl6dsp02PL0p/mMZMu+Iej+IaPNUmMCwXnMpg=;
-  b=jCifeWKrinyD7RWVsKg71APBrTRbKK9rHA6u7DS2KV1afffY+sDdp/tE
-   RN8TBAnR+lcUyQ4yS8gYH5kpjUvHfHRYvCY/o5lvpi8bJPXeynKxOh+t9
-   hqnCAUAS0NxLzMtLyw62OL9qjruemDgtdFTMf3uX8WLRulnJrrzF+nmsz
-   5dhWV7214RfV7+xBblCCcbvwbPZ5nfF82hl1UecUsL6VDrYqlWYjAJwyv
-   Hgz2VQiqZYDM6n4gGqb03CtzjwHkhsNdp8w0Z3ZlioWfESwQMcCpBon4N
-   X5ZgWrHHcBQGOw9cspMjeJIoyehU4cpTn2fxUHbtgSX+NawEUJLGindSe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="360244761"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="360244761"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 00:59:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="799200418"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="799200418"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Jun 2023 00:59:49 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q6o56-0006Lv-30;
-	Wed, 07 Jun 2023 07:59:48 +0000
-Date: Wed, 7 Jun 2023 15:59:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Maxime Ripard <maxime@cerno.tech>
-Subject: [linux-next:master 4264/7747] lib/kunit/executor_test.c:138:4:
- error: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void
- (*)(void *)') converts to incompatible function type
-Message-ID: <202306071513.vCmugxAi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE926AB4
+	for <llvm@lists.linux.dev>; Wed,  7 Jun 2023 11:00:32 +0000 (UTC)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-786de394130so1964357241.2
+        for <llvm@lists.linux.dev>; Wed, 07 Jun 2023 04:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686135631; x=1688727631;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=utFv2n7Nj2e/FDpN7qyLak8UIusvCi1A8IvvGYMYwhU=;
+        b=DrwRvvr8wkCc60q+4TeytNMzG5yzg5YRzsakXJGC5Mw51JiiVpXEblZqcTLneUGJvd
+         Sl1NFLHdxszDECCn/BTwb2PY65GlWu1yjId2I5ebbKULn5NN/9Cywfn2KeU4LYcUzD+0
+         aVBVXuToS3UQiftn4+QXSg3fTT84fIo8/VwwmdS5+Lg32ucMC7dWX9sGw7asFrNqJ+du
+         hRQ0EqOTlYd/EM2OtCPk9uRb5YTjsFKSOxVMzz9S86hL9AVjoxpqKux72m5Kks0rLNHY
+         cq6HGMLo/dx7PHz6Z3KK0P6idgtfCnvnfrQ5B2WadXP6Zo+1J7Ugkd1IMVrZcKxtB8W7
+         c0mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686135631; x=1688727631;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=utFv2n7Nj2e/FDpN7qyLak8UIusvCi1A8IvvGYMYwhU=;
+        b=O+xtAewlGZToxfN9LkfCTSNmNx+PxGGz1CuZ95LSOjIEqYbLpqrh5Tur7rtqt7iZK7
+         F70EzjYKscr1XrfO+lqZG63NPiqyXf2QMtyzJatAVIov+CvR5wM2A8395vtvMxXS+vuo
+         fXLqiXIJ9BfxRNtCc9IE4NVRSMTnkhzvMT/2GiRXbP5PJz+VQuLS8N92bs7LiPurmYPu
+         k4eJBun9JhzKHF7l7PYYpfDABdzU1WqdpE7eIcWu3CqKQNzqn31v+KSQK+RiZMJ1ZVW4
+         Z8VbGH7qiHnqJnCWoGH3swIhQbZ/QMkZ2Rzn0t7gPOl40zNQXY5E5TufGhyE18lgvFZu
+         I5pQ==
+X-Gm-Message-State: AC+VfDxFzyCuqACBuge9TXWmUz9gyyDwy6k1IvCFBGfwYzfFkUDUIcYO
+	qaVo5v4UUMcO4NT/l0mxPzQeJCfprMRDdwAgNKesyw==
+X-Google-Smtp-Source: ACHHUZ4HFfYgNv7o5eIp7Pa4GlU+Wn3luys2k3t/inbdIsV5+uKmMsly2J5/GaooqGXZqbfoG+Fnb0Er/HoYVgIr5bQ=
+X-Received: by 2002:a67:f7c4:0:b0:436:22fe:1d9 with SMTP id
+ a4-20020a67f7c4000000b0043622fe01d9mr874244vsp.10.1686135630486; Wed, 07 Jun
+ 2023 04:00:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230606-fix-as-option-after-clang_flags-move-v1-1-a7f7b23a35e3@kernel.org>
+In-Reply-To: <20230606-fix-as-option-after-clang_flags-move-v1-1-a7f7b23a35e3@kernel.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 7 Jun 2023 16:30:19 +0530
+Message-ID: <CA+G9fYs8HCjaBzTDdXsQoEt3KP5rS=M34awGs8em7Jmx=yQkkw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Add KBUILD_CPPFLAGS to as-option invocation
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
+	trix@redhat.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, 
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   abbd8bb42915d9ed06df11b430bf4ecb3d8ac5ad
-commit: 00e63f8afcfc6bf93d75141c51d35e8a40e86363 [4264/7747] kunit: executor_test: Use kunit_add_action()
-config: riscv-randconfig-r032-20230607 (https://download.01.org/0day-ci/archive/20230607/202306071513.vCmugxAi-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e63f8afcfc6bf93d75141c51d35e8a40e86363
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 00e63f8afcfc6bf93d75141c51d35e8a40e86363
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash lib/
+On Wed, 7 Jun 2023 at 04:10, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> After commit feb843a469fb ("kbuild: add $(CLANG_FLAGS) to
+> KBUILD_CPPFLAGS"), there is an error while building certain PowerPC
+> assembly files with clang:
+>
+>   arch/powerpc/lib/copypage_power7.S: Assembler messages:
+>   arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
+>   arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
+>   arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
+>   arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
+>   arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
+>   clang: error: assembler command failed with exit code 1 (use -v to see invocation)
+>
+> as-option only uses KBUILD_AFLAGS, so after removing CLANG_FLAGS from
+> KBUILD_AFLAGS, there is no more '--target=' or '--prefix=' flags. As a
+> result of those missing flags, the host target
+> will be tested during as-option calls and likely fail, meaning necessary
+> flags may not get added when building assembly files, resulting in
+> errors like seen above.
+>
+> Add KBUILD_CPPFLAGS to as-option invocations to clear up the errors.
+> This should have been done in commit d5c8d6e0fa61 ("kbuild: Update
+> assembler calls to use proper flags and language target"), which
+> switched from using the assembler target to the assembler-with-cpp
+> target, so flags that affect preprocessing are passed along in all
+> relevant tests. as-option now mirrors cc-option.
+>
+> Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306071513.vCmugxAi-lkp@intel.com/
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-All errors (new ones prefixed by >>):
+This proposed fix patch applied on top of Linux next and
+built with clang and build test pass.
+https://storage.tuxsuite.com/public/linaro/naresh/builds/2QsEzqEij2M3F1JkQAQfhpIpsXG/
 
-   In file included from lib/kunit/executor.c:223:
->> lib/kunit/executor_test.c:138:4: error: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-                           (kunit_action_t *)kfree,
-                           ^~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+> ---
+>  scripts/Makefile.compiler | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 437013f8def3..e31f18625fcf 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -32,7 +32,7 @@ try-run = $(shell set -e;             \
+>  # Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
+>
+>  as-option = $(call try-run,\
+> -       $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
+> +       $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
+>
+>  # as-instr
+>  # Usage: aflags-y += $(call as-instr,instr,option1,option2)
+>
+> ---
+> base-commit: feb843a469fb0ab00d2d23cfb9bcc379791011bb
+> change-id: 20230606-fix-as-option-after-clang_flags-move-be88e993cbaa
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
 
-
-vim +138 lib/kunit/executor_test.c
-
-   127	
-   128	/* Use the resource API to register a call to kfree(to_free).
-   129	 * Since we never actually use the resource, it's safe to use on const data.
-   130	 */
-   131	static void kfree_at_end(struct kunit *test, const void *to_free)
-   132	{
-   133		/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
-   134		if (IS_ERR_OR_NULL(to_free))
-   135			return;
-   136	
-   137		kunit_add_action(test,
- > 138				(kunit_action_t *)kfree,
-   139				(void *)to_free);
-   140	}
-   141	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards
+Naresh Kamboju
