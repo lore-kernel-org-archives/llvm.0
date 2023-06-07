@@ -1,122 +1,173 @@
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2040.outbound.protection.outlook.com [40.107.101.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE926AB4
-	for <llvm@lists.linux.dev>; Wed,  7 Jun 2023 11:00:32 +0000 (UTC)
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-786de394130so1964357241.2
-        for <llvm@lists.linux.dev>; Wed, 07 Jun 2023 04:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686135631; x=1688727631;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=utFv2n7Nj2e/FDpN7qyLak8UIusvCi1A8IvvGYMYwhU=;
-        b=DrwRvvr8wkCc60q+4TeytNMzG5yzg5YRzsakXJGC5Mw51JiiVpXEblZqcTLneUGJvd
-         Sl1NFLHdxszDECCn/BTwb2PY65GlWu1yjId2I5ebbKULn5NN/9Cywfn2KeU4LYcUzD+0
-         aVBVXuToS3UQiftn4+QXSg3fTT84fIo8/VwwmdS5+Lg32ucMC7dWX9sGw7asFrNqJ+du
-         hRQ0EqOTlYd/EM2OtCPk9uRb5YTjsFKSOxVMzz9S86hL9AVjoxpqKux72m5Kks0rLNHY
-         cq6HGMLo/dx7PHz6Z3KK0P6idgtfCnvnfrQ5B2WadXP6Zo+1J7Ugkd1IMVrZcKxtB8W7
-         c0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686135631; x=1688727631;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=utFv2n7Nj2e/FDpN7qyLak8UIusvCi1A8IvvGYMYwhU=;
-        b=O+xtAewlGZToxfN9LkfCTSNmNx+PxGGz1CuZ95LSOjIEqYbLpqrh5Tur7rtqt7iZK7
-         F70EzjYKscr1XrfO+lqZG63NPiqyXf2QMtyzJatAVIov+CvR5wM2A8395vtvMxXS+vuo
-         fXLqiXIJ9BfxRNtCc9IE4NVRSMTnkhzvMT/2GiRXbP5PJz+VQuLS8N92bs7LiPurmYPu
-         k4eJBun9JhzKHF7l7PYYpfDABdzU1WqdpE7eIcWu3CqKQNzqn31v+KSQK+RiZMJ1ZVW4
-         Z8VbGH7qiHnqJnCWoGH3swIhQbZ/QMkZ2Rzn0t7gPOl40zNQXY5E5TufGhyE18lgvFZu
-         I5pQ==
-X-Gm-Message-State: AC+VfDxFzyCuqACBuge9TXWmUz9gyyDwy6k1IvCFBGfwYzfFkUDUIcYO
-	qaVo5v4UUMcO4NT/l0mxPzQeJCfprMRDdwAgNKesyw==
-X-Google-Smtp-Source: ACHHUZ4HFfYgNv7o5eIp7Pa4GlU+Wn3luys2k3t/inbdIsV5+uKmMsly2J5/GaooqGXZqbfoG+Fnb0Er/HoYVgIr5bQ=
-X-Received: by 2002:a67:f7c4:0:b0:436:22fe:1d9 with SMTP id
- a4-20020a67f7c4000000b0043622fe01d9mr874244vsp.10.1686135630486; Wed, 07 Jun
- 2023 04:00:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50BE139F
+	for <llvm@lists.linux.dev>; Wed,  7 Jun 2023 13:27:36 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZzJJ/ThNP0nEdqylFWCIqZbyivWK2HGKLuYPt7TKBxMN/7y4HqZQd8wJzbejtIbInURsp8+VJ4u4zfIhjn5WKfMJ9VnnfguEC2td9ALgYRX0g507oK9n7B/qT7/jTbP7SdRz0I5NY3JRhgOeUn6mLmklhY0Yu47Tkyony2glAIkfiSEWvgpUPWsYinkHDOqa1e0sPabOsLQr5yb66lHM0/J596I2HX0QXN1tWgF8U6nyd8sqm6wzutzXRWspTleI/OOueMsQxAY06y1cPAP/ZMZ21ICtiZE9ohqZdAlU++GMdr8F+XQmZR58cGjcRtqxMGRq2ooc/CvQmQTzGR349Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D4W7ZAlg3ymfDSEZ/m6RslfJhsMl7yVZ9HtLhCa4OVg=;
+ b=a7SfcAgbj1R7l5hwYINK8oorcS0hZXoQjoRDX/y1tCFjrOkS55BO6utus+yRYBXHdmF+Ex3hE5nQ37tV3KYWuhGChE1UNAuBCLGBbzU8BlDFbiO3NYQ2A8nx72G5dimwbtSGoWpFPaJWJfMvoM76LRRZcTHYTRSRCuPipGw8Xv4YYcpE4tLUZDa5lBXEOVhle7StAX86k7ywI7ZrsCWCbUoPPojJGSB40jAgsf2duHjhfu4aB2Cw4qWitMWsrXhP5lr765ZlHk+CUYOe4IYT+Afw+LKv5FJWwNBzedwxI9HxQ5iIY6iE03ETDOGZe2HToCqmysh7aG+y/INi9wQcsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D4W7ZAlg3ymfDSEZ/m6RslfJhsMl7yVZ9HtLhCa4OVg=;
+ b=C+mI9hukhbROGtDt3HJssnE5ELg+SMmgxICLEAdGCOJ7WWnTqYkPmckmiUEba20dNfFB4R3ZTH9tOLYRGT+FRrmyabyx87VXLhLQf/JCj9steFexPfMZrQUBhFOGeNfV4MNWzULj/m1BWnw1vkYeqW/EGmPZ84g+sP55YKk5ykY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6460.namprd12.prod.outlook.com (2603:10b6:208:3a8::13)
+ by CY5PR12MB6549.namprd12.prod.outlook.com (2603:10b6:930:43::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 13:27:32 +0000
+Received: from IA1PR12MB6460.namprd12.prod.outlook.com
+ ([fe80::d5b1:3b31:ee99:aa94]) by IA1PR12MB6460.namprd12.prod.outlook.com
+ ([fe80::d5b1:3b31:ee99:aa94%7]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 13:27:32 +0000
+Message-ID: <9fc1d064-7b97-9c1a-f76a-7be467994693@amd.com>
+Date: Wed, 7 Jun 2023 18:57:17 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol:
+ lynx_pcs_destroy
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ lkft-triage@lists.linaro.org, clang-built-linux <llvm@lists.linux.dev>,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Netdev <netdev@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Anders Roxell <anders.roxell@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, maxime.chevallier@bootlin.com,
+ joyce.ooi@intel.com
+References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+ <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+From: "Aithal, Srikanth" <sraithal@amd.com>
+In-Reply-To: <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0124.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::9) To IA1PR12MB6460.namprd12.prod.outlook.com
+ (2603:10b6:208:3a8::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230606-fix-as-option-after-clang_flags-move-v1-1-a7f7b23a35e3@kernel.org>
-In-Reply-To: <20230606-fix-as-option-after-clang_flags-move-v1-1-a7f7b23a35e3@kernel.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 7 Jun 2023 16:30:19 +0530
-Message-ID: <CA+G9fYs8HCjaBzTDdXsQoEt3KP5rS=M34awGs8em7Jmx=yQkkw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Add KBUILD_CPPFLAGS to as-option invocation
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
-	trix@redhat.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6460:EE_|CY5PR12MB6549:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ec5bb2c-8982-443d-6196-08db675af2dd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	FEeGJtu87mBuZXPLY8X5uQ+oHHNZzifqFWAxbyQ8t0JCXVId+d9bAbSAIpcJUHZuFrIIEpIElOs21OM+r3voM2RlFzgCqKBNQv8DworRoBocw32DPPR0CTMbqEZm3cElCz4WmnXINElQQwBZoHZT/r2xbmKgk/BBeSH2HxoRgiCV/bdGryMuppwNEohlsyxr5x7SlLA7NSk6ZV9v2XGLK48545BjnVhaoKnBPNcpemY8jQlu6nsjwF4n8XHa7VLF46SQhTsvb6wi0r+JJ5TftvQw2G5lqzTHCWJHjQRVCe9COQlexWxtyMY+oj4YCnCLCzPsdWkltTG9Y3E5r0HQqc1QgjZyhO1m7kuN6yGLrWLOWlIA1La7/FM4FNmWP5IwDdP1bzgGy5rgOdgjYSZoDxQRuD+ju1JL7Fk21otSvIjvq89nTY1t+2ZX6P8B/W+dQZMn7CKtAWYU7GErJ4ECvt/G3jDboqgCT2wFfNjZr6s1YRTLAKT2ExBShw7xDylD66DLgxx9QOmxpErDUSncXlNCvuY13pTusV4wbbgij5XhoduOHpb2sfdyyLLhhrnaxcXKFSgujx0GlQ7HzG+6Ap8/l3b+pBUOXBdXBnAUbrdw5mR2OdyZiL5GDyIZyW1tsoDlXbop2RBH8lz+zR0Zvw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6460.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199021)(2906002)(2616005)(36756003)(31696002)(38100700002)(41300700001)(6486002)(316002)(6666004)(5660300002)(966005)(8936002)(8676002)(110136005)(478600001)(54906003)(66556008)(66946007)(66476007)(4326008)(31686004)(6506007)(53546011)(6512007)(26005)(186003)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?T0RNUW9lVkV4ZG1weFY2MXcvWnBPQWY0ektPeGZ2dVdra0QxemlFRjBrY2Q3?=
+ =?utf-8?B?Sm95YmZBRWs5MnBhNFVRQjlDT1BuUzlHVUxJVVRmTE5RaDRpZEZvNzRSaVox?=
+ =?utf-8?B?eExwVkFaMVQyRTIvNWtmcHZUQVdXUHFxMzBYbGJ6WFY1VUZQTXJZb2U2TnF6?=
+ =?utf-8?B?VEtUQjh2ejBiVGd3WDZBd3B6SVRkdUZyM25PL2F4ZGdEaTNyR0p0Z3NWNHpN?=
+ =?utf-8?B?RmVTTzJUM0RvQUxpcXF0MVpwNUJ5L0JzYkU1TnZZSDlLSnpUTnhSZ1FZc3hG?=
+ =?utf-8?B?NitqUjNIUFpYTk5yam1QYTUyM1h3S1pqaEIyWGxKRklmb1JBSnNoUVZtbXo2?=
+ =?utf-8?B?TDhKOENqMHpVRXdPa0UvOTduL21iSTBsNTZBU1BpZzNvaG5hclpmTjJlZStp?=
+ =?utf-8?B?OGoyWWdVS0NFS05yODZrS2ZYRS9zdStvV1ZXa0hFc0EzZEVBUlpwS2p1eENE?=
+ =?utf-8?B?Ny9tSGN2QXpUM21oV1oyZnRSMWRWV0IwbmhoM09hajdWRnZ0by95UGVjY1pR?=
+ =?utf-8?B?c2U2bkRxbVg5KzhBQVdTL2swek95N3dCQ2FJbk5yZEJJT0xjMEViQ0FhV1RG?=
+ =?utf-8?B?NWVwQTNRUVQ0bW1VQnNrOHp0SUtBQ3lBa3V5aFJQbEtMOVBZdS90WXJyeWNv?=
+ =?utf-8?B?YXY5MWtDekhaS0dRQkhUbWtNQzlhYmx4Y3FGOENHbXJib2dtNHhhTURjaktH?=
+ =?utf-8?B?M3pteEtQWXJ4K0FEUTEvQnUyVEFmeDhxRXFoWmNoWDIxOFJ5K0JCdXpIQUM4?=
+ =?utf-8?B?YXRDU1hBUjVvWTRidjF3cTdqRDhYai9HT1lZKzhEbVZnelJpUEdtYVcyRndW?=
+ =?utf-8?B?N0dOWU5jSHg0dzVEUFdYQkozeWk1ZjNuOTVqenk4dzcxbWpJRGgwU1YzQlhH?=
+ =?utf-8?B?bG1Fb3F1V1k3WlRyZVdHTStCYVRCK1RNS1FrU25UUWd3a1FmZlJOalk3Tmxq?=
+ =?utf-8?B?VkNLOFp2QTJwVFhZdG5PN3V1RDU1bjRQT2cwWlgvRFZHa3oySjU0aEdVaUwv?=
+ =?utf-8?B?MEdaR1ZETXlHOVVFSlVqL3F1di9KaXVBU0IrazUwVGI2S3h0T2dLcHZPSkt3?=
+ =?utf-8?B?bkFDcCtvY3cvUVRuZVg1REZkczNEQ045YTBXeTZkaHBUL1VCNWd3Zy82SzlR?=
+ =?utf-8?B?L2w0c0hXOFZFU3NuUWM2V0xPZmJJUFJWcEhWSC9VNXlKalg0UUVBL1F4L1BI?=
+ =?utf-8?B?WG42NVg3aVFtcGd2WlNtWGkzTFpuTW5YdkE4OStVT1MzU0J0MFBRMXlnQ3h5?=
+ =?utf-8?B?NVlWUm5OMmE1eHgrRVovc0JEbUxMeklHa2huZHFtU24yZStVc3FqSHViUWJJ?=
+ =?utf-8?B?cDdjSGY2eXRsRDV2c1FOYjMzRmxoT044aXZhcnpDSDVkdjV2RlJXNitPclFi?=
+ =?utf-8?B?djMvUW9vNUczSkhPN1JHZFByMVpPZG9WWEUvdnlXZHRRdktzWGdTeDhDNWUr?=
+ =?utf-8?B?cnRpL3hsaS95RXVJczJvRGRvMGx2VTJiV1FCRkVlamlhTGI5enNvYzFWa0gr?=
+ =?utf-8?B?MEluUHZiM0pqbEpmcnFEdHBqbWlpR0V5VkZWSjJyaWs1djRCby9mTjd3aGZF?=
+ =?utf-8?B?eXlUbU54YWVGUFduTVhrZ1lYTG9OYVQ2TXlSUXNTMjFleHlORzZhdHB3N214?=
+ =?utf-8?B?WlA3bFJ3MGJ0Mlo2VmJtd0lGWkd6VmE4Yy9IUFp1RXZNS2dROGtxT2l1d2dI?=
+ =?utf-8?B?cGQ5bmxITWx1T3Z6U1hIVXptWXl6MmZaNmFNZXhhWDZ1ZnJFM2huQ3hkOVdx?=
+ =?utf-8?B?Nm8vdmI5YUtwa1V5RXN3UTFjcktzUktVdG11NnBCeFBCM2VOeERscTV2Uk1r?=
+ =?utf-8?B?cFI2aUlVQUszT0dCL1FlRFJxSEUyK3FCYjlQZlpWSmtnd2k3UVlncWs2c1Jx?=
+ =?utf-8?B?RHI1Z2tVQ1dVOWd3V1lyOUxvZWJHV0x5R1ZCOC96a1JsbjI2T0pBajdUaS9O?=
+ =?utf-8?B?QlVNa0I5ZU1JQStaaVN3U0NpSnRId3FjY1lzdG9GRjBoN1lFLzlrN1dROVlN?=
+ =?utf-8?B?eWVYM1RyVDVmdWE5UDFBVmlyYitqOWtjWk41L2gxemkxbkxIWXhrRWxlZHdn?=
+ =?utf-8?B?NjVWcktSOVprVWg1Q0JUS0wwc2pQTElCVlM3R0dDamM3UzI4Tk13cHd4NXlu?=
+ =?utf-8?Q?D36R0Nlrsjo8rYi3J7em1u7iw?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ec5bb2c-8982-443d-6196-08db675af2dd
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6460.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 13:27:32.6331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ERCaqShwDodu3cekifJ2kDITg110BBTUZN7XNOSSbdSqv+QinAN2ncYJw2Z5qQcwF95CgPHNZvqeN9S9OmZuEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6549
 
-On Wed, 7 Jun 2023 at 04:10, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> After commit feb843a469fb ("kbuild: add $(CLANG_FLAGS) to
-> KBUILD_CPPFLAGS"), there is an error while building certain PowerPC
-> assembly files with clang:
->
->   arch/powerpc/lib/copypage_power7.S: Assembler messages:
->   arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
->   arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
->   arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
->   arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
->   arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
->   clang: error: assembler command failed with exit code 1 (use -v to see invocation)
->
-> as-option only uses KBUILD_AFLAGS, so after removing CLANG_FLAGS from
-> KBUILD_AFLAGS, there is no more '--target=' or '--prefix=' flags. As a
-> result of those missing flags, the host target
-> will be tested during as-option calls and likely fail, meaning necessary
-> flags may not get added when building assembly files, resulting in
-> errors like seen above.
->
-> Add KBUILD_CPPFLAGS to as-option invocations to clear up the errors.
-> This should have been done in commit d5c8d6e0fa61 ("kbuild: Update
-> assembler calls to use proper flags and language target"), which
-> switched from using the assembler target to the assembler-with-cpp
-> target, so flags that affect preprocessing are passed along in all
-> relevant tests. as-option now mirrors cc-option.
->
-> Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://lore.kernel.org/CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On 6/6/2023 2:31 PM, Geert Uytterhoeven wrote:
+> Hi Naresh,
+> 
+> On Tue, Jun 6, 2023 at 10:53 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>> Following build regressions found while building arm shmobile_defconfig on
+>>> Linux next-20230606.
+>>>
+>>> Regressions found on arm:
+>>>
+>>>   - build/clang-16-shmobile_defconfig
+>>>   - build/gcc-8-shmobile_defconfig
+>>>   - build/gcc-12-shmobile_defconfig
+>>>   - build/clang-nightly-shmobile_defconfig
+>>
+>> And mips defconfig builds failed.
+>> Regressions found on mips:
+>>
+>>    - build/clang-16-defconfig
+>>    - build/gcc-12-defconfig
+>>    - build/gcc-8-defconfig
+>>    - build/clang-nightly-defconfig
+> 
+> Please give my fix a try:
+> https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be
+On x86 as well seeing couple of issues related to same, not on defconfig 
+though..
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+ERROR: modpost: "lynx_pcs_destroy" 
+[drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
+ERROR: modpost: "lynx_pcs_destroy" 
+[drivers/net/ethernet/altera/altera_tse.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+make: *** [Makefile:1984: modpost] Error 2
 
-This proposed fix patch applied on top of Linux next and
-built with clang and build test pass.
-https://storage.tuxsuite.com/public/linaro/naresh/builds/2QsEzqEij2M3F1JkQAQfhpIpsXG/
+Among above issues stmmac issue would be resolved with above mentioned fix.
+> 
+> Thanks!
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
 
-> ---
->  scripts/Makefile.compiler | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index 437013f8def3..e31f18625fcf 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -32,7 +32,7 @@ try-run = $(shell set -e;             \
->  # Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
->
->  as-option = $(call try-run,\
-> -       $(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
-> +       $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
->
->  # as-instr
->  # Usage: aflags-y += $(call as-instr,instr,option1,option2)
->
-> ---
-> base-commit: feb843a469fb0ab00d2d23cfb9bcc379791011bb
-> change-id: 20230606-fix-as-option-after-clang_flags-move-be88e993cbaa
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
-
-Best regards
-Naresh Kamboju
