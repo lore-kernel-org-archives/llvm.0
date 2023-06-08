@@ -1,116 +1,106 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C284C84;
-	Thu,  8 Jun 2023 05:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D533137F
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 07:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686203734; x=1717739734;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=2Iucio4ou+pWP9d+rnZvmfJ3P/VBTd3iKUGOnWY6IeY=;
-  b=QaAAeABxdZmtGXJvo2NmfWclmae3AlpV7+VUOsI/ri7rKoZZvA0fRvr4
-   14fcguqXhBll32JiTvJ4krhjKM/OVpNXht3dfp7cxbmo43+BjeEkwXgcp
-   dJufn8wQQZ0gzCj/Q5AD2ggNyLHMneRT6tXEJYYBjrhfP6iZFyTtVyabR
-   cC2701qWKWnFO8pK5OYARA2ouNaEXVeyQI6q1mC4B1I1OqpFeH6Yp+biN
-   GSc0kOURxsi4HBo2hqgUcQDLw1x91qjNfs19zhUhD4cLMYmuRA9UPnAvG
-   vCPXVfGQvGTrifpAH8LgFjvJKA3n5I3g3KvjCB7P4LSFhGxltZaGMHt0V
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="423062895"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686207712; x=1717743712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZZLdqZM7DUuJb+zfCqM9sRlIRP3z6YOCxQmfCfYvk1o=;
+  b=qnyycx72y7olbfTd0AnDKnUV1++83viKsZw8Fgt5mFxfYRG+FoHR29Fv
+   xy0Ziix0+EpTJZhH1C5N3RWyq/neBUfy+b9gjSvjIoP3gZ+dacET8kF9Y
+   8gS6Jp6XrjPFonp+j86Q6a/M5aW0IZIii9kCvRUVpuIu2CCP+iiEjQJwn
+   6QPDhx77S9cgUa8+/SY9YMsQAUcn5JPIWnwouCc+cJOFusECHwxlG4in4
+   0C6wuWPnNKXXnrAFyW1OhE+Ms3ZlR3dmD835WZ16uzWNRoQWK3G1XURKj
+   QI9P+cuLNdrjuTuRo4wDyA2u3Kl4V9CjsdRT64P0AGQgf9RqpDpWqzOG3
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="423062895"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 22:55:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="709839416"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="709839416"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2023 22:55:32 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q78cO-0007NX-09;
-	Thu, 08 Jun 2023 05:55:32 +0000
-Date: Thu, 8 Jun 2023 13:54:30 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 bpf-next 17/18] libbpf: add BPF token support to
- bpf_prog_load() API
-Message-ID: <202306081346.w8SEKYRr-lkp@intel.com>
+   d="asc'?scan'208";a="219382726"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 00:01:43 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 8 Jun 2023 00:01:43 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 00:01:40 -0700
+Date: Thu, 8 Jun 2023 08:01:16 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: <linux-riscv@lists.infradead.org>
+CC: <conor@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+	<alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
+ Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Jonathan
+ Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	<rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+Message-ID: <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Ka1WzDdcwslcLLPy"
 Content-Disposition: inline
+In-Reply-To: <20230307102441.94417-1-conor.dooley@microchip.com>
 
-In-Reply-To: <20230607235352.1723243-18-andrii@kernel.org>
-References: <20230607235352.1723243-18-andrii@kernel.org>
-TO: Andrii Nakryiko <andrii@kernel.org>
-TO: bpf@vger.kernel.org
-CC: linux-security-module@vger.kernel.org
-CC: keescook@chromium.org
-CC: brauner@kernel.org
-CC: lennart@poettering.net
-CC: cyphar@cyphar.com
-CC: luto@kernel.org
-CC: kernel-team@meta.com
+--Ka1WzDdcwslcLLPy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+Hey Kwang,
 
-kernel test robot noticed the following build errors:
+On 08/06/2023 05:46, =EC=86=90=EA=B4=91=ED=9B=88/Tizen Platform Lab(SR)/=EC=
+=82=BC=EC=84=B1=EC=A0=84=EC=9E=90 wrote:
+> Hi,
+> Recently I'm trying to put a rust patch on the risc-v board.
+> I saw a patch [1] and looked through it roughly.
+> Only if llvm(not gcc) is allowed, it looks good with no major problems.
+>=20
+> > I'll revisit this when my thoughts have settled down.
+>=20
+> If you let me know the problematic part, may I try the patch?
+>=20
+> [1] https://lore.kernel.org/linux-riscv/20230405-itinerary-handgrip-
+> a5ffba368148@spud/
 
-[auto build test ERROR on bpf-next/master]
+Yeah, you can definitely try this or the downstream rust-for-linux
+project - both should work well on RISC-V.
+The problematic part is figuring out what ISA extensions are supported
+by the rust compiler being used (and by bindgen), and deciding what to
+put in -march as a result.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-introduce-BPF-token-object/20230608-080004
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230607235352.1723243-18-andrii%40kernel.org
-patch subject: [PATCH v2 bpf-next 17/18] libbpf: add BPF token support to bpf_prog_load() API
-config: riscv-randconfig-r033-20230607 (https://download.01.org/0day-ci/archive/20230608/202306081346.w8SEKYRr-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        git remote add bpf-next https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-        git fetch bpf-next master
-        git checkout bpf-next/master
-        b4 shazam https://lore.kernel.org/r/20230607235352.1723243-18-andrii@kernel.org
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+I think it is unlikely to matter for you, unless you're aggressively
+mixing versions for different parts of your toolchain.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306081346.w8SEKYRr-lkp@intel.com/
+I do intend revisting this, probably after the min. version for rust
+gets bumped, I've just been really busy with other work the last weeks.
 
-All errors (new ones prefixed by >>):
+Cheers,
+Conor.
 
->> ld.lld: error: vmlinux.a(block/badblocks.o):(function badblocks_show: .text+0xff0): relocation R_RISCV_HI20 out of range: 532299 is not in [-524288, 524287]; references '.L.str.9'
-   >>> referenced by badblocks.c
-   >>> defined in vmlinux.a(block/badblocks.o)
---
->> ld.lld: error: vmlinux.a(block/badblocks.o):(function badblocks_store: .text+0x121c): relocation R_RISCV_HI20 out of range: 532284 is not in [-524288, 524287]; references '.L.str.10'
-   >>> referenced by badblocks.c
-   >>> defined in vmlinux.a(block/badblocks.o)
---
->> ld.lld: error: vmlinux.a(block/badblocks.o):(function badblocks_init: .text+0x1324): relocation R_RISCV_HI20 out of range: 532385 is not in [-524288, 524287]; references 'kmalloc_caches'
-   >>> referenced by badblocks.c
-   >>> defined in vmlinux.a(mm/slab_common.o)
---
->> ld.lld: error: vmlinux.a(block/badblocks.o):(function badblocks_init: .text+0x1354): relocation R_RISCV_HI20 out of range: 532048 is not in [-524288, 524287]; references '.L.str.11'
-   >>> referenced by badblocks.c
-   >>> defined in vmlinux.a(block/badblocks.o)
---
->> ld.lld: error: vmlinux.a(block/badblocks.o):(function badblocks_init: .text+0x135c): relocation R_RISCV_HI20 out of range: 535156 is not in [-524288, 524287]; references '__badblocks_init.__key'
-   >>> referenced by badblocks.c
-   >>> defined in vmlinux.a(block/badblocks.o)
+--Ka1WzDdcwslcLLPy
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIF8rgAKCRB4tDGHoIJi
+0k0tAP9oSP5G1PJWtLGyf1+R6tsih6t/Fcf8f5aQBdxxrsXn/gD/UYOgt9r9Nkht
+w/d+pWUDXdDuNyfeTgh/x6BfVqn+TAo=
+=QM1l
+-----END PGP SIGNATURE-----
+
+--Ka1WzDdcwslcLLPy--
