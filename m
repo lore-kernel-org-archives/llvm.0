@@ -1,83 +1,123 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41DA8F5C;
-	Thu,  8 Jun 2023 08:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dtEYRmo7Mb4HUPwmNIi7aG7beCq9+eQ8V/5sHbI/Q38=; b=hBBKScrUI1BSKFTaY5cRW0O5DK
-	6A8/XsHkCD6vbgeQUP8jxDFsg1DqqsIsyjeTU7dvMGCeHlAkHJmca43pwPV0RMQMSv9QIji7wOGV4
-	iSYfxwy36sAG16PNED0NJ+yagL2152BVszOq5AHtjtlxY3OE2k3kTqc5lzsH3zW64jqe6DQBt5tsp
-	f77I0iL7TCIQir8d9+/YkvIM6BGOcb70scybid46M5a2MBAUbbxj8U9pIycSDMkn56DKXWic/nGH8
-	srrTdzOOkiSfjyKEl9fkKut8jAPFv4gdzuuVJ2guD0ptKWXIXzrgHD2Hz3Ti89DXajthrOewvBa22
-	blwutyZw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q7B1a-0069YO-18;
-	Thu, 08 Jun 2023 08:29:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28BE9300222;
-	Thu,  8 Jun 2023 10:29:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 02C7120D72191; Thu,  8 Jun 2023 10:29:40 +0200 (CEST)
-Date: Thu, 8 Jun 2023 10:29:40 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: mark.rutland@arm.com, arnd@arndb.de, ndesaulniers@google.com,
-	trix@redhat.com, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] percpu: Fix self-assignment of __old in
- raw_cpu_generic_try_cmpxchg()
-Message-ID: <20230608082940.GF998233@hirez.programming.kicks-ass.net>
-References: <20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F49D9457
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 08:51:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686214273;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XLZvDTbckG7nhe33VneTVLFEL61Nhj003Z7YVAmBF3c=;
+	b=GMblngOIfGgkwk38WTpM9w7i19IenFlDybdCXEfie9BOM28JnzCemFYvBUrXw7a72n5pvt
+	XJTqzaoEAWLcxkZXzicC/GGFD3Po7vgnZca0Xt1KZiJK7M4BqXzeARWVyC0kxR2VMyU3RI
+	9TdHjGTKje15bnkKZQ/EdaxOdeV5cJk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-uCeYP60NM3es4CLzEGJUvw-1; Thu, 08 Jun 2023 04:51:12 -0400
+X-MC-Unique: uCeYP60NM3es4CLzEGJUvw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38140811E98
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 08:51:12 +0000 (UTC)
+Received: from [172.64.0.113] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 230DF492B0A;
+	Thu,  8 Jun 2023 08:51:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 346): Test report for master
+ (6.4.0-rc5, mainline.kernel.org-clang, a27648c7)
+Date: Thu, 08 Jun 2023 08:51:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <43449.123060804511200293@us-mta-329.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 07, 2023 at 02:20:59PM -0700, Nathan Chancellor wrote:
-> After commit c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()"),
-> clang built ARCH=arm and ARCH=arm64 kernels with CONFIG_INIT_STACK_NONE
-> started panicking on boot in alloc_vmap_area():
-> 
->   [    0.000000] kernel BUG at mm/vmalloc.c:1638!
->   [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
->   [    0.000000] Modules linked in:
->   [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc2-ARCH+ #1
->   [    0.000000] Hardware name: linux,dummy-virt (DT)
->   [    0.000000] pstate: 200000c9 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   [    0.000000] pc : alloc_vmap_area+0x7ec/0x7f8
->   [    0.000000] lr : alloc_vmap_area+0x7e8/0x7f8
-> 
-> Compiling mm/vmalloc.c with W=2 reveals an instance of -Wshadow, which
-> helps uncover that through macro expansion, '__old = *(ovalp)' in
-> raw_cpu_generic_try_cmpxchg() can become '__old = *(&__old)' through
-> raw_cpu_generic_cmpxchg(), which results in garbage being assigned to
-> the inner __old and the cmpxchg not working properly.
-> 
-> Add an extra underscore to __old in raw_cpu_generic_try_cmpxchg() so
-> that there is no more self-assignment, which resolves the panics.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1868
+Hi, we tested your kernel and here are the results:
 
-First time I see Closes; is this an 'official' tag?
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> Debugged-by: Nick Desaulniers <ndesaulniers@google.com>
-> Fixes: c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Durr, C is such a lovely language :-)
+Kernel information:
+    Commit message: afs: Fix setting of mtime when creating a file/dir/syml=
+ink
 
-I'll go stick it in locking/core to go with the bunch that wrecked it.
-Thanks!
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91713
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
