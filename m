@@ -1,158 +1,331 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC9519922;
-	Thu,  8 Jun 2023 17:21:16 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RHgUu3HsR/rPUWOnz8nF9nEnoCfvZcfRuUQH+KIam8jxv+z+CG4UHwNosqCrmB1pqUkLxongt3R6uV/0RSNN26qp3tjzIGT3nK40pLfGBRbFJmyAc98YlIKBXS9fgrGFRUqLleU+EUCPVa+mf+aamjuTqe2HdqvBK5aSF/pgpdsWLjZEh+c6/CZH+rIDL/ZBHC8bFW/ReCj3YCI7Qg9GwFTZ3Unhofp1vBaPo2qf8LwdpGWL8zF9wlAR0WZJ9H3VIcNPswZaSgD7Z33mLWww+j3KF2KGdZGY3FB+/DMpTQu9dsPij1wF8ywfcBRXA30wx6Lc9d43Z0IowkZw+qqFAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+rR6QPWwwSgd9JdZ6oiFM1eUKJ4/xl3D1dmoihqFzrI=;
- b=DhESneuma4NZ/pCsBUamEA8Fs3Eh/Q8Cyz4W4K39rIyYDymPJ7Pr7Aavl1qwVf4dOFm5Hg+sb6oldhpliU6ezauFg0RS0oZwANek8d5xaG1Ruwc4dxd0/94+MX4h2BqqcevL63KM7aWd5Ch/fMdEhcIZn0eMeHBrBfLcfJvoZ3WUAJQ+vZqowTfAtzss6VRssFnriMsgw2VjoBzjAZjbFWkVkeidIWK2GQ3ke8ClR8pX5FFaQFekMr7SPZQlzTDl6rBcgITCCMTJdviJ2tZk0JpZNegcNLyzrX9OaXFuMperZgJyWqVfyBpT/8CMBrRkTx7Oc2OIG9s9b4rVcDGzqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+rR6QPWwwSgd9JdZ6oiFM1eUKJ4/xl3D1dmoihqFzrI=;
- b=mHjxoIkfvP2SXTPX0mXEqMCOgCMaaO2bK01G4jwN7B3QvVSXcawikofTWwsDqqZ3f8WUceqWYImIyOJVTl4Cxp5LLXruVtSNoCv+Q0NZmfDOARm1Finj8Lig/vD/AHBFrQkMRlpsri+DlK7vvyu7uiEI2T2+TLSsx6DRZH7yZ8w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DM6PR12MB4927.namprd12.prod.outlook.com (2603:10b6:5:20a::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Thu, 8 Jun 2023 17:21:14 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6433.024; Thu, 8 Jun 2023
- 17:21:14 +0000
-Message-ID: <4ba2d1a9-2bf7-a25d-754c-c1d1d640baa5@amd.com>
-Date: Thu, 8 Jun 2023 13:21:09 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amdgpu: Wrap -Wunused-but-set-variable in cc-option
-To: Nathan Chancellor <nathan@kernel.org>, alexander.deucher@amd.com,
- christian.koenig@amd.com, Xinhui.Pan@amd.com
-Cc: ndesaulniers@google.com, trix@redhat.com, Kenny.Ho@amd.com,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
-Content-Language: en-US
-From: Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0322.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:6c::24) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2539112B92;
+	Thu,  8 Jun 2023 18:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686250304; x=1717786304;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Do546SqSlw1K7uHgwulKmaY0ZDHBN3zEv/4nGSGHnZ8=;
+  b=iYXuw484qBP8zfWwBzWbjBt17UNQzp/GCpSQ0LJwF+vauVBcTerYc4kh
+   +MTCmE2s2dWrXZ1YWemuyX+o832zMClhxs8u17DWZ3GNU4j6bxC8V6CZA
+   hjXQMli+DG17C9c0Kr2G4NjT+/JMMYoe8XnQlO6xS5uefnKE2VM7d8JT0
+   Lkff+4OuXkbNuv3PSrQ+usCSZe32iN2lw+i6f6roP/YUIwYVDg1w3Heuq
+   3EhJonpHXVveDzLRTzVrP1HRXUe5h+6ywXCxfzBI8pheKqOLxQcOXb3hA
+   EWw0YcF/ZVXdu9eUUFZRkBdV5emNYNPpZU57NE5qOPMR8tFjRHgeKRTj3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342075813"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="342075813"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 11:51:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="1040206616"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="1040206616"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jun 2023 11:51:41 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7KjU-0008Ay-2K;
+	Thu, 08 Jun 2023 18:51:40 +0000
+Date: Fri, 9 Jun 2023 02:50:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Subject: kernel/bpf/verifier.c:8221:12: warning: stack frame size (2144)
+ exceeds limit (2048) in 'check_kfunc_args'
+Message-ID: <202306090228.JIljoJa6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM6PR12MB4927:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c879026-2129-4b33-eaa1-08db6844c2b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	J1JBtgmssqSYaJyTI5eOtgIm4Bbg7wMtzYbFoDrQkYN2w5taTK6oX6Qku9UtUWgyhil9pG3GefbK8ddebGMJa91ZC2HlnQS9JJ8nCXiAsTGSdJz0JOeN41au3xJ7pMIInquxMfcm53vU39Z21k+iHm8rWIm4icoMHiRwOe+QBzUcoqXmzPmIQQ5htXVE619FVsnEq0IJLEeoFyE8okD/aVvsPECBU9ipJ5FVHBUlhKNPZeDhT2seKW8obOf+FcN6UwOjU8+vVsYq+WvKtBkTn+ms38P6sgWaF9oKDpBqQ692StHD5g37prBvebTZN44+GWqeuymPisn2+965KUk6+bAfGd+NRUhYEtnwvDIvvJ4wLH9Fu6UF4LsRM8gGz6ueSl414oRNLyKjh3oxt431PzBslS7Z48HKWdoEhJN4ovNlvNfLI7/Q96/dSr9KR0SHrxfxs7tQXy9AQ9n9K77yx1ckOp41C2RqtsSN7sTcxBDm23f11xLRUv7DZay9/IFxlpVr5S83Sz+iFoJ3++Ys442ga/WXD4A+5Q2JCIzWBCeltsz4WZ7DmEVJ4tQ75prZ0VnCsuTVA990jfYiD/4URMqCiqCe/dOCkRHg8hJF6GMu4aqyQgEBSFOvkCA21AximfAinx0Ql5EwA7RDrDU+AA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199021)(41300700001)(316002)(478600001)(44832011)(8676002)(2906002)(4326008)(66946007)(8936002)(66556008)(31686004)(66476007)(5660300002)(6636002)(6666004)(966005)(31696002)(86362001)(36756003)(186003)(6486002)(38100700002)(2616005)(53546011)(6506007)(83380400001)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OG8wUGRnSEV0MjJHaEYvb3FvamVTQUNwZWJyVzdtOW9wZHdHNjREWDdYSWZm?=
- =?utf-8?B?NHhGNzlpWFMrQk1DbWhuZ01BSHBpM1F3TXV1TGJyTjJNUVdmdDRzK3MvY2Mv?=
- =?utf-8?B?Q0NnRFF1eldOT25yUVQwNmNtQXJYT2xhR2phMWw4YWUrUHlKS2FHT1pSZmJu?=
- =?utf-8?B?MCttcG0yUU8yVnAzY1FLZktrek54dDMya0toY2JoS3pCK2llVjVsK1ZnTXY5?=
- =?utf-8?B?MitqR0M5VWV2d1F5eG9tbnNnaU1EMDRpYkwvdUVVbUZrbUE3dUVVbUwwdWk0?=
- =?utf-8?B?NEw2Wjhacm1zdTZvcU5RcUpwNENWM2k3MEFJSHpOTURnVVhLcks0ams3Mmt6?=
- =?utf-8?B?WWZ2dDZpTzBqL1ZGNUtiSTZCcTN3TXlTaUE0U004dFJ5SzhQU0JVSDR5WEhC?=
- =?utf-8?B?VEEvdmNlSDhkY2ZsVlVBa0pMV29ieE51OExnK0dqVEs4L1RMYy9Vbng2ZEF3?=
- =?utf-8?B?UVJnL3B2d3FFUnVZWEtNQlN6dnFNcE9Qb04wMWN3RUtNMDAxbzA5Z2FmNmt2?=
- =?utf-8?B?OHJmRE9adXozN0RQb1Q3ZkJVTlNuWVRJOU9vNkk0RGwySUFNcmlZd3dMSHZM?=
- =?utf-8?B?VXVuTW9hbk5DZzhXakpCKzIvcklYQjRNUS8rbS9JRmJCRDR0SG5mWEFQc254?=
- =?utf-8?B?QnlyMnU3bWNiZjhUcTRqTHhUVDViNE4yakViL1ZwSUVYc1lyVThVc2lXRXV3?=
- =?utf-8?B?WVZFRjVkYWpIaGlTQnkzMUlXUXN3ZlFoYWdmSTZ6RlIxKzM0ekRYazFJdjdj?=
- =?utf-8?B?TERTV2s4T1MwTDV2VytkV215ZkJlaVlpSHJNV0dRNHlEOE5zL3hZTEVUYzBJ?=
- =?utf-8?B?eE1LNTJnWkUzN3hEWlJuYzAraDhyTzdHZGZGZzlicXR2VnNMOFZhek9Ua3FT?=
- =?utf-8?B?Qkw3eXAveTFvTityNWJjc3Q3WkprRGFEUlNlT3p1em1ZcG80VmNXVlU1aldi?=
- =?utf-8?B?OUhEakgwSTlhNUdHbWdhMzFUTjhkajhhV1NVek1DQWFJelBUKzlwUE1vN2V2?=
- =?utf-8?B?UkF3NWZxYzI3NWNDSlMvakxySWV6TWoybkdkWWR1a1lCbWMya0NvM2FkM2Z1?=
- =?utf-8?B?NTU4ZmhnQ1RzZzNiQ3IycnBRaTFmOVh6UjRwd3NGUExtSEZiRWM1QWtOSXdN?=
- =?utf-8?B?bXoveEVWNWYrMnY0NEtKOWFVcmhWVEFrbEtDVlU0cWRiU0pvU0lVOGdWaHAv?=
- =?utf-8?B?YUtiWU5WbWZBbmRrYmo2Wkw2TjIrS0s2cGNxaDVxdjUzNDN4RWpodGxWS0hJ?=
- =?utf-8?B?Rk1DdnNqeUNlNlpzR3I3NTIyclJPMlV6bTYweHJpeTArN0U2STJ4Wk5YNzRH?=
- =?utf-8?B?RFVkSWpkUURQK2ExOTNqUkM1aWV0aUhSaC9kaG1NR3MranVTR2N3NVlZZk5K?=
- =?utf-8?B?UGVKemVqWit1c1Y2QnFpYW02aUJHMXVoK2hTT1ZhSHZXemtZbDRqTzBRbzQr?=
- =?utf-8?B?WUlkOHY2MVVKRTJQZC9Ic3dibUhScVNLd2NFYmJVSFdqcHV0SmpzNDJ0dTJQ?=
- =?utf-8?B?QS9Maml0Q3ZvSnpBUmFlanpmdjZIb1ZVYkM3cHVwSVpUK01XSW9TTEJoN1R3?=
- =?utf-8?B?aXo5WEd6RnRoMXQyUys0NUxGYzF4bU5RLzNkaCtsRkhOK01IZ3RwSzZPVXhM?=
- =?utf-8?B?cWFKMmJkSVdmakFKNXVDbklZMjJZdEJFN0syUzFWcXdKb3pMK0dNUktsWVNp?=
- =?utf-8?B?aHFHVG9wWDhKcGJKUCs4QmQ1akFsQnB4UFA1dFB2dVlsOEZhTmo1OEVGRk8w?=
- =?utf-8?B?eFM0aXlUQXl4ZW5pWkxxa2NFL0tNY3JZSEhFOERKQ2ZtZlp2Z2cwNzVocFNY?=
- =?utf-8?B?bFArSVhGSXkzOGFuUjV3bkQ5RjFzMCtUVFRsWSt1VkIwU043YS9QN1MzZWxl?=
- =?utf-8?B?RXduR0dOVWNxV29RTWtQd0gzUnMvaVlmNlRjMUpDaXhqdTlZRm9YYU4yb3pm?=
- =?utf-8?B?Q0UxdGZ1dk1qK0RJRlc5b21yQlZuODhVTVNMUHNNQkZXQTVLd0tyRUluUmYw?=
- =?utf-8?B?VkFiTWhoUi94NTF1aHZpdWZXN3ZoVXZ1bzhmZzloL1NjUnpzQTlJRXl5Uy9T?=
- =?utf-8?B?dXZxdHNrV0NSMFJOZzVkWG1LbTJlSmlhc3RvZEo1QVpJbkFGcDVmTUFsVU1T?=
- =?utf-8?Q?z3+zI/JJL5SGR1zGyBLCiGyyU?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c879026-2129-4b33-eaa1-08db6844c2b9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 17:21:13.8865
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tXy5DCKpxNd7ebCY0lT+ALWDeI7/GxLSBC5+s2MEzNtOgJ//XmbuAPOacuG22HeZBR3ZlQkiK0LNmU4TlOqbDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4927
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/8/23 13:01, Nathan Chancellor wrote:
-> -Wunused-but-set-variable was only supported in clang starting with
-> 13.0.0, so earlier versions will emit a warning, which is turned into a
-> hard error for the kernel to mirror GCC:
-> 
->    error: unknown warning option '-Wunused-but-set-variable'; did you mean '-Wunused-const-variable'? [-Werror,-Wunknown-warning-option]
-> 
-> The minimum supported version of clang for building the kernel is
-> 11.0.0, so match the rest of the kernel and wrap
-> -Wunused-but-set-variable in a cc-option call, so that it is only used
-> when supported by the compiler.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1869
-> Fixes: a0fd5a5f676c ("drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Kumar,
 
-Applied, thanks!
+First bad commit (maybe != root cause):
 
-> ---
->   drivers/gpu/drm/amd/amdgpu/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
-> index 7ee68b1bbfed..86b833085f19 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/Makefile
-> +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
-> @@ -40,7 +40,7 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
->   	-I$(FULL_AMD_PATH)/amdkfd
->   
->   subdir-ccflags-y := -Wextra
-> -subdir-ccflags-y += -Wunused-but-set-variable
-> +subdir-ccflags-y += $(call cc-option, -Wunused-but-set-variable)
->   subdir-ccflags-y += -Wno-unused-parameter
->   subdir-ccflags-y += -Wno-type-limits
->   subdir-ccflags-y += -Wno-sign-compare
-> 
-> ---
-> base-commit: 6bd4b01e8938779b0d959bdf33949a9aa258a363
-> change-id: 20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-0be9528ac5c8
-> 
-> Best regards,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
+commit: ac9f06050a3580cf4076a57a470cd71f12a81171 bpf: Introduce bpf_obj_drop
+date:   7 months ago
+config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090228.JIljoJa6-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ac9f06050a3580cf4076a57a470cd71f12a81171
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ac9f06050a3580cf4076a57a470cd71f12a81171
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/f2fs/ kernel/bpf/ lib/zstd/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306090228.JIljoJa6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/bpf/verifier.c:14822:12: warning: stack frame size (3024) exceeds limit (2048) in 'do_misc_fixups' [-Wframe-larger-than]
+   static int do_misc_fixups(struct bpf_verifier_env *env)
+              ^
+   kernel/bpf/verifier.c:13035:12: warning: stack frame size (3280) exceeds limit (2048) in 'do_check' [-Wframe-larger-than]
+   static int do_check(struct bpf_verifier_env *env)
+              ^
+>> kernel/bpf/verifier.c:8221:12: warning: stack frame size (2144) exceeds limit (2048) in 'check_kfunc_args' [-Wframe-larger-than]
+   static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta)
+              ^
+   3 warnings generated.
+
+
+vim +/check_kfunc_args +8221 kernel/bpf/verifier.c
+
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8220  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18 @8221  static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8222  {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8223  	const char *func_name = meta->func_name, *ref_tname;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8224  	const struct btf *btf = meta->btf;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8225  	const struct btf_param *args;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8226  	u32 i, nargs;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8227  	int ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8228  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8229  	args = (const struct btf_param *)(meta->func_proto + 1);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8230  	nargs = btf_type_vlen(meta->func_proto);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8231  	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8232  		verbose(env, "Function %s has %d > %d args\n", func_name, nargs,
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8233  			MAX_BPF_FUNC_REG_ARGS);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8234  		return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8235  	}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8236  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8237  	/* Check that BTF function arguments match actual types that the
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8238  	 * verifier sees.
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8239  	 */
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8240  	for (i = 0; i < nargs; i++) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8241  		struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[i + 1];
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8242  		const struct btf_type *t, *ref_t, *resolve_ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8243  		enum bpf_arg_type arg_type = ARG_DONTCARE;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8244  		u32 regno = i + 1, ref_id, type_size;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8245  		bool is_ret_buf_sz = false;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8246  		int kf_arg_type;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8247  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8248  		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+958cf2e273f0929 Kumar Kartikeya Dwivedi 2022-11-18  8249  
+958cf2e273f0929 Kumar Kartikeya Dwivedi 2022-11-18  8250  		if (is_kfunc_arg_ignore(btf, &args[i]))
+958cf2e273f0929 Kumar Kartikeya Dwivedi 2022-11-18  8251  			continue;
+958cf2e273f0929 Kumar Kartikeya Dwivedi 2022-11-18  8252  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8253  		if (btf_type_is_scalar(t)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8254  			if (reg->type != SCALAR_VALUE) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8255  				verbose(env, "R%d is not a scalar\n", regno);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8256  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8257  			}
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8258  
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8259  			if (is_kfunc_arg_constant(meta->btf, &args[i])) {
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8260  				if (meta->arg_constant.found) {
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8261  					verbose(env, "verifier internal error: only one constant argument permitted\n");
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8262  					return -EFAULT;
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8263  				}
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8264  				if (!tnum_is_const(reg->var_off)) {
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8265  					verbose(env, "R%d must be a known constant\n", regno);
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8266  					return -EINVAL;
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8267  				}
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8268  				ret = mark_chain_precision(env, regno);
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8269  				if (ret < 0)
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8270  					return ret;
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8271  				meta->arg_constant.found = true;
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8272  				meta->arg_constant.value = reg->var_off.value;
+a50388dbb328a42 Kumar Kartikeya Dwivedi 2022-11-18  8273  			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8274  				meta->r0_rdonly = true;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8275  				is_ret_buf_sz = true;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8276  			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdwr_buf_size")) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8277  				is_ret_buf_sz = true;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8278  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8279  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8280  			if (is_ret_buf_sz) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8281  				if (meta->r0_size) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8282  					verbose(env, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8283  					return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8284  				}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8285  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8286  				if (!tnum_is_const(reg->var_off)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8287  					verbose(env, "R%d is not a const\n", regno);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8288  					return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8289  				}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8290  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8291  				meta->r0_size = reg->var_off.value;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8292  				ret = mark_chain_precision(env, regno);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8293  				if (ret)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8294  					return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8295  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8296  			continue;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8297  		}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8298  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8299  		if (!btf_type_is_ptr(t)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8300  			verbose(env, "Unrecognized arg#%d type %s\n", i, btf_type_str(t));
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8301  			return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8302  		}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8303  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8304  		if (reg->ref_obj_id) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8305  			if (is_kfunc_release(meta) && meta->ref_obj_id) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8306  				verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8307  					regno, reg->ref_obj_id,
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8308  					meta->ref_obj_id);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8309  				return -EFAULT;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8310  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8311  			meta->ref_obj_id = reg->ref_obj_id;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8312  			if (is_kfunc_release(meta))
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8313  				meta->release_regno = regno;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8314  		}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8315  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8316  		ref_t = btf_type_skip_modifiers(btf, t->type, &ref_id);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8317  		ref_tname = btf_name_by_offset(btf, ref_t->name_off);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8318  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8319  		kf_arg_type = get_kfunc_ptr_arg_type(env, meta, t, ref_t, ref_tname, args, i, nargs);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8320  		if (kf_arg_type < 0)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8321  			return kf_arg_type;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8322  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8323  		switch (kf_arg_type) {
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8324  		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8325  		case KF_ARG_PTR_TO_BTF_ID:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8326  			if (!is_kfunc_trusted_args(meta))
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8327  				break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8328  			if (!reg->ref_obj_id) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8329  				verbose(env, "R%d must be referenced\n", regno);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8330  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8331  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8332  			fallthrough;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8333  		case KF_ARG_PTR_TO_CTX:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8334  			/* Trusted arguments have the same offset checks as release arguments */
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8335  			arg_type |= OBJ_RELEASE;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8336  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8337  		case KF_ARG_PTR_TO_KPTR:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8338  		case KF_ARG_PTR_TO_DYNPTR:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8339  		case KF_ARG_PTR_TO_MEM:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8340  		case KF_ARG_PTR_TO_MEM_SIZE:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8341  			/* Trusted by default */
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8342  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8343  		default:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8344  			WARN_ON_ONCE(1);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8345  			return -EFAULT;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8346  		}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8347  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8348  		if (is_kfunc_release(meta) && reg->ref_obj_id)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8349  			arg_type |= OBJ_RELEASE;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8350  		ret = check_func_arg_reg_off(env, reg, regno, arg_type);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8351  		if (ret < 0)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8352  			return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8353  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8354  		switch (kf_arg_type) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8355  		case KF_ARG_PTR_TO_CTX:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8356  			if (reg->type != PTR_TO_CTX) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8357  				verbose(env, "arg#%d expected pointer to ctx, but got %s\n", i, btf_type_str(t));
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8358  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8359  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8360  			break;
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8361  		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8362  			if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8363  				verbose(env, "arg#%d expected pointer to allocated object\n", i);
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8364  				return -EINVAL;
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8365  			}
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8366  			if (!reg->ref_obj_id) {
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8367  				verbose(env, "allocated object must be referenced\n");
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8368  				return -EINVAL;
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8369  			}
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8370  			if (meta->btf == btf_vmlinux &&
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8371  			    meta->func_id == special_kfunc_list[KF_bpf_obj_drop_impl]) {
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8372  				meta->arg_obj_drop.btf = reg->btf;
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8373  				meta->arg_obj_drop.btf_id = reg->btf_id;
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8374  			}
+ac9f06050a3580c Kumar Kartikeya Dwivedi 2022-11-18  8375  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8376  		case KF_ARG_PTR_TO_KPTR:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8377  			if (reg->type != PTR_TO_MAP_VALUE) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8378  				verbose(env, "arg#0 expected pointer to map value\n");
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8379  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8380  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8381  			ret = process_kf_arg_ptr_to_kptr(env, reg, ref_t, ref_tname, meta, i);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8382  			if (ret < 0)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8383  				return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8384  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8385  		case KF_ARG_PTR_TO_DYNPTR:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8386  			if (reg->type != PTR_TO_STACK) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8387  				verbose(env, "arg#%d expected pointer to stack\n", i);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8388  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8389  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8390  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8391  			if (!is_dynptr_reg_valid_init(env, reg)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8392  				verbose(env, "arg#%d pointer type %s %s must be valid and initialized\n",
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8393  					i, btf_type_str(ref_t), ref_tname);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8394  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8395  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8396  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8397  			if (!is_dynptr_type_expected(env, reg, ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8398  				verbose(env, "arg#%d pointer type %s %s points to unsupported dynamic pointer type\n",
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8399  					i, btf_type_str(ref_t), ref_tname);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8400  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8401  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8402  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8403  		case KF_ARG_PTR_TO_BTF_ID:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8404  			/* Only base_type is checked, further checks are done here */
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8405  			if (reg->type != PTR_TO_BTF_ID &&
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8406  			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8407  				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8408  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8409  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8410  			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8411  			if (ret < 0)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8412  				return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8413  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8414  		case KF_ARG_PTR_TO_MEM:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8415  			resolve_ret = btf_resolve_size(btf, ref_t, &type_size);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8416  			if (IS_ERR(resolve_ret)) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8417  				verbose(env, "arg#%d reference type('%s %s') size cannot be determined: %ld\n",
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8418  					i, btf_type_str(ref_t), ref_tname, PTR_ERR(resolve_ret));
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8419  				return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8420  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8421  			ret = check_mem_reg(env, reg, regno, type_size);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8422  			if (ret < 0)
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8423  				return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8424  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8425  		case KF_ARG_PTR_TO_MEM_SIZE:
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8426  			ret = check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8427  			if (ret < 0) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8428  				verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memory access\n", i, i + 1);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8429  				return ret;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8430  			}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8431  			/* Skip next '__sz' argument */
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8432  			i++;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8433  			break;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8434  		}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8435  	}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8436  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8437  	if (is_kfunc_release(meta) && !meta->release_regno) {
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8438  		verbose(env, "release kernel function %s expects refcounted PTR_TO_BTF_ID\n",
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8439  			func_name);
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8440  		return -EINVAL;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8441  	}
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8442  
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8443  	return 0;
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8444  }
+00b85860feb8098 Kumar Kartikeya Dwivedi 2022-11-18  8445  
+
+:::::: The code at line 8221 was first introduced by commit
+:::::: 00b85860feb809852af9a88cb4ca8766d7dff6a3 bpf: Rewrite kfunc argument handling
+
+:::::: TO: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
+
 -- 
-Hamza
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
