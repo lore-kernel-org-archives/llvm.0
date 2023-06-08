@@ -1,194 +1,186 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2048.outbound.protection.outlook.com [40.107.6.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB3931F00;
-	Thu,  8 Jun 2023 23:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686265610; x=1717801610;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w4iphQO2kDqcY7KZI9IUTUwWPw4dllWLRJTEvqf7O3w=;
-  b=KUUlGpGRnEgtzAYteKEDYr36Qe8goTJCh+Y3WvEVvhEeI+3hV1nI3B6d
-   xwiK1fFY3uKHJHA9DFNH5RG3BmKzx5Xja87YWdJWMprIoA+qSsCJ6c+aG
-   i1YiVT70EDCcqfnZNYyA32v8+D5tfSYC+/P7QO4yJ5vf3Ef9i5ytHTOPR
-   ntcJHdfQ5d+vSN6GDOoyK9k2FPZuhVQt1h8nC1n9rZFJ82HJYWmIY4fEV
-   AlMtlmnmoECetpp2ZNuAsTgmZIhTfFwXSpIwT4YUw9cjdGUOJkvA8ZWcx
-   aJCD7TDp8ZiyQIePHUiW1OMzWs4pdCNNPpFWQPsxhrkjDoFWSs2GPXH/v
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="385808382"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="385808382"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:06:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="687525374"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="687525374"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jun 2023 16:06:47 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7OiM-0008KU-1M;
-	Thu, 08 Jun 2023 23:06:46 +0000
-Date: Fri, 9 Jun 2023 07:06:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yangtao Li <frank.li@vivo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: fs/f2fs/gc.c:744:5: warning: stack frame size (3248) exceeds limit
- (2048) in 'f2fs_get_victim'
-Message-ID: <202306090735.vBTMC3us-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1EF2A9CA
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 23:10:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BjoqRopW67Ds+wKZ55LJ6L3LgEJE52q8jXHXyCsFVU2Gn0KeGP5I4p0Dd2eXLJQPdNmkNfmZeeBzotUUUD9qDihWWEb6KPoTPomyOMrLnlkGfFGq93ZiHHHau/ziMcoLlczsC3a227jsj/NnnaTHWDIYo19CWkye0xOsSvB5MuTxmYPv7mUo+VQNv41lG2wm2XTOUgfhGID7vOYemLHx8fVZ+3grN+XE55Iwn9euemA6auYWrIxZ8bVrmO75aDKld1gGhcpiJCNkoWxZ1SiWAphg2fqI1BeOvzQMySbtQwscHXAR4LY0B3jv7m4LF+DpXgIaFihZik/3Jx6Xo/07ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=30ovn0dE2MI+5v90BQkqxTk9fgY/JH7R3CdcoYtwNxA=;
+ b=Vt2JJ/ObNZXxKaIOKAe0po/3gjFBx41vkhvT0tfVnR5090caVlZx+6pNT59HSsGswsUA4DWVKjWk2cSbH90yEsAHikE//6Dhap9TsJsv81/A66sH9iNCRp3KjNlaPnB9ryy3qK9IEFhfGCEo9KAejQaQw/rn44kdm6yQ4druKnJ0c/wGKNzHJhfG7np6HujAu5FscZoLAzQ7g7srkeMUHNkbjUN0PyU1PQRMzaocferoSj2edzpjwFZCUxCToOIwAGsErzKN+QQaZJj5dUbueiO4wckBCdryMLJpuLogZYZ79ORRI72eJQb7fq1jHzl0t0ayZkpksMdrBhuEoZ714Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=30ovn0dE2MI+5v90BQkqxTk9fgY/JH7R3CdcoYtwNxA=;
+ b=qtxjLsLsAIwXrvHELM8eMQN9OcEkBL0/LDptfczW/mgheehFDPJoV5dcCwR3EM18ABhwaYPJ6h7kQfwbcpNQrYbLp+d8b1A3JclQVC8Ah4zk+ly6tk7/XNvSoM9h+5IQ6yVUSvxqKr7s+WVLskgn+C+kzql8NrjUpyKvYNhsbrU=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by DB8PR04MB6907.eurprd04.prod.outlook.com (2603:10a6:10:119::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
+ 2023 23:10:42 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 23:10:42 +0000
+From: Leo Li <leoyang.li@nxp.com>
+To: =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+CC: Nathan Chancellor <nathan@kernel.org>, "kernel@pengutronix.de"
+	<kernel@pengutronix.de>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Stuart Yoder
+	<stuyoder@gmail.com>, Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: RE: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Thread-Topic: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Thread-Index: AQHZlJ98Oz9RTwIAQkWKphRxSM1C9a92K6+AgAtT7NCAAA9agIAABGng
+Date: Thu, 8 Jun 2023 23:10:42 +0000
+Message-ID:
+ <AM0PR04MB62894F383B97E4FFA6ED58118F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
+ <20230601154101.GA2368233@dev-arch.thelio-3990X>
+ <20230601165945.f7itlyso4rbp2nbb@pengutronix.de>
+ <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <20230608225355.3raozoq3v6teft7q@pengutronix.de>
+In-Reply-To: <20230608225355.3raozoq3v6teft7q@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DB8PR04MB6907:EE_
+x-ms-office365-filtering-correlation-id: 2eee5afd-79fd-43b1-be61-08db687594e2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ gsus/8gw2MdDzLHSOWvuqR06/JzR7JDoacOLe7Oh2GW5oOwg8f3SPn43UfIjkZLCwuR404KX/uonuigIE2FfhIiHAa9PJHLgrZvivJKwz7soL/gKY0z69ydeHDgj6armRWV+ctBXlUvSsFgyi95FyZZ1FKzKLBQo1xvjnj1kBp9Sl9rTc/Ig3ao7uuIUZM3a9xsvDuK/9WD3EJnkUE76VRyMOho3ngQP8RneCnPG3woZAdpMTHvDt97xEWYJ166gSfDojCPNYClv3Ko4KdLZZDE0tsNXuW/TdKcj7PGtTvCfngY34w/JNteyIjO+pQFNuEAQ0PEIkt5p1Z1IUoWQR4qIpUEY2ir9tfy4r6XOdPKOfnnRz1vBz5w5clGaShQ+ciQdfMIsLHMBOjRfruchUk77/WlolilK1/T6x95cPAvH2j0/ZdVt+UGkS2cgE1fNgRsb9pQmw5S8gx0LFaeklfwdk4F9WrnX+XZeL1CR6ptj6NrXWKLLEr4ZoVMReEqio0EKZGBd0dQvfSXcbThaa9o/jKK5VcDp+PtEUgQ6qOj7xiM6ztylCD0UkKcKrUAAdxlELdRYPBVMQ5qEhkNARONegGPd6/30Fpp61HkAb1M=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(136003)(396003)(376002)(451199021)(52536014)(5660300002)(122000001)(55236004)(53546011)(38070700005)(186003)(38100700002)(9686003)(6506007)(26005)(66574015)(83380400001)(54906003)(55016003)(33656002)(478600001)(2906002)(71200400001)(86362001)(966005)(7696005)(66446008)(66476007)(66556008)(66946007)(64756008)(8936002)(4326008)(6916009)(316002)(76116006)(8676002)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?H6Bg5ALv6rz+VvJRjqwmzXfYNWI24F3Gc/ekSPc49Kr3z3M85glNQEkr5e?=
+ =?iso-8859-1?Q?FeSAOzA1NjRCncXNUQ5hjoOciXpiU/DPBTZGrp+7eXkdHwm5PiBKPEJwlL?=
+ =?iso-8859-1?Q?RvZET1GFdac+WyOVJ08cZZFiTIOodcM/heCPQQIufB95UNfqUWHoZPho5e?=
+ =?iso-8859-1?Q?zyuByhOT79nxDUk1eavFfrsv/yiTpg+Q8ZsbJ/4pFRF+NadlhCEV0VxO1W?=
+ =?iso-8859-1?Q?0mipkRRJj0WqQWLBSxmbGUUtGSZHK04PtBXWqJGA4+cT8grlOIbXUBOa8L?=
+ =?iso-8859-1?Q?JO2nNAUxndT+yZZQllCqXT5jsG5T+pAuExQ7Z8mKEAwLgCta2uWZubvcqd?=
+ =?iso-8859-1?Q?DDK1E1Z7VVhv92fyyw3zV4TGTgIhPRDxuX9CtxwhFAR4Yac3K08Wfd9q/Z?=
+ =?iso-8859-1?Q?yUJefPWqjutWFtEfqvXBOQ/65aJgt3G4B1bNprrl62mJlIQxMpUPF3ktEt?=
+ =?iso-8859-1?Q?kg+H7mLMHgkLHOLcCz/ksVv1ljnZKnUp9zpLSXox/KcqVoEiA/dLwZB95f?=
+ =?iso-8859-1?Q?fThpykFSk+dl19EFJbSQRCxmtrfoNju5oKGG9m5aXm2xFzduPMrHtB/Tdg?=
+ =?iso-8859-1?Q?bBfTpC5VXy2UcyTemmnmMzyt68gc3Bt44x6loz7ADGbULzwvXjlQced2/B?=
+ =?iso-8859-1?Q?aNOSp7XnZFJGa8EJBiqTIYdVgel0xRdOzbTXr3hcmCgsdV0upkgV7Bwj56?=
+ =?iso-8859-1?Q?lmLYDnxifhMMzbp1dLCyvoKkHSi28QTwmiaxEN5IFIt5LGoZzOEA8PgEvk?=
+ =?iso-8859-1?Q?2Yi5GO/pNgz0HawwHIfyTNbIdn2s4loCGLMPHlU853nsVYp5yqUilL+WyE?=
+ =?iso-8859-1?Q?e+5l+5Kmwx3JC8UbH10BLRd7hus6+ZqDia5YOGPSyPzZOdmNFsMYqzZpG5?=
+ =?iso-8859-1?Q?NF9STRBMFEJVjFCbuQmxoc7+ldhpwyjYOmE9tdAU2EyTIjcAEi9kmGZijb?=
+ =?iso-8859-1?Q?NRf3XPKNa9d5gYdOl1iK4TfSKbbphBJJKGSKLRC1I5d+zJm/gaEPPRlF3Z?=
+ =?iso-8859-1?Q?k1G8/XCUxhWop4mBftUlifIjy+darCGCGHxYkdCxoMEjQmemRBOVEUMfYk?=
+ =?iso-8859-1?Q?H11BD4NwkbH7MrfVcpV2Sh4wtIEuwJOzXKzQj71rLDQRZiFo8kqdIQjxoJ?=
+ =?iso-8859-1?Q?B8Iyko+MIraBxfkYZwZ8R0UNPmDNHKxydlFGLDWVTPBbQn/6lgOTfx7e42?=
+ =?iso-8859-1?Q?y85osXn6qz4mjFRTeMXVM4XfAuHsqzZAB67MyXp3I/iz0Hm1alGsmktqOE?=
+ =?iso-8859-1?Q?Wk1/a8QLJNBxq8RMVKnzUcUDlksN3Siy8xtfvSLpUMJo5mhuG2GFM4Aad+?=
+ =?iso-8859-1?Q?10cSPzISeScrjz6MqCHL8v3T5IGk9jziqeCDPHW6wbzPkGQQ7b4jciyMqR?=
+ =?iso-8859-1?Q?LzrAu8WsCXEEQvrBeWJ19ZtrK2BozUEaSZJJ5DNZiIQciHP5xZ4Hlkt+KD?=
+ =?iso-8859-1?Q?vues0CDP5QL8gKLnZvrItoJfB/gfBmCcfP+VqyPPteK64mLGQ4SNPPAOFJ?=
+ =?iso-8859-1?Q?U6rKkbqp7I/gQULXnqO0wSLXu3ljyrfcPnBxRD3jyVelrC/g0WwJ2u7w5T?=
+ =?iso-8859-1?Q?DOYfn96MOAabt7nlIDW23KQuHRdkF/cL9JYcwFd+bIkx3rlvO4kTKjz9GH?=
+ =?iso-8859-1?Q?LfH1wwZEvYPK4=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   25041a4c02c7cf774d8b6ed60586fd64f1cdaa81
-commit: 19e0e21a51183d4e0784602f27e4db7b965077be f2fs: remove struct victim_selection default_v_ops
-date:   8 weeks ago
-config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090735.vBTMC3us-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=19e0e21a51183d4e0784602f27e4db7b965077be
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 19e0e21a51183d4e0784602f27e4db7b965077be
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090735.vBTMC3us-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/f2fs/gc.c:744:5: warning: stack frame size (3248) exceeds limit (2048) in 'f2fs_get_victim' [-Wframe-larger-than]
-   int f2fs_get_victim(struct f2fs_sb_info *sbi, unsigned int *result,
-       ^
-   1 warning generated.
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2eee5afd-79fd-43b1-be61-08db687594e2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 23:10:42.0996
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BNqtAqOtKkhHfBxuJx+ujxHJ+I4MRebFoji+hptqKHfZe7kYeGAWXnCgAgUNkKbjDbgO3JnZ4Y0tlXDil3vC9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6907
 
 
-vim +/f2fs_get_victim +744 fs/f2fs/gc.c
 
-   735	
-   736	/*
-   737	 * This function is called from two paths.
-   738	 * One is garbage collection and the other is SSR segment selection.
-   739	 * When it is called during GC, it just gets a victim segment
-   740	 * and it does not remove it from dirty seglist.
-   741	 * When it is called from SSR segment selection, it finds a segment
-   742	 * which has minimum valid blocks and removes it from dirty seglist.
-   743	 */
- > 744	int f2fs_get_victim(struct f2fs_sb_info *sbi, unsigned int *result,
-   745				int gc_type, int type, char alloc_mode,
-   746				unsigned long long age)
-   747	{
-   748		struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
-   749		struct sit_info *sm = SIT_I(sbi);
-   750		struct victim_sel_policy p;
-   751		unsigned int secno, last_victim;
-   752		unsigned int last_segment;
-   753		unsigned int nsearched;
-   754		bool is_atgc;
-   755		int ret = 0;
-   756	
-   757		mutex_lock(&dirty_i->seglist_lock);
-   758		last_segment = MAIN_SECS(sbi) * sbi->segs_per_sec;
-   759	
-   760		p.alloc_mode = alloc_mode;
-   761		p.age = age;
-   762		p.age_threshold = sbi->am.age_threshold;
-   763	
-   764	retry:
-   765		select_policy(sbi, gc_type, type, &p);
-   766		p.min_segno = NULL_SEGNO;
-   767		p.oldest_age = 0;
-   768		p.min_cost = get_max_cost(sbi, &p);
-   769	
-   770		is_atgc = (p.gc_mode == GC_AT || p.alloc_mode == AT_SSR);
-   771		nsearched = 0;
-   772	
-   773		if (is_atgc)
-   774			SIT_I(sbi)->dirty_min_mtime = ULLONG_MAX;
-   775	
-   776		if (*result != NULL_SEGNO) {
-   777			if (!get_valid_blocks(sbi, *result, false)) {
-   778				ret = -ENODATA;
-   779				goto out;
-   780			}
-   781	
-   782			if (sec_usage_check(sbi, GET_SEC_FROM_SEG(sbi, *result)))
-   783				ret = -EBUSY;
-   784			else
-   785				p.min_segno = *result;
-   786			goto out;
-   787		}
-   788	
-   789		ret = -ENODATA;
-   790		if (p.max_search == 0)
-   791			goto out;
-   792	
-   793		if (__is_large_section(sbi) && p.alloc_mode == LFS) {
-   794			if (sbi->next_victim_seg[BG_GC] != NULL_SEGNO) {
-   795				p.min_segno = sbi->next_victim_seg[BG_GC];
-   796				*result = p.min_segno;
-   797				sbi->next_victim_seg[BG_GC] = NULL_SEGNO;
-   798				goto got_result;
-   799			}
-   800			if (gc_type == FG_GC &&
-   801					sbi->next_victim_seg[FG_GC] != NULL_SEGNO) {
-   802				p.min_segno = sbi->next_victim_seg[FG_GC];
-   803				*result = p.min_segno;
-   804				sbi->next_victim_seg[FG_GC] = NULL_SEGNO;
-   805				goto got_result;
-   806			}
-   807		}
-   808	
-   809		last_victim = sm->last_victim[p.gc_mode];
-   810		if (p.alloc_mode == LFS && gc_type == FG_GC) {
-   811			p.min_segno = check_bg_victims(sbi);
-   812			if (p.min_segno != NULL_SEGNO)
-   813				goto got_it;
-   814		}
-   815	
-   816		while (1) {
-   817			unsigned long cost, *dirty_bitmap;
-   818			unsigned int unit_no, segno;
-   819	
-   820			dirty_bitmap = p.dirty_bitmap;
-   821			unit_no = find_next_bit(dirty_bitmap,
-   822					last_segment / p.ofs_unit,
-   823					p.offset / p.ofs_unit);
-   824			segno = unit_no * p.ofs_unit;
-   825			if (segno >= last_segment) {
-   826				if (sm->last_victim[p.gc_mode]) {
-   827					last_segment =
-   828						sm->last_victim[p.gc_mode];
-   829					sm->last_victim[p.gc_mode] = 0;
-   830					p.offset = 0;
-   831					continue;
-   832				}
-   833				break;
-   834			}
-   835	
-   836			p.offset = segno + p.ofs_unit;
-   837			nsearched++;
-   838	
+> -----Original Message-----
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Sent: Thursday, June 8, 2023 5:54 PM
+> To: Leo Li <leoyang.li@nxp.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>; kernel@pengutronix.de;
+> llvm@lists.linux.dev; linux-kernel@vger.kernel.org; Stuart Yoder
+> <stuyoder@gmail.com>; Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+> reporting
+>=20
+> Hello,
+>=20
+> On Thu, Jun 08, 2023 at 10:00:13PM +0000, Leo Li wrote:
+> > > Hmm, clang seems to be right, and I just confirmed that gcc
+> > > (arm-linux- gnueabihf-gcc (Debian 12.2.0-14) 12.2.0) doesn't emit a
+> > > warning. :-\
+> > >
+> > > My approach would be:
+> > >
+> > > diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > b/drivers/bus/fsl-mc/fsl-mc- allocator.c index
+> > > 0ad68099684e..991273f956ce 100644
+> > > --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > @@ -103,14 +103,15 @@ static int __must_check
+> > > fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+> > >  	struct fsl_mc_resource *resource;
+> > >  	int error =3D -EINVAL;
+> > >
+> > > +	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > > +	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> > > +
+> > >  	resource =3D mc_dev->resource;
+> > >  	if (!resource || resource->data !=3D mc_dev) {
+> > >  		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+> > >  		goto out;
+> > >  	}
+> > >
+> > > -	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > > -	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> > >  	res_pool =3D resource->parent_pool;
+> > >  	if (res_pool !=3D &mc_bus->resource_pools[resource->type]) {
+> > >  		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
+> > >
+> > >
+> > > Should I prepare a proper patch, or is it possible to squash this
+> > > change into b3134039c5b3cf879841e3ec84c8cbf7675554ec?
+> > >
+> > > @Li Yang: Please advice.
+> >
+> > This looks fine.  Please send a new patch and I can squash it to the or=
+iginal
+> commit.
+>=20
+> I did send a proper patch already, see
+>=20
+> 	https://lore.kernel.org/all/20230605112025.80061-1-u.kleine-
+> koenig@pengutronix.de
+>=20
+> You can apply that on top of the broken commit, or if you prefer also squ=
+ash
+> it into the offending commit. Note that in the above thread there is anot=
+her
+> fix for an older commit.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks.  Both look good.  Applied for next.
+
+Regards,
+Leo
