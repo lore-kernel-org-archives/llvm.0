@@ -1,249 +1,151 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626D1D2FA;
-	Thu,  8 Jun 2023 14:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686235779; x=1717771779;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dUrdRDInHI5IdT+z31/GWwoL1bHY8ozfictJiZNzPeE=;
-  b=cfVPKE9Jr+ePP44oulbyARYb/yofkXGgjK89OPR2olmmi/FPO8nxpXds
-   WRoA0n/d/EEKreRTVbj0ZYxAyfo7S7hjW3Le30LR9EJ7rbARfYIZV4/I3
-   wekNU6uCdg+mK706H4kY9bCIvfv/ZFKofEMl3n1qDd4A0MCx15UnPX1Az
-   Fh+YpNZWVYo1g9BAaOyPWNU2k62vElDPQXJ5aQtG/s1ajxJP3Xx4PwXhz
-   J13pvaYA2EN9AaFRGW86rZiPUV3EjMzqLh3HxikRJOfDwiMXHXIMuhRB/
-   MFTcccnkhscidOtt/n5CElh7Ylk/RT8ScGZok91Ap6dsn1CA1Sji4eXq3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="360673646"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="360673646"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 07:49:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713141075"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="713141075"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2023 07:49:20 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7Gwx-0007vw-1J;
-	Thu, 08 Jun 2023 14:49:19 +0000
-Date: Thu, 8 Jun 2023 22:48:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrej Picej <andrej.picej@norik.com>, a.zummo@towertech.it,
-	alexandre.belloni@bootlin.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@phytec.de
-Subject: Re: [PATCH] rtc: rv3028: Improve trickle charger logic
-Message-ID: <202306082225.gJGvLhg6-lkp@intel.com>
-References: <20230608090446.2899646-1-andrej.picej@norik.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FCB28F3
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 15:18:23 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-777b1b5ff50so24296039f.3
+        for <llvm@lists.linux.dev>; Thu, 08 Jun 2023 08:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686237502; x=1688829502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
+        b=DbiGdt/oX7arO3iWcipj6bejJlBT8uppJCEgpZwaoeIw8a20LnBcuRhnAu4V80z3WR
+         axKAjsS/3fS3jg4TZj6pmy1cwMtO9if6j6Xz6qiqDSQgL/JgYQv+45jJefZwuvAuImj+
+         /3IDcFI/UylAC13MbTvszj0MKy07hp697fs/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686237502; x=1688829502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
+        b=DdmqNGUsA7P8EUf+zf9OjTOcfkVCBBZVnozUfsXBAhnSuHIWppDweeBBrl7VOeQ6lu
+         izTiRCfd8rUiTMyjgcFEbhkrHKrPnsglqYRf5UqfgngPsKExYlCgRs3JwkZCopeDB1iV
+         sw4V96js/FhQX9+IccrKuR0llLyEX73j0Aj86q+pIR1OQNMbKdo9iRo63ICW3yaN9dr6
+         WgOCYa4mkUQAGxsaKpJtMfcrRJj+AdT3dYki6s/K/vNWeKwgiMwODZqQGh3RgvCOOknH
+         +TTRy1PI9TTeIvWj+4uL9u9b4wcDH/qDyL6yTfzz22VVmJlkXKw9RIc3LcJzn/xMWy2x
+         rmmQ==
+X-Gm-Message-State: AC+VfDwXGZOuOuZ+5OYoeqqWzyfZHG7N5xE/7Kh2tf14OuDNsEwJ9Huw
+	Jyi8PIZ8G19UFoMkVP7iJ81psN5q8zTpHfNntRE=
+X-Google-Smtp-Source: ACHHUZ5dwKgZmRPYjMR773xFgupjMjvS+B7IAXaZd/DaRK2P7Z0J8frp53s1S+SP0i7qG13OSrttTQ==
+X-Received: by 2002:a6b:fd18:0:b0:76c:6c78:5144 with SMTP id c24-20020a6bfd18000000b0076c6c785144mr9919761ioi.17.1686237501975;
+        Thu, 08 Jun 2023 08:18:21 -0700 (PDT)
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com. [209.85.166.178])
+        by smtp.gmail.com with ESMTPSA id y10-20020a5ec80a000000b0076c70f8c4d1sm420788iol.45.2023.06.08.08.18.21
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 08:18:21 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-33d928a268eso131235ab.0
+        for <llvm@lists.linux.dev>; Thu, 08 Jun 2023 08:18:21 -0700 (PDT)
+X-Received: by 2002:a92:c549:0:b0:33d:929c:af67 with SMTP id
+ a9-20020a92c549000000b0033d929caf67mr120694ilj.17.1686237051541; Thu, 08 Jun
+ 2023 08:10:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608090446.2899646-1-andrej.picej@norik.com>
+References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+ <202306081419.Dzz0T4iW-lkp@intel.com>
+In-Reply-To: <202306081419.Dzz0T4iW-lkp@intel.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Thu, 8 Jun 2023 08:10:39 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
+Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
+Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
+To: kernel test robot <lkp@intel.com>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Sam Ravnborg <sam@ravnborg.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org, 
+	linux-arm-msm@vger.kernel.org, yangcong5@huaqin.corp-partner.google.com, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Chris Morgan <macroalpha82@gmail.com>, 
+	linux-input@vger.kernel.org, hsinyi@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrej,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Thu, Jun 8, 2023 at 12:15=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Douglas,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on robh/for-next]
+> [also build test ERROR on hid/for-next dtor-input/next dtor-input/for-lin=
+us drm-misc/drm-misc-next linus/master v6.4-rc5 next-20230607]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/d=
+t-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20=
+230608-055515
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git fo=
+r-next
+> patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c45=
+5cd7e26b931c69993d4fba33bbe15%40changeid
+> patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follo=
+wer
+> config: i386-randconfig-i003-20230607 (https://download.01.org/0day-ci/ar=
+chive/20230608/202306081419.Dzz0T4iW-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
+8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add robh https://git.kernel.org/pub/scm/linux/kernel/g=
+it/robh/linux.git
+>         git fetch robh for-next
+>         git checkout robh/for-next
+>         b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309=
+c455cd7e26b931c69993d4fba33bbe15@changeid
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306081419.Dzz0T4iW-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: undefined symbol: drm_panel_add_follower
+>    >>> referenced by i2c-hid-core.c:1159 (drivers/hid/i2c-hid/i2c-hid-cor=
+e.c:1159)
+>    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_pro=
+be) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_panel_remove_follower
+>    >>> referenced by i2c-hid-core.c:1218 (drivers/hid/i2c-hid/i2c-hid-cor=
+e.c:1218)
+>    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_rem=
+ove) in archive vmlinux.a
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on linus/master v6.4-rc5 next-20230608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the report! Ugh, I guess I forgot that even though
+DRM_PANEL is bool, it gets bundled up into all of DRM which can be a
+module. Assuming that this series looks mostly the same in the next
+version, I'll plan to add this:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrej-Picej/rtc-rv3028-Improve-trickle-charger-logic/20230608-190234
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230608090446.2899646-1-andrej.picej%40norik.com
-patch subject: [PATCH] rtc: rv3028: Improve trickle charger logic
-config: x86_64-randconfig-x062-20230608 (https://download.01.org/0day-ci/archive/20230608/202306082225.gJGvLhg6-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
-        git fetch abelloni rtc-next
-        git checkout abelloni/rtc-next
-        b4 shazam https://lore.kernel.org/r/20230608090446.2899646-1-andrej.picej@norik.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/rtc/
+depends on DRM || !DRM # if DRM=3Dm, this can't be 'y'
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306082225.gJGvLhg6-lkp@intel.com/
+...to each of the i2c-hid subclasses.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/rtc-rv3028.c:959:7: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-rv3028.c:968:17: note: uninitialized use occurs here
-           if (val_old != val) {
-                          ^~~
-   drivers/rtc/rtc-rv3028.c:959:3: note: remove the 'if' if its condition is always true
-                   if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-rv3028.c:863:18: note: initialize the variable 'val' to silence this warning
-           int val_old, val;
-                           ^
-                            = 0
-   1 warning generated.
-
-
-vim +959 drivers/rtc/rtc-rv3028.c
-
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  857  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  858  static int rv3028_probe(struct i2c_client *client)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  859  {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  860  	struct rv3028_data *rv3028;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  861  	int ret, status;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  862  	u32 ohms;
-7982492c6d02c7 Andrej Picej        2023-06-08  863  	int val_old, val;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  864  	struct nvmem_config nvmem_cfg = {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  865  		.name = "rv3028_nvram",
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  866  		.word_size = 1,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  867  		.stride = 1,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  868  		.size = 2,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  869  		.type = NVMEM_TYPE_BATTERY_BACKED,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  870  		.reg_read = rv3028_nvram_read,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  871  		.reg_write = rv3028_nvram_write,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  872  	};
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  873  	struct nvmem_config eeprom_cfg = {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  874  		.name = "rv3028_eeprom",
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  875  		.word_size = 1,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  876  		.stride = 1,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  877  		.size = 43,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  878  		.type = NVMEM_TYPE_EEPROM,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  879  		.reg_read = rv3028_eeprom_read,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  880  		.reg_write = rv3028_eeprom_write,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  881  	};
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  882  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  883  	rv3028 = devm_kzalloc(&client->dev, sizeof(struct rv3028_data),
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  884  			      GFP_KERNEL);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  885  	if (!rv3028)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  886  		return -ENOMEM;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  887  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  888  	rv3028->regmap = devm_regmap_init_i2c(client, &regmap_config);
-c3b29bf6f166f6 Chuhong Yuan        2020-05-28  889  	if (IS_ERR(rv3028->regmap))
-c3b29bf6f166f6 Chuhong Yuan        2020-05-28  890  		return PTR_ERR(rv3028->regmap);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  891  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  892  	i2c_set_clientdata(client, rv3028);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  893  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  894  	ret = regmap_read(rv3028->regmap, RV3028_STATUS, &status);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  895  	if (ret < 0)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  896  		return ret;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  897  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  898  	if (status & RV3028_STATUS_AF)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  899  		dev_warn(&client->dev, "An alarm may have been missed.\n");
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  900  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  901  	rv3028->rtc = devm_rtc_allocate_device(&client->dev);
-44c638ce4ec6fb Alexandre Belloni   2019-08-19  902  	if (IS_ERR(rv3028->rtc))
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  903  		return PTR_ERR(rv3028->rtc);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  904  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  905  	if (client->irq > 0) {
-16b26f6027588b Wadim Egorov        2022-12-08  906  		unsigned long flags;
-16b26f6027588b Wadim Egorov        2022-12-08  907  
-16b26f6027588b Wadim Egorov        2022-12-08  908  		/*
-16b26f6027588b Wadim Egorov        2022-12-08  909  		 * If flags = 0, devm_request_threaded_irq() will use IRQ flags
-16b26f6027588b Wadim Egorov        2022-12-08  910  		 * obtained from device tree.
-16b26f6027588b Wadim Egorov        2022-12-08  911  		 */
-16b26f6027588b Wadim Egorov        2022-12-08  912  		if (dev_fwnode(&client->dev))
-16b26f6027588b Wadim Egorov        2022-12-08  913  			flags = 0;
-16b26f6027588b Wadim Egorov        2022-12-08  914  		else
-16b26f6027588b Wadim Egorov        2022-12-08  915  			flags = IRQF_TRIGGER_LOW;
-16b26f6027588b Wadim Egorov        2022-12-08  916  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  917  		ret = devm_request_threaded_irq(&client->dev, client->irq,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  918  						NULL, rv3028_handle_irq,
-16b26f6027588b Wadim Egorov        2022-12-08  919  						flags | IRQF_ONESHOT,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  920  						"rv3028", rv3028);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  921  		if (ret) {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  922  			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  923  			client->irq = 0;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  924  		}
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  925  	}
-0f7695691be617 Alexandre Belloni   2021-01-11  926  	if (!client->irq)
-0f7695691be617 Alexandre Belloni   2021-01-11  927  		clear_bit(RTC_FEATURE_ALARM, rv3028->rtc->features);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  928  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  929  	ret = regmap_update_bits(rv3028->regmap, RV3028_CTRL1,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  930  				 RV3028_CTRL1_WADA, RV3028_CTRL1_WADA);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  931  	if (ret)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  932  		return ret;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  933  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  934  	/* setup timestamping */
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  935  	ret = regmap_update_bits(rv3028->regmap, RV3028_CTRL2,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  936  				 RV3028_CTRL2_EIE | RV3028_CTRL2_TSE,
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  937  				 RV3028_CTRL2_EIE | RV3028_CTRL2_TSE);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  938  	if (ret)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  939  		return ret;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  940  
-7982492c6d02c7 Andrej Picej        2023-06-08  941  	ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
-7982492c6d02c7 Andrej Picej        2023-06-08  942  	if (ret < 0)
-7982492c6d02c7 Andrej Picej        2023-06-08  943  		return ret;
-7982492c6d02c7 Andrej Picej        2023-06-08  944  
-7982492c6d02c7 Andrej Picej        2023-06-08  945  	/* mask out only trickle charger bits */
-7982492c6d02c7 Andrej Picej        2023-06-08  946  	val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
-7982492c6d02c7 Andrej Picej        2023-06-08  947  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  948  	/* setup trickle charger */
-7982492c6d02c7 Andrej Picej        2023-06-08  949  	if (device_property_read_u32(&client->dev, "trickle-resistor-ohms", &ohms)) {
-7982492c6d02c7 Andrej Picej        2023-06-08  950  		/* disable the trickle charger */
-7982492c6d02c7 Andrej Picej        2023-06-08  951  		val = 0;
-7982492c6d02c7 Andrej Picej        2023-06-08  952  	} else {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  953  		int i;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  954  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  955  		for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  956  			if (ohms == rv3028_trickle_resistors[i])
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  957  				break;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  958  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13 @959  		if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
-7982492c6d02c7 Andrej Picej        2023-06-08  960  			/* enable the trickle charger and setup its resistor accordingly */
-7982492c6d02c7 Andrej Picej        2023-06-08  961  			val = RV3028_BACKUP_TCE | i;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  962  		} else {
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  963  			dev_warn(&client->dev, "invalid trickle resistor value\n");
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  964  		}
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  965  	}
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  966  
-7982492c6d02c7 Andrej Picej        2023-06-08  967  	/* only update EEPROM if changes are necessary */
-7982492c6d02c7 Andrej Picej        2023-06-08  968  	if (val_old != val) {
-7982492c6d02c7 Andrej Picej        2023-06-08  969  		ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
-7982492c6d02c7 Andrej Picej        2023-06-08  970  					RV3028_BACKUP_TCR_MASK, val);
-7982492c6d02c7 Andrej Picej        2023-06-08  971  		if (ret)
-7982492c6d02c7 Andrej Picej        2023-06-08  972  			return ret;
-7982492c6d02c7 Andrej Picej        2023-06-08  973  	}
-7982492c6d02c7 Andrej Picej        2023-06-08  974  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  975  	ret = rtc_add_group(rv3028->rtc, &rv3028_attr_group);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  976  	if (ret)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  977  		return ret;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  978  
-018d959ba7ffca Alexandre Belloni   2021-10-18  979  	set_bit(RTC_FEATURE_BACKUP_SWITCH_MODE, rv3028->rtc->features);
-018d959ba7ffca Alexandre Belloni   2021-10-18  980  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  981  	rv3028->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  982  	rv3028->rtc->range_max = RTC_TIMESTAMP_END_2099;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  983  	rv3028->rtc->ops = &rv3028_rtc_ops;
-fdcfd854333be5 Bartosz Golaszewski 2020-11-09  984  	ret = devm_rtc_register_device(rv3028->rtc);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  985  	if (ret)
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  986  		return ret;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  987  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  988  	nvmem_cfg.priv = rv3028->regmap;
-3a905c2d9544a4 Bartosz Golaszewski 2020-11-09  989  	devm_rtc_nvmem_register(rv3028->rtc, &nvmem_cfg);
-de0ad60e79e1ce Alexandre Belloni   2020-10-09  990  	eeprom_cfg.priv = rv3028;
-3a905c2d9544a4 Bartosz Golaszewski 2020-11-09  991  	devm_rtc_nvmem_register(rv3028->rtc, &eeprom_cfg);
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  992  
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  993  	rv3028->rtc->max_user_freq = 1;
-e6e7376cfd7b3f Alexandre Belloni   2019-02-13  994  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Doug
