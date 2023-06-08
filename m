@@ -1,85 +1,77 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91015A945;
-	Thu,  8 Jun 2023 09:58:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686218281; x=1717754281;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ztXZEFwxcxQubvmV/lljE2Dc939p0dz324TayOxx/kg=;
-  b=d5PaMYgYjuU066Nxn011rYg2jU1bBsQ05lNDw/QXzkDyYltpri5s7ubE
-   X2/60Jug8gjG4888IURmTtIKb6rMvB/mduisIDVk/8nt9/M4RZOAqeSsf
-   WCcnuC3euJTVqIOVhUpL53ZptILithP0Y8iMzoO1C/emyB7YAUeLyxtFL
-   IDU+LQ7SQ96oAN6FRb1gg9pASgAeg/nK22SMlKlnstcvTHiLXhDtTXvi+
-   oZrHRE5MG8w6qsW9FlU5/r7VHeUB1RBbiudwEC4KUm6H3qIkEPs2+7hYQ
-   CWGEYxouhG/c4lly/dGEEzAZZvMIyDobNgELq8YGHCSqp+xlHE1mfaFJk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354753738"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="354753738"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:57:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="704017666"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="704017666"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2023 02:57:53 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7COv-0007eO-02;
-	Thu, 08 Jun 2023 09:57:53 +0000
-Date: Thu, 8 Jun 2023 17:56:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/210-gpu 89/225] warning: associated function
- `into_raw` is never used
-Message-ID: <202306081708.R2L4ylXV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A2E1119D
+	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 11:53:00 +0000 (UTC)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-565ba6aee5fso4319967b3.1
+        for <llvm@lists.linux.dev>; Thu, 08 Jun 2023 04:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686225179; x=1688817179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zl1R25aFlMknfZ0TZaTg0XuHD/qftBgk3A9a/qrvBxE=;
+        b=JkWwFpUHXV9of/EMlxEglfiJIwG1whJEIcTeXTzj0r1UXBhS3QQTuzkkduG01/PtL+
+         Dc6zQvaguzzgwBx7WI0aYdeB7ZdtueyKcmvT7IKVzNRsqhuqwtYMPUyjy1gqCKi7EY23
+         SDoM2b1Qy5nIPOupVMsQuZokYSz/qFGraoOECWmgxh0wTrApXG7k5bt7SAB/kFmj9Ux4
+         H5IMMf5fkjKmupydwZm55ILHeDzk4y1Otqyjwmj34EZ6NbSwkuOhAZc6ig5rU70vV4i/
+         Y8Mwh64R+JCNUx3ml3+xihLvBqH1Ja3Dh1iA1tYZ2SdKKDpJQVjhW0iAhUfUpepA3d1x
+         UUKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686225179; x=1688817179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zl1R25aFlMknfZ0TZaTg0XuHD/qftBgk3A9a/qrvBxE=;
+        b=ieae8LVRwaZXGtNuxfIOmYtZfLx5akYAyD/sSzvdM4s2qMq9wDkB741tKBxQ40YSTI
+         dv60vHwqOgcuX7+fAxbPQAo3alh2/LsPNsjnNMbK7wCBmH0Ar+mXCByGtnYTt7nQrwI5
+         jxwI1r/D+F0jIVITl8kc72TlGf69/NlhtNOmr8ryGL2ajObE7autyD9H8FQBrhOyPJJv
+         yQa75YBIUM1ul1Rk1ntPvctTkjo4cJiNJsPbdOFHVth6CVq5sUGXT98hyDvX5kmzJxsI
+         Bl5bbz5+D/lo56dzZHQQJ6Ic5XvPTTFOE1yr/J3y2R2rSNRl5/ntrl17v8+JkDJnmo3q
+         F1XQ==
+X-Gm-Message-State: AC+VfDy6FLZNzUqbjGsYoZYHKRvTS4aaGEK7E98Vx0cCApHwXgLsRVQr
+	c9eEX2gDg8Jdzj6JXei+pqIFbjdHnBUfT0MU21s=
+X-Google-Smtp-Source: ACHHUZ6h6dDyv4SxutQEfzo1GDIGkQqE4VT4CGwB81++CdMgJ3EN0Xs26iS4UkX3+1xwEFlXbP9izWEIR2g4zFlOcTk=
+X-Received: by 2002:a0d:c584:0:b0:561:b246:77ca with SMTP id
+ h126-20020a0dc584000000b00561b24677camr9370671ywd.28.1686225178967; Thu, 08
+ Jun 2023 04:52:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230307102441.94417-1-conor.dooley@microchip.com> <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+In-Reply-To: <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 8 Jun 2023 13:52:47 +0200
+Message-ID: <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: linux-riscv@lists.infradead.org, conor@kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/210-gpu
-head:   088cf4cc64f4e0eec3c9b99e36c9f5e9a86b1173
-commit: 29b0bf0eed1a1011e729d34508c82aa3fb406500 [89/225] rust: dma_fence: Add DMA Fence abstraction
-config: x86_64-randconfig-x061-20230606 (https://download.01.org/0day-ci/archive/20230608/202306081708.R2L4ylXV-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/29b0bf0eed1a1011e729d34508c82aa3fb406500
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/210-gpu
-        git checkout 29b0bf0eed1a1011e729d34508c82aa3fb406500
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
+On Thu, Jun 8, 2023 at 9:01=E2=80=AFAM Conor Dooley <conor.dooley@microchip=
+.com> wrote:
+>
+> I do intend revisting this, probably after the min. version for rust
+> gets bumped, I've just been really busy with other work the last weeks.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306081708.R2L4ylXV-lkp@intel.com/
+Thanks Conor! That would be great. We are increasing the minimum
+version after the merge window to Rust 1.70.0 (assuming no unexpected
+issues).
 
-All warnings (new ones prefixed by >>):
+This is the branch I have in case you want to use it, I will submit it
+soon: https://github.com/ojeda/linux/tree/rust-1.70
 
->> warning: associated function `into_raw` is never used
-   --> rust/kernel/dma_fence.rs:520:19
-   |
-   520 |     pub(crate) fn into_raw(self) -> *mut bindings::dma_fence_chain {
-   |                   ^^^^^^^^
-   |
-   = note: `#[warn(dead_code)]` on by default
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
