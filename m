@@ -1,149 +1,83 @@
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB07F8F6B
-	for <llvm@lists.linux.dev>; Thu,  8 Jun 2023 08:21:05 +0000 (UTC)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-77a1335cf04so29209039f.3
-        for <llvm@lists.linux.dev>; Thu, 08 Jun 2023 01:21:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686212464; x=1688804464;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tFdbyfwK2zMGYrItzLYM26ey0ZOsA/HVPrlJVM9jIuY=;
-        b=A5/l1cYVnGtN6srjwTrfeJAl4PhpZkzS/iR4YrN0acciQgnpXxjY9xnpIrAQN/uaFJ
-         mFMm3if7N0ZWDchMmYUHEWrBHMo8lWNAJUtIAVqGkoE0lT9A8Qfyp5NHijZIiVY6ASOj
-         tFOUOoq7ilzfuZhV1B04hg0dLVB60sHRIychmUhoyKK0Vj6SDtJnDWD0R6t8nK8hgqbC
-         6czd4I68yHTMtHnfFKVQ9vum9+Pb9RYA1k73udE2yM8d6vND5p+kClqlGiarm6gWCu8z
-         8Ha/Suhv8k8jW/6W/mE6tlHASnlRiJjBH2m86bbCDg3VSbbONdbtCAuiyzI+1qDA5qUg
-         boVw==
-X-Gm-Message-State: AC+VfDz/YHNIJBP9gZsYUUNbtW7diXyBpOM1JrDLy4e5k2V5gBRKhtaB
-	9FUHNtwo8Dki4ncsthvfOgzZCxQ2JaMDiBZyzP5gtu3z/PRF
-X-Google-Smtp-Source: ACHHUZ7FXmOjWdl7KkEzBBg3I9xfBGy5q7PZjPFyCeGv1SBAIDyPW3jZ7shSbKEUUndJ9d1EbuVVsklnqcWxqLRKVGq6CVuKk+Tn
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41DA8F5C;
+	Thu,  8 Jun 2023 08:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=dtEYRmo7Mb4HUPwmNIi7aG7beCq9+eQ8V/5sHbI/Q38=; b=hBBKScrUI1BSKFTaY5cRW0O5DK
+	6A8/XsHkCD6vbgeQUP8jxDFsg1DqqsIsyjeTU7dvMGCeHlAkHJmca43pwPV0RMQMSv9QIji7wOGV4
+	iSYfxwy36sAG16PNED0NJ+yagL2152BVszOq5AHtjtlxY3OE2k3kTqc5lzsH3zW64jqe6DQBt5tsp
+	f77I0iL7TCIQir8d9+/YkvIM6BGOcb70scybid46M5a2MBAUbbxj8U9pIycSDMkn56DKXWic/nGH8
+	srrTdzOOkiSfjyKEl9fkKut8jAPFv4gdzuuVJ2guD0ptKWXIXzrgHD2Hz3Ti89DXajthrOewvBa22
+	blwutyZw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1q7B1a-0069YO-18;
+	Thu, 08 Jun 2023 08:29:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28BE9300222;
+	Thu,  8 Jun 2023 10:29:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 02C7120D72191; Thu,  8 Jun 2023 10:29:40 +0200 (CEST)
+Date: Thu, 8 Jun 2023 10:29:40 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: mark.rutland@arm.com, arnd@arndb.de, ndesaulniers@google.com,
+	trix@redhat.com, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] percpu: Fix self-assignment of __old in
+ raw_cpu_generic_try_cmpxchg()
+Message-ID: <20230608082940.GF998233@hirez.programming.kicks-ass.net>
+References: <20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e603:0:b0:777:b713:22b5 with SMTP id
- g3-20020a6be603000000b00777b71322b5mr3912686ioh.4.1686212464773; Thu, 08 Jun
- 2023 01:21:04 -0700 (PDT)
-Date: Thu, 08 Jun 2023 01:21:04 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fa8ea705fd99ee81@google.com>
-Subject: [syzbot] [ntfs3?] WARNING in iov_iter_revert (4)
-From: syzbot <syzbot+5e732e5de356b7242fb8@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org>
 
-Hello,
+On Wed, Jun 07, 2023 at 02:20:59PM -0700, Nathan Chancellor wrote:
+> After commit c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()"),
+> clang built ARCH=arm and ARCH=arm64 kernels with CONFIG_INIT_STACK_NONE
+> started panicking on boot in alloc_vmap_area():
+> 
+>   [    0.000000] kernel BUG at mm/vmalloc.c:1638!
+>   [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+>   [    0.000000] Modules linked in:
+>   [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc2-ARCH+ #1
+>   [    0.000000] Hardware name: linux,dummy-virt (DT)
+>   [    0.000000] pstate: 200000c9 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   [    0.000000] pc : alloc_vmap_area+0x7ec/0x7f8
+>   [    0.000000] lr : alloc_vmap_area+0x7e8/0x7f8
+> 
+> Compiling mm/vmalloc.c with W=2 reveals an instance of -Wshadow, which
+> helps uncover that through macro expansion, '__old = *(ovalp)' in
+> raw_cpu_generic_try_cmpxchg() can become '__old = *(&__old)' through
+> raw_cpu_generic_cmpxchg(), which results in garbage being assigned to
+> the inner __old and the cmpxchg not working properly.
+> 
+> Add an extra underscore to __old in raw_cpu_generic_try_cmpxchg() so
+> that there is no more self-assignment, which resolves the panics.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1868
 
-syzbot found the following issue on:
+First time I see Closes; is this an 'official' tag?
 
-HEAD commit:    a4d7d7011219 Merge tag 'spi-fix-v6.4-rc5' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16c28ab3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e732e5de356b7242fb8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ab7393280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11697e1b280000
+> Debugged-by: Nick Desaulniers <ndesaulniers@google.com>
+> Fixes: c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1d4c310c7a76/disk-a4d7d701.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/918b9286fb09/vmlinux-a4d7d701.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a1c1f51764b3/bzImage-a4d7d701.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/55b5173d0801/mount_0.gz
+Durr, C is such a lovely language :-)
 
-The issue was bisected to:
-
-commit 6e5be40d32fb1907285277c02e74493ed43d77fe
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Fri Aug 13 14:21:30 2021 +0000
-
-    fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16af0359280000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15af0359280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11af0359280000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5e732e5de356b7242fb8@syzkaller.appspotmail.com
-Fixes: 6e5be40d32fb ("fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile")
-
-RBP: 00007fff19f23f20 R08: 0000000000000002 R09: 00007fff19f23f30
-R10: 0000000100000000 R11: 0000000000000246 R12: 0000000000000005
-R13: 00007fff19f23f60 R14: 00007fff19f23f40 R15: 0000000000000001
- </TASK>
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5001 at lib/iov_iter.c:970 iov_iter_revert+0x59/0x60 lib/iov_iter.c:970
-Modules linked in:
-CPU: 0 PID: 5001 Comm: syz-executor145 Not tainted 6.4.0-rc5-syzkaller-00016-ga4d7d7011219 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:iov_iter_revert+0x59/0x60 lib/iov_iter.c:970
-Code: 1d 6a 73 fd 48 81 fd 00 f0 ff 7f 77 18 e8 cf 6d 73 fd 48 89 ee 4c 89 e7 e8 84 f8 ff ff 5d 41 5c e9 bc 6d 73 fd e8 b7 6d 73 fd <0f> 0b eb ef 0f 1f 00 41 54 49 89 fc 55 53 e8 a4 6d 73 fd 49 8d 7c
-RSP: 0018:ffffc90003adf968 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88807d889dc0 RSI: ffffffff8410d889 RDI: 0000000000000007
-RBP: ffffffffffff1000 R08: 0000000000000007 R09: 000000007ffff000
-R10: ffffffffffff1000 R11: 0000000000000001 R12: ffffc90003adfa60
-R13: ffffc90003adfa60 R14: ffff888078367a78 R15: ffff88807a84d400
-FS:  0000555556f46300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f62af0bc138 CR3: 000000001e80f000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- generic_file_read_iter+0x2b2/0x5b0 mm/filemap.c:2820
- ntfs_file_read_iter+0x1b8/0x270 fs/ntfs3/file.c:744
- call_read_iter include/linux/fs.h:1862 [inline]
- generic_file_splice_read+0x182/0x4b0 fs/splice.c:419
- do_splice_to+0x1b9/0x240 fs/splice.c:902
- splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:973
- do_splice_direct+0x1ab/0x280 fs/splice.c:1082
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f62af02a9f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff19f23ef8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f62af02a9f9
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-RBP: 00007fff19f23f20 R08: 0000000000000002 R09: 00007fff19f23f30
-R10: 0000000100000000 R11: 0000000000000246 R12: 0000000000000005
-R13: 00007fff19f23f60 R14: 00007fff19f23f40 R15: 0000000000000001
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+I'll go stick it in locking/core to go with the bunch that wrecked it.
+Thanks!
