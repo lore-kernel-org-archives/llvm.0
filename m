@@ -1,49 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF83294D4;
-	Thu,  8 Jun 2023 19:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E4017740;
+	Thu,  8 Jun 2023 20:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686253486; x=1717789486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VxXoH67dsmpaHt3OmDmsDM54npgIe5Q392w5Z0/YsUI=;
-  b=Vq6A758ZSkWZ7m8VpECBdj2DlvkfrSYS2AkIppxLPLS6RWD5QHUwCzvJ
-   ec5RxhZhZ1uPz1bCWmVBH67+QfKgOjH2lXVZH5A7etkd8VoXNT8wxKZOW
-   PkeRS5D9BV0bQpMLz4BtHuNm7wQXi3uowyJDYmJ7mgZPNCP6iQJsqec/1
-   MnrAIVImMMYcxBcl2NbJy2wuxp8CMcQrFZ/ttHxqY5d3LC1PDZHtSdorK
-   uhFSF1Yr2/Rb3PBX8OgFOgEk9JIYAa5hwAGibtLnqyMWULwmS/krWJjFq
-   Ee3AcTMvxalWE/ji5E6JEkoSJPVUtL//VqmYSXdG0inW5fPneRYFbBA4H
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="356288958"
+  t=1686255341; x=1717791341;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bQ8USvTuPShT41vdizddYIMplKOudOsDiNy8CWhvyUI=;
+  b=hfbHJ1Wzz3cO7mccLz8HAf95D3zoK4Iv2XokEMs5/3gdudCJu0EytQiA
+   YpTS16ObZfjzJVdKfiqikJICIPlgUf4diFiyDCUbOUeVsd5JtjdWmITs7
+   Tx4QqxZTak1/TK5l6lvvfeCTbg6S4PjI4lCgU0wdnLCqK8+zggk7m94oI
+   L6ZRyO47t0Ja9o8L9k7jXEQ3dJHMZeJrYAjkqI25qXyM9U69TblqXa9nu
+   B3kVnrQXXU915viFDvY8tKnVtMLb/vsqH5rvTJsHyvFpab8F5K7qm3HV/
+   iO/zzyynnToxnC1eAcL+J87joqR3EY7uVEWIxLQdgs+V0oD8Rs3acSrUE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="357429041"
 X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="356288958"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 12:44:45 -0700
+   d="scan'208";a="357429041"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 13:15:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="822754649"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="739892236"
 X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="822754649"
+   d="scan'208";a="739892236"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2023 12:44:42 -0700
+  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2023 13:15:37 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q7LYo-0008Cq-0a;
-	Thu, 08 Jun 2023 19:44:42 +0000
-Date: Fri, 9 Jun 2023 03:43:56 +0800
+	id 1q7M2j-0008EE-0G;
+	Thu, 08 Jun 2023 20:15:37 +0000
+Date: Fri, 9 Jun 2023 04:14:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Nick Terrell <terrelln@fb.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Alexander Stein <linux@ew.tq-group.com>
-Subject: Re: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay
- support for individual output pins
-Message-ID: <202306090344.UJNc4HFx-lkp@intel.com>
-References: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
+	linux-kernel@vger.kernel.org
+Subject: lib/zstd/compress/zstd_opt.c:1324:15: warning: stack frame size
+ (2224) exceeds limit (2048) in 'ZSTD_compressBlock_opt0'
+Message-ID: <202306090430.17nVObx2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,212 +46,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
 
-Hi Andy,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.4-rc5 next-20230608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-aggregator-Introduce-delay-support-for-individual-output-pins/20230609-002703
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230608162130.55015-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay support for individual output pins
-config: hexagon-randconfig-r023-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090344.UJNc4HFx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   25041a4c02c7cf774d8b6ed60586fd64f1cdaa81
+commit: 2aa14b1ab2c41a4fe41efae80d58bb77da91f19f zstd: import usptream v1.5.2
+date:   8 months ago
+config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090430.17nVObx2-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
-        git fetch brgl gpio/for-next
-        git checkout brgl/gpio/for-next
-        b4 shazam https://lore.kernel.org/r/20230608162130.55015-1-andriy.shevchenko@linux.intel.com
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2aa14b1ab2c41a4fe41efae80d58bb77da91f19f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2aa14b1ab2c41a4fe41efae80d58bb77da91f19f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/f2fs/ lib/zstd/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090344.UJNc4HFx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306090430.17nVObx2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/gpio/gpio-aggregator.c:426:36: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
-     426 |         if (gpiospec->args_count != chip->of_gpio_n_cells)
-         |                                     ~~~~  ^
->> drivers/gpio/gpio-aggregator.c:518:9: error: no member named 'of_xlate' in 'struct gpio_chip'
-     518 |                 chip->of_xlate = gpiochip_fwd_delay_of_xlate;
-         |                 ~~~~  ^
-   drivers/gpio/gpio-aggregator.c:519:9: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
-     519 |                 chip->of_gpio_n_cells = 3;
-         |                 ~~~~  ^
-   6 warnings and 3 errors generated.
+>> lib/zstd/compress/zstd_opt.c:1324:15: warning: stack frame size (2224) exceeds limit (2048) in 'ZSTD_compressBlock_opt0' [-Wframe-larger-than]
+   static size_t ZSTD_compressBlock_opt0(
+                 ^
+>> lib/zstd/compress/zstd_opt.c:1331:15: warning: stack frame size (2128) exceeds limit (2048) in 'ZSTD_compressBlock_opt2' [-Wframe-larger-than]
+   static size_t ZSTD_compressBlock_opt2(
+                 ^
+   2 warnings generated.
 
 
-vim +426 drivers/gpio/gpio-aggregator.c
+vim +/ZSTD_compressBlock_opt0 +1324 lib/zstd/compress/zstd_opt.c
 
-   417	
-   418	static int gpiochip_fwd_delay_of_xlate(struct gpio_chip *chip,
-   419					       const struct of_phandle_args *gpiospec,
-   420					       u32 *flags)
-   421	{
-   422		struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
-   423		struct gpiochip_fwd_timing *timings;
-   424		u32 line;
-   425	
- > 426		if (gpiospec->args_count != chip->of_gpio_n_cells)
-   427			return -EINVAL;
-   428	
-   429		line = gpiospec->args[0];
-   430		if (line >= chip->ngpio)
-   431			return -EINVAL;
-   432	
-   433		timings = &fwd->delay_timings[line];
-   434		timings->ramp_up_us = gpiospec->args[1];
-   435		timings->ramp_down_us = gpiospec->args[2];
-   436	
-   437		return line;
-   438	}
-   439	
-   440	/**
-   441	 * gpiochip_fwd_create() - Create a new GPIO forwarder
-   442	 * @dev: Parent device pointer
-   443	 * @ngpios: Number of GPIOs in the forwarder.
-   444	 * @descs: Array containing the GPIO descriptors to forward to.
-   445	 *         This array must contain @ngpios entries, and must not be deallocated
-   446	 *         before the forwarder has been destroyed again.
-   447	 * @delay: True if the pins have an external delay line.
-   448	 *
-   449	 * This function creates a new gpiochip, which forwards all GPIO operations to
-   450	 * the passed GPIO descriptors.
-   451	 *
-   452	 * Return: An opaque object pointer, or an ERR_PTR()-encoded negative error
-   453	 *         code on failure.
-   454	 */
-   455	static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
-   456							unsigned int ngpios,
-   457							struct gpio_desc *descs[],
-   458							bool delay)
-   459	{
-   460		const char *label = dev_name(dev);
-   461		struct gpiochip_fwd *fwd;
-   462		struct gpio_chip *chip;
-   463		unsigned int i;
-   464		int error;
-   465	
-   466		fwd = devm_kzalloc(dev, struct_size(fwd, tmp, fwd_tmp_size(ngpios)),
-   467				   GFP_KERNEL);
-   468		if (!fwd)
-   469			return ERR_PTR(-ENOMEM);
-   470	
-   471		chip = &fwd->chip;
-   472	
-   473		/*
-   474		 * If any of the GPIO lines are sleeping, then the entire forwarder
-   475		 * will be sleeping.
-   476		 * If any of the chips support .set_config(), then the forwarder will
-   477		 * support setting configs.
-   478		 */
-   479		for (i = 0; i < ngpios; i++) {
-   480			struct gpio_chip *parent = gpiod_to_chip(descs[i]);
-   481	
-   482			dev_dbg(dev, "%u => gpio %d irq %d\n", i,
-   483				desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
-   484	
-   485			if (gpiod_cansleep(descs[i]))
-   486				chip->can_sleep = true;
-   487			if (parent && parent->set_config)
-   488				chip->set_config = gpio_fwd_set_config;
-   489		}
-   490	
-   491		chip->label = label;
-   492		chip->parent = dev;
-   493		chip->owner = THIS_MODULE;
-   494		chip->get_direction = gpio_fwd_get_direction;
-   495		chip->direction_input = gpio_fwd_direction_input;
-   496		chip->direction_output = gpio_fwd_direction_output;
-   497		chip->get = gpio_fwd_get;
-   498		chip->get_multiple = gpio_fwd_get_multiple_locked;
-   499		chip->set = gpio_fwd_set;
-   500		chip->set_multiple = gpio_fwd_set_multiple_locked;
-   501		chip->to_irq = gpio_fwd_to_irq;
-   502		chip->base = -1;
-   503		chip->ngpio = ngpios;
-   504		fwd->descs = descs;
-   505	
-   506		if (chip->can_sleep)
-   507			mutex_init(&fwd->mlock);
-   508		else
-   509			spin_lock_init(&fwd->slock);
-   510	
-   511		if (delay) {
-   512			fwd->delay_timings = devm_kcalloc(dev, ngpios,
-   513							  sizeof(*fwd->delay_timings),
-   514							  GFP_KERNEL);
-   515			if (!fwd->delay_timings)
-   516				return ERR_PTR(-ENOMEM);
-   517	
- > 518			chip->of_xlate = gpiochip_fwd_delay_of_xlate;
-   519			chip->of_gpio_n_cells = 3;
-   520		}
-   521	
-   522		error = devm_gpiochip_add_data(dev, chip, fwd);
-   523		if (error)
-   524			return ERR_PTR(error);
-   525	
-   526		return fwd;
-   527	}
-   528	
+  1323	
+> 1324	static size_t ZSTD_compressBlock_opt0(
+  1325	        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
+  1326	        const void* src, size_t srcSize, const ZSTD_dictMode_e dictMode)
+  1327	{
+  1328	    return ZSTD_compressBlock_opt_generic(ms, seqStore, rep, src, srcSize, 0 /* optLevel */, dictMode);
+  1329	}
+  1330	
+> 1331	static size_t ZSTD_compressBlock_opt2(
+  1332	        ZSTD_matchState_t* ms, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
+  1333	        const void* src, size_t srcSize, const ZSTD_dictMode_e dictMode)
+  1334	{
+  1335	    return ZSTD_compressBlock_opt_generic(ms, seqStore, rep, src, srcSize, 2 /* optLevel */, dictMode);
+  1336	}
+  1337	
 
 -- 
 0-DAY CI Kernel Test Service
