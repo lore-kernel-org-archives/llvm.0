@@ -1,126 +1,87 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3820101D6;
-	Thu,  8 Jun 2023 16:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686242130; x=1717778130;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=veQhTchAfnha6TSGQ8oHaXlBvjwa/QQKR6qpNgtP/Jw=;
-  b=YH69pICbgCKJh+psaDnFpuo6Pb2+UuhDN2ixrDfJgPwLiuehyAaM8mDv
-   nD9TqJulXAACQqXjrV69jnMfr6vKfA5jT0bqrCPvjlO3v5G4VuA5lYAr1
-   gliRDNrfbUwPA+d2Cx/6o8gB+4lM2dMvKvvjGxi44QRHpdcto1mfA5ScY
-   tq8TT4KOCYjnCZYr0mb7CQEQCYxxvZ2Iw9DabmAzVk1SfKbNCUe3YOuUS
-   c6BqnNlM1DLdZON1XvtQuX9JVyONANgNSGThMG0AaHlz58uZlnaSG9YEI
-   FCGXbjSjd+CrGYSlBBdt2tIMaAds5IrW2AALJgrm9xYVD4WQ+yKwodPIG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="420939769"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="420939769"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 09:35:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="660456380"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="660456380"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2023 09:35:28 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7Ibf-000832-2p;
-	Thu, 08 Jun 2023 16:35:27 +0000
-Date: Fri, 9 Jun 2023 00:34:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: drivers/ata/libata-eh.c:2411:6: warning: stack frame size (2288)
- exceeds limit (2048) in 'ata_eh_report'
-Message-ID: <202306090021.YucfHGtk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF2E171CB;
+	Thu,  8 Jun 2023 17:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64855C433D2;
+	Thu,  8 Jun 2023 17:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686243730;
+	bh=9FEDzsYIDwHxxh598m4E7BJ7qf89BOb1Zpn6HGMQj80=;
+	h=From:Date:Subject:To:Cc:From;
+	b=R+kZXTb8gy/Bh8WYcChU0kwjdd0rl+u8uPULWcdlyvgn6cAdl6rMJsmJuGKvBhnZg
+	 COlLQz9zYTnxHm0OYGWGObXenwfQGeoI5RQt55mMLd5ApFPeOLpc6c0avGXvswyS8L
+	 elYz9p5b5T408DOasKPyf3vVKlFHt3Wbz0N2m6h+lKEGtBpoaJD+d0bpqstWjGg+Qe
+	 xOjMvYEoPpgz0ONT7ZROeQ8nSbVXbrVCmC5I/4aIRodpa1tSpD7Q/bBWVGqSW9cMTq
+	 /JccQQZBOHBJR0cYxttqHJy/QZaqbc3sfEZpmEFj0umlinSRTMgITtxVgZOV3L4p7k
+	 UJBHpyuIZ8Kig==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 08 Jun 2023 10:01:57 -0700
+Subject: [PATCH] drm/amdgpu: Wrap -Wunused-but-set-variable in cc-option
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIQJgmQC/x2OQQrDIBBFrxJcd8AaUmyvUroYdZoIjZEZTQohd
+ 6/p8vH4j78rIY4k6tHtimmNEpfU4HrplJ8wjQQxNFZGm17ftAWcw5grbIwZtpqqUABXCwgVWJE
+ juk/bJPAellxaDbSj+2As+sFb1boOhcAxJj+d5RmlEJ8iM73j93/m+TqOHz1XAlacAAAA
+To: alexander.deucher@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com
+Cc: ndesaulniers@google.com, trix@redhat.com, hamza.mahfooz@amd.com, 
+ Kenny.Ho@amd.com, amd-gfx@lists.freedesktop.org, 
+ dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1626; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=9FEDzsYIDwHxxh598m4E7BJ7qf89BOb1Zpn6HGMQj80=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDClNnBODSgTuzrSIzb451SfT0JRjDevszKBrl/7wufQc7
+ gmz8VLtKGVhEONgkBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABPhTmH4X7DlpoX8uq47GbfP
+ cBeybVq/Maz9wwm3ldt2PGDUTLe6vJThf8jORH9pvx9//BTN70yTVbG8khGxSCWfr9fM+aVHueh
+ XBgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Hannes,
+-Wunused-but-set-variable was only supported in clang starting with
+13.0.0, so earlier versions will emit a warning, which is turned into a
+hard error for the kernel to mirror GCC:
 
-First bad commit (maybe != root cause):
+  error: unknown warning option '-Wunused-but-set-variable'; did you mean '-Wunused-const-variable'? [-Werror,-Wunknown-warning-option]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
-commit: 742bef476ca5352b16063161fb73a56629a6d995 ata: libata: move ata_{port,link,dev}_dbg to standard pr_XXX() macros
-date:   1 year, 5 months ago
-config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090021.YucfHGtk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=742bef476ca5352b16063161fb73a56629a6d995
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 742bef476ca5352b16063161fb73a56629a6d995
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ata/ drivers/gpu/drm/ drivers/hid/ drivers/media/tuners/ lib/
+The minimum supported version of clang for building the kernel is
+11.0.0, so match the rest of the kernel and wrap
+-Wunused-but-set-variable in a cc-option call, so that it is only used
+when supported by the compiler.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090021.YucfHGtk-lkp@intel.com/
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1869
+Fixes: a0fd5a5f676c ("drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/amd/amdgpu/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
+index 7ee68b1bbfed..86b833085f19 100644
+--- a/drivers/gpu/drm/amd/amdgpu/Makefile
++++ b/drivers/gpu/drm/amd/amdgpu/Makefile
+@@ -40,7 +40,7 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
+ 	-I$(FULL_AMD_PATH)/amdkfd
+ 
+ subdir-ccflags-y := -Wextra
+-subdir-ccflags-y += -Wunused-but-set-variable
++subdir-ccflags-y += $(call cc-option, -Wunused-but-set-variable)
+ subdir-ccflags-y += -Wno-unused-parameter
+ subdir-ccflags-y += -Wno-type-limits
+ subdir-ccflags-y += -Wno-sign-compare
 
->> drivers/ata/libata-eh.c:2411:6: warning: stack frame size (2288) exceeds limit (2048) in 'ata_eh_report' [-Wframe-larger-than]
-   void ata_eh_report(struct ata_port *ap)
-        ^
-   drivers/ata/libata-eh.c:3550:5: warning: stack frame size (4320) exceeds limit (2048) in 'ata_eh_recover' [-Wframe-larger-than]
-   int ata_eh_recover(struct ata_port *ap, ata_prereset_fn_t prereset,
-       ^
-   2 warnings generated.
---
->> drivers/ata/libata-pmp.c:915:12: warning: stack frame size (3296) exceeds limit (2048) in 'sata_pmp_eh_recover' [-Wframe-larger-than]
-   static int sata_pmp_eh_recover(struct ata_port *ap)
-              ^
-   1 warning generated.
+---
+base-commit: 6bd4b01e8938779b0d959bdf33949a9aa258a363
+change-id: 20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-0be9528ac5c8
 
-
-vim +/ata_eh_report +2411 drivers/ata/libata-eh.c
-
-022bdb075b9e1f drivers/scsi/libata-eh.c Tejun Heo 2006-05-15  2401  
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2402  /**
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2403   *	ata_eh_report - report error handling to user
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2404   *	@ap: ATA port to report EH about
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2405   *
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2406   *	Report EH to user.
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2407   *
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2408   *	LOCKING:
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2409   *	None.
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2410   */
-fb7fd61454c868 drivers/ata/libata-eh.c  Tejun Heo 2007-09-23 @2411  void ata_eh_report(struct ata_port *ap)
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2412  {
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2413  	struct ata_link *link;
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2414  
-1eca4365be25c5 drivers/ata/libata-eh.c  Tejun Heo 2008-11-03  2415  	ata_for_each_link(link, ap, HOST_FIRST)
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2416  		ata_eh_link_report(link);
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2417  }
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2418  
-
-:::::: The code at line 2411 was first introduced by commit
-:::::: fb7fd61454c8681cd2621051a710b78a00369203 libata-pmp-prep: make a number of functions global to libata
-
-:::::: TO: Tejun Heo <htejun@gmail.com>
-:::::: CC: Jeff Garzik <jeff@garzik.org>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
