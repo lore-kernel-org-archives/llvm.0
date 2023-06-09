@@ -1,43 +1,50 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBCDDDA8;
-	Fri,  9 Jun 2023 11:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8A963D4;
+	Fri,  9 Jun 2023 11:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686308954; x=1717844954;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wVr1kLbtriASKspXcRj+ZyuEM7xKec0xrsttnTYTUqQ=;
-  b=FE3iSz7Nq2oO9QnSZmnBd23tO0t1iGt7FiYKprpYc/pbQA8nIM09STkD
-   +aOndeEKtRSsptPDlx5fYSSZp0tWseV0Die5gcJ+cXNK9NLicyuAiUTuD
-   T5dWZ9roNryC2eeaEZWh5xp9M5PYyZwfAYZK5RGzg5DwfrFVC/VhVDSZ/
-   +QXJpsSDdFoMFwyF25BYJkhjwG5YfjCQaJy5SvnlScdk3qcxOoJMPHUIC
-   y8yrMJb+KrsrmFe4op1nZ/1a/urKeUD4i8E6taH9qNOH5YiclfQWly9we
-   fxOnesldzsplA7X9vuoYmnwhVwVxYILb3FJQ7E9sv2buLtOk+9AEMWMbJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="443942916"
+  t=1686309014; x=1717845014;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1Bm+HKznjWvTnKT7ys8/7kIdAyqCt3IzGxh9BOlmOlo=;
+  b=OeN5wjoQBdR4HoWreHXqFG4hDTATPrqoMpmpu1uC3bqNFzCMFoFBJp4u
+   OwHxtVDw4BQ19K+YL0XtYNWIs8wmS7H+j1pDYhn+fSYrLRfyPdlxZC77N
+   4MJDP17ti0QSz04q8qMiT6NCGuxa4s/aRjgtaQlZ0ANiCVXfV6Mt1tk+2
+   fwJsKP6xHEVZIceyGQA2xZVVlm25mXfo1kVXxllGS6coIz1qPqBSDDPm0
+   KCtWZCQbgXYvoqtChbDYrOkwNXEGAwHpcxoIN0wEu7yLzDuTsS5UwVDOT
+   tz/Upjr4i2rWGaJkys48nlcqlw2uZu3b9eVPuy4ARI6i/sDVMHrML5wjc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="355065935"
 X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="443942916"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:09:09 -0700
+   d="scan'208";a="355065935"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:10:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713477018"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="834618560"
 X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="713477018"
+   d="scan'208";a="834618560"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 04:09:07 -0700
+  by orsmga004.jf.intel.com with ESMTP; 09 Jun 2023 04:10:08 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q7ZzP-0008x1-0f;
-	Fri, 09 Jun 2023 11:09:07 +0000
-Date: Fri, 9 Jun 2023 19:08:42 +0800
+	id 1q7a0N-0008xA-1A;
+	Fri, 09 Jun 2023 11:10:07 +0000
+Date: Fri, 9 Jun 2023 19:09:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
+To: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
- '.L.str'; recompile with -fPIC
-Message-ID: <202306091810.x8zmn8Qv-lkp@intel.com>
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+	christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
+	willy@infradead.org, agordeev@linux.ibm.com,
+	wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+	David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+	Baoquan He <bhe@redhat.com>, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <202306091859.NhlW2nny-lkp@intel.com>
+References: <20230609075528.9390-3-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,90 +53,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230609075528.9390-3-bhe@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
-commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable kernels with early alternatives using -fno-pie
-date:   9 days ago
-config: riscv-randconfig-r001-20230609 (https://download.01.org/0day-ci/archive/20230609/202306091810.x8zmn8Qv-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+Hi Baoquan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
+patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091810.x8zmn8Qv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L.str'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L.str'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_4'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_4'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_5'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_5'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_6'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_6'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_7'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_7'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_8'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
-..
+   In file included from arch/hexagon/kernel/asm-offsets.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:339:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:339:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:339:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
+    1078 | void iounmap(volatile void __iomem *addr);
+         |      ^
+   arch/hexagon/include/asm/io.h:30:13: note: previous declaration is here
+      30 | extern void iounmap(const volatile void __iomem *addr);
+         |             ^
+   6 warnings and 1 error generated.
+   make[2]: *** [scripts/Makefile.build:114: arch/hexagon/kernel/asm-offsets.s] Error 1 shuffle=2830738586
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1287: prepare0] Error 2 shuffle=2830738586
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2 shuffle=2830738586
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/iounmap +1078 include/asm-generic/io.h
+
+18e780b4e6ab89 Kefeng Wang       2022-06-07  1075  
+abc5992b9dd0ba Kefeng Wang       2022-06-07  1076  void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+abc5992b9dd0ba Kefeng Wang       2022-06-07  1077  			   unsigned long prot);
+80b0ca98f91ddb Christoph Hellwig 2019-08-13 @1078  void iounmap(volatile void __iomem *addr);
+80b0ca98f91ddb Christoph Hellwig 2019-08-13  1079  
 
 -- 
 0-DAY CI Kernel Test Service
