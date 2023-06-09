@@ -1,157 +1,170 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB409174E5
-	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 16:20:14 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso2514254e87.0
-        for <llvm@lists.linux.dev>; Fri, 09 Jun 2023 09:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686327612; x=1688919612;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=usUa91lFTwm78ZcJqDITECIX6IQZqVVPZb/qreiSqx0=;
-        b=ot7OR9FGvlcYcZD5e+cFOOoEF/WG2TryjkzKF7Y7nyRNcMhYN0MPV79TOo+C+dmXVR
-         lvY31ZIut1OfKvPeIw1e4q0ma1wj7mAjXEFWSFt7BORxCehJmy+esFpQFKx8xRPe5RPa
-         s4oATGJiDMXjJbGLGJxsRdaGE8LN2xwnUjHvb003d2AHf4bECiPk6MM3tIZC1gDgtqIo
-         S8rUIbK2/DPKp88G24eIsWO5PYwE1Plm80C+bNKFkMHjM0r4iYDPMwaUxCptdVMLIqDT
-         NdWzm185jBe4dLSFadFllbTJ1U8CNLjkqheJd96W2zGVd0ou9BREA0NHohLbIw/KL3G4
-         vHgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686327612; x=1688919612;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=usUa91lFTwm78ZcJqDITECIX6IQZqVVPZb/qreiSqx0=;
-        b=RPWJyntInUCM/WTbpPpmg6tYyXBKL3Z+yaQlzckqdbBJaqizO044o4EZD0xdZRCeAn
-         SkBhPMQL6an91vGBToHeaSzSYsH9a74sjPbmxcgQRLd4TpMSlMT9TzLocNFwNNb3L+sf
-         r3wkMiFx2S0l2MRPQTS9zxe3ajRC1uzdMaTSqbcZ+346mMQpGPmPOPdzYbq4n8MHHqYQ
-         NTdAhuCAgqcKdrDb4ACnHEP+TbKKzNe0NnIfveAN3QoVZxn1zhystHiQIS8bhR1mOI4Z
-         FO1CBT7d9QljVaOU6el5I7uug2TqeNEYZ/IU3ZAQYyuLH+V12113XFk81vjkKOWtcekJ
-         t2cA==
-X-Gm-Message-State: AC+VfDyTbSAj94CLATu1iK7XWx/qVbU+BSEeKOWzd8l7mYPRINGuVZ3Z
-	6WEb51ZBXONy8vU/G1oq+tXz2w==
-X-Google-Smtp-Source: ACHHUZ5JUKhb5xLWhhwfP9hIde5UuYkLpVxnT1k61JKzExG1On60bR+Hs2VUE0a/47NYIgSj/pTTUg==
-X-Received: by 2002:a19:5009:0:b0:4f3:b588:48d0 with SMTP id e9-20020a195009000000b004f3b58848d0mr1249482lfb.14.1686327612574;
-        Fri, 09 Jun 2023 09:20:12 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id a1-20020a056512020100b004f138c4de81sm594947lfo.149.2023.06.09.09.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 09:20:12 -0700 (PDT)
-Message-ID: <90b04e1b-8f3b-982e-bab2-36c09cc1d53d@linaro.org>
-Date: Fri, 9 Jun 2023 18:20:09 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBC5171B4;
+	Fri,  9 Jun 2023 16:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686329919; x=1717865919;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6INKds2DlLwXJTo0xAjqFhrQvssfKdbM/SBY2w+Y9Rw=;
+  b=X6l0FpNlPce8+xi2Nt4JiDOVOhGHHcr4lGKra9O9KAQHRU+Mk7l5oHE4
+   Z3z76dNspB8oUXEoJwo41IEwgKkrwo2FgKXKKmYVRWQeI6iCWV7g7Pu03
+   Iew35d+OqzRj+qpoWi8b/7anvkU31juzZIgD3tsiI2wGnzQ0Vr48wYewP
+   2Aa6tr/9WDXrqiZp9KS5z0N7zbdR8dNDLt79K+wpp38GmTkY7C4qqodz7
+   PvkCD9ht4bojC04CBlllVO95DLkKJpqa6c4mcxtV7vTWYfx5OM9RpkNoE
+   /U9BOIq6yGjCS1az3TFHuIGyg0hdy/eMQQIKHd+1b5oJ4Agdb8YXp6mRW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="386008327"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="386008327"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 09:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="687803766"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="687803766"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Jun 2023 09:58:37 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7fRc-0009Ey-11;
+	Fri, 09 Jun 2023 16:58:36 +0000
+Date: Sat, 10 Jun 2023 00:58:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [linux-next:master 3357/8413] drivers/scsi/FlashPoint.c:1712:12:
+ warning: stack frame size (1056) exceeds limit (1024) in
+ 'FlashPoint_HandleInterrupt'
+Message-ID: <202306100035.VTusNhm4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net, will@kernel.org,
- boqun.feng@gmail.com, mark.rutland@arm.com, catalin.marinas@arm.com,
- dennis@kernel.org, tj@kernel.org, cl@linux.com, hca@linux.ibm.com,
- gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
- svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
- suravee.suthikulpanit@amd.com, robin.murphy@arm.com, dwmw2@infradead.org,
- baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
- Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
- penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
- Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
- roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-s390@vger.kernel.org, iommu@lists.linux.dev,
- linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
- sfr@canb.auug.org.au, mpe@ellerman.id.au,
- James.Bottomley@hansenpartnership.com, deller@gmx.de,
- linux-parisc@vger.kernel.org, llvm@lists.linux.dev
-References: <20230531132323.587480729@infradead.org>
- <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
- <20230609161340.GA4019185@dev-arch.thelio-3990X>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v2 5/12] percpu: Add {raw,this}_cpu_try_cmpxchg()
-In-Reply-To: <20230609161340.GA4019185@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Kees,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   53ab6975c12d1ad86c599a8927e8c698b144d669
+commit: df8fc4e934c12b906d08050d7779f292b9c5c6b5 [3357/8413] kbuild: Enable -fstrict-flex-arrays=3
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230610/202306100035.VTusNhm4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=df8fc4e934c12b906d08050d7779f292b9c5c6b5
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout df8fc4e934c12b906d08050d7779f292b9c5c6b5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306100035.VTusNhm4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/scsi/BusLogic.c:51:
+>> drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (1056) exceeds limit (1024) in 'FlashPoint_HandleInterrupt' [-Wframe-larger-than]
+    1712 | static int FlashPoint_HandleInterrupt(void *pcard)
+         |            ^
+   1 warning generated.
 
 
+vim +/FlashPoint_HandleInterrupt +1712 drivers/scsi/FlashPoint.c
 
-On 9.06.2023 18:13, Nathan Chancellor wrote:
-> Hi Konrad,
-> 
-> On Fri, Jun 09, 2023 at 06:10:38PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 31.05.2023 15:08, Peter Zijlstra wrote:
->>> Add the try_cmpxchg() form to the per-cpu ops.
->>>
->>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->>> ---
->> +CC Nathan, llvm list
->>
->> Hi all, this patch seems to break booting on Qualcomm ARM64 platforms
->> when compiled with clang (GCC works fine) for some reason..:
->>
->> next-20230605 - works
->> next-20230606 - doesn't
->>
->> grev -m 1 dc4e51fd9846 on next-20230606 - works again
->> b4 shazam <this_msgid> -P 1-4 - still works
->> b4 shazam <this_msgid> -P 5 - breaks
->>
->> Confirmed on at least Qualcomm QCM2290, SM8250.
->>
->> Checking the serial console, it hits a BUG_ON:
->>
->> [    0.000000] ------------[ cut here ]------------
->> [    0.000000] kernel BUG at mm/vmalloc.c:1638!
->> [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->> [    0.000000] Modules linked in:
->> [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted [snip]
->> [    0.000000] Hardware name: Qualcomm Technologies, Inc. Robotics RB1 (DT)
->> [    0.000000] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [    0.000000] pc : alloc_vmap_area+0xafc/0xb08
->> [    0.000000] lr : alloc_vmap_area+0x9e4/0xb08
->> [    0.000000] sp : ffffa50137f53c20
->> [    0.000000] x29: ffffa50137f53c60 x28: ffffa50137f30c18 x27: 0000000000000000
->> [    0.000000] x26: 0000000000007fff x25: ffff800080000000 x24: 000000000000cfff
->> [    0.000000] x23: ffffffffffff8000 x22: ffffa50137fef970 x21: fffffbfff0000000
->> [    0.000000] x20: ffff022982003208 x19: ffff0229820031f8 x18: ffffa50137f64f70
->> [    0.000000] x17: ffffa50137fef980 x16: ffffa501375e6d08 x15: 0000000000000001
->> [    0.000000] x14: ffffa5013831e1a0 x13: ffffa50137f30c18 x12: 0000000000402dc2
->> [    0.000000] x11: 0000000000000000 x10: ffff022982003018 x9 : ffffa5013831e188
->> [    0.000000] x8 : ffffcb55ff003228 x7 : 0000000000000000 x6 : 0000000000000048
->> [    0.000000] x5 : 0000000000000000 x4 : ffffa50137f53bd0 x3 : ffffa50136490000
->> [    0.000000] x2 : 0000000000000001 x1 : ffffa5013831e190 x0 : ffff022982003208
->> [    0.000000] Call trace:
->> [    0.000000]  alloc_vmap_area+0xafc/0xb08
->> [    0.000000]  __get_vm_area_node+0x108/0x1e8
->> [    0.000000]  __vmalloc_node_range+0x1fc/0x728
->> [    0.000000]  __vmalloc_node+0x5c/0x70
->> [    0.000000]  init_IRQ+0x90/0x11c
->> [    0.000000]  start_kernel+0x1ac/0x3bc
->> [    0.000000]  __primary_switched+0xc4/0xcc
->> [    0.000000] Code: f000e300 91062000 943bd9ba 17ffff8f (d4210000)
->> [    0.000000] ---[ end trace 0000000000000000 ]---
->> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
->>
->> Compiled with clang 15.0.7 from Arch repos, with
->> make ARCH=arm64 LLVM=1
-> 
-> Thanks a lot for testing with LLVM, submitting this report, and doing a
-> bisect.
-No, thank *you* for making it even possible ;)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1702  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1703  /*---------------------------------------------------------------------
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1704   *
+d8b6b8bd8a99ee Alexey Dobriyan 2006-03-08  1705   * Function: FlashPoint_HandleInterrupt
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1706   *
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1707   * Description: This is our entry point when an interrupt is generated
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1708   *              by the card and the upper level driver passes it on to
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1709   *              us.
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1710   *
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1711   *---------------------------------------------------------------------*/
+391e2f25601e34 Khalid Aziz     2013-05-16 @1712  static int FlashPoint_HandleInterrupt(void *pcard)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1713  {
+69eb2ea4779336 Alexey Dobriyan 2006-03-08  1714  	struct sccb *currSCCB;
+554b117e8fab4f Colin Ian King  2022-07-30  1715  	unsigned char thisCard, result, bm_status;
+c823feeb33161c Alexey Dobriyan 2006-03-08  1716  	unsigned short hp_int;
+db038cf86fc63d Alexey Dobriyan 2006-03-08  1717  	unsigned char i, target;
+391e2f25601e34 Khalid Aziz     2013-05-16  1718  	struct sccb_card *pCurrCard = pcard;
+391e2f25601e34 Khalid Aziz     2013-05-16  1719  	u32 ioport;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1720  
+391e2f25601e34 Khalid Aziz     2013-05-16  1721  	thisCard = pCurrCard->cardIndex;
+391e2f25601e34 Khalid Aziz     2013-05-16  1722  	ioport = pCurrCard->ioPort;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1723  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1724  	MDISABLE_INT(ioport);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1725  
+554b117e8fab4f Colin Ian King  2022-07-30  1726  	if (RD_HARPOON(ioport + hp_int_status) & EXT_STATUS_ON)
+391e2f25601e34 Khalid Aziz     2013-05-16  1727  		bm_status = RD_HARPOON(ioport + hp_ext_status) &
+391e2f25601e34 Khalid Aziz     2013-05-16  1728  					(unsigned char)BAD_EXT_STATUS;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1729  	else
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1730  		bm_status = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1731  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1732  	WR_HARPOON(ioport + hp_int_mask, (INT_CMD_COMPL | SCSI_INTERRUPT));
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1733  
+391e2f25601e34 Khalid Aziz     2013-05-16  1734  	while ((hp_int = RDW_HARPOON((ioport + hp_intstat)) &
+391e2f25601e34 Khalid Aziz     2013-05-16  1735  				FPT_default_intena) | bm_status) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1736  
+391e2f25601e34 Khalid Aziz     2013-05-16  1737  		currSCCB = pCurrCard->currentSCCB;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1738  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1739  		if (hp_int & (FIFO | TIMEOUT | RESET | SCAM_SEL) || bm_status) {
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1740  			result =
+391e2f25601e34 Khalid Aziz     2013-05-16  1741  			    FPT_SccbMgr_bad_isr(ioport, thisCard, pCurrCard,
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1742  						hp_int);
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1743  			WRW_HARPOON((ioport + hp_intstat),
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1744  				    (FIFO | TIMEOUT | RESET | SCAM_SEL));
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1745  			bm_status = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1746  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1747  			if (result) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1748  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1749  				MENABLE_INT(ioport);
+5c1b85e209af41 Alexey Dobriyan 2006-03-08  1750  				return result;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1751  			}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1752  		}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1753  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1754  		else if (hp_int & ICMD_COMP) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1755  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1756  			if (!(hp_int & BUS_FREE)) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1757  				/* Wait for the BusFree before starting a new command.  We
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1758  				   must also check for being reselected since the BusFree
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1759  				   may not show up if another device reselects us in 1.5us or
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1760  				   less.  SRR Wednesday, 3/8/1995.
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1761  				 */
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1762  				while (!
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1763  				       (RDW_HARPOON((ioport + hp_intstat)) &
+5c04a7b8981f28 Alexey Dobriyan 2006-03-08  1764  					(BUS_FREE | RSEL))) ;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1765  			}
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1766  
+391e2f25601e34 Khalid Aziz     2013-05-16  1767  			if (pCurrCard->globalFlags & F_HOST_XFER_ACT)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1768  
+47b5d69c4aa753 James Bottomley 2005-04-24  1769  				FPT_phaseChkFifo(ioport, thisCard);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  1770  
 
-I sent a patch to fix this a couple of days ago and Peter pushed
-> it to -tip today, so it should be in the next -next release:
-> 
-> https://git.kernel.org/tip/093d9b240a1fa261ff8aeb7c7cc484dedacfda53
-Amazing, I can boot the most recent next-20230609 with it again!
+:::::: The code at line 1712 was first introduced by commit
+:::::: 391e2f25601e34a7d7e5dc155e487bc58dffd8c6 [SCSI] BusLogic: Port driver to 64-bit.
 
-Konrad
-> 
-> Cheers,
-> Nathan
+:::::: TO: Khalid Aziz <khalid.aziz@oracle.com>
+:::::: CC: James Bottomley <JBottomley@Parallels.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
