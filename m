@@ -1,77 +1,125 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E237879E5;
-	Fri,  9 Jun 2023 13:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1686315913;
-	bh=hT63nSeqfXe+w/wcTH/EVqDDlEdDBDYjRZhYbxbpM9E=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=npo+qrCHsIrTavth6RFp9whOgzBlVXmzRzYXUH+dxBlx16fsDq62B5M0BsrtN4VtJ
-	 1fdfpCWNVPfQBRPxlsk/T5jnywsDDxzlQF9T3tubgjW3v4DrYce6kTsX/rRJiWMx5i
-	 hBEItCRBrPuBf/r8DMY+d6WFyBryIiRnxabHdAlU=
-Received: from [192.168.124.11] (unknown [113.140.11.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 48AE16638D;
-	Fri,  9 Jun 2023 09:05:09 -0400 (EDT)
-Message-ID: <5de9d69817138f2ccae0867b5ccb602dcfa007a3.camel@xry111.site>
-Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-From: Xi Ruoyao <xry111@xry111.site>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-s390@vger.kernel.org, 
- llvm@lists.linux.dev, linux-ia64@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org,
- x86@kernel.org,  linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev, 
- linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- loongson-kernel@lists.loongnix.cn
-Date: Fri, 09 Jun 2023 21:05:07 +0800
-In-Reply-To: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
-	 <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
-	 <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
-	 <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
-	 <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23446171B4;
+	Fri,  9 Jun 2023 14:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686322162; x=1717858162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5aT0rjqFbe+Vm7sM5/iX2YZk1lMoLO2VmOKe2HIj6kI=;
+  b=iKqUCXsKMDro2dLO9oUCrj+hvT1yUBZuzdiyq0E8yy6cLj0ZpACpZ8+L
+   L4IiQOnBY0yUuvdivAci+gZCLtUPGdbl/pupfXUami/niC099t3mKhwkU
+   W2TkXZ5ekEbBvjbJiQFlX9PMGvbQSdyc+PkqBTzwjxixi+joXpyToy6BP
+   yUaBtCMHgd7GgO+PcrRC/LsUZ+/lD2IA8ikpWt+cGK3ljj4gi4TEpeJ+n
+   L0AtU9nCghaVIjAVI+J6CFiNBLffizIkpzorZ9tDQk0BFcrYaqBn9WNBx
+   vhHVir4Lzmr0KzMxto94ti5yGhAxAjxN9VK5PAaivXqLDGa+K1t1wOLSO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="337970845"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="337970845"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 07:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="1040503245"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="1040503245"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jun 2023 07:49:19 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7dQU-00096S-1J;
+	Fri, 09 Jun 2023 14:49:18 +0000
+Date: Fri, 9 Jun 2023 22:48:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
+ migratable pages
+Message-ID: <202306092250.cp65gzkn-lkp@intel.com>
+References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
 
-On Fri, 2023-06-09 at 14:50 +0800, Tiezhu Yang wrote:
+Hi Baolin,
 
-/* snip */
+kernel test robot noticed the following build errors:
 
-> > > > In musl, the documentation states that at least gcc-3.4 or
-> > > > clang-3.2 are required, which probably predate the
-> > > > __SIZEOF_LONG__ macro.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Indeed, I've digged some history and __SIZEOF_LONG__ was added into GCC-
-4.3 (in 2008).  And I didn't realize the bitsperlong.h in tools
-directory is a copy from uapi.
+url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/mm-compaction-skip-memory-hole-rapidly-when-isolating-migratable-pages/20230609-174659
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang%40linux.alibaba.com
+patch subject: [PATCH] mm: compaction: skip memory hole rapidly when isolating migratable pages
+config: arm-randconfig-r025-20230609 (https://download.01.org/0day-ci/archive/20230609/202306092250.cp65gzkn-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> > > > On the other hand, musl was only
-> > > > released in 2011, and building musl itself explicitly
-> > > > does not require kernel uapi headers, so this may not
-> > > > be too critical.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306092250.cp65gzkn-lkp@intel.com/
 
-> Only arm64, riscv and loongarch belong to the newer architectures
-> which are related with this change, I am not sure it is necessary
-> to "unify" uapi bitsperlong.h for them.
+All errors (new ones prefixed by >>):
 
-At least it will stop the engineers working on "the next architecture"
-from adding an unneeded bitsperlong.h :).
+>> mm/compaction.c:235:27: error: call to undeclared function 'pfn_to_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           unsigned long start_nr = pfn_to_section_nr(start_pfn);
+                                    ^
+>> mm/compaction.c:237:6: error: call to undeclared function 'online_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (online_section_nr(start_nr))
+               ^
+>> mm/compaction.c:240:19: error: call to undeclared function 'next_online_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           next_online_nr = next_online_section_nr(start_nr);
+                            ^
+>> mm/compaction.c:242:10: error: call to undeclared function 'section_nr_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return section_nr_to_pfn(next_online_nr);
+                          ^
+   4 errors generated.
 
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+vim +/pfn_to_section_nr +235 mm/compaction.c
+
+   231	
+   232	static unsigned long skip_hole_pageblock(unsigned long start_pfn)
+   233	{
+   234		unsigned long next_online_nr;
+ > 235		unsigned long start_nr = pfn_to_section_nr(start_pfn);
+   236	
+ > 237		if (online_section_nr(start_nr))
+   238			return -1UL;
+   239	
+ > 240		next_online_nr = next_online_section_nr(start_nr);
+   241		if (next_online_nr != -1UL)
+ > 242			return section_nr_to_pfn(next_online_nr);
+   243	
+   244		return -1UL;
+   245	}
+   246	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
