@@ -1,168 +1,120 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB291993B;
-	Fri,  9 Jun 2023 18:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686334483; x=1717870483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s6PMRTdXqAmK7gh5R1wLzFq6mutI0Y/2eO7ArWN9Qco=;
-  b=cMFzpIFP7msS0ubM/xiT/SQS8s7nfAqIezdup6plFT+7MDbFGgU9qWWH
-   kZzZIzyy906WpCwv5tzhVvvWrE1Xs/gS2kC7BzdhXWZXCRUefns1oU/un
-   Nw4C1hPYEY+exyAXkDUO09LVx6ma4KnCwX4KNOrEeozhAOsKZpzgKnjP1
-   GRlyGv+jyCBQFSaXLNS5pKbVZSK7Epc4jtjtJfU5/6dSODOEhR2xdMqUi
-   k44sW3CvndkOm/n2UjAdpj5bmytkw0ROUwM4PHyNePmapRvVp+BIeFAr2
-   ktrfSKiYV7bj8BEjg4Ql9B/eN2M3PxBYTzhhnzioFBqzvDBNVCRYdBeLi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355148001"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="355148001"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 11:14:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="1040564649"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="1040564649"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Jun 2023 11:14:40 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7gdD-0009IG-0s;
-	Fri, 09 Jun 2023 18:14:39 +0000
-Date: Sat, 10 Jun 2023 02:13:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ekansh Gupta <quic_ekangupt@quicinc.com>,
-	srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ekansh Gupta <quic_ekangupt@quicinc.com>, ekangupt@qti.qualcomm.com,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	fastrpc.upstream@qti.qualcomm.com, quic_anane@quicinc.com
-Subject: Re: [PATCH v1 2/2] misc: fastrpc: Add persistent header buffer
- support
-Message-ID: <202306100111.JeCyQ9wW-lkp@intel.com>
-References: <1686307187-15199-3-git-send-email-quic_ekangupt@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A6F21CF6
+	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 18:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686335473;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GZg6k39/I9bDIXRSYGxxovR42low8taiT22Zr5UCULU=;
+	b=KKjvv2NzFVzQYPUaD19HN0GFpFDGcP4gZ1u9zlhgmw4RVVoxMlxdESSf6YCabUXvbArYSy
+	/nkpaB57Mtm6b8UXh+vTBRtlqZtAkxU+qrEJRQ1rcxXgOPtef9vCj7HNjhkMmVzwzLzRQ/
+	KQP9AbtW9wd9gCW5zBf/iU4nVTe3MjU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-jEVVhi2DPfOvROGamwi-cg-1; Fri, 09 Jun 2023 14:31:12 -0400
+X-MC-Unique: jEVVhi2DPfOvROGamwi-cg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 589F93C0CF0D
+	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 18:31:12 +0000 (UTC)
+Received: from [172.64.0.113] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 45DEA2166B25;
+	Fri,  9 Jun 2023 18:31:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 127 of 346): Test report for master
+ (6.4.0-rc5, mainline.kernel.org-clang, 33f2b578)
+Date: Fri, 09 Jun 2023 18:31:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1686307187-15199-3-git-send-email-quic_ekangupt@quicinc.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <67073.123060914311201485@us-mta-175.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ekansh,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc5 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ekansh-Gupta/misc-fastrpc-Add-cached-buffer-support/20230609-184517
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/1686307187-15199-3-git-send-email-quic_ekangupt%40quicinc.com
-patch subject: [PATCH v1 2/2] misc: fastrpc: Add persistent header buffer support
-config: arm64-randconfig-r024-20230608 (https://download.01.org/0day-ci/archive/20230610/202306100111.JeCyQ9wW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch char-misc char-misc-testing
-        git checkout char-misc/char-misc-testing
-        b4 shazam https://lore.kernel.org/r/1686307187-15199-3-git-send-email-quic_ekangupt@quicinc.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/misc/
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2023-06-09' of git://anongit.freed=
+esktop.org/drm/drm
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100111.JeCyQ9wW-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/91929
 
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/fastrpc.c:1400:8: warning: format specifies type 'unsigned long long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
-                           fd, va, size);
-                               ^~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
->> drivers/misc/fastrpc.c:1400:12: warning: format specifies type 'long long' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-                           fd, va, size);
-                                   ^~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   2 warnings generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +1400 drivers/misc/fastrpc.c
 
-  1360	
-  1361	static int fastrpc_mem_map_to_dsp(struct fastrpc_user *fl, int fd, int offset,
-  1362					u32 flags, u32 va, u64 phys,
-  1363					size_t size, uintptr_t *raddr)
-  1364	{
-  1365		struct fastrpc_invoke_args args[4] = { [0 ... 3] = { 0 } };
-  1366		struct fastrpc_mem_map_req_msg req_msg = { 0 };
-  1367		struct fastrpc_mmap_rsp_msg rsp_msg = { 0 };
-  1368		struct fastrpc_phy_page pages = { 0 };
-  1369		struct device *dev = fl->sctx->dev;
-  1370		int err = 0;
-  1371		u32 sc;
-  1372	
-  1373		req_msg.pgid = fl->tgid;
-  1374		req_msg.fd = fd;
-  1375		req_msg.offset = offset;
-  1376		req_msg.vaddrin = va;
-  1377		req_msg.flags = flags;
-  1378		req_msg.num = sizeof(pages);
-  1379		req_msg.data_len = 0;
-  1380	
-  1381		args[0].ptr = (u64) (uintptr_t) &req_msg;
-  1382		args[0].length = sizeof(req_msg);
-  1383	
-  1384		pages.addr = phys;
-  1385		pages.size = size;
-  1386	
-  1387		args[1].ptr = (u64) (uintptr_t) &pages;
-  1388		args[1].length = sizeof(pages);
-  1389	
-  1390		args[2].ptr = (u64) (uintptr_t) &pages;
-  1391		args[2].length = 0;
-  1392	
-  1393		args[3].ptr = (u64) (uintptr_t) &rsp_msg;
-  1394		args[3].length = sizeof(rsp_msg);
-  1395	
-  1396		sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MEM_MAP, 3, 1);
-  1397		err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc, &args[0]);
-  1398		if (err) {
-  1399			dev_err(dev, "mem mmap error, fd %d, vaddr %llx, size %lld\n",
-> 1400				fd, va, size);
-  1401			return err;
-  1402		}
-  1403		*raddr = rsp_msg.vaddr;
-  1404	
-  1405		return 0;
-  1406	}
-  1407	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
