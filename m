@@ -1,160 +1,142 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E017A943;
-	Fri,  9 Jun 2023 23:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686354720; x=1717890720;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1YG4Ql6OUeQuDlm8568xTSV64aSQEgRGFQ6GA35ZneE=;
-  b=Bp7MeG7Y/FEmh7hDGtLLKezzUU7QACy3WgmEe+8P0xfPnU1XDF/qDCJb
-   RkN5ayyA94k7ruqk2gFV0LEgME/PfeqKhD/sO+dV8S423sG/DiPRTbmjz
-   ObsML5cBf+Vs5PAh1Ur15q4dVk5OZiL+vBu9hcLetpgPssh/6N+hEyUdJ
-   2CqPWsndOeY1wu9x1ys0iHPI/XVPngTM98Yw9Z7W39EVPe/Ozg/PsZveC
-   bpmnfFKucKqChqZD6hkJSQZ8O/XNnfiRpHfSmamq8xZnGJrDEMKbkmBiG
-   2HLZ24ZqCX+2zilzWcmEiinz5uAt32klE1qts+z+jX9SDSQT4Uf7QPIrB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="421300313"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="421300313"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 16:51:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="743644199"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="743644199"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Jun 2023 16:51:57 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q7ltd-0009Vg-0h;
-	Fri, 09 Jun 2023 23:51:57 +0000
-Date: Sat, 10 Jun 2023 07:51:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:io_uring-futex 24/25] io_uring/futex.h:18:1: error:
- expected identifier or '('
-Message-ID: <202306100758.dMGu90VY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE67A943
+	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 23:54:28 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-bb2fae9b286so2782949276.3
+        for <llvm@lists.linux.dev>; Fri, 09 Jun 2023 16:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686354868; x=1688946868;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cZRa8J45tSEoIBwwMfP3oeiIjnBxryB3tiHQ4mYVspA=;
+        b=A0YP3D1MDS6ipDOhIWcopNNcD1QYcBlz/2xVJXWlJnEcbGaUxeiAs8tAUYkIngCOa8
+         MQo2PIbwQsXAFY1yuFQGkjf3bvgbdqa3mrQBK2i0yIO5RLeYwe/tpXG6AkOgOrci1IM6
+         ee3XPIDjmnxTfAdqa01/cUYTAwXqQaBt3LihZqFiSQfj+Jb56vCWeBQ0D7e3X0KHZvuN
+         yynmKcETGjwSFfENJ2wUnkXz3Ho9B6qnkXADkQCciNzXPJ2rCD22RrDxLcS5y4lyZldw
+         C5JPSBAZ0ooPspDHdyJ11GeQVbOA4ixy1f+h1W52hL6Td8d6Y+NofNCoJTEmAYSVrDGh
+         4PwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686354868; x=1688946868;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cZRa8J45tSEoIBwwMfP3oeiIjnBxryB3tiHQ4mYVspA=;
+        b=Omuum3mbkTHoFE3tgLBJZocDHTZcdb8tiatw6d3/bgA+7FeAvSQ25xYJUCrznnKlHO
+         iGH46GiT7XruP30FUrgh5NhimKEHQ8toqW0N/g5WKkuPoVW8W0fZZ1hV6ZR1lzhIdEkA
+         pIpgUEoyWmS7DaRo2N/U9Xlx4qzY/8AD7H19491dbLpV4t/K/EX9dtZF1quKG12Zr/gj
+         hicuX5GSFaVUYNrB0J/B+U2HocyyUEy06v128CVFGtfHbzSgYbJeWJpsBxMQGOQ59qUr
+         C/dIDMqeVY0+umk5gg6HK/zztvF4n05rliePvmcOAA3duGIg0EMNSi6JrbainLQoh30l
+         tE5g==
+X-Gm-Message-State: AC+VfDyiWPqeWF82W6AeoRkixgxGXD32R4KmPu3SJqj5Jn30A9GlxySJ
+	K8zb4ATRi6M4E03yNnkI+ItDz0RjZ7Jf
+X-Google-Smtp-Source: ACHHUZ5r3Yz2yKKHzyS3K5w8FkkkyUAesFC0U/xNjOAbG5oeaKw2Nxnz2IOd1Bgz+HxxkgCovA9JoZEHUQJh
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:55f2:1922:c44b:472d])
+ (user=irogers job=sendgmr) by 2002:a05:6902:1085:b0:ba8:cbd2:61b3 with SMTP
+ id v5-20020a056902108500b00ba8cbd261b3mr731327ybu.5.1686354868009; Fri, 09
+ Jun 2023 16:54:28 -0700 (PDT)
+Date: Fri,  9 Jun 2023 16:54:18 -0700
+Message-Id: <20230609235419.204624-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v1 1/2] perf srcline: Make addr2line configuration failure
+ more verbose
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Changbin Du <changbin.du@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-futex
-head:   08c3f53180099f7a5188bea9e117f1e3fe591e13
-commit: 5fe488baac7abe30d21e45ffc57473f185712e11 [24/25] io_uring: add support for futex wake and wait
-config: hexagon-randconfig-r041-20230609 (https://download.01.org/0day-ci/archive/20230610/202306100758.dMGu90VY-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=5fe488baac7abe30d21e45ffc57473f185712e11
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block io_uring-futex
-        git checkout 5fe488baac7abe30d21e45ffc57473f185712e11
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+To aid debugging why it fails. Also, combine the loops for reading a
+line for the llvm/binutils cases.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100758.dMGu90VY-lkp@intel.com/
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/srcline.c | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from io_uring/cancel.c:14:
-   In file included from io_uring/io_uring.h:6:
-   In file included from include/linux/resume_user_mode.h:8:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from io_uring/cancel.c:14:
-   In file included from io_uring/io_uring.h:6:
-   In file included from include/linux/resume_user_mode.h:8:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from io_uring/cancel.c:14:
-   In file included from io_uring/io_uring.h:6:
-   In file included from include/linux/resume_user_mode.h:8:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from io_uring/cancel.c:18:
->> io_uring/futex.h:18:1: error: expected identifier or '('
-      18 | {
-         | ^
-   6 warnings and 1 error generated.
-
-
-vim +18 io_uring/futex.h
-
-     8	
-     9	#if defined(CONFIG_FUTEX)
-    10	int io_futex_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd,
-    11			    unsigned int issue_flags);
-    12	bool io_futex_remove_all(struct io_ring_ctx *ctx, struct task_struct *task,
-    13				 bool cancel_all);
-    14	#else
-    15	static inline int io_futex_cancel(struct io_ring_ctx *ctx,
-    16					  struct io_cancel_data *cd,
-    17					  unsigned int issue_flags);
-  > 18	{
-
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index b8e596528d7e..fc85cdd6c8f9 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -441,7 +441,7 @@ enum a2l_style {
+ 	LLVM,
+ };
+ 
+-static enum a2l_style addr2line_configure(struct child_process *a2l)
++static enum a2l_style addr2line_configure(struct child_process *a2l, const char *dso_name)
+ {
+ 	static bool cached;
+ 	static enum a2l_style style;
+@@ -450,6 +450,7 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
+ 		char buf[128];
+ 		struct io io;
+ 		int ch;
++		int lines;
+ 
+ 		if (write(a2l->in, ",\n", 2) != 2)
+ 			return BROKEN;
+@@ -459,19 +460,29 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
+ 		if (ch == ',') {
+ 			style = LLVM;
+ 			cached = true;
++			lines = 1;
+ 		} else if (ch == '?') {
+ 			style = GNU_BINUTILS;
+ 			cached = true;
++			lines = 2;
+ 		} else {
+-			style = BROKEN;
++			if (!symbol_conf.disable_add2line_warn) {
++				char *output;
++				size_t output_len;
++
++				io__getline(&io, &output, &output_len);
++				pr_warning("%s %s: addr2line configuration failed\n",
++					   __func__, dso_name);
++				pr_warning("\t%c%s\n", ch, output);
++			}
++			return BROKEN;
+ 		}
+-		do {
++		while (lines) {
+ 			ch = io__get_char(&io);
+-		} while (ch > 0 && ch != '\n');
+-		if (style == GNU_BINUTILS) {
+-			do {
+-				ch = io__get_char(&io);
+-			} while (ch > 0 && ch != '\n');
++			if (ch <= 0)
++				break;
++			if (ch == '\n')
++				lines--;
+ 		}
+ 		/* Ignore SIGPIPE in the event addr2line exits. */
+ 		signal(SIGPIPE, SIG_IGN);
+@@ -591,12 +602,9 @@ static int addr2line(const char *dso_name, u64 addr,
+ 			pr_warning("%s %s: addr2line_subprocess_init failed\n", __func__, dso_name);
+ 		goto out;
+ 	}
+-	a2l_style = addr2line_configure(a2l);
+-	if (a2l_style == BROKEN) {
+-		if (!symbol_conf.disable_add2line_warn)
+-			pr_warning("%s: addr2line configuration failed\n", __func__);
++	a2l_style = addr2line_configure(a2l, dso_name);
++	if (a2l_style == BROKEN)
+ 		goto out;
+-	}
+ 
+ 	/*
+ 	 * Send our request and then *deliberately* send something that can't be interpreted as
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0.162.gfafddb0af9-goog
+
