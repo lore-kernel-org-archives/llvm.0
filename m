@@ -1,43 +1,49 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053FA15C0;
-	Fri,  9 Jun 2023 09:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9944125A9;
+	Fri,  9 Jun 2023 09:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686301388; x=1717837388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z7CDYQ9fN77GTiWbac1E7CKF9yq11wZi/oPdaLG6Ai0=;
-  b=ALxxnLP0cbphps9UVCf5QQlefPTtXjK4+3OGhbivOej1rLDAJUQrfsB0
-   9fw63KsWDqN0xjJk9NQTfGeiIc3/ipAFYlJ04fv7hweTpJT81tu52I5G1
-   N078oJCjop1uvtQrZZ3AjQ1pGqyfxCMJZ+ktevHIOxgCmymnMQ94r0kOd
-   ZsHpBRDyOP3YkBF7X55v/WafVaqOmoz/xA+1+VLWw2x/SFijliEMzmAch
-   dTAMlohQs43/aXAtnvhd0ZgYx+GV3DI2rqslEoeyz2bcjewyvSPzRiUBC
-   wPd48PDLBwdR8Qye4Xvq+pMJSShDUm5lo2PmANl8pkj3deqxCIHA1gmQU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="423434362"
+  t=1686301984; x=1717837984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iABd7J+Z2Pr+pemZcE68eNmTsZ+3OObupdFPLfMdguU=;
+  b=f8PmZoXUL31xcJj69owD0JqjSGDEnb/gNTnVlc+mR1e/IoJiGuyQppkX
+   otLvE9PXbzfdIiS6bLvoADnp96ta29wXj0GCWT/j2j6Ls6BcAXzJ69ly0
+   GaECyC+eeplICE99wJ1CPLafi5Y0CZ8Gmd6M67ClH3a6Zs/TnAJFDMtdM
+   c5aRKd3ZRfEh7GbDEkT8eygX2E28CtjXqnXiDPrmZj17Vol9boA9B6NYJ
+   XBIYvN7mGCkDAULFwi5LmVucDgYfdKErt24Q2hokLn8XRtle/c67eT0oC
+   TicGQxJhxWgj7YBBTj8gvjjI3/sYhQ5vhtmKodG47Q3YBTHuB6fYUVj/a
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342231084"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="423434362"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:02:02 -0700
+   d="scan'208";a="342231084"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:13:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="704480870"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="1040434681"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="704480870"
+   d="scan'208";a="1040434681"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jun 2023 02:02:00 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jun 2023 02:13:00 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q7Y0N-0008sG-0c;
-	Fri, 09 Jun 2023 09:01:59 +0000
-Date: Fri, 9 Jun 2023 17:01:20 +0800
+	id 1q7YB1-0008so-2C;
+	Fri, 09 Jun 2023 09:12:59 +0000
+Date: Fri, 9 Jun 2023 17:12:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
+To: Vincent Whitchurch <vincent.whitchurch@axis.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/si_dpm.c:7386:12:
- warning: stack frame size (2112) exceeds limit (2048) in 'si_dpm_init'
-Message-ID: <202306091633.KUdquWVa-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@axis.com, Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: Re: [PATCH] watchdog/mm: Allow dumping memory info in pretimeout
+Message-ID: <202306091716.pcrXYphk-lkp@intel.com>
+References: <20230608-pretimeout-oom-v1-1-542cc91062d7@axis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,218 +52,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230608-pretimeout-oom-v1-1-542cc91062d7@axis.com>
 
-Hi Dave,
+Hi Vincent,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
-commit: 123db17ddff007080d464e785689fb14f94cbc7a Merge tag 'amd-drm-next-5.18-2022-02-11-1' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-date:   1 year, 4 months ago
-config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091633.KUdquWVa-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+[auto build test WARNING on 9561de3a55bed6bdd44a12820ba81ec416e705a7]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Whitchurch/watchdog-mm-Allow-dumping-memory-info-in-pretimeout/20230609-144807
+base:   9561de3a55bed6bdd44a12820ba81ec416e705a7
+patch link:    https://lore.kernel.org/r/20230608-pretimeout-oom-v1-1-542cc91062d7%40axis.com
+patch subject: [PATCH] watchdog/mm: Allow dumping memory info in pretimeout
+config: hexagon-buildonly-randconfig-r001-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091716.pcrXYphk-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=123db17ddff007080d464e785689fb14f94cbc7a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 123db17ddff007080d464e785689fb14f94cbc7a
+        git checkout 9561de3a55bed6bdd44a12820ba81ec416e705a7
+        b4 shazam https://lore.kernel.org/r/20230608-pretimeout-oom-v1-1-542cc91062d7@axis.com
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/ drivers/hid/ lib/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091633.KUdquWVa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306091716.pcrXYphk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/si_dpm.c:7386:12: warning: stack frame size (2112) exceeds limit (2048) in 'si_dpm_init' [-Wframe-larger-than]
-   static int si_dpm_init(struct amdgpu_device *adev)
-              ^
-   1 warning generated.
+   In file included from mm/oom_kill.c:30:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/oom_kill.c:30:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/oom_kill.c:30:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> mm/oom_kill.c:156:21: warning: no previous prototype for function 'find_trylock_task_mm' [-Wmissing-prototypes]
+     156 | struct task_struct *find_trylock_task_mm(struct task_struct *p)
+         |                     ^
+   mm/oom_kill.c:156:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     156 | struct task_struct *find_trylock_task_mm(struct task_struct *p)
+         | ^
+         | static 
+   7 warnings generated.
 
 
-vim +/si_dpm_init +7386 drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/si_dpm.c
+vim +/find_trylock_task_mm +156 mm/oom_kill.c
 
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7385  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01 @7386  static int si_dpm_init(struct amdgpu_device *adev)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7387  {
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7388  	struct rv7xx_power_info *pi;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7389  	struct evergreen_power_info *eg_pi;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7390  	struct ni_power_info *ni_pi;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7391  	struct si_power_info *si_pi;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7392  	struct atom_clock_dividers dividers;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7393  	int ret;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7394  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7395  	si_pi = kzalloc(sizeof(struct si_power_info), GFP_KERNEL);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7396  	if (si_pi == NULL)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7397  		return -ENOMEM;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7398  	adev->pm.dpm.priv = si_pi;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7399  	ni_pi = &si_pi->ni;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7400  	eg_pi = &ni_pi->eg;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7401  	pi = &eg_pi->rv7xx;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7402  
-0bf6718537cf11 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Alex Deucher        2018-02-26  7403  	si_pi->sys_pcie_mask =
-5d9a6330403271 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Alex Deucher        2018-06-25  7404  		adev->pm.pcie_gen_mask & CAIL_PCIE_LINK_SPEED_SUPPORT_MASK;
-a79110f2dc0194 drivers/gpu/drm/amd/pm/powerplay/si_dpm.c Evan Quan           2021-11-11  7405  	si_pi->force_pcie_gen = SI_PCIE_GEN_INVALID;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7406  	si_pi->boot_pcie_gen = si_get_current_pcie_speed(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7407  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7408  	si_set_max_cu_value(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7409  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7410  	rv770_get_max_vddc(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7411  	si_get_leakage_vddc(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7412  	si_patch_dependency_tables_based_on_leakage(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7413  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7414  	pi->acpi_vddc = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7415  	eg_pi->acpi_vddci = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7416  	pi->min_vddc_in_table = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7417  	pi->max_vddc_in_table = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7418  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7419  	ret = amdgpu_get_platform_caps(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7420  	if (ret)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7421  		return ret;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7422  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7423  	ret = amdgpu_parse_extended_power_table(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7424  	if (ret)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7425  		return ret;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7426  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7427  	ret = si_parse_power_table(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7428  	if (ret)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7429  		return ret;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7430  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7431  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries =
-6396bb221514d2 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Kees Cook           2018-06-12  7432  		kcalloc(4,
-6396bb221514d2 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Kees Cook           2018-06-12  7433  			sizeof(struct amdgpu_clock_voltage_dependency_entry),
-6396bb221514d2 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Kees Cook           2018-06-12  7434  			GFP_KERNEL);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7435  	if (!adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries) {
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7436  		amdgpu_free_extended_power_table(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7437  		return -ENOMEM;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7438  	}
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7439  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.count = 4;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7440  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].clk = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7441  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].v = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7442  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[1].clk = 36000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7443  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[1].v = 720;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7444  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[2].clk = 54000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7445  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[2].v = 810;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7446  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[3].clk = 72000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7447  	adev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[3].v = 900;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7448  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7449  	if (adev->pm.dpm.voltage_response_time == 0)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7450  		adev->pm.dpm.voltage_response_time = R600_VOLTAGERESPONSETIME_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7451  	if (adev->pm.dpm.backbias_response_time == 0)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7452  		adev->pm.dpm.backbias_response_time = R600_BACKBIASRESPONSETIME_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7453  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7454  	ret = amdgpu_atombios_get_clock_dividers(adev, COMPUTE_ENGINE_PLL_PARAM,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7455  					     0, false, &dividers);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7456  	if (ret)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7457  		pi->ref_div = dividers.ref_div + 1;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7458  	else
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7459  		pi->ref_div = R600_REFERENCEDIVIDER_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7460  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7461  	eg_pi->smu_uvd_hs = false;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7462  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7463  	pi->mclk_strobe_mode_threshold = 40000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7464  	if (si_is_special_1gb_platform(adev))
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7465  		pi->mclk_stutter_mode_threshold = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7466  	else
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7467  		pi->mclk_stutter_mode_threshold = pi->mclk_strobe_mode_threshold;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7468  	pi->mclk_edc_enable_threshold = 40000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7469  	eg_pi->mclk_edc_wr_enable_threshold = 40000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7470  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7471  	ni_pi->mclk_rtt_mode_threshold = eg_pi->mclk_edc_wr_enable_threshold;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7472  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7473  	pi->voltage_control =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7474  		amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_VDDC,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7475  					    VOLTAGE_OBJ_GPIO_LUT);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7476  	if (!pi->voltage_control) {
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7477  		si_pi->voltage_control_svi2 =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7478  			amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_VDDC,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7479  						    VOLTAGE_OBJ_SVID2);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7480  		if (si_pi->voltage_control_svi2)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7481  			amdgpu_atombios_get_svi2_info(adev, SET_VOLTAGE_TYPE_ASIC_VDDC,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7482  						  &si_pi->svd_gpio_id, &si_pi->svc_gpio_id);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7483  	}
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7484  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7485  	pi->mvdd_control =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7486  		amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_MVDDC,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7487  					    VOLTAGE_OBJ_GPIO_LUT);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7488  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7489  	eg_pi->vddci_control =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7490  		amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_VDDCI,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7491  					    VOLTAGE_OBJ_GPIO_LUT);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7492  	if (!eg_pi->vddci_control)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7493  		si_pi->vddci_control_svi2 =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7494  			amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_VDDCI,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7495  						    VOLTAGE_OBJ_SVID2);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7496  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7497  	si_pi->vddc_phase_shed_control =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7498  		amdgpu_atombios_is_voltage_gpio(adev, SET_VOLTAGE_TYPE_ASIC_VDDC,
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7499  					    VOLTAGE_OBJ_PHASE_LUT);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7500  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7501  	rv770_get_engine_memory_ss(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7502  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7503  	pi->asi = RV770_ASI_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7504  	pi->pasi = CYPRESS_HASI_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7505  	pi->vrc = SISLANDS_VRC_DFLT;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7506  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7507  	pi->gfx_clock_gating = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7508  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7509  	eg_pi->sclk_deep_sleep = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7510  	si_pi->sclk_deep_sleep_above_low = false;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7511  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7512  	if (adev->pm.int_thermal_type != THERMAL_TYPE_NONE)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7513  		pi->thermal_protection = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7514  	else
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7515  		pi->thermal_protection = false;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7516  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7517  	eg_pi->dynamic_ac_timing = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7518  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7519  	eg_pi->light_sleep = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7520  #if defined(CONFIG_ACPI)
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7521  	eg_pi->pcie_performance_request =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7522  		amdgpu_acpi_is_pcie_performance_request_supported(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7523  #else
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7524  	eg_pi->pcie_performance_request = false;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7525  #endif
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7526  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7527  	si_pi->sram_end = SMC_RAM_END;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7528  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7529  	adev->pm.dpm.dyn_state.mclk_sclk_ratio = 4;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7530  	adev->pm.dpm.dyn_state.sclk_mclk_delta = 15000;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7531  	adev->pm.dpm.dyn_state.vddc_vddci_delta = 200;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7532  	adev->pm.dpm.dyn_state.valid_sclk_values.count = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7533  	adev->pm.dpm.dyn_state.valid_sclk_values.values = NULL;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7534  	adev->pm.dpm.dyn_state.valid_mclk_values.count = 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7535  	adev->pm.dpm.dyn_state.valid_mclk_values.values = NULL;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7536  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7537  	si_initialize_powertune_defaults(adev);
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7538  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7539  	/* make sure dc limits are valid */
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7540  	if ((adev->pm.dpm.dyn_state.max_clock_voltage_on_dc.sclk == 0) ||
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7541  	    (adev->pm.dpm.dyn_state.max_clock_voltage_on_dc.mclk == 0))
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7542  		adev->pm.dpm.dyn_state.max_clock_voltage_on_dc =
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7543  			adev->pm.dpm.dyn_state.max_clock_voltage_on_ac;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7544  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7545  	si_pi->fan_ctrl_is_in_default_mode = true;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7546  
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7547  	return 0;
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7548  }
-841686df9f7d29 drivers/gpu/drm/amd/amdgpu/si_dpm.c       Maruthi Bayyavarapu 2016-08-01  7549  
-
-:::::: The code at line 7386 was first introduced by commit
-:::::: 841686df9f7d2942cfd94d024b8591fa3f74ef7c drm/amdgpu: add SI DPM support (v4)
-
-:::::: TO: Maruthi Bayyavarapu <maruthi.bayyavarapu@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+   151	
+   152	/*
+   153	 * Identical to the above, except that we avoid tasks which we can't lock, to
+   154	 * avoid deadlocks when called from an interrupt handler.
+   155	 */
+ > 156	struct task_struct *find_trylock_task_mm(struct task_struct *p)
+   157	{
+   158		struct task_struct *t;
+   159	
+   160		rcu_read_lock();
+   161	
+   162		for_each_thread(p, t) {
+   163			if (!task_trylock(t))
+   164				continue;
+   165			if (likely(t->mm))
+   166				goto found;
+   167			task_unlock(t);
+   168		}
+   169		t = NULL;
+   170	found:
+   171		rcu_read_unlock();
+   172	
+   173		return t;
+   174	}
+   175	
 
 -- 
 0-DAY CI Kernel Test Service
