@@ -1,120 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A6F21CF6
-	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 18:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1686335473;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GZg6k39/I9bDIXRSYGxxovR42low8taiT22Zr5UCULU=;
-	b=KKjvv2NzFVzQYPUaD19HN0GFpFDGcP4gZ1u9zlhgmw4RVVoxMlxdESSf6YCabUXvbArYSy
-	/nkpaB57Mtm6b8UXh+vTBRtlqZtAkxU+qrEJRQ1rcxXgOPtef9vCj7HNjhkMmVzwzLzRQ/
-	KQP9AbtW9wd9gCW5zBf/iU4nVTe3MjU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-jEVVhi2DPfOvROGamwi-cg-1; Fri, 09 Jun 2023 14:31:12 -0400
-X-MC-Unique: jEVVhi2DPfOvROGamwi-cg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 589F93C0CF0D
-	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 18:31:12 +0000 (UTC)
-Received: from [172.64.0.113] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 45DEA2166B25;
-	Fri,  9 Jun 2023 18:31:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 127 of 346): Test report for master
- (6.4.0-rc5, mainline.kernel.org-clang, 33f2b578)
-Date: Fri, 09 Jun 2023 18:31:12 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FAF408FD;
+	Fri,  9 Jun 2023 19:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686338805; x=1717874805;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T3G1dKhXZoZ0L+fduIGltxF4o4BVMOKjo0mz8e9pY0A=;
+  b=ffqYC2a5h78TGn5JL7JwnXKuZszlx5MK5MbSjeTFTEigJnQ2+bNZgZsu
+   O91a78+VcnIYhALR1WzYGsG+lVdFE2AE6xFm0IZLABwshEljHpFt002K3
+   ZMtba6cSeNKBGlfaddno4Yz+ArAbg74u5lwuPQc8pF5ilSCIeSzprqi/g
+   KS1uK+qht0iGQk9Hg95y5eTovOp78IJ/2plCwSYC5P1hcsFoS8SZRxmS4
+   nuJSTxgWGEVUo4bcNjQqJ81QQXMkLjD8UKzAcp98nSw4FNFSTFxthyHmp
+   /hkUJgMbECGzFh5vt/xjtCZiqqJ12/vG7gsckNLx7yOn3JzB16RzxXixe
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355161996"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="355161996"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 12:26:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="800318730"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="800318730"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2023 12:26:42 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7hkv-0009KW-0t;
+	Fri, 09 Jun 2023 19:26:41 +0000
+Date: Sat, 10 Jun 2023 03:26:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hemant Kumar <hemantk@codeaurora.org>,
+	Alex Elder <elder@linaro.org>, Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-5.15.y 9400/9999] drivers/bus/mhi/host/pm.c:733:6:
+ warning: stack frame size (2768) exceeds limit (2048) in 'mhi_pm_st_worker'
+Message-ID: <202306100303.KZViMwBJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <67073.123060914311201485@us-mta-175.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Manivannan,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+First bad commit (maybe != root cause):
 
-Tested-by: CKI Project <cki-project@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   7349e40704a0209a2af8b37fa876322209de9684
+commit: 9fbf10148f31a63b6d8c2b0e56cb97eb173d600b [9400/9999] bus: mhi: Move host MHI code to "host" directory
+config: riscv-randconfig-r001-20230609 (https://download.01.org/0day-ci/archive/20230610/202306100303.KZViMwBJ-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=9fbf10148f31a63b6d8c2b0e56cb97eb173d600b
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 9fbf10148f31a63b6d8c2b0e56cb97eb173d600b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/bus/mhi/host/
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-06-09' of git://anongit.freed=
-esktop.org/drm/drm
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306100303.KZViMwBJ-lkp@intel.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/91929
+All warnings (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Internal Network Outage
-            URL: https://docs.cki-project.org/failures/#internal-network-ou=
-tage
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/bus/mhi/host/pm.c:733:6: warning: stack frame size (2768) exceeds limit (2048) in 'mhi_pm_st_worker' [-Wframe-larger-than]
+   void mhi_pm_st_worker(struct work_struct *work)
+        ^
+   1 warning generated.
 
 
+vim +/mhi_pm_st_worker +733 drivers/bus/mhi/host/pm.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  731  
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  732  /* Device State Transition worker */
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20 @733  void mhi_pm_st_worker(struct work_struct *work)
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  734  {
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  735  	struct state_transition *itr, *tmp;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  736  	LIST_HEAD(head);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  737  	struct mhi_controller *mhi_cntrl = container_of(work,
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  738  							struct mhi_controller,
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  739  							st_worker);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  740  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  741  
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  742  	spin_lock_irq(&mhi_cntrl->transition_lock);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  743  	list_splice_tail_init(&mhi_cntrl->transition_list, &head);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  744  	spin_unlock_irq(&mhi_cntrl->transition_lock);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  745  
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  746  	list_for_each_entry_safe(itr, tmp, &head, node) {
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  747  		list_del(&itr->node);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  748  		dev_dbg(dev, "Handling state transition: %s\n",
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  749  			TO_DEV_STATE_TRANS_STR(itr->state));
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  750  
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  751  		switch (itr->state) {
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  752  		case DEV_ST_TRANSITION_PBL:
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  753  			write_lock_irq(&mhi_cntrl->pm_lock);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  754  			if (MHI_REG_ACCESS_VALID(mhi_cntrl->pm_state))
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  755  				mhi_cntrl->ee = mhi_get_exec_env(mhi_cntrl);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  756  			write_unlock_irq(&mhi_cntrl->pm_lock);
+560e3a045961ed drivers/bus/mhi/core/pm.c Bhaumik Bhatt         2020-05-21  757  			mhi_fw_load_handler(mhi_cntrl);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  758  			break;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  759  		case DEV_ST_TRANSITION_SBL:
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  760  			write_lock_irq(&mhi_cntrl->pm_lock);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  761  			mhi_cntrl->ee = MHI_EE_SBL;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  762  			write_unlock_irq(&mhi_cntrl->pm_lock);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  763  			/*
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  764  			 * The MHI devices are only created when the client
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  765  			 * device switches its Execution Environment (EE) to
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  766  			 * either SBL or AMSS states
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  767  			 */
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  768  			mhi_create_devices(mhi_cntrl);
+4884362f6977fc drivers/bus/mhi/core/pm.c Bhaumik Bhatt         2021-02-24  769  			if (mhi_cntrl->fbc_download)
+4884362f6977fc drivers/bus/mhi/core/pm.c Bhaumik Bhatt         2021-02-24  770  				mhi_download_amss_image(mhi_cntrl);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  771  			break;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  772  		case DEV_ST_TRANSITION_MISSION_MODE:
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  773  			mhi_pm_mission_mode_transition(mhi_cntrl);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  774  			break;
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  775  		case DEV_ST_TRANSITION_FP:
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  776  			write_lock_irq(&mhi_cntrl->pm_lock);
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  777  			mhi_cntrl->ee = MHI_EE_FP;
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  778  			write_unlock_irq(&mhi_cntrl->pm_lock);
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  779  			mhi_create_devices(mhi_cntrl);
+66ac7985b2af31 drivers/bus/mhi/core/pm.c Carl Yin              2021-03-29  780  			break;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  781  		case DEV_ST_TRANSITION_READY:
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  782  			mhi_ready_state_transition(mhi_cntrl);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  783  			break;
+bc7ccce5a5192c drivers/bus/mhi/core/pm.c Hemant Kumar          2020-05-21  784  		case DEV_ST_TRANSITION_SYS_ERR:
+556bbb442bbb44 drivers/bus/mhi/core/pm.c Bhaumik Bhatt         2020-11-09  785  			mhi_pm_sys_error_transition(mhi_cntrl);
+bc7ccce5a5192c drivers/bus/mhi/core/pm.c Hemant Kumar          2020-05-21  786  			break;
+3c1bd0047124f5 drivers/bus/mhi/core/pm.c Hemant Kumar          2020-05-21  787  		case DEV_ST_TRANSITION_DISABLE:
+a03c7a86e12721 drivers/bus/mhi/core/pm.c Bhaumik Bhatt         2020-11-09  788  			mhi_pm_disable_transition(mhi_cntrl);
+3c1bd0047124f5 drivers/bus/mhi/core/pm.c Hemant Kumar          2020-05-21  789  			break;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  790  		default:
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  791  			break;
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  792  		}
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  793  		kfree(itr);
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  794  	}
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  795  }
+a6e2e3522f2914 drivers/bus/mhi/core/pm.c Manivannan Sadhasivam 2020-02-20  796  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 733 was first introduced by commit
+:::::: a6e2e3522f29141b95c1ef8580c665a3582b3e66 bus: mhi: core: Add support for PM state transitions
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
