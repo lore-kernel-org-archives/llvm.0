@@ -1,45 +1,46 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BD218C34;
-	Fri,  9 Jun 2023 20:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D77118C34;
+	Fri,  9 Jun 2023 20:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686341387; x=1717877387;
+  t=1686341389; x=1717877389;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Uxfrul5tjkZFnTPfH9Hqt2+LtaPUUZwxG8+TTjZ3+Sc=;
-  b=EXbDKrLkee9acFK9GAnREI6ba81GtukTR/1oN0Qi+CvZsrJdpnPsObke
-   bJ/Tu2S258rOaJY21gP8QAU/s8FFLqibYSKwF/lQ2FjYh+9TVAKiM3VIb
-   ju053b7KHKTIwKQwCmGMafGo3SvP9FynShemLWdoCX1T5f6bDMb5mM6HR
-   lxNiKXrP2sla7+R6X9Pxuo63mEe0j3YAsu9XhnEr4O8fCxkMzsO2qoY2Q
-   5BdLcKXEJkY6fWvfb90dUDhiQbUmqa8GfLnpZdgcFS/lErEQ0rFHoLK0M
-   qDf67G053zV+E8y+BL4NUXeJLLdElp9kj/wjXovMC2j5nA/KYWP9lTHRY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355169048"
+  bh=ddi+tWw+RO5Vunrujbki4YcMhgJ/XzjlgAgXc0jyQjs=;
+  b=TveI3QnWTlFNsbNBnOcg2F7HfSjGpFPw4auQ6CdaV5nn5Aqj7Lf6fH4t
+   DZQcJIOwc4sSQuFiBd1fzheWSYZJmpcqubU2ybjmeEm/mBY0MPNweSmng
+   rGLC0x8ZideLSoflWEpGBqIiQc/xrJthQPJd2kBFUZoxWGeuROdbvfbIi
+   b/RUUQneF1VOXSuxHePNdhvSZpJJbOkjGIUyk2xFee19EUxsM4bjjzmtb
+   Q51Mat7DYJJgjt/ld1DAWk2/dmdT9EbQkphyfZhxQOWm15/QpCPJza4IH
+   ZvOqGsrFTJSIr1dz3Y6pMxon92bdf6mDY0/5tIaxydvK2JxeUMqd8dDBj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355169052"
 X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="355169048"
+   d="scan'208";a="355169052"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 13:09:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="704667798"
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="704667797"
 X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="704667798"
+   d="scan'208";a="704667797"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 09 Jun 2023 13:09:44 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q7iQZ-0009Lx-0s;
+	id 1q7iQZ-0009Lv-0h;
 	Fri, 09 Jun 2023 20:09:43 +0000
-Date: Sat, 10 Jun 2023 04:09:18 +0800
+Date: Sat, 10 Jun 2023 04:09:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Stanley Yang <Stanley.Yang@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, arm@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [soc:soc/arm 14/16] drivers/input/touchscreen/ads7846.c:1126:17:
- warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'const
- void *'
-Message-ID: <202306100442.jStknDT1-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Likun Gao <Likun.Gao@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:511:12: warning: stack frame
+ size (3904) exceeds limit (2048) in 'sdma_v6_0_gfx_resume'
+Message-ID: <202306100454.5IAHFgxo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,157 +50,194 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc/arm
-head:   9a0e0c5957ff37147253796fbf5dfd68b307af58
-commit: 8f7913c04f6a7b90bcf998ece17395d7090f6d44 [14/16] Input: ads7846 - Fix usage of match data
-config: s390-buildonly-randconfig-r002-20230608 (https://download.01.org/0day-ci/archive/20230610/202306100442.jStknDT1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dbfa18c5d7695766f24c0c140204e1f8c921fb95
+commit: 61a039d1757b148717b9e10ea0cd30e5da6cf919 drm/amdgpu: add initial support for sdma v6.0
+date:   1 year, 1 month ago
+config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230610/202306100454.5IAHFgxo-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=8f7913c04f6a7b90bcf998ece17395d7090f6d44
-        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-        git fetch --no-tags soc soc/arm
-        git checkout 8f7913c04f6a7b90bcf998ece17395d7090f6d44
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61a039d1757b148717b9e10ea0cd30e5da6cf919
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 61a039d1757b148717b9e10ea0cd30e5da6cf919
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/input/touchscreen/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/ lib/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100442.jStknDT1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306100454.5IAHFgxo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/input/touchscreen/ads7846.c:29:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/input/touchscreen/ads7846.c:29:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/input/touchscreen/ads7846.c:29:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/input/touchscreen/ads7846.c:1126:17: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'const void *' [-Wvoid-pointer-to-int-cast]
-    1126 |         pdata->model = (u32)device_get_match_data(dev);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   13 warnings generated.
+>> drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:511:12: warning: stack frame size (3904) exceeds limit (2048) in 'sdma_v6_0_gfx_resume' [-Wframe-larger-than]
+   static int sdma_v6_0_gfx_resume(struct amdgpu_device *adev)
+              ^
+   1 warning generated.
 
 
-vim +1126 drivers/input/touchscreen/ads7846.c
+vim +/sdma_v6_0_gfx_resume +511 drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
 
-  1116	
-  1117	static const struct ads7846_platform_data *ads7846_get_props(struct device *dev)
-  1118	{
-  1119		struct ads7846_platform_data *pdata;
-  1120		u32 value;
-  1121	
-  1122		pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-  1123		if (!pdata)
-  1124			return ERR_PTR(-ENOMEM);
-  1125	
-> 1126		pdata->model = (u32)device_get_match_data(dev);
-  1127	
-  1128		device_property_read_u16(dev, "ti,vref-delay-usecs",
-  1129					 &pdata->vref_delay_usecs);
-  1130		device_property_read_u16(dev, "ti,vref-mv", &pdata->vref_mv);
-  1131		pdata->keep_vref_on = device_property_read_bool(dev, "ti,keep-vref-on");
-  1132	
-  1133		pdata->swap_xy = device_property_read_bool(dev, "ti,swap-xy");
-  1134	
-  1135		device_property_read_u16(dev, "ti,settle-delay-usec",
-  1136					 &pdata->settle_delay_usecs);
-  1137		device_property_read_u16(dev, "ti,penirq-recheck-delay-usecs",
-  1138					 &pdata->penirq_recheck_delay_usecs);
-  1139	
-  1140		device_property_read_u16(dev, "ti,x-plate-ohms", &pdata->x_plate_ohms);
-  1141		device_property_read_u16(dev, "ti,y-plate-ohms", &pdata->y_plate_ohms);
-  1142	
-  1143		device_property_read_u16(dev, "ti,x-min", &pdata->x_min);
-  1144		device_property_read_u16(dev, "ti,y-min", &pdata->y_min);
-  1145		device_property_read_u16(dev, "ti,x-max", &pdata->x_max);
-  1146		device_property_read_u16(dev, "ti,y-max", &pdata->y_max);
-  1147	
-  1148		/*
-  1149		 * touchscreen-max-pressure gets parsed during
-  1150		 * touchscreen_parse_properties()
-  1151		 */
-  1152		device_property_read_u16(dev, "ti,pressure-min", &pdata->pressure_min);
-  1153		if (!device_property_read_u32(dev, "touchscreen-min-pressure", &value))
-  1154			pdata->pressure_min = (u16) value;
-  1155		device_property_read_u16(dev, "ti,pressure-max", &pdata->pressure_max);
-  1156	
-  1157		device_property_read_u16(dev, "ti,debounce-max", &pdata->debounce_max);
-  1158		if (!device_property_read_u32(dev, "touchscreen-average-samples", &value))
-  1159			pdata->debounce_max = (u16) value;
-  1160		device_property_read_u16(dev, "ti,debounce-tol", &pdata->debounce_tol);
-  1161		device_property_read_u16(dev, "ti,debounce-rep", &pdata->debounce_rep);
-  1162	
-  1163		device_property_read_u32(dev, "ti,pendown-gpio-debounce",
-  1164				     &pdata->gpio_pendown_debounce);
-  1165	
-  1166		pdata->wakeup = device_property_read_bool(dev, "wakeup-source") ||
-  1167				device_property_read_bool(dev, "linux,wakeup");
-  1168	
-  1169		return pdata;
-  1170	}
-  1171	
+   502	
+   503	/**
+   504	 * sdma_v6_0_gfx_resume - setup and start the async dma engines
+   505	 *
+   506	 * @adev: amdgpu_device pointer
+   507	 *
+   508	 * Set up the gfx DMA ring buffers and enable them.
+   509	 * Returns 0 for success, error for failure.
+   510	 */
+ > 511	static int sdma_v6_0_gfx_resume(struct amdgpu_device *adev)
+   512	{
+   513		struct amdgpu_ring *ring;
+   514		u32 rb_cntl, ib_cntl;
+   515		u32 rb_bufsz;
+   516		u32 doorbell;
+   517		u32 doorbell_offset;
+   518		u32 temp;
+   519		u64 wptr_gpu_addr;
+   520		int i, r;
+   521	
+   522		for (i = 0; i < adev->sdma.num_instances; i++) {
+   523			ring = &adev->sdma.instance[i].ring;
+   524	
+   525			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_SEM_WAIT_FAIL_TIMER_CNTL), 0);
+   526	
+   527			/* Set ring buffer size in dwords */
+   528			rb_bufsz = order_base_2(ring->ring_size / 4);
+   529			rb_cntl = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_CNTL));
+   530			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, RB_SIZE, rb_bufsz);
+   531	#ifdef __BIG_ENDIAN
+   532			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, RB_SWAP_ENABLE, 1);
+   533			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL,
+   534						RPTR_WRITEBACK_SWAP_ENABLE, 1);
+   535	#endif
+   536			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, RB_PRIV, 1);
+   537			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_CNTL), rb_cntl);
+   538	
+   539			/* Initialize the ring buffer's read and write pointers */
+   540			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_RPTR), 0);
+   541			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_RPTR_HI), 0);
+   542			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR), 0);
+   543			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR_HI), 0);
+   544	
+   545			/* setup the wptr shadow polling */
+   546			wptr_gpu_addr = ring->wptr_gpu_addr;
+   547			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR_POLL_ADDR_LO),
+   548			       lower_32_bits(wptr_gpu_addr));
+   549			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR_POLL_ADDR_HI),
+   550			       upper_32_bits(wptr_gpu_addr));
+   551	
+   552			/* set the wb address whether it's enabled or not */
+   553			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_RPTR_ADDR_HI),
+   554			       upper_32_bits(ring->rptr_gpu_addr) & 0xFFFFFFFF);
+   555			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_RPTR_ADDR_LO),
+   556			       lower_32_bits(ring->rptr_gpu_addr) & 0xFFFFFFFC);
+   557	
+   558			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, RPTR_WRITEBACK_ENABLE, 1);
+   559			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, WPTR_POLL_ENABLE, 1);
+   560			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, F32_WPTR_POLL_ENABLE, 1);
+   561	
+   562			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_BASE), ring->gpu_addr >> 8);
+   563			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_BASE_HI), ring->gpu_addr >> 40);
+   564	
+   565			ring->wptr = 0;
+   566	
+   567			/* before programing wptr to a less value, need set minor_ptr_update first */
+   568			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_MINOR_PTR_UPDATE), 1);
+   569	
+   570			if (!amdgpu_sriov_vf(adev)) { /* only bare-metal use register write for wptr */
+   571				WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR), lower_32_bits(ring->wptr) << 2);
+   572				WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_WPTR_HI), upper_32_bits(ring->wptr) << 2);
+   573			}
+   574	
+   575			doorbell = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_DOORBELL));
+   576			doorbell_offset = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_DOORBELL_OFFSET));
+   577	
+   578			if (ring->use_doorbell) {
+   579				doorbell = REG_SET_FIELD(doorbell, SDMA0_QUEUE0_DOORBELL, ENABLE, 1);
+   580				doorbell_offset = REG_SET_FIELD(doorbell_offset, SDMA0_QUEUE0_DOORBELL_OFFSET,
+   581						OFFSET, ring->doorbell_index);
+   582			} else {
+   583				doorbell = REG_SET_FIELD(doorbell, SDMA0_QUEUE0_DOORBELL, ENABLE, 0);
+   584			}
+   585			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_DOORBELL), doorbell);
+   586			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_DOORBELL_OFFSET), doorbell_offset);
+   587	
+   588			if (i == 0)
+   589				adev->nbio.funcs->sdma_doorbell_range(adev, i, ring->use_doorbell,
+   590							      ring->doorbell_index,
+   591							      adev->doorbell_index.sdma_doorbell_range * adev->sdma.num_instances);
+   592	
+   593			if (amdgpu_sriov_vf(adev))
+   594				sdma_v6_0_ring_set_wptr(ring);
+   595	
+   596			/* set minor_ptr_update to 0 after wptr programed */
+   597			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_MINOR_PTR_UPDATE), 0);
+   598	
+   599			/* Set up RESP_MODE to non-copy addresses */
+   600			temp = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_UTCL1_CNTL));
+   601			temp = REG_SET_FIELD(temp, SDMA0_UTCL1_CNTL, RESP_MODE, 3);
+   602			temp = REG_SET_FIELD(temp, SDMA0_UTCL1_CNTL, REDO_DELAY, 9);
+   603			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_UTCL1_CNTL), temp);
+   604	
+   605			/* program default cache read and write policy */
+   606			temp = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_UTCL1_PAGE));
+   607			/* clean read policy and write policy bits */
+   608			temp &= 0xFF0FFF;
+   609			temp |= ((CACHE_READ_POLICY_L2__DEFAULT << 12) |
+   610				 (CACHE_WRITE_POLICY_L2__DEFAULT << 14) |
+   611				 SDMA0_UTCL1_PAGE__LLC_NOALLOC_MASK);
+   612			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_UTCL1_PAGE), temp);
+   613	
+   614			if (!amdgpu_sriov_vf(adev)) {
+   615				/* unhalt engine */
+   616				temp = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_F32_CNTL));
+   617				temp = REG_SET_FIELD(temp, SDMA0_F32_CNTL, HALT, 0);
+   618				temp = REG_SET_FIELD(temp, SDMA0_F32_CNTL, TH1_RESET, 0);
+   619				WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_F32_CNTL), temp);
+   620			}
+   621	
+   622			/* enable DMA RB */
+   623			rb_cntl = REG_SET_FIELD(rb_cntl, SDMA0_QUEUE0_RB_CNTL, RB_ENABLE, 1);
+   624			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_RB_CNTL), rb_cntl);
+   625	
+   626			ib_cntl = RREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_IB_CNTL));
+   627			ib_cntl = REG_SET_FIELD(ib_cntl, SDMA0_QUEUE0_IB_CNTL, IB_ENABLE, 1);
+   628	#ifdef __BIG_ENDIAN
+   629			ib_cntl = REG_SET_FIELD(ib_cntl, SDMA0_QUEUE0_IB_CNTL, IB_SWAP_ENABLE, 1);
+   630	#endif
+   631			/* enable DMA IBs */
+   632			WREG32_SOC15_IP(GC, sdma_v6_0_get_reg_offset(adev, i, regSDMA0_QUEUE0_IB_CNTL), ib_cntl);
+   633	
+   634			ring->sched.ready = true;
+   635	
+   636			if (amdgpu_sriov_vf(adev)) { /* bare-metal sequence doesn't need below to lines */
+   637				sdma_v6_0_ctx_switch_enable(adev, true);
+   638				sdma_v6_0_enable(adev, true);
+   639			}
+   640	
+   641			r = amdgpu_ring_test_helper(ring);
+   642			if (r) {
+   643				ring->sched.ready = false;
+   644				return r;
+   645			}
+   646	
+   647			if (adev->mman.buffer_funcs_ring == ring)
+   648				amdgpu_ttm_set_buffer_funcs_status(adev, true);
+   649		}
+   650	
+   651		return 0;
+   652	}
+   653	
 
 -- 
 0-DAY CI Kernel Test Service
