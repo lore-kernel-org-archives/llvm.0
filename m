@@ -1,123 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C68D1FD5
-	for <llvm@lists.linux.dev>; Sat, 10 Jun 2023 09:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1686389477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=v/jmEHQZnEUmNz8WhSw/SoOAT8STcPQo5bn4WrPm1hc=;
-	b=TJ5pj8wTaBFh9E4+j3PD30uU404gcwCSzMdp/dUl64+WYpT+VRi0vrwJykbU6LUk2jyH0y
-	ZeLOJ7ZD/LriNwWvOcC7Zo9ZZHE4S4MdhWbA//VOrsdE4lMdjFDFhIMHfu/fr/41+yKVwR
-	2MmoBkH3K9v7MQO3NZlxfX9ocWXpDIY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-601-l9jlUA5POsqqX-chlxo3YQ-1; Sat, 10 Jun 2023 05:31:15 -0400
-X-MC-Unique: l9jlUA5POsqqX-chlxo3YQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0174802355
-	for <llvm@lists.linux.dev>; Sat, 10 Jun 2023 09:31:15 +0000 (UTC)
-Received: from [172.64.0.113] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 885E010BDF;
-	Sat, 10 Jun 2023 09:31:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 17 of 346): Test report for master
- (6.4.0-rc5, mainline.kernel.org-clang, 64569520)
-Date: Sat, 10 Jun 2023 09:31:15 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64277C2E6;
+	Sat, 10 Jun 2023 11:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686395553; x=1717931553;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pf7/McJhbL/163MYUPHbW0LK47faUt40Z5w2ExzAwsU=;
+  b=jnSNLPciLsLF5P9aT225Bv4qCOnmtDkUWDs+LeUin8tQDqd0Kt8MNOQq
+   TYSjAATE7rA3oMP8OOeBq/DpMG/gJMhF81mBrz1YHqGNDQsWCIZ/AehoU
+   D8agVrduYsFk/ImzPJQep8kndVxGbbOR84AE+03RMPwytHIQSvJf9d1TT
+   tpVGx22LsTRlZDlPDxR2415LEOKyYtDsfTUc8JpIKQVC0fw8tTBIPiAyw
+   zpdMLBw4b08HoHU0JEEd2vEWrX9a9UaZ9assGvmk1HeA7LURo1wiwWk+I
+   /SESh8G7gTNbrW86c3sMKs9FHhyTOtxnwrzpZvzFsarbDgopLpsJQtZor
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="361117763"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="361117763"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 04:12:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="688044840"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="688044840"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 04:12:31 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7wWE-000A2f-2c;
+	Sat, 10 Jun 2023 11:12:30 +0000
+Date: Sat, 10 Jun 2023 19:11:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:core/guards2 12/58] kernel/sched/core.c:5667:7: error:
+ call to undeclared function 'cpu_is_online'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202306101919.Z26XbX9g-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <59093.123061005311500161@us-mta-601.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/guards2
+head:   7e38bc75e33efb3722a7bfeb15207e61819ca3c8
+commit: b8629ae9c880d8e19621e5c7866d217d98fc5288 [12/58] sched: Simplify sched_tick_remote()
+config: arm-randconfig-r046-20230610 (https://download.01.org/0day-ci/archive/20230610/202306101919.Z26XbX9g-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=b8629ae9c880d8e19621e5c7866d217d98fc5288
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue core/guards2
+        git checkout b8629ae9c880d8e19621e5c7866d217d98fc5288
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306101919.Z26XbX9g-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'block-6.4-2023-06-09' of git://git.kernel.dk=
-/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/92092
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+>> kernel/sched/core.c:5667:7: error: call to undeclared function 'cpu_is_online'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   if (cpu_is_online(cpu)) {
+                       ^
+   kernel/sched/core.c:5667:7: note: did you mean 'cpu_online'?
+   include/linux/cpumask.h:1080:20: note: 'cpu_online' declared here
+   static inline bool cpu_online(unsigned int cpu)
+                      ^
+   kernel/sched/core.c:6741:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
+   asmlinkage __visible void __sched schedule_user(void)
+                                     ^
+   kernel/sched/core.c:6741:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void __sched schedule_user(void)
+                        ^
+                        static 
+   1 warning and 1 error generated.
 
 
+vim +/cpu_is_online +5667 kernel/sched/core.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  5647	
+  5648	static void sched_tick_remote(struct work_struct *work)
+  5649	{
+  5650		struct delayed_work *dwork = to_delayed_work(work);
+  5651		struct tick_work *twork = container_of(dwork, struct tick_work, work);
+  5652		int cpu = twork->cpu;
+  5653		struct rq *rq = cpu_rq(cpu);
+  5654		int os;
+  5655	
+  5656		/*
+  5657		 * Handle the tick only if it appears the remote CPU is running in full
+  5658		 * dynticks mode. The check is racy by nature, but missing a tick or
+  5659		 * having one too much is no big deal because the scheduler tick updates
+  5660		 * statistics and checks timeslices in a time-independent way, regardless
+  5661		 * of when exactly it is running.
+  5662		 */
+  5663		if (tick_nohz_tick_stopped_cpu(cpu)) {
+  5664			guard(rq_lock_irq)(rq);
+  5665			struct task_struct *curr = rq->curr;
+  5666	
+> 5667			if (cpu_is_online(cpu)) {
+  5668				update_rq_clock(rq);
+  5669	
+  5670				if (!is_idle_task(curr)) {
+  5671					/*
+  5672					 * Make sure the next tick runs within a
+  5673					 * reasonable amount of time.
+  5674					 */
+  5675					u64 delta = rq_clock_task(rq) - curr->se.exec_start;
+  5676					WARN_ON_ONCE(delta > (u64)NSEC_PER_SEC * 3);
+  5677				}
+  5678				curr->sched_class->task_tick(rq, curr, 0);
+  5679	
+  5680				calc_load_nohz_remote(rq);
+  5681			}
+  5682		}
+  5683	
+  5684		/*
+  5685		 * Run the remote tick once per second (1Hz). This arbitrary
+  5686		 * frequency is large enough to avoid overload but short enough
+  5687		 * to keep scheduler internal stats reasonably up to date.  But
+  5688		 * first update state to reflect hotplug activity if required.
+  5689		 */
+  5690		os = atomic_fetch_add_unless(&twork->state, -1, TICK_SCHED_REMOTE_RUNNING);
+  5691		WARN_ON_ONCE(os == TICK_SCHED_REMOTE_OFFLINE);
+  5692		if (os == TICK_SCHED_REMOTE_RUNNING)
+  5693			queue_delayed_work(system_unbound_wq, dwork, HZ);
+  5694	}
+  5695	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
