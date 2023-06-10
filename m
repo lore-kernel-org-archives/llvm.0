@@ -1,40 +1,45 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8338836;
-	Sat, 10 Jun 2023 08:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gWKqc15+EXQAtpyqltNf7kL8HfK2rfuZrC722LYUk6k=; b=MXxUg3LkTPXrUiF2SyIoRW14lG
-	+OkA13KqE53DCJcWzOiMXLjMaROnNjlfGgWhF92sdXKCGA1vDbzlFBgpj+5teHBEzkeAPG+aPVxzq
-	IQQmelRUsLH8DLmsEpFg6Lr7rwEHxaQ1HUDa2c0gbfe4mX86Qe3K+9DbSnG+QuSc0ltCu+mfuiESP
-	tKtI3jJm670DNi8NklWw+/cLUaGUPH7vEz5d+7WzU9j91hc0AYD/3x7O3z1FYV1okZjAgKr0Cc3x5
-	s3tdNrwBE0m+UUBTI242pJy1Q3rgFr/YtGMMlzQSvayBZwM99fSsB2DCyr8f4H8Msb4hBwgU0rKyF
-	Yv6ECCwQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q7tpO-007sOR-0q;
-	Sat, 10 Jun 2023 08:20:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A9C423001AE;
-	Sat, 10 Jun 2023 10:20:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8851D243C7B63; Sat, 10 Jun 2023 10:20:05 +0200 (CEST)
-Date: Sat, 10 Jun 2023 10:20:05 +0200
-From: Peter Zijlstra <peterz@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C688BBA5E
+	for <llvm@lists.linux.dev>; Sat, 10 Jun 2023 08:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686385596;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GvArk9hcrOiQbHygnyJk41fy5YrA+5LXHt7YDXtAp2Y=;
+	b=ISyWSh1CWkLwEBnpioC75xzVi1zyc/sVye3xYAi4P4OdY/97wUZQnAOptEEDWdSFPqNRC6
+	jxrTzgzYiTf/0tizPE22NUlmAr6/HslV+6Gvnn8SV3yz8qYoTKjYIurM1nxlg6YVESnyoe
+	hFgStfVwCM+MFOFvxFhZMkdcbSpan6Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-AEWV5vKOPumHdPA80TVoSw-1; Sat, 10 Jun 2023 04:26:30 -0400
+X-MC-Unique: AEWV5vKOPumHdPA80TVoSw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 150CF8002BF;
+	Sat, 10 Jun 2023 08:26:29 +0000 (UTC)
+Received: from localhost (ovpn-12-39.pek2.redhat.com [10.72.12.39])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id AD8AAC0004B;
+	Sat, 10 Jun 2023 08:26:27 +0000 (UTC)
+Date: Sat, 10 Jun 2023 16:26:21 +0800
+From: Baoquan He <bhe@redhat.com>
 To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [peterz-queue:core/guards 37/58] kernel/events/core.c:4815:4:
- error: cannot jump from this asm goto statement to one of its possible
- targets
-Message-ID: <20230610082005.GB1370249@hirez.programming.kicks-ass.net>
-References: <202306101109.PqwXuQIY-lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+	hch@lst.de, rppt@kernel.org, willy@infradead.org,
+	agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+	schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+	deller@gmx.de, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
+References: <20230609075528.9390-3-bhe@redhat.com>
+ <202306091859.NhlW2nny-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,120 +48,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306101109.PqwXuQIY-lkp@intel.com>
+In-Reply-To: <202306091859.NhlW2nny-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 
-On Sat, Jun 10, 2023 at 11:13:14AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/guards
-> head:   dd132e83d180b932488bcf612576529e6163a1ea
-> commit: bbca204d731b08997a60a4ca0530fdee8b6f429c [37/58] perf: Simplify find_get_pmu_context()
-> config: powerpc-gamecube_defconfig (https://download.01.org/0day-ci/archive/20230610/202306101109.PqwXuQIY-lkp@intel.com/config)
+On 06/09/23 at 07:09pm, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
+> patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+> config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
 > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 > reproduce (this is a W=1 build):
 >         mkdir -p ~/bin
 >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=bbca204d731b08997a60a4ca0530fdee8b6f429c
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue core/guards
->         git checkout bbca204d731b08997a60a4ca0530fdee8b6f429c
+>         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>         git fetch akpm-mm mm-everything
+>         git checkout akpm-mm/mm-everything
+>         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
 >         # save the config file
 >         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
 > 
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306101109.PqwXuQIY-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
 
-> >> kernel/events/core.c:4815:4: error: cannot jump from this asm goto statement to one of its possible targets
->     4815 |                         WARN_ON_ONCE(epc->ctx != ctx);
->          |                         ^
->    include/asm-generic/bug.h:112:3: note: expanded from macro 'WARN_ON_ONCE'
->      112 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
->          |                 ^
->    arch/powerpc/include/asm/bug.h:101:2: note: expanded from macro '__WARN_FLAGS'
->      101 |         WARN_ENTRY("twi 31, 0, 0", BUGFLAG_WARNING | (flags), __label_warn_on); \
->          |         ^
->    arch/powerpc/include/asm/bug.h:77:2: note: expanded from macro 'WARN_ENTRY'
->       77 |         asm_volatile_goto(                              \
->          |         ^
->    include/linux/compiler_types.h:328:33: note: expanded from macro 'asm_volatile_goto'
->      328 | #define asm_volatile_goto(x...) asm goto(x)
->          |                                 ^
->    kernel/events/core.c:4784:4: note: possible target of asm goto statement
->     4784 |                         WARN_ON_ONCE(epc->ctx != ctx);
->          |                         ^
->    include/asm-generic/bug.h:112:3: note: expanded from macro 'WARN_ON_ONCE'
->      112 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
->          |                 ^
->    arch/powerpc/include/asm/bug.h:104:9: note: expanded from macro '__WARN_FLAGS'
->      104 |                                                                 \
->          |                                                                 ^
->    kernel/events/core.c:4791:8: note: jump exits scope of variable with __attribute__((cleanup))
->     4791 |         void *new __free(kfree) = kzalloc(sizeof(*epc), GFP_KERNEL);
->          |               ^
->    kernel/events/core.c:4784:4: error: cannot jump from this asm goto statement to one of its possible targets
->     4784 |                         WARN_ON_ONCE(epc->ctx != ctx);
->          |                         ^
+Thanks for reporting. I reproduced them on my local machine. Below patch
+can fix them. And by the way, I also saw the clone3 warning, and have to 
+made change in scripts/checksyscalls.sh to mute it, wondering how you
+handle it in your testing.
 
-So I can't reproduce this using GCC for ARCH=powerpc gamecube_defconfig,
-and I can't figure out WTF the compiler is trying to do. The code in
-question reads:
+------
+stdin>:1520:2: warning: syscall clone3 not implemented [-W#warnings]
+ 1520 | #warning syscall clone3 not implemented
+      |  ^
+1 warning generated.
 
-  static struct perf_event_pmu_context *
-  find_get_pmu_context(struct pmu *pmu, struct perf_event_context *ctx,
-		       struct perf_event *event)
-  {
-	  struct perf_event_pmu_context *epc;
-	  void *task_ctx_data = NULL;
-
-	  if (!ctx->task) {
-		  /*
-		   * perf_pmu_migrate_context() / __perf_pmu_install_event()
-		   * relies on the fact that find_get_pmu_context() cannot fail
-		   * for CPU contexts.
-		   */
-		  struct perf_cpu_pmu_context *cpc;
-
-		  cpc = per_cpu_ptr(pmu->cpu_pmu_context, event->cpu);
-		  epc = &cpc->epc;
-		  raw_spin_lock_irq(&ctx->lock);
-		  if (!epc->ctx) {
-			  atomic_set(&epc->refcount, 1);
-			  epc->embedded = 1;
-			  list_add(&epc->pmu_ctx_entry, &ctx->pmu_ctx_list);
-			  epc->ctx = ctx;
-		  } else {
-			  WARN_ON_ONCE(epc->ctx != ctx);
-
-And for some mysterious raisin this ^^ WARN wants to continue..
-
-			  atomic_inc(&epc->refcount);
-		  }
-		  raw_spin_unlock_irq(&ctx->lock);
-		  return epc;
-	  }
-
-	  void *new __free(kfree) = kzalloc(sizeof(*epc), GFP_KERNEL);
-	  if (!new)
-		  return NULL;
-
-.. here or so? even though it has a return statement before this decl.
+------
+diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+index 1e5d2eeb726d..3a369b78edb7 100755
+--- a/scripts/checksyscalls.sh
++++ b/scripts/checksyscalls.sh
+@@ -148,6 +148,7 @@ cat << EOF
+ #define __IGNORE_nanosleep
+ #define __IGNORE_io_getevents
+ #define __IGNORE_recvmmsg
++#define __IGNORE_clone3
+ #endif
 
 
-	  if (event->attach_state & PERF_ATTACH_TASK_DATA) {
-		  task_ctx_data = alloc_task_ctx_data(pmu);
-		  if (!task_ctx_data)
-			  return NULL;
-	  }
+From 6a86f4360a61a2b7b4d71172e5c03be554367553 Mon Sep 17 00:00:00 2001
+From: root <root@dell-pem620-01.dell2.lab.eng.bos.redhat.com>
+Date: Fri, 9 Jun 2023 21:21:36 -0400
+Subject: [PATCH] hexagon: mm: fix warning in asm/io.h
+Content-type: text/plain
 
-	  __perf_init_event_pmu_context(new, pmu);
+Remove the old iounmap() declaration which is not consistent with the
+standard one in asm-generic/io.h, let's use the standard one.
 
+And also add macro definition of inb/w/l and outb/w/l to override
+the definition of them in asm-generic/io.h.
 
-Help?
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ arch/hexagon/include/asm/io.h | 8 ++++++--
+ scripts/checksyscalls.sh      | 1 +
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
+index dcd9cbbf5934..efe9cb00ebf8 100644
+--- a/arch/hexagon/include/asm/io.h
++++ b/arch/hexagon/include/asm/io.h
+@@ -27,8 +27,6 @@
+ extern int remap_area_pages(unsigned long start, unsigned long phys_addr,
+ 				unsigned long end, unsigned long flags);
+ 
+-extern void iounmap(const volatile void __iomem *addr);
+-
+ /* Defined in lib/io.c, needed for smc91x driver. */
+ extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
+ extern void __raw_writesw(void __iomem *addr, const void *data, int wordlen);
+@@ -207,16 +205,19 @@ static inline void memset_io(volatile void __iomem *addr, int value,
+  *
+  * Operates on "I/O bus I/O space"
+  */
++#define inb inb
+ static inline u8 inb(unsigned long port)
+ {
+ 	return readb(_IO_BASE + (port & IO_SPACE_LIMIT));
+ }
+ 
++#define inw inw
+ static inline u16 inw(unsigned long port)
+ {
+ 	return readw(_IO_BASE + (port & IO_SPACE_LIMIT));
+ }
+ 
++#define inl inl
+ static inline u32 inl(unsigned long port)
+ {
+ 	return readl(_IO_BASE + (port & IO_SPACE_LIMIT));
+@@ -227,16 +228,19 @@ static inline u32 inl(unsigned long port)
+  * @data: data to write to
+  * @addr:  address in I/O space
+  */
++#define outb outb
+ static inline void outb(u8 data, unsigned long port)
+ {
+ 	writeb(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+ }
+ 
++#define outw outw
+ static inline void outw(u16 data, unsigned long port)
+ {
+ 	writew(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+ }
+ 
++#define outl outl
+ static inline void outl(u32 data, unsigned long port)
+ {
+ 	writel(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+
