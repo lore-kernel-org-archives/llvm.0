@@ -1,77 +1,102 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A645408F8;
-	Sat, 10 Jun 2023 05:43:14 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1b075e13a5eso14625895ad.3;
-        Fri, 09 Jun 2023 22:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686375794; x=1688967794;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0E9TqPlClkIkHO+5O6SHOK2wGvqw8vvKKZgxDdIA58=;
-        b=ehxZ2tJJ+t7XM0Wd0ZMB4vbxxGKlA95yzAAydTbIhcnAKMxqoyCHq3ui1wJzZASSqH
-         3eqG6Z2krUc2SB8KvKVErAhrUHD0sAQtXSlXANHay5xwP8jN7rmR/lZIDKpSJIT7Tqh1
-         +JYJXs50J8bJzUlPGsWEPSK7UuQfEkaX897U6v6U6qmbqa3Wh20oga9vJnBX+FnJMjYt
-         M6AUKH+PssFLRJBhmzgRNBaoxv0HjiymvNUB+mydsDMxToMlO1qvx+ByzjuH8beuvu4X
-         sObK0Km4n+gNnuOlUcmXEjnaIjxsk6ZpUKQiJfA+NZVZXCSIk8xx9YbIYFZRdpkzsKZR
-         tNIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686375794; x=1688967794;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S0E9TqPlClkIkHO+5O6SHOK2wGvqw8vvKKZgxDdIA58=;
-        b=htNKHSGGrMCbqwfx8jGvn6WYpm6GsPZ6ImBW7GwLTbluqVkKmnao/uaHCSkFySw+9C
-         VbuD94OyRyLTTgqX4LJf5q9aoCtLwjmHiNYNi+gM+d8eSqIsTIAc1pFGEB9O1t3OVA3P
-         8Otakf9sVEYn0bDAMy5qcP+cHhHFsh1JQOfgnMMgGgfHtfIeR4GhrbZSlSAkj8PhcF4x
-         1q6lKyvtqc7/LZ7k+wnu6tEatsNhUPOKj7QqlJ832C3/OA69T57tODanMZU7STC8gJB4
-         7T/4CT98vsSo/534qAmCmQVoA0miha9tWy8GNgQ3d21BF/ntKASPTIApJi59lK/lxkmw
-         FEPA==
-X-Gm-Message-State: AC+VfDxPJG4D0CItzGRL6qhXprpbkreNWell37qdjqOTG+kmgR4ES6wb
-	wRNZUMmJ2X0Ze0HF6JOl/mw=
-X-Google-Smtp-Source: ACHHUZ4GUhjjnA5tTtq4uGyTDpp5RIaHFVnK+jzOcUyACTrvCYSY+6NtuP2l+uJHTJDXH4DeFtsFjA==
-X-Received: by 2002:a17:903:244a:b0:1b2:409a:3099 with SMTP id l10-20020a170903244a00b001b2409a3099mr1076360pls.58.1686375794211;
-        Fri, 09 Jun 2023 22:43:14 -0700 (PDT)
-Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
-        by smtp.gmail.com with ESMTPSA id z24-20020a1709028f9800b001b016313b1esm4151970plo.82.2023.06.09.22.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 22:43:13 -0700 (PDT)
-Date: Sat, 10 Jun 2023 13:43:08 +0800
-From: Kent Gibson <warthog618@gmail.com>
-To: brgl@bgdev.pl
-Cc: linux-gpio@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [libgpiod][PATCH] doc: add configuration to generate doxygen
- documentation on readthedocs.
-Message-ID: <ZIQNbB30BUsirOr1@sol>
-References: <20230610020148.8973-1-warthog618@gmail.com>
- <202306101327.8CQ451FM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EED3C0B;
+	Sat, 10 Jun 2023 07:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686381253; x=1717917253;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=/AJK6BcsI1+pYayq4GPa+LNrEBFVNr39nXOAfbSELVQ=;
+  b=DMlab+E0krCIGWLq6E6qsZaaWGm0etDoTLL8v+UQrUCeeRgKH13z7Y9n
+   /ytXEx94tmJXoP/6a7JzjeMSJ3dxIgztSWI/5v/4/9jl8LA8J26LdWn7x
+   UDOs7tHX2dUMY7svc3dsCpwM/Shc2gvHtRbB+tmtDHjPtE0wHs6oXjSGX
+   ykloczcYXJdcWrhyFCzaF/rpJWPOfDbyk3v/aJxrnHdqnv3yFss2P7p//
+   Y6VfXzgEvwrXWLJZXnZlwZ8OBxgj75ZGs1EsoTSExfrHwnLZVH1+Yurbt
+   yPhgNafOLYbYiB5jS/8QZT7OEVuvPt9VfdDQwLcrMSt4zrLvLG+ofX6B1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355228626"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="355228626"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 00:14:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="854981401"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="854981401"
+Received: from mnovakov-mobl1.amr.corp.intel.com (HELO localhost) ([10.252.60.33])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 00:14:08 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>, alexander.deucher@amd.com,
+ christian.koenig@amd.com, Xinhui.Pan@amd.com
+Cc: amd-gfx@lists.freedesktop.org, trix@redhat.com, llvm@lists.linux.dev,
+ ndesaulniers@google.com, patches@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, Nathan Chancellor <nathan@kernel.org>,
+ hamza.mahfooz@amd.com, Kenny.Ho@amd.com
+Subject: Re: [PATCH] drm/amdgpu: Wrap -Wunused-but-set-variable in cc-option
+In-Reply-To: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
+Date: Sat, 10 Jun 2023 10:14:05 +0300
+Message-ID: <87ttvfpz5u.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202306101327.8CQ451FM-lkp@intel.com>
+Content-Type: text/plain
 
-On Sat, Jun 10, 2023 at 01:20:47PM +0800, kernel test robot wrote:
-> Hi Kent,
-> 
-> kernel test robot noticed the following build warnings:
-> 
+On Thu, 08 Jun 2023, Nathan Chancellor <nathan@kernel.org> wrote:
+> -Wunused-but-set-variable was only supported in clang starting with
+> 13.0.0, so earlier versions will emit a warning, which is turned into a
+> hard error for the kernel to mirror GCC:
+>
+>   error: unknown warning option '-Wunused-but-set-variable'; did you mean '-Wunused-const-variable'? [-Werror,-Wunknown-warning-option]
+>
+> The minimum supported version of clang for building the kernel is
+> 11.0.0, so match the rest of the kernel and wrap
+> -Wunused-but-set-variable in a cc-option call, so that it is only used
+> when supported by the compiler.
 
-Ok, not sure what to make of that - why is the test robot concerned with
-libgpiod patches?
+I wonder if there's a table somewhere listing all the warning options,
+which GCC and Clang versions support them, and which versions have them
+in -Wall and -Wextra. Would be really useful.
 
-The files in the patch aren't ignored by the .gitignores in the libgpiod
-tree, so it must've applied the patch to the linux tree - which doesn't
-like dot-files. That wont end well either way.
+If there isn't one, it would be really helpful. *wink*.
 
-Can we tell the test robot not to try paddling around in the libgpiod
-pool, e.g. ignore patches with the [libgpiod] prefix?
+BR,
+Jani.
 
-Cheers,
-Kent.
+
+>
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1869
+> Fixes: a0fd5a5f676c ("drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
+> index 7ee68b1bbfed..86b833085f19 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/Makefile
+> +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
+> @@ -40,7 +40,7 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
+>  	-I$(FULL_AMD_PATH)/amdkfd
+>  
+>  subdir-ccflags-y := -Wextra
+> -subdir-ccflags-y += -Wunused-but-set-variable
+> +subdir-ccflags-y += $(call cc-option, -Wunused-but-set-variable)
+>  subdir-ccflags-y += -Wno-unused-parameter
+>  subdir-ccflags-y += -Wno-type-limits
+>  subdir-ccflags-y += -Wno-sign-compare
+>
+> ---
+> base-commit: 6bd4b01e8938779b0d959bdf33949a9aa258a363
+> change-id: 20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-0be9528ac5c8
+>
+> Best regards,
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
