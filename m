@@ -1,197 +1,177 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BBDA943
-	for <llvm@lists.linux.dev>; Fri,  9 Jun 2023 23:54:31 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-bb3cb542875so3244992276.1
-        for <llvm@lists.linux.dev>; Fri, 09 Jun 2023 16:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686354870; x=1688946870;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oNyUS02eW/yXFIAlgFDfwEmFoe9Pd7uSEDgKLORvHjM=;
-        b=V11apG9LHOwhutH46QHmQ0gFKrfNaC6p1CizyVW65E2n8EhG+rIvmW285qgxYWdy68
-         Am892SzAOwS/ktZ92R2Inm+9rHnmpjZH5EtYHOE9rLiXEl33z6EZLwsx3lkKfCfkYfNa
-         dnpiTxRdkt2Aha2k3I1IdY+WUUBb6EnCjBrF+YbO1s2z1W1d4daY7/xMLd+PqX6c2ZN7
-         1l4pasEPgSopAcpHBehgcFW+gl/CqZK9N+iAoO9Xm2e0ZieeV+dpSeNsvOeXcKMNRuf4
-         /fEJf+7N7JW8da5CtMIl/WIre12zkDa/wtXnudrUI7oozutQxWyOqfMhHfJ4n0RSogMw
-         bEDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686354870; x=1688946870;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oNyUS02eW/yXFIAlgFDfwEmFoe9Pd7uSEDgKLORvHjM=;
-        b=cJk9RAExec69iC/VtVsvkV6qi0PKsC0MitC+94ELQGCHHh8TzUVxDpaeqnK3rmrLVx
-         5nMjXG/BoWoqr6Di18agvx5Ywq59Nd0NyZRQktzJsYainXhab6W5WQ/ElPc2Vt6CEyTF
-         CQx/tA7+5EIIdIcJLAVP3nXn2kodjNhp3XevEzFvtYokizGNJKD0e6SWUSxe99M8RHsV
-         hdOVvE8q/c5RwW3K+Xim+HxMMqJFTwaiUSce+fb7D+lvYeyLGnOxh1p+P73KqVSMi0zh
-         Vo265torEzULj7QdKmVV3mDUxG24+C2Psy+wXJU0rce69F/X4UZh4ak1GtmIW4cXDpif
-         1GqA==
-X-Gm-Message-State: AC+VfDxHPVIf4bppXIj09uMXKzcmA6Vh1A1DYI3MFqHadnMCEIy9gmEB
-	nc9UymsMlbiEp6e9+cHn3fEMSNsx35tA
-X-Google-Smtp-Source: ACHHUZ4PMyCkdCSyENQFYB0qETjtjOg/fcbawc434c4hu5aAPdXX7kCJC4yurstliqdU7VqpZ+H7i4hZQlWz
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:55f2:1922:c44b:472d])
- (user=irogers job=sendgmr) by 2002:a25:da09:0:b0:bbe:8486:5895 with SMTP id
- n9-20020a25da09000000b00bbe84865895mr1408283ybf.1.1686354870144; Fri, 09 Jun
- 2023 16:54:30 -0700 (PDT)
-Date: Fri,  9 Jun 2023 16:54:19 -0700
-In-Reply-To: <20230609235419.204624-1-irogers@google.com>
-Message-Id: <20230609235419.204624-2-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77989137B;
+	Sat, 10 Jun 2023 00:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686355383; x=1717891383;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uHrUFX0U46K1wbQS7/+JiqCv8DGIbqklS6Ui5kHHCdo=;
+  b=M+Zf1YkvRoss0fuj0wSAuKTMMTJU/kqh4gb26Lf+uGWhL03f0dQEKMfT
+   rH99msRtCGk/OvI17lghV1eAWURytR/kHD2F5gVKJmOWJj6OcPRwOuQ80
+   9z5GtgYIfN1z969BOPRa8jsVIxmBurRMcPqWwsqumxdCSO2CmcLUYO+qp
+   kJ6CcFkH7/9c5C0sfPimUmHBTfDhGtKBKQA7AhR+PtRG4/G/evcXE2ufe
+   SKTJ0t8yBAs4NT6iV3MszLv1rtLN052CTU1jD5mKbtUoA0d3DGsGaqQch
+   lwnxwqbxdGj5x6usLPg0UeACvbWl3YCqBenxHzuH5EDVnKFkWVT6/bVjK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="347355327"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="347355327"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 17:02:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="854902413"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="854902413"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2023 17:02:58 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q7m4H-0009W8-1s;
+	Sat, 10 Jun 2023 00:02:57 +0000
+Date: Sat, 10 Jun 2023 08:02:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leo Liu <leo.liu@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	James Zhu <James.Zhu@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:1303:12: warning: stack frame
+ size (3536) exceeds limit (2048) in 'vcn_v4_0_stop'
+Message-ID: <202306100755.2Kmzf3xm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230609235419.204624-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v1 2/2] perf srcline: Make sentinel reading for binutils
- addr2line more robust
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Changbin Du <changbin.du@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The addr2line process is sent an address then multiple function,
-filename:line "records" are read. To detect the end of output a ',' is
-sent and for llvm-addr2line a ',' is then read back showing the end of
-addrline's output. For binutils addr2line the ',' translates to
-address 0 and we expect the bogus filename marker "??:0" (see
-filename_split) to be sent from addr2line. For some kernels address 0
-may have a mapping and so a seemingly valid inline output is given and
-breaking the sentinel discovery:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   64569520920a3ca5d456ddd9f4f95fc6ea9b8b45
+commit: 8da1170a16e4d4b49fa07d1f75ad480847ff7eca drm/amdgpu: add VCN4 ip block support
+date:   1 year, 1 month ago
+config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230610/202306100755.2Kmzf3xm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8da1170a16e4d4b49fa07d1f75ad480847ff7eca
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8da1170a16e4d4b49fa07d1f75ad480847ff7eca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/ lib/
 
-```
-$ addr2line -e vmlinux -f -i
-,
-__per_cpu_start
-./arch/x86/kernel/cpu/common.c:1850
-```
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306100755.2Kmzf3xm-lkp@intel.com/
 
-To avoid this problem enable the address dumping for addr2line (the -a
-option). If an address of 0x0000000000000000 is read then this is the
-sentinel value working around the problem above. The filename_split
-still needs to check for "??:0" as bogus non-zero addresses also need
-handling.
+All warnings (new ones prefixed by >>):
 
-Reported-by: Changbin Du <changbin.du@huawei.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/srcline.c | 61 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 53 insertions(+), 8 deletions(-)
+>> drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:1303:12: warning: stack frame size (3536) exceeds limit (2048) in 'vcn_v4_0_stop' [-Wframe-larger-than]
+   static int vcn_v4_0_stop(struct amdgpu_device *adev)
+              ^
+>> drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:1057:12: warning: stack frame size (8896) exceeds limit (2048) in 'vcn_v4_0_start' [-Wframe-larger-than]
+   static int vcn_v4_0_start(struct amdgpu_device *adev)
+              ^
+   drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:887:12: warning: stack frame size (3056) exceeds limit (2048) in 'vcn_v4_0_start_dpg_mode' [-Wframe-larger-than]
+   static int vcn_v4_0_start_dpg_mode(struct amdgpu_device *adev, int inst_idx, bool indirect)
+              ^
+   3 warnings generated.
 
-diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index fc85cdd6c8f9..c99a001453b4 100644
---- a/tools/perf/util/srcline.c
-+++ b/tools/perf/util/srcline.c
-@@ -406,7 +406,7 @@ static struct child_process *addr2line_subprocess_init(const char *addr2line_pat
- 	const char *argv[] = {
- 		addr2line_path ?: "addr2line",
- 		"-e", binary_path,
--		"-i", "-f", NULL
-+		"-a", "-i", "-f", NULL
- 	};
- 	struct child_process *a2l = zalloc(sizeof(*a2l));
- 	int start_command_status = 0;
-@@ -461,10 +461,10 @@ static enum a2l_style addr2line_configure(struct child_process *a2l, const char
- 			style = LLVM;
- 			cached = true;
- 			lines = 1;
--		} else if (ch == '?') {
-+		} else if (ch == '0') {
- 			style = GNU_BINUTILS;
- 			cached = true;
--			lines = 2;
-+			lines = 3;
- 		} else {
- 			if (!symbol_conf.disable_add2line_warn) {
- 				char *output;
-@@ -516,20 +516,64 @@ static int read_addr2line_record(struct io *io,
- 	if (line_nr != NULL)
- 		*line_nr = 0;
- 
-+	/*
-+	 * Read the first line. Without an error this will be either an address
-+	 * like 0x1234 or for llvm-addr2line the sentinal ',' character.
-+	 */
- 	if (io__getline(io, &line, &line_len) < 0 || !line_len)
- 		goto error;
- 
--	if (style == LLVM && line_len == 2 && line[0] == ',') {
--		zfree(&line);
--		return 0;
-+	if (style == LLVM) {
-+		if (line_len == 2 && line[0] == ',') {
-+			zfree(&line);
-+			return 0;
-+		}
-+	} else {
-+		int zero_count = 0, non_zero_count = 0;
-+
-+		/* The address should always start 0x. */
-+		if (line_len < 2 || line[0] != '0' || line[1] != 'x')
-+			goto error;
-+
-+		for (size_t i = 2; i < line_len; i++) {
-+			if (line[i] == '0')
-+				zero_count++;
-+			else
-+				non_zero_count++;
-+		}
-+		if (!non_zero_count) {
-+			int ch;
-+
-+			if (!zero_count) {
-+				/* Line was erroneous just '0x'. */
-+				goto error;
-+			}
-+			/*
-+			 * Line was 0x0..0, the sentinel for binutils. Remove
-+			 * the function and filename lines.
-+			 */
-+			zfree(&line);
-+			do {
-+				ch = io__get_char(io);
-+			} while (ch > 0 && ch != '\n');
-+			do {
-+				ch = io__get_char(io);
-+			} while (ch > 0 && ch != '\n');
-+			return 0;
-+		}
- 	}
- 
-+	/* Read the second function name line. */
-+	if (io__getline(io, &line, &line_len) < 0 || !line_len)
-+		goto error;
-+
- 	if (function != NULL)
- 		*function = strdup(strim(line));
- 
- 	zfree(&line);
- 	line_len = 0;
- 
-+	/* Read the third filename and line number line. */
- 	if (io__getline(io, &line, &line_len) < 0 || !line_len)
- 		goto error;
- 
-@@ -633,8 +677,9 @@ static int addr2line(const char *dso_name, u64 addr,
- 		goto out;
- 	case 0:
- 		/*
--		 * The first record was invalid, so return failure, but first read another
--		 * record, since we asked a junk question and have to clear the answer out.
-+		 * The first record was invalid, so return failure, but first
-+		 * read another record, since we sent a sentinel ',' for the
-+		 * sake of detected the last inlined function.
- 		 */
- 		switch (read_addr2line_record(&io, a2l_style, NULL, NULL, NULL)) {
- 		case -1:
+
+vim +/vcn_v4_0_stop +1303 drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c
+
+  1295	
+  1296	/**
+  1297	 * vcn_v4_0_stop - VCN stop
+  1298	 *
+  1299	 * @adev: amdgpu_device pointer
+  1300	 *
+  1301	 * Stop VCN block
+  1302	 */
+> 1303	static int vcn_v4_0_stop(struct amdgpu_device *adev)
+  1304	{
+  1305		uint32_t tmp;
+  1306		int i, r = 0;
+  1307	
+  1308		for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
+  1309			if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
+  1310				r = vcn_v4_0_stop_dpg_mode(adev, i);
+  1311				continue;
+  1312			}
+  1313	
+  1314			/* wait for vcn idle */
+  1315			r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_STATUS, UVD_STATUS__IDLE, 0x7);
+  1316			if (r)
+  1317				return r;
+  1318	
+  1319			tmp = UVD_LMI_STATUS__VCPU_LMI_WRITE_CLEAN_MASK |
+  1320				UVD_LMI_STATUS__READ_CLEAN_MASK |
+  1321				UVD_LMI_STATUS__WRITE_CLEAN_MASK |
+  1322				UVD_LMI_STATUS__WRITE_CLEAN_RAW_MASK;
+  1323			r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_LMI_STATUS, tmp, tmp);
+  1324			if (r)
+  1325				return r;
+  1326	
+  1327			/* disable LMI UMC channel */
+  1328			tmp = RREG32_SOC15(VCN, i, regUVD_LMI_CTRL2);
+  1329			tmp |= UVD_LMI_CTRL2__STALL_ARB_UMC_MASK;
+  1330			WREG32_SOC15(VCN, i, regUVD_LMI_CTRL2, tmp);
+  1331			tmp = UVD_LMI_STATUS__UMC_READ_CLEAN_RAW_MASK |
+  1332				UVD_LMI_STATUS__UMC_WRITE_CLEAN_RAW_MASK;
+  1333			r = SOC15_WAIT_ON_RREG(VCN, i, regUVD_LMI_STATUS, tmp, tmp);
+  1334			if (r)
+  1335				return r;
+  1336	
+  1337			/* block VCPU register access */
+  1338			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_RB_ARB_CTRL),
+  1339					UVD_RB_ARB_CTRL__VCPU_DIS_MASK,
+  1340					~UVD_RB_ARB_CTRL__VCPU_DIS_MASK);
+  1341	
+  1342			/* reset VCPU */
+  1343			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL),
+  1344					UVD_VCPU_CNTL__BLK_RST_MASK,
+  1345					~UVD_VCPU_CNTL__BLK_RST_MASK);
+  1346	
+  1347			/* disable VCPU clock */
+  1348			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL), 0,
+  1349					~(UVD_VCPU_CNTL__CLK_EN_MASK));
+  1350	
+  1351			/* apply soft reset */
+  1352			tmp = RREG32_SOC15(VCN, i, regUVD_SOFT_RESET);
+  1353			tmp |= UVD_SOFT_RESET__LMI_UMC_SOFT_RESET_MASK;
+  1354			WREG32_SOC15(VCN, i, regUVD_SOFT_RESET, tmp);
+  1355			tmp = RREG32_SOC15(VCN, i, regUVD_SOFT_RESET);
+  1356			tmp |= UVD_SOFT_RESET__LMI_SOFT_RESET_MASK;
+  1357			WREG32_SOC15(VCN, i, regUVD_SOFT_RESET, tmp);
+  1358	
+  1359			/* clear status */
+  1360			WREG32_SOC15(VCN, i, regUVD_STATUS, 0);
+  1361	
+  1362			/* apply HW clock gating */
+  1363			vcn_v4_0_enable_clock_gating(adev, i);
+  1364	
+  1365			/* enable VCN power gating */
+  1366			vcn_v4_0_enable_static_power_gating(adev, i);
+  1367		}
+  1368	
+  1369		if (adev->pm.dpm_enabled)
+  1370			amdgpu_dpm_enable_uvd(adev, false);
+  1371	
+  1372		return 0;
+  1373	}
+  1374	
+
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
