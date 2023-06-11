@@ -1,214 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1A11FD9
-	for <llvm@lists.linux.dev>; Sun, 11 Jun 2023 07:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2256D15C4
+	for <llvm@lists.linux.dev>; Sun, 11 Jun 2023 08:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1686470264;
+	s=mimecast20190719; t=1686471072;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yNeQCbj8pV3SB38pUZmjA+ecb2r5qadTlgkidFMl7tU=;
-	b=PioGwLwbsr/w/PYkNNHd9kqjl4dJ90wEeguTfntsh1lUwm8VCgPECItmhnth6wOt02DY2b
-	PGeViNY5R3NfWSRC5xXUh+ZNAP2udpN2DHdjyv6FfHYDv/zJCNQO3iy1QLI71UhzSc9W6F
-	5pg4EEj/OK1uNitYtG4OzVmlGoK7Y+Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZEbL/ch4LTminTGWzdQihmZ4LgatG/UsEWFyswhfFDg=;
+	b=eMkVJl1rfztFteQOAbMf+jKNccn0y/bMVcJqKy9oaGEMjmGjPUv1EabFVfyYAcHhITom0t
+	PeRoFPxr6J3FUgfgRBMVSK5B2IQRzNkvThFIVGyfLHeeS2cFg0WuXueVxbIuJEU3TZQ5/+
+	eTJ9BrRyctj7QrSasjSwYkmuj5NcSms=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-DkUqp_jjOe6hP2QQpRYblQ-1; Sun, 11 Jun 2023 03:57:39 -0400
-X-MC-Unique: DkUqp_jjOe6hP2QQpRYblQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-638-VdwuQ0iGMVutn51dcJ97Tg-1; Sun, 11 Jun 2023 04:11:11 -0400
+X-MC-Unique: VdwuQ0iGMVutn51dcJ97Tg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31B181C06909;
-	Sun, 11 Jun 2023 07:57:38 +0000 (UTC)
-Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0C891400E6C9;
-	Sun, 11 Jun 2023 07:57:35 +0000 (UTC)
-Date: Sun, 11 Jun 2023 15:57:32 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-	christophe.leroy@csgroup.eu, hch@lst.de, willy@infradead.org,
-	agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-	schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-	deller@gmx.de, Brian Cain <bcain@quicinc.com>,
-	linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
-References: <20230609075528.9390-3-bhe@redhat.com>
- <202306091859.NhlW2nny-lkp@intel.com>
- <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
- <20230611054019.GL52412@kernel.org>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5ACE101A53A
+	for <llvm@lists.linux.dev>; Sun, 11 Jun 2023 08:11:10 +0000 (UTC)
+Received: from [172.64.0.113] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D1A392166B25;
+	Sun, 11 Jun 2023 08:11:10 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 45 of 346): Test report for master
+ (6.4.0-rc5, mainline.kernel.org-clang, 022ce886)
+Date: Sun, 11 Jun 2023 08:11:10 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230611054019.GL52412@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <22275.123061104111100173@us-mta-638.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06/11/23 at 08:40am, Mike Rapoport wrote:
-> Hi Baoquan,
-> 
-> On Sat, Jun 10, 2023 at 04:26:21PM +0800, Baoquan He wrote:
-> > On 06/09/23 at 07:09pm, kernel test robot wrote:
-> > > Hi Baoquan,
-> > > 
-> > > kernel test robot noticed the following build errors:
-> > > 
-> > > [auto build test ERROR on akpm-mm/mm-everything]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > > patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
-> > > patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-> > > config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > reproduce (this is a W=1 build):
-> > >         mkdir -p ~/bin
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> > >         git fetch akpm-mm mm-everything
-> > >         git checkout akpm-mm/mm-everything
-> > >         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
-> > 
-> > Thanks for reporting. I reproduced them on my local machine. Below patch
-> > can fix them. And by the way, I also saw the clone3 warning, and have to 
-> > made change in scripts/checksyscalls.sh to mute it, wondering how you
-> > handle it in your testing.
-> 
-> I think the warning kbuild reported is rather this one:
-> 
-> >> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
->     1078 | void iounmap(volatile void __iomem *addr);
->          |      ^
+Hi, we tested your kernel and here are the results:
 
-This one is reported as error. The old iounmap() declaration has a const,
-while the standard one doesn't have. So I just remove the old one to use
-the standard one.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Another one is warning about PCI_IOBASE. Because inb/w/l and outb/w/l is
-redefined in asm-generic/io.h, and it uses PCI_IOBASE which is defniend
-as NULL in asm-generic/io.h if ARCH doesn't have its own PCI_IOBASE
-definition. Then the warning is triggered. So I define macro to override
-the standard inb/w/l and outb/w/l.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-#ifndef PCI_IOBASE
-#define PCI_IOBASE ((void __iomem *)0)
-#endif
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.4-rc6' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/wsa/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/92130
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-> > ------
-> > stdin>:1520:2: warning: syscall clone3 not implemented [-W#warnings]
-> >  1520 | #warning syscall clone3 not implemented
-> >       |  ^
-> > 1 warning generated.
-> > 
-> > ------
-> > diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-> > index 1e5d2eeb726d..3a369b78edb7 100755
-> > --- a/scripts/checksyscalls.sh
-> > +++ b/scripts/checksyscalls.sh
-> > @@ -148,6 +148,7 @@ cat << EOF
-> >  #define __IGNORE_nanosleep
-> >  #define __IGNORE_io_getevents
-> >  #define __IGNORE_recvmmsg
-> > +#define __IGNORE_clone3
-> >  #endif
-> > 
-> > 
-> > From 6a86f4360a61a2b7b4d71172e5c03be554367553 Mon Sep 17 00:00:00 2001
-> > From: root <root@dell-pem620-01.dell2.lab.eng.bos.redhat.com>
-> > Date: Fri, 9 Jun 2023 21:21:36 -0400
-> > Subject: [PATCH] hexagon: mm: fix warning in asm/io.h
-> > Content-type: text/plain
-> > 
-> > Remove the old iounmap() declaration which is not consistent with the
-> > standard one in asm-generic/io.h, let's use the standard one.
-> > 
-> > And also add macro definition of inb/w/l and outb/w/l to override
-> > the definition of them in asm-generic/io.h.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > ---
-> >  arch/hexagon/include/asm/io.h | 8 ++++++--
-> >  scripts/checksyscalls.sh      | 1 +
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
-> > index dcd9cbbf5934..efe9cb00ebf8 100644
-> > --- a/arch/hexagon/include/asm/io.h
-> > +++ b/arch/hexagon/include/asm/io.h
-> > @@ -27,8 +27,6 @@
-> >  extern int remap_area_pages(unsigned long start, unsigned long phys_addr,
-> >  				unsigned long end, unsigned long flags);
-> >  
-> > -extern void iounmap(const volatile void __iomem *addr);
-> > -
-> >  /* Defined in lib/io.c, needed for smc91x driver. */
-> >  extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
-> >  extern void __raw_writesw(void __iomem *addr, const void *data, int wordlen);
-> > @@ -207,16 +205,19 @@ static inline void memset_io(volatile void __iomem *addr, int value,
-> >   *
-> >   * Operates on "I/O bus I/O space"
-> >   */
-> > +#define inb inb
-> >  static inline u8 inb(unsigned long port)
-> >  {
-> >  	return readb(_IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define inw inw
-> >  static inline u16 inw(unsigned long port)
-> >  {
-> >  	return readw(_IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define inl inl
-> >  static inline u32 inl(unsigned long port)
-> >  {
-> >  	return readl(_IO_BASE + (port & IO_SPACE_LIMIT));
-> > @@ -227,16 +228,19 @@ static inline u32 inl(unsigned long port)
-> >   * @data: data to write to
-> >   * @addr:  address in I/O space
-> >   */
-> > +#define outb outb
-> >  static inline void outb(u8 data, unsigned long port)
-> >  {
-> >  	writeb(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define outw outw
-> >  static inline void outw(u16 data, unsigned long port)
-> >  {
-> >  	writew(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> >  }
-> >  
-> > +#define outl outl
-> >  static inline void outl(u32 data, unsigned long port)
-> >  {
-> >  	writel(data, _IO_BASE + (port & IO_SPACE_LIMIT));
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
