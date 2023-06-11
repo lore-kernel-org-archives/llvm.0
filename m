@@ -1,143 +1,109 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05819101DF;
-	Sat, 10 Jun 2023 23:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD4180;
+	Sun, 11 Jun 2023 00:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686438283; x=1717974283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=uRt5yR5sb+AiORo00Ddd8AH4m3wS/RHVS4cBKEYsZCg=;
-  b=l8qMJqTQnzZEkz/abKqVFdJ/3ORJC3q/GxYeowGVTqbqMbuJ0uH1H9Xk
-   supkNNP0AIFsXgTL5jYiMnFWWuyoCnJItQVhVlZmCA6qywueufDJDZqtM
-   h1gRfEhJ7x8irzAznhZIxFxyfA9pZE1Nf0cphQ37m6DiL22QnusNjhARx
-   0msNcI3VrDZ/wmk/8QR9cMcv+tLDyIQduCMk643FT3qxozMlNuYn+J8vg
-   bbqKbEKQYgZABtaTx7WZPu3BOF0PZJLmmGw26RmQ6REGXd+rEhPd2FgSo
-   Izy91VTBMd2a53+8T8a0Znn0YHu03Fk20v2wLMZQVEfUD9++c64J+MRCY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="338174694"
+  t=1686442273; x=1717978273;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NLEnkKYTvfD8Hk/fURnxd0K/bfOpBwUqsmlz/17e4gQ=;
+  b=iGjGwCpJeXbiH1rYv2oWUX6hErJ64BI5Q9v2Ad5+k65/wLyg4vhL2/7h
+   UGUe2jDRHHCp6STxO5YMuCHDkfrCTUhv6MoAi6N5UdJpCWkHJA39ZJ/5J
+   G0TE8CO+o/ywf2aOA0ExpPTH50UKdT70wonsMI0EzWNBdSk/SP38CLf8M
+   3oveUAstKheDabPpfur3oM+hmvOAwayq1voIGnmthmWu9QKMTtlledhnP
+   IE5Dg5HyzV7AGmqHpZU/yd4RqbkjfNsQ9qu3aQ4OPup70w7tOrT1yHmOP
+   ykbiN31jHgoG0Fiyg0tyTZNYyrxsLAZWB+BQe9WnwmsSk+GiWmqkA+xeE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="361177706"
 X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
-   d="scan'208";a="338174694"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 16:04:42 -0700
+   d="scan'208";a="361177706"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 17:11:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="775882403"
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="835031878"
 X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
-   d="scan'208";a="775882403"
+   d="scan'208";a="835031878"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2023 16:04:40 -0700
+  by orsmga004.jf.intel.com with ESMTP; 10 Jun 2023 17:11:10 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q87dP-000ATw-1O;
-	Sat, 10 Jun 2023 23:04:39 +0000
-Date: Sun, 11 Jun 2023 07:04:00 +0800
+	id 1q88fk-000AVY-12;
+	Sun, 11 Jun 2023 00:11:08 +0000
+Date: Sun, 11 Jun 2023 08:09:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-	linux@roeck-us.net
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-	derekjohn.clark@gmail.com, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (oxp-sensors) Add tt_toggle attribute on
- supported boards
-Message-ID: <202306110659.msus3mCo-lkp@intel.com>
-References: <20230610192400.80611-2-samsagax@gmail.com>
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
+ 'misaligned_access_speed'; recompile with -fPIC
+Message-ID: <202306110855.7TlBCIzI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230610192400.80611-2-samsagax@gmail.com>
 
-Hi Joaquín,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on next-20230609]
-[cannot apply to linus/master v6.4-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joaqu-n-Ignacio-Aramend-a/hwmon-oxp-sensors-Add-tt_toggle-attribute-on-supported-boards/20230611-032531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230610192400.80611-2-samsagax%40gmail.com
-patch subject: [PATCH v2] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-config: x86_64-randconfig-a013-20230611 (https://download.01.org/0day-ci/archive/20230611/202306110659.msus3mCo-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   022ce8862dff83c859089cd14bc4dca0733e2f90
+commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable kernels with early alternatives using -fno-pie
+date:   10 days ago
+config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch groeck-staging hwmon-next
-        git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/20230610192400.80611-2-samsagax@gmail.com
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306110659.msus3mCo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/hwmon/oxp-sensors.c:445:10: error: label at end of compound statement: expected statement
-           default:
-                   ^
-                    ;
-   1 error generated.
-
-
-vim +445 drivers/hwmon/oxp-sensors.c
-
-   416	
-   417	/* Initialization logic */
-   418	static int oxp_platform_probe(struct platform_device *pdev)
-   419	{
-   420		const struct dmi_system_id *dmi_entry;
-   421		struct device *dev = &pdev->dev;
-   422		struct device *hwdev;
-   423		int ret;
-   424	
-   425		/*
-   426		 * Have to check for AMD processor here because DMI strings are the
-   427		 * same between Intel and AMD boards, the only way to tell them apart
-   428		 * is the CPU.
-   429		 * Intel boards seem to have different EC registers and values to
-   430		 * read/write.
-   431		 */
-   432		dmi_entry = dmi_first_match(dmi_table);
-   433		if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-   434			return -ENODEV;
-   435	
-   436		board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
-   437	
-   438		switch (board) {
-   439		case aok_zoe_a1:
-   440		case oxp_mini_amd_a07:
-   441		case oxp_mini_amd_pro:
-   442			ret = devm_device_add_groups(dev, oxp_ec_groups);
-   443			if (ret)
-   444				return ret;
- > 445		default:
-   446		}
-   447	
-   448		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-   449							     &oxp_ec_chip_info, NULL);
-   450	
-   451		return PTR_ERR_OR_ZERO(hwdev);
-   452	}
-   453	
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
+   >>> defined in vmlinux.a(mm/percpu.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
+   >>> defined in vmlinux.a(mm/percpu.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
