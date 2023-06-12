@@ -1,81 +1,108 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D877538C;
-	Mon, 12 Jun 2023 20:44:48 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3f78a32266bso48756765e9.3;
-        Mon, 12 Jun 2023 13:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686602687; x=1689194687;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ALjtb1mIX+GZejE31to3xfsby/eOvSoCSDDPLC+nH8A=;
-        b=nWnT2Ip48Z5YrH4Iz+A80ravFKFkjRg8lIRgfaBRLgKcEx98gjWQA7RmTzbceBJJ9b
-         OhYeE3/mnEV+oQRgE83mD3lo6WDjv20Q/EPdhypuvJG7iIyUiykjQWne1GhOUkIQlESL
-         /2D5H7ARsaaEIEcWg9vKSxFOBkKmT1GQBdBNANEV++VL1HOVmC3Gp6cZsaemY1kMJ/++
-         d2Js7egZ3mc0CNaIXkmm1RgRk7Bjt7Klj2dbHG2hCJk1ylFmXEbX1IgDbVTnWeeovddE
-         g8gXS7EaFiuIfhiB74kd01JFJ/wLf7Y1zCtkSdtThgKWZK29RXv3HLc1MhyvAnvs7if8
-         DxWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686602687; x=1689194687;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALjtb1mIX+GZejE31to3xfsby/eOvSoCSDDPLC+nH8A=;
-        b=hJ9F3Cmj37x6UlCW5lMVbq0r/GH4fj5qDjjJOyy+xxuSDcOwcgDcRg5whp4utrpJWi
-         ivx6EfZAbOlpglv8hnpnRmL5pF4wwNEyyZ2969XrQ+JFSclxDeX+hYpmDNFoxjV4LTyV
-         q7RCzfz6VXwgap+No4upfWGFotPngsHV3wHOgAc+QjWSxTVysvyYZLMmVXNFCT1VmNat
-         gukjcX7OYRmddnxTwldGlNbhSd40JeyE0tVmJ/9PxL3JjcsB7OK/QNx+oLtXV/OQb4fd
-         4A7IVQumSrEOxZIoKyBgcyjKREd+4y+0DaawDUfE2eOe/Ce+pLJKhmBBvFq+2las3hkA
-         xQTw==
-X-Gm-Message-State: AC+VfDy9jfOdimjwayNedxL3zA8t7C9yx+j0mKBp2JFIGlMgA4JuUtlX
-	NKaGZV602E6hQQl85ybum3A=
-X-Google-Smtp-Source: ACHHUZ6HgQri17EQgGB6hP+QvkVq22s68BSuTg5TQ0W3NZO1vKc/aDZCMWNSlqdZMSs2Nka6Slh6wg==
-X-Received: by 2002:a05:600c:2245:b0:3f7:33cf:707f with SMTP id a5-20020a05600c224500b003f733cf707fmr8494315wmm.35.1686602686967;
-        Mon, 12 Jun 2023 13:44:46 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003f735ba7736sm12310321wmq.46.2023.06.12.13.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 13:44:46 -0700 (PDT)
-Subject: Re: [netdev-net-next:main 26/28] ld.lld: error: undefined symbol:
- efx_tc_netdev_event
-To: Simon Horman <simon.horman@corigine.com>,
- kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDE42342B;
+	Mon, 12 Jun 2023 22:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686608603; x=1718144603;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z7lMnWLVZUtIABsHb5EnGYpPZQF8Q7ziKnufPLXzAeY=;
+  b=XTUSRpviH4ERXFd3H33gMTpNTLLKkSs0R4W4z1yB/9UpIP1yOzwXMUDz
+   0ISBVAaqbxCNUj9d0gjvU+kT/ywS46TnDb/g9ucbYU2ibWbHEWQ9NkBxF
+   KVrV5yEu2SPJ+XI3Hh88y43p1JV601hzLr3d8kdTdplxBl9Z1xxn8aMxL
+   JdR1ud2F3A9iR34su9JrCaqJjauIJpEjx9It+zASZhhP8IUnJOuuXtaFd
+   JV+i2pbQVAuu+Y/oK4AkEOqYhQ3IBB45gL+9mOHEW9zzldzfebvbppP7J
+   OVgqytLpVvRGIBqQeSuHe0LiivTlWivV9Bhhz6wQi/aidtym2tIFnaiJ7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="338534539"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="338534539"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 15:23:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="705550334"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="705550334"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 Jun 2023 15:23:19 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q8pwU-0000nP-1S;
+	Mon, 12 Jun 2023 22:23:18 +0000
+Date: Tue, 13 Jun 2023 06:23:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Helge Deller <deller@gmx.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jakub Kicinski <kuba@kernel.org>,
- Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
-References: <202306102026.ISK5JfUQ-lkp@intel.com>
- <ZIbUNpktWf2TmKGZ@corigine.com>
-From: Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <8724de62-fe9b-cdd4-bb39-b3c06b440f5f@gmail.com>
-Date: Mon, 12 Jun 2023 21:44:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	linux-media@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] fbdev/media: Use GPIO descriptors for VIA GPIO
+Message-ID: <202306130650.BS2fQAUp-lkp@intel.com>
+References: <20230612134500.249178-1-linus.walleij@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <ZIbUNpktWf2TmKGZ@corigine.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612134500.249178-1-linus.walleij@linaro.org>
 
-On 12/06/2023 09:15, Simon Horman wrote:
-> On Sat, Jun 10, 2023 at 09:10:45PM +0800, kernel test robot wrote:
->> All errors (new ones prefixed by >>):
->>
->>>> ld.lld: error: undefined symbol: efx_tc_netdev_event
->>    >>> referenced by ef100_netdev.c:313 (drivers/net/ethernet/sfc/ef100_netdev.c:313)
->>    >>>               drivers/net/ethernet/sfc/ef100_netdev.o:(ef100_netdev_event) in archive vmlinux.a
->> --
->>>> ld.lld: error: undefined symbol: efx_tc_netevent_event
->>    >>> referenced by ef100_netdev.c:329 (drivers/net/ethernet/sfc/ef100_netdev.c:329)
->>    >>>               drivers/net/ethernet/sfc/ef100_netdev.o:(ef100_netevent_event) in archive vmlinux.a
-> 
-> A cursory investigation leads me to thinking this occurs
-> if the CONFIG_SFC is set but CONFIG_SFC_SRIOV is not.
+Hi Linus,
 
-Yep, looks that way.  Patch on its way shortly.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v6.4-rc6 next-20230609]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/fbdev-media-Use-GPIO-descriptors-for-VIA-GPIO/20230612-214746
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230612134500.249178-1-linus.walleij%40linaro.org
+patch subject: [PATCH] fbdev/media: Use GPIO descriptors for VIA GPIO
+config: i386-randconfig-r034-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130650.BS2fQAUp-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add media-tree git://linuxtv.org/media_tree.git
+        git fetch media-tree master
+        git checkout media-tree/master
+        b4 shazam https://lore.kernel.org/r/20230612134500.249178-1-linus.walleij@linaro.org
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130650.BS2fQAUp-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/video/fbdev/via/via-gpio.c:13:10: fatal error: 'linux/via-gpio.h' file not found
+   #include <linux/via-gpio.h>
+            ^~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +13 drivers/video/fbdev/via/via-gpio.c
+
+ec66841e495b9a drivers/video/via/via-gpio.c Jonathan Corbet 2010-05-05 @13  #include <linux/via-gpio.h>
+a8a359318530a7 drivers/video/via/via-gpio.c Paul Gortmaker  2011-07-10  14  #include <linux/export.h>
+7e0de022680f78 drivers/video/via/via-gpio.c Jonathan Corbet 2009-12-01  15  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
