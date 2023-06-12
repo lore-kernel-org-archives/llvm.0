@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597C7182D6
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4497B18B06
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=2Fw/6pc13hFz4431UNCf/XS3M9fAIWcYfqPnXE09Ku4=; b=IkMJrnTkC3UydwX8F7sR2rw+E7
-	qrpnTHjipHj9gjZN63v0jwUuqEu1Mg9rdn0ysJZsU3k+bbvS+nFtfeQVWRowAYsXbb1HuEKamnIIz
-	HOIcxy5m0UdtJWWjuSTPFqpdwyDPIXzcXwEkEIoXCDrCUmFkdJ+GFrhoNc01wh3aicCUOa10qpR7a
-	WofmyO7MYSzVS7H5t/N22SEAh3MmpqURBWgAHS/7YvS39VK1LcqoCwKErkQ7MKJCQvRC9Rq8vP/jO
-	EkmUi2UmvAQ2vQh7qcIrh7W9Nc2sM9G7lQoy/TYld5cIxAMGSLihA+yoEO5WtVkG1JMasioI5qmwr
-	trnIZBqA==;
+	bh=TIflEc6HK/22xB9+LAc8fdYfMJHSxjY/dB735CDFq7w=; b=OzxWN5L/KzC4VUo/iTYaWameCX
+	hrbwrk3ixeRH23F57jlIRFGWnlTcHuMcV7kLy7osS01tgjphDYs7mWn2JZfDkZ1+rR6EcEvrBxrNq
+	zuW6xChuJcvp8qwBU8di5iOmYh8pWWaTGqRRp0lXV86E7IzjUkmvM0B0kyib/7YaiFdsFaLUU6kzN
+	jRUGUTzf6TM4YMKKaPBC+AkGNgv4QE6GBnrVTUB+3uvTZYeky0QKBbK68+lbLkHSUur0WJ5xngoPZ
+	gJIK2g+KtjpXKF0kOxEZS0dUHbQ0CQVAE0El1MhQ7ke9TlaJD5eefsKkFJQO3sIV0cBEXmZEPvZrb
+	0kCDB3Ig==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0j-008kPn-14;
-	Mon, 12 Jun 2023 09:38:53 +0000
+	id 1q8e0m-008kQr-1K;
+	Mon, 12 Jun 2023 09:39:28 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 89359302F24;
-	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27DE53031D9;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 0FD3C30A6FEEC; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093537.762718530@infradead.org>
+	id 9735A30A77B62; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.537454913@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:18 +0200
+Date: Mon, 12 Jun 2023 11:07:41 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 05/57] sched: Simplify get_nohz_timer_target()
+Subject: [PATCH v3 28/57] perf; Simplify event_sched_in()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -108,42 +108,57 @@ Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ kernel/events/core.c |   13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1097,25 +1097,22 @@ int get_nohz_timer_target(void)
- 
- 	hk_mask = housekeeping_cpumask(HK_TYPE_TIMER);
- 
--	rcu_read_lock();
-+	guard(rcu)();
-+
- 	for_each_domain(cpu, sd) {
- 		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
- 			if (cpu == i)
- 				continue;
- 
--			if (!idle_cpu(i)) {
--				cpu = i;
--				goto unlock;
--			}
-+			if (!idle_cpu(i))
-+				return i;
- 		}
- 	}
- 
- 	if (default_cpu == -1)
- 		default_cpu = housekeeping_any_cpu(HK_TYPE_TIMER);
--	cpu = default_cpu;
--unlock:
--	rcu_read_unlock();
--	return cpu;
-+
-+	return default_cpu;
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -1153,6 +1153,8 @@ void perf_pmu_enable(struct pmu *pmu)
+ 		pmu->pmu_enable(pmu);
  }
  
- /*
++DEFINE_GUARD(perf_pmu_disable, struct pmu *, perf_pmu_disable(_T), perf_pmu_enable(_T))
++
+ static void perf_assert_pmu_disabled(struct pmu *pmu)
+ {
+ 	WARN_ON_ONCE(*this_cpu_ptr(pmu->pmu_disable_count) == 0);
+@@ -2489,7 +2491,6 @@ event_sched_in(struct perf_event *event,
+ {
+ 	struct perf_event_pmu_context *epc = event->pmu_ctx;
+ 	struct perf_cpu_pmu_context *cpc = this_cpu_ptr(epc->pmu->cpu_pmu_context);
+-	int ret = 0;
+ 
+ 	WARN_ON_ONCE(event->ctx != ctx);
+ 
+@@ -2517,15 +2518,14 @@ event_sched_in(struct perf_event *event,
+ 		event->hw.interrupts = 0;
+ 	}
+ 
+-	perf_pmu_disable(event->pmu);
++	guard(perf_pmu_disable)(event->pmu);
+ 
+ 	perf_log_itrace_start(event);
+ 
+ 	if (event->pmu->add(event, PERF_EF_START)) {
+ 		perf_event_set_state(event, PERF_EVENT_STATE_INACTIVE);
+ 		event->oncpu = -1;
+-		ret = -EAGAIN;
+-		goto out;
++		return -EAGAIN;
+ 	}
+ 
+ 	if (!is_software_event(event))
+@@ -2536,10 +2536,7 @@ event_sched_in(struct perf_event *event,
+ 	if (event->attr.exclusive)
+ 		cpc->exclusive = 1;
+ 
+-out:
+-	perf_pmu_enable(event->pmu);
+-
+-	return ret;
++	return 0;
+ }
+ 
+ static int
 
 
