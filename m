@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCF818AF3
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F74318B07
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=y0wgwpukS8T7O340+NKvU9chnTVlAmLcht1jdurq5Ss=; b=IJJcAP7KAXyKALIlvYXD9fMgmz
-	GeoAwbQqcg0VhHICXsdM3KXAm6v/W9FloICvZkYKr9QXrkEi0mxIVfEvohhbDVRBSmrvXNFj0MgbE
-	XR9JQl0oEW4YRTosKAzrh//XBlh8Olt02IvedyiWZJedWtm8rcagjR5e1E6iARLrPMOCC0IS60qVf
-	H2VaZmY3Saa6T8V4+nHzUUOpfuoE/dg2ShoNZ4z3L49jkvTnfCKyTyfzOQD5VZ4WorqFI/sRD74Eg
-	LjIbi/OVJD6XHnRe40odeWHxW5ei5wB0c7WNV9KYJFXXVoPJG+nRY2M1LeEjmGuQqB7ZsvTDx+26o
-	oSEhBgXw==;
+	bh=/A/ePFAjeMC2GglceFED5TIbtUbkLmsSQSkhfQHRtFw=; b=kFbg2Jf4qYcn0XtHtKqR2yCbMd
+	H8amaE7vnYEWxcLgDO4zyoMl9/c1f9cvqTyiAU7MH8KX+IvKKJAqW9Sf8EIweVxdv6ScrGmGJyi0P
+	u8+kOhhR6xdwShh7mjg3MQDWp6nr/4UiMAukJyxwqHSwNzQ+PASFrxXd7QOcVveGNYd0JZPrR4N+g
+	EYGrvk4J11hBkeUPkxIvX/hhxL1jhGJmW4HO/81uJGpYfivRaZmHYneQuLRhD2D530TvYDj3B4wW5
+	K+uiqOt+PVGGlvAY8RwSAa0jFsZPi8DoURNPx2MXWp0DIkZGwYBfg4WMqhJzNkupmdNH+rBSU3Yul
+	4CLnKaUw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0j-008kPl-10;
-	Mon, 12 Jun 2023 09:38:53 +0000
+	id 1q8e0y-008kUJ-31;
+	Mon, 12 Jun 2023 09:39:15 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 35DB73031CD;
-	Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6BC7330613B;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 6353930A77B5A; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.871533689@infradead.org>
+	id 234A130A79084; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093541.240573885@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:32 +0200
+Date: Mon, 12 Jun 2023 11:08:04 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 19/57] sched: Simplify sched_move_task()
+Subject: [PATCH v3 51/57] perf: Simplify perf_event_create_kernel_counter()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,46 +104,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ kernel/events/core.c |   79 ++++++++++++++++-----------------------------------
+ 1 file changed, 26 insertions(+), 53 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10361,17 +10361,18 @@ void sched_move_task(struct task_struct
- 	int queued, running, queue_flags =
- 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
- 	struct task_group *group;
--	struct rq_flags rf;
- 	struct rq *rq;
- 
--	rq = task_rq_lock(tsk, &rf);
-+	CLASS(task_rq_lock, rq_guard)(tsk);
-+	rq = rq_guard.rq;
-+
- 	/*
- 	 * Esp. with SCHED_AUTOGROUP enabled it is possible to get superfluous
- 	 * group changes.
- 	 */
- 	group = sched_get_task_group(tsk);
- 	if (group == tsk->sched_task_group)
--		goto unlock;
-+		return;
- 
- 	update_rq_clock(rq);
- 
-@@ -10396,9 +10397,6 @@ void sched_move_task(struct task_struct
- 		 */
- 		resched_curr(rq);
- 	}
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12569,12 +12569,6 @@ perf_event_create_kernel_counter(struct
+ 				 perf_overflow_handler_t overflow_handler,
+ 				 void *context)
+ {
+-	struct perf_event_pmu_context *pmu_ctx;
+-	struct perf_event_context *ctx;
+-	struct perf_event *event;
+-	struct pmu *pmu;
+-	int err;
 -
--unlock:
--	task_rq_unlock(rq, tsk, &rf);
- }
+ 	/*
+ 	 * Grouping is not supported for kernel events, neither is 'AUX',
+ 	 * make sure the caller's intentions are adjusted.
+@@ -12582,16 +12576,16 @@ perf_event_create_kernel_counter(struct
+ 	if (attr->aux_output)
+ 		return ERR_PTR(-EINVAL);
  
- static inline struct task_group *css_tg(struct cgroup_subsys_state *css)
+-	event = perf_event_alloc(attr, cpu, task, NULL, NULL,
++
++	struct perf_event *event __free(free_event) =
++		perf_event_alloc(attr, cpu, task, NULL, NULL,
+ 				 overflow_handler, context, -1);
+-	if (IS_ERR(event)) {
+-		err = PTR_ERR(event);
+-		goto err;
+-	}
++	if (IS_ERR(event))
++		return event;
+ 
+ 	/* Mark owner so we could distinguish it from user events. */
+ 	event->owner = TASK_TOMBSTONE;
+-	pmu = event->pmu;
++	struct pmu *pmu = event->pmu;
+ 
+ 	if (pmu->task_ctx_nr == perf_sw_context)
+ 		event->event_caps |= PERF_EV_CAP_SOFTWARE;
+@@ -12599,25 +12593,21 @@ perf_event_create_kernel_counter(struct
+ 	/*
+ 	 * Get the target context (task or percpu):
+ 	 */
+-	ctx = find_get_context(task, event);
+-	if (IS_ERR(ctx)) {
+-		err = PTR_ERR(ctx);
+-		goto err_alloc;
+-	}
++	CLASS(find_get_ctx, ctx)(task, event);
++	if (IS_ERR(ctx))
++		return (void *)ctx;
+ 
+ 	WARN_ON_ONCE(ctx->parent_ctx);
+-	mutex_lock(&ctx->mutex);
+-	if (ctx->task == TASK_TOMBSTONE) {
+-		err = -ESRCH;
+-		goto err_unlock;
+-	}
++	guard(mutex)(&ctx->mutex);
+ 
+-	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
+-	if (IS_ERR(pmu_ctx)) {
+-		err = PTR_ERR(pmu_ctx);
+-		goto err_unlock;
+-	}
+-	event->pmu_ctx = pmu_ctx;
++	if (ctx->task == TASK_TOMBSTONE)
++		return ERR_PTR(-ESRCH);
++
++
++	struct perf_event_pmu_context *pmu_ctx __free(put_pmu_ctx) =
++		find_get_pmu_context(pmu, ctx, event);
++	if (!pmu_ctx)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	if (!task) {
+ 		/*
+@@ -12628,34 +12618,17 @@ perf_event_create_kernel_counter(struct
+ 		 */
+ 		struct perf_cpu_context *cpuctx =
+ 			container_of(ctx, struct perf_cpu_context, ctx);
+-		if (!cpuctx->online) {
+-			err = -ENODEV;
+-			goto err_pmu_ctx;
+-		}
++		if (!cpuctx->online)
++			return ERR_PTR(-ENODEV);
+ 	}
+ 
+-	if (!exclusive_event_installable(event, ctx)) {
+-		err = -EBUSY;
+-		goto err_pmu_ctx;
+-	}
++	if (!exclusive_event_installable(event, ctx))
++		return ERR_PTR(-EBUSY);
++
++	event->pmu_ctx = no_free_ptr(pmu_ctx);
++	perf_install_in_context(get_ctx(ctx), event, event->cpu);
+ 
+-	perf_install_in_context(ctx, event, event->cpu);
+-	perf_unpin_context(ctx);
+-	mutex_unlock(&ctx->mutex);
+-
+-	return event;
+-
+-err_pmu_ctx:
+-	put_pmu_ctx(pmu_ctx);
+-	event->pmu_ctx = NULL; /* _free_event() */
+-err_unlock:
+-	mutex_unlock(&ctx->mutex);
+-	perf_unpin_context(ctx);
+-	put_ctx(ctx);
+-err_alloc:
+-	free_event(event);
+-err:
+-	return ERR_PTR(err);
++	return_ptr(event);
+ }
+ EXPORT_SYMBOL_GPL(perf_event_create_kernel_counter);
+ 
 
 
