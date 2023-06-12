@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB1818AF9
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6B8182DE
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=UxgZ8gBb/X/LH3e6EzhOyo9roeaslQ6np5gS0C0ZzJo=; b=Ku/t+uwBxcqEV4o8+xZ+jpXBBt
-	FWrdQHAgk/+eAox1Yy+gfbVADpk/LbCphZgsxdUlobKu4+TaYfqV9KxLiuLGWQd9GNW+WuVAzfxiF
-	dJWeGD6CwmQK05LoRE6BdXJfHnUbooKiSjkY8hx0yVmWbhbvE/3eESTNuU47tNoA+PujXrr4ImhHY
-	MjUH8zDthMar/X1SGJ+REjWeg4WZQuw7ZK157DBPaBMQ3SHNY2+9JiWw4s5+qY9wtno0nOszWVFPI
-	9n0qmTh63fK6roRgD8IfwefdUUqtIEBiPp48mJShCtT+omUi7MWUoaxm2w+oKxK8nIm3bgKuUxtat
-	UH/09s6A==;
+	bh=R8zokz8HpLYR/tS6Df4K9QtMMliKooDPknNNGx1Aq0A=; b=gDtWsQkYmCDnkEwKNGgB3R3yg5
+	AQY1YY9Pt79S6dVL6CWepHSUTi7Jk2ap0PirgoxJz1fjs1z3NKbdLaY23YcYonOyGm9p5ZcrqukWc
+	yahOpmdpqbTYWS9bKccGyNolDypM6QDGY9gdEy70lbk3rS4+jMW+Sv98MjpmckatRRRmbimMkq23O
+	vXAs7ycWwEeJNAkE/ixzJXGvLIQcTSvvlAur3TsCI9Ilrhz2nzXNDbdx1TsVCzn07sqZDE31KbMn4
+	EtMMfJoiXbcTAoBrqdc9gvRSE1k4X7as2PcuNqT2QlErwrhHL5omOT8gwrGh0frufhfqd9bor9oz2
+	0FAle/iA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0w-008kSz-2Z;
-	Mon, 12 Jun 2023 09:39:14 +0000
+	id 1q8e0m-008kQt-3A;
+	Mon, 12 Jun 2023 09:39:01 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D89D3060F1;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2812530325C;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 08B3F30A77B7C; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
-Message-ID: <20230612093540.850386350@infradead.org>
+	id A6ED730A77B69; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.753013700@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:59 +0200
+Date: Mon, 12 Jun 2023 11:07:44 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Subject: [PATCH v3 31/57] perf: Simplify perf_event_modify_attr()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -107,91 +107,41 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   65 ++++++++++++++++++++++++---------------------------
- 1 file changed, 31 insertions(+), 34 deletions(-)
+ kernel/events/core.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -11285,49 +11285,46 @@ static void pmu_dev_release(struct devic
+@@ -3172,7 +3172,7 @@ static int perf_event_modify_attr(struct
  
- static int pmu_dev_alloc(struct pmu *pmu)
- {
--	int ret = -ENOMEM;
-+	int ret;
+ 	WARN_ON_ONCE(event->ctx->parent_ctx);
  
--	pmu->dev = kzalloc(sizeof(struct device), GFP_KERNEL);
--	if (!pmu->dev)
+-	mutex_lock(&event->child_mutex);
++	guard(mutex)(&event->child_mutex);
+ 	/*
+ 	 * Event-type-independent attributes must be copied before event-type
+ 	 * modification, which will validate that final attributes match the
+@@ -3181,16 +3181,16 @@ static int perf_event_modify_attr(struct
+ 	perf_event_modify_copy_attr(&event->attr, attr);
+ 	err = func(event, attr);
+ 	if (err)
 -		goto out;
-+	struct device *dev __free(put_device) =
-+		kzalloc(sizeof(struct device), GFP_KERNEL);
-+	if (!dev)
-+		return -ENOMEM;
- 
--	pmu->dev->groups = pmu->attr_groups;
--	device_initialize(pmu->dev);
-+	dev->groups = pmu->attr_groups;
-+	device_initialize(dev);
- 
--	dev_set_drvdata(pmu->dev, pmu);
--	pmu->dev->bus = &pmu_bus;
--	pmu->dev->release = pmu_dev_release;
-+	dev_set_drvdata(dev, pmu);
-+	dev->bus = &pmu_bus;
-+	dev->release = pmu_dev_release;
- 
--	ret = dev_set_name(pmu->dev, "%s", pmu->name);
-+	ret = dev_set_name(dev, "%s", pmu->name);
- 	if (ret)
--		goto free_dev;
-+		return ret;
- 
--	ret = device_add(pmu->dev);
-+	ret = device_add(dev);
- 	if (ret)
--		goto free_dev;
-+		return ret;
- 
--	/* For PMUs with address filters, throw in an extra attribute: */
--	if (pmu->nr_addr_filters)
--		ret = device_create_file(pmu->dev, &dev_attr_nr_addr_filters);
--
--	if (ret)
--		goto del_dev;
-+	struct device *del __free(device_del) = dev;
- 
--	if (pmu->attr_update)
--		ret = sysfs_update_groups(&pmu->dev->kobj, pmu->attr_update);
--
--	if (ret)
--		goto del_dev;
--
++		return err;
++
+ 	list_for_each_entry(child, &event->child_list, child_list) {
+ 		perf_event_modify_copy_attr(&child->attr, attr);
+ 		err = func(child, attr);
+ 		if (err)
+-			goto out;
++			return err;
+ 	}
 -out:
--	return ret;
--
--del_dev:
--	device_del(pmu->dev);
--
--free_dev:
--	put_device(pmu->dev);
--	goto out;
-+	/* For PMUs with address filters, throw in an extra attribute: */
-+	if (pmu->nr_addr_filters) {
-+		ret = device_create_file(dev, &dev_attr_nr_addr_filters);
-+		if (ret)
-+			return ret;
-+	}
+-	mutex_unlock(&event->child_mutex);
+-	return err;
 +
-+	if (pmu->attr_update) {
-+		ret = sysfs_update_groups(&dev->kobj, pmu->attr_update);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	no_free_ptr(del);
-+	pmu->dev = no_free_ptr(dev);
 +	return 0;
  }
  
- static struct lock_class_key cpuctx_mutex;
+ static void __pmu_ctx_sched_out(struct perf_event_pmu_context *pmu_ctx,
 
 
