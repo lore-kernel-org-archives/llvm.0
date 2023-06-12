@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B0817FF8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A65C1800C
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=8IwM37e642EshGkaM591nsICKeU24b96IU4dYucK72I=; b=dXBEmpz80b7hoderM45846w/8O
-	pNO8hpipMKRJ27niZQqDP/oZ7/BF1rbJvgcP4PNZOjA0/uy51im9efmFnxUQeqkaz8ERUeIMTVgbA
-	4VU+/qmkIVh9mruK1Kemd08wt+2YvNqj7iMBDIb55yjZBxdNbyYHd4vmkglhIRzn3VhbsO1g6kMNX
-	DPownbe5F7lKMEY9oMSiQbAsQ6Sq/LDRo6BH7dsjs/eLhKCTZkfWMRYDFaavzf9aNxmS0+JA4YiOd
-	d6r7PI/eGL4W69GpFhaxW3FPhqLQIpOokWmypJbsZsB0KhQzPHHjPZBSmrvaJDXXl2NqdZOvB1M89
-	9hb3DItQ==;
+	bh=9OWN91/cXOLRfmVSj/c39yenMABydmgJP4BxXsEr7m4=; b=ODMSw25KlwnbIZwtM8Ooplwz3S
+	avsg1C00hw0ZNaZy9SLLjMZe48szqJxUiobcK4beCgvel6ihAYx2CB/a5nHYQfhh+vAHV4C8Cmzs9
+	sHrFLrQ8JgaSA/kQmUkLW4qOpTYgvv7KZlHNVaG4mFStN9gg4I9vNmU5SCLRgi1KP1mNG2IqtUsMx
+	Bn2lgUNR5mJw4d6qus/8zp5DlFSOnjyVpqcuU6rRQsEHrG6c+y/Y3B/BEKX+tLP83TTc2c2wVlwgW
+	ZQhT0qliAPMSaNLZeLP4zzJpsXK4sXqa3/eS25o+5DQB5pDBPNuzZ9bbmC1N5UaAjMUFBVYOytSF3
+	R2+1UEzw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0k-008kQ5-1y;
-	Mon, 12 Jun 2023 09:38:55 +0000
+	id 1q8e0z-008kUr-2p;
+	Mon, 12 Jun 2023 09:39:16 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 186AF3031BF;
-	Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 77027306153;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 5D3FD30A77B5B; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.792690687@infradead.org>
+	id 3757230A79088; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093541.524967360@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:31 +0200
+Date: Mon, 12 Jun 2023 11:08:08 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 18/57] sched: Simplify sched_rr_get_interval()
+Subject: [PATCH v3 55/57] perf: Simplify find_get_context()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,69 +104,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+ kernel/events/core.c |   46 ++++++++++++++++++----------------------------
+ 1 file changed, 18 insertions(+), 28 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8941,38 +8941,30 @@ SYSCALL_DEFINE1(sched_get_priority_min,
- 
- static int sched_rr_get_interval(pid_t pid, struct timespec64 *t)
- {
--	struct task_struct *p;
--	unsigned int time_slice;
--	struct rq_flags rf;
--	struct rq *rq;
-+	unsigned int time_slice = 0;
- 	int retval;
- 
- 	if (pid < 0)
- 		return -EINVAL;
- 
--	retval = -ESRCH;
--	rcu_read_lock();
--	p = find_process_by_pid(pid);
--	if (!p)
--		goto out_unlock;
--
--	retval = security_task_getscheduler(p);
--	if (retval)
--		goto out_unlock;
--
--	rq = task_rq_lock(p, &rf);
--	time_slice = 0;
--	if (p->sched_class->get_rr_interval)
--		time_slice = p->sched_class->get_rr_interval(rq, p);
--	task_rq_unlock(rq, p, &rf);
-+	scoped_guard (rcu) {
-+		struct task_struct *p = find_process_by_pid(pid);
-+		if (!p)
-+			return -ESRCH;
-+
-+		retval = security_task_getscheduler(p);
-+		if (retval)
-+			return retval;
-+
-+		scoped_guard (task_rq_lock, p) {
-+			struct rq *rq = scope.rq;
-+			if (p->sched_class->get_rr_interval)
-+				time_slice = p->sched_class->get_rr_interval(rq, p);
-+		}
-+	}
- 
--	rcu_read_unlock();
- 	jiffies_to_timespec64(time_slice, t);
- 	return 0;
--
--out_unlock:
--	rcu_read_unlock();
--	return retval;
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -1202,6 +1202,8 @@ static void put_ctx(struct perf_event_co
+ 	}
  }
  
- /**
++DEFINE_FREE(put_ctx, struct perf_event_context *, if (_T) put_ctx(_T))
++
+ /*
+  * Because of perf_event::ctx migration in sys_perf_event_open::move_group and
+  * perf_pmu_migrate_context() we need some magic.
+@@ -4718,41 +4720,29 @@ find_get_context(struct task_struct *tas
+ 		if (clone_ctx)
+ 			put_ctx(clone_ctx);
+ 	} else {
+-		ctx = alloc_perf_context(task);
+-		err = -ENOMEM;
+-		if (!ctx)
+-			goto errout;
+-
+-		err = 0;
+-		mutex_lock(&task->perf_event_mutex);
+-		/*
+-		 * If it has already passed perf_event_exit_task().
+-		 * we must see PF_EXITING, it takes this mutex too.
+-		 */
+-		if (task->flags & PF_EXITING)
+-			err = -ESRCH;
+-		else if (task->perf_event_ctxp)
+-			err = -EAGAIN;
+-		else {
+-			get_ctx(ctx);
+-			++ctx->pin_count;
+-			rcu_assign_pointer(task->perf_event_ctxp, ctx);
+-		}
+-		mutex_unlock(&task->perf_event_mutex);
++		struct perf_event_context *new __free(put_ctx) =
++			alloc_perf_context(task);
++		if (!new)
++			return ERR_PTR(-ENOMEM);
+ 
+-		if (unlikely(err)) {
+-			put_ctx(ctx);
++		scoped_guard (mutex, &task->perf_event_mutex) {
++			/*
++			 * If it has already passed perf_event_exit_task().
++			 * we must see PF_EXITING, it takes this mutex too.
++			 */
++			if (task->flags & PF_EXITING)
++				return ERR_PTR(-ESRCH);
+ 
+-			if (err == -EAGAIN)
++			if (task->perf_event_ctxp)
+ 				goto retry;
+-			goto errout;
++
++			ctx = get_ctx(no_free_ptr(new));
++			++ctx->pin_count;
++			rcu_assign_pointer(task->perf_event_ctxp, ctx);
+ 		}
+ 	}
+ 
+ 	return ctx;
+-
+-errout:
+-	return ERR_PTR(err);
+ }
+ 
+ DEFINE_CLASS(find_get_ctx, struct perf_event_context *,
 
 
