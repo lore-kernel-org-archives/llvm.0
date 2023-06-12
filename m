@@ -1,100 +1,51 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB44019BB1
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:04:16 +0000 (UTC)
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-75d4f12d4a3so16131585a.0
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 11:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686593055; x=1689185055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APHh3Nys4coEeSeVUj0oYbJvBI1pNrqCMzlNnyXighg=;
-        b=RlK7II8xo4KN6uK+P4qhzADQcHADQU0gppNv539F+MhnKzEzKl8kGFT+Ezt4JxpxNz
-         7H/6mXli4RYeNG3JvnaHG+6pEY+/L6AhxTll8ico20yxchoZKOUg1s/qwQHyEtGLYNaO
-         CNIbdTO9hw6Mw6K0vzpoGDrUVcJOk6ebSmTL3/UxyfZalzNQPwzXkRbh72etZAQhjUmt
-         kKoWtLNSO+hisLiT3gnrY0zT1UN0bfHj8ag59Bdg3pzucOp/IyNtNhAlGiE+1zs0pW1P
-         SZQh8VyJa716lOLNnSBr5pFjltIYIowqnN2V9u9zM1TffiEnQ85BHYxD+NJBxpC9ikoN
-         ev8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593055; x=1689185055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=APHh3Nys4coEeSeVUj0oYbJvBI1pNrqCMzlNnyXighg=;
-        b=DzSgrjhgQY3CMUD2sUbzhccIqjsqhV+bpQwA5OG6PItBzabaIK43Imtl3PignhMmnB
-         xsLSw/Nz+LGDtF8kK9EGjlUZFt+dx6Gwx5Lf2VaXFkh8oL8JBr95nauJcTIhVAbq+mRd
-         6zaF6W6/JBxKds4RW4LNVLhYhcZQzh4zTIHyAwt8lg0EZb+uUTPMCRule+Mu1nOCXfHW
-         Yf9AdeJD1m24Fvmi3tdzHJgDMA2U5IuzWB2puFmFgsMjgGAJEhNYnZFaTYqE8x2/59sj
-         Fva7eoyMDCGMYYJI0+wTNT/XYE9Wd0USzWmFHECQzeVPrhWnHypxlULA9ZFHcu5WUbWw
-         PhFw==
-X-Gm-Message-State: AC+VfDxzWExH5jTsW3BBvOHznH+8uiDrobrPD/GWBUY2UhLc6/HPKljV
-	qCT0tg9awi581JgQhIVVdp4=
-X-Google-Smtp-Source: ACHHUZ42v1zzemlh5TyqezWxqhKP4+f7W8FTGmdaTJaUQKiluWd5q74RDa+nIJqNqXTIXjd7yh7FEA==
-X-Received: by 2002:a05:620a:4bc9:b0:75e:c6e1:3ca9 with SMTP id sw9-20020a05620a4bc900b0075ec6e13ca9mr9030181qkn.43.1686593055236;
-        Mon, 12 Jun 2023 11:04:15 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05620a130800b0075caf18008bsm3010217qkj.116.2023.06.12.11.04.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:04:15 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailauth.nyi.internal (Postfix) with ESMTP id F0CAF27C005B;
-	Mon, 12 Jun 2023 14:04:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 12 Jun 2023 14:04:14 -0400
-X-ME-Sender: <xms:G16HZMNVqrczWrJlBmlnmqA_k3VHCkZKlMPdezVbzttdNLWyMeO7AA>
-    <xme:G16HZC_STa5f_J1Ybm3vIOtNUX_iLnkPp03GgxwojQJDKxWUBr_Q46NhzKb6vWa5r
-    -nornpYBqdvPEKyjA>
-X-ME-Received: <xmr:G16HZDQQrZ5x6VPJNoKo17C11asfBTkCA-eOYIgUM-UuAnY6m9Ho6o41wZE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:G16HZEsKElmlwO8YuPshs7AS1ebBAVUXDJnxxwDMfVVRxRO3KKyrbw>
-    <xmx:G16HZEeIVeVKGtqa1UMPTB_17IzjM2rVfekKaW8Fhyyyk4iJPLKq4A>
-    <xmx:G16HZI1sNTLC6pSjNuJVN7hWHveas8tMSgvQ6XiG4SAK3POvuTV5Ng>
-    <xmx:HV6HZCDb8rZpMmG2YODQuMZ_Pvj-i2G7rXcV5Kybq1j8UczScNQIKdIYfb0>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Jun 2023 14:04:10 -0400 (EDT)
-Date: Mon, 12 Jun 2023 11:02:28 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: torvalds@linux-foundation.org, keescook@chromium.org,
-	gregkh@linuxfoundation.org, pbonzini@redhat.com,	masahiroy@kernel.org,
- nathan@kernel.org, ndesaulniers@google.com,	nicolas@fjasle.eu,
- catalin.marinas@arm.com, will@kernel.org,	vkoul@kernel.org,
- trix@redhat.com, ojeda@kernel.org,	mingo@redhat.com, longman@redhat.com,
- dennis@kernel.org,	tj@kernel.org, cl@linux.com, acme@kernel.org,
- mark.rutland@arm.com,	alexander.shishkin@linux.intel.com,
- jolsa@kernel.org,	namhyung@kernel.org, irogers@google.com,
- adrian.hunter@intel.com,	juri.lelli@redhat.com,
- vincent.guittot@linaro.org,	dietmar.eggemann@arm.com,
- rostedt@goodmis.org, bsegall@google.com,	mgorman@suse.de,
- bristot@redhat.com, vschneid@redhat.com,	paulmck@kernel.org,
- frederic@kernel.org, quic_neeraju@quicinc.com,	joel@joelfernandes.org,
- josh@joshtriplett.org,	mathieu.desnoyers@efficios.com,
- jiangshanlai@gmail.com,	rientjes@google.com, vbabka@suse.cz,
- roman.gushchin@linux.dev,	42.hyeyoo@gmail.com, apw@canonical.com,
- joe@perches.com,	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 08/57] sched: Simplify wake_up_if_idle()
-Message-ID: <ZIddtMiTj8Kktq1z@boqun-archlinux>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.977924652@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0FC19BB1;
+	Mon, 12 Jun 2023 18:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686593518; x=1718129518;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MUJIyIIxyWDXLsGprFR9Y5h4WDL/y5XyfJH9HS3u2l4=;
+  b=dXfD7fH5tnm5gE9+znQ/LA6Xy7CRYZgRvJ3lILh/ZO4SJUKVW2LhaZKq
+   sEp58g1GfCF55bPGv42s888v5DTGy2cvzXgl7nNfeIWlV2TzH0ZauHv6Z
+   Y6ZxhUDxypodRv1Mu0em5oZuttBpRk++TJ7HFX8c68dveHz8qZgM/i1cE
+   SfZJ8qL97RttJ+sfhuYNbLiAS4FOblbXELwvcBY9YKEzYpijVykEgnGMF
+   jjC7UcPP9MoAqhvRLdRz5+KsMKkJb0sL3qkfaVGvsIqRlKaq/N1y3Kzhs
+   ZCeU40oBJauT4xNKWYifqKfnpHbRcyODcwGqXWRNnMAJ4nn7wqMCFylxc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444502004"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="444502004"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:11:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="855757138"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="855757138"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2023 11:11:42 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q8m0z-0000YW-2g;
+	Mon, 12 Jun 2023 18:11:41 +0000
+Date: Tue, 13 Jun 2023 02:10:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
+Message-ID: <202306130116.8PIDa21J-lkp@intel.com>
+References: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -103,81 +54,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612093537.977924652@infradead.org>
+In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
 
-On Mon, Jun 12, 2023 at 11:07:21AM +0200, Peter Zijlstra wrote:
-> Use guards to reduce gotos and simplify control flow.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/sched/core.c  |   20 ++++++--------------
->  kernel/sched/sched.h |   15 +++++++++++++++
->  2 files changed, 21 insertions(+), 14 deletions(-)
-> 
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3872,21 +3872,13 @@ static void __ttwu_queue_wakelist(struct
->  void wake_up_if_idle(int cpu)
->  {
->  	struct rq *rq = cpu_rq(cpu);
-> -	struct rq_flags rf;
->  
-> -	rcu_read_lock();
-> -
-> -	if (!is_idle_task(rcu_dereference(rq->curr)))
-> -		goto out;
-> -
-> -	rq_lock_irqsave(rq, &rf);
-> -	if (is_idle_task(rq->curr))
-> -		resched_curr(rq);
-> -	/* Else CPU is not idle, do nothing here: */
-> -	rq_unlock_irqrestore(rq, &rf);
-> -
-> -out:
-> -	rcu_read_unlock();
-> +	guard(rcu)();
-> +	if (is_idle_task(rcu_dereference(rq->curr))) {
-> +		guard(rq_lock)(rq);
+Hi Rasmus,
 
-We assume that irq must be disabled when this function called?
-Otherwise, I don't understand why this is not
+kernel test robot noticed the following build errors:
 
-	guard(rq_lock_irqsave)(rq);
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230609]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-?
+url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230612-211434
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20230612113059.247275-5-linux%40rasmusvillemoes.dk
+patch subject: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
+config: arm-randconfig-r012-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130116.8PIDa21J-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
+        git fetch abelloni rtc-next
+        git checkout abelloni/rtc-next
+        b4 shazam https://lore.kernel.org/r/20230612113059.247275-5-linux@rasmusvillemoes.dk
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/rtc/
 
-Regards,
-Boqun
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130116.8PIDa21J-lkp@intel.com/
 
-> +		if (is_idle_task(rq->curr))
-> +			resched_curr(rq);
-> +	}
->  }
->  
->  bool cpus_share_cache(int this_cpu, int that_cpu)
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1678,6 +1678,21 @@ rq_unlock(struct rq *rq, struct rq_flags
->  	raw_spin_rq_unlock(rq);
->  }
->  
-> +DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
-> +		    rq_lock(_T->lock, &_T->rf),
-> +		    rq_unlock(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
-> +DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
-> +		    rq_lock_irq(_T->lock, &_T->rf),
-> +		    rq_unlock_irq(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
-> +DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
-> +		    rq_lock_irqsave(_T->lock, &_T->rf),
-> +		    rq_unlock_irqrestore(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
->  static inline struct rq *
->  this_rq_lock_irq(struct rq_flags *rf)
->  	__acquires(rq->lock)
-> 
-> 
+All errors (new ones prefixed by >>):
+
+>> drivers/rtc/rtc-isl12022.c:238:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     238 |         val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
+         |               ^
+   1 error generated.
+
+
+vim +/FIELD_PREP +238 drivers/rtc/rtc-isl12022.c
+
+   219	
+   220	static void isl12022_set_trip_levels(struct device *dev)
+   221	{
+   222		struct regmap *regmap = dev_get_drvdata(dev);
+   223		u32 level85 = 0, level75 = 0;
+   224		int ret, x85, x75;
+   225		u8 val, mask;
+   226	
+   227		device_property_read_u32(dev, "isil,trip-level85-microvolt", &level85);
+   228		device_property_read_u32(dev, "isil,trip-level75-microvolt", &level75);
+   229	
+   230		for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
+   231			if (level85 <= trip_level85[x85])
+   232				break;
+   233	
+   234		for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
+   235			if (level75 <= trip_level75[x75])
+   236				break;
+   237	
+ > 238		val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
+   239		mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
+   240	
+   241		ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
+   242		if (ret)
+   243			dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
+   244	}
+   245	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
