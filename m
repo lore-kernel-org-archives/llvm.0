@@ -1,129 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCC05252
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B808DC433EF;
-	Mon, 12 Jun 2023 18:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686596066;
-	bh=/Ri1xyOerdimybY5WnwGgxuj7fv7VGFmjAE4nT3rS6c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SJSh/vuWkOaDMgV+aJhtgMUtUkZlKSJ207YLgw2MMqinW9+Ax7JBbNJB0TEh3zpKQ
-	 TPtoFVa4YCcif6L2dfpF8lWIVtT4JVDS9sP5m9y4sdnDpGSPC2IqzSNy4EZ7wTGjlO
-	 gMz9V6BXA1aAuXg9irzuu2u1SmvTjFOTTEKEkUhUDynk5cB2V0h9hIeq2L7RV9heDN
-	 9ZKg5RjNKH1YsoxU0OUdMnELVNDidzZurCRd4lxYXC0yfhZP3WXOPRFVd9yK5eUWCV
-	 01Fq4dfxwyi6SHbneeufQNKJ5CHfd8IlA73levP3Pxwyyi3zcTZ4y85VyVWR0dvDtl
-	 xkO5n2Izn2kDA==
-Date: Mon, 12 Jun 2023 11:54:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
-	open list <linux-kernel@vger.kernel.org>,
-	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: clang: Powerpc: =?utf-8?Q?clang-nightl?=
- =?utf-8?B?eS1tYXBsZV9kZWZjb25maWcg4oCU?= FAIL
-Message-ID: <20230612185424.GA2891387@dev-arch.thelio-3990X>
-References: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929D1522D
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XU9axK6uJmgJQSoRJwESZ2YBCmhPiMFjehu8M/bt6Oc=; b=oEZpxMsPxgp77AwTg3jdZUFpU8
+	btsEePZBm/Ugf5WVKugSk/fB4d1+Bi75EVmGymAR5JC4BYjUzSClgVUmQSPrLyTmhX12YE//NEAj2
+	HzorzGh3uEi0gkKzG2nCK62lmKIUt9Tv3fC7YRx00Y5lW6O75GkEg7u9fD2c8jiXCnfrB1PckCkDw
+	xLNrRMYnXshPnoGOEAKHvjl0SjAGvuHy9JhJt1IsHPYtYLvOqIme3WFVlCNdssQm92iIIGFGyooln
+	vuTwUduRy8s7d/cDJBoMY+dswQ7AxTvrGSj20qdaZvOin2xWq2DgwH5TXknK3glDrGOwf59J5Og7V
+	LpG/bPGA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1q8mhI-008ybZ-1O;
+	Mon, 12 Jun 2023 18:55:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 69F8C300195;
+	Mon, 12 Jun 2023 20:55:22 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4D4B320D70605; Mon, 12 Jun 2023 20:55:22 +0200 (CEST)
+Date: Mon, 12 Jun 2023 20:55:22 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com,
+	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+	nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+	vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+	dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+	adrian.hunter@intel.com, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+	frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
+Message-ID: <20230612185522.GF83892@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093541.598260416@infradead.org>
+ <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
+In-Reply-To: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
 
-Hi Naresh,
-
-On Tue, Jun 13, 2023 at 12:10:30AM +0530, Naresh Kamboju wrote:
-> [Please ignore if it is already reported]
+On Mon, Jun 12, 2023 at 09:19:19AM -0700, Linus Torvalds wrote:
+> This patch looks completely broken to me.
 > 
-> Following two builds failed on stable-rc 6.1.34-rc1.
+> You now do
 > 
->   - Powerpc: clang-nightly-maple_defconfig — FAIL
->   - Powerpc: clang-nightly-cell_defconfig — FAIL
+>                 if (err == -EAGAIN)
+>                         goto restart;
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc
-> CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1
-> LLVM_IAS=0 LD=powerpc64le-linux-gnu-ld
-> 
-> arch/powerpc/lib/copypage_power7.S: Assembler messages:
-> arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
-> arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
-> arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
-> arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
-> arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
-> clang: error: assembler command failed with exit code 1 (use -v to see
-> invocation)
-> make[4]: *** [scripts/Makefile.build:382:
-> arch/powerpc/lib/copypage_power7.o] Error 1
-> make[4]: Target 'arch/powerpc/lib/' not remade because of errors.
-> make[3]: *** [scripts/Makefile.build:500: arch/powerpc/lib] Error 2
-> arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
-> arch/powerpc/kernel/exceptions-64s.S:2959: Error: junk at end of line: `0b01010'
-> arch/powerpc/kernel/exceptions-64s.S:2979: Error: junk at end of line: `0b01010'
-> arch/powerpc/kernel/exceptions-64s.S:2994: Error: junk at end of line: `0b01010'
-> arch/powerpc/kernel/exceptions-64s.S:3012: Error: junk at end of line: `0b01010'
-> arch/powerpc/kernel/exceptions-64s.S:3032: Error: junk at end of line: `0b01010'
-> arch/powerpc/kernel/exceptions-64s.S:3079: Error: junk at end of line: `0b01010'
-> clang: error: assembler command failed with exit code 1 (use -v to see
-> invocation)
-> make[4]: *** [scripts/Makefile.build:382: arch/powerpc/kernel/head_64.o] Error 1
-> arch/powerpc/kernel/entry_64.S: Assembler messages:
-> arch/powerpc/kernel/entry_64.S:172: Error: junk at end of line: `0b01010'
-> clang: error: assembler command failed with exit code 1 (use -v to see
-> invocation)
-> make[4]: *** [scripts/Makefile.build:382:
-> arch/powerpc/kernel/entry_64.o] Error 1
-> make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
-> make[3]: *** [scripts/Makefile.build:500: arch/powerpc/kernel] Error 2
-> make[3]: Target 'arch/powerpc/' not remade because of errors.
-> make[2]: *** [scripts/Makefile.build:500: arch/powerpc] Error 2
-> make[2]: Target './' not remade because of errors.
-> make[1]: *** [Makefile:2012: .] Error 2
-> make[1]: Target '__all' not remade because of errors.
-> make: *** [Makefile:238: __sub-make] Error 2
-> make: Target '__all' not remade because of errors.
+> *within* the RCU-guarded section, and the "goto restart" will guard it again.
 
-As always, thanks for the report. This is an LLVM regression/change in
-behavior caused by [1], which can break as-option and as-instr on
-releases prior to commit d5c8d6e0fa61 ("kbuild: Update assembler calls
-to use proper flags and language target"), as unsupported flags for the
-current target ('-x') may be present (KBUILD_CFLAGS is used for these
-tests instead of KBUILD_AFLAGS). Inside try-run, the macro behind
-as-instr and as-option, I see
+restart:
+	guard(rcu)();
+	list_for_each_entry_rcu(iter, &head, rb_entry) {
+		...
+		if (err == -EAGAIN)
+			goto restart;
+	}
 
-  clang-17: error: unsupported option '-mno-prefixed' for target 'powerpc64le-linux-gnu'
-  clang-17: error: unsupported option '-mno-pcrel' for target 'powerpc64le-linux-gnu'
-  clang-17: error: unsupported option '-mno-altivec' for target 'powerpc64le-linux-gnu'
-  clang-17: error: unsupported option '-mno-vsx' for target 'powerpc64le-linux-gnu'
-  clang-17: error: unsupported option '-mno-mma' for target 'powerpc64le-linux-gnu'
-  clang-17: error: unsupported option '-mno-spe' for target 'powerpc64le-linux-gnu'
+So the restart is *before* the variable exists, eg. it's out-of-scope.
 
-This has come up recently elsewhere in PowerPC, see
-commit 2b694fc96fe3 ("powerpc/boot: Disable power10 features after
-BOOTAFLAGS assignment"). While I think it is dubious that clang errors
-on these flags for the assembler target, this is already fixed on the
-Linux side by using KBUILD_AFLAGS for these make macros.
+per the last email's guard.c, if changed like so:
 
-I am preparing a series of d5c8d6e0fa61 and its dependencies for 6.1 but
-I want to do sufficient build testing first, which is currently running
-for me. Would you be able to point your matrix to [2] to make sure
-everything works properly with both GCC and LLVM? It is a work in
-progress as the second patch in the stack needs a proper commit message
-but it is the diff I expect to ship so that it all that matters.
+void main(void)
+{
+	int done = 0;
+restart:
+	lock_guard(spin, moo, &lock);
+	for (;!done;) {
+		done = 1;
+		goto restart;
+	}
+}
 
-[1]: https://github.com/llvm/llvm-project/commit/5548843d692a92a7840f14002debc3cebcb3cdc3
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=wip/b4/6-1-asssembler-target-llvm-17
+$ gcc -O2 -o guard guard.c && ./guard
+spin_lock
+spin_unlock
+spin_lock
+spin_unlock
 
-Cheers,
-Nathan
+Which is exactly the expected result.
+
+
+
+
