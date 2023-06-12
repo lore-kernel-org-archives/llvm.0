@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E1B18AE4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCF818AF3
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=VwLJzq4wQCJ4xfIoCm0MOddWikggSaLNbFpG3XgsB1U=; b=dDnxyA36tfL2pJa+fjQ2VTeARz
-	uh5lFYPphgrzEScOZBiNSB/l0JET6lz9vuFxdA8IjoxWv//Mx3BL1bDtn1P4YIMrpV/FRB35iPjRQ
-	S/2hc5m9oTCtV65ICDia0XlNp2GJ0x2OKDtdrc7GG+LtRuBqj2191E0uWBwd1NiC6XGa9rjhVrcph
-	ZKoLG6i5q8+lBORMXKkBhDQwET2tp7pp2axVFoU3Tu0b7dxGOs6WD1mFYQPYjDOIn9x8uoZZFJBye
-	DG5AK1uryNKX7xiUVquINqYQD8O0H4yN8nueL4W+D6yuGI4G4JIeE0rBu/zP8xN1C128nOvfhbHfZ
-	MmQ71Gaw==;
+	bh=y0wgwpukS8T7O340+NKvU9chnTVlAmLcht1jdurq5Ss=; b=IJJcAP7KAXyKALIlvYXD9fMgmz
+	GeoAwbQqcg0VhHICXsdM3KXAm6v/W9FloICvZkYKr9QXrkEi0mxIVfEvohhbDVRBSmrvXNFj0MgbE
+	XR9JQl0oEW4YRTosKAzrh//XBlh8Olt02IvedyiWZJedWtm8rcagjR5e1E6iARLrPMOCC0IS60qVf
+	H2VaZmY3Saa6T8V4+nHzUUOpfuoE/dg2ShoNZ4z3L49jkvTnfCKyTyfzOQD5VZ4WorqFI/sRD74Eg
+	LjIbi/OVJD6XHnRe40odeWHxW5ei5wB0c7WNV9KYJFXXVoPJG+nRY2M1LeEjmGuQqB7ZsvTDx+26o
+	oSEhBgXw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0u-008kRz-1Q;
-	Mon, 12 Jun 2023 09:39:09 +0000
+	id 1q8e0j-008kPl-10;
+	Mon, 12 Jun 2023 09:38:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4DE533033EF;
-	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 35DB73031CD;
+	Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id E135130A77B73; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.493651920@infradead.org>
+	id 6353930A77B5A; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093538.871533689@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:54 +0200
+Date: Mon, 12 Jun 2023 11:07:32 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 41/57] perf: Simplify __perf_event_output()
+Subject: [PATCH v3 19/57] sched: Simplify sched_move_task()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,39 +104,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
+Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ kernel/sched/core.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7739,22 +7739,17 @@ __perf_event_output(struct perf_event *e
- 	int err;
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -10361,17 +10361,18 @@ void sched_move_task(struct task_struct
+ 	int queued, running, queue_flags =
+ 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
+ 	struct task_group *group;
+-	struct rq_flags rf;
+ 	struct rq *rq;
  
- 	/* protect the callchain buffers */
--	rcu_read_lock();
-+	guard(rcu)();
+-	rq = task_rq_lock(tsk, &rf);
++	CLASS(task_rq_lock, rq_guard)(tsk);
++	rq = rq_guard.rq;
++
+ 	/*
+ 	 * Esp. with SCHED_AUTOGROUP enabled it is possible to get superfluous
+ 	 * group changes.
+ 	 */
+ 	group = sched_get_task_group(tsk);
+ 	if (group == tsk->sched_task_group)
+-		goto unlock;
++		return;
  
- 	perf_prepare_sample(data, event, regs);
- 	perf_prepare_header(&header, data, event, regs);
--
- 	err = output_begin(&handle, data, event, header.size);
- 	if (err)
--		goto exit;
--
-+		return err;
- 	perf_output_sample(&handle, &header, data, event);
--
- 	perf_output_end(&handle);
+ 	update_rq_clock(rq);
  
--exit:
--	rcu_read_unlock();
--	return err;
-+	return 0;
+@@ -10396,9 +10397,6 @@ void sched_move_task(struct task_struct
+ 		 */
+ 		resched_curr(rq);
+ 	}
+-
+-unlock:
+-	task_rq_unlock(rq, tsk, &rf);
  }
  
- void
+ static inline struct task_group *css_tg(struct cgroup_subsys_state *css)
 
 
