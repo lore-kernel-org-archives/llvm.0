@@ -1,108 +1,150 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1638EA8
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 16:38:35 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso5326936e87.1
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:38:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794EE17AB7
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 17:11:54 +0000 (UTC)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1b3b3c69969so18387585ad.0
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686587913; x=1689179913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZkQkCR0zK+G1VvzG47ybOhl6nFuB5nGWY9v59LgjCEc=;
-        b=TFz7syu073g1TLL4KeZsNwWe7UtqoiPAh7S+IiXwa07W3+rqjKn/Enyh/XB3TkuP4S
-         TqB2x8FBNEMLQj1VpMYL5A0l0usDika4psdZfJU7OzYWtTARLtsTHtsmy1KIWkni4ZRV
-         AZVkJOdwOkptzTXP/yS253RHdR8qjkwoAwBik=
+        d=google.com; s=20221208; t=1686589914; x=1689181914;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
+        b=wVF0xEYGM/V+zCU80xvyq4qwV0yj1hOdLFRqOeBG6rNq1mZS9axHGYBLeBI0WMdRIv
+         hkzXG+DQqyxUG3ZNJwhk4nvHa7dTDdVmUbtUbv0KonjLnpMhwIR++Zn+JYGYF4qpACy0
+         TBguC9jF/7RXSTOZFdVTFwDFoUFeZKO/TxKQvxwyOSfFBR1hlTDCsLQF3gJGrQKh0dM1
+         dnbBs1N9sWbWV7gnyAH3EvCgPH/tTgIbVrgHLUeG6DI/qTktPkH3U4iZQSPo6hQIH+Hn
+         C7b43aUeXSO/Vmzkm31QiJeIjfT3Lil1qVykh5WcPDzbPCKU8j1R2gFpw17raF0Nay2u
+         ptyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686587913; x=1689179913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZkQkCR0zK+G1VvzG47ybOhl6nFuB5nGWY9v59LgjCEc=;
-        b=CiQKfc2L58mknvMvtWZoi+Bm8K1E2NKxd/MFlFTuryvERXLh6GeBO5ddYYr7QmUr6H
-         zloS/GXjbTOZ7rTP4bPEcvSfWtJ+N97oAUzpi7GQPWYj5oWJoFGwvW+f7Vr0K+tunZl4
-         JRDwm124vAM2FxQ5fbOhuF3YZsqine9Q3PfraoY3QNltlAEAXBPSp9mudKKJdKtDBTJF
-         D1gtHvLhipVHduQGGfdXENsi5EpW8GNyOg1VxG//Z38d+jLGQ2JDxjvLv3YUNKWWVdOF
-         bmMD+jf95QWVZD9iExh0/2EecriWM1M98p2oEE+TrrhenbkOoAmOq8ctM6G7oCPVSn5I
-         rtxw==
-X-Gm-Message-State: AC+VfDz3KCNj4wsz6I9T+o1hf7lRO+EKUfSIAxI6IBEkffOZwdjCHzE8
-	zUkq2a4pCNnziwwzvfDoatrMQAnU/GsjCRj7p8dFz+mX
-X-Google-Smtp-Source: ACHHUZ6T9CwbTUoyFhoVWCc3AqM9wWGtDWrWQQWGXEHUaAS4PwAty37/3Teqe9Lohq6rChuVB3I9UA==
-X-Received: by 2002:a05:6512:54b:b0:4ed:b061:18ee with SMTP id h11-20020a056512054b00b004edb06118eemr4815762lfl.22.1686587913653;
-        Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id z14-20020a19f70e000000b004eeec1261ecsm1478879lfe.31.2023.06.12.09.38.33
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5336392e87.2
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
-X-Received: by 2002:a19:e30c:0:b0:4f6:1779:b1c1 with SMTP id
- a12-20020a19e30c000000b004f61779b1c1mr5015246lfh.48.1686587892415; Mon, 12
- Jun 2023 09:38:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686589914; x=1689181914;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
+        b=KXMn8xnO1IRrAIEZ1fdqtCvnpn5UYYt3198yihzJWYWEVVb+IcN/n9TIe2WQHoxbvv
+         1ejF91V5pgRxS/jAJenC39P/0fTBG6Fi6rs8Jxi1e+Z4557oLfsKQLVImN3bNlYGAghW
+         XdzsZfJaD44GJNaz+ipVU/T1OBU2KfDmD2Gmlf713y36ZMCqYA0Ug7Vp4KwmHDvo6Dot
+         VZoGI13XwRA0pp++NTYlY64EhjIJC5Yo6gKs7HC4WvTCo9O6opHP+1GZJDLfyZCbUXRp
+         P68Mh3HGT415SBsydr+2no+J4U0JpmoZRB1iLk/cZeShbg1+3fB2ya538RdTu45KYkxb
+         dKdQ==
+X-Gm-Message-State: AC+VfDyRSmpj3OULlVdrdDpgtK/PJt/D2CSvFMtfpUPs6/Llcr01Qxuk
+	/TQLWvIAE8QgcdflsI0NXiW4uoo+gSU=
+X-Google-Smtp-Source: ACHHUZ5v1c+CqyBwYivhK+DSqau5kQVmVjEZH0nAYmDaNR5inKzg30hD4xw/4ZnGEEzgZLpMXuBMN4uPSsY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:8d81:b0:1b3:95a9:3fc3 with SMTP id
+ v1-20020a1709028d8100b001b395a93fc3mr1303122plo.10.1686589913639; Mon, 12 Jun
+ 2023 10:11:53 -0700 (PDT)
+Date: Mon, 12 Jun 2023 10:11:51 -0700
+In-Reply-To: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230612090713.652690195@infradead.org>
-In-Reply-To: <20230612090713.652690195@infradead.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 12 Jun 2023 09:37:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj3jV+v63RA30eVpjHVyrGmmTF7d3ajdV=1wBU=5OHa=A@mail.gmail.com>
-Message-ID: <CAHk-=wj3jV+v63RA30eVpjHVyrGmmTF7d3ajdV=1wBU=5OHa=A@mail.gmail.com>
-Subject: Re: [PATCH v3 00/57] Scope-based Resource Management
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com, 
-	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
-	nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org, 
-	trix@redhat.com, ojeda@kernel.org, mingo@redhat.com, longman@redhat.com, 
-	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org, cl@linux.com, 
-	acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, namhyung@kernel.org, irogers@google.com, 
-	adrian.hunter@intel.com, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org, 
-	frederic@kernel.org, quic_neeraju@quicinc.com, joel@joelfernandes.org, 
-	josh@joshtriplett.org, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, 
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev, 
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com, 
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com, john.johansen@canonical.com, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+Mime-Version: 1.0
+References: <20230612090713.652690195@infradead.org> <20230612093541.598260416@infradead.org>
+ <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+Message-ID: <ZIdR18xG1jy8WdEp@google.com>
+Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
+From: Sean Christopherson <seanjc@google.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org, gregkh@linuxfoundation.org, 
+	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com, 
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org, 
+	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org, 
+	tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, 
+	irogers@google.com, adrian.hunter@intel.com, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com, 
+	joel@joelfernandes.org, josh@joshtriplett.org, mathieu.desnoyers@efficios.com, 
+	jiangshanlai@gmail.com, rientjes@google.com, vbabka@suse.cz, 
+	roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, apw@canonical.com, 
+	joe@perches.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com, 
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	dmaengine@vger.kernel.org, llvm@lists.linux.dev, 
 	linux-perf-users@vger.kernel.org, rcu@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, tglx@linutronix.de, 
 	ravi.bangoria@amd.com, error27@gmail.com, luc.vanoostenryck@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> These are by no means 'complete' convertions, I've mostly focussed on fun=
-ctions
-> that had 'goto' in them. Since that's a large part of why I started on al=
-l this.
+On Mon, Jun 12, 2023, Linus Torvalds wrote:
+> This patch looks completely broken to me.
+>=20
+> You now do
+>=20
+>                 if (err =3D=3D -EAGAIN)
+>                         goto restart;
+>=20
+> *within* the RCU-guarded section, and the "goto restart" will guard it ag=
+ain.
 
-So I found what looks like two patches being completely broken because
-the conversion was fundamentally misguided.
+What if we require that all guarded sections have explicit scoping?  E.g. d=
+rop
+the current version of guard() and rename scoped_guard() =3D> guard().  And=
+ then
+figure out macro magic to guard an entire function?  E.g. something like
 
-And honestly, by the end of walking through the patches I was just
-scanning so quickly that I might have missed some.
+  static void perf_pmu_output_stop(struct perf_event *event) fn_guard(rcu)
+  {
+	...
+  }
 
-Let's make the rule be that
+or just "guard(rcu)" if possible.  IIUC, function scopes like that will be =
+possible
+once -Wdeclaration-after-statement goes away.
 
- - max 10 patches in the series so that I think they were actually
-thought about, and people can actually review them
+Bugs aside, IMO guards that are buried in the middle of a function and impl=
+icitly
+scoped to the function are all too easy to overlook.  Requiring explicit sc=
+oping
+would make bugs like this easier to spot since the goto would jump out of s=
+cope
+(and I assume prematurely release the resource/lock?).  As a bonus, annotat=
+ing
+the function itself would also serve as documentation.
 
- - only clear "goto out of scope" conversions. When you see a
-"continue" or a "goto repeat", you TAKE A BIG STEP BACK.
+The only downside is that the code for function-scoped locks that are acqui=
+red
+partway through the function would be more verbose and/or cumbersome to wri=
+te,
+but that can be mitigated to some extent, e.g. by moving the locked portion=
+ to a
+separate helper.
 
-Because this is all clever, and I am now happy with the syntax, but I
-am *not* happy with that 60-patch monster series with what looks like
-horrible bugs.
-
-             Linus
+> On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+> >
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
+> >         int err, cpu;
+> >
+> >  restart:
+> > -       rcu_read_lock();
+> > +       /* cannot have a label in front of a decl */;
+> > +       guard(rcu)();
+> >         list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry)=
+ {
+> >                 /*
+> >                  * For per-CPU events, we need to make sure that neithe=
+r they
+> > @@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
+> >                         continue;
+> >
+> >                 err =3D cpu_function_call(cpu, __perf_pmu_output_stop, =
+event);
+> > -               if (err =3D=3D -EAGAIN) {
+> > -                       rcu_read_unlock();
+> > +               if (err =3D=3D -EAGAIN)
+> >                         goto restart;
+> > -               }
+> >         }
+> > -       rcu_read_unlock();
+> >  }
