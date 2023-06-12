@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B1C18AE5
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB1818AF9
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=kTQMzLiQOiysp6z8Xt3S6oOFWuHsLtjxBsNekM1iUPM=; b=FnsYw1rgaWsOiA0J8R1O2i1uX3
-	e/F70Qz8dzTuEl3kifFu3bO7NPhClNyjvgCn8IyOXFExymb1mJLxjsIE1VNsGjM+ZK5UdyD9Uvpmx
-	8MMlCDrtOaWNKsB/UhUOB/ZOYncIt9ndU2q2e+wO9d2EOd9MKV6zm5aJXolVKFVPXj7clRX/cVNos
-	UIEMW7CktYOkUgJCjntPeUklJKZwTRaqyQxMkh9aZMJURF4j5ZOLong2c9l7tRmNOL8u2yfvD2bky
-	pOzCMpkX6wckfonGJZWPeiND+Om9Xf6BVzQSrlpTGvnF4Bd5KmsJ+mb8KpkZEAGen/+v1YgVnR9df
-	hpzryTVw==;
+	bh=UxgZ8gBb/X/LH3e6EzhOyo9roeaslQ6np5gS0C0ZzJo=; b=Ku/t+uwBxcqEV4o8+xZ+jpXBBt
+	FWrdQHAgk/+eAox1Yy+gfbVADpk/LbCphZgsxdUlobKu4+TaYfqV9KxLiuLGWQd9GNW+WuVAzfxiF
+	dJWeGD6CwmQK05LoRE6BdXJfHnUbooKiSjkY8hx0yVmWbhbvE/3eESTNuU47tNoA+PujXrr4ImhHY
+	MjUH8zDthMar/X1SGJ+REjWeg4WZQuw7ZK157DBPaBMQ3SHNY2+9JiWw4s5+qY9wtno0nOszWVFPI
+	9n0qmTh63fK6roRgD8IfwefdUUqtIEBiPp48mJShCtT+omUi7MWUoaxm2w+oKxK8nIm3bgKuUxtat
+	UH/09s6A==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0r-008kRc-24;
-	Mon, 12 Jun 2023 09:39:07 +0000
+	id 1q8e0w-008kSz-2Z;
+	Mon, 12 Jun 2023 09:39:14 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3FBB83033BB;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D89D3060F1;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id D6BA430A77B71; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.324593804@infradead.org>
+	id 08B3F30A77B7C; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093540.850386350@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:52 +0200
+Date: Mon, 12 Jun 2023 11:07:59 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 39/57] perf: Simplify perf_event_*_userpage()
+Subject: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -107,98 +107,91 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   30 ++++++++++--------------------
- 1 file changed, 10 insertions(+), 20 deletions(-)
+ kernel/events/core.c |   65 ++++++++++++++++++++++++---------------------------
+ 1 file changed, 31 insertions(+), 34 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -5971,10 +5971,10 @@ static void perf_event_init_userpage(str
- 	struct perf_event_mmap_page *userpg;
- 	struct perf_buffer *rb;
+@@ -11285,49 +11285,46 @@ static void pmu_dev_release(struct devic
  
--	rcu_read_lock();
-+	guard(rcu)();
- 	rb = rcu_dereference(event->rb);
- 	if (!rb)
--		goto unlock;
-+		return;
+ static int pmu_dev_alloc(struct pmu *pmu)
+ {
+-	int ret = -ENOMEM;
++	int ret;
  
- 	userpg = rb->user_page;
+-	pmu->dev = kzalloc(sizeof(struct device), GFP_KERNEL);
+-	if (!pmu->dev)
+-		goto out;
++	struct device *dev __free(put_device) =
++		kzalloc(sizeof(struct device), GFP_KERNEL);
++	if (!dev)
++		return -ENOMEM;
  
-@@ -5983,9 +5983,6 @@ static void perf_event_init_userpage(str
- 	userpg->size = offsetof(struct perf_event_mmap_page, __reserved);
- 	userpg->data_offset = PAGE_SIZE;
- 	userpg->data_size = perf_data_size(rb);
+-	pmu->dev->groups = pmu->attr_groups;
+-	device_initialize(pmu->dev);
++	dev->groups = pmu->attr_groups;
++	device_initialize(dev);
+ 
+-	dev_set_drvdata(pmu->dev, pmu);
+-	pmu->dev->bus = &pmu_bus;
+-	pmu->dev->release = pmu_dev_release;
++	dev_set_drvdata(dev, pmu);
++	dev->bus = &pmu_bus;
++	dev->release = pmu_dev_release;
+ 
+-	ret = dev_set_name(pmu->dev, "%s", pmu->name);
++	ret = dev_set_name(dev, "%s", pmu->name);
+ 	if (ret)
+-		goto free_dev;
++		return ret;
+ 
+-	ret = device_add(pmu->dev);
++	ret = device_add(dev);
+ 	if (ret)
+-		goto free_dev;
++		return ret;
+ 
+-	/* For PMUs with address filters, throw in an extra attribute: */
+-	if (pmu->nr_addr_filters)
+-		ret = device_create_file(pmu->dev, &dev_attr_nr_addr_filters);
 -
--unlock:
--	rcu_read_unlock();
- }
+-	if (ret)
+-		goto del_dev;
++	struct device *del __free(device_del) = dev;
  
- void __weak arch_perf_update_userpage(
-@@ -6004,10 +6001,10 @@ void perf_event_update_userpage(struct p
- 	struct perf_buffer *rb;
- 	u64 enabled, running, now;
- 
--	rcu_read_lock();
-+	guard(rcu)();
- 	rb = rcu_dereference(event->rb);
- 	if (!rb)
--		goto unlock;
-+		return;
- 
- 	/*
- 	 * compute total_time_enabled, total_time_running
-@@ -6025,7 +6022,7 @@ void perf_event_update_userpage(struct p
- 	 * Disable preemption to guarantee consistent time stamps are stored to
- 	 * the user page.
- 	 */
--	preempt_disable();
-+	guard(preempt)();
- 	++userpg->lock;
- 	barrier();
- 	userpg->index = perf_event_index(event);
-@@ -6043,9 +6040,6 @@ void perf_event_update_userpage(struct p
- 
- 	barrier();
- 	++userpg->lock;
--	preempt_enable();
--unlock:
--	rcu_read_unlock();
- }
- EXPORT_SYMBOL_GPL(perf_event_update_userpage);
- 
-@@ -6061,27 +6055,23 @@ static vm_fault_t perf_mmap_fault(struct
- 		return ret;
- 	}
- 
--	rcu_read_lock();
-+	guard(rcu)();
- 	rb = rcu_dereference(event->rb);
- 	if (!rb)
--		goto unlock;
-+		return ret;
- 
- 	if (vmf->pgoff && (vmf->flags & FAULT_FLAG_WRITE))
--		goto unlock;
-+		return ret;
- 
- 	vmf->page = perf_mmap_to_page(rb, vmf->pgoff);
- 	if (!vmf->page)
--		goto unlock;
-+		return ret;
- 
- 	get_page(vmf->page);
- 	vmf->page->mapping = vmf->vma->vm_file->f_mapping;
- 	vmf->page->index   = vmf->pgoff;
- 
--	ret = 0;
--unlock:
--	rcu_read_unlock();
+-	if (pmu->attr_update)
+-		ret = sysfs_update_groups(&pmu->dev->kobj, pmu->attr_update);
 -
+-	if (ret)
+-		goto del_dev;
+-
+-out:
 -	return ret;
+-
+-del_dev:
+-	device_del(pmu->dev);
+-
+-free_dev:
+-	put_device(pmu->dev);
+-	goto out;
++	/* For PMUs with address filters, throw in an extra attribute: */
++	if (pmu->nr_addr_filters) {
++		ret = device_create_file(dev, &dev_attr_nr_addr_filters);
++		if (ret)
++			return ret;
++	}
++
++	if (pmu->attr_update) {
++		ret = sysfs_update_groups(&dev->kobj, pmu->attr_update);
++		if (ret)
++			return ret;
++	}
++
++	no_free_ptr(del);
++	pmu->dev = no_free_ptr(dev);
 +	return 0;
  }
  
- static void ring_buffer_attach(struct perf_event *event,
+ static struct lock_class_key cpuctx_mutex;
 
 
