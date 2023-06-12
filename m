@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6397018B01
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCE818AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=Hyp83c4zEQiDnre/2FuPX5V+t4FAU+QqZYq6E3vAduE=; b=p1jHX4au92g/f0sAw+1FR6aavH
-	p6QFQFHYIJrl+W9ByL1Afng798ynxuaS4e4ihnokXGnNrUt3nIdpMVDjSOhi0Ql0j1xokLGJYxBG+
-	9iylbl53m+zCAkDpTavlz7GiprlXoq+XtDc0/a8gE2k+4bqYhWwQHwGwa4781UfgcpsIDoYgEPzhM
-	3IDEmW13lBEm/A7BOPzimLDiYGh8HPVFHMFd/fv/SI6LS/MoIQhA5hc04LpIDA21+rJdmI686FK+U
-	md0fsTle+4f0RcUKleHrpn4wUGI9WuCKY36o21KrSBZZpz3jHNQQ+qyaLwLl++ztGMq3H4j2jaPkE
-	Ips14cnw==;
+	bh=0Nln3H/TQf9zjJAhRuDD5Vdsf6AHs8EETAgdoNVjkyE=; b=P0ibcjmy94tU6H+ubLQm9Q0Y/n
+	9HZa2H7KqRZPP6eb5AwBDJicEz91wZLofcMbAsDApdkUejo9yFGTjcDlqBVYRH46T0oUvVOegPBVZ
+	btJTiG5LLstlrmejjuiWlapsVbdI7QmDbtIH5A6FNLQIZj29AR/mPngtmLnJAF6S/7E49IaD8ANNN
+	aNqc4WgrSV/cyws6GwONET8ZKNzBrdcBXbhtYNCuSUe/GPYcYjiDUXa7Rc0ZDzVAgUIoELQGQkib8
+	WirzVREeEjTD60CarPGH7CRoqfCXLbDN3NcKqJmYuIhYCmnK3/kXp/m58JJHZpMsMGlme3zbBx2oC
+	M6h/yTlw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0n-002NC4-CM; Mon, 12 Jun 2023 09:38:57 +0000
+	id 1q8e0n-002NC6-DS; Mon, 12 Jun 2023 09:38:57 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2DC3F30328C;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2E7FF3032B0;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id AE93C30A77B6A; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093539.823493926@infradead.org>
+	id B8BAA30A77B6C; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.966607037@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:45 +0200
+Date: Mon, 12 Jun 2023 11:07:47 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 32/57] perf: Simplify perf_event_context_sched_in()
+Subject: [PATCH v3 34/57] perf: Simplify perf_event_*_on_exec()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,78 +106,125 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   38 +++++++++++++++-----------------------
- 1 file changed, 15 insertions(+), 23 deletions(-)
+ kernel/events/core.c |   88 +++++++++++++++++++++++----------------------------
+ 1 file changed, 40 insertions(+), 48 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -713,6 +713,9 @@ static void perf_ctx_enable(struct perf_
- 		perf_pmu_enable(pmu_ctx->pmu);
- }
+@@ -4318,39 +4318,36 @@ static void perf_event_enable_on_exec(st
+ 	enum event_type_t event_type = 0;
+ 	struct perf_cpu_context *cpuctx;
+ 	struct perf_event *event;
+-	unsigned long flags;
+ 	int enabled = 0;
  
-+DEFINE_GUARD(perf_ctx_disable, struct perf_event_context *,
-+	     perf_ctx_disable(_T), perf_ctx_enable(_T))
-+
- static void ctx_sched_out(struct perf_event_context *ctx, enum event_type_t event_type);
- static void ctx_sched_in(struct perf_event_context *ctx, enum event_type_t event_type);
- 
-@@ -3906,31 +3909,27 @@ static void perf_event_context_sched_in(
- 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
- 	struct perf_event_context *ctx;
- 
--	rcu_read_lock();
-+	guard(rcu)();
-+
- 	ctx = rcu_dereference(task->perf_event_ctxp);
- 	if (!ctx)
--		goto rcu_unlock;
+-	local_irq_save(flags);
+-	if (WARN_ON_ONCE(current->perf_event_ctxp != ctx))
+-		goto out;
 -
--	if (cpuctx->task_ctx == ctx) {
--		perf_ctx_lock(cpuctx, ctx);
--		perf_ctx_disable(ctx);
+-	if (!ctx->nr_events)
+-		goto out;
 -
--		perf_ctx_sched_task_cb(ctx, true);
--
--		perf_ctx_enable(ctx);
--		perf_ctx_unlock(cpuctx, ctx);
--		goto rcu_unlock;
--	}
-+		return;
- 
+-	cpuctx = this_cpu_ptr(&perf_cpu_context);
 -	perf_ctx_lock(cpuctx, ctx);
-+	guard(perf_ctx_lock)(cpuctx, ctx);
- 	/*
- 	 * We must check ctx->nr_events while holding ctx->lock, such
- 	 * that we serialize against perf_install_in_context().
- 	 */
- 	if (!ctx->nr_events)
--		goto unlock;
-+		return;
-+
-+	guard(perf_ctx_disable)(ctx);
-+
-+	if (cpuctx->task_ctx == ctx) {
-+		perf_ctx_sched_task_cb(ctx, true);
-+		return;
-+	}
- 
--	perf_ctx_disable(ctx);
- 	/*
- 	 * We want to keep the following priority order:
- 	 * cpu pinned (that don't need to move), task pinned,
-@@ -3950,13 +3949,6 @@ static void perf_event_context_sched_in(
- 
- 	if (!RB_EMPTY_ROOT(&ctx->pinned_groups.tree))
- 		perf_ctx_enable(&cpuctx->ctx);
+-	ctx_sched_out(ctx, EVENT_TIME);
 -
--	perf_ctx_enable(ctx);
+-	list_for_each_entry(event, &ctx->event_list, event_entry) {
+-		enabled |= event_enable_on_exec(event, ctx);
+-		event_type |= get_event_type(event);
++	scoped_guard (irqsave) {
++		if (WARN_ON_ONCE(current->perf_event_ctxp != ctx))
++			return;
++
++		if (!ctx->nr_events)
++			return;
++
++		cpuctx = this_cpu_ptr(&perf_cpu_context);
++		guard(perf_ctx_lock)(cpuctx, ctx);
++
++		ctx_sched_out(ctx, EVENT_TIME);
++
++		list_for_each_entry(event, &ctx->event_list, event_entry) {
++			enabled |= event_enable_on_exec(event, ctx);
++			event_type |= get_event_type(event);
++		}
++
++		/*
++		 * Unclone and reschedule this context if we enabled any event.
++		 */
++		if (enabled) {
++			clone_ctx = unclone_ctx(ctx);
++			ctx_resched(cpuctx, ctx, event_type);
++		} else {
++			ctx_sched_in(ctx, EVENT_TIME);
++		}
+ 	}
+ 
+-	/*
+-	 * Unclone and reschedule this context if we enabled any event.
+-	 */
+-	if (enabled) {
+-		clone_ctx = unclone_ctx(ctx);
+-		ctx_resched(cpuctx, ctx, event_type);
+-	} else {
+-		ctx_sched_in(ctx, EVENT_TIME);
+-	}
+-	perf_ctx_unlock(cpuctx, ctx);
+-
+-out:
+-	local_irq_restore(flags);
+-
+ 	if (clone_ctx)
+ 		put_ctx(clone_ctx);
+ }
+@@ -4367,34 +4364,29 @@ static void perf_event_remove_on_exec(st
+ {
+ 	struct perf_event_context *clone_ctx = NULL;
+ 	struct perf_event *event, *next;
+-	unsigned long flags;
+ 	bool modified = false;
+ 
+-	mutex_lock(&ctx->mutex);
++	scoped_guard (mutex, &ctx->mutex) {
++		if (WARN_ON_ONCE(ctx->task != current))
++			return;
+ 
+-	if (WARN_ON_ONCE(ctx->task != current))
+-		goto unlock;
++		list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
++			if (!event->attr.remove_on_exec)
++				continue;
+ 
+-	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
+-		if (!event->attr.remove_on_exec)
+-			continue;
++			if (!is_kernel_event(event))
++				perf_remove_from_owner(event);
+ 
+-		if (!is_kernel_event(event))
+-			perf_remove_from_owner(event);
++			modified = true;
+ 
+-		modified = true;
++			perf_event_exit_event(event, ctx);
++		}
+ 
+-		perf_event_exit_event(event, ctx);
++		guard(raw_spinlock_irqsave)(&ctx->lock);
++		if (modified)
++			clone_ctx = unclone_ctx(ctx);
+ 	}
+ 
+-	raw_spin_lock_irqsave(&ctx->lock, flags);
+-	if (modified)
+-		clone_ctx = unclone_ctx(ctx);
+-	raw_spin_unlock_irqrestore(&ctx->lock, flags);
 -
 -unlock:
--	perf_ctx_unlock(cpuctx, ctx);
--rcu_unlock:
--	rcu_read_unlock();
+-	mutex_unlock(&ctx->mutex);
+-
+ 	if (clone_ctx)
+ 		put_ctx(clone_ctx);
  }
- 
- /*
 
 
