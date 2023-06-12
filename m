@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B6018AF0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405B018AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=vBUL+P10jAOvg5j6kSlF2qo+oprvGK1yGYCCYSiAqlM=; b=NFuacbXRk1gej6UwVgLc5tNbL/
-	Rg3HhKBUmBwl5eLO+25JusMfSuIbyFVR/iUbv784FGfrgacXrn7NqDLzDE0FRvICex1OyPQ1v6sir
-	2XfS9G9NRaxckYmtb2iC8wKstPTcK7x76yeCDSmRMdFkjrgTu/V1PBFcOb8PR+SJS4k4G3LaUbuug
-	aLZU4s0ZG5xxXzMb3tMoJAIyEzjBHzcirZvJrDNWxTDRGx2uI+jItcz4dFj/bh+yWpfl6YNw2dwMf
-	dkRpxXp9x4mnWBxHUfuIuRlkVIDAL6TszLM10QD9hqFaG724GHiWCbVaBNkbUXvGCxbDmMTuu5725
-	3aUtil+g==;
+	bh=i6isNClAHvIMw2+OzbyxD8vRwSg4Nx0nqjzFU0CtSfM=; b=MxrQC5up24n4fUnoCZs9xhGydj
+	WPiaUY1fVHgP0zt4SgHjFl9bU1FTswRc5S3GTdIwagtnGxmM8g/mVm8h6tFslA0BkAIHCS0lsmsxf
+	mXYApR3w+00dThAGwRw5SSsaVtCEesX57GFzuJg1kHrKYomu8aDdoUGY1JDUE8JBHipCfa92Ifv/r
+	zd+VuHJHkrbYFig5uYcq1Hizv1HY2WFQ43Hgl/mswdSuUFAi9hjrs2LMVRGruHQWcuZ+8W1Fu1Q+7
+	OvClSB+9TLTaaO7D8ryJgXgnOZRmNV9glpRBLCdH+94Z9Be2B+yVwhI1KhGtwMx58ouJ9xNIuEfjs
+	v+1zP2IQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0m-002NBt-Dt; Mon, 12 Jun 2023 09:38:56 +0000
+	id 1q8e0v-002NIX-7L; Mon, 12 Jun 2023 09:39:05 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27D323031CC;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5937130341E;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 9C85030A77B66; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093539.611540686@infradead.org>
+	id 0DD7E30A79080; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093540.931189374@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:42 +0200
+Date: Mon, 12 Jun 2023 11:08:00 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 29/57] perf: Simplify: __perf_install_in_context()
+Subject: [PATCH v3 47/57] perf: Simplify perf_pmu_register()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,57 +106,101 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ kernel/events/core.c |   40 ++++++++++++++++------------------------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -2732,13 +2732,13 @@ static int  __perf_install_in_context(vo
- 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
- 	struct perf_event_context *task_ctx = cpuctx->task_ctx;
- 	bool reprogram = true;
--	int ret = 0;
- 
--	raw_spin_lock(&cpuctx->ctx.lock);
--	if (ctx->task) {
--		raw_spin_lock(&ctx->lock);
-+	if (ctx->task)
- 		task_ctx = ctx;
- 
-+	guard(perf_ctx_lock)(cpuctx, task_ctx);
-+
-+	if (ctx->task) {
- 		reprogram = (ctx->task == current);
- 
- 		/*
-@@ -2748,14 +2748,10 @@ static int  __perf_install_in_context(vo
- 		 * If its not running, we don't care, ctx->lock will
- 		 * serialize against it becoming runnable.
- 		 */
--		if (task_curr(ctx->task) && !reprogram) {
--			ret = -ESRCH;
--			goto unlock;
--		}
-+		if (task_curr(ctx->task) && !reprogram)
-+			return -ESRCH;
- 
- 		WARN_ON_ONCE(reprogram && cpuctx->task_ctx && cpuctx->task_ctx != ctx);
--	} else if (task_ctx) {
--		raw_spin_lock(&task_ctx->lock);
- 	}
- 
- #ifdef CONFIG_CGROUP_PERF
-@@ -2778,10 +2774,7 @@ static int  __perf_install_in_context(vo
- 		add_event_to_ctx(event, ctx);
- 	}
- 
--unlock:
--	perf_ctx_unlock(cpuctx, task_ctx);
--
--	return ret;
-+	return 0;
+@@ -11344,22 +11344,23 @@ void __perf_pmu_unregister(struct pmu *p
+ 	free_pmu_context(pmu);
  }
  
- static bool exclusive_event_installable(struct perf_event *event,
+-int perf_pmu_register(struct pmu *pmu, const char *name, int type)
++DEFINE_FREE(pmu_unregister, struct pmu *, if (_T) __perf_pmu_unregister(_T))
++
++int perf_pmu_register(struct pmu *_pmu, const char *name, int type)
+ {
+ 	int cpu, ret, max = PERF_TYPE_MAX;
+ 
+-	pmu->type = -1;
++	_pmu->type = -1;
++
++	guard(mutex)(&pmus_lock);
++	struct pmu *pmu __free(pmu_unregister) = _pmu;
+ 
+-	mutex_lock(&pmus_lock);
+-	ret = -ENOMEM;
+ 	pmu->pmu_disable_count = alloc_percpu(int);
+ 	if (!pmu->pmu_disable_count)
+-		goto unlock;
++		return -ENOMEM;
+ 
+-	if (WARN_ONCE(!name, "Can not register anonymous pmu.\n")) {
+-		ret = -EINVAL;
+-		goto free;
+-	}
++	if (WARN_ONCE(!name, "Can not register anonymous pmu.\n"))
++		return -EINVAL;
+ 
+ 	pmu->name = name;
+ 
+@@ -11368,7 +11369,7 @@ int perf_pmu_register(struct pmu *pmu, c
+ 
+ 	ret = idr_alloc(&pmu_idr, pmu, max, 0, GFP_KERNEL);
+ 	if (ret < 0)
+-		goto free;
++		return ret;
+ 
+ 	WARN_ON(type >= 0 && ret != type);
+ 
+@@ -11377,13 +11378,12 @@ int perf_pmu_register(struct pmu *pmu, c
+ 	if (pmu_bus_running && !pmu->dev) {
+ 		ret = pmu_dev_alloc(pmu);
+ 		if (ret)
+-			goto free;
++			return ret;
+ 	}
+ 
+-	ret = -ENOMEM;
+ 	pmu->cpu_pmu_context = alloc_percpu(struct perf_cpu_pmu_context);
+ 	if (!pmu->cpu_pmu_context)
+-		goto free;
++		return -ENOMEM;
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		struct perf_cpu_pmu_context *cpc;
+@@ -11423,21 +11423,14 @@ int perf_pmu_register(struct pmu *pmu, c
+ 
+ 	list_add_rcu(&pmu->entry, &pmus);
+ 	atomic_set(&pmu->exclusive_cnt, 0);
+-	ret = 0;
+-unlock:
+-	mutex_unlock(&pmus_lock);
+-
+-	return ret;
+-
+-free:
+-	__perf_pmu_unregister(pmu);
+-	goto unlock;
++	no_free_ptr(pmu); // let it rip
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(perf_pmu_register);
+ 
+ void perf_pmu_unregister(struct pmu *pmu)
+ {
+-	mutex_lock(&pmus_lock);
++	guard(mutex)(&pmus_lock);
+ 	list_del_rcu(&pmu->entry);
+ 
+ 	/*
+@@ -11448,7 +11441,6 @@ void perf_pmu_unregister(struct pmu *pmu
+ 	synchronize_rcu();
+ 
+ 	__perf_pmu_unregister(pmu);
+-	mutex_unlock(&pmus_lock);
+ }
+ EXPORT_SYMBOL_GPL(perf_pmu_unregister);
+ 
 
 
