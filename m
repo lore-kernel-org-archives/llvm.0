@@ -1,47 +1,32 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF2D1C757;
-	Mon, 12 Jun 2023 15:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686583850; x=1718119850;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hsY7cdk3+yXxCH81fXMhYa8Wte/52CPyooEnklUk1oA=;
-  b=kjUTK0RZs2TS96roXEsOI5Qflurpzz/p2xWCEwPeHMsKoxmw8Ru5FkMe
-   4lDHhf35Yz58NIhPDFGF5vkeYnSiG2e0A0j7y5PpZ1gZUqBFGrQK7AhiY
-   EJZcu52645oyViBc+j8fQA8GSuRi5tsiwf7AkEj142pas9d4avR/A84Jr
-   UtzLaIOBFNnwsKKZ1M5magbgv39kheJ6zrxB7E8VLJIpXRLAR4EkPIHP1
-   SxAIYNoUfenyVOfz8P+eIDPoX1BVrobLe0sZ8qiQ+gp/CYVVpjFCXfdGf
-   pGwsFKikJ3WPb9PLH4lYYMvaLOpyzoyUx7L6p+Oese1J4t34aAO48UzUm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360560512"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="360560512"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:30:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741070982"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="741070982"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 08:30:30 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8jV0-0000Mi-0i;
-	Mon, 12 Jun 2023 15:30:30 +0000
-Date: Mon, 12 Jun 2023 23:29:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Maxime Ripard <maxime@cerno.tech>
-Subject: [linux-next:master 4217/8413] lib/kunit/executor_test.c:138:4:
- warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void
- (*)(void *)') converts to incompatible function type
-Message-ID: <202306122325.N7YrihQV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EF71C75F;
+	Mon, 12 Jun 2023 15:39:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E01C433EF;
+	Mon, 12 Jun 2023 15:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686584376;
+	bh=eTO6nV2KFJoFHZXkfRoArOeQJS3VieaqFmMwWQ7nFG0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DwCvPig+2UdunEVNFvrjxGGOm4CBmeQWUFA4xn9f5so5tXTwNR5m3xxQgBCQO6KgF
+	 vYMDPE3osITaH2duWQ4bvInWTct3JoWwHsV9krCMACKGovD2z8xwAJcrOk4yf7EWTt
+	 XQoROZwdyLW080/0l1krZvbrWuD0MuAYoYCf46ePKZuGDintNQGwzIdU1Hl+/KVJkU
+	 BczK3MVFHQRxYvgmKSE0bDJFqeMfNEmkwggrXZ+ZIcS/YBKBv9sVTYr073vU+jm5xV
+	 w+xeuAY4C1pHJKjlbKBYvAQ6RDB0WktNuAZU2yh7vorG36lahM/G/uDr8+q1QDzWMw
+	 t8MWrewg6GT5w==
+Date: Mon, 12 Jun 2023 08:39:33 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: alexander.deucher@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
+	amd-gfx@lists.freedesktop.org, trix@redhat.com,
+	llvm@lists.linux.dev, ndesaulniers@google.com,
+	patches@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	hamza.mahfooz@amd.com, Kenny.Ho@amd.com
+Subject: Re: [PATCH] drm/amdgpu: Wrap -Wunused-but-set-variable in cc-option
+Message-ID: <20230612153933.GA3521@dev-arch.thelio-3990X>
+References: <20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-v1-1-48ca005f2247@kernel.org>
+ <87ttvfpz5u.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,57 +35,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87ttvfpz5u.fsf@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   53ab6975c12d1ad86c599a8927e8c698b144d669
-commit: 00e63f8afcfc6bf93d75141c51d35e8a40e86363 [4217/8413] kunit: executor_test: Use kunit_add_action()
-config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230612/202306122325.N7YrihQV-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e63f8afcfc6bf93d75141c51d35e8a40e86363
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 00e63f8afcfc6bf93d75141c51d35e8a40e86363
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
+On Sat, Jun 10, 2023 at 10:14:05AM +0300, Jani Nikula wrote:
+> On Thu, 08 Jun 2023, Nathan Chancellor <nathan@kernel.org> wrote:
+> > -Wunused-but-set-variable was only supported in clang starting with
+> > 13.0.0, so earlier versions will emit a warning, which is turned into a
+> > hard error for the kernel to mirror GCC:
+> >
+> >   error: unknown warning option '-Wunused-but-set-variable'; did you mean '-Wunused-const-variable'? [-Werror,-Wunknown-warning-option]
+> >
+> > The minimum supported version of clang for building the kernel is
+> > 11.0.0, so match the rest of the kernel and wrap
+> > -Wunused-but-set-variable in a cc-option call, so that it is only used
+> > when supported by the compiler.
+> 
+> I wonder if there's a table somewhere listing all the warning options,
+> which GCC and Clang versions support them, and which versions have them
+> in -Wall and -Wextra. Would be really useful.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306122325.N7YrihQV-lkp@intel.com/
+I don't think there is anything other than the official documentations for each listing
+all the warning options. I know each version has its own documentation
+for comparing warnings between releases but that is obviously tedious.
 
-All warnings (new ones prefixed by >>):
+The clang -Wall question is easy enough to answer based on the test
+case:
 
-   In file included from lib/kunit/executor.c:223:
->> lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     138 |                         (kunit_action_t *)kfree,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+https://github.com/llvm/llvm-project/blob/llvmorg-16.0.0/clang/test/Misc/warning-wall.c
+https://github.com/llvm/llvm-project/blob/llvmorg-15.0.0/clang/test/Misc/warning-wall.c
+https://github.com/llvm/llvm-project/blob/llvmorg-14.0.0/clang/test/Misc/warning-wall.c
+https://github.com/llvm/llvm-project/blob/llvmorg-13.0.0/clang/test/Misc/warning-wall.c
+https://github.com/llvm/llvm-project/blob/llvmorg-12.0.0/clang/test/Misc/warning-wall.c
+https://github.com/llvm/llvm-project/blob/llvmorg-11.0.0/clang/test/Misc/warning-wall.c
 
+Clang has a tool, diagtool, that can print information about -Wextra,
+but I do not ship it with the kernel.org LLVM releases, nor does Debian
+it seems. On a recent clang-17 (the colors don't matter for this
+exercise):
 
-vim +138 lib/kunit/executor_test.c
+$ diagtool tree -Wextra
 
-   127	
-   128	/* Use the resource API to register a call to kfree(to_free).
-   129	 * Since we never actually use the resource, it's safe to use on const data.
-   130	 */
-   131	static void kfree_at_end(struct kunit *test, const void *to_free)
-   132	{
-   133		/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
-   134		if (IS_ERR_OR_NULL(to_free))
-   135			return;
-   136	
-   137		kunit_add_action(test,
- > 138				(kunit_action_t *)kfree,
-   139				(void *)to_free);
-   140	}
-   141	
+GREEN = enabled by default
+YELLOW = disabled by default
+RED = unimplemented (accepted for GCC compatibility)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Wextra
+  -Wdeprecated-copy
+    -Wdeprecated-copy-with-user-provided-copy
+  -Wmissing-field-initializers
+  -Wignored-qualifiers
+    -Wignored-reference-qualifiers
+  -Winitializer-overrides
+  -Wsemicolon-before-method-body
+  -Wmissing-method-return-type
+  -Wsign-compare
+  -Wunused-parameter
+  -Wunused-but-set-parameter
+  -Wnull-pointer-arithmetic
+    -Wgnu-null-pointer-arithmetic
+  -Wnull-pointer-subtraction
+  -Wempty-init-stmt
+  -Wstring-concatenation
+  -Wfuse-ld-path
+
+Maybe some of that can be useful for future travelers.
+
+> If there isn't one, it would be really helpful. *wink*.
+
+Heh, that does sound like an interesting project but I am not sure I
+have the bandwidth at the moment to do something like that, especially
+since the number of warnings that are different between GCC and clang
+are continuing to dwindle :)
+
+Cheers,
+Nathan
+
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1869
+> > Fixes: a0fd5a5f676c ("drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
+> > index 7ee68b1bbfed..86b833085f19 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/Makefile
+> > +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
+> > @@ -40,7 +40,7 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
+> >  	-I$(FULL_AMD_PATH)/amdkfd
+> >  
+> >  subdir-ccflags-y := -Wextra
+> > -subdir-ccflags-y += -Wunused-but-set-variable
+> > +subdir-ccflags-y += $(call cc-option, -Wunused-but-set-variable)
+> >  subdir-ccflags-y += -Wno-unused-parameter
+> >  subdir-ccflags-y += -Wno-type-limits
+> >  subdir-ccflags-y += -Wno-sign-compare
+> >
+> > ---
+> > base-commit: 6bd4b01e8938779b0d959bdf33949a9aa258a363
+> > change-id: 20230608-amdgpu-wrap-wunused-but-set-variable-in-cc-option-0be9528ac5c8
+> >
+> > Best regards,
+> 
+> -- 
+> Jani Nikula, Intel Open Source Graphics Center
