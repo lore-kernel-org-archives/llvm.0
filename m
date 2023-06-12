@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B1F18AF0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA45F18AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=3znloSDHViiBmrAdv7OWZVEw7vUxAyx0B3A3/+Qs8bI=; b=IUO9OLx1TrVgcptK2MZb4c+Sn4
-	EVzHTvVu+xtHeRn8FXs+4TG6lnj2b3k/me7UG7IIb1KpO4T5GPw2+qWG9oATedUzq+NM70mcT4bti
-	HLzEMtejImfTANsC8sPs1gswHo/77zVVk6+JE8KGZDN2idZrQ91P2npzPnTaxcVqhdp7GM9v7xzqO
-	83Un7eDMkpuqONSKTCyszSRzP/K6jTfTnP438X5enxh5e8KELYoQkGq5KDulr1XMZqUpPzpwdVlsN
-	B70mhv8SwI8fCgJro8rqHKdeL6YR9k4RzfmXBv/eguvp03Eee6R4yJax4MoBvm6+4AfTeHzlm/+Ou
-	b0LlqYtg==;
+	bh=15bpyN9dSHomHwXMCYT6MSRj+ih+/8LUKVobKyJuC4s=; b=aVKdVujyHhnIGV1vYgbwfBE+2H
+	mng0rJnkQ73EO1MVNeyhkcBhsD2HnSOhkzj9ws92mfjiqQZrIFsnBt8NZ/G9kL4ILpV9hFbcrBQ/p
+	otA6VDxtMDH8J9l919Q1XfVrb8aPlQU427+gUblaD6j11gqgVPJtt6toohHULc/zlXVT70r15aWFk
+	eGp9Gitjr6IeKj1GEJsUKcCjBXmuwmiUd673uj8128K/qM84E2645KU2RjY66JFecabMTj7S92aSJ
+	XzvPxEnktb9ud2oFFS3uMhA1bA2iHBYlhbYhUa4qiK0ZSPf+w7UcC5ez2+vkl0poy0jT+dUXLyV0w
+	B0vyytSw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e12-002NTw-Le; Mon, 12 Jun 2023 09:39:12 +0000
+	id 1q8e0z-002NNx-4n; Mon, 12 Jun 2023 09:39:09 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7CEB7306160;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 704B830613F;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 4309930A7A2A1; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
-Message-ID: <20230612093541.669724890@infradead.org>
+	id 2E28C30A79086; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093541.382527855@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:08:10 +0200
+Date: Mon, 12 Jun 2023 11:08:06 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 57/57] perf: Simplify perf_install_in_context()
+Subject: [PATCH v3 53/57] perf: Simplify perf_event_sysfs_init()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,40 +106,38 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ kernel/events/core.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -2876,7 +2876,7 @@ perf_install_in_context(struct perf_even
- 	if (!task_function_call(task, __perf_install_in_context, event))
- 		return;
+@@ -13503,11 +13503,11 @@ static int __init perf_event_sysfs_init(
+ 	struct pmu *pmu;
+ 	int ret;
  
--	raw_spin_lock_irq(&ctx->lock);
-+	guard(raw_spinlock_irq)(&ctx->lock);
- 	task = ctx->task;
- 	if (WARN_ON_ONCE(task == TASK_TOMBSTONE)) {
- 		/*
-@@ -2884,19 +2884,15 @@ perf_install_in_context(struct perf_even
- 		 * cannot happen), and we hold ctx->mutex, which serializes us
- 		 * against perf_event_exit_task_context().
- 		 */
--		raw_spin_unlock_irq(&ctx->lock);
- 		return;
+-	mutex_lock(&pmus_lock);
++	guard(mutex)(&pmus_lock);
+ 
+ 	ret = bus_register(&pmu_bus);
+ 	if (ret)
+-		goto unlock;
++		return ret;
+ 
+ 	list_for_each_entry(pmu, &pmus, entry) {
+ 		if (pmu->dev)
+@@ -13517,12 +13517,8 @@ static int __init perf_event_sysfs_init(
+ 		WARN(ret, "Failed to register pmu: %s, reason %d\n", pmu->name, ret);
  	}
- 	/*
- 	 * If the task is not running, ctx->lock will avoid it becoming so,
- 	 * thus we can safely install the event.
- 	 */
--	if (task_curr(task)) {
--		raw_spin_unlock_irq(&ctx->lock);
-+	if (task_curr(task))
- 		goto again;
--	}
- 	add_event_to_ctx(event, ctx);
--	raw_spin_unlock_irq(&ctx->lock);
- }
+ 	pmu_bus_running = 1;
+-	ret = 0;
  
- /*
+-unlock:
+-	mutex_unlock(&pmus_lock);
+-
+-	return ret;
++	return 0;
+ }
+ device_initcall(perf_event_sysfs_init);
+ 
 
 
