@@ -1,138 +1,81 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797C7A95A;
-	Mon, 12 Jun 2023 20:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686602230; x=1718138230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SbYyvJYQ3piNwv5linQ1WYTpJRSYyWv7Nn+u6U5b9MI=;
-  b=IbQ/kmNFVrYpXiX3HtNfLI2BYkiwmA9sBgTzB/NEGcpqjT4r6v8O1wXR
-   TUeAk8lS7zbclHd0l2kbSc5Gy6JRztyrBIMFIxtNdamR3V2OPvyr0p25u
-   lfhD6syYBEfOb+FVhX4f23sTKvDmWQz9REMN0RhuRX2c78Wn43KGQ5Ra4
-   /NXxUWYUZMf2wbS24OnPdLCvA9nocngF7gqMYfChxzq7dH7FbMLK0Ng/D
-   /sL+fCvLk26IdrFVcZtKC/9FYYFiMcwf6K/Jjrg4uErGKOS2FJSAqNNPJ
-   ZwudjzIkv7nMp64JSr/rKIPgvwAmlyPCV+Zxt+VTVATC3XQlSeOCer9uA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358153906"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="358153906"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:37:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741167195"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="741167195"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 13:37:07 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8oHi-0000gg-0C;
-	Mon, 12 Jun 2023 20:37:06 +0000
-Date: Tue, 13 Jun 2023 04:36:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D877538C;
+	Mon, 12 Jun 2023 20:44:48 +0000 (UTC)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3f78a32266bso48756765e9.3;
+        Mon, 12 Jun 2023 13:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686602687; x=1689194687;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ALjtb1mIX+GZejE31to3xfsby/eOvSoCSDDPLC+nH8A=;
+        b=nWnT2Ip48Z5YrH4Iz+A80ravFKFkjRg8lIRgfaBRLgKcEx98gjWQA7RmTzbceBJJ9b
+         OhYeE3/mnEV+oQRgE83mD3lo6WDjv20Q/EPdhypuvJG7iIyUiykjQWne1GhOUkIQlESL
+         /2D5H7ARsaaEIEcWg9vKSxFOBkKmT1GQBdBNANEV++VL1HOVmC3Gp6cZsaemY1kMJ/++
+         d2Js7egZ3mc0CNaIXkmm1RgRk7Bjt7Klj2dbHG2hCJk1ylFmXEbX1IgDbVTnWeeovddE
+         g8gXS7EaFiuIfhiB74kd01JFJ/wLf7Y1zCtkSdtThgKWZK29RXv3HLc1MhyvAnvs7if8
+         DxWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686602687; x=1689194687;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ALjtb1mIX+GZejE31to3xfsby/eOvSoCSDDPLC+nH8A=;
+        b=hJ9F3Cmj37x6UlCW5lMVbq0r/GH4fj5qDjjJOyy+xxuSDcOwcgDcRg5whp4utrpJWi
+         ivx6EfZAbOlpglv8hnpnRmL5pF4wwNEyyZ2969XrQ+JFSclxDeX+hYpmDNFoxjV4LTyV
+         q7RCzfz6VXwgap+No4upfWGFotPngsHV3wHOgAc+QjWSxTVysvyYZLMmVXNFCT1VmNat
+         gukjcX7OYRmddnxTwldGlNbhSd40JeyE0tVmJ/9PxL3JjcsB7OK/QNx+oLtXV/OQb4fd
+         4A7IVQumSrEOxZIoKyBgcyjKREd+4y+0DaawDUfE2eOe/Ce+pLJKhmBBvFq+2las3hkA
+         xQTw==
+X-Gm-Message-State: AC+VfDy9jfOdimjwayNedxL3zA8t7C9yx+j0mKBp2JFIGlMgA4JuUtlX
+	NKaGZV602E6hQQl85ybum3A=
+X-Google-Smtp-Source: ACHHUZ6HgQri17EQgGB6hP+QvkVq22s68BSuTg5TQ0W3NZO1vKc/aDZCMWNSlqdZMSs2Nka6Slh6wg==
+X-Received: by 2002:a05:600c:2245:b0:3f7:33cf:707f with SMTP id a5-20020a05600c224500b003f733cf707fmr8494315wmm.35.1686602686967;
+        Mon, 12 Jun 2023 13:44:46 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003f735ba7736sm12310321wmq.46.2023.06.12.13.44.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 13:44:46 -0700 (PDT)
+Subject: Re: [netdev-net-next:main 26/28] ld.lld: error: undefined symbol:
+ efx_tc_netdev_event
+To: Simon Horman <simon.horman@corigine.com>,
+ kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/platforms/52xx/lite5200_pm.c:47:12: error: stack frame
- size (1040) exceeds limit (1024) in 'lite5200_pm_prepare'
-Message-ID: <202306130405.uTv5yOZD-lkp@intel.com>
+ Jakub Kicinski <kuba@kernel.org>,
+ Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+References: <202306102026.ISK5JfUQ-lkp@intel.com>
+ <ZIbUNpktWf2TmKGZ@corigine.com>
+From: Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <8724de62-fe9b-cdd4-bb39-b3c06b440f5f@gmail.com>
+Date: Mon, 12 Jun 2023 21:44:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <ZIbUNpktWf2TmKGZ@corigine.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   858fd168a95c5b9669aac8db6c14a9aeab446375
-commit: 2500763dd3db37fad94d9b506907c59c2f5e97c6 powerpc: Use of_address_to_resource()
-date:   10 weeks ago
-config: powerpc-randconfig-r033-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130405.uTv5yOZD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2500763dd3db37fad94d9b506907c59c2f5e97c6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2500763dd3db37fad94d9b506907c59c2f5e97c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/52xx/
+On 12/06/2023 09:15, Simon Horman wrote:
+> On Sat, Jun 10, 2023 at 09:10:45PM +0800, kernel test robot wrote:
+>> All errors (new ones prefixed by >>):
+>>
+>>>> ld.lld: error: undefined symbol: efx_tc_netdev_event
+>>    >>> referenced by ef100_netdev.c:313 (drivers/net/ethernet/sfc/ef100_netdev.c:313)
+>>    >>>               drivers/net/ethernet/sfc/ef100_netdev.o:(ef100_netdev_event) in archive vmlinux.a
+>> --
+>>>> ld.lld: error: undefined symbol: efx_tc_netevent_event
+>>    >>> referenced by ef100_netdev.c:329 (drivers/net/ethernet/sfc/ef100_netdev.c:329)
+>>    >>>               drivers/net/ethernet/sfc/ef100_netdev.o:(ef100_netevent_event) in archive vmlinux.a
+> 
+> A cursory investigation leads me to thinking this occurs
+> if the CONFIG_SFC is set but CONFIG_SFC_SRIOV is not.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306130405.uTv5yOZD-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/platforms/52xx/lite5200_pm.c:47:12: error: stack frame size (1040) exceeds limit (1024) in 'lite5200_pm_prepare' [-Werror,-Wframe-larger-than]
-      47 | static int lite5200_pm_prepare(void)
-         |            ^
-   1 error generated.
-
-
-vim +/lite5200_pm_prepare +47 arch/powerpc/platforms/52xx/lite5200_pm.c
-
-e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  46  
-e6c5eb9541f219 Rafael J. Wysocki 2007-10-18 @47  static int lite5200_pm_prepare(void)
-ee983079ce0464 Domen Puncer      2007-07-18  48  {
-75ca399e82726f Grant Likely      2008-01-18  49  	struct device_node *np;
-66ffbe490b6156 Grant Likely      2008-01-24  50  	const struct of_device_id immr_ids[] = {
-66ffbe490b6156 Grant Likely      2008-01-24  51  		{ .compatible = "fsl,mpc5200-immr", },
-66ffbe490b6156 Grant Likely      2008-01-24  52  		{ .compatible = "fsl,mpc5200b-immr", },
-66ffbe490b6156 Grant Likely      2008-01-24  53  		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
-66ffbe490b6156 Grant Likely      2008-01-24  54  		{ .type = "builtin", .compatible = "mpc5200", }, /* efika */
-66ffbe490b6156 Grant Likely      2008-01-24  55  		{}
-66ffbe490b6156 Grant Likely      2008-01-24  56  	};
-2500763dd3db37 Rob Herring       2023-03-29  57  	struct resource res;
-75ca399e82726f Grant Likely      2008-01-18  58  
-ee983079ce0464 Domen Puncer      2007-07-18  59  	/* deep sleep? let mpc52xx code handle that */
-e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  60  	if (lite5200_pm_target_state == PM_SUSPEND_STANDBY)
-e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  61  		return mpc52xx_pm_prepare();
-ee983079ce0464 Domen Puncer      2007-07-18  62  
-e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  63  	if (lite5200_pm_target_state != PM_SUSPEND_MEM)
-ee983079ce0464 Domen Puncer      2007-07-18  64  		return -EINVAL;
-ee983079ce0464 Domen Puncer      2007-07-18  65  
-ee983079ce0464 Domen Puncer      2007-07-18  66  	/* map registers */
-66ffbe490b6156 Grant Likely      2008-01-24  67  	np = of_find_matching_node(NULL, immr_ids);
-2500763dd3db37 Rob Herring       2023-03-29  68  	of_address_to_resource(np, 0, &res);
-75ca399e82726f Grant Likely      2008-01-18  69  	of_node_put(np);
-18d76ac9a47742 Tim Yamin         2008-06-17  70  
-2500763dd3db37 Rob Herring       2023-03-29  71  	mbar = ioremap(res.start, 0xC000);
-ee983079ce0464 Domen Puncer      2007-07-18  72  	if (!mbar) {
-ee983079ce0464 Domen Puncer      2007-07-18  73  		printk(KERN_ERR "%s:%i Error mapping registers\n", __func__, __LINE__);
-ee983079ce0464 Domen Puncer      2007-07-18  74  		return -ENOSYS;
-ee983079ce0464 Domen Puncer      2007-07-18  75  	}
-ee983079ce0464 Domen Puncer      2007-07-18  76  
-ee983079ce0464 Domen Puncer      2007-07-18  77  	cdm = mbar + 0x200;
-ee983079ce0464 Domen Puncer      2007-07-18  78  	pic = mbar + 0x500;
-ee983079ce0464 Domen Puncer      2007-07-18  79  	gps = mbar + 0xb00;
-ee983079ce0464 Domen Puncer      2007-07-18  80  	gpw = mbar + 0xc00;
-18d76ac9a47742 Tim Yamin         2008-06-17  81  	pci = mbar + 0xd00;
-ee983079ce0464 Domen Puncer      2007-07-18  82  	bes = mbar + 0x1200;
-ee983079ce0464 Domen Puncer      2007-07-18  83  	xlb = mbar + 0x1f00;
-ee983079ce0464 Domen Puncer      2007-07-18  84  	sram = mbar + 0x8000;
-ee983079ce0464 Domen Puncer      2007-07-18  85  
-ee983079ce0464 Domen Puncer      2007-07-18  86  	return 0;
-ee983079ce0464 Domen Puncer      2007-07-18  87  }
-ee983079ce0464 Domen Puncer      2007-07-18  88  
-
-:::::: The code at line 47 was first introduced by commit
-:::::: e6c5eb9541f2197a3ffab90b1c7a3250a9b51bf6 PM: Rework struct platform_suspend_ops
-
-:::::: TO: Rafael J. Wysocki <rjw@sisk.pl>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yep, looks that way.  Patch on its way shortly.
