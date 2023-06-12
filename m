@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4727518B01
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6397018B01
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=+ABEd9mMVv/0QFeK6grpTerCWBoJWrrnVkIx9/E66Rs=; b=UTo4GrteI/bFbo9KHpO0OPwMGI
-	3uaOsWbK8QQKJpqqXdvWKe/1DuroVfEQe6X20N2c/d4VACYYWQBssFwlcwWzekErpAM0jQu1tZ9/e
-	+YjTJLibkb7RS+vl5QNs6CnVHMIIsZx26ITReWfpe+4LcyRYAR3GYYJnxqTgCp03WtkHryIoBvyNs
-	TXVQ6nIN0Wo13A75EEBRaNQgHJG89a01PYjHojcWPFAz9Lso8WCkbgk970fpgIc60tblrKHCu8q3T
-	ZNjg78iPZJ+jSlMlf+tB1JB3hzy3afqZWV9UZL/bFcehkWkvUp1ecRWM7hjJ4i7++5u7/hW81IfNT
-	RM5pjjLw==;
+	bh=Hyp83c4zEQiDnre/2FuPX5V+t4FAU+QqZYq6E3vAduE=; b=p1jHX4au92g/f0sAw+1FR6aavH
+	p6QFQFHYIJrl+W9ByL1Afng798ynxuaS4e4ihnokXGnNrUt3nIdpMVDjSOhi0Ql0j1xokLGJYxBG+
+	9iylbl53m+zCAkDpTavlz7GiprlXoq+XtDc0/a8gE2k+4bqYhWwQHwGwa4781UfgcpsIDoYgEPzhM
+	3IDEmW13lBEm/A7BOPzimLDiYGh8HPVFHMFd/fv/SI6LS/MoIQhA5hc04LpIDA21+rJdmI686FK+U
+	md0fsTle+4f0RcUKleHrpn4wUGI9WuCKY36o21KrSBZZpz3jHNQQ+qyaLwLl++ztGMq3H4j2jaPkE
+	Ips14cnw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0w-002NJN-63; Mon, 12 Jun 2023 09:39:06 +0000
+	id 1q8e0n-002NC4-CM; Mon, 12 Jun 2023 09:38:57 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D9DD306126;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2DC3F30328C;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 12B3030A79081; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
-Message-ID: <20230612093541.025480679@infradead.org>
+	id AE93C30A77B6A; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.823493926@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:08:01 +0200
+Date: Mon, 12 Jun 2023 11:07:45 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 48/57] perf: Simplify perf_init_event()
+Subject: [PATCH v3 32/57] perf: Simplify perf_event_context_sched_in()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,83 +106,78 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   31 ++++++++++++-------------------
- 1 file changed, 12 insertions(+), 19 deletions(-)
+ kernel/events/core.c |   38 +++++++++++++++-----------------------
+ 1 file changed, 15 insertions(+), 23 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -11504,10 +11504,10 @@ static int perf_try_init_event(struct pm
- static struct pmu *perf_init_event(struct perf_event *event)
- {
- 	bool extended_type = false;
--	int idx, type, ret;
- 	struct pmu *pmu;
-+	int type, ret;
- 
--	idx = srcu_read_lock(&pmus_srcu);
-+	guard(srcu)(&pmus_srcu);
- 
- 	/*
- 	 * Save original type before calling pmu->event_init() since certain
-@@ -11520,7 +11520,7 @@ static struct pmu *perf_init_event(struc
- 		pmu = event->parent->pmu;
- 		ret = perf_try_init_event(pmu, event);
- 		if (!ret)
--			goto unlock;
-+			return pmu;
- 	}
- 
- 	/*
-@@ -11539,13 +11539,12 @@ static struct pmu *perf_init_event(struc
- 	}
- 
- again:
--	rcu_read_lock();
--	pmu = idr_find(&pmu_idr, type);
--	rcu_read_unlock();
-+	scoped_guard (rcu)
-+		pmu = idr_find(&pmu_idr, type);
- 	if (pmu) {
- 		if (event->attr.type != type && type != PERF_TYPE_RAW &&
- 		    !(pmu->capabilities & PERF_PMU_CAP_EXTENDED_HW_TYPE))
--			goto fail;
-+			return ERR_PTR(-ENOENT);
- 
- 		ret = perf_try_init_event(pmu, event);
- 		if (ret == -ENOENT && event->attr.type != type && !extended_type) {
-@@ -11554,27 +11553,21 @@ static struct pmu *perf_init_event(struc
- 		}
- 
- 		if (ret)
--			pmu = ERR_PTR(ret);
-+			return ERR_PTR(ret);
- 
--		goto unlock;
-+		return pmu;
- 	}
- 
- 	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
- 		ret = perf_try_init_event(pmu, event);
- 		if (!ret)
--			goto unlock;
-+			return pmu;
- 
--		if (ret != -ENOENT) {
--			pmu = ERR_PTR(ret);
--			goto unlock;
--		}
-+		if (ret != -ENOENT)
-+			return ERR_PTR(ret);
- 	}
--fail:
--	pmu = ERR_PTR(-ENOENT);
--unlock:
--	srcu_read_unlock(&pmus_srcu, idx);
- 
--	return pmu;
-+	return ERR_PTR(-ENOENT);
+@@ -713,6 +713,9 @@ static void perf_ctx_enable(struct perf_
+ 		perf_pmu_enable(pmu_ctx->pmu);
  }
  
- static void attach_sb_event(struct perf_event *event)
++DEFINE_GUARD(perf_ctx_disable, struct perf_event_context *,
++	     perf_ctx_disable(_T), perf_ctx_enable(_T))
++
+ static void ctx_sched_out(struct perf_event_context *ctx, enum event_type_t event_type);
+ static void ctx_sched_in(struct perf_event_context *ctx, enum event_type_t event_type);
+ 
+@@ -3906,31 +3909,27 @@ static void perf_event_context_sched_in(
+ 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
+ 	struct perf_event_context *ctx;
+ 
+-	rcu_read_lock();
++	guard(rcu)();
++
+ 	ctx = rcu_dereference(task->perf_event_ctxp);
+ 	if (!ctx)
+-		goto rcu_unlock;
+-
+-	if (cpuctx->task_ctx == ctx) {
+-		perf_ctx_lock(cpuctx, ctx);
+-		perf_ctx_disable(ctx);
+-
+-		perf_ctx_sched_task_cb(ctx, true);
+-
+-		perf_ctx_enable(ctx);
+-		perf_ctx_unlock(cpuctx, ctx);
+-		goto rcu_unlock;
+-	}
++		return;
+ 
+-	perf_ctx_lock(cpuctx, ctx);
++	guard(perf_ctx_lock)(cpuctx, ctx);
+ 	/*
+ 	 * We must check ctx->nr_events while holding ctx->lock, such
+ 	 * that we serialize against perf_install_in_context().
+ 	 */
+ 	if (!ctx->nr_events)
+-		goto unlock;
++		return;
++
++	guard(perf_ctx_disable)(ctx);
++
++	if (cpuctx->task_ctx == ctx) {
++		perf_ctx_sched_task_cb(ctx, true);
++		return;
++	}
+ 
+-	perf_ctx_disable(ctx);
+ 	/*
+ 	 * We want to keep the following priority order:
+ 	 * cpu pinned (that don't need to move), task pinned,
+@@ -3950,13 +3949,6 @@ static void perf_event_context_sched_in(
+ 
+ 	if (!RB_EMPTY_ROOT(&ctx->pinned_groups.tree))
+ 		perf_ctx_enable(&cpuctx->ctx);
+-
+-	perf_ctx_enable(ctx);
+-
+-unlock:
+-	perf_ctx_unlock(cpuctx, ctx);
+-rcu_unlock:
+-	rcu_read_unlock();
+ }
+ 
+ /*
 
 
