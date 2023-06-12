@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4497B18B06
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D799182C6
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=TIflEc6HK/22xB9+LAc8fdYfMJHSxjY/dB735CDFq7w=; b=OzxWN5L/KzC4VUo/iTYaWameCX
-	hrbwrk3ixeRH23F57jlIRFGWnlTcHuMcV7kLy7osS01tgjphDYs7mWn2JZfDkZ1+rR6EcEvrBxrNq
-	zuW6xChuJcvp8qwBU8di5iOmYh8pWWaTGqRRp0lXV86E7IzjUkmvM0B0kyib/7YaiFdsFaLUU6kzN
-	jRUGUTzf6TM4YMKKaPBC+AkGNgv4QE6GBnrVTUB+3uvTZYeky0QKBbK68+lbLkHSUur0WJ5xngoPZ
-	gJIK2g+KtjpXKF0kOxEZS0dUHbQ0CQVAE0El1MhQ7ke9TlaJD5eefsKkFJQO3sIV0cBEXmZEPvZrb
-	0kCDB3Ig==;
+	bh=oJyDWnF7S8lcaog4Xmhyr6vhDojPiq7m8dz3r+ZsZG4=; b=rdH9P5/MC3KcY+M1BubJnq2SDA
+	VDGeL/wvRJ516ylJciShUfk/lLKhhrHMf84ST4NUiKTy2ExpNVzaIsxOt0cQrm7+eX/8udNe5etuq
+	a8fdjA1aakVHh17wbvSw2yH8JlQoRaJkmSyuc03oqmoc7UOXpLHURSRxkh0dVmI/veHKlufAu0gpY
+	Ns3St7yJnjxp7C9LWCYQAjUcurSze2tx9FwQXkuQqZEP3Medv20JQgxJrWc9w8JIbLUqKZH2b4jfd
+	jiWzkPTbr4fSMmiKp/dav0iBFlH+nbdDr15ksYyL2JPyPxZmPbWGcP2XPV4+cHOFrrcX0V4f4DCw+
+	S6QpV56A==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0m-008kQr-1K;
-	Mon, 12 Jun 2023 09:39:28 +0000
+	id 1q8e0l-008kQR-0k;
+	Mon, 12 Jun 2023 09:38:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27DE53031D9;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E5AD302680;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 9735A30A77B62; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093539.537454913@infradead.org>
+	id 67EF730A77B58; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093538.942686455@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:41 +0200
+Date: Mon, 12 Jun 2023 11:07:33 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 28/57] perf; Simplify event_sched_in()
+Subject: [PATCH v3 20/57] sched: Simplify tg_set_cfs_bandwidth()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -108,57 +108,95 @@ Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ include/linux/cpu.h |    2 ++
+ kernel/sched/core.c |   42 +++++++++++++++++++++---------------------
+ 2 files changed, 23 insertions(+), 21 deletions(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1153,6 +1153,8 @@ void perf_pmu_enable(struct pmu *pmu)
- 		pmu->pmu_enable(pmu);
- }
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -148,6 +148,8 @@ static inline int remove_cpu(unsigned in
+ static inline void smp_shutdown_nonboot_cpus(unsigned int primary_cpu) { }
+ #endif	/* !CONFIG_HOTPLUG_CPU */
  
-+DEFINE_GUARD(perf_pmu_disable, struct pmu *, perf_pmu_disable(_T), perf_pmu_enable(_T))
++DEFINE_LOCK_GUARD_0(cpus_read_lock, cpus_read_lock(), cpus_read_unlock())
 +
- static void perf_assert_pmu_disabled(struct pmu *pmu)
- {
- 	WARN_ON_ONCE(*this_cpu_ptr(pmu->pmu_disable_count) == 0);
-@@ -2489,7 +2491,6 @@ event_sched_in(struct perf_event *event,
- {
- 	struct perf_event_pmu_context *epc = event->pmu_ctx;
- 	struct perf_cpu_pmu_context *cpc = this_cpu_ptr(epc->pmu->cpu_pmu_context);
--	int ret = 0;
+ #ifdef CONFIG_PM_SLEEP_SMP
+ extern int freeze_secondary_cpus(int primary);
+ extern void thaw_secondary_cpus(void);
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -10726,11 +10726,12 @@ static int tg_set_cfs_bandwidth(struct t
+ 	 * Prevent race between setting of cfs_rq->runtime_enabled and
+ 	 * unthrottle_offline_cfs_rqs().
+ 	 */
+-	cpus_read_lock();
+-	mutex_lock(&cfs_constraints_mutex);
++	guard(cpus_read_lock)();
++	guard(mutex)(&cfs_constraints_mutex);
++
+ 	ret = __cfs_schedulable(tg, period, quota);
+ 	if (ret)
+-		goto out_unlock;
++		return ret;
  
- 	WARN_ON_ONCE(event->ctx != ctx);
- 
-@@ -2517,15 +2518,14 @@ event_sched_in(struct perf_event *event,
- 		event->hw.interrupts = 0;
- 	}
- 
--	perf_pmu_disable(event->pmu);
-+	guard(perf_pmu_disable)(event->pmu);
- 
- 	perf_log_itrace_start(event);
- 
- 	if (event->pmu->add(event, PERF_EF_START)) {
- 		perf_event_set_state(event, PERF_EVENT_STATE_INACTIVE);
- 		event->oncpu = -1;
--		ret = -EAGAIN;
--		goto out;
-+		return -EAGAIN;
- 	}
- 
- 	if (!is_software_event(event))
-@@ -2536,10 +2536,7 @@ event_sched_in(struct perf_event *event,
- 	if (event->attr.exclusive)
- 		cpc->exclusive = 1;
- 
--out:
--	perf_pmu_enable(event->pmu);
+ 	runtime_enabled = quota != RUNTIME_INF;
+ 	runtime_was_enabled = cfs_b->quota != RUNTIME_INF;
+@@ -10740,39 +10741,38 @@ static int tg_set_cfs_bandwidth(struct t
+ 	 */
+ 	if (runtime_enabled && !runtime_was_enabled)
+ 		cfs_bandwidth_usage_inc();
+-	raw_spin_lock_irq(&cfs_b->lock);
+-	cfs_b->period = ns_to_ktime(period);
+-	cfs_b->quota = quota;
+-	cfs_b->burst = burst;
 -
+-	__refill_cfs_bandwidth_runtime(cfs_b);
+-
+-	/* Restart the period timer (if active) to handle new period expiry: */
+-	if (runtime_enabled)
+-		start_cfs_bandwidth(cfs_b);
+ 
+-	raw_spin_unlock_irq(&cfs_b->lock);
++	scoped_guard (raw_spinlock_irq, &cfs_b->lock) {
++		cfs_b->period = ns_to_ktime(period);
++		cfs_b->quota = quota;
++		cfs_b->burst = burst;
++
++		__refill_cfs_bandwidth_runtime(cfs_b);
++
++		/*
++		 * Restart the period timer (if active) to handle new
++		 * period expiry:
++		 */
++		if (runtime_enabled)
++			start_cfs_bandwidth(cfs_b);
++	}
+ 
+ 	for_each_online_cpu(i) {
+ 		struct cfs_rq *cfs_rq = tg->cfs_rq[i];
+ 		struct rq *rq = cfs_rq->rq;
+-		struct rq_flags rf;
+ 
+-		rq_lock_irq(rq, &rf);
++		guard(rq_lock_irq)(rq);
+ 		cfs_rq->runtime_enabled = runtime_enabled;
+ 		cfs_rq->runtime_remaining = 0;
+ 
+ 		if (cfs_rq->throttled)
+ 			unthrottle_cfs_rq(cfs_rq);
+-		rq_unlock_irq(rq, &rf);
+ 	}
++
+ 	if (runtime_was_enabled && !runtime_enabled)
+ 		cfs_bandwidth_usage_dec();
+-out_unlock:
+-	mutex_unlock(&cfs_constraints_mutex);
+-	cpus_read_unlock();
+ 
 -	return ret;
 +	return 0;
  }
  
- static int
+ static int tg_set_cfs_quota(struct task_group *tg, long cfs_quota_us)
 
 
