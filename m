@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E816182BD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7E9182B6
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=MG7QpnmCwLygWJ81Mn2iabAPA0zngwNBxpS2UJOPCco=; b=aXuukbWfDT3crpdpELnmpXOIr1
-	rmi7tOYHchwZ0ZWw12XRPDCQqRwMiqZMiABYBZi2O+0tfNVzQRKi9P8ydd//mWeA7oQObClsjTE7E
-	LHFghoj5tdofv/RNddLTT0JWVj87F1f4zRP5QUXDwod/ck/TDyMXZ81p3o1Z6UVNSI9dRWMzyaW7W
-	AD+qE0/n4a7Qe6Z1Xg8QD2b21dyEkZzvC33hTI2lYy5oByr7zAHpxalio1Yq2xpIfpyfIQyhGsstj
-	/SW7fmJDwrmmYyPiT1S62tcE02v5eg0/HjDJXCTz1h+1fcNR5efvE/6XROFvb22ZtQgISEaHBYV0v
-	ZehA35sA==;
+	bh=5KSqPesmPX08w8dWPEEw5Ll2e7FMQinOnTr3XW9NIYo=; b=otUSsXrkwDi6rVuLl90MM+76vL
+	cE6gp9EEa8Zpqqg9MG4CPJ7+wgAaw1DsHIj5puea/XbvsOxRyOFpyECLs24dRzQ6Sjol89f/EXqvQ
+	LChObBEVQXRBsTW4GZSlyTIrge2V5AXUII3ByKeNmerebPgKH0p6l5UMuFfc+5XpT1yAnuRwxbHT8
+	2TJtKzkAkK7oEDchq+KMZKfYnIVzQSIQ18PSNfOGRXZs26r2yqrAQzcGI/y/cuIBGiWJXVqpmFdO/
+	vnWMq8UVC4ZBmx1AVgqzGkpD1hMSd/tM7MGG2el0Wb3T3Cib/eS7vjoZ84B8P3FcOaWoCXC0PdTIv
+	Ssmk1qgw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0j-008kPt-35;
-	Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0u-008kS1-1t;
+	Mon, 12 Jun 2023 09:39:09 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E089A303191;
-	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51D843033F7;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 46BE630A77B54; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.465891562@infradead.org>
+	id EBB5330A77B75; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093540.638818161@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:27 +0200
+Date: Mon, 12 Jun 2023 11:07:56 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 14/57] sched: Simplify set_user_nice()
+Subject: [PATCH v3 43/57] perf: Simplify perf_sw_event()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,72 +104,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c  |   13 ++++++-------
- kernel/sched/sched.h |    5 +++++
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ kernel/events/core.c |   37 ++++++++++++-------------------------
+ 1 file changed, 12 insertions(+), 25 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7119,9 +7119,8 @@ static inline int rt_effective_prio(stru
- void set_user_nice(struct task_struct *p, long nice)
- {
- 	bool queued, running;
--	int old_prio;
--	struct rq_flags rf;
- 	struct rq *rq;
-+	int old_prio;
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9701,17 +9701,15 @@ static void do_perf_sw_event(enum perf_t
+ 	struct perf_event *event;
+ 	struct hlist_head *head;
  
- 	if (task_nice(p) == nice || nice < MIN_NICE || nice > MAX_NICE)
- 		return;
-@@ -7129,7 +7128,9 @@ void set_user_nice(struct task_struct *p
- 	 * We have to be careful, if called from sys_setpriority(),
- 	 * the task might be in the middle of scheduling on another CPU.
- 	 */
--	rq = task_rq_lock(p, &rf);
-+	CLASS(task_rq_lock, rq_guard)(p);
-+	rq = rq_guard.rq;
-+
- 	update_rq_clock(rq);
- 
- 	/*
-@@ -7140,8 +7141,9 @@ void set_user_nice(struct task_struct *p
- 	 */
- 	if (task_has_dl_policy(p) || task_has_rt_policy(p)) {
- 		p->static_prio = NICE_TO_PRIO(nice);
--		goto out_unlock;
+-	rcu_read_lock();
++	guard(rcu)();
+ 	head = find_swevent_head_rcu(swhash, type, event_id);
+ 	if (!head)
+-		goto end;
 +		return;
+ 
+ 	hlist_for_each_entry_rcu(event, head, hlist_entry) {
+ 		if (perf_swevent_match(event, type, event_id, data, regs))
+ 			perf_swevent_event(event, nr, data, regs);
  	}
-+
- 	queued = task_on_rq_queued(p);
- 	running = task_current(rq, p);
- 	if (queued)
-@@ -7164,9 +7166,6 @@ void set_user_nice(struct task_struct *p
- 	 * lowered its priority, then reschedule its CPU:
- 	 */
- 	p->sched_class->prio_changed(rq, p, old_prio);
+-end:
+-	rcu_read_unlock();
+ }
+ 
+ DEFINE_PER_CPU(struct pt_regs, __perf_regs[4]);
+@@ -9746,16 +9744,13 @@ void __perf_sw_event(u32 event_id, u64 n
+ {
+ 	int rctx;
+ 
+-	preempt_disable_notrace();
++	guard(preempt_notrace)();
+ 	rctx = perf_swevent_get_recursion_context();
+ 	if (unlikely(rctx < 0))
+-		goto fail;
++		return;
+ 
+ 	___perf_sw_event(event_id, nr, regs, addr);
 -
--out_unlock:
--	task_rq_unlock(rq, p, &rf);
- }
- EXPORT_SYMBOL(set_user_nice);
- 
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1630,6 +1630,11 @@ task_rq_unlock(struct rq *rq, struct tas
- 	raw_spin_unlock_irqrestore(&p->pi_lock, rf->flags);
+ 	perf_swevent_put_recursion_context(rctx);
+-fail:
+-	preempt_enable_notrace();
  }
  
-+DEFINE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
-+		    _T->rq = task_rq_lock(_T->lock, &_T->rf),
-+		    task_rq_unlock(_T->rq, _T->lock, &_T->rf),
-+		    struct rq *rq; struct rq_flags rf)
-+
- static inline void
- rq_lock_irqsave(struct rq *rq, struct rq_flags *rf)
- 	__acquires(rq->lock)
+ static void perf_swevent_read(struct perf_event *event)
+@@ -9844,21 +9839,17 @@ static int swevent_hlist_get_cpu(int cpu
+ 	struct swevent_htable *swhash = &per_cpu(swevent_htable, cpu);
+ 	int err = 0;
+ 
+-	mutex_lock(&swhash->hlist_mutex);
++	guard(mutex)(&swhash->hlist_mutex);
+ 	if (!swevent_hlist_deref(swhash) &&
+ 	    cpumask_test_cpu(cpu, perf_online_mask)) {
+ 		struct swevent_hlist *hlist;
+ 
+ 		hlist = kzalloc(sizeof(*hlist), GFP_KERNEL);
+-		if (!hlist) {
+-			err = -ENOMEM;
+-			goto exit;
+-		}
++		if (!hlist)
++			return -ENOMEM;
+ 		rcu_assign_pointer(swhash->swevent_hlist, hlist);
+ 	}
+ 	swhash->hlist_refcount++;
+-exit:
+-	mutex_unlock(&swhash->hlist_mutex);
+ 
+ 	return err;
+ }
+@@ -10115,16 +10106,12 @@ void perf_tp_event(u16 event_type, u64 c
+ 	if (task && task != current) {
+ 		struct perf_event_context *ctx;
+ 
+-		rcu_read_lock();
++		guard(rcu)();
+ 		ctx = rcu_dereference(task->perf_event_ctxp);
+-		if (!ctx)
+-			goto unlock;
+-
+-		raw_spin_lock(&ctx->lock);
+-		perf_tp_event_target_task(count, record, regs, &data, ctx);
+-		raw_spin_unlock(&ctx->lock);
+-unlock:
+-		rcu_read_unlock();
++		if (ctx) {
++			guard(raw_spinlock)(&ctx->lock);
++			perf_tp_event_target_task(count, record, regs, &data, ctx);
++		}
+ 	}
+ 
+ 	perf_swevent_put_recursion_context(rctx);
 
 
