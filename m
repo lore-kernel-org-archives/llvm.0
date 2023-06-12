@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2577518AF0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A0818AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=9sqy4wj1SuZG+E1ZOkNDiw8zR5F8T4bHRpYkByM8S6o=; b=UhQupRCCFcRTcJ52xSokO+BN+/
-	kY/7gwhYYUJuWiDkepIOXaTfsN9oUJbZyPz4MGALg25P7b34n6+Ok2hbsZlYT7UksaAbwFk+F5Un8
-	jbd0MhYNazKforhuRdwoa9pzipclcVjCfcGu7ssHvdaMAJrvZmonDjlAA82HDpnBgtYzV2d8s8b8t
-	qHBYO/MZaSs22phHQ0cwMSR1JVJ0EDMmO+hUawjvBK3rJ7dTYlYL9gVmi9JmzTZgb8zcO18rNbEE9
-	xqdqtcflTFMJKPjso5gcIRtT3JFqm+sPu9caS+aUoSXbgNJHfAmzzmVGM2xLIewVD7QxJWS3gnuG1
-	XlreM76Q==;
+	bh=QOVoxBXTqeJRoOWdQft4bGcKCTL4UyZrQG32knsR3k0=; b=c+D11F7FSqbBnyBLSSfE5UYd1l
+	IvFPRzJeGLbLE977YxYQAS4g0jVtxP4+qS7e9sAEyGnpnM0/g6folbG9eSZv5iyY/d24GmbN9NGRN
+	/+RkwB8o1SLLroMJqf+HzAXEkGvwurDfZKEjFEq3/dV71E5Xp3YhCsfoKdyKyuyYpRdWWU4rMR6bN
+	7KySp2Drh9CXlO7audT1YOfwwh4FrL2zBrKIN+tMW03xlMnBm4G7PO6JWp8epOgTbND+XuyDvWtfY
+	wxdQXZn9Web1FeOuzgWYGEmPyXwuR9f6T2BwQc4dFBBrjDcoPkjo6/3va7mxH8xuCy9vdUYE8+v0P
+	IpzOAsYg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0k-002NAm-K5; Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0k-002NAo-Tq; Mon, 12 Jun 2023 09:38:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B8033031BC;
-	Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8EC34302F74;
+	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 5832930A77B57; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.712217968@infradead.org>
+	id 14D9A30A70220; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093537.833273038@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:30 +0200
+Date: Mon, 12 Jun 2023 11:07:19 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 17/57] sched: Simplify yield_to()
+Subject: [PATCH v3 06/57] sched: Simplify sysctl_sched_uclamp_handler()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -107,98 +107,47 @@ Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   73 ++++++++++++++++++++++------------------------------
- 1 file changed, 32 insertions(+), 41 deletions(-)
+ kernel/sched/core.c |   11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -8799,55 +8799,46 @@ int __sched yield_to(struct task_struct
- {
- 	struct task_struct *curr = current;
- 	struct rq *rq, *p_rq;
--	unsigned long flags;
- 	int yielded = 0;
+@@ -1801,7 +1801,8 @@ static int sysctl_sched_uclamp_handler(s
+ 	int old_min, old_max, old_min_rt;
+ 	int result;
  
--	local_irq_save(flags);
--	rq = this_rq();
-+	scoped_guard (irqsave) {
-+		rq = this_rq();
- 
- again:
--	p_rq = task_rq(p);
--	/*
--	 * If we're the only runnable task on the rq and target rq also
--	 * has only one task, there's absolutely no point in yielding.
--	 */
--	if (rq->nr_running == 1 && p_rq->nr_running == 1) {
--		yielded = -ESRCH;
--		goto out_irq;
--	}
--
--	double_rq_lock(rq, p_rq);
--	if (task_rq(p) != p_rq) {
--		double_rq_unlock(rq, p_rq);
--		goto again;
--	}
--
--	if (!curr->sched_class->yield_to_task)
--		goto out_unlock;
--
--	if (curr->sched_class != p->sched_class)
--		goto out_unlock;
--
--	if (task_on_cpu(p_rq, p) || !task_is_running(p))
--		goto out_unlock;
--
--	yielded = curr->sched_class->yield_to_task(rq, p);
--	if (yielded) {
--		schedstat_inc(rq->yld_count);
-+		p_rq = task_rq(p);
- 		/*
--		 * Make p's CPU reschedule; pick_next_entity takes care of
--		 * fairness.
-+		 * If we're the only runnable task on the rq and target rq also
-+		 * has only one task, there's absolutely no point in yielding.
- 		 */
--		if (preempt && rq != p_rq)
--			resched_curr(p_rq);
--	}
-+		if (rq->nr_running == 1 && p_rq->nr_running == 1)
-+			return -ESRCH;
- 
--out_unlock:
--	double_rq_unlock(rq, p_rq);
--out_irq:
--	local_irq_restore(flags);
-+		guard(double_rq_lock)(rq, p_rq);
-+		if (task_rq(p) != p_rq)
-+			goto again;
+-	mutex_lock(&uclamp_mutex);
++	guard(mutex)(&uclamp_mutex);
 +
-+		if (!curr->sched_class->yield_to_task)
-+			return 0;
-+
-+		if (curr->sched_class != p->sched_class)
-+			return 0;
-+
-+		if (task_on_cpu(p_rq, p) || !task_is_running(p))
-+			return 0;
-+
-+		yielded = curr->sched_class->yield_to_task(rq, p);
-+		if (yielded) {
-+			schedstat_inc(rq->yld_count);
-+			/*
-+			 * Make p's CPU reschedule; pick_next_entity
-+			 * takes care of fairness.
-+			 */
-+			if (preempt && rq != p_rq)
-+				resched_curr(p_rq);
-+		}
-+	}
+ 	old_min = sysctl_sched_uclamp_util_min;
+ 	old_max = sysctl_sched_uclamp_util_max;
+ 	old_min_rt = sysctl_sched_uclamp_util_min_rt_default;
+@@ -1810,7 +1811,7 @@ static int sysctl_sched_uclamp_handler(s
+ 	if (result)
+ 		goto undo;
+ 	if (!write)
+-		goto done;
++		return result;
  
--	if (yielded > 0)
-+	if (yielded)
- 		schedule();
+ 	if (sysctl_sched_uclamp_util_min > sysctl_sched_uclamp_util_max ||
+ 	    sysctl_sched_uclamp_util_max > SCHED_CAPACITY_SCALE	||
+@@ -1846,16 +1847,12 @@ static int sysctl_sched_uclamp_handler(s
+ 	 * Otherwise, keep it simple and do just a lazy update at each next
+ 	 * task enqueue time.
+ 	 */
+-
+-	goto done;
++	return result;
  
- 	return yielded;
+ undo:
+ 	sysctl_sched_uclamp_util_min = old_min;
+ 	sysctl_sched_uclamp_util_max = old_max;
+ 	sysctl_sched_uclamp_util_min_rt_default = old_min_rt;
+-done:
+-	mutex_unlock(&uclamp_mutex);
+-
+ 	return result;
+ }
+ #endif
 
 
