@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7887918AF0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B83F18AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=7465s/BLfgTETUEeYyMSYNRfYMViPKbFZJuWYGxIsWk=; b=QrymH738S6BUWgGevujYrQ8VaB
-	PH+wkAUdCcq+ZLI/VVa9WjXC5jZpY+ZtjcTeVaVSgBK/rrtFX4JipIkEotQDIo42uymhGb+OTP5PP
-	av0vR0d50Sub11D0y+JHydz6x+S3PfCD62KHQJdThRZlMRhjOTK6mtfoAqx5xK47SDM9nJjq4RHSW
-	a8TjpFD0LPYr8sp7k4DeKSUT4JSgkTAb4WkfQ+qo4yx3kuwHXxYGmJgnDJcnK6v3WoeLNwuoJMiNd
-	UKngBMPfhPm8JbrLbn5yick33k3nsGcjbOuquk6ZnmIewchgWER3XiRFCR+KtYCJksfjzFMm8xey/
-	JeBHTfJA==;
+	bh=zYnYxbpqthdvjZXSbX3mfTIRB+RNguvN2goMXYp9Xns=; b=C5N48YEmWa+xMIpR8Tid5fFCz1
+	4ts/IhHAlVB3Y7klukQjxw44QSTOVczdIgHCgTTbeHSL7aNXDjlvrZtOElLa8bHls8SaEi11a1yjW
+	m8kixqnVYt13JTML9cc4mFMTjjaeZEqje23QKPWH88Nmb5TXkjBZw9Qbm/tLMrNNaaBI01UM3PP4o
+	mnSnzt8+wc/j6RBeyZpxQSflkzM8u9BQdxPW12PhV7VkCm5m4D2Z6wf2b/Pbn8epVWSKozGvq5kEJ
+	r34sE5/kpDYtj9XvM/rxugO23nxtz5nDzFbm0JOBNbjS5cquGVt7sQ2Oz3swWIcXkshOgt0riH9zO
+	O7emOYuA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0n-002NC5-Dd; Mon, 12 Jun 2023 09:38:57 +0000
+	id 1q8e0l-002NB6-78; Mon, 12 Jun 2023 09:38:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 349893032C8;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E6BC302DA8;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id C0F5430A77B6E; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.037803940@infradead.org>
+	id 75EFF30A77B5E; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.157685883@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:48 +0200
+Date: Mon, 12 Jun 2023 11:07:36 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 35/57] perf: Simplify *perf_event_read*()
+Subject: [PATCH v3 23/57] perf: Simplify perf_event_alloc() error path
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -103,152 +103,277 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
+The error cleanup sequence in perf_event_alloc() is a subset of the
+existing _free_event() function (it must of course be).
+
+Split this out into __free_event() and simplify the error path.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   54 ++++++++++++++++-----------------------------------
- 1 file changed, 17 insertions(+), 37 deletions(-)
+ include/linux/perf_event.h |    1 
+ kernel/events/core.c       |  129 ++++++++++++++++++++++-----------------------
+ 2 files changed, 66 insertions(+), 64 deletions(-)
 
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -634,6 +634,7 @@ struct swevent_hlist {
+ #define PERF_ATTACH_ITRACE	0x10
+ #define PERF_ATTACH_SCHED_CB	0x20
+ #define PERF_ATTACH_CHILD	0x40
++#define PERF_ATTACH_EXCLUSIVE	0x80
+ 
+ struct bpf_prog;
+ struct perf_cgroup;
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -4435,7 +4435,8 @@ static void __perf_event_read(void *info
- 	if (ctx->task && cpuctx->task_ctx != ctx)
- 		return;
+@@ -5094,6 +5094,8 @@ static int exclusive_event_init(struct p
+ 			return -EBUSY;
+ 	}
  
--	raw_spin_lock(&ctx->lock);
-+	guard(raw_spinlock)(&ctx->lock);
++	event->attach_state |= PERF_ATTACH_EXCLUSIVE;
 +
- 	if (ctx->is_active & EVENT_TIME) {
- 		update_context_time(ctx);
- 		update_cgrp_time_from_event(event);
-@@ -4446,12 +4447,12 @@ static void __perf_event_read(void *info
- 		perf_event_update_sibling_time(event);
- 
- 	if (event->state != PERF_EVENT_STATE_ACTIVE)
--		goto unlock;
-+		return;
- 
- 	if (!data->group) {
- 		pmu->read(event);
- 		data->ret = 0;
--		goto unlock;
-+		return;
- 	}
- 
- 	pmu->start_txn(pmu, PERF_PMU_TXN_READ);
-@@ -4469,9 +4470,6 @@ static void __perf_event_read(void *info
- 	}
- 
- 	data->ret = pmu->commit_txn(pmu);
--
--unlock:
--	raw_spin_unlock(&ctx->lock);
+ 	return 0;
  }
  
- static inline u64 perf_event_count(struct perf_event *event)
-@@ -4502,43 +4500,32 @@ static void calc_timer_values(struct per
- int perf_event_read_local(struct perf_event *event, u64 *value,
- 			  u64 *enabled, u64 *running)
+@@ -5101,14 +5103,13 @@ static void exclusive_event_destroy(stru
  {
--	unsigned long flags;
--	int ret = 0;
+ 	struct pmu *pmu = event->pmu;
+ 
+-	if (!is_exclusive_pmu(pmu))
+-		return;
 -
- 	/*
- 	 * Disabling interrupts avoids all counter scheduling (context
- 	 * switches, timer based rotation and IPIs).
- 	 */
--	local_irq_save(flags);
-+	guard(irqsave)();
- 
- 	/*
- 	 * It must not be an event with inherit set, we cannot read
- 	 * all child counters from atomic context.
- 	 */
--	if (event->attr.inherit) {
--		ret = -EOPNOTSUPP;
--		goto out;
--	}
-+	if (event->attr.inherit)
-+		return -EOPNOTSUPP;
- 
- 	/* If this is a per-task event, it must be for current */
- 	if ((event->attach_state & PERF_ATTACH_TASK) &&
--	    event->hw.target != current) {
--		ret = -EINVAL;
--		goto out;
--	}
-+	    event->hw.target != current)
-+		return -EINVAL;
- 
- 	/* If this is a per-CPU event, it must be for this CPU */
- 	if (!(event->attach_state & PERF_ATTACH_TASK) &&
--	    event->cpu != smp_processor_id()) {
--		ret = -EINVAL;
--		goto out;
--	}
-+	    event->cpu != smp_processor_id())
-+		return -EINVAL;
- 
- 	/* If this is a pinned event it must be running on this CPU */
--	if (event->attr.pinned && event->oncpu != smp_processor_id()) {
--		ret = -EBUSY;
--		goto out;
--	}
-+	if (event->attr.pinned && event->oncpu != smp_processor_id())
-+		return -EBUSY;
- 
- 	/*
- 	 * If the event is currently on this CPU, its either a per-task event,
-@@ -4558,10 +4545,8 @@ int perf_event_read_local(struct perf_ev
- 		if (running)
- 			*running = __running;
- 	}
--out:
--	local_irq_restore(flags);
- 
--	return ret;
-+	return 0;
+ 	/* see comment in exclusive_event_init() */
+ 	if (event->attach_state & PERF_ATTACH_TASK)
+ 		atomic_dec(&pmu->exclusive_cnt);
+ 	else
+ 		atomic_inc(&pmu->exclusive_cnt);
++
++	event->attach_state &= ~PERF_ATTACH_EXCLUSIVE;
  }
  
- static int perf_event_read(struct perf_event *event, bool group)
-@@ -4595,7 +4580,7 @@ static int perf_event_read(struct perf_e
- 			.ret = 0,
- 		};
+ static bool exclusive_event_match(struct perf_event *e1, struct perf_event *e2)
+@@ -5143,38 +5144,22 @@ static bool exclusive_event_installable(
+ static void perf_addr_filters_splice(struct perf_event *event,
+ 				       struct list_head *head);
  
--		preempt_disable();
-+		guard(preempt)();
- 		event_cpu = __perf_event_read_cpu(event, event_cpu);
- 
- 		/*
-@@ -4609,19 +4594,15 @@ static int perf_event_read(struct perf_e
- 		 * after this.
- 		 */
- 		(void)smp_call_function_single(event_cpu, __perf_event_read, &data, 1);
--		preempt_enable();
- 		ret = data.ret;
- 
- 	} else if (state == PERF_EVENT_STATE_INACTIVE) {
- 		struct perf_event_context *ctx = event->ctx;
--		unsigned long flags;
- 
--		raw_spin_lock_irqsave(&ctx->lock, flags);
-+		guard(raw_spinlock_irqsave)(&ctx->lock);
- 		state = event->state;
--		if (state != PERF_EVENT_STATE_INACTIVE) {
--			raw_spin_unlock_irqrestore(&ctx->lock, flags);
-+		if (state != PERF_EVENT_STATE_INACTIVE)
- 			goto again;
--		}
- 
- 		/*
- 		 * May read while context is not active (e.g., thread is
-@@ -4635,7 +4616,6 @@ static int perf_event_read(struct perf_e
- 		perf_event_update_time(event);
- 		if (group)
- 			perf_event_update_sibling_time(event);
--		raw_spin_unlock_irqrestore(&ctx->lock, flags);
+-static void _free_event(struct perf_event *event)
++/* vs perf_event_alloc() error */
++static void __free_event(struct perf_event *event)
+ {
+-	irq_work_sync(&event->pending_irq);
+-
+-	unaccount_event(event);
+-
+-	security_perf_event_free(event);
+-
+-	if (event->rb) {
+-		/*
+-		 * Can happen when we close an event with re-directed output.
+-		 *
+-		 * Since we have a 0 refcount, perf_mmap_close() will skip
+-		 * over us; possibly making our ring_buffer_put() the last.
+-		 */
+-		mutex_lock(&event->mmap_mutex);
+-		ring_buffer_attach(event, NULL);
+-		mutex_unlock(&event->mmap_mutex);
+-	}
+-
+-	if (is_cgroup_event(event))
+-		perf_detach_cgroup(event);
+-
+ 	if (!event->parent) {
+ 		if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
+ 			put_callchain_buffers();
  	}
+ 
+-	perf_event_free_bpf_prog(event);
+-	perf_addr_filters_splice(event, NULL);
+ 	kfree(event->addr_filter_ranges);
+ 
++	if (event->attach_state & PERF_ATTACH_EXCLUSIVE)
++		exclusive_event_destroy(event);
++
++	if (is_cgroup_event(event))
++		perf_detach_cgroup(event);
++
+ 	if (event->destroy)
+ 		event->destroy(event);
+ 
+@@ -5185,22 +5170,56 @@ static void _free_event(struct perf_even
+ 	if (event->hw.target)
+ 		put_task_struct(event->hw.target);
+ 
+-	if (event->pmu_ctx)
++	if (event->pmu_ctx) {
++		/*
++		 * put_pmu_ctx() needs an event->ctx reference, because of
++		 * epc->ctx.
++		 */
++		WARN_ON_ONCE(!event->ctx);
++		WARN_ON_ONCE(event->pmu_ctx->ctx != event->ctx);
+ 		put_pmu_ctx(event->pmu_ctx);
++	}
+ 
+ 	/*
+-	 * perf_event_free_task() relies on put_ctx() being 'last', in particular
+-	 * all task references must be cleaned up.
++	 * perf_event_free_task() relies on put_ctx() being 'last', in
++	 * particular all task references must be cleaned up.
+ 	 */
+ 	if (event->ctx)
+ 		put_ctx(event->ctx);
+ 
+-	exclusive_event_destroy(event);
+-	module_put(event->pmu->module);
++	if (event->pmu)
++		module_put(event->pmu->module);
+ 
+ 	call_rcu(&event->rcu_head, free_event_rcu);
+ }
+ 
++/* vs perf_event_alloc() success */
++static void _free_event(struct perf_event *event)
++{
++	irq_work_sync(&event->pending_irq);
++
++	unaccount_event(event);
++
++	security_perf_event_free(event);
++
++	if (event->rb) {
++		/*
++		 * Can happen when we close an event with re-directed output.
++		 *
++		 * Since we have a 0 refcount, perf_mmap_close() will skip
++		 * over us; possibly making our ring_buffer_put() the last.
++		 */
++		mutex_lock(&event->mmap_mutex);
++		ring_buffer_attach(event, NULL);
++		mutex_unlock(&event->mmap_mutex);
++	}
++
++	perf_event_free_bpf_prog(event);
++	perf_addr_filters_splice(event, NULL);
++
++	__free_event(event);
++}
++
+ /*
+  * Used to free events which have a known refcount of 1, such as in error paths
+  * where the event isn't exposed yet and inherited events.
+@@ -11591,8 +11610,10 @@ static int perf_try_init_event(struct pm
+ 			event->destroy(event);
+ 	}
+ 
+-	if (ret)
++	if (ret) {
++		event->pmu = NULL;
+ 		module_put(pmu->module);
++	}
  
  	return ret;
+ }
+@@ -11918,7 +11939,7 @@ perf_event_alloc(struct perf_event_attr
+ 	 * See perf_output_read().
+ 	 */
+ 	if (attr->inherit && (attr->sample_type & PERF_SAMPLE_READ))
+-		goto err_ns;
++		goto err;
+ 
+ 	if (!has_branch_stack(event))
+ 		event->attr.branch_sample_type = 0;
+@@ -11926,7 +11947,7 @@ perf_event_alloc(struct perf_event_attr
+ 	pmu = perf_init_event(event);
+ 	if (IS_ERR(pmu)) {
+ 		err = PTR_ERR(pmu);
+-		goto err_ns;
++		goto err;
+ 	}
+ 
+ 	/*
+@@ -11936,24 +11957,24 @@ perf_event_alloc(struct perf_event_attr
+ 	 */
+ 	if (pmu->task_ctx_nr == perf_invalid_context && (task || cgroup_fd != -1)) {
+ 		err = -EINVAL;
+-		goto err_pmu;
++		goto err;
+ 	}
+ 
+ 	if (event->attr.aux_output &&
+ 	    !(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT)) {
+ 		err = -EOPNOTSUPP;
+-		goto err_pmu;
++		goto err;
+ 	}
+ 
+ 	if (cgroup_fd != -1) {
+ 		err = perf_cgroup_connect(cgroup_fd, event, attr, group_leader);
+ 		if (err)
+-			goto err_pmu;
++			goto err;
+ 	}
+ 
+ 	err = exclusive_event_init(event);
+ 	if (err)
+-		goto err_pmu;
++		goto err;
+ 
+ 	if (has_addr_filter(event)) {
+ 		event->addr_filter_ranges = kcalloc(pmu->nr_addr_filters,
+@@ -11961,7 +11982,7 @@ perf_event_alloc(struct perf_event_attr
+ 						    GFP_KERNEL);
+ 		if (!event->addr_filter_ranges) {
+ 			err = -ENOMEM;
+-			goto err_per_task;
++			goto err;
+ 		}
+ 
+ 		/*
+@@ -11986,41 +12007,21 @@ perf_event_alloc(struct perf_event_attr
+ 		if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
+ 			err = get_callchain_buffers(attr->sample_max_stack);
+ 			if (err)
+-				goto err_addr_filters;
++				goto err;
+ 		}
+ 	}
+ 
+ 	err = security_perf_event_alloc(event);
+ 	if (err)
+-		goto err_callchain_buffer;
++		goto err;
+ 
+ 	/* symmetric to unaccount_event() in _free_event() */
+ 	account_event(event);
+ 
+ 	return event;
+ 
+-err_callchain_buffer:
+-	if (!event->parent) {
+-		if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
+-			put_callchain_buffers();
+-	}
+-err_addr_filters:
+-	kfree(event->addr_filter_ranges);
+-
+-err_per_task:
+-	exclusive_event_destroy(event);
+-
+-err_pmu:
+-	if (is_cgroup_event(event))
+-		perf_detach_cgroup(event);
+-	if (event->destroy)
+-		event->destroy(event);
+-	module_put(pmu->module);
+-err_ns:
+-	if (event->hw.target)
+-		put_task_struct(event->hw.target);
+-	call_rcu(&event->rcu_head, free_event_rcu);
+-
++err:
++	__free_event(event);
+ 	return ERR_PTR(err);
+ }
+ 
 
 
