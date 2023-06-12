@@ -1,96 +1,83 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E8C881F
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 20:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=hbUr7IqiQ3CwOQutnN3C5mnCnB3Aa1KO/Z6mvwxhaXQ=; b=Rp7djgU5nkaEOZ74z2JQg1BkKV
-	MbwriGvIvAGQGuMggl/ypweoO/NNk8efTr8x6R8disYov6A5jt6mGgOm2UPvgjSWJ9Vs1yXdan2sz
-	L0GGtK1SfcJrwPCUyXbfWE1Gi4ZfRF6Lv+ib5G3qarEYIn/EPYO5rjyfLm4Y7TxvGqJLY1fcGGFqQ
-	M7TpSrH9HDhMZmX24Fet2hKD8ciljCaI6ApPqLRE04I5ua8XoOhpVDTY12azUVz2z6fy3sAHVmpG9
-	vbe6BAuENNC7VAIeglhe+ctBtENVW/y/zq29Rhb8OjR5lfusHBV9Uxx+QVs9GO0PQP79LV1GCrX2/
-	hGH4sbZA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8nn4-008zsz-0g;
-	Mon, 12 Jun 2023 20:05:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 961D7300188;
-	Mon, 12 Jun 2023 22:05:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 782692460EAE4; Mon, 12 Jun 2023 22:05:25 +0200 (CEST)
-Date: Mon, 12 Jun 2023 22:05:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com,
-	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-	vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-	dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-	adrian.hunter@intel.com, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-	frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 33/57] perf: Simplify perf_adjust_freq_unthr_context()
-Message-ID: <20230612200525.GO4253@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093539.895253662@infradead.org>
- <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
- <20230612184403.GE83892@hirez.programming.kicks-ass.net>
- <CAHk-=wgaSkM4fjdP9dcdXQpLLjxW43ykgLA=FgzyHpyHayz8ww@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5E2AD5C
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 20:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686600664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=puEHVglTEsa/nHxBZfVqxj5ryYHq4VSB/sQ1rWcLcFo=;
+	b=ClFeyrTkCtrwRu7JPJwRFpHkzoFJ/2BxPRH9VG5zQJbNdEN3ML1IoO/jZ1IdJwiGaQrrTL
+	9Sg1MvpOTSmrF88Aa3ZzGuQ+Llnst0Y8Us3LWUFFMtuT6mN/RzrgzXcDpt4b28OHvMa8KY
+	B6Sg6tH0nFUwXCuzHPXm4qgxxavOdL8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-578-0zZ91YlcMFCFyoKnrznkOQ-1; Mon, 12 Jun 2023 16:11:02 -0400
+X-MC-Unique: 0zZ91YlcMFCFyoKnrznkOQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67DE3380670A
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 20:11:02 +0000 (UTC)
+Received: from [172.64.4.14] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 53C7E2026833;
+	Mon, 12 Jun 2023 20:11:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
+ mainline.kernel.org-clang, fd37b884)
+Date: Mon, 12 Jun 2023 20:11:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgaSkM4fjdP9dcdXQpLLjxW43ykgLA=FgzyHpyHayz8ww@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <36973.123061216110202123@us-mta-578.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 12, 2023 at 11:55:57AM -0700, Linus Torvalds wrote:
+Hi, we tested your kernel and here are the results:
 
-> So while it might not be the horrible bug I thought it was, I'd
-> _really_ like us to not do those things just from a sanity angle.
-
-OK, let me go see if there's another way to sanely write those.
-
-
-Is this less offensive?
-
-restart:
-	scoped_guard (rcu) {
-		list_for_each_entry_rcu(..) {
-			...
-			if (err == -EAGAIN)
-				goto restart;
-		}
-	}
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-That has the explicit scope on the rcu and now the goto explicitly exist
-it.
+Kernel information:
+    Commit message: io_uring/io-wq: don't clear PF_IO_WORKER on exit
 
-Gonna have to think what to do about the continue ...
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/92255
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36102=
+9
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
