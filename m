@@ -1,228 +1,129 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C225D2F26
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=DfpkQU/ATTdj8SQ8S2sycjFTHz0K1T3h41EdnH1FLuQ=; b=A2P3J1t+kFU71LJhv8EYFdMWC4
-	T5bWxDAMk4Zh6Ks3vN3nx/A/JGUVHTwElYJUZNilKGcMUm2/wKmIGvvQhZbLEeJmxCLwQb7JgKEFo
-	oe1Te5CWVP6D6Jd3D3BGxKIF5pHAKMWd0vocfR0UMPLHIGk4YW8LfF3onsgabmKUOz7IIXuZ9tVXA
-	DraFcLoaxsDxn2EMMxzeSqA3NFNVMbrPlCrT3g+7yCksa52VYLaJ6TQyQGxSTbuYLK18U0h5TAbUp
-	8Cc/c/PVbaGDnEQepe44h7OZsm2Tojs6bv9jwHMIpDa8+Cm2MNM3pUHP5H2SkF05k7TkZLbAV9Aoa
-	h7Xkpfhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8mWN-008yN4-0P;
-	Mon, 12 Jun 2023 18:44:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B9237300188;
-	Mon, 12 Jun 2023 20:44:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 999F420D70605; Mon, 12 Jun 2023 20:44:03 +0200 (CEST)
-Date: Mon, 12 Jun 2023 20:44:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com,
-	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-	vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-	dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-	adrian.hunter@intel.com, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-	frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 33/57] perf: Simplify perf_adjust_freq_unthr_context()
-Message-ID: <20230612184403.GE83892@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093539.895253662@infradead.org>
- <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCC05252
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B808DC433EF;
+	Mon, 12 Jun 2023 18:54:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686596066;
+	bh=/Ri1xyOerdimybY5WnwGgxuj7fv7VGFmjAE4nT3rS6c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SJSh/vuWkOaDMgV+aJhtgMUtUkZlKSJ207YLgw2MMqinW9+Ax7JBbNJB0TEh3zpKQ
+	 TPtoFVa4YCcif6L2dfpF8lWIVtT4JVDS9sP5m9y4sdnDpGSPC2IqzSNy4EZ7wTGjlO
+	 gMz9V6BXA1aAuXg9irzuu2u1SmvTjFOTTEKEkUhUDynk5cB2V0h9hIeq2L7RV9heDN
+	 9ZKg5RjNKH1YsoxU0OUdMnELVNDidzZurCRd4lxYXC0yfhZP3WXOPRFVd9yK5eUWCV
+	 01Fq4dfxwyi6SHbneeufQNKJ5CHfd8IlA73levP3Pxwyyi3zcTZ4y85VyVWR0dvDtl
+	 xkO5n2Izn2kDA==
+Date: Mon, 12 Jun 2023 11:54:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	open list <linux-kernel@vger.kernel.org>,
+	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: clang: Powerpc: =?utf-8?Q?clang-nightl?=
+ =?utf-8?B?eS1tYXBsZV9kZWZjb25maWcg4oCU?= FAIL
+Message-ID: <20230612185424.GA2891387@dev-arch.thelio-3990X>
+References: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
 
-On Mon, Jun 12, 2023 at 09:27:09AM -0700, Linus Torvalds wrote:
+Hi Naresh,
 
-> The thing does not not go out of scope when the loop *iterates*.
+On Tue, Jun 13, 2023 at 12:10:30AM +0530, Naresh Kamboju wrote:
+> [Please ignore if it is already reported]
 > 
-> It only goes out of scope when the loop *ends*.
+> Following two builds failed on stable-rc 6.1.34-rc1.
+> 
+>   - Powerpc: clang-nightly-maple_defconfig — FAIL
+>   - Powerpc: clang-nightly-cell_defconfig — FAIL
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc
+> CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1
+> LLVM_IAS=0 LD=powerpc64le-linux-gnu-ld
+> 
+> arch/powerpc/lib/copypage_power7.S: Assembler messages:
+> arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
+> arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
+> arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:382:
+> arch/powerpc/lib/copypage_power7.o] Error 1
+> make[4]: Target 'arch/powerpc/lib/' not remade because of errors.
+> make[3]: *** [scripts/Makefile.build:500: arch/powerpc/lib] Error 2
+> arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
+> arch/powerpc/kernel/exceptions-64s.S:2959: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:2979: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:2994: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3012: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3032: Error: junk at end of line: `0b01010'
+> arch/powerpc/kernel/exceptions-64s.S:3079: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:382: arch/powerpc/kernel/head_64.o] Error 1
+> arch/powerpc/kernel/entry_64.S: Assembler messages:
+> arch/powerpc/kernel/entry_64.S:172: Error: junk at end of line: `0b01010'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [scripts/Makefile.build:382:
+> arch/powerpc/kernel/entry_64.o] Error 1
+> make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
+> make[3]: *** [scripts/Makefile.build:500: arch/powerpc/kernel] Error 2
+> make[3]: Target 'arch/powerpc/' not remade because of errors.
+> make[2]: *** [scripts/Makefile.build:500: arch/powerpc] Error 2
+> make[2]: Target './' not remade because of errors.
+> make[1]: *** [Makefile:2012: .] Error 2
+> make[1]: Target '__all' not remade because of errors.
+> make: *** [Makefile:238: __sub-make] Error 2
+> make: Target '__all' not remade because of errors.
 
-> Or have I mis-understood something completely?
+As always, thanks for the report. This is an LLVM regression/change in
+behavior caused by [1], which can break as-option and as-instr on
+releases prior to commit d5c8d6e0fa61 ("kbuild: Update assembler calls
+to use proper flags and language target"), as unsupported flags for the
+current target ('-x') may be present (KBUILD_CFLAGS is used for these
+tests instead of KBUILD_AFLAGS). Inside try-run, the macro behind
+as-instr and as-option, I see
 
-I tried this before I used it and variables inside a for() loop have a
-scope of a single iteration.
+  clang-17: error: unsupported option '-mno-prefixed' for target 'powerpc64le-linux-gnu'
+  clang-17: error: unsupported option '-mno-pcrel' for target 'powerpc64le-linux-gnu'
+  clang-17: error: unsupported option '-mno-altivec' for target 'powerpc64le-linux-gnu'
+  clang-17: error: unsupported option '-mno-vsx' for target 'powerpc64le-linux-gnu'
+  clang-17: error: unsupported option '-mno-mma' for target 'powerpc64le-linux-gnu'
+  clang-17: error: unsupported option '-mno-spe' for target 'powerpc64le-linux-gnu'
 
+This has come up recently elsewhere in PowerPC, see
+commit 2b694fc96fe3 ("powerpc/boot: Disable power10 features after
+BOOTAFLAGS assignment"). While I think it is dubious that clang errors
+on these flags for the assembler target, this is already fixed on the
+Linux side by using KBUILD_AFLAGS for these make macros.
 
-$ gcc -O2 -o guard guard.c && ./guard
-spin_lock
-ponies
-__raw_spin_lock_irqsave
-can haz
-raw_spin_unlock_irqrestore
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-spin_unlock
+I am preparing a series of d5c8d6e0fa61 and its dependencies for 6.1 but
+I want to do sufficient build testing first, which is currently running
+for me. Would you be able to point your matrix to [2] to make sure
+everything works properly with both GCC and LLVM? It is a work in
+progress as the second patch in the stack needs a proper commit message
+but it is the diff I expect to ship so that it all that matters.
 
+[1]: https://github.com/llvm/llvm-project/commit/5548843d692a92a7840f14002debc3cebcb3cdc3
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=wip/b4/6-1-asssembler-target-llvm-17
 
-
----
-#include <stdio.h>
-#include <stdbool.h>
-
-typedef struct {
-} raw_spinlock_t;
-
-typedef struct {
-} spinlock_t;
-
-typedef struct {
-} mutex_t;
-
-void raw_spin_lock(raw_spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void raw_spin_unlock(raw_spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-unsigned long __raw_spin_lock_irqsave(raw_spinlock_t *lock)
-{
-	printf("%s\n", __FUNCTION__);
-	return 0;
-}
-#define raw_spin_lock_irqsave(lock, flags) \
-	flags = __raw_spin_lock_irqsave(lock)
-
-void raw_spin_unlock_irqrestore(raw_spinlock_t *lock, unsigned long flags)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void spin_lock(spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void spin_unlock(spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-
-void mutex_lock(mutex_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void mutex_unlock(mutex_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-#define DEFINE_LOCK_GUARD(_type, _Type, _Lock, _Unlock, ...)			\
-typedef struct {								\
-	_Type *lock;								\
-	__VA_ARGS__								\
-} lock_guard_##_type##_t;							\
-										\
-static inline void lock_guard_##_type##_cleanup(void *_g)	\
-{										\
-	lock_guard_##_type##_t *_G = _g; \
-	if (_G->lock) \
-	_Unlock;								\
-}										\
-										\
-static inline lock_guard_##_type##_t lock_guard_##_type##_init(_Type *lock)	\
-{										\
-	lock_guard_##_type##_t _g = { .lock = lock }, *_G = &_g;		\
-	_Lock;									\
-	return _g;								\
-}
-
-DEFINE_LOCK_GUARD(raw,   raw_spinlock_t,
-		  raw_spin_lock(_G->lock),
-		  raw_spin_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(spin,  spinlock_t,
-		  spin_lock(_G->lock),
-		  spin_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(mutex, mutex_t,
-		  mutex_lock(_G->lock),
-		  mutex_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(raw_irqsave, raw_spinlock_t,
-		  raw_spin_lock_irqsave(_G->lock, _G->flags),
-		  raw_spin_unlock_irqrestore(_G->lock, _G->flags),
-		  unsigned long flags;
-		 )
-
-#define __cleanup(func) __attribute__((__cleanup__(func)))
-
-#define lock_guard(_type, _name, _ptr) \
-	lock_guard_##_type##_t _name __cleanup(lock_guard_##_type##_cleanup) = \
-	lock_guard_##_type##_init(_ptr)
-
-#define lock_scope(_type, _ptr) \
-	for (struct { lock_guard_##_type##_t guard ; bool done; } _scope __cleanup(lock_guard_##_type##_cleanup) = \
-	     { .guard = lock_guard_##_type##_init(_ptr), .done = false }; \
-	     !_scope.done; _scope.done = true)
-
-raw_spinlock_t raw_lock;
-spinlock_t lock;
-mutex_t mutex;
-
-void main(void)
-{
-	lock_guard(spin, guard, &lock);
-	printf("ponies\n");
-	lock_scope(raw_irqsave, &raw_lock) {
-		printf("can haz\n");
-	}
-
-	for (int i=0; i<5; i++) {
-		lock_guard(mutex, foo, &mutex);
-		continue;
-	}
-}
+Cheers,
+Nathan
