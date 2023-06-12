@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBF217FF7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6AB17FED
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To;
-	bh=U4i7z1jGLLioJYi9TDEcLiRvRYzXl6AqAACZeSAVHVg=; b=SBLpIgKh9BvTgin8OgClkKlYXg
-	X5ams+FHzFQ6G1lMnSouT1mDdb4OLsixaSq0XGTpb8qMCrU112HpuhNQoPMpu5LuKgc0l67v7cO1h
-	u5ptXidisQWMYnTu9VRqL7lCU0qSFMrhITDD9gjBmwe8Ob3g4CMGsAIsrtG8NhdHIlElo7XiHuBGk
-	i6CUfsyeQ89E6j6aUDbi6UnyyLpJP5feQWE/A/0f7bznVuaG82q1C6WO47OsY3j0TTRUJpg1Of5WA
-	IRcAI8pTAmFoYuUbcG3n6PWRD/wAaLyzUwLu2dB3lMCN4lr3Q2ZxqN2zU2caRGifvgztAd6QumekK
-	vRuQDjXw==;
+	d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+	Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=B0zTaY9KKPrZ1tK1qkRJnGUNtZfdXptR/HzHjs1+iS4=; b=XQZ4FGxflXtqrO54lLAdhO230P
+	0eX2jASHQqZyaZNrOmMoEAP3MzmJ1PuCQQZsDzJJBywGmqEPEQHqvhlhW6xpMkYIB7cscPsZnMTPl
+	wda/YRaaOhoccHxY9GPvcZrmpGt4nCDyqnVSaswXky246eD7cW64gEprJmzd0jxHJVUT0l9r//0Pk
+	si1QkPjlyyiXYTzocQuwfczKtYj0dLOHYdp/NLE/KEPazV26d+77/ruWNTca7LUqUMS4HC8k/lh1H
+	dX6E3O3gMC+cI3mUHbifWMBmIlu4IhoS0cvWd9D1DJFJDkJUmucMJXsZhbMU02ynkCiQnt/FdIvcn
+	A8w/NYnw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0q-008kRX-2x;
-	Mon, 12 Jun 2023 09:39:07 +0000
+	id 1q8e0j-008kPo-13;
+	Mon, 12 Jun 2023 09:38:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3FB923033B6;
-	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1C3B2300322;
+	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id D03BE30A77B70; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.253514702@infradead.org>
+	id E7CDA30A20814; Mon, 12 Jun 2023 11:38:47 +0200 (CEST)
+Message-ID: <20230612090713.652690195@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:51 +0200
+Date: Mon, 12 Jun 2023 11:07:13 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,59 +94,66 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 38/57] perf: Simplify IOC_SET_OUTPUT
-References: <20230612090713.652690195@infradead.org>
+Subject: [PATCH v3 00/57] Scope-based Resource Management
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 
+Hi,
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+After a wee bit of bike-shedding on the syntax/API of the thing I think we're
+in a reasonable shape.
+
+There's still the no_free_ptr() vs take_ptr() thing, but that can be easily
+sorted with a little script over the patches if we reach consensus.
+
+I've taken to converting kernel/sched/core.c and kernel/events/core.c to see
+how well this stuff actually works. Unlike last time, I've split them up into a
+gazillion little patches. Both for my sanity -- bisect is genius when you're
+trying to debug stuff in the middle of the night as well as reviewer sanity.
+
+These are by no means 'complete' convertions, I've mostly focussed on functions
+that had 'goto' in them. Since that's a large part of why I started on all this.
+
+x86_x64-defconfig boots and passes perf test. I'll go figure out how to point
+syzcaller at it.
+
+The patches have gone through a few cycles of 0day over the weekend, and mostly
+builds fine now.
+
+Dan Carpenter poked me about how sparse doesn't yet understand the __cleanup__
+attribute and seems to suffer from decl-after-stmt issues, so that might be
+something that needs attention.
+
+Anyway, does this look like something we can live with?
+
 ---
- kernel/events/core.c |   17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5762,6 +5762,11 @@ static inline struct fd perf_fdget(int f
- 	return f;
- }
- 
-+static inline bool is_perf_fd(struct fd fd)
-+{
-+	return fd.file && fd.file->f_op == &perf_fops;
-+}
-+
- static int perf_event_set_output(struct perf_event *event,
- 				 struct perf_event *output_event);
- static int perf_event_set_filter(struct perf_event *event, void __user *arg);
-@@ -5807,19 +5812,15 @@ static long _perf_ioctl(struct perf_even
- 
- 	case PERF_EVENT_IOC_SET_OUTPUT:
- 	{
--		int ret;
- 		if (arg != -1) {
- 			struct perf_event *output_event;
--			struct fd output = perf_fdget(arg);
--			if (!output.file)
-+			CLASS(fd, output)(arg);
-+			if (!is_perf_fd(output))
- 				return -EBADF;
- 			output_event = output.file->private_data;
--			ret = perf_event_set_output(event, output_event);
--			fdput(output);
--		} else {
--			ret = perf_event_set_output(event, NULL);
-+			return perf_event_set_output(event, output_event);
- 		}
--		return ret;
-+		return perf_event_set_output(event, NULL);
- 	}
- 
- 	case PERF_EVENT_IOC_SET_FILTER:
-
+ Makefile                            |    6 +-
+ arch/arm64/kernel/vdso32/Makefile   |    2 -
+ drivers/dma/ioat/dma.c              |   12 +-
+ include/linux/cleanup.h             |  167 ++++
+ include/linux/compiler-clang.h      |    9 +
+ include/linux/compiler_attributes.h |    6 +
+ include/linux/cpu.h                 |    2 +
+ include/linux/device.h              |    7 +
+ include/linux/file.h                |   11 +
+ include/linux/irqflags.h            |    7 +
+ include/linux/mutex.h               |    4 +
+ include/linux/percpu.h              |    4 +
+ include/linux/perf_event.h          |   14 +-
+ include/linux/preempt.h             |    5 +
+ include/linux/rcupdate.h            |    3 +
+ include/linux/rwsem.h               |    8 +
+ include/linux/sched/task.h          |    2 +
+ include/linux/slab.h                |    3 +
+ include/linux/spinlock.h            |   31 +
+ include/linux/srcu.h                |    5 +
+ kernel/events/core.c                | 1642 +++++++++++++++--------------------
+ kernel/sched/core.c                 |  931 +++++++++-----------
+ kernel/sched/sched.h                |   40 +
+ scripts/checkpatch.pl               |    2 +-
+ security/apparmor/include/lib.h     |    6 +-
+ 25 files changed, 1433 insertions(+), 1496 deletions(-)
 
