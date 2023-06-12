@@ -1,235 +1,233 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65886882A
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 19:17:37 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1b3e3f33e33so35215ad.0
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 12:17:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7798BF8
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 19:45:02 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-650352b89f6so3693950b3a.0
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 12:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686597456; x=1689189456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pZZnDMehrpoBA93zHNtYxRT8/Ymf8pvYvAg1yVBg5/4=;
-        b=keY5rgqjJR3aCNXzC9vjyaZW9XOrpvERMqGkM4RxD6n7d+2NEfDZZ92PYFuo9O6DWW
-         Lv3KMuyeOjYtG1xyoh1zJUSlAwIIK9gsnY3TEzwKg+R0brkH6ZwHMKMymynW4TfPymIN
-         jlwlWRyrtC+tJzS8iquz45RJalu3azLVbw8T138oVbci21AmAsc8vqwgtau+qLB/WfNW
-         tkP7jkYewZz0ISAIdhl3aNb75FPS1PjdP4AIvWDklpjanIPapq65Uty09NVXyjTIpaok
-         CXVY8gl//Wpqasw7eweqDmohZ53SeHuGKh8WiukFSvXqQF+OewbxrWBfuO0uWNrWJjIN
-         VIbw==
+        d=gmail.com; s=20221208; t=1686599101; x=1689191101;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SqkCjzH8EDX69emqqTnSLhV/oO1OorGxyiylgKOLPhs=;
+        b=n8E45iNLNI5A1fK4mNvFfCMpoJC/UvMNT0d5QOE6Ze2+RTG6LcQvPX09TZRJQOmhiN
+         N/lty5wFosqnDu07ERqOtzJ7OqYw/ap3bfACWKuzood41h/dPvdPZEV/ctUpMEJzIUFy
+         UoKFt6etNeGazvvHMjES5ANqcxJh/W3CT2wqG9GciZE94nHmQST/wNRU+fhCV29wW3pu
+         H7PpjvRLruvaMCSFmqcRqbtjEjPtAs9F4ipuszj0HlCpbmwOsrRMefvgqboizAqyl7ht
+         rsIvYELUWjTLiehFy2km7hhQBjI27Qdfg/6lv4wTsPFWrR1gt8CUpKDVANGyPjR9ulhA
+         nicQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686597456; x=1689189456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pZZnDMehrpoBA93zHNtYxRT8/Ymf8pvYvAg1yVBg5/4=;
-        b=BgNJcXtylvJGMJf708tXwX8a7T1S8d6LzO/yIkLLahmC0EjazjkDjsVTZzr8V5qSo7
-         SuQD68Npux4Nax/VXJukpDVFNBLdffCLIE5kzcDwFMByVHSqzd+zIf1kTwsHKCsGs2fp
-         0nnRTMiScNt8eNTSxm/+iQDMui5lbI0LWDaSPlqGfD2z76xygYbI4HwFHTxlG86El+ey
-         opQdAt7yoGRX73kJE13DEHawOJk6lJa6/hdoQCDuhmQdJrcotqT8llJGu0a2HVOwAN7O
-         JsmCIOUyYkzLQiqUXJhtlkp5fHjGlQWcx4iIndD3jjzraCFA1LjmDaJgZjUxdFwwpQrA
-         ofbg==
-X-Gm-Message-State: AC+VfDxBFlZdhU8dFI+lJJagR09ISKCDY3/YlwBZrgg8urkReL1gIeww
-	W0Ct+yxScqJbzzErvfFfcUavsO1deHFXSgBL0RjfDw==
-X-Google-Smtp-Source: ACHHUZ6pzrAp8DYHzFw09Om/1sOsX4ebRUPfbmfEHrmKwvP+eaKyiX6qR5FZuTeM/RkNT+3DUev3KPnY5kL+KFHpjVw=
-X-Received: by 2002:a17:902:e84b:b0:1b1:d1fe:e73 with SMTP id
- t11-20020a170902e84b00b001b1d1fe0e73mr35074plg.8.1686597456453; Mon, 12 Jun
- 2023 12:17:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686599101; x=1689191101;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SqkCjzH8EDX69emqqTnSLhV/oO1OorGxyiylgKOLPhs=;
+        b=G5Ztsg8fiA8xpQv42IfNwmM+z6fXbARPimBXFfwjU5r8ucFwxZaMbUH2RrZjlky0qS
+         /YcGE/a81HJHazcSpSLPTcj1RI+Yr+nguH/PM5jXmoe71K7VUm70K5pNJex8BOXmYf++
+         zwp/abUZwi/ZufoQe4OkmLkAN1EsLQS0sUVPO+FbI+TgJosKjjmT+/qnRLxQFxipNDhM
+         H/Ba1sw8jIdZ1K7esb/1ycyFZzQgrsPFIoTjWYoCBLSsLldmkOzQHbGmYt1yNiAZV5Md
+         qOPHtb1tRO1wHQLreQCSYaAjMpgueoiOSgGP78zp6we6lMXSo/Z4dSHbS99hIMQmxBpH
+         en4Q==
+X-Gm-Message-State: AC+VfDyuQB8y9hrJfzDAGQG3LbomvRfpNxptH/xo4TZQLJo8wRvxM5K2
+	0Z2RZUckZBlEKP9rGrsKanE=
+X-Google-Smtp-Source: ACHHUZ4m0aYpRl01maIeL2HiWz0Am9u27+hloUxmq+d5BC1fnWyP4A9YVICUOGvFTsxMDL+syl8Hlg==
+X-Received: by 2002:a05:6a21:99aa:b0:114:6f3c:4332 with SMTP id ve42-20020a056a2199aa00b001146f3c4332mr12014892pzb.24.1686599101395;
+        Mon, 12 Jun 2023 12:45:01 -0700 (PDT)
+Received: from fedora.. ([2409:40e2:102b:b6d8:efc7:8b57:73a7:8d1])
+        by smtp.gmail.com with ESMTPSA id c8-20020aa781c8000000b0063aa1763146sm7502869pfn.17.2023.06.12.12.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 12:45:00 -0700 (PDT)
+From: Aakash Sen Sharma <aakashsensharma@gmail.com>
+To: corbet@lwn.net,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	wedsonaf@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	masahiroy@kernel.org,
+	me@kloenk.de,
+	aakashsensharma@gmail.com,
+	aliceryhl@google.com,
+	benno.lossin@proton.me,
+	dev@niklasmohrin.de,
+	lina@asahilina.net,
+	hca@linux.ibm.com,
+	rust-for-linux@vger.kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] rust: bindgen: upgrade to 0.65.1
+Date: Tue, 13 Jun 2023 01:13:11 +0530
+Message-Id: <20230612194311.24826-1-aakashsensharma@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230609235419.204624-1-irogers@google.com> <20230609235419.204624-2-irogers@google.com>
- <ZIdt18EmHQBgiWXF@kernel.org>
-In-Reply-To: <ZIdt18EmHQBgiWXF@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 12 Jun 2023 12:17:24 -0700
-Message-ID: <CAP-5=fUnS7yC+d4Xey0YMuOJcaXRBscjvD5i=q=vjS_7cgW3gw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] perf srcline: Make sentinel reading for binutils
- addr2line more robust
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Changbin Du <changbin.du@huawei.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 12, 2023 at 12:11=E2=80=AFPM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Jun 09, 2023 at 04:54:19PM -0700, Ian Rogers escreveu:
-> > The addr2line process is sent an address then multiple function,
-> > filename:line "records" are read. To detect the end of output a ',' is
-> > sent and for llvm-addr2line a ',' is then read back showing the end of
-> > addrline's output. For binutils addr2line the ',' translates to
-> > address 0 and we expect the bogus filename marker "??:0" (see
-> > filename_split) to be sent from addr2line. For some kernels address 0
-> > may have a mapping and so a seemingly valid inline output is given and
-> > breaking the sentinel discovery:
-> >
-> > ```
-> > $ addr2line -e vmlinux -f -i
-> > ,
-> > __per_cpu_start
-> > ./arch/x86/kernel/cpu/common.c:1850
-> > ```
-> >
-> > To avoid this problem enable the address dumping for addr2line (the -a
-> > option). If an address of 0x0000000000000000 is read then this is the
-> > sentinel value working around the problem above. The filename_split
-> > still needs to check for "??:0" as bogus non-zero addresses also need
-> > handling.
-> >
-> > Reported-by: Changbin Du <changbin.du@huawei.com>
->
-> Changbin,
->
->         Did this fix the problem you reported? If so can I have your
-> Tested-by?
+* Rationale:
 
-There are ongoing issues that Changbin has found, the thread is here:
-https://lore.kernel.org/linux-perf-users/CAP-5=3DfWdvMVOiZDhqiz1R9hucz+6+ho=
-_L3jBixqP3YLcJD7Lew@mail.gmail.com/
+Upgrades bindgen to code-generation for anonymous unions, structs, and enums [7]
+for LLVM-16 based toolchains.
 
-Thanks,
-Ian
+The following upgrade also incorporates `noreturn` support from bindgen
+allowing us to remove useless `loop` calls which was placed as a
+workaround.
 
-> Thanks,
->
-> - Arnaldo
->
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/srcline.c | 61 ++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 53 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-> > index fc85cdd6c8f9..c99a001453b4 100644
-> > --- a/tools/perf/util/srcline.c
-> > +++ b/tools/perf/util/srcline.c
-> > @@ -406,7 +406,7 @@ static struct child_process *addr2line_subprocess_i=
-nit(const char *addr2line_pat
-> >       const char *argv[] =3D {
-> >               addr2line_path ?: "addr2line",
-> >               "-e", binary_path,
-> > -             "-i", "-f", NULL
-> > +             "-a", "-i", "-f", NULL
-> >       };
-> >       struct child_process *a2l =3D zalloc(sizeof(*a2l));
-> >       int start_command_status =3D 0;
-> > @@ -461,10 +461,10 @@ static enum a2l_style addr2line_configure(struct =
-child_process *a2l, const char
-> >                       style =3D LLVM;
-> >                       cached =3D true;
-> >                       lines =3D 1;
-> > -             } else if (ch =3D=3D '?') {
-> > +             } else if (ch =3D=3D '0') {
-> >                       style =3D GNU_BINUTILS;
-> >                       cached =3D true;
-> > -                     lines =3D 2;
-> > +                     lines =3D 3;
-> >               } else {
-> >                       if (!symbol_conf.disable_add2line_warn) {
-> >                               char *output;
-> > @@ -516,20 +516,64 @@ static int read_addr2line_record(struct io *io,
-> >       if (line_nr !=3D NULL)
-> >               *line_nr =3D 0;
-> >
-> > +     /*
-> > +      * Read the first line. Without an error this will be either an a=
-ddress
-> > +      * like 0x1234 or for llvm-addr2line the sentinal ',' character.
-> > +      */
-> >       if (io__getline(io, &line, &line_len) < 0 || !line_len)
-> >               goto error;
-> >
-> > -     if (style =3D=3D LLVM && line_len =3D=3D 2 && line[0] =3D=3D ',')=
- {
-> > -             zfree(&line);
-> > -             return 0;
-> > +     if (style =3D=3D LLVM) {
-> > +             if (line_len =3D=3D 2 && line[0] =3D=3D ',') {
-> > +                     zfree(&line);
-> > +                     return 0;
-> > +             }
-> > +     } else {
-> > +             int zero_count =3D 0, non_zero_count =3D 0;
-> > +
-> > +             /* The address should always start 0x. */
-> > +             if (line_len < 2 || line[0] !=3D '0' || line[1] !=3D 'x')
-> > +                     goto error;
-> > +
-> > +             for (size_t i =3D 2; i < line_len; i++) {
-> > +                     if (line[i] =3D=3D '0')
-> > +                             zero_count++;
-> > +                     else
-> > +                             non_zero_count++;
-> > +             }
-> > +             if (!non_zero_count) {
-> > +                     int ch;
-> > +
-> > +                     if (!zero_count) {
-> > +                             /* Line was erroneous just '0x'. */
-> > +                             goto error;
-> > +                     }
-> > +                     /*
-> > +                      * Line was 0x0..0, the sentinel for binutils. Re=
-move
-> > +                      * the function and filename lines.
-> > +                      */
-> > +                     zfree(&line);
-> > +                     do {
-> > +                             ch =3D io__get_char(io);
-> > +                     } while (ch > 0 && ch !=3D '\n');
-> > +                     do {
-> > +                             ch =3D io__get_char(io);
-> > +                     } while (ch > 0 && ch !=3D '\n');
-> > +                     return 0;
-> > +             }
-> >       }
-> >
-> > +     /* Read the second function name line. */
-> > +     if (io__getline(io, &line, &line_len) < 0 || !line_len)
-> > +             goto error;
-> > +
-> >       if (function !=3D NULL)
-> >               *function =3D strdup(strim(line));
-> >
-> >       zfree(&line);
-> >       line_len =3D 0;
-> >
-> > +     /* Read the third filename and line number line. */
-> >       if (io__getline(io, &line, &line_len) < 0 || !line_len)
-> >               goto error;
-> >
-> > @@ -633,8 +677,9 @@ static int addr2line(const char *dso_name, u64 addr=
-,
-> >               goto out;
-> >       case 0:
-> >               /*
-> > -              * The first record was invalid, so return failure, but f=
-irst read another
-> > -              * record, since we asked a junk question and have to cle=
-ar the answer out.
-> > +              * The first record was invalid, so return failure, but f=
-irst
-> > +              * read another record, since we sent a sentinel ',' for =
-the
-> > +              * sake of detected the last inlined function.
-> >                */
-> >               switch (read_addr2line_record(&io, a2l_style, NULL, NULL,=
- NULL)) {
-> >               case -1:
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
->
-> --
->
-> - Arnaldo
+* Truncated build logs on using bindgen `v0.56.0` prior to LLVM-16 toolchain:
+
+```
+$ make rustdoc LLVM=1 CLIPPY=1 -j$(nproc)
+  RUSTC L rust/core.o
+  BINDGEN rust/bindings/bindings_generated.rs
+  BINDGEN rust/bindings/bindings_helpers_generated.rs
+  BINDGEN rust/uapi/uapi_generated.rs
+thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
+...
+thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
+...
+```
+
+* LLVM-16 Changes:
+
+API changes [1] were introduced such that libclang would emit names like
+"(unnamed union at compiler_types.h:146:2)" for unnamed unions, structs, and
+enums whereas it previously returned an empty string.
+
+* Bindgen Changes:
+
+Bindgen `v0.56.0` on LLVM-16 based toolchains hence was unable to process the
+anonymous union in `include/linux/compiler_types` `struct ftrace_branch_data`
+and caused subsequent panics as the new `libclang` API emitted name was not
+being handled. The following issue was fixed in Bindgen `v0.62.0` [2].
+
+Bindgen `v0.58.0` changed the flags `--whitelist-*` and `--blacklist-*`
+to `--allowlist-*` and `--blocklist-*` respectively [3].
+
+Bindgen `v0.61.0` added support for `_Noreturn`, `[[noreturn]]`, `__attribute__((noreturn))` [4],
+hence the empty `loop`s used to circumvent bindgen returning `!` in place of `()`
+for noreturn attributes have been removed completely.
+
+Bindgen `v0.61.0` also changed default functionality to bind `size_t` to `usize` [5] and
+added the `--no-size_t-is-usize` [5] flag to not bind `size_t` as `usize`.
+
+Bindgen `v0.65.0` removed `--size_t-is-usize` flag [6].
+
+Link: https://github.com/llvm/llvm-project/commit/19e984ef8f49bc3ccced15621989fa9703b2cd5b [1]
+Link: https://github.com/rust-lang/rust-bindgen/pull/2319 [2]
+Link: https://github.com/rust-lang/rust-bindgen/pull/1990 [3]
+Link: https://github.com/rust-lang/rust-bindgen/issues/2094 [4]
+Link: https://github.com/rust-lang/rust-bindgen/commit/cc78b6fdb6e829e5fb8fa1639f2182cb49333569 [5]
+Link: https://github.com/rust-lang/rust-bindgen/pull/2408 [6]
+Closes: https://github.com/Rust-for-Linux/linux/issues/1013 [7]
+Signed-off-by: Aakash Sen Sharma <aakashsensharma@gmail.com>
+---
+ Documentation/process/changes.rst |  2 +-
+ rust/Makefile                     |  6 +++---
+ rust/helpers.c                    | 13 ++++++-------
+ rust/kernel/lib.rs                |  3 ---
+ scripts/min-tool-version.sh       |  2 +-
+ 5 files changed, 11 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index ef540865ad22..5f21c4c6cf5c 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -32,7 +32,7 @@ you probably needn't concern yourself with pcmciautils.
+ GNU C                  5.1              gcc --version
+ Clang/LLVM (optional)  11.0.0           clang --version
+ Rust (optional)        1.62.0           rustc --version
+-bindgen (optional)     0.56.0           bindgen --version
++bindgen (optional)     0.65.1           bindgen --version
+ GNU make               3.82             make --version
+ bash                   4.2              bash --version
+ binutils               2.25             ld -v
+diff --git a/rust/Makefile b/rust/Makefile
+index f88d108fbef0..c187c6f3a384 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -279,7 +279,7 @@ quiet_cmd_bindgen = BINDGEN $@
+ 	$(BINDGEN) $< $(bindgen_target_flags) \
+ 		--use-core --with-derive-default --ctypes-prefix core::ffi --no-layout-tests \
+ 		--no-debug '.*' \
+-		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMODULE \
++		-o $@ -- $(bindgen_c_flags_final) -DMODULE \
+ 		$(bindgen_target_cflags) $(bindgen_target_extra)
+
+ $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags = \
+@@ -293,8 +293,8 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindings/bindings_helper.h \
+ # given it is `libclang`; but for consistency, future Clang changes and/or
+ # a potential future GCC backend for `bindgen`, we disable it too.
+ $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_flags = \
+-    --blacklist-type '.*' --whitelist-var '' \
+-    --whitelist-function 'rust_helper_.*'
++    --blocklist-type '.*' --allowlist-var '' \
++    --allowlist-function 'rust_helper_.*'
+ $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_cflags = \
+     -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarations
+ $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_extra = ; \
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 121583282976..98d9ef47225b 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -122,19 +122,18 @@ void rust_helper_put_task_struct(struct task_struct *t)
+ EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
+
+ /*
+- * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+- * as the Rust `usize` type, so we can use it in contexts where Rust
+- * expects a `usize` like slice (array) indices. `usize` is defined to be
+- * the same as C's `uintptr_t` type (can hold any pointer) but not
+- * necessarily the same as `size_t` (can hold the size of any single
++ * `bindgen` binds the C `size_t` type the Rust `usize` type, so we can
++ * use it in contexts where Rust expects a `usize` like slice (array) indices.
++ * `usize` is defined to be the same as C's `uintptr_t` type (can hold any pointer)
++ * but not necessarily the same as `size_t` (can hold the size of any single
+  * object). Most modern platforms use the same concrete integer type for
+  * both of them, but in case we find ourselves on a platform where
+  * that's not true, fail early instead of risking ABI or
+  * integer-overflow issues.
+  *
+  * If your platform fails this assertion, it means that you are in
+- * danger of integer-overflow bugs (even if you attempt to remove
+- * `--size_t-is-usize`). It may be easiest to change the kernel ABI on
++ * danger of integer-overflow bugs (even if you attempt to add
++ * `--no-size_t-is-usize`). It may be easiest to change the kernel ABI on
+  * your platform such that `size_t` matches `uintptr_t` (i.e., to increase
+  * `size_t`, because `uintptr_t` has to be at least as big as `size_t`).
+  */
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index ee27e10da479..1b0dcf03b9c2 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -95,7 +95,4 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+     pr_emerg!("{}\n", info);
+     // SAFETY: FFI call.
+     unsafe { bindings::BUG() };
+-    // Bindgen currently does not recognize `__noreturn` so `BUG` returns `()`
+-    // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/issues/2094>.
+-    loop {}
+ }
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 20d483ec6f5f..5b80c5d3a9f8 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -30,7 +30,7 @@ rustc)
+ 	echo 1.62.0
+ 	;;
+ bindgen)
+-	echo 0.56.0
++	echo 0.65.1
+ 	;;
+ *)
+ 	echo "$1: unknown tool" >&2
+--
+2.40.1
+
