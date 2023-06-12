@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFE3182C4
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D68618C00
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=tN5fF7Wyh35qBJFCdjEuKMaMwIiqau8XmW0j2x/SMjk=; b=pTQEAHGpF5fz0pLIBta9z8QWvF
-	V3VTKbdm5MrZ6Uq6sIyVOPIlJRamTVCnfvzmEg5CiuDQWZwIOhMu3l9PZQuNwkMb8MTxXwLb05k1F
-	pXKfEwe9Z0i663rYdw9pUPCOE+2AHi/lm0RzSNXMm4U2w1iNa1ZIxBs9afcsQW/V20UMXzYer3WCT
-	zF9DC46u7wLZd3iCRc+AmRVnu9fCua5kGt94sVVOX6RESLLLndvS1OIwmKToKe+pfW/q3/OlKUMUJ
-	NzNjcl62XQoQkQaJg1jmU538/Cwb5EJWwMJr4XxONBZWuSlObMm3Fh7GXzLLBUAOiqFAhv2ZaNNZD
-	zVv+iV3g==;
+	bh=ZQvmg1eOC4ujP8jeHKMUa0GcDNPOQum0WTJAKmNFtGA=; b=LPWnimpJNpLZAm9lAEc9/THe/4
+	L17U+Uvk/IrPGFLBwGSRewqcM4EG3AHAJ0JNDl0MCKyM49V4OoY1gcgT3tGs6IQwyi+zWYkIA/x5n
+	e9OIIbDmUiJQWpPFwqC+kJCVOEw/Jj8WMAAQcCCnT/9I80sTpkArIdTpzmw+gX5XtO2srpXfBixaW
+	SsP8pAuR1zdJrNJ7b4JAofN3opgCSHW1FfpRE0M6GQjVwiKIUqL/X25uTaFzLPdcUW2hsoDiXKfRf
+	6iMaLNLdSNAx4MUk+7WYDbOpD1drZrQV2g7rFKO3wkyvuWgjibIrNULJfmQtiqD+E/UxDE+bOjznW
+	a6a3xmpw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0k-002NAj-JK; Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0t-002NGr-1J; Mon, 12 Jun 2023 09:39:03 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D99F530318F;
-	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4881E3033CC;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 416A530A70ADF; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.393498853@infradead.org>
+	id DC80030A77B72; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093540.407316252@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:26 +0200
+Date: Mon, 12 Jun 2023 11:07:53 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 13/57] sched: Simplify sched_core_cpu_{starting,deactivate}()
+Subject: [PATCH v3 40/57] perf: Simplify perf_mmap_close()/perf_aux_sample_output()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -103,103 +103,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ kernel/events/core.c |   20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6331,20 +6331,24 @@ static void queue_core_balance(struct rq
- 	queue_balance_callback(rq, &per_cpu(core_balance_head, rq->cpu), sched_core_balance);
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6179,6 +6179,9 @@ void ring_buffer_put(struct perf_buffer
+ 	call_rcu(&rb->rcu_head, rb_free_rcu);
  }
  
-+DEFINE_LOCK_GUARD_1(core_lock, int,
-+		    sched_core_lock(*_T->lock, &_T->flags),
-+		    sched_core_unlock(*_T->lock, &_T->flags),
-+		    unsigned long flags)
++DEFINE_CLASS(ring_buffer_get, struct perf_buffer *, ring_buffer_put(_T),
++	     ring_buffer_get(event), struct perf_event *event)
 +
- static void sched_core_cpu_starting(unsigned int cpu)
+ static void perf_mmap_open(struct vm_area_struct *vma)
  {
- 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
- 	struct rq *rq = cpu_rq(cpu), *core_rq = NULL;
--	unsigned long flags;
- 	int t;
+ 	struct perf_event *event = vma->vm_file->private_data;
+@@ -6206,7 +6209,7 @@ static void perf_pmu_output_stop(struct
+ static void perf_mmap_close(struct vm_area_struct *vma)
+ {
+ 	struct perf_event *event = vma->vm_file->private_data;
+-	struct perf_buffer *rb = ring_buffer_get(event);
++	CLASS(ring_buffer_get, rb)(event);
+ 	struct user_struct *mmap_user = rb->mmap_user;
+ 	int mmap_locked = rb->mmap_locked;
+ 	unsigned long size = perf_data_size(rb);
+@@ -6245,14 +6248,14 @@ static void perf_mmap_close(struct vm_ar
+ 		detach_rest = true;
  
--	sched_core_lock(cpu, &flags);
-+	guard(core_lock)(&cpu);
- 
- 	WARN_ON_ONCE(rq->core != rq);
- 
- 	/* if we're the first, we'll be our own leader */
- 	if (cpumask_weight(smt_mask) == 1)
--		goto unlock;
+ 	if (!atomic_dec_and_mutex_lock(&event->mmap_count, &event->mmap_mutex))
+-		goto out_put;
 +		return;
  
- 	/* find the leader */
- 	for_each_cpu(t, smt_mask) {
-@@ -6358,7 +6362,7 @@ static void sched_core_cpu_starting(unsi
- 	}
+ 	ring_buffer_attach(event, NULL);
+ 	mutex_unlock(&event->mmap_mutex);
  
- 	if (WARN_ON_ONCE(!core_rq)) /* whoopsie */
--		goto unlock;
+ 	/* If there's still other mmap()s of this buffer, we're done. */
+ 	if (!detach_rest)
+-		goto out_put;
 +		return;
  
- 	/* install and validate core_rq */
- 	for_each_cpu(t, smt_mask) {
-@@ -6369,29 +6373,25 @@ static void sched_core_cpu_starting(unsi
- 
- 		WARN_ON_ONCE(rq->core != core_rq);
- 	}
+ 	/*
+ 	 * No other mmap()s, detach from all other events that might redirect
+@@ -6309,9 +6312,6 @@ static void perf_mmap_close(struct vm_ar
+ 			&mmap_user->locked_vm);
+ 	atomic64_sub(mmap_locked, &vma->vm_mm->pinned_vm);
+ 	free_uid(mmap_user);
 -
--unlock:
--	sched_core_unlock(cpu, &flags);
+-out_put:
+-	ring_buffer_put(rb); /* could be last */
  }
  
- static void sched_core_cpu_deactivate(unsigned int cpu)
+ static const struct vm_operations_struct perf_mmap_vmops = {
+@@ -6962,14 +6962,13 @@ static void perf_aux_sample_output(struc
+ 				   struct perf_sample_data *data)
  {
- 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
- 	struct rq *rq = cpu_rq(cpu), *core_rq = NULL;
--	unsigned long flags;
- 	int t;
+ 	struct perf_event *sampler = event->aux_event;
+-	struct perf_buffer *rb;
+ 	unsigned long pad;
+ 	long size;
  
--	sched_core_lock(cpu, &flags);
-+	guard(core_lock)(&cpu);
+ 	if (WARN_ON_ONCE(!sampler || !data->aux_size))
+ 		return;
  
- 	/* if we're the last man standing, nothing to do */
- 	if (cpumask_weight(smt_mask) == 1) {
- 		WARN_ON_ONCE(rq->core != rq);
--		goto unlock;
-+		return;
- 	}
+-	rb = ring_buffer_get(sampler);
++	CLASS(ring_buffer_get, rb)(sampler);
+ 	if (!rb)
+ 		return;
  
- 	/* if we're not the leader, nothing to do */
- 	if (rq->core != rq)
--		goto unlock;
-+		return;
- 
- 	/* find a new leader */
- 	for_each_cpu(t, smt_mask) {
-@@ -6402,7 +6402,7 @@ static void sched_core_cpu_deactivate(un
- 	}
- 
- 	if (WARN_ON_ONCE(!core_rq)) /* impossible */
--		goto unlock;
+@@ -6982,7 +6981,7 @@ static void perf_aux_sample_output(struc
+ 	 * like to know.
+ 	 */
+ 	if (WARN_ON_ONCE(size < 0))
+-		goto out_put;
 +		return;
  
- 	/* copy the shared state to the new leader */
- 	core_rq->core_task_seq             = rq->core_task_seq;
-@@ -6424,9 +6424,6 @@ static void sched_core_cpu_deactivate(un
- 		rq = cpu_rq(t);
- 		rq->core = core_rq;
+ 	/*
+ 	 * The pad comes from ALIGN()ing data->aux_size up to u64 in
+@@ -6996,9 +6995,6 @@ static void perf_aux_sample_output(struc
+ 		u64 zero = 0;
+ 		perf_output_copy(handle, &zero, pad);
  	}
 -
--unlock:
--	sched_core_unlock(cpu, &flags);
+-out_put:
+-	ring_buffer_put(rb);
  }
  
- static inline void sched_core_cpu_dying(unsigned int cpu)
+ /*
 
 
