@@ -1,52 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C4C1C75F
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 15:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF72C433D2;
-	Mon, 12 Jun 2023 15:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1686584702;
-	bh=i8KTAL9m8czF59/PWA43ufGF+FzGsWZsS4YZqCVtdKk=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD84F1DDF8;
+	Mon, 12 Jun 2023 16:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ADE1C433D2;
+	Mon, 12 Jun 2023 16:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686585760;
+	bh=Cw8/v58Xwe9nL7yTk1IkL4cO65ODqpxDl2gTcvbhl3s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S6SCCwEkUvsAE44g1h3nEDQvyPPbLi9tRWYfi7bXehLj56bfQ32rk8JZJk89wj1KH
-	 wbSgiqPPh527cc4rsW/DFf21XHZC1DgpLsktZsa6oeyHkHf49wYWp20NWb+pX3Ivf8
-	 7UX+5YYHNwBwokPzVWADs1YDGLcSKPZcwRgqNknA=
-Date: Mon, 12 Jun 2023 17:44:59 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: torvalds@linux-foundation.org, keescook@chromium.org,
-	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
-	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
-	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
-	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
-	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-Message-ID: <2023061217-mutable-curry-c2ac@gregkh>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
- <2023061226-grumpily-entire-f06a@gregkh>
- <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+	b=epqC8+rmPDl+BzBaPqK8iPO5GY2MfOWKrl9+fdaLf2x9qOH4UJnmnHT7N140y6g3L
+	 Vq1Wdf/Nc3kYloaEu/NdI/4N7ZpHmGMTFcEchMqJDX+a7usWKgZNg9X097J1IglqZG
+	 V0sMpHL/tY7r3M1XGzo5yDodJJEFIJr2DSjiwCN76R2WGDcNxTG9MB6+OGph59BGhI
+	 zzXsCR/Sq6eJtqXu7v2qAC9m2XUOdpx5CA4ugsdN5cTHf+mUKkcctvIfEP4rhl29hU
+	 4tuIloBLb2UgEOSVC60yxOuGH3E7/Gn5bopZq/OJqk+wTK25LqIncxPClX/YEyYrVl
+	 maL8Z7Z+IBPoA==
+Date: Mon, 12 Jun 2023 09:02:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Baoquan He <bhe@redhat.com>
+Cc: Mike Rapoport <rppt@kernel.org>, kernel test robot <lkp@intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+	hch@lst.de, willy@infradead.org, agordeev@linux.ibm.com,
+	wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+	David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+	Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <20230612160237.GA199007@dev-arch.thelio-3990X>
+References: <20230609075528.9390-3-bhe@redhat.com>
+ <202306091859.NhlW2nny-lkp@intel.com>
+ <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
+ <20230611054019.GL52412@kernel.org>
+ <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,202 +41,173 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
 
-On Mon, Jun 12, 2023 at 04:13:22PM +0200, Peter Zijlstra wrote:
-> > Mind if I try this series to convert a more "normal" driver to see how
-> > it works with that?  That's going to be the true test, see if the
-> > changes make sense to someone who doesn't really know the internals of
-> > the driver core like this...
+On Sun, Jun 11, 2023 at 03:57:32PM +0800, Baoquan He wrote:
+> On 06/11/23 at 08:40am, Mike Rapoport wrote:
+> > Hi Baoquan,
+> > 
+> > On Sat, Jun 10, 2023 at 04:26:21PM +0800, Baoquan He wrote:
+> > > On 06/09/23 at 07:09pm, kernel test robot wrote:
+> > > > Hi Baoquan,
+> > > > 
+> > > > kernel test robot noticed the following build errors:
+> > > > 
+> > > > [auto build test ERROR on akpm-mm/mm-everything]
+> > > > 
+> > > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
+> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > > > patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
+> > > > patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+> > > > config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
+> > > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > > reproduce (this is a W=1 build):
+> > > >         mkdir -p ~/bin
+> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > >         chmod +x ~/bin/make.cross
+> > > >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+> > > >         git fetch akpm-mm mm-everything
+> > > >         git checkout akpm-mm/mm-everything
+> > > >         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
+> > > > 
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > the same patch/commit), kindly add following tags
+> > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
+> > > 
+> > > Thanks for reporting. I reproduced them on my local machine. Below patch
+> > > can fix them. And by the way, I also saw the clone3 warning, and have to 
+> > > made change in scripts/checksyscalls.sh to mute it, wondering how you
+> > > handle it in your testing.
+> > 
+> > I think the warning kbuild reported is rather this one:
+> > 
+> > >> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
+> >     1078 | void iounmap(volatile void __iomem *addr);
+> >          |      ^
 > 
-> Not at all, feel tree to have a go at that. I picked code I was familiar
-> with, but it would ofc. be good to have others give it a spin too.
+> This one is reported as error. The old iounmap() declaration has a const,
+> while the standard one doesn't have. So I just remove the old one to use
+> the standard one.
+> 
+> Another one is warning about PCI_IOBASE. Because inb/w/l and outb/w/l is
+> redefined in asm-generic/io.h, and it uses PCI_IOBASE which is defniend
+> as NULL in asm-generic/io.h if ARCH doesn't have its own PCI_IOBASE
+> definition. Then the warning is triggered. So I define macro to override
+> the standard inb/w/l and outb/w/l.
+> 
+> #ifndef PCI_IOBASE
+> #define PCI_IOBASE ((void __iomem *)0)
+> #endif
 
-Ok, here's an attempt to clean up misc.c a bit.  It does two things,
-adds a guard for the global misc_mtx mutex when used (sometimes, it's
-not always paired with a release.)
+I believe that this series [1] by Niklas Schnelle should take care of
+the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
+need to worry about them when they show up in build reports.
 
-Then in the last part of the file, I abuse the DEFINE_FREE() to handle a
-special case of removing a proc file if things go bad (and add a
-DEFINE_FREE() for class_destroy(), which should go into
-include/device/class.h.
+[1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
 
-I've only test-built it, but is this the proper use of DEFINE_FREE()?
-There wasn't much documentation :)
+Cheers,
+Nathan
 
-To be fair the end-result of misc_init() is much nicer and cleaner and
-"obviously correct", which is good, even with the crazy proc file mess
-in it.  So I like the idea overall, need to figure out when to use
-DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
-
-Also, you can't put a DEFINE_FREE() within a function declaration, which
-I guess makes sense, but the build warning is very odd when you attempt
-it, mentioning an "invalid storage class".  Is that supposed to be able
-to work?
-
-thanks,
-
-greg k-h
-
-
----
- drivers/char/misc.c | 69 +++++++++++++++++----------------------------
- 1 file changed, 26 insertions(+), 43 deletions(-)
-
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index 1c44c29a666e..a203b17a2b82 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -123,10 +123,9 @@ static int misc_open(struct inode *inode, struct file *file)
- {
- 	int minor = iminor(inode);
- 	struct miscdevice *c = NULL, *iter;
--	int err = -ENODEV;
- 	const struct file_operations *new_fops = NULL;
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 
- 	list_for_each_entry(iter, &misc_list, list) {
- 		if (iter->minor != minor)
-@@ -149,7 +148,7 @@ static int misc_open(struct inode *inode, struct file *file)
- 			break;
- 		}
- 		if (!new_fops)
--			goto fail;
-+			return -ENODEV;
- 	}
- 
- 	/*
-@@ -159,13 +158,11 @@ static int misc_open(struct inode *inode, struct file *file)
- 	 */
- 	file->private_data = c;
- 
--	err = 0;
- 	replace_fops(file, new_fops);
- 	if (file->f_op->open)
--		err = file->f_op->open(inode, file);
--fail:
--	mutex_unlock(&misc_mtx);
--	return err;
-+		return file->f_op->open(inode, file);
-+
-+	return 0;
- }
- 
- static struct class *misc_class;
-@@ -197,29 +194,24 @@ static const struct file_operations misc_fops = {
- int misc_register(struct miscdevice *misc)
- {
- 	dev_t dev;
--	int err = 0;
- 	bool is_dynamic = (misc->minor == MISC_DYNAMIC_MINOR);
- 
- 	INIT_LIST_HEAD(&misc->list);
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 
- 	if (is_dynamic) {
- 		int i = misc_minor_alloc();
- 
--		if (i < 0) {
--			err = -EBUSY;
--			goto out;
--		}
-+		if (i < 0)
-+			return -EBUSY;
- 		misc->minor = i;
- 	} else {
- 		struct miscdevice *c;
- 
- 		list_for_each_entry(c, &misc_list, list) {
--			if (c->minor == misc->minor) {
--				err = -EBUSY;
--				goto out;
--			}
-+			if (c->minor == misc->minor)
-+				return -EBUSY;
- 		}
- 	}
- 
-@@ -233,8 +225,7 @@ int misc_register(struct miscdevice *misc)
- 			misc_minor_free(misc->minor);
- 			misc->minor = MISC_DYNAMIC_MINOR;
- 		}
--		err = PTR_ERR(misc->this_device);
--		goto out;
-+		return PTR_ERR(misc->this_device);
- 	}
- 
- 	/*
-@@ -242,9 +233,7 @@ int misc_register(struct miscdevice *misc)
- 	 * earlier defaults
- 	 */
- 	list_add(&misc->list, &misc_list);
-- out:
--	mutex_unlock(&misc_mtx);
--	return err;
-+	return 0;
- }
- EXPORT_SYMBOL(misc_register);
- 
-@@ -261,11 +250,10 @@ void misc_deregister(struct miscdevice *misc)
- 	if (WARN_ON(list_empty(&misc->list)))
- 		return;
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 	list_del(&misc->list);
- 	device_destroy(misc_class, MKDEV(MISC_MAJOR, misc->minor));
- 	misc_minor_free(misc->minor);
--	mutex_unlock(&misc_mtx);
- }
- EXPORT_SYMBOL(misc_deregister);
- 
-@@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
- 	return NULL;
- }
- 
-+DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
-+DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
- static int __init misc_init(void)
- {
--	int err;
--	struct proc_dir_entry *ret;
-+	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
-+	struct class *c __free(class_destroy) = class_create("misc");
- 
--	ret = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
--	misc_class = class_create("misc");
--	err = PTR_ERR(misc_class);
--	if (IS_ERR(misc_class))
--		goto fail_remove;
-+	if (IS_ERR(c))
-+		return PTR_ERR(c);
- 
--	err = -EIO;
- 	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
--		goto fail_printk;
--	misc_class->devnode = misc_devnode;
--	return 0;
-+		return -EIO;
- 
--fail_printk:
--	pr_err("unable to get major %d for misc devices\n", MISC_MAJOR);
--	class_destroy(misc_class);
--fail_remove:
--	if (ret)
--		remove_proc_entry("misc", NULL);
--	return err;
-+	c->devnode = misc_devnode;
-+
-+	misc_class = no_free_ptr(c);
-+	no_free_ptr(ret);
-+
-+	return 0;
- }
- subsys_initcall(misc_init);
--- 
-2.41.0
-
+> > > stdin>:1520:2: warning: syscall clone3 not implemented [-W#warnings]
+> > >  1520 | #warning syscall clone3 not implemented
+> > >       |  ^
+> > > 1 warning generated.
+> > > 
+> > > ------
+> > > diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> > > index 1e5d2eeb726d..3a369b78edb7 100755
+> > > --- a/scripts/checksyscalls.sh
+> > > +++ b/scripts/checksyscalls.sh
+> > > @@ -148,6 +148,7 @@ cat << EOF
+> > >  #define __IGNORE_nanosleep
+> > >  #define __IGNORE_io_getevents
+> > >  #define __IGNORE_recvmmsg
+> > > +#define __IGNORE_clone3
+> > >  #endif
+> > > 
+> > > 
+> > > From 6a86f4360a61a2b7b4d71172e5c03be554367553 Mon Sep 17 00:00:00 2001
+> > > From: root <root@dell-pem620-01.dell2.lab.eng.bos.redhat.com>
+> > > Date: Fri, 9 Jun 2023 21:21:36 -0400
+> > > Subject: [PATCH] hexagon: mm: fix warning in asm/io.h
+> > > Content-type: text/plain
+> > > 
+> > > Remove the old iounmap() declaration which is not consistent with the
+> > > standard one in asm-generic/io.h, let's use the standard one.
+> > > 
+> > > And also add macro definition of inb/w/l and outb/w/l to override
+> > > the definition of them in asm-generic/io.h.
+> > > 
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > > ---
+> > >  arch/hexagon/include/asm/io.h | 8 ++++++--
+> > >  scripts/checksyscalls.sh      | 1 +
+> > >  2 files changed, 7 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
+> > > index dcd9cbbf5934..efe9cb00ebf8 100644
+> > > --- a/arch/hexagon/include/asm/io.h
+> > > +++ b/arch/hexagon/include/asm/io.h
+> > > @@ -27,8 +27,6 @@
+> > >  extern int remap_area_pages(unsigned long start, unsigned long phys_addr,
+> > >  				unsigned long end, unsigned long flags);
+> > >  
+> > > -extern void iounmap(const volatile void __iomem *addr);
+> > > -
+> > >  /* Defined in lib/io.c, needed for smc91x driver. */
+> > >  extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
+> > >  extern void __raw_writesw(void __iomem *addr, const void *data, int wordlen);
+> > > @@ -207,16 +205,19 @@ static inline void memset_io(volatile void __iomem *addr, int value,
+> > >   *
+> > >   * Operates on "I/O bus I/O space"
+> > >   */
+> > > +#define inb inb
+> > >  static inline u8 inb(unsigned long port)
+> > >  {
+> > >  	return readb(_IO_BASE + (port & IO_SPACE_LIMIT));
+> > >  }
+> > >  
+> > > +#define inw inw
+> > >  static inline u16 inw(unsigned long port)
+> > >  {
+> > >  	return readw(_IO_BASE + (port & IO_SPACE_LIMIT));
+> > >  }
+> > >  
+> > > +#define inl inl
+> > >  static inline u32 inl(unsigned long port)
+> > >  {
+> > >  	return readl(_IO_BASE + (port & IO_SPACE_LIMIT));
+> > > @@ -227,16 +228,19 @@ static inline u32 inl(unsigned long port)
+> > >   * @data: data to write to
+> > >   * @addr:  address in I/O space
+> > >   */
+> > > +#define outb outb
+> > >  static inline void outb(u8 data, unsigned long port)
+> > >  {
+> > >  	writeb(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+> > >  }
+> > >  
+> > > +#define outw outw
+> > >  static inline void outw(u16 data, unsigned long port)
+> > >  {
+> > >  	writew(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+> > >  }
+> > >  
+> > > +#define outl outl
+> > >  static inline void outl(u32 data, unsigned long port)
+> > >  {
+> > >  	writel(data, _IO_BASE + (port & IO_SPACE_LIMIT));
+> > > 
+> > 
+> > -- 
+> > Sincerely yours,
+> > Mike.
+> > 
+> 
+> 
