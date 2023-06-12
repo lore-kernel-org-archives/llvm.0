@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E7F182C0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4C618AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=VyS6fqYhD/n91U5f9GQ+a8R8fakG8EouUVHj8V9PE00=; b=WDbu6ayIeIXQQalbN/1trxPgzk
-	tUQcEakjuK8T5g6tc3B+8uGsn3qyIdk8iOthoIG4hBBz3vYO3PT28HLHkNCXFw1wNOZvHqyqgixbD
-	v4xipH+7kOH5QsxDU8L8ve4OpEccGLZPkV2P9fZKc4eb6dHnFuhTpsiMZejVa9elclsY4ofigwzv9
-	wTBcbwVVs09Z75mgX0G47ZVBWzbzOkrgy0/rBwB79L6sjtp51GCNBu5HMYnsHht2DOvPpe4liHvrF
-	TZxliVXrYa132s4sdWu0DFmxkEHz9tq7OVloq1pNbhRjH1SUolF9Pe1JfHd53rdXyc8hiYU6rqX43
-	G0VrFQvA==;
+	bh=VxLoQWqPLfFOizpz6LclwAvcc6NhnspZtOnksJEP8nY=; b=p6PhqIfSxM8DiwUuU4pSepp9+t
+	sQDAs+RLgzLsKfJ0Kcen7QCEGUEiIeSA/rwAsAR7b6MfNGO9pcntCkHSiswQZFuF2xM2R+zf8J3ow
+	wX35cUTV1JxcFVTwq7nPW7+2yeRbGO9zPkqabUzEI167PNV6S41nRrSC4/lAzjfi/vOJ3w15MxDOX
+	ZX/q+B8JUmaFcJIBrT88ZNo/cz0VSFtkEr9L9mebjyXbMWd2ohnjBecsQJ/J3K5VJxidYIQPFKy+9
+	4HVU7cOA9JH1oDaOoJo11k/QJT8iAkLcVqjNx5HmWfEws0lEKwGfEU1AD+SSkaq9GPZUqJdegwQDg
+	EEzgg1Jw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0k-002NAn-K6; Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0x-002NL2-5D; Mon, 12 Jun 2023 09:39:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25F19300E46;
-	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61FC330612E;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id ED20B240FDF93; Mon, 12 Jun 2023 11:38:47 +0200 (CEST)
-Message-ID: <20230612093537.467120754@infradead.org>
+	id 1B34930A79083; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093541.097332151@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:14 +0200
+Date: Mon, 12 Jun 2023 11:08:02 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 01/57] dmaengine: ioat: Free up __cleanup() name
+Subject: [PATCH v3 49/57] perf: Simplify perf_event_alloc()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -103,65 +103,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-In order to use __cleanup for __attribute__((__cleanup__(func))) the
-name must not be used for anything else. Avoid the conflict.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- drivers/dma/ioat/dma.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/events/core.c |   47 ++++++++++++++++++-----------------------------
+ 1 file changed, 18 insertions(+), 29 deletions(-)
 
---- a/drivers/dma/ioat/dma.c
-+++ b/drivers/dma/ioat/dma.c
-@@ -584,11 +584,11 @@ desc_get_errstat(struct ioatdma_chan *io
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5148,6 +5148,8 @@ static void __free_event(struct perf_eve
+ 	call_rcu(&event->rcu_head, free_event_rcu);
  }
  
- /**
-- * __cleanup - reclaim used descriptors
-+ * __ioat_cleanup - reclaim used descriptors
-  * @ioat_chan: channel (ring) to clean
-  * @phys_complete: zeroed (or not) completion address (from status)
-  */
--static void __cleanup(struct ioatdma_chan *ioat_chan, dma_addr_t phys_complete)
-+static void __ioat_cleanup(struct ioatdma_chan *ioat_chan, dma_addr_t phys_complete)
++DEFINE_FREE(__free_event, struct perf_event *, if (_T) __free_event(_T))
++
+ /* vs perf_event_alloc() success */
+ static void _free_event(struct perf_event *event)
  {
- 	struct ioatdma_device *ioat_dma = ioat_chan->ioat_dma;
- 	struct ioat_ring_ent *desc;
-@@ -675,7 +675,7 @@ static void ioat_cleanup(struct ioatdma_
- 	spin_lock_bh(&ioat_chan->cleanup_lock);
- 
- 	if (ioat_cleanup_preamble(ioat_chan, &phys_complete))
--		__cleanup(ioat_chan, phys_complete);
-+		__ioat_cleanup(ioat_chan, phys_complete);
- 
- 	if (is_ioat_halted(*ioat_chan->completion)) {
- 		u32 chanerr = readl(ioat_chan->reg_base + IOAT_CHANERR_OFFSET);
-@@ -712,7 +712,7 @@ static void ioat_restart_channel(struct
- 
- 	ioat_quiesce(ioat_chan, 0);
- 	if (ioat_cleanup_preamble(ioat_chan, &phys_complete))
--		__cleanup(ioat_chan, phys_complete);
-+		__ioat_cleanup(ioat_chan, phys_complete);
- 
- 	__ioat_restart_chan(ioat_chan);
- }
-@@ -786,7 +786,7 @@ static void ioat_eh(struct ioatdma_chan
- 
- 	/* cleanup so tail points to descriptor that caused the error */
- 	if (ioat_cleanup_preamble(ioat_chan, &phys_complete))
--		__cleanup(ioat_chan, phys_complete);
-+		__ioat_cleanup(ioat_chan, phys_complete);
- 
- 	chanerr = readl(ioat_chan->reg_base + IOAT_CHANERR_OFFSET);
- 	pci_read_config_dword(pdev, IOAT_PCI_CHANERR_INT_OFFSET, &chanerr_int);
-@@ -943,7 +943,7 @@ void ioat_timer_event(struct timer_list
- 		/* timer restarted in ioat_cleanup_preamble
- 		 * and IOAT_COMPLETION_ACK cleared
- 		 */
--		__cleanup(ioat_chan, phys_complete);
-+		__ioat_cleanup(ioat_chan, phys_complete);
- 		goto unlock_out;
+@@ -11694,7 +11696,6 @@ perf_event_alloc(struct perf_event_attr
+ 		 void *context, int cgroup_fd)
+ {
+ 	struct pmu *pmu;
+-	struct perf_event *event;
+ 	struct hw_perf_event *hwc;
+ 	long err = -EINVAL;
+ 	int node;
+@@ -11709,8 +11710,8 @@ perf_event_alloc(struct perf_event_attr
  	}
  
+ 	node = (cpu >= 0) ? cpu_to_node(cpu) : -1;
+-	event = kmem_cache_alloc_node(perf_event_cache, GFP_KERNEL | __GFP_ZERO,
+-				      node);
++	struct perf_event *event __free(__free_event) =
++		kmem_cache_alloc_node(perf_event_cache, GFP_KERNEL | __GFP_ZERO, node);
+ 	if (!event)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -11815,51 +11816,43 @@ perf_event_alloc(struct perf_event_attr
+ 	 * See perf_output_read().
+ 	 */
+ 	if (attr->inherit && (attr->sample_type & PERF_SAMPLE_READ))
+-		goto err;
++		return ERR_PTR(-EINVAL);
+ 
+ 	if (!has_branch_stack(event))
+ 		event->attr.branch_sample_type = 0;
+ 
+ 	pmu = perf_init_event(event);
+-	if (IS_ERR(pmu)) {
+-		err = PTR_ERR(pmu);
+-		goto err;
+-	}
++	if (IS_ERR(pmu))
++		return (void*)pmu;
+ 
+ 	/*
+ 	 * Disallow uncore-task events. Similarly, disallow uncore-cgroup
+ 	 * events (they don't make sense as the cgroup will be different
+ 	 * on other CPUs in the uncore mask).
+ 	 */
+-	if (pmu->task_ctx_nr == perf_invalid_context && (task || cgroup_fd != -1)) {
+-		err = -EINVAL;
+-		goto err;
+-	}
++	if (pmu->task_ctx_nr == perf_invalid_context && (task || cgroup_fd != -1))
++		return ERR_PTR(-EINVAL);
+ 
+ 	if (event->attr.aux_output &&
+-	    !(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT)) {
+-		err = -EOPNOTSUPP;
+-		goto err;
+-	}
++	    !(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT))
++		return ERR_PTR(-EOPNOTSUPP);
+ 
+ 	if (cgroup_fd != -1) {
+ 		err = perf_cgroup_connect(cgroup_fd, event, attr, group_leader);
+ 		if (err)
+-			goto err;
++			return ERR_PTR(err);
+ 	}
+ 
+ 	err = exclusive_event_init(event);
+ 	if (err)
+-		goto err;
++		return ERR_PTR(err);
+ 
+ 	if (has_addr_filter(event)) {
+ 		event->addr_filter_ranges = kcalloc(pmu->nr_addr_filters,
+ 						    sizeof(struct perf_addr_filter_range),
+ 						    GFP_KERNEL);
+-		if (!event->addr_filter_ranges) {
+-			err = -ENOMEM;
+-			goto err;
+-		}
++		if (!event->addr_filter_ranges)
++			return ERR_PTR(-ENOMEM);
+ 
+ 		/*
+ 		 * Clone the parent's vma offsets: they are valid until exec()
+@@ -11883,22 +11876,18 @@ perf_event_alloc(struct perf_event_attr
+ 		if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
+ 			err = get_callchain_buffers(attr->sample_max_stack);
+ 			if (err)
+-				goto err;
++				return ERR_PTR(err);
+ 		}
+ 	}
+ 
+ 	err = security_perf_event_alloc(event);
+ 	if (err)
+-		goto err;
++		return ERR_PTR(err);
+ 
+ 	/* symmetric to unaccount_event() in _free_event() */
+ 	account_event(event);
+ 
+-	return event;
+-
+-err:
+-	__free_event(event);
+-	return ERR_PTR(err);
++	return_ptr(event);
+ }
+ 
+ static int perf_copy_attr(struct perf_event_attr __user *uattr,
 
 
