@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4A218C00
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5ACE18C00
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=ICqqJG5l0sWCX8xrZRxbU0jefpCN2MYfe0yl/+VCRM4=; b=mNGAL6VZhJ/wJTmZKapHx44ouf
-	rgJzcjoCF7AAIeNDZbH6y8MPhHAI8Ey/JNzV7juiK/fgRbSlsjwwfgohDNyK8ptDQbXHNNQAB8/Nq
-	QK0enwMcHVSSJzAm5BHJmn+ckyAarbqSUi9J2BAKB3wm3/RRzvnJA1RO1JKEASUNJPLa50zkb2wUI
-	sq2DOOMTuHT7ec3WZFo10k/GNTVAVsl7SC3of50T0oqYnIhWK+Ol+7T+qr7e9fYkBnNjCMpQVGDpn
-	lCywDdmbGmpIgPD2b/WdcySr15oBaU4wPjbzP9Hzl0MqHgo27XNjxW8g7c3oaKpEllF+ph37IseIG
-	ZFdF9Tgw==;
+	bh=uQ/8+qtEwxL57I4UlVvTVvhZ1JibWBOVMl2SE33h5lQ=; b=ZOiq1ke3pot53kQunNRUtXsq1d
+	V5y/hgJbdq0ZCpi19CP5k0s9TVugeElYoMtBjNQiMfKhriDdOViXz13z+mXjhQs1lh5Add+N5EsA+
+	97Ytp162GD8DmEyvlIAZDmbyvOg0B9z6LUmK67yAvvHZt5LgJpEb+JZMCr+61gpJu+KOVFSzfR36F
+	3tqTV1asHS3VYK51N36Uh7QTWlIeQvJ59dJfAYcdLbTUgO2wX/hJw43LbU5N+I998tv53aUMKO5L4
+	LpWRzwVaRTJBUgMK657xFiLyq8TevHcFHer9zZyt+HcUX4ZJRPRohzv80h606NIyeSXIMh+J++VC2
+	8w01ss2A==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0t-002NH1-Fh; Mon, 12 Jun 2023 09:39:03 +0000
+	id 1q8e0t-002NH2-HK; Mon, 12 Jun 2023 09:39:03 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3E974303346;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52E42303406;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id CA60630A77B6F; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.181605463@infradead.org>
+	id F2AAD30A77B78; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093540.708955479@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:50 +0200
+Date: Mon, 12 Jun 2023 11:07:57 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 37/57] perf: Simplify perf_read_group()
+Subject: [PATCH v3 44/57] perf: Simplify bpf_overflow_handler()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,63 +106,34 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   30 +++++++++++-------------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
+ kernel/events/core.c |   16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -5472,11 +5472,10 @@ static int perf_read_group(struct perf_e
- 	struct perf_event *leader = event->group_leader, *child;
- 	struct perf_event_context *ctx = leader->ctx;
- 	int ret;
--	u64 *values;
+@@ -10288,16 +10288,14 @@ static void bpf_overflow_handler(struct
+ 	int ret = 0;
  
- 	lockdep_assert_held(&ctx->mutex);
- 
--	values = kzalloc(event->read_size, GFP_KERNEL);
-+	u64 *values __free(kfree) = kzalloc(event->read_size, GFP_KERNEL);
- 	if (!values)
- 		return -ENOMEM;
- 
-@@ -5486,29 +5485,22 @@ static int perf_read_group(struct perf_e
- 	 * By locking the child_mutex of the leader we effectively
- 	 * lock the child list of all siblings.. XXX explain how.
- 	 */
--	mutex_lock(&leader->child_mutex);
--
--	ret = __perf_read_group_add(leader, read_format, values);
--	if (ret)
--		goto unlock;
--
--	list_for_each_entry(child, &leader->child_list, child_list) {
--		ret = __perf_read_group_add(child, read_format, values);
-+	scoped_guard (mutex, &leader->child_mutex) {
-+		ret = __perf_read_group_add(leader, read_format, values);
- 		if (ret)
--			goto unlock;
--	}
-+			return ret;
- 
--	mutex_unlock(&leader->child_mutex);
-+		list_for_each_entry(child, &leader->child_list, child_list) {
-+			ret = __perf_read_group_add(child, read_format, values);
-+			if (ret)
-+				return ret;
+ 	ctx.regs = perf_arch_bpf_user_pt_regs(regs);
+-	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1))
+-		goto out;
+-	rcu_read_lock();
+-	prog = READ_ONCE(event->prog);
+-	if (prog) {
+-		perf_prepare_sample(data, event, regs);
+-		ret = bpf_prog_run(prog, &ctx);
++	if (likely(__this_cpu_inc_return(bpf_prog_active) == 1)) {
++		guard(rcu)();
++		prog = READ_ONCE(event->prog);
++		if (prog) {
++			perf_prepare_sample(data, event, regs);
++			ret = bpf_prog_run(prog, &ctx);
 +		}
-+	}
- 
- 	ret = event->read_size;
- 	if (copy_to_user(buf, values, event->read_size))
--		ret = -EFAULT;
--	goto out;
-+		return -EFAULT;
- 
--unlock:
--	mutex_unlock(&leader->child_mutex);
+ 	}
+-	rcu_read_unlock();
 -out:
--	kfree(values);
- 	return ret;
- }
- 
+ 	__this_cpu_dec(bpf_prog_active);
+ 	if (!ret)
+ 		return;
 
 
