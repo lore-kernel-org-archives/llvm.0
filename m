@@ -1,233 +1,163 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7798BF8
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 19:45:02 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-650352b89f6so3693950b3a.0
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 12:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686599101; x=1689191101;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SqkCjzH8EDX69emqqTnSLhV/oO1OorGxyiylgKOLPhs=;
-        b=n8E45iNLNI5A1fK4mNvFfCMpoJC/UvMNT0d5QOE6Ze2+RTG6LcQvPX09TZRJQOmhiN
-         N/lty5wFosqnDu07ERqOtzJ7OqYw/ap3bfACWKuzood41h/dPvdPZEV/ctUpMEJzIUFy
-         UoKFt6etNeGazvvHMjES5ANqcxJh/W3CT2wqG9GciZE94nHmQST/wNRU+fhCV29wW3pu
-         H7PpjvRLruvaMCSFmqcRqbtjEjPtAs9F4ipuszj0HlCpbmwOsrRMefvgqboizAqyl7ht
-         rsIvYELUWjTLiehFy2km7hhQBjI27Qdfg/6lv4wTsPFWrR1gt8CUpKDVANGyPjR9ulhA
-         nicQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686599101; x=1689191101;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SqkCjzH8EDX69emqqTnSLhV/oO1OorGxyiylgKOLPhs=;
-        b=G5Ztsg8fiA8xpQv42IfNwmM+z6fXbARPimBXFfwjU5r8ucFwxZaMbUH2RrZjlky0qS
-         /YcGE/a81HJHazcSpSLPTcj1RI+Yr+nguH/PM5jXmoe71K7VUm70K5pNJex8BOXmYf++
-         zwp/abUZwi/ZufoQe4OkmLkAN1EsLQS0sUVPO+FbI+TgJosKjjmT+/qnRLxQFxipNDhM
-         H/Ba1sw8jIdZ1K7esb/1ycyFZzQgrsPFIoTjWYoCBLSsLldmkOzQHbGmYt1yNiAZV5Md
-         qOPHtb1tRO1wHQLreQCSYaAjMpgueoiOSgGP78zp6we6lMXSo/Z4dSHbS99hIMQmxBpH
-         en4Q==
-X-Gm-Message-State: AC+VfDyuQB8y9hrJfzDAGQG3LbomvRfpNxptH/xo4TZQLJo8wRvxM5K2
-	0Z2RZUckZBlEKP9rGrsKanE=
-X-Google-Smtp-Source: ACHHUZ4m0aYpRl01maIeL2HiWz0Am9u27+hloUxmq+d5BC1fnWyP4A9YVICUOGvFTsxMDL+syl8Hlg==
-X-Received: by 2002:a05:6a21:99aa:b0:114:6f3c:4332 with SMTP id ve42-20020a056a2199aa00b001146f3c4332mr12014892pzb.24.1686599101395;
-        Mon, 12 Jun 2023 12:45:01 -0700 (PDT)
-Received: from fedora.. ([2409:40e2:102b:b6d8:efc7:8b57:73a7:8d1])
-        by smtp.gmail.com with ESMTPSA id c8-20020aa781c8000000b0063aa1763146sm7502869pfn.17.2023.06.12.12.44.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 12:45:00 -0700 (PDT)
-From: Aakash Sen Sharma <aakashsensharma@gmail.com>
-To: corbet@lwn.net,
-	ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	wedsonaf@gmail.com,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	masahiroy@kernel.org,
-	me@kloenk.de,
-	aakashsensharma@gmail.com,
-	aliceryhl@google.com,
-	benno.lossin@proton.me,
-	dev@niklasmohrin.de,
-	lina@asahilina.net,
-	hca@linux.ibm.com,
-	rust-for-linux@vger.kernel.org
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] rust: bindgen: upgrade to 0.65.1
-Date: Tue, 13 Jun 2023 01:13:11 +0530
-Message-Id: <20230612194311.24826-1-aakashsensharma@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7680881F;
+	Mon, 12 Jun 2023 19:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686599527; x=1718135527;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0byWgD2iutW23lTIRoLghI/Uv0KDX4DTnyiQtQ8B2B0=;
+  b=JB2DzU0JQBStmdxF0I9n2dv6keP0peNmlYIeXv/ccwwq0HZXjtf0IEaA
+   I7+VPKWbIpOU2BX6AeOVPwD9eCgMQU2PRrztN8+dSRliK6xtMxAue57A0
+   8hCYZVhPCf5pdczaLVzbCJDNtTT/nmyOdEwLkPcv4Mow1HNtF5ig6nsQ1
+   b6pRzJR9MajkEWrvxc3v+BxCGZFXMMLMyK/HQb1sgYNu/UEHu+qvkCmlt
+   DhgQY9UlLNgV7/zK1DPrZF2mZmNFvRckSJzVmy6SZsEycx6bXnRmkvHR6
+   NvYjR8gb0Yg+EStyZ4SGW4kai3h6r7ypnxGIL9qxSNnCFbaKCjVgF+1UQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="347799313"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="347799313"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 12:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741155452"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="741155452"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 12:52:05 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q8na8-0000e4-15;
+	Mon, 12 Jun 2023 19:52:04 +0000
+Date: Tue, 13 Jun 2023 03:51:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 7837/8413]
+ drivers/remoteproc/stm32_rproc.c:121:50: warning: format specifies type
+ 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long')
+Message-ID: <202306130350.uHFVwZE9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-* Rationale:
+Hi Alexandre,
 
-Upgrades bindgen to code-generation for anonymous unions, structs, and enums [7]
-for LLVM-16 based toolchains.
+First bad commit (maybe != root cause):
 
-The following upgrade also incorporates `noreturn` support from bindgen
-allowing us to remove useless `loop` calls which was placed as a
-workaround.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   53ab6975c12d1ad86c599a8927e8c698b144d669
+commit: 9e4e24414cc6b45bd887d746a59691e295431ddf [7837/8413] arm64: introduce STM32 family on Armv8 architecture
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230613/202306130350.uHFVwZE9-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=9e4e24414cc6b45bd887d746a59691e295431ddf
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 9e4e24414cc6b45bd887d746a59691e295431ddf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
 
-* Truncated build logs on using bindgen `v0.56.0` prior to LLVM-16 toolchain:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130350.uHFVwZE9-lkp@intel.com/
 
-```
-$ make rustdoc LLVM=1 CLIPPY=1 -j$(nproc)
-  RUSTC L rust/core.o
-  BINDGEN rust/bindings/bindings_generated.rs
-  BINDGEN rust/bindings/bindings_helpers_generated.rs
-  BINDGEN rust/uapi/uapi_generated.rs
-thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
-...
-thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
-...
-```
+All warnings (new ones prefixed by >>):
 
-* LLVM-16 Changes:
+>> drivers/remoteproc/stm32_rproc.c:121:50: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+     121 |         dev_dbg(dev, "map memory: %pa+%x\n", &mem->dma, mem->len);
+         |                                       ~~                ^~~~~~~~
+         |                                       %zx
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:272:19: note: expanded from macro 'dynamic_dev_dbg'
+     272 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:59: note: expanded from macro '_dynamic_func_call'
+     248 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:246:65: note: expanded from macro '_dynamic_func_call_cls'
+     246 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:222:15: note: expanded from macro '__dynamic_func_call_cls'
+     222 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/remoteproc/stm32_rproc.c:125:15: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+     125 |                 dev_err(dev, "Unable to map memory region: %pa+%x\n",
+         |                                                                ~~
+         |                                                                %zx
+     126 |                         &mem->dma, mem->len);
+         |                                    ^~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+>> drivers/remoteproc/stm32_rproc.c:631:13: warning: format specifies type 'size_t' (aka 'unsigned long') but the argument has type 'int' [-Wformat]
+     631 |                 dev_err(dev, "Unable to map memory region: %pa+%zx\n",
+         |                                                                ~~~
+         |                                                                %x
+     632 |                         &rsc_pa, RSC_TBL_SIZE);
+         |                                  ^~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/remoteproc/stm32_rproc.c:43:23: note: expanded from macro 'RSC_TBL_SIZE'
+      43 | #define RSC_TBL_SIZE            1024
+         |                                 ^~~~
+   3 warnings generated.
 
-API changes [1] were introduced such that libclang would emit names like
-"(unnamed union at compiler_types.h:146:2)" for unnamed unions, structs, and
-enums whereas it previously returned an empty string.
 
-* Bindgen Changes:
+vim +121 drivers/remoteproc/stm32_rproc.c
 
-Bindgen `v0.56.0` on LLVM-16 based toolchains hence was unable to process the
-anonymous union in `include/linux/compiler_types` `struct ftrace_branch_data`
-and caused subsequent panics as the new `libclang` API emitted name was not
-being handled. The following issue was fixed in Bindgen `v0.62.0` [2].
+13140de09cc2dd Fabien Dessenne 2019-05-14  114  
+13140de09cc2dd Fabien Dessenne 2019-05-14  115  static int stm32_rproc_mem_alloc(struct rproc *rproc,
+13140de09cc2dd Fabien Dessenne 2019-05-14  116  				 struct rproc_mem_entry *mem)
+13140de09cc2dd Fabien Dessenne 2019-05-14  117  {
+13140de09cc2dd Fabien Dessenne 2019-05-14  118  	struct device *dev = rproc->dev.parent;
+13140de09cc2dd Fabien Dessenne 2019-05-14  119  	void *va;
+13140de09cc2dd Fabien Dessenne 2019-05-14  120  
+13140de09cc2dd Fabien Dessenne 2019-05-14 @121  	dev_dbg(dev, "map memory: %pa+%x\n", &mem->dma, mem->len);
+13140de09cc2dd Fabien Dessenne 2019-05-14  122  	va = ioremap_wc(mem->dma, mem->len);
+13140de09cc2dd Fabien Dessenne 2019-05-14  123  	if (IS_ERR_OR_NULL(va)) {
+13140de09cc2dd Fabien Dessenne 2019-05-14  124  		dev_err(dev, "Unable to map memory region: %pa+%x\n",
+13140de09cc2dd Fabien Dessenne 2019-05-14  125  			&mem->dma, mem->len);
+13140de09cc2dd Fabien Dessenne 2019-05-14  126  		return -ENOMEM;
+13140de09cc2dd Fabien Dessenne 2019-05-14  127  	}
+13140de09cc2dd Fabien Dessenne 2019-05-14  128  
+13140de09cc2dd Fabien Dessenne 2019-05-14  129  	/* Update memory entry va */
+13140de09cc2dd Fabien Dessenne 2019-05-14  130  	mem->va = va;
+13140de09cc2dd Fabien Dessenne 2019-05-14  131  
+13140de09cc2dd Fabien Dessenne 2019-05-14  132  	return 0;
+13140de09cc2dd Fabien Dessenne 2019-05-14  133  }
+13140de09cc2dd Fabien Dessenne 2019-05-14  134  
 
-Bindgen `v0.58.0` changed the flags `--whitelist-*` and `--blacklist-*`
-to `--allowlist-*` and `--blocklist-*` respectively [3].
+:::::: The code at line 121 was first introduced by commit
+:::::: 13140de09cc2dd5e5166ad42292bb82af4e23cef remoteproc: stm32: add an ST stm32_rproc driver
 
-Bindgen `v0.61.0` added support for `_Noreturn`, `[[noreturn]]`, `__attribute__((noreturn))` [4],
-hence the empty `loop`s used to circumvent bindgen returning `!` in place of `()`
-for noreturn attributes have been removed completely.
+:::::: TO: Fabien Dessenne <fabien.dessenne@st.com>
+:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Bindgen `v0.61.0` also changed default functionality to bind `size_t` to `usize` [5] and
-added the `--no-size_t-is-usize` [5] flag to not bind `size_t` as `usize`.
-
-Bindgen `v0.65.0` removed `--size_t-is-usize` flag [6].
-
-Link: https://github.com/llvm/llvm-project/commit/19e984ef8f49bc3ccced15621989fa9703b2cd5b [1]
-Link: https://github.com/rust-lang/rust-bindgen/pull/2319 [2]
-Link: https://github.com/rust-lang/rust-bindgen/pull/1990 [3]
-Link: https://github.com/rust-lang/rust-bindgen/issues/2094 [4]
-Link: https://github.com/rust-lang/rust-bindgen/commit/cc78b6fdb6e829e5fb8fa1639f2182cb49333569 [5]
-Link: https://github.com/rust-lang/rust-bindgen/pull/2408 [6]
-Closes: https://github.com/Rust-for-Linux/linux/issues/1013 [7]
-Signed-off-by: Aakash Sen Sharma <aakashsensharma@gmail.com>
----
- Documentation/process/changes.rst |  2 +-
- rust/Makefile                     |  6 +++---
- rust/helpers.c                    | 13 ++++++-------
- rust/kernel/lib.rs                |  3 ---
- scripts/min-tool-version.sh       |  2 +-
- 5 files changed, 11 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index ef540865ad22..5f21c4c6cf5c 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -32,7 +32,7 @@ you probably needn't concern yourself with pcmciautils.
- GNU C                  5.1              gcc --version
- Clang/LLVM (optional)  11.0.0           clang --version
- Rust (optional)        1.62.0           rustc --version
--bindgen (optional)     0.56.0           bindgen --version
-+bindgen (optional)     0.65.1           bindgen --version
- GNU make               3.82             make --version
- bash                   4.2              bash --version
- binutils               2.25             ld -v
-diff --git a/rust/Makefile b/rust/Makefile
-index f88d108fbef0..c187c6f3a384 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -279,7 +279,7 @@ quiet_cmd_bindgen = BINDGEN $@
- 	$(BINDGEN) $< $(bindgen_target_flags) \
- 		--use-core --with-derive-default --ctypes-prefix core::ffi --no-layout-tests \
- 		--no-debug '.*' \
--		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMODULE \
-+		-o $@ -- $(bindgen_c_flags_final) -DMODULE \
- 		$(bindgen_target_cflags) $(bindgen_target_extra)
-
- $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags = \
-@@ -293,8 +293,8 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindings/bindings_helper.h \
- # given it is `libclang`; but for consistency, future Clang changes and/or
- # a potential future GCC backend for `bindgen`, we disable it too.
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_flags = \
--    --blacklist-type '.*' --whitelist-var '' \
--    --whitelist-function 'rust_helper_.*'
-+    --blocklist-type '.*' --allowlist-var '' \
-+    --allowlist-function 'rust_helper_.*'
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_cflags = \
-     -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarations
- $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_extra = ; \
-diff --git a/rust/helpers.c b/rust/helpers.c
-index 121583282976..98d9ef47225b 100644
---- a/rust/helpers.c
-+++ b/rust/helpers.c
-@@ -122,19 +122,18 @@ void rust_helper_put_task_struct(struct task_struct *t)
- EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
-
- /*
-- * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-- * as the Rust `usize` type, so we can use it in contexts where Rust
-- * expects a `usize` like slice (array) indices. `usize` is defined to be
-- * the same as C's `uintptr_t` type (can hold any pointer) but not
-- * necessarily the same as `size_t` (can hold the size of any single
-+ * `bindgen` binds the C `size_t` type the Rust `usize` type, so we can
-+ * use it in contexts where Rust expects a `usize` like slice (array) indices.
-+ * `usize` is defined to be the same as C's `uintptr_t` type (can hold any pointer)
-+ * but not necessarily the same as `size_t` (can hold the size of any single
-  * object). Most modern platforms use the same concrete integer type for
-  * both of them, but in case we find ourselves on a platform where
-  * that's not true, fail early instead of risking ABI or
-  * integer-overflow issues.
-  *
-  * If your platform fails this assertion, it means that you are in
-- * danger of integer-overflow bugs (even if you attempt to remove
-- * `--size_t-is-usize`). It may be easiest to change the kernel ABI on
-+ * danger of integer-overflow bugs (even if you attempt to add
-+ * `--no-size_t-is-usize`). It may be easiest to change the kernel ABI on
-  * your platform such that `size_t` matches `uintptr_t` (i.e., to increase
-  * `size_t`, because `uintptr_t` has to be at least as big as `size_t`).
-  */
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index ee27e10da479..1b0dcf03b9c2 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -95,7 +95,4 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
-     pr_emerg!("{}\n", info);
-     // SAFETY: FFI call.
-     unsafe { bindings::BUG() };
--    // Bindgen currently does not recognize `__noreturn` so `BUG` returns `()`
--    // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/issues/2094>.
--    loop {}
- }
-diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index 20d483ec6f5f..5b80c5d3a9f8 100755
---- a/scripts/min-tool-version.sh
-+++ b/scripts/min-tool-version.sh
-@@ -30,7 +30,7 @@ rustc)
- 	echo 1.62.0
- 	;;
- bindgen)
--	echo 0.56.0
-+	echo 0.65.1
- 	;;
- *)
- 	echo "$1: unknown tool" >&2
---
-2.40.1
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
