@@ -1,150 +1,110 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794EE17AB7
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 17:11:54 +0000 (UTC)
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1b3b3c69969so18387585ad.0
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686589914; x=1689181914;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
-        b=wVF0xEYGM/V+zCU80xvyq4qwV0yj1hOdLFRqOeBG6rNq1mZS9axHGYBLeBI0WMdRIv
-         hkzXG+DQqyxUG3ZNJwhk4nvHa7dTDdVmUbtUbv0KonjLnpMhwIR++Zn+JYGYF4qpACy0
-         TBguC9jF/7RXSTOZFdVTFwDFoUFeZKO/TxKQvxwyOSfFBR1hlTDCsLQF3gJGrQKh0dM1
-         dnbBs1N9sWbWV7gnyAH3EvCgPH/tTgIbVrgHLUeG6DI/qTktPkH3U4iZQSPo6hQIH+Hn
-         C7b43aUeXSO/Vmzkm31QiJeIjfT3Lil1qVykh5WcPDzbPCKU8j1R2gFpw17raF0Nay2u
-         ptyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589914; x=1689181914;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
-        b=KXMn8xnO1IRrAIEZ1fdqtCvnpn5UYYt3198yihzJWYWEVVb+IcN/n9TIe2WQHoxbvv
-         1ejF91V5pgRxS/jAJenC39P/0fTBG6Fi6rs8Jxi1e+Z4557oLfsKQLVImN3bNlYGAghW
-         XdzsZfJaD44GJNaz+ipVU/T1OBU2KfDmD2Gmlf713y36ZMCqYA0Ug7Vp4KwmHDvo6Dot
-         VZoGI13XwRA0pp++NTYlY64EhjIJC5Yo6gKs7HC4WvTCo9O6opHP+1GZJDLfyZCbUXRp
-         P68Mh3HGT415SBsydr+2no+J4U0JpmoZRB1iLk/cZeShbg1+3fB2ya538RdTu45KYkxb
-         dKdQ==
-X-Gm-Message-State: AC+VfDyRSmpj3OULlVdrdDpgtK/PJt/D2CSvFMtfpUPs6/Llcr01Qxuk
-	/TQLWvIAE8QgcdflsI0NXiW4uoo+gSU=
-X-Google-Smtp-Source: ACHHUZ5v1c+CqyBwYivhK+DSqau5kQVmVjEZH0nAYmDaNR5inKzg30hD4xw/4ZnGEEzgZLpMXuBMN4uPSsY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:8d81:b0:1b3:95a9:3fc3 with SMTP id
- v1-20020a1709028d8100b001b395a93fc3mr1303122plo.10.1686589913639; Mon, 12 Jun
- 2023 10:11:53 -0700 (PDT)
-Date: Mon, 12 Jun 2023 10:11:51 -0700
-In-Reply-To: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A4A17AB7;
+	Mon, 12 Jun 2023 17:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686590879; x=1718126879;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Wr26ymbSaqmp1BGBK1IL633YfgYmRWMNHjHSpJko55M=;
+  b=bfqfDw+ASkjzDiUx28XtCUg6/EMM43eo0PX7CrxmMQX292P2d3xt2Jlm
+   gEXcIfeDUMVIID1EQ6ck3JP6BUxEUar6mJS/Wblm3m+XzewDvG4LcJZx3
+   T/zWv4hnAEYBz6oyATHotKX5VRWA90uhj8Mqve4p8XSGIPrV/kKPcxAnn
+   yHaRiOT4Val+sUVlG9gvj9yuZQtEnkx9ckODmGAURHLtFdBOMudbpIYHg
+   AV51hr+9xi8Us1faKS3FXr6Oxf7SnXSWVtft7gL3f5aA7//Z1azIhfpec
+   nV4ab+D/cUL0o/fjQ2adxpHBo9J5Bj/JAXEDvFRPC1eoI1KrfHiIDlBTM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="356997110"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="356997110"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 10:27:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824050854"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="824050854"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2023 10:27:50 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q8lKY-0000VM-2A;
+	Mon, 12 Jun 2023 17:27:50 +0000
+Date: Tue, 13 Jun 2023 01:27:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Gow <davidgow@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: [linux-next:master 4218/8413] lib/kunit/test.c:764:38: warning: cast
+ from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)')
+ converts to incompatible function type
+Message-ID: <202306130136.ZO9p5nTK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230612090713.652690195@infradead.org> <20230612093541.598260416@infradead.org>
- <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
-Message-ID: <ZIdR18xG1jy8WdEp@google.com>
-Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
-From: Sean Christopherson <seanjc@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org, gregkh@linuxfoundation.org, 
-	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org, 
-	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com, 
-	will@kernel.org, vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org, 
-	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org, 
-	tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com, 
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, 
-	irogers@google.com, adrian.hunter@intel.com, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com, 
-	joel@joelfernandes.org, josh@joshtriplett.org, mathieu.desnoyers@efficios.com, 
-	jiangshanlai@gmail.com, rientjes@google.com, vbabka@suse.cz, 
-	roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, apw@canonical.com, 
-	joe@perches.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com, 
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	dmaengine@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, tglx@linutronix.de, 
-	ravi.bangoria@amd.com, error27@gmail.com, luc.vanoostenryck@gmail.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 12, 2023, Linus Torvalds wrote:
-> This patch looks completely broken to me.
->=20
-> You now do
->=20
->                 if (err =3D=3D -EAGAIN)
->                         goto restart;
->=20
-> *within* the RCU-guarded section, and the "goto restart" will guard it ag=
-ain.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   53ab6975c12d1ad86c599a8927e8c698b144d669
+commit: 57e3cded99e9c840bc5310878d0a7f4e7768a296 [4218/8413] kunit: kmalloc_array: Use kunit_add_action()
+config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130136.ZO9p5nTK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=57e3cded99e9c840bc5310878d0a7f4e7768a296
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 57e3cded99e9c840bc5310878d0a7f4e7768a296
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/kunit/
 
-What if we require that all guarded sections have explicit scoping?  E.g. d=
-rop
-the current version of guard() and rename scoped_guard() =3D> guard().  And=
- then
-figure out macro magic to guard an entire function?  E.g. something like
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130136.ZO9p5nTK-lkp@intel.com/
 
-  static void perf_pmu_output_stop(struct perf_event *event) fn_guard(rcu)
-  {
-	...
-  }
+All warnings (new ones prefixed by >>):
 
-or just "guard(rcu)" if possible.  IIUC, function scopes like that will be =
-possible
-once -Wdeclaration-after-statement goes away.
+>> lib/kunit/test.c:764:38: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     764 |         if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
+   lib/kunit/test.c:776:29: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     776 |         kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
-Bugs aside, IMO guards that are buried in the middle of a function and impl=
-icitly
-scoped to the function are all too easy to overlook.  Requiring explicit sc=
-oping
-would make bugs like this easier to spot since the goto would jump out of s=
-cope
-(and I assume prematurely release the resource/lock?).  As a bonus, annotat=
-ing
-the function itself would also serve as documentation.
 
-The only downside is that the code for function-scoped locks that are acqui=
-red
-partway through the function would be more verbose and/or cumbersome to wri=
-te,
-but that can be mitigated to some extent, e.g. by moving the locked portion=
- to a
-separate helper.
+vim +764 lib/kunit/test.c
 
-> On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
-org> wrote:
-> >
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
-> >         int err, cpu;
-> >
-> >  restart:
-> > -       rcu_read_lock();
-> > +       /* cannot have a label in front of a decl */;
-> > +       guard(rcu)();
-> >         list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry)=
- {
-> >                 /*
-> >                  * For per-CPU events, we need to make sure that neithe=
-r they
-> > @@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
-> >                         continue;
-> >
-> >                 err =3D cpu_function_call(cpu, __perf_pmu_output_stop, =
-event);
-> > -               if (err =3D=3D -EAGAIN) {
-> > -                       rcu_read_unlock();
-> > +               if (err =3D=3D -EAGAIN)
-> >                         goto restart;
-> > -               }
-> >         }
-> > -       rcu_read_unlock();
-> >  }
+   754	
+   755	void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
+   756	{
+   757		void *data;
+   758	
+   759		data = kmalloc_array(n, size, gfp);
+   760	
+   761		if (!data)
+   762			return NULL;
+   763	
+ > 764		if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
+   765			return NULL;
+   766	
+   767		return data;
+   768	}
+   769	EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
+   770	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
