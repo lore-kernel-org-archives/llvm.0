@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7E9182B6
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AC818AE1
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=5KSqPesmPX08w8dWPEEw5Ll2e7FMQinOnTr3XW9NIYo=; b=otUSsXrkwDi6rVuLl90MM+76vL
-	cE6gp9EEa8Zpqqg9MG4CPJ7+wgAaw1DsHIj5puea/XbvsOxRyOFpyECLs24dRzQ6Sjol89f/EXqvQ
-	LChObBEVQXRBsTW4GZSlyTIrge2V5AXUII3ByKeNmerebPgKH0p6l5UMuFfc+5XpT1yAnuRwxbHT8
-	2TJtKzkAkK7oEDchq+KMZKfYnIVzQSIQ18PSNfOGRXZs26r2yqrAQzcGI/y/cuIBGiWJXVqpmFdO/
-	vnWMq8UVC4ZBmx1AVgqzGkpD1hMSd/tM7MGG2el0Wb3T3Cib/eS7vjoZ84B8P3FcOaWoCXC0PdTIv
-	Ssmk1qgw==;
+	bh=A6Nf2exxWEURXKIPC4PisBIYNsQ8WOBsy7I8/r8MB2I=; b=QBEQojlPOctoq6m4at+zDWspSt
+	wLwIrtYUbLj0j1sfpEmxBViAyHgcgROxzxQwfT3lTGgty+s5tbZ6EbtiB7F+9gLvV8EMLMSghl8I0
+	AyNN/6oOlyqNToFGZ/ozYQ8tFNBsZrc+DoAmXaDvDSzbp6ZX9mFEI8zG2Xwti2PhIuhoI5h86pVCY
+	KP/0l64QOPPmXvxDqK3cLtzDrPThkS7WcH8QNrScYz1W2aZRD1jsA+X01l5cHGCM6Baf9JIwMZxHw
+	SZiz3drbNw5O0sfshDo9uroFr2tGF7VKAZaQxZnbY9B8qhuf6oZuiJ+ynC2QC/5htAoiB4EkKK1k4
+	8gpd0qqA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0u-008kS1-1t;
-	Mon, 12 Jun 2023 09:39:09 +0000
+	id 1q8e0l-008kQV-1I;
+	Mon, 12 Jun 2023 09:38:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51D843033F7;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E6EC302E28;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id EBB5330A77B75; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.638818161@infradead.org>
+	id 725F830A77B5F; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.085862001@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:56 +0200
+Date: Mon, 12 Jun 2023 11:07:35 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 43/57] perf: Simplify perf_sw_event()
+Subject: [PATCH v3 22/57] perf: Fix cpuctx refcounting
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -105,98 +105,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
 
+
+Fixes: bd2756811766 ("perf: Rewrite core context handling")
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   37 ++++++++++++-------------------------
- 1 file changed, 12 insertions(+), 25 deletions(-)
+ include/linux/perf_event.h |   13 ++++++++-----
+ kernel/events/core.c       |   16 ++++++++++++++++
+ 2 files changed, 24 insertions(+), 5 deletions(-)
 
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -841,11 +841,11 @@ struct perf_event {
+ };
+ 
+ /*
+- *           ,-----------------------[1:n]----------------------.
+- *           V                                                  V
+- * perf_event_context <-[1:n]-> perf_event_pmu_context <--- perf_event
+- *           ^                      ^     |                     |
+- *           `--------[1:n]---------'     `-[n:1]-> pmu <-[1:n]-'
++ *           ,-----------------------[1:n]------------------------.
++ *           V                                                    V
++ * perf_event_context <-[1:n]-> perf_event_pmu_context <-[1:n]- perf_event
++ *                                        |                       |
++ *                                        `--[n:1]-> pmu <-[1:n]--'
+  *
+  *
+  * struct perf_event_pmu_context  lifetime is refcount based and RCU freed
+@@ -863,6 +863,9 @@ struct perf_event {
+  * ctx->mutex pinning the configuration. Since we hold a reference on
+  * group_leader (through the filedesc) it can't go away, therefore it's
+  * associated pmu_ctx must exist and cannot change due to ctx->mutex.
++ *
++ * perf_event holds a refcount on perf_event_context
++ * perf_event holds a refcount on perf_event_pmu_context
+  */
+ struct perf_event_pmu_context {
+ 	struct pmu			*pmu;
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -9701,17 +9701,15 @@ static void do_perf_sw_event(enum perf_t
- 	struct perf_event *event;
- 	struct hlist_head *head;
+@@ -4809,6 +4809,11 @@ find_get_pmu_context(struct pmu *pmu, st
+ 	void *task_ctx_data = NULL;
  
--	rcu_read_lock();
-+	guard(rcu)();
- 	head = find_swevent_head_rcu(swhash, type, event_id);
- 	if (!head)
--		goto end;
-+		return;
+ 	if (!ctx->task) {
++		/*
++		 * perf_pmu_migrate_context() / __perf_pmu_install_event()
++		 * relies on the fact that find_get_pmu_context() cannot fail
++		 * for CPU contexts.
++		 */
+ 		struct perf_cpu_pmu_context *cpc;
  
- 	hlist_for_each_entry_rcu(event, head, hlist_entry) {
- 		if (perf_swevent_match(event, type, event_id, data, regs))
- 			perf_swevent_event(event, nr, data, regs);
- 	}
--end:
--	rcu_read_unlock();
- }
- 
- DEFINE_PER_CPU(struct pt_regs, __perf_regs[4]);
-@@ -9746,16 +9744,13 @@ void __perf_sw_event(u32 event_id, u64 n
+ 		cpc = per_cpu_ptr(pmu->cpu_pmu_context, event->cpu);
+@@ -12832,6 +12837,13 @@ static void __perf_pmu_install_event(str
  {
- 	int rctx;
+ 	struct perf_event_pmu_context *epc;
  
--	preempt_disable_notrace();
-+	guard(preempt_notrace)();
- 	rctx = perf_swevent_get_recursion_context();
- 	if (unlikely(rctx < 0))
--		goto fail;
-+		return;
++	/*
++	 * Now that the events are unused, put their old ctx and grab a
++	 * reference on the new context.
++	 */
++	put_ctx(event->ctx);
++	get_ctx(ctx);
++
+ 	event->cpu = cpu;
+ 	epc = find_get_pmu_context(pmu, ctx, event);
+ 	event->pmu_ctx = epc;
+@@ -12877,6 +12889,10 @@ void perf_pmu_migrate_context(struct pmu
+ 	struct perf_event_context *src_ctx, *dst_ctx;
+ 	LIST_HEAD(events);
  
- 	___perf_sw_event(event_id, nr, regs, addr);
--
- 	perf_swevent_put_recursion_context(rctx);
--fail:
--	preempt_enable_notrace();
- }
++	/*
++	 * Since per-cpu context is persistent, no need to grab an extra
++	 * reference.
++	 */
+ 	src_ctx = &per_cpu_ptr(&perf_cpu_context, src_cpu)->ctx;
+ 	dst_ctx = &per_cpu_ptr(&perf_cpu_context, dst_cpu)->ctx;
  
- static void perf_swevent_read(struct perf_event *event)
-@@ -9844,21 +9839,17 @@ static int swevent_hlist_get_cpu(int cpu
- 	struct swevent_htable *swhash = &per_cpu(swevent_htable, cpu);
- 	int err = 0;
- 
--	mutex_lock(&swhash->hlist_mutex);
-+	guard(mutex)(&swhash->hlist_mutex);
- 	if (!swevent_hlist_deref(swhash) &&
- 	    cpumask_test_cpu(cpu, perf_online_mask)) {
- 		struct swevent_hlist *hlist;
- 
- 		hlist = kzalloc(sizeof(*hlist), GFP_KERNEL);
--		if (!hlist) {
--			err = -ENOMEM;
--			goto exit;
--		}
-+		if (!hlist)
-+			return -ENOMEM;
- 		rcu_assign_pointer(swhash->swevent_hlist, hlist);
- 	}
- 	swhash->hlist_refcount++;
--exit:
--	mutex_unlock(&swhash->hlist_mutex);
- 
- 	return err;
- }
-@@ -10115,16 +10106,12 @@ void perf_tp_event(u16 event_type, u64 c
- 	if (task && task != current) {
- 		struct perf_event_context *ctx;
- 
--		rcu_read_lock();
-+		guard(rcu)();
- 		ctx = rcu_dereference(task->perf_event_ctxp);
--		if (!ctx)
--			goto unlock;
--
--		raw_spin_lock(&ctx->lock);
--		perf_tp_event_target_task(count, record, regs, &data, ctx);
--		raw_spin_unlock(&ctx->lock);
--unlock:
--		rcu_read_unlock();
-+		if (ctx) {
-+			guard(raw_spinlock)(&ctx->lock);
-+			perf_tp_event_target_task(count, record, regs, &data, ctx);
-+		}
- 	}
- 
- 	perf_swevent_put_recursion_context(rctx);
 
 
