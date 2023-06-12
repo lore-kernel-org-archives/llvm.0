@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472CF182C4
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFE3182C4
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=q92jsVFPZSP8G7FOeDp8TiMSNcZFRY9w1smIqAIutpc=; b=cC3P05pE1HH/s/tUR84v5mVIAO
-	kPGxqIz/FKjqtp+XWrF/jcaJBTTdb46IPie32qxZbfjlzy/0boCc4eL/PNs9nOrnR/JIYKgJ2hPBE
-	30WlTKP2Xn4GIseF5sfJN6BUqdSfvcIqMDrCRGs7WaVlcgSi6IAfn0dQDvvdQgKCg8ll0HLzOe0yi
-	HfpPhPlF4UX3STerOIzqwzzinQ28XHstWcQuhaPRyfeoqSRSeCy+uNg25cZvGOChp4XMZR1B9/Cik
-	kZ/MkwuVPscwEUL3+6RCvT6Km37MHjOnTk9FOuBRgxmqVRXPo0OCW52lQsNInBJ0V/fuO59PYN/hJ
-	32gsL4KQ==;
+	bh=tN5fF7Wyh35qBJFCdjEuKMaMwIiqau8XmW0j2x/SMjk=; b=pTQEAHGpF5fz0pLIBta9z8QWvF
+	V3VTKbdm5MrZ6Uq6sIyVOPIlJRamTVCnfvzmEg5CiuDQWZwIOhMu3l9PZQuNwkMb8MTxXwLb05k1F
+	pXKfEwe9Z0i663rYdw9pUPCOE+2AHi/lm0RzSNXMm4U2w1iNa1ZIxBs9afcsQW/V20UMXzYer3WCT
+	zF9DC46u7wLZd3iCRc+AmRVnu9fCua5kGt94sVVOX6RESLLLndvS1OIwmKToKe+pfW/q3/OlKUMUJ
+	NzNjcl62XQoQkQaJg1jmU538/Cwb5EJWwMJr4XxONBZWuSlObMm3Fh7GXzLLBUAOiqFAhv2ZaNNZD
+	zVv+iV3g==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0k-002NAl-K1; Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0k-002NAj-JK; Mon, 12 Jun 2023 09:38:54 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C3A90303162;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D99F530318F;
 	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 3619930A70ADD; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.225353309@infradead.org>
+	id 416A530A70ADF; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093538.393498853@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:24 +0200
+Date: Mon, 12 Jun 2023 11:07:26 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 11/57] sched: Simplify sched_tick_remote()
+Subject: [PATCH v3 13/57] sched: Simplify sched_core_cpu_{starting,deactivate}()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -107,69 +107,99 @@ Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   43 ++++++++++++++++++-------------------------
- 1 file changed, 18 insertions(+), 25 deletions(-)
+ kernel/sched/core.c |   27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -5651,9 +5651,6 @@ static void sched_tick_remote(struct wor
- 	struct tick_work *twork = container_of(dwork, struct tick_work, work);
- 	int cpu = twork->cpu;
- 	struct rq *rq = cpu_rq(cpu);
--	struct task_struct *curr;
--	struct rq_flags rf;
--	u64 delta;
- 	int os;
+@@ -6331,20 +6331,24 @@ static void queue_core_balance(struct rq
+ 	queue_balance_callback(rq, &per_cpu(core_balance_head, rq->cpu), sched_core_balance);
+ }
  
- 	/*
-@@ -5663,30 +5660,26 @@ static void sched_tick_remote(struct wor
- 	 * statistics and checks timeslices in a time-independent way, regardless
- 	 * of when exactly it is running.
- 	 */
--	if (!tick_nohz_tick_stopped_cpu(cpu))
--		goto out_requeue;
-+	if (tick_nohz_tick_stopped_cpu(cpu)) {
-+		guard(rq_lock_irq)(rq);
-+		struct task_struct *curr = rq->curr;
++DEFINE_LOCK_GUARD_1(core_lock, int,
++		    sched_core_lock(*_T->lock, &_T->flags),
++		    sched_core_unlock(*_T->lock, &_T->flags),
++		    unsigned long flags)
 +
-+		if (cpu_online(cpu)) {
-+			update_rq_clock(rq);
-+
-+			if (!is_idle_task(curr)) {
-+				/*
-+				 * Make sure the next tick runs within a
-+				 * reasonable amount of time.
-+				 */
-+				u64 delta = rq_clock_task(rq) - curr->se.exec_start;
-+				WARN_ON_ONCE(delta > (u64)NSEC_PER_SEC * 3);
-+			}
-+			curr->sched_class->task_tick(rq, curr, 0);
+ static void sched_core_cpu_starting(unsigned int cpu)
+ {
+ 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
+ 	struct rq *rq = cpu_rq(cpu), *core_rq = NULL;
+-	unsigned long flags;
+ 	int t;
  
--	rq_lock_irq(rq, &rf);
--	curr = rq->curr;
--	if (cpu_is_offline(cpu))
--		goto out_unlock;
--
--	update_rq_clock(rq);
--
--	if (!is_idle_task(curr)) {
--		/*
--		 * Make sure the next tick runs within a reasonable
--		 * amount of time.
--		 */
--		delta = rq_clock_task(rq) - curr->se.exec_start;
--		WARN_ON_ONCE(delta > (u64)NSEC_PER_SEC * 3);
-+			calc_load_nohz_remote(rq);
-+		}
+-	sched_core_lock(cpu, &flags);
++	guard(core_lock)(&cpu);
+ 
+ 	WARN_ON_ONCE(rq->core != rq);
+ 
+ 	/* if we're the first, we'll be our own leader */
+ 	if (cpumask_weight(smt_mask) == 1)
+-		goto unlock;
++		return;
+ 
+ 	/* find the leader */
+ 	for_each_cpu(t, smt_mask) {
+@@ -6358,7 +6362,7 @@ static void sched_core_cpu_starting(unsi
  	}
--	curr->sched_class->task_tick(rq, curr, 0);
--
--	calc_load_nohz_remote(rq);
--out_unlock:
--	rq_unlock_irq(rq, &rf);
--out_requeue:
  
- 	/*
- 	 * Run the remote tick once per second (1Hz). This arbitrary
+ 	if (WARN_ON_ONCE(!core_rq)) /* whoopsie */
+-		goto unlock;
++		return;
+ 
+ 	/* install and validate core_rq */
+ 	for_each_cpu(t, smt_mask) {
+@@ -6369,29 +6373,25 @@ static void sched_core_cpu_starting(unsi
+ 
+ 		WARN_ON_ONCE(rq->core != core_rq);
+ 	}
+-
+-unlock:
+-	sched_core_unlock(cpu, &flags);
+ }
+ 
+ static void sched_core_cpu_deactivate(unsigned int cpu)
+ {
+ 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
+ 	struct rq *rq = cpu_rq(cpu), *core_rq = NULL;
+-	unsigned long flags;
+ 	int t;
+ 
+-	sched_core_lock(cpu, &flags);
++	guard(core_lock)(&cpu);
+ 
+ 	/* if we're the last man standing, nothing to do */
+ 	if (cpumask_weight(smt_mask) == 1) {
+ 		WARN_ON_ONCE(rq->core != rq);
+-		goto unlock;
++		return;
+ 	}
+ 
+ 	/* if we're not the leader, nothing to do */
+ 	if (rq->core != rq)
+-		goto unlock;
++		return;
+ 
+ 	/* find a new leader */
+ 	for_each_cpu(t, smt_mask) {
+@@ -6402,7 +6402,7 @@ static void sched_core_cpu_deactivate(un
+ 	}
+ 
+ 	if (WARN_ON_ONCE(!core_rq)) /* impossible */
+-		goto unlock;
++		return;
+ 
+ 	/* copy the shared state to the new leader */
+ 	core_rq->core_task_seq             = rq->core_task_seq;
+@@ -6424,9 +6424,6 @@ static void sched_core_cpu_deactivate(un
+ 		rq = cpu_rq(t);
+ 		rq->core = core_rq;
+ 	}
+-
+-unlock:
+-	sched_core_unlock(cpu, &flags);
+ }
+ 
+ static inline void sched_core_cpu_dying(unsigned int cpu)
 
 
