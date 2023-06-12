@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BBE168DC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683FF17AA3
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=4+/Q1nIn7pjeaoOkqiN8ZoN9dOzRXj0Qx8pmucBG9KU=; b=CGHl8Ke92uJbbyjxJGKK8koPvn
-	7wHNWoLM/OkAmrZ4gFQeXc0QQYBrCLhXWZt2umEgQksz88cD9v5hn14i7kQSP4K9xSMDFQh7PWwsv
-	vQ1SFBK+bYKYSFKj0XwP0Ih62MxyjrlkyHVnaSND5EqZmqUghHIM16cEmrRxwbC47HZ2K2goOhkXP
-	7bLK4qmMqxam/hy7LL1/k9bAfAGqb3r2FCP5gi8DTPb2h4vhx5jv0YK9/YQ7I/abyHFJxNBAwqOtq
-	5BakdSMaPpb64bGqaUJXeYcn8P33r4cdzpzV0yukOTXCzKuo49ETcvhq4nvaUPnPQLSdX4jXV6W/Q
-	oznHsxwg==;
+	bh=RF7AlZRmRPruwiE6WSJ8fgsVWKVvpbmYdppCd/KBEkQ=; b=RnySH+cxU2P4SRyBNjFB/FhqFH
+	0/24hRC8l1Y+RzqS9t+LLJgYTbpemr3uJbKUzAhz4nDyzkTPxi01OU3HfrP75fxls9S78Wd7ksLPt
+	/IGrVYxHpIECVcQ0BB0l79olUuLK3KmcgCUPsADYEITDkzUhiby4ZeFVXhVHF+xfIHbIUmN1Lzu8A
+	4hXtsrfh7u8Q7WjPFmeWG58TDtMn+x8XnoBzWdX7mctC0o//NiJ96Wm8JS4EP+QDO3AE+Uq8F1iAp
+	E1B5jo2/jWWweXA0Icm938LOtGEZZ3OkgMyx6u7AwZEvVq/NZqo4EN5kDmmfwdXP6QQ4WokIoemI6
+	Sv19YETA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0j-008kPs-37;
-	Mon, 12 Jun 2023 09:38:54 +0000
+	id 1q8e0m-008kQs-39;
+	Mon, 12 Jun 2023 09:39:01 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CCFC330316E;
-	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 280E63031E0;
+	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 3C3B930A70ADE; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.307089780@infradead.org>
+	id A1B8930A77B67; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093539.682563843@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:25 +0200
+Date: Mon, 12 Jun 2023 11:07:43 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 12/57] sched: Simplify try_steal_cookie()
+Subject: [PATCH v3 30/57] perf: Simplify: *perf_event_{dis,en}able*()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,64 +104,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/sched/core.c |   21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ kernel/events/core.c |   51 ++++++++++++++++++++++-----------------------------
+ 1 file changed, 22 insertions(+), 29 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6229,19 +6229,19 @@ static bool try_steal_cookie(int this, i
- 	unsigned long cookie;
- 	bool success = false;
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2415,7 +2415,7 @@ static void __perf_event_disable(struct
+ 		update_cgrp_time_from_event(event);
+ 	}
  
--	local_irq_disable();
--	double_rq_lock(dst, src);
-+	guard(irq)();
-+	guard(double_rq_lock)(dst, src);
+-	perf_pmu_disable(event->pmu_ctx->pmu);
++	guard(perf_pmu_disable)(event->pmu_ctx->pmu);
  
- 	cookie = dst->core->core_cookie;
- 	if (!cookie)
--		goto unlock;
-+		return false;
+ 	if (event == event->group_leader)
+ 		group_sched_out(event, ctx);
+@@ -2424,8 +2424,6 @@ static void __perf_event_disable(struct
  
- 	if (dst->curr != dst->idle)
--		goto unlock;
-+		return false;
- 
- 	p = sched_core_find(src, cookie);
- 	if (!p)
--		goto unlock;
-+		return false;
- 
- 	do {
- 		if (p == src->core_pick || p == src->curr)
-@@ -6253,9 +6253,10 @@ static bool try_steal_cookie(int this, i
- 		if (p->core_occupation > dst->idle->core_occupation)
- 			goto next;
- 		/*
--		 * sched_core_find() and sched_core_next() will ensure that task @p
--		 * is not throttled now, we also need to check whether the runqueue
--		 * of the destination CPU is being throttled.
-+		 * sched_core_find() and sched_core_next() will ensure
-+		 * that task @p is not throttled now, we also need to
-+		 * check whether the runqueue of the destination CPU is
-+		 * being throttled.
- 		 */
- 		if (sched_task_is_throttled(p, this))
- 			goto next;
-@@ -6273,10 +6274,6 @@ static bool try_steal_cookie(int this, i
- 		p = sched_core_next(p, cookie);
- 	} while (p);
- 
--unlock:
--	double_rq_unlock(dst, src);
--	local_irq_enable();
+ 	perf_event_set_state(event, PERF_EVENT_STATE_OFF);
+ 	perf_cgroup_event_disable(event, ctx);
 -
- 	return success;
+-	perf_pmu_enable(event->pmu_ctx->pmu);
  }
  
+ /*
+@@ -2446,12 +2444,10 @@ static void _perf_event_disable(struct p
+ {
+ 	struct perf_event_context *ctx = event->ctx;
+ 
+-	raw_spin_lock_irq(&ctx->lock);
+-	if (event->state <= PERF_EVENT_STATE_OFF) {
+-		raw_spin_unlock_irq(&ctx->lock);
+-		return;
++	scoped_guard (raw_spinlock_irq, &ctx->lock) {
++		if (event->state <= PERF_EVENT_STATE_OFF)
++			return;
+ 	}
+-	raw_spin_unlock_irq(&ctx->lock);
+ 
+ 	event_function_call(event, __perf_event_disable, NULL);
+ }
+@@ -2955,32 +2951,29 @@ static void _perf_event_enable(struct pe
+ {
+ 	struct perf_event_context *ctx = event->ctx;
+ 
+-	raw_spin_lock_irq(&ctx->lock);
+-	if (event->state >= PERF_EVENT_STATE_INACTIVE ||
+-	    event->state <  PERF_EVENT_STATE_ERROR) {
+-out:
+-		raw_spin_unlock_irq(&ctx->lock);
+-		return;
+-	}
++	scoped_guard (raw_spinlock_irq, &ctx->lock) {
++		if (event->state >= PERF_EVENT_STATE_INACTIVE ||
++		    event->state <  PERF_EVENT_STATE_ERROR)
++			return;
+ 
+-	/*
+-	 * If the event is in error state, clear that first.
+-	 *
+-	 * That way, if we see the event in error state below, we know that it
+-	 * has gone back into error state, as distinct from the task having
+-	 * been scheduled away before the cross-call arrived.
+-	 */
+-	if (event->state == PERF_EVENT_STATE_ERROR) {
+ 		/*
+-		 * Detached SIBLING events cannot leave ERROR state.
++		 * If the event is in error state, clear that first.
++		 *
++		 * That way, if we see the event in error state below, we know that it
++		 * has gone back into error state, as distinct from the task having
++		 * been scheduled away before the cross-call arrived.
+ 		 */
+-		if (event->event_caps & PERF_EV_CAP_SIBLING &&
+-		    event->group_leader == event)
+-			goto out;
++		if (event->state == PERF_EVENT_STATE_ERROR) {
++			/*
++			 * Detached SIBLING events cannot leave ERROR state.
++			 */
++			if (event->event_caps & PERF_EV_CAP_SIBLING &&
++			    event->group_leader == event)
++				return;
+ 
+-		event->state = PERF_EVENT_STATE_OFF;
++			event->state = PERF_EVENT_STATE_OFF;
++		}
+ 	}
+-	raw_spin_unlock_irq(&ctx->lock);
+ 
+ 	event_function_call(event, __perf_event_enable, NULL);
+ }
 
 
