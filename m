@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59790182D1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C179182DD
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=ldnPYKUyHMdijInwVZoC1NuQUIqnzmW6aookZYRZh1U=; b=cgW4db+34EYcfOD+ugAWlih6L8
-	L/jNDTcu2i9fG+nvVlktxcUddMXQJ7RsD+BbDjolaEczhlhwpgja7UDOuAxNJCIWpKjAkzOPYv2Zx
-	/Qo5p0lq52KBp0V1ZxkzEeUvyoDKAYxG62owwp6I9frl7ils+cPmIyH7sopXDWmlS7dHyvIU5mP3n
-	287Bf1+i+xEltlqpgI9i3OH9vcj1m3RPGORA4wagSRH85wRp7rZK9n2Y+KiaoBCKZcOcY1vWYIcbx
-	G/jFuwTTD0+cX3UuWtvW2BIX9AITSfqAc++zFQPfgkyqeUSM+GNLDTl/vI31A4zql2673ftWTlir6
-	EuKHS/KQ==;
+	bh=i7e4Ed2VApizqqMeLDQrTIcscOdlMDKi2d1+AvdLSfc=; b=TLH0h/m4GoAk2wL3yh55l4IzRI
+	jY9uOtCPaEekSHLEHO8dDm8WEVzCjRv1x76mT4+w1m038KSAfu8dqm5waSVM52O+uEiDXRHj/jCgu
+	3DWmoUeWCVAOAuw2WN+lfGOVAExS++x0sVfkBCBE3yIsAN9sXvVqSjnvZRHqXwA5S+fjYQ5uqOUPg
+	0le2x7tEhFXGMyx0cXp7Nb7aE39s4gkVOuB7q76B1xrcm5cJoBCfcYfpoaz9BXhdEJ6sMWOpWd3CX
+	MxsZp6OHCLa+XGQ39oxUnzAB8YNwtKxDXcEb/izP3qhSFz+f2JtTW5ORQ4UhQcKzxHWZwbIwAMMDK
+	7jLMY3/w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0l-008kQY-1q;
-	Mon, 12 Jun 2023 09:38:56 +0000
+	id 1q8e0j-008kPm-11;
+	Mon, 12 Jun 2023 09:38:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1838F30313F;
-	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5223302F8F;
+	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 7F8B230A77B61; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093539.300603001@infradead.org>
+	id 22F9530A70248; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093537.977924652@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:38 +0200
+Date: Mon, 12 Jun 2023 11:07:21 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 25/57] perf: Simplify perf_fget_light()
+Subject: [PATCH v3 08/57] sched: Simplify wake_up_if_idle()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,78 +104,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Introduce fdnull and use it to simplify perf_fget_light() to either
-return a valid struct fd or not -- much like fdget() itself.
+Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/file.h |    7 ++++++-
- kernel/events/core.c |   22 +++++++++++-----------
- 2 files changed, 17 insertions(+), 12 deletions(-)
+ kernel/sched/core.c  |   20 ++++++--------------
+ kernel/sched/sched.h |   15 +++++++++++++++
+ 2 files changed, 21 insertions(+), 14 deletions(-)
 
---- a/include/linux/file.h
-+++ b/include/linux/file.h
-@@ -59,6 +59,8 @@ static inline struct fd __to_fd(unsigned
- 	return (struct fd){(struct file *)(v & ~3),v & 3};
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3872,21 +3872,13 @@ static void __ttwu_queue_wakelist(struct
+ void wake_up_if_idle(int cpu)
+ {
+ 	struct rq *rq = cpu_rq(cpu);
+-	struct rq_flags rf;
+ 
+-	rcu_read_lock();
+-
+-	if (!is_idle_task(rcu_dereference(rq->curr)))
+-		goto out;
+-
+-	rq_lock_irqsave(rq, &rf);
+-	if (is_idle_task(rq->curr))
+-		resched_curr(rq);
+-	/* Else CPU is not idle, do nothing here: */
+-	rq_unlock_irqrestore(rq, &rf);
+-
+-out:
+-	rcu_read_unlock();
++	guard(rcu)();
++	if (is_idle_task(rcu_dereference(rq->curr))) {
++		guard(rq_lock)(rq);
++		if (is_idle_task(rq->curr))
++			resched_curr(rq);
++	}
  }
  
-+#define fdnull __to_fd(0)
+ bool cpus_share_cache(int this_cpu, int that_cpu)
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1678,6 +1678,21 @@ rq_unlock(struct rq *rq, struct rq_flags
+ 	raw_spin_rq_unlock(rq);
+ }
+ 
++DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
++		    rq_lock(_T->lock, &_T->rf),
++		    rq_unlock(_T->lock, &_T->rf),
++		    struct rq_flags rf)
 +
- static inline struct fd fdget(unsigned int fd)
- {
- 	return __to_fd(__fdget(fd));
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5802,18 +5802,17 @@ EXPORT_SYMBOL_GPL(perf_event_period);
- 
- static const struct file_operations perf_fops;
- 
--static inline int perf_fget_light(int fd, struct fd *p)
-+static inline struct fd perf_fdget(int fd)
- {
- 	struct fd f = fdget(fd);
- 	if (!f.file)
--		return -EBADF;
-+		return fdnull;
- 
- 	if (f.file->f_op != &perf_fops) {
- 		fdput(f);
--		return -EBADF;
-+		return fdnull;
- 	}
--	*p = f;
--	return 0;
-+	return f;
- }
- 
- static int perf_event_set_output(struct perf_event *event,
-@@ -5864,10 +5863,9 @@ static long _perf_ioctl(struct perf_even
- 		int ret;
- 		if (arg != -1) {
- 			struct perf_event *output_event;
--			struct fd output;
--			ret = perf_fget_light(arg, &output);
--			if (ret)
--				return ret;
-+			struct fd output = perf_fdget(arg);
-+			if (!output.file)
-+				return -EBADF;
- 			output_event = output.file->private_data;
- 			ret = perf_event_set_output(event, output_event);
- 			fdput(output);
-@@ -12401,9 +12399,11 @@ SYSCALL_DEFINE5(perf_event_open,
- 		return event_fd;
- 
- 	if (group_fd != -1) {
--		err = perf_fget_light(group_fd, &group);
--		if (err)
-+		group = perf_fdget(group_fd);
-+		if (!group.file) {
-+			err = -EBADF;
- 			goto err_fd;
-+		}
- 		group_leader = group.file->private_data;
- 		if (flags & PERF_FLAG_FD_OUTPUT)
- 			output_event = group_leader;
++DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
++		    rq_lock_irq(_T->lock, &_T->rf),
++		    rq_unlock_irq(_T->lock, &_T->rf),
++		    struct rq_flags rf)
++
++DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
++		    rq_lock_irqsave(_T->lock, &_T->rf),
++		    rq_unlock_irqrestore(_T->lock, &_T->rf),
++		    struct rq_flags rf)
++
+ static inline struct rq *
+ this_rq_lock_irq(struct rq_flags *rf)
+ 	__acquires(rq->lock)
 
 
