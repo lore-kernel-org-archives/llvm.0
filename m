@@ -1,135 +1,132 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0FC19BB1;
-	Mon, 12 Jun 2023 18:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686593518; x=1718129518;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MUJIyIIxyWDXLsGprFR9Y5h4WDL/y5XyfJH9HS3u2l4=;
-  b=dXfD7fH5tnm5gE9+znQ/LA6Xy7CRYZgRvJ3lILh/ZO4SJUKVW2LhaZKq
-   sEp58g1GfCF55bPGv42s888v5DTGy2cvzXgl7nNfeIWlV2TzH0ZauHv6Z
-   Y6ZxhUDxypodRv1Mu0em5oZuttBpRk++TJ7HFX8c68dveHz8qZgM/i1cE
-   SfZJ8qL97RttJ+sfhuYNbLiAS4FOblbXELwvcBY9YKEzYpijVykEgnGMF
-   jjC7UcPP9MoAqhvRLdRz5+KsMKkJb0sL3qkfaVGvsIqRlKaq/N1y3Kzhs
-   ZCeU40oBJauT4xNKWYifqKfnpHbRcyODcwGqXWRNnMAJ4nn7wqMCFylxc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444502004"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="444502004"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:11:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="855757138"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="855757138"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2023 11:11:42 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8m0z-0000YW-2g;
-	Mon, 12 Jun 2023 18:11:41 +0000
-Date: Tue, 13 Jun 2023 02:10:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-Message-ID: <202306130116.8PIDa21J-lkp@intel.com>
-References: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AFC2F26
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 18:40:43 +0000 (UTC)
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-43dc0aa328dso120156137.1
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 11:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686595242; x=1689187242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPF8uPb56GviGY9KiREimI3Llex5+RzsOybBEO8RgOE=;
+        b=bSub8knI2My+mzdaIppR7khjRkqEOAJYxAgrpaHsB74yBrmaVGcnccW2fkxC4RD4Er
+         Dj36HtgZm64aau1F0geqCqra5BKcQhORteB3ZvxW7jGgx9alss4uXQlntCEmhf0+qUBP
+         SMaknbSSY9pftOMeU3KeaORgEvCbHS2kVgp5UnYdRQoz/IZowDK88X9xNypKonMdKix0
+         +fifpmPPyY2IT9deMsOL7TohKu/WS+pDiOf0xNRBYb3SFiJ0KMRv2wPud7uFV5CVg/9F
+         xnyR9o/n6O3XXziSeQDA8q522aR7h1Ea5bKDFX/e+SRceRhvlRHctdALXvVMGW7pQolc
+         tX4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686595242; x=1689187242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kPF8uPb56GviGY9KiREimI3Llex5+RzsOybBEO8RgOE=;
+        b=Up7OQinAIAJrzKFb9lyz5A8/ZFNI/MB+to9DMUj4jHVwKUPyyZiFwj+JbDN6wvHMBC
+         L7oS2pHb9D+koyCBzMrEqBfkHJ5gkHnXwWVqem/zqUFnz0Cs4qWKBqk2FB9kUVUpSD5Q
+         Grfu0HUPa+mPrms+xrafgWKqUTnLL5Wa+nLP5o96IMPifMaCFsevQRoEiFuUp9jhJBhV
+         CPIcak3NNMZCMmDoTOQIw41NOo7QGB1vaFGa5gtAB8l0KgK0AiBp6ekaleNPIC4pz2N/
+         EGMHSZqd4yMiT4+lrU+hfMfbz4NNSAF95jnPS7VBJCfB8d916FJMBGU+RzyYufJwJcsi
+         6aqw==
+X-Gm-Message-State: AC+VfDzsz0EsYipObSItGXnwV72E1pT6B8Dg1id0eYfRV6J7jPv3WeYQ
+	cVH9ERatnocmT4y3z3oe4oi+l4vG+NxHNKgIl/tE7YcnjEKXW8YMcVCBSA==
+X-Google-Smtp-Source: ACHHUZ6+WeYQrAwQgl9qOclJRU4IgMRZR5i2j3aydWORpX0W6M+7rLZHhZ1sf5W41WNq+KeYignkj7N34hIkFAod87o=
+X-Received: by 2002:a05:6102:5106:b0:43b:1dd8:76b4 with SMTP id
+ bm6-20020a056102510600b0043b1dd876b4mr5677539vsb.11.1686595241684; Mon, 12
+ Jun 2023 11:40:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 13 Jun 2023 00:10:30 +0530
+Message-ID: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
+Subject: =?UTF-8?Q?clang=3A_Powerpc=3A_clang=2Dnightly=2Dmaple=5Fdefconfig_=E2=80=94_FA?=
+	=?UTF-8?Q?IL?=
+To: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rasmus,
+[Please ignore if it is already reported]
 
-kernel test robot noticed the following build errors:
+Following two builds failed on stable-rc 6.1.34-rc1.
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  - Powerpc: clang-nightly-maple_defconfig =E2=80=94 FAIL
+  - Powerpc: clang-nightly-cell_defconfig =E2=80=94 FAIL
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230612-211434
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230612113059.247275-5-linux%40rasmusvillemoes.dk
-patch subject: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-config: arm-randconfig-r012-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130116.8PIDa21J-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
-        git fetch abelloni rtc-next
-        git checkout abelloni/rtc-next
-        b4 shazam https://lore.kernel.org/r/20230612113059.247275-5-linux@rasmusvillemoes.dk
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/rtc/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306130116.8PIDa21J-lkp@intel.com/
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=3Dpowerpc
+CROSS_COMPILE=3Dpowerpc64le-linux-gnu- HOSTCC=3Dclang CC=3Dclang LLVM=3D1
+LLVM_IAS=3D0 LD=3Dpowerpc64le-linux-gnu-ld
 
-All errors (new ones prefixed by >>):
+arch/powerpc/lib/copypage_power7.S: Assembler messages:
+arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000=
+'
+arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010=
+'
+arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000=
+'
+arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010=
+'
+arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010=
+'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382:
+arch/powerpc/lib/copypage_power7.o] Error 1
+make[4]: Target 'arch/powerpc/lib/' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:500: arch/powerpc/lib] Error 2
+arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
+arch/powerpc/kernel/exceptions-64s.S:2959: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:2979: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:2994: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3012: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3032: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3079: Error: junk at end of line: `0b0=
+1010'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382: arch/powerpc/kernel/head_64.o] Er=
+ror 1
+arch/powerpc/kernel/entry_64.S: Assembler messages:
+arch/powerpc/kernel/entry_64.S:172: Error: junk at end of line: `0b01010'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382:
+arch/powerpc/kernel/entry_64.o] Error 1
+make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:500: arch/powerpc/kernel] Error 2
+make[3]: Target 'arch/powerpc/' not remade because of errors.
+make[2]: *** [scripts/Makefile.build:500: arch/powerpc] Error 2
+make[2]: Target './' not remade because of errors.
+make[1]: *** [Makefile:2012: .] Error 2
+make[1]: Target '__all' not remade because of errors.
+make: *** [Makefile:238: __sub-make] Error 2
+make: Target '__all' not remade because of errors.
 
->> drivers/rtc/rtc-isl12022.c:238:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     238 |         val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-         |               ^
-   1 error generated.
 
 
-vim +/FIELD_PREP +238 drivers/rtc/rtc-isl12022.c
+Links,
+- https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1=
+.33-133-g08f336c8c68d/testrun/17475368/suite/build/test/clang-nightly-cell_=
+defconfig/history/
+- https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1=
+.33-133-g08f336c8c68d/testrun/17475373/suite/build/test/clang-nightly-maple=
+_defconfig/history/
 
-   219	
-   220	static void isl12022_set_trip_levels(struct device *dev)
-   221	{
-   222		struct regmap *regmap = dev_get_drvdata(dev);
-   223		u32 level85 = 0, level75 = 0;
-   224		int ret, x85, x75;
-   225		u8 val, mask;
-   226	
-   227		device_property_read_u32(dev, "isil,trip-level85-microvolt", &level85);
-   228		device_property_read_u32(dev, "isil,trip-level75-microvolt", &level75);
-   229	
-   230		for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
-   231			if (level85 <= trip_level85[x85])
-   232				break;
-   233	
-   234		for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
-   235			if (level75 <= trip_level75[x75])
-   236				break;
-   237	
- > 238		val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-   239		mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
-   240	
-   241		ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
-   242		if (ret)
-   243			dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
-   244	}
-   245	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Linaro LKFT
+https://lkft.linaro.org
