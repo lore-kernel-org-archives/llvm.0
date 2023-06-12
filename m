@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A65C1800C
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E816182BD
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=9OWN91/cXOLRfmVSj/c39yenMABydmgJP4BxXsEr7m4=; b=ODMSw25KlwnbIZwtM8Ooplwz3S
-	avsg1C00hw0ZNaZy9SLLjMZe48szqJxUiobcK4beCgvel6ihAYx2CB/a5nHYQfhh+vAHV4C8Cmzs9
-	sHrFLrQ8JgaSA/kQmUkLW4qOpTYgvv7KZlHNVaG4mFStN9gg4I9vNmU5SCLRgi1KP1mNG2IqtUsMx
-	Bn2lgUNR5mJw4d6qus/8zp5DlFSOnjyVpqcuU6rRQsEHrG6c+y/Y3B/BEKX+tLP83TTc2c2wVlwgW
-	ZQhT0qliAPMSaNLZeLP4zzJpsXK4sXqa3/eS25o+5DQB5pDBPNuzZ9bbmC1N5UaAjMUFBVYOytSF3
-	R2+1UEzw==;
+	bh=MG7QpnmCwLygWJ81Mn2iabAPA0zngwNBxpS2UJOPCco=; b=aXuukbWfDT3crpdpELnmpXOIr1
+	rmi7tOYHchwZ0ZWw12XRPDCQqRwMiqZMiABYBZi2O+0tfNVzQRKi9P8ydd//mWeA7oQObClsjTE7E
+	LHFghoj5tdofv/RNddLTT0JWVj87F1f4zRP5QUXDwod/ck/TDyMXZ81p3o1Z6UVNSI9dRWMzyaW7W
+	AD+qE0/n4a7Qe6Z1Xg8QD2b21dyEkZzvC33hTI2lYy5oByr7zAHpxalio1Yq2xpIfpyfIQyhGsstj
+	/SW7fmJDwrmmYyPiT1S62tcE02v5eg0/HjDJXCTz1h+1fcNR5efvE/6XROFvb22ZtQgISEaHBYV0v
+	ZehA35sA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0z-008kUr-2p;
-	Mon, 12 Jun 2023 09:39:16 +0000
+	id 1q8e0j-008kPt-35;
+	Mon, 12 Jun 2023 09:38:54 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 77027306153;
-	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E089A303191;
+	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 3757230A79088; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
-Message-ID: <20230612093541.524967360@infradead.org>
+	id 46BE630A77B54; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093538.465891562@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:08:08 +0200
+Date: Mon, 12 Jun 2023 11:07:27 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 55/57] perf: Simplify find_get_context()
+Subject: [PATCH v3 14/57] sched: Simplify set_user_nice()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,80 +104,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
+Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   46 ++++++++++++++++++----------------------------
- 1 file changed, 18 insertions(+), 28 deletions(-)
+ kernel/sched/core.c  |   13 ++++++-------
+ kernel/sched/sched.h |    5 +++++
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1202,6 +1202,8 @@ static void put_ctx(struct perf_event_co
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -7119,9 +7119,8 @@ static inline int rt_effective_prio(stru
+ void set_user_nice(struct task_struct *p, long nice)
+ {
+ 	bool queued, running;
+-	int old_prio;
+-	struct rq_flags rf;
+ 	struct rq *rq;
++	int old_prio;
+ 
+ 	if (task_nice(p) == nice || nice < MIN_NICE || nice > MAX_NICE)
+ 		return;
+@@ -7129,7 +7128,9 @@ void set_user_nice(struct task_struct *p
+ 	 * We have to be careful, if called from sys_setpriority(),
+ 	 * the task might be in the middle of scheduling on another CPU.
+ 	 */
+-	rq = task_rq_lock(p, &rf);
++	CLASS(task_rq_lock, rq_guard)(p);
++	rq = rq_guard.rq;
++
+ 	update_rq_clock(rq);
+ 
+ 	/*
+@@ -7140,8 +7141,9 @@ void set_user_nice(struct task_struct *p
+ 	 */
+ 	if (task_has_dl_policy(p) || task_has_rt_policy(p)) {
+ 		p->static_prio = NICE_TO_PRIO(nice);
+-		goto out_unlock;
++		return;
  	}
++
+ 	queued = task_on_rq_queued(p);
+ 	running = task_current(rq, p);
+ 	if (queued)
+@@ -7164,9 +7166,6 @@ void set_user_nice(struct task_struct *p
+ 	 * lowered its priority, then reschedule its CPU:
+ 	 */
+ 	p->sched_class->prio_changed(rq, p, old_prio);
+-
+-out_unlock:
+-	task_rq_unlock(rq, p, &rf);
+ }
+ EXPORT_SYMBOL(set_user_nice);
+ 
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1630,6 +1630,11 @@ task_rq_unlock(struct rq *rq, struct tas
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, rf->flags);
  }
  
-+DEFINE_FREE(put_ctx, struct perf_event_context *, if (_T) put_ctx(_T))
++DEFINE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
++		    _T->rq = task_rq_lock(_T->lock, &_T->rf),
++		    task_rq_unlock(_T->rq, _T->lock, &_T->rf),
++		    struct rq *rq; struct rq_flags rf)
 +
- /*
-  * Because of perf_event::ctx migration in sys_perf_event_open::move_group and
-  * perf_pmu_migrate_context() we need some magic.
-@@ -4718,41 +4720,29 @@ find_get_context(struct task_struct *tas
- 		if (clone_ctx)
- 			put_ctx(clone_ctx);
- 	} else {
--		ctx = alloc_perf_context(task);
--		err = -ENOMEM;
--		if (!ctx)
--			goto errout;
--
--		err = 0;
--		mutex_lock(&task->perf_event_mutex);
--		/*
--		 * If it has already passed perf_event_exit_task().
--		 * we must see PF_EXITING, it takes this mutex too.
--		 */
--		if (task->flags & PF_EXITING)
--			err = -ESRCH;
--		else if (task->perf_event_ctxp)
--			err = -EAGAIN;
--		else {
--			get_ctx(ctx);
--			++ctx->pin_count;
--			rcu_assign_pointer(task->perf_event_ctxp, ctx);
--		}
--		mutex_unlock(&task->perf_event_mutex);
-+		struct perf_event_context *new __free(put_ctx) =
-+			alloc_perf_context(task);
-+		if (!new)
-+			return ERR_PTR(-ENOMEM);
- 
--		if (unlikely(err)) {
--			put_ctx(ctx);
-+		scoped_guard (mutex, &task->perf_event_mutex) {
-+			/*
-+			 * If it has already passed perf_event_exit_task().
-+			 * we must see PF_EXITING, it takes this mutex too.
-+			 */
-+			if (task->flags & PF_EXITING)
-+				return ERR_PTR(-ESRCH);
- 
--			if (err == -EAGAIN)
-+			if (task->perf_event_ctxp)
- 				goto retry;
--			goto errout;
-+
-+			ctx = get_ctx(no_free_ptr(new));
-+			++ctx->pin_count;
-+			rcu_assign_pointer(task->perf_event_ctxp, ctx);
- 		}
- 	}
- 
- 	return ctx;
--
--errout:
--	return ERR_PTR(err);
- }
- 
- DEFINE_CLASS(find_get_ctx, struct perf_event_context *,
+ static inline void
+ rq_lock_irqsave(struct rq *rq, struct rq_flags *rf)
+ 	__acquires(rq->lock)
 
 
