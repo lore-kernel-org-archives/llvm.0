@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D799182C6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B1C18AE5
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=oJyDWnF7S8lcaog4Xmhyr6vhDojPiq7m8dz3r+ZsZG4=; b=rdH9P5/MC3KcY+M1BubJnq2SDA
-	VDGeL/wvRJ516ylJciShUfk/lLKhhrHMf84ST4NUiKTy2ExpNVzaIsxOt0cQrm7+eX/8udNe5etuq
-	a8fdjA1aakVHh17wbvSw2yH8JlQoRaJkmSyuc03oqmoc7UOXpLHURSRxkh0dVmI/veHKlufAu0gpY
-	Ns3St7yJnjxp7C9LWCYQAjUcurSze2tx9FwQXkuQqZEP3Medv20JQgxJrWc9w8JIbLUqKZH2b4jfd
-	jiWzkPTbr4fSMmiKp/dav0iBFlH+nbdDr15ksYyL2JPyPxZmPbWGcP2XPV4+cHOFrrcX0V4f4DCw+
-	S6QpV56A==;
+	bh=kTQMzLiQOiysp6z8Xt3S6oOFWuHsLtjxBsNekM1iUPM=; b=FnsYw1rgaWsOiA0J8R1O2i1uX3
+	e/F70Qz8dzTuEl3kifFu3bO7NPhClNyjvgCn8IyOXFExymb1mJLxjsIE1VNsGjM+ZK5UdyD9Uvpmx
+	8MMlCDrtOaWNKsB/UhUOB/ZOYncIt9ndU2q2e+wO9d2EOd9MKV6zm5aJXolVKFVPXj7clRX/cVNos
+	UIEMW7CktYOkUgJCjntPeUklJKZwTRaqyQxMkh9aZMJURF4j5ZOLong2c9l7tRmNOL8u2yfvD2bky
+	pOzCMpkX6wckfonGJZWPeiND+Om9Xf6BVzQSrlpTGvnF4Bd5KmsJ+mb8KpkZEAGen/+v1YgVnR9df
+	hpzryTVw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0l-008kQR-0k;
-	Mon, 12 Jun 2023 09:38:55 +0000
+	id 1q8e0r-008kRc-24;
+	Mon, 12 Jun 2023 09:39:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E5AD302680;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3FBB83033BB;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 67EF730A77B58; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093538.942686455@infradead.org>
+	id D6BA430A77B71; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093540.324593804@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:33 +0200
+Date: Mon, 12 Jun 2023 11:07:52 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 20/57] sched: Simplify tg_set_cfs_bandwidth()
+Subject: [PATCH v3 39/57] perf: Simplify perf_event_*_userpage()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,99 +104,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/cpu.h |    2 ++
- kernel/sched/core.c |   42 +++++++++++++++++++++---------------------
- 2 files changed, 23 insertions(+), 21 deletions(-)
+ kernel/events/core.c |   30 ++++++++++--------------------
+ 1 file changed, 10 insertions(+), 20 deletions(-)
 
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -148,6 +148,8 @@ static inline int remove_cpu(unsigned in
- static inline void smp_shutdown_nonboot_cpus(unsigned int primary_cpu) { }
- #endif	/* !CONFIG_HOTPLUG_CPU */
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5971,10 +5971,10 @@ static void perf_event_init_userpage(str
+ 	struct perf_event_mmap_page *userpg;
+ 	struct perf_buffer *rb;
  
-+DEFINE_LOCK_GUARD_0(cpus_read_lock, cpus_read_lock(), cpus_read_unlock())
-+
- #ifdef CONFIG_PM_SLEEP_SMP
- extern int freeze_secondary_cpus(int primary);
- extern void thaw_secondary_cpus(void);
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10726,11 +10726,12 @@ static int tg_set_cfs_bandwidth(struct t
- 	 * Prevent race between setting of cfs_rq->runtime_enabled and
- 	 * unthrottle_offline_cfs_rqs().
+-	rcu_read_lock();
++	guard(rcu)();
+ 	rb = rcu_dereference(event->rb);
+ 	if (!rb)
+-		goto unlock;
++		return;
+ 
+ 	userpg = rb->user_page;
+ 
+@@ -5983,9 +5983,6 @@ static void perf_event_init_userpage(str
+ 	userpg->size = offsetof(struct perf_event_mmap_page, __reserved);
+ 	userpg->data_offset = PAGE_SIZE;
+ 	userpg->data_size = perf_data_size(rb);
+-
+-unlock:
+-	rcu_read_unlock();
+ }
+ 
+ void __weak arch_perf_update_userpage(
+@@ -6004,10 +6001,10 @@ void perf_event_update_userpage(struct p
+ 	struct perf_buffer *rb;
+ 	u64 enabled, running, now;
+ 
+-	rcu_read_lock();
++	guard(rcu)();
+ 	rb = rcu_dereference(event->rb);
+ 	if (!rb)
+-		goto unlock;
++		return;
+ 
+ 	/*
+ 	 * compute total_time_enabled, total_time_running
+@@ -6025,7 +6022,7 @@ void perf_event_update_userpage(struct p
+ 	 * Disable preemption to guarantee consistent time stamps are stored to
+ 	 * the user page.
  	 */
--	cpus_read_lock();
--	mutex_lock(&cfs_constraints_mutex);
-+	guard(cpus_read_lock)();
-+	guard(mutex)(&cfs_constraints_mutex);
-+
- 	ret = __cfs_schedulable(tg, period, quota);
- 	if (ret)
--		goto out_unlock;
+-	preempt_disable();
++	guard(preempt)();
+ 	++userpg->lock;
+ 	barrier();
+ 	userpg->index = perf_event_index(event);
+@@ -6043,9 +6040,6 @@ void perf_event_update_userpage(struct p
+ 
+ 	barrier();
+ 	++userpg->lock;
+-	preempt_enable();
+-unlock:
+-	rcu_read_unlock();
+ }
+ EXPORT_SYMBOL_GPL(perf_event_update_userpage);
+ 
+@@ -6061,27 +6055,23 @@ static vm_fault_t perf_mmap_fault(struct
+ 		return ret;
+ 	}
+ 
+-	rcu_read_lock();
++	guard(rcu)();
+ 	rb = rcu_dereference(event->rb);
+ 	if (!rb)
+-		goto unlock;
 +		return ret;
  
- 	runtime_enabled = quota != RUNTIME_INF;
- 	runtime_was_enabled = cfs_b->quota != RUNTIME_INF;
-@@ -10740,39 +10741,38 @@ static int tg_set_cfs_bandwidth(struct t
- 	 */
- 	if (runtime_enabled && !runtime_was_enabled)
- 		cfs_bandwidth_usage_inc();
--	raw_spin_lock_irq(&cfs_b->lock);
--	cfs_b->period = ns_to_ktime(period);
--	cfs_b->quota = quota;
--	cfs_b->burst = burst;
+ 	if (vmf->pgoff && (vmf->flags & FAULT_FLAG_WRITE))
+-		goto unlock;
++		return ret;
+ 
+ 	vmf->page = perf_mmap_to_page(rb, vmf->pgoff);
+ 	if (!vmf->page)
+-		goto unlock;
++		return ret;
+ 
+ 	get_page(vmf->page);
+ 	vmf->page->mapping = vmf->vma->vm_file->f_mapping;
+ 	vmf->page->index   = vmf->pgoff;
+ 
+-	ret = 0;
+-unlock:
+-	rcu_read_unlock();
 -
--	__refill_cfs_bandwidth_runtime(cfs_b);
--
--	/* Restart the period timer (if active) to handle new period expiry: */
--	if (runtime_enabled)
--		start_cfs_bandwidth(cfs_b);
- 
--	raw_spin_unlock_irq(&cfs_b->lock);
-+	scoped_guard (raw_spinlock_irq, &cfs_b->lock) {
-+		cfs_b->period = ns_to_ktime(period);
-+		cfs_b->quota = quota;
-+		cfs_b->burst = burst;
-+
-+		__refill_cfs_bandwidth_runtime(cfs_b);
-+
-+		/*
-+		 * Restart the period timer (if active) to handle new
-+		 * period expiry:
-+		 */
-+		if (runtime_enabled)
-+			start_cfs_bandwidth(cfs_b);
-+	}
- 
- 	for_each_online_cpu(i) {
- 		struct cfs_rq *cfs_rq = tg->cfs_rq[i];
- 		struct rq *rq = cfs_rq->rq;
--		struct rq_flags rf;
- 
--		rq_lock_irq(rq, &rf);
-+		guard(rq_lock_irq)(rq);
- 		cfs_rq->runtime_enabled = runtime_enabled;
- 		cfs_rq->runtime_remaining = 0;
- 
- 		if (cfs_rq->throttled)
- 			unthrottle_cfs_rq(cfs_rq);
--		rq_unlock_irq(rq, &rf);
- 	}
-+
- 	if (runtime_was_enabled && !runtime_enabled)
- 		cfs_bandwidth_usage_dec();
--out_unlock:
--	mutex_unlock(&cfs_constraints_mutex);
--	cpus_read_unlock();
- 
 -	return ret;
 +	return 0;
  }
  
- static int tg_set_cfs_quota(struct task_group *tg, long cfs_quota_us)
+ static void ring_buffer_attach(struct perf_event *event,
 
 
