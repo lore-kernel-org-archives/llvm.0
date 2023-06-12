@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A11F17FE3
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883E2182A3
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=u1PqToTv4tGu/wNo5qNbJmeSKvydQLpyPDESq1sFIz4=; b=mHcg7bsEVSqy84in9mzk14TWOQ
-	pUvBhruN8Ps4QU7UuXumepKGGKVTz/FqQ93C9z0RN9W8/VKYjDbgUgbBY3/hYg1MVwS8NQtUh+Xww
-	CynHYhgrEVuJvTSlRsgcVCBrRmckY/PSGTJojKVJLzgMoiN08hB1rnPRAI2jI27rXNxb+MIytDB8L
-	DnKzYQDZWDNXEVW7juyczQTLAGwCYM4mK+1HoLnrpThSbhUJZex38ZlRC9grt10V6FjhXAKdXPMZm
-	veFavMchJctFhw66K958zPJTPkM0N+TjTu3S9OTJzMVp9r9RRaE5dQ/R2ohI3MV52F1JIkwJGTg5z
-	XosuHW2w==;
+	bh=vDHS8Plr2cencdpiH/auo6E776oNoOhgYdcpKlgKc4Q=; b=XfspiS8Usbqb2dpT01GShTpXYF
+	0wwyX4AcSTYBMwe4XCE0JXv0GEXukM5Z+wJrQ5ydemtoQKvufj+e0HtUrkEv50Xk/7NS5f+kXoBH9
+	NRHSIXz+gP5a9fY839hRRMg3XMU8GiI1b3Pt7sMPV4OqaS+t6EGwmATXLiqnN97MCbKsORuHO2Pr8
+	vz3ITtR3OFV8f2JSdzAkJYccKWoz7g4QT5P8RYF55XvZaHjj/8iBTBPAQu9E+hOhqdBtj1hgmbPlJ
+	c78PyIoTct3THwyJGFh1bmBuUYmoopUkjAyRnngrF2sMB5pJoA+wZWUNb+w3pp3J3RKYPSrqc3iKz
+	xqluhn6g==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0s-008kRe-1v;
-	Mon, 12 Jun 2023 09:39:08 +0000
+	id 1q8e0k-008kQ6-1x;
+	Mon, 12 Jun 2023 09:38:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FC233033F3;
-	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F14A83031B3;
+	Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id E65E130A77B74; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093540.564584285@infradead.org>
+	id 53B9E30A77B56; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093538.640502622@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:55 +0200
+Date: Mon, 12 Jun 2023 11:07:29 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 42/57] perf: Simplify perf_iterate_sb()
+Subject: [PATCH v3 16/57] sched: Simplify sched_{set,get}affinity()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,43 +104,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
+Use guards to reduce gotos and simplify control flow.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ kernel/sched/core.c |   53 +++++++++++++---------------------------------------
+ 1 file changed, 14 insertions(+), 39 deletions(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7871,8 +7871,8 @@ perf_iterate_sb(perf_iterate_f output, v
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8258,39 +8258,24 @@ long sched_setaffinity(pid_t pid, const
  {
- 	struct perf_event_context *ctx;
+ 	struct affinity_context ac;
+ 	struct cpumask *user_mask;
+-	struct task_struct *p;
+ 	int retval;
  
 -	rcu_read_lock();
--	preempt_disable();
-+	guard(rcu)();
-+	guard(preempt)();
+-
+-	p = find_process_by_pid(pid);
+-	if (!p) {
+-		rcu_read_unlock();
++	CLASS(find_get_task, p)(pid);
++	if (!p)
+ 		return -ESRCH;
+-	}
  
- 	/*
- 	 * If we have task_ctx != NULL we only notify the task context itself.
-@@ -7881,7 +7881,7 @@ perf_iterate_sb(perf_iterate_f output, v
- 	 */
- 	if (task_ctx) {
- 		perf_iterate_ctx(task_ctx, output, data, false);
--		goto done;
-+		return;
+-	/* Prevent p going away */
+-	get_task_struct(p);
+-	rcu_read_unlock();
+-
+-	if (p->flags & PF_NO_SETAFFINITY) {
+-		retval = -EINVAL;
+-		goto out_put_task;
+-	}
++	if (p->flags & PF_NO_SETAFFINITY)
++		return -EINVAL;
+ 
+ 	if (!check_same_owner(p)) {
+-		rcu_read_lock();
+-		if (!ns_capable(__task_cred(p)->user_ns, CAP_SYS_NICE)) {
+-			rcu_read_unlock();
+-			retval = -EPERM;
+-			goto out_put_task;
+-		}
+-		rcu_read_unlock();
++		guard(rcu)();
++		if (!ns_capable(__task_cred(p)->user_ns, CAP_SYS_NICE))
++			return -EPERM;
  	}
  
- 	perf_iterate_sb_cpu(output, data);
-@@ -7889,9 +7889,6 @@ perf_iterate_sb(perf_iterate_f output, v
- 	ctx = rcu_dereference(current->perf_event_ctxp);
- 	if (ctx)
- 		perf_iterate_ctx(ctx, output, data, false);
--done:
--	preempt_enable();
--	rcu_read_unlock();
+ 	retval = security_task_setscheduler(p);
+ 	if (retval)
+-		goto out_put_task;
++		return retval;
+ 
+ 	/*
+ 	 * With non-SMP configs, user_cpus_ptr/user_mask isn't used and
+@@ -8300,8 +8285,7 @@ long sched_setaffinity(pid_t pid, const
+ 	if (user_mask) {
+ 		cpumask_copy(user_mask, in_mask);
+ 	} else if (IS_ENABLED(CONFIG_SMP)) {
+-		retval = -ENOMEM;
+-		goto out_put_task;
++		return -ENOMEM;
+ 	}
+ 
+ 	ac = (struct affinity_context){
+@@ -8313,8 +8297,6 @@ long sched_setaffinity(pid_t pid, const
+ 	retval = __sched_setaffinity(p, &ac);
+ 	kfree(ac.user_mask);
+ 
+-out_put_task:
+-	put_task_struct(p);
+ 	return retval;
  }
  
- /*
+@@ -8356,28 +8338,21 @@ SYSCALL_DEFINE3(sched_setaffinity, pid_t
+ long sched_getaffinity(pid_t pid, struct cpumask *mask)
+ {
+ 	struct task_struct *p;
+-	unsigned long flags;
+ 	int retval;
+ 
+-	rcu_read_lock();
+-
+-	retval = -ESRCH;
++	guard(rcu)();
+ 	p = find_process_by_pid(pid);
+ 	if (!p)
+-		goto out_unlock;
++		return -ESRCH;
+ 
+ 	retval = security_task_getscheduler(p);
+ 	if (retval)
+-		goto out_unlock;
++		return retval;
+ 
+-	raw_spin_lock_irqsave(&p->pi_lock, flags);
++	guard(raw_spinlock_irqsave)(&p->pi_lock);
+ 	cpumask_and(mask, &p->cpus_mask, cpu_active_mask);
+-	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+ 
+-out_unlock:
+-	rcu_read_unlock();
+-
+-	return retval;
++	return 0;
+ }
+ 
+ /**
 
 
