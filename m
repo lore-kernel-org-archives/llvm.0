@@ -1,32 +1,32 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405B018AF0
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3AA18AF0
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=i6isNClAHvIMw2+OzbyxD8vRwSg4Nx0nqjzFU0CtSfM=; b=MxrQC5up24n4fUnoCZs9xhGydj
-	WPiaUY1fVHgP0zt4SgHjFl9bU1FTswRc5S3GTdIwagtnGxmM8g/mVm8h6tFslA0BkAIHCS0lsmsxf
-	mXYApR3w+00dThAGwRw5SSsaVtCEesX57GFzuJg1kHrKYomu8aDdoUGY1JDUE8JBHipCfa92Ifv/r
-	zd+VuHJHkrbYFig5uYcq1Hizv1HY2WFQ43Hgl/mswdSuUFAi9hjrs2LMVRGruHQWcuZ+8W1Fu1Q+7
-	OvClSB+9TLTaaO7D8ryJgXgnOZRmNV9glpRBLCdH+94Z9Be2B+yVwhI1KhGtwMx58ouJ9xNIuEfjs
-	v+1zP2IQ==;
+	bh=LlQbmNANbazrx11NDWgZGA+KsXoINGT+PoaKYdOA2yY=; b=FAhhJcL5wzXpd6/fePyByMHlGt
+	fkY+cHPA6B6pRWa2NAXR0yXWtu23wEpGEkpHmsxg7Y7bmjTCycz3uD4SRu3giSJxsLax8ExHTqJMo
+	Fz1W4BW9ceAlCjfjf5iVusL/5gEkawP+3GN9Ff6xAxCcRGnC1vLTdTw4wd6ZXL8IpF1kM6Dpc03SL
+	UdM9gMNV/IP1lr81r5RrkycCUd+hpHWPmzNYJ44TYZEAsY5+rqsBe+NiSCpDjijseaGTSWZjR5iYi
+	9rhl+YpYvMKWtQXK3DRaHpkJQYxBNriEkyQ39xhPuoEDc+OeEH5pE3OpTYpp5HvZot7wCaROGgEVL
+	aryp95oQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1q8e0v-002NIX-7L; Mon, 12 Jun 2023 09:39:05 +0000
+	id 1q8e12-002NTc-6H; Mon, 12 Jun 2023 09:39:12 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5937130341E;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7840030615C;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id 0DD7E30A79080; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
-Message-ID: <20230612093540.931189374@infradead.org>
+	id 3CAAD30A7A29D; Mon, 12 Jun 2023 11:38:49 +0200 (CEST)
+Message-ID: <20230612093541.598260416@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:08:00 +0200
+Date: Mon, 12 Jun 2023 11:08:09 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -93,7 +93,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 47/57] perf: Simplify perf_pmu_register()
+Subject: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -106,101 +106,34 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+ kernel/events/core.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -11344,22 +11344,23 @@ void __perf_pmu_unregister(struct pmu *p
- 	free_pmu_context(pmu);
- }
+@@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
+ 	int err, cpu;
  
--int perf_pmu_register(struct pmu *pmu, const char *name, int type)
-+DEFINE_FREE(pmu_unregister, struct pmu *, if (_T) __perf_pmu_unregister(_T))
-+
-+int perf_pmu_register(struct pmu *_pmu, const char *name, int type)
- {
- 	int cpu, ret, max = PERF_TYPE_MAX;
+ restart:
+-	rcu_read_lock();
++	/* cannot have a label in front of a decl */;
++	guard(rcu)();
+ 	list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry) {
+ 		/*
+ 		 * For per-CPU events, we need to make sure that neither they
+@@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
+ 			continue;
  
--	pmu->type = -1;
-+	_pmu->type = -1;
-+
-+	guard(mutex)(&pmus_lock);
-+	struct pmu *pmu __free(pmu_unregister) = _pmu;
- 
--	mutex_lock(&pmus_lock);
--	ret = -ENOMEM;
- 	pmu->pmu_disable_count = alloc_percpu(int);
- 	if (!pmu->pmu_disable_count)
--		goto unlock;
-+		return -ENOMEM;
- 
--	if (WARN_ONCE(!name, "Can not register anonymous pmu.\n")) {
--		ret = -EINVAL;
--		goto free;
--	}
-+	if (WARN_ONCE(!name, "Can not register anonymous pmu.\n"))
-+		return -EINVAL;
- 
- 	pmu->name = name;
- 
-@@ -11368,7 +11369,7 @@ int perf_pmu_register(struct pmu *pmu, c
- 
- 	ret = idr_alloc(&pmu_idr, pmu, max, 0, GFP_KERNEL);
- 	if (ret < 0)
--		goto free;
-+		return ret;
- 
- 	WARN_ON(type >= 0 && ret != type);
- 
-@@ -11377,13 +11378,12 @@ int perf_pmu_register(struct pmu *pmu, c
- 	if (pmu_bus_running && !pmu->dev) {
- 		ret = pmu_dev_alloc(pmu);
- 		if (ret)
--			goto free;
-+			return ret;
+ 		err = cpu_function_call(cpu, __perf_pmu_output_stop, event);
+-		if (err == -EAGAIN) {
+-			rcu_read_unlock();
++		if (err == -EAGAIN)
+ 			goto restart;
+-		}
  	}
- 
--	ret = -ENOMEM;
- 	pmu->cpu_pmu_context = alloc_percpu(struct perf_cpu_pmu_context);
- 	if (!pmu->cpu_pmu_context)
--		goto free;
-+		return -ENOMEM;
- 
- 	for_each_possible_cpu(cpu) {
- 		struct perf_cpu_pmu_context *cpc;
-@@ -11423,21 +11423,14 @@ int perf_pmu_register(struct pmu *pmu, c
- 
- 	list_add_rcu(&pmu->entry, &pmus);
- 	atomic_set(&pmu->exclusive_cnt, 0);
--	ret = 0;
--unlock:
--	mutex_unlock(&pmus_lock);
--
--	return ret;
--
--free:
--	__perf_pmu_unregister(pmu);
--	goto unlock;
-+	no_free_ptr(pmu); // let it rip
-+	return 0;
+-	rcu_read_unlock();
  }
- EXPORT_SYMBOL_GPL(perf_pmu_register);
  
- void perf_pmu_unregister(struct pmu *pmu)
- {
--	mutex_lock(&pmus_lock);
-+	guard(mutex)(&pmus_lock);
- 	list_del_rcu(&pmu->entry);
- 
- 	/*
-@@ -11448,7 +11441,6 @@ void perf_pmu_unregister(struct pmu *pmu
- 	synchronize_rcu();
- 
- 	__perf_pmu_unregister(pmu);
--	mutex_unlock(&pmus_lock);
- }
- EXPORT_SYMBOL_GPL(perf_pmu_unregister);
- 
+ /*
 
 
