@@ -1,58 +1,59 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4377C1F18A
-	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 16:27:50 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5319006e87.2
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:27:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1638EA8
+	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 16:38:35 +0000 (UTC)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso5326936e87.1
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:38:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686587268; x=1689179268;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQ64AB6vFE2gCnLICKj93uVfxKBboA+BfLd8wCYY+0E=;
-        b=GGYYVsoEcCvOtMCbQCEGpMUTlLitinee+4cI9TY/ECPn0E8/1r157Y1iWtRQZ5Cxac
-         YySzailK3aA1bQM+Cjs0E12G9OqfTX3Z3pQzA5iBMVhUQanNMp1U2QAnfBSSY2BGgPBq
-         0Sf9MB5K4qnDVr0F92Hc/BAulYDYNJRzwbr0Q=
+        d=linux-foundation.org; s=google; t=1686587913; x=1689179913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZkQkCR0zK+G1VvzG47ybOhl6nFuB5nGWY9v59LgjCEc=;
+        b=TFz7syu073g1TLL4KeZsNwWe7UtqoiPAh7S+IiXwa07W3+rqjKn/Enyh/XB3TkuP4S
+         TqB2x8FBNEMLQj1VpMYL5A0l0usDika4psdZfJU7OzYWtTARLtsTHtsmy1KIWkni4ZRV
+         AZVkJOdwOkptzTXP/yS253RHdR8qjkwoAwBik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686587268; x=1689179268;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XQ64AB6vFE2gCnLICKj93uVfxKBboA+BfLd8wCYY+0E=;
-        b=PTqgXXy4O7gigtnrIdor8iXbxqO8isQjYzNMfsL9D+KrE8JCWfDLW98YrjUtCuIxSm
-         oaVcN9rI9IMPwG/FE8Xwh/IsFdFxSRQY/3+1IyFF9P5YJZGst+a7pG2zlXpi2ymtwycr
-         yGUmQtfVpKFUky25j3WEUVzw57XRQx0CuIOcmHkxihrmXELiNlJjzxhlz37cPzpgvR5A
-         khangvZZZnHeAV7y8G03fK/Bceu9lft2Ntw7PKrreEwWWrjzSWQ1WiDmW3EIVHroJN2k
-         xPU5PFtMZUUT6/sqFKW0B5INfWQ0A+/xB0WHaH4WQCsVyNYy1mxrIWRxpVxmtBmH6gfl
-         fdIQ==
-X-Gm-Message-State: AC+VfDzTsEXJVqHibUZRIYglrB6nSe3zwEyu8RZ+wX6aXwgvd4zcXiCd
-	Z3+YKTmuW8EKLLz568N3aB2NM9K2XVHGL0e7bwubMclN
-X-Google-Smtp-Source: ACHHUZ6LY8n+cUvuw2Tomt9rASsZD4ADnSUW+yI/Zj+oUu7VBM8wi30xM1N2mB5wsTOuBOnRP3fI9g==
-X-Received: by 2002:a2e:88d3:0:b0:2a8:ad36:f8ca with SMTP id a19-20020a2e88d3000000b002a8ad36f8camr3391756ljk.14.1686587267906;
-        Mon, 12 Jun 2023 09:27:47 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170906684d00b0096f7500502csm5429349ejs.199.2023.06.12.09.27.46
+        d=1e100.net; s=20221208; t=1686587913; x=1689179913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZkQkCR0zK+G1VvzG47ybOhl6nFuB5nGWY9v59LgjCEc=;
+        b=CiQKfc2L58mknvMvtWZoi+Bm8K1E2NKxd/MFlFTuryvERXLh6GeBO5ddYYr7QmUr6H
+         zloS/GXjbTOZ7rTP4bPEcvSfWtJ+N97oAUzpi7GQPWYj5oWJoFGwvW+f7Vr0K+tunZl4
+         JRDwm124vAM2FxQ5fbOhuF3YZsqine9Q3PfraoY3QNltlAEAXBPSp9mudKKJdKtDBTJF
+         D1gtHvLhipVHduQGGfdXENsi5EpW8GNyOg1VxG//Z38d+jLGQ2JDxjvLv3YUNKWWVdOF
+         bmMD+jf95QWVZD9iExh0/2EecriWM1M98p2oEE+TrrhenbkOoAmOq8ctM6G7oCPVSn5I
+         rtxw==
+X-Gm-Message-State: AC+VfDz3KCNj4wsz6I9T+o1hf7lRO+EKUfSIAxI6IBEkffOZwdjCHzE8
+	zUkq2a4pCNnziwwzvfDoatrMQAnU/GsjCRj7p8dFz+mX
+X-Google-Smtp-Source: ACHHUZ6T9CwbTUoyFhoVWCc3AqM9wWGtDWrWQQWGXEHUaAS4PwAty37/3Teqe9Lohq6rChuVB3I9UA==
+X-Received: by 2002:a05:6512:54b:b0:4ed:b061:18ee with SMTP id h11-20020a056512054b00b004edb06118eemr4815762lfl.22.1686587913653;
+        Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id z14-20020a19f70e000000b004eeec1261ecsm1478879lfe.31.2023.06.12.09.38.33
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 09:27:47 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f732d37d7bso34456945e9.0
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:27:46 -0700 (PDT)
-X-Received: by 2002:a05:6402:6d3:b0:514:93b2:f3b1 with SMTP id
- n19-20020a05640206d300b0051493b2f3b1mr5343956edy.40.1686587246075; Mon, 12
- Jun 2023 09:27:26 -0700 (PDT)
+        Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5336392e87.2
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:38:33 -0700 (PDT)
+X-Received: by 2002:a19:e30c:0:b0:4f6:1779:b1c1 with SMTP id
+ a12-20020a19e30c000000b004f61779b1c1mr5015246lfh.48.1686587892415; Mon, 12
+ Jun 2023 09:38:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230612090713.652690195@infradead.org> <20230612093539.895253662@infradead.org>
-In-Reply-To: <20230612093539.895253662@infradead.org>
+References: <20230612090713.652690195@infradead.org>
+In-Reply-To: <20230612090713.652690195@infradead.org>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 12 Jun 2023 09:27:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
-Message-ID: <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
-Subject: Re: [PATCH v3 33/57] perf: Simplify perf_adjust_freq_unthr_context()
+Date: Mon, 12 Jun 2023 09:37:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj3jV+v63RA30eVpjHVyrGmmTF7d3ajdV=1wBU=5OHa=A@mail.gmail.com>
+Message-ID: <CAHk-=wj3jV+v63RA30eVpjHVyrGmmTF7d3ajdV=1wBU=5OHa=A@mail.gmail.com>
+Subject: Re: [PATCH v3 00/57] Scope-based Resource Management
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com, 
 	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
@@ -76,30 +77,32 @@ Cc: keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com,
 	linux-security-module@vger.kernel.org, tglx@linutronix.de, 
 	ravi.bangoria@amd.com, error27@gmail.com, luc.vanoostenryck@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This seems to have the same pattern that I *think* it's entirely
-broken, ie you are doing that
+On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> These are by no means 'complete' convertions, I've mostly focussed on fun=
+ctions
+> that had 'goto' in them. Since that's a large part of why I started on al=
+l this.
 
-                guard(perf_pmu_disable)(event->pmu);
+So I found what looks like two patches being completely broken because
+the conversion was fundamentally misguided.
 
-inside a loop, and then you are randomly just removing the
+And honestly, by the end of walking through the patches I was just
+scanning so quickly that I might have missed some.
 
-               perf_pmu_enable(event->pmu);
+Let's make the rule be that
 
-at the end of the loop, or when you do a "continue"./
+ - max 10 patches in the series so that I think they were actually
+thought about, and people can actually review them
 
-That's not right.
+ - only clear "goto out of scope" conversions. When you see a
+"continue" or a "goto repeat", you TAKE A BIG STEP BACK.
 
-The thing does not not go out of scope when the loop *iterates*.
+Because this is all clever, and I am now happy with the syntax, but I
+am *not* happy with that 60-patch monster series with what looks like
+horrible bugs.
 
-It only goes out of scope when the loop *ends*.
-
-Big difference as far as cleanup goes.
-
-So you have not "simplified" the unlocking code, you've broken it. Now
-it no longer locks and unlocks for each iteration, it tries to re-lock
-every time.
-
-Or have I mis-understood something completely?
-
-               Linus
+             Linus
