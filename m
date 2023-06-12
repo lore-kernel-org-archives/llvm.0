@@ -1,33 +1,33 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683FF17AA3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A11F17FE3
 	for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 09:39:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=RF7AlZRmRPruwiE6WSJ8fgsVWKVvpbmYdppCd/KBEkQ=; b=RnySH+cxU2P4SRyBNjFB/FhqFH
-	0/24hRC8l1Y+RzqS9t+LLJgYTbpemr3uJbKUzAhz4nDyzkTPxi01OU3HfrP75fxls9S78Wd7ksLPt
-	/IGrVYxHpIECVcQ0BB0l79olUuLK3KmcgCUPsADYEITDkzUhiby4ZeFVXhVHF+xfIHbIUmN1Lzu8A
-	4hXtsrfh7u8Q7WjPFmeWG58TDtMn+x8XnoBzWdX7mctC0o//NiJ96Wm8JS4EP+QDO3AE+Uq8F1iAp
-	E1B5jo2/jWWweXA0Icm938LOtGEZZ3OkgMyx6u7AwZEvVq/NZqo4EN5kDmmfwdXP6QQ4WokIoemI6
-	Sv19YETA==;
+	bh=u1PqToTv4tGu/wNo5qNbJmeSKvydQLpyPDESq1sFIz4=; b=mHcg7bsEVSqy84in9mzk14TWOQ
+	pUvBhruN8Ps4QU7UuXumepKGGKVTz/FqQ93C9z0RN9W8/VKYjDbgUgbBY3/hYg1MVwS8NQtUh+Xww
+	CynHYhgrEVuJvTSlRsgcVCBrRmckY/PSGTJojKVJLzgMoiN08hB1rnPRAI2jI27rXNxb+MIytDB8L
+	DnKzYQDZWDNXEVW7juyczQTLAGwCYM4mK+1HoLnrpThSbhUJZex38ZlRC9grt10V6FjhXAKdXPMZm
+	veFavMchJctFhw66K958zPJTPkM0N+TjTu3S9OTJzMVp9r9RRaE5dQ/R2ohI3MV52F1JIkwJGTg5z
+	XosuHW2w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q8e0m-008kQs-39;
-	Mon, 12 Jun 2023 09:39:01 +0000
+	id 1q8e0s-008kRe-1v;
+	Mon, 12 Jun 2023 09:39:08 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 280E63031E0;
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FC233033F3;
 	Mon, 12 Jun 2023 11:38:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-	id A1B8930A77B67; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
-Message-ID: <20230612093539.682563843@infradead.org>
+	id E65E130A77B74; Mon, 12 Jun 2023 11:38:48 +0200 (CEST)
+Message-ID: <20230612093540.564584285@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 12 Jun 2023 11:07:43 +0200
+Date: Mon, 12 Jun 2023 11:07:55 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: torvalds@linux-foundation.org,
  keescook@chromium.org,
@@ -94,7 +94,7 @@ Cc: masahiroy@kernel.org,
  ravi.bangoria@amd.com,
  error27@gmail.com,
  luc.vanoostenryck@gmail.com
-Subject: [PATCH v3 30/57] perf: Simplify: *perf_event_{dis,en}able*()
+Subject: [PATCH v3 42/57] perf: Simplify perf_iterate_sb()
 References: <20230612090713.652690195@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -107,95 +107,40 @@ Content-Type: text/plain; charset=UTF-8
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/events/core.c |   51 ++++++++++++++++++++++-----------------------------
- 1 file changed, 22 insertions(+), 29 deletions(-)
+ kernel/events/core.c |    9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -2415,7 +2415,7 @@ static void __perf_event_disable(struct
- 		update_cgrp_time_from_event(event);
+@@ -7871,8 +7871,8 @@ perf_iterate_sb(perf_iterate_f output, v
+ {
+ 	struct perf_event_context *ctx;
+ 
+-	rcu_read_lock();
+-	preempt_disable();
++	guard(rcu)();
++	guard(preempt)();
+ 
+ 	/*
+ 	 * If we have task_ctx != NULL we only notify the task context itself.
+@@ -7881,7 +7881,7 @@ perf_iterate_sb(perf_iterate_f output, v
+ 	 */
+ 	if (task_ctx) {
+ 		perf_iterate_ctx(task_ctx, output, data, false);
+-		goto done;
++		return;
  	}
  
--	perf_pmu_disable(event->pmu_ctx->pmu);
-+	guard(perf_pmu_disable)(event->pmu_ctx->pmu);
- 
- 	if (event == event->group_leader)
- 		group_sched_out(event, ctx);
-@@ -2424,8 +2424,6 @@ static void __perf_event_disable(struct
- 
- 	perf_event_set_state(event, PERF_EVENT_STATE_OFF);
- 	perf_cgroup_event_disable(event, ctx);
--
--	perf_pmu_enable(event->pmu_ctx->pmu);
+ 	perf_iterate_sb_cpu(output, data);
+@@ -7889,9 +7889,6 @@ perf_iterate_sb(perf_iterate_f output, v
+ 	ctx = rcu_dereference(current->perf_event_ctxp);
+ 	if (ctx)
+ 		perf_iterate_ctx(ctx, output, data, false);
+-done:
+-	preempt_enable();
+-	rcu_read_unlock();
  }
  
  /*
-@@ -2446,12 +2444,10 @@ static void _perf_event_disable(struct p
- {
- 	struct perf_event_context *ctx = event->ctx;
- 
--	raw_spin_lock_irq(&ctx->lock);
--	if (event->state <= PERF_EVENT_STATE_OFF) {
--		raw_spin_unlock_irq(&ctx->lock);
--		return;
-+	scoped_guard (raw_spinlock_irq, &ctx->lock) {
-+		if (event->state <= PERF_EVENT_STATE_OFF)
-+			return;
- 	}
--	raw_spin_unlock_irq(&ctx->lock);
- 
- 	event_function_call(event, __perf_event_disable, NULL);
- }
-@@ -2955,32 +2951,29 @@ static void _perf_event_enable(struct pe
- {
- 	struct perf_event_context *ctx = event->ctx;
- 
--	raw_spin_lock_irq(&ctx->lock);
--	if (event->state >= PERF_EVENT_STATE_INACTIVE ||
--	    event->state <  PERF_EVENT_STATE_ERROR) {
--out:
--		raw_spin_unlock_irq(&ctx->lock);
--		return;
--	}
-+	scoped_guard (raw_spinlock_irq, &ctx->lock) {
-+		if (event->state >= PERF_EVENT_STATE_INACTIVE ||
-+		    event->state <  PERF_EVENT_STATE_ERROR)
-+			return;
- 
--	/*
--	 * If the event is in error state, clear that first.
--	 *
--	 * That way, if we see the event in error state below, we know that it
--	 * has gone back into error state, as distinct from the task having
--	 * been scheduled away before the cross-call arrived.
--	 */
--	if (event->state == PERF_EVENT_STATE_ERROR) {
- 		/*
--		 * Detached SIBLING events cannot leave ERROR state.
-+		 * If the event is in error state, clear that first.
-+		 *
-+		 * That way, if we see the event in error state below, we know that it
-+		 * has gone back into error state, as distinct from the task having
-+		 * been scheduled away before the cross-call arrived.
- 		 */
--		if (event->event_caps & PERF_EV_CAP_SIBLING &&
--		    event->group_leader == event)
--			goto out;
-+		if (event->state == PERF_EVENT_STATE_ERROR) {
-+			/*
-+			 * Detached SIBLING events cannot leave ERROR state.
-+			 */
-+			if (event->event_caps & PERF_EV_CAP_SIBLING &&
-+			    event->group_leader == event)
-+				return;
- 
--		event->state = PERF_EVENT_STATE_OFF;
-+			event->state = PERF_EVENT_STATE_OFF;
-+		}
- 	}
--	raw_spin_unlock_irq(&ctx->lock);
- 
- 	event_function_call(event, __perf_event_enable, NULL);
- }
 
 
