@@ -1,73 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E749519511;
-	Mon, 12 Jun 2023 15:11:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9607BC433EF;
-	Mon, 12 Jun 2023 15:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686582684;
-	bh=eDgQQTnNXvtYnlfPivw1uJS5LUo+wBz13Eepr0vFzj0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gtt9xkuaBuj/OASEX1MDLGuhScD02hv5zKaedC0w53NvArXfbPKaWWj/7YRjCWnVT
-	 9KCLx0F/2qRd6wtKVh0HLe3gsszUNSbfathiYFvTM8rN+mBExF0C/c0gD190TEn0iK
-	 bl/jsqlhDN5w2A08kh8zgW6ClhAfKcam1gZW74KWX+zX1SRRuRciLPhoi+Q9kf4jSb
-	 MIewmmvZxFjTKjk1UA6BsZM92wfyxb0l57tdbcNWMUWaH2x00Uj5lvjiwHaW2CGRqx
-	 kv+vjAb5ntfUAQBir5A6N+yvb0hLD8GMR2KoQ7syobMSvIInoYeXq6Dhh/Mj6CZqxh
-	 b1VwIXItxfIJA==
-Date: Mon, 12 Jun 2023 16:11:20 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: kernelci: please upgrade clang-17
-Message-ID: <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk>
-References: <CAKwvOd=qxNfPDo-=bxzyzmY3YmsBtxv686rr9Q_thrfC6ni3eg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF2D1C757;
+	Mon, 12 Jun 2023 15:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686583850; x=1718119850;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hsY7cdk3+yXxCH81fXMhYa8Wte/52CPyooEnklUk1oA=;
+  b=kjUTK0RZs2TS96roXEsOI5Qflurpzz/p2xWCEwPeHMsKoxmw8Ru5FkMe
+   4lDHhf35Yz58NIhPDFGF5vkeYnSiG2e0A0j7y5PpZ1gZUqBFGrQK7AhiY
+   EJZcu52645oyViBc+j8fQA8GSuRi5tsiwf7AkEj142pas9d4avR/A84Jr
+   UtzLaIOBFNnwsKKZ1M5magbgv39kheJ6zrxB7E8VLJIpXRLAR4EkPIHP1
+   SxAIYNoUfenyVOfz8P+eIDPoX1BVrobLe0sZ8qiQ+gp/CYVVpjFCXfdGf
+   pGwsFKikJ3WPb9PLH4lYYMvaLOpyzoyUx7L6p+Oese1J4t34aAO48UzUm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360560512"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="360560512"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:30:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741070982"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="741070982"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 08:30:30 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q8jV0-0000Mi-0i;
+	Mon, 12 Jun 2023 15:30:30 +0000
+Date: Mon, 12 Jun 2023 23:29:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Gow <davidgow@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: [linux-next:master 4217/8413] lib/kunit/executor_test.c:138:4:
+ warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void
+ (*)(void *)') converts to incompatible function type
+Message-ID: <202306122325.N7YrihQV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HGnH2osC6wMqsFcL"
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=qxNfPDo-=bxzyzmY3YmsBtxv686rr9Q_thrfC6ni3eg@mail.gmail.com>
-X-Cookie: If it heals good, say it.
-
-
---HGnH2osC6wMqsFcL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 09, 2023 at 01:50:13PM -0700, Nick Desaulniers wrote:
-> Starting a new thread because gmail cannot handle replying to an email
-> w/ >45k warnings.
-> https://lore.kernel.org/llvm/6482b7dd.170a0220.a93c3.9102@mx.google.com/
->=20
-> instances of -Wbuiltin-macro-redefined have been fixed in ToT llvm.
-> Updating clang-17 should resolve most of the error spew.
->=20
-> Does kernel CI update ToT clang builds on a fixed cadence?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   53ab6975c12d1ad86c599a8927e8c698b144d669
+commit: 00e63f8afcfc6bf93d75141c51d35e8a40e86363 [4217/8413] kunit: executor_test: Use kunit_add_action()
+config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230612/202306122325.N7YrihQV-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e63f8afcfc6bf93d75141c51d35e8a40e86363
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 00e63f8afcfc6bf93d75141c51d35e8a40e86363
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
 
-The containers with the tools should be being rebuilt during the
-production update which normally happens every Monday.  There's some
-disruption at the minute due to some infrastructure rebuilding that's
-going on so today's update of the containers might be delayed.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306122325.N7YrihQV-lkp@intel.com/
 
---HGnH2osC6wMqsFcL
-Content-Type: application/pgp-signature; name="signature.asc"
+All warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   In file included from lib/kunit/executor.c:223:
+>> lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     138 |                         (kunit_action_t *)kfree,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSHNZcACgkQJNaLcl1U
-h9B5CQf/YylYbVq/TiEDK2iK2Nz6nl1YnYkSgEhUIlfPbAzqPd2bW5aZDGlVYRsX
-uaNpbKEECGumx773wKmYxVifE9IM/u4tHrbIehIhBN/Dt9ow24d0ZsSRaL3ZtTSu
-It1rJ26m21bGSXaXG8cvLmW/SZdjOhMtFlts1omrXgAg3jb+AC84EIBAPsYyHYTz
-KKtN61cugvycAbDV/n86HJetzOKln78UXHjmdc99bphNWr+kYczxQzLcSxMD57qM
-br6H+HIwFJQNCPQ2y7cxKbXokAGGT0I2+e7TOrL/i4Vd3wqqPmumYcNYU3/P6il1
-z4mTlFFpWjdI5ifBP3QylJJbwUUQ5g==
-=RPJH
------END PGP SIGNATURE-----
 
---HGnH2osC6wMqsFcL--
+vim +138 lib/kunit/executor_test.c
+
+   127	
+   128	/* Use the resource API to register a call to kfree(to_free).
+   129	 * Since we never actually use the resource, it's safe to use on const data.
+   130	 */
+   131	static void kfree_at_end(struct kunit *test, const void *to_free)
+   132	{
+   133		/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
+   134		if (IS_ERR_OR_NULL(to_free))
+   135			return;
+   136	
+   137		kunit_add_action(test,
+ > 138				(kunit_action_t *)kfree,
+   139				(void *)to_free);
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
