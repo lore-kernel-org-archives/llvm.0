@@ -1,56 +1,65 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F156523CD;
-	Tue, 13 Jun 2023 06:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686637242; x=1718173242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UM3IHuTsa6izrIPK7yHaYSJMoWtyJyQyl1XOgL5IY6g=;
-  b=jjPtLr6yee17BFO5ayDOktnSgknBEylQwBLzFr2ZeFK34LQGp93zgiYi
-   R14OEIKUE8YbOE+akuO7L1tuGsJmuV6h2Wc9tENB30Lcff9gHYi4EfADX
-   0WdWyH9iL1QS/KI+4x2gBtaLMdOzeuVP/SknpcbozUiD+FVZogbQ+HR+q
-   Z2OZ9T45lCbEg5so9bbnpaRKGIn7ziGTFSVceJqGS4wqpQM3ZDK3c5iYK
-   0cwjPiX9psIbVjMjpCkS56qwErFzJWPQu6orKWh83KbuoAZWiv9LrFf5u
-   y63rjDG7S2YV1NTigWgYI61xw9F8Bu4LKOGa7J9O0q3cajjYL383RSFml
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="357125174"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="357125174"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 23:19:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="781516543"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="781516543"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jun 2023 23:19:36 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8xNP-00013c-1j;
-	Tue, 13 Jun 2023 06:19:35 +0000
-Date: Tue, 13 Jun 2023 14:19:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
-	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Guru Das Srinagesh <quic_gurus@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: Re: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-Message-ID: <202306131424.QEYiIiQA-lkp@intel.com>
-References: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F1117D0
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 07:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tAKolwLuXUR1D5yD/hL0f+kZnHou+PxeYU9aqGSZlgk=; b=PJ7DjtI5p9Scuhe88BpMQDomP0
+	MKCJntJTn1U+Rd2ZhV3FQnt6v8jDArMbzoUNSNBw22KQvf4WZts+aU5TsuEO6LVgTBI9Lt5J5/tRM
+	J8ziNRHbscTBejaoYpXuU/l3qPuKSjn5T8wVUN8+JYdj713tuMnbHx+7gbgAdsmA8wZ38wg4ht6m7
+	i0+jX0ZKdElRGA4MizB5sMdH1s4BRkSbqJI4EUQFv5UwmALAHg55ZjQOv7/wSBKbBTi1uFQEMjskS
+	A/QCcZxrSOjGP5FrTd8O11G3S61ZxvJCh2x57TVAqR8kGkTdhlP7MuYlgXagHdz4r3FYQqRS+YNsG
+	xU47uqLA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1q8yXj-003evD-4P; Tue, 13 Jun 2023 07:34:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 03F87300023;
+	Tue, 13 Jun 2023 09:34:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id DB9FC262C92A1; Tue, 13 Jun 2023 09:34:15 +0200 (CEST)
+Date: Tue, 13 Jun 2023 09:34:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: torvalds@linux-foundation.org, keescook@chromium.org,
+	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
+	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
+	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <20230613073415.GP4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061226-grumpily-entire-f06a@gregkh>
+ <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+ <2023061217-mutable-curry-c2ac@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,80 +68,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
+In-Reply-To: <2023061217-mutable-curry-c2ac@gregkh>
 
-Hi Gokul,
+On Mon, Jun 12, 2023 at 05:44:59PM +0200, Greg KH wrote:
 
-kernel test robot noticed the following build errors:
+> Then in the last part of the file, I abuse the DEFINE_FREE() to handle a
+> special case of removing a proc file if things go bad (and add a
+> DEFINE_FREE() for class_destroy(), which should go into
+> include/device/class.h.
+> 
+> I've only test-built it, but is this the proper use of DEFINE_FREE()?
+> There wasn't much documentation :)
 
-[auto build test ERROR on 1ca04f21b204e99dd704146231adfb79ea2fb366]
+Yes, this looks right.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gokul-krishna-Krishnakumar/remoteproc-Introduce-traces-for-remoteproc-events/20230613-060527
-base:   1ca04f21b204e99dd704146231adfb79ea2fb366
-patch link:    https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris%40quicinc.com
-patch subject: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230613/202306131424.QEYiIiQA-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout 1ca04f21b204e99dd704146231adfb79ea2fb366
-        b4 shazam https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> To be fair the end-result of misc_init() is much nicer and cleaner and
+> "obviously correct", which is good, even with the crazy proc file mess
+> in it.  So I like the idea overall, need to figure out when to use
+> DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131424.QEYiIiQA-lkp@intel.com/
+CLASS is meant for things that have an obvious contructor as well as a
+destructor, that always go together. Like for example the lock things,
+they always pair a lock and unlock. But also things like:
+fdget()+fdput(), these can also always be paired, and if you want the
+file to escape you simply take yet another reference to prevent the
+fdput() from being the final.
 
-All errors (new ones prefixed by >>):
+> Also, you can't put a DEFINE_FREE() within a function declaration, which
+> I guess makes sense, but the build warning is very odd when you attempt
+> it, mentioning an "invalid storage class".  Is that supposed to be able
+> to work?
 
->> ld.lld: error: undefined symbol: __tracepoint_rproc_start_event
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_start_event
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: __tracepoint_rproc_load_segment_event
-   >>> referenced by remoteproc_internal.h:178 (drivers/remoteproc/remoteproc_internal.h:178)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
-   >>> referenced by remoteproc_internal.h:178 (drivers/remoteproc/remoteproc_internal.h:178)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_load_segment_event
-   >>> referenced by remoteproc_tracepoints.h:17 (include/trace/events/remoteproc_tracepoints.h:17)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:17 (include/trace/events/remoteproc_tracepoints.h:17)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __tracepoint_rproc_stop_event
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_stop_event
-   >>> referenced by remoteproc_tracepoints.h:82 (include/trace/events/remoteproc_tracepoints.h:82)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:82 (include/trace/events/remoteproc_tracepoints.h:82)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
+No, DEFINE_FREE() and DEFINE_CLASS() end up defining a bunch of inline
+functions, which can't be done inside another function.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If only C would have lambda functions ... alas.
+
+> @@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
+>  	return NULL;
+>  }
+>  
+> +DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
+
+Documentation for class_create() says it will return ERR_PTR(), so then
+this should be something like:
+
+DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
+
+> +DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
+>  static int __init misc_init(void)
+>  {
+> +	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
+> +	struct class *c __free(class_destroy) = class_create("misc");
+>  
+> +	if (IS_ERR(c))
+> +		return PTR_ERR(c);
+>  
+>  	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+> +		return -EIO;
+>  
+> +	c->devnode = misc_devnode;
+> +
+> +	misc_class = no_free_ptr(c);
+> +	no_free_ptr(ret);
+> +
+> +	return 0;
+>  }
+
+And yes, this does look nicer.
