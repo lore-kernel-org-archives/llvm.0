@@ -1,63 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6026730B99;
-	Tue, 13 Jun 2023 17:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256E433E3;
+	Tue, 13 Jun 2023 17:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686677240; x=1718213240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SlHj7S5jOOv05K4dEGQA+cB2WN4KQBOtvdjDfWv8PXg=;
-  b=TlOy0sePIFbClb5r/VcgsA2JxadQe2XsYuVXQvRRMtLZqX5CDGw36yKy
-   udMYweFAVZz40Mk4O8a0dyCAcWAA0dlhH3VyLiW8vy4lVUxh3ALMVnGYc
-   XDazfFaI/HHjPisjHGpvcamrMiklW5sJmefyeQzOyKQYzqea5uiH6m1tA
-   yExstjWA/AWWASPBIpZWz+6HKx7z/rh4DMYiZsuA7t31RwItdWtZOit/g
-   ZU6wHGE4MHBRAwAhCjl3H31M57h91iuQph3V1T5dJ2elcQOtr90FUEGQT
-   tLH/zNoy5DjUCk0Fca+aBQgTX/skaTKJ/6zHlTTKL0amYzp6gzB0mO97/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361774276"
+  t=1686679157; x=1718215157;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=L5aXTjwA3/KyVEnPpEew1lzmOdMTVg7qLN01WRZQQZE=;
+  b=UvFc1/we8T2uCJdE8Kbcdrxj1W4bzzdq/kbGI1iolpmHr9ygAKcHJAYx
+   m4ZixMEYeX1Mv4kqztXtKrLOw0jIjMbR1yhFnIMIHhE7bPV78Y83oBraz
+   5d5MPUqw7iErh76RVFP8X1uZugtTe2k27B1OHT/mN2Bkfa+wjpYKJnHUX
+   xI7g3JuUuA+5n2Y+UAhmFB/TfGJzYiGM0KVUYAhgou7vDVPn0mRZyXv6x
+   ysFwOAsJaMKTMFh+geM7nOnynFObHRWuZXqrMra1ILuQw7OQQRLt85AxM
+   eaTf9ZdIbA7rUbzajDskkFdCVjD2ZPgSMBKRwSOOiJ+sYFXbHbXVuu7R8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348070770"
 X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="361774276"
+   d="scan'208";a="348070770"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:27:19 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:59:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="885923880"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="885934928"
 X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="885923880"
+   d="scan'208";a="885934928"
 Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2023 10:27:12 -0700
+  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2023 10:59:14 -0700
 Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q97nT-0001bK-2i;
-	Tue, 13 Jun 2023 17:27:11 +0000
-Date: Wed, 14 Jun 2023 01:26:22 +0800
+	id 1q98IT-0001ce-3A;
+	Tue, 13 Jun 2023 17:59:13 +0000
+Date: Wed, 14 Jun 2023 01:58:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lorenz Bauer <lmb@isovalent.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Joe Stringer <joe@wand.net.nz>, Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
-Subject: Re: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-Message-ID: <202306140012.hLncDFR5-lkp@intel.com>
-References: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [jirislaby:devel 35/55] drivers/tty/serial/serial_port.c:23:3:
+ error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202306140146.kUiRwwJQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,53 +47,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
 
-Hi Lorenz,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
-base:   25085b4e9251c77758964a8e8651338972353642
-patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613%40isovalent.com
-patch subject: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-config: arm-randconfig-r016-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140012.hLncDFR5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   f8c938871c78b165f3123967084c0f7b4f64a439
+commit: f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4 [35/55] tty: serial, use kfifo
+config: arm-randconfig-r024-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140146.kUiRwwJQ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        git checkout 25085b4e9251c77758964a8e8651338972353642
-        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306140012.hLncDFR5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140146.kUiRwwJQ-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp1 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp4 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp7 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp10 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp13 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp16 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp19 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp22 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp25 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp28 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp31 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp34 (section: .init.text)
->> ERROR: modpost: "inet_ehashfn" [net/dccp/dccp_ipv4.ko] undefined!
+>> drivers/tty/serial/serial_port.c:23:3: error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   uart_circ_chars_pending(&port->state->xmit);
+                   ^
+>> drivers/tty/serial/serial_port.c:23:41: error: no member named 'xmit' in 'struct uart_state'
+                   uart_circ_chars_pending(&port->state->xmit);
+                                            ~~~~~~~~~~~  ^
+   2 errors generated.
+
+
+vim +/uart_circ_chars_pending +23 drivers/tty/serial/serial_port.c
+
+84a9582fd20306 Tony Lindgren 2023-05-25  18  
+84a9582fd20306 Tony Lindgren 2023-05-25  19  /* Only considers pending TX for now. Caller must take care of locking */
+84a9582fd20306 Tony Lindgren 2023-05-25  20  static int __serial_port_busy(struct uart_port *port)
+84a9582fd20306 Tony Lindgren 2023-05-25  21  {
+84a9582fd20306 Tony Lindgren 2023-05-25  22  	return !uart_tx_stopped(port) &&
+84a9582fd20306 Tony Lindgren 2023-05-25 @23  		uart_circ_chars_pending(&port->state->xmit);
+84a9582fd20306 Tony Lindgren 2023-05-25  24  }
+84a9582fd20306 Tony Lindgren 2023-05-25  25  
+
+:::::: The code at line 23 was first introduced by commit
+:::::: 84a9582fd203063cd4d301204971ff2cd8327f1a serial: core: Start managing serial controllers to enable runtime PM
+
+:::::: TO: Tony Lindgren <tony@atomide.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
