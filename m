@@ -1,46 +1,54 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854FC8BE0;
-	Tue, 13 Jun 2023 07:42:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686642164; x=1718178164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rniLsWnACjZZ6Kmsz9b14uy1hoecAmhH7gTtOx3cOo8=;
-  b=CPJi4CO9yc87+n+CU3sm4LOM6RjFK4IzF0DPwP+XNP0kVrlNb2gJNSQh
-   AO82jNHttcd3IyizBJHJ36JWDq7kioJKLhlR0xXmX16J652tVrz/CT5tz
-   mWCd8q2zL7sUEJ5gzUrd7jpgkCqEIexEC+IheICgHA97NrmThv4fnsnD+
-   j+7mBrY2OADNO9ZRuEi5/L720rNPXZVUBqSQ9bfL0nTLatUQpuRoqncPg
-   vjj9svkXIM4Bt0ZZEVRd65ZXUImKw/gxL6G8Z5qtzXmwdI/Sq7pvfMKgE
-   xmDIXvU+XDE/FDcap8JWZoz5P6QkVDv5rNIF4kRhRe0RhSBzOjtiyagjt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="424139694"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="424139694"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 00:42:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="744601046"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="744601046"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2023 00:42:41 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8yfp-00016Z-0i;
-	Tue, 13 Jun 2023 07:42:41 +0000
-Date: Tue, 13 Jun 2023 15:42:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Seung-Woo Kim <sw0312.kim@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Florian Fainelli <f.fainelli@gmail.com>
-Subject: lib/test_bitmap.c:926:2: error: call to '__compiletime_assert_190'
- declared with 'error' attribute: BUILD_BUG_ON failed:
- !__builtin_constant_p(res)
-Message-ID: <202306131550.LosyU9Kt-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E53E323C
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 07:50:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E75BC433D2;
+	Tue, 13 Jun 2023 07:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1686642631;
+	bh=goV8gP/KHbMbiDcM/4DeoeQ71fS5d2keb4GB/l1HI1s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pjHMiqIgYrYF+L+Wjiij+dvaTaGD/brRW3tDy2aXuD04wH0r41aqKdSqN9sOvWh0x
+	 xCel0co6I2RgxXNs6fdhwx5nIhmSUNB0GyCSE0HhYV6XJ6/wB0c1ff9QBlPhyR7hpv
+	 jdIDB9/uE7u61z8T2RC3V6WuiqbKWjqnT8t7+CYg=
+Date: Tue, 13 Jun 2023 09:50:28 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: torvalds@linux-foundation.org, keescook@chromium.org,
+	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
+	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
+	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <2023061333-imposing-shortly-6803@gregkh>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061226-grumpily-entire-f06a@gregkh>
+ <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+ <2023061217-mutable-curry-c2ac@gregkh>
+ <20230613073415.GP4253@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,130 +57,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230613073415.GP4253@hirez.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fb054096aea0576f0c0a61c598e5e9676443ee86
-commit: d539fee9f825b0c8eac049732c83562b28a483b5 ARM: 9253/1: ubsan: select ARCH_HAS_UBSAN_SANITIZE_ALL
-date:   7 months ago
-config: arm-randconfig-r034-20230613 (https://download.01.org/0day-ci/archive/20230613/202306131550.LosyU9Kt-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d539fee9f825b0c8eac049732c83562b28a483b5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d539fee9f825b0c8eac049732c83562b28a483b5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, Jun 13, 2023 at 09:34:15AM +0200, Peter Zijlstra wrote:
+> On Mon, Jun 12, 2023 at 05:44:59PM +0200, Greg KH wrote:
+> > To be fair the end-result of misc_init() is much nicer and cleaner and
+> > "obviously correct", which is good, even with the crazy proc file mess
+> > in it.  So I like the idea overall, need to figure out when to use
+> > DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
+> 
+> CLASS is meant for things that have an obvious contructor as well as a
+> destructor, that always go together. Like for example the lock things,
+> they always pair a lock and unlock. But also things like:
+> fdget()+fdput(), these can also always be paired, and if you want the
+> file to escape you simply take yet another reference to prevent the
+> fdput() from being the final.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131550.LosyU9Kt-lkp@intel.com/
+Ok, so then the class_destroy stuff down below here should be
+DEFINE_CLASS()?
 
-All errors (new ones prefixed by >>):
+> > @@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
+> >  	return NULL;
+> >  }
+> >  
+> > +DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
+> 
+> Documentation for class_create() says it will return ERR_PTR(), so then
+> this should be something like:
+> 
+> DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
 
->> lib/test_bitmap.c:926:2: error: call to '__compiletime_assert_190' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
-     926 |         BUILD_BUG_ON(!__builtin_constant_p(res));
-         |         ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:354:2: note: expanded from macro 'compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:342:2: note: expanded from macro '_compiletime_assert'
-     342 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:335:4: note: expanded from macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:196:1: note: expanded from here
-     196 | __compiletime_assert_190
-         | ^
-   1 error generated.
+Nit, as class_destroy() handles this type of check within it, it can be
+even simpler:
+	DEFINE_FREE(class_destroy, struct class *, class_destroy(_T));
+or would that be:
+	DEFINE_CLASS(class_destroy, struct class *, class_destroy(_T));
+?
 
+> > +DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
+> >  static int __init misc_init(void)
+> >  {
+> > +	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
+> > +	struct class *c __free(class_destroy) = class_create("misc");
+> >  
+> > +	if (IS_ERR(c))
+> > +		return PTR_ERR(c);
+> >  
+> >  	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+> > +		return -EIO;
+> >  
+> > +	c->devnode = misc_devnode;
+> > +
+> > +	misc_class = no_free_ptr(c);
+> > +	no_free_ptr(ret);
+> > +
+> > +	return 0;
+> >  }
+> 
+> And yes, this does look nicer.
 
-vim +926 lib/test_bitmap.c
+I have a ton of future patches coming that does a bunch of
+class_create/destroy changes that would be made a LOT simpler with this
+patchset, and I really don't want to have to hit the same codepaths
+twice if at all possible.
 
-291f93ca339f5b Barry Song        2021-08-06  877  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  878  static void __init test_bitmap_const_eval(void)
-dc34d5036692c6 Alexander Lobakin 2022-06-24  879  {
-dc34d5036692c6 Alexander Lobakin 2022-06-24  880  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  881  	unsigned long initvar = BIT(2);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  882  	unsigned long bitopvar = 0;
-dc34d5036692c6 Alexander Lobakin 2022-06-24  883  	unsigned long var = 0;
-dc34d5036692c6 Alexander Lobakin 2022-06-24  884  	int res;
-dc34d5036692c6 Alexander Lobakin 2022-06-24  885  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  886  	/*
-dc34d5036692c6 Alexander Lobakin 2022-06-24  887  	 * Compilers must be able to optimize all of those to compile-time
-dc34d5036692c6 Alexander Lobakin 2022-06-24  888  	 * constants on any supported optimization level (-O2, -Os) and any
-dc34d5036692c6 Alexander Lobakin 2022-06-24  889  	 * architecture. Otherwise, trigger a build bug.
-dc34d5036692c6 Alexander Lobakin 2022-06-24  890  	 * The whole function gets optimized out then, there's nothing to do
-dc34d5036692c6 Alexander Lobakin 2022-06-24  891  	 * in runtime.
-dc34d5036692c6 Alexander Lobakin 2022-06-24  892  	 */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  893  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  894  	/*
-dc34d5036692c6 Alexander Lobakin 2022-06-24  895  	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
-dc34d5036692c6 Alexander Lobakin 2022-06-24  896  	 * Clang on s390 optimizes bitops at compile-time as intended, but at
-dc34d5036692c6 Alexander Lobakin 2022-06-24  897  	 * the same time stops treating @bitmap and @bitopvar as compile-time
-dc34d5036692c6 Alexander Lobakin 2022-06-24  898  	 * constants after regular test_bit() is executed, thus triggering the
-dc34d5036692c6 Alexander Lobakin 2022-06-24  899  	 * build bugs below. So, call const_test_bit() there directly until
-dc34d5036692c6 Alexander Lobakin 2022-06-24  900  	 * the compiler is fixed.
-dc34d5036692c6 Alexander Lobakin 2022-06-24  901  	 */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  902  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  903  #if defined(__s390__) && defined(__clang__)
-dc34d5036692c6 Alexander Lobakin 2022-06-24  904  	if (!const_test_bit(7, bitmap))
-dc34d5036692c6 Alexander Lobakin 2022-06-24  905  #else
-dc34d5036692c6 Alexander Lobakin 2022-06-24  906  	if (!test_bit(7, bitmap))
-dc34d5036692c6 Alexander Lobakin 2022-06-24  907  #endif
-dc34d5036692c6 Alexander Lobakin 2022-06-24  908  		bitmap_set(bitmap, 5, 2);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  909  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  910  	/* Equals to `unsigned long bitopvar = BIT(20)` */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  911  	__change_bit(31, &bitopvar);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  912  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  913  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  914  	/* Equals to `unsigned long var = BIT(25)` */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  915  	var |= BIT(25);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  916  	if (var & BIT(0))
-dc34d5036692c6 Alexander Lobakin 2022-06-24  917  		var ^= GENMASK(9, 6);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  918  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  919  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  920  	res = bitmap_weight(bitmap, 20);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  921  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c6 Alexander Lobakin 2022-06-24  922  	BUILD_BUG_ON(res != 2);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  923  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  924  	/* !(BIT(31) & BIT(18)) == 1 */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  925  	res = !test_bit(18, &bitopvar);
-dc34d5036692c6 Alexander Lobakin 2022-06-24 @926  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c6 Alexander Lobakin 2022-06-24  927  	BUILD_BUG_ON(!res);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  928  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  929  	/* BIT(2) & GENMASK(14, 8) == 0 */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  930  	res = initvar & GENMASK(14, 8);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  931  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c6 Alexander Lobakin 2022-06-24  932  	BUILD_BUG_ON(res);
-dc34d5036692c6 Alexander Lobakin 2022-06-24  933  
-dc34d5036692c6 Alexander Lobakin 2022-06-24  934  	/* ~BIT(25) */
-dc34d5036692c6 Alexander Lobakin 2022-06-24  935  	BUILD_BUG_ON(!__builtin_constant_p(~var));
-dc34d5036692c6 Alexander Lobakin 2022-06-24  936  	BUILD_BUG_ON(~var != ~BIT(25));
-dc34d5036692c6 Alexander Lobakin 2022-06-24  937  }
-dc34d5036692c6 Alexander Lobakin 2022-06-24  938  
+So what's the odds this can be reasonable enough to get into 6.5-rc1 so
+we can rely on it there?
 
-:::::: The code at line 926 was first introduced by commit
-:::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+thanks,
 
-:::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
-:::::: CC: Yury Norov <yury.norov@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
