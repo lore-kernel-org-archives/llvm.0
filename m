@@ -1,76 +1,176 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9129B0;
-	Tue, 13 Jun 2023 10:35:57 +0000 (UTC)
-Received: from [IPV6:2001:861:4a40:8620:ac8f:54cf:6e66:b8b4] (unknown [IPv6:2001:861:4a40:8620:ac8f:54cf:6e66:b8b4])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD1C3C25
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 10:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=t+702YjolGkCyiHa0l6OM91j5GcnA1zXDcpSBa22PVM=; b=cq3oZ+2UUoBW6Ayud8FUtqQcgF
+	8Vk9zP7UFBdd1d5LBwQwn2AkLSvaMfko2yWiv9XTV3anXy7DAOSeZQkgyVfeGKfahXGD+fkz+Tt9x
+	z2YrKk3GWFF7yvNhzjfGwd7uC2o/8XbL6zOGRyRohwqKELaQOpfHoEiGSrSNfQnPksAkvlXI+zUf2
+	dj9Sqph+JWkhUnsUxpvfxI6kDqHqJh5mnoP7BZzMEauf4WABiQTm/JqQV+CwrLy2ZqsJStDi7WZKS
+	ntMaSJ9nXSXZMcN0Xi0oz9dUtpl8UdLwensB313mHVTtQ2munRbB6PSLvGJ7IFwV5LUI3Ef3epYcJ
+	AVXfP0Aw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1q91bN-009L0N-14;
+	Tue, 13 Jun 2023 10:50:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: gtucker)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 36D576606EFD;
-	Tue, 13 Jun 2023 11:35:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1686652550;
-	bh=QvZoVMtSRfbKYzNTR8JdqBOwdHvxzvmP3UiPrsmqRzo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g2kPUpusiVLEUh6bkquiemGCKqej3sLrqklLNIMGKqIk/hL62sKgNOIL6vWcevJco
-	 9HzbA6VKv922k2F/ncvzfIxEEJTnH36I+HwWrV+aFbH+f2Kn1FG8RmBhNDGoFPG2LW
-	 KBneWqBHdZ1F9CT1bxWmgZPfg5HvD+V0d0yGaoY256aHjpkc8e1yLcYc0MtpnteVW5
-	 ffqnMJ7MUtI4LuU8HuprAgmADoVTitnPGiZOHw86buQnm9Gx4hnThK3FGUO+tAQCdK
-	 9HpS9bigXubEEBMg/XgjxoneudHrVRGZJ6QwWHKbDPibhXUigoOoKPS8unctMu5YJ6
-	 mMjUWuJ0OJS0w==
-Message-ID: <dfa85ccc-693b-00cb-a4d9-af32e0dfbed8@collabora.com>
-Date: Tue, 13 Jun 2023 12:37:05 +0200
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D8043002F1;
+	Tue, 13 Jun 2023 12:50:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 49B8524556031; Tue, 13 Jun 2023 12:50:13 +0200 (CEST)
+Date: Tue, 13 Jun 2023 12:50:13 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: torvalds@linux-foundation.org, keescook@chromium.org,
+	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
+	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
+	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <20230613105013.GT4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061226-grumpily-entire-f06a@gregkh>
+ <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+ <2023061217-mutable-curry-c2ac@gregkh>
+ <20230613073415.GP4253@hirez.programming.kicks-ass.net>
+ <2023061333-imposing-shortly-6803@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: kernelci: please upgrade clang-17
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>
-References: <CAKwvOd=qxNfPDo-=bxzyzmY3YmsBtxv686rr9Q_thrfC6ni3eg@mail.gmail.com>
- <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk>
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023061333-imposing-shortly-6803@gregkh>
 
-On 12/06/2023 17:11, Mark Brown wrote:
-> On Fri, Jun 09, 2023 at 01:50:13PM -0700, Nick Desaulniers wrote:
->> Starting a new thread because gmail cannot handle replying to an email
->> w/ >45k warnings.
->> https://lore.kernel.org/llvm/6482b7dd.170a0220.a93c3.9102@mx.google.com/
->>
->> instances of -Wbuiltin-macro-redefined have been fixed in ToT llvm.
->> Updating clang-17 should resolve most of the error spew.
->>
->> Does kernel CI update ToT clang builds on a fixed cadence?
+On Tue, Jun 13, 2023 at 09:50:28AM +0200, Greg KH wrote:
+
+> > DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
 > 
-> The containers with the tools should be being rebuilt during the
-> production update which normally happens every Monday.  There's some
-> disruption at the minute due to some infrastructure rebuilding that's
-> going on so today's update of the containers might be delayed.
+> Nit, as class_destroy() handles this type of check within it, it can be
+> even simpler:
+> 	DEFINE_FREE(class_destroy, struct class *, class_destroy(_T));
 
-Yes the LLVM-17 update has now trickled down into production and
-warnings are all gone:
+Note that that means there will be an unconditional call to
+class_destroy() in the success path. As long as that is never a hot-path
+this should be fine I suppose, but it is something Linus pointed out
+earlier.
 
-  https://storage.kernelci.org/next/master/next-20230613/arm/multi_v7_defconfig/clang-17/logs/kernel.log
+> or would that be:
+> 	DEFINE_CLASS(class_destroy, struct class *, class_destroy(_T));
 
-compared with the previous linux-next build which had all the warnings:
+Has a slightly different syntax per the comment I did do write :-)
 
-  https://storage.kernelci.org/next/master/next-20230609/arm/multi_v7_defconfig/clang-17/logs/kernel.log
+DEFINE_CLASS(class, struct class *,
+	     if (!IS_ERR_OR_NULL(_T)) class_destroy(_T),
+	     class_create(cname), const char *name)
 
-We skipped the regular production update last Monday to focus on
-migrating VMs to the new Azure subscription, sorry for the
-inconvenience.  We're back on the regular schedule now.
+static int __init misc_init(void)
+{
+	struct proc_dir_entry *ret __free(remove_proc) =
+		proc_create_seq("misc", 0, NULL, &misc_seq_ops);
 
-Thanks,
-Guillaume
+	CLASS(class, c)("misc");
+	if (IS_ERR(c))
+		return PTR_ERR(c);
 
+	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+		return -EIO;
+
+	c->devnode = misc_devnode;
+
+	misc_class = no_free_ptr(c);
+	no_free_ptr(ret);
+
+	return 0;
+}
+
+The no_free_ptr() should work with CLASS(), but I'm not sure that's
+recommended, lots of un-explored terretory here :-)
+
+Similarly I suppose you could do something like:
+
+DEFINE_CLASS(proc_dir, struct proc_dir_entry *,
+	     proc_remove(_T), proc_create(pname, mode, parent, proc_ops),
+	     const char *pname, umode_t mode, struct proc_dir_entry *parent,
+	     const struct proc_ops *proc_ops)
+
+EXTEND_CLASS(proc_dir, _seq, proc_create_seq(pname, mode, parent, ops, state_size, data),
+	     const char *pname, umode_t mode, struct proc_dir_entry *parent,
+	     const struct seq_operations *ops, unsigned int state_size, void *data)
+
+EXTEND_CLASS(proc_dir, _seq_private, .....)
+
+(urgh, C really needs better forwarding support)
+
+Then you could write it something like:
+
+static int __init misc_init(void)
+{
+	CLASS(proc_dir_seq, ret)("misc", 0, NULL, &misc_seq_ops);
+
+	CLASS(class, c)("misc");
+	if (IS_ERR(c))
+		return PTR_ERR(c);
+
+	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+		return -EIO;
+
+	c->devnode = misc_devnode;
+
+	misc_class = no_free_ptr(c);
+	no_free_ptr(ret);
+
+	return 0;
+}
+
+Is what what we want?
+
+(also, perhaps I should prefix the macro arguments with an '_', as is
+you can't use 'name' as a constructor argument because the thing would
+expand weird)
+
+> I have a ton of future patches coming that does a bunch of
+> class_create/destroy changes that would be made a LOT simpler with this
+> patchset, and I really don't want to have to hit the same codepaths
+> twice if at all possible.
+> 
+> So what's the odds this can be reasonable enough to get into 6.5-rc1 so
+> we can rely on it there?
+
+That's one for Linus I suppose.. the only remaining issue I still have
+is the no_free_*() naming. One suggestion that made sense had it called
+take_*().
+
+All we really need are the first 4 patches to land; thereafter we can
+gradually start converting things.
