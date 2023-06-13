@@ -1,71 +1,55 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FAD136A
-	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 19:47:28 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1b3d0b33dc2so16485125ad.0
-        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 12:47:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A743322E49
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 20:46:56 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1b3a6469623so22350935ad.3
+        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 13:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686685648; x=1689277648;
+        d=chromium.org; s=google; t=1686689216; x=1689281216;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/WhOeElaMsiD9GyeVbS/Kz/uOr4hArVsc6evONFkFnM=;
-        b=aeMNEMT7mnAhLHospPJ5V6vIYNCAcophNZar1VJgpYHxyFURQMMgUNDfiKxbq31qUx
-         /ntMLDU6dIgcpzP5jt5szoYlfgJOQ930p726r6qPC78stOnaYjfEWHjjMU58XMpu3dyx
-         I1eRXxTLecm0sTZY+o9wNW2LEqaDO5EnnyJcs=
+        bh=UU2W1Yd3b/N1bxttJwHZMPKGDdWn1+63RfP3dSCBBR4=;
+        b=bAZ8pdO/DxdY6zDe8daGd9jbKgSBR2wTKN+h+1X22YogYqUPNT4I78n15bPFBQ2Qie
+         d8nBcepCW8TdqSPQS6v8H+pYQYNqVZS0r2ubI4BOzwLN+126Je4Yi1tKtAWaAcy8vmrq
+         XmgdpIH/9XO5lgOlOBMZPJT8W/gNTxR1kXJYU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686685648; x=1689277648;
+        d=1e100.net; s=20221208; t=1686689216; x=1689281216;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/WhOeElaMsiD9GyeVbS/Kz/uOr4hArVsc6evONFkFnM=;
-        b=GMeVajmPehZ67dVEGrXQwd04FvYeN+ma3uIIVeP3ftMIIyPUGV8zICJ0zSAs+ytjCX
-         eIw32FV0p/CO3vivn7p80OjZkDKmm46N6ZBtPcyVb1kuupLSLhyk0w/F42roxz8MOX1h
-         Tz1qhW8jCBjeKofMNqZM6U/l/Rw7wyhAcikewVwCtDESGoCA/zoykSYw4Jih//bIr543
-         HApSqFUN5WZTupw2ihfOIajLRkPLyGVrTy847hunKZNz/VqJQqDv0rk6Ij3S03vCa0DD
-         /cwg5lGO0yervs+OLeSRMHPoS+SzZEnatxoEJuLefPUzzQc0Wu2pS1YYxjl5Olra0r4U
-         Dptw==
-X-Gm-Message-State: AC+VfDxW8vr2JRI5q+81Sb9pSUVOIz/KG5L+fGVYofXr1rsyW+zpIdb3
-	ojUCOgzKVLbspV4g1y82C+QERQ==
-X-Google-Smtp-Source: ACHHUZ4wkZtVASMYXX5dMM9DSBV3rPVF6650RBePcMhCjKiUT61w7X++xe3XcHFN8ktb3nqMI7IKLw==
-X-Received: by 2002:a17:902:c20d:b0:1b2:4e50:f22e with SMTP id 13-20020a170902c20d00b001b24e50f22emr10107078pll.1.1686685647720;
-        Tue, 13 Jun 2023 12:47:27 -0700 (PDT)
+        bh=UU2W1Yd3b/N1bxttJwHZMPKGDdWn1+63RfP3dSCBBR4=;
+        b=Z+OUCQNUYUcSmBW7zmqe2sGc7Q6FJscTDS/aReSLm4ae1dQS+T1sCKx6Vpag+5j2Tu
+         IZb1myR/iYGVDub1rRn/twz03G9CcQQdL1ozFWp3pa+KmtCPXa5HST5mNlfKnZKDqdco
+         v3LemvFeEZweMF/Rd49EtivtKThBZode5Kp/u+U75yhs7aY3VxzAshYP0mrBKIIsVEYg
+         uTBtWNmp05MdxP1c14KsuPbv5G8vqzlA6GS/oD9iYRlxHa5tbX4dhykLfQy1r92JAmkb
+         Dl/XoGcQtI9bGJtQ9yCJAC+qspMgfEn2VTU0EwoTz7Q4r5h3HKpDwp4Z6P/LscxSrrKj
+         0qCA==
+X-Gm-Message-State: AC+VfDzkIPiD85exr1sVYB30H3Fa6ipxf2txJBBcHWIihmMpTFWuDtZ+
+	aZ2Odq+5tzSJk7gOmOe8wMvGNQ==
+X-Google-Smtp-Source: ACHHUZ6fFOMFh+FwU12YfRQVUNKzL4Zw50Ovq3PP5212pZBhNw4LQmUj8O7Bv6Fc9zyeJpMSdFalcg==
+X-Received: by 2002:a17:903:11d2:b0:1ae:7631:7fa9 with SMTP id q18-20020a17090311d200b001ae76317fa9mr11703605plh.37.1686689215857;
+        Tue, 13 Jun 2023 13:46:55 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x21-20020a17090300d500b001a221d14179sm10578328plc.302.2023.06.13.12.47.27
+        by smtp.gmail.com with ESMTPSA id j11-20020a170902690b00b001b03842ab78sm10672486plk.89.2023.06.13.13.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:47:27 -0700 (PDT)
-Date: Tue, 13 Jun 2023 12:47:26 -0700
+        Tue, 13 Jun 2023 13:46:55 -0700 (PDT)
+Date: Tue, 13 Jun 2023 13:46:54 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
-	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
-	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
-	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
-	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 45/57] perf: Simplify perf_event_parse_addr_filter()
-Message-ID: <202306131247.3E617931@keescook>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.779825032@infradead.org>
+To: kernel test robot <oliver.sang@intel.com>
+Cc: oe-lkp@lists.linux.dev, lkp@intel.com,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [linux-next:master] [kbuild]  df8fc4e934:
+ BUG:unable_to_handle_page_fault_for_address
+Message-ID: <202306131342.51A51F651C@keescook>
+References: <202306102333.8f5a7443-oliver.sang@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,48 +58,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612093540.779825032@infradead.org>
+In-Reply-To: <202306102333.8f5a7443-oliver.sang@intel.com>
 
-On Mon, Jun 12, 2023 at 11:07:58AM +0200, Peter Zijlstra wrote:
-> XXX this code needs a cleanup
+On Sun, Jun 11, 2023 at 09:41:30PM +0800, kernel test robot wrote:
+> the issue we found below is by clang-15, but we confirmed clang-15 we use is
+> commit 8dfdcc7b7b in llvm-project. it supports the flag already.
 
-:)
+Interesting! Thanks for the report.
 
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/events/core.c |   56 ++++++++++++++++++++-------------------------------
->  1 file changed, 22 insertions(+), 34 deletions(-)
-> 
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -10495,6 +10495,8 @@ static void free_filters_list(struct lis
->  	}
->  }
->  
-> +DEFINE_FREE(filter_list, struct list_head *, if (_T) free_filters_list(_T))
-> +
->  /*
->   * Free existing address filters and optionally install new ones
->   */
-> @@ -10658,13 +10660,15 @@ perf_event_parse_addr_filter(struct perf
->  			     struct list_head *filters)
->  {
->  	struct perf_addr_filter *filter = NULL;
-> -	char *start, *orig, *filename = NULL;
->  	substring_t args[MAX_OPT_ARGS];
->  	int state = IF_STATE_ACTION, token;
->  	unsigned int kernel = 0;
-> -	int ret = -EINVAL;
-> +	char *start;
-> +	int ret;
->  
-> -	orig = fstr = kstrdup(fstr, GFP_KERNEL);
-> +	struct list_head *fguard __free(filter_list) = filters;
-> +	char *filename __free(kfree) = NULL;
-> +	char *orig __free(kfree) = fstr = kstrdup(fstr, GFP_KERNEL);
+> [  228.605608][    C1] BUG: unable to handle page fault for address: 04090300
+> [...]
+> [ 228.608262][ C1] EIP: string (lib/vsprintf.c:644 lib/vsprintf.c:726) 
+> [...]
+> [ 228.608262][ C1] Call Trace:
+> [ 228.608262][ C1]  <SOFTIRQ>
+> [ 228.608262][ C1] vsnprintf (lib/vsprintf.c:2817) 
+> [ 228.608262][ C1] vprintk_store (kernel/printk/printk.c:2191) 
+> [ 228.608262][ C1] vprintk_emit (kernel/printk/printk.c:2288) 
+> [ 228.608262][ C1] vprintk_default (kernel/printk/printk.c:2318) 
+> [ 228.608262][ C1] vprintk (kernel/printk/printk_safe.c:50) 
+> [ 228.608262][ C1] _printk (kernel/printk/printk.c:2331) 
+> [ 228.608262][ C1] __ubsan_handle_out_of_bounds (lib/ubsan.c:209 lib/ubsan.c:343) 
 
-Ah! I see a kfree users. Sorry for the noise. :)
+This is a crash within the UBSAN handler! That's very unexpected.
+
+> [ 228.608262][ C1] get_string (drivers/usb/gadget/composite.c:1314) 
+> [ 228.608262][ C1] composite_setup (drivers/usb/gadget/composite.c:1871) 
+> [ 228.608262][ C1] dummy_timer (drivers/usb/gadget/udc/dummy_hcd.c:?) 
+
+And the out-of-bounds condition got triggered in dummy_hcd.
+
+I also see this is happening in SOFTIRQ context. I wonder if there is a
+problem with UBSAN vs SOFTIRQ. Again, I'd find that surprising...
+
+I'll see what I can find...
 
 -- 
 Kees Cook
