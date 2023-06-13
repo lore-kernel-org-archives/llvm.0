@@ -1,50 +1,43 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F973174FA
-	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 21:22:28 +0000 (UTC)
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso4606114b3a.3
-        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 14:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686691348; x=1689283348;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wWRudrPnHjVGc5oCn6M809kCQsjvZKoLo1qzFLP37Us=;
-        b=Ktgo8zSr8EXXB2UzZLgdhE6zaCRIeHoRMwBb1uUA1A9M3CTZ+2BYMnYKR2PzOHPNwa
-         YWDiUp1WSeHQkJDCpGcgRLHm9/AGUtAYL1oeHSQmkxlym0jpb8Pr2lf6FjB/QY+fD9Bz
-         oU9HOHcqvQec/HPDkxKJvpmw5IMRk3QcXazpw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686691348; x=1689283348;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wWRudrPnHjVGc5oCn6M809kCQsjvZKoLo1qzFLP37Us=;
-        b=jh5xWobMMAbwfQ2YijuUzEtJGnej1WvbmFIIEa3d6oSxOioMDJTFzbgx3oL84lO7Z8
-         EMB8taJXMt7c1Kf85leydjuTtaeKdxstGtGhrrxTdcd0WZLP52dn3RDrXvPDdEMQmI9w
-         +KyLA0GflKuquYc2jetbkmzAK3iJOgKBpO+shzrxW2EAjoAmLpmaHMwGLPBam+FTgrts
-         sAN0DLz25GSHA1aBiJiy/MeOnn2BF5KkeHSyf46zyJvO6a9KXvDuZEsDEJkWyoNm2yFM
-         xjC2uc4e18vzWQMgZs3uyoK2ctRsjbA8SiSFqb0o66b2fQIewiVDLzYEbXlQdWmPLbq8
-         Jkdg==
-X-Gm-Message-State: AC+VfDw0IltZYJ0y22/Uk5M0WJfzi310234HJOfdpulIrpiYU2RD4V3m
-	9tHS2q4fhbnx4v2MysYxQBoKGUnykdFnkPEpjFw=
-X-Google-Smtp-Source: ACHHUZ7Hnj2dBGCbwSlRjBAKHsJQ2zREIGLpMzHssRYQlX+brI0ocqWinP2aG4ynfZVSI0C/+C81Cw==
-X-Received: by 2002:a05:6a00:14d0:b0:64c:c5f9:1533 with SMTP id w16-20020a056a0014d000b0064cc5f91533mr16110132pfu.33.1686691347806;
-        Tue, 13 Jun 2023 14:22:27 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u5-20020aa78385000000b0064d4d11b8bfsm8986934pfm.59.2023.06.13.14.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 14:22:27 -0700 (PDT)
-Date: Tue, 13 Jun 2023 14:22:26 -0700
-From: Kees Cook <keescook@chromium.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [linux-next:master 3357/8413] drivers/scsi/FlashPoint.c:1712:12:
- warning: stack frame size (1056) exceeds limit (1024) in
- 'FlashPoint_HandleInterrupt'
-Message-ID: <202306131418.35B5D649DC@keescook>
-References: <202306100035.VTusNhm4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B776D3ED8C;
+	Tue, 13 Jun 2023 22:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686694828; x=1718230828;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dE+szeYmzk/CG3JQv53HG5HzxOyft4kzDMvCZ7X08oU=;
+  b=Svi2E09iF9EzsWyH5gEP+KCqVEoEYbJz98V1fL0hwf35syFM/LxOoPfe
+   9YbW8kaxgRpsPt25zJPrzP1LAVJESl9qtO4S6HTSU5MlZcqt0021823gC
+   JpkiMBElZl41IL90Xjiltsd6H+C9OR1M/TbZQPpGxpP8OrJduauT3t5Q7
+   KOWKsXvO6ZTuPjBXLR9P+802MAyq0Jkt2ngiQYxfnHatFteqkJzc6NV+7
+   RTl343xvL8tAyisjJbjRxc4vVitCwxPyt6kagvZQcFKiFFsgVFRRISg/H
+   ZXgv6FTTg5prZcI/qZdlp3cIEiomaS8sWBqBt3Zw1ktpOtPxE03URxQ4I
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424345468"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="424345468"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 15:20:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="662159182"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="662159182"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jun 2023 15:20:26 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9CNF-0001rM-33;
+	Tue, 13 Jun 2023 22:20:25 +0000
+Date: Wed, 14 Jun 2023 06:19:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [avpatel:riscv_timer_imp_v1 43/50]
+ drivers/iommu/dma-iommu.c:1698:37: warning: variable 'msi_addr' is
+ uninitialized when used here
+Message-ID: <202306140622.C6XZVCIr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,82 +46,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306100035.VTusNhm4-lkp@intel.com>
 
-On Sat, Jun 10, 2023 at 12:58:23AM +0800, kernel test robot wrote:
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   53ab6975c12d1ad86c599a8927e8c698b144d669
-> commit: df8fc4e934c12b906d08050d7779f292b9c5c6b5 [3357/8413] kbuild: Enable -fstrict-flex-arrays=3
-> config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230610/202306100035.VTusNhm4-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=df8fc4e934c12b906d08050d7779f292b9c5c6b5
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout df8fc4e934c12b906d08050d7779f292b9c5c6b5
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306100035.VTusNhm4-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from drivers/scsi/BusLogic.c:51:
-> >> drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (1056) exceeds limit (1024) in 'FlashPoint_HandleInterrupt' [-Wframe-larger-than]
->     1712 | static int FlashPoint_HandleInterrupt(void *pcard)
->          |            ^
->    1 warning generated.
+tree:   https://github.com/avpatel/linux.git riscv_timer_imp_v1
+head:   74a10c4f3857dece3424b109452f63add2baa7f6
+commit: 59f0204d5995cda5dad48d7821d2d885a852f519 [43/50] irqchip/riscv-imsic: Improve IOMMU DMA support
+config: arm64-randconfig-r002-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140622.C6XZVCIr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/avpatel/linux/commit/59f0204d5995cda5dad48d7821d2d885a852f519
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_timer_imp_v1
+        git checkout 59f0204d5995cda5dad48d7821d2d885a852f519
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/
 
-I wasn't able to generate the warning with my Clang, but it sure is
-close! Building with KCFLAGS=-Rpass-analysis=stack-frame-layout I see:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140622.C6XZVCIr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iommu/dma-iommu.c:1698:37: warning: variable 'msi_addr' is uninitialized when used here [-Wuninitialized]
+    1698 |         if (!msi_page || msi_page->phys != msi_addr) {
+         |                                            ^~~~~~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/iommu/dma-iommu.c:1691:22: note: initialize the variable 'msi_addr' to silence this warning
+    1691 |         phys_addr_t msi_addr;
+         |                             ^
+         |                              = 0
+   1 warning generated.
 
 
-In file included from ../drivers/scsi/BusLogic.c:51:
-../drivers/scsi/FlashPoint.c:1713:1: remark:
-Function: FlashPoint_HandleInterrupt
-Offset: [SP-4], Type: Protector, Align: 4, Size: 4
-Offset: [SP-8], Type: Spill, Align: 8, Size: 4
-Offset: [SP-12], Type: Spill, Align: 4, Size: 4
-Offset: [SP-16], Type: Spill, Align: 16, Size: 4
-Offset: [SP-20], Type: Spill, Align: 4, Size: 4
-Offset: [SP-24], Type: Spill, Align: 8, Size: 4
-Offset: [SP-28], Type: Spill, Align: 4, Size: 4
-Offset: [SP-32], Type: Spill, Align: 16, Size: 4
-Offset: [SP-36], Type: Spill, Align: 4, Size: 4
-Offset: [SP-40], Type: Spill, Align: 8, Size: 4
-Offset: [SP-44], Type: Spill, Align: 4, Size: 4
-Offset: [SP-48], Type: Spill, Align: 16, Size: 4
-Offset: [SP-52], Type: Spill, Align: 4, Size: 4
-Offset: [SP-56], Type: Spill, Align: 8, Size: 4
-Offset: [SP-60], Type: Spill, Align: 4, Size: 4
-Offset: [SP-64], Type: Spill, Align: 16, Size: 4
-Offset: [SP-68], Type: Spill, Align: 4, Size: 4
-Offset: [SP-72], Type: Spill, Align: 8, Size: 4
-Offset: [SP-76], Type: Variable, Align: 4, Size: 4
-Offset: [SP-80], Type: Spill, Align: 4, Size: 4
-Offset: [SP-84], Type: Spill, Align: 4, Size: 4
-...[4 byte spills]...
-Offset: [SP-1012], Type: Variable, Align: 4, Size: 4
-Offset: [SP-1016], Type: Variable, Align: 4, Size: 4
-[-Rpass-analysis=stack-frame-layout]
+vim +/msi_addr +1698 drivers/iommu/dma-iommu.c
 
-So something is very weird in FlashPoint_HandleInterrupt -- it has a
-single while loop with an internal if/else if/.../else chain. So I don't
-see why it would need such extensive spills...
-
-This seems like a missed optimization in Clang, maybe?
+  1679	
+  1680	/**
+  1681	 * iommu_dma_compose_msi_msg() - Apply translation to an MSI message
+  1682	 * @desc: MSI descriptor prepared by iommu_dma_prepare_msi()
+  1683	 * @msg: MSI message containing target physical address
+  1684	 */
+  1685	void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+  1686	{
+  1687		struct device *dev = msi_desc_to_dev(desc);
+  1688		const struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+  1689		const struct iommu_dma_msi_page *msi_page;
+  1690		struct iommu_dma_cookie *cookie;
+  1691		phys_addr_t msi_addr;
+  1692	
+  1693		if (!domain || !domain->iova_cookie)
+  1694			return;
+  1695	
+  1696		cookie = domain->iova_cookie;
+  1697		msi_page = msi_desc_get_iommu_cookie(desc);
+> 1698		if (!msi_page || msi_page->phys != msi_addr) {
+  1699			msi_addr = ((u64)msg->address_hi << 32) | msg->address_lo;
+  1700			msi_addr &= ~(phys_addr_t)(cookie_msi_granule(cookie) - 1);
+  1701	
+  1702			msi_desc_set_iommu_cookie(desc, NULL);
+  1703			list_for_each_entry(msi_page, &cookie->msi_page_list, list) {
+  1704				if (msi_page->phys == msi_addr) {
+  1705					msi_desc_set_iommu_cookie(desc, msi_page);
+  1706					break;
+  1707				}
+  1708			}
+  1709			msi_page = msi_desc_get_iommu_cookie(desc);
+  1710		}
+  1711		if (WARN_ON(!msi_page))
+  1712			return;
+  1713	
+  1714		msg->address_hi = upper_32_bits(msi_page->iova);
+  1715		msg->address_lo &= cookie_msi_granule(cookie) - 1;
+  1716		msg->address_lo += lower_32_bits(msi_page->iova);
+  1717	}
+  1718	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
