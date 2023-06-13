@@ -1,49 +1,52 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000567F
-	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 03:48:21 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-56cfa1c5d59so40681707b3.1
-        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 20:48:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB3A7F
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 03:48:23 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-bc6a920e69aso3872634276.0
+        for <llvm@lists.linux.dev>; Mon, 12 Jun 2023 20:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686628100; x=1689220100;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yRFC2gTGY007exC0q04MPM2juCknJSwNc/jlO0n+WpM=;
-        b=VTWfjUVR8/UW1zs2ihPMDXWF3W50tJ+8vNMUicZElwkf6TK3Qpfo71NnZNRyhZ4lMh
-         1cgRzyRkY4qxCCnK74TPSj6Si1gl2Xo85izzGgGCkK+WlK4i5aI+Vl1qcbJ+DZeXNyhy
-         53ElrNS7kpDILNA2tLMEro7VstfXg6d1fxusQnOMoB4dHnD4KlxEIY5F9DsbVHpIf3PU
-         Tp9G7njcFEWQk7HQAnMhWLlMQEs75aNWGNim6jLyQPeAupbigfRdUVxfQW1ND+rqP6/H
-         SGOiskS8HRJi30IigNaKRQTkjLgOK7fG6ghqadu28kCraVYyZCagS+Pkz1okJDa6Eba0
-         zuuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686628100; x=1689220100;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1686628103; x=1689220103;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yRFC2gTGY007exC0q04MPM2juCknJSwNc/jlO0n+WpM=;
-        b=LJhEkjX5qWWFRiiTuQKkR0yys8K4qbGSIDbtS5wAHu5v81aZ0xfyjtBSXYmkyPVF99
-         anYUjcctlPD3ZJ3QIcWzPGlhP+1nMubmxnqMm3ysjRFtfl/GV5vGSYKVFc/wcEwsA3vL
-         7CZJILirGx8N6C7Gez8rDlwxhMywEElmOvdPfR3pzcdl2bLLSYxLJN4QNwQJQsNt8GJi
-         UUv5vHMt5MSGCqsAqBL8ZRcljp+jlWRcgstDkFwe12k8biUe68hqBLDj11hjDwFEOIsK
-         pnoMXPabCrm6JOz4YA/sP+ql7Ht87k8Qt/vmvs1KHqYXaiYuxu+cSjgByUGv05TjlM7R
-         sEsA==
-X-Gm-Message-State: AC+VfDyTrqxa7C0kONTsRGuKgqEaJ1jGYLSTm8VgW68oiMrq8k4pyc6K
-	nvYre+ZdGwa9xvt49vt28ql3C6F1yGZX
-X-Google-Smtp-Source: ACHHUZ6WvZmHfRtOL6PifDmP9nAuzb3DebSOsXHxUxvJFPY38MyU0uRAiIHoxg8oAsOrrCaJ6xJR+YkM+R6K
+        bh=TFZEItTTBrSMUTBa58hKToUNkL4hMjjE5NbhujtdO6I=;
+        b=sugIE8oskjJ0EeMybjZLw2QY8Hop8AEO4OtW23PCZWE3F2bKKMHhNiXsuJibFMMwGY
+         o9JgVx3RwVyXpJif3Mj0k++i5lcshtCZnCpjD/0lbvoSGBi706rw/3HTUpwfpFDvvt6l
+         R6JaGfUsg2ChbI9Lc4oNoQv9vp5k7VhrG92rk80H8sY6fT26z8Ca/LkSYbkAvWc+QHUc
+         BND3MS/YPcPWMpbzXKIwqGGX3fonvC56Y6UQmkLh82amrlb3pdC3yS4MZuJZs68mxOWk
+         Cv0L66ytK2vloI75LBX8XZkCUE0i8sfwHJkGWso6uGWxJuyaKFCWKdf09TQYNwDpwhPA
+         Cn+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686628103; x=1689220103;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFZEItTTBrSMUTBa58hKToUNkL4hMjjE5NbhujtdO6I=;
+        b=QOm0W6jTNSvrP2swAf+3vwAz2bDot6Drne2/LZZpP2IpPRCVP92NTvpwLma5R3yPKP
+         lCqKvKpGFczy2u1LxqD9j1ysF2U3RL3jK5pKKNhL3NpW9oXz91UwgYS9dPws0TuKEFUD
+         2vFOuU3QNx+GWDYreB3dqKZj8ljx1HHaccelyYbXwW2UX3r+2i9mehaj0WxybhK866M3
+         99yviQamSZHsv4q6qocjziWR3QFXMnXqEEGuWzN77xW7oZ0h2AU41IRrWSfHVcP6bUN+
+         ZlbXSXLtEqEkdHLxRNe+nCKugiQdiuf9QOIL3s0CrZEl+D0yV0G+QxaK6+mK51PEcRrp
+         1G8g==
+X-Gm-Message-State: AC+VfDziGz5tVAmmXI1a/ZReFnkCwMeeu4hdWYY6mNcbIlXCtIo2shst
+	kda4MqGHcdrbgK9Eau8fXpCz+qitDz6z
+X-Google-Smtp-Source: ACHHUZ79nD4tHJp4BftcjKhgpKXuJELFAbzCZiWZNM9q+2bGeEAnsJjQvM5m0L1KgjOvrfxsRqfOhuz5toHp
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a704:56d6:f79d:33e7])
- (user=irogers job=sendgmr) by 2002:a81:b3c1:0:b0:559:e97a:cb21 with SMTP id
- r184-20020a81b3c1000000b00559e97acb21mr284968ywh.9.1686628100761; Mon, 12 Jun
- 2023 20:48:20 -0700 (PDT)
-Date: Mon, 12 Jun 2023 20:48:15 -0700
-Message-Id: <20230613034817.1356114-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:361f:0:b0:bc8:c749:eede with SMTP id
+ d31-20020a25361f000000b00bc8c749eedemr299027yba.7.1686628102944; Mon, 12 Jun
+ 2023 20:48:22 -0700 (PDT)
+Date: Mon, 12 Jun 2023 20:48:16 -0700
+In-Reply-To: <20230613034817.1356114-1-irogers@google.com>
+Message-Id: <20230613034817.1356114-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230613034817.1356114-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 0/2] Fix srcline addr2line issue with the ',' sentinel
+Subject: [PATCH v2 1/2] perf srcline: Make addr2line configuration failure
+ more verbose
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -55,23 +58,87 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev, Changbin Du <changbin.du@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 
-addr2line makes it hard to detect when inline output has finished. To
-detect it srcline issues a bogus ',' symbol and expects to see a
-filename:line of "??:0". For binutils addr2line ',' gets turned into
-address 0 and if there is a symbol there then the sentinel isn't
-detected, this problem has been occurring with kernel binaries.
+To aid debugging why it fails. Also, combine the loops for reading a
+line for the llvm/binutils cases.
 
-The issue was reported by and debugged by Changbin Du <changbin.du@huawei.com>.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/srcline.c | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
-v2. Incorporate feedback from Changbin.
-
-Ian Rogers (2):
-  perf srcline: Make addr2line configuration failure more verbose
-  perf srcline: Make sentinel reading for binutils addr2line more robust
-
- tools/perf/util/srcline.c | 93 ++++++++++++++++++++++++++++++---------
- 1 file changed, 73 insertions(+), 20 deletions(-)
-
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index aec596a0b0bb..d477332586b2 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -443,7 +443,7 @@ enum a2l_style {
+ 	LLVM,
+ };
+ 
+-static enum a2l_style addr2line_configure(struct child_process *a2l)
++static enum a2l_style addr2line_configure(struct child_process *a2l, const char *dso_name)
+ {
+ 	static bool cached;
+ 	static enum a2l_style style;
+@@ -452,6 +452,7 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
+ 		char buf[128];
+ 		struct io io;
+ 		int ch;
++		int lines;
+ 
+ 		if (write(a2l->in, ",\n", 2) != 2)
+ 			return BROKEN;
+@@ -461,19 +462,29 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
+ 		if (ch == ',') {
+ 			style = LLVM;
+ 			cached = true;
++			lines = 1;
+ 		} else if (ch == '?') {
+ 			style = GNU_BINUTILS;
+ 			cached = true;
++			lines = 2;
+ 		} else {
+-			style = BROKEN;
++			if (!symbol_conf.disable_add2line_warn) {
++				char *output = NULL;
++				size_t output_len;
++
++				io__getline(&io, &output, &output_len);
++				pr_warning("%s %s: addr2line configuration failed\n",
++					   __func__, dso_name);
++				pr_warning("\t%c%s", ch, output);
++			}
++			return BROKEN;
+ 		}
+-		do {
++		while (lines) {
+ 			ch = io__get_char(&io);
+-		} while (ch > 0 && ch != '\n');
+-		if (style == GNU_BINUTILS) {
+-			do {
+-				ch = io__get_char(&io);
+-			} while (ch > 0 && ch != '\n');
++			if (ch <= 0)
++				break;
++			if (ch == '\n')
++				lines--;
+ 		}
+ 		/* Ignore SIGPIPE in the event addr2line exits. */
+ 		signal(SIGPIPE, SIG_IGN);
+@@ -593,12 +604,9 @@ static int addr2line(const char *dso_name, u64 addr,
+ 			pr_warning("%s %s: addr2line_subprocess_init failed\n", __func__, dso_name);
+ 		goto out;
+ 	}
+-	a2l_style = addr2line_configure(a2l);
+-	if (a2l_style == BROKEN) {
+-		if (!symbol_conf.disable_add2line_warn)
+-			pr_warning("%s: addr2line configuration failed\n", __func__);
++	a2l_style = addr2line_configure(a2l, dso_name);
++	if (a2l_style == BROKEN)
+ 		goto out;
+-	}
+ 
+ 	/*
+ 	 * Send our request and then *deliberately* send something that can't be interpreted as
 -- 
 2.41.0.162.gfafddb0af9-goog
 
