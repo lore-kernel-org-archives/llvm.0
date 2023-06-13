@@ -1,151 +1,109 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D3327738;
-	Tue, 13 Jun 2023 10:09:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686650997; x=1718186997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2VSwRPSkxIPkkO43q2Odc9trSs0HhJfKrbzg/FdIwSU=;
-  b=BUdxGZNo07AJTCZYdjrAk+WF/bnVKlDsXKF7xlpLdWdcgvUQ2lcg5xzw
-   L1fB5vBJB+c7qyl+989X4n25bxpLo/+zAG6155PHGdG2Khz4cyi2RM0AZ
-   RtcwONm4069CevfyUnFxSjq4gkhmw1QBYG+5dEtMfMv9RmCjv1tjjjcTE
-   ONYBYHKHdxKhReaMTnXDjkMREgNwJVtis18nRsN2b0/XuAD0npnpdoNs4
-   99IuSqPQOw3ZWhA5vD5V8Ds0DXYFzEysUV46JmPGE7id9pwW0sqlT6gsA
-   6yXHqd9P8PH+NYR9/oHW4msSGop+T3b8UolRP/k+dSdMnLzD//5dY9+8z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358285066"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="358285066"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 03:09:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711582141"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="711582141"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 03:09:48 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q90yB-0001Dq-1D;
-	Tue, 13 Jun 2023 10:09:47 +0000
-Date: Tue, 13 Jun 2023 18:09:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Robert Moore <robert.moore@intel.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devel@acpica.org, Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
-	Wyes Karny <Wyes.Karny@amd.com>, Perry Yuan <perry.yuan@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 4/4] cpufreq: intel_pstate: Use the
- acpi_pm_profile_server() symbol
-Message-ID: <202306131736.HZQ9caR6-lkp@intel.com>
-References: <20230605151133.2615-5-mario.limonciello@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD82DDBC
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 10:28:47 +0000 (UTC)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 4DFF73F29E;
+	Tue, 13 Jun 2023 10:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1686652118;
+	bh=yuUVupheiX+fA0yIsT77K8SHvi7G/28fKE1KdCvB4EI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=kIFXkXLwTi8Vhwl0B3KgUjKplp+GFiivWWmc+2H0HmoQR0YefI3BYzum4LwGZzC77
+	 QmPA++ao2gD5e+Gir8KMpheXayrFbjQbgvhTgIvEoMCqaAWLOHfZYYR+Vy0TFf21HB
+	 paNpbj3orVkN8mM8UJlHzWQX37Anoe4WSQiBJgkcE98XU4QnJ5VG5EfPehu/YN+Sv2
+	 wbW9cmWYhBIbVqk37fU+RG9eItXgqNmPixJRU5jkTamWtfae/OnFI0AgDxdoQydsBe
+	 18OhuzXboVgUDhTR109MkQ86KaVZllNbA6C9EbYYfLJ8+T7fXrIeCM1PZH+aSkOuZ5
+	 caCW3j5bzB3uA==
+Message-ID: <dc7f6674-6bc4-00a5-c273-e0f61a385949@canonical.com>
+Date: Tue, 13 Jun 2023 03:28:23 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605151133.2615-5-mario.limonciello@amd.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 02/57] apparmor: Free up __cleanup() name
+Content-Language: en-US
+To: Peter Zijlstra <peterz@infradead.org>, torvalds@linux-foundation.org,
+ keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com
+Cc: masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+ vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+ longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+ cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com, paulmck@kernel.org, frederic@kernel.org,
+ quic_neeraju@quicinc.com, joel@joelfernandes.org, josh@joshtriplett.org,
+ mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, rientjes@google.com,
+ vbabka@suse.cz, roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+ apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
+ lukas.bulwahn@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+ llvm@lists.linux.dev, linux-perf-users@vger.kernel.org, rcu@vger.kernel.org,
+ linux-security-module@vger.kernel.org, tglx@linutronix.de,
+ ravi.bangoria@amd.com, error27@gmail.com, luc.vanoostenryck@gmail.com
+References: <20230612090713.652690195@infradead.org>
+ <20230612093537.536441207@infradead.org>
+From: John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20230612093537.536441207@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Mario,
+On 6/12/23 02:07, Peter Zijlstra wrote:
+> In order to use __cleanup for __attribute__((__cleanup__(func))) the
+> name must not be used for anything else. Avoid the conflict.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-kernel test robot noticed the following build errors:
+if you want, I can just pull this small change into the apparmor
+tree so you don't have to carry it anymore as part of the series.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.4-rc6 next-20230613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
+>   security/apparmor/include/lib.h |    6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> --- a/security/apparmor/include/lib.h
+> +++ b/security/apparmor/include/lib.h
+> @@ -232,7 +232,7 @@ void aa_policy_destroy(struct aa_policy
+>    */
+>   #define fn_label_build(L, P, GFP, FN)					\
+>   ({									\
+> -	__label__ __cleanup, __done;					\
+> +	__label__ __do_cleanup, __done;					\
+>   	struct aa_label *__new_;					\
+>   									\
+>   	if ((L)->size > 1) {						\
+> @@ -250,7 +250,7 @@ void aa_policy_destroy(struct aa_policy
+>   			__new_ = (FN);					\
+>   			AA_BUG(!__new_);				\
+>   			if (IS_ERR(__new_))				\
+> -				goto __cleanup;				\
+> +				goto __do_cleanup;			\
+>   			__lvec[__j++] = __new_;				\
+>   		}							\
+>   		for (__j = __count = 0; __j < (L)->size; __j++)		\
+> @@ -272,7 +272,7 @@ void aa_policy_destroy(struct aa_policy
+>   			vec_cleanup(profile, __pvec, __count);		\
+>   		} else							\
+>   			__new_ = NULL;					\
+> -__cleanup:								\
+> +__do_cleanup:								\
+>   		vec_cleanup(label, __lvec, (L)->size);			\
+>   	} else {							\
+>   		(P) = labels_profile(L);				\
+> 
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-CPPC-Add-a-symbol-to-check-if-the-preferred-profile-is-a-server/20230605-231602
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230605151133.2615-5-mario.limonciello%40amd.com
-patch subject: [PATCH 4/4] cpufreq: intel_pstate: Use the acpi_pm_profile_server() symbol
-config: i386-buildonly-randconfig-r006-20230612 (https://download.01.org/0day-ci/archive/20230613/202306131736.HZQ9caR6-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch rafael-pm linux-next
-        git checkout rafael-pm/linux-next
-        b4 shazam https://lore.kernel.org/r/20230605151133.2615-5-mario.limonciello@amd.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131736.HZQ9caR6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cpufreq/intel_pstate.c:2397:8: error: call to undeclared function 'acpi_pm_profile_server'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           if (acpi_pm_profile_server())
-                               ^
-   1 error generated.
-
-
-vim +/acpi_pm_profile_server +2397 drivers/cpufreq/intel_pstate.c
-
-  2376	
-  2377	static int intel_pstate_init_cpu(unsigned int cpunum)
-  2378	{
-  2379		struct cpudata *cpu;
-  2380	
-  2381		cpu = all_cpu_data[cpunum];
-  2382	
-  2383		if (!cpu) {
-  2384			cpu = kzalloc(sizeof(*cpu), GFP_KERNEL);
-  2385			if (!cpu)
-  2386				return -ENOMEM;
-  2387	
-  2388			WRITE_ONCE(all_cpu_data[cpunum], cpu);
-  2389	
-  2390			cpu->cpu = cpunum;
-  2391	
-  2392			cpu->epp_default = -EINVAL;
-  2393	
-  2394			if (hwp_active) {
-  2395				intel_pstate_hwp_enable(cpu);
-  2396	
-> 2397				if (acpi_pm_profile_server())
-  2398					hwp_boost = true;
-  2399			}
-  2400		} else if (hwp_active) {
-  2401			/*
-  2402			 * Re-enable HWP in case this happens after a resume from ACPI
-  2403			 * S3 if the CPU was offline during the whole system/resume
-  2404			 * cycle.
-  2405			 */
-  2406			intel_pstate_hwp_reenable(cpu);
-  2407		}
-  2408	
-  2409		cpu->epp_powersave = -EINVAL;
-  2410		cpu->epp_policy = 0;
-  2411	
-  2412		intel_pstate_get_cpu_pstates(cpu);
-  2413	
-  2414		pr_debug("controlling: cpu %d\n", cpunum);
-  2415	
-  2416		return 0;
-  2417	}
-  2418	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
