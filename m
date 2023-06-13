@@ -1,55 +1,51 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483223D56
-	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 20:58:43 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-650352b89f6so4579881b3a.0
-        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686689923; x=1689281923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kaJ1SlZ50WSiGQJPsQQTsMtPEKHuyraiHKR0QOdAX9I=;
-        b=H80e47crm4ESXow/QaIuxPk66TgxVa/iJGaHnH95xfD08xVJrKMNHs8ysh9jIGX/dr
-         NDw2UibOZWY96JQi/qehTglV6bBwPEKNS9cB24g/qjELKgnSsGugeXdqfhSWJE2tQTe6
-         QS/TOUG6kPDT9evqGfodFJrPyJwJtMP47mu9o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686689923; x=1689281923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kaJ1SlZ50WSiGQJPsQQTsMtPEKHuyraiHKR0QOdAX9I=;
-        b=XYgR57FkG1zYsPFXxxs1bhCPGP4wcfmHfZ6jDULDc/46TvmcNDMz7xKXhRQqC2tkOB
-         x6xoHtkInbCzIZThxyDOyUCcd1HHuBQrlOdidDmM1AGO4+yoxA8QCjkmj/Yyk2xnrSe8
-         WkT8YAQX/FympPB1EQFGE/VPJdLj6eSLVYKsFhzQd+Oc6gFRCq+KrePuY8W8Jj2EEQJw
-         Ti+em6jfvPf1P/q/Qc1mbYZb6cmiyKl6G54pM2RXs9NxJkZBTRGsl8uOTM5TvgnNpiGg
-         W07RZlsI7CALpXaoD5ra6pw2o96OHKTuOnB+yiCYQZ1k+v58bpHhELo3Z39Axfb43JYu
-         BFQA==
-X-Gm-Message-State: AC+VfDyOsu04++66jtByNb6vS4eGBUttdK+CuM8hpK9e1T4srZV8Wnzo
-	VDs3c1PIxRPyAaYbeD2+ZEaRHw==
-X-Google-Smtp-Source: ACHHUZ7n7RXpBZeC4liksc7ps6dJc9YnbYCeZyY/kUOx53JAf3fL+kUrRrJ+Xsm2JqhZ7HUXteWTew==
-X-Received: by 2002:a05:6a00:13a6:b0:65a:cbf3:4687 with SMTP id t38-20020a056a0013a600b0065acbf34687mr54961pfg.0.1686689923521;
-        Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78d01000000b0065418efa5ebsm9022926pfe.155.2023.06.13.13.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
-Date: Tue, 13 Jun 2023 13:58:42 -0700
-From: Kees Cook <keescook@chromium.org>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com,
-	kernel test robot <oliver.sang@intel.com>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [linux-next:master] [kbuild]  df8fc4e934:
- BUG:unable_to_handle_page_fault_for_address
-Message-ID: <202306131354.A499DE60@keescook>
-References: <202306102333.8f5a7443-oliver.sang@intel.com>
- <202306131342.51A51F651C@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C4C1ED43;
+	Tue, 13 Jun 2023 21:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686690996; x=1718226996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xBxRrQSWCNJeRrf4b0WLzHh8isR+4h1yUuTtpwm0xS8=;
+  b=ORgBbE6oJQ6Zxp1wijzm0fPTMRzcpHkQyUKkz3uwCHyODFTEk+kCbzna
+   F9VLUxXuCXeozNXM9H5rS73GtaUs1uXaZYg5oxMVAmgpt3xKS2SpPqjW8
+   LYC2dxGcG/IPAq0xueF2bIJre9LKxlQfelpprGABQMlEpW85QOb02OBAy
+   rodZ+leUZKZ2RyAgEuc7Q1BrYJU1KpFYklU+NVg73mmS/pO5LLwwdtVx0
+   iaqh40wQC95BDmcOfEWGUJ8oTCixflRFpNNj9dwPZzH/GWlMky4aO6wRe
+   zvDjWdv5mdIZlENlt/RaXPUXbtOyYKKxYLucQOYTiaGC/yQTa05vEkByd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="357334280"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="357334280"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 14:16:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="1041912514"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="1041912514"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jun 2023 14:16:22 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9BNF-0001mK-2i;
+	Tue, 13 Jun 2023 21:16:21 +0000
+Date: Wed, 14 Jun 2023 05:16:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: mwilck@suse.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
+	Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	James Bottomley <jejb@linux.vnet.ibm.com>,
+	linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+	Hannes Reinecke <hare@suse.de>, Martin Wilck <mwilck@suse.com>,
+	Karan Tilak Kumar <kartilak@cisco.com>,
+	Sesidhar Baddela <sebaddel@cisco.com>
+Subject: Re: [PATCH v6 6/7] scsi: replace scsi_target_block() by
+ scsi_block_targets()
+Message-ID: <202306140503.hMWyg8Xa-lkp@intel.com>
+References: <20230613174227.11235-7-mwilck@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,66 +54,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306131342.51A51F651C@keescook>
+In-Reply-To: <20230613174227.11235-7-mwilck@suse.com>
 
-On Tue, Jun 13, 2023 at 01:46:54PM -0700, Kees Cook wrote:
-> On Sun, Jun 11, 2023 at 09:41:30PM +0800, kernel test robot wrote:
-> > the issue we found below is by clang-15, but we confirmed clang-15 we use is
-> > commit 8dfdcc7b7b in llvm-project. it supports the flag already.
-> 
-> Interesting! Thanks for the report.
-> 
-> > [  228.605608][    C1] BUG: unable to handle page fault for address: 04090300
-> > [...]
-> > [ 228.608262][ C1] EIP: string (lib/vsprintf.c:644 lib/vsprintf.c:726) 
-> > [...]
-> > [ 228.608262][ C1] Call Trace:
-> > [ 228.608262][ C1]  <SOFTIRQ>
-> > [ 228.608262][ C1] vsnprintf (lib/vsprintf.c:2817) 
-> > [ 228.608262][ C1] vprintk_store (kernel/printk/printk.c:2191) 
-> > [ 228.608262][ C1] vprintk_emit (kernel/printk/printk.c:2288) 
-> > [ 228.608262][ C1] vprintk_default (kernel/printk/printk.c:2318) 
-> > [ 228.608262][ C1] vprintk (kernel/printk/printk_safe.c:50) 
-> > [ 228.608262][ C1] _printk (kernel/printk/printk.c:2331) 
-> > [ 228.608262][ C1] __ubsan_handle_out_of_bounds (lib/ubsan.c:209 lib/ubsan.c:343) 
-> 
-> This is a crash within the UBSAN handler! That's very unexpected.
+Hi,
 
-I still don't understand this. Is printk() not allowed in SOFTIRQ?
+kernel test robot noticed the following build errors:
 
-> > [ 228.608262][ C1] get_string (drivers/usb/gadget/composite.c:1314) 
-> > [ 228.608262][ C1] composite_setup (drivers/usb/gadget/composite.c:1871) 
-> > [ 228.608262][ C1] dummy_timer (drivers/usb/gadget/udc/dummy_hcd.c:?) 
-> 
-> And the out-of-bounds condition got triggered in dummy_hcd.
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next axboe-block/for-next linus/master v6.4-rc6 next-20230613]
+[cannot apply to hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I found this. I'm surprised we didn't trip over it earlier!
+url:    https://github.com/intel-lab-lkp/linux/commits/mwilck-suse-com/bsg-increase-number-of-devices/20230614-014437
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230613174227.11235-7-mwilck%40suse.com
+patch subject: [PATCH v6 6/7] scsi: replace scsi_target_block() by scsi_block_targets()
+config: arm-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140503.hMWyg8Xa-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add mkp-scsi https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+        git fetch mkp-scsi for-next
+        git checkout mkp-scsi/for-next
+        b4 shazam https://lore.kernel.org/r/20230613174227.11235-7-mwilck@suse.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
 
-/* USB_DT_STRING: String descriptor */
-struct usb_string_descriptor {
-        __u8  bLength;
-        __u8  bDescriptorType;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140503.hMWyg8Xa-lkp@intel.com/
 
-        __le16 wData[1];                /* UTF-16LE encoded */
-} __attribute__ ((packed));
+All errors (new ones prefixed by >>):
 
-$ git grep 'struct usb_string_descriptor'
-drivers/usb/early/xhci-dbc.c:   struct usb_string_descriptor *s_desc;
-drivers/usb/early/xhci-dbc.c:   s_desc                  = (struct usb_string_descriptor *)strings->serial;
-drivers/usb/early/xhci-dbc.c:   s_desc                  = (struct usb_string_descriptor *)strings->product;
-drivers/usb/early/xhci-dbc.c:   s_desc                  = (struct usb_string_descriptor *)strings->manufacturer;
-drivers/usb/gadget/composite.c:         struct usb_string_descriptor    *s = buf;
-drivers/usb/gadget/udc/aspeed-vhub/hub.c:       struct usb_string_descriptor *sdesc = buf;
-drivers/usb/host/xhci-dbgcap.c: struct usb_string_descriptor    *s_desc;
-drivers/usb/host/xhci-dbgcap.c: s_desc = (struct usb_string_descriptor *)strings->serial;
-drivers/usb/host/xhci-dbgcap.c: s_desc = (struct usb_string_descriptor *)strings->product;
-drivers/usb/host/xhci-dbgcap.c: s_desc = (struct usb_string_descriptor *)strings->manufacturer;
-include/uapi/linux/usb/ch9.h:struct usb_string_descriptor {
+>> drivers/scsi/scsi_lib.c:2912:1: error: conflicting types for 'scsi_block_targets'
+    2912 | scsi_block_targets(struct device *dev, struct Scsi_Host *shost)
+         | ^
+   include/scsi/scsi_device.h:459:6: note: previous declaration is here
+     459 | void scsi_block_targets(struct Scsi_Host *shost, struct device *dev);
+         |      ^
+   1 error generated.
 
-Looking at each use, none are using sizeof() on the struct, so it should
-be a trivial replacement. I'll send a patch.
 
--Kees
+vim +/scsi_block_targets +2912 drivers/scsi/scsi_lib.c
+
+  2898	
+  2899	/**
+  2900	 * scsi_block_targets - transition all SCSI child devices to SDEV_BLOCK state
+  2901	 * @dev: a parent device of one or more scsi_target devices
+  2902	 * @shost: the Scsi_Host to which this device belongs
+  2903	 *
+  2904	 * Iterate over all children of @dev, which should be scsi_target devices,
+  2905	 * and switch all subordinate scsi devices to SDEV_BLOCK state. Wait for
+  2906	 * ongoing scsi_queue_rq() calls to finish. May sleep.
+  2907	 *
+  2908	 * Note:
+  2909	 * @dev must not itself be a scsi_target device.
+  2910	 */
+  2911	void
+> 2912	scsi_block_targets(struct device *dev, struct Scsi_Host *shost)
+  2913	{
+  2914		WARN_ON_ONCE(scsi_is_target_device(dev));
+  2915		device_for_each_child(dev, NULL, target_block);
+  2916		blk_mq_wait_quiesce_done(&shost->tag_set);
+  2917	}
+  2918	EXPORT_SYMBOL_GPL(scsi_block_targets);
+  2919	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
