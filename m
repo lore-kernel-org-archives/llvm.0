@@ -1,27 +1,27 @@
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD82DDBC
-	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 10:28:47 +0000 (UTC)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9129B0;
+	Tue, 13 Jun 2023 10:35:57 +0000 (UTC)
+Received: from [IPV6:2001:861:4a40:8620:ac8f:54cf:6e66:b8b4] (unknown [IPv6:2001:861:4a40:8620:ac8f:54cf:6e66:b8b4])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 4DFF73F29E;
-	Tue, 13 Jun 2023 10:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1686652118;
-	bh=yuUVupheiX+fA0yIsT77K8SHvi7G/28fKE1KdCvB4EI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=kIFXkXLwTi8Vhwl0B3KgUjKplp+GFiivWWmc+2H0HmoQR0YefI3BYzum4LwGZzC77
-	 QmPA++ao2gD5e+Gir8KMpheXayrFbjQbgvhTgIvEoMCqaAWLOHfZYYR+Vy0TFf21HB
-	 paNpbj3orVkN8mM8UJlHzWQX37Anoe4WSQiBJgkcE98XU4QnJ5VG5EfPehu/YN+Sv2
-	 wbW9cmWYhBIbVqk37fU+RG9eItXgqNmPixJRU5jkTamWtfae/OnFI0AgDxdoQydsBe
-	 18OhuzXboVgUDhTR109MkQ86KaVZllNbA6C9EbYYfLJ8+T7fXrIeCM1PZH+aSkOuZ5
-	 caCW3j5bzB3uA==
-Message-ID: <dc7f6674-6bc4-00a5-c273-e0f61a385949@canonical.com>
-Date: Tue, 13 Jun 2023 03:28:23 -0700
+	(Authenticated sender: gtucker)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 36D576606EFD;
+	Tue, 13 Jun 2023 11:35:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1686652550;
+	bh=QvZoVMtSRfbKYzNTR8JdqBOwdHvxzvmP3UiPrsmqRzo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=g2kPUpusiVLEUh6bkquiemGCKqej3sLrqklLNIMGKqIk/hL62sKgNOIL6vWcevJco
+	 9HzbA6VKv922k2F/ncvzfIxEEJTnH36I+HwWrV+aFbH+f2Kn1FG8RmBhNDGoFPG2LW
+	 KBneWqBHdZ1F9CT1bxWmgZPfg5HvD+V0d0yGaoY256aHjpkc8e1yLcYc0MtpnteVW5
+	 ffqnMJ7MUtI4LuU8HuprAgmADoVTitnPGiZOHw86buQnm9Gx4hnThK3FGUO+tAQCdK
+	 9HpS9bigXubEEBMg/XgjxoneudHrVRGZJ6QwWHKbDPibhXUigoOoKPS8unctMu5YJ6
+	 mMjUWuJ0OJS0w==
+Message-ID: <dfa85ccc-693b-00cb-a4d9-af32e0dfbed8@collabora.com>
+Date: Tue, 13 Jun 2023 12:37:05 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,81 +29,48 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 02/57] apparmor: Free up __cleanup() name
+ Thunderbird/102.10.0
+Subject: Re: kernelci: please upgrade clang-17
 Content-Language: en-US
-To: Peter Zijlstra <peterz@infradead.org>, torvalds@linux-foundation.org,
- keescook@chromium.org, gregkh@linuxfoundation.org, pbonzini@redhat.com
-Cc: masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
- vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
- longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
- cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
- vschneid@redhat.com, paulmck@kernel.org, frederic@kernel.org,
- quic_neeraju@quicinc.com, joel@joelfernandes.org, josh@joshtriplett.org,
- mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, rientjes@google.com,
- vbabka@suse.cz, roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
- apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
- lukas.bulwahn@gmail.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
- llvm@lists.linux.dev, linux-perf-users@vger.kernel.org, rcu@vger.kernel.org,
- linux-security-module@vger.kernel.org, tglx@linutronix.de,
- ravi.bangoria@amd.com, error27@gmail.com, luc.vanoostenryck@gmail.com
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.536441207@infradead.org>
-From: John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20230612093537.536441207@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Mark Brown <broonie@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>
+References: <CAKwvOd=qxNfPDo-=bxzyzmY3YmsBtxv686rr9Q_thrfC6ni3eg@mail.gmail.com>
+ <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk>
+From: Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/12/23 02:07, Peter Zijlstra wrote:
-> In order to use __cleanup for __attribute__((__cleanup__(func))) the
-> name must not be used for anything else. Avoid the conflict.
+On 12/06/2023 17:11, Mark Brown wrote:
+> On Fri, Jun 09, 2023 at 01:50:13PM -0700, Nick Desaulniers wrote:
+>> Starting a new thread because gmail cannot handle replying to an email
+>> w/ >45k warnings.
+>> https://lore.kernel.org/llvm/6482b7dd.170a0220.a93c3.9102@mx.google.com/
+>>
+>> instances of -Wbuiltin-macro-redefined have been fixed in ToT llvm.
+>> Updating clang-17 should resolve most of the error spew.
+>>
+>> Does kernel CI update ToT clang builds on a fixed cadence?
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> The containers with the tools should be being rebuilt during the
+> production update which normally happens every Monday.  There's some
+> disruption at the minute due to some infrastructure rebuilding that's
+> going on so today's update of the containers might be delayed.
 
-if you want, I can just pull this small change into the apparmor
-tree so you don't have to carry it anymore as part of the series.
+Yes the LLVM-17 update has now trickled down into production and
+warnings are all gone:
 
-> ---
->   security/apparmor/include/lib.h |    6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> --- a/security/apparmor/include/lib.h
-> +++ b/security/apparmor/include/lib.h
-> @@ -232,7 +232,7 @@ void aa_policy_destroy(struct aa_policy
->    */
->   #define fn_label_build(L, P, GFP, FN)					\
->   ({									\
-> -	__label__ __cleanup, __done;					\
-> +	__label__ __do_cleanup, __done;					\
->   	struct aa_label *__new_;					\
->   									\
->   	if ((L)->size > 1) {						\
-> @@ -250,7 +250,7 @@ void aa_policy_destroy(struct aa_policy
->   			__new_ = (FN);					\
->   			AA_BUG(!__new_);				\
->   			if (IS_ERR(__new_))				\
-> -				goto __cleanup;				\
-> +				goto __do_cleanup;			\
->   			__lvec[__j++] = __new_;				\
->   		}							\
->   		for (__j = __count = 0; __j < (L)->size; __j++)		\
-> @@ -272,7 +272,7 @@ void aa_policy_destroy(struct aa_policy
->   			vec_cleanup(profile, __pvec, __count);		\
->   		} else							\
->   			__new_ = NULL;					\
-> -__cleanup:								\
-> +__do_cleanup:								\
->   		vec_cleanup(label, __lvec, (L)->size);			\
->   	} else {							\
->   		(P) = labels_profile(L);				\
-> 
-> 
+  https://storage.kernelci.org/next/master/next-20230613/arm/multi_v7_defconfig/clang-17/logs/kernel.log
+
+compared with the previous linux-next build which had all the warnings:
+
+  https://storage.kernelci.org/next/master/next-20230609/arm/multi_v7_defconfig/clang-17/logs/kernel.log
+
+We skipped the regular production update last Monday to focus on
+migrating VMs to the new Azure subscription, sorry for the
+inconvenience.  We're back on the regular schedule now.
+
+Thanks,
+Guillaume
 
