@@ -1,62 +1,71 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DC9136A;
-	Tue, 13 Jun 2023 19:42:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686685347; x=1718221347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lz85jrU6iR9R6CqSIYyzCsTLAAEFjmrL/CeWk5ErFa4=;
-  b=lPylbGrglXiK1nr6xN/3v6CfVNVSg+9Q/ixsPlsfApamnXWq1pZqtksK
-   tDsoj00Yr/5Adw7KIG4dyuLhJu6U/iXTgAvdYq4Ip1sfDn0nf6rK1hXra
-   5e0yhapwjxUBkPDVExY+murl0yMU685CQS4FlUZzUTkRGTdDQ5taOYZJU
-   NCNeQbstYEfvrAUNBkjNamqIWQ07MfS37c3+KerAOn+/S0M8PAoLxML2W
-   ZJurYpzxfZ2yf8ZPNzxTFBDVgtcYIxEW9uuWXYuf1TMXjBPeihYSEuFNp
-   /6y1rE3HPD1/0ygiLiWHsoYb92Adynr9N38T36Fo8i9KA5MAxmFI47GH8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="355935114"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="355935114"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 12:42:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856242508"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="856242508"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2023 12:42:19 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q99uE-0001ia-0x;
-	Tue, 13 Jun 2023 19:42:18 +0000
-Date: Wed, 14 Jun 2023 03:41:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenz Bauer <lmb@isovalent.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Joe Stringer <joe@wand.net.nz>, Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
-Subject: Re: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
-Message-ID: <202306140351.Y1JjOIxo-lkp@intel.com>
-References: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40C7136A
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 19:43:05 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1b3a9eae57cso24947735ad.1
+        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 12:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686685385; x=1689277385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=++RlJEGBoYZZIYZsRHYoBMeQspkNZr4R3QmKZH+3SVM=;
+        b=H1q3jvV/pyh4iAygQto1xdexTU/nOQVTmlJXFt1V1I4T+zRrPD02k1089dAsxc1QZm
+         waIS8XBlYOTH6cQJ3o3yQVaXu3IFlTlHBQEFUUYp9JEwAcf9n+cAWiIML/6H11PZcjZA
+         keWtPgaY06BYpTYNOkXy5KeusVGGvYattkCMw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686685385; x=1689277385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++RlJEGBoYZZIYZsRHYoBMeQspkNZr4R3QmKZH+3SVM=;
+        b=SdPig/xXsZ+qEhCRtiovW0+iTIXZZuoBZVlAks8J6OE+6LdAz2ViGpB5usXFDeqmaq
+         7AikKA4JZ4fpeZ52jqo3hWoxuHWIU/zA3N/FwZ0ZBtUchi1g4T6uEhTyRC6rllk4GHGu
+         iQIRTkoBsyvkYfsJZ4WIND6bQGmISMNTBnEGNHDEegdgFJOhA47GM7Lrfyo/NsM/v7Bh
+         b8+T9e9cqSvR6Mr6NfxFc7PJyPXcGXv3BjEXncElFRDcldd5swPYnsBQEybX5WySOayl
+         QW2cxMaXOnXAtO3tya0LByJNDw8s38wx45QcbLDwkvDScsvYNxW+1G6U1MpkI0WEdXXA
+         CXcA==
+X-Gm-Message-State: AC+VfDzpZ0ZLUA1i8VebBdkK8WNnbjor2fzfr2iAlqg/yWS3b2y/pOR8
+	bZvPoWahQIgV94QE4ZrrSwfdsg==
+X-Google-Smtp-Source: ACHHUZ5K6eRjoeJmG56eUTKIiERD67E62TvQWKzLdYNBGkqzE1DRXsi0Qjm+hqShi0dhC4jE+A9sEQ==
+X-Received: by 2002:a17:903:2284:b0:1b3:de1d:1ce9 with SMTP id b4-20020a170903228400b001b3de1d1ce9mr6725776plh.25.1686685385007;
+        Tue, 13 Jun 2023 12:43:05 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001b3d0aff88fsm4291856plb.109.2023.06.13.12.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 12:43:04 -0700 (PDT)
+Date: Tue, 13 Jun 2023 12:43:03 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+	pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
+	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
+	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 28/57] perf; Simplify event_sched_in()
+Message-ID: <202306131242.99E9B4A@keescook>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093539.537454913@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,40 +74,12 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+In-Reply-To: <20230612093539.537454913@infradead.org>
 
-Hi Lorenz,
+On Mon, Jun 12, 2023 at 11:07:41AM +0200, Peter Zijlstra wrote:
+> Use guards to reduce gotos and simplify control flow.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
-base:   25085b4e9251c77758964a8e8651338972353642
-patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613%40isovalent.com
-patch subject: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
-config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140351.Y1JjOIxo-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout 25085b4e9251c77758964a8e8651338972353642
-        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306140351.Y1JjOIxo-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "inet6_lookup_run_sk_lookup" [net/ipv6/ipv6.ko] undefined!
+Typoe in Subject: ";" should be ":"
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
