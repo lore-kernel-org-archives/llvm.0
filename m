@@ -1,44 +1,44 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5623117E0;
-	Tue, 13 Jun 2023 02:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D59179;
+	Tue, 13 Jun 2023 02:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686622230; x=1718158230;
+  t=1686623489; x=1718159489;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C4Op1AxtApCIC5gbv0edjaoQ4BBs9gtlBPlJtJcsw6Q=;
-  b=johtGnbVN4qzc9lgPilEUNxYzzlXvKfyyRtU5juYrEm+Db6Z3qtGjtIj
-   aAzOMn5NazFE4D3jjdViS7jKeFpdLRZRcWYc+eWPmLXIeWqcMEfnqxPUE
-   XpMR5zoN8juXirxn3cv8KTChpyIHYacAhftWvhFO4Xa1k76MlOlPm32/e
-   NswS3OlLMql02fblKbAhU0TAMr8A9EexUbSw91ydTe2uotwjcs64tbaJP
-   eIGWwS/fLlacP4EzwNlLexIZv0RF5pDF4cFqD4aBHXR+emwAYKaisxFec
-   j14gV8D8Ph4Y8ueTvg380Y91nVwKtPCxOWvUXje5BcBBDWqJ6xqA4y0/4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="424090499"
+  bh=GOiNhNQJ7Kbc4limx3A3nHNPpQ3hcpot1ecRyWzTGn0=;
+  b=HSj9xXf6qfmGPpon6dRhD6j9q0k5TL3Tz2oYPd4HkN8/0aFxbvP4lUJC
+   1SNH/OHYaXOECnmlg4s857we9YvcDg6dahLGVr8cVc8ugy//H3Qb/Bc0C
+   FycOJYRehN48xG9N/QsuTklv8gA34OgxWBrryQY+LZ8zLlrJsA8C/AjrY
+   iGVGk+Lox571RDEG2QnFFrX0mltO5Fh3VS/N3oPqseIzK1Y3+uFUpeCQy
+   TfBdJ/qOB/eY9DSnNfU130+tTQwjSjJ/+qcnCKRvIBNuHIOp/sLICH+tG
+   TeTloYoJFVeuJi7H3gJLMZwrHp/+rWKESLc7hTufzps9zL791wWTL7G53
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="347864115"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="424090499"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 19:10:28 -0700
+   d="scan'208";a="347864115"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 19:31:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="958231146"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="885674094"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="958231146"
+   d="scan'208";a="885674094"
 Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2023 19:10:26 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Jun 2023 19:31:26 -0700
 Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q8tUH-0000vK-2K;
-	Tue, 13 Jun 2023 02:10:25 +0000
-Date: Tue, 13 Jun 2023 10:09:44 +0800
+	id 1q8toc-0000w6-0Z;
+	Tue, 13 Jun 2023 02:31:26 +0000
+Date: Tue, 13 Jun 2023 10:30:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
+To: Petr Machata <petrm@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm64:devel/kmalloc-minalign 1/17]
- arch/powerpc/include/asm/page_32.h:16:9: warning: 'ARCH_DMA_MINALIGN' macro
- redefined
-Message-ID: <202306131053.1ybvRRhO-lkp@intel.com>
+	Danielle Ratson <danieller@nvidia.com>
+Subject: [jpirko-mlxsw:combined_queue 76/94]
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:9834:34: warning:
+ variable 'rif' is uninitialized when used here
+Message-ID: <202306131041.qUsgJbAX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,398 +48,71 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git devel/kmalloc-minalign
-head:   b862c01a97ef575e8d5f018e542dbd30ddc524b9
-commit: 9c5a142fe1e2aeb1a1821eb79b39edd09bbb0078 [1/17] mm/slab: Decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINALIGN
-config: powerpc-walnut_defconfig (https://download.01.org/0day-ci/archive/20230613/202306131053.1ybvRRhO-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+tree:   https://github.com/jpirko/linux_mlxsw combined_queue
+head:   3cfb81e62be1e484eed57086d87ac32038f50fa5
+commit: 5efc31463b07489a9a3cec153a696c93d0a3a6a6 [76/94] mlxsw: spectrum_router: Replay IP NETDEV_UP on device enslavement
+config: i386-randconfig-i004-20230612 (https://download.01.org/0day-ci/archive/20230613/202306131041.qUsgJbAX-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?id=9c5a142fe1e2aeb1a1821eb79b39edd09bbb0078
-        git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-        git fetch --no-tags arm64 devel/kmalloc-minalign
-        git checkout 9c5a142fe1e2aeb1a1821eb79b39edd09bbb0078
+        # https://github.com/jpirko/linux_mlxsw/commit/5efc31463b07489a9a3cec153a696c93d0a3a6a6
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw combined_queue
+        git checkout 5efc31463b07489a9a3cec153a696c93d0a3a6a6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpio/ drivers/net/ethernet/mellanox/mlxsw/ sound/soc/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131053.1ybvRRhO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306131041.qUsgJbAX-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/powerpc/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/powerpc/include/asm/thread_info.h:13:
-   In file included from arch/powerpc/include/asm/page.h:247:
->> arch/powerpc/include/asm/page_32.h:16:9: warning: 'ARCH_DMA_MINALIGN' macro redefined [-Wmacro-redefined]
-      16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
-         |         ^
-   include/linux/cache.h:104:9: note: previous definition is here
-     104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      43 | DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      44 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:187:1: note: expanded from here
-     187 | __do_insb
-         | ^
-   arch/powerpc/include/asm/io.h:614:56: note: expanded from macro '__do_insb'
-     614 | #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:189:1: note: expanded from here
-     189 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:191:1: note: expanded from here
-     191 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
---
-   In file included from fs/lockd/clntlock.c:10:
-   In file included from include/linux/module.h:14:
-   In file included from include/linux/buildid.h:5:
-   In file included from include/linux/mm_types.h:5:
-   In file included from include/linux/mm_types_task.h:13:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/powerpc/include/asm/atomic.h:11:
-   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
-   In file included from include/asm-generic/cmpxchg-local.h:6:
-   In file included from include/linux/irqflags.h:16:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:12:
-   In file included from arch/powerpc/include/asm/ptrace.h:342:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/powerpc/include/asm/thread_info.h:13:
-   In file included from arch/powerpc/include/asm/page.h:247:
->> arch/powerpc/include/asm/page_32.h:16:9: warning: 'ARCH_DMA_MINALIGN' macro redefined [-Wmacro-redefined]
-      16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
-         |         ^
-   include/linux/cache.h:104:9: note: previous definition is here
-     104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-         |         ^
-   In file included from fs/lockd/clntlock.c:14:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      43 | DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      44 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:182:1: note: expanded from here
-     182 | __do_insb
-         | ^
-   arch/powerpc/include/asm/io.h:614:56: note: expanded from macro '__do_insb'
-     614 | #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntlock.c:14:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:184:1: note: expanded from here
-     184 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntlock.c:14:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:186:1: note: expanded from here
-     186 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntlock.c:14:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:188:1: note: expanded from here
-     188 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntlock.c:14:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
---
-   In file included from fs/lockd/clntproc.c:10:
-   In file included from include/linux/module.h:14:
-   In file included from include/linux/buildid.h:5:
-   In file included from include/linux/mm_types.h:5:
-   In file included from include/linux/mm_types_task.h:13:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/powerpc/include/asm/atomic.h:11:
-   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
-   In file included from include/asm-generic/cmpxchg-local.h:6:
-   In file included from include/linux/irqflags.h:16:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:12:
-   In file included from arch/powerpc/include/asm/ptrace.h:342:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/powerpc/include/asm/thread_info.h:13:
-   In file included from arch/powerpc/include/asm/page.h:247:
->> arch/powerpc/include/asm/page_32.h:16:9: warning: 'ARCH_DMA_MINALIGN' macro redefined [-Wmacro-redefined]
-      16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
-         |         ^
-   include/linux/cache.h:104:9: note: previous definition is here
-     104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-         |         ^
-   In file included from fs/lockd/clntproc.c:16:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:43:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      43 | DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      44 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:204:1: note: expanded from here
-     204 | __do_insb
-         | ^
-   arch/powerpc/include/asm/io.h:614:56: note: expanded from macro '__do_insb'
-     614 | #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntproc.c:16:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:206:1: note: expanded from here
-     206 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntproc.c:16:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:208:1: note: expanded from here
-     208 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntproc.c:16:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:210:1: note: expanded from here
-     210 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/lockd/clntproc.c:16:
-   In file included from include/linux/nfs_fs.h:24:
-   In file included from include/linux/pagemap.h:11:
-..
+>> drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:9834:34: warning: variable 'rif' is uninitialized when used here [-Wuninitialized]
+           if (!mlxsw_sp_rif_should_config(rif, dev, NETDEV_UP))
+                                           ^~~
+   drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c:9821:26: note: initialize the variable 'rif' to silence this warning
+           struct mlxsw_sp_rif *rif;
+                                   ^
+                                    = NULL
+   1 warning generated.
 
 
-vim +/ARCH_DMA_MINALIGN +16 arch/powerpc/include/asm/page_32.h
+vim +/rif +9834 drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
 
-5cd16ee934eafc include/asm-powerpc/page_32.h      Michael Ellerman       2005-11-11  14  
-52142e756e9bf6 include/asm-powerpc/page_32.h      Benjamin Herrenschmidt 2007-11-19  15  #ifdef CONFIG_NOT_COHERENT_CACHE
-a6eb9fe105d5de arch/powerpc/include/asm/page_32.h FUJITA Tomonori        2010-08-10 @16  #define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
-52142e756e9bf6 include/asm-powerpc/page_32.h      Benjamin Herrenschmidt 2007-11-19  17  #endif
-52142e756e9bf6 include/asm-powerpc/page_32.h      Benjamin Herrenschmidt 2007-11-19  18  
-
-:::::: The code at line 16 was first introduced by commit
-:::::: a6eb9fe105d5de0053b261148cee56c94b4720ca dma-mapping: rename ARCH_KMALLOC_MINALIGN to ARCH_DMA_MINALIGN
-
-:::::: TO: FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+  9815	
+  9816	static int mlxsw_sp_router_unreplay_inetaddr_up(struct net_device *dev,
+  9817							struct netdev_nested_priv *priv)
+  9818	{
+  9819		struct mlxsw_sp_router_replay_inetaddr_up *ctx = priv->data;
+  9820		struct mlxsw_sp_crif *crif;
+  9821		struct mlxsw_sp_rif *rif;
+  9822	
+  9823		if (!ctx->done)
+  9824			return 0;
+  9825	
+  9826		if (mlxsw_sp_dev_addr_list_empty(dev))
+  9827			return 0;
+  9828	
+  9829		crif = mlxsw_sp_crif_lookup(ctx->mlxsw_sp->router, dev);
+  9830		if (!crif || !crif->rif)
+  9831			return 0;
+  9832	
+  9833		/* We are rolling back NETDEV_UP, so ask for that. */
+> 9834		if (!mlxsw_sp_rif_should_config(rif, dev, NETDEV_UP))
+  9835			return 0;
+  9836	
+  9837		__mlxsw_sp_inetaddr_event(ctx->mlxsw_sp, dev, NETDEV_DOWN, false, NULL);
+  9838	
+  9839		ctx->done--;
+  9840		return 0;
+  9841	}
+  9842	
 
 -- 
 0-DAY CI Kernel Test Service
