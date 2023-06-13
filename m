@@ -1,153 +1,158 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BCE567D;
-	Tue, 13 Jun 2023 08:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686643426; x=1718179426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8VB2fSbfG7bVXnvN2SMewZux4+XqMyV3m8Nsf25Mv74=;
-  b=D78nlr1NRmMkxR3YAhuhWvFSDJJk3ynnkSgXtO7SILj/bNsAuRMhGUwt
-   m1HvxArjMQh8dNSQm1iDfPGw5Jn+Aq8sz0kEhfNTk/EczqpfVy2gWsIXm
-   6ildVent+A8vy9JOrea2AsYwjVnpSBM741kdNX+a2nucDO8PnyvG6P039
-   IS0FyCksVOMKSTLs3WUqNNPI1swGesCL9xYdfCl3F5R10uGW3Ksu/Okt1
-   989IGFV/FF+4PQJeddVnz5+ChpjaPDHjHvoaB049QMt1fTJY7D1qFf4nL
-   9h+NgKiea9FUgQtSqUvSojqEdk4zrQ56mryNiF4tF9zdUhqsqnrKURUsV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361630672"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="361630672"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 01:03:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="958317069"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="958317069"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 01:03:42 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q8z09-00017W-2p;
-	Tue, 13 Jun 2023 08:03:41 +0000
-Date: Tue, 13 Jun 2023 16:02:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
-	yhs@fb.com, Eduard Zingerman <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/4] bpf: verify scalar ids mapping in
- regsafe() using check_ids()
-Message-ID: <202306131550.U3M9AJGm-lkp@intel.com>
-References: <20230612160801.2804666-4-eddyz87@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F616567E
+	for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 08:17:07 +0000 (UTC)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-3f8cc04c287so2479875e9.0
+        for <llvm@lists.linux.dev>; Tue, 13 Jun 2023 01:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686644225; x=1689236225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L7QlNfAS35s5IEireeywT9BDZtDXaOwJcuTVGyEkAeI=;
+        b=WulKdQxAXrxH+7PEV/Up9ciz+zGSeTlkGR3tmJo3i4TCjapz60sLnp9bZdtGT2gETq
+         6EOZv+lIqkQyBNbkNkBULCMoHQGp7CqrEcrLeSZZhgBq/XhYX8hM//+JV/FmHc0zAA7I
+         7XT6TIxc5PiBJLOhdVYjDaIeFSIKBqNhCm/F/MoChPnXegvv767f5cjSpn/5ARsQy69K
+         MbepAqYhmKrM8kY7wJvrxRgtD/oPddTh4RwprwfSlV0siHkToL3+Ljrd5OXG4ZfXubXa
+         EE+KKQ02et3CVShbjP4gQMl1Td70nApUMnbDoSzL/ZC1bL/oIBvkzANdkNyaMLb9ZDnm
+         0WwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686644225; x=1689236225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L7QlNfAS35s5IEireeywT9BDZtDXaOwJcuTVGyEkAeI=;
+        b=bFNZdU1IoMixDZth4hmf7eHf7NK4VX+Sd4d+Pz7kB2/Yi6ftaTPm1chegaAvnELzGr
+         TwcFdZGcnRvX898Y7bCjW4f9kfCOtlSU7V/ftLPvitnPIdM6mMrH9DQWgWRRJtzo1S2+
+         AqM7KLQOypb9tm+gDF/czxQOHZXN8yalCa2WTKVxtv/jDBLo5s+FYcsfFhh9mGqFiikD
+         WVomSko/ZwRSRIqbKP4wkHzcw3XNHR4JaZg89YOfD/Z0+B/W6LjSOFgAM8lT/6iNvgMk
+         hrlrnaZhMgvaqWhE4nNZxS1oFPPzJPXfC7jj/0X314qAIF600iq99UoszWIdrfvaWpcH
+         i5JA==
+X-Gm-Message-State: AC+VfDwdkywctIupIEooAYCui10htEIyMZy8/GcBN2RXXRd2Dig7ISbn
+	tSkihxERKyD0jKff/VuoqyPWexc6sytVX6hhjeYFFQ==
+X-Google-Smtp-Source: ACHHUZ7VmXEbkSo06kH3PnaXfBgVtlxIDL8bZLrkOLf2u653hvOcOpBicst3nGcLYsyaJpXv2rjGxGR/0aBZpCkhIFM=
+X-Received: by 2002:adf:e985:0:b0:30f:c1d6:61cf with SMTP id
+ h5-20020adfe985000000b0030fc1d661cfmr4192511wrm.51.1686644225284; Tue, 13 Jun
+ 2023 01:17:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612160801.2804666-4-eddyz87@gmail.com>
+References: <202306110855.7TlBCIzI-lkp@intel.com>
+In-Reply-To: <202306110855.7TlBCIzI-lkp@intel.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Tue, 13 Jun 2023 10:16:54 +0200
+Message-ID: <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
+Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
+ symbol 'misaligned_access_speed'; recompile with -fPIC
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eduard,
+On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   022ce8862dff83c859089cd14bc4dca0733e2f90
+> commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable k=
+ernels with early alternatives using -fno-pie
+> date:   10 days ago
+> config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci/a=
+rchive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git =
+ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
+git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '=
+misaligned_access_speed'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_prob=
+e_func) in archive vmlinux.a
+> --
+> >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol=
+ 'misaligned_access_speed'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_prob=
+e_func) in archive vmlinux.a
+> --
+> >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '=
+riscv_cbom_block_size'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch=
+_func) in archive vmlinux.a
+> --
+> >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symbol=
+ 'riscv_cbom_block_size'; recompile with -fPIC
+>    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch=
+_func) in archive vmlinux.a
+> --
+> >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '=
+__per_cpu_offset'; recompile with -fPIC
+>    >>> defined in vmlinux.a(mm/percpu.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_prob=
+e_func) in archive vmlinux.a
+> --
+> >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol=
+ '__per_cpu_offset'; recompile with -fPIC
+>    >>> defined in vmlinux.a(mm/percpu.o)
+>    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+>    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_prob=
+e_func) in archive vmlinux.a
+>
 
-kernel test robot noticed the following build warnings:
+So I looked into those errors, the config is basically =3D RELOCATABLE +
+MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
+medany, which makes sense since we only need this code to be medany
+when EARLY_ALTERNATIVES is enabled (because the code would be executed
+with mmu off, which is not the case here).
 
-[auto build test WARNING on bpf-next/master]
+I can fix those errors by adding the medany flag, but I'm not sure
+actually we want to do that since we do not need it and gcc does not
+complain: any idea?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/bpf-use-scalar-ids-in-mark_chain_precision/20230613-001651
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230612160801.2804666-4-eddyz87%40gmail.com
-patch subject: [PATCH bpf-next v5 3/4] bpf: verify scalar ids mapping in regsafe() using check_ids()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230613/202306131550.U3M9AJGm-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add bpf-next https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-        git fetch bpf-next master
-        git checkout bpf-next/master
-        b4 shazam https://lore.kernel.org/r/20230612160801.2804666-4-eddyz87@gmail.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131550.U3M9AJGm-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/bpf/verifier.c:7:
-   In file included from include/linux/bpf-cgroup.h:5:
-   In file included from include/linux/bpf.h:10:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/x86/include/asm/timex.h:5:
-   In file included from arch/x86/include/asm/processor.h:23:
-   In file included from arch/x86/include/asm/msr.h:11:
-   In file included from arch/x86/include/asm/cpumask.h:5:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:11:
-   In file included from include/linux/string.h:254:
->> include/linux/fortify-string.h:430:4: warning: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-                           __write_overflow_field(p_size_field, size);
-                           ^
-   1 warning generated.
+Alex
 
 
-vim +/warning +430 include/linux/fortify-string.h
 
-a28a6e860c6cf2 Francis Laniel 2021-02-25  411  
-28e77cc1c06866 Kees Cook      2021-06-16  412  __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
-28e77cc1c06866 Kees Cook      2021-06-16  413  					 const size_t p_size,
-28e77cc1c06866 Kees Cook      2021-06-16  414  					 const size_t p_size_field)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  415  {
-28e77cc1c06866 Kees Cook      2021-06-16  416  	if (__builtin_constant_p(size)) {
-28e77cc1c06866 Kees Cook      2021-06-16  417  		/*
-28e77cc1c06866 Kees Cook      2021-06-16  418  		 * Length argument is a constant expression, so we
-28e77cc1c06866 Kees Cook      2021-06-16  419  		 * can perform compile-time bounds checking where
-fa35198f39571b Kees Cook      2022-09-19  420  		 * buffer sizes are also known at compile time.
-28e77cc1c06866 Kees Cook      2021-06-16  421  		 */
-a28a6e860c6cf2 Francis Laniel 2021-02-25  422  
-28e77cc1c06866 Kees Cook      2021-06-16  423  		/* Error when size is larger than enclosing struct. */
-fa35198f39571b Kees Cook      2022-09-19  424  		if (__compiletime_lessthan(p_size_field, p_size) &&
-fa35198f39571b Kees Cook      2022-09-19  425  		    __compiletime_lessthan(p_size, size))
-a28a6e860c6cf2 Francis Laniel 2021-02-25  426  			__write_overflow();
-28e77cc1c06866 Kees Cook      2021-06-16  427  
-28e77cc1c06866 Kees Cook      2021-06-16  428  		/* Warn when write size is larger than dest field. */
-fa35198f39571b Kees Cook      2022-09-19  429  		if (__compiletime_lessthan(p_size_field, size))
-28e77cc1c06866 Kees Cook      2021-06-16 @430  			__write_overflow_field(p_size_field, size);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  431  	}
-28e77cc1c06866 Kees Cook      2021-06-16  432  	/*
-28e77cc1c06866 Kees Cook      2021-06-16  433  	 * At this point, length argument may not be a constant expression,
-28e77cc1c06866 Kees Cook      2021-06-16  434  	 * so run-time bounds checking can be done where buffer sizes are
-28e77cc1c06866 Kees Cook      2021-06-16  435  	 * known. (This is not an "else" because the above checks may only
-28e77cc1c06866 Kees Cook      2021-06-16  436  	 * be compile-time warnings, and we want to still warn for run-time
-28e77cc1c06866 Kees Cook      2021-06-16  437  	 * overflows.)
-28e77cc1c06866 Kees Cook      2021-06-16  438  	 */
-28e77cc1c06866 Kees Cook      2021-06-16  439  
-28e77cc1c06866 Kees Cook      2021-06-16  440  	/*
-28e77cc1c06866 Kees Cook      2021-06-16  441  	 * Always stop accesses beyond the struct that contains the
-28e77cc1c06866 Kees Cook      2021-06-16  442  	 * field, when the buffer's remaining size is known.
-311fb40aa0569a Kees Cook      2022-09-02  443  	 * (The SIZE_MAX test is to optimize away checks where the buffer
-28e77cc1c06866 Kees Cook      2021-06-16  444  	 * lengths are unknown.)
-28e77cc1c06866 Kees Cook      2021-06-16  445  	 */
-311fb40aa0569a Kees Cook      2022-09-02  446  	if (p_size != SIZE_MAX && p_size < size)
-28e77cc1c06866 Kees Cook      2021-06-16  447  		fortify_panic("memset");
-28e77cc1c06866 Kees Cook      2021-06-16  448  }
-28e77cc1c06866 Kees Cook      2021-06-16  449  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
