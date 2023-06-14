@@ -1,193 +1,134 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF99B101DD
-	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 20:27:59 +0000 (UTC)
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-3f9e9e9d06fso526651cf.0
-        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 13:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686774478; x=1689366478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kimLIYWPOvzs4k2x7Iocr5Znn/T70aABOYbrugGGfHk=;
-        b=1Dp95kTjoBgw5soGCnXEj5PVJ6JaMLGi2nMWtU3y4lJXt/E0oBA57JOFvEur5abN9G
-         /h1JgUgo4ExdPrbtD1+VINTEzbAsmENDcwvFunWnDCyWxHOOVP8Myu34ou4unGSmhQPG
-         QIpKgJJHxQ/JFZGzff9JsQfURNfLROVmZv9gBDoLXr2bFf1BHB2CDsdNKFsH9XqHB9ig
-         wPD4mqR+Bh2stXDXR9XGEVOoQJJpAgs76OvLjUNqtnV2Sl7c9Qyt+kx5eE0ZU28neurQ
-         pMaksSioupfoOYZWx9pkzPP1AEK254YXDgmmvTSAbq8boRAuFjnuBC1ZY1NpwywDKJCv
-         V9+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686774478; x=1689366478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kimLIYWPOvzs4k2x7Iocr5Znn/T70aABOYbrugGGfHk=;
-        b=SjMiFmZT8AYcmZivSP3K+VGwyI5RuAyDGDQ52Lt0XP6hWA72cjUOhDWACxE6sqLL3E
-         h+rDdd50jhkqwu+61FLsOHYc+Ovk49IPW/lyNTqlGEKkp2EgHybCN7Hm6GhesUULTO2L
-         JNgxUczwaDN80qCY8na5SdL8TBRpHcAh3Y2Wll9Aq7ayBPX7tJTHTxJQdq2D3u24wTPC
-         s9FdKqVYM8/JTcZxdubD2MFqb+9ZeVMLhU+X2+kt577F+1sIpL94P5dDyL9BMXYNYJnE
-         MRuPiidFkzM2er62p7x5ZUWUXGt1eClwB/r7zdxjRhGo6CDZWeDm1n9OYlYiawG+raLQ
-         uAeg==
-X-Gm-Message-State: AC+VfDwzP58I8yKfj4vw0Iq2lRJNjkf8X1BA1h8f6vyc1krTNbAnyYBu
-	h4kYi0A1U3iPDQpA7v3nrbVmJe9pb42ckLKOU+yvug==
-X-Google-Smtp-Source: ACHHUZ7ay8BwIAHN3FlqdH3RTUmegJtrBYKRwr5TaPYYT2JLfVoH8FJtYQ8A89LRAaOeARNe1NIR4/MB8+6wMGmCs0o=
-X-Received: by 2002:ad4:5c81:0:b0:62d:e3d7:5b7a with SMTP id
- o1-20020ad45c81000000b0062de3d75b7amr3409806qvh.11.1686774478425; Wed, 14 Jun
- 2023 13:27:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CE2125D5
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 21:19:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268C5C433C8;
+	Wed, 14 Jun 2023 21:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686777547;
+	bh=UEhz/kpeox3MvxRfpolw9Y3cKpiMR3f1Bj+mCSrsu+w=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GzJN/pOX0gp/xstmlig24vmyKpwxXIYsnKum50WEILylD4i6NTZFzKYVhffUDxW1Z
+	 XfP3kJEiqS+53Z56BzKvRJWl4cEsXDphkVNy+DQNzIwXOwcsHHjnpj3L1guuKBw/hK
+	 Nti/cS6HDhwvoFs/OnnPPv1R5aTlFX7llyepiWR9tdJTSxhyAmaw13FMj/V+4t+m12
+	 omVscywuF6a6xs8I2zCR2jW1FVzEqxEHt2YFQtmnSO2O0XYMsJR9ULTbp5It/FMSeI
+	 scbeCkf0FRyKN6q71Lilt9y90n4UZqGzYZzM5XUc8GNfEr8dGEUIBk9Ks9ZHFkdoQ8
+	 YTK3QY5/fgFzw==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 14 Jun 2023 22:18:58 +0100
+Subject: [PATCH] selftests/mm: Fix cross compilation with LLVM
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306100035.VTusNhm4-lkp@intel.com> <202306131418.35B5D649DC@keescook>
-In-Reply-To: <202306131418.35B5D649DC@keescook>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 14 Jun 2023 16:27:46 -0400
-Message-ID: <CAKwvOdmZ7fMB1Kpat3wbcUxaVbWmjO30MzQcytUZ=2Yj-NLmTA@mail.gmail.com>
-Subject: Re: [linux-next:master 3357/8413] drivers/scsi/FlashPoint.c:1712:12:
- warning: stack frame size (1056) exceeds limit (1024) in 'FlashPoint_HandleInterrupt'
-To: Kees Cook <keescook@chromium.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMIuimQC/x2NQQqDQAwAvyI5N6Db1kK/UnqImtTg7loSsQXx7
+ 117nIFhNnA2ZYd7tYHxqq5zLtCcKuhHyi9GHQpDqMO5bpsLTs5RFvYFU8IY14QUrnQbSIRagdJ
+ 15IydUe7Ho/zMNh36bSz6/a8ez33/AdkJN7h6AAAA
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ llvm@lists.linux.dev, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-c6835
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3189; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=UEhz/kpeox3MvxRfpolw9Y3cKpiMR3f1Bj+mCSrsu+w=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkii7IGttHdFnUF0lmq6L7TPI3idmAEp2wD+7pMnu+
+ wqAt+VyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZIouyAAKCRAk1otyXVSH0OZoCA
+ CB/4e2WEwUuvnxjdo+IKA2oPKHQrf9LrGE8Bum4qjdJu1TWsTJNE2T1qrdmYPXAQZFQYlmViy7AeDT
+ l21o4NRfo4DZmLv6rx3O49Lq+orAst4ATm/P3+uFGOH08jBnhGTAULa/4edYKGQO/xVq3BKr8zSyBn
+ 2at4XPXbnZzWMqx/LUDYTS699PrfTxw3ZA1q78EnuQMxxhn+RYZdESgpPYMs7kd6wkGE+d5ZUJbJqL
+ ku8wS2yMyX66n13s89P4L824wzcEDcenfJDGTyiQyh3xBP1kueox5NrVPUwAT63but7/Wz82WcRQGZ
+ DGUl9W9QiMMHEckJYUrVY6fLz5cnkt
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Tue, Jun 13, 2023 at 5:22=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Sat, Jun 10, 2023 at 12:58:23AM +0800, kernel test robot wrote:
-> > First bad commit (maybe !=3D root cause):
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git master
-> > head:   53ab6975c12d1ad86c599a8927e8c698b144d669
-> > commit: df8fc4e934c12b906d08050d7779f292b9c5c6b5 [3357/8413] kbuild: En=
-able -fstrict-flex-arrays=3D3
-> > config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/2=
-0230610/202306100035.VTusNhm4-lkp@intel.com/config)
+Currently the MM selftests attempt to work out the target architecture by
+using CROSS_COMPILE or otherwise querying the host machine, storing the
+target architecture in a variable called MACHINE rather than the usual ARCH
+though as far as I can tell (including for x86_64) the value is the same as
+we would use for architecture.
 
-^ I just checked this config. CONFIG_KASAN=3Dy is not set, so this is
-not a case of
-https://github.com/ClangBuiltLinux/linux/issues/39
+When cross compiling with LLVM we don't need a CROSS_COMPILE as LLVM can
+support many target architectures in a single build so this logic does not
+work, CROSS_COMPILE is not set and we end up selecting tests for the host
+rather than target architecture. Fix this by using the more standard ARCH
+to describe the architecture, taking it from the environment if specified.
 
-UBSAN is though (maybe a red herring) as well as GCOV and TSAN/KCSAN.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/mm/Makefile | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Disabling GCOV did not change the stack usage from allmodconfig.
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 23af4633f0f4..4f0c50c33ba7 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -5,12 +5,15 @@ LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
+ 
+ include local_config.mk
+ 
++ifeq ($(ARCH),)
++
+ ifeq ($(CROSS_COMPILE),)
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ else
+ uname_M := $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
+ endif
+-MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
++ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
++endif
+ 
+ # Without this, failed build products remain, with up-to-date timestamps,
+ # thus tricking Make (and you!) into believing that All Is Well, in subsequent
+@@ -65,7 +68,7 @@ TEST_GEN_PROGS += ksm_tests
+ TEST_GEN_PROGS += ksm_functional_tests
+ TEST_GEN_PROGS += mdwe_test
+ 
+-ifeq ($(MACHINE),x86_64)
++ifeq ($(ARCH),x86_64)
+ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
+ CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+ CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+@@ -87,13 +90,13 @@ TEST_GEN_PROGS += $(BINARIES_64)
+ endif
+ else
+ 
+-ifneq (,$(findstring $(MACHINE),ppc64))
++ifneq (,$(findstring $(ARCH),ppc64))
+ TEST_GEN_PROGS += protection_keys
+ endif
+ 
+ endif
+ 
+-ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
++ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
+ TEST_GEN_PROGS += va_high_addr_switch
+ TEST_GEN_PROGS += virtual_address_range
+ TEST_GEN_PROGS += write_to_hugetlbfs
+@@ -112,7 +115,7 @@ $(TEST_GEN_PROGS): vm_util.c
+ $(OUTPUT)/uffd-stress: uffd-common.c
+ $(OUTPUT)/uffd-unit-tests: uffd-common.c
+ 
+-ifeq ($(MACHINE),x86_64)
++ifeq ($(ARCH),x86_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
 
-Disable KCSAN dropped it down from 2272 to 2160.
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230614-kselftest-mm-llvm-a25a7daffa6f
 
-Disabling UBSAN produced no warnings, and changed the inlining
-behavior such that FlashPoint_HandleInterrupt only uses 656B rather
-than 2272 via allmodconfig.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Seems specific to:
-```
-CONFIG_UBSAN=3Dy
-CONFIG_CC_HAS_UBSAN_ARRAY_BOUNDS=3Dy
-CONFIG_UBSAN_BOUNDS=3Dy
-CONFIG_UBSAN_ARRAY_BOUNDS=3Dy
-# CONFIG_UBSAN_SHIFT is not set
-# CONFIG_UBSAN_UNREACHABLE is not set
-# CONFIG_UBSAN_BOOL is not set
-# CONFIG_UBSAN_ENUM is not set
-CONFIG_UBSAN_SANITIZE_ALL=3Dy
-```
-but adding these on top of powernv_defconfig I couldn't reproduce.  So
-perhaps we can do a config bisection between allmodconfig and
-powernv_defconfig to see what combination of configs in allmodconfig
-is causing this to blow up.
-
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
-t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce (this is a W=3D1 build):
-> >         mkdir -p ~/bin
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install powerpc cross compiling tool for clang build
-> >         # apt-get install binutils-powerpc-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-ne=
-xt.git/commit/?id=3Ddf8fc4e934c12b906d08050d7779f292b9c5c6b5
-> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/=
-kernel/git/next/linux-next.git
-> >         git fetch --no-tags linux-next master
-> >         git checkout df8fc4e934c12b906d08050d7779f292b9c5c6b5
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc olddefconfig
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash drivers/
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306100035.VTusNhm4-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    In file included from drivers/scsi/BusLogic.c:51:
-> > >> drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (1056) =
-exceeds limit (1024) in 'FlashPoint_HandleInterrupt' [-Wframe-larger-than]
-> >     1712 | static int FlashPoint_HandleInterrupt(void *pcard)
-> >          |            ^
-> >    1 warning generated.
->
-> I wasn't able to generate the warning with my Clang, but it sure is
-> close! Building with KCFLAGS=3D-Rpass-analysis=3Dstack-frame-layout I see=
-:
->
->
-> In file included from ../drivers/scsi/BusLogic.c:51:
-> ../drivers/scsi/FlashPoint.c:1713:1: remark:
-> Function: FlashPoint_HandleInterrupt
-> Offset: [SP-4], Type: Protector, Align: 4, Size: 4
-> Offset: [SP-8], Type: Spill, Align: 8, Size: 4
-> Offset: [SP-12], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-16], Type: Spill, Align: 16, Size: 4
-
-Perhaps alignment 16B for a 4B variable leads to excessive padding?
-Perhaps this config changes the alignment of a type?  No, looks like
-most spills are the 4B w/ 4B alignment and the 16B alignment spills
-are insignificant.
-
-> Offset: [SP-20], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-24], Type: Spill, Align: 8, Size: 4
-> Offset: [SP-28], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-32], Type: Spill, Align: 16, Size: 4
-> Offset: [SP-36], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-40], Type: Spill, Align: 8, Size: 4
-> Offset: [SP-44], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-48], Type: Spill, Align: 16, Size: 4
-> Offset: [SP-52], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-56], Type: Spill, Align: 8, Size: 4
-> Offset: [SP-60], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-64], Type: Spill, Align: 16, Size: 4
-> Offset: [SP-68], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-72], Type: Spill, Align: 8, Size: 4
-> Offset: [SP-76], Type: Variable, Align: 4, Size: 4
-> Offset: [SP-80], Type: Spill, Align: 4, Size: 4
-> Offset: [SP-84], Type: Spill, Align: 4, Size: 4
-> ...[4 byte spills]...
-> Offset: [SP-1012], Type: Variable, Align: 4, Size: 4
-> Offset: [SP-1016], Type: Variable, Align: 4, Size: 4
-> [-Rpass-analysis=3Dstack-frame-layout]
->
-> So something is very weird in FlashPoint_HandleInterrupt -- it has a
-> single while loop with an internal if/else if/.../else chain. So I don't
-> see why it would need such extensive spills...
->
-> This seems like a missed optimization in Clang, maybe?
->
-> --
-> Kees Cook
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
