@@ -1,109 +1,218 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E2B7F
-	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 08:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=xz5/VyeWvrJxvz7Vj1Bej8cUKvcRWi1AM/YLcdj+D/Y=; b=BRDdoKzwDzkGKB+A7e3ag/q8ah
-	OuIxesfxVQag4DfRTqhUekNoppHbkzvJkwCCICkhEf8dky95UyM5bzWwWxiNms2GIKgSietdNCacr
-	HKrpLs/0yU3FtQlwoH2plJxAxqyXuzokNnbLBzeUE9RSI7aVLHoO8WAyzDiPUNVNg7d4jKQdfqnkK
-	9h4Yy3POzOVCIIQ6n1ZFg5fvmffQFY8z1DLGdH80TK1X/ioX1bFq0p3iImYmiPCTfOGxyHwcnHVIe
-	dc1+v/iDoOcVsxc8xJStSr7UlxJxe/mokgVK6nXWCJOg+fkstoS29jdcRppL3KDo7lAMYq+k7jWOq
-	4GBG8M1g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1q9Lp1-00AbbI-0c;
-	Wed, 14 Jun 2023 08:25:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDAEA300195;
-	Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 975E227F86A4E; Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
-Date: Wed, 14 Jun 2023 10:25:39 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: torvalds@linux-foundation.org, keescook@chromium.org,
-	gregkh@linuxfoundation.org, pbonzini@redhat.com, nathan@kernel.org,
-	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
-	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
-	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
-	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
-	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 04/57] kbuild: Drop -Wdeclaration-after-statement
-Message-ID: <20230614082539.GB1639749@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.693926033@infradead.org>
- <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475D6369;
+	Wed, 14 Jun 2023 08:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686732147; x=1718268147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zJouC6bmMjLkzEvp7C/K2kpaga55aPlidd5musYLcrw=;
+  b=lCLBkyz3C+gHGWvM4hwd0fZNCqwPNIla522h/vP4mm/b9XS8H0aAZEy1
+   aTyC8qLaqXQeU4rFS5lP+4RxIiAfyHSkvuF1dW4x4eIDrxqVlkrIf6Erx
+   yNCOP3QxEjSWxWCBP8jqOcPXMz6U+YtfZLQrJ/TIAQgLg/GVYUcESejga
+   EwaINS+O10/7jvpJcYZmmbM1ffdZapogRbRDJCdWE0unFr7g6VqwgbjiC
+   uHdKSjrpZ8wazuFzJ1+CARbCKKJrRjjAnA9U7R0mhSiSLq8J5nRdYg8Gr
+   z6CjCb8TmP5RdiYaX0CilIqVkwXWoKdzQGI51yK8mUlGYZc4b1EF7rTz8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338910637"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="338910637"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 01:42:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856426084"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="856426084"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Jun 2023 01:42:23 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9M58-0000RX-2B;
+	Wed, 14 Jun 2023 08:42:22 +0000
+Date: Wed, 14 Jun 2023 16:42:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>,
+	linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	wsd_upstream@mediatek.com, wei-chin.tsai@mediatek.com,
+	mel.lee@mediatek.com, ivan.tseng@mediatek.com,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
+ functions
+Message-ID: <202306141630.EQtwoD5V-lkp@intel.com>
+References: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
+In-Reply-To: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
 
-On Wed, Jun 14, 2023 at 03:13:03PM +0900, Masahiro Yamada wrote:
-> On Mon, Jun 12, 2023 at 6:39 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > With the advent on scope-based resource management it comes really
-> > tedious to abide by the contraints of -Wdeclaration-after-statement.
-> 
-> Where is the context of Linus' suggested-by?
-> 
-> I do not know where this came from.
-> I suddenly got a huge v3 in my mailbox.
-> 
-> 
-> I see an equivalent patch submitted last year:
-> https://lore.kernel.org/lkml/Y1w031iI6Ld29IVT@p183/
-> 
-> Linus rejected it. Did he change his mind?
+Hi Wei,
 
-https://lkml.kernel.org/r/CAHk-%3Dwi-RyoUhbChiVaJZoZXheAwnJ7OO%3DGxe85BkPAd93TwDA%40mail.gmail.com
+kernel test robot noticed the following build warnings:
 
-I'll add it as a Link tag to the Changelog.
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc6 next-20230613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> > It will still be recommeneded to place declarations at the start of a
-> > scope where possible, but it will no longer be enforced.
-> 
-> If you remove the warning, we will not be able to
-> detect code that opts out the recommendation
-> for no good reason.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chin-Tsai/kernel-process-fork-exit-export-symbol-for-fork-exit-tracing-functions/20230614-112218
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai%40mediatek.com
+patch subject: [PATCH v2 2/3] memory: export symbols for memory related functions
+config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141630.EQtwoD5V-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+        git fetch char-misc char-misc-testing
+        git checkout char-misc/char-misc-testing
+        b4 shazam https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai@mediatek.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/proc/
 
-Yeah, so per that thread linked above I tried to play clever games with
-_Pragma() to get around this, but GCC hates on it (works fine with Clang
-though).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306141630.EQtwoD5V-lkp@intel.com/
 
-Linus said to just give up and scrap the whole
--Wdeclaration-after-statement thing.
+All warnings (new ones prefixed by >>):
 
-I suppose it'll be up to reviewers and perhaps checkpatch like things to
-'enforce' the rules.
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/proc/task_mmu.c:3:
+   In file included from include/linux/mm_inline.h:7:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/proc/task_mmu.c:776:6: warning: no previous prototype for function 'smap_gather_stats' [-Wmissing-prototypes]
+     776 | void smap_gather_stats(struct vm_area_struct *vma,
+         |      ^
+   fs/proc/task_mmu.c:776:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     776 | void smap_gather_stats(struct vm_area_struct *vma,
+         | ^
+         | static 
+   7 warnings generated.
+
+
+vim +/smap_gather_stats +776 fs/proc/task_mmu.c
+
+   769	
+   770	/*
+   771	 * Gather mem stats from @vma with the indicated beginning
+   772	 * address @start, and keep them in @mss.
+   773	 *
+   774	 * Use vm_start of @vma as the beginning address if @start is 0.
+   775	 */
+ > 776	void smap_gather_stats(struct vm_area_struct *vma,
+   777			       struct mem_size_stats *mss, unsigned long start)
+   778	{
+   779		const struct mm_walk_ops *ops = &smaps_walk_ops;
+   780	
+   781		/* Invalid start */
+   782		if (start >= vma->vm_end)
+   783			return;
+   784	
+   785		if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
+   786			/*
+   787			 * For shared or readonly shmem mappings we know that all
+   788			 * swapped out pages belong to the shmem object, and we can
+   789			 * obtain the swap value much more efficiently. For private
+   790			 * writable mappings, we might have COW pages that are
+   791			 * not affected by the parent swapped out pages of the shmem
+   792			 * object, so we have to distinguish them during the page walk.
+   793			 * Unless we know that the shmem object (or the part mapped by
+   794			 * our VMA) has no swapped out pages at all.
+   795			 */
+   796			unsigned long shmem_swapped = shmem_swap_usage(vma);
+   797	
+   798			if (!start && (!shmem_swapped || (vma->vm_flags & VM_SHARED) ||
+   799						!(vma->vm_flags & VM_WRITE))) {
+   800				mss->swap += shmem_swapped;
+   801			} else {
+   802				ops = &smaps_shmem_walk_ops;
+   803			}
+   804		}
+   805	
+   806		/* mmap_lock is held in m_start */
+   807		if (!start)
+   808			walk_page_vma(vma, ops, mss);
+   809		else
+   810			walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
+   811	}
+   812	EXPORT_SYMBOL_GPL(smap_gather_stats);
+   813	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
