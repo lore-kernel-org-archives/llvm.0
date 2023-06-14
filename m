@@ -1,248 +1,359 @@
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2073.outbound.protection.outlook.com [40.107.9.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59797C137;
-	Wed, 14 Jun 2023 14:11:48 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aBYZyzvOfNu8oxCLCWE+fCOqDoJY5dXNHGmjD02OFXGvAdsikvVde/ZrZAOGjdVm54FrP2ms3zOpNh5PRXcVHTEdR7VYsLQvyDOQWGmNEJrxEjpHidOloTkzGDUZpYilpdDauWbMPREz0nJykDlggNaRqWYU4EQvUACiz8AKYweUIFyqv06CPf2vOO2Qy0zRz5Hl6+jci8TJSU2bVyY5cKnMDjaStD1poZSfAKClQZE+beVpQaD0jSoxbkeauSk8bQxsdXPLjiSCgkorz2L8PJ8FQto60cJcyZMDEgrGh3a0k20RGxjn0syYjICw4PC4UrCNmCoMo+ODolYWcAEu2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q6JWNaheoMxJVBTrgqYiCdH7WQAExMKUtIzFLilEy10=;
- b=b8ncUC0OglkvXqOGPAvvN4R7zgJZS2SNHBUBgcrxlsCpJomEKID18X4vNT2BGfpTU54A83Vve0FNTUcXTXmREhRhx/jfQlJ/nA9NalT9QZyCXVB7wY06sdZIJEwvIDjWY3MgJNS9OrPgngSEw6AMnmZtMXheRxH9AECaLQ5TOIQH7qPJxsmwvYfBgcVDbkUxLL4qtljMDnQYDzAh8Rc9HBf3fIHLgJ42ZmpTOUKqXza29dvVwzsW36NvwixnOPynEGsTqb1t6qM3NYqXpiG0b3aZgtt4rVTku1+psfvTULKeWGl+VrsK152dm57TjDBnk8rGW+2InDm3fQEObryJ8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q6JWNaheoMxJVBTrgqYiCdH7WQAExMKUtIzFLilEy10=;
- b=ZKvG7PGiyEAKOGzP/rwRBrH143RK9pc83LuOfSrIJ9sbQOW0MjZVesoUpSXf0DNiI7hnN5PVXYGK1w1X3qLgWPDmH+MgeEISY+LIW/AscmsIjwZ6uDZclZEQ/g/22S4jVYgVObntJMp2ENjt7VFLLxKjPaCCjc48foL+VWVE+++GcOuF3SK9KLTgZEL7ge5EV2ypMlVYPJjv8RyTmVi5sMOdV/VZ7WYtF7+LsKNSrZCxRZI0tvL0VPGB1tx0uHqhALwaPtuOw5iu5uekLAcjOW/iPJW3K6DI7CXTg7OvFRn5UcqktSjlFPnhiMuxvl9VuIIOTu5fCfOCfVjCRN8TWA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB1748.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:12::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 14:11:43 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217%4]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 14:11:43 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: kernel test robot <lkp@intel.com>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Michael
- Ellerman <mpe@ellerman.id.au>, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set
- but not used
-Thread-Topic: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set
- but not used
-Thread-Index: AQHZjN/QsNPDFNpsGkKAVwWg+Ohdk6+KeoqA
-Date: Wed, 14 Jun 2023 14:11:43 +0000
-Message-ID: <edf2ec88-3586-bbb1-fbf1-9451393c12ec@csgroup.eu>
-References: <202305230231.3Wb7Q68G-lkp@intel.com>
-In-Reply-To: <202305230231.3Wb7Q68G-lkp@intel.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB1748:EE_
-x-ms-office365-filtering-correlation-id: 70788812-e1de-42d9-fddf-08db6ce1481f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- ujFrWJrc2w/5L1upg/lbeAx5s/7Xyl4DnWToi4Ax81NIscoNj1rglaggduSz3hf9ABmKn3J0aIPdodqJtDM8pi8prm1trpCcV78OUvVa+6HlnzlOocH8lAP8IwRKM1IhPQSSh3/jdTXF0KAQIVKNLBDfwNML5/UzfUZPxKKK9DLa6WuSr8VovOCVOPowCi9Nal8QhFrTCPdNZNWoMKGXYlsRL4qsQvJmQlyfcxjSSriizOnzKfODjcnb17bdX7ipSgI6NF6v6xySmRXf6pPirOBdDWilJFyhIlRCVLQVvmdTKGfN2Le5Fr0zw6Ob2gOsqYgtIcIsuM8HelN7Z9OzF4StEq5Ndbg2Ma47AdXjT97aeROLS/eBP1BC4GkSb1gbXw0ffBFt9tw/BIrGEezsI2TTEeUkkOAUSFAeA1+0cWRE3UrSGFOXOSoFE+jd1p72iebNVXjg1CdlYrRm8VUljemOdIOhnr+kRi9TCfsdIqB9dXKof9Vbq4E0oKrYi2qpRoKdxMyG8ixk3bmcES2oGRQ9XgTw6FRrqAPtUFad6OAeTuenUxJRisiucxr9CLt985f+ZCZHGbjjRTRYo4fWFPJ/iZuz0tFUTDAoxQdK4v/kL2TbY3zGKjQO7J1ihYsjeawnlFHSUBuROtpwLTmHQnnwnThwTj7nNjcbMLdFc2A=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199021)(31686004)(83380400001)(66574015)(122000001)(38100700002)(41300700001)(316002)(38070700005)(6486002)(71200400001)(6512007)(966005)(6506007)(26005)(66556008)(4326008)(64756008)(66476007)(66446008)(66946007)(76116006)(91956017)(2906002)(44832011)(86362001)(8936002)(6916009)(5660300002)(36756003)(8676002)(31696002)(2616005)(54906003)(478600001)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?b2UzbDBZQ1JmbEdnZmdkNGZ5OWNDYTRrOTEvZVIxaXJ6ZGZReGxKelVEMlJD?=
- =?utf-8?B?bnJvUHF3bTlNYlEvM1lZUUc1R0tCN0xZcHpQV3A0dEUwM3VrYlJqeWJmSzJ6?=
- =?utf-8?B?WUJWSk5CaXNQZzJIZytFNVdodjNPcnFhZW9zdEFyZ1QweWp0SjlneXVrK0V1?=
- =?utf-8?B?enF1RGNIMjRGOGhYVU5Ub1B5QkVzcnFPRjFienBJblpvTHc3QnJ5UVpGbmQ2?=
- =?utf-8?B?QTh0eS9nenBvTjRIQ1Rhc1pvcnFFbGVXMVlTenlqcmdDOXRTZGYzdGxJQnlZ?=
- =?utf-8?B?cENOaEFaa0FLdm44WVZTN1hEWlBYRkNXY0s0QkJiU0dsYzdrQzlHV1hVcTdt?=
- =?utf-8?B?Rk5jbEZGVHRBUHJFVGNwNWY3ZnF4c3V0WFkrTnRibjRlVitqMWV6U3hMNTNx?=
- =?utf-8?B?YjM1OXkvUis0YlNSQzVQQ1N6MkgvUDkvTTZyUG5nM2FaZHQ0bU4zK1hqUUVl?=
- =?utf-8?B?NEVKZkpCdERibFJsQmJXZmoyODV2WXlvazVqRktjOExzVW5yYmxPZENBdWVJ?=
- =?utf-8?B?VFVUSjJKRk5Ha3ZhTkp1Rk8rbGZsV2t3YkpHU1lzTExab3N0WUlJcDIrU1BN?=
- =?utf-8?B?UnpNQWVjN25MbTZPS2drb0ZRcDQxUWpvMEY0ZVlBUEw1WmMxbHZoL1NJYnB2?=
- =?utf-8?B?eHUrbE03WGVuQzJIUVNSTCs2RTN0RlN2S2l0Z1VJbVdpYnlpMVFILzBzL3hj?=
- =?utf-8?B?ckdTY09ZeWtzaFJ1aXBCSy8zTlZsb2FqYzdlRlFsK1VVUGFsRU4xRFVvSzZr?=
- =?utf-8?B?NFJ6eGJUTjFzTjhvWTRlSFBvOGtnd1hFbW93WWNnSTYxeFI3TXFpeVUxZlA0?=
- =?utf-8?B?TmMwdHBZcEtSdUh0b0FWWXJ4WDVBNnV6MUEycTZrWHpxOHRJR2hQTTd6cExX?=
- =?utf-8?B?eHhlLzg4SjBLSDZMak1pY1F1NlRJRk5IcEJRLzBLWDl5SVF1V2RmcGJKS0VL?=
- =?utf-8?B?UVFpVG5TdnRrU0l0Mkk3dk1rNEJTUm9xeWlaMHBiakRNUG8vK2pwcnZySUow?=
- =?utf-8?B?YkJ1aGpuNTl5QVI5SVJmQ3FBRHRUREdWL3A4REV6MG9uTWpzZ0NOSDZWbm5h?=
- =?utf-8?B?MGFaTFRQV2wvbkdDRnEyNU52N2xHYkdlV0EzUFJxUXF6bDlnd0xBT05uMzZJ?=
- =?utf-8?B?aDRYdFJqSnRQMzU3dlRYb0crdnhvQW5CVjV4alBOUFlLOEVUT01yR3oybFNE?=
- =?utf-8?B?Q1VmV0dzcm91b3crMlBldXlZNFhObjBCOTExdENEeFZFNmpCWHlqakZBODh6?=
- =?utf-8?B?QlpjTkswTE5ERWo3NlVFdHZBTzNwaHRNeERIeEUwSUVlT0t4S1pQNE1qUjVi?=
- =?utf-8?B?dzBaMFcybC9TS3VjMkU4U2pGQWNnZFUraVFUUFBBZVY3OVkrREJFZnlkVVQv?=
- =?utf-8?B?ZnpPTncrY1FlZ3czQmZ4ZEFRZXYxNHlvWVFScnBGZ0lyWHlBblVqa1VJUUw5?=
- =?utf-8?B?cXFWcDRUNkJGdzhtQzNodXNBU0dTaHB5bTVSb29PcEhjM1JjdExBQUpOOWE2?=
- =?utf-8?B?ckZWb1ZaY0xYc0E3cTlEamhWK2J1a3lGRUpDL0x6eVRCanhYeVlaUlljMGhF?=
- =?utf-8?B?RTgrbXBFMTR5TzNqTmFTeEhRWmJkMmRlNldEWmkybEhLZEEvclN4UEgyOEZX?=
- =?utf-8?B?M2dSVGVqSmRydWFPMVUwaENJVmZlaVFLWEtKYzQvMCtaeC9WMWtpTlNEc3Ez?=
- =?utf-8?B?ZTBYcjk1N1NoYjNHcEQ0Ni9WTlB0b2V0WFlIRGF5cXBxS3U5RDAxak90SU9X?=
- =?utf-8?B?VDN0S1FVdFhXNGI0K1M0SjNWeURLazlNQnRLNEJaTDNQZzVSY2RRZjRLQ2tS?=
- =?utf-8?B?RnZaZlI5Mk1vWDJrUHh0Vm5zc054QVJsbEFzakd1UEQrYW1hTDRYK0pQRGZE?=
- =?utf-8?B?YUJ3WWRsaVkvbEFsSDNQdFd0RDNmbU9DQ3o1MmdCNmh3RCtsT1dXOWx0V0p5?=
- =?utf-8?B?OTlDMHMrWkd5S3daTjhTQmxzWkI0Skl6NGJkM2hXcEh3NElNUTNXbHZ5QmxY?=
- =?utf-8?B?MkZoWXJEb3F5dlZRYzRubkVZNDNZRW8xdVc2enZiWTZFKzBWOU9BTml1RHNq?=
- =?utf-8?B?Y3lpVFRKT3NsSGVwUVFGZk8wQllaVGN5aUtiR1FLMlpYZVU3TTI3N2FhaWFQ?=
- =?utf-8?B?cS80VHFkc0V2bXVVSDFMV1poelVWZ2xJelJjMjN5UG10alBpMUE5akhETUM4?=
- =?utf-8?B?Ync9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D2EBE9B576B39E40AABA4E1784AF4BC5@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6E7C137
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 14:13:58 +0000 (UTC)
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-43f55b63ebfso94918137.2
+        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 07:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686752037; x=1689344037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/lhBcL8PdmZexLMneyEv/Gn9hUSFm3VXCVDLTnVzqY=;
+        b=IE2ZBrX/096j0CEQLIUIkj3jA66V9mddB6v8ac6SRJ9TDJEXg7/0cQmnIEqOFunHWn
+         YYVCbiHUrFhwgKp46bkmEWuuZcnIsMFn3tPA4Cyd075PySjZNDPX01+m/q0UL/2iB7TG
+         WfoHOpurwygr5aORfI68aEgIjBaor+tSvzCjHFkCPQDvxlHpYjObNZtCbYXRheLxV7AV
+         E4d9hQkf5Dg/fmqpNi//WVo9ZIYvcLr0u619woIIZBzdkbOKASL8TOWrqDPKNVk3RoFA
+         9RrambwMSpx49ohSPluuUpPJfK5KAwVwk2hZEUF4bOUEsj7DJKqcRdr2hBMvmaxvVbLX
+         VRsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686752037; x=1689344037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T/lhBcL8PdmZexLMneyEv/Gn9hUSFm3VXCVDLTnVzqY=;
+        b=VGZNL+ZVK34X77lqiT0cbHxO9Ic6LgRMa6998yLQhLmAPnM820Rz1DHxBG7FFDCbpO
+         0tHkHkNVrc7HB5LBK3jIZire+tDWpQ4vsXwgtc1kTEtm73A1oZkspE63itOdjjOWtjxX
+         N6jb4oCbxt8HU5pvf3FRhIYlJYQ2qKpvtnN+KljCrIBH4JBX64sJVo5Z507CVKCSs+JQ
+         tB5JJCAnOsOzRFVJoaUrGYZQtweZXdlPOHiQFHuBbp54PJFqsyV54DifwdC3cfiJPxEY
+         /sUsjpg3Pg6Uifke0uDwcdO8fdzkl8bhltySO/Juwo3VWfnoS7HvU9CAj9BC/Ebr2ILc
+         MteA==
+X-Gm-Message-State: AC+VfDzNtpz36y7lJt3N4qgNurMvpKX4wDXfA0xU4TTm24U/xboqW2DW
+	As+fBKxY7BUevwkw40+9pLQBeTtZ/ENDMNK7b9NjWQ==
+X-Google-Smtp-Source: ACHHUZ7IgTjMs3w5UlStqcOEigI5kidG9B+ujD++WFwvUgi7uH9u3I5/+rh/wkwAF23Cmkcs9+Ru7SL6kUdvrr0HtsA=
+X-Received: by 2002:a05:6102:3da:b0:43f:37d6:22a7 with SMTP id
+ n26-20020a05610203da00b0043f37d622a7mr2443149vsq.13.1686752037313; Wed, 14
+ Jun 2023 07:13:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70788812-e1de-42d9-fddf-08db6ce1481f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 14:11:43.6458
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QEEPPQx8UHQOp3wkDeh89NUW7KpUZU1Y9UBpkopDkEBMoqniE6yR1LhZq3tLRrqIADJesiOZdZTWPC8QqwasYUnDtvADlFYMyV0cAyptf6U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1748
+References: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
+ <20230612185424.GA2891387@dev-arch.thelio-3990X> <CA+G9fYtX6YNqmz9vxJxa5cA5Uf2rr=RNM0nkoTzRpg79Azp2tA@mail.gmail.com>
+In-Reply-To: <CA+G9fYtX6YNqmz9vxJxa5cA5Uf2rr=RNM0nkoTzRpg79Azp2tA@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 14 Jun 2023 19:43:45 +0530
+Message-ID: <CA+G9fYvmqz3nQ=Cgs=7J6vtRj=OhbNzgkLPmxxN+vOBTU=9zVA@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_clang=3A_Powerpc=3A_clang=2Dnightly=2Dmaple=5Fdefconfig_?=
+	=?UTF-8?Q?=E2=80=94_FAIL?=
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	linux-stable <stable@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Anders Roxell <anders.roxell@linaro.org>, 
+	=?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGksDQoNCkxlIDIyLzA1LzIwMjMgw6AgMjE6MDAsIGtlcm5lbCB0ZXN0IHJvYm90IGEgw6ljcml0
-wqA6DQo+IEhpIENocmlzdG9waGUsDQo+IA0KPiBGWUksIHRoZSBlcnJvci93YXJuaW5nIHN0aWxs
-IHJlbWFpbnMuDQo+IA0KPiB0cmVlOiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9s
-aW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdCBtYXN0ZXINCj4gaGVhZDogICA0NGMw
-MjZhNzNiZTgwMzhmMDNkYmRlZWYwMjhiNjQyODgwY2YxNTExDQo+IGNvbW1pdDogNzI0NWZjNWJi
-N2E5NjY4NTJkNWJkNzc3OWQxZjU4NTU1MzBiNDYxYSBwb3dlcnBjL21hdGgtZW11OiBSZW1vdmUg
-LXcgYnVpbGQgZmxhZyBhbmQgZml4IHdhcm5pbmdzDQo+IGRhdGU6ICAgOSBtb250aHMgYWdvDQo+
-IGNvbmZpZzogcG93ZXJwYy1yYW5kY29uZmlnLXIwMjItMjAyMzA1MjIgKGh0dHBzOi8vZG93bmxv
-YWQuMDEub3JnLzBkYXktY2kvYXJjaGl2ZS8yMDIzMDUyMy8yMDIzMDUyMzAyMzEuM1diN1E2OEct
-bGtwQGludGVsLmNvbS9jb25maWcpDQo+IGNvbXBpbGVyOiBjbGFuZyB2ZXJzaW9uIDE3LjAuMCAo
-aHR0cHM6Ly9naXRodWIuY29tL2xsdm0vbGx2bS1wcm9qZWN0IGIwZmI5ODIyN2M5MGFkZjI1MzZj
-OWFkNjQ0YTc0ZDVlOTI5NjExMTEpDQo+IHJlcHJvZHVjZSAodGhpcyBpcyBhIFc9MSBidWlsZCk6
-DQo+ICAgICAgICAgIHdnZXQgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2ludGVs
-L2xrcC10ZXN0cy9tYXN0ZXIvc2Jpbi9tYWtlLmNyb3NzIC1PIH4vYmluL21ha2UuY3Jvc3MNCj4g
-ICAgICAgICAgY2htb2QgK3ggfi9iaW4vbWFrZS5jcm9zcw0KPiAgICAgICAgICAjIGluc3RhbGwg
-cG93ZXJwYyBjcm9zcyBjb21waWxpbmcgdG9vbCBmb3IgY2xhbmcgYnVpbGQNCj4gICAgICAgICAg
-IyBhcHQtZ2V0IGluc3RhbGwgYmludXRpbHMtcG93ZXJwYy1saW51eC1nbnUNCj4gICAgICAgICAg
-IyBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxk
-cy9saW51eC5naXQvY29tbWl0Lz9pZD03MjQ1ZmM1YmI3YTk2Njg1MmQ1YmQ3Nzc5ZDFmNTg1NTUz
-MGI0NjFhDQo+ICAgICAgICAgIGdpdCByZW1vdGUgYWRkIGxpbnVzIGh0dHBzOi8vZ2l0Lmtlcm5l
-bC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdA0KPiAgICAg
-ICAgICBnaXQgZmV0Y2ggLS1uby10YWdzIGxpbnVzIG1hc3Rlcg0KPiAgICAgICAgICBnaXQgY2hl
-Y2tvdXQgNzI0NWZjNWJiN2E5NjY4NTJkNWJkNzc3OWQxZjU4NTU1MzBiNDYxYQ0KPiAgICAgICAg
-ICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxlDQo+ICAgICAgICAgIG1rZGlyIGJ1aWxkX2RpciAmJiBj
-cCBjb25maWcgYnVpbGRfZGlyLy5jb25maWcNCj4gICAgICAgICAgQ09NUElMRVJfSU5TVEFMTF9Q
-QVRIPSRIT01FLzBkYXkgQ09NUElMRVI9Y2xhbmcgbWFrZS5jcm9zcyBXPTEgTz1idWlsZF9kaXIg
-QVJDSD1wb3dlcnBjIG9sZGRlZmNvbmZpZw0KPiAgICAgICAgICBDT01QSUxFUl9JTlNUQUxMX1BB
-VEg9JEhPTUUvMGRheSBDT01QSUxFUj1jbGFuZyBtYWtlLmNyb3NzIFc9MSBPPWJ1aWxkX2RpciBB
-UkNIPXBvd2VycGMgU0hFTEw9L2Jpbi9iYXNoIGFyY2gvcG93ZXJwYy9tYXRoLWVtdS8NCj4gDQo+
-IElmIHlvdSBmaXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWcgd2hlcmUgYXBw
-bGljYWJsZQ0KPiB8IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNv
-bT4NCj4gfCBDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAy
-MzA1MjMwMjMxLjNXYjdRNjhHLWxrcEBpbnRlbC5jb20vDQo+IA0KPiBBbGwgd2FybmluZ3MgKG5l
-dyBvbmVzIHByZWZpeGVkIGJ5ID4+KToNCj4gDQo+Pj4gYXJjaC9wb3dlcnBjL21hdGgtZW11L2Zj
-bXB1LmM6MTM6Mjogd2FybmluZzogdmFyaWFibGUgJ0FfYycgc2V0IGJ1dCBub3QgdXNlZCBbLVd1
-bnVzZWQtYnV0LXNldC12YXJpYWJsZV0NCg0KVGhpcyBjb2RlIGlzIGltcG9ydGVkLCBhbmQgdGhl
-cmUgaXMgbm8gcGxhbiB0byBtYWtlIGFueSBjaGFuZ2UgdG8gaXQuIA0KQ2FuIHlvdSBkZXNhY3Rp
-dmF0ZSB0aGF0IHdhcm5pbmcgPw0KDQpUaGFua3MNCkNocmlzdG9waGUNCg0KPiAgICAgICAgICAg
-ICBGUF9ERUNMX0QoQSk7DQo+ICAgICAgICAgICAgIF4NCj4gICAgIGluY2x1ZGUvbWF0aC1lbXUv
-ZG91YmxlLmg6NzM6MjM6IG5vdGU6IGV4cGFuZGVkIGZyb20gbWFjcm8gJ0ZQX0RFQ0xfRCcNCj4g
-ICAgICNkZWZpbmUgRlBfREVDTF9EKFgpICAgICAgICAgICAgX0ZQX0RFQ0woMixYKQ0KPiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAgICBpbmNsdWRlL21hdGgtZW11
-L29wLWNvbW1vbi5oOjI4OjE0OiBub3RlOiBleHBhbmRlZCBmcm9tIG1hY3JvICdfRlBfREVDTCcN
-Cj4gICAgICAgX0ZQX0lfVFlQRSBYIyNfYz0wLCBYIyNfcz0wLCBYIyNfZT0wOyBcDQo+ICAgICAg
-ICAgICAgICAgICAgXg0KPiAgICAgPHNjcmF0Y2ggc3BhY2U+OjEyNDoxOiBub3RlOiBleHBhbmRl
-ZCBmcm9tIGhlcmUNCj4gICAgIEFfYw0KPiAgICAgXg0KPj4+IGFyY2gvcG93ZXJwYy9tYXRoLWVt
-dS9mY21wdS5jOjE0OjI6IHdhcm5pbmc6IHZhcmlhYmxlICdCX2MnIHNldCBidXQgbm90IHVzZWQg
-Wy1XdW51c2VkLWJ1dC1zZXQtdmFyaWFibGVdDQo+ICAgICAgICAgICAgIEZQX0RFQ0xfRChCKTsN
-Cj4gICAgICAgICAgICAgXg0KPiAgICAgaW5jbHVkZS9tYXRoLWVtdS9kb3VibGUuaDo3MzoyMzog
-bm90ZTogZXhwYW5kZWQgZnJvbSBtYWNybyAnRlBfREVDTF9EJw0KPiAgICAgI2RlZmluZSBGUF9E
-RUNMX0QoWCkgICAgICAgICAgICBfRlBfREVDTCgyLFgpDQo+ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIF4NCj4gICAgIGluY2x1ZGUvbWF0aC1lbXUvb3AtY29tbW9uLmg6Mjg6
-MTQ6IG5vdGU6IGV4cGFuZGVkIGZyb20gbWFjcm8gJ19GUF9ERUNMJw0KPiAgICAgICBfRlBfSV9U
-WVBFIFgjI19jPTAsIFgjI19zPTAsIFgjI19lPTA7IFwNCj4gICAgICAgICAgICAgICAgICBeDQo+
-ICAgICA8c2NyYXRjaCBzcGFjZT46MTMwOjE6IG5vdGU6IGV4cGFuZGVkIGZyb20gaGVyZQ0KPiAg
-ICAgQl9jDQo+ICAgICBeDQo+Pj4gYXJjaC9wb3dlcnBjL21hdGgtZW11L2ZjbXB1LmM6MTU6Mjog
-d2FybmluZzogdmFyaWFibGUgJ19mZXgnIHNldCBidXQgbm90IHVzZWQgWy1XdW51c2VkLWJ1dC1z
-ZXQtdmFyaWFibGVdDQo+ICAgICAgICAgICAgIEZQX0RFQ0xfRVg7DQo+ICAgICAgICAgICAgIF4N
-Cj4gICAgIGluY2x1ZGUvbWF0aC1lbXUvc29mdC1mcC5oOjk0OjI0OiBub3RlOiBleHBhbmRlZCBm
-cm9tIG1hY3JvICdGUF9ERUNMX0VYJw0KPiAgICAgI2RlZmluZSBGUF9ERUNMX0VYIGludCBfZmV4
-ID0gMA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAgICBhcmNoL3Bvd2VycGMv
-bWF0aC1lbXUvZmNtcHUuYzoxMToxOiB3YXJuaW5nOiBubyBwcmV2aW91cyBwcm90b3R5cGUgZm9y
-IGZ1bmN0aW9uICdmY21wdScgWy1XbWlzc2luZy1wcm90b3R5cGVzXQ0KPiAgICAgZmNtcHUodTMy
-ICpjY3IsIGludCBjcmZELCB2b2lkICpmckEsIHZvaWQgKmZyQikNCj4gICAgIF4NCj4gICAgIGFy
-Y2gvcG93ZXJwYy9tYXRoLWVtdS9mY21wdS5jOjEwOjE6IG5vdGU6IGRlY2xhcmUgJ3N0YXRpYycg
-aWYgdGhlIGZ1bmN0aW9uIGlzIG5vdCBpbnRlbmRlZCB0byBiZSB1c2VkIG91dHNpZGUgb2YgdGhp
-cyB0cmFuc2xhdGlvbiB1bml0DQo+ICAgICBpbnQNCj4gICAgIF4NCj4gICAgIHN0YXRpYw0KPiAg
-ICAgNCB3YXJuaW5ncyBnZW5lcmF0ZWQuDQo+IC0tDQo+Pj4gYXJjaC9wb3dlcnBjL21hdGgtZW11
-L2ZjdGl3LmM6MTQ6Mjogd2FybmluZzogdmFyaWFibGUgJ19mZXgnIHNldCBidXQgbm90IHVzZWQg
-Wy1XdW51c2VkLWJ1dC1zZXQtdmFyaWFibGVdDQo+ICAgICAgICAgICAgIEZQX0RFQ0xfRVg7DQo+
-ICAgICAgICAgICAgIF4NCj4gICAgIGluY2x1ZGUvbWF0aC1lbXUvc29mdC1mcC5oOjk0OjI0OiBu
-b3RlOiBleHBhbmRlZCBmcm9tIG1hY3JvICdGUF9ERUNMX0VYJw0KPiAgICAgI2RlZmluZSBGUF9E
-RUNMX0VYIGludCBfZmV4ID0gMA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAg
-ICBhcmNoL3Bvd2VycGMvbWF0aC1lbXUvZmN0aXcuYzoxMToxOiB3YXJuaW5nOiBubyBwcmV2aW91
-cyBwcm90b3R5cGUgZm9yIGZ1bmN0aW9uICdmY3RpdycgWy1XbWlzc2luZy1wcm90b3R5cGVzXQ0K
-PiAgICAgZmN0aXcodTMyICpmckQsIHZvaWQgKmZyQikNCj4gICAgIF4NCj4gICAgIGFyY2gvcG93
-ZXJwYy9tYXRoLWVtdS9mY3Rpdy5jOjEwOjE6IG5vdGU6IGRlY2xhcmUgJ3N0YXRpYycgaWYgdGhl
-IGZ1bmN0aW9uIGlzIG5vdCBpbnRlbmRlZCB0byBiZSB1c2VkIG91dHNpZGUgb2YgdGhpcyB0cmFu
-c2xhdGlvbiB1bml0DQo+ICAgICBpbnQNCj4gICAgIF4NCj4gICAgIHN0YXRpYw0KPiAgICAgMiB3
-YXJuaW5ncyBnZW5lcmF0ZWQuDQo+IC0tDQo+Pj4gYXJjaC9wb3dlcnBjL21hdGgtZW11L2ZjdGl3
-ei5jOjE0OjI6IHdhcm5pbmc6IHZhcmlhYmxlICdfZmV4JyBzZXQgYnV0IG5vdCB1c2VkIFstV3Vu
-dXNlZC1idXQtc2V0LXZhcmlhYmxlXQ0KPiAgICAgICAgICAgICBGUF9ERUNMX0VYOw0KPiAgICAg
-ICAgICAgICBeDQo+ICAgICBpbmNsdWRlL21hdGgtZW11L3NvZnQtZnAuaDo5NDoyNDogbm90ZTog
-ZXhwYW5kZWQgZnJvbSBtYWNybyAnRlBfREVDTF9FWCcNCj4gICAgICNkZWZpbmUgRlBfREVDTF9F
-WCBpbnQgX2ZleCA9IDANCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0KPiAgICAgYXJj
-aC9wb3dlcnBjL21hdGgtZW11L2ZjdGl3ei5jOjExOjE6IHdhcm5pbmc6IG5vIHByZXZpb3VzIHBy
-b3RvdHlwZSBmb3IgZnVuY3Rpb24gJ2ZjdGl3eicgWy1XbWlzc2luZy1wcm90b3R5cGVzXQ0KPiAg
-ICAgZmN0aXd6KHUzMiAqZnJELCB2b2lkICpmckIpDQo+ICAgICBeDQo+ICAgICBhcmNoL3Bvd2Vy
-cGMvbWF0aC1lbXUvZmN0aXd6LmM6MTA6MTogbm90ZTogZGVjbGFyZSAnc3RhdGljJyBpZiB0aGUg
-ZnVuY3Rpb24gaXMgbm90IGludGVuZGVkIHRvIGJlIHVzZWQgb3V0c2lkZSBvZiB0aGlzIHRyYW5z
-bGF0aW9uIHVuaXQNCj4gICAgIGludA0KPiAgICAgXg0KPiAgICAgc3RhdGljDQo+ICAgICAyIHdh
-cm5pbmdzIGdlbmVyYXRlZC4NCj4gLS0NCj4+PiBhcmNoL3Bvd2VycGMvbWF0aC1lbXUvZnNlbC5j
-OjE0OjI6IHdhcm5pbmc6IHZhcmlhYmxlICdfZmV4JyBzZXQgYnV0IG5vdCB1c2VkIFstV3VudXNl
-ZC1idXQtc2V0LXZhcmlhYmxlXQ0KPiAgICAgICAgICAgICBGUF9ERUNMX0VYOw0KPiAgICAgICAg
-ICAgICBeDQo+ICAgICBpbmNsdWRlL21hdGgtZW11L3NvZnQtZnAuaDo5NDoyNDogbm90ZTogZXhw
-YW5kZWQgZnJvbSBtYWNybyAnRlBfREVDTF9FWCcNCj4gICAgICNkZWZpbmUgRlBfREVDTF9FWCBp
-bnQgX2ZleCA9IDANCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0KPiAgICAgYXJjaC9w
-b3dlcnBjL21hdGgtZW11L2ZzZWwuYzoxMToxOiB3YXJuaW5nOiBubyBwcmV2aW91cyBwcm90b3R5
-cGUgZm9yIGZ1bmN0aW9uICdmc2VsJyBbLVdtaXNzaW5nLXByb3RvdHlwZXNdDQo+ICAgICBmc2Vs
-KHUzMiAqZnJELCB2b2lkICpmckEsIHUzMiAqZnJCLCB1MzIgKmZyQykNCj4gICAgIF4NCj4gICAg
-IGFyY2gvcG93ZXJwYy9tYXRoLWVtdS9mc2VsLmM6MTA6MTogbm90ZTogZGVjbGFyZSAnc3RhdGlj
-JyBpZiB0aGUgZnVuY3Rpb24gaXMgbm90IGludGVuZGVkIHRvIGJlIHVzZWQgb3V0c2lkZSBvZiB0
-aGlzIHRyYW5zbGF0aW9uIHVuaXQNCj4gICAgIGludA0KPiAgICAgXg0KPiAgICAgc3RhdGljDQo+
-ICAgICAyIHdhcm5pbmdzIGdlbmVyYXRlZC4NCj4gDQo+IA0KPiB2aW0gKy9BX2MgKzEzIGFyY2gv
-cG93ZXJwYy9tYXRoLWVtdS9mY21wdS5jDQo+IA0KPiBeMWRhMTc3ZTRjM2Y0MSBhcmNoL3BwYy9t
-YXRoLWVtdS9mY21wdS5jICAgICBMaW51cyBUb3J2YWxkcyAyMDA1LTA0LTE2ICAgOQ0KPiBeMWRh
-MTc3ZTRjM2Y0MSBhcmNoL3BwYy9tYXRoLWVtdS9mY21wdS5jICAgICBMaW51cyBUb3J2YWxkcyAy
-MDA1LTA0LTE2ICAxMCAgaW50DQo+IF4xZGExNzdlNGMzZjQxIGFyY2gvcHBjL21hdGgtZW11L2Zj
-bXB1LmMgICAgIExpbnVzIFRvcnZhbGRzIDIwMDUtMDQtMTYgIDExICBmY21wdSh1MzIgKmNjciwg
-aW50IGNyZkQsIHZvaWQgKmZyQSwgdm9pZCAqZnJCKQ0KPiBeMWRhMTc3ZTRjM2Y0MSBhcmNoL3Bw
-Yy9tYXRoLWVtdS9mY21wdS5jICAgICBMaW51cyBUb3J2YWxkcyAyMDA1LTA0LTE2ICAxMiAgew0K
-PiBeMWRhMTc3ZTRjM2Y0MSBhcmNoL3BwYy9tYXRoLWVtdS9mY21wdS5jICAgICBMaW51cyBUb3J2
-YWxkcyAyMDA1LTA0LTE2IEAxMyAgCUZQX0RFQ0xfRChBKTsNCj4gXjFkYTE3N2U0YzNmNDEgYXJj
-aC9wcGMvbWF0aC1lbXUvZmNtcHUuYyAgICAgTGludXMgVG9ydmFsZHMgMjAwNS0wNC0xNiBAMTQg
-IAlGUF9ERUNMX0QoQik7DQo+IGQyYjE5NGVkODIwODgwIGFyY2gvcG93ZXJwYy9tYXRoLWVtdS9m
-Y21wdS5jIEt1bWFyIEdhbGEgICAgIDIwMDgtMDYtMDQgQDE1ICAJRlBfREVDTF9FWDsNCj4gXjFk
-YTE3N2U0YzNmNDEgYXJjaC9wcGMvbWF0aC1lbXUvZmNtcHUuYyAgICAgTGludXMgVG9ydmFsZHMg
-MjAwNS0wNC0xNiAgMTYgIAlpbnQgY29kZVs0XSA9IHsgKDEgPDwgMyksICgxIDw8IDEpLCAoMSA8
-PCAyKSwgKDEgPDwgMCkgfTsNCj4gXjFkYTE3N2U0YzNmNDEgYXJjaC9wcGMvbWF0aC1lbXUvZmNt
-cHUuYyAgICAgTGludXMgVG9ydmFsZHMgMjAwNS0wNC0xNiAgMTcgIAlsb25nIGNtcDsNCj4gXjFk
-YTE3N2U0YzNmNDEgYXJjaC9wcGMvbWF0aC1lbXUvZmNtcHUuYyAgICAgTGludXMgVG9ydmFsZHMg
-MjAwNS0wNC0xNiAgMTgNCj4gDQo+IDo6Ojo6OiBUaGUgY29kZSBhdCBsaW5lIDEzIHdhcyBmaXJz
-dCBpbnRyb2R1Y2VkIGJ5IGNvbW1pdA0KPiA6Ojo6OjogMWRhMTc3ZTRjM2Y0MTUyNGU4ODZiN2Yx
-YjhhMGMxZmM3MzIxY2FjMiBMaW51eC0yLjYuMTItcmMyDQo+IA0KPiA6Ojo6OjogVE86IExpbnVz
-IFRvcnZhbGRzIDx0b3J2YWxkc0BwcGM5NzAub3NkbC5vcmc+DQo+IDo6Ojo6OiBDQzogTGludXMg
-VG9ydmFsZHMgPHRvcnZhbGRzQHBwYzk3MC5vc2RsLm9yZz4NCj4gDQo=
+Hi Nathan,
+
+On Tue, 13 Jun 2023 at 09:57, Naresh Kamboju <naresh.kamboju@linaro.org> wr=
+ote:
+>
+> Hi Nathan,
+>
+> On Tue, 13 Jun 2023 at 00:24, Nathan Chancellor <nathan@kernel.org> wrote=
+:
+> >
+> > Hi Naresh,
+> >
+> > On Tue, Jun 13, 2023 at 12:10:30AM +0530, Naresh Kamboju wrote:
+> > > [Please ignore if it is already reported]
+> > >
+> > > Following two builds failed on stable-rc 6.1.34-rc1.
+> > >
+> > >   - Powerpc: clang-nightly-maple_defconfig =E2=80=94 FAIL
+> > >   - Powerpc: clang-nightly-cell_defconfig =E2=80=94 FAIL
+> > >
+
+> > As always, thanks for the report. This is an LLVM regression/change in
+> > behavior caused by [1], which can break as-option and as-instr on
+> > releases prior to commit d5c8d6e0fa61 ("kbuild: Update assembler calls
+> > to use proper flags and language target"), as unsupported flags for the
+> > current target ('-x') may be present (KBUILD_CFLAGS is used for these
+> > tests instead of KBUILD_AFLAGS). Inside try-run, the macro behind
+> > as-instr and as-option, I see
+> >
+> >   clang-17: error: unsupported option '-mno-prefixed' for target 'power=
+pc64le-linux-gnu'
+> >   clang-17: error: unsupported option '-mno-pcrel' for target 'powerpc6=
+4le-linux-gnu'
+> >   clang-17: error: unsupported option '-mno-altivec' for target 'powerp=
+c64le-linux-gnu'
+> >   clang-17: error: unsupported option '-mno-vsx' for target 'powerpc64l=
+e-linux-gnu'
+> >   clang-17: error: unsupported option '-mno-mma' for target 'powerpc64l=
+e-linux-gnu'
+> >   clang-17: error: unsupported option '-mno-spe' for target 'powerpc64l=
+e-linux-gnu'
+> >
+> > This has come up recently elsewhere in PowerPC, see
+> > commit 2b694fc96fe3 ("powerpc/boot: Disable power10 features after
+> > BOOTAFLAGS assignment"). While I think it is dubious that clang errors
+> > on these flags for the assembler target, this is already fixed on the
+> > Linux side by using KBUILD_AFLAGS for these make macros.
+> >
+> > I am preparing a series of d5c8d6e0fa61 and its dependencies for 6.1 bu=
+t
+> > I want to do sufficient build testing first, which is currently running
+> > for me. Would you be able to point your matrix to [2] to make sure
+> > everything works properly with both GCC and LLVM? It is a work in
+> > progress as the second patch in the stack needs a proper commit message
+> > but it is the diff I expect to ship so that it all that matters.
+>
+> We'll start building [2] with GCC and LLVM by using tuxplans and
+> get back to you.
+
+LKFT has been configured to run GCC and LLVM in total 205 builds
+and all the builds have passed on your tree / branch [2]. You can find
+the list of builds including kselftest, perf, rcutorture, kunit, kmemleak
+and many more combinations and architectures.
+
+I request you to review the list of builds results and test results on
+projects page [3] [4]. I do not find any regressions compared with
+mainline master as sanity testing.
+
+Do you think LKFT should build your tree / branch often ?
+We are happy to test anytime.
+
+Thanks Daniel and Anders for your work.
+
+build_names: that got tested and all have passed.
+
+  - clang-16-allnoconfig
+  - clang-16-at91_dt_defconfig
+  - clang-16-axm55xx_defconfig
+  - clang-16-bcm2835_defconfig
+  - clang-16-cell_defconfig
+  - clang-16-clps711x_defconfig
+  - clang-16-davinci_all_defconfig
+  - clang-16-defconfig
+  - clang-16-defconfig-40bc7ee5
+  - clang-16-exynos_defconfig
+  - clang-16-footbridge_defconfig
+  - clang-16-imx_v4_v5_defconfig
+  - clang-16-imx_v6_v7_defconfig
+  - clang-16-integrator_defconfig
+  - clang-16-keystone_defconfig
+  - clang-16-lkftconfig
+  - clang-16-lkftconfig-compat
+  - clang-16-lkftconfig-kcsan
+  - clang-16-lkftconfig-no-kselftest-frag
+  - clang-16-lpc32xx_defconfig
+  - clang-16-maple_defconfig
+  - clang-16-mpc83xx_defconfig
+  - clang-16-multi_v5_defconfig
+  - clang-16-multi_v5_defconfig-65236a87
+  - clang-16-mxs_defconfig
+  - clang-16-nhk8815_defconfig
+  - clang-16-omap1_defconfig
+  - clang-16-omap2plus_defconfig
+  - clang-16-orion5x_defconfig
+  - clang-16-ppc64e_defconfig
+  - clang-16-pxa910_defconfig
+  - clang-16-s3c6400_defconfig
+  - clang-16-s5pv210_defconfig
+  - clang-16-sama5_defconfig
+  - clang-16-shmobile_defconfig
+  - clang-16-tinyconfig
+  - clang-16-tqm8xx_defconfig
+  - clang-16-u8500_defconfig
+  - clang-16-vexpress_defconfig
+  - clang-16-x86_64_defconfig
+  - clang-nightly-allnoconfig
+  - clang-nightly-at91_dt_defconfig
+  - clang-nightly-axm55xx_defconfig
+  - clang-nightly-bcm2835_defconfig
+  - clang-nightly-cell_defconfig
+  - clang-nightly-clps711x_defconfig
+  - clang-nightly-davinci_all_defconfig
+  - clang-nightly-defconfig
+  - clang-nightly-defconfig-40bc7ee5
+  - clang-nightly-exynos_defconfig
+  - clang-nightly-footbridge_defconfig
+  - clang-nightly-imx_v4_v5_defconfig
+  - clang-nightly-imx_v6_v7_defconfig
+  - clang-nightly-integrator_defconfig
+  - clang-nightly-keystone_defconfig
+  - clang-nightly-lkftconfig
+  - clang-nightly-lpc32xx_defconfig
+  - clang-nightly-maple_defconfig
+  - clang-nightly-mpc83xx_defconfig
+  - clang-nightly-multi_v5_defconfig
+  - clang-nightly-multi_v5_defconfig-65236a87
+  - clang-nightly-mxs_defconfig
+  - clang-nightly-nhk8815_defconfig
+  - clang-nightly-omap1_defconfig
+  - clang-nightly-omap2plus_defconfig
+  - clang-nightly-orion5x_defconfig
+  - clang-nightly-ppc64e_defconfig
+  - clang-nightly-pxa910_defconfig
+  - clang-nightly-s3c6400_defconfig
+  - clang-nightly-s5pv210_defconfig
+  - clang-nightly-sama5_defconfig
+  - clang-nightly-shmobile_defconfig
+  - clang-nightly-tinyconfig
+  - clang-nightly-tqm8xx_defconfig
+  - clang-nightly-u8500_defconfig
+  - clang-nightly-vexpress_defconfig
+  - clang-nightly-x86_64_defconfig
+  - gcc-11-allnoconfig
+  - gcc-11-defconfig
+  - gcc-11-dreamcast_defconfig
+  - gcc-11-lkftconfig
+  - gcc-11-lkftconfig-perf
+  - gcc-11-microdev_defconfig
+  - gcc-11-shx3_defconfig
+  - gcc-11-tinyconfig
+  - gcc-12-allnoconfig
+  - gcc-12-ar7_defconfig
+  - gcc-12-at91_dt_defconfig
+  - gcc-12-ath79_defconfig
+  - gcc-12-axm55xx_defconfig
+  - gcc-12-bcm2835_defconfig
+  - gcc-12-bcm47xx_defconfig
+  - gcc-12-bcm63xx_defconfig
+  - gcc-12-cavium_octeon_defconfig
+  - gcc-12-cell_defconfig
+  - gcc-12-clps711x_defconfig
+  - gcc-12-davinci_all_defconfig
+  - gcc-12-defconfig
+  - gcc-12-defconfig-40bc7ee5
+  - gcc-12-exynos_defconfig
+  - gcc-12-footbridge_defconfig
+  - gcc-12-imx_v4_v5_defconfig
+  - gcc-12-imx_v6_v7_defconfig
+  - gcc-12-integrator_defconfig
+  - gcc-12-ixp4xx_defconfig
+  - gcc-12-keystone_defconfig
+  - gcc-12-lkftconfig
+  - gcc-12-lkftconfig-64k_page_size
+  - gcc-12-lkftconfig-armv8_features
+  - gcc-12-lkftconfig-compat
+  - gcc-12-lkftconfig-debug
+  - gcc-12-lkftconfig-debug-kmemleak
+  - gcc-12-lkftconfig-devicetree
+  - gcc-12-lkftconfig-kasan
+  - gcc-12-lkftconfig-kselftest
+  - gcc-12-lkftconfig-kunit
+  - gcc-12-lkftconfig-libgpiod
+  - gcc-12-lkftconfig-no-kselftest-frag
+  - gcc-12-lkftconfig-perf
+  - gcc-12-lkftconfig-rcutorture
+  - gcc-12-lpc32xx_defconfig
+  - gcc-12-malta_defconfig
+  - gcc-12-maple_defconfig
+  - gcc-12-mpc83xx_defconfig
+  - gcc-12-multi_v5_defconfig
+  - gcc-12-multi_v5_defconfig-65236a87
+  - gcc-12-mxs_defconfig
+  - gcc-12-nhk8815_defconfig
+  - gcc-12-omap1_defconfig
+  - gcc-12-omap2plus_defconfig
+  - gcc-12-orion5x_defconfig
+  - gcc-12-ppc64e_defconfig
+  - gcc-12-ppc6xx_defconfig
+  - gcc-12-pxa910_defconfig
+  - gcc-12-rt305x_defconfig
+  - gcc-12-s3c6400_defconfig
+  - gcc-12-s5pv210_defconfig
+  - gcc-12-sama5_defconfig
+  - gcc-12-shmobile_defconfig
+  - gcc-12-tinyconfig
+  - gcc-12-tqm8xx_defconfig
+  - gcc-12-u8500_defconfig
+  - gcc-12-vexpress_defconfig
+  - gcc-8-allnoconfig
+  - gcc-8-ar7_defconfig
+  - gcc-8-at91_dt_defconfig
+  - gcc-8-ath79_defconfig
+  - gcc-8-axm55xx_defconfig
+  - gcc-8-bcm2835_defconfig
+  - gcc-8-bcm47xx_defconfig
+  - gcc-8-bcm63xx_defconfig
+  - gcc-8-cavium_octeon_defconfig
+  - gcc-8-cell_defconfig
+  - gcc-8-clps711x_defconfig
+  - gcc-8-davinci_all_defconfig
+  - gcc-8-defconfig
+  - gcc-8-defconfig-40bc7ee5
+  - gcc-8-defconfig-fe40093d
+  - gcc-8-dreamcast_defconfig
+  - gcc-8-exynos_defconfig
+  - gcc-8-footbridge_defconfig
+  - gcc-8-i386_defconfig
+  - gcc-8-imx_v4_v5_defconfig
+  - gcc-8-imx_v6_v7_defconfig
+  - gcc-8-integrator_defconfig
+  - gcc-8-ixp4xx_defconfig
+  - gcc-8-keystone_defconfig
+  - gcc-8-lpc32xx_defconfig
+  - gcc-8-malta_defconfig
+  - gcc-8-maple_defconfig
+  - gcc-8-microdev_defconfig
+  - gcc-8-mpc83xx_defconfig
+  - gcc-8-multi_v5_defconfig
+  - gcc-8-mxs_defconfig
+  - gcc-8-nhk8815_defconfig
+  - gcc-8-omap1_defconfig
+  - gcc-8-omap2plus_defconfig
+  - gcc-8-orion5x_defconfig
+  - gcc-8-ppc64e_defconfig
+  - gcc-8-ppc6xx_defconfig
+  - gcc-8-pxa910_defconfig
+  - gcc-8-rt305x_defconfig
+  - gcc-8-s3c6400_defconfig
+  - gcc-8-s5pv210_defconfig
+  - gcc-8-sama5_defconfig
+  - gcc-8-shmobile_defconfig
+  - gcc-8-shx3_defconfig
+  - gcc-8-tinyconfig
+  - gcc-8-tqm8xx_defconfig
+  - gcc-8-u8500_defconfig
+  - gcc-8-vexpress_defconfig
+  - gcc-8-x86_64_defconfig
+  - gcc-9-allnoconfig
+  - gcc-9-axs103_defconfig
+  - gcc-9-defconfig
+  - gcc-9-tinyconfig
+  - gcc-9-vdk_hs38_smp_defconfig
+  - rv32-clang-16-allnoconfig
+  - rv32-clang-16-defconfig
+  - rv32-clang-16-lkftconfig
+  - rv32-clang-16-tinyconfig
+  - rv32-clang-nightly-allnoconfig
+  - rv32-clang-nightly-defconfig
+  - rv32-clang-nightly-tinyconfig
+  - rv32-gcc-11-lkftconfig
+
+
+> > [1]: https://github.com/llvm/llvm-project/commit/5548843d692a92a7840f14=
+002debc3cebcb3cdc3
+> > [2]: https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/l=
+og/?h=3Dwip/b4/6-1-asssembler-target-llvm-17
+
+[3] https://qa-reports.linaro.org/~anders.roxell/natan-6-1-asssembler-targe=
+t-llvm-17/build/v6.1-6642-gb29a8d48035a/metadata/
+[4] https://qa-reports.linaro.org/~anders.roxell/natan-6-1-asssembler-targe=
+t-llvm-17/build/v6.1-6642-gb29a8d48035a/
+
+
+> > Cheers,
+> > Nathan
+
+
+- Naresh
