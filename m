@@ -1,178 +1,97 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3E0AD29
-	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 16:40:41 +0000 (UTC)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-75d4dd6f012so226788485a.2
-        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 09:40:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E267F
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 16:43:51 +0000 (UTC)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-62fe1e6dc65so7755506d6.0
+        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 09:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686760840; x=1689352840;
+        d=google.com; s=20221208; t=1686761030; x=1689353030;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
-        b=OAoITSntNBYS+uJgf1ujmP2eeCLW9WF/FTefuiku8oybwrFBx+upKikf92RbfxXDE+
-         LnYGDbG150ZKoTMWfmq3xvUFJt8/h0GeDKE4BfhS5mPt4LFm8IFdGz0371yuNV+Z/fKH
-         BFj0AXE1/uumb9GBim7y91GR0ZrJp5EcO87efwp3wOhNFp8ZrMk82cAtVmQFn+3r6q/O
-         Rg1fgvFf/yOlmVFHUa43o0hvV3WXx27jsfTzl4CuRT9dho1R5DLVFyrR9QiIkd9mP4Mt
-         zzG27bxORvKu5rmKLtRzdL3zlEvwsqLHG5zaL7qJcVVUT6AFxL+ONDCwRBish4r8Ujgu
-         EM5g==
+        bh=cwxcE8abfYw4UDD2GwaIyR5gbC93lb1+WlKxHZUaJK4=;
+        b=YnaAofNwG+L1xpWJDFLiuB3ppaQpvkRQa5GmJ1Fo9B8EAI2N4K/P7cYjUjwwfY1RoK
+         sggYy4X+kAkcjfERRLyXJg+XwoOAKf8mKT04iTG2rEVFPkCJ0/qeFlPchkVdwV1tIS1B
+         YRZzWRvoCO9rr4zorVfdnBsD3p8Kf/2b60y5/Ki8sXkwt/Y52brl+5Ri1PuqUSD9dECe
+         M1UYr7AA7KRhPKwuJUV+45mg2ao2CA80CXq8rM7YrS6Z8471zIRwrG1qFf6jYJeugoc5
+         w7tsyWdbp+7K75JdJEtNFv0yyjWfDQFAjo6k1AaX0PZhb34Rqj3ECmIgiMgiC9/8B8Bj
+         3ImA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686760840; x=1689352840;
+        d=1e100.net; s=20221208; t=1686761030; x=1689353030;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
-        b=mIE1UQw6EiX0cEw/rESeYWMTk7N26qDKHqxYAfgQ/2qivpb8rmi+gRu1zA616/j9hr
-         3Rv2BfWGTgDZq6mMdfjvuvFI9CXSw6w3SjXGUEzmk3nRygFywivfwdD3LmO8X4GOWmxe
-         HzUKiwOg6tzYymFlgiYziKaqSNYwKTN4eZMG24Fg/iWS1RvOVNB90l3tZzz7BbQry56F
-         7ZpCl9fMH+UX03apnbULoGnl+uTOq5uUI+DE/g98OAM6RXYVz+kXRgv5ze3K1p4Ofyqh
-         mvVbKh5IfaJqyl69FLLIG/8fhlU1eyI7fTUump5FA7JpJRplQ0y7mrr4/HL8+AyboZlQ
-         FbBA==
-X-Gm-Message-State: AC+VfDxBU0wsAxhS7I2MNagW1/bhn3YyUs7dggXYeyfxgJAOJrHjdKIu
-	uwCH/hdhLyQJB8QW4jnSpj0gER3w2BpR4XrVdrMvmw==
-X-Google-Smtp-Source: ACHHUZ6nzw2pIHfANPy+oymiDmwVUSVPnDXJQ6OjIAJWySkyRIMjr8q00W31fdmz4ODSODxrNZYayP0uNr3Rvjbpr08=
-X-Received: by 2002:a05:6214:e6e:b0:628:6abe:f06e with SMTP id
- jz14-20020a0562140e6e00b006286abef06emr17513666qvb.41.1686760840396; Wed, 14
- Jun 2023 09:40:40 -0700 (PDT)
+        bh=cwxcE8abfYw4UDD2GwaIyR5gbC93lb1+WlKxHZUaJK4=;
+        b=RSVEoByHcLfA4M63rz38dLe1JpApiccZ67wVejyyqIOQHBU+uqyXzBUfFyjIBF35G3
+         Fq/FJSjFud0oRHEthT653PI02nqqG8LPfDBDUK7j9kBQX39F6LQnYIgwEcGq5itYVcAf
+         FPsGnhJQeM4xpuk/QzcZqMVdWHVpiK66ygR8T9aMpTA6pU5wfiTV6Tko9SHReo6fNaHZ
+         mR76vf6bsVSB+9WVAQvVCkH2Lj7JoIN9te+K+iv6Y7CaYko/hT7ijW6OlXbX0VGs9vgC
+         inHRKjDaZYOzFyl5lBWRbzEbRd7O3BEXvWZtOsclR8d0piOf7WSUhigpV8JS7wEDa6XP
+         913g==
+X-Gm-Message-State: AC+VfDwRpwlsmA+vlOZCQAuDW2r8epGN1v0V/aiq+S4xIuKOAva/Cn2g
+	vJ/FwSOxq3XqpheuV87eQ1eVEHtY7Ob1hxj03GKSsw==
+X-Google-Smtp-Source: ACHHUZ5o8sqdC4i4keALJfqNYXtPDam68Ipa/08xsOY3XLPJwD3/x42L275UgzABPRHZJgKAd+xS3V+jUiSWv462VUc=
+X-Received: by 2002:ad4:5f8e:0:b0:62a:d642:df29 with SMTP id
+ jp14-20020ad45f8e000000b0062ad642df29mr20295870qvb.39.1686761030496; Wed, 14
+ Jun 2023 09:43:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306110855.7TlBCIzI-lkp@intel.com> <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
-In-Reply-To: <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
+References: <CAKwvOd=qxNfPDo-=bxzyzmY3YmsBtxv686rr9Q_thrfC6ni3eg@mail.gmail.com>
+ <262df5fd-d8c4-47aa-a65d-dd79a303a9ca@sirena.org.uk> <dfa85ccc-693b-00cb-a4d9-af32e0dfbed8@collabora.com>
+In-Reply-To: <dfa85ccc-693b-00cb-a4d9-af32e0dfbed8@collabora.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 14 Jun 2023 12:40:28 -0400
-Message-ID: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
-Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
- symbol 'misaligned_access_speed'; recompile with -fPIC
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Date: Wed, 14 Jun 2023 12:43:39 -0400
+Message-ID: <CAKwvOd=8eZbQWngCs1V_o9Z8ecd5vx39k=FJUE_P2wuXxu2HXA@mail.gmail.com>
+Subject: Re: kernelci: please upgrade clang-17
+To: Guillaume Tucker <guillaume.tucker@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc: kernelci@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 13, 2023 at 4:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
-> > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable=
- kernels with early alternatives using -fno-pie
-> > date:   10 days ago
-> > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci=
-/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
-> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
-t ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > reproduce (this is a W=3D1 build):
-> >         mkdir -p ~/bin
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv64-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
-l/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- 'misaligned_access_speed'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
-ol 'misaligned_access_speed'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- 'riscv_cbom_block_size'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
-ch_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symb=
-ol 'riscv_cbom_block_size'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
-ch_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- '__per_cpu_offset'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(mm/percpu.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
-ol '__per_cpu_offset'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(mm/percpu.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> >
->
-> So I looked into those errors, the config is basically =3D RELOCATABLE +
-> MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
+ack - thanks!
 
-Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
--fPIC? If so, why is LLD complaining about -fPIC not being used?
-
-arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE =3D=3D y.
-
-Is it possible that -fpie was dropped for these object files, or
--fno-pic or -fno-pie was added to the cflags for these object files
-somehow?
-
-I've filed
-https://github.com/ClangBuiltLinux/linux/issues/1872
-to track this.
-
-> medany, which makes sense since we only need this code to be medany
-> when EARLY_ALTERNATIVES is enabled (because the code would be executed
-> with mmu off, which is not the case here).
+On Tue, Jun 13, 2023 at 6:35=E2=80=AFAM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
 >
-> I can fix those errors by adding the medany flag, but I'm not sure
-> actually we want to do that since we do not need it and gcc does not
-> complain: any idea?
+> On 12/06/2023 17:11, Mark Brown wrote:
+> > On Fri, Jun 09, 2023 at 01:50:13PM -0700, Nick Desaulniers wrote:
+> >> Starting a new thread because gmail cannot handle replying to an email
+> >> w/ >45k warnings.
+> >> https://lore.kernel.org/llvm/6482b7dd.170a0220.a93c3.9102@mx.google.co=
+m/
+> >>
+> >> instances of -Wbuiltin-macro-redefined have been fixed in ToT llvm.
+> >> Updating clang-17 should resolve most of the error spew.
+> >>
+> >> Does kernel CI update ToT clang builds on a fixed cadence?
+> >
+> > The containers with the tools should be being rebuilt during the
+> > production update which normally happens every Monday.  There's some
+> > disruption at the minute due to some infrastructure rebuilding that's
+> > going on so today's update of the containers might be delayed.
 >
-> Alex
+> Yes the LLVM-17 update has now trickled down into production and
+> warnings are all gone:
 >
+>   https://storage.kernelci.org/next/master/next-20230613/arm/multi_v7_def=
+config/clang-17/logs/kernel.log
 >
+> compared with the previous linux-next build which had all the warnings:
 >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
+>   https://storage.kernelci.org/next/master/next-20230609/arm/multi_v7_def=
+config/clang-17/logs/kernel.log
+>
+> We skipped the regular production update last Monday to focus on
+> migrating VMs to the new Azure subscription, sorry for the
+> inconvenience.  We're back on the regular schedule now.
+>
+> Thanks,
+> Guillaume
 >
 
 
