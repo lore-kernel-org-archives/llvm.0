@@ -1,44 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF2A6AA3;
-	Wed, 14 Jun 2023 11:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E3F747D;
+	Wed, 14 Jun 2023 11:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686742147; x=1718278147;
+  t=1686742792; x=1718278792;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LCFEar9AtoamxOAIH560TDgXfoXndQ1KnZekFUg3LgA=;
-  b=b96jhZ8CGAbdJrtKVDZUlizuWVg/AWTnT3aHkw5KVjeA24G6JgybTgMv
-   yRB7OLSzljuIAPvORpHUjrDVxINhduXyxw+w07Ww8LBIC/tIk/ylkv92D
-   UlaPsmfj5LdBBFOUwY565p50cYS8nAaZHY2KbAHvkmXHN/SNLV+vTODwo
-   LLFByiFCxzXZaB8Q1qi8tNg6nkr+uWXR0TXMi2I00P/UpxPHhDJZ0qHdf
-   JezM4IQ6jLxLnwHrMHuOkUWN55grAzTqUfdAWFekd1ZwvfV9bSm27joWC
-   1+o12NAYtACvoIJIQsFS500ExqvlpmnK8cm+XGpSnRmOfWLOThsyNrJRZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="357467662"
+  bh=7saw5N683whe9FE6tJR9ykZLOEvMdGgMTKprfq9kE6o=;
+  b=H4OAzSpfYDGzIK0snR7Bcg4OO6hkqJ/Bcy8wKs0P0010URD+VcO8O8S/
+   T9Os//axC9E7PBJcGPiy/rCRnwMz5TAbRc2mgtJZn9662rLiefSIIu8Ra
+   E+kJPzV7r/Q0XgEZkLHQwR0eXiy81GZqt26lW0Wi29VN3G6In9Yg8k1Lj
+   osZQPPSDnUbPFzIp7W68GIPMm0Nz6gFwMcr/3aCvRX680V8SIjskfVOvo
+   RMX7cE79udQ045EfVYkFB6FsYH5BcKTezRoNxVPKrjQgb4vu/TFOxUBAp
+   aXbbON4Mp7L7uV+oolBduoRDgZU0jMtRmKESgG3e8G6VRnEv8BnFD5Nhg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="356080938"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="357467662"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 04:29:06 -0700
+   d="scan'208";a="356080938"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 04:39:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958765736"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="706189819"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="958765736"
+   d="scan'208";a="706189819"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Jun 2023 04:29:04 -0700
+  by orsmga007.jf.intel.com with ESMTP; 14 Jun 2023 04:39:49 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q9OgS-0000Yj-0V;
-	Wed, 14 Jun 2023 11:29:04 +0000
-Date: Wed, 14 Jun 2023 19:28:38 +0800
+	id 1q9Oqm-0000ZZ-1E;
+	Wed, 14 Jun 2023 11:39:45 +0000
+Date: Wed, 14 Jun 2023 19:39:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-audio-on-next
- 29/43] drivers/usb/typec/mux/fsa4480.c:76:65: warning: format specifies type
- 'int' but the argument has type 'unsigned long'
-Message-ID: <202306141915.QCzfPuJq-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 7890/9793] kernel/rcu/rcuscale.c:301:20: error:
+ use of undeclared identifier 'get_rcu_tasks_gp_kthread'; did you mean
+ 'get_rcu_tasks_trace_gp_kthread'?
+Message-ID: <202306141920.TTvpsXwJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,202 +48,71 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-audio-on-next
-head:   da068c30bd9c28a81733394531fe0f0a8ac475e3
-commit: 1dffa7c9c2a6400399565e972b25b077871ec7b5 [29/43] usb: type-c: fsa4480: add support for Audio Accessory mode
-config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141915.QCzfPuJq-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b16049b21162bb649cdd8519642a35972b7910fe
+commit: df8fa2f1fc4c20cd300855a11b31ba5565f45ac6 [7890/9793] rcuscale: Measure RCU Tasks Trace grace-period kthread CPU time
+config: arm-randconfig-r046-20230614 (https://download.01.org/0day-ci/archive/20230614/202306141920.TTvpsXwJ-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/1dffa7c9c2a6400399565e972b25b077871ec7b5
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-audio-on-next
-        git checkout 1dffa7c9c2a6400399565e972b25b077871ec7b5
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=df8fa2f1fc4c20cd300855a11b31ba5565f45ac6
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout df8fa2f1fc4c20cd300855a11b31ba5565f45ac6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/mux/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141915.QCzfPuJq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306141920.TTvpsXwJ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/usb/typec/mux/fsa4480.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/usb/typec/mux/fsa4480.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/usb/typec/mux/fsa4480.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/usb/typec/mux/fsa4480.c:76:65: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-      76 |         pr_info("%s: reverse %d mode %d svid %x\n", __func__, reverse, fsa->mode, fsa->svid);
-         |                                      ~~                                ^~~~~~~~~
-         |                                      %lu
-   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
-     528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   drivers/usb/typec/mux/fsa4480.c:166:48: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-     166 |         pr_info("%s: mux mode %d alt %d\n", __func__, state->mode, !!state->alt);
-         |                               ~~                      ^~~~~~~~~~~
-         |                               %lu
-   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
-     528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   8 warnings generated.
+>> kernel/rcu/rcuscale.c:301:20: error: use of undeclared identifier 'get_rcu_tasks_gp_kthread'; did you mean 'get_rcu_tasks_trace_gp_kthread'?
+     301 |         .rso_gp_kthread = get_rcu_tasks_gp_kthread,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                           get_rcu_tasks_trace_gp_kthread
+   include/linux/rcupdate_trace.h:90:21: note: 'get_rcu_tasks_trace_gp_kthread' declared here
+      90 | struct task_struct *get_rcu_tasks_trace_gp_kthread(void);
+         |                     ^
+   1 error generated.
+--
+   In file included from kernel/rcu/update.c:649:
+>> kernel/rcu/tasks.h:1113:21: warning: no previous prototype for function 'get_rcu_tasks_gp_kthread' [-Wmissing-prototypes]
+    1113 | struct task_struct *get_rcu_tasks_gp_kthread(void)
+         |                     ^
+   kernel/rcu/tasks.h:1113:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1113 | struct task_struct *get_rcu_tasks_gp_kthread(void)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +76 drivers/usb/typec/mux/fsa4480.c
+vim +301 kernel/rcu/rcuscale.c
 
-    69	
-    70	static int fsa4480_set(struct fsa4480 *fsa)
-    71	{
-    72		bool reverse = (fsa->orientation == TYPEC_ORIENTATION_REVERSE);
-    73		u8 enable = FSA4480_ENABLE_DEVICE;
-    74		u8 sel = 0;
-    75	
-  > 76		pr_info("%s: reverse %d mode %d svid %x\n", __func__, reverse, fsa->mode, fsa->svid);
-    77	
-    78		/* USB Mode */
-    79		if (fsa->mode < TYPEC_STATE_MODAL ||
-    80		    (!fsa->svid && (fsa->mode == TYPEC_MODE_USB2 ||
-    81				    fsa->mode == TYPEC_MODE_USB3))) {
-    82			enable |= FSA4480_ENABLE_USB;
-    83			sel = FSA4480_SEL_USB;
-    84		} else if (fsa->svid) {
-    85			switch (fsa->mode) {
-    86			/* DP Only */
-    87			case TYPEC_DP_STATE_C:
-    88			case TYPEC_DP_STATE_E:
-    89				enable |= FSA4480_ENABLE_SBU;
-    90				if (reverse)
-    91					sel = FSA4480_SEL_SBU_REVERSE;
-    92				break;
-    93	
-    94			/* DP + USB */
-    95			case TYPEC_DP_STATE_D:
-    96			case TYPEC_DP_STATE_F:
-    97				enable |= FSA4480_ENABLE_USB | FSA4480_ENABLE_SBU;
-    98				sel = FSA4480_SEL_USB;
-    99				if (reverse)
-   100					sel |= FSA4480_SEL_SBU_REVERSE;
-   101				break;
-   102	
-   103			default:
-   104				return -ENOTSUPP;
-   105			}
-   106		} else if (fsa->mode == TYPEC_MODE_AUDIO) {
-   107			/* Audio Accessory Mode */
-   108			enable |= FSA4480_ENABLE_SENSE | FSA4480_ENABLE_MIC | FSA4480_ENABLE_AGND;
-   109			if (reverse)
-   110				sel = FSA4480_SEL_SENSE | FSA4480_SEL_MIC | FSA4480_SEL_AGND;
-   111		} else
-   112			return -ENOTSUPP;
-   113	
-   114		pr_info("%s: cur enable %x\n", __func__, fsa->cur_enable);
-   115		pr_info("%s: new enable %x\n", __func__, enable);
-   116		pr_info("%s: new sel %x\n", __func__, sel);
-   117	
-   118		if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-   119			/* Disable SBU output while re-configuring the switch */
-   120			regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE,
-   121				     fsa->cur_enable & ~FSA4480_ENABLE_SBU);
-   122	
-   123			/* 35us to allow the SBU switch to turn off */
-   124			usleep_range(35, 1000);
-   125		}
-   126	
-   127		regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, sel);
-   128		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, enable);
-   129	
-   130		if (enable & FSA4480_ENABLE_SBU) {
-   131			/* 15us to allow the SBU switch to turn on again */
-   132			usleep_range(15, 1000);
-   133		}
-   134	
-   135		fsa->cur_enable = enable;
-   136	
-   137		return 0;
-   138	}
-   139	
+   289	
+   290	static struct rcu_scale_ops tasks_ops = {
+   291		.ptype		= RCU_TASKS_FLAVOR,
+   292		.init		= rcu_sync_scale_init,
+   293		.readlock	= tasks_scale_read_lock,
+   294		.readunlock	= tasks_scale_read_unlock,
+   295		.get_gp_seq	= rcu_no_completed,
+   296		.gp_diff	= rcu_seq_diff,
+   297		.async		= call_rcu_tasks,
+   298		.gp_barrier	= rcu_barrier_tasks,
+   299		.sync		= synchronize_rcu_tasks,
+   300		.exp_sync	= synchronize_rcu_tasks,
+ > 301		.rso_gp_kthread	= get_rcu_tasks_gp_kthread,
+   302		.name		= "tasks"
+   303	};
+   304	
 
 -- 
 0-DAY CI Kernel Test Service
