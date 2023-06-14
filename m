@@ -1,91 +1,103 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776887F
-	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 16:44:36 +0000 (UTC)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-19f3550bcceso5013902fac.0
-        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 09:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686761075; x=1689353075;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sGL7yKszvXa2cHQQt1GT6R3oKRDiN6LOViSYfGPWdZo=;
-        b=lBQX5SXd0WDA3PYTUq+DPijuVWmtojhq1FptFGztY9lgLFeSHQH/K4mxr6HYUbkwaV
-         Rxhv1T6U2qgxuGbubeXSajtOcHfgJdNPQyE8Wdej8d0HgHSdYreUERKq+39go1Gss04V
-         UgpbIQYsXgFRU31sfTPAXXoudV2mQppbgiiLSjGzhU4BSQIeEVf1OZPKvYNEHWPtWnsS
-         Y9t5+iX7fx8udI37abgmFnKIyte9AUsvjpbv4fyIYX56tSBWb5CGLlwhjoBbGB3vjyRK
-         F+UA14eBgKGYnr3jt8zWGEcDtpWMZFzjP4KKwoeXQgO0ECiGPy9pMrIhMnCHHE/SHkBv
-         Y7gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686761075; x=1689353075;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGL7yKszvXa2cHQQt1GT6R3oKRDiN6LOViSYfGPWdZo=;
-        b=TCi+gMKuz1fbGZwdhs7l0kvWQr68DLZsa1BnVaU3GA8V/UelOQIadTehR+Ves0Qeeg
-         3pC+tDfj8UXIheeazmdnP7rZiCqioMIGvqnbh4ir0SBnK8nAaaFf8ORhW4c3Kn6w+Hod
-         HR8q1+uUdI7NIyi4M4F/WL2lnWYj+M4cML+pZdFlK8y9HsUtq0GBfU5HYMVuigwMdiFc
-         ViQ/vFgOy+IJISe+JGDaZ5SDcg0TzybwkBG8TRx4+h0QRn1TM00LiFC/xuQc++7/E3mV
-         rGL6M5qPVfdpDZBGWfBJr3a+YtYdmKC08dYqEFOD7o5fmi6vbL/iPErxovbbTyDRKfZv
-         DZNA==
-X-Gm-Message-State: AC+VfDz1bEwf7MFg8V0boQ33ngaarYmBB0IsGRCAJNZE+FhW8JcYzrW6
-	x29A73gwp9nlEzVToMnUjr0=
-X-Google-Smtp-Source: ACHHUZ4r1WlTv/EKwLsLnrfaKpz6dKG+rQYC1+TpjBZJkEfor9XmpN+kRPszhoK90YWMTA4IbWSNDg==
-X-Received: by 2002:a05:6870:772d:b0:184:39e3:9c85 with SMTP id dw45-20020a056870772d00b0018439e39c85mr11651838oab.29.1686761075300;
-        Wed, 14 Jun 2023 09:44:35 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id el18-20020a056870f69200b001a6d15fc52fsm1501154oab.4.2023.06.14.09.44.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 09:44:34 -0700 (PDT)
-Message-ID: <4a1096e9-500e-d764-0a79-289e6559cfb1@gmail.com>
-Date: Wed, 14 Jun 2023 13:44:30 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6947F
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 18:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0459AC433C9;
+	Wed, 14 Jun 2023 18:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686765879;
+	bh=wp7B/trtTxzsWZYBY9l+01nfl6ED3uURUNkOtUU1+Uw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=KO+nORZYd0v91v7U3AQT65+13B2bxKZ62jI/Ssc83UeUa6tH/JtUBKI2/u9dsSZie
+	 3zV6tW9LHmRALXQI5dip9HaX+lnGYFFwzz1Kmf0yrNgzXCSbd+ZSEd8mgu3sdh/2RZ
+	 YuFyVwtNUta3juu+bhbJeeV86ZC2x+PZvwV7rcnNwkDNnTv2W+L7m9IVv6CzDKtz3n
+	 a+PEjsUuwWbgKeIyYJeXGJ0KvQYE2g/rn470WL7w610jeXCk7ihdDAJVh2wLB8KSqU
+	 zZzrPSKSPP8NQ1zktrapzwwpDv7eOMG/QREVkzgO/L1nEKi+RuRxHVnNsDxRuOWzE4
+	 BZVrHz/TbKVcw==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 6.1 0/4] Update as-{instr,option} to use KBUILD_AFLAGS
+Date: Wed, 14 Jun 2023 11:04:34 -0700
+Message-Id: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
-Content-Language: en-US
-To: "Ethan D. Twardy" <ethan.twardy@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, Tiago Lam <tiagolam@gmail.com>,
- Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>,
- "open list:RUST" <rust-for-linux@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
-References: <20230528131802.6390-1-ethan.twardy@gmail.com>
- <20230528131802.6390-2-ethan.twardy@gmail.com>
- <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
- <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADIBimQC/x2NQQrDIBAAvxL23C2uARv6ldKD2jUR1JZdCYWQv
+ zfpcRiY2UBZMivchw2E16z53Q6gywBx8W1mzK+DwRo7GkcWHRJ6VeUaCgt2LzN3LGWtSDcc00S
+ GUjRmSnA0glfGIL7F5axUr53lFB/hlL//8QPcleC57z/FxGyejQAAAA==
+To: gregkh@linuxfoundation.org, sashal@kernel.org, ndesaulniers@google.com
+Cc: naresh.kamboju@linaro.org, stable@vger.kernel.org, llvm@lists.linux.dev, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Anders Roxell <anders.roxell@linaro.org>, tsbogend@alpha.franken.de, 
+ linux-mips@vger.kernel.org, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2123; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=wp7B/trtTxzsWZYBY9l+01nfl6ED3uURUNkOtUU1+Uw=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCldjKa+03bXmv4Q4tlR8/9Ul6HG72wZl847SrlXE1OFT
+ nfxbYvoKGVhEONgkBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABO5EMzI8PiV3c+9Yan7hX9f
+ vr23bvXyrBV365fWpDdtYbOYzrt0cwIjw1eZh8cyP9z0Y91Vk9RieOhxQr2cyvS6Gc7H9/ZrfPn
+ JxwwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 6/14/23 09:08, Ethan D. Twardy wrote:
-> Greetings, Martin!
-> 
-> Thanks very much for your testing and review. Do I need to take any
-> further action to make this patch ready for review? I sent out a v3
-> version of the patch, where the only change was adding Reviewed-By and
-> Tested-By tags to my git commit--since this is my first time
-> contributing to this community, I wasn't sure whether I needed to do
-> that. Thanks!
-> 
-> Sincerely,
-> 
-> Ethan Twardy
+Hi all,
 
-Unless other reviewers requested changes, you have to rebase your
-work or you want to make a modification, it is not necessary to send a
-new version of the patch series, generally, maintainers will, and have
-to, add any Reviewed-bys or Tested-bys prior to merging.
+This series backports commit d5c8d6e0fa61 ("kbuild: Update assembler
+calls to use proper flags and language target") to linux-6.1.y to
+address a recent issue caused by a change in behavior in clang:
+
+https://lore.kernel.org/CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com/
+https://lore.kernel.org/20230612185424.GA2891387@dev-arch.thelio-3990X/
+
+While that was not the original intention of the aforementioned change,
+it ends up resolving the issue for the same reason, by not passing flags
+that are not supported or necessary for the current language target
+(KBUILD_CFLAGS for .c files and KBUILD_AFLAGS for .S files) when testing
+flags for that language target.
+
+All patches except the second one are direct backports from mainline.
+The second patch is a stable specific patch because the upstream
+solution could break stable due to the minimum supported version of
+binutils in mainline being a newer version than 6.1 and earlier; it
+chooses to do the more conservative fix, which was alluded to in the
+changelog of the upstream commit.
+
+For now, this is just a 6.1 issue. If the issue occurs in older
+releases, I will send separate backports. If there are any issues or
+objections to this series, please let me know.
+
+Cheers,
+Nathan
+
+---
+Nathan Chancellor (2):
+      MIPS: Move '-Wa,-msoft-float' check from as-option to cc-option
+      MIPS: Prefer cc-option for additions to cflags
+
+Nick Desaulniers (2):
+      x86/boot/compressed: prefer cc-option for CFLAGS additions
+      kbuild: Update assembler calls to use proper flags and language target
+
+ arch/mips/Makefile                | 4 ++--
+ arch/mips/loongson2ef/Platform    | 2 +-
+ arch/x86/boot/compressed/Makefile | 2 +-
+ scripts/Kconfig.include           | 2 +-
+ scripts/Makefile.compiler         | 8 ++++----
+ scripts/as-version.sh             | 2 +-
+ 6 files changed, 10 insertions(+), 10 deletions(-)
+---
+base-commit: ca87e77a2ef8b298aa9f69658d5898e72ee450fe
+change-id: 20230612-6-1-asssembler-target-llvm-17-3f8101fc008f
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
