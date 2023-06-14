@@ -1,104 +1,84 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6A6363;
-	Wed, 14 Jun 2023 00:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686702275; x=1718238275;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+z9GBLi1BnVcEXppPKhFwPlvZeKrj9V+HDJt8oeyVsU=;
-  b=UHLb7l3dhCJDt5aYkLd4fUgERGFTCM1YoqguFeq9PaVVpfW30ZLNcefh
-   W0tdXjz+C6GvFCDgrIFgkavsWSOOxshmdM1KQLDRUv9KzGPnsXmwESKZN
-   Jz7HTG9kjhz7uHwVY0l01vc1Lu/ddOB0jgWgjLXzOeSUgovo88xy5r7Aa
-   78EAWfAffbK16/+L1bddHdByvA0zw/eFDZQWf0ziSK5yuacD0VOITk9kA
-   1XY7KYTFwwJFNQXxpmI2weHHDaSGMKZF1cUlyXljA2nGew0n00M00a19M
-   IQmGfncaeqNSJEwTrA6Z/ZPksY3GHkHP9YrJCpRBOhLgnNVjOp4OQmtDP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348139669"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="348139669"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 17:24:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958603361"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="958603361"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 17:24:32 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q9EJM-0001yq-2m;
-	Wed, 14 Jun 2023 00:24:32 +0000
-Date: Wed, 14 Jun 2023 08:23:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [jirislaby:devel 35/55] drivers/tty/serial/serial_port.c:23:3:
- error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202306140845.IOXyGfiW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0727F
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 01:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686705066;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=36eRvAfuGtYwTzu+nIkI07NGCCQdbjrgK4uehlN+4Zo=;
+	b=KJ/6q5NoyMqmymQz6fZSxB6dcEX9uetGqMA/f9WGmy1Q6x1K4IJ/Mmt56hoCNgicGd9jVs
+	6ni8ORyFZ3Asi6muSHQNE3Goi33MD5ifUN+Xj4LDknn5Y3Kwo8ySXeFhLnuVza+McLSsj1
+	6Szr/YJtXJiQm4NdiRuvfFdnIbIXgQ8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-475-yR9wzZGPOeqWq3OfTbGVfg-1; Tue, 13 Jun 2023 21:11:04 -0400
+X-MC-Unique: yR9wzZGPOeqWq3OfTbGVfg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6BB00803DBE
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 01:11:04 +0000 (UTC)
+Received: from [172.64.4.14] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 52C5C140E951;
+	Wed, 14 Jun 2023 01:11:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
+ mainline.kernel.org-clang, b6dad517)
+Date: Wed, 14 Jun 2023 01:11:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <18704.123061321110400877@us-mta-475.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   f8c938871c78b165f3123967084c0f7b4f64a439
-commit: f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4 [35/55] tty: serial, use kfifo
-config: i386-randconfig-r035-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140845.IOXyGfiW-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout f1d3b372ea89b57cd1be6cab2b25a72a8cfabef4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/serial/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306140845.IOXyGfiW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/tty/serial/serial_port.c:23:3: error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   uart_circ_chars_pending(&port->state->xmit);
-                   ^
->> drivers/tty/serial/serial_port.c:23:41: error: no member named 'xmit' in 'struct uart_state'
-                   uart_circ_chars_pending(&port->state->xmit);
-                                            ~~~~~~~~~~~  ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/uart_circ_chars_pending +23 drivers/tty/serial/serial_port.c
+Kernel information:
+    Commit message: Merge tag 'nios2_fix_v6.4' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/dinguyen/linux
 
-84a9582fd20306 Tony Lindgren 2023-05-25  18  
-84a9582fd20306 Tony Lindgren 2023-05-25  19  /* Only considers pending TX for now. Caller must take care of locking */
-84a9582fd20306 Tony Lindgren 2023-05-25  20  static int __serial_port_busy(struct uart_port *port)
-84a9582fd20306 Tony Lindgren 2023-05-25  21  {
-84a9582fd20306 Tony Lindgren 2023-05-25  22  	return !uart_tx_stopped(port) &&
-84a9582fd20306 Tony Lindgren 2023-05-25 @23  		uart_circ_chars_pending(&port->state->xmit);
-84a9582fd20306 Tony Lindgren 2023-05-25  24  }
-84a9582fd20306 Tony Lindgren 2023-05-25  25  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/92425
 
-:::::: The code at line 23 was first introduced by commit
-:::::: 84a9582fd203063cd4d301204971ff2cd8327f1a serial: core: Start managing serial controllers to enable runtime PM
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36156=
+9
 
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
