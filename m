@@ -1,109 +1,82 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59FE8463;
-	Wed, 14 Jun 2023 12:00:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686744052; x=1718280052;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xDjUpYasRxyrhlL0uWcijIk60YRM1SQaCp/n9Qm4DMk=;
-  b=HcSbqT7QWehzG3Oqseq781rhu/ftrjXOGiNV3Zu+Y0VLzgnTT0s7Qce/
-   3b1SpsDlULrHhFUcRAwTWG8IXxpaqAwFvX47gfA1XR2S5xLegru7VXE74
-   +VID0bgOMRjdZmi5QDZOSTzWqU4v6FSaHtamjSSk8Ci2I/F5vRTVaaWVN
-   8oMuKI+6pf4i015k9auE6EgDzoWtukYN22zMJMPnG7SuRa4HMhy2LUNcB
-   TPMyyydZc6+0NFZo44QNvXlFwKUTtughYUReGtun4AHHfofUx68W5fugD
-   TCtmsixoaTR0tVHJ2zO4Eulr147rHKxrjy6rsstOGm7eXH2i5Ubr+cArY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="356084520"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="356084520"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:00:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="1042181936"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="1042181936"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jun 2023 05:00:38 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q9PAz-0000bB-1g;
-	Wed, 14 Jun 2023 12:00:37 +0000
-Date: Wed, 14 Jun 2023 19:59:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Johansen <john.johansen@canonical.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jon Tourville <jontourville@me.com>
-Subject: [linux-next:master 8650/9793]
- security/apparmor/policy_unpack.c:1144: warning: expecting prototype for
- verify_dfa_accept_xindex(). Prototype was for verify_dfa_accept_index()
- instead
-Message-ID: <202306141934.UKmM9bFX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249698C1B
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 12:08:56 +0000 (UTC)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-3f9df7eb837so18355661cf.2
+        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 05:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686744536; x=1689336536;
+        h=in-reply-to:references:message-id:from:subject:to:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ICyOrpP9yZ8UNQouKztYfYpCQHNzL6t2U9KVRuzbBV4=;
+        b=CVttXEgcnxek3hQKtlR8hsjF23X01S5bgOt7ZLYziuJ8d/zESBQC1GJtAryd+G6Ra8
+         NiRdZ4DJhO0E23mqq0HJk/IhAnok/2l/6yZAvMAGxW9GgWWabRYRBG47i6AvJYWc1Qst
+         dHqkHaWIqs1pHhEgq1e/5T4TPSk76zUFqpJBBdVP63mM+XCeMP8XQwM9o9HaG5Gcu0IC
+         2toIH0v5Te0+zu5iNdQxaHNPvqcxBt7nuq1pCorFshQQZvtAwvztpvAQ5KyMaPJbjTOF
+         clssKGom4EwSFfBrAKp3NKk7uXUOL6rCSExmVUQL3+NlEfZwJvOGbgTyYZTGW61Lp6Hr
+         wvIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686744536; x=1689336536;
+        h=in-reply-to:references:message-id:from:subject:to:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ICyOrpP9yZ8UNQouKztYfYpCQHNzL6t2U9KVRuzbBV4=;
+        b=WB+Fy/4/LFCm4dhnE4v1SewHfzBsbcbH+tTzh04Ukbfc+/WxbiSISiiOL6C3X1lbll
+         s0AB8D/DYF7XzR9C6DGujt4JTDPpHd4VZFoj3K9qNtPJ2JMkNHMqZ+ZVG0AejBAJIoUh
+         +6uFi8v54uFpWNfOSzNl8dWCzV8meWltQC3dcaaN7jiFLO2j8JM1gdQCOF7WXRXmOCBA
+         vlbPTnB/R0I3lxqDoV1kyYStE69uTeSZkS7W43VMQhTd9Z/GvI7VSNX9z7RUNcIANKk6
+         7Pj8cei8nkk6cf1ZjCrtoVr2yCsXaXQTzgRja75SJobxpFMTPdw6O/ccNxGy0t9cgnB4
+         /zdA==
+X-Gm-Message-State: AC+VfDx2QiPB9NdszxqfE5Wrg3KdI7oETrx0HSvsTGZZejAHyVtTpgpb
+	FK/t/mumI7WWLF3cQhtnKgw=
+X-Google-Smtp-Source: ACHHUZ6hxmTpEnrPsU0Ea16L7G6meCduItfLC5GnO65BPUihWPKuwA51vM4DK6qE0dZ4TkoPHD5CKw==
+X-Received: by 2002:a05:622a:1888:b0:3ef:6c09:edcc with SMTP id v8-20020a05622a188800b003ef6c09edccmr2399709qtc.22.1686744535717;
+        Wed, 14 Jun 2023 05:08:55 -0700 (PDT)
+Received: from localhost (2603-6000-8100-7fd4-0000-0000-0000-0619.res6.spectrum.com. [2603:6000:8100:7fd4::619])
+        by smtp.gmail.com with ESMTPSA id a22-20020ac844b6000000b003f6c9f8f0a8sm4931656qto.68.2023.06.14.05.08.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 05:08:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 14 Jun 2023 07:08:53 -0500
+To: "Martin Rodriguez Reboredo" <yakoyoku@gmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Wedson Almeida
+ Filho" <wedsonaf@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
+ Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <benno.lossin@proton.me>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
+ <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>, "Tiago Lam"
+ <tiagolam@gmail.com>, "Kees Cook" <keescook@chromium.org>, "Finn Behrens"
+ <me@kloenk.de>, "open list:RUST" <rust-for-linux@vger.kernel.org>, "open
+ list" <linux-kernel@vger.kernel.org>, "open list:CLANG/LLVM BUILD SUPPORT"
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version
+ check
+From: "Ethan D. Twardy" <ethan.twardy@gmail.com>
+Message-Id: <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
+X-Mailer: aerc 9999
+References: <20230528131802.6390-1-ethan.twardy@gmail.com>
+ <20230528131802.6390-2-ethan.twardy@gmail.com>
+ <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
+In-Reply-To: <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b16049b21162bb649cdd8519642a35972b7910fe
-commit: bd1f4873db0451a3f004062f9ca09a978605943a [8650/9793] apparmor: fix profile verification and enable it
-config: i386-randconfig-i001-20230614 (https://download.01.org/0day-ci/archive/20230614/202306141934.UKmM9bFX-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=bd1f4873db0451a3f004062f9ca09a978605943a
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout bd1f4873db0451a3f004062f9ca09a978605943a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash security/apparmor/
+Greetings, Martin!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141934.UKmM9bFX-lkp@intel.com/
+Thanks very much for your testing and review. Do I need to take any
+further action to make this patch ready for review? I sent out a v3
+version of the patch, where the only change was adding Reviewed-By and
+Tested-By tags to my git commit--since this is my first time
+contributing to this community, I wasn't sure whether I needed to do
+that. Thanks!
 
-All warnings (new ones prefixed by >>):
+Sincerely,
 
-   security/apparmor/policy_unpack.c:1144: warning: Function parameter or member 'table_size' not described in 'verify_dfa_accept_index'
->> security/apparmor/policy_unpack.c:1144: warning: expecting prototype for verify_dfa_accept_xindex(). Prototype was for verify_dfa_accept_index() instead
-
-
-vim +1144 security/apparmor/policy_unpack.c
-
-736ec752d95e91 John Johansen 2010-07-29  1137  
-bd1f4873db0451 John Johansen 2023-04-17  1138  /**
-bd1f4873db0451 John Johansen 2023-04-17  1139   * verify_dfa_accept_xindex - verify accept indexes are in range of perms table
-bd1f4873db0451 John Johansen 2023-04-17  1140   * @dfa: the dfa to check accept indexes are in range
-bd1f4873db0451 John Johansen 2023-04-17  1141   * table_size: the permission table size the indexes should be within
-bd1f4873db0451 John Johansen 2023-04-17  1142   */
-bd1f4873db0451 John Johansen 2023-04-17  1143  static bool verify_dfa_accept_index(struct aa_dfa *dfa, int table_size)
-736ec752d95e91 John Johansen 2010-07-29 @1144  {
-736ec752d95e91 John Johansen 2010-07-29  1145  	int i;
-736ec752d95e91 John Johansen 2010-07-29  1146  	for (i = 0; i < dfa->tables[YYTD_ID_ACCEPT]->td_lolen; i++) {
-bd1f4873db0451 John Johansen 2023-04-17  1147  		if (ACCEPT_TABLE(dfa)[i] >= table_size)
-e37986097ba63c Zou Wei       2020-04-28  1148  			return false;
-736ec752d95e91 John Johansen 2010-07-29  1149  	}
-e37986097ba63c Zou Wei       2020-04-28  1150  	return true;
-736ec752d95e91 John Johansen 2010-07-29  1151  }
-736ec752d95e91 John Johansen 2010-07-29  1152  
-
-:::::: The code at line 1144 was first introduced by commit
-:::::: 736ec752d95e91e77cc0e8c97c057ab076ac2f51 AppArmor: policy routines for loading and unpacking policy
-
-:::::: TO: John Johansen <john.johansen@canonical.com>
-:::::: CC: James Morris <jmorris@namei.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ethan Twardy
