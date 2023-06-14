@@ -1,47 +1,44 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52129441;
-	Wed, 14 Jun 2023 12:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A07A38;
+	Wed, 14 Jun 2023 12:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686745336; x=1718281336;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JZVfxrwUIK3Wdo4307QCQsPD4ASj/0JzwbGG4o3QQcM=;
-  b=OoNSGocfe/zEveglHvuAOdnXEqkBkogAxvZGI+tmF0v3G9arW+TRR8R2
-   i8JC8tSP5Skjz2sGnrB2QkZE9ayGf1l35Fukp3+4qVmpCBbxPK66UQUO9
-   XL17Jst4+WCJ/loqx7r2iQY+VcmGEjW3ZLIj1wMvF2U1lKjlevEQ+uLw7
-   V+fioQNSQsEYIG48Dhg1WFEuSmId064a7+JoQpxlPeya+l19SCXqytR7U
-   LeU8ivvNYCVvqYcuJ27zVidYtjaZQgdfqFj2YxMgHmEujwOCltC8iALLE
-   c8zoTeF3eL4GVUfQ2RGjI3bSolCode3wDZnjbI2qL9X0TVcSUAWeLHaHy
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="356089043"
+  t=1686745999; x=1718281999;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UGghMEvEY8zW301YstEYZBeI+gjrDjnN55hnJ4f4WAU=;
+  b=jADeRMjgBZXEjfUmqnTg3Nm8cWwpdJK590vyYfJikNAjc8p8TRPs7+z8
+   0nY1q8KyHyRNKVKO7oB7BCw3bP7RJm5kMXT412kGqZYuuc5QjkOmUJhUm
+   t8HIKz7FcL7n+ySe0OPPHC3+IM6vqKWfXM0hWxSiPyYlb3Sdb+XX5Y9H4
+   bWQXisB2sUDri1kt6CZm7e7yu+eZ8ChThbZe+FCFRlnfL1IGAKUrYHsxu
+   JCMUt1eHTuOSv3q+nGKK9aUFiX7MJIBKx1ChtWkGs2gxZM/GhhS6fa7ZL
+   OH5D88UBkziBlzZkNK2gDMjag1EM0Yqf8+iepvfkgCS4iYkFbNchYAz0c
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="356091405"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="356089043"
+   d="scan'208";a="356091405"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:22:16 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:33:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="741821027"
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="741823946"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="741821027"
+   d="scan'208";a="741823946"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 05:22:13 -0700
+  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 05:33:16 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q9PVn-0000ck-0W;
-	Wed, 14 Jun 2023 12:22:08 +0000
-Date: Wed, 14 Jun 2023 20:21:33 +0800
+	id 1q9Pga-0000dF-0U;
+	Wed, 14 Jun 2023 12:33:16 +0000
+Date: Wed, 14 Jun 2023 20:32:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Felix.Kuehling@amd.com
+To: Yu Kuai <yukuai3@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Xinhui.Pan@amd.com,
-	Abaci Robot <abaci@linux.alibaba.com>, linux-kernel@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	alexander.deucher@amd.com, christian.koenig@amd.com
-Subject: Re: [PATCH] drm/amdkfd: Switch over to memdup_user()
-Message-ID: <202306142005.G5XIz3fm-lkp@intel.com>
-References: <20230614020432.44044-1-jiapeng.chong@linux.alibaba.com>
+	linux-raid@vger.kernel.org, Song Liu <song@kernel.org>
+Subject: [song-md:md-next 25/29] drivers/md/raid1-10.c:117:25: error: casting
+ from randomized structure pointer type 'struct block_device *' to 'struct
+ md_rdev *'
+Message-ID: <202306142042.fmjfmTF8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,66 +47,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614020432.44044-1-jiapeng.chong@linux.alibaba.com>
 
-Hi Jiapeng,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20230613]
-[cannot apply to drm-misc/drm-misc-next v6.4-rc6 v6.4-rc5 v6.4-rc4 linus/master v6.4-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/drm-amdkfd-Switch-over-to-memdup_user/20230614-100553
-base:   next-20230613
-patch link:    https://lore.kernel.org/r/20230614020432.44044-1-jiapeng.chong%40linux.alibaba.com
-patch subject: [PATCH] drm/amdkfd: Switch over to memdup_user()
-config: x86_64-buildonly-randconfig-r006-20230614 (https://download.01.org/0day-ci/archive/20230614/202306142005.G5XIz3fm-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+head:   460af1f9d9e62acce4a21f9bd00b5bcd5963bcd4
+commit: 8295efbe68c080047e98d9c0eb5cb933b238a8cb [25/29] md/raid1-10: factor out a helper to submit normal write
+config: arm-randconfig-r026-20230612 (https://download.01.org/0day-ci/archive/20230614/202306142042.fmjfmTF8-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git checkout next-20230613
-        b4 shazam https://lore.kernel.org/r/20230614020432.44044-1-jiapeng.chong@linux.alibaba.com
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=8295efbe68c080047e98d9c0eb5cb933b238a8cb
+        git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
+        git fetch --no-tags song-md md-next
+        git checkout 8295efbe68c080047e98d9c0eb5cb933b238a8cb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306142005.G5XIz3fm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306142042.fmjfmTF8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:2815:10: error: incompatible integer to pointer conversion returning 'long' from a function with result type 'uint32_t *' (aka 'unsigned int *') [-Wint-conversion]
-                   return PTR_ERR(queue_ids);
-                          ^~~~~~~~~~~~~~~~~~
+   In file included from drivers/md/raid10.c:80:
+>> drivers/md/raid1-10.c:117:25: error: casting from randomized structure pointer type 'struct block_device *' to 'struct md_rdev *'
+     117 |         struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
+         |                                ^
    1 error generated.
 
 
-vim +2815 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c
+vim +117 drivers/md/raid1-10.c
 
-  2804	
-  2805	static uint32_t *get_queue_ids(uint32_t num_queues, uint32_t *usr_queue_id_array)
-  2806	{
-  2807		size_t array_size = num_queues * sizeof(uint32_t);
-  2808		uint32_t *queue_ids = NULL;
-  2809	
-  2810		if (!usr_queue_id_array)
-  2811			return NULL;
-  2812	
-  2813		queue_ids = memdup_user(usr_queue_id_array, array_size);
-  2814		if (IS_ERR(queue_ids))
-> 2815			return PTR_ERR(queue_ids);
-  2816	
-  2817		return queue_ids;
-  2818	}
-  2819	
+   113	
+   114	
+   115	static inline void raid1_submit_write(struct bio *bio)
+   116	{
+ > 117		struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
+   118	
+   119		bio->bi_next = NULL;
+   120		bio_set_dev(bio, rdev->bdev);
+   121		if (test_bit(Faulty, &rdev->flags))
+   122			bio_io_error(bio);
+   123		else if (unlikely(bio_op(bio) ==  REQ_OP_DISCARD &&
+   124				  !bdev_max_discard_sectors(bio->bi_bdev)))
+   125			/* Just ignore it */
+   126			bio_endio(bio);
+   127		else
+   128			submit_bio_noacct(bio);
+   129	}
+   130	
 
 -- 
 0-DAY CI Kernel Test Service
