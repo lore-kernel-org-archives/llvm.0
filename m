@@ -1,33 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4BC7F;
-	Wed, 14 Jun 2023 08:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E56C433C0;
-	Wed, 14 Jun 2023 08:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686731109;
-	bh=qv7ZrgSm9Ln/aGp/kiqgz0NRobfFBMT5o4e8ivb7x+w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VEW1hxUSaszh3VxIvcwfyXi4Kfr4/7zx/rnmonlUEXpqIcfOMqNCl2xpf+jGl3aRo
-	 pP+g/7PcOB0y2YLmlHweHYKrz7mMiONUez4GsdQj4g6NCymOopkh4GEM36s3pgD1CL
-	 rJ9GQ88EwtMSLv5c+I9yl12Pbwkzc2u0DHA5HLLj/HDOftvMZPN99VwuwamOQjgqdA
-	 aLCo0Nhrx5iSl2xcBGGCb5OkqPY+PDnB2/mdxKkOvlhWTuDVqht+PBNmloGxZJPpnw
-	 bSB3YoBZ8HlnyJWqulYay2+OMxOgl69hJ12uOP7XJH9fTgLu73bj2diiDv8Z00ubNA
-	 YQTl8EuvYHM7g==
-Date: Wed, 14 Jun 2023 10:25:05 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [linux-next:master 2238/9385]
- drivers/gpu/drm/i915/display/intel_display_power.h:256:70: error:
- declaration of 'struct seq_file' will not be visible outside of this
- function
-Message-ID: <20230614-stadien-gasbetrieben-f9cbfc4343b8@brauner>
-References: <202306132237.Z4LJE8bP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E2B7F
+	for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 08:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=xz5/VyeWvrJxvz7Vj1Bej8cUKvcRWi1AM/YLcdj+D/Y=; b=BRDdoKzwDzkGKB+A7e3ag/q8ah
+	OuIxesfxVQag4DfRTqhUekNoppHbkzvJkwCCICkhEf8dky95UyM5bzWwWxiNms2GIKgSietdNCacr
+	HKrpLs/0yU3FtQlwoH2plJxAxqyXuzokNnbLBzeUE9RSI7aVLHoO8WAyzDiPUNVNg7d4jKQdfqnkK
+	9h4Yy3POzOVCIIQ6n1ZFg5fvmffQFY8z1DLGdH80TK1X/ioX1bFq0p3iImYmiPCTfOGxyHwcnHVIe
+	dc1+v/iDoOcVsxc8xJStSr7UlxJxe/mokgVK6nXWCJOg+fkstoS29jdcRppL3KDo7lAMYq+k7jWOq
+	4GBG8M1g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1q9Lp1-00AbbI-0c;
+	Wed, 14 Jun 2023 08:25:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDAEA300195;
+	Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 975E227F86A4E; Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
+Date: Wed, 14 Jun 2023 10:25:39 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: torvalds@linux-foundation.org, keescook@chromium.org,
+	gregkh@linuxfoundation.org, pbonzini@redhat.com, nathan@kernel.org,
+	ndesaulniers@google.com, nicolas@fjasle.eu, catalin.marinas@arm.com,
+	will@kernel.org, vkoul@kernel.org, trix@redhat.com,
+	ojeda@kernel.org, mingo@redhat.com, longman@redhat.com,
+	boqun.feng@gmail.com, dennis@kernel.org, tj@kernel.org,
+	cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+	joel@joelfernandes.org, josh@joshtriplett.org,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+	luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 04/57] kbuild: Drop -Wdeclaration-after-statement
+Message-ID: <20230614082539.GB1639749@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093537.693926033@infradead.org>
+ <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,37 +66,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202306132237.Z4LJE8bP-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
 
-On Tue, Jun 13, 2023 at 10:39:01PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   1f6ce8392d6ff486af5ca96df9ded5882c4b6977
-> commit: ef104443bffa004f631729dfc924f0b84abbd602 [2238/9385] procfs: consolidate arch_report_meminfo declaration
-> config: x86_64-randconfig-r036-20230612 (https://download.01.org/0day-ci/archive/20230613/202306132237.Z4LJE8bP-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ef104443bffa004f631729dfc924f0b84abbd602
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout ef104443bffa004f631729dfc924f0b84abbd602
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Jun 14, 2023 at 03:13:03PM +0900, Masahiro Yamada wrote:
+> On Mon, Jun 12, 2023 at 6:39 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > With the advent on scope-based resource management it comes really
+> > tedious to abide by the contraints of -Wdeclaration-after-statement.
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306132237.Z4LJE8bP-lkp@intel.com/
+> Where is the context of Linus' suggested-by?
 > 
-> All errors (new ones prefixed by >>):
+> I do not know where this came from.
+> I suddenly got a huge v3 in my mailbox.
 > 
->    In file included from <built-in>:4:
->    In file included from drivers/gpu/drm/i915/display/intel_display_power_well.h:10:
-> >> drivers/gpu/drm/i915/display/intel_display_power.h:256:70: error: declaration of 'struct seq_file' will not be visible outside of this function [-Werror,-Wvisibility]
->    void intel_display_power_debug(struct drm_i915_private *i915, struct seq_file *m);
+> 
+> I see an equivalent patch submitted last year:
+> https://lore.kernel.org/lkml/Y1w031iI6Ld29IVT@p183/
+> 
+> Linus rejected it. Did he change his mind?
 
-This seems odd. Arnd, any idea?
+https://lkml.kernel.org/r/CAHk-%3Dwi-RyoUhbChiVaJZoZXheAwnJ7OO%3DGxe85BkPAd93TwDA%40mail.gmail.com
+
+I'll add it as a Link tag to the Changelog.
+
+> 
+> > It will still be recommeneded to place declarations at the start of a
+> > scope where possible, but it will no longer be enforced.
+> 
+> If you remove the warning, we will not be able to
+> detect code that opts out the recommendation
+> for no good reason.
+
+Yeah, so per that thread linked above I tried to play clever games with
+_Pragma() to get around this, but GCC hates on it (works fine with Clang
+though).
+
+Linus said to just give up and scrap the whole
+-Wdeclaration-after-statement thing.
+
+I suppose it'll be up to reviewers and perhaps checkpatch like things to
+'enforce' the rules.
