@@ -1,51 +1,46 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475D6369;
-	Wed, 14 Jun 2023 08:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBF533E9;
+	Wed, 14 Jun 2023 09:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686732147; x=1718268147;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zJouC6bmMjLkzEvp7C/K2kpaga55aPlidd5musYLcrw=;
-  b=lCLBkyz3C+gHGWvM4hwd0fZNCqwPNIla522h/vP4mm/b9XS8H0aAZEy1
-   aTyC8qLaqXQeU4rFS5lP+4RxIiAfyHSkvuF1dW4x4eIDrxqVlkrIf6Erx
-   yNCOP3QxEjSWxWCBP8jqOcPXMz6U+YtfZLQrJ/TIAQgLg/GVYUcESejga
-   EwaINS+O10/7jvpJcYZmmbM1ffdZapogRbRDJCdWE0unFr7g6VqwgbjiC
-   uHdKSjrpZ8wazuFzJ1+CARbCKKJrRjjAnA9U7R0mhSiSLq8J5nRdYg8Gr
-   z6CjCb8TmP5RdiYaX0CilIqVkwXWoKdzQGI51yK8mUlGYZc4b1EF7rTz8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338910637"
+  t=1686734706; x=1718270706;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UJmF5P0icBX6if1NLlG2T6ru/Xcoyi5FBPasmuqs6BM=;
+  b=BeeqTd/b6IRUPf0dZMgkh+0pRTlUCyscT2D35PbPlg2q7Ajg+bZ8XULc
+   wMfHeR6+ovRvCfn8oIZAdskHzSH9tGDsApWwAe48UEJ8MuVqw4JoJUC+9
+   PgeqIhG6HSrhInFyF+GITnGnPtmgNxVK5W5nD2umUU/qLSJeUrMiZcWWt
+   AbEXbV6IDC3DnXVQX1I4CPidOWrN98jr85o2rvR5W4FcDecgohbu+/SzC
+   gCdTPAyTACXg2X3tGdmslSuotuHPaY161QO0L2f888/wvQ++vDzQWZhFd
+   HlMVIOlgVJ0kS1VWlANDTlqGgHUmhGYPGq7OgvbyH/pqtk5uiVNoT71Lr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338201313"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="338910637"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 01:42:26 -0700
+   d="scan'208";a="338201313"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 02:25:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856426084"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="886159077"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="856426084"
+   d="scan'208";a="886159077"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jun 2023 01:42:23 -0700
+  by orsmga005.jf.intel.com with ESMTP; 14 Jun 2023 02:25:03 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q9M58-0000RX-2B;
-	Wed, 14 Jun 2023 08:42:22 +0000
-Date: Wed, 14 Jun 2023 16:42:07 +0800
+	id 1q9MkE-0000Tx-2g;
+	Wed, 14 Jun 2023 09:24:57 +0000
+Date: Wed, 14 Jun 2023 17:23:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>,
-	linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Rob Herring <robh@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wsd_upstream@mediatek.com, wei-chin.tsai@mediatek.com,
-	mel.lee@mediatek.com, ivan.tseng@mediatek.com,
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
- functions
-Message-ID: <202306141630.EQtwoD5V-lkp@intel.com>
-References: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [linux-next:master 9063/9793] drivers/ata/pata_octeon_cf.c:835:7:
+ error: call to undeclared function 'of_property_read_reg'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202306141702.ZaO9V2lk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,164 +49,220 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
 
-Hi Wei,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc6 next-20230613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chin-Tsai/kernel-process-fork-exit-export-symbol-for-fork-exit-tracing-functions/20230614-112218
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai%40mediatek.com
-patch subject: [PATCH v2 2/3] memory: export symbols for memory related functions
-config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141630.EQtwoD5V-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b16049b21162bb649cdd8519642a35972b7910fe
+commit: d0b2461678b12c08d43eaf6740485e2f2c3aeac6 [9063/9793] ata: Use of_property_read_reg() to parse "reg"
+config: mips-randconfig-r016-20230614 (https://download.01.org/0day-ci/archive/20230614/202306141702.ZaO9V2lk-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch char-misc char-misc-testing
-        git checkout char-misc/char-misc-testing
-        b4 shazam https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai@mediatek.com
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d0b2461678b12c08d43eaf6740485e2f2c3aeac6
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d0b2461678b12c08d43eaf6740485e2f2c3aeac6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/proc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/ata/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141630.EQtwoD5V-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306141702.ZaO9V2lk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> fs/proc/task_mmu.c:776:6: warning: no previous prototype for function 'smap_gather_stats' [-Wmissing-prototypes]
-     776 | void smap_gather_stats(struct vm_area_struct *vma,
-         |      ^
-   fs/proc/task_mmu.c:776:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     776 | void smap_gather_stats(struct vm_area_struct *vma,
-         | ^
-         | static 
-   7 warnings generated.
+>> drivers/ata/pata_octeon_cf.c:835:7: error: call to undeclared function 'of_property_read_reg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     835 |         rv = of_property_read_reg(node, 0, &reg, NULL);
+         |              ^
+   drivers/ata/pata_octeon_cf.c:959:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     959 |         rv = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                       ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+      76 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 1 error generated.
 
 
-vim +/smap_gather_stats +776 fs/proc/task_mmu.c
+vim +/of_property_read_reg +835 drivers/ata/pata_octeon_cf.c
 
-   769	
-   770	/*
-   771	 * Gather mem stats from @vma with the indicated beginning
-   772	 * address @start, and keep them in @mss.
-   773	 *
-   774	 * Use vm_start of @vma as the beginning address if @start is 0.
-   775	 */
- > 776	void smap_gather_stats(struct vm_area_struct *vma,
-   777			       struct mem_size_stats *mss, unsigned long start)
-   778	{
-   779		const struct mm_walk_ops *ops = &smaps_walk_ops;
-   780	
-   781		/* Invalid start */
-   782		if (start >= vma->vm_end)
-   783			return;
-   784	
-   785		if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
-   786			/*
-   787			 * For shared or readonly shmem mappings we know that all
-   788			 * swapped out pages belong to the shmem object, and we can
-   789			 * obtain the swap value much more efficiently. For private
-   790			 * writable mappings, we might have COW pages that are
-   791			 * not affected by the parent swapped out pages of the shmem
-   792			 * object, so we have to distinguish them during the page walk.
-   793			 * Unless we know that the shmem object (or the part mapped by
-   794			 * our VMA) has no swapped out pages at all.
-   795			 */
-   796			unsigned long shmem_swapped = shmem_swap_usage(vma);
-   797	
-   798			if (!start && (!shmem_swapped || (vma->vm_flags & VM_SHARED) ||
-   799						!(vma->vm_flags & VM_WRITE))) {
-   800				mss->swap += shmem_swapped;
-   801			} else {
-   802				ops = &smaps_shmem_walk_ops;
-   803			}
-   804		}
+   801	
+   802	static int octeon_cf_probe(struct platform_device *pdev)
+   803	{
+   804		struct resource *res_cs0, *res_cs1;
    805	
-   806		/* mmap_lock is held in m_start */
-   807		if (!start)
-   808			walk_page_vma(vma, ops, mss);
-   809		else
-   810			walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
-   811	}
-   812	EXPORT_SYMBOL_GPL(smap_gather_stats);
-   813	
+   806		bool is_16bit;
+   807		u64 reg;
+   808		struct device_node *node;
+   809		void __iomem *cs0;
+   810		void __iomem *cs1 = NULL;
+   811		struct ata_host *host;
+   812		struct ata_port *ap;
+   813		int irq = 0;
+   814		irq_handler_t irq_handler = NULL;
+   815		void __iomem *base;
+   816		struct octeon_cf_port *cf_port;
+   817		int rv = -ENOMEM;
+   818		u32 bus_width;
+   819	
+   820		node = pdev->dev.of_node;
+   821		if (node == NULL)
+   822			return -EINVAL;
+   823	
+   824		cf_port = devm_kzalloc(&pdev->dev, sizeof(*cf_port), GFP_KERNEL);
+   825		if (!cf_port)
+   826			return -ENOMEM;
+   827	
+   828		cf_port->is_true_ide = of_property_read_bool(node, "cavium,true-ide");
+   829	
+   830		if (of_property_read_u32(node, "cavium,bus-width", &bus_width) == 0)
+   831			is_16bit = (bus_width == 16);
+   832		else
+   833			is_16bit = false;
+   834	
+ > 835		rv = of_property_read_reg(node, 0, &reg, NULL);
+   836		if (rv < 0)
+   837			return rv;
+   838		cf_port->cs0 = upper_32_bits(reg);
+   839	
+   840		if (cf_port->is_true_ide) {
+   841			struct device_node *dma_node;
+   842			dma_node = of_parse_phandle(node,
+   843						    "cavium,dma-engine-handle", 0);
+   844			if (dma_node) {
+   845				struct platform_device *dma_dev;
+   846				dma_dev = of_find_device_by_node(dma_node);
+   847				if (dma_dev) {
+   848					struct resource *res_dma;
+   849					int i;
+   850					res_dma = platform_get_resource(dma_dev, IORESOURCE_MEM, 0);
+   851					if (!res_dma) {
+   852						put_device(&dma_dev->dev);
+   853						of_node_put(dma_node);
+   854						return -EINVAL;
+   855					}
+   856					cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
+   857										 resource_size(res_dma));
+   858					if (!cf_port->dma_base) {
+   859						put_device(&dma_dev->dev);
+   860						of_node_put(dma_node);
+   861						return -EINVAL;
+   862					}
+   863	
+   864					i = platform_get_irq(dma_dev, 0);
+   865					if (i > 0) {
+   866						irq = i;
+   867						irq_handler = octeon_cf_interrupt;
+   868					}
+   869					put_device(&dma_dev->dev);
+   870				}
+   871				of_node_put(dma_node);
+   872			}
+   873			res_cs1 = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+   874			if (!res_cs1)
+   875				return -EINVAL;
+   876	
+   877			cs1 = devm_ioremap(&pdev->dev, res_cs1->start,
+   878						   resource_size(res_cs1));
+   879			if (!cs1)
+   880				return -EINVAL;
+   881	
+   882			rv = of_property_read_reg(node, 1, &reg, NULL);
+   883			if (rv < 0)
+   884				return rv;
+   885			cf_port->cs1 = upper_32_bits(reg);
+   886		}
+   887	
+   888		res_cs0 = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   889		if (!res_cs0)
+   890			return -EINVAL;
+   891	
+   892		cs0 = devm_ioremap(&pdev->dev, res_cs0->start,
+   893					   resource_size(res_cs0));
+   894		if (!cs0)
+   895			return rv;
+   896	
+   897		/* allocate host */
+   898		host = ata_host_alloc(&pdev->dev, 1);
+   899		if (!host)
+   900			return rv;
+   901	
+   902		ap = host->ports[0];
+   903		ap->private_data = cf_port;
+   904		pdev->dev.platform_data = cf_port;
+   905		cf_port->ap = ap;
+   906		ap->ops = &octeon_cf_ops;
+   907		ap->pio_mask = ATA_PIO6;
+   908		ap->flags |= ATA_FLAG_NO_ATAPI | ATA_FLAG_PIO_POLLING;
+   909	
+   910		if (!is_16bit) {
+   911			base = cs0 + 0x800;
+   912			ap->ioaddr.cmd_addr	= base;
+   913			ata_sff_std_ports(&ap->ioaddr);
+   914	
+   915			ap->ioaddr.altstatus_addr = base + 0xe;
+   916			ap->ioaddr.ctl_addr	= base + 0xe;
+   917			octeon_cf_ops.sff_data_xfer = octeon_cf_data_xfer8;
+   918		} else if (cf_port->is_true_ide) {
+   919			base = cs0;
+   920			ap->ioaddr.cmd_addr	= base + (ATA_REG_CMD << 1) + 1;
+   921			ap->ioaddr.data_addr	= base + (ATA_REG_DATA << 1);
+   922			ap->ioaddr.error_addr	= base + (ATA_REG_ERR << 1) + 1;
+   923			ap->ioaddr.feature_addr	= base + (ATA_REG_FEATURE << 1) + 1;
+   924			ap->ioaddr.nsect_addr	= base + (ATA_REG_NSECT << 1) + 1;
+   925			ap->ioaddr.lbal_addr	= base + (ATA_REG_LBAL << 1) + 1;
+   926			ap->ioaddr.lbam_addr	= base + (ATA_REG_LBAM << 1) + 1;
+   927			ap->ioaddr.lbah_addr	= base + (ATA_REG_LBAH << 1) + 1;
+   928			ap->ioaddr.device_addr	= base + (ATA_REG_DEVICE << 1) + 1;
+   929			ap->ioaddr.status_addr	= base + (ATA_REG_STATUS << 1) + 1;
+   930			ap->ioaddr.command_addr	= base + (ATA_REG_CMD << 1) + 1;
+   931			ap->ioaddr.altstatus_addr = cs1 + (6 << 1) + 1;
+   932			ap->ioaddr.ctl_addr	= cs1 + (6 << 1) + 1;
+   933			octeon_cf_ops.sff_data_xfer = octeon_cf_data_xfer16;
+   934	
+   935			ap->mwdma_mask	= enable_dma ? ATA_MWDMA4 : 0;
+   936	
+   937			/* True IDE mode needs a timer to poll for not-busy.  */
+   938			hrtimer_init(&cf_port->delayed_finish, CLOCK_MONOTONIC,
+   939				     HRTIMER_MODE_REL);
+   940			cf_port->delayed_finish.function = octeon_cf_delayed_finish;
+   941		} else {
+   942			/* 16 bit but not True IDE */
+   943			base = cs0 + 0x800;
+   944			octeon_cf_ops.sff_data_xfer	= octeon_cf_data_xfer16;
+   945			octeon_cf_ops.softreset		= octeon_cf_softreset16;
+   946			octeon_cf_ops.sff_check_status	= octeon_cf_check_status16;
+   947			octeon_cf_ops.sff_tf_read	= octeon_cf_tf_read16;
+   948			octeon_cf_ops.sff_tf_load	= octeon_cf_tf_load16;
+   949			octeon_cf_ops.sff_exec_command	= octeon_cf_exec_command16;
+   950	
+   951			ap->ioaddr.data_addr	= base + ATA_REG_DATA;
+   952			ap->ioaddr.nsect_addr	= base + ATA_REG_NSECT;
+   953			ap->ioaddr.lbal_addr	= base + ATA_REG_LBAL;
+   954			ap->ioaddr.ctl_addr	= base + 0xe;
+   955			ap->ioaddr.altstatus_addr = base + 0xe;
+   956		}
+   957		cf_port->c0 = ap->ioaddr.ctl_addr;
+   958	
+   959		rv = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+   960		if (rv)
+   961			return rv;
+   962	
+   963		ata_port_desc(ap, "cmd %p ctl %p", base, ap->ioaddr.ctl_addr);
+   964	
+   965		dev_info(&pdev->dev, "version " DRV_VERSION" %d bit%s.\n",
+   966			 is_16bit ? 16 : 8,
+   967			 cf_port->is_true_ide ? ", True IDE" : "");
+   968	
+   969		return ata_host_activate(host, irq, irq_handler,
+   970					 IRQF_SHARED, &octeon_cf_sht);
+   971	}
+   972	
 
 -- 
 0-DAY CI Kernel Test Service
