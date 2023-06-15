@@ -1,108 +1,148 @@
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47001EAED
-	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 19:42:31 +0000 (UTC)
-Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-43f5aa0f383so490080137.0
-        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 12:42:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B706BEAF0
+	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 19:52:53 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-62de1a3e354so584246d6.3
+        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 12:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686858150; x=1689450150;
+        d=google.com; s=20221208; t=1686858772; x=1689450772;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
-        b=lBwTUjIilesidUCNGaAvZ+xj4jRGP9ZPcdF6CpMtEeTbtwKGGC9zJYJcwMkwh5GDSj
-         6TO/HyTtOMlwBDHVt0L6hSeGPFlURYJRwbR0dz4PRCJYntqmF/3cCuuu0h/v1jxKA888
-         pcmBRHsiMmLRBAi8IYio5/cKlRMvzj4FcDxzkLhnj050yvQrc9Y1F2XzKmuYr5NBlcP1
-         EpPbrkvpKqrj1yDytJDpzeEKUPlcQGBPnhKCW4YtvBC64iiFEdkoC0QwKJLipXFkq7wc
-         jGtl3rS0rfb7Pcfqsc0daraaxrNMh7MKpbrNuhkhT76TdPMOj1SNGsX7ycRIVoJ3AQy9
-         BDIQ==
+        bh=MTzq5hSsnrdspp0Q8Z2qZmybbO9m5q4PJef6PuPlxY4=;
+        b=mFfch2X5A3Z/L3a+HkNlCsTl9QrojoGGyOvNVq/cpYjoXF6aDPK3raQfeMzOy2r0oM
+         1+usKYqvfqZid6JeZDP0SrR0fzhFRG4tT1LIsbdEK60B9GcrlxvoXGhjTXOyBjkIWu/A
+         kSe289SSpJXtx54Rgsicd0rrJQgwfRh3co5y0XIPxIrW8A3aEbpLn9aPFk0CqdEvt5CU
+         WQggEC46WAdmJ3XruSBEpFXSzYQFO8l5E2n3ZtzZ6o7MXsHMh1465uz+OkKRxfxFkylv
+         Fd7pn4HxPBsPSs6uVtBOPypSSa99c2y0w4TMMVjsVpy/3aGJNZpBO0MoC+Uly56Qi9fl
+         FlNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686858150; x=1689450150;
+        d=1e100.net; s=20221208; t=1686858772; x=1689450772;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
-        b=JTUJOLJFYdvUwcmkJq2SqRY1Vzn+0DFvoP73ZshmzQndyI2KHVZlC56npNHofEg35n
-         bJdldQP87SVaCPuQo0Agh+N561lEakmaRdPTaBkK9nZok5QZ+Zk1YTkP5bMoiMO3kgVj
-         uKgh1oWXA0fWiElkdOkjJSl2RdMLhj5XFmgJw8/HkkAtvamit5y+P5UXkg8J4PvjqpXP
-         /R7CjCqMz6ZJPupw8oQeZ+fVgKDt2VezGwfn2EIv3dKQYT5GjTYh9Jw+UlrXrTpnXN1A
-         BAfMtuQvFHtJC18qzO16EwKyrzAICfWpzJ5XefNyykGdjSapxlXL5jB6jL8zzljL9U2f
-         SJtQ==
-X-Gm-Message-State: AC+VfDzw4vqvArfb/uoPZvn+85qY/bACZRLTWdHUlC8GEoJwF0PJ1w4e
-	lWEvaoq7tB2H8nkBvdq4IDny38FbUPA4/Xcx8klC3w==
-X-Google-Smtp-Source: ACHHUZ4DAcb8XJ7cK5trIjfYu8JayVxt4ZPxnD/vGCWza1Eoy4aPA1/eOXTHCyXUZSdlUS0q7KBknTMFqsdih3/7QPM=
-X-Received: by 2002:a67:f34d:0:b0:43b:38a5:f8a0 with SMTP id
- p13-20020a67f34d000000b0043b38a5f8a0mr494060vsm.14.1686858149899; Thu, 15 Jun
- 2023 12:42:29 -0700 (PDT)
+        bh=MTzq5hSsnrdspp0Q8Z2qZmybbO9m5q4PJef6PuPlxY4=;
+        b=iuHkZuliv+4fMn3VcFyrTO5deV4NIdEkD9c6e/bV5owe+y5gszF50H/+EiQe9Ze00d
+         nNGLdrnxIC9Ac0OR5Z0t60lpx9AJ2TknvCO41lE3PcLJTziBom6CDN0tWxEJNzw0QEdB
+         WLjKOzma/wFW2cTua8YUFeWFjavLJ0MPS8ahiXyPzoNdzQ1DU/WThTFBUf6ZjSKcbm5v
+         0gnLRxiNoqevth4lj3/3Q+8e+DpVLj7a4td2SXkBh583rzBxJX0FB0Wy1V+LcWfWy40a
+         vgdxAUK4/JaWl5FgrE7cv1jbDnSCYYnHu/LFMTSnDgvGeMfn7H13d5XX8Sku92ceQvgZ
+         ztyQ==
+X-Gm-Message-State: AC+VfDyMV34bysawHJzkMs+hxYQ6DI1x5/RLEuEOoNpRI8KIXJZqmlq+
+	ysM6pwAOy7ovrFmclSbM5TyJHM0/2PV35fTC12s/W80x3IBrLgCjsBVTNw==
+X-Google-Smtp-Source: ACHHUZ7Sb3rvv0FFQfN7pGUeRbEn+6TYdTX8b2ZZ5a0LX/Fre8Y9zeSsAgqT+GEm/Edwv6sphAndGZmjGOXmIYbQksg=
+X-Received: by 2002:a05:6214:d6c:b0:626:1e4e:b5b7 with SMTP id
+ 12-20020a0562140d6c00b006261e4eb5b7mr21421626qvs.59.1686858772406; Thu, 15
+ Jun 2023 12:52:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
-In-Reply-To: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
+References: <202306151433.QKcn7ZNn-lkp@intel.com> <ZIr0hZV/jcpZkRq2@smile.fi.intel.com>
+In-Reply-To: <ZIr0hZV/jcpZkRq2@smile.fi.intel.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 15 Jun 2023 15:42:16 -0400
-Message-ID: <CAKwvOdndp=2h9se6ddGiYJ6S4o_ROFLD2CH5ZuW-SRa=DMapzw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Mark core_vpe_count() as __init
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: tsbogend@alpha.franken.de, trix@redhat.com, jiaxun.yang@flygoat.com, 
-	linux-mips@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Date: Thu, 15 Jun 2023 15:52:40 -0400
+Message-ID: <CAKwvOd=Fj51=m0EZznjOmkqeZy_5uDZ_Gyf-Pv=yd2=53Gb6Sw@mail.gmail.com>
+Subject: Re: lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239'
+ declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: kernel test robot <lkp@intel.com>, Alexander Lobakin <alexandr.lobakin@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Yury Norov <yury.norov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 15, 2023 at 12:21=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
+On Thu, Jun 15, 2023 at 7:22=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> After commit 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters"),
-> modpost complains when building with clang:
->
->   WARNING: modpost: vmlinux.o: section mismatch in reference: core_vpe_co=
-unt (section: .text) -> smp_max_threads (section: .init.data)
->
-> This warning occurs when core_vpe_count() is not inlined, as it appears
-> that a non-init function is referring to an init symbol. However, this
-> is not a problem in practice because core_vpe_count() is only called
-> from __init functions, cps_smp_setup() and cps_prepare_cpus().
->
-> Resolve the warning by marking core_vpe_count() as __init, as it is only
-> called in an init context so it can refer to init functions and symbols
-> and have its memory freed on boot.
->
-> Fixes: 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> On Thu, Jun 15, 2023 at 02:32:02PM +0800, kernel test robot wrote:
+> > Hi Alexander,
+> >
+> > FYI, the error/warning still remains.
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+> > head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
+> > commit: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add =
+compile-time optimization/evaluations assertions
+> > date:   12 months ago
+> > config: arm64-randconfig-r025-20230615 (https://download.01.org/0day-ci=
+/archive/20230615/202306151433.QKcn7ZNn-lkp@intel.com/config)
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+^ randconfig
 
-> ---
->  arch/mips/kernel/smp-cps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
+t ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > reproduce (this is a W=3D1 build):
+> >         mkdir -p ~/bin
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git/commit/?id=3Ddc34d5036692c614eef23c1130ee42a201c316bf
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
+l/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout dc34d5036692c614eef23c1130ee42a201c316bf
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
+cross W=3D1 O=3Dbuild_dir ARCH=3Darm64 olddefconfig
+> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
+cross W=3D1 O=3Dbuild_dir ARCH=3Darm64 SHELL=3D/bin/bash lib/
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306151433.QKcn7ZNn-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
 >
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index bea6a13ea464..92575222713b 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -29,7 +29,7 @@ static DECLARE_BITMAP(core_power, NR_CPUS);
+> >    888                /*
+> >    889                 * Equals to `unsigned long bitmap[1] =3D { GENMA=
+SK(6, 5), }`.
+> >    890                 * Clang on s390 optimizes bitops at compile-time=
+ as intended, but at
+> >    891                 * the same time stops treating @bitmap and @bito=
+pvar as compile-time
+> >    892                 * constants after regular test_bit() is executed=
+, thus triggering the
+> >    893                 * build bugs below. So, call const_test_bit() th=
+ere directly until
+> >    894                 * the compiler is fixed.
+> >    895                 */
+> >    896                bitmap_clear(bitmap, 0, BITS_PER_LONG);
+> >    897        #if defined(__s390__) && defined(__clang__)
+> >    898                if (!const_test_bit(7, bitmap))
+> >    899        #else
+> >    900                if (!test_bit(7, bitmap))
+> >    901        #endif
 >
->  struct core_boot_config *mips_cps_core_bootcfg;
+> Hmm... Reveals the bug in clang/arm64?
+
+Seems related to the config.  ARCH=3Darm64 defconfig +
+CONFIG_TEST_BITMAP=3Dy doesn't trigger this for me, but the randconfig
+does.  We'll bisect the config, and update the thread tracking this:
+https://github.com/ClangBuiltLinux/linux/issues/1874
+
 >
-> -static unsigned core_vpe_count(unsigned int cluster, unsigned core)
-> +static unsigned __init core_vpe_count(unsigned int cluster, unsigned cor=
-e)
->  {
->         return min(smp_max_threads, mips_cps_numvps(cluster, core));
->  }
+> >    919                res =3D !test_bit(18, &bitopvar);
+> >  > 920                BUILD_BUG_ON(!__builtin_constant_p(res));
+> >    921                BUILD_BUG_ON(!res);
 >
-> ---
-> base-commit: 5cad8323040bb8d47e130c10ea4dcb7175c7602a
-> change-id: 20230615-mips-mark-core_vpe_count-as-init-600dc73e367d
 >
-> Best regards,
 > --
-> Nathan Chancellor <nathan@kernel.org>
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 >
 
 
