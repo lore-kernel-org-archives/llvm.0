@@ -1,162 +1,180 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A28E156C0
-	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 20:48:35 +0000 (UTC)
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-62ff2764887so998576d6.1
-        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 13:48:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2122E0FC
+	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 21:02:08 +0000 (UTC)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-62de5392c7bso1067246d6.2
+        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 14:02:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686862115; x=1689454115;
+        d=google.com; s=20221208; t=1686862927; x=1689454927;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dVvK/Na1gzfD54zw3ZOXcU4ToR+ZUGcJvnZfZy+0SyA=;
-        b=BYzNhG/2M13rrWc4SlMkHjcj84wfdb67wim4N9PJyVRKPtgNfq6FLAzFHAakbir6aG
-         vo9e+j+8nnoh810rC5R9QTR1iPW9VJ/pxU3naoK2dHb29sSA6MTb84Ku1VCGIRA7XGW5
-         IrejTrsPbwn89itbgLme/C+yC5XwFjrUMv/jqzN/F0FAw3X+eQ0MDy333M6EGEQSBcU1
-         pA0tSk9xbOJIHFh1FDJ7XtCfVrupBx4LzSl3gqX2BNSLNe6spb6aSUQAkGL340PnuI9U
-         8rv27Cz60Xxlx7i8w28IQHJtYIwZzWhaiVDCn08Jihq9TmgFabzkBi0LSJD0tWeDT5vd
-         ucww==
+        bh=gM071qijEG6vwQ8W2iWjOXAWrKZk2GbsTR59ysMJ+f0=;
+        b=r3+18zMpdGu3FBIH/XR/CeWPIdLuk9aHwOyPzPMPD+aHBmCQpHV+CqHUcVxkyh3f56
+         fQ7+hwVRMsFfVJ6+fAgFxywc9Ey5lBpqCJ1GP/M6gvUqaPeqlGn+b+LTUfV+eWSTjehP
+         AttQBBokUk9dBF//9b4mMJFpP/2IYaDEkFoGTV/xU2CUd5Kss+CHXPeuI2SnlPARzQjV
+         627F9+EcbOVoZxCvs6FMh/M6bErKb9BknEk6bpMOEacDUXg9U3FvnUNrB1OD8WsQ5mpN
+         ftALbqUPSTzgQw4ZxwDtP2xWijGeHdmJZRHt9ceN4vbAImdo/Irw3ryRWU7EZjVnA/Lw
+         osEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686862115; x=1689454115;
+        d=1e100.net; s=20221208; t=1686862927; x=1689454927;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dVvK/Na1gzfD54zw3ZOXcU4ToR+ZUGcJvnZfZy+0SyA=;
-        b=Mf4CGNWVREzpjwWAb0zkdiYwou0Xe2iXy4EERWlaPPKNZashtccOGjeI+WCZfE8iK4
-         b71986U9gpJzx+p37K9KznniLehb7bPncWdiLRQLyQGS3Fdfyk6pJFkFmmzgq4IYloA1
-         dxeaI0G8B+nzj3wBcrLQXJefUDa/5gjzSEZrxXZuxsIiXd9CEpjc4v5q1osrYjj3a7YH
-         HLXDHL7hrYET0ng5t2z89xHxYBqQGYAniNha/7deCsuRt91odnunuTKIrNQ3pPmrnZUI
-         1uvMHMhoGd4U7portlgLIJBcbmJwBWhu0sl0CGfHIowL2VcZQZi3mcr8Zk1c69bZdhnQ
-         xP4A==
-X-Gm-Message-State: AC+VfDyjnnjIXJN3wgmnZLU4nMhJMjdAtrmHv+0xC22OBV3tK9GWckKz
-	rrJU0xImyEz3aCEUurxDWMKDEpYbvqRjlepnMDHQEA==
-X-Google-Smtp-Source: ACHHUZ4a6nnUds7xEqYAgpw0wxXpCLHo7IXs3V7u6TdWBAunKYjarCg+B9sPjNdQ2GTlBbC3TJ280TuXA1/SCGlak4Y=
-X-Received: by 2002:a05:6214:5298:b0:62d:f170:f6b3 with SMTP id
- kj24-20020a056214529800b0062df170f6b3mr108262qvb.19.1686862114692; Thu, 15
- Jun 2023 13:48:34 -0700 (PDT)
+        bh=gM071qijEG6vwQ8W2iWjOXAWrKZk2GbsTR59ysMJ+f0=;
+        b=fUQiqWIP5heD1SYL9SUcmeKmWkTl8JZwYwBZxEYSZ8Z+x65IdN65ga37YVfM3RkI33
+         x97wttwA8QS+lqKCHC8B75XST3EdxiCgQlAxnM8+H53O2YchVJ62oZeV4Y/HwXnNfYa9
+         mjgu5xtN+kMBDWqNkeSrtzWPQYlOZzMCPBDi+neb6k7U28n9SBsZsUDiYBg2RICRdkBc
+         mDUVdAoDDTnFsiNNhT02cT+WtnUCiI6Ye/p6PExO6/zEXEge+wN3d1pywM2/kHXzlEOB
+         w3M4bF0j5bwTlrDoP1couCZhCmAg5KgiBTLQi4At71jlCGLR86XDJssZ2B0JTvmrwwOC
+         v9Qw==
+X-Gm-Message-State: AC+VfDxJzmR7X14Pp0X3otqtXhsq+oX0Ec0K9u9YYLlDMa3scx67IR4v
+	ifR2lKTJqGnhWwT9u1q6nyljLLwOOEn4QWE97oDDpQ==
+X-Google-Smtp-Source: ACHHUZ4krPXQb/OSjDusqHVygPJ8Ls9dUMXR5x901QOHwbeTZhZdMqBueLHq0YUPgxe/cr08Jcvy1LCoC+5/N/PO2+Y=
+X-Received: by 2002:ad4:5d62:0:b0:62f:f23e:14fe with SMTP id
+ fn2-20020ad45d62000000b0062ff23e14femr102715qvb.20.1686862927549; Thu, 15 Jun
+ 2023 14:02:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306151433.QKcn7ZNn-lkp@intel.com> <ZIr0hZV/jcpZkRq2@smile.fi.intel.com>
- <CAKwvOd=Fj51=m0EZznjOmkqeZy_5uDZ_Gyf-Pv=yd2=53Gb6Sw@mail.gmail.com>
-In-Reply-To: <CAKwvOd=Fj51=m0EZznjOmkqeZy_5uDZ_Gyf-Pv=yd2=53Gb6Sw@mail.gmail.com>
+References: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
+In-Reply-To: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 15 Jun 2023 16:48:22 -0400
-Message-ID: <CAKwvOd=uqfnyw2u=Nhm+Q0uGORjW9GB+pso6tb_HKGSU0rhZBQ@mail.gmail.com>
-Subject: Re: lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239'
- declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: kernel test robot <lkp@intel.com>, Alexander Lobakin <alexandr.lobakin@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Yury Norov <yury.norov@gmail.com>
+Date: Thu, 15 Jun 2023 17:01:56 -0400
+Message-ID: <CAKwvOdk0sPi95TSdbyEKXud68nHq_7=ccDwaCkVsyd54ArRC=A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: Fix cross compilation with LLVM
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 15, 2023 at 3:52=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Wed, Jun 14, 2023 at 5:19=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
 >
-> On Thu, Jun 15, 2023 at 7:22=E2=80=AFAM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Thu, Jun 15, 2023 at 02:32:02PM +0800, kernel test robot wrote:
-> > > Hi Alexander,
-> > >
-> > > FYI, the error/warning still remains.
-> > >
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git master
-> > > head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
-> > > commit: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: ad=
-d compile-time optimization/evaluations assertions
-> > > date:   12 months ago
-> > > config: arm64-randconfig-r025-20230615 (https://download.01.org/0day-=
-ci/archive/20230615/202306151433.QKcn7ZNn-lkp@intel.com/config)
+> Currently the MM selftests attempt to work out the target architecture by
+> using CROSS_COMPILE or otherwise querying the host machine, storing the
+> target architecture in a variable called MACHINE rather than the usual AR=
+CH
+> though as far as I can tell (including for x86_64) the value is the same =
+as
+> we would use for architecture.
 >
-> ^ randconfig
+> When cross compiling with LLVM we don't need a CROSS_COMPILE as LLVM can
+> support many target architectures in a single build so this logic does no=
+t
+> work, CROSS_COMPILE is not set and we end up selecting tests for the host
+> rather than target architecture. Fix this by using the more standard ARCH
+> to describe the architecture, taking it from the environment if specified=
+.
 >
-> > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.=
-git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > > reproduce (this is a W=3D1 build):
-> > >         mkdir -p ~/bin
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install arm64 cross compiling tool for clang build
-> > >         # apt-get install binutils-aarch64-linux-gnu
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
-nux.git/commit/?id=3Ddc34d5036692c614eef23c1130ee42a201c316bf
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/ker=
-nel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout dc34d5036692c614eef23c1130ee42a201c316bf
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
-e.cross W=3D1 O=3Dbuild_dir ARCH=3Darm64 olddefconfig
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
-e.cross W=3D1 O=3Dbuild_dir ARCH=3Darm64 SHELL=3D/bin/bash lib/
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
-version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306151433.QKcn7ZNn=
--lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> >
-> > >    888                /*
-> > >    889                 * Equals to `unsigned long bitmap[1] =3D { GEN=
-MASK(6, 5), }`.
-> > >    890                 * Clang on s390 optimizes bitops at compile-ti=
-me as intended, but at
-> > >    891                 * the same time stops treating @bitmap and @bi=
-topvar as compile-time
-> > >    892                 * constants after regular test_bit() is execut=
-ed, thus triggering the
-> > >    893                 * build bugs below. So, call const_test_bit() =
-there directly until
-> > >    894                 * the compiler is fixed.
-> > >    895                 */
-> > >    896                bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> > >    897        #if defined(__s390__) && defined(__clang__)
-> > >    898                if (!const_test_bit(7, bitmap))
-> > >    899        #else
-> > >    900                if (!test_bit(7, bitmap))
-> > >    901        #endif
-> >
-> > Hmm... Reveals the bug in clang/arm64?
->
-> Seems related to the config.  ARCH=3Darm64 defconfig +
-> CONFIG_TEST_BITMAP=3Dy doesn't trigger this for me, but the randconfig
-> does.  We'll bisect the config, and update the thread tracking this:
-> https://github.com/ClangBuiltLinux/linux/issues/1874
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-KASAN and GCOV together seem to be tickling this.
+Broonie,
+Thanks for the patch! What's the best way to test this?
 
+$ ARCH=3Darm64 make LLVM=3D1 -j128 -C tools/testing/selfte
+sts/mm/
+
+Is what I would have guessed, but I get errors with or without this patch.
+
+Also, fwiw, b4 shows that you don't have a pgp key setup for
+broonie@kernel.org; I don't think it matters, but maybe it's a
+surprise to you if you thought you had set that up,
+$ b4 shazam https://lore.kernel.org/llvm/20230614-kselftest-mm-llvm-v1-1-18=
+0523f277d3@kernel.org/
+...
+  =E2=9C=97 No key: openpgp/broonie@kernel.org
+
+
+> ---
+>  tools/testing/selftests/mm/Makefile | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 >
-> >
-> > >    919                res =3D !test_bit(18, &bitopvar);
-> > >  > 920                BUILD_BUG_ON(!__builtin_constant_p(res));
-> > >    921                BUILD_BUG_ON(!res);
-> >
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-> >
-> >
-> >
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftest=
+s/mm/Makefile
+> index 23af4633f0f4..4f0c50c33ba7 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -5,12 +5,15 @@ LOCAL_HDRS +=3D $(selfdir)/mm/local_config.h $(top_srcd=
+ir)/mm/gup_test.h
+>
+>  include local_config.mk
+>
+> +ifeq ($(ARCH),)
+> +
+>  ifeq ($(CROSS_COMPILE),)
+>  uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
+>  else
+>  uname_M :=3D $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
+>  endif
+> -MACHINE ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's=
+/ppc64.*/ppc64/')
+> +ARCH ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/pp=
+c64.*/ppc64/')
+> +endif
+>
+>  # Without this, failed build products remain, with up-to-date timestamps=
+,
+>  # thus tricking Make (and you!) into believing that All Is Well, in subs=
+equent
+> @@ -65,7 +68,7 @@ TEST_GEN_PROGS +=3D ksm_tests
+>  TEST_GEN_PROGS +=3D ksm_functional_tests
+>  TEST_GEN_PROGS +=3D mdwe_test
+>
+> -ifeq ($(MACHINE),x86_64)
+> +ifeq ($(ARCH),x86_64)
+>  CAN_BUILD_I386 :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_=
+32bit_program.c -m32)
+>  CAN_BUILD_X86_64 :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivia=
+l_64bit_program.c)
+>  CAN_BUILD_WITH_NOPIE :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/tr=
+ivial_program.c -no-pie)
+> @@ -87,13 +90,13 @@ TEST_GEN_PROGS +=3D $(BINARIES_64)
+>  endif
+>  else
+>
+> -ifneq (,$(findstring $(MACHINE),ppc64))
+> +ifneq (,$(findstring $(ARCH),ppc64))
+>  TEST_GEN_PROGS +=3D protection_keys
+>  endif
+>
+>  endif
+>
+> -ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s39=
+0x sparc64 x86_64))
+> +ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x =
+sparc64 x86_64))
+>  TEST_GEN_PROGS +=3D va_high_addr_switch
+>  TEST_GEN_PROGS +=3D virtual_address_range
+>  TEST_GEN_PROGS +=3D write_to_hugetlbfs
+> @@ -112,7 +115,7 @@ $(TEST_GEN_PROGS): vm_util.c
+>  $(OUTPUT)/uffd-stress: uffd-common.c
+>  $(OUTPUT)/uffd-unit-tests: uffd-common.c
+>
+> -ifeq ($(MACHINE),x86_64)
+> +ifeq ($(ARCH),x86_64)
+>  BINARIES_32 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+>  BINARIES_64 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
 >
 >
+> ---
+> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+> change-id: 20230614-kselftest-mm-llvm-a25a7daffa6f
+>
+> Best regards,
 > --
-> Thanks,
-> ~Nick Desaulniers
-
+> Mark Brown <broonie@kernel.org>
+>
+>
 
 
 --=20
