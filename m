@@ -1,45 +1,47 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D8C174DF;
-	Thu, 15 Jun 2023 22:00:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4805D174F6;
+	Thu, 15 Jun 2023 22:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686866455; x=1718402455;
+  t=1686866457; x=1718402457;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JN/6v0RRe0LtIZ2wBFgUzMVCscs41NCa1blW5xLxo3g=;
-  b=amc2EDw+vmz3cKVejQaH+sgXxQV5pa3MtpAZHOOQhEbYITjqMKnABdbE
-   Ysc6xfrv3fKkw7ZLVswjxjHtNOmusMg2iyzJyN4/HB8gZJvnVp5og+P+j
-   eJs8z3ZDV0x00qiWuInkJwke1L5YiZqYdQWEe3mDOXel9UDYf0PFO7C/5
-   pjs9lVlJvEI/FNo+DCuDplwfEWDKHSMxegY4Tm4mdQzWm0CU5TeeepTVW
-   3OkE0p02D4z8M7zt1CwtysVXUmPI6Ybx/smSOzzTHYWjR0YWvLudULIUP
-   ShwMo36WdCJ+aM4FIIB+SVCQZ0rcswAtpiUdCfAxmYhcKEW8CwM0K9NcL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="338669733"
+  bh=VixVhVq+fB60ytIjlPKKkNw/tWOkMvypRvdQAxH+drM=;
+  b=kyVhkwH4Bk2+hQRV20aoXFVwybAMsof61Y8h/VQ8cMWCl/VcI6wH519K
+   dhcMQICQXbsm+wOhkQSXmo1N5sR4ahp9mjSKjvvzPscssNXMxuXVI/xzD
+   9a4BUes+tFWUTMDF3x8BAOXizKb/bTwpkglM/DCff59D6djU4DGzyd3Ul
+   h2n2H9yWQvWXXhBzjItNWvAstfkDM1/d9mygOmt9pcneD3SKcTsq8gkoV
+   ulP3RAUzVQ7Zg4UYVWttkvpX/sqBo+ogtF161QAOBYu2dga6pacMsVoay
+   D6q09ccDJpth/lTQPMuBDfRzIZXzk2dMbiJggiy1A7wO42YMCGT6QyEyE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="339391356"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="338669733"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:00:54 -0700
+   d="scan'208";a="339391356"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:00:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="825471879"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689970719"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="825471879"
+   d="scan'208";a="689970719"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Jun 2023 15:00:52 -0700
+  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 15:00:52 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q9v1P-0000Qt-1c;
+	id 1q9v1P-0000Qn-1F;
 	Thu, 15 Jun 2023 22:00:51 +0000
-Date: Fri, 16 Jun 2023 05:59:54 +0800
+Date: Fri, 16 Jun 2023 05:59:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>
+To: Xiaolei Wang <xiaolei.wang@windriver.com>, peter.chen@kernel.org,
+	pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
+	gregkh@linuxfoundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-raid@vger.kernel.org, linux-block@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 06/11] md-bitmap: refactor md_bitmap_init_from_disk
-Message-ID: <202306160552.smw0qbmb-lkp@intel.com>
-References: <20230615064840.629492-7-hch@lst.de>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdns3: Put the cdns set active part outside the
+ spin lock
+Message-ID: <202306160517.DJARQEZU-lkp@intel.com>
+References: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,195 +50,201 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615064840.629492-7-hch@lst.de>
+In-Reply-To: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
 
-Hi Christoph,
+Hi Xiaolei,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on song-md/md-next]
-[also build test WARNING on device-mapper-dm/for-next linus/master v6.4-rc6 next-20230615]
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.4-rc6 next-20230615]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/md-bitmap-initialize-variables-at-declaration-time-in-md_bitmap_file_unmap/20230615-154928
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-patch link:    https://lore.kernel.org/r/20230615064840.629492-7-hch%40lst.de
-patch subject: [PATCH 06/11] md-bitmap: refactor md_bitmap_init_from_disk
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230616/202306160552.smw0qbmb-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/usb-cdns3-Put-the-cdns-set-active-part-outside-the-spin-lock/20230615-190721
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang%40windriver.com
+patch subject: [PATCH v2] usb: cdns3: Put the cdns set active part outside the spin lock
+config: riscv-randconfig-r042-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160517.DJARQEZU-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
-        git fetch song-md md-next
-        git checkout song-md/md-next
-        b4 shazam https://lore.kernel.org/r/20230615064840.629492-7-hch@lst.de
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch usb usb-testing
+        git checkout usb/usb-testing
+        b4 shazam https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang@windriver.com
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/cdns3/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306160552.smw0qbmb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160517.DJARQEZU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/md/md-bitmap.c:1107:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (file && i_size_read(file->f_mapping->host) < store->bytes) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/md-bitmap.c:1198:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/md/md-bitmap.c:1107:2: note: remove the 'if' if its condition is always false
-           if (file && i_size_read(file->f_mapping->host) < store->bytes) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/md-bitmap.c:1090:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     743 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/usb/cdns3/cdns3-plat.c:258:18: error: too few arguments to function call, expected 2, have 1
+     258 |         cdns_resume(cdns);
+         |         ~~~~~~~~~~~     ^
+   drivers/usb/cdns3/core.h:132:19: note: 'cdns_resume' declared here
+     132 | static inline int cdns_resume(struct cdns *cdns, u8 set_active)
+         |                   ^
+>> drivers/usb/cdns3/cdns3-plat.c:261:2: error: call to undeclared function 'cdns_set_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     261 |         cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+         |         ^
+   13 warnings and 2 errors generated.
 
 
-vim +1107 drivers/md/md-bitmap.c
+vim +258 drivers/usb/cdns3/cdns3-plat.c
 
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1068  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1069  /*
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1070   * Initialize the in-memory bitmap from the on-disk bitmap and set up the memory
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1071   * mapping of the bitmap file.
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1072   *
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1073   * Special case: If there's no bitmap file, or if the bitmap file had been
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1074   * previously kicked from the array, we mark all the bits as 1's in order to
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1075   * cause a full resync.
-6a07997fc34ac1 drivers/md/bitmap.c    NeilBrown         2005-09-09  1076   *
-6a07997fc34ac1 drivers/md/bitmap.c    NeilBrown         2005-09-09  1077   * We ignore all bits for sectors that end earlier than 'start'.
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1078   * This is used when reading an out-of-date bitmap.
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1079   */
-e64e4018d57271 drivers/md/md-bitmap.c Andy Shevchenko   2018-08-01  1080  static int md_bitmap_init_from_disk(struct bitmap *bitmap, sector_t start)
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1081  {
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1082  	bool outofdate = test_bit(BITMAP_STALE, &bitmap->flags);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1083  	struct mddev *mddev = bitmap->mddev;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1084  	unsigned long chunks = bitmap->counts.chunks;
-1ec885cdd01a9a drivers/md/bitmap.c    NeilBrown         2012-05-22  1085  	struct bitmap_storage *store = &bitmap->storage;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1086  	struct file *file = store->file;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1087  	unsigned long node_offset = 0;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1088  	unsigned long bit_cnt = 0;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1089  	unsigned long i;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1090  	int ret;
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1091  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1092  	if (!file && !mddev->bitmap_info.offset) {
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1093  		/* No permanent bitmap - fill with '1s'. */
-1ec885cdd01a9a drivers/md/bitmap.c    NeilBrown         2012-05-22  1094  		store->filemap = NULL;
-1ec885cdd01a9a drivers/md/bitmap.c    NeilBrown         2012-05-22  1095  		store->file_pages = 0;
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1096  		for (i = 0; i < chunks ; i++) {
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1097  			/* if the disk bit is set, set the memory bit */
-40cffcc0e8f9f6 drivers/md/bitmap.c    NeilBrown         2012-05-22  1098  			int needed = ((sector_t)(i+1) << (bitmap->counts.chunkshift)
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1099  				      >= start);
-e64e4018d57271 drivers/md/md-bitmap.c Andy Shevchenko   2018-08-01  1100  			md_bitmap_set_memory_bits(bitmap,
-40cffcc0e8f9f6 drivers/md/bitmap.c    NeilBrown         2012-05-22  1101  						  (sector_t)i << bitmap->counts.chunkshift,
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1102  						  needed);
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1103  		}
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1104  		return 0;
-ef99bf480de9bd drivers/md/bitmap.c    NeilBrown         2012-05-22  1105  	}
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1106  
-d1244cb062750b drivers/md/bitmap.c    NeilBrown         2012-05-22 @1107  	if (file && i_size_read(file->f_mapping->host) < store->bytes) {
-ec0cc226854a79 drivers/md/bitmap.c    NeilBrown         2016-11-02  1108  		pr_warn("%s: bitmap file too short %lu < %lu\n",
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1109  			bmname(bitmap),
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1110  			(unsigned long) i_size_read(file->f_mapping->host),
-d1244cb062750b drivers/md/bitmap.c    NeilBrown         2012-05-22  1111  			store->bytes);
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1112  		goto err;
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1113  	}
-bc7f77de2cd817 drivers/md/bitmap.c    NeilBrown         2005-06-21  1114  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1115  	if (mddev_is_clustered(mddev))
-b97e92574c0bf3 drivers/md/bitmap.c    Goldwyn Rodrigues 2014-06-06  1116  		node_offset = bitmap->cluster_slot * (DIV_ROUND_UP(store->bytes, PAGE_SIZE));
-b97e92574c0bf3 drivers/md/bitmap.c    Goldwyn Rodrigues 2014-06-06  1117  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1118  	for (i = 0; i < store->file_pages; i++) {
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1119  		struct page *page = store->filemap[i];
-d785a06a0b9d0c drivers/md/bitmap.c    NeilBrown         2006-06-26  1120  		int count;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1121  
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1122  		/* unmap the old page, we're done with it */
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1123  		if (i == store->file_pages - 1)
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1124  			count = store->bytes - i * PAGE_SIZE;
-d785a06a0b9d0c drivers/md/bitmap.c    NeilBrown         2006-06-26  1125  		else
-d785a06a0b9d0c drivers/md/bitmap.c    NeilBrown         2006-06-26  1126  			count = PAGE_SIZE;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1127  
-27581e5ae01f77 drivers/md/bitmap.c    NeilBrown         2012-05-22  1128  		if (file)
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1129  			ret = read_file_page(file, i, bitmap, count, page);
-27581e5ae01f77 drivers/md/bitmap.c    NeilBrown         2012-05-22  1130  		else
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1131  			ret = read_sb_page(mddev, mddev->bitmap_info.offset,
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1132  					   page, i + node_offset, count);
-27581e5ae01f77 drivers/md/bitmap.c    NeilBrown         2012-05-22  1133  		if (ret)
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1134  			goto err;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1135  	}
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1136  
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1137  	if (outofdate) {
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1138  		pr_warn("%s: bitmap file is out of date, doing full recovery\n",
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1139  			bmname(bitmap));
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1140  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1141  		for (i = 0; i < store->file_pages; i++) {
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1142  			struct page *page = store->filemap[i];
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1143  			unsigned long offset = 0;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1144  			void *paddr;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1145  	
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1146  			if (i == 0 && !mddev->bitmap_info.external)
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1147  				offset = sizeof(bitmap_super_t);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1148  
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1149  			/*
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1150  			 * If the bitmap is out of date, dirty the whole page
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1151  			 * and write it out
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1152  			 */
-b2f46e68825648 drivers/md/bitmap.c    Cong Wang         2011-11-28  1153  			paddr = kmap_atomic(page);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1154  			memset(paddr + offset, 0xff, PAGE_SIZE - offset);
-b2f46e68825648 drivers/md/bitmap.c    Cong Wang         2011-11-28  1155  			kunmap_atomic(paddr);
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1156  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1157  			write_page(bitmap, page, 1);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1158  			if (test_bit(BITMAP_WRITE_ERROR, &bitmap->flags)) {
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1159  				ret = -EIO;
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1160  				goto err;
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1161  			}
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1162  		}
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1163  	}
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1164  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1165  	for (i = 0; i < chunks; i++) {
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1166  		struct page *page = filemap_get_page(&bitmap->storage, i);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1167  		unsigned long bit = file_page_offset(&bitmap->storage, i);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1168  		void *paddr;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1169  		bool was_set;
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1170  
-b2f46e68825648 drivers/md/bitmap.c    Cong Wang         2011-11-28  1171  		paddr = kmap_atomic(page);
-b405fe91e50c60 drivers/md/bitmap.c    NeilBrown         2012-05-22  1172  		if (test_bit(BITMAP_HOSTENDIAN, &bitmap->flags))
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1173  			was_set = test_bit(bit, paddr);
-bd926c63b7a684 drivers/md/bitmap.c    NeilBrown         2005-11-08  1174  		else
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1175  			was_set = test_bit_le(bit, paddr);
-b2f46e68825648 drivers/md/bitmap.c    Cong Wang         2011-11-28  1176  		kunmap_atomic(paddr);
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1177  
-5479b6ae3886b9 drivers/md/md-bitmap.c Christoph Hellwig 2023-06-15  1178  		if (was_set) {
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1179  			/* if the disk bit is set, set the memory bit */
-40cffcc0e8f9f6 drivers/md/bitmap.c    NeilBrown         2012-05-22  1180  			int needed = ((sector_t)(i+1) << bitmap->counts.chunkshift
-db305e507d5544 drivers/md/bitmap.c    NeilBrown         2009-05-07  1181  				      >= start);
-e64e4018d57271 drivers/md/md-bitmap.c Andy Shevchenko   2018-08-01  1182  			md_bitmap_set_memory_bits(bitmap,
-40cffcc0e8f9f6 drivers/md/bitmap.c    NeilBrown         2012-05-22  1183  						  (sector_t)i << bitmap->counts.chunkshift,
-db305e507d5544 drivers/md/bitmap.c    NeilBrown         2009-05-07  1184  						  needed);
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1185  			bit_cnt++;
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1186  		}
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1187  	}
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1188  
-ec0cc226854a79 drivers/md/bitmap.c    NeilBrown         2016-11-02  1189  	pr_debug("%s: bitmap initialized from disk: read %lu pages, set %lu of %lu bits\n",
-1ec885cdd01a9a drivers/md/bitmap.c    NeilBrown         2012-05-22  1190  		 bmname(bitmap), store->file_pages,
-d1244cb062750b drivers/md/bitmap.c    NeilBrown         2012-05-22  1191  		 bit_cnt, chunks);
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1192  
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1193  	return 0;
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1194  
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1195   err:
-ec0cc226854a79 drivers/md/bitmap.c    NeilBrown         2016-11-02  1196  	pr_warn("%s: bitmap initialisation failed: %d\n",
-4ad1366376bfef drivers/md/bitmap.c    NeilBrown         2007-07-17  1197  		bmname(bitmap), ret);
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1198  	return ret;
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1199  }
-32a7627cf3a353 drivers/md/bitmap.c    NeilBrown         2005-06-21  1200  
+   229	
+   230	static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+   231	{
+   232		struct cdns *cdns = dev_get_drvdata(dev);
+   233		int ret;
+   234		unsigned long flags;
+   235	
+   236		if (!cdns->in_lpm)
+   237			return 0;
+   238	
+   239		if (cdns_power_is_lost(cdns)) {
+   240			phy_exit(cdns->usb2_phy);
+   241			ret = phy_init(cdns->usb2_phy);
+   242			if (ret)
+   243				return ret;
+   244	
+   245			phy_exit(cdns->usb3_phy);
+   246			ret = phy_init(cdns->usb3_phy);
+   247			if (ret)
+   248				return ret;
+   249		}
+   250	
+   251		ret = set_phy_power_on(cdns);
+   252		if (ret)
+   253			return ret;
+   254	
+   255		cdns3_set_platform_suspend(cdns->dev, false, false);
+   256	
+   257		spin_lock_irqsave(&cdns->lock, flags);
+ > 258		cdns_resume(cdns);
+   259		cdns->in_lpm = false;
+   260		spin_unlock_irqrestore(&cdns->lock, flags);
+ > 261		cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+   262		if (cdns->wakeup_pending) {
+   263			cdns->wakeup_pending = false;
+   264			enable_irq(cdns->wakeup_irq);
+   265		}
+   266		dev_dbg(cdns->dev, "%s ends\n", __func__);
+   267	
+   268		return ret;
+   269	}
+   270	
 
 -- 
 0-DAY CI Kernel Test Service
