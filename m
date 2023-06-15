@@ -1,274 +1,111 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7B0374;
-	Thu, 15 Jun 2023 18:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686854087; x=1718390087;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cCFkjIx40JEd/60lLLxnVURN+PWZ0sjr65Uwqars5gM=;
-  b=id19FHpWsqQHJAH183uH9XjaRcFXFfBzfuFQV2u916kBnJ+jc8JYzq/t
-   xOZ9srv5xDrzoO1bO5Kv0lLP4KBRTKa8F7A6Hw7oTRbXK+6jc92uXAtg1
-   PDT3SUyLbRNn7CXH/NSrYQXqo5svj/KidcCdsYcYhttvkr2pWEdeMF8mg
-   p/A1pYdzF6OBASDnNI04dkTiALUMEDYMyHIpV0XTazLQwSIUMv6gCZik4
-   U4msk1m+fD/9ozQPRqXAAjHP1QxEzzAcTYxpbayVLxlXsqXSf9/jj/KJX
-   2AU4HQPanfv90grUy1c12nlinVQU9fIQegDBoLA8c4BtrVKGRlRgftv/F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348712147"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="348712147"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 11:34:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689893902"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="689893902"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 11:34:44 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q9rnv-0000Gc-1R;
-	Thu, 15 Jun 2023 18:34:43 +0000
-Date: Fri, 16 Jun 2023 02:34:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Rander Wang <rander.wang@intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	=?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>
-Subject: sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064) exceeds
- limit (2048) in 'dpcm_be_dai_trigger'
-Message-ID: <202306160240.ahGjvPqw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47001EAED
+	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 19:42:31 +0000 (UTC)
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-43f5aa0f383so490080137.0
+        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 12:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686858150; x=1689450150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
+        b=lBwTUjIilesidUCNGaAvZ+xj4jRGP9ZPcdF6CpMtEeTbtwKGGC9zJYJcwMkwh5GDSj
+         6TO/HyTtOMlwBDHVt0L6hSeGPFlURYJRwbR0dz4PRCJYntqmF/3cCuuu0h/v1jxKA888
+         pcmBRHsiMmLRBAi8IYio5/cKlRMvzj4FcDxzkLhnj050yvQrc9Y1F2XzKmuYr5NBlcP1
+         EpPbrkvpKqrj1yDytJDpzeEKUPlcQGBPnhKCW4YtvBC64iiFEdkoC0QwKJLipXFkq7wc
+         jGtl3rS0rfb7Pcfqsc0daraaxrNMh7MKpbrNuhkhT76TdPMOj1SNGsX7ycRIVoJ3AQy9
+         BDIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686858150; x=1689450150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EEzNrFy4XtnBJchIRCyudJpLzlojDK3YzlAqwYMXFT0=;
+        b=JTUJOLJFYdvUwcmkJq2SqRY1Vzn+0DFvoP73ZshmzQndyI2KHVZlC56npNHofEg35n
+         bJdldQP87SVaCPuQo0Agh+N561lEakmaRdPTaBkK9nZok5QZ+Zk1YTkP5bMoiMO3kgVj
+         uKgh1oWXA0fWiElkdOkjJSl2RdMLhj5XFmgJw8/HkkAtvamit5y+P5UXkg8J4PvjqpXP
+         /R7CjCqMz6ZJPupw8oQeZ+fVgKDt2VezGwfn2EIv3dKQYT5GjTYh9Jw+UlrXrTpnXN1A
+         BAfMtuQvFHtJC18qzO16EwKyrzAICfWpzJ5XefNyykGdjSapxlXL5jB6jL8zzljL9U2f
+         SJtQ==
+X-Gm-Message-State: AC+VfDzw4vqvArfb/uoPZvn+85qY/bACZRLTWdHUlC8GEoJwF0PJ1w4e
+	lWEvaoq7tB2H8nkBvdq4IDny38FbUPA4/Xcx8klC3w==
+X-Google-Smtp-Source: ACHHUZ4DAcb8XJ7cK5trIjfYu8JayVxt4ZPxnD/vGCWza1Eoy4aPA1/eOXTHCyXUZSdlUS0q7KBknTMFqsdih3/7QPM=
+X-Received: by 2002:a67:f34d:0:b0:43b:38a5:f8a0 with SMTP id
+ p13-20020a67f34d000000b0043b38a5f8a0mr494060vsm.14.1686858149899; Thu, 15 Jun
+ 2023 12:42:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
+In-Reply-To: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 15 Jun 2023 15:42:16 -0400
+Message-ID: <CAKwvOdndp=2h9se6ddGiYJ6S4o_ROFLD2CH5ZuW-SRa=DMapzw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Mark core_vpe_count() as __init
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: tsbogend@alpha.franken.de, trix@redhat.com, jiaxun.yang@flygoat.com, 
+	linux-mips@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Pierre-Louis,
+On Thu, Jun 15, 2023 at 12:21=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> After commit 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters"),
+> modpost complains when building with clang:
+>
+>   WARNING: modpost: vmlinux.o: section mismatch in reference: core_vpe_co=
+unt (section: .text) -> smp_max_threads (section: .init.data)
+>
+> This warning occurs when core_vpe_count() is not inlined, as it appears
+> that a non-init function is referring to an init symbol. However, this
+> is not a problem in practice because core_vpe_count() is only called
+> from __init functions, cps_smp_setup() and cps_prepare_cpus().
+>
+> Resolve the warning by marking core_vpe_count() as __init, as it is only
+> called in an init context so it can refer to init functions and symbols
+> and have its memory freed on boot.
+>
+> Fixes: 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-First bad commit (maybe != root cause):
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
-commit: 9995c1d096c8ab1b5f1edc4141257719f6a53524 ASoC: soc-pcm: improve BE transition for PAUSE_RELEASE
-date:   1 year, 2 months ago
-config: riscv-buildonly-randconfig-r001-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160240.ahGjvPqw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9995c1d096c8ab1b5f1edc4141257719f6a53524
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9995c1d096c8ab1b5f1edc4141257719f6a53524
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash ./ drivers/ fs/ lib/zstd/ mm/ sound/pci/hda/ sound/soc/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306160240.ahGjvPqw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064) exceeds limit (2048) in 'dpcm_be_dai_trigger' [-Wframe-larger-than]
-   int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
-       ^
-   1 warning generated.
+> ---
+>  arch/mips/kernel/smp-cps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+> index bea6a13ea464..92575222713b 100644
+> --- a/arch/mips/kernel/smp-cps.c
+> +++ b/arch/mips/kernel/smp-cps.c
+> @@ -29,7 +29,7 @@ static DECLARE_BITMAP(core_power, NR_CPUS);
+>
+>  struct core_boot_config *mips_cps_core_bootcfg;
+>
+> -static unsigned core_vpe_count(unsigned int cluster, unsigned core)
+> +static unsigned __init core_vpe_count(unsigned int cluster, unsigned cor=
+e)
+>  {
+>         return min(smp_max_threads, mips_cps_numvps(cluster, core));
+>  }
+>
+> ---
+> base-commit: 5cad8323040bb8d47e130c10ea4dcb7175c7602a
+> change-id: 20230615-mips-mark-core_vpe_count-as-init-600dc73e367d
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
 
 
-vim +/dpcm_be_dai_trigger +2089 sound/soc/soc-pcm.c
-
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2088  
-23607025303af6e Liam Girdwood        2014-01-17 @2089  int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
-45c0a188ca59e7e Mark Brown           2012-05-09  2090  			       int cmd)
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2091  {
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2092  	struct snd_soc_pcm_runtime *be;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2093  	bool pause_stop_transition;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2094  	struct snd_soc_dpcm *dpcm;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2095  	unsigned long flags;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2096  	int ret = 0;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2097  
-8d6258a4dd26783 Kuninori Morimoto    2018-09-18  2098  	for_each_dpcm_be(fe, stream, dpcm) {
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2099  		struct snd_pcm_substream *be_substream;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2100  
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2101  		be = dpcm->be;
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2102  		be_substream = snd_soc_dpcm_get_substream(be, stream);
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2103  
-3c75c0ea5da749b Takashi Iwai         2022-01-19  2104  		snd_soc_dpcm_stream_lock_irqsave_nested(be, stream, flags);
-b2ae80663008a76 Takashi Iwai         2021-12-07  2105  
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2106  		/* is this op for this BE ? */
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2107  		if (!snd_soc_dpcm_be_can_update(fe, be, stream))
-b2ae80663008a76 Takashi Iwai         2021-12-07  2108  			goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2109  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2110  		dev_dbg(be->dev, "ASoC: trigger BE %s cmd %d\n",
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2111  			be->dai_link->name, cmd);
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2112  
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2113  		switch (cmd) {
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2114  		case SNDRV_PCM_TRIGGER_START:
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2115  			if (!be->dpcm[stream].be_start &&
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2116  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PREPARE) &&
-21fca8bdbb64df1 이경택               2020-04-01  2117  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_STOP) &&
-3202e2f5fac0032 Mark Brown           2021-08-30  2118  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
-b2ae80663008a76 Takashi Iwai         2021-12-07  2119  				goto next;
-6479f7588651cbc Pierre-Louis Bossart 2021-08-17  2120  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2121  			be->dpcm[stream].be_start++;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2122  			if (be->dpcm[stream].be_start != 1)
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2123  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2124  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2125  			ret = soc_pcm_trigger(be_substream, cmd);
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2126  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2127  				be->dpcm[stream].be_start--;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2128  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2129  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2130  
-3202e2f5fac0032 Mark Brown           2021-08-30  2131  			be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2132  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2133  		case SNDRV_PCM_TRIGGER_RESUME:
-3202e2f5fac0032 Mark Brown           2021-08-30  2134  			if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_SUSPEND))
-b2ae80663008a76 Takashi Iwai         2021-12-07  2135  				goto next;
-6479f7588651cbc Pierre-Louis Bossart 2021-08-17  2136  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2137  			be->dpcm[stream].be_start++;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2138  			if (be->dpcm[stream].be_start != 1)
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2139  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2140  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2141  			ret = soc_pcm_trigger(be_substream, cmd);
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2142  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2143  				be->dpcm[stream].be_start--;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2144  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2145  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2146  
-3202e2f5fac0032 Mark Brown           2021-08-30  2147  			be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2148  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2149  		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-3aa1e96a2b95e2e Pierre-Louis Bossart 2021-12-07  2150  			if (!be->dpcm[stream].be_start &&
-3aa1e96a2b95e2e Pierre-Louis Bossart 2021-12-07  2151  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START) &&
-3aa1e96a2b95e2e Pierre-Louis Bossart 2021-12-07  2152  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
-b2ae80663008a76 Takashi Iwai         2021-12-07  2153  				goto next;
-6479f7588651cbc Pierre-Louis Bossart 2021-08-17  2154  
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2155  			fe->dpcm[stream].fe_pause = false;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2156  			be->dpcm[stream].be_pause--;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2157  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2158  			be->dpcm[stream].be_start++;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2159  			if (be->dpcm[stream].be_start != 1)
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2160  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2161  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2162  			ret = soc_pcm_trigger(be_substream, cmd);
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2163  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2164  				be->dpcm[stream].be_start--;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2165  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2166  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2167  
-3202e2f5fac0032 Mark Brown           2021-08-30  2168  			be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2169  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2170  		case SNDRV_PCM_TRIGGER_STOP:
-21fca8bdbb64df1 이경택               2020-04-01  2171  			if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_START) &&
-3202e2f5fac0032 Mark Brown           2021-08-30  2172  			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
-b2ae80663008a76 Takashi Iwai         2021-12-07  2173  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2174  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2175  			if (be->dpcm[stream].state == SND_SOC_DPCM_STATE_START)
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2176  				be->dpcm[stream].be_start--;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2177  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2178  			if (be->dpcm[stream].be_start != 0)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2179  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2180  
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2181  			pause_stop_transition = false;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2182  			if (fe->dpcm[stream].fe_pause) {
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2183  				pause_stop_transition = true;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2184  				fe->dpcm[stream].fe_pause = false;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2185  				be->dpcm[stream].be_pause--;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2186  			}
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2187  
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2188  			if (be->dpcm[stream].be_pause != 0)
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2189  				ret = soc_pcm_trigger(be_substream, SNDRV_PCM_TRIGGER_PAUSE_PUSH);
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2190  			else
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2191  				ret = soc_pcm_trigger(be_substream, SNDRV_PCM_TRIGGER_STOP);
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2192  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2193  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2194  				if (be->dpcm[stream].state == SND_SOC_DPCM_STATE_START)
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2195  					be->dpcm[stream].be_start++;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2196  				if (pause_stop_transition) {
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2197  					fe->dpcm[stream].fe_pause = true;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2198  					be->dpcm[stream].be_pause++;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2199  				}
-b2ae80663008a76 Takashi Iwai         2021-12-07  2200  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2201  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2202  
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2203  			if (be->dpcm[stream].be_pause != 0)
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2204  				be->dpcm[stream].state = SND_SOC_DPCM_STATE_PAUSED;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2205  			else
-3202e2f5fac0032 Mark Brown           2021-08-30  2206  				be->dpcm[stream].state = SND_SOC_DPCM_STATE_STOP;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2207  
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2208  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2209  		case SNDRV_PCM_TRIGGER_SUSPEND:
-3202e2f5fac0032 Mark Brown           2021-08-30  2210  			if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2211  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2212  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2213  			be->dpcm[stream].be_start--;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2214  			if (be->dpcm[stream].be_start != 0)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2215  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2216  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2217  			ret = soc_pcm_trigger(be_substream, cmd);
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2218  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2219  				be->dpcm[stream].be_start++;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2220  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2221  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2222  
-3202e2f5fac0032 Mark Brown           2021-08-30  2223  			be->dpcm[stream].state = SND_SOC_DPCM_STATE_SUSPEND;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2224  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2225  		case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-3202e2f5fac0032 Mark Brown           2021-08-30  2226  			if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2227  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2228  
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2229  			fe->dpcm[stream].fe_pause = true;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2230  			be->dpcm[stream].be_pause++;
-9995c1d096c8ab1 Pierre-Louis Bossart 2022-04-06  2231  
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2232  			be->dpcm[stream].be_start--;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2233  			if (be->dpcm[stream].be_start != 0)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2234  				goto next;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2235  
-a9faca15a644ff7 Kuninori Morimoto    2020-12-01  2236  			ret = soc_pcm_trigger(be_substream, cmd);
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2237  			if (ret) {
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2238  				be->dpcm[stream].be_start++;
-b2ae80663008a76 Takashi Iwai         2021-12-07  2239  				goto next;
-848aedfdc6ba25a Pierre-Louis Bossart 2021-12-07  2240  			}
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2241  
-3202e2f5fac0032 Mark Brown           2021-08-30  2242  			be->dpcm[stream].state = SND_SOC_DPCM_STATE_PAUSED;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2243  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2244  		}
-b2ae80663008a76 Takashi Iwai         2021-12-07  2245  next:
-b2ae80663008a76 Takashi Iwai         2021-12-07  2246  		snd_soc_dpcm_stream_unlock_irqrestore(be, stream, flags);
-b2ae80663008a76 Takashi Iwai         2021-12-07  2247  		if (ret)
-b2ae80663008a76 Takashi Iwai         2021-12-07  2248  			break;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2249  	}
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2250  	if (ret < 0)
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2251  		dev_err(fe->dev, "ASoC: %s() failed at %s (%d)\n",
-db3aa39c9106842 Kuninori Morimoto    2021-03-15  2252  			__func__, be->dai_link->name, ret);
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2253  	return ret;
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2254  }
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2255  EXPORT_SYMBOL_GPL(dpcm_be_dai_trigger);
-01d7584cd2e5a93 Liam Girdwood        2012-04-25  2256  
-
-:::::: The code at line 2089 was first introduced by commit
-:::::: 23607025303af6e84bc2cd4cabe89c21f6a22a3f ASoC: DPCM: make some DPCM API calls non static for compressed usage
-
-:::::: TO: Liam Girdwood <liam.r.girdwood@linux.intel.com>
-:::::: CC: Mark Brown <broonie@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
