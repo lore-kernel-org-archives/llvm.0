@@ -1,43 +1,47 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7B9610E;
-	Thu, 15 Jun 2023 09:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5F320E0;
+	Thu, 15 Jun 2023 11:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686822178; x=1718358178;
+  t=1686828169; x=1718364169;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ozRaUnbT/BFkvq1xki+T0dmsx7lOQKo8VnV+xky8Rzs=;
-  b=KAFfPYclOuV5WwPvy23cRl0bAgtQPxa5MbcHgyjJk19bOFNl4hs4WXn/
-   FaKe2yffmqs61uoV0/08i+09gXXo9Goj54ZAowAv3S34Y6YoqeVhA4IL0
-   C1iJ7G5j82W5+ZFzXLjFIHHx2wLMn7lCEDQepu6l6F2eMnYrctlQ8jV1e
-   z9dbtcfAJOj/FhJxUvJEU4dDa2qnB/pN6xSHPa8BuuUnuFQ6+HT5m7AQA
-   fYZbTKIXVRWXOWG9FjhRdK4c4mi+t0bISCm0vP3KMeL6wGngICf7o2c1U
-   YshixIF0nmyQT5pcNaRIMunUbJiNHsuUhxdW1Nlxzxftwqp9aWknH3CT3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424757864"
+  bh=116F3/yC9e2Y/2nrti3FoTM8GkLnOVOOFoERu342pTk=;
+  b=RdtncISh6vK3wv2lL3aykrh4Hn6tjFlYOPv6L1in/0cmA5MQP1jnXFKC
+   UOQbkUrQVHO0W1vY8n3cCjA3y/1JSjJq8LVb1QJz93jND31I8yHx+6L4Q
+   /t9v2OKwpYR5ethezs02e9SFs0d9KghHX4CR8FXR4dIy6RZCqD2c6luYK
+   6Zi95giN9TipW0eDt+spMrYBOB+ILRBQgIoSXHMnWmCPL2/1Nqw/b+gZw
+   Fp/Qe3Sc78MLNwe4i0YuBEt+Ivm85ByfdVBeKLb3mpsm6TJDVdzVHfMOc
+   XKP0VnCHUYmR6F04MsIGhwXaYl+I4/0HouaIRx91ccaQapLrEEiHApPZ4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="358875418"
 X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="424757864"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 02:42:54 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="745437414"
+   d="scan'208";a="358875418"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 04:22:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="802300149"
 X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="745437414"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 02:42:53 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q9jVE-0001i9-1H;
-	Thu, 15 Jun 2023 09:42:52 +0000
-Date: Thu, 15 Jun 2023 17:42:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 3/3] zsmalloc: charge the zspage's object to
- obj_cgroup
-Message-ID: <202306151727.Nw4ilZPb-lkp@intel.com>
-References: <20230615034905.1362034-1-hezhongkun.hzk@bytedance.com>
+   d="scan'208";a="802300149"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 04:22:47 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1q9l3t-003vZ9-2r;
+	Thu, 15 Jun 2023 14:22:45 +0300
+Date: Thu, 15 Jun 2023 14:22:45 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>
+Subject: Re: lib/test_bitmap.c:920:2: error: call to
+ '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON
+ failed: !__builtin_constant_p(res)
+Message-ID: <ZIr0hZV/jcpZkRq2@smile.fi.intel.com>
+References: <202306151433.QKcn7ZNn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,146 +50,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615034905.1362034-1-hezhongkun.hzk@bytedance.com>
+In-Reply-To: <202306151433.QKcn7ZNn-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Zhongkun,
+On Thu, Jun 15, 2023 at 02:32:02PM +0800, kernel test robot wrote:
+> Hi Alexander,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
+> commit: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+> date:   12 months ago
+> config: arm64-randconfig-r025-20230615 (https://download.01.org/0day-ci/archive/20230615/202306151433.QKcn7ZNn-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc34d5036692c614eef23c1130ee42a201c316bf
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout dc34d5036692c614eef23c1130ee42a201c316bf
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash lib/
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306151433.QKcn7ZNn-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+>    888		/*
+>    889		 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
+>    890		 * Clang on s390 optimizes bitops at compile-time as intended, but at
+>    891		 * the same time stops treating @bitmap and @bitopvar as compile-time
+>    892		 * constants after regular test_bit() is executed, thus triggering the
+>    893		 * build bugs below. So, call const_test_bit() there directly until
+>    894		 * the compiler is fixed.
+>    895		 */
+>    896		bitmap_clear(bitmap, 0, BITS_PER_LONG);
+>    897	#if defined(__s390__) && defined(__clang__)
+>    898		if (!const_test_bit(7, bitmap))
+>    899	#else
+>    900		if (!test_bit(7, bitmap))
+>    901	#endif
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on linus/master v6.4-rc6]
-[cannot apply to akpm-mm/mm-everything next-20230615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hmm... Reveals the bug in clang/arm64?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhongkun-He/memcg-export-obj_cgroup-symbol-to-charge-compressed-RAM/20230615-115048
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230615034905.1362034-1-hezhongkun.hzk%40bytedance.com
-patch subject: [RFC PATCH 3/3] zsmalloc: charge the zspage's object to obj_cgroup
-config: hexagon-randconfig-r035-20230615 (https://download.01.org/0day-ci/archive/20230615/202306151727.Nw4ilZPb-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch axboe-block for-next
-        git checkout axboe-block/for-next
-        b4 shazam https://lore.kernel.org/r/20230615034905.1362034-1-hezhongkun.hzk@bytedance.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+>    919		res = !test_bit(18, &bitopvar);
+>  > 920		BUILD_BUG_ON(!__builtin_constant_p(res));
+>    921		BUILD_BUG_ON(!res);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306151727.Nw4ilZPb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/zsmalloc.c:45:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/zsmalloc.c:45:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/zsmalloc.c:45:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> mm/zsmalloc.c:1479:6: warning: no previous prototype for function 'zs_alloc_obj_cgroups' [-Wmissing-prototypes]
-    1479 | void zs_alloc_obj_cgroups(struct zspage *zspage, struct size_class *class)
-         |      ^
-   mm/zsmalloc.c:1479:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1479 | void zs_alloc_obj_cgroups(struct zspage *zspage, struct size_class *class)
-         | ^
-         | static 
->> mm/zsmalloc.c:1684:6: warning: variable 'index' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1684 |         if (!zspage) {
-         |             ^~~~~~~
-   mm/zsmalloc.c:1714:40: note: uninitialized use occurs here
-    1714 |         zs_obj_post_alloc_hook(class, zspage, index, objcg);
-         |                                               ^~~~~
-   mm/zsmalloc.c:1684:2: note: remove the 'if' if its condition is always false
-    1684 |         if (!zspage) {
-         |         ^~~~~~~~~~~~~~
-    1685 |                 cache_free_handle(pool, handle);
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1686 |                 handle =  (unsigned long)ERR_PTR(-ENOMEM);
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1687 |                 goto out;
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~
-    1688 |         }
-         | ~~~~~~~~~
-   mm/zsmalloc.c:1645:34: note: initialize the variable 'index' to silence this warning
-    1645 |         unsigned long handle, obj, index;
-         |                                         ^
-         |                                          = 0
-   8 warnings generated.
-
-
-vim +/zs_alloc_obj_cgroups +1479 mm/zsmalloc.c
-
-  1478	
-> 1479	void zs_alloc_obj_cgroups(struct zspage *zspage, struct size_class *class)
-  1480	{
-  1481		struct page *page = zspage->first_page;
-  1482		int objects = class->objs_per_zspage;
-  1483		unsigned long memcg_data = 0;
-  1484		void *vec;
-  1485	
-  1486		vec = kcalloc_node(objects, sizeof(struct obj_cgroup *),
-  1487				GFP_NOWAIT|__GFP_NOWARN|
-  1488				__GFP_ZERO|__GFP_MOVABLE,
-  1489				page_to_nid(page));
-  1490	
-  1491		if (vec)
-  1492			memcg_data = (unsigned long)vec | MEMCG_DATA_OBJCGS;
-  1493		page->memcg_data = memcg_data;
-  1494	}
-  1495	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
