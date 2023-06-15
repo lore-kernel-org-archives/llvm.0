@@ -1,127 +1,106 @@
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13EE379;
-	Thu, 15 Jun 2023 01:47:39 +0000 (UTC)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QhQCN4srCz4f48LG;
-	Thu, 15 Jun 2023 09:47:28 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-	by APP4 (Coremail) with SMTP id gCh0CgBnHbGsbYpkuYDsLg--.36696S3;
-	Thu, 15 Jun 2023 09:47:25 +0800 (CST)
-Subject: Re: [song-md:md-next 25/29] drivers/md/raid1-10.c:117:25: error:
- casting from randomized structure pointer type 'struct block_device *' to
- 'struct md_rdev *'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
- "yukuai (C)" <yukuai3@huawei.com>
-References: <202306142042.fmjfmTF8-lkp@intel.com>
-From: Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <dd0d4b24-a149-6796-90c6-b41e569d7902@huaweicloud.com>
-Date: Thu, 15 Jun 2023 09:47:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A34E379;
+	Thu, 15 Jun 2023 01:49:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122B1C433D9;
+	Thu, 15 Jun 2023 01:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686793796;
+	bh=13gtF2bZglg63yrcK3lxW+cPS0rix6IFq+4QbpuaVqI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TrlgT4GOuYdBNGCPlMo9ywNESPLLc7CKzgW6t5gXJMa0raksWYB5YJY5qu3FlKI78
+	 TquE6itIMX2cKgBWrrBSp39ywmQopGttDJBsw3/F/pSTo79cOeq87JSkabZqaKIOpP
+	 HI9dBr2vEd0mlKhYY264myATYH5wZlkQ+9DKxjZdmT7yuM81F/GKVfNxWsrCsFmQ8B
+	 hmM9PZ90SeWywDztrUp16XHnMfvajCtAn7ysclVCC7WQpurGtMTEo7EVoiXsMZkTOC
+	 5BOgQ8OZslQtHrXlk70mb93JDkKfERK7XO8zhl6H78bVJEeAxYTI9hyTZ4EwcgaOoj
+	 jMyiw6Pn4NqWQ==
+Message-ID: <38de9e99-593b-f852-190c-e843869694b3@kernel.org>
+Date: Thu, 15 Jun 2023 10:49:55 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202306142042.fmjfmTF8-lkp@intel.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBnHbGsbYpkuYDsLg--.36696S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr1xCFyxGrW5Kw4DJFykuFg_yoW5Zr1Dpa
-	yUKayUG3y8XrW8GayDW3yUW3W5tws5J343Ca4rG347Aw45ZFWUtF97Kry3WFyDCr1DKrWU
-	ZFs7K3ykK34DtFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [linux-next:master 9063/9793] drivers/ata/pata_octeon_cf.c:835:7:
+ error: call to undeclared function 'of_property_read_reg'; ISO C99 and later
+ do not support implicit function declarations
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Sergey Shtylyov <s.shtylyov@omp.ru>
+References: <202306141702.ZaO9V2lk-lkp@intel.com>
+ <ff92e980-a531-d37e-448d-c85a106a725a@kernel.org>
+ <CAL_JsqLjp-hSULp8xFb1zpwdO7OdYDwH+XtgRjhsKfG2R-0Z3g@mail.gmail.com>
+ <9be724b6-9b3c-51fd-ca20-634603a9145e@kernel.org>
+ <CAL_JsqL1=gPcRRmqhYK_nnxim5m4NJcYxCVO1wy-eLh0pWnwzA@mail.gmail.com>
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAL_JsqL1=gPcRRmqhYK_nnxim5m4NJcYxCVO1wy-eLh0pWnwzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-ÔÚ 2023/06/14 20:32, kernel test robot Ð´µÀ:
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-> head:   460af1f9d9e62acce4a21f9bd00b5bcd5963bcd4
-> commit: 8295efbe68c080047e98d9c0eb5cb933b238a8cb [25/29] md/raid1-10: factor out a helper to submit normal write
-> config: arm-randconfig-r026-20230612 (https://download.01.org/0day-ci/archive/20230614/202306142042.fmjfmTF8-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build):
->          mkdir -p ~/bin
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install arm cross compiling tool for clang build
->          # apt-get install binutils-arm-linux-gnueabi
->          # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=8295efbe68c080047e98d9c0eb5cb933b238a8cb
->          git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
->          git fetch --no-tags song-md md-next
->          git checkout 8295efbe68c080047e98d9c0eb5cb933b238a8cb
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+On 6/15/23 10:34, Rob Herring wrote:
+>> Something like this works for ahci_octeon:
+>>
+>> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+>> index 4572f837e504..6b115685a86e 100644
+>> --- a/drivers/ata/Kconfig
+>> +++ b/drivers/ata/Kconfig
+>> @@ -239,7 +239,7 @@ config AHCI_MVEBU
+>>
+>>  config AHCI_OCTEON
+>>         tristate "Cavium Octeon Soc Serial ATA"
+>> -       depends on SATA_AHCI_PLATFORM && MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
+>> +       depends on SATA_AHCI_PLATFORM && ((MIPS && CAVIUM_OCTEON_SOC) ||
+>> COMPILE_TEST)
+>>         default y
+>>         help
+>>           This option enables support for Cavium Octeon SoC Serial ATA.
+>> diff --git a/drivers/ata/ahci_octeon.c b/drivers/ata/ahci_octeon.c
+>> index 5021ab3ede49..2e6b28bf43f4 100644
+>> --- a/drivers/ata/ahci_octeon.c
+>> +++ b/drivers/ata/ahci_octeon.c
+>> @@ -15,8 +15,13 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/of_platform.h>
+>>
+>> +#ifdef CONFIG_MIPS
+>>  #include <asm/octeon/octeon.h>
+>>  #include <asm/bitfield.h>
+>> +#else
+>> +#define cvmx_readq_csr(csr)            (0)
+>> +#define cvmx_writeq_csr(csr, cfg)      do { } while (0)
+>> +#endif
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306142042.fmjfmTF8-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->     In file included from drivers/md/raid10.c:80:
->>> drivers/md/raid1-10.c:117:25: error: casting from randomized structure pointer type 'struct block_device *' to 'struct md_rdev *'
->       117 |         struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
+> That's kind of ugly...
 
-I didn't hit this warning with W=1 in my local machine, so I guess this
-might related to compiler. I'm using gcc (GCC) 12.2.1 and here is clang
-version 17.0.0.
+Yes :)
 
-I'm planning to get rid of all these weird usage, which is used a lot in
-raid, to borrow a field to store something else temporarily, but this
-might take sometime.
-
-Can someone help to confirm following change can prevent this warning?
-
-struct md_rdev *rdev = (void *)bio->bi_bdev
-
-Thanks,
-Kuai
-
->           |                                ^
->     1 error generated.
 > 
+>>
+>>  #define CVMX_SATA_UCTL_SHIM_CFG                0xE8
+>>
+>> But it is not that simple for pata_octeon...
 > 
-> vim +117 drivers/md/raid1-10.c
+> I copied you on mine[1]. It doesn't build for !MIPS, but at least
+> doesn't depend on a specific config. Should be good enough for 0-day
+> to build somewhat quickly.
+
+Yes, replied to that. The patches look good to me. An Ack from the MIPS folks on
+patch 1 would be nice though.
+
 > 
->     113	
->     114	
->     115	static inline void raid1_submit_write(struct bio *bio)
->     116	{
->   > 117		struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
->     118	
->     119		bio->bi_next = NULL;
->     120		bio_set_dev(bio, rdev->bdev);
->     121		if (test_bit(Faulty, &rdev->flags))
->     122			bio_io_error(bio);
->     123		else if (unlikely(bio_op(bio) ==  REQ_OP_DISCARD &&
->     124				  !bdev_max_discard_sectors(bio->bi_bdev)))
->     125			/* Just ignore it */
->     126			bio_endio(bio);
->     127		else
->     128			submit_bio_noacct(bio);
->     129	}
->     130	
+> Rob
 > 
+> [1] https://lore.kernel.org/all/20230614173633.2430653-2-robh@kernel.org/
+
+-- 
+Damien Le Moal
+Western Digital Research
 
