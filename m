@@ -1,45 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10062E0D8;
-	Thu, 15 Jun 2023 17:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1C82E0D8;
+	Thu, 15 Jun 2023 17:54:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686850965; x=1718386965;
+  t=1686851657; x=1718387657;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4h2LkdjJA/Ksz2W4qrcAM5sBKclK3bSACHuZzufQkO0=;
-  b=nvaPhnwIdWrJ52W0bcBMQf2xQZxSLuziXeBYdtwxFWO4Cat1nNOPyBIa
-   6flAdswb80a7zCAkFCaTJZ4/lrMudT6z2kjylmpr3YnA2DgWlzr1/pre1
-   dxBY7JByaT3rKQnp1J2Y8fVeO/nO6VE1lQpWXUjD+WPqXsnpPyWdGvd6Q
-   svzxSYBW3MElhIoWyPG0B76xSasLFmPmY+DkfoA0nLxW4DSCzv+lQ6DS/
-   6/dnlBemYBWXcUlPhixbwwP0igeCgehEp9khcs2JWr5FDWYgUlr1Lnzve
-   65ILhx26XnSjuXLnxGEJ9zZu9unpyNYpVHTXlAULHfZ+dPpqc7PIhWYXG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348700095"
+  bh=M5HG/Z8xM0hGFLzU9ZTCMfj2JYrEGxYFNH365bchPSE=;
+  b=fTwBKV/IePAWixMn9qiq9WTG/JMNurZD2M/yIXBn6CRtV+eznYiv9H/V
+   t4g516226AwF/4MuwtORt2S/9WZ38YH1HII+tB8s+T7fI7AGPuGjTKJwO
+   VKYxKwdFEEDzqjSlvvbH0ExVNLjB5p7a+00Ulc02Z2Tgbp5oLnzaAQwX8
+   opzwnI6qglMqCyT9eYFlirLVNOi1mUnRd8biONl/4hmR0QZHARaq2SA7i
+   aFuz/Femio1wGJEnhKsKXw/ruU5jNv6sp2UmRHlMT3FLZqZ9cWSaOgsjw
+   +GBYcpPqzxcTRTp6WezM+F/S254qrnuqFXbrlFndB11HSFk+tHTKkEADs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="424923063"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="348700095"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:42:44 -0700
+   d="scan'208";a="424923063"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:54:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802499096"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="886788157"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="802499096"
+   d="scan'208";a="886788157"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 10:42:42 -0700
+  by orsmga005.jf.intel.com with ESMTP; 15 Jun 2023 10:53:43 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1q9qzZ-0000EJ-2m;
-	Thu, 15 Jun 2023 17:42:41 +0000
-Date: Fri, 16 Jun 2023 01:42:24 +0800
+	id 1q9rAE-0000F0-1G;
+	Thu, 15 Jun 2023 17:53:42 +0000
+Date: Fri, 16 Jun 2023 01:52:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yajun Deng <yajun.deng@linux.dev>, akpm@linux-foundation.org,
-	rppt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: Re: [PATCH] mm: pass nid to reserve_bootmem_region()
-Message-ID: <202306160145.juJMr3Bi-lkp@intel.com>
-References: <20230615110355.1694461-1-yajun.deng@linux.dev>
+To: carlos.fernandez@technica-engineering.de, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] net: macsec SCI assignment for ES = 0
+Message-ID: <202306160102.4iSEfuNY-lkp@intel.com>
+References: <20230615111315.6072-1-carlos.fernandez@technica-engineering.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,74 +48,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615110355.1694461-1-yajun.deng@linux.dev>
+In-Reply-To: <20230615111315.6072-1-carlos.fernandez@technica-engineering.de>
 
-Hi Yajun,
+Hi,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main linus/master horms-ipvs/master v6.4-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yajun-Deng/mm-pass-nid-to-reserve_bootmem_region/20230615-190631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230615110355.1694461-1-yajun.deng%40linux.dev
-patch subject: [PATCH] mm: pass nid to reserve_bootmem_region()
-config: arm-randconfig-r023-20230614 (https://download.01.org/0day-ci/archive/20230616/202306160145.juJMr3Bi-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+url:    https://github.com/intel-lab-lkp/linux/commits/carlos-fernandez-technica-engineering-de/net-macsec-SCI-assignment-for-ES-0/20230615-192230
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230615111315.6072-1-carlos.fernandez%40technica-engineering.de
+patch subject: [PATCH] net: macsec SCI assignment for ES = 0
+config: s390-randconfig-r026-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160102.4iSEfuNY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch akpm-mm mm-everything
-        git checkout akpm-mm/mm-everything
-        b4 shazam https://lore.kernel.org/r/20230615110355.1694461-1-yajun.deng@linux.dev
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        git remote add net-next https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+        git fetch net-next main
+        git checkout net-next/main
+        b4 shazam https://lore.kernel.org/r/20230615111315.6072-1-carlos.fernandez@technica-engineering.de
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160102.4iSEfuNY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/memblock.c:2098:18: error: no member named 'nid' in 'struct memblock_region'
-                           nid = region->nid;
-                                 ~~~~~~  ^
-   1 error generated.
+   In file included from drivers/net/macsec.c:9:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/net/macsec.c:9:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/net/macsec.c:9:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/macsec.c:270:3: warning: variable 'sci' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+     270 |                 list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rculist.h:392:3: note: expanded from macro 'list_for_each_entry_rcu'
+     392 |                 &pos->member != (head);                                 \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/macsec.c:285:9: note: uninitialized use occurs here
+     285 |         return sci;
+         |                ^~~
+   drivers/net/macsec.c:270:3: note: remove the condition if it is always true
+     270 |                 list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
+         |                 ^
+   include/linux/rculist.h:392:3: note: expanded from macro 'list_for_each_entry_rcu'
+     392 |                 &pos->member != (head);                                 \
+         |                 ^
+   drivers/net/macsec.c:263:11: note: initialize the variable 'sci' to silence this warning
+     263 |         sci_t sci;
+         |                  ^
+         |                   = 0
+   13 warnings generated.
 
 
-vim +2098 mm/memblock.c
+vim +270 drivers/net/macsec.c
 
-  2080	
-  2081	static void __init memmap_init_reserved_pages(void)
-  2082	{
-  2083		struct memblock_region *region;
-  2084		phys_addr_t start, end;
-  2085		int nid;
-  2086		u64 i;
-  2087	
-  2088		/* initialize struct pages for the reserved regions */
-  2089		__for_each_mem_range(i, &memblock.reserved, NULL, NUMA_NO_NODE,
-  2090				     MEMBLOCK_NONE, &start, &end, &nid)
-  2091			reserve_bootmem_region(start, end, nid);
-  2092	
-  2093		/* and also treat struct pages for the NOMAP regions as PageReserved */
-  2094		for_each_mem_region(region) {
-  2095			if (memblock_is_nomap(region)) {
-  2096				start = region->base;
-  2097				end = start + region->size;
-> 2098				nid = region->nid;
-  2099				reserve_bootmem_region(start, end, nid);
-  2100			}
-  2101		}
-  2102	}
-  2103	
+   258	
+   259	static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present,
+   260			struct macsec_rxh_data *rxd)
+   261	{
+   262		struct macsec_dev *macsec_device;
+   263		sci_t sci;
+   264		/* SC = 1*/
+   265		if (sci_present)
+   266			memcpy(&sci, hdr->secure_channel_id,
+   267					sizeof(hdr->secure_channel_id));
+   268		/* SC = 0; ES = 0*/
+   269		else if (0 == (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC))) {
+ > 270			list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
+   271				struct macsec_rx_sc *rx_sc;
+   272				struct macsec_secy *secy = &macsec_device->secy;
+   273	
+   274				for_each_rxsc(secy, rx_sc) {
+   275					rx_sc = rx_sc ? macsec_rxsc_get(rx_sc) : NULL;
+   276					if (rx_sc && rx_sc->active) {
+   277						sci = rx_sc->sci;
+   278						return sci;
+   279					}
+   280				}
+   281			}
+   282		} else {
+   283			sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
+   284		}
+   285		return sci;
+   286	}
+   287	
 
 -- 
 0-DAY CI Kernel Test Service
