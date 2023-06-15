@@ -1,164 +1,136 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7A9BA3A
-	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 14:56:29 +0000 (UTC)
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3f8c5d0b216so19112915e9.1
-        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 07:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686840988; x=1689432988;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZejLKN5aLCLQqaxNI770STmW64dCVjdqgJRYwrLAEQY=;
-        b=PLv0SOqjQIJKhHDvPhJa/ZXB9L6XDUaeP7ZKUz07rxGmbHpPzPDaIqnBTNJRKv73lf
-         73zFaCphp11PzXmvWBy7SMjfUaaGsYMlOhN5KfuKgPgKWX7pmuIauxcdRvTtKWboDOaS
-         6ZdWEqdqMTaq49d1a7W2ZfqKhadmkebP+Trm4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840988; x=1689432988;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZejLKN5aLCLQqaxNI770STmW64dCVjdqgJRYwrLAEQY=;
-        b=mG219pzQUzsQWskp1tOT8fjkSYZvJO1k5qOixrmjtIJYL3KvbVhej1J2r/PMvpAFCz
-         sflTtAIkWgOmdjY92JZ7ZSMIR+Y0LARExBcndpf/em/j9fVfm1qsaj8kvfNdIEDkgu5Q
-         lnRArUlF3LvaxZPFe9rqHxrcjInhneltXPqujrtJsVrevyrl2JFJd8s842HbjzKHek3K
-         1VjEm9Nc4a5/K6gOjb4yfvPNH0Piv/7KSsdm5mPgVeDgNLElczOpx1E3cvUfE/f0MFio
-         jrx+PF4+7TgBOriK7VSrbMrqf6920kQKO2/LOXbILfxsi4dyGYohYpwCO0yDUxbVzKRw
-         93VQ==
-X-Gm-Message-State: AC+VfDwlYCJStbD0+vbStjCiygexZILXNdUJ2TA3sNHcqkV5d998Wd1X
-	TRrrG088pCnUubCE6NYHqIYnLA==
-X-Google-Smtp-Source: ACHHUZ5OpUwlJ/vrCXpmVoMFPIO8LTjjlYgRLY492Ohe4rUYc/w74e7rMy7X0TCztfIjKLgSpnSJyQ==
-X-Received: by 2002:a05:600c:b54:b0:3f6:2ee:6993 with SMTP id k20-20020a05600c0b5400b003f602ee6993mr14415646wmr.4.1686840987856;
-        Thu, 15 Jun 2023 07:56:27 -0700 (PDT)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:7ec7:7f97:45af:3056])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05600c218d00b003f709a7e46bsm20617755wme.46.2023.06.15.07.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 07:56:27 -0700 (PDT)
-From: Florent Revest <revest@chromium.org>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	Florent Revest <revest@chromium.org>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf] bpf/btf: Accept function names that contain dots
-Date: Thu, 15 Jun 2023 16:56:07 +0200
-Message-ID: <20230615145607.3469985-1-revest@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC1515AEF;
+	Thu, 15 Jun 2023 15:41:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830B2C433C8;
+	Thu, 15 Jun 2023 15:41:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686843686;
+	bh=q+fviFTWnM7ClsGX6apcWowNa53cnN1O72GvNjKUj0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SKfb1f/w9pZO+h+1XLESWFDO2CoIXYaH2Lndd1KRL97/gOrvism9Bmc11aklQSxEi
+	 An/2qknfAU9opeiNg3ImVtB0EkjfCx3A7qrGMk8Z2mTaTfx/vWkx8Gag35CFBbWpb3
+	 EbKdUOHV16f+qV588pDcCYFlogCQNQWLJPhsCrr1uK2dIc0ojkAssqt7DfeLRYT6X4
+	 MPcL5pfJ/0om02PTH8oXR5nZxLFrpy++/40PvwpFf2oAVFcAMf7fZPm0B/nO5pJjKR
+	 hOBUcXtHuMqwMfltRw69f2wj7XhWH3mpI+4okIUy9GqwrtvZYLMRSaTURMF/TqjGIH
+	 /DC7TVaZaqH1Q==
+Date: Thu, 15 Jun 2023 08:41:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yu Kuai <yukuai1@huaweicloud.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-raid@vger.kernel.org,
+	Song Liu <song@kernel.org>, "yukuai (C)" <yukuai3@huawei.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [song-md:md-next 25/29] drivers/md/raid1-10.c:117:25: error:
+ casting from randomized structure pointer type 'struct block_device *' to
+ 'struct md_rdev *'
+Message-ID: <20230615154123.GA3665766@dev-arch.thelio-3990X>
+References: <202306142042.fmjfmTF8-lkp@intel.com>
+ <dd0d4b24-a149-6796-90c6-b41e569d7902@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <dd0d4b24-a149-6796-90c6-b41e569d7902@huaweicloud.com>
 
-When building a kernel with LLVM=1, LLVM_IAS=0 and CONFIG_KASAN=y, LLVM
-leaves DWARF tags for the "asan.module_ctor" & co symbols. In turn,
-pahole creates BTF_KIND_FUNC entries for these and this makes the BTF
-metadata validation fail because they contain a dot.
+On Thu, Jun 15, 2023 at 09:47:24AM +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2023/06/14 20:32, kernel test robot 写道:
+> > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+> > head:   460af1f9d9e62acce4a21f9bd00b5bcd5963bcd4
+> > commit: 8295efbe68c080047e98d9c0eb5cb933b238a8cb [25/29] md/raid1-10: factor out a helper to submit normal write
+> > config: arm-randconfig-r026-20230612 (https://download.01.org/0day-ci/archive/20230614/202306142042.fmjfmTF8-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce (this is a W=1 build):
+> >          mkdir -p ~/bin
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          # install arm cross compiling tool for clang build
+> >          # apt-get install binutils-arm-linux-gnueabi
+> >          # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=8295efbe68c080047e98d9c0eb5cb933b238a8cb
+> >          git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
+> >          git fetch --no-tags song-md md-next
+> >          git checkout 8295efbe68c080047e98d9c0eb5cb933b238a8cb
+> >          # save the config file
+> >          mkdir build_dir && cp config build_dir/.config
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306142042.fmjfmTF8-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >     In file included from drivers/md/raid10.c:80:
+> > > > drivers/md/raid1-10.c:117:25: error: casting from randomized structure pointer type 'struct block_device *' to 'struct md_rdev *'
+> >       117 |         struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
+> 
+> I didn't hit this warning with W=1 in my local machine, so I guess this
+> might related to compiler. I'm using gcc (GCC) 12.2.1 and here is clang
+> version 17.0.0.
 
-In a dramatic turn of event, this BTF verification failure can cause
-the netfilter_bpf initialization to fail, causing netfilter_core to
-free the netfilter_helper hashmap and netfilter_ftp to trigger a
-use-after-free. The risk of u-a-f in netfilter will be addressed
-separately but the existence of "asan.module_ctor" debug info under some
-build conditions sounds like a good enough reason to accept functions
-that contain dots in BTF.
+Interesting, I would have expected the GCC plugin to have the same
+behavior as clang (which has randstruct in the compiler proper) and
+error when casting randomized structures but I just tested with
+aarch64-linux-gnu-gcc (GCC) 13.1.0 and drivers/md/raid10.c builds just
+fine, so confirmed.
 
-Cc: stable@vger.kernel.org
-Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- kernel/bpf/btf.c | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+For the record, this is a hard error, not a warning, so the build is
+broken in -next because of this:
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6b682b8e4b50..72b32b7cd9cd 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -744,13 +744,12 @@ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
- 	return offset < btf->hdr.str_len;
- }
- 
--static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
-+static bool __btf_name_char_ok(char c, bool first)
- {
- 	if ((first ? !isalpha(c) :
- 		     !isalnum(c)) &&
- 	    c != '_' &&
--	    ((c == '.' && !dot_ok) ||
--	      c != '.'))
-+	    c != '.')
- 		return false;
- 	return true;
- }
-@@ -767,20 +766,20 @@ static const char *btf_str_by_offset(const struct btf *btf, u32 offset)
- 	return NULL;
- }
- 
--static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
-+static bool __btf_name_valid(const struct btf *btf, u32 offset)
- {
- 	/* offset must be valid */
- 	const char *src = btf_str_by_offset(btf, offset);
- 	const char *src_limit;
- 
--	if (!__btf_name_char_ok(*src, true, dot_ok))
-+	if (!__btf_name_char_ok(*src, true))
- 		return false;
- 
- 	/* set a limit on identifier length */
- 	src_limit = src + KSYM_NAME_LEN;
- 	src++;
- 	while (*src && src < src_limit) {
--		if (!__btf_name_char_ok(*src, false, dot_ok))
-+		if (!__btf_name_char_ok(*src, false))
- 			return false;
- 		src++;
- 	}
-@@ -788,17 +787,14 @@ static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
- 	return !*src;
- }
- 
--/* Only C-style identifier is permitted. This can be relaxed if
-- * necessary.
-- */
- static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
- {
--	return __btf_name_valid(btf, offset, false);
-+	return __btf_name_valid(btf, offset);
- }
- 
- static bool btf_name_valid_section(const struct btf *btf, u32 offset)
- {
--	return __btf_name_valid(btf, offset, true);
-+	return __btf_name_valid(btf, offset);
- }
- 
- static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
-@@ -4422,7 +4418,7 @@ static s32 btf_var_check_meta(struct btf_verifier_env *env,
- 	}
- 
- 	if (!t->name_off ||
--	    !__btf_name_valid(env->btf, t->name_off, true)) {
-+	    !__btf_name_valid(env->btf, t->name_off)) {
- 		btf_verifier_log_type(env, t, "Invalid name");
- 		return -EINVAL;
- 	}
--- 
-2.41.0.162.gfafddb0af9-goog
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5278732212/jobs/9552208141
 
+> I'm planning to get rid of all these weird usage, which is used a lot in
+> raid, to borrow a field to store something else temporarily, but this
+> might take sometime.
+> 
+> Can someone help to confirm following change can prevent this warning?
+> 
+> struct md_rdev *rdev = (void *)bio->bi_bdev
+
+Yes, this fixes the build.
+
+In the future, if you need to reproduce issues with clang, I have
+prebuilt versions of stable clang/LLVM available on kernel.org:
+
+https://mirrors.edge.kernel.org/pub/tools/llvm/
+
+Cheers,
+Nathan
+
+> >           |                                ^
+> >     1 error generated.
+> > 
+> > 
+> > vim +117 drivers/md/raid1-10.c
+> > 
+> >     113	
+> >     114	
+> >     115	static inline void raid1_submit_write(struct bio *bio)
+> >     116	{
+> >   > 117		struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
+> >     118	
+> >     119		bio->bi_next = NULL;
+> >     120		bio_set_dev(bio, rdev->bdev);
+> >     121		if (test_bit(Faulty, &rdev->flags))
+> >     122			bio_io_error(bio);
+> >     123		else if (unlikely(bio_op(bio) ==  REQ_OP_DISCARD &&
+> >     124				  !bdev_max_discard_sectors(bio->bi_bdev)))
+> >     125			/* Just ignore it */
+> >     126			bio_endio(bio);
+> >     127		else
+> >     128			submit_bio_noacct(bio);
+> >     129	}
+> >     130	
+> > 
+> 
+> 
