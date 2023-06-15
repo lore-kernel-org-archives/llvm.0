@@ -1,107 +1,122 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8304EAC0
-	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 17:05:16 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b341f83493so32605541fa.3
-        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 10:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686848715; x=1689440715;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=crBt2ITg8SZ2kjr+v53DzcSzxyBX77tw0/FzCIW8K/M=;
-        b=DUuKjGKkLd3xr6fw7ISZK9UObyf9IKsH9P5OAMVKBBFO2p+gWILzdkAlmpX9qvis6c
-         rNIKx3JtA3BKucyQwwzgvgLT/405EdgBeNp5o+KsahwdLKpFFRk9rdnmg7z7SHJOZPzK
-         YLn4jzrY3rv65y71YS5w+xMd3K7068Y2Ui+ewyGSM6j7z0BXzwe5aXPLS7TmDcO+Qqzg
-         u3bCkITTMBXCH1+h/MQ7hxPK1TxyNbFO/XRceINXXj2lvq5Cvd0+DfnTBuN35QDj6r2X
-         eopRfgU6pF4o7AAyjP/vnsM63+YkWAp33Gis/C6he4BMsfBKr714P9vuRcc0m1IPGn+S
-         u2Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686848715; x=1689440715;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=crBt2ITg8SZ2kjr+v53DzcSzxyBX77tw0/FzCIW8K/M=;
-        b=GzpfQn2l71G+mnv+8GGHbZ9zMTFvz/vT3taxOziO+XqsnEDb42Z0IHzlDYHVKE0F73
-         Ca87zPef04suLDHUDra+DRkPgqOTaV0zZgm+5U3wZieLewGBGiEMlBfpn6ripY9nn0Hy
-         Od3Pi5INHPRwxAKYrRK1Xot8MVKLFnT6JeyHpQptW3aZNaO7E79FfFD4xRnvGIyI/QK2
-         HyOWfBNA45ttSwcWozrsO70gR4sDFS6fQle3FZ6S6zpIho4asgRpHPUVz8XmNVvXPuud
-         z5H4a1SClumbWwCRmXwOVj6/SPFrtq4VRgWce3Fl6Y/482YO9kv3IVJVQQUx/QQTsi/L
-         x8lw==
-X-Gm-Message-State: AC+VfDy/eh56LP0Teo/TRN/P34gwOOCKm0Sl03O5abmtim8oDMi+NIMA
-	5Qg3SCPHobb/cVPw/rSAoBU=
-X-Google-Smtp-Source: ACHHUZ7r4SbDTfLJT6A+Xdd3hkh4l9+0lbKnY5uI/8PhcRo2xcI7zxTj5tNJ3wYJvt8qxVxw9ze7ug==
-X-Received: by 2002:a2e:a175:0:b0:2b3:47b3:3c39 with SMTP id u21-20020a2ea175000000b002b347b33c39mr49134ljl.23.1686848714423;
-        Thu, 15 Jun 2023 10:05:14 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z27-20020a05651c023b00b002adc6c2cb3bsm3195205ljn.5.2023.06.15.10.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 10:05:13 -0700 (PDT)
-Message-ID: <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Florent Revest <revest@chromium.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org,  song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org,  sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- nathan@kernel.org,  ndesaulniers@google.com, trix@redhat.com,
- stable@vger.kernel.org
-Date: Thu, 15 Jun 2023 20:05:11 +0300
-In-Reply-To: <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
-References: <20230615145607.3469985-1-revest@chromium.org>
-	 <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10062E0D8;
+	Thu, 15 Jun 2023 17:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686850965; x=1718386965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4h2LkdjJA/Ksz2W4qrcAM5sBKclK3bSACHuZzufQkO0=;
+  b=nvaPhnwIdWrJ52W0bcBMQf2xQZxSLuziXeBYdtwxFWO4Cat1nNOPyBIa
+   6flAdswb80a7zCAkFCaTJZ4/lrMudT6z2kjylmpr3YnA2DgWlzr1/pre1
+   dxBY7JByaT3rKQnp1J2Y8fVeO/nO6VE1lQpWXUjD+WPqXsnpPyWdGvd6Q
+   svzxSYBW3MElhIoWyPG0B76xSasLFmPmY+DkfoA0nLxW4DSCzv+lQ6DS/
+   6/dnlBemYBWXcUlPhixbwwP0igeCgehEp9khcs2JWr5FDWYgUlr1Lnzve
+   65ILhx26XnSjuXLnxGEJ9zZu9unpyNYpVHTXlAULHfZ+dPpqc7PIhWYXG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348700095"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="348700095"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:42:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802499096"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="802499096"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 10:42:42 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9qzZ-0000EJ-2m;
+	Thu, 15 Jun 2023 17:42:41 +0000
+Date: Fri, 16 Jun 2023 01:42:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yajun Deng <yajun.deng@linux.dev>, akpm@linux-foundation.org,
+	rppt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: Re: [PATCH] mm: pass nid to reserve_bootmem_region()
+Message-ID: <202306160145.juJMr3Bi-lkp@intel.com>
+References: <20230615110355.1694461-1-yajun.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615110355.1694461-1-yajun.deng@linux.dev>
 
-On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
-> On Thu, Jun 15, 2023 at 4:56=E2=80=AFPM Florent Revest <revest@chromium.o=
-rg> wrote:
-> >=20
-> > When building a kernel with LLVM=3D1, LLVM_IAS=3D0 and CONFIG_KASAN=3Dy=
-, LLVM
-> > leaves DWARF tags for the "asan.module_ctor" & co symbols.
->=20
-> To be fair I can't tell if this is an LLVM bug. It's sort of curious
-> that with LLVM_IAS=3D1, these debugging symbols are not kept and they
-> are with LLVM_IAS=3D0 but I don't know what the expected behavior should
-> be and how BTF should deal with it. I'll let people with more context
-> comment on this! :)
->=20
-> An easy reproducer is:
->=20
-> $ touch pwet.c
->=20
-> $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
-> $ llvm-dwarfdump pwet.o | grep module_ctor
->=20
-> $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwet.o pw=
-et.c
-> $ llvm-dwarfdump pwet.o | grep module_ctor
->                 DW_AT_name      ("asan.module_ctor")
+Hi Yajun,
 
-Interestingly, I am unable to reproduce it using either
-clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
+kernel test robot noticed the following build errors:
 
->=20
-> > In a dramatic turn of event, this BTF verification failure can cause
-> > the netfilter_bpf initialization to fail, causing netfilter_core to
-> > free the netfilter_helper hashmap and netfilter_ftp to trigger a
-> > use-after-free. The risk of u-a-f in netfilter will be addressed
-> > separately
->=20
-> To be precise, I meant "netfilter conntrack".
->=20
-> I sent the following patch as a more targeted mitigation for the uaf
-> https://lore.kernel.org/netfilter-devel/20230615152918.3484699-1-revest@c=
-hromium.org/T/#u
->=20
+[auto build test ERROR on akpm-mm/mm-everything]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Yajun-Deng/mm-pass-nid-to-reserve_bootmem_region/20230615-190631
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230615110355.1694461-1-yajun.deng%40linux.dev
+patch subject: [PATCH] mm: pass nid to reserve_bootmem_region()
+config: arm-randconfig-r023-20230614 (https://download.01.org/0day-ci/archive/20230616/202306160145.juJMr3Bi-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/20230615110355.1694461-1-yajun.deng@linux.dev
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/memblock.c:2098:18: error: no member named 'nid' in 'struct memblock_region'
+                           nid = region->nid;
+                                 ~~~~~~  ^
+   1 error generated.
+
+
+vim +2098 mm/memblock.c
+
+  2080	
+  2081	static void __init memmap_init_reserved_pages(void)
+  2082	{
+  2083		struct memblock_region *region;
+  2084		phys_addr_t start, end;
+  2085		int nid;
+  2086		u64 i;
+  2087	
+  2088		/* initialize struct pages for the reserved regions */
+  2089		__for_each_mem_range(i, &memblock.reserved, NULL, NUMA_NO_NODE,
+  2090				     MEMBLOCK_NONE, &start, &end, &nid)
+  2091			reserve_bootmem_region(start, end, nid);
+  2092	
+  2093		/* and also treat struct pages for the NOMAP regions as PageReserved */
+  2094		for_each_mem_region(region) {
+  2095			if (memblock_is_nomap(region)) {
+  2096				start = region->base;
+  2097				end = start + region->size;
+> 2098				nid = region->nid;
+  2099				reserve_bootmem_region(start, end, nid);
+  2100			}
+  2101		}
+  2102	}
+  2103	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
