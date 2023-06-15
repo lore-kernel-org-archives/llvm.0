@@ -1,271 +1,89 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AEC635
-	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 06:47:59 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b1bb2fc9c6so22239181fa.0
-        for <llvm@lists.linux.dev>; Wed, 14 Jun 2023 23:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686811677; x=1689403677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3hoT+7D5pHhrPbVSfAK0c9rFMVCQODh4bvnFJ3aIXs=;
-        b=RxypO+7ulWZW2Xd+Brv2amG47hyOVkgve8lccmYw435rjgP5mnEHwEMJ5l9qE06jxr
-         BATtcCQ9MnLq591v6s1aOZXOf0oNj3RcEg800iQbMrThqogq2CP6cDxs25JQaD5vvZ9w
-         Ng4KG5g4BdnnHaP/3BFBCJnQiJvHxZcvZgdaiGw5+PUMY7Qy4atu5/oQ7YCesivzrIbZ
-         hEmsvXsfRaVeuHtK0QzQODKWMfPBnGvrU+XACovC8DysfDvLWoU8VXKXhrK0JJA7fe3r
-         rkkNBr5cjVgY/SEWCDPyAJukNrIftsomrpQJlCPgEmVhsyNbEruckQUGWyyyviqPAZWw
-         bnaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686811677; x=1689403677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O3hoT+7D5pHhrPbVSfAK0c9rFMVCQODh4bvnFJ3aIXs=;
-        b=LkaJM0aPXM9HGOkA1A7lw67VcDDHQ5I4zDcpLgPJVGkU88zBFNMd8/IeOP0eITOSed
-         zl3m/TYiFDFVO7yQOwRlK4i3B0sMa+E2R2gzsmCb+op/Xc7EeyLo90DgYQxgN/mMdGD9
-         IlyjZEVOH/rJCQCkQvz7at3epHgWw5F1Ut+Lj3s+OWQqXz6BbRzOe8FLTw8Z+XS1pI2L
-         hJJFLaMQ+Bu1HVFfsMO78Z31/vxP/+OdmtHkHrStb7ywlgwmog4ySTPQPszp13+Yx9rf
-         i33OA2uWOREBKr8pREzLut1J0Qxe0CBbhu/rUR5PR6VHpmKWC+5MZfjLPvjZC4D35m84
-         eD+g==
-X-Gm-Message-State: AC+VfDzQ9VbhkXBxpSSgR5XkmDa5ilZsSLXL1kpt24VNS2IAtbgq3QyI
-	Gz/IAWjSn4PaGoSQS9UB/cQwsJFTDqTHK0eLEJM=
-X-Google-Smtp-Source: ACHHUZ5TG9GTRx5egU/FbTNEndD607mf6f3ksMH2dhB+MQ7nXugStpQPhd/DAXiYROaM8g4S6iaJBdyGbNFHKnd0LmM=
-X-Received: by 2002:a2e:7d18:0:b0:2b1:fcb2:3026 with SMTP id
- y24-20020a2e7d18000000b002b1fcb23026mr7426249ljc.5.1686811677057; Wed, 14 Jun
- 2023 23:47:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D634635;
+	Thu, 15 Jun 2023 07:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686813945; x=1718349945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wer7VA7XjNpicQLFbnkgJHYtwAIp8CyLQHVOQDC1XUg=;
+  b=FPfglzrdF4mjlm9myE7w9rFgcuqPkgcqUttBVWmRJzpL1ij2eGBdUrAH
+   p+kp7YCSkrjN4MLbTGZXv5N03vKNjFCfKXU6PAn89DJyBXR531g1THvY5
+   pLczgE9BhzHzSkxFbyVIFMu3gX45dNTXFI1iMDgBuJOzgI0aL0Glpv3TX
+   PUFLZjZ4MsyyCw5HP+5Zd5LBPf30SDqnYI6vFGJ2zark+Qw4+B/rshTdF
+   zmlk1+ZEtCt4ey5jJzl8j9x/cPTvoikUcIwWPtQpr56wH/f/ulJd5P/7F
+   GOzHxJJc2lM9AAt+Wg2UqHIxiuFUnFtT5qzxCau1ZNDgCS3a8Z4lulWKR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="445206418"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="445206418"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:25:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="777554499"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="777554499"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Jun 2023 00:25:36 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9hMO-0001ax-05;
+	Thu, 15 Jun 2023 07:25:36 +0000
+Date: Thu, 15 Jun 2023 15:24:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Niklas Cassel <niklas.cassel@wdc.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [mkp-scsi:for-next 70/83] ./usr/include/linux/ioprio.h:107:8: error:
+ unknown type name '__always_inline'
+Message-ID: <202306151519.FDr0tbFR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230612194311.24826-1-aakashsensharma@gmail.com> <20230614194930.5da4e418.gary@garyguo.net>
-In-Reply-To: <20230614194930.5da4e418.gary@garyguo.net>
-From: Ariel Miculas <ariel.miculas@gmail.com>
-Date: Thu, 15 Jun 2023 09:47:45 +0300
-Message-ID: <CAPDJoNu42E-_qrKB0s27POgaL6Np7-4=UO_5D27oOPaB4fEgwA@mail.gmail.com>
-Subject: Re: [PATCH] rust: bindgen: upgrade to 0.65.1
-To: Gary Guo <gary@garyguo.net>
-Cc: Aakash Sen Sharma <aakashsensharma@gmail.com>, corbet@lwn.net, ojeda@kernel.org, 
-	alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com, 
-	bjorn3_gh@protonmail.com, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, masahiroy@kernel.org, me@kloenk.de, aliceryhl@google.com, 
-	benno.lossin@proton.me, dev@niklasmohrin.de, lina@asahilina.net, 
-	hca@linux.ibm.com, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tested-by: Ariel Miculas <amiculas@cisco.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+head:   aca416ac0b1fbe89d563f88cdb9884f986863d34
+commit: bfaaaa3d9d09974828dc5c5d44eb2657a65d6b60 [70/83] scsi: block: Improve ioprio value validity checks
+config: i386-randconfig-i001-20230614 (https://download.01.org/0day-ci/archive/20230615/202306151519.FDr0tbFR-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?id=bfaaaa3d9d09974828dc5c5d44eb2657a65d6b60
+        git remote add mkp-scsi https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+        git fetch --no-tags mkp-scsi for-next
+        git checkout bfaaaa3d9d09974828dc5c5d44eb2657a65d6b60
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Wed, Jun 14, 2023 at 9:52=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
->
-> On Tue, 13 Jun 2023 01:13:11 +0530
-> Aakash Sen Sharma <aakashsensharma@gmail.com> wrote:
->
-> > * Rationale:
-> >
-> > Upgrades bindgen to code-generation for anonymous unions, structs, and =
-enums [7]
-> > for LLVM-16 based toolchains.
-> >
-> > The following upgrade also incorporates `noreturn` support from bindgen
-> > allowing us to remove useless `loop` calls which was placed as a
-> > workaround.
-> >
-> > * Truncated build logs on using bindgen `v0.56.0` prior to LLVM-16 tool=
-chain:
-> >
-> > ```
-> > $ make rustdoc LLVM=3D1 CLIPPY=3D1 -j$(nproc)
-> >   RUSTC L rust/core.o
-> >   BINDGEN rust/bindings/bindings_generated.rs
-> >   BINDGEN rust/bindings/bindings_helpers_generated.rs
-> >   BINDGEN rust/uapi/uapi_generated.rs
-> > thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/=
-include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macr=
-o2-1.0.24/src/fallback.rs:693:9
-> > ...
-> > thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/=
-include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macr=
-o2-1.0.24/src/fallback.rs:693:9
-> > ...
-> > ```
-> >
-> > * LLVM-16 Changes:
-> >
-> > API changes [1] were introduced such that libclang would emit names lik=
-e
-> > "(unnamed union at compiler_types.h:146:2)" for unnamed unions, structs=
-, and
-> > enums whereas it previously returned an empty string.
-> >
-> > * Bindgen Changes:
-> >
-> > Bindgen `v0.56.0` on LLVM-16 based toolchains hence was unable to proce=
-ss the
-> > anonymous union in `include/linux/compiler_types` `struct ftrace_branch=
-_data`
-> > and caused subsequent panics as the new `libclang` API emitted name was=
- not
-> > being handled. The following issue was fixed in Bindgen `v0.62.0` [2].
-> >
-> > Bindgen `v0.58.0` changed the flags `--whitelist-*` and `--blacklist-*`
-> > to `--allowlist-*` and `--blocklist-*` respectively [3].
-> >
-> > Bindgen `v0.61.0` added support for `_Noreturn`, `[[noreturn]]`, `__att=
-ribute__((noreturn))` [4],
-> > hence the empty `loop`s used to circumvent bindgen returning `!` in pla=
-ce of `()`
-> > for noreturn attributes have been removed completely.
-> >
-> > Bindgen `v0.61.0` also changed default functionality to bind `size_t` t=
-o `usize` [5] and
-> > added the `--no-size_t-is-usize` [5] flag to not bind `size_t` as `usiz=
-e`.
-> >
-> > Bindgen `v0.65.0` removed `--size_t-is-usize` flag [6].
-> >
-> > Link: https://github.com/llvm/llvm-project/commit/19e984ef8f49bc3ccced1=
-5621989fa9703b2cd5b [1]
-> > Link: https://github.com/rust-lang/rust-bindgen/pull/2319 [2]
-> > Link: https://github.com/rust-lang/rust-bindgen/pull/1990 [3]
-> > Link: https://github.com/rust-lang/rust-bindgen/issues/2094 [4]
-> > Link: https://github.com/rust-lang/rust-bindgen/commit/cc78b6fdb6e829e5=
-fb8fa1639f2182cb49333569 [5]
-> > Link: https://github.com/rust-lang/rust-bindgen/pull/2408 [6]
-> > Closes: https://github.com/Rust-for-Linux/linux/issues/1013 [7]
-> > Signed-off-by: Aakash Sen Sharma <aakashsensharma@gmail.com>
->
-> Reviewed-by: Gary Guo <gary@garyguo.net>
->
-> > ---
-> >  Documentation/process/changes.rst |  2 +-
-> >  rust/Makefile                     |  6 +++---
-> >  rust/helpers.c                    | 13 ++++++-------
-> >  rust/kernel/lib.rs                |  3 ---
-> >  scripts/min-tool-version.sh       |  2 +-
-> >  5 files changed, 11 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/Documentation/process/changes.rst b/Documentation/process/=
-changes.rst
-> > index ef540865ad22..5f21c4c6cf5c 100644
-> > --- a/Documentation/process/changes.rst
-> > +++ b/Documentation/process/changes.rst
-> > @@ -32,7 +32,7 @@ you probably needn't concern yourself with pcmciautil=
-s.
-> >  GNU C                  5.1              gcc --version
-> >  Clang/LLVM (optional)  11.0.0           clang --version
-> >  Rust (optional)        1.62.0           rustc --version
-> > -bindgen (optional)     0.56.0           bindgen --version
-> > +bindgen (optional)     0.65.1           bindgen --version
-> >  GNU make               3.82             make --version
-> >  bash                   4.2              bash --version
-> >  binutils               2.25             ld -v
-> > diff --git a/rust/Makefile b/rust/Makefile
-> > index f88d108fbef0..c187c6f3a384 100644
-> > --- a/rust/Makefile
-> > +++ b/rust/Makefile
-> > @@ -279,7 +279,7 @@ quiet_cmd_bindgen =3D BINDGEN $@
-> >       $(BINDGEN) $< $(bindgen_target_flags) \
-> >               --use-core --with-derive-default --ctypes-prefix core::ff=
-i --no-layout-tests \
-> >               --no-debug '.*' \
-> > -             --size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMOD=
-ULE \
-> > +             -o $@ -- $(bindgen_c_flags_final) -DMODULE \
-> >               $(bindgen_target_cflags) $(bindgen_target_extra)
-> >
-> >  $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags =
-=3D \
-> > @@ -293,8 +293,8 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindi=
-ngs/bindings_helper.h \
-> >  # given it is `libclang`; but for consistency, future Clang changes an=
-d/or
-> >  # a potential future GCC backend for `bindgen`, we disable it too.
-> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
-flags =3D \
-> > -    --blacklist-type '.*' --whitelist-var '' \
-> > -    --whitelist-function 'rust_helper_.*'
-> > +    --blocklist-type '.*' --allowlist-var '' \
-> > +    --allowlist-function 'rust_helper_.*'
-> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
-cflags =3D \
-> >      -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarati=
-ons
-> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
-extra =3D ; \
-> > diff --git a/rust/helpers.c b/rust/helpers.c
-> > index 121583282976..98d9ef47225b 100644
-> > --- a/rust/helpers.c
-> > +++ b/rust/helpers.c
-> > @@ -122,19 +122,18 @@ void rust_helper_put_task_struct(struct task_stru=
-ct *t)
-> >  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
-> >
-> >  /*
-> > - * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t=
-` type
-> > - * as the Rust `usize` type, so we can use it in contexts where Rust
-> > - * expects a `usize` like slice (array) indices. `usize` is defined to=
- be
-> > - * the same as C's `uintptr_t` type (can hold any pointer) but not
-> > - * necessarily the same as `size_t` (can hold the size of any single
-> > + * `bindgen` binds the C `size_t` type the Rust `usize` type, so we ca=
-n
-> > + * use it in contexts where Rust expects a `usize` like slice (array) =
-indices.
-> > + * `usize` is defined to be the same as C's `uintptr_t` type (can hold=
- any pointer)
-> > + * but not necessarily the same as `size_t` (can hold the size of any =
-single
-> >   * object). Most modern platforms use the same concrete integer type f=
-or
-> >   * both of them, but in case we find ourselves on a platform where
-> >   * that's not true, fail early instead of risking ABI or
-> >   * integer-overflow issues.
-> >   *
-> >   * If your platform fails this assertion, it means that you are in
-> > - * danger of integer-overflow bugs (even if you attempt to remove
-> > - * `--size_t-is-usize`). It may be easiest to change the kernel ABI on
-> > + * danger of integer-overflow bugs (even if you attempt to add
-> > + * `--no-size_t-is-usize`). It may be easiest to change the kernel ABI=
- on
-> >   * your platform such that `size_t` matches `uintptr_t` (i.e., to incr=
-ease
-> >   * `size_t`, because `uintptr_t` has to be at least as big as `size_t`=
-).
-> >   */
-> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> > index ee27e10da479..1b0dcf03b9c2 100644
-> > --- a/rust/kernel/lib.rs
-> > +++ b/rust/kernel/lib.rs
-> > @@ -95,7 +95,4 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
-> >      pr_emerg!("{}\n", info);
-> >      // SAFETY: FFI call.
-> >      unsafe { bindings::BUG() };
-> > -    // Bindgen currently does not recognize `__noreturn` so `BUG` retu=
-rns `()`
-> > -    // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/=
-issues/2094>.
-> > -    loop {}
-> >  }
-> > diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-> > index 20d483ec6f5f..5b80c5d3a9f8 100755
-> > --- a/scripts/min-tool-version.sh
-> > +++ b/scripts/min-tool-version.sh
-> > @@ -30,7 +30,7 @@ rustc)
-> >       echo 1.62.0
-> >       ;;
-> >  bindgen)
-> > -     echo 0.56.0
-> > +     echo 0.65.1
-> >       ;;
-> >  *)
-> >       echo "$1: unknown tool" >&2
-> > --
-> > 2.40.1
-> >
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306151519.FDr0tbFR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/ioprio.h:107:8: error: unknown type name '__always_inline'
+   static __always_inline __u16 ioprio_value(int class, int level, int hint)
+          ^
+>> ./usr/include/linux/ioprio.h:107:29: error: expected ';' after top level declarator
+   static __always_inline __u16 ioprio_value(int class, int level, int hint)
+                               ^
+                               ;
+   2 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
