@@ -1,136 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC1515AEF;
-	Thu, 15 Jun 2023 15:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830B2C433C8;
-	Thu, 15 Jun 2023 15:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686843686;
-	bh=q+fviFTWnM7ClsGX6apcWowNa53cnN1O72GvNjKUj0Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SKfb1f/w9pZO+h+1XLESWFDO2CoIXYaH2Lndd1KRL97/gOrvism9Bmc11aklQSxEi
-	 An/2qknfAU9opeiNg3ImVtB0EkjfCx3A7qrGMk8Z2mTaTfx/vWkx8Gag35CFBbWpb3
-	 EbKdUOHV16f+qV588pDcCYFlogCQNQWLJPhsCrr1uK2dIc0ojkAssqt7DfeLRYT6X4
-	 MPcL5pfJ/0om02PTH8oXR5nZxLFrpy++/40PvwpFf2oAVFcAMf7fZPm0B/nO5pJjKR
-	 hOBUcXtHuMqwMfltRw69f2wj7XhWH3mpI+4okIUy9GqwrtvZYLMRSaTURMF/TqjGIH
-	 /DC7TVaZaqH1Q==
-Date: Thu, 15 Jun 2023 08:41:23 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yu Kuai <yukuai1@huaweicloud.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-raid@vger.kernel.org,
-	Song Liu <song@kernel.org>, "yukuai (C)" <yukuai3@huawei.com>,
-	Kees Cook <keescook@chromium.org>
-Subject: Re: [song-md:md-next 25/29] drivers/md/raid1-10.c:117:25: error:
- casting from randomized structure pointer type 'struct block_device *' to
- 'struct md_rdev *'
-Message-ID: <20230615154123.GA3665766@dev-arch.thelio-3990X>
-References: <202306142042.fmjfmTF8-lkp@intel.com>
- <dd0d4b24-a149-6796-90c6-b41e569d7902@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F7915AEF
+	for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 15:44:30 +0000 (UTC)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6b162fa87d8so4965062a34.3
+        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 08:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686843870; x=1689435870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4StmFmRajOimzwQuxAIm4oA1Qq+pBLBdDXasM5CJ9r0=;
+        b=X9ur/1kQVScMujlfFfp3RRguZGxLCtamV4Mzp2jhXW69XuqY70QQFqj0rNBmgLCsao
+         YezKD56/IDNwS0TvAu+X+bUeyOKHcNbo5hcSRIIDiQQNyCaVmT0uSxyHhW15PYIizP0m
+         aFyjKgl/6bkcVvtG5PUV5GOXL1+F9NzTfdDE8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686843870; x=1689435870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4StmFmRajOimzwQuxAIm4oA1Qq+pBLBdDXasM5CJ9r0=;
+        b=SlpSpgmozkKvOiwEqvZcBKoXkDlHMbXBqrbAtg3xjar7RveLWhtqK3fnWLsUNzWBde
+         uB97cV+wByCQ+13S8TjEq4LDaXNmJ0hSsnMmkrPYS+NxsRR6rfj4yMekzWKKzeYrUCMN
+         dF7B9dr1tRvA7yzj5bOXzJ/9l9LiFYOb0i/aht3V6JmQ+vtyxe+d+ft63jFBoj8R0mxV
+         apKO0BTrh5LbAUr4VO6J2yEEC6lRVjlaRBBxTa5T+z56AwtJYW+dBKdPi3tQRMLcgS0c
+         9QCBPYv95oRYuN0gb0e6tDxtya3f1OJ2Uz6KtWF53Th8ukFMelIhX8kpmwR7qgIb8XBA
+         qwiw==
+X-Gm-Message-State: AC+VfDw3DoX+s5MwplDbaRYbBEj5v7hjdEy4iWwTMNMG6+RYhtpE/gz+
+	BnYhBAXTdZxoPtXrtPNhnmrPtYSSnaBQV9edpx7Ylw==
+X-Google-Smtp-Source: ACHHUZ4XzMRy765MiqkYZk2EQDL/FAz6ib58uJzpHUeyESFt2Ss5dqWqW1EtsOL4TZFKrIHxwhGFu6PjB0MFUoR5V30=
+X-Received: by 2002:a05:6870:d450:b0:180:857:d47d with SMTP id
+ j16-20020a056870d45000b001800857d47dmr13034116oag.57.1686843870070; Thu, 15
+ Jun 2023 08:44:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd0d4b24-a149-6796-90c6-b41e569d7902@huaweicloud.com>
+References: <20230615145607.3469985-1-revest@chromium.org>
+In-Reply-To: <20230615145607.3469985-1-revest@chromium.org>
+From: Florent Revest <revest@chromium.org>
+Date: Thu, 15 Jun 2023 17:44:18 +0200
+Message-ID: <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 15, 2023 at 09:47:24AM +0800, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2023/06/14 20:32, kernel test robot 写道:
-> > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-> > head:   460af1f9d9e62acce4a21f9bd00b5bcd5963bcd4
-> > commit: 8295efbe68c080047e98d9c0eb5cb933b238a8cb [25/29] md/raid1-10: factor out a helper to submit normal write
-> > config: arm-randconfig-r026-20230612 (https://download.01.org/0day-ci/archive/20230614/202306142042.fmjfmTF8-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce (this is a W=1 build):
-> >          mkdir -p ~/bin
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # install arm cross compiling tool for clang build
-> >          # apt-get install binutils-arm-linux-gnueabi
-> >          # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=8295efbe68c080047e98d9c0eb5cb933b238a8cb
-> >          git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
-> >          git fetch --no-tags song-md md-next
-> >          git checkout 8295efbe68c080047e98d9c0eb5cb933b238a8cb
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306142042.fmjfmTF8-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >     In file included from drivers/md/raid10.c:80:
-> > > > drivers/md/raid1-10.c:117:25: error: casting from randomized structure pointer type 'struct block_device *' to 'struct md_rdev *'
-> >       117 |         struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
-> 
-> I didn't hit this warning with W=1 in my local machine, so I guess this
-> might related to compiler. I'm using gcc (GCC) 12.2.1 and here is clang
-> version 17.0.0.
+On Thu, Jun 15, 2023 at 4:56=E2=80=AFPM Florent Revest <revest@chromium.org=
+> wrote:
+>
+> When building a kernel with LLVM=3D1, LLVM_IAS=3D0 and CONFIG_KASAN=3Dy, =
+LLVM
+> leaves DWARF tags for the "asan.module_ctor" & co symbols.
 
-Interesting, I would have expected the GCC plugin to have the same
-behavior as clang (which has randstruct in the compiler proper) and
-error when casting randomized structures but I just tested with
-aarch64-linux-gnu-gcc (GCC) 13.1.0 and drivers/md/raid10.c builds just
-fine, so confirmed.
+To be fair I can't tell if this is an LLVM bug. It's sort of curious
+that with LLVM_IAS=3D1, these debugging symbols are not kept and they
+are with LLVM_IAS=3D0 but I don't know what the expected behavior should
+be and how BTF should deal with it. I'll let people with more context
+comment on this! :)
 
-For the record, this is a hard error, not a warning, so the build is
-broken in -next because of this:
+An easy reproducer is:
 
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5278732212/jobs/9552208141
+$ touch pwet.c
 
-> I'm planning to get rid of all these weird usage, which is used a lot in
-> raid, to borrow a field to store something else temporarily, but this
-> might take sometime.
-> 
-> Can someone help to confirm following change can prevent this warning?
-> 
-> struct md_rdev *rdev = (void *)bio->bi_bdev
+$ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
+$ llvm-dwarfdump pwet.o | grep module_ctor
 
-Yes, this fixes the build.
+$ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwet.o pwet=
+.c
+$ llvm-dwarfdump pwet.o | grep module_ctor
+                DW_AT_name      ("asan.module_ctor")
 
-In the future, if you need to reproduce issues with clang, I have
-prebuilt versions of stable clang/LLVM available on kernel.org:
+> In a dramatic turn of event, this BTF verification failure can cause
+> the netfilter_bpf initialization to fail, causing netfilter_core to
+> free the netfilter_helper hashmap and netfilter_ftp to trigger a
+> use-after-free. The risk of u-a-f in netfilter will be addressed
+> separately
 
-https://mirrors.edge.kernel.org/pub/tools/llvm/
+To be precise, I meant "netfilter conntrack".
 
-Cheers,
-Nathan
-
-> >           |                                ^
-> >     1 error generated.
-> > 
-> > 
-> > vim +117 drivers/md/raid1-10.c
-> > 
-> >     113	
-> >     114	
-> >     115	static inline void raid1_submit_write(struct bio *bio)
-> >     116	{
-> >   > 117		struct md_rdev *rdev = (struct md_rdev *)bio->bi_bdev;
-> >     118	
-> >     119		bio->bi_next = NULL;
-> >     120		bio_set_dev(bio, rdev->bdev);
-> >     121		if (test_bit(Faulty, &rdev->flags))
-> >     122			bio_io_error(bio);
-> >     123		else if (unlikely(bio_op(bio) ==  REQ_OP_DISCARD &&
-> >     124				  !bdev_max_discard_sectors(bio->bi_bdev)))
-> >     125			/* Just ignore it */
-> >     126			bio_endio(bio);
-> >     127		else
-> >     128			submit_bio_noacct(bio);
-> >     129	}
-> >     130	
-> > 
-> 
-> 
+I sent the following patch as a more targeted mitigation for the uaf
+https://lore.kernel.org/netfilter-devel/20230615152918.3484699-1-revest@chr=
+omium.org/T/#u
