@@ -1,40 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63D3DF62
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 09:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BB9C433C0;
-	Fri, 16 Jun 2023 09:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C018F57;
+	Fri, 16 Jun 2023 09:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05596C433C0;
+	Fri, 16 Jun 2023 09:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686907360;
-	bh=Cr7VVccB8uslD6H1Rks/FobCq/NyeYEEWyypGmgKkiA=;
+	s=k20201202; t=1686907611;
+	bh=tARQMYG/aYeqmMUAJH7cbPA26P2Il2Rzs/1oa9c9qgk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=dTvM44ZXNSDFZVjiYgwjfbRy6+GClxKKzlxx1FBu02t+iOmlQ7e2ISPmW1iSVfpmX
-	 +Ayx7iH/zbCv3VOBRBi8VMAf20lpzSH2x8UkSSAu5wadLTisVTw+GsJYyv6/WXytIh
-	 z1D8iydKNBYM+MkkEGK+oOdDec0ZDaZrdq4nQlbPf+r2PQK+3F7I4EeM0bCzcMwd2f
-	 ZRHON5Y6cj3qyye0ixyVs4ykwgdY5mcyiy+PgIoinCS4FCjFWYVkTFCBBnwIKRvfzR
-	 xak12VDCWVECi/HWWmNG10zyF84XvGhsb8Cr3Y5qRuAWePN1Ls+kdw23ZuP4aT3CwA
-	 NBIR3IV3BrcKw==
+	b=CCgVGKytISv+fj1viUpOXb/VC4Og1rkCvfO1nGrZGtrr1hcPuZ0OGg72pWvzllRMt
+	 B2i720ZfbsqDU3GVRmN6t7ig12mjc3aT0Fo+p3oR10Nv3yAlD4LtPlTSLUYfYeeg3B
+	 bGj3FAUqVSldEwRGDSkJ7bujvfySd2/5hftnxzPLC8DhikYfFUna16dmx7UZzUNM4/
+	 4pn4P/OsmywmiZ6cw+2KCP0P1V1hlCn42pdDJ//LUDJiUgy0ZD3nx8MtrDgqG2SO48
+	 fmE0/zJZ8CLWyI8+9UTPddpKhqr8Ht40TYTI9yS8Kv/T85fISnMtqW5qcGxic477Hd
+	 hB3qSJirhs9bQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
+To: Igor Russkikh <irusskikh@marvell.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Kees Cook <keescook@chromium.org>,
-	Azeem Shaikh <azeemshaikh38@gmail.com>,
-	Krishna Gudipati <kgudipat@brocade.com>,
-	James Bottomley <JBottomley@Parallels.com>,
-	linux-scsi@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 1/2] scsi: bfa: fix function pointer type mismatch for hcb_qe->cbfn
-Date: Fri, 16 Jun 2023 11:22:09 +0200
-Message-Id: <20230616092233.3229414-1-arnd@kernel.org>
+Subject: [PATCH] net: atlantic: fix ring buffer alignment
+Date: Fri, 16 Jun 2023 11:26:32 +0200
+Message-Id: <20230616092645.3384103-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -46,142 +42,62 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Some callback functions used here take a boolean argument, others
-take a status argument. This breaks KCFI type checking, so clang
-now warns about the function pointer cast:
+clang warns about conflicting packing annotations:
 
-drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+drivers/net/ethernet/aquantia/atlantic/aq_ring.h:72:2: error: field  within 'struct aq_ring_buff_s' is less aligned than 'union aq_ring_buff_s::(anonymous at drivers/net/ethernet/aquantia/atlantic/aq_ring.h:72:2)' and is usually due to 'struct aq_ring_buff_s' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
 
-Assuming the code is actually correct here and the callers always match
-the argument types of the callee, rework this to replace the explicit
-cast with a union of the two pointer types. This does not change the
-behavior of the code, so if something is actually broken here, a larger
-rework may be necessary.
+This was originally intended to ensure the structure fits exactly into
+32 bytes on 64-bit architectures, but apparently never did, and instead
+just produced misaligned pointers as well as forcing byte-wise access
+on hardware without unaligned load/store instructions.
 
-Fixes: 37ea0558b87ab ("[SCSI] bfa: Added support to collect and reset fcport stats")
-Fixes: 3ec4f2c8bff25 ("[SCSI] bfa: Added support to configure QOS and collect stats.")
+Update the comment to more closely reflect the layout and remove the
+broken __packed annotation.
+
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/scsi/bfa/bfa.h      |  9 ++++++++-
- drivers/scsi/bfa/bfa_core.c |  4 +---
- drivers/scsi/bfa/bfa_ioc.h  |  8 ++++++--
- drivers/scsi/bfa/bfad_bsg.c | 11 ++++-------
- 4 files changed, 19 insertions(+), 13 deletions(-)
+ .../net/ethernet/aquantia/atlantic/aq_ring.h  | 26 +++++++++++--------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfa.h b/drivers/scsi/bfa/bfa.h
-index 7bd2ba1ad4d11..f30fe324e6ecc 100644
---- a/drivers/scsi/bfa/bfa.h
-+++ b/drivers/scsi/bfa/bfa.h
-@@ -20,7 +20,6 @@
- struct bfa_s;
- 
- typedef void (*bfa_isr_func_t) (struct bfa_s *bfa, struct bfi_msg_s *m);
--typedef void (*bfa_cb_cbfn_status_t) (void *cbarg, bfa_status_t status);
- 
- /*
-  * Interrupt message handlers
-@@ -437,4 +436,12 @@ struct bfa_cb_pending_q_s {
- 	(__qe)->data = (__data);				\
- } while (0)
- 
-+#define bfa_pending_q_init_status(__qe, __cbfn, __cbarg, __data) do {	\
-+	bfa_q_qe_init(&((__qe)->hcb_qe.qe));			\
-+	(__qe)->hcb_qe.cbfn_status = (__cbfn);			\
-+	(__qe)->hcb_qe.cbarg = (__cbarg);			\
-+	(__qe)->hcb_qe.pre_rmv = BFA_TRUE;			\
-+	(__qe)->data = (__data);				\
-+} while (0)
-+
- #endif /* __BFA_H__ */
-diff --git a/drivers/scsi/bfa/bfa_core.c b/drivers/scsi/bfa/bfa_core.c
-index 6846ca8f7313c..3438d0b8ba062 100644
---- a/drivers/scsi/bfa/bfa_core.c
-+++ b/drivers/scsi/bfa/bfa_core.c
-@@ -1907,15 +1907,13 @@ bfa_comp_process(struct bfa_s *bfa, struct list_head *comp_q)
- 	struct list_head		*qe;
- 	struct list_head		*qen;
- 	struct bfa_cb_qe_s	*hcb_qe;
--	bfa_cb_cbfn_status_t	cbfn;
- 
- 	list_for_each_safe(qe, qen, comp_q) {
- 		hcb_qe = (struct bfa_cb_qe_s *) qe;
- 		if (hcb_qe->pre_rmv) {
- 			/* qe is invalid after return, dequeue before cbfn() */
- 			list_del(qe);
--			cbfn = (bfa_cb_cbfn_status_t)(hcb_qe->cbfn);
--			cbfn(hcb_qe->cbarg, hcb_qe->fw_status);
-+			hcb_qe->cbfn_status(hcb_qe->cbarg, hcb_qe->fw_status);
- 		} else
- 			hcb_qe->cbfn(hcb_qe->cbarg, BFA_TRUE);
- 	}
-diff --git a/drivers/scsi/bfa/bfa_ioc.h b/drivers/scsi/bfa/bfa_ioc.h
-index 933a1c3890ff5..5e568d6d7b261 100644
---- a/drivers/scsi/bfa/bfa_ioc.h
-+++ b/drivers/scsi/bfa/bfa_ioc.h
-@@ -361,14 +361,18 @@ struct bfa_reqq_wait_s {
- 	void	*cbarg;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+index 0a6c34438c1d0..a9cc5a1c4c479 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+@@ -26,19 +26,23 @@ struct aq_rxpage {
+ 	unsigned int pg_off;
  };
  
--typedef void	(*bfa_cb_cbfn_t) (void *cbarg, bfa_boolean_t complete);
-+typedef void (*bfa_cb_cbfn_t) (void *cbarg, bfa_boolean_t complete);
-+typedef void (*bfa_cb_cbfn_status_t) (void *cbarg, bfa_status_t status);
- 
- /*
-  * Generic BFA callback element.
+-/*           TxC       SOP        DX         EOP
+- *         +----------+----------+----------+-----------
+- *   8bytes|len l3,l4 | pa       | pa       | pa
+- *         +----------+----------+----------+-----------
+- * 4/8bytes|len pkt   |len pkt   |          | skb
+- *         +----------+----------+----------+-----------
+- * 4/8bytes|is_gso    |len,flags |len       |len,is_eop
+- *         +----------+----------+----------+-----------
++/*           TxC       SOP        DX         EOP	RX
++ *         +----------+----------+----------+----------+-------
++ *   8bytes|len l3,l4 | pa       | pa       | pa       | hash
++ *         +----------+----------+----------+----------+-------
++ * 4/8bytes|len pkt   |len pkt   |          | skb      | page
++ *         +----------+----------+----------+----------+-------
++ * 4/8bytes|is_gso    |len,flags |len       |len,is_eop| daddr
++ *         +----------+----------+----------+----------+-------
++ * 4/8bytes|          |          |          |          | order,pgoff
++ *         +----------+----------+----------+----------+-------
++ * 2bytes  |          |          |          |          | vlan_rx_tag
++ *         +----------+----------+----------+----------+-------
++ * 8bytes  +                   flags
++ *         +----------+----------+----------+----------+-------
+  *
+- *  This aq_ring_buff_s doesn't have endianness dependency.
+- *  It is __packed for cache line optimizations.
   */
- struct bfa_cb_qe_s {
- 	struct list_head	qe;
--	bfa_cb_cbfn_t	cbfn;
-+	union {
-+		bfa_cb_cbfn_status_t	cbfn_status;
-+		bfa_cb_cbfn_t		cbfn;
-+	};
- 	bfa_boolean_t	once;
- 	bfa_boolean_t	pre_rmv;	/* set for stack based qe(s) */
- 	bfa_status_t	fw_status;	/* to access fw status in comp proc */
-diff --git a/drivers/scsi/bfa/bfad_bsg.c b/drivers/scsi/bfa/bfad_bsg.c
-index 520f9152f3bf2..c4b78ffb723bd 100644
---- a/drivers/scsi/bfa/bfad_bsg.c
-+++ b/drivers/scsi/bfa/bfad_bsg.c
-@@ -2135,8 +2135,7 @@ bfad_iocmd_fcport_get_stats(struct bfad_s *bfad, void *cmd)
- 	struct bfa_cb_pending_q_s cb_qe;
- 
- 	init_completion(&fcomp.comp);
--	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
--			   &fcomp, &iocmd->stats);
-+	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, &iocmd->stats);
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	iocmd->status = bfa_fcport_get_stats(&bfad->bfa, &cb_qe);
- 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-@@ -2159,7 +2158,7 @@ bfad_iocmd_fcport_reset_stats(struct bfad_s *bfad, void *cmd)
- 	struct bfa_cb_pending_q_s cb_qe;
- 
- 	init_completion(&fcomp.comp);
--	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp, &fcomp, NULL);
-+	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, NULL);
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	iocmd->status = bfa_fcport_clear_stats(&bfad->bfa, &cb_qe);
-@@ -2443,8 +2442,7 @@ bfad_iocmd_qos_get_stats(struct bfad_s *bfad, void *cmd)
- 	struct bfa_fcport_s *fcport = BFA_FCPORT_MOD(&bfad->bfa);
- 
- 	init_completion(&fcomp.comp);
--	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
--			   &fcomp, &iocmd->stats);
-+	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, &iocmd->stats);
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	WARN_ON(!bfa_ioc_get_fcmode(&bfad->bfa.ioc));
-@@ -2474,8 +2472,7 @@ bfad_iocmd_qos_reset_stats(struct bfad_s *bfad, void *cmd)
- 	struct bfa_fcport_s *fcport = BFA_FCPORT_MOD(&bfad->bfa);
- 
- 	init_completion(&fcomp.comp);
--	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
--			   &fcomp, NULL);
-+	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, NULL);
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	WARN_ON(!bfa_ioc_get_fcmode(&bfad->bfa.ioc));
+-struct __packed aq_ring_buff_s {
++struct aq_ring_buff_s {
+ 	union {
+ 		/* RX/TX */
+ 		dma_addr_t pa;
 -- 
 2.39.2
 
