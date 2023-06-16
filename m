@@ -1,47 +1,40 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF01E18C11;
-	Fri, 16 Jun 2023 14:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB9018C11;
+	Fri, 16 Jun 2023 14:08:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686924440; x=1718460440;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N/d+Y/4Dq6rhjNnlkPdhh6+3o+oEa3eFMji5Z3JjKdI=;
-  b=aAz5HyJCOqZVmkJG86Sg/Up1cGMMbh3hVj14C0ERqo4xkgAplEOL1cZs
-   OUpRRJLH4sytVnJ6WnHEEnfq2W01+xuUK85SoaY7PocUDVX/q4Ws4zFrr
-   IuveGlhmt1gkhOhX5TAm6u4Nl7TaO+xIxHJ0AniF87hXQp3OTX+Ed6mxq
-   ZW3WIqjlTd8xA6Tq9EvHFJHEUubfqbfbtUlrUONiYJwqfAjQiZMyNwiqH
-   P8REukwPFvFFaa9Ve1airoQNS/m/DtWwPxU/Q9ZWDATRYsNz8lzi2f1+j
-   5matm8mNgIvV+T7InHAQhwWu5W7AkJetDNSHZYEnZVziy/nCYAVuzjlqn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="338838705"
+  t=1686924512; x=1718460512;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=YhLJmrat1rKC5Mk/FqLd7iLy7Ny9xkmqCloi625tITg=;
+  b=Q+XnWPRvQd5Yrsx89LxGYQ378yMa/rmC1zwYcqe/dMgCfs8oZotDhtu1
+   HFxwiXJRta9eXUP3HbfzbjbGcWewYFhEPpkX5WaHdDI0X7mXE+nHUzJpy
+   Yg1iUEuItZZIa31B3kIsUTqrSq+2Yg0/HhMLUh4Be91d35ulvdp0eytz+
+   KKr/XE6tASYR9DXp9J3FJ+GIG7UNIY5mhw/8TKLNNNFYF2HgwKfodiWZS
+   qvH/7W7aLfQl8BkSqbecdGjHMtdVmegpsGIiZN5xBzCkuhz6bfxQD0gmS
+   zU1l/pgHd4dMyaAmgI2ZG9qdluaqmm3O7GTl4o9Kw4z/tcloU2sWta+k5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="425156283"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="338838705"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:07:20 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="746278319"
+   d="scan'208";a="425156283"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:08:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802841769"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="746278319"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2023 07:07:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1qAA6e-004Idn-11;
-	Fri, 16 Jun 2023 17:07:16 +0300
-Date: Fri, 16 Jun 2023 17:07:15 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [linux-next:master 6153/10326] drivers/block/pktcdvd.c:1315:13:
- warning: stack frame size (2496) exceeds limit (2048) in
- 'pkt_handle_packets'
-Message-ID: <ZIxsk1tiSwujC586@smile.fi.intel.com>
-References: <202306160811.nV1bMsK4-lkp@intel.com>
+   d="scan'208";a="802841769"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Jun 2023 07:08:30 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qAA7p-0001J6-2W;
+	Fri, 16 Jun 2023 14:08:29 +0000
+Date: Fri, 16 Jun 2023 22:08:22 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-6.1.y 4267/6769] error: unknown target CPU '8540'
+Message-ID: <202306162205.sHQDwlgi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,76 +43,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306160811.nV1bMsK4-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Jun 16, 2023 at 08:43:56AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   925294c9aa184801cc0a451b69a18dd0fe7d847d
-> commit: 3a41db531e5124adaa3a9ab9ca0c724aee85b10c [6153/10326] pktcdvd: Get rid of custom printing macros
-> config: riscv-buildonly-randconfig-r001-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160811.nV1bMsK4-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3a41db531e5124adaa3a9ab9ca0c724aee85b10c
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout 3a41db531e5124adaa3a9ab9ca0c724aee85b10c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ mm//
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306160811.nV1bMsK4-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/block/pktcdvd.c:1364:12: warning: stack frame size (3648) exceeds limit (2048) in 'kcdrwd' [-Wframe-larger-than]
->    static int kcdrwd(void *foobar)
->               ^
-> >> drivers/block/pktcdvd.c:1315:13: warning: stack frame size (2496) exceeds limit (2048) in 'pkt_handle_packets' [-Wframe-larger-than]
->    static void pkt_handle_packets(struct pktcdvd_device *pd)
->                ^
->    2 warnings generated.
+TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Michael Ellerman <mpe@ellerman.id.au>
 
-Ha, the added line
+Hi Christophe,
 
-> 4b83e99ee7092d Jens Axboe      2023-01-04 @1315  static void pkt_handle_packets(struct pktcdvd_device *pd)
-> 4b83e99ee7092d Jens Axboe      2023-01-04  1316  {
+FYI, the error/warning still remains.
 
-> 3a41db531e5124 Andy Shevchenko 2023-03-10  1317  	struct device *ddev = disk_to_dev(pd->disk);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+head:   ca87e77a2ef8b298aa9f69658d5898e72ee450fe
+commit: da0beae2449376326086e9f57468fd2b64736d2a [4267/6769] powerpc/64: Set default CPU in Kconfig
+config: powerpc-xes_mpc85xx_defconfig (https://download.01.org/0day-ci/archive/20230616/202306162205.sHQDwlgi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162205.sHQDwlgi-lkp@intel.com/reproduce)
 
-is a simple macro
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306162205.sHQDwlgi-lkp@intel.com/
 
-	#define disk_to_dev(disk) \
-	        (&((disk)->part0->bd_device))
+All errors (new ones prefixed by >>):
 
-and looking into implementation it might be that clang mistakenly allocates
-stack based on bd_device size. And since it's a randconfig, quite likely
-something like GCOV, KASAN, etc. is involved.
-
-Also note, that
-
-struct block_device {
-	...
-	/*
-	 * keep this out-of-line as it's both big and not needed in the fast
-	 * path
-	 */
-	struct device           bd_device;
-} __randomize_layout;
-
-> 4b83e99ee7092d Jens Axboe      2023-01-04  1318  	struct packet_data *pkt, *next;
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   clang: error: unsupported argument '-me500' to option '-Wa,'
+   make[2]: *** [scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
+>> error: unknown target CPU '8540'
+   note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+   make[2]: *** [scripts/Makefile.build:118: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target 'scripts/mod/' not remade because of errors.
+   make[1]: *** [Makefile:1288: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:238: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
