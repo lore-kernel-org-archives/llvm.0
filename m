@@ -1,84 +1,48 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1CD1ED4C
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 20:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1686946863;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8Dab9nodSoDmCb4rtqpMrZbUv9KUPwcK1vTGw3Amqmg=;
-	b=DHonfl5YeIJnUoavLndPDJwjvMZSC2dKtTPJ78G7s5gugRYl59uPZD5fnhbRXkph3pdpAT
-	sjkyxI61G9k8Kaf+aeXhN+TSBPj9cabDyfpjenVzxNR7ZQ+qZE9kdshY6mS8r39rsga4qx
-	xwWn6Jy+zhkvtYsbSFbbiW7kC8vFcfY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-hKM17I06PWmXlLtnnKobOQ-1; Fri, 16 Jun 2023 16:21:02 -0400
-X-MC-Unique: hKM17I06PWmXlLtnnKobOQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC3FE38117F1
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 20:21:01 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 99C8F1415102;
-	Fri, 16 Jun 2023 20:21:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
- mainline.kernel.org-clang, b73056e9)
-Date: Fri, 16 Jun 2023 20:21:01 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4064ECB;
+	Fri, 16 Jun 2023 20:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7NMn5FMbTfSQEBtJ1sgdlKHxn3BWoPbJ2tOem4xpBjA=; b=jqFB1SofE1CtkJBNNhAbJW8LN+
+	d2G+pzpSGadm6Lu/qQ4syWd4EZsH0bHKgnsaOlHaX3zbnmuyb2qf9ImHo3b9ZpEK3u5CwvtjB3Wdb
+	U2Tb9YFgCVSTOKkcqgBpX7JfVJhF89PCyCBoNTrKNtZnW/bc2KFksKMNwcr9nwJo3PT6s/0UfHfcG
+	8L7f4Cy5gUDEIQuhFaJveWAjjqPjUL+rW43gx+4pSsUKhea7NiJT9m24w35J3WDc5hT8EfAGwlMsy
+	O3n/z3VL9OasdFPf1ri3RtE6KAYL8cjgzuKvEVRHqW/vY5E0p3KtGZ80gczw8ivKVKmQ7GroohLUa
+	+5YmzNVw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1qAGVo-009MTl-PY; Fri, 16 Jun 2023 20:57:40 +0000
+Date: Fri, 16 Jun 2023 21:57:40 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [mcgrof-next:large-block-20230616-hacks 37/38]
+ fs/iomap/buffered-io.c:830:42: warning: if statement has empty body
+Message-ID: <ZIzMxFPbJWnuyHHI@casper.infradead.org>
+References: <202306170021.8TZdCFER-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <58651.123061616210200183@us-mta-138.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306170021.8TZdCFER-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Sat, Jun 17, 2023 at 12:13:42AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git large-block-20230616-hacks
+> head:   5416cb31017b28b25627f4f5b8292af96bb65f58
+> commit: ddf48d516b57d686874c57ffa3630ea19c4b7fdb [37/38] iomap: Copy larger chunks from userspace
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+This patch is out of date.  Luis, can you replace with the v3
+patches, please?
 
+https://lore.kernel.org/linux-fsdevel/20230612203910.724378-1-willy@infradead.org/
 
-Kernel information:
-    Commit message: Merge tag 'urgent-rcu.2023.06.11a' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/paulmck/linux-rcu
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/92831
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36290=
-5
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+(there will be a v4, but so far all the changes are to comments)
 
