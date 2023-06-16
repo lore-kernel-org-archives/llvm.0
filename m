@@ -1,110 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5CB8F59;
-	Fri, 16 Jun 2023 16:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED29C433C0;
-	Fri, 16 Jun 2023 16:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686933699;
-	bh=wVP9KiItEr8mSN+tUTw1LX0kVRv/kPOjeQ4/eD7jAGQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=iYgsjdiZFE5XgFNrwAXDyB2HL4aWLv5j/6Sw40HMnepdzIRc92o0Gitqy66qikBeP
-	 ETCbvFXDbne2TZWh8TEh7U32pvcgY4hAALxNNlUw1vb2oh5ctGsRM2cRt/hfwg0RDP
-	 JkVMmurdcqDQLtcPT8wC8H4XOScWj9gd3SZzc/lgFk0wh0oYfIoJUdDh7ZvHlHguQO
-	 /1XE2TnV+K3tlsyDZ8BRZscbbkHVKVfv3HqHJaEaiRdZiFVvYVU6ducRGdYbzbSZCU
-	 PoRkI1G5rQA6SMzzYNIoBtP0oxeOpcD1754mEBYinoCsrNroU5lTl/ewifXAG1C4xr
-	 p9C5ahwTfMIjQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 16 Jun 2023 09:41:30 -0700
-Subject: [PATCH] coresight: dummy: Update type of mode parameter in
- dummy_{sink,source}_enable()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A517732
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 16:57:51 +0000 (UTC)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-97881a996a0so137343566b.0
+        for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 09:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686934670; x=1689526670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2oAtZ5LXCHICXaEO7EYK6uvp3llXWtuPjR3rLD7TKJU=;
+        b=X6FK8VVxK2s2rEUXtQ32Cv6NtWP2XqSlUIH7xOzkfQgToM1SrRJeCyXKqsO3Fu1r/C
+         CECb1sgPbuh8vEmvSmNOMtijAdUYkc6hAWV4YrDf0eCljhRFaSFWIO+vzDs2BP4T7d08
+         rZjtoCQknhmFp+QFgsq3K2IEefeL0Nd347SjjD7gA80RN/jZiOjmNSA9Pm8PjxLI/VTZ
+         lLMfj7XtiRuARmKr6jB2NOmiyHMK13AQXKwRx7ydy0TKcKClknlex1cnevSTtJcDtdJp
+         WFwyuROSnzUp2uwn7sl8iQp3j6q88l9X/gQ63VMZwfGc6cL8dvbBy8rosgC1RnFhQakl
+         lCSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686934670; x=1689526670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2oAtZ5LXCHICXaEO7EYK6uvp3llXWtuPjR3rLD7TKJU=;
+        b=X0vi80si0LBH/xInfAnQ8uEABHWiiqcnMHmtbpVPDefMqbCaoHbcurnndgfM2kRk9W
+         6cc7UoXZ2Xf1L6ku5Jmj7sxzd6h8jvZLEZ/WToRyncD+9NBXnIgJNENGpFeMNNbYpz0a
+         Cxrcd8EAPf2nXIllqwel3ZZea3PyYt0FDzoCXZrh2CWNTY0N6PulmFhaz4wT3q6SSHoa
+         ZwPUci1JjDYbt47lkikfhSk095aCZ042lSKyiLWbxFHpIBkpY5gEt1B8bEg3Wdoyw655
+         wUe6zI7dJ1b04dFIKQaYQFCNumx5ODNX5iT4ZIRRqvg2J60qy1QhI9L5CeVGyYXxXdsz
+         dmKg==
+X-Gm-Message-State: AC+VfDynoqsIA8rE0YXMNIgynEFVOBXgpZp7ZK+bd97SUL2UbH9BQnqZ
+	ZeCwiS8tyOE3GXYOXx8ScCOAVQKWQpKrGzIJJRM=
+X-Google-Smtp-Source: ACHHUZ6IJBsH6IRx7Uwluo2vNRpp9G8byokV5tCgCmBN0iBQ/GSKRC++f8BpezqBMk9959m4aEwxSzcp5BF7z8sEJqE=
+X-Received: by 2002:a17:907:7b96:b0:984:5c67:e73f with SMTP id
+ ne22-20020a1709077b9600b009845c67e73fmr2433871ejc.54.1686934670087; Fri, 16
+ Jun 2023 09:57:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230616-coresight-dummy-fix-kcfi-warnings-v1-1-c55c64f8f0f5@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALmQjGQC/x2NSwrDMAwFrxK8rsBOwU17ldKFYiu2KHaKlP4Iu
- XudLofhzVuNkjCpuXSrEXqx8lwbuENnQsaaCDg2Nr3tj9Y7D2EWUk55gfgs5QsTf+AeJoY3SuW
- aFLwfTjjGIVp3Nq0zohKMgjXkvVRQF5JdPITa+n9+vW3bD+4jZmeMAAAA
-To: suzuki.poulose@arm.com
-Cc: mike.leach@linaro.org, james.clark@arm.com, leo.yan@linaro.org, 
- quic_hazha@quicinc.com, coresight@lists.linaro.org, 
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3308; i=nathan@kernel.org;
- h=from:subject:message-id; bh=wVP9KiItEr8mSN+tUTw1LX0kVRv/kPOjeQ4/eD7jAGQ=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCk9Ew79uibVedT37S+9vKA+PYHSCQcUI9arsrFkzlp42
- 8tC/mldRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIAjsjw6T0jcaPGTsDbs3V
- 6PtbJ+M186UX2zWVuJfS+UdLbDy4nRn+Bzw+JiCWkxqaEqCoNeF+Za/opkuGPWxbk3OPuNy7NnM
- SNwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20230615145607.3469985-1-revest@chromium.org>
+In-Reply-To: <20230615145607.3469985-1-revest@chromium.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 16 Jun 2023 09:57:38 -0700
+Message-ID: <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To: Florent Revest <revest@chromium.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, trix@redhat.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang's kernel Control Flow Integrity (kCFI) is a compiler-based
-security mitigation that ensures the target of an indirect function call
-matches the expected type of the call and trapping if they do not match
-exactly. The warning -Wincompatible-function-pointer-types-strict aims
-to catch these issues at compile time, which reveals:
+On Thu, Jun 15, 2023 at 7:56=E2=80=AFAM Florent Revest <revest@chromium.org=
+> wrote:
+>
+> When building a kernel with LLVM=3D1, LLVM_IAS=3D0 and CONFIG_KASAN=3Dy, =
+LLVM
+> leaves DWARF tags for the "asan.module_ctor" & co symbols. In turn,
+> pahole creates BTF_KIND_FUNC entries for these and this makes the BTF
+> metadata validation fail because they contain a dot.
+>
+> In a dramatic turn of event, this BTF verification failure can cause
+> the netfilter_bpf initialization to fail, causing netfilter_core to
+> free the netfilter_helper hashmap and netfilter_ftp to trigger a
+> use-after-free. The risk of u-a-f in netfilter will be addressed
+> separately but the existence of "asan.module_ctor" debug info under some
+> build conditions sounds like a good enough reason to accept functions
+> that contain dots in BTF.
 
-  drivers/hwtracing/coresight/coresight-dummy.c:53:12: error: incompatible function pointer types initializing 'int (*)(struct coresight_device *, struct perf_event *, enum cs_mode)' with an expression of type 'int (struct coresight_device *, struct perf_event *, u32)' (aka 'int (struct coresight_device *, struct perf_event *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-     53 |         .enable = dummy_source_enable,
-        |                   ^~~~~~~~~~~~~~~~~~~
-  drivers/hwtracing/coresight/coresight-dummy.c:62:12: error: incompatible function pointer types initializing 'int (*)(struct coresight_device *, enum cs_mode, void *)' with an expression of type 'int (struct coresight_device *, u32, void *)' (aka 'int (struct coresight_device *, unsigned int, void *)') [-Werror,-Wincompatible-function-pointer-types-strict]
-     62 |         .enable = dummy_sink_enable,
-        |                   ^~~~~~~~~~~~~~~~~
-  2 errors generated.
+I don't see much harm in allowing dots. There are also all those .isra
+and other modifications to functions that we currently don't have in
+BTF, but with the discussions about recording function addrs we might
+eventually have those as well. So:
 
-Commit 9fa3682869d4 ("coresight: Use enum type for cs_mode wherever
-possible") updated the type of the mode parameter in the prototype but
-this driver was not introduced until commit 9d3ba0b6c056 ("Coresight:
-Add coresight dummy driver") and 'int' is ABI compatible with 'enum
-cs_mode', so there is no warning from regular
--Wincompatible-function-pointer-types.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Adjust the type of the mode parameter in the callback implementations in
-the coresight dummy driver to match the prototype, clearing up the
-warning and avoiding kCFI failures at runtime.
-
-Fixes: 9d3ba0b6c056 ("Coresight: Add coresight dummy driver")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/hwtracing/coresight/coresight-dummy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-dummy.c b/drivers/hwtracing/coresight/coresight-dummy.c
-index 42125b7a0f39..8035120b70b3 100644
---- a/drivers/hwtracing/coresight/coresight-dummy.c
-+++ b/drivers/hwtracing/coresight/coresight-dummy.c
-@@ -21,7 +21,7 @@ DEFINE_CORESIGHT_DEVLIST(source_devs, "dummy_source");
- DEFINE_CORESIGHT_DEVLIST(sink_devs, "dummy_sink");
- 
- static int dummy_source_enable(struct coresight_device *csdev,
--			       struct perf_event *event, u32 mode)
-+			       struct perf_event *event, enum cs_mode mode)
- {
- 	dev_dbg(csdev->dev.parent, "Dummy source enabled\n");
- 
-@@ -34,7 +34,7 @@ static void dummy_source_disable(struct coresight_device *csdev,
- 	dev_dbg(csdev->dev.parent, "Dummy source disabled\n");
- }
- 
--static int dummy_sink_enable(struct coresight_device *csdev, u32 mode,
-+static int dummy_sink_enable(struct coresight_device *csdev, enum cs_mode mode,
- 				void *data)
- {
- 	dev_dbg(csdev->dev.parent, "Dummy sink enabled\n");
-
----
-base-commit: 3b79104f80036231a40ba5d15c3e329985029a0f
-change-id: 20230616-coresight-dummy-fix-kcfi-warnings-6687abd8d019
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
+> Signed-off-by: Florent Revest <revest@chromium.org>
+> ---
+>  kernel/bpf/btf.c | 20 ++++++++------------
+>  1 file changed, 8 insertions(+), 12 deletions(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 6b682b8e4b50..72b32b7cd9cd 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -744,13 +744,12 @@ static bool btf_name_offset_valid(const struct btf =
+*btf, u32 offset)
+>         return offset < btf->hdr.str_len;
+>  }
+>
+> -static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
+> +static bool __btf_name_char_ok(char c, bool first)
+>  {
+>         if ((first ? !isalpha(c) :
+>                      !isalnum(c)) &&
+>             c !=3D '_' &&
+> -           ((c =3D=3D '.' && !dot_ok) ||
+> -             c !=3D '.'))
+> +           c !=3D '.')
+>                 return false;
+>         return true;
+>  }
+> @@ -767,20 +766,20 @@ static const char *btf_str_by_offset(const struct b=
+tf *btf, u32 offset)
+>         return NULL;
+>  }
+>
+> -static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot=
+_ok)
+> +static bool __btf_name_valid(const struct btf *btf, u32 offset)
+>  {
+>         /* offset must be valid */
+>         const char *src =3D btf_str_by_offset(btf, offset);
+>         const char *src_limit;
+>
+> -       if (!__btf_name_char_ok(*src, true, dot_ok))
+> +       if (!__btf_name_char_ok(*src, true))
+>                 return false;
+>
+>         /* set a limit on identifier length */
+>         src_limit =3D src + KSYM_NAME_LEN;
+>         src++;
+>         while (*src && src < src_limit) {
+> -               if (!__btf_name_char_ok(*src, false, dot_ok))
+> +               if (!__btf_name_char_ok(*src, false))
+>                         return false;
+>                 src++;
+>         }
+> @@ -788,17 +787,14 @@ static bool __btf_name_valid(const struct btf *btf,=
+ u32 offset, bool dot_ok)
+>         return !*src;
+>  }
+>
+> -/* Only C-style identifier is permitted. This can be relaxed if
+> - * necessary.
+> - */
+>  static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
+>  {
+> -       return __btf_name_valid(btf, offset, false);
+> +       return __btf_name_valid(btf, offset);
+>  }
+>
+>  static bool btf_name_valid_section(const struct btf *btf, u32 offset)
+>  {
+> -       return __btf_name_valid(btf, offset, true);
+> +       return __btf_name_valid(btf, offset);
+>  }
+>
+>  static const char *__btf_name_by_offset(const struct btf *btf, u32 offse=
+t)
+> @@ -4422,7 +4418,7 @@ static s32 btf_var_check_meta(struct btf_verifier_e=
+nv *env,
+>         }
+>
+>         if (!t->name_off ||
+> -           !__btf_name_valid(env->btf, t->name_off, true)) {
+> +           !__btf_name_valid(env->btf, t->name_off)) {
+>                 btf_verifier_log_type(env, t, "Invalid name");
+>                 return -EINVAL;
+>         }
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
