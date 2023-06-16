@@ -1,103 +1,94 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7057410E4;
-	Fri, 16 Jun 2023 06:10:58 +0000 (UTC)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.55])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qj7xK4lwhzGpkt;
-	Fri, 16 Jun 2023 14:07:49 +0800 (CST)
-Received: from [10.174.179.160] (10.174.179.160) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 16 Jun 2023 14:10:54 +0800
-Message-ID: <cb02c057-1fdb-9844-4911-b8406e6108da@huawei.com>
-Date: Fri, 16 Jun 2023 14:10:53 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E937A2105
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 06:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75155C433C9
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 06:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686896881;
+	bh=NK6NuNFj6+ESLJk6aKbG68bt0tVJtq65SC771NXQPfg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WwCkCulQ6VNP6YtmzKbofwhV7Z2+OKi2JPo0GjlVrFuD+Ok0Yq/Gg++NnVw+iYMDr
+	 5iz7p5PFY3HafVtWf0I9vr3r09RSpQJ9oJO0rQRExuh7qb1Jzg/rfAXSb4jYhl9K/J
+	 o+7Yz8vSs0P484qhoE2tlZssstXQQo4MiOGQmx7e2otY0gNALtDe2W9igNHZLeL1jX
+	 /OiOwBr+65CIlNbJ0DJGBH4bGj6MQFO3zt/BWScq+/3OemQKsAwqulJMMpQE6jOsP3
+	 Jq7RpQ2U069FvzGKo3OICqcDDPjwpXHjmOBQ0yZuvD1CtxmLCfg3u0O9V2AtOhPTp/
+	 kTek1+U/Omx6w==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f76b6db73fso1912258e87.1
+        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 23:28:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyns/wpGYOD1lAzblNF996CXjjSTyQsTL5HzTPX/lycpbehy6Nd
+	4HZZ4kAC4Y99td5lRfbEgLPNmWv3zqh8BMAlOGE=
+X-Google-Smtp-Source: ACHHUZ4/Yfz6iefR4/LZNWw3H9bD7KIpGKrwWMx1kWDdh4k0Fq0YPCWWuMoccGxCBeNVge+THgNUshhhznV0O6TiVkU=
+X-Received: by 2002:a05:6512:1289:b0:4f6:19c3:da30 with SMTP id
+ u9-20020a056512128900b004f619c3da30mr2240526lfs.29.1686896879390; Thu, 15 Jun
+ 2023 23:27:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mm/memcg: remove return value of mem_cgroup_scan_tasks()
-To: kernel test robot <lkp@intel.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<hannes@cmpxchg.org>, <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
-	<shakeelb@google.com>, <muchun.song@linux.dev>, <akpm@linux-foundation.org>,
-	<wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
-References: <20230616021955.872413-1-zhangpeng362@huawei.com>
- <202306161306.9YKbncNT-lkp@intel.com>
-Content-Language: en-US
-From: "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <202306161306.9YKbncNT-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
+References: <20230616012136.3047071-1-yukuai1@huaweicloud.com>
+In-Reply-To: <20230616012136.3047071-1-yukuai1@huaweicloud.com>
+From: Song Liu <song@kernel.org>
+Date: Thu, 15 Jun 2023 23:27:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6aSvCEa1khjjmDYGozUEs+Tx75RxfaE1+xL2Y1T6aN=Q@mail.gmail.com>
+Message-ID: <CAPhsuW6aSvCEa1khjjmDYGozUEs+Tx75RxfaE1+xL2Y1T6aN=Q@mail.gmail.com>
+Subject: Re: [PATCH] md/raid1-10: fix casting from randomized structure in raid1_submit_write()
+To: Yu Kuai <yukuai1@huaweicloud.com>
+Cc: axboe@kernel.dk, nathan@kernel.org, ndesaulniers@google.com, 
+	yukuai3@huawei.com, linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, yi.zhang@huawei.com, yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/6/16 13:13, kernel test robot wrote:
+On Thu, Jun 15, 2023 at 6:26=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> Following build error triggered while build with clang version 17.0.0
+> with W=3D1(this can't be reporduced with gcc 13.1.0):
+>
+> drivers/md/raid1-10.c:117:25: error: casting from randomized structure
+> pointer type 'struct block_device *' to 'struct md_rdev *'
+>      117 |         struct md_rdev *rdev =3D (struct md_rdev *)bio->bi_bde=
+v;
+>          |                                ^
+>
+> Fix this by casting 'bio->bi_bdev' to 'void *', as it used to be.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202306142042.fmjfmTF8-lkp@int=
+el.com/
+> Fixes: 8295efbe68c0 ("md/raid1-10: factor out a helper to submit normal w=
+rite")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-> Hi Peng,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/mm-memcg-remove-return-value-of-mem_cgroup_scan_tasks/20230616-102145
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230616021955.872413-1-zhangpeng362%40huawei.com
-> patch subject: [PATCH] mm/memcg: remove return value of mem_cgroup_scan_tasks()
-> config: x86_64-randconfig-r005-20230616 (https://download.01.org/0day-ci/archive/20230616/202306161306.9YKbncNT-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=1 build):
->          mkdir -p ~/bin
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
->          git fetch akpm-mm mm-everything
->          git checkout akpm-mm/mm-everything
->          b4 shazam https://lore.kernel.org/r/20230616021955.872413-1-zhangpeng362@huawei.com
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306161306.9YKbncNT-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     In file included from arch/x86/kernel/asm-offsets.c:14:
->     In file included from include/linux/suspend.h:5:
->     In file included from include/linux/swap.h:9:
->>> include/linux/memcontrol.h:1370:2: error: void function 'mem_cgroup_scan_tasks' should not return a value [-Wreturn-type]
->             return 0;
+Applied to md-next.
 
-Thanks for reporting. I'll drop this line.
+Thanks,
+Song
 
->             ^      ~
->     1 error generated.
->     make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=3878817758
->     make[2]: Target 'prepare' not remade because of errors.
->     make[1]: *** [Makefile:1287: prepare0] Error 2 shuffle=3878817758
->     make[1]: Target 'prepare' not remade because of errors.
->     make: *** [Makefile:226: __sub-make] Error 2 shuffle=3878817758
->     make: Target 'prepare' not remade because of errors.
+> ---
+>  drivers/md/raid1-10.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
+> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+> index 169ebe296f2d..3f22edec70e7 100644
+> --- a/drivers/md/raid1-10.c
+> +++ b/drivers/md/raid1-10.c
+> @@ -116,7 +116,7 @@ static void md_bio_reset_resync_pages(struct bio *bio=
+, struct resync_pages *rp,
 >
-> vim +/mem_cgroup_scan_tasks +1370 include/linux/memcontrol.h
+>  static inline void raid1_submit_write(struct bio *bio)
+>  {
+> -       struct md_rdev *rdev =3D (struct md_rdev *)bio->bi_bdev;
+> +       struct md_rdev *rdev =3D (void *)bio->bi_bdev;
 >
-> 5660048ccac873 Johannes Weiner  2012-01-12  1366
-> 5044a2e0ddbf82 ZhangPeng        2023-06-16  1367  static inline void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
-> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1368  		int (*fn)(struct task_struct *, void *), void *arg)
-> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1369  {
-> 7c5f64f84483bd Vladimir Davydov 2016-10-07 @1370  	return 0;
-> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1371  }
-> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1372
+>         bio->bi_next =3D NULL;
+>         bio_set_dev(bio, rdev->bdev);
+> --
+> 2.39.2
 >
