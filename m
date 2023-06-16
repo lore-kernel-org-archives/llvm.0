@@ -1,79 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B091427C;
-	Fri, 16 Jun 2023 11:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CA3C433C8;
-	Fri, 16 Jun 2023 11:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686916565;
-	bh=Cefq0nhQ5+KvwZkN7+opbg79I2XubmqBgE72Y6hj+rY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a0Oq79zw6rjdIS59w8GBa8hCRA6XQ22iHGti0I4SUc8HJE67VHiY+6RqYZZVx3JWP
-	 qqg4CFTHRtfRci/CeIlsuXGUwNetOJZ6HdlntcvnBqbBlz71poBAr7MxIISHB76wbZ
-	 DjTEpml4uo09DSJRX7HzUZpoBZ3IY0kQxnoGg6/jryDz1ePpLJfdIoKIU4jRpEtk4B
-	 LwSVT5EbqMiGPRGvlo3ykAnBWJa0a0Fm8ImLAmd5eP22N3x8z8dA9M4kv+TQ1XY3T0
-	 V7D5UBo56g3KqZGCBZO9i6n2TIaWIrI0obUA5ybqu4pve9gq6oMYxA3w1qFjOefKeu
-	 dAgPAWGAYBZrg==
-Date: Fri, 16 Jun 2023 12:56:00 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Rander Wang <rander.wang@intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	=?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064)
- exceeds limit (2048) in 'dpcm_be_dai_trigger'
-Message-ID: <caea391c-f10a-4979-92c3-75964ed7497a@sirena.org.uk>
-References: <202306160240.ahGjvPqw-lkp@intel.com>
- <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B46BA23;
+	Fri, 16 Jun 2023 12:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686917734; x=1718453734;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TJ8frg6HkptminmtlkY4zu4e19aJYU/HJP18W7iXQFQ=;
+  b=b3oEw+u63AhlXl6RC+S9We2rMeIGpFgChH6akENnUCoLrqYCKJzyrnH7
+   QDiF6ZP1soFHqKVMThnM5FLxwhZBeBwgljMf7xNbgcOuXKNGYFynj9sqf
+   ECmJGNrxLovCelx9ZtxU7Y+4BHmN3pPy+NhTs/ZLGkYS8ottxkBKod46/
+   EwxEmsOqmiMwQB7L2d3akX/ciJrB0GTfaVPuHMw0hh2IpfCNN+ugSgKSP
+   V/pp0Winwrn2oQ8va9qRytp2tFvCKdIl6DDZmvqwvLhG5dAz3bnSthhdP
+   6KHdzfk1AP6/4NTrUP+zQu6MmcMfJ0eaLgaiuPHD+6PPFPMEHeS0PvkvW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387914946"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="387914946"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 05:15:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782880853"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="782880853"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2023 05:15:25 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qA8MP-0001EC-18;
+	Fri, 16 Jun 2023 12:15:25 +0000
+Date: Fri, 16 Jun 2023 20:14:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dexuan Cui <decui@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	Michael Kelley <mikelley@microsoft.com>
+Subject: [dcui-tdx:decui/upstream-tip/x86/tdx/v7-wip 7/14] ld.lld: error:
+ undefined symbol: __tdx_hypercall_ret
+Message-ID: <202306162015.9xyd65bD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HCxw+tlxQuwCrK6z"
-Content-Disposition: inline
-In-Reply-To: <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
-X-Cookie: P-K4
-
-
---HCxw+tlxQuwCrK6z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jun 16, 2023 at 12:21:13PM +0200, Pierre-Louis Bossart wrote:
-> On 6/15/23 20:34, kernel test robot wrote:
+tree:   https://github.com/dcui/tdx decui/upstream-tip/x86/tdx/v7-wip
+head:   f91277070137eb09dc47fe27d0e327b8a285fc6b
+commit: c95e14c94d53cbb21418b661eb397cee1c67dd24 [7/14] x86/hyperv: Support hypercalls for TDX guests
+config: i386-randconfig-r024-20230615 (https://download.01.org/0day-ci/archive/20230616/202306162015.9xyd65bD-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162015.9xyd65bD-lkp@intel.com/reproduce)
 
-> >>> sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064) exceeds limit (2048) in 'dpcm_be_dai_trigger' [-Wframe-larger-than]
-> >    int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306162015.9xyd65bD-lkp@intel.com/
 
-> Not sure what causes this warning to show up, the code hasn't changed in
-> 1.2 years, nor what to do about it....
+All errors (new ones prefixed by >>):
 
-One of the sanitisers is doing things which explodes the stack size.  I
-wouldn't worry about it, one of the toolchain people will probably get
-to it at some point if they didn't already (sometimes these things are
-done by tuning the compiler flags).
+>> ld.lld: error: undefined symbol: __tdx_hypercall_ret
+   >>> referenced by ivm.c:427 (arch/x86/hyperv/ivm.c:427)
+   >>>               arch/x86/hyperv/ivm.o:(hv_tdx_hypercall) in archive vmlinux.a
 
---HCxw+tlxQuwCrK6z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSMTc8ACgkQJNaLcl1U
-h9A7OAf6AgtQcEPXuFb0M6xmtaQTE76Xb+GZtm13l3OadG+W1Dt9iWZ7TkgsRJsn
-9SNNxVV4MNvTBDnMdaIub6laD2Z9ZVrJGl8LdzaKB9+knR8P728hF+w4XY1F20lc
-WqHIRocELOJocfPAta9UrJfzPlpKjtFysCsaEzwSkDz5pYuSwqvJ2bGgVy2cVaze
-Sn6jchA2BXu3D1n1+FPVvUrOFD7aLyCVJjh8eLT9rsAQDB02Ok9k3AXtfPj2BXw7
-+6V25NqO/UGYYfwAFxPUNFiEkaqXh++eRwJs6rFkHTNej3GyxifySHfFGwojCXaH
-JJcS9oKg3P9+3CPmYoPQtExmpmujBQ==
-=9AO/
------END PGP SIGNATURE-----
-
---HCxw+tlxQuwCrK6z--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
