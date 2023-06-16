@@ -1,87 +1,131 @@
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B85536D
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 00:41:46 +0000 (UTC)
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-463992996d2so40813e0c.2
-        for <llvm@lists.linux.dev>; Thu, 15 Jun 2023 17:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686876105; x=1689468105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qol4pW950bVrPxMcx9m5G6bgEMEiZH+6L8x+VD8KC8A=;
-        b=hzT1SI9cDM7BqgPvmr2VaaxDdIxGT2vQ0D2KW1SseHaFxTrV/HGVivpT4WRGzJRlyh
-         4gDwz6Hul54N+HOohx0FuMXuMSfO+rfU8xq3HbMnhgkeCLZp3LzQHSofoCRfjeXxToH6
-         M41xOOerk71Y0CBKnCEELEUVkKGpizsfoW6JHSRgAwsTdz14dkWNBZDOzLGD75kf6JlT
-         jAlSYACo+rJO3d8VWNDbz0qd6l1lCqNFM7XMBhW9v7Kwrq1FpDFisEYoLsVovIdkqI+C
-         GruRNrp67pOlWemOlNK2PRpMVq9QZD/lnl29e8Xn7W8ngF6uquf1qH0fyExAjubvgUpn
-         8nJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686876105; x=1689468105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qol4pW950bVrPxMcx9m5G6bgEMEiZH+6L8x+VD8KC8A=;
-        b=CafbqgdF8rmIc9DbdO6UbS712vSSJadkm09/YTAwqlqnSjMTs8dWm3r+WaXaDDz4eS
-         u5OkX5ABgRVzS9yjVxmB6KDJq5Xzu2fClts/+7cRjEwHeqzJWICRiKGHtCcACmlcDXhG
-         tHgLD/j06ztDUpy8Ffp0xnzDTtSbm8UyMNPmRW/KseiImadmcR2O4RvnggT9BsPcB6Tq
-         XuvJPHiIidMGLJzdjuAUZO07VF17gM6muISO4qkJ0z9fV+TpJseF0dY/R9X4FxA4q6o2
-         W0TbY4b5ORe7nHHnVl/avmz4gZu+UDkbaaBEc29jxdaBDpzTV5DcKoY58NxhB0/sJK9F
-         1SSw==
-X-Gm-Message-State: AC+VfDzQ3YYHVr0hISgXT/mUXbCmfIkoferQ1ndgZ76raV2mR4QNonyu
-	uHhuxIcaL/6eefD8jH7pr/Ph1BmAENGziaaiils=
-X-Google-Smtp-Source: ACHHUZ4dpaBRKjiODf3+MZwId8nX7G6NUoJYnfE5Hq4PElCSsMM0Nqc+53GZ0BMXmjNyDcRXMeaeQFSmN0jJgsK2aus=
-X-Received: by 2002:a1f:5546:0:b0:443:6db9:24e with SMTP id
- j67-20020a1f5546000000b004436db9024emr707946vkb.15.1686876105146; Thu, 15 Jun
- 2023 17:41:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0ED36D;
+	Fri, 16 Jun 2023 00:44:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686876242; x=1718412242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6VMIw7zq8N8fDGyfLPP18isZxHcdtduQ/eil4I+EYWE=;
+  b=ITtnPYezHYtKwg6aZxfqrdEg6/lvBWqQYo8/gnO0nVuliY+0Hu2WhZ1R
+   M+2cdzxrfj7D5saYWUo2fi5tdXEj6ZfvSHu17WeVYQi1WVzAu3UIiRVVt
+   1wxtAtFrrYxhsCXEyjptOfGoo9Yr8qt+RsfdfhRVeLAPuPmmlcTzebf+k
+   YxXKwssUVv3iGIsVMZOaUmqUQZfD2qtnUanzpSQZLvNeY/60g1RvmOSor
+   oP3asL5xEUkrzF362ThvPr4gW89VXDhW4D1fvmK29TWvXTdhKDSmpoewq
+   Jqw2+MMLPTFlNbuSpYleeAHuQBYL6x5LSauLcBTgeF8pYw3PbLwIrXLQr
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="357953751"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="357953751"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 17:44:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="857183114"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="857183114"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2023 17:43:59 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q9xZG-0000aa-2l;
+	Fri, 16 Jun 2023 00:43:58 +0000
+Date: Fri, 16 Jun 2023 08:43:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-next:master 6153/10326] drivers/block/pktcdvd.c:1315:13:
+ warning: stack frame size (2496) exceeds limit (2048) in
+ 'pkt_handle_packets'
+Message-ID: <202306160811.nV1bMsK4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230528131802.6390-1-ethan.twardy@gmail.com> <20230528131802.6390-2-ethan.twardy@gmail.com>
- <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com> <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
-In-Reply-To: <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 16 Jun 2023 02:41:34 +0200
-Message-ID: <CANiq72=YQyqtpXZ+Hp9oySwfmBS6OJ1ik-zxXx4mSF34hruqbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
-To: "Ethan D. Twardy" <ethan.twardy@gmail.com>
-Cc: Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Tiago Lam <tiagolam@gmail.com>, Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>, 
-	"open list:RUST" <rust-for-linux@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jun 14, 2023 at 2:08=E2=80=AFPM Ethan D. Twardy <ethan.twardy@gmail=
-.com> wrote:
->
-> Thanks very much for your testing and review. Do I need to take any
-> further action to make this patch ready for review? I sent out a v3
-> version of the patch, where the only change was adding Reviewed-By and
-> Tested-By tags to my git commit--since this is my first time
-> contributing to this community, I wasn't sure whether I needed to do
-> that. Thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   925294c9aa184801cc0a451b69a18dd0fe7d847d
+commit: 3a41db531e5124adaa3a9ab9ca0c724aee85b10c [6153/10326] pktcdvd: Get rid of custom printing macros
+config: riscv-buildonly-randconfig-r001-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160811.nV1bMsK4-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3a41db531e5124adaa3a9ab9ca0c724aee85b10c
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3a41db531e5124adaa3a9ab9ca0c724aee85b10c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ mm//
 
-You did everything well! The patch looked fine to me, and the commit
-message is detailed. The tags are all fine too. Thanks a lot for the
-effort!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160811.nV1bMsK4-lkp@intel.com/
 
-I had v2 of the script improvement patch series in my backlog, which
-normalizes to `sed` (rather than use `grep`/`cut` etc.), adds a test
-suite, and a few other things; but otherwise we could have easily
-taken this one, because it is well done.
+All warnings (new ones prefixed by >>):
 
-So, you did everything right, and you are more than welcome to send
-more patches like that :)
+   drivers/block/pktcdvd.c:1364:12: warning: stack frame size (3648) exceeds limit (2048) in 'kcdrwd' [-Wframe-larger-than]
+   static int kcdrwd(void *foobar)
+              ^
+>> drivers/block/pktcdvd.c:1315:13: warning: stack frame size (2496) exceeds limit (2048) in 'pkt_handle_packets' [-Wframe-larger-than]
+   static void pkt_handle_packets(struct pktcdvd_device *pd)
+               ^
+   2 warnings generated.
 
-Cheers,
-Miguel
+
+vim +/pkt_handle_packets +1315 drivers/block/pktcdvd.c
+
+4b83e99ee7092d Jens Axboe      2023-01-04  1314  
+4b83e99ee7092d Jens Axboe      2023-01-04 @1315  static void pkt_handle_packets(struct pktcdvd_device *pd)
+4b83e99ee7092d Jens Axboe      2023-01-04  1316  {
+3a41db531e5124 Andy Shevchenko 2023-03-10  1317  	struct device *ddev = disk_to_dev(pd->disk);
+4b83e99ee7092d Jens Axboe      2023-01-04  1318  	struct packet_data *pkt, *next;
+4b83e99ee7092d Jens Axboe      2023-01-04  1319  
+4b83e99ee7092d Jens Axboe      2023-01-04  1320  	/*
+4b83e99ee7092d Jens Axboe      2023-01-04  1321  	 * Run state machine for active packets
+4b83e99ee7092d Jens Axboe      2023-01-04  1322  	 */
+4b83e99ee7092d Jens Axboe      2023-01-04  1323  	list_for_each_entry(pkt, &pd->cdrw.pkt_active_list, list) {
+4b83e99ee7092d Jens Axboe      2023-01-04  1324  		if (atomic_read(&pkt->run_sm) > 0) {
+4b83e99ee7092d Jens Axboe      2023-01-04  1325  			atomic_set(&pkt->run_sm, 0);
+4b83e99ee7092d Jens Axboe      2023-01-04  1326  			pkt_run_state_machine(pd, pkt);
+4b83e99ee7092d Jens Axboe      2023-01-04  1327  		}
+4b83e99ee7092d Jens Axboe      2023-01-04  1328  	}
+4b83e99ee7092d Jens Axboe      2023-01-04  1329  
+4b83e99ee7092d Jens Axboe      2023-01-04  1330  	/*
+4b83e99ee7092d Jens Axboe      2023-01-04  1331  	 * Move no longer active packets to the free list
+4b83e99ee7092d Jens Axboe      2023-01-04  1332  	 */
+4b83e99ee7092d Jens Axboe      2023-01-04  1333  	spin_lock(&pd->cdrw.active_list_lock);
+4b83e99ee7092d Jens Axboe      2023-01-04  1334  	list_for_each_entry_safe(pkt, next, &pd->cdrw.pkt_active_list, list) {
+4b83e99ee7092d Jens Axboe      2023-01-04  1335  		if (pkt->state == PACKET_FINISHED_STATE) {
+4b83e99ee7092d Jens Axboe      2023-01-04  1336  			list_del(&pkt->list);
+4b83e99ee7092d Jens Axboe      2023-01-04  1337  			pkt_put_packet_data(pd, pkt);
+3a41db531e5124 Andy Shevchenko 2023-03-10  1338  			pkt_set_state(ddev, pkt, PACKET_IDLE_STATE);
+4b83e99ee7092d Jens Axboe      2023-01-04  1339  			atomic_set(&pd->scan_queue, 1);
+4b83e99ee7092d Jens Axboe      2023-01-04  1340  		}
+4b83e99ee7092d Jens Axboe      2023-01-04  1341  	}
+4b83e99ee7092d Jens Axboe      2023-01-04  1342  	spin_unlock(&pd->cdrw.active_list_lock);
+4b83e99ee7092d Jens Axboe      2023-01-04  1343  }
+4b83e99ee7092d Jens Axboe      2023-01-04  1344  
+
+:::::: The code at line 1315 was first introduced by commit
+:::::: 4b83e99ee7092df37a5cf292fde976ebc475ea63 Revert "pktcdvd: remove driver."
+
+:::::: TO: Jens Axboe <axboe@kernel.dk>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
