@@ -1,80 +1,187 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632EF10781;
-	Fri, 16 Jun 2023 09:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238A6C433C0;
-	Fri, 16 Jun 2023 09:21:31 +0000 (UTC)
-Date: Fri, 16 Jun 2023 10:21:29 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, will@kernel.org, mark.rutland@arm.com,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-	Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Suzuki Poulose <suzuki.poulose@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-Message-ID: <ZIwpma4SAJ/ZUyh5@arm.com>
-References: <20230615133239.442736-6-anshuman.khandual@arm.com>
- <202306160706.Uei5XDoi-lkp@intel.com>
- <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63D3DF62
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 09:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BB9C433C0;
+	Fri, 16 Jun 2023 09:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686907360;
+	bh=Cr7VVccB8uslD6H1Rks/FobCq/NyeYEEWyypGmgKkiA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dTvM44ZXNSDFZVjiYgwjfbRy6+GClxKKzlxx1FBu02t+iOmlQ7e2ISPmW1iSVfpmX
+	 +Ayx7iH/zbCv3VOBRBi8VMAf20lpzSH2x8UkSSAu5wadLTisVTw+GsJYyv6/WXytIh
+	 z1D8iydKNBYM+MkkEGK+oOdDec0ZDaZrdq4nQlbPf+r2PQK+3F7I4EeM0bCzcMwd2f
+	 ZRHON5Y6cj3qyye0ixyVs4ykwgdY5mcyiy+PgIoinCS4FCjFWYVkTFCBBnwIKRvfzR
+	 xak12VDCWVECi/HWWmNG10zyF84XvGhsb8Cr3Y5qRuAWePN1Ls+kdw23ZuP4aT3CwA
+	 NBIR3IV3BrcKw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Kees Cook <keescook@chromium.org>,
+	Azeem Shaikh <azeemshaikh38@gmail.com>,
+	Krishna Gudipati <kgudipat@brocade.com>,
+	James Bottomley <JBottomley@Parallels.com>,
+	linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 1/2] scsi: bfa: fix function pointer type mismatch for hcb_qe->cbfn
+Date: Fri, 16 Jun 2023 11:22:09 +0200
+Message-Id: <20230616092233.3229414-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
-> On 6/16/23 05:12, kernel test robot wrote:
-> > kernel test robot noticed the following build errors:
-> > 
-> > [auto build test ERROR on arm64/for-next/core]
-> > [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> > patch link:    https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual%40arm.com
-> > patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
-> > config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce (this is a W=1 build):
-> >         mkdir -p ~/bin
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-> >         git fetch arm64 for-next/core
-> >         git checkout arm64/for-next/core
-> >         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual@arm.com
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
-> 
-> I am unable to reproduce this on mainline 6.4-rc6 via default cross compiler
-> on a W=1 build. Looking at all other problems reported on the file, it seems
-> something is not right here. Reported build problems around these callbacks,
-> i.e armv8pmu_branch_XXXX() do not make sense as they are available via config
-> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 in this
-> test config.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Have you tried applying this series on top of the arm64 for-next/core
-branch? That's what the robot it testing (in the absence of a --base
-option when generating the patches).
+Some callback functions used here take a boolean argument, others
+take a status argument. This breaks KCFI type checking, so clang
+now warns about the function pointer cast:
 
+drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+
+Assuming the code is actually correct here and the callers always match
+the argument types of the callee, rework this to replace the explicit
+cast with a union of the two pointer types. This does not change the
+behavior of the code, so if something is actually broken here, a larger
+rework may be necessary.
+
+Fixes: 37ea0558b87ab ("[SCSI] bfa: Added support to collect and reset fcport stats")
+Fixes: 3ec4f2c8bff25 ("[SCSI] bfa: Added support to configure QOS and collect stats.")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/scsi/bfa/bfa.h      |  9 ++++++++-
+ drivers/scsi/bfa/bfa_core.c |  4 +---
+ drivers/scsi/bfa/bfa_ioc.h  |  8 ++++++--
+ drivers/scsi/bfa/bfad_bsg.c | 11 ++++-------
+ 4 files changed, 19 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/scsi/bfa/bfa.h b/drivers/scsi/bfa/bfa.h
+index 7bd2ba1ad4d11..f30fe324e6ecc 100644
+--- a/drivers/scsi/bfa/bfa.h
++++ b/drivers/scsi/bfa/bfa.h
+@@ -20,7 +20,6 @@
+ struct bfa_s;
+ 
+ typedef void (*bfa_isr_func_t) (struct bfa_s *bfa, struct bfi_msg_s *m);
+-typedef void (*bfa_cb_cbfn_status_t) (void *cbarg, bfa_status_t status);
+ 
+ /*
+  * Interrupt message handlers
+@@ -437,4 +436,12 @@ struct bfa_cb_pending_q_s {
+ 	(__qe)->data = (__data);				\
+ } while (0)
+ 
++#define bfa_pending_q_init_status(__qe, __cbfn, __cbarg, __data) do {	\
++	bfa_q_qe_init(&((__qe)->hcb_qe.qe));			\
++	(__qe)->hcb_qe.cbfn_status = (__cbfn);			\
++	(__qe)->hcb_qe.cbarg = (__cbarg);			\
++	(__qe)->hcb_qe.pre_rmv = BFA_TRUE;			\
++	(__qe)->data = (__data);				\
++} while (0)
++
+ #endif /* __BFA_H__ */
+diff --git a/drivers/scsi/bfa/bfa_core.c b/drivers/scsi/bfa/bfa_core.c
+index 6846ca8f7313c..3438d0b8ba062 100644
+--- a/drivers/scsi/bfa/bfa_core.c
++++ b/drivers/scsi/bfa/bfa_core.c
+@@ -1907,15 +1907,13 @@ bfa_comp_process(struct bfa_s *bfa, struct list_head *comp_q)
+ 	struct list_head		*qe;
+ 	struct list_head		*qen;
+ 	struct bfa_cb_qe_s	*hcb_qe;
+-	bfa_cb_cbfn_status_t	cbfn;
+ 
+ 	list_for_each_safe(qe, qen, comp_q) {
+ 		hcb_qe = (struct bfa_cb_qe_s *) qe;
+ 		if (hcb_qe->pre_rmv) {
+ 			/* qe is invalid after return, dequeue before cbfn() */
+ 			list_del(qe);
+-			cbfn = (bfa_cb_cbfn_status_t)(hcb_qe->cbfn);
+-			cbfn(hcb_qe->cbarg, hcb_qe->fw_status);
++			hcb_qe->cbfn_status(hcb_qe->cbarg, hcb_qe->fw_status);
+ 		} else
+ 			hcb_qe->cbfn(hcb_qe->cbarg, BFA_TRUE);
+ 	}
+diff --git a/drivers/scsi/bfa/bfa_ioc.h b/drivers/scsi/bfa/bfa_ioc.h
+index 933a1c3890ff5..5e568d6d7b261 100644
+--- a/drivers/scsi/bfa/bfa_ioc.h
++++ b/drivers/scsi/bfa/bfa_ioc.h
+@@ -361,14 +361,18 @@ struct bfa_reqq_wait_s {
+ 	void	*cbarg;
+ };
+ 
+-typedef void	(*bfa_cb_cbfn_t) (void *cbarg, bfa_boolean_t complete);
++typedef void (*bfa_cb_cbfn_t) (void *cbarg, bfa_boolean_t complete);
++typedef void (*bfa_cb_cbfn_status_t) (void *cbarg, bfa_status_t status);
+ 
+ /*
+  * Generic BFA callback element.
+  */
+ struct bfa_cb_qe_s {
+ 	struct list_head	qe;
+-	bfa_cb_cbfn_t	cbfn;
++	union {
++		bfa_cb_cbfn_status_t	cbfn_status;
++		bfa_cb_cbfn_t		cbfn;
++	};
+ 	bfa_boolean_t	once;
+ 	bfa_boolean_t	pre_rmv;	/* set for stack based qe(s) */
+ 	bfa_status_t	fw_status;	/* to access fw status in comp proc */
+diff --git a/drivers/scsi/bfa/bfad_bsg.c b/drivers/scsi/bfa/bfad_bsg.c
+index 520f9152f3bf2..c4b78ffb723bd 100644
+--- a/drivers/scsi/bfa/bfad_bsg.c
++++ b/drivers/scsi/bfa/bfad_bsg.c
+@@ -2135,8 +2135,7 @@ bfad_iocmd_fcport_get_stats(struct bfad_s *bfad, void *cmd)
+ 	struct bfa_cb_pending_q_s cb_qe;
+ 
+ 	init_completion(&fcomp.comp);
+-	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+-			   &fcomp, &iocmd->stats);
++	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, &iocmd->stats);
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	iocmd->status = bfa_fcport_get_stats(&bfad->bfa, &cb_qe);
+ 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+@@ -2159,7 +2158,7 @@ bfad_iocmd_fcport_reset_stats(struct bfad_s *bfad, void *cmd)
+ 	struct bfa_cb_pending_q_s cb_qe;
+ 
+ 	init_completion(&fcomp.comp);
+-	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp, &fcomp, NULL);
++	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, NULL);
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	iocmd->status = bfa_fcport_clear_stats(&bfad->bfa, &cb_qe);
+@@ -2443,8 +2442,7 @@ bfad_iocmd_qos_get_stats(struct bfad_s *bfad, void *cmd)
+ 	struct bfa_fcport_s *fcport = BFA_FCPORT_MOD(&bfad->bfa);
+ 
+ 	init_completion(&fcomp.comp);
+-	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+-			   &fcomp, &iocmd->stats);
++	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, &iocmd->stats);
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	WARN_ON(!bfa_ioc_get_fcmode(&bfad->bfa.ioc));
+@@ -2474,8 +2472,7 @@ bfad_iocmd_qos_reset_stats(struct bfad_s *bfad, void *cmd)
+ 	struct bfa_fcport_s *fcport = BFA_FCPORT_MOD(&bfad->bfa);
+ 
+ 	init_completion(&fcomp.comp);
+-	bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+-			   &fcomp, NULL);
++	bfa_pending_q_init_status(&cb_qe, bfad_hcb_comp, &fcomp, NULL);
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	WARN_ON(!bfa_ioc_get_fcmode(&bfad->bfa.ioc));
 -- 
-Catalin
+2.39.2
+
