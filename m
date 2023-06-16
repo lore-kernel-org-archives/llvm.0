@@ -1,84 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032D77C
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 05:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1686892807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3dJ3EdntUCyQcj+X8YpuZvz+37CUNiokNp7GI9F7QVo=;
-	b=Fv08rVTLloOmQIokhbtlK/uNoeVh12i5xhN/sC4jKmn5CzGaCIiWjF8TvQinhIdOor/Use
-	o4apgD3FUHkeHSepeQ6+NiCshHMbo35U9UhUSlzJa+JPCxj3rxAZ9ykx1RbyVfzfV5MxD6
-	B9qPFIsGQYkrlIAfSZ7mKeQXWPwlKmQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-113-yWwqjSHFNSuvk5t76SdwNQ-1; Fri, 16 Jun 2023 01:20:05 -0400
-X-MC-Unique: yWwqjSHFNSuvk5t76SdwNQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 203BE3806700
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 05:20:05 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0C667492C1B;
-	Fri, 16 Jun 2023 05:20:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
- mainline.kernel.org-clang, 40f71e7c)
-Date: Fri, 16 Jun 2023 05:20:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7057410E4;
+	Fri, 16 Jun 2023 06:10:58 +0000 (UTC)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qj7xK4lwhzGpkt;
+	Fri, 16 Jun 2023 14:07:49 +0800 (CST)
+Received: from [10.174.179.160] (10.174.179.160) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 14:10:54 +0800
+Message-ID: <cb02c057-1fdb-9844-4911-b8406e6108da@huawei.com>
+Date: Fri, 16 Jun 2023 14:10:53 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <48456.123061601200500471@us-mta-113.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mm/memcg: remove return value of mem_cgroup_scan_tasks()
+To: kernel test robot <lkp@intel.com>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<hannes@cmpxchg.org>, <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
+	<shakeelb@google.com>, <muchun.song@linux.dev>, <akpm@linux-foundation.org>,
+	<wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
+References: <20230616021955.872413-1-zhangpeng362@huawei.com>
+ <202306161306.9YKbncNT-lkp@intel.com>
+Content-Language: en-US
+From: "zhangpeng (AS)" <zhangpeng362@huawei.com>
+In-Reply-To: <202306161306.9YKbncNT-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.160]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
 
-Hi, we tested your kernel and here are the results:
+On 2023/6/16 13:13, kernel test robot wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+> Hi Peng,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on akpm-mm/mm-everything]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/mm-memcg-remove-return-value-of-mem_cgroup_scan_tasks/20230616-102145
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230616021955.872413-1-zhangpeng362%40huawei.com
+> patch subject: [PATCH] mm/memcg: remove return value of mem_cgroup_scan_tasks()
+> config: x86_64-randconfig-r005-20230616 (https://download.01.org/0day-ci/archive/20230616/202306161306.9YKbncNT-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce (this is a W=1 build):
+>          mkdir -p ~/bin
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>          git fetch akpm-mm mm-everything
+>          git checkout akpm-mm/mm-everything
+>          b4 shazam https://lore.kernel.org/r/20230616021955.872413-1-zhangpeng362@huawei.com
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 prepare
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306161306.9YKbncNT-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     In file included from arch/x86/kernel/asm-offsets.c:14:
+>     In file included from include/linux/suspend.h:5:
+>     In file included from include/linux/swap.h:9:
+>>> include/linux/memcontrol.h:1370:2: error: void function 'mem_cgroup_scan_tasks' should not return a value [-Wreturn-type]
+>             return 0;
 
+Thanks for reporting. I'll drop this line.
 
-Kernel information:
-    Commit message: Merge tag 'net-6.4-rc7' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/92745
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36261=
-7
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>             ^      ~
+>     1 error generated.
+>     make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=3878817758
+>     make[2]: Target 'prepare' not remade because of errors.
+>     make[1]: *** [Makefile:1287: prepare0] Error 2 shuffle=3878817758
+>     make[1]: Target 'prepare' not remade because of errors.
+>     make: *** [Makefile:226: __sub-make] Error 2 shuffle=3878817758
+>     make: Target 'prepare' not remade because of errors.
+>
+>
+> vim +/mem_cgroup_scan_tasks +1370 include/linux/memcontrol.h
+>
+> 5660048ccac873 Johannes Weiner  2012-01-12  1366
+> 5044a2e0ddbf82 ZhangPeng        2023-06-16  1367  static inline void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1368  		int (*fn)(struct task_struct *, void *), void *arg)
+> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1369  {
+> 7c5f64f84483bd Vladimir Davydov 2016-10-07 @1370  	return 0;
+> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1371  }
+> 7c5f64f84483bd Vladimir Davydov 2016-10-07  1372
+>
