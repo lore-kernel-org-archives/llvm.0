@@ -1,244 +1,208 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1CB19930;
-	Fri, 16 Jun 2023 13:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26D01113;
+	Fri, 16 Jun 2023 14:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686923312; x=1718459312;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DbASQlzZ71aLt8w4TWh3pXUInLvlcqUaLm1T8q5SPDk=;
-  b=Q9KqR+QXoRy2Oo2ZIde0UAJ0yys16zOQFNgakOKEVWSfRHjkM/jfakJ6
-   7UeWrhSVw8ppyk08oaYRoH8tdbhRyxBYPBUTrJB+t0J/2DZVcr1eS723E
-   1B133hfs5BXri+CCImkQLPylxhuX30VVym1m0Tb8B4fVUPzEBiAEJIeqX
-   oCqkWEKnQSp33uMaJq9GjY1006ncq2dFGqCciKxb5vGqaaeKQM7pArv6O
-   jYrsZkB2As09lUG8i2t3RDIiQwEbCu49ZSBQiQFZD5hEMWfbX9qJu87mY
-   ae9aq0CzwT++qiXXifoKyDSkS0/9YjS9thx1LmghKtmqd1lep6sfG/QuA
+  t=1686924250; x=1718460250;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=lYW+n1Q6gILOp9zQzbAIrkvBaYzj8YvCAVb5CNv4a/0=;
+  b=L/0Hm7sLNjlZaa1SdyDfINjoCGs3z/8Op/IFkhfXQxYMb397daGOWODY
+   4HQoPuhNakyGCAos5e6pgYjVh0MB/pO3C+bOXUeHvZNEn1QSdOQ3qXEeC
+   Gc/dh1hZk2/OvlCRwDAXWy8iDlYxzFv1bm+mUUrI0dv9/v1THkQnYtIq2
+   Vjfsc5mHm0rJ9C2Wfkn9cnRU9Eb0TqEBflGGnN0CcmM79UB2/+aa24lSl
+   vUH2pCLdLFuD5P4yMEAM/L6MlYLK4WV4xFfTnu8UE2gn2J5Zs1cHa4z5c
+   X/vfQwJlrCU+dKoXsqY/VaxuaDGUdoRsYofYm1zccCzCnFiu+fjaV5lIz
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="339545585"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="359229131"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="339545585"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 06:48:31 -0700
+   d="scan'208";a="359229131"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:04:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="1043099972"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742685975"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="1043099972"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Jun 2023 06:48:29 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qA9oT-0001I4-0m;
-	Fri, 16 Jun 2023 13:48:29 +0000
-Date: Fri, 16 Jun 2023 21:47:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joel Granados <j.granados@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [joelgranados:jag/sysctl-testing-for-0day 14/20]
- net/core/sysctl_net_core.c:715:65: error: too few arguments to function
- call, expected 4, have 3
-Message-ID: <202306162138.tAhS2PnR-lkp@intel.com>
+   d="scan'208";a="742685975"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 07:04:00 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 07:03:59 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 16 Jun 2023 07:03:59 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.41) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 16 Jun 2023 07:03:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GAF9PP4891AdR22mvLGHGaUTdCCbUOppbZu/KwkgwqRpe6dMWrcCdujpmcF37Bvjtmd8JYwYVU0SjcYhsiDO7ajtTjeBgbwRnYc79kLwvIrNLBgmOCnJWgJvqUYwdBbokdwtSO/6bKvj/BnQxocrt5eVyc2Ho7TfBpIMPq1luGBapJ4Lml7Aerb0Kj11U2dBRbLM8XgEQmaH4APc9OiBoLJGCSw6sjIJKwoXhKXpFQlP3ElIEBx2hp18CEthR1rARSzAZBQyr5Cow1To/1Udc2LRPKskdFtxDJTXiddlMgGZb0WwrPKGh0ptX0rmQPgTBAxqCdjQuemhjiRGrvj/LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kHzAnr3WIKHRIv/cJXJsXGonYuVSYfBuq1CuW3Wgpyg=;
+ b=EWAAq2b8/E5c+oYPVoBC0jvTmmltT64KeDR0hEFFin0henVHMbQdkZTF8KzdlfjHpKaNjRZxYKXiLBdRJZe4S6L+XKnxoHcdKT2E6+jbH/0S/V53msFFHGL/AYmjOa1kfFPyYM0n/UNznEKtd8WtsTViSH8bJFShjoGsZuPa/ZRmaWQ5XJW6adZhewlN2NXpeb6H5FTh+TKSW6rDujRgBRCByCDt454zDDq1kYfotgNw4mxyx2XkSyuz6565XZzY9tEyCf7fFgAF/EOePMXejb6LF0EqOhfn2AryAYWbt+jEObiknLyhlMdSrffcyKqywBDRqwStwRyFr6QOg3LWYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by DM4PR11MB5360.namprd11.prod.outlook.com (2603:10b6:5:397::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 14:03:36 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.030; Fri, 16 Jun 2023
+ 14:03:36 +0000
+Message-ID: <67508559-0bcd-46ff-b040-59bcb41b0a9a@intel.com>
+Date: Fri, 16 Jun 2023 16:03:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: lib/test_bitmap.c:920:2: error: call to
+ '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON
+ failed: !__builtin_constant_p(res)
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>
+CC: kernel test robot <lkp@intel.com>, Alexander Lobakin
+	<alexandr.lobakin@intel.com>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, Yury Norov
+	<yury.norov@gmail.com>
+References: <202306151433.QKcn7ZNn-lkp@intel.com>
+ <ZIr0hZV/jcpZkRq2@smile.fi.intel.com>
+ <CAKwvOd=Fj51=m0EZznjOmkqeZy_5uDZ_Gyf-Pv=yd2=53Gb6Sw@mail.gmail.com>
+ <CAKwvOd=uqfnyw2u=Nhm+Q0uGORjW9GB+pso6tb_HKGSU0rhZBQ@mail.gmail.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <CAKwvOd=uqfnyw2u=Nhm+Q0uGORjW9GB+pso6tb_HKGSU0rhZBQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0107.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9c::10) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DM4PR11MB5360:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a365682-4506-46f2-437b-08db6e727a2b
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4R84UYdKXiC/EIjtTiElaDepMBXVnKXgcx5My2z/bB0K61Xq5qD0oi232wZpd/R01kiyGUlcEdX1dwpvJWLl4Os+q6bIjnqXVj/N6Jx8MCtnzuUWAN6RwKSWgq6ehMto8fbT8IOJrfXT0wy1fEYv6+gMRLX7Ps74l1ILvgJR6/jEvCthPFBQpdZZnKA3E2mszpwsbfYsfzxcSBkuWG35Z3TLkyoElXcfvhGSlLJKTn3zAwov6kdxXDxqynlE7/wXfAkdwaVmwcO87GLHmK0Fht+LpZnLPtEKy88ROuBkHaiiNw09fJf6+YkcAZryMMRAek4uNfBIxrLxelY4JMH4b/DHDsVP1ye6PGBj6kgxy/B+pA5mnoJufBpJ5D4BtEwgJuoHJvCxXs8+fy2bJUc65GJskKouDhdQFzyKcy0COLUq2orRDzITvHMYxta6lhLtwqhKzIw5hmOAMUGX9hvOxqOF1SK3JnylUrFi320EF7C7xtg/YSy6vmIedXB0wAu3nupEBnYebp/9GhrTMwIg3mFm6k+5LowSJoMsHQUSeIv4NQs6vv5kGTEIp0OJXe5WVXC8tPlIGqpt2NEH9N/eMVCf4zPeMvklO64+BQZbZ4+RMbEhgMRcwgaE4Y3q4y3V3hy83a0dE7W3iAKmeoSOKQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(346002)(136003)(396003)(366004)(451199021)(478600001)(110136005)(54906003)(966005)(6666004)(6486002)(5660300002)(8936002)(8676002)(82960400001)(41300700001)(2906002)(36756003)(31696002)(86362001)(38100700002)(66476007)(66556008)(316002)(66946007)(4326008)(26005)(53546011)(6512007)(6506007)(186003)(31686004)(83380400001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clRrdXpSdHlpbFp6NEI0YkU3QWROUE9RSnRwQnNXa2J5UkJkSi9OTlRxTHZm?=
+ =?utf-8?B?bUl1ZWQ3bHQ4emV5dUFUM2ZYcHkxam1wcEtSVkxWc25velQ1YW9wU1lJTlBK?=
+ =?utf-8?B?U2RLOXpyeGNKaXpUOTNsTlVub0RiL1FmMnNmelNIZjF0b2hib25iVXdrQTRQ?=
+ =?utf-8?B?bnVFaDg5OEo2dUV0eVZCZmNhU2htQXA5K2QyQWw2d3hobjZROGtmUVRwUVVX?=
+ =?utf-8?B?Rmw0d09MZnFqemxsdjVrQWVrSThwK2tES1NITExzVjdhNDMrSmgxWjAxTm03?=
+ =?utf-8?B?MGNMeHNydTFPYzRCZW8rbDN3eDI3TzlmcnZSVTNsdGZDSGJ2VEhqNXR0SUFP?=
+ =?utf-8?B?L21qUGsweEhUcXRxSVRmTU9RUFV6YTRKQ1hFL1c1R2FPSm00Z0VvR2lHcEp5?=
+ =?utf-8?B?dWExdnNVSnlKZXJzbkVublRWNGdYTUI4RFduUU56U1ZoWTlSMy82NW10UVB5?=
+ =?utf-8?B?Y1llNUdTbGFtZ050WWtCVEpRL3RmZHF4YXBZVVRTL3V6RDFDdHBUU3Y2WGh0?=
+ =?utf-8?B?aHVPL2IxWktxOXA1aEFFQkpmRE9SMm1UZTdXcDdzcXdsanlKeVpGaDVqb01Z?=
+ =?utf-8?B?akpKcC9MS0xrQ0dhYWpPWnp4MDdOcW5PRDg3UzJ0aDhJMnBNYnZGb0plZTh0?=
+ =?utf-8?B?SFl2QVlheXpSQlYycVdUT0tJZjNvWlFydVlUQTFxaWk0MG8vd0w1VmNVZXhL?=
+ =?utf-8?B?RE41UUJFTGV0T0tJeEgrWmJRMkNXci9CU1QxZTRjSmZYT05ESi93M3Q2Vzdh?=
+ =?utf-8?B?Sm9wbHBGa2FpdzQ0UmdOMzZ6ZFVMYk1qY3luYWROczVjMkc3bSsxeldYaXIr?=
+ =?utf-8?B?NHMrOVRwQ1pUV1ZZWm1SNTl2SmhMVHROTkQwM3VkY1NlcXVoUUpDaG12dXVW?=
+ =?utf-8?B?bFVFVVdnaVlhK0tiSXJFOXFpUGIrU2FKRDc0bEFOcWYvRjdBSUFGOVhYL1JY?=
+ =?utf-8?B?cWVGcW9MTGxIVFlRbzgrTnJ5V0h6dmMreHBYQllPdGNhaUF3MTgyNi9KL3VF?=
+ =?utf-8?B?RDBBWnp0amZGSUtFN1RmZ0lYTm5VRDFSN3Y4akpyTDFsdEtJR0JCUDFaTGxz?=
+ =?utf-8?B?K0V0bHJKa0JSSGdwQUlDT0taSEtndUJ3ZDBzaTlxL3dEQnJrZjRXS25pbFpJ?=
+ =?utf-8?B?aTVBWDFTT0swK3QxejcyMExCQVRrODhNalVRdzJrQzB1TGdKWk1kTTMvK0ZL?=
+ =?utf-8?B?V3N6OXVneHRudmZJTkRVUmxyTEVmV2RFczBZNnVlcksvR2lLNnJncXZoZG1s?=
+ =?utf-8?B?WmVYekxHQzdGU2pVUm80ZXVpYWM0b3JaaEp2ODBnOUlNNzgrT1RGL3lqenBU?=
+ =?utf-8?B?Zm15blhaSWlvVFlUWDdVcHppcEZyUkVFUDlXSE1hNlhMVjBpVUVRdnlqY1Y3?=
+ =?utf-8?B?dWVBNnRPSTBUdi90ekFPWDFjc1U1Y2h4SzhWNUIrSG83L3lRaGtoM1QwdXZB?=
+ =?utf-8?B?VHJkZzV6NHB1VDhvekZZZGcyd0tNRHBTSEd5RG5oV0ZRUEg0WHBWUU1pblBz?=
+ =?utf-8?B?Zy93WTZoOEdkVjF5cjRrcVZCc1RGYlhNVkFXbk9xKzlkeWlQRkdyMlhnazRM?=
+ =?utf-8?B?Q2R0THFacVpQT01YWW1zYk9HYVEydlpkekNZRVZwRHBZNDVkaGtqRHJXaXRV?=
+ =?utf-8?B?UzFRTkRIM01mS3p5a21CSUxyOGMxdHdMWFlSenJQTnplZHR6eWtxSVVKTUhG?=
+ =?utf-8?B?cGVpMWtxUjUxUTQ3ZC9FbGd0M3RVL2pmSVdBVWJpeklQTUVmRjUxYmx5VEVt?=
+ =?utf-8?B?aFJ2OUI1SWcvNVZUMGZQeUpGQ0YxZDhES3UzM0RYR0tTOEk0LzRhLy9DNVpx?=
+ =?utf-8?B?NHZ2dkd0NUpZZE44cDFmcGpwRFdLRFpER1E2ZGd2V2xUOWF5R1BmTWl4YmxV?=
+ =?utf-8?B?SHg0YjFqZHdQanJ6OEVrclpGYUlWZFRXZE5teElmVVFmcEI2SG9iZHU3aE56?=
+ =?utf-8?B?UnlLcmdQak82NTVQQXFWVk1lYXJSbmtIQmNRZDB6OGZFWEVUQm1STW5YVmds?=
+ =?utf-8?B?SW1LTzBWRG52UWZ0USs2bG11bThvWG85S0dyVGowbTB3MXNvWGROWkFnYnBI?=
+ =?utf-8?B?T2txeEFRK3F3SHBkbXZCZGpINUFuYWVNWXlDb1h3L2VpbkpGUnN3Y0tNU2pD?=
+ =?utf-8?B?a1o3dU1rMnZ6OEYvRlR4UzhUREl0d2ZKMTM2UmlPNkJqK0ZKQ3p1WGhQV3B2?=
+ =?utf-8?B?WlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a365682-4506-46f2-437b-08db6e727a2b
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 14:03:36.0851
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T4lDwNfJyU1JEADrFv/Uwtjr+Ub1Xs2zF16crp2JhcTY4a1bqkCkW0VAYE4keycU0lZCvsL+C0m5B5jr73sedN5JWReQGW+/1Qsi1jq+pcY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5360
+X-OriginatorOrg: intel.com
 
-tree:   https://github.com/Joelgranados/linux.git jag/sysctl-testing-for-0day
-head:   669cf696035fa888754f34d948b9488c2206dd7d
-commit: 88e548722da320e210dc084d6ac3ffbea4162984 [14/20] sysctl: add size to the regsiter_net_sysctl function
-config: x86_64-randconfig-r022-20230615 (https://download.01.org/0day-ci/archive/20230616/202306162138.tAhS2PnR-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162138.tAhS2PnR-lkp@intel.com/reproduce)
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 15 Jun 2023 16:48:22 -0400
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306162138.tAhS2PnR-lkp@intel.com/
+> On Thu, Jun 15, 2023 at 3:52 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> On Thu, Jun 15, 2023 at 7:22 AM Andy Shevchenko
+>> <andriy.shevchenko@linux.intel.com> wrote:
 
-Note: the joelgranados/jag/sysctl-testing-for-0day HEAD 669cf696035fa888754f34d948b9488c2206dd7d builds fine.
-      It only hurts bisectability.
+[...]
 
-All errors (new ones prefixed by >>):
+>>>>    896                bitmap_clear(bitmap, 0, BITS_PER_LONG);
+>>>>    897        #if defined(__s390__) && defined(__clang__)
+>>>>    898                if (!const_test_bit(7, bitmap))
+>>>>    899        #else
+>>>>    900                if (!test_bit(7, bitmap))
+>>>>    901        #endif
+>>>
+>>> Hmm... Reveals the bug in clang/arm64?
+>>
+>> Seems related to the config.  ARCH=arm64 defconfig +
+>> CONFIG_TEST_BITMAP=y doesn't trigger this for me, but the randconfig
+>> does.  We'll bisect the config, and update the thread tracking this:
+>> https://github.com/ClangBuiltLinux/linux/issues/1874
+> 
+> KASAN and GCOV together seem to be tickling this.
 
->> net/core/sysctl_net_core.c:715:65: error: too few arguments to function call, expected 4, have 3
-           net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl);
-                                  ~~~~~~~~~~~~~~~~~~~                     ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/core/sysctl_net_core.c:748:59: error: too few arguments to function call, expected 4, have 3
-           register_net_sysctl(&init_net, "net/core", net_core_table);
-           ~~~~~~~~~~~~~~~~~~~                                      ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   2 errors generated.
---
->> net/core/neighbour.c:3845:68: error: too few arguments to function call, expected 4, have 3
-                   register_net_sysctl(neigh_parms_net(p), neigh_path, t->neigh_vars);
-                   ~~~~~~~~~~~~~~~~~~~                                              ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   1 error generated.
---
->> net/ipv4/ip_fragment.c:618:50: error: too few arguments to function call, expected 4, have 3
-           hdr = register_net_sysctl(net, "net/ipv4", table);
-                 ~~~~~~~~~~~~~~~~~~~                       ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv4/ip_fragment.c:643:64: error: too few arguments to function call, expected 4, have 3
-           register_net_sysctl(&init_net, "net/ipv4", ip4_frags_ctl_table);
-           ~~~~~~~~~~~~~~~~~~~                                           ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   2 errors generated.
---
->> net/ipv4/devinet.c:2590:67: error: too few arguments to function call, expected 4, have 3
-           t->sysctl_header = register_net_sysctl(net, path, t->devinet_vars);
-                              ~~~~~~~~~~~~~~~~~~~                           ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv4/devinet.c:2723:53: error: too few arguments to function call, expected 4, have 3
-           forw_hdr = register_net_sysctl(net, "net/ipv4", tbl);
-                      ~~~~~~~~~~~~~~~~~~~                     ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   2 errors generated.
---
->> net/ipv4/sysctl_net_ipv4.c:1503:65: error: too few arguments to function call, expected 4, have 3
-           net->ipv4.ipv4_hdr = register_net_sysctl(net, "net/ipv4", table);
-                                ~~~~~~~~~~~~~~~~~~~                       ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv4/sysctl_net_ipv4.c:1541:61: error: too few arguments to function call, expected 4, have 3
-           hdr = register_net_sysctl(&init_net, "net/ipv4", ipv4_table);
-                 ~~~~~~~~~~~~~~~~~~~                                  ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   2 errors generated.
---
-   net/ipv4/route.c:880:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
-           int log_martians;
-               ^
->> net/ipv4/route.c:3618:70: error: too few arguments to function call, expected 4, have 3
-           net->ipv4.route_hdr = register_net_sysctl(net, "net/ipv4/route", tbl);
-                                 ~~~~~~~~~~~~~~~~~~~                           ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv4/route.c:3778:67: error: too few arguments to function call, expected 4, have 3
-           register_net_sysctl(&init_net, "net/ipv4/route", ipv4_route_table);
-           ~~~~~~~~~~~~~~~~~~~                                              ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   1 warning and 2 errors generated.
---
->> net/unix/sysctl_net_unix.c:39:59: error: too few arguments to function call, expected 4, have 3
-           net->unx.ctl = register_net_sysctl(net, "net/unix", table);
-                          ~~~~~~~~~~~~~~~~~~~                       ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   1 error generated.
---
->> net/ipv6/addrconf.c:7089:57: error: too few arguments to function call, expected 4, have 3
-           p->sysctl_header = register_net_sysctl(net, path, table);
-                              ~~~~~~~~~~~~~~~~~~~                 ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   1 error generated.
---
->> net/ipv6/reassembly.c:473:50: error: too few arguments to function call, expected 4, have 3
-           hdr = register_net_sysctl(net, "net/ipv6", table);
-                 ~~~~~~~~~~~~~~~~~~~                       ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv6/reassembly.c:502:23: error: too few arguments to function call, expected 4, have 3
-                           ip6_frags_ctl_table);
-                                              ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   2 errors generated.
---
->> net/ipv6/sysctl_net_ipv6.c:278:72: error: too few arguments to function call, expected 4, have 3
-           net->ipv6.sysctl.hdr = register_net_sysctl(net, "net/ipv6", ipv6_table);
-                                  ~~~~~~~~~~~~~~~~~~~                            ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv6/sysctl_net_ipv6.c:283:62: error: too few arguments to function call, expected 4, have 3
-                   register_net_sysctl(net, "net/ipv6/route", ipv6_route_table);
-                   ~~~~~~~~~~~~~~~~~~~                                        ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv6/sysctl_net_ipv6.c:288:60: error: too few arguments to function call, expected 4, have 3
-                   register_net_sysctl(net, "net/ipv6/icmp", ipv6_icmp_table);
-                   ~~~~~~~~~~~~~~~~~~~                                      ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   net/ipv6/sysctl_net_ipv6.c:338:70: error: too few arguments to function call, expected 4, have 3
-           ip6_header = register_net_sysctl(&init_net, "net/ipv6", ipv6_rotable);
-                        ~~~~~~~~~~~~~~~~~~~                                    ^
-   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
-   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
-                            ^
-   4 errors generated.
+Thanks for root-causing this!
+Should I prepare a patch which would work around KASAN + GCOV here or
+you're digging the Clang sources for potential issues?
 
+> 
+>>
+>>>
+>>>>    919                res = !test_bit(18, &bitopvar);
+>>>>  > 920                BUILD_BUG_ON(!__builtin_constant_p(res));
+>>>>    921                BUILD_BUG_ON(!res);
+>>>
+>>>
+>>> --
+>>> With Best Regards,
+>>> Andy Shevchenko
+>>>
+>>>
+>>>
+>>
+>>
+>> --
+>> Thanks,
+>> ~Nick Desaulniers
+> 
+> 
+> 
 
-vim +715 net/core/sysctl_net_core.c
-
-316cdaa1158af1 Mahesh Bandewar   2020-08-26  700  
-024626e36d75fc Pavel Emelyanov   2007-12-08  701  static __net_init int sysctl_core_net_init(struct net *net)
-024626e36d75fc Pavel Emelyanov   2007-12-08  702  {
-e187013abeb4c2 Akhmat Karakotov  2022-01-31  703  	struct ctl_table *tbl, *tmp;
-024626e36d75fc Pavel Emelyanov   2007-12-08  704  
-d5a4502e9efa53 Pavel Emelyanov   2008-05-19  705  	tbl = netns_core_table;
-09ad9bc752519c Octavian Purdila  2009-11-25  706  	if (!net_eq(net, &init_net)) {
-d5a4502e9efa53 Pavel Emelyanov   2008-05-19  707  		tbl = kmemdup(tbl, sizeof(netns_core_table), GFP_KERNEL);
-024626e36d75fc Pavel Emelyanov   2007-12-08  708  		if (tbl == NULL)
-024626e36d75fc Pavel Emelyanov   2007-12-08  709  			goto err_dup;
-024626e36d75fc Pavel Emelyanov   2007-12-08  710  
-e187013abeb4c2 Akhmat Karakotov  2022-01-31  711  		for (tmp = tbl; tmp->procname; tmp++)
-e187013abeb4c2 Akhmat Karakotov  2022-01-31  712  			tmp->data += (char *)net - (char *)&init_net;
-790a35328991b0 Pavel Emelyanov   2007-12-08  713  	}
-024626e36d75fc Pavel Emelyanov   2007-12-08  714  
-ec8f23ce0f4005 Eric W. Biederman 2012-04-19 @715  	net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl);
-8efa6e93cb2666 Pavel Emelyanov   2008-03-31  716  	if (net->core.sysctl_hdr == NULL)
-024626e36d75fc Pavel Emelyanov   2007-12-08  717  		goto err_reg;
-024626e36d75fc Pavel Emelyanov   2007-12-08  718  
-024626e36d75fc Pavel Emelyanov   2007-12-08  719  	return 0;
-024626e36d75fc Pavel Emelyanov   2007-12-08  720  
-024626e36d75fc Pavel Emelyanov   2007-12-08  721  err_reg:
-d5a4502e9efa53 Pavel Emelyanov   2008-05-19  722  	if (tbl != netns_core_table)
-024626e36d75fc Pavel Emelyanov   2007-12-08  723  		kfree(tbl);
-024626e36d75fc Pavel Emelyanov   2007-12-08  724  err_dup:
-024626e36d75fc Pavel Emelyanov   2007-12-08  725  	return -ENOMEM;
-024626e36d75fc Pavel Emelyanov   2007-12-08  726  }
-024626e36d75fc Pavel Emelyanov   2007-12-08  727  
-
-:::::: The code at line 715 was first introduced by commit
-:::::: ec8f23ce0f4005b74013d4d122e0d540397a93c9 net: Convert all sysctl registrations to register_net_sysctl
-
-:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Olek
