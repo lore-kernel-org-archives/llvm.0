@@ -1,112 +1,84 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76776398;
-	Fri, 16 Jun 2023 23:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686957245; x=1718493245;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=JBlIJP78VbRgv33bQFDWjNFzb+rgpPjZTv8aQm6ZitY=;
-  b=Q+UT5mWsQw0Z+REWVXAq1cW5TyQvqdgvN0mUv/eCE3Buh8Z14bnRk0Y8
-   yutukcUqo/urBLHFejvGgdwSM+zHrEemykpVP/33LDQuiOTh2+sFJm37o
-   JMHZYOEX+TWhVy8uGc41esZ4dcXMEeYzWF5iehctEJD5PHzvcrPjpCoxQ
-   I3QZh1wGo2ED20twO7DP8yLhkfNCIkK5d0sjZNytzgL14mIfVFv2ly2jn
-   /D1dgFm3AH4hUJAflCm1Y+vi/77OhDs30eqGXZpV5GdNVOwg0DllK3Da3
-   JNeJi+7jHS9yd3w23KDnRrA03NOUoF2CdfJ3zCeDzORfnRV5SFLqmdnWy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="445714052"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="445714052"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 16:14:00 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="746521711"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="746521711"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2023 16:13:59 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qAIdi-0001u0-11;
-	Fri, 16 Jun 2023 23:13:58 +0000
-Date: Sat, 17 Jun 2023 07:13:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to
- !ENDBR: kprobe_emulate_loop+0x13
-Message-ID: <202306170722.zsVkjVO4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8992E0F7
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 23:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686957667;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=r6wpF39pvLJvqN+X7GpqqFPJsW468kVGxte4EvUi8UQ=;
+	b=VQS6NVnl4Se76sxLGxwcGz53PKPjdANXTgFasC5GtBkIxUbgcpAMf+XUEsobuEKv/dsFfz
+	4hfHXLSF8INALj2KyJ9rg10/RJFiWj67xxjxeZnuAGKFWxoSrwZStOclETAAT+FS+6j9ds
+	gzEvI72L9gDnOFLp/ywVMPIJoA5spHY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-F-seS4AXPhit2GgB7sujZg-1; Fri, 16 Jun 2023 19:21:03 -0400
+X-MC-Unique: F-seS4AXPhit2GgB7sujZg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D5293806723
+	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 23:21:03 +0000 (UTC)
+Received: from [172.64.4.14] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 76409492C1B;
+	Fri, 16 Jun 2023 23:21:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
+ mainline.kernel.org-clang, 1639fae5)
+Date: Fri, 16 Jun 2023 23:21:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <90809.123061619210300977@us-mta-153.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: Ingo Molnar <mingo@kernel.org>
-CC: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4973ca29552864a7a047ab8a15611a585827412f
-commit: db7adcfd1cec4e95155e37bc066fddab302c6340 x86/alternatives: Introduce int3_emulate_jcc()
-date:   5 months ago
-config: x86_64-randconfig-a014-20230617 (https://download.01.org/0day-ci/archive/20230617/202306170722.zsVkjVO4-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306170722.zsVkjVO4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306170722.zsVkjVO4-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: resume_play_dead+0x1d: unreachable instruction
->> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: kprobe_emulate_loop+0x13
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-objdump-func vmlinux.o set_ftrace_ops_ro:
-0000 0000000000080810 <set_ftrace_ops_ro>:
-0000    80810:	f3 0f 1e fa          	endbr64
-0004    80814:	41 57                	push   %r15
-0006    80816:	41 56                	push   %r14
-0008    80818:	41 54                	push   %r12
-000a    8081a:	53                   	push   %rbx
-000b    8081b:	48 8b 1d 00 00 00 00 	mov    0x0(%rip),%rbx        # 80822 <set_ftrace_ops_ro+0x12>	8081e: R_X86_64_PC32	ftrace_ops_list-0x4
-0012    80822:	49 c7 c6 00 00 00 00 	mov    $0x0,%r14	80825: R_X86_64_32S	ftrace_list_end
-0019    80829:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	8082c: R_X86_64_32S	ftrace_regs_caller
-0020    80830:	48 f7 d8             	neg    %rax
-0023    80833:	4c 8d 3c 05 00 00 00 00 	lea    0x0(,%rax,1),%r15	80837: R_X86_64_32S	ftrace_regs_caller_end+0x1008
-002b    8083b:	49 c1 ef 0c          	shr    $0xc,%r15
-002f    8083f:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	80842: R_X86_64_32S	ftrace_caller
-0036    80846:	48 f7 d8             	neg    %rax
-0039    80849:	4c 8d 24 05 00 00 00 00 	lea    0x0(,%rax,1),%r12	8084d: R_X86_64_32S	ftrace_caller_end+0x1008
-0041    80851:	49 c1 ec 0c          	shr    $0xc,%r12
-0045    80855:	48 8b 43 10          	mov    0x10(%rbx),%rax
-0049    80859:	0f ba e0 0b          	bt     $0xb,%eax
-004d    8085d:	73 15                	jae    80874 <set_ftrace_ops_ro+0x64>
-004f    8085f:	a8 04                	test   $0x4,%al
-0051    80861:	48 8b bb 70 01 00 00 	mov    0x170(%rbx),%rdi
-0058    80868:	44 89 fe             	mov    %r15d,%esi
-005b    8086b:	41 0f 44 f4          	cmove  %r12d,%esi
-005f    8086f:	e8 00 00 00 00       	call   80874 <set_ftrace_ops_ro+0x64>	80870: R_X86_64_PLT32	set_memory_ro-0x4
-0064    80874:	48 8b 5b 08          	mov    0x8(%rbx),%rbx
-0068    80878:	48 85 db             	test   %rbx,%rbx
-006b    8087b:	74 05                	je     80882 <set_ftrace_ops_ro+0x72>
-006d    8087d:	4c 39 f3             	cmp    %r14,%rbx
-0070    80880:	75 d3                	jne    80855 <set_ftrace_ops_ro+0x45>
-0072    80882:	5b                   	pop    %rbx
-0073    80883:	41 5c                	pop    %r12
-0075    80885:	41 5e                	pop    %r14
-0077    80887:	41 5f                	pop    %r15
-0079    80889:	31 c0                	xor    %eax,%eax
-007b    8088b:	31 ff                	xor    %edi,%edi
-007d    8088d:	31 f6                	xor    %esi,%esi
-007f    8088f:	c3                   	ret
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2023-06-17' of git://anongit.freed=
+esktop.org/drm/drm
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/92877
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36303=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
