@@ -1,84 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8298F9F4
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 09:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8C3C433CD;
-	Fri, 16 Jun 2023 09:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686906475;
-	bh=4phIGceOvtI2yxKDIT1C76n8i2VAK0TTfcMygNtE+64=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OQgajVQV62OKGC/9ew5Mw9zNBUvWBMyfnUuOHneuy+cdi3NMZdc61WUdw4PWMpnv1
-	 PDZble9eXjKhIG4raJnoCLlv0YKxvlCKQyu6URXNE0LezsYrXYKfwcgsnrwK4SOkDK
-	 o+/YEqHfDEHlor+xmDv2jxNqnPK7xaeMWeRWGqsVlKdgEQPPwRxr++OuC8eD0JmUNG
-	 JWKro2+aG33LZFyN/Pq7qDPWzy/L1+em8T4mOMikd1bNlSOIRypD6O9eMo8+MVW9je
-	 mnV5SVIMCisxridyPv6HAAI5uF1a9xJXk8/WQg5/0bMLeTQpCa+/otjDjLfORtakFY
-	 XrxgVmIS9ZD5A==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <sfrench@samba.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Tom Talpey <tom@talpey.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Dave Chinner <dchinner@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Ronnie Sahlberg <lsahlber@redhat.com>,
-	Hyunchul Lee <hyc.lee@gmail.com>,
-	linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] smb: avoid field overflow warning
-Date: Fri, 16 Jun 2023 11:07:28 +0200
-Message-Id: <20230616090749.2646749-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632EF10781;
+	Fri, 16 Jun 2023 09:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238A6C433C0;
+	Fri, 16 Jun 2023 09:21:31 +0000 (UTC)
+Date: Fri, 16 Jun 2023 10:21:29 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, will@kernel.org, mark.rutland@arm.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
+	Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Suzuki Poulose <suzuki.poulose@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8
+ PMU
+Message-ID: <ZIwpma4SAJ/ZUyh5@arm.com>
+References: <20230615133239.442736-6-anshuman.khandual@arm.com>
+ <202306160706.Uei5XDoi-lkp@intel.com>
+ <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com>
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
+> On 6/16/23 05:12, kernel test robot wrote:
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on arm64/for-next/core]
+> > [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> > patch link:    https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual%40arm.com
+> > patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
+> > config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce (this is a W=1 build):
+> >         mkdir -p ~/bin
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm cross compiling tool for clang build
+> >         # apt-get install binutils-arm-linux-gnueabi
+> >         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+> >         git fetch arm64 for-next/core
+> >         git checkout arm64/for-next/core
+> >         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual@arm.com
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
+> 
+> I am unable to reproduce this on mainline 6.4-rc6 via default cross compiler
+> on a W=1 build. Looking at all other problems reported on the file, it seems
+> something is not right here. Reported build problems around these callbacks,
+> i.e armv8pmu_branch_XXXX() do not make sense as they are available via config
+> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 in this
+> test config.
 
-clang warns about a possible field overflow in a memcpy:
+Have you tried applying this series on top of the arm64 for-next/core
+branch? That's what the robot it testing (in the absence of a --base
+option when generating the patches).
 
-In file included from fs/smb/server/smb_common.c:7:
-include/linux/fortify-string.h:583:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-                        __write_overflow_field(p_size_field, size);
-
-It appears to interpret the "&out[baselen + 4]" as referring to a single
-byte of the character array, while the equivalen "out + baselen + 4" is
-seen as an offset into the array.
-
-I don't see that kind of warning elsewhere, so just go with the simple
-rework.
-
-Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/smb/server/smb_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-index a7e81067bc991..e3273fa640b07 100644
---- a/fs/smb/server/smb_common.c
-+++ b/fs/smb/server/smb_common.c
-@@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn, const char *longname,
- 	out[baselen + 3] = PERIOD;
- 
- 	if (dot_present)
--		memcpy(&out[baselen + 4], extension, 4);
-+		memcpy(out + baselen + 4, extension, 1);
- 	else
- 		out[baselen + 4] = '\0';
- 	smbConvertToUTF16((__le16 *)shortname, out, PATH_MAX,
 -- 
-2.39.2
-
+Catalin
