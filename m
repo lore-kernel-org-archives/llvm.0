@@ -1,178 +1,244 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2091.outbound.protection.outlook.com [40.107.244.91])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CB4107A0
-	for <llvm@lists.linux.dev>; Fri, 16 Jun 2023 13:10:15 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PVw0jlL5Ua49r7lClYyH4rxafgi1HrElakn/9xqP7ITOOOorEPTr9Ta3L/ab7ZhQ44cLbnq4HjPH/jI6OuQxlLhlELS/uV/mV7Sc/sxZsgTQPur6S7/mvufMiJT8fGCFYDYyOjf1RtB3TKWfFyma1EG6MFRqsMyWyemLhxfl5PAs3/09rizIRS4Co2ZGoztcNjP48absQ9a4azGWcOeUznU9GD3196EvoQpcrKitMB6q6wI80tOSX286LF0n3hHJLiWWLHvvCiuVcA3XYItYki4MsHGKwovO9n4FASsd2/xiCnwuBunMOv70s/f5HBXJm+Ap3N/OlIQ2T4Zau/a62Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9yGTCz9pNDub/SFTrWYEXC8z/fOcJwYslhcFoGEAVEI=;
- b=bipeA2ZgUdpk/Byw8oVG1b91FwBPBSdHYtYKcCEyFwZD0MedT6QPa8DloOnWl5eTmxuiNmbLn1FZ+xEvHIHHnQTftmGtFZ6BsSV4O7jRq4a39K7QOtr4zwOlE+fhuSpb1L1/rMFVYaCrfGSVfM5l6n+BxaYtFcgEG4wbWUTs81sf2e5/u2zsKC4u/FFHA5BZsz1f14kzLCZK0opzx5Dx6g62bRGNxmdLJTstIjkOIov+Fzd8YV2+vlUNgV4ISog/yihQanS+fRt+HvpFfG3NEBDBCijPd2q2wOxBaxKsA3nxGhTg0C9y1EtUzUDk4ISr/mxaiKSXHcuqMySfmNklaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9yGTCz9pNDub/SFTrWYEXC8z/fOcJwYslhcFoGEAVEI=;
- b=rNBp8APKcq6k4hSJDn0HqwBi3HW5RlQEZr8uo+J6sNilulDzjQ+qzwk5DvSPcyDhv8WvmdwxWqD7FwX0tn1k31sBKKrgNpn87X8psX6lhayZF1VDMJl4DqozMcfIy4DJ99cVB08LywFuHr5XFRkMGFBnIq+RNK522bz+wjusXm0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5713.namprd13.prod.outlook.com (2603:10b6:510:114::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Fri, 16 Jun
- 2023 13:10:11 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
- 13:10:11 +0000
-Date: Fri, 16 Jun 2023 15:10:03 +0200
-From: Simon Horman <simon.horman@corigine.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Igor Russkikh <irusskikh@marvell.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] net: atlantic: fix ring buffer alignment
-Message-ID: <ZIxfK1MVRL+1wDvq@corigine.com>
-References: <20230616092645.3384103-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616092645.3384103-1-arnd@kernel.org>
-X-ClientProxiedBy: AM3PR03CA0055.eurprd03.prod.outlook.com
- (2603:10a6:207:5::13) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1CB19930;
+	Fri, 16 Jun 2023 13:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686923312; x=1718459312;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DbASQlzZ71aLt8w4TWh3pXUInLvlcqUaLm1T8q5SPDk=;
+  b=Q9KqR+QXoRy2Oo2ZIde0UAJ0yys16zOQFNgakOKEVWSfRHjkM/jfakJ6
+   7UeWrhSVw8ppyk08oaYRoH8tdbhRyxBYPBUTrJB+t0J/2DZVcr1eS723E
+   1B133hfs5BXri+CCImkQLPylxhuX30VVym1m0Tb8B4fVUPzEBiAEJIeqX
+   oCqkWEKnQSp33uMaJq9GjY1006ncq2dFGqCciKxb5vGqaaeKQM7pArv6O
+   jYrsZkB2As09lUG8i2t3RDIiQwEbCu49ZSBQiQFZD5hEMWfbX9qJu87mY
+   ae9aq0CzwT++qiXXifoKyDSkS0/9YjS9thx1LmghKtmqd1lep6sfG/QuA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="339545585"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="339545585"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 06:48:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="1043099972"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="1043099972"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Jun 2023 06:48:29 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qA9oT-0001I4-0m;
+	Fri, 16 Jun 2023 13:48:29 +0000
+Date: Fri, 16 Jun 2023 21:47:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Granados <j.granados@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [joelgranados:jag/sysctl-testing-for-0day 14/20]
+ net/core/sysctl_net_core.c:715:65: error: too few arguments to function
+ call, expected 4, have 3
+Message-ID: <202306162138.tAhS2PnR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5713:EE_
-X-MS-Office365-Filtering-Correlation-Id: f036685f-fa13-4bd8-d1a5-08db6e6b0421
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ZNWteHQ8SFDSX774SIAw/G3o6esbma3tbCo4vb7nkjsM4EQwg/LtVGLZujSjDKOIogjL1VQVDsTtXkwaXczvEyxVc55cST/GWadF9C00SnT3BAxFWgD4wNtVVfDiDlQc9pow3lGAIH0B6/WmXrOl3YsxZTnXF1/3Bw8wlk3wtTbBhsHDOjLvcayv26zK9s/0kYKCQyZX3deCFda9lbfo590BoYv/iSABi7BJiCWFAgZaIzQVLnX1gAHFVD5FFM+ABFNB3JFrKv3Tddxfm3khgrtPXTdxkupLBGeUrcTKQmX4mg8qpMujFqBxQQxryjzA/mHIxuwcBKevFMc+zsG7MhAfaEY8G6xq05V4ziMGMltLPw7zllaIlRQen0oP9G3LsEJS8TJdJRsn4ApNkdF7fibCTQAiOQe/91eBrc+NRjC0i3xTdGdbpi2ptGZWB5RIgWsfVOTBR/Rousmuo/sv1L0M0iEqEcJQbUqVQTLZNIxxjnJybsIXGtoULl4CJ6LKzw8WaqSsMSZtMOpB7eLj+1zGFlPrvWMh3Jn/TAQfeS5gwgaJOOERq8CdnL1z5HRbzSy8kJsPf668uMX0QBvkysKm3eCNGgCoX6TFlIj54bQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(376002)(136003)(396003)(346002)(451199021)(44832011)(6512007)(186003)(83380400001)(7416002)(6506007)(38100700002)(54906003)(2906002)(2616005)(5660300002)(478600001)(6486002)(36756003)(66556008)(66946007)(6666004)(8936002)(316002)(6916009)(86362001)(8676002)(41300700001)(66476007)(4326008)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2iccjbmPr0Qyt78gFY6BmlfTUMQlkNXaGzfas93YPDFy+ByW64UyJDt6A5d1?=
- =?us-ascii?Q?3c3wNIB+5iIzosZyNVFiuPKNS90kc4ovRLa7dlnbskFQ6W9fIaTQEtgV0X6l?=
- =?us-ascii?Q?Pkz/3+XMaq/JbWT9JVzLTFSpoU9yeWPXln7cajfbHcjJtNOD3nkLwjI0ATDA?=
- =?us-ascii?Q?HR809sZk07JPGrf7PRx7NM1tUTnJdxm8Nust+jcaBkNuZSsBbP2BQ1/wefH0?=
- =?us-ascii?Q?LQWhGOZP+EiuCcTbImX/zPhnyq6tMwOUjFf38+DGZYyyztMroN8MlHCy00qN?=
- =?us-ascii?Q?utg6KH2Vsj2G4RSfeG18cTE6j2Q46tfYgMOto+L0J8+w7PEr0AqPNDC3MR7a?=
- =?us-ascii?Q?3NhmICyhI2kDqGpmFNeFHIftHirmw/eInRxe4ikCfpC+ZERr917e66z+z10x?=
- =?us-ascii?Q?juWszvwVOf//QQkooagnGPdR29AFtWsmr43gz8oXkluxfkQ26e1a+yLKThn2?=
- =?us-ascii?Q?vB3VUZmO453J19yYwUpEiP1fVn8E6HyjeZdIhxLmuSiy01EkYLwnmdAFs+J5?=
- =?us-ascii?Q?puORD+vgpxSGmCk7h7IxF5bMtPHxHezb3YurvooMBluwe4uHdw12WCYRffDA?=
- =?us-ascii?Q?euliyblvXnfJ3UNljO3vzEVtNALTbApCWPKO1k8JvS79MB5DDcD5qHVnUIvR?=
- =?us-ascii?Q?yIAA/9Hd3GDPMez2trKi4WAVaGMRu1aqwGw6rtFcVSV7nT01LlYDlrwwRC05?=
- =?us-ascii?Q?5Y8bsO3UqNVmxuleE7qtkEYkZ9EXt3TjkXatIvN3Rpey8Vjj9UYCZarnt2O4?=
- =?us-ascii?Q?xI8/dZ05dTwC9XFdYjl8b82DdgkMZQMCR/MTVdregaeZEEEKLvElNQSTZy+Y?=
- =?us-ascii?Q?wOglDX617n42NIsMzlCLfPYvttrIRxqGcRH7ARx0a/FGm9dchVclELecjVbq?=
- =?us-ascii?Q?/BoBPBoEQlaOty0tBai9TI5JzBqX9NVcKUyoobwa+bvInjhsHMVpoK2os7+b?=
- =?us-ascii?Q?WBVTZbW0XnlZXKqgyqelKP/I7SEsifuWr6zmj0Htq/7nTy/xnOzNesccrg77?=
- =?us-ascii?Q?8NprQGNHXOonRECk4FRtz0/Ewj7L/ikGktyEePUe12WD/BiRkjNZ/+Xopm3d?=
- =?us-ascii?Q?1SNXpxhSFigtCmpdVCxCwnjSsTiJjYOHUJJT3fcjCmlyzB4yIqO7r5dKoIWt?=
- =?us-ascii?Q?BiY7qJiY6t18kQ8TA1TbH63jFTyHJCMDweAsMIy1ito2KMuTvpt1Dj3ZF5lX?=
- =?us-ascii?Q?HrNpxlmVmFhOg6tFjbPYW5FscY+Fe5b0uUydV1+HEXjrLWpid0753v8tCSQd?=
- =?us-ascii?Q?rMOe0GtFhmjeejQRlkJlG5voDyfG16VSfuovzZTg6CVclYgyZit/IHYrhpII?=
- =?us-ascii?Q?EbchQWiimvOjkzIiJb3FfplD8H05PMaM4/F9oW18xz1SLueLca/IFuBqb4DB?=
- =?us-ascii?Q?IxiKz5QNYKZDNOa4620KGd0MqbOkki6S3V1JaUbv/8YEA4XI8uM1ZylAzqAj?=
- =?us-ascii?Q?QLTVvIiNIHxAU4EYy+R2bymk3eWew7ZtlXhVTsiHlp0nrWEQMHQI0/L1pfIk?=
- =?us-ascii?Q?zf7vG312fVcOmkwTQmKqot2O4JfjzG3O/tgVcoMqIpWE59yZbzZuEXIOxCK7?=
- =?us-ascii?Q?mKwtCqUzULCpxpmnhiUF8+NBn7vyzu/10qHr2TepS057NYLVtHPQyxtJa49y?=
- =?us-ascii?Q?5HZACQV9l94sCyak3tC7WzQrKcsfQCcMm0SHAxM+RXToBJIklx0UEvf0ZYOq?=
- =?us-ascii?Q?xdDK1w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f036685f-fa13-4bd8-d1a5-08db6e6b0421
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 13:10:11.4430
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qoK6BZlI/pp6a4KkkXxhW8I9iTJ3/2xfrPUpGJdPcNYrLVzFH0PGdmZgYcYZ0D2FgsRrOR16dI/FAvt9J1Vw5ktnp2T6m0iGyqOGoxl+vcc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5713
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 16, 2023 at 11:26:32AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang warns about conflicting packing annotations:
-> 
-> drivers/net/ethernet/aquantia/atlantic/aq_ring.h:72:2: error: field  within 'struct aq_ring_buff_s' is less aligned than 'union aq_ring_buff_s::(anonymous at drivers/net/ethernet/aquantia/atlantic/aq_ring.h:72:2)' and is usually due to 'struct aq_ring_buff_s' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+tree:   https://github.com/Joelgranados/linux.git jag/sysctl-testing-for-0day
+head:   669cf696035fa888754f34d948b9488c2206dd7d
+commit: 88e548722da320e210dc084d6ac3ffbea4162984 [14/20] sysctl: add size to the regsiter_net_sysctl function
+config: x86_64-randconfig-r022-20230615 (https://download.01.org/0day-ci/archive/20230616/202306162138.tAhS2PnR-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162138.tAhS2PnR-lkp@intel.com/reproduce)
 
-FWIIW, I was able to reproduce this (warning) with clang-16 on ARM (32bit).
-And I agree with the approach you have taken here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306162138.tAhS2PnR-lkp@intel.com/
 
-> This was originally intended to ensure the structure fits exactly into
-> 32 bytes on 64-bit architectures, but apparently never did, and instead
-> just produced misaligned pointers as well as forcing byte-wise access
-> on hardware without unaligned load/store instructions.
-> 
-> Update the comment to more closely reflect the layout and remove the
-> broken __packed annotation.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  .../net/ethernet/aquantia/atlantic/aq_ring.h  | 26 +++++++++++--------
->  1 file changed, 15 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-> index 0a6c34438c1d0..a9cc5a1c4c479 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-> @@ -26,19 +26,23 @@ struct aq_rxpage {
->  	unsigned int pg_off;
->  };
->  
-> -/*           TxC       SOP        DX         EOP
-> - *         +----------+----------+----------+-----------
-> - *   8bytes|len l3,l4 | pa       | pa       | pa
-> - *         +----------+----------+----------+-----------
-> - * 4/8bytes|len pkt   |len pkt   |          | skb
-> - *         +----------+----------+----------+-----------
-> - * 4/8bytes|is_gso    |len,flags |len       |len,is_eop
-> - *         +----------+----------+----------+-----------
-> +/*           TxC       SOP        DX         EOP	RX
-> + *         +----------+----------+----------+----------+-------
-> + *   8bytes|len l3,l4 | pa       | pa       | pa       | hash
-> + *         +----------+----------+----------+----------+-------
-> + * 4/8bytes|len pkt   |len pkt   |          | skb      | page
-> + *         +----------+----------+----------+----------+-------
-> + * 4/8bytes|is_gso    |len,flags |len       |len,is_eop| daddr
-> + *         +----------+----------+----------+----------+-------
-> + * 4/8bytes|          |          |          |          | order,pgoff
-> + *         +----------+----------+----------+----------+-------
-> + * 2bytes  |          |          |          |          | vlan_rx_tag
-> + *         +----------+----------+----------+----------+-------
-> + * 8bytes  +                   flags
-> + *         +----------+----------+----------+----------+-------
+Note: the joelgranados/jag/sysctl-testing-for-0day HEAD 669cf696035fa888754f34d948b9488c2206dd7d builds fine.
+      It only hurts bisectability.
 
-Perhaps it just me.  But I do have trouble reconciling the description
-above with the structure below. As such, my suggest would be to simply
-delete it.
+All errors (new ones prefixed by >>):
 
->   *
-> - *  This aq_ring_buff_s doesn't have endianness dependency.
-> - *  It is __packed for cache line optimizations.
->   */
-> -struct __packed aq_ring_buff_s {
-> +struct aq_ring_buff_s {
->  	union {
->  		/* RX/TX */
->  		dma_addr_t pa;
+>> net/core/sysctl_net_core.c:715:65: error: too few arguments to function call, expected 4, have 3
+           net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl);
+                                  ~~~~~~~~~~~~~~~~~~~                     ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/core/sysctl_net_core.c:748:59: error: too few arguments to function call, expected 4, have 3
+           register_net_sysctl(&init_net, "net/core", net_core_table);
+           ~~~~~~~~~~~~~~~~~~~                                      ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   2 errors generated.
+--
+>> net/core/neighbour.c:3845:68: error: too few arguments to function call, expected 4, have 3
+                   register_net_sysctl(neigh_parms_net(p), neigh_path, t->neigh_vars);
+                   ~~~~~~~~~~~~~~~~~~~                                              ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   1 error generated.
+--
+>> net/ipv4/ip_fragment.c:618:50: error: too few arguments to function call, expected 4, have 3
+           hdr = register_net_sysctl(net, "net/ipv4", table);
+                 ~~~~~~~~~~~~~~~~~~~                       ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv4/ip_fragment.c:643:64: error: too few arguments to function call, expected 4, have 3
+           register_net_sysctl(&init_net, "net/ipv4", ip4_frags_ctl_table);
+           ~~~~~~~~~~~~~~~~~~~                                           ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   2 errors generated.
+--
+>> net/ipv4/devinet.c:2590:67: error: too few arguments to function call, expected 4, have 3
+           t->sysctl_header = register_net_sysctl(net, path, t->devinet_vars);
+                              ~~~~~~~~~~~~~~~~~~~                           ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv4/devinet.c:2723:53: error: too few arguments to function call, expected 4, have 3
+           forw_hdr = register_net_sysctl(net, "net/ipv4", tbl);
+                      ~~~~~~~~~~~~~~~~~~~                     ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   2 errors generated.
+--
+>> net/ipv4/sysctl_net_ipv4.c:1503:65: error: too few arguments to function call, expected 4, have 3
+           net->ipv4.ipv4_hdr = register_net_sysctl(net, "net/ipv4", table);
+                                ~~~~~~~~~~~~~~~~~~~                       ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv4/sysctl_net_ipv4.c:1541:61: error: too few arguments to function call, expected 4, have 3
+           hdr = register_net_sysctl(&init_net, "net/ipv4", ipv4_table);
+                 ~~~~~~~~~~~~~~~~~~~                                  ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   2 errors generated.
+--
+   net/ipv4/route.c:880:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
+           int log_martians;
+               ^
+>> net/ipv4/route.c:3618:70: error: too few arguments to function call, expected 4, have 3
+           net->ipv4.route_hdr = register_net_sysctl(net, "net/ipv4/route", tbl);
+                                 ~~~~~~~~~~~~~~~~~~~                           ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv4/route.c:3778:67: error: too few arguments to function call, expected 4, have 3
+           register_net_sysctl(&init_net, "net/ipv4/route", ipv4_route_table);
+           ~~~~~~~~~~~~~~~~~~~                                              ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   1 warning and 2 errors generated.
+--
+>> net/unix/sysctl_net_unix.c:39:59: error: too few arguments to function call, expected 4, have 3
+           net->unx.ctl = register_net_sysctl(net, "net/unix", table);
+                          ~~~~~~~~~~~~~~~~~~~                       ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   1 error generated.
+--
+>> net/ipv6/addrconf.c:7089:57: error: too few arguments to function call, expected 4, have 3
+           p->sysctl_header = register_net_sysctl(net, path, table);
+                              ~~~~~~~~~~~~~~~~~~~                 ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   1 error generated.
+--
+>> net/ipv6/reassembly.c:473:50: error: too few arguments to function call, expected 4, have 3
+           hdr = register_net_sysctl(net, "net/ipv6", table);
+                 ~~~~~~~~~~~~~~~~~~~                       ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv6/reassembly.c:502:23: error: too few arguments to function call, expected 4, have 3
+                           ip6_frags_ctl_table);
+                                              ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   2 errors generated.
+--
+>> net/ipv6/sysctl_net_ipv6.c:278:72: error: too few arguments to function call, expected 4, have 3
+           net->ipv6.sysctl.hdr = register_net_sysctl(net, "net/ipv6", ipv6_table);
+                                  ~~~~~~~~~~~~~~~~~~~                            ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv6/sysctl_net_ipv6.c:283:62: error: too few arguments to function call, expected 4, have 3
+                   register_net_sysctl(net, "net/ipv6/route", ipv6_route_table);
+                   ~~~~~~~~~~~~~~~~~~~                                        ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv6/sysctl_net_ipv6.c:288:60: error: too few arguments to function call, expected 4, have 3
+                   register_net_sysctl(net, "net/ipv6/icmp", ipv6_icmp_table);
+                   ~~~~~~~~~~~~~~~~~~~                                      ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   net/ipv6/sysctl_net_ipv6.c:338:70: error: too few arguments to function call, expected 4, have 3
+           ip6_header = register_net_sysctl(&init_net, "net/ipv6", ipv6_rotable);
+                        ~~~~~~~~~~~~~~~~~~~                                    ^
+   include/net/net_namespace.h:474:26: note: 'register_net_sysctl' declared here
+   struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
+                            ^
+   4 errors generated.
+
+
+vim +715 net/core/sysctl_net_core.c
+
+316cdaa1158af1 Mahesh Bandewar   2020-08-26  700  
+024626e36d75fc Pavel Emelyanov   2007-12-08  701  static __net_init int sysctl_core_net_init(struct net *net)
+024626e36d75fc Pavel Emelyanov   2007-12-08  702  {
+e187013abeb4c2 Akhmat Karakotov  2022-01-31  703  	struct ctl_table *tbl, *tmp;
+024626e36d75fc Pavel Emelyanov   2007-12-08  704  
+d5a4502e9efa53 Pavel Emelyanov   2008-05-19  705  	tbl = netns_core_table;
+09ad9bc752519c Octavian Purdila  2009-11-25  706  	if (!net_eq(net, &init_net)) {
+d5a4502e9efa53 Pavel Emelyanov   2008-05-19  707  		tbl = kmemdup(tbl, sizeof(netns_core_table), GFP_KERNEL);
+024626e36d75fc Pavel Emelyanov   2007-12-08  708  		if (tbl == NULL)
+024626e36d75fc Pavel Emelyanov   2007-12-08  709  			goto err_dup;
+024626e36d75fc Pavel Emelyanov   2007-12-08  710  
+e187013abeb4c2 Akhmat Karakotov  2022-01-31  711  		for (tmp = tbl; tmp->procname; tmp++)
+e187013abeb4c2 Akhmat Karakotov  2022-01-31  712  			tmp->data += (char *)net - (char *)&init_net;
+790a35328991b0 Pavel Emelyanov   2007-12-08  713  	}
+024626e36d75fc Pavel Emelyanov   2007-12-08  714  
+ec8f23ce0f4005 Eric W. Biederman 2012-04-19 @715  	net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl);
+8efa6e93cb2666 Pavel Emelyanov   2008-03-31  716  	if (net->core.sysctl_hdr == NULL)
+024626e36d75fc Pavel Emelyanov   2007-12-08  717  		goto err_reg;
+024626e36d75fc Pavel Emelyanov   2007-12-08  718  
+024626e36d75fc Pavel Emelyanov   2007-12-08  719  	return 0;
+024626e36d75fc Pavel Emelyanov   2007-12-08  720  
+024626e36d75fc Pavel Emelyanov   2007-12-08  721  err_reg:
+d5a4502e9efa53 Pavel Emelyanov   2008-05-19  722  	if (tbl != netns_core_table)
+024626e36d75fc Pavel Emelyanov   2007-12-08  723  		kfree(tbl);
+024626e36d75fc Pavel Emelyanov   2007-12-08  724  err_dup:
+024626e36d75fc Pavel Emelyanov   2007-12-08  725  	return -ENOMEM;
+024626e36d75fc Pavel Emelyanov   2007-12-08  726  }
+024626e36d75fc Pavel Emelyanov   2007-12-08  727  
+
+:::::: The code at line 715 was first introduced by commit
+:::::: ec8f23ce0f4005b74013d4d122e0d540397a93c9 net: Convert all sysctl registrations to register_net_sysctl
+
+:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
