@@ -1,47 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3209279FE;
-	Sat, 17 Jun 2023 10:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB2A748E;
+	Sat, 17 Jun 2023 11:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686999574; x=1718535574;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RJgqnncStiZ0O2XKLU6s/eNBp9BMfcDWyAx4Cgh5IGE=;
-  b=gTmAR6UqyFABqS5pSUEyfEaChHjsV1i8+7gbE+GF0jMi1R3uQkckgytJ
-   nCrib2tIcCHhQymXRjxNu2W7/P+ajwLLVdLfoCV05H1ea1NZ4fnYRW8xf
-   gWBG5HH73PN5AU8fu6hKLuAP9gcKmTn/AfdbiuXtqpKS8vOxiLJO6hGQs
-   vDPYBXJOl9wQetXwP27/WGDdiIJbZWso4pehQMSFrd9pb0FML57xCG6FN
-   pKE9hd4kX0Lp+AeDMIMsF9XZmrAssggMjVS6a0JRD64edWVZdVsprb4Z8
-   5UaUAUziIgA6yYx8vjAMIXrFKRu2AdcZoUtCP2D0iDvbYZdb0eG5/cpan
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388248450"
+  t=1687001494; x=1718537494;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dhnoq8GmV/hmm4klrWY7d/s4ctPYBGaiKd5ihl8jhlc=;
+  b=AufvJp8h+75RzHi9ZeuCwLZF2glClV5u03zlTiBlTXbFWE9CZc3jO/A/
+   tyhyVOgQ8KN78OMlr4LjYMlYjtjzlQL2HexpsSdB9+v6gQ4v/M34bECus
+   pO7itesonGnoHJ2ThcrVoStuptkWqk1StQQOVZ/NMtOIOH57ZAuCi9GNl
+   50NpBkW5jejLsu4hEL/qlldfjqS6s9c65hmgFXKOtjWDBOc45LfTakdqZ
+   8Rntd5M+tOy5jVD7kpjjITANzW0gyMYrUGGRTXujMIRo6viKhe6u5Ixgn
+   tcW+/PCJhd/jc9zyj728WXs3LjtT8B+tfFYG+5AifU8eZBLWqDWF3JHLv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="339715409"
 X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="388248450"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 03:59:33 -0700
+   d="scan'208";a="339715409"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 04:31:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="1043377580"
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="857686411"
 X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="1043377580"
+   d="scan'208";a="857686411"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Jun 2023 03:59:30 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 17 Jun 2023 04:31:31 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qATeT-0002gj-2z;
-	Sat, 17 Jun 2023 10:59:29 +0000
-Date: Sat, 17 Jun 2023 18:58:52 +0800
+	id 1qAU9S-0002i0-1k;
+	Sat, 17 Jun 2023 11:31:30 +0000
+Date: Sat, 17 Jun 2023 19:30:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miaohe Lin <linmiaohe@huawei.com>, hannes@cmpxchg.org,
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-	akpm@linux-foundation.org
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	muchun.song@linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linmiaohe@huawei.com
-Subject: Re: [PATCH] memcg: remove unneeded header files
-Message-ID: <202306171859.y5wGpmlD-lkp@intel.com>
-References: <20230617072658.1826560-1-linmiaohe@huawei.com>
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [krzk-github:n/dts-sm8350-hdk-audio-and-sd 16/35]
+ drivers/usb/typec/mux/nb7vpq904m.c:98:24: error: call to undeclared function
+ 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202306171917.h9V2vhNS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,136 +49,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230617072658.1826560-1-linmiaohe@huawei.com>
 
-Hi Miaohe,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.4-rc6 next-20230616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/memcg-remove-unneeded-header-files/20230617-152922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230617072658.1826560-1-linmiaohe%40huawei.com
-patch subject: [PATCH] memcg: remove unneeded header files
-config: hexagon-randconfig-r045-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171859.y5wGpmlD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171859.y5wGpmlD-lkp@intel.com/reproduce)
+tree:   https://github.com/krzk/linux n/dts-sm8350-hdk-audio-and-sd
+head:   8aabb9b23f1ba73be01d969660a8b05245806b57
+commit: 236a2a4503e2cd28b116847e9a7e6baadaa09204 [16/35] usb: typec: add support for the nb7vpq904m Type-C Linear Redriver
+config: powerpc-randconfig-r025-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171917.h9V2vhNS-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171917.h9V2vhNS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306171859.y5wGpmlD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306171917.h9V2vhNS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/memcontrol.c:29:
+   In file included from include/linux/swap.h:9:
    In file included from include/linux/memcontrol.h:13:
    In file included from include/linux/cgroup.h:26:
    In file included from include/linux/kernel_stat.h:9:
    In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/memcontrol.c:29:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:11:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
    In file included from include/linux/memcontrol.h:13:
    In file included from include/linux/cgroup.h:26:
    In file included from include/linux/kernel_stat.h:9:
    In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/memcontrol.c:29:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:13:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
    In file included from include/linux/memcontrol.h:13:
    In file included from include/linux/cgroup.h:26:
    In file included from include/linux/kernel_stat.h:9:
    In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> mm/memcontrol.c:5447:2: error: call to undeclared function 'wb_memcg_offline'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5447 |         wb_memcg_offline(memcg);
-         |         ^
->> mm/memcontrol.c:5788:8: error: call to undeclared function 'mapping_can_writeback'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5788 |                         if (mapping_can_writeback(mapping)) {
-         |                             ^
-   mm/memcontrol.c:5788:8: note: did you mean 'mapping_map_writable'?
-   include/linux/fs.h:545:19: note: 'mapping_map_writable' declared here
-     545 | static inline int mapping_map_writable(struct address_space *mapping)
-         |                   ^
-   6 warnings and 2 errors generated.
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:15:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:17:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> drivers/usb/typec/mux/nb7vpq904m.c:98:24: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                              EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
+                                               ^
+   drivers/usb/typec/mux/nb7vpq904m.c:119:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
+                                ^
+   drivers/usb/typec/mux/nb7vpq904m.c:199:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
+                                ^
+   6 warnings and 3 errors generated.
 
 
-vim +/wb_memcg_offline +5447 mm/memcontrol.c
+vim +/FIELD_PREP +98 drivers/usb/typec/mux/nb7vpq904m.c
 
-8cdea7c0545426 Balbir Singh      2008-02-07  5424  
-eb95419b023aba Tejun Heo         2013-08-08  5425  static void mem_cgroup_css_offline(struct cgroup_subsys_state *css)
-df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5426  {
-eb95419b023aba Tejun Heo         2013-08-08  5427  	struct mem_cgroup *memcg = mem_cgroup_from_css(css);
-3bc942f372af38 Tejun Heo         2013-11-22  5428  	struct mem_cgroup_event *event, *tmp;
-79bd9814e5ec9a Tejun Heo         2013-11-22  5429  
-79bd9814e5ec9a Tejun Heo         2013-11-22  5430  	/*
-79bd9814e5ec9a Tejun Heo         2013-11-22  5431  	 * Unregister events and notify userspace.
-79bd9814e5ec9a Tejun Heo         2013-11-22  5432  	 * Notify userspace about cgroup removing only after rmdir of cgroup
-79bd9814e5ec9a Tejun Heo         2013-11-22  5433  	 * directory to avoid race between userspace and kernelspace.
-79bd9814e5ec9a Tejun Heo         2013-11-22  5434  	 */
-4ba9515d32bac1 Shakeel Butt      2021-09-02  5435  	spin_lock_irq(&memcg->event_list_lock);
-fba94807837850 Tejun Heo         2013-11-22  5436  	list_for_each_entry_safe(event, tmp, &memcg->event_list, list) {
-79bd9814e5ec9a Tejun Heo         2013-11-22  5437  		list_del_init(&event->list);
-79bd9814e5ec9a Tejun Heo         2013-11-22  5438  		schedule_work(&event->remove);
-79bd9814e5ec9a Tejun Heo         2013-11-22  5439  	}
-4ba9515d32bac1 Shakeel Butt      2021-09-02  5440  	spin_unlock_irq(&memcg->event_list_lock);
-ec64f51545fffb KAMEZAWA Hiroyuki 2009-04-02  5441  
-bf8d5d52ffe89a Roman Gushchin    2018-06-07  5442  	page_counter_set_min(&memcg->memory, 0);
-230671533d6463 Roman Gushchin    2018-06-07  5443  	page_counter_set_low(&memcg->memory, 0);
-63677c745d63ba Roman Gushchin    2017-09-06  5444  
-567e9ab2e614e5 Johannes Weiner   2016-01-20  5445  	memcg_offline_kmem(memcg);
-a178015cde6998 Yang Shi          2021-05-04  5446  	reparent_shrinker_deferred(memcg);
-52ebea749aaed1 Tejun Heo         2015-05-22 @5447  	wb_memcg_offline(memcg);
-e4dde56cd20867 Yu Zhao           2022-12-21  5448  	lru_gen_offline_memcg(memcg);
-73f576c04b9410 Johannes Weiner   2016-07-20  5449  
-591edfb10a949d Roman Gushchin    2018-10-26  5450  	drain_all_stock(memcg);
-591edfb10a949d Roman Gushchin    2018-10-26  5451  
-73f576c04b9410 Johannes Weiner   2016-07-20  5452  	mem_cgroup_id_put(memcg);
-df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5453  }
-df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5454  
+    80	
+    81	static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
+    82	{
+    83		u8 eq, out_comp, flat_gain, loss_match;
+    84	
+    85		if (dp) {
+    86			eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
+    87			out_comp = 0x3;
+    88			flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
+    89			loss_match = 0x3;
+    90		} else {
+    91			eq = 0x4;
+    92			out_comp = 0x3;
+    93			flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
+    94			loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
+    95		}
+    96	
+    97		regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
+  > 98				   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
+    99		regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
+   100				   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
+   101		regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
+   102				   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
+   103		regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
+   104				   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
+   105	}
+   106	
 
 -- 
 0-DAY CI Kernel Test Service
