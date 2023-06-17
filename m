@@ -1,46 +1,55 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB2A748E;
-	Sat, 17 Jun 2023 11:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961198C0F;
+	Sat, 17 Jun 2023 12:15:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687001494; x=1718537494;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dhnoq8GmV/hmm4klrWY7d/s4ctPYBGaiKd5ihl8jhlc=;
-  b=AufvJp8h+75RzHi9ZeuCwLZF2glClV5u03zlTiBlTXbFWE9CZc3jO/A/
-   tyhyVOgQ8KN78OMlr4LjYMlYjtjzlQL2HexpsSdB9+v6gQ4v/M34bECus
-   pO7itesonGnoHJ2ThcrVoStuptkWqk1StQQOVZ/NMtOIOH57ZAuCi9GNl
-   50NpBkW5jejLsu4hEL/qlldfjqS6s9c65hmgFXKOtjWDBOc45LfTakdqZ
-   8Rntd5M+tOy5jVD7kpjjITANzW0gyMYrUGGRTXujMIRo6viKhe6u5Ixgn
-   tcW+/PCJhd/jc9zyj728WXs3LjtT8B+tfFYG+5AifU8eZBLWqDWF3JHLv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="339715409"
+  t=1687004147; x=1718540147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mQ87SPnE3Di8X8k0ALKsp3NAdHIXJcUi2J4OGCuvT7M=;
+  b=jC0aBWdI1eOU3FDyesENWEP3tJUvux+sKMEA8M6J1SFhEuuZWB0I6Jva
+   oxsm5ueJyD6JHjJ81D79Q610AO/ZREEBDflh+NEz2zuCVQGo2D086Yjya
+   FwSQ21Hhh6om0S6E6REJa3X+EBGwSrLzs4cUPlRgvGv3pKLyXCdP56O2z
+   EYx4uwtT/1aN2IDv+v+1xXOiYA3rG+XoQ//oDYOkQ/3Yifa8DDERk2bxa
+   sGx777Z9LAk8WJ+gUz6ezd2Dut2OwQkKMk19919lEN6CMZ4ubszfTQcYp
+   XxXQAhLtW3za/YklVrn37PbtHZbFKhd2Wtob0NJWVEd0WY3ydaLmYUNaB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="344123938"
 X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="339715409"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 04:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="857686411"
+   d="scan'208";a="344123938"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 05:15:37 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="746738268"
 X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="857686411"
+   d="scan'208";a="746738268"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Jun 2023 04:31:31 -0700
+  by orsmga001.jf.intel.com with ESMTP; 17 Jun 2023 05:15:31 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qAU9S-0002i0-1k;
-	Sat, 17 Jun 2023 11:31:30 +0000
-Date: Sat, 17 Jun 2023 19:30:51 +0800
+	id 1qAUq4-0002jg-1C;
+	Sat, 17 Jun 2023 12:15:32 +0000
+Date: Sat, 17 Jun 2023 20:15:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Frank Oltmanns <frank@oltmanns.dev>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [krzk-github:n/dts-sm8350-hdk-audio-and-sd 16/35]
- drivers/usb/typec/mux/nb7vpq904m.c:98:24: error: call to undeclared function
- 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202306171917.h9V2vhNS-lkp@intel.com>
+	Frank Oltmanns <frank@oltmanns.dev>,
+	"A.s. Dong" <aisheng.dong@nxp.com>, Abel Vesa <abelvesa@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Elaine Zhang <zhangqing@rock-chips.com>
+Subject: Re: [PATCH v4 2/2] clk: fractional-divider: tests: Add test suite
+ for edge cases
+Message-ID: <202306172036.EevtaVp6-lkp@intel.com>
+References: <20230617102919.27564-3-frank@oltmanns.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,162 +58,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230617102919.27564-3-frank@oltmanns.dev>
 
-tree:   https://github.com/krzk/linux n/dts-sm8350-hdk-audio-and-sd
-head:   8aabb9b23f1ba73be01d969660a8b05245806b57
-commit: 236a2a4503e2cd28b116847e9a7e6baadaa09204 [16/35] usb: typec: add support for the nb7vpq904m Type-C Linear Redriver
-config: powerpc-randconfig-r025-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171917.h9V2vhNS-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171917.h9V2vhNS-lkp@intel.com/reproduce)
+Hi Frank,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linus/master v6.4-rc6 next-20230616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Oltmanns/clk-fractional-divider-Improve-approximation-when-zero-based-and-export/20230617-183118
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230617102919.27564-3-frank%40oltmanns.dev
+patch subject: [PATCH v4 2/2] clk: fractional-divider: tests: Add test suite for edge cases
+config: hexagon-randconfig-r035-20230617 (https://download.01.org/0day-ci/archive/20230617/202306172036.EevtaVp6-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230617/202306172036.EevtaVp6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306171917.h9V2vhNS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306172036.EevtaVp6-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:11:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:13:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:15:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/usb/typec/mux/nb7vpq904m.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:17:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/usb/typec/mux/nb7vpq904m.c:98:24: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                              EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
-                                               ^
-   drivers/usb/typec/mux/nb7vpq904m.c:119:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-                                ^
-   drivers/usb/typec/mux/nb7vpq904m.c:199:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-                                ^
-   6 warnings and 3 errors generated.
+>> drivers/clk/clk-fractional-divider_test.c:26:41: warning: variable 'max_m' set but not used [-Wunused-but-set-variable]
+      26 |         unsigned long rate, parent_rate, m, n, max_m, max_n;
+         |                                                ^
+   drivers/clk/clk-fractional-divider_test.c:88:41: warning: variable 'max_m' set but not used [-Wunused-but-set-variable]
+      88 |         unsigned long rate, parent_rate, m, n, max_m, max_n;
+         |                                                ^
+   2 warnings generated.
 
 
-vim +/FIELD_PREP +98 drivers/usb/typec/mux/nb7vpq904m.c
+vim +/max_m +26 drivers/clk/clk-fractional-divider_test.c
 
-    80	
-    81	static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
-    82	{
-    83		u8 eq, out_comp, flat_gain, loss_match;
-    84	
-    85		if (dp) {
-    86			eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
-    87			out_comp = 0x3;
-    88			flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
-    89			loss_match = 0x3;
-    90		} else {
-    91			eq = 0x4;
-    92			out_comp = 0x3;
-    93			flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
-    94			loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
-    95		}
-    96	
-    97		regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
-  > 98				   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
-    99		regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
-   100				   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
-   101		regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
-   102				   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
-   103		regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
-   104				   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
-   105	}
-   106	
+    15	
+    16	/*
+    17	 * Test the maximum denominator case for fd clock without flags.
+    18	 *
+    19	 * Expect the highest possible denominator to be used in order to get as close as possible to the
+    20	 * requested rate.
+    21	 */
+    22	static void clk_fd_test_approximation_max_denominator(struct kunit *test)
+    23	{
+    24		struct clk_fractional_divider *fd;
+    25		struct clk_hw *hw;
+  > 26		unsigned long rate, parent_rate, m, n, max_m, max_n;
+    27	
+    28		fd = kunit_kzalloc(test, sizeof(*fd), GFP_KERNEL);
+    29		KUNIT_ASSERT_NOT_NULL(test, fd);
+    30	
+    31		fd->mwidth = 3;
+    32		max_m = 7;
+    33		fd->nwidth = 3;
+    34		max_n = 7;
+    35	
+    36		hw = &fd->hw;
+    37	
+    38		rate = 240000000;
+    39		parent_rate = (max_n + 1) * rate; /* so that it exceeds the maximum divisor */
+    40	
+    41		clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
+    42		KUNIT_EXPECT_EQ(test, parent_rate, (max_n + 1) * rate); /* parent remains unchanged */
+    43		KUNIT_EXPECT_EQ(test, m, 1);
+    44		KUNIT_EXPECT_EQ(test, n, max_n);
+    45	}
+    46	
 
 -- 
 0-DAY CI Kernel Test Service
