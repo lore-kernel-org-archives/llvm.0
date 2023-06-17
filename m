@@ -1,44 +1,47 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4857820E1;
-	Sat, 17 Jun 2023 06:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71557FA;
+	Sat, 17 Jun 2023 09:24:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686983964; x=1718519964;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a/GcUO5RmZuj/9Xe5/8mvDW2JA/dFr1+oCRjc+bAqEc=;
-  b=gm7iopBgg7Q00v9t2gw5Uld2SzpUVHLhffyFQGA8eS6ek/Pis5Zl8QHe
-   PFDJM3ORvbe/S4DWDYb3sMuZ9P4iTknCqfRyhcjbNZTW8sr+79vdRXgrZ
-   RfrVdFXBdHrWaf//asOTKKIF9ve3haAolyOh3c2u3C7tBPlKjg19mWk+1
-   KNTmxfCFGy3VfsjyE/KuKEsX4Kqe6VkvtNAjFx8wAVlpzOtgpP+oetSQg
-   a7l7TreXtkTwyp6jczJW89tEOfxN/QoKpwRR12/KF9fCs08TguW980aQc
-   T+A4PSokwspppTpWYWyxkVj/v0s1FVVQj8/Te13lyyaxsdW6wud8gA5bF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="361902063"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="361902063"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 23:39:21 -0700
+  t=1686993870; x=1718529870;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q12Mn3SskxHyYSjjc9NvWyCrgucyGSmuPx1bDTGGBEY=;
+  b=Gp44bZTQnHNkOsPOzMVYDQ54ICZLFr8TR6127rnX3arYKDFUSysGYD8W
+   C9OdI6ORqkYcdFQ3zqy0f12w+4LAWuqUuTvE9dNgwgIpenORaLT9WHUqh
+   XK99egMV7C8KxsVYlssi/pHjoit3cy8jNGlm3Jh977iMyXusrBRVfUIZt
+   +5BUwy/+9bYkLbYDCg0UVcqkrMtgr34HSUbpMPEo9ZODbTs5pJNgQWS73
+   qJtEzSUJJY8Sv9HQUWebM7AU4dJQ2V/iSfD+sdyP37fzcXWGzKIuc5Rrq
+   TjptsuWe+0S/UFXl/1SDew59Gytc0GevTtxNQtQznUKbolJFNAk1HjciY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="423032681"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="423032681"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 02:24:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="716287833"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="716287833"
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="742909880"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="742909880"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2023 23:39:20 -0700
+  by orsmga008.jf.intel.com with ESMTP; 17 Jun 2023 02:24:26 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qAPah-0002OW-18;
-	Sat, 17 Jun 2023 06:39:19 +0000
-Date: Sat, 17 Jun 2023 14:38:46 +0800
+	id 1qASAT-0002a0-37;
+	Sat, 17 Jun 2023 09:24:25 +0000
+Date: Sat, 17 Jun 2023 17:24:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Miaohe Lin <linmiaohe@huawei.com>, hannes@cmpxchg.org,
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+	akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: net/bluetooth/bnep/core.c:478:12: warning: stack frame size (2112)
- exceeds limit (2048) in 'bnep_session'
-Message-ID: <202306171406.rQWGJPpr-lkp@intel.com>
+	muchun.song@linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linmiaohe@huawei.com
+Subject: Re: [PATCH] memcg: remove unneeded header files
+Message-ID: <202306171711.3ZCE2wVo-lkp@intel.com>
+References: <20230617072658.1826560-1-linmiaohe@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,106 +50,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230617072658.1826560-1-linmiaohe@huawei.com>
 
-Hi Kees,
+Hi Miaohe,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1639fae5132bc8a904af28d97cea0bedb3af802e
-commit: 03f61041c17914355dde7261be9ccdc821ddd454 skbuff: Switch structure bounds to struct_group()
-date:   1 year, 7 months ago
-config: riscv-randconfig-r006-20230616 (https://download.01.org/0day-ci/archive/20230617/202306171406.rQWGJPpr-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171406.rQWGJPpr-lkp@intel.com/reproduce)
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.4-rc6 next-20230616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/memcg-remove-unneeded-header-files/20230617-152922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230617072658.1826560-1-linmiaohe%40huawei.com
+patch subject: [PATCH] memcg: remove unneeded header files
+config: i386-randconfig-i012-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171711.3ZCE2wVo-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171711.3ZCE2wVo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306171406.rQWGJPpr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306171711.3ZCE2wVo-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/bluetooth/bnep/core.c:478:12: warning: stack frame size (2112) exceeds limit (2048) in 'bnep_session' [-Wframe-larger-than]
-   static int bnep_session(void *arg)
-              ^
-   2008/2112 (95.08%) spills, 104/2112 (4.92%) variables
-   1 warning generated.
+>> mm/memcontrol.c:5447:2: error: call to undeclared function 'wb_memcg_offline'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           wb_memcg_offline(memcg);
+           ^
+>> mm/memcontrol.c:5788:8: error: call to undeclared function 'mapping_can_writeback'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           if (mapping_can_writeback(mapping)) {
+                               ^
+   mm/memcontrol.c:5788:8: note: did you mean 'mapping_map_writable'?
+   include/linux/fs.h:545:19: note: 'mapping_map_writable' declared here
+   static inline int mapping_map_writable(struct address_space *mapping)
+                     ^
+   2 errors generated.
 
 
-vim +/bnep_session +478 net/bluetooth/bnep/core.c
+vim +/wb_memcg_offline +5447 mm/memcontrol.c
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  477  
-^1da177e4c3f41 Linus Torvalds  2005-04-16 @478  static int bnep_session(void *arg)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  479  {
-^1da177e4c3f41 Linus Torvalds  2005-04-16  480  	struct bnep_session *s = arg;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  481  	struct net_device *dev = s->dev;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  482  	struct sock *sk = s->sock->sk;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  483  	struct sk_buff *skb;
-25717382c1dd0d Jeffy Chen      2017-06-27  484  	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  485  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  486  	BT_DBG("");
-^1da177e4c3f41 Linus Torvalds  2005-04-16  487  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  488  	set_user_nice(current, -15);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  489  
-aa395145165cb0 Eric Dumazet    2010-04-20  490  	add_wait_queue(sk_sleep(sk), &wait);
-38d57555616afc Peter Hurley    2011-07-24  491  	while (1) {
-751c10a5680251 Peter Hurley    2011-08-05  492  		if (atomic_read(&s->terminate))
-38d57555616afc Peter Hurley    2011-07-24  493  			break;
-3aad75a128e2f2 Szymon Janc     2011-03-21  494  		/* RX */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  495  		while ((skb = skb_dequeue(&sk->sk_receive_queue))) {
-^1da177e4c3f41 Linus Torvalds  2005-04-16  496  			skb_orphan(skb);
-449357200c5d73 Mat Martineau   2011-07-22  497  			if (!skb_linearize(skb))
-^1da177e4c3f41 Linus Torvalds  2005-04-16  498  				bnep_rx_frame(s, skb);
-449357200c5d73 Mat Martineau   2011-07-22  499  			else
-449357200c5d73 Mat Martineau   2011-07-22  500  				kfree_skb(skb);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  501  		}
-^1da177e4c3f41 Linus Torvalds  2005-04-16  502  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  503  		if (sk->sk_state != BT_CONNECTED)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  504  			break;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  505  
-3aad75a128e2f2 Szymon Janc     2011-03-21  506  		/* TX */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  507  		while ((skb = skb_dequeue(&sk->sk_write_queue)))
-^1da177e4c3f41 Linus Torvalds  2005-04-16  508  			if (bnep_tx_frame(s, skb))
-^1da177e4c3f41 Linus Torvalds  2005-04-16  509  				break;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  510  		netif_wake_queue(dev);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  511  
-5aac49378742a5 Andrea Parri    2018-08-14  512  		/*
-5aac49378742a5 Andrea Parri    2018-08-14  513  		 * wait_woken() performs the necessary memory barriers
-5aac49378742a5 Andrea Parri    2018-08-14  514  		 * for us; see the header comment for this primitive.
-5aac49378742a5 Andrea Parri    2018-08-14  515  		 */
-25717382c1dd0d Jeffy Chen      2017-06-27  516  		wait_woken(&wait, TASK_INTERRUPTIBLE, MAX_SCHEDULE_TIMEOUT);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  517  	}
-aa395145165cb0 Eric Dumazet    2010-04-20  518  	remove_wait_queue(sk_sleep(sk), &wait);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  519  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  520  	/* Cleanup session */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  521  	down_write(&bnep_session_sem);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  522  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  523  	/* Delete network device */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  524  	unregister_netdev(dev);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  525  
-ec8dab36e0738d Marcel Holtmann 2008-07-14  526  	/* Wakeup user-space polling for socket errors */
-ec8dab36e0738d Marcel Holtmann 2008-07-14  527  	s->sock->sk->sk_err = EUNATCH;
-ec8dab36e0738d Marcel Holtmann 2008-07-14  528  
-aa395145165cb0 Eric Dumazet    2010-04-20  529  	wake_up_interruptible(sk_sleep(s->sock->sk));
-ec8dab36e0738d Marcel Holtmann 2008-07-14  530  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  531  	/* Release the socket */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  532  	fput(s->sock->file);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  533  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  534  	__bnep_unlink_session(s);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  535  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  536  	up_write(&bnep_session_sem);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  537  	free_netdev(dev);
-9b338c3dd12918 David Herrmann  2011-11-19  538  	module_put_and_exit(0);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  539  	return 0;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  540  }
-^1da177e4c3f41 Linus Torvalds  2005-04-16  541  
-
-:::::: The code at line 478 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+8cdea7c0545426 Balbir Singh      2008-02-07  5424  
+eb95419b023aba Tejun Heo         2013-08-08  5425  static void mem_cgroup_css_offline(struct cgroup_subsys_state *css)
+df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5426  {
+eb95419b023aba Tejun Heo         2013-08-08  5427  	struct mem_cgroup *memcg = mem_cgroup_from_css(css);
+3bc942f372af38 Tejun Heo         2013-11-22  5428  	struct mem_cgroup_event *event, *tmp;
+79bd9814e5ec9a Tejun Heo         2013-11-22  5429  
+79bd9814e5ec9a Tejun Heo         2013-11-22  5430  	/*
+79bd9814e5ec9a Tejun Heo         2013-11-22  5431  	 * Unregister events and notify userspace.
+79bd9814e5ec9a Tejun Heo         2013-11-22  5432  	 * Notify userspace about cgroup removing only after rmdir of cgroup
+79bd9814e5ec9a Tejun Heo         2013-11-22  5433  	 * directory to avoid race between userspace and kernelspace.
+79bd9814e5ec9a Tejun Heo         2013-11-22  5434  	 */
+4ba9515d32bac1 Shakeel Butt      2021-09-02  5435  	spin_lock_irq(&memcg->event_list_lock);
+fba94807837850 Tejun Heo         2013-11-22  5436  	list_for_each_entry_safe(event, tmp, &memcg->event_list, list) {
+79bd9814e5ec9a Tejun Heo         2013-11-22  5437  		list_del_init(&event->list);
+79bd9814e5ec9a Tejun Heo         2013-11-22  5438  		schedule_work(&event->remove);
+79bd9814e5ec9a Tejun Heo         2013-11-22  5439  	}
+4ba9515d32bac1 Shakeel Butt      2021-09-02  5440  	spin_unlock_irq(&memcg->event_list_lock);
+ec64f51545fffb KAMEZAWA Hiroyuki 2009-04-02  5441  
+bf8d5d52ffe89a Roman Gushchin    2018-06-07  5442  	page_counter_set_min(&memcg->memory, 0);
+230671533d6463 Roman Gushchin    2018-06-07  5443  	page_counter_set_low(&memcg->memory, 0);
+63677c745d63ba Roman Gushchin    2017-09-06  5444  
+567e9ab2e614e5 Johannes Weiner   2016-01-20  5445  	memcg_offline_kmem(memcg);
+a178015cde6998 Yang Shi          2021-05-04  5446  	reparent_shrinker_deferred(memcg);
+52ebea749aaed1 Tejun Heo         2015-05-22 @5447  	wb_memcg_offline(memcg);
+e4dde56cd20867 Yu Zhao           2022-12-21  5448  	lru_gen_offline_memcg(memcg);
+73f576c04b9410 Johannes Weiner   2016-07-20  5449  
+591edfb10a949d Roman Gushchin    2018-10-26  5450  	drain_all_stock(memcg);
+591edfb10a949d Roman Gushchin    2018-10-26  5451  
+73f576c04b9410 Johannes Weiner   2016-07-20  5452  	mem_cgroup_id_put(memcg);
+df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5453  }
+df878fb04dea04 KAMEZAWA Hiroyuki 2008-02-07  5454  
 
 -- 
 0-DAY CI Kernel Test Service
