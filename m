@@ -1,84 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80BA3D74
-	for <llvm@lists.linux.dev>; Sun, 18 Jun 2023 19:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687116686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xonBFRY5GHV2rr5Rl7BaWbaX4/q6dZ9ntMU4n1BM3PM=;
-	b=IH1MdfLV4P6ptXewsTK2m+d3NQIx8aFRdATd3anhr8CbIO62qo9wxrN93y0Yyit7d5+SVx
-	6I8Ja2feD0SnphB+BwLcLgmZ66i4xVGp594xW0xTSm5sD1IUWLrj3ytRKcVoCYCEnAhX1e
-	oi+PhUm8KbV4AWaeXwRtBad7fYj7ezs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-jF5IV6J3OlaQQLmWtvhPGQ-1; Sun, 18 Jun 2023 15:31:24 -0400
-X-MC-Unique: jF5IV6J3OlaQQLmWtvhPGQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66F893C01C34
-	for <llvm@lists.linux.dev>; Sun, 18 Jun 2023 19:31:24 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7104F2166B26;
-	Sun, 18 Jun 2023 19:31:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc6,
- mainline.kernel.org-clang, 8c1f0c38)
-Date: Sun, 18 Jun 2023 19:31:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4957473;
+	Sun, 18 Jun 2023 21:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687123183; x=1718659183;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Plcyh4dlupOF2/wvncz4aGtsbkmENnkZX2jLIs/uuNs=;
+  b=DxIYTYTddVQdIaKFF0eCM+kJ696HANCCnoQGJso5DmZSSUqCiH2a9e0Y
+   Djyyg3hSftnt+9cVBdiQfVU+3e6tUPSv4CEF20w1LV/LNvdCsvGuCGGLu
+   UJC9qM7Gc09GcIa8xUMOsKUx3gvenJq56+UCoBnjmaN2ZzKC+J1UVLvcy
+   N+BvLcqJBaUVCi0rOnjiW25lYLG92zbsJpHMHkR4gPbTOXpzTfwtMIs+l
+   +LAjI3XT5L+w8LLxEj4fYD2WpU/8Y/SHCfhdtWBeSb/rQKCWXxmDcDlfd
+   uetzIeTj11jUSz0pg7y48/SHqwpyGskoePduKotq0B5CPn9xFZh8DDFBv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="423169089"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="423169089"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 14:19:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="663772816"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="663772816"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Jun 2023 14:19:41 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qAzoC-00042u-1K;
+	Sun, 18 Jun 2023 21:19:40 +0000
+Date: Mon, 19 Jun 2023 05:19:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: kernel/trace/trace_eprobe.c:427:1: warning: stack frame size (1424)
+ exceeds limit (1024) in 'process_fetch_insn'
+Message-ID: <202306190512.F00Ve0zD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <24719.123061815312400219@us-mta-231.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8c1f0c38b31025f60437215dd27fffc293565fa4
+commit: b26a124cbfa80f42bfc4e63e1d5643ca98159d66 tracing/probes: Add symstr type for dynamic events
+date:   6 months ago
+config: riscv-randconfig-r011-20230619 (https://download.01.org/0day-ci/archive/20230619/202306190512.F00Ve0zD-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306190512.F00Ve0zD-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306190512.F00Ve0zD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/trace_eprobe.c:427:1: warning: stack frame size (1424) exceeds limit (1024) in 'process_fetch_insn' [-Wframe-larger-than]
+     427 | process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+         | ^
+   kernel/trace/trace_eprobe.c:561:13: warning: stack frame size (1584) exceeds limit (1024) in 'eprobe_trigger_func' [-Wframe-larger-than]
+     561 | static void eprobe_trigger_func(struct event_trigger_data *data,
+         |             ^
+   2 warnings generated.
+--
+>> kernel/trace/trace_uprobe.c:218:1: warning: stack frame size (1440) exceeds limit (1024) in 'process_fetch_insn' [-Wframe-larger-than]
+     218 | process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+         | ^
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+vim +/process_fetch_insn +427 kernel/trace/trace_eprobe.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/92910
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  424) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  425) /* Note that we don't verify it, since the code does not come from user space */
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  426) static int
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19 @427) process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  428) 		   void *base)
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  429) {
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  430) 	unsigned long val;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  431) 
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  432)  retry:
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  433) 	switch (code->op) {
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  434) 	case FETCH_OP_TP_ARG:
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  435) 		val = get_event_field(code, rec);
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  436) 		break;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  437) 	case FETCH_OP_IMM:
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  438) 		val = code->immediate;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  439) 		break;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  440) 	case FETCH_OP_COMM:
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  441) 		val = (unsigned long)current->comm;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  442) 		break;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  443) 	case FETCH_OP_DATA:
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  444) 		val = (unsigned long)code->data;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  445) 		break;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  446) 	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  447) 		code++;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  448) 		goto retry;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  449) 	default:
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  450) 		return -EILSEQ;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  451) 	}
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  452) 	code++;
+6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  453) 	return process_fetch_insn_bottom(code, val, dest, base);
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  454) }
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  455) NOKPROBE_SYMBOL(process_fetch_insn)
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  456) 
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36318=
-7
+:::::: The code at line 427 was first introduced by commit
+:::::: 7491e2c442781a1860181adb5ab472a52075f393 tracing: Add a probe that attaches to trace events
 
+:::::: TO: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
