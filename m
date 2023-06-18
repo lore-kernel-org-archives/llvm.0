@@ -1,43 +1,44 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4957473;
-	Sun, 18 Jun 2023 21:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1025563BB;
+	Sun, 18 Jun 2023 22:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687123183; x=1718659183;
+  t=1687127027; x=1718663027;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Plcyh4dlupOF2/wvncz4aGtsbkmENnkZX2jLIs/uuNs=;
-  b=DxIYTYTddVQdIaKFF0eCM+kJ696HANCCnoQGJso5DmZSSUqCiH2a9e0Y
-   Djyyg3hSftnt+9cVBdiQfVU+3e6tUPSv4CEF20w1LV/LNvdCsvGuCGGLu
-   UJC9qM7Gc09GcIa8xUMOsKUx3gvenJq56+UCoBnjmaN2ZzKC+J1UVLvcy
-   N+BvLcqJBaUVCi0rOnjiW25lYLG92zbsJpHMHkR4gPbTOXpzTfwtMIs+l
-   +LAjI3XT5L+w8LLxEj4fYD2WpU/8Y/SHCfhdtWBeSb/rQKCWXxmDcDlfd
-   uetzIeTj11jUSz0pg7y48/SHqwpyGskoePduKotq0B5CPn9xFZh8DDFBv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="423169089"
+  bh=KjNekOqWRtFbZcJys2xPNUrkkb4T2h1uOmRSQUTwu4c=;
+  b=ieXIo5fEk1rATobBZRtdmWHPcTnWZc6hddDTRK8gSA8O0emedjvki2DV
+   8CnzZcSLIeJ40muGN0vBg73hljnQ9gGrPNOew0Inf19daL6tZBFYk04MJ
+   vbt+8YKRjrflm25A4vD41rp8+M6pIxOmfm7UUxKyF6YSeOFQXZvV+LJTX
+   ecgo+X1YR3LEYUKyBYio93AebsuD6Sh4HBicJgFJINBZzfxVnWv7tLdzO
+   dSErW7ySK6y5jNq/P+XUa2gQTgdzjo1yErM4Z00KC/9bXJzmR9ceaN7ji
+   h0T+fqPZELhLgma8i3EYMx5j0XXSjHWU/NK3cNSFgNFTsgQqxsj+a/OJJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="423172375"
 X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="423169089"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 14:19:42 -0700
+   d="scan'208";a="423172375"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 15:23:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="663772816"
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="1043690826"
 X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="663772816"
+   d="scan'208";a="1043690826"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Jun 2023 14:19:41 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jun 2023 15:23:44 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qAzoC-00042u-1K;
-	Sun, 18 Jun 2023 21:19:40 +0000
-Date: Mon, 19 Jun 2023 05:19:22 +0800
+	id 1qB0oB-00045k-1y;
+	Sun, 18 Jun 2023 22:23:43 +0000
+Date: Mon, 19 Jun 2023 06:22:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Song Chen <chensong_2000@189.cn>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: kernel/trace/trace_eprobe.c:427:1: warning: stack frame size (1424)
- exceeds limit (1024) in 'process_fetch_insn'
-Message-ID: <202306190512.F00Ve0zD-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: kernel/trace/trace_eprobe.c:460:1: warning: stack frame size (1760)
+ exceeds limit (1024) in '__eprobe_trace_func'
+Message-ID: <202306190644.qKs8k0ng-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,70 +50,62 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   8c1f0c38b31025f60437215dd27fffc293565fa4
-commit: b26a124cbfa80f42bfc4e63e1d5643ca98159d66 tracing/probes: Add symstr type for dynamic events
-date:   6 months ago
-config: riscv-randconfig-r011-20230619 (https://download.01.org/0day-ci/archive/20230619/202306190512.F00Ve0zD-lkp@intel.com/config)
+commit: 672a2bf84061f0f19acfc5869f5b3689759a55a8 kernel/trace: Provide default impelentations defined in trace_probe_tmpl.h
+date:   4 months ago
+config: riscv-randconfig-r011-20230619 (https://download.01.org/0day-ci/archive/20230619/202306190644.qKs8k0ng-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306190512.F00Ve0zD-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306190644.qKs8k0ng-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306190512.F00Ve0zD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306190644.qKs8k0ng-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace_eprobe.c:427:1: warning: stack frame size (1424) exceeds limit (1024) in 'process_fetch_insn' [-Wframe-larger-than]
-     427 | process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+   kernel/trace/trace_eprobe.c:428:1: warning: stack frame size (1424) exceeds limit (1024) in 'process_fetch_insn' [-Wframe-larger-than]
+     428 | process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
          | ^
-   kernel/trace/trace_eprobe.c:561:13: warning: stack frame size (1584) exceeds limit (1024) in 'eprobe_trigger_func' [-Wframe-larger-than]
-     561 | static void eprobe_trigger_func(struct event_trigger_data *data,
-         |             ^
+>> kernel/trace/trace_eprobe.c:460:1: warning: stack frame size (1760) exceeds limit (1024) in '__eprobe_trace_func' [-Wframe-larger-than]
+     460 | __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+         | ^
    2 warnings generated.
---
->> kernel/trace/trace_uprobe.c:218:1: warning: stack frame size (1440) exceeds limit (1024) in 'process_fetch_insn' [-Wframe-larger-than]
-     218 | process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-         | ^
-   1 warning generated.
 
 
-vim +/process_fetch_insn +427 kernel/trace/trace_eprobe.c
+vim +/__eprobe_trace_func +460 kernel/trace/trace_eprobe.c
 
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  424) 
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  425) /* Note that we don't verify it, since the code does not come from user space */
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  426) static int
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19 @427) process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  428) 		   void *base)
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  429) {
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  430) 	unsigned long val;
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  431) 
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  432)  retry:
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  433) 	switch (code->op) {
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  434) 	case FETCH_OP_TP_ARG:
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  435) 		val = get_event_field(code, rec);
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  436) 		break;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  437) 	case FETCH_OP_IMM:
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  438) 		val = code->immediate;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  439) 		break;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  440) 	case FETCH_OP_COMM:
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  441) 		val = (unsigned long)current->comm;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  442) 		break;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  443) 	case FETCH_OP_DATA:
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  444) 		val = (unsigned long)code->data;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  445) 		break;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  446) 	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  447) 		code++;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  448) 		goto retry;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  449) 	default:
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  450) 		return -EILSEQ;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  451) 	}
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  452) 	code++;
-6a832ec3d680b3 Steven Rostedt (Google      2022-08-20  453) 	return process_fetch_insn_bottom(code, val, dest, base);
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  454) }
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  455) NOKPROBE_SYMBOL(process_fetch_insn)
-7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  456) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  457) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  458) /* eprobe handler */
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  459) static inline void
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19 @460) __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  461) {
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  462) 	struct eprobe_trace_entry_head *entry;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  463) 	struct trace_event_call *call = trace_probe_event_call(&edata->ep->tp);
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  464) 	struct trace_event_buffer fbuffer;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  465) 	int dsize;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  466) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  467) 	if (WARN_ON_ONCE(call != edata->file->event_call))
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  468) 		return;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  469) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  470) 	if (trace_trigger_soft_disabled(edata->file))
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  471) 		return;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  472) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  473) 	dsize = get_eprobe_size(&edata->ep->tp, rec);
+3e8b1a29a0e8d3 Steven Rostedt (VMware      2021-11-29  474) 
+3e8b1a29a0e8d3 Steven Rostedt (VMware      2021-11-29  475) 	entry = trace_event_buffer_reserve(&fbuffer, edata->file,
+3e8b1a29a0e8d3 Steven Rostedt (VMware      2021-11-29  476) 					   sizeof(*entry) + edata->ep->tp.size + dsize);
+3e8b1a29a0e8d3 Steven Rostedt (VMware      2021-11-29  477) 
+3e8b1a29a0e8d3 Steven Rostedt (VMware      2021-11-29  478) 	if (!entry)
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  479) 		return;
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  480) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  481) 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  482) 	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  483) 
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  484) 	trace_event_buffer_commit(&fbuffer);
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  485) }
+7491e2c442781a Tzvetomir Stoyanov (VMware  2021-08-19  486) 
 
-:::::: The code at line 427 was first introduced by commit
+:::::: The code at line 460 was first introduced by commit
 :::::: 7491e2c442781a1860181adb5ab472a52075f393 tracing: Add a probe that attaches to trace events
 
 :::::: TO: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
