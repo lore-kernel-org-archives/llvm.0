@@ -1,42 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9191FA21;
-	Sun, 18 Jun 2023 06:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4486915CE;
+	Sun, 18 Jun 2023 12:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687070230; x=1718606230;
+  t=1687090578; x=1718626578;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1qhO3RODYrWAdMnMdiLCilqlI2D2BthhK99I/FhNJ4U=;
-  b=fdJW7378ZY+cLIGYkE26C6R0LZvwub0Z9g1gQ3swAl8OR1PeAZpekud6
-   ON0/WH/TgluhQI7JEKNYNR/1QGkS2KAz2DQcFJIUZJLh274LY9ccN3cq3
-   mO/YYlK5mNd44vdHe8xNg46CdcMEyAajvcNIBV7wPnT3QwrmvM1q+eSeC
-   anYBRGbKfOi69sFJRKAFbTxvi/W1GdOmqV6MFazn90fIS460/rwhQY/p0
-   FIy42dnIT1tFAWfnilCUf9J71+X6pzOuTOjJaY3uw0NHgf6Sk8dy30xxL
-   PZRJVos+ymI8l/UxZi88szAHHUQrDOkhjONCq3Z9xdRONMjFhbnsJAKRx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10744"; a="349170161"
+  bh=UWm3kenZVu59Vo3msG0GuZzxYCAvlgL/tVzezWrJQV8=;
+  b=MpxAYXQyLed2AERqtHP1D3gIcmdzVDd9I4P5PG4G0bNEKGDkj1aOjArr
+   /OFLIstzf6O+DPnA1yzTBZEg9VieUy0sZRd2w3GVVhcfb0ytvsx/IacEq
+   RVfXEWXUtn7xdQXrYHqZoztmozgyuPU42k+JU/WRTHeXaYJooDe6veMVE
+   5Nc2cO3Uapvr9jyqsHoaMW/SIljlb9jCTi5E2Wdak5wPGNfqrMkyFWqll
+   FubxtE9Z8kc3zZMg+bPXTCDp2lJmCRrx4xReEydqfYzA9id88Sk1KLq8m
+   bczfm6zZ4smPtYrTbO5sRASif5q7coqxrY7lZT4p7sAGPO+NfN39sMP6w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10744"; a="425421850"
 X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
-   d="scan'208";a="349170161"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 23:37:09 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10744"; a="747010152"
+   d="scan'208";a="425421850"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 05:16:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10744"; a="857924319"
 X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
-   d="scan'208";a="747010152"
+   d="scan'208";a="857924319"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jun 2023 23:37:07 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 18 Jun 2023 05:16:15 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qAm26-0003VY-2e;
-	Sun, 18 Jun 2023 06:37:06 +0000
-Date: Sun, 18 Jun 2023 14:37:05 +0800
+	id 1qArKJ-0003hY-15;
+	Sun, 18 Jun 2023 12:16:15 +0000
+Date: Sun, 18 Jun 2023 20:15:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
+To: Miri Korenblit <miriam.rachel.korenblit@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [mcgrof-next:large-block-20230616-hacks 3/38] block/fops.c:604:11:
- error: no member named 'backing_dev_info' in 'struct task_struct'
-Message-ID: <202306181459.ybZNx5Ki-lkp@intel.com>
+	Gregory Greenman <gregory.greenman@intel.com>
+Subject: [iwlwifi-next:pending-all 89/105]
+ drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3157:5: warning: no previous
+ prototype for function 'iwl_fw_send_timestamp_marker_cmd'
+Message-ID: <202306182027.bfngOrWo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,97 +48,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git large-block-20230616-hacks
-head:   5416cb31017b28b25627f4f5b8292af96bb65f58
-commit: 62bfaecc35641804b36660d656020acd8fc4672d [3/38] block: open code __generic_file_write_iter for blkdev writes
-config: x86_64-randconfig-a003-20230616 (https://download.01.org/0day-ci/archive/20230618/202306181459.ybZNx5Ki-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git pending-all
+head:   7016c057949e578df3f1b0001d0b312fe6b65ab5
+commit: 5fa7b778731ba201d776e18a2b859f7a2f761180 [89/105] wifi: iwlwifi: send marker cmd before suspend cmd
+config: x86_64-buildonly-randconfig-r003-20230618 (https://download.01.org/0day-ci/archive/20230618/202306182027.bfngOrWo-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230618/202306181459.ybZNx5Ki-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230618/202306182027.bfngOrWo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306181459.ybZNx5Ki-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306182027.bfngOrWo-lkp@intel.com/
 
-Note: the mcgrof-next/large-block-20230616-hacks HEAD 5416cb31017b28b25627f4f5b8292af96bb65f58 builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> block/fops.c:604:11: error: no member named 'backing_dev_info' in 'struct task_struct'
-           current->backing_dev_info = bdev->bd_disk->bdi;
-           ~~~~~~~  ^
-   block/fops.c:613:11: error: no member named 'backing_dev_info' in 'struct task_struct'
-           current->backing_dev_info = NULL;
-           ~~~~~~~  ^
-   2 errors generated.
+>> drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3157:5: warning: no previous prototype for function 'iwl_fw_send_timestamp_marker_cmd' [-Wmissing-prototypes]
+   int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
+       ^
+   drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3157:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +604 block/fops.c
+vim +/iwl_fw_send_timestamp_marker_cmd +3157 drivers/net/wireless/intel/iwlwifi/fw/dbg.c
 
-   558	
-   559	/*
-   560	 * Write data to the block device.  Only intended for the block device itself
-   561	 * and the raw driver which basically is a fake block device.
-   562	 *
-   563	 * Does not take i_mutex for the write and thus is not for general purpose
-   564	 * use.
-   565	 */
-   566	static ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
-   567	{
-   568		struct block_device *bdev = I_BDEV(iocb->ki_filp->f_mapping->host);
-   569		struct file *file = iocb->ki_filp;
-   570		struct inode *bd_inode = bdev->bd_inode;
-   571		loff_t size = bdev_nr_bytes(bdev);
-   572		size_t shorted = 0;
-   573		ssize_t ret;
-   574	
-   575		if (bdev_read_only(bdev))
-   576			return -EPERM;
-   577	
-   578		if (IS_SWAPFILE(bd_inode) && !is_hibernate_resume_dev(bd_inode->i_rdev))
-   579			return -ETXTBSY;
-   580	
-   581		if (!iov_iter_count(from))
-   582			return 0;
-   583	
-   584		if (iocb->ki_pos >= size)
-   585			return -ENOSPC;
-   586	
-   587		if ((iocb->ki_flags & (IOCB_NOWAIT | IOCB_DIRECT)) == IOCB_NOWAIT)
-   588			return -EOPNOTSUPP;
-   589	
-   590		ret = file_remove_privs(file);
-   591		if (ret)
-   592			return ret;
-   593	
-   594		ret = file_update_time(file);
-   595		if (ret)
-   596			return ret;
-   597	
-   598		size -= iocb->ki_pos;
-   599		if (iov_iter_count(from) > size) {
-   600			shorted = iov_iter_count(from) - size;
-   601			iov_iter_truncate(from, size);
-   602		}
-   603	
- > 604		current->backing_dev_info = bdev->bd_disk->bdi;
-   605		if (iocb->ki_flags & IOCB_DIRECT) {
-   606			ret = blkdev_direct_write(iocb, from);
-   607			if (ret >= 0 && iov_iter_count(from))
-   608				ret = direct_write_fallback(iocb, from, ret,
-   609						generic_perform_write(iocb, from));
-   610		} else {
-   611			ret = generic_perform_write(iocb, from);
-   612		}
-   613		current->backing_dev_info = NULL;
-   614	
-   615		if (ret > 0)
-   616			ret = generic_write_sync(iocb, ret);
-   617		iov_iter_reexpand(from, iov_iter_count(from) + shorted);
-   618		return ret;
-   619	}
-   620	
+  3156	
+> 3157	int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
+  3158	{
+  3159		struct iwl_mvm_marker marker = {
+  3160			.dw_len = sizeof(struct iwl_mvm_marker) / 4,
+  3161			.marker_id = MARKER_ID_SYNC_CLOCK,
+  3162		};
+  3163		struct iwl_host_cmd hcmd = {
+  3164			.flags = CMD_ASYNC,
+  3165			.id = WIDE_ID(LONG_GROUP, MARKER_CMD),
+  3166			.dataflags = {},
+  3167		};
+  3168		struct iwl_mvm_marker_rsp *resp;
+  3169		int cmd_ver = iwl_fw_lookup_cmd_ver(fwrt->fw,
+  3170						    WIDE_ID(LONG_GROUP, MARKER_CMD),
+  3171						    IWL_FW_CMD_VER_UNKNOWN);
+  3172		int ret;
+  3173	
+  3174		if (cmd_ver == 1) {
+  3175			/* the real timestamp is taken from the ftrace clock
+  3176			 * this is for finding the match between fw and kernel logs
+  3177			 */
+  3178			marker.timestamp = cpu_to_le64(fwrt->timestamp.seq++);
+  3179		} else if (cmd_ver == 2) {
+  3180			marker.timestamp = cpu_to_le64(ktime_get_boottime_ns());
+  3181		} else {
+  3182			IWL_DEBUG_INFO(fwrt,
+  3183				       "Invalid version of Marker CMD. Ver = %d\n",
+  3184				       cmd_ver);
+  3185			return -EINVAL;
+  3186		}
+  3187	
+  3188		hcmd.data[0] = &marker;
+  3189		hcmd.len[0] = sizeof(marker);
+  3190	
+  3191		ret = iwl_trans_send_cmd(fwrt->trans, &hcmd);
+  3192	
+  3193		if (cmd_ver > 1 && hcmd.resp_pkt) {
+  3194			resp = (void *)hcmd.resp_pkt->data;
+  3195			IWL_DEBUG_INFO(fwrt, "FW GP2 time: %u\n", le32_to_cpu(resp->gp2));
+  3196		}
+  3197	
+  3198		return ret;
+  3199	}
+  3200	
 
 -- 
 0-DAY CI Kernel Test Service
