@@ -1,84 +1,73 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6303E14283
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 19:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687203616;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lK1UGQersZ5e6KMdHeHfi01cT948kseq7sPdjUX1tMQ=;
-	b=YJBe3LDfnjEBtjfnoHf6C09Uf63IEyDS22O1dLAki6pSVUT2n5E49AA2+xJqWy6cpc+Ow9
-	mWImKLppzHMltNVnw8l0oDRUkIuJqKm33GrLUGNDR50IZwtnzJsgTD0rOHXNJZ/ODuNK09
-	yZpPQqvNZrc5UupFtXNtl4LQRTkfxHs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-jGaPmtDMMH2Y0LUk4s8ASw-1; Mon, 19 Jun 2023 15:40:15 -0400
-X-MC-Unique: jGaPmtDMMH2Y0LUk4s8ASw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E62529A9CB6
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 19:40:15 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 79617422B0;
-	Mon, 19 Jun 2023 19:40:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc7,
- mainline.kernel.org-clang, dbad9ce9)
-Date: Mon, 19 Jun 2023 19:40:06 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F6F1427E;
+	Mon, 19 Jun 2023 19:47:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687204023; x=1718740023;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y6uCnDi6s8xKpkxLjIo0Do9Gpa+PeBZT/7pbRYY49Os=;
+  b=O/E2oY+xGMP5n3GfqebFEpYMDimtX1lsOWJyelAPfdXpJltSVtUUkkT7
+   Wfa4V3SpJl8ua36rp/k4MgDB87b66aGmiwMYIDWhGsJHE6jUBNkaL4mJT
+   vNQDHS28zq/0YnyV5ikyxdk6ICoya/ZClaT5A4Ebd3JLXjyAgPZoV3+pZ
+   CSFycRIwczq+8f2o6rzpswNsrIAwOqip1wuynZWiq3wf4Nh2x4mGmlnop
+   vEV23F/yIz9o7ikHs/G1eHhrE77VTsaZxMFZ3/P55pQfTHsyIgV6uIfkd
+   FYRm3Ub21+faTvkUCBW3YELwGhhDOiW1UFJw1U6R/zmxI1YOJrjC+lQfa
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="423369235"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="423369235"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 12:47:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="1043988363"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="1043988363"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jun 2023 12:47:01 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBKq4-00054W-2A;
+	Mon, 19 Jun 2023 19:47:00 +0000
+Date: Tue, 20 Jun 2023 03:46:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 10783/10788] /bin/bash: line 1: 137480
+ Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J
+ --btf_gen_floats -j --lang_exclude=rust
+ --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base
+ vmlinux drivers/iio/adc/max1363.ko
+Message-ID: <202306200328.NX4JlBDv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <83778.123061915401502523@us-mta-620.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   47045630bc409ce6606d97b790895210dd1d517d
+commit: 55ec9fb02a9a37ba830b14379197a3cd1f7120a3 [10783/10788] Merge branch 'sysctl-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+config: hexagon-randconfig-r011-20230619 (https://download.01.org/0day-ci/archive/20230620/202306200328.NX4JlBDv-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306200328.NX4JlBDv-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306200328.NX4JlBDv-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'afs-fixes-20230719' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/dhowells/linux-fs
+   die__process_class: tag not supported 0x21 (subrange_type)!
+   die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+>> /bin/bash: line 1: 137480 Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/iio/adc/max1363.ko
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/92999
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36349=
-0
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
