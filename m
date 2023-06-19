@@ -1,150 +1,106 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C52B8BE5;
-	Mon, 19 Jun 2023 13:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687181615; x=1718717615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xqr/3S2/EUn4m71NKoQyh8sBO7P+dlIVRJAQ29FZbC0=;
-  b=c/Ecwzedc14YvqNSvGkOaNuakwn+hcGMzeoOaDIM33Lyqaqy7JfSGxAD
-   yDeyCX6rpTvgoc88j9pOMNiv4HntrmK1FXsrjEr9KYTghMO0FgFFl0J3v
-   bwW/8BTj5GxLxFvZ5+z6jIdHm2wSP2WR1VFTrq+9KyXOiqLBCutr5CuCK
-   MRmWHe7fJM9PaFr3/p7k10keO4Qr9vRDbN6pC3MwzCpmL158Ki84vkfUN
-   ThNc1MQFDBLyHNMZakOSjVeP3TQxMAS3uLq5m+pMRdMyZUZ0fULtB0kw1
-   bEGm9dlxoxudDpfUmhSa8JJJ1VTK8m2yVNGsGh5GdrqCl1zpeGDhjD518
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446005347"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="446005347"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 06:33:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="1043902171"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="1043902171"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jun 2023 06:33:30 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qBF0b-0004jw-1i;
-	Mon, 19 Jun 2023 13:33:29 +0000
-Date: Mon, 19 Jun 2023 21:32:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heng Qi <hengqi@linux.alibaba.com>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH net-next 2/4] virtio-net: reprobe csum related fields for
- skb passed by XDP
-Message-ID: <202306192151.YMz3NiKw-lkp@intel.com>
-References: <20230619105738.117733-3-hengqi@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F06D8BE5
+	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 13:56:10 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso1540259a12.1
+        for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 06:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687182970; x=1689774970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z4qVvgFOGP5lG2STwYbhhcifXhM7KwsnEag7M7GxbaU=;
+        b=mqBC2bCHRGwRVWEnV4RRj7z2yEXrZ9c/s5jh971VamQHKXsP0jhqaODXkcNAWNzCh8
+         6x/z8RtMdkGhLp++g5mP2aCYUacSBXWlbt+KyZC+Bh8mKxQ+xbWcL5g8Qf8M56rc+Tbm
+         OJNW2BeHirQzRyW2tN7JkUuLInZ2bC71StUbE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687182970; x=1689774970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z4qVvgFOGP5lG2STwYbhhcifXhM7KwsnEag7M7GxbaU=;
+        b=X/rxTy7+613oNGNI9vmZV3oZS7Ef+mB0O0wLWmixbNY4xurHBobIKEmjFN45z0oTNW
+         9Zhm8uCwJQlhiM2/bDh/xjCw6YevtaCobpS/NGBPTXM8V5J8y6yd8AwROZmpvZflmawT
+         8+j+CrymMkgrhIwM8ILyk4ol5T/JE3RUoB/8kMlCGLWmLTHiR5hu2z4oLD8zCqkuuJzr
+         xzPoAHeJTuJkvILjhcQossFWiIJ5KZVNxRQ3EyFZG7azOAwlIbiDBdGGlEjqiuzI+UHM
+         5zI72Ayysk/mszqiktFjX8xHsBzbKTaLFkXhEbNht8fXTf3YdVaOiNtyrAwLNbvjnbSU
+         +VlQ==
+X-Gm-Message-State: AC+VfDxrbgz5/J49uyjEGSpK0My3efIq2CMTlCRp/Mjgi5zHahNyG3Vf
+	ivo3xKqTrz++hRX8BOPi4rGFAipw9TWfrvvAHlHkuA==
+X-Google-Smtp-Source: ACHHUZ7nNKwUY+sVJCe/t51WF3ftY3P14r1vQ/Bg6jEdoDr4w3Sjv/D3zod2phORxlfpRmbgSL3EeHgwx1G2veNxMOg=
+X-Received: by 2002:a17:902:8c94:b0:1b1:a9e7:5d4b with SMTP id
+ t20-20020a1709028c9400b001b1a9e75d4bmr9437925plo.22.1687182970381; Mon, 19
+ Jun 2023 06:56:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619105738.117733-3-hengqi@linux.alibaba.com>
+References: <20230615145607.3469985-1-revest@chromium.org> <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
+ <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com> <CABRcYmLaummOg=Nf0qXVN2eci=25OqXLD0zpCUz4CgmTjvo9LA@mail.gmail.com>
+In-Reply-To: <CABRcYmLaummOg=Nf0qXVN2eci=25OqXLD0zpCUz4CgmTjvo9LA@mail.gmail.com>
+From: Florent Revest <revest@chromium.org>
+Date: Mon, 19 Jun 2023 15:55:58 +0200
+Message-ID: <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, trix@redhat.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heng,
+On Mon, Jun 19, 2023 at 1:20=E2=80=AFPM Florent Revest <revest@chromium.org=
+> wrote:
+>
+> On Thu, Jun 15, 2023 at 7:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >
+> > On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
+> > > An easy reproducer is:
+> > >
+> > > $ touch pwet.c
+> > >
+> > > $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
+> > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > >
+> > > $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwet.=
+o pwet.c
+> > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > >                 DW_AT_name      ("asan.module_ctor")
+> >
+> > Interestingly, I am unable to reproduce it using either
+> > clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
+>
+> Somehow, I didn't think of trying other clang versions! Thanks, that's
+> a good point Eduard. :)
+>
+> I also can't reproduce it on a 14x build.
+>
+> However, I seem to be able to reproduce it on main:
+>
+>   git clone https://github.com/llvm/llvm-project.git
+>   mkdir llvm-project/build
+>   cd llvm-project/build
+>   git checkout bd66f4b1da30
+>   cmake -DLLVM_ENABLE_PROJECTS=3Dclang -DCMAKE_BUILD_TYPE=3DRelease -G
+> "Unix Makefiles" ../llvm
+>   make -j $(nproc)
+>
+>   bin/clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o
+> ~/pwet.o ~/pwet.c
+>   bin/llvm-dwarfdump ~/pwet.o | grep module_ctor
+>   # Shows module_ctor
+>
+> I started a bisection, hopefully that will point to something interesting
 
-kernel test robot noticed the following build warnings:
+The bisection pointed to a LLVM patch from Nick in October 2022:
+e3bb359aacdd ("[clang][Toolchains][Gnu] pass -g through to assembler")
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heng-Qi/virtio-net-a-helper-for-probing-the-pseudo-header-checksum/20230619-190212
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230619105738.117733-3-hengqi%40linux.alibaba.com
-patch subject: [PATCH net-next 2/4] virtio-net: reprobe csum related fields for skb passed by XDP
-config: x86_64-randconfig-r014-20230619 (https://download.01.org/0day-ci/archive/20230619/202306192151.YMz3NiKw-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192151.YMz3NiKw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306192151.YMz3NiKw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/virtio_net.c:1648:17: error: call to undeclared function 'csum_ipv6_magic'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           uh->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
-                                        ^
-   drivers/net/virtio_net.c:1648:17: note: did you mean 'csum_tcpudp_magic'?
-   include/asm-generic/checksum.h:52:1: note: 'csum_tcpudp_magic' declared here
-   csum_tcpudp_magic(__be32 saddr, __be32 daddr, __u32 len,
-   ^
-   drivers/net/virtio_net.c:1657:17: error: call to undeclared function 'csum_ipv6_magic'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           th->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
-                                        ^
->> drivers/net/virtio_net.c:1695:19: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-           } else if (flags && VIRTIO_NET_HDR_F_DATA_VALID) {
-                            ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/virtio_net.c:1695:19: note: use '&' for a bitwise operation
-           } else if (flags && VIRTIO_NET_HDR_F_DATA_VALID) {
-                            ^~
-                            &
-   drivers/net/virtio_net.c:1695:19: note: remove constant to silence this warning
-           } else if (flags && VIRTIO_NET_HDR_F_DATA_VALID) {
-                           ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +1695 drivers/net/virtio_net.c
-
-  1667	
-  1668	static int virtnet_set_csum_after_xdp(struct virtnet_info *vi,
-  1669					      struct sk_buff *skb,
-  1670					      __u8 flags)
-  1671	{
-  1672		int err;
-  1673	
-  1674		/* When XDP program is loaded, for example, the vm-vm scenario
-  1675		 * on the same host, packets marked as VIRTIO_NET_HDR_F_NEEDS_CSUM
-  1676		 * will travel. Although these packets are safe from the point of
-  1677		 * view of the vm, to avoid modification by XDP and successful
-  1678		 * forwarding in the upper layer, we re-probe the necessary checksum
-  1679		 * related information: skb->csum_{start, offset}, pseudo-header csum.
-  1680		 *
-  1681		 * This benefits us:
-  1682		 * 1. XDP can be loaded when there's _F_GUEST_CSUM.
-  1683		 * 2. The device verifies the checksum of packets , especially
-  1684		 *    benefiting for large packets.
-  1685		 * 3. In the same-host vm-vm scenario, packets marked as
-  1686		 *    VIRTIO_NET_HDR_F_NEEDS_CSUM are no longer dropped after being
-  1687		 *    processed by XDP.
-  1688		 */
-  1689		if (flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) {
-  1690			err = virtnet_flow_dissect_udp_tcp(vi, skb);
-  1691			if (err < 0)
-  1692				return -EINVAL;
-  1693	
-  1694			skb->ip_summed = CHECKSUM_PARTIAL;
-> 1695		} else if (flags && VIRTIO_NET_HDR_F_DATA_VALID) {
-  1696			/* We want to benefit from this: XDP guarantees that packets marked
-  1697			 * as VIRTIO_NET_HDR_F_DATA_VALID still have correct csum after they
-  1698			 * are processed.
-  1699			 */
-  1700			skb->ip_summed = CHECKSUM_UNNECESSARY;
-  1701		}
-  1702	
-  1703		return 0;
-  1704	}
-  1705	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Based on the context I have, that commit sounds fair enough. I don't
+think LLVM does anything wrong here, it seems like BPF should be the
+one dealing with dots in function debug info.
