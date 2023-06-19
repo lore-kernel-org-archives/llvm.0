@@ -1,142 +1,138 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19A215A0;
-	Mon, 19 Jun 2023 04:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687149846; x=1718685846;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bUCFA7qHgbmkXh7nKLQJWhe3mIqCB8quJxSpRgkECHk=;
-  b=JrvcxY3tGre+tJ8jQghtCbBI/zYW7qOqan/aR2DLForYtEUS+gnjdRWZ
-   whQ6RVTgGgB6TjWiS2uadlVUrW0GWQEk/T++jOk9tPr9tR3BukD6OFLhb
-   r2xxBcAmLHCsvIaGTJwi7cybb1INs6dFksVssYb4l9fjzW7MNoUwYxNoL
-   vUFknlKnGkqCGzlA8MRThoqkS68Xl4U9NtvsE8uWQFSXCNB3jFc8ONwMo
-   Np1kQPI95Jw8pXLtmHX49n5QKIOzbDU8ImSK+uEr53CX7zBnpZb1Nj1Nd
-   YCEEx/Bo2EFX7+7im3EwclwUDKnRQFcUKqXzdSQYO6CfmQRvkQwwER7Nd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="423203645"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="423203645"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 21:44:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="690955363"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="690955363"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2023 21:44:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qB6kF-0004LA-1q;
-	Mon, 19 Jun 2023 04:44:03 +0000
-Date: Mon, 19 Jun 2023 12:43:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof-next:large-block-20230618-hacks-v2 44/45]
- include/linux/blkdev.h:1530:6: warning: no previous prototype for function
- 'bdev_aops_reset'
-Message-ID: <202306191243.g0jcBcnz-lkp@intel.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8423185F;
+	Mon, 19 Jun 2023 05:45:22 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03D822F4;
+	Sun, 18 Jun 2023 22:46:00 -0700 (PDT)
+Received: from [10.162.40.17] (a077893.blr.arm.com [10.162.40.17])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBF263F663;
+	Sun, 18 Jun 2023 22:45:10 -0700 (PDT)
+Message-ID: <f624966d-5973-0aed-bd73-29ef0530e5ce@arm.com>
+Date: Mon, 19 Jun 2023 11:15:07 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git large-block-20230618-hacks-v2
-head:   45755261f269a9ff35d37c5aa481e86424e78716
-commit: f698784915e1c993a52b563936ef824727a98e77 [44/45] bdev: allow to switch between bdev aops
-config: riscv-randconfig-r042-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191243.g0jcBcnz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191243.g0jcBcnz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306191243.g0jcBcnz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/core.c:40:
->> include/linux/blkdev.h:1530:6: warning: no previous prototype for function 'bdev_aops_reset' [-Wmissing-prototypes]
-    1530 | void bdev_aops_reset(struct block_device *bdev)
-         |      ^
-   include/linux/blkdev.h:1530:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1530 | void bdev_aops_reset(struct block_device *bdev)
-         | ^
-         | static 
-   kernel/sched/core.c:2442:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    2442 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^
-   kernel/sched/core.c:5821:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5821 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^
-   kernel/sched/core.c:6522:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6522 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:6523:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6523 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^
-   kernel/sched/core.c:9560:20: warning: unused function 'balance_hotplug_wait' [-Wunused-function]
-    9560 | static inline void balance_hotplug_wait(void)
-         |                    ^
-   6 warnings generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8
+ PMU
+Content-Language: en-US
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, will@kernel.org, mark.rutland@arm.com,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
+ Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+ Suzuki Poulose <suzuki.poulose@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org
+References: <20230615133239.442736-6-anshuman.khandual@arm.com>
+ <202306160706.Uei5XDoi-lkp@intel.com>
+ <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com> <ZIwpma4SAJ/ZUyh5@arm.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <ZIwpma4SAJ/ZUyh5@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +/bdev_aops_reset +1530 include/linux/blkdev.h
 
-  1488	
-  1489	#ifdef CONFIG_BLOCK
-  1490	void invalidate_bdev(struct block_device *bdev);
-  1491	int sync_blockdev(struct block_device *bdev);
-  1492	int sync_blockdev_range(struct block_device *bdev, loff_t lstart, loff_t lend);
-  1493	int sync_blockdev_nowait(struct block_device *bdev);
-  1494	void sync_bdevs(bool wait);
-  1495	void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
-  1496	void printk_all_partitions(void);
-  1497	int __init early_lookup_bdev(const char *pathname, dev_t *dev);
-  1498	#ifdef CONFIG_BUFFER_HEAD
-  1499	void bdev_aops_reset(struct block_device *bdev);
-  1500	#else
-  1501	void bdev_aops_reset(struct block_device *bdev)
-  1502	{
-  1503	}
-  1504	#endif
-  1505	#else
-  1506	static inline void invalidate_bdev(struct block_device *bdev)
-  1507	{
-  1508	}
-  1509	static inline int sync_blockdev(struct block_device *bdev)
-  1510	{
-  1511		return 0;
-  1512	}
-  1513	static inline int sync_blockdev_nowait(struct block_device *bdev)
-  1514	{
-  1515		return 0;
-  1516	}
-  1517	static inline void sync_bdevs(bool wait)
-  1518	{
-  1519	}
-  1520	static inline void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
-  1521	{
-  1522	}
-  1523	static inline void printk_all_partitions(void)
-  1524	{
-  1525	}
-  1526	static inline int early_lookup_bdev(const char *pathname, dev_t *dev)
-  1527	{
-  1528		return -EINVAL;
-  1529	}
-> 1530	void bdev_aops_reset(struct block_device *bdev)
-  1531	{
-  1532	}
-  1533	#endif /* CONFIG_BLOCK */
-  1534	
+On 6/16/23 14:51, Catalin Marinas wrote:
+> On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
+>> On 6/16/23 05:12, kernel test robot wrote:
+>>> kernel test robot noticed the following build errors:
+>>>
+>>> [auto build test ERROR on arm64/for-next/core]
+>>> [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
+>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+>>> patch link:    https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual%40arm.com
+>>> patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
+>>> config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
+>>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+>>> reproduce (this is a W=1 build):
+>>>         mkdir -p ~/bin
+>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>         chmod +x ~/bin/make.cross
+>>>         # install arm cross compiling tool for clang build
+>>>         # apt-get install binutils-arm-linux-gnueabi
+>>>         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+>>>         git fetch arm64 for-next/core
+>>>         git checkout arm64/for-next/core
+>>>         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual@arm.com
+>>>         # save the config file
+>>>         mkdir build_dir && cp config build_dir/.config
+>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
+>>
+>> I am unable to reproduce this on mainline 6.4-rc6 via default cross compiler
+>> on a W=1 build. Looking at all other problems reported on the file, it seems
+>> something is not right here. Reported build problems around these callbacks,
+>> i.e armv8pmu_branch_XXXX() do not make sense as they are available via config
+>> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 in this
+>> test config.
+> 
+> Have you tried applying this series on top of the arm64 for-next/core
+> branch? That's what the robot it testing (in the absence of a --base
+> option when generating the patches).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Right, it turned out to be a build problem on arm (32 bit) platform instead.
+After arm_pmuv3.c moved into common ./drivers/perf from ./arch/arm64/kernel/,
+it can no longer access arch/arm64/include/asm/perf_event.h defined functions
+without breaking arm (32) bit. The following code block needs to be moved out
+from arch/arm64/include/asm/perf_event.h into include/linux/perf/arm_pmuv3.h
+(which is preferred as all call sites are inside drivers/perf/arm_pmuv3.c) or
+may be arm_pmu.h (which is one step higher in the abstraction).
+
+struct pmu_hw_events;
+struct arm_pmu;
+struct perf_event;
+
+#ifdef CONFIG_PERF_EVENTS
+static inline bool has_branch_stack(struct perf_event *event);
+
+#ifdef CONFIG_ARM64_BRBE
+void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event);
+bool armv8pmu_branch_attr_valid(struct perf_event *event);
+void armv8pmu_branch_enable(struct perf_event *event);
+void armv8pmu_branch_disable(struct perf_event *event);
+void armv8pmu_branch_probe(struct arm_pmu *arm_pmu);
+void armv8pmu_branch_reset(void);
+int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu);
+void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu);
+void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx);
+#else
+static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+{
+        WARN_ON_ONCE(!has_branch_stack(event));
+}
+
+static inline bool armv8pmu_branch_attr_valid(struct perf_event *event)
+{
+        WARN_ON_ONCE(!has_branch_stack(event));
+        return false;
+}
+
+static inline void armv8pmu_branch_enable(struct perf_event *event)
+{
+        WARN_ON_ONCE(!has_branch_stack(event));
+}
+
+static inline void armv8pmu_branch_disable(struct perf_event *event)
+{
+        WARN_ON_ONCE(!has_branch_stack(event));
+}
+
+static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
+static inline void armv8pmu_branch_reset(void) { }
+static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu) { return 0; }
+static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu) { }
+static inline void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx) { }
+#endif
+#endif
