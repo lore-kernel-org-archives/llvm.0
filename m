@@ -1,73 +1,97 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FF123D9;
-	Mon, 19 Jun 2023 06:28:10 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 859A02F4;
-	Sun, 18 Jun 2023 23:28:53 -0700 (PDT)
-Received: from [10.162.40.17] (a077893.blr.arm.com [10.162.40.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1F403F663;
-	Sun, 18 Jun 2023 23:28:03 -0700 (PDT)
-Message-ID: <63ddbe9b-dd08-0bbf-adc6-2f831575be3a@arm.com>
-Date: Mon, 19 Jun 2023 11:58:00 +0530
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBFA210F;
+	Mon, 19 Jun 2023 06:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687157299; x=1718693299;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qnB+fhSTQqlAc/3k74Aph0kpFjm4zt6dTZBGvj5YK7g=;
+  b=X3w3FBvoAF/RFIs84dMrl/AmzDvj+Dh7EKExh+SpEzR3hvqhvoWa5UE0
+   yV03TyteV3Z5cEjZDlmVbCs6c6ApMT5WpV+JqUSOquMQq6qqN4vvz/vJv
+   5cYNvvuCNJSGBQziWKuY8s6kr6ZNGfYqdYb7PVUGlMb5x22vIvOm5PYYj
+   +5xrIpKsmxCAjq97lG67B1SaATXwtKcSF5h/KaQq895PLjMMUy+VPYt0S
+   F+tOFQJflnGW1r9ZTfOSjqBtuRrFPEpRyYNvF+gpyjZIgrIO6tPT9Ux/2
+   yxgKYpspZx286CKSwBVAz1m5jVEIzdJodjWYZr4mY3SgSHDyAu84xQfTU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="339893668"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="339893668"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 23:48:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="707782940"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="707782940"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 18 Jun 2023 23:48:15 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qB8gR-0004Tc-0O;
+	Mon, 19 Jun 2023 06:48:15 +0000
+Date: Mon, 19 Jun 2023 14:47:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jorge Lopez <jorge.lopez2@hp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-5.15.y 9543/9999]
+ drivers/platform/x86/hp/hp-wmi.c:342:24: warning: cast to smaller integer
+ type 'enum hp_wmi_radio' from 'void *'
+Message-ID: <202306191433.5E0eMmdo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V12 07/10] arm64/perf: Add PERF_ATTACH_TASK_DATA to events
- with has_branch_stack()
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, will@kernel.org, catalin.marinas@arm.com,
- mark.rutland@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
- Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
- Suzuki Poulose <suzuki.poulose@arm.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org
-References: <20230615133239.442736-8-anshuman.khandual@arm.com>
- <202306161016.jJeqG6mc-lkp@intel.com>
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <202306161016.jJeqG6mc-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   471e639e59d128f4bf58000a118b2ceca3893f98
+commit: a832a43fdd95bc689bc23862326a114579aa025b [9543/9999] platform/x86: Move existing HP drivers to a new hp subdir
+config: x86_64-randconfig-r015-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191433.5E0eMmdo-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191433.5E0eMmdo-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306191433.5E0eMmdo-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/hp/hp-wmi.c:342:24: warning: cast to smaller integer type 'enum hp_wmi_radio' from 'void *' [-Wvoid-pointer-to-enum-cast]
+           enum hp_wmi_radio r = (enum hp_wmi_radio) data;
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +342 drivers/platform/x86/hp/hp-wmi.c
 
-On 6/16/23 08:08, kernel test robot wrote:
-> Hi Anshuman,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on arm64/for-next/core]
-> [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> patch link:    https://lore.kernel.org/r/20230615133239.442736-8-anshuman.khandual%40arm.com
-> patch subject: [PATCH V12 07/10] arm64/perf: Add PERF_ATTACH_TASK_DATA to events with has_branch_stack()
-> config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306161016.jJeqG6mc-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->         git fetch arm64 for-next/core
->         git checkout arm64/for-next/core
->         b4 shazam https://lore.kernel.org/r/20230615133239.442736-8-anshuman.khandual@arm.com
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
+f82bdd0d77b6bf drivers/platform/x86/hp-wmi.c Kyle Evans           2014-06-09  339  
+19d337dff95cbf drivers/platform/x86/hp-wmi.c Johannes Berg        2009-06-02  340  static int hp_wmi_set_block(void *data, bool blocked)
+62ec30d45ecbb8 drivers/misc/hp-wmi.c         Matthew Garrett      2008-07-25  341  {
+e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins         2009-07-21 @342  	enum hp_wmi_radio r = (enum hp_wmi_radio) data;
+e5fbba85a7acc2 drivers/platform/x86/hp-wmi.c Alan Jenkins         2009-07-21  343  	int query = BIT(r + 8) | ((!blocked) << r);
+6d96e00cef3503 drivers/platform/x86/hp-wmi.c Thomas Renninger     2010-05-21  344  	int ret;
+62ec30d45ecbb8 drivers/misc/hp-wmi.c         Matthew Garrett      2008-07-25  345  
+d8193cff33906e drivers/platform/x86/hp-wmi.c Darren Hart (VMware  2017-04-19  346) 	ret = hp_wmi_perform_query(HPWMI_WIRELESS_QUERY, HPWMI_WRITE,
+c3021ea1beeeb1 drivers/platform/x86/hp-wmi.c Anssi Hannula        2011-02-20  347  				   &query, sizeof(query), 0);
+527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware  2017-04-19  348) 
+527376c89caf59 drivers/platform/x86/hp-wmi.c Darren Hart (VMware  2017-04-19  349) 	return ret <= 0 ? ret : -EINVAL;
+62ec30d45ecbb8 drivers/misc/hp-wmi.c         Matthew Garrett      2008-07-25  350  }
+62ec30d45ecbb8 drivers/misc/hp-wmi.c         Matthew Garrett      2008-07-25  351  
 
-This build failure too gets solved via the header code block movement as mentioned earlier.
+:::::: The code at line 342 was first introduced by commit
+:::::: e5fbba85a7acc2626d4fe14501816811d702f3e9 hp-wmi: improve rfkill support
+
+:::::: TO: Alan Jenkins <alan-jenkins@tuffmail.co.uk>
+:::::: CC: Len Brown <len.brown@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
