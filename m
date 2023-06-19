@@ -1,144 +1,125 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D2512B6E
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 15:24:53 +0000 (UTC)
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b46f5f4d79so21804791fa.1
-        for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 08:24:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95867D2E2
+	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 16:44:49 +0000 (UTC)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so2875190a12.0
+        for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 09:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687188291; x=1689780291;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
-        b=hmTfkVb+5LmAraeoRlAOtQU14wJrr/lgzvR+pDJxJ7X2TCQxz9veq5BwYSt39JR1um
-         fKJGbSp1IWE5aslsjXPVUho0EMDZ4bRE6wJkt768yw0v+lxdELB77ZDd9nAmmmZLEbVs
-         D5VHK5W0jz9fPmJsuYlOrMqoaZsr1vOK50OzAz39gP4y7j64wNGVM9ekZSm1jDo7bCrc
-         4tnCoZrgax2KIniW6LeEd1BtaYeYEgjtXZI2VS5n/n+3+R6XGkHtZKJiuNAVGUdP64Tp
-         jnx6X0d68TpmsanR2eHuE4wuWo0Y9n4ZGdtl29klrSRgrKYxtDCQEt1lu0b/ZrmfwuxK
-         5k7A==
+        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1687193087; x=1689785087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yvChMOwZFZ2731U67nUr7jD+9YjSwDaijH2KuLSlnQU=;
+        b=dqnDtEgE802DF2yzx1ijAtFdHVLsIX/P86p0xOsCR6lKz7yW5aqZ3sj/lOdPMsgDQu
+         qzgtHKxEdk7NV8ucLaVTdGK0UWwcVN5lh+P0LSWCdYVF0dtls/3ZLu/Wa+OMEY/GZFV7
+         47tppJTVSaMBhD/EDiy0vfJnyO4yx0X0rMj8Yyi8TK1kuMwzonzbs3uhaX7Y2F+12ejG
+         12Y6ELHKmqOLwiO6rHNc6Ndgq5Efm3U32Jwhke6KBjsXQ2mdzQkB0HsOvMFgEEM5Brmg
+         y1JuyfhhpqMf0k2DOos/QdIF52t9pK1WZnq336BZ7vE0xCYwWMSkgkLhHarcJdr2miAH
+         vXyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687188291; x=1689780291;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
-        b=FljaBTHc8mZ7/txXye8itrCwYq0pJN7czKthRyqJXbx+Tu8C1reF3bAEptcHRRIimb
-         0GLZu90NPUyVSji7R81wod/sYJYb6gFiztrYLRPN/7dp09Hxz1y0F0x5k88Kjm1tj1je
-         sQSO5G5xQ1umUpfArymUVvP/CSbMaaHpCIQVQk74JUM2fm81DZS35FqGt31K6y6dwXgK
-         rG+Uy0BHgCZV9F+vgsUubk9WfZZo88INp/veE1/daCIC1FJEqIr9U4Ze8YQMsIlWxKbN
-         IH01iblvt4jWD1wf/+11hCPdz5/yUINElYTYTlHVoapeepj7wFJmgnMwctmYYRNg2zCT
-         evXQ==
-X-Gm-Message-State: AC+VfDznBCUwOIyOv2wrLYYLBZ62pZb7Y2AREfJwqiArCTMDsBhXqMwp
-	RkNQHRh6v1gYKArN/bSJlOE=
-X-Google-Smtp-Source: ACHHUZ7A1W0yVDwzsTAdsr/IbmVvuV/7c1xvRqXSQlsbE31LJj2Z0Ti8MaZzcSuz6xpu+pZnnF0n4A==
-X-Received: by 2002:a2e:b5cc:0:b0:2b4:7500:3094 with SMTP id g12-20020a2eb5cc000000b002b475003094mr1308798ljn.3.1687188291342;
-        Mon, 19 Jun 2023 08:24:51 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id 15-20020a05651c008f00b002b47e824518sm388769ljq.76.2023.06.19.08.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 08:24:50 -0700 (PDT)
-Message-ID: <478f608e3b8de1218798c792b34dca75fa91f6a9.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Florent Revest <revest@chromium.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-  martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org,  song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org,  sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- nathan@kernel.org,  ndesaulniers@google.com, trix@redhat.com,
- stable@vger.kernel.org
-Date: Mon, 19 Jun 2023 18:24:49 +0300
-In-Reply-To: <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
-References: <20230615145607.3469985-1-revest@chromium.org>
-	 <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
-	 <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com>
-	 <CABRcYmLaummOg=Nf0qXVN2eci=25OqXLD0zpCUz4CgmTjvo9LA@mail.gmail.com>
-	 <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        d=1e100.net; s=20221208; t=1687193087; x=1689785087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yvChMOwZFZ2731U67nUr7jD+9YjSwDaijH2KuLSlnQU=;
+        b=X8u2AWY1VBRyJruYWYgZZc4Yvg4Iak7vp890oex1tlEsrsiOA0YfbrVeRRPMkKpr5I
+         OPTPuMM28l6YALSoYijSBRjdLVA15X52NmH1t1fQEOwlJbcxkymCiNdrhDoFLPr4rF3x
+         HrH7qQhHilHKvY+c4kkIP6caLoKsHgSopyFA98t7yxUAL7LisFgmpmxcBBu4SXt3hjMJ
+         Pr269Ig7xbNZ02wNBZt2Ig4ttFBkSXKL0CoFTi5vf/mtemRCDanzergm02PonHEXdmnF
+         k7ySVWkBsPZCAOdf85xjqi6DiH1nzYUWonMQkp4NO9HciUjHSwQ9VpTZQlL+Oili0a+N
+         mzsg==
+X-Gm-Message-State: AC+VfDxCzMaUTdXmaw5pypD9nLeHJRs+Md7hATnuyNHf/Zx0T9D77zDW
+	7PjI1AN0n/duVDyIz6FucqnHost1zKjWNupq0K0qqg==
+X-Google-Smtp-Source: ACHHUZ6oSj/i6Pykedq2ySsISQglFJicZjuCcGa7TXEAoC1+pp+dVicruuI7Lb36pj/NzDmsI8BaGgcXUl5VCyUNogo=
+X-Received: by 2002:aa7:d64a:0:b0:50b:c456:a72a with SMTP id
+ v10-20020aa7d64a000000b0050bc456a72amr9189226edr.19.1687193087364; Mon, 19
+ Jun 2023 09:44:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+References: <CA+G9fYvtPPhG6w8Ge2_YOdQ6F0nSNA1q-2JLej=6gsyoCT-0ag@mail.gmail.com>
+ <ZJBRcG4gPA2wzgax@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <ZJBRcG4gPA2wzgax@FVFF77S0Q05N.cambridge.arm.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Mon, 19 Jun 2023 22:14:35 +0530
+Message-ID: <CAAhSdy1Kxb0cYteEDA2bun3p_JwFSPbiqrecZfLp9uKFXe7rBg@mail.gmail.com>
+Subject: Re: next: arch/riscv/kvm/aia_imsic.c:237:9: error: call to undeclared
+ function 'arch_atomic_long_fetch_or'
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org, 
+	Anup Patel <apatel@ventanamicro.com>, Atish Patra <atishp@rivosinc.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2023-06-19 at 15:55 +0200, Florent Revest wrote:
-> On Mon, Jun 19, 2023 at 1:20=E2=80=AFPM Florent Revest <revest@chromium.o=
-rg> wrote:
-> >=20
-> > On Thu, Jun 15, 2023 at 7:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
-> > >=20
-> > > On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
-> > > > An easy reproducer is:
-> > > >=20
-> > > > $ touch pwet.c
-> > > >=20
-> > > > $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
-> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
-> > > >=20
-> > > > $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwe=
-t.o pwet.c
-> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
-> > > >                 DW_AT_name      ("asan.module_ctor")
-> > >=20
-> > > Interestingly, I am unable to reproduce it using either
-> > > clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
-> >=20
-> > Somehow, I didn't think of trying other clang versions! Thanks, that's
-> > a good point Eduard. :)
-> >=20
-> > I also can't reproduce it on a 14x build.
-> >=20
-> > However, I seem to be able to reproduce it on main:
-> >=20
-> >   git clone https://github.com/llvm/llvm-project.git
-> >   mkdir llvm-project/build
-> >   cd llvm-project/build
-> >   git checkout bd66f4b1da30
-> >   cmake -DLLVM_ENABLE_PROJECTS=3Dclang -DCMAKE_BUILD_TYPE=3DRelease -G
-> > "Unix Makefiles" ../llvm
-> >   make -j $(nproc)
-> >=20
-> >   bin/clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o
-> > ~/pwet.o ~/pwet.c
-> >   bin/llvm-dwarfdump ~/pwet.o | grep module_ctor
-> >   # Shows module_ctor
-> >=20
-> > I started a bisection, hopefully that will point to something interesti=
-ng
->=20
-> The bisection pointed to a LLVM patch from Nick in October 2022:
-> e3bb359aacdd ("[clang][Toolchains][Gnu] pass -g through to assembler")
->=20
-> Based on the context I have, that commit sounds fair enough. I don't
-> think LLVM does anything wrong here, it seems like BPF should be the
-> one dealing with dots in function debug info.
+On Mon, Jun 19, 2023 at 6:30=E2=80=AFPM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+>
+> On Mon, Jun 19, 2023 at 03:27:47PM +0530, Naresh Kamboju wrote:
+> > Following build regressions noticed on Linux next-20230619.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Regressions found on riscv:
+> >
+> >  - build/rv32-clang-16-lkftconfig
+> >  - build/rv32-clang-16-tinyconfig
+> >  - build/rv32-clang-nightly-defconfig
+> >  - build/rv32-clang-16-allnoconfig
+> >  - build/gcc-12-defconfig
+> >  - build/gcc-11-lkftconfig
+> >  - build/clang-16-lkftconfig
+> >  - build/rv32-clang-16-defconfig
+> >  - build/gcc-8-defconfig
+> >  - build/rv32-gcc-11-lkftconfig
+> >  - build/clang-16-defconfig
+> >  - build/rv32-clang-nightly-allnoconfig
+> >  - build/rv32-clang-nightly-tinyconfig
+> >  - build/clang-nightly-defconfig
+> >
+> >
+> > arch/riscv/kvm/aia_imsic.c:237:9: error: call to undeclared function
+> >  'arch_atomic_long_fetch_or'; ISO C99 and later do not support implicit
+> >     function declarations [-Wimplicit-function-declaration]
+> >         return arch_atomic_long_fetch_or(val, (atomic_long_t *)ptr);
+> >                ^
+> > arch/riscv/kvm/aia_imsic.c:237:9: note: did you mean 'raw_atomic_long_f=
+etch_or'?
+> > include/linux/atomic/atomic-long.h:1087:1: note:
+> > 'raw_atomic_long_fetch_or' declared here
+> > raw_atomic_long_fetch_or(long i, atomic_long_t *v)
+> > ^
+> > 1 error generated.
+>
+> It looks like this is because:
+>
+>   2f68d5420412040e ("RISC-V: KVM: Add in-kernel virtualization of AIA IMS=
+IC")
+>
+> ... added a call to arch_atomic_long_fetch_or(), but we've reworked the a=
+tomics
+> in the tip locking/core branch such that arch_atomic_long_fetch_or() does=
+n't
+> exist unless provided directly by the architecture.
+>
+> Does this actually need to be arch_atomic_long_fetch_or(), i.e. was there=
+ a
+> specific reason not to use atomic_long_fetch_or() here?
+>
+> If not, then please use atomic_long_fetch_or() -- that'll work before and=
+ after
+> the locking/core changes.
 
-That explains why I could not reproduce the issue: I tried with gas 2.38.
-Using gas 2.40 I see the same behavior as you.
+There is no specific reason for using arch_atomic_long_fetch_or().
+I will update the patch to use atomic_long_fetch_or().
 
-If one tries to generate assembly file with '-fsanitize':
+Thanks for catching.
 
-  $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -S -o pwet.s pw=
-et.c
-  $ cat pwet.s
-  	.text
-  	.file	"pwet.c"
-  	.p2align	4, 0x90                         # -- Begin function asan.module=
-_ctor
-  	.type	asan.module_ctor,@function
-  asan.module_ctor:                       # @asan.module_ctor
-  .Lfunc_begin0:
-      ...
-
-And then compile it using Gnu assembler:
-
-  $ as --64 -o pwet.o pwet.s -g -gdwarf-5
-
-The behavior differs between 2.38 and 2.40, the older version does not
-produce debug entry for 'asan.module_ctor', while newer does.
-
+Regards,
+Anup
