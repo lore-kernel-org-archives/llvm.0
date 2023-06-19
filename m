@@ -1,69 +1,144 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0B811C8B;
-	Mon, 19 Jun 2023 14:04:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687183494; x=1718719494;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z8uXsforMl0XmVyX4A+J/yhtIhNXcSqm5wuH/WP1qXk=;
-  b=KEmlF1u+kOfRxqifSDMDrhvojyjByp1AqJC2cdSo9WcKb+VudCRPFhBC
-   mTtUdW96GXXGK5Q36QPo+q0WQU4Z47ZdWyszntLqFrkv3U2tk5G+rjLAz
-   bsk0SBb8pkKpkaWbiqubB2pDTULIu4UD0HU0A4SnYjHmP7gr5jcE0sXg1
-   mtVQUV/zRShsrruvxXaB1uZmBTRwZii17Fngi+SNAgfnOBA+SNNs0rxsU
-   11RD3b/S7andfLUJM7ZQlgySzHcEds0K8l1ua+FgdHylqmpEuGtrbkmTp
-   5obwlYK/fPjUwgAWbitxQZM6zEApPntQ/E7+UVpyC3dCox8HtLTzKZpyJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="357125352"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="357125352"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 07:04:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="743471583"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="743471583"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jun 2023 07:04:31 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qBFUc-0004lO-1c;
-	Mon, 19 Jun 2023 14:04:30 +0000
-Date: Mon, 19 Jun 2023 22:03:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [stable:linux-6.3.y 1775/1937] ld.lld: error: section: .got is not
- contiguous with other relro sections
-Message-ID: <202306192231.DJmWr6BX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D2512B6E
+	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 15:24:53 +0000 (UTC)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b46f5f4d79so21804791fa.1
+        for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 08:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687188291; x=1689780291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
+        b=hmTfkVb+5LmAraeoRlAOtQU14wJrr/lgzvR+pDJxJ7X2TCQxz9veq5BwYSt39JR1um
+         fKJGbSp1IWE5aslsjXPVUho0EMDZ4bRE6wJkt768yw0v+lxdELB77ZDd9nAmmmZLEbVs
+         D5VHK5W0jz9fPmJsuYlOrMqoaZsr1vOK50OzAz39gP4y7j64wNGVM9ekZSm1jDo7bCrc
+         4tnCoZrgax2KIniW6LeEd1BtaYeYEgjtXZI2VS5n/n+3+R6XGkHtZKJiuNAVGUdP64Tp
+         jnx6X0d68TpmsanR2eHuE4wuWo0Y9n4ZGdtl29klrSRgrKYxtDCQEt1lu0b/ZrmfwuxK
+         5k7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687188291; x=1689780291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
+        b=FljaBTHc8mZ7/txXye8itrCwYq0pJN7czKthRyqJXbx+Tu8C1reF3bAEptcHRRIimb
+         0GLZu90NPUyVSji7R81wod/sYJYb6gFiztrYLRPN/7dp09Hxz1y0F0x5k88Kjm1tj1je
+         sQSO5G5xQ1umUpfArymUVvP/CSbMaaHpCIQVQk74JUM2fm81DZS35FqGt31K6y6dwXgK
+         rG+Uy0BHgCZV9F+vgsUubk9WfZZo88INp/veE1/daCIC1FJEqIr9U4Ze8YQMsIlWxKbN
+         IH01iblvt4jWD1wf/+11hCPdz5/yUINElYTYTlHVoapeepj7wFJmgnMwctmYYRNg2zCT
+         evXQ==
+X-Gm-Message-State: AC+VfDznBCUwOIyOv2wrLYYLBZ62pZb7Y2AREfJwqiArCTMDsBhXqMwp
+	RkNQHRh6v1gYKArN/bSJlOE=
+X-Google-Smtp-Source: ACHHUZ7A1W0yVDwzsTAdsr/IbmVvuV/7c1xvRqXSQlsbE31LJj2Z0Ti8MaZzcSuz6xpu+pZnnF0n4A==
+X-Received: by 2002:a2e:b5cc:0:b0:2b4:7500:3094 with SMTP id g12-20020a2eb5cc000000b002b475003094mr1308798ljn.3.1687188291342;
+        Mon, 19 Jun 2023 08:24:51 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05651c008f00b002b47e824518sm388769ljq.76.2023.06.19.08.24.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:24:50 -0700 (PDT)
+Message-ID: <478f608e3b8de1218798c792b34dca75fa91f6a9.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Florent Revest <revest@chromium.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+  martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org,  song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org,  sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ nathan@kernel.org,  ndesaulniers@google.com, trix@redhat.com,
+ stable@vger.kernel.org
+Date: Mon, 19 Jun 2023 18:24:49 +0300
+In-Reply-To: <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
+References: <20230615145607.3469985-1-revest@chromium.org>
+	 <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
+	 <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com>
+	 <CABRcYmLaummOg=Nf0qXVN2eci=25OqXLD0zpCUz4CgmTjvo9LA@mail.gmail.com>
+	 <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.3.y
-head:   f2427f9a3730e9a1a11b69f6b767f7f2fad87523
-commit: e6d1562dd4e9cf8da89edd21c4453893bfe0d4ac [1775/1937] riscv: vmlinux.lds.S: Explicitly handle '.got' section
-config: riscv-randconfig-r023-20230619 (https://download.01.org/0day-ci/archive/20230619/202306192231.DJmWr6BX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192231.DJmWr6BX-lkp@intel.com/reproduce)
+On Mon, 2023-06-19 at 15:55 +0200, Florent Revest wrote:
+> On Mon, Jun 19, 2023 at 1:20=E2=80=AFPM Florent Revest <revest@chromium.o=
+rg> wrote:
+> >=20
+> > On Thu, Jun 15, 2023 at 7:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> > >=20
+> > > On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
+> > > > An easy reproducer is:
+> > > >=20
+> > > > $ touch pwet.c
+> > > >=20
+> > > > $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
+> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > > >=20
+> > > > $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwe=
+t.o pwet.c
+> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > > >                 DW_AT_name      ("asan.module_ctor")
+> > >=20
+> > > Interestingly, I am unable to reproduce it using either
+> > > clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
+> >=20
+> > Somehow, I didn't think of trying other clang versions! Thanks, that's
+> > a good point Eduard. :)
+> >=20
+> > I also can't reproduce it on a 14x build.
+> >=20
+> > However, I seem to be able to reproduce it on main:
+> >=20
+> >   git clone https://github.com/llvm/llvm-project.git
+> >   mkdir llvm-project/build
+> >   cd llvm-project/build
+> >   git checkout bd66f4b1da30
+> >   cmake -DLLVM_ENABLE_PROJECTS=3Dclang -DCMAKE_BUILD_TYPE=3DRelease -G
+> > "Unix Makefiles" ../llvm
+> >   make -j $(nproc)
+> >=20
+> >   bin/clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o
+> > ~/pwet.o ~/pwet.c
+> >   bin/llvm-dwarfdump ~/pwet.o | grep module_ctor
+> >   # Shows module_ctor
+> >=20
+> > I started a bisection, hopefully that will point to something interesti=
+ng
+>=20
+> The bisection pointed to a LLVM patch from Nick in October 2022:
+> e3bb359aacdd ("[clang][Toolchains][Gnu] pass -g through to assembler")
+>=20
+> Based on the context I have, that commit sounds fair enough. I don't
+> think LLVM does anything wrong here, it seems like BPF should be the
+> one dealing with dots in function debug info.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306192231.DJmWr6BX-lkp@intel.com/
+That explains why I could not reproduce the issue: I tried with gas 2.38.
+Using gas 2.40 I see the same behavior as you.
 
-All errors (new ones prefixed by >>):
+If one tries to generate assembly file with '-fsanitize':
 
->> ld.lld: error: section: .got is not contiguous with other relro sections
+  $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -S -o pwet.s pw=
+et.c
+  $ cat pwet.s
+  	.text
+  	.file	"pwet.c"
+  	.p2align	4, 0x90                         # -- Begin function asan.module=
+_ctor
+  	.type	asan.module_ctor,@function
+  asan.module_ctor:                       # @asan.module_ctor
+  .Lfunc_begin0:
+      ...
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+And then compile it using Gnu assembler:
+
+  $ as --64 -o pwet.o pwet.s -g -gdwarf-5
+
+The behavior differs between 2.38 and 2.40, the older version does not
+produce debug entry for 'asan.module_ctor', while newer does.
+
