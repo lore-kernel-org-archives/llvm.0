@@ -1,162 +1,197 @@
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2049.outbound.protection.outlook.com [40.107.212.49])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E33DC14A
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 12:26:35 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HW0LRvGwO2+yQ/nTQoc/4IQzz+50EEkQkL3RMpRe9nzuWAppAgxa7rN1tgRtuJyDo7Zhp/UBkhdSqTYZ1WLKFDHZTEJPGsslXA9wD6/xO7klRpyJ9HJRaj+ybv0kTWD0xWeCA4l4Y4cwoyfirW2dkaTmu/Wy8F07fh33amU4VjTBFO2OGPGP5jOKDDSecK3Jj/2ENozkqn2j4Sans6Tv7YYPLeeJ8v46X7wQJ81FtjNAe+kanTp9zD2a7jca81kiEx/rrM3CFmVjCW1eY6EoNY3gXA4qhkMJsrpwhdZjvpSM1QB9zqAK49j3NAI5WGBsOkpHREDJjxH3B3WkH5dSeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5RZVwlv9MFI+QC9G4Fo0BGa9nOSduQ7EZjTZwrFmJWk=;
- b=l/tU8cwSsOD8iqtLK/yt378b6/yEGwFp0g48TGKNf12BEud6NGEJm36OjyQt0Bmcqfrdg2P/ndHEnjj0aoANAL2rdNxuS8PJ00k/CHunXyDFCl7aaXZBqloqg4gEPqVEXmdFbuRG1sucAoskES+lG+G7zs8GG81a0/GS+UL2brrT0re2PQeXRYcmf3P1kTh6/ihH9l+DrarVDgY+lQ6fQyly5ZhNc3D1HycNvjolyi+Gvx3bortptY7aUc4jQLesHLhilTlRBGONQLRoh5upDh1oRQz7T1rpn22PSL2l6qQP9wQvwjJGMC8NHp+r6RNHR96o15QGxYcwQClSDsaYWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=talpey.com; dmarc=pass action=none header.from=talpey.com;
- dkim=pass header.d=talpey.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=talpey.com;
-Received: from SN6PR01MB4445.prod.exchangelabs.com (2603:10b6:805:e2::33) by
- MW6PR01MB8319.prod.exchangelabs.com (2603:10b6:303:241::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.36; Mon, 19 Jun 2023 12:26:31 +0000
-Received: from SN6PR01MB4445.prod.exchangelabs.com
- ([fe80::17e9:7e30:6603:23bc]) by SN6PR01MB4445.prod.exchangelabs.com
- ([fe80::17e9:7e30:6603:23bc%5]) with mapi id 15.20.6500.031; Mon, 19 Jun 2023
- 12:26:29 +0000
-Message-ID: <930c76ab-89a9-3b03-7436-50bfb5696d0c@talpey.com>
-Date: Mon, 19 Jun 2023 08:26:29 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] [v2] smb: avoid field overflow warning
-Content-Language: en-US
-To: Arnd Bergmann <arnd@kernel.org>, Namjae Jeon <linkinjeon@kernel.org>,
- Steve French <sfrench@samba.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Christian Brauner <brauner@kernel.org>, Ronnie Sahlberg
- <lsahlber@redhat.com>, Hyunchul Lee <hyc.lee@gmail.com>,
- linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230619082019.656605-1-arnd@kernel.org>
-From: Tom Talpey <tom@talpey.com>
-In-Reply-To: <20230619082019.656605-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR05CA0020.namprd05.prod.outlook.com
- (2603:10b6:208:36e::23) To SN6PR01MB4445.prod.exchangelabs.com
- (2603:10b6:805:e2::33)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDD4C2D9;
+	Mon, 19 Jun 2023 12:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687177895; x=1718713895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S5Tbof1M3nkG5q1M0ChkWrKFAeuGsOQlkoha0trItmY=;
+  b=J+1EXPA2BRZ25u0Y8E7hcDmN21xceYFPCjLSRuInSNnJtyQ7oBKYpmou
+   9wCcuSmB4u2Z5V0Ghuhczn4oRUWNN5ASenegOCmKt0sWE7Ja98deEMUhb
+   opmg8eT6R1LpYrHECDN618ZBCFtVSZoucCnb3WTFtZgTlsoyX5JIbF2K3
+   FCpEfXt9wMUVHwA7H+Q+8METZG6Gxz/jddI9o46/aGFuwyLzfoZ88dPzX
+   winMU9ebCtDQUedNAfaZ4gA0ESipOBp2B5TjIio9TABhgguFAMUvXpycN
+   syKJVvDDKWzzH7CBjEwRAYtNFCi7G0IRa43+mKQAHrfgV5yzA/pmCaPIJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="359622553"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="359622553"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 05:31:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="1043889029"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="1043889029"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jun 2023 05:31:29 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBE2a-0004hw-19;
+	Mon, 19 Jun 2023 12:31:28 +0000
+Date: Mon, 19 Jun 2023 20:30:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heng Qi <hengqi@linux.alibaba.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH net-next 1/4] virtio-net: a helper for probing the
+ pseudo-header checksum
+Message-ID: <202306192049.8y7DR5F1-lkp@intel.com>
+References: <20230619105738.117733-2-hengqi@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4445:EE_|MW6PR01MB8319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2593ba8e-04f2-441b-339d-08db70c06887
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	aWLCMSJiCJ1qbWkGwvkf2OZhUBVjTS5EPTzcRAGW1BSab4lBt08Yga/pKpdMozvdpzYgSNQloi1eEIrE45lsIUn8Ge/8B69CmyfJ+IFDkfBMZ3QiJEGDBinMruufHku1fqOdcjlj/on/wOPztISIblazEy++XYxV38F6jCKpPDR/4xdG2l2R0dUqSMLvR0jVcWADWWsAEMkA9VNahQCzM8SG5jkzaxvflc6wldutwd0E2ZDwK7M410zEgBs2E4j4PjTj2lWov3eOOldrdY2LoC9NKu9j1VKzdzppt7ppxSrx5oBVtJoFSZ619968FR+b+ztsuw0cnc3SKTTdDa4qIDMriEV2llx0oijCXogkAjY6QatsiblmAo9n/cAB0/LFjUPqF8R5Z+dGNRySJ8qlS92Ji1FMCfH/AnYgTTBRjWMqOJC1j1AZVDaTi7x3SOQ0+apUTMRBJOlkSW+viuZ5BIuyRcwA3U6azrgYjeneZl6JxbZ+jDznR7ZShPTw8ZUb+Ip/nD56vyli06MKshT6zjUCUduNGLVQQL25mGrdjD0KdedW5s8qbIFCyksJQbZuVh04sOFXnSnelgAwNQ2YbctEY/vhpCNIuU1zyBtDgcmQ8EcDq258c7PQzdOfyT6nEUjvLV+XZtT6luLiSt7MsA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4445.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(39830400003)(366004)(136003)(346002)(451199021)(186003)(66946007)(8936002)(8676002)(66556008)(5660300002)(66476007)(110136005)(54906003)(52116002)(6486002)(316002)(38350700002)(38100700002)(478600001)(41300700001)(36756003)(26005)(53546011)(6506007)(6512007)(4326008)(7416002)(2906002)(31696002)(86362001)(83380400001)(31686004)(2616005)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cnNLVGRZSDE1V3dNR3I0QjhzVGhrZmJmaHpqdEFFd0RVWDMrb3JuOExvdkxn?=
- =?utf-8?B?bHJsSk8zNmM4VjE5ZDRLeVlackkwVnpKRFN5ejV2UnFvWm1wTU4yRXp2ZHR0?=
- =?utf-8?B?VnltVkUyZXVSSDJrNE4wbEFPYm1UQXNIWkh0VFlocUdhY3lrUXdDdXFyM2hW?=
- =?utf-8?B?UytxVGp5QmFyYXNwRlRDRnE0MlRXMmd3M1BpOE1rbU9XZmtlT2FXZkF1ZzFO?=
- =?utf-8?B?ZGpoSStoM0NkQU1LbkxDa1dmOHNvSVVTY3dDSXpFbVhyQUkyUFRwUC93Tk1s?=
- =?utf-8?B?dkJjeElLRG10SUd5ejRVT3lPUlM4UDZTYUdSaU9ld3ZZKzBjSTBBT2doVzA0?=
- =?utf-8?B?RSt5L0EwVFVBREw1akRQaDhaWnV0UGZyVm4rU0xha3hrK010dlMzSnFkVjJp?=
- =?utf-8?B?Qlc4bVY0UktWNGhjMjMyWG5SWFgvSVpHRVowL0dESmsxUS9heWRRVHNLb2Rj?=
- =?utf-8?B?eHFTc0hlUmZ3cUxDcHZtKzVBS0RpNHNOenlZMW5Qdk1uZDAvUE1yUWswbk93?=
- =?utf-8?B?Z2huS3dBUGZhVGw5QWtkVE5yQXFPYzJ6WGNwNlNvR1B1TWtBbkxpTC8zcU91?=
- =?utf-8?B?WDZNYm00ckpOUmVHSndIeWZId3BCUDJReWs4YXl0VGpMSmp6c1ZrQ1E5K2Z2?=
- =?utf-8?B?eDFIYWU1VzhRZGFNMldGaGlaMUsrV2RNUGJ2bHAxRmhKU0p4andjRHFqTXRs?=
- =?utf-8?B?eXdkUkVZd2ZNSmlpVnFzaUZxTHBpSUdWQWo2MDRvcDU3SFIwRlk2cmRvQTEw?=
- =?utf-8?B?d0RaY1dmV2Rvb20wZjZhbHhKckxFUm03SlNndWxudDFLRXJ2dG9EeDRHNmt5?=
- =?utf-8?B?OTFxT1dobDg2MWcrbEdBZ2JQUVdSWTdJQld1aVNDWGgrZWcyTjVXVEk0WVRM?=
- =?utf-8?B?bFp5VFFNVmhlWEVtYlBYTC9wNVVhV2VlRjRGdklpOVA4SXh2ZWp5R0JIaDFG?=
- =?utf-8?B?YlFudnc1Z0NWV0ZlNTUyUHgxNkZlc05OSHFPRkVRREdWcW8wT3QvVGNMVUxC?=
- =?utf-8?B?YWViV2pBeFlkdkdrbFRXOHU1SzMwRUxUK1dZdFcrR1d2QUNjTkc4UGczQk5q?=
- =?utf-8?B?N1JxVjIya3ltRlZ6UE1oZEJQeWdzQURhREF2TWNkWFpkcEpldnBKNzQ4NFBR?=
- =?utf-8?B?alprOStEZ3M0bG9qV2VMU0Voa2F2QndCQlczc3JBOWNRYy9lNGNjUU9YdnV2?=
- =?utf-8?B?ZjM0NGhHcmtubEJYc0pZSEQzZk90OUdOZUcva3l0WW9PeGxDVS9vb1VhbEhP?=
- =?utf-8?B?WnpGNWo3elpGMURCTDJRekZzQUMvSU4rMkkwR1NJNk1Db3NZTkJFWkltVlRY?=
- =?utf-8?B?YktuQ2IwRXpFNnZEaE5RMXc1Rm9EOUNqTlZ5L0F5RnFBVGtiTXVyVmtFNUZ2?=
- =?utf-8?B?L1JkRlY1c2dFekdjUlNJWHlSUkFKV21jc3h0SndrOXcwOXBWNlBmWXJnK0VB?=
- =?utf-8?B?VFRWMFF6S3VkVWhTM2xKRloxQ1VTcGQ3bmJYSFpmMEQvQTA2U2ZEN2VJd1NP?=
- =?utf-8?B?aThwZzkvZFVBdmVKSE9TRWpSQ1lvZlpxQi9iTC9QZjFNOGgrRFQxSVNnbmg3?=
- =?utf-8?B?aU92WUk5a3Z0VDZEOEQzT2tubjBGQXJhSmdYMHVEM1REbU5NczhWa0NDa3VD?=
- =?utf-8?B?QnBrUHJPSzUrZFllNnZGN1lLNEFPeWtHSnFTdjB1RHBHb2MzYitEY0RmRVJ5?=
- =?utf-8?B?bGtRQkZybmdKakFGWTFWVWxIempIS0N5MlczelUxMTBibVNNYjhrQjBOdThv?=
- =?utf-8?B?NEtVejNwemFwOWxYRWI1UDVzSC9hVGRydi9IQStBKzBJKzZ6WUFCdElnM2RF?=
- =?utf-8?B?NkVyUklXU05KT3g2NzhyTHFUSEsvS3hKTzRnVzZBZlZ3eTZtZjRtTzJ4TGpP?=
- =?utf-8?B?cW9XWVpCbnpoM3RYVjJmQy9SY1E5SmtLd3J4WFpGRTg0R1krL01yY0pVQ25C?=
- =?utf-8?B?NjcrcWwrM29DOWI3SDI4NVdnQkVBSEpLT29pK1hrY3BMSlYrUDJDQ1NnUHY0?=
- =?utf-8?B?b3MvYmp5ZURjbXp1bTJ2VDRtQkZPNFZDYmZQOGttRG5YTGhzTGpsK0JaVUk4?=
- =?utf-8?B?UjQvQmI3UTQ5ODFNaVV6bzFhbDhEOXBZdTRwUnJTM0tJQTVHRFpnMS9UYkJE?=
- =?utf-8?Q?18HUvzi+igPxnn/9ni5G262Z8?=
-X-OriginatorOrg: talpey.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2593ba8e-04f2-441b-339d-08db70c06887
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4445.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 12:26:29.4184
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 2b2dcae7-2555-4add-bc80-48756da031d5
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GBs6ald7a4S6Oa7RSCdXeElilmJG/khBgBgeTuUHyVvzVnX3LMZmGZ5GSmMDPWLn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR01MB8319
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619105738.117733-2-hengqi@linux.alibaba.com>
 
-On 6/19/2023 4:19 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang warns about a possible field overflow in a memcpy:
-> 
-> In file included from fs/smb/server/smb_common.c:7:
-> include/linux/fortify-string.h:583:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
->                          __write_overflow_field(p_size_field, size);
-> 
-> It appears to interpret the "&out[baselen + 4]" as referring to a single
-> byte of the character array, while the equivalen "out + baselen + 4" is
-> seen as an offset into the array.
-> 
-> I don't see that kind of warning elsewhere, so just go with the simple
-> rework.
-> 
-> Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ----
-> v2: fix typo in array length, and make sure it still addresses the warning
-> ---
->   fs/smb/server/smb_common.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-> index a7e81067bc991..39c6c8d7d0623 100644
-> --- a/fs/smb/server/smb_common.c
-> +++ b/fs/smb/server/smb_common.c
-> @@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn, const char *longname,
->   	out[baselen + 3] = PERIOD;
->   
->   	if (dot_present)
-> -		memcpy(&out[baselen + 4], extension, 4);
-> +		memcpy(out + baselen + 4, extension, 4);
->   	else
->   		out[baselen + 4] = '\0';
->   	smbConvertToUTF16((__le16 *)shortname, out, PATH_MAX,
+Hi Heng,
 
-It'd be really confusing to have the other two out[baselen + foo] = bar
-in the lines above and below.
+kernel test robot noticed the following build errors:
 
-Can this be fixed more clearly with a new pointer, like
-	char *q = &out[baselen + 4];
-	memcpy(q, extension, 4);
-??
+[auto build test ERROR on net-next/main]
 
-Tom.
+url:    https://github.com/intel-lab-lkp/linux/commits/Heng-Qi/virtio-net-a-helper-for-probing-the-pseudo-header-checksum/20230619-190212
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230619105738.117733-2-hengqi%40linux.alibaba.com
+patch subject: [PATCH net-next 1/4] virtio-net: a helper for probing the pseudo-header checksum
+config: x86_64-randconfig-r014-20230619 (https://download.01.org/0day-ci/archive/20230619/202306192049.8y7DR5F1-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192049.8y7DR5F1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306192049.8y7DR5F1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/virtio_net.c:1648:17: error: call to undeclared function 'csum_ipv6_magic'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           uh->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
+                                        ^
+   drivers/net/virtio_net.c:1648:17: note: did you mean 'csum_tcpudp_magic'?
+   include/asm-generic/checksum.h:52:1: note: 'csum_tcpudp_magic' declared here
+   csum_tcpudp_magic(__be32 saddr, __be32 daddr, __u32 len,
+   ^
+   drivers/net/virtio_net.c:1657:17: error: call to undeclared function 'csum_ipv6_magic'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           th->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
+                                        ^
+   2 errors generated.
+
+
+vim +/csum_ipv6_magic +1648 drivers/net/virtio_net.c
+
+  1572	
+  1573	static int virtnet_flow_dissect_udp_tcp(struct virtnet_info *vi, struct sk_buff *skb)
+  1574	{
+  1575		struct net_device *dev = vi->dev;
+  1576		struct flow_keys_basic keys;
+  1577		struct udphdr *uh;
+  1578		struct tcphdr *th;
+  1579		int len, offset;
+  1580	
+  1581		/* The flow dissector needs this information. */
+  1582		skb->dev = dev;
+  1583		skb_reset_mac_header(skb);
+  1584		skb->protocol = dev_parse_header_protocol(skb);
+  1585		/* virtio-net does not need to resolve VLAN. */
+  1586		skb_set_network_header(skb, ETH_HLEN);
+  1587		if (!skb_flow_dissect_flow_keys_basic(NULL, skb, &keys,
+  1588						      NULL, 0, 0, 0, 0))
+  1589			return -EINVAL;
+  1590	
+  1591		/* 1. Pseudo-header checksum calculation requires:
+  1592		 *    (1) saddr/daddr (2) IP_PROTO (3) length of transport payload
+  1593		 * 2. We don't parse SCTP because virtio-net currently doesn't
+  1594		 *    support CRC offloading for SCTP.
+  1595		 */
+  1596		if (keys.basic.n_proto == htons(ETH_P_IP)) {
+  1597			struct iphdr *iph;
+  1598	
+  1599			/* Flow dissector has verified that there is an IP header. */
+  1600			iph = ip_hdr(skb);
+  1601			if (iph->version != 4 || !pskb_may_pull(skb, iph->ihl * 4))
+  1602				return -EINVAL;
+  1603	
+  1604			skb->transport_header = skb->mac_header + keys.control.thoff;
+  1605			offset = skb_transport_offset(skb);
+  1606			len = skb->len - offset;
+  1607			if (keys.basic.ip_proto == IPPROTO_UDP) {
+  1608				if (!pskb_may_pull(skb, offset + sizeof(struct udphdr)))
+  1609					return -EINVAL;
+  1610	
+  1611				uh = udp_hdr(skb);
+  1612				skb->csum_offset = offsetof(struct udphdr, check);
+  1613				/* Although uh->len is already the 3rd parameter for the calculation
+  1614				 * of the pseudo-header checksum, we have already calculated the
+  1615				 * length of the transport layer, so use 'len' here directly.
+  1616				 */
+  1617				uh->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr, len,
+  1618						IPPROTO_UDP, 0);
+  1619			} else if (keys.basic.ip_proto == IPPROTO_TCP) {
+  1620				if (!pskb_may_pull(skb, offset + sizeof(struct tcphdr)))
+  1621					return -EINVAL;
+  1622	
+  1623				th = tcp_hdr(skb);
+  1624				skb->csum_offset = offsetof(struct tcphdr, check);
+  1625				th->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr, len,
+  1626						IPPROTO_TCP, 0);
+  1627			} /* virtio-net doesn't support checksums for SCTP hw offloading.*/
+  1628		} else if (keys.basic.n_proto == htons(ETH_P_IPV6)) {
+  1629			struct ipv6hdr *ip6h;
+  1630	
+  1631			ip6h = ipv6_hdr(skb);
+  1632			if (ip6h->version != 6)
+  1633				return -EINVAL;
+  1634	
+  1635			/* We have skipped the possible extension headers for IPv6.
+  1636			 * If there is a Routing Header, the tx's check value is calculated by
+  1637			 * final_dst, and that value is the rx's daddr.
+  1638			 */
+  1639			skb->transport_header = skb->mac_header + keys.control.thoff;
+  1640			offset = skb_transport_offset(skb);
+  1641			len = skb->len - offset;
+  1642			if (keys.basic.ip_proto == IPPROTO_UDP) {
+  1643				if (!pskb_may_pull(skb, offset + sizeof(struct udphdr)))
+  1644					return -EINVAL;
+  1645	
+  1646				uh = udp_hdr(skb);
+  1647				skb->csum_offset = offsetof(struct udphdr, check);
+> 1648				uh->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
+  1649						(const struct in6_addr *)&ip6h->daddr,
+  1650						len, IPPROTO_UDP, 0);
+  1651			} else if (keys.basic.ip_proto == IPPROTO_TCP) {
+  1652				if (!pskb_may_pull(skb, offset + sizeof(struct tcphdr)))
+  1653					return -EINVAL;
+  1654	
+  1655				th = tcp_hdr(skb);
+  1656				skb->csum_offset = offsetof(struct tcphdr, check);
+  1657				th->check = ~csum_ipv6_magic((const struct in6_addr *)&ip6h->saddr,
+  1658						(const struct in6_addr *)&ip6h->daddr,
+  1659						len, IPPROTO_TCP, 0);
+  1660			}
+  1661		}
+  1662	
+  1663		skb->csum_start = skb->transport_header;
+  1664	
+  1665		return 0;
+  1666	}
+  1667	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
