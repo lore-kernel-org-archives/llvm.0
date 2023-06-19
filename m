@@ -1,83 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081526ABD
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 08:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8663AC433C8;
-	Mon, 19 Jun 2023 08:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687162826;
-	bh=3qmrbX+gre5g324ufIaHDRifEUP5SgH9Kco2mZL155U=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mdMIswmrdfZbEPolQxk4U3MMdRbKG7clRlpwVVU+po7lodeNJWfqP5tlXv7sOyBzk
-	 zuKikrud9u1SwwPwOPAY/P0xvVwd5knb/W0+3i7VdRoYukOUV65ZNl5a2qR1iZY19F
-	 RxU3Ev3AcFf2V8deVvxspGeIiOKmuRu9tSTIHKiPThxC2Yax0XE8Dqs/lw2XVwohf3
-	 +blK27iRqPof/ng//FKYF95MaC18xx2pYaGreus772awP0FtgxvHQNbrUsAZwK+aLK
-	 rBJ8KzE9ezDRoObYV2aghtCwwYI4h9bY2dIH9TE8wToyvEryGZIz6raw1Y0Wv28w63
-	 MQMC0ne7t2ctg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Namjae Jeon <linkinjeon@kernel.org>,
-	Steve French <sfrench@samba.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Tom Talpey <tom@talpey.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Ronnie Sahlberg <lsahlber@redhat.com>,
-	Hyunchul Lee <hyc.lee@gmail.com>,
-	linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [v2] smb: avoid field overflow warning
-Date: Mon, 19 Jun 2023 10:19:38 +0200
-Message-Id: <20230619082019.656605-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA571BA2C;
+	Mon, 19 Jun 2023 08:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687164201; x=1718700201;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V3WB2n/kedw2l5Jen6Ta1lvwWdygT4WlDZU4n53anXQ=;
+  b=Yxl18nJJeHGpl6wStpZNuzsDFuslo67GZGLAhCpavMSBZWEXdizZrsdV
+   pUAz7zWRDXPOW/sPwXPqBFCGoY5mgAb8SRc4cTVhI7jHoK1Wjz5DdwS93
+   IoGthpYT9EaSugYFf2ksHAOKiEedhVUKXnByO29fBOHsf1xTZO9Y5FPy6
+   3ceItL4c3DpjgR9M/NKmNsHxVVc2Z2CkcLgz9Q3OmI6l+hCooEstBzWHi
+   ZeopznH2A1KquaQzjKMQzXsSQHm8uslwg+ymaXw9/gfumGTm9243IPFkh
+   CuhSZ0ZSdvElXkRedZqUrsmLMVDWmUn4Vgytx+KW7ut3qwzgOBkf7aJxC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="339915811"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="339915811"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 01:43:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="858150606"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="858150606"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jun 2023 01:43:18 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBATl-0004Ya-2x;
+	Mon, 19 Jun 2023 08:43:17 +0000
+Date: Mon, 19 Jun 2023 16:43:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <anup@brainfault.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 10734/10788] arch/riscv/kvm/aia_imsic.c:237:9:
+ error: call to undeclared function 'arch_atomic_long_fetch_or'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202306191640.NE97q8G3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   47045630bc409ce6606d97b790895210dd1d517d
+commit: 45d0f6cbccb6e26047d42baa32de1df7bbc25f97 [10734/10788] Merge branch 'riscv_kvm_next' of https://github.com/kvm-riscv/linux.git
+config: riscv-randconfig-r042-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191640.NE97q8G3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191640.NE97q8G3-lkp@intel.com/reproduce)
 
-clang warns about a possible field overflow in a memcpy:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306191640.NE97q8G3-lkp@intel.com/
 
-In file included from fs/smb/server/smb_common.c:7:
-include/linux/fortify-string.h:583:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-                        __write_overflow_field(p_size_field, size);
+All errors (new ones prefixed by >>):
 
-It appears to interpret the "&out[baselen + 4]" as referring to a single
-byte of the character array, while the equivalen "out + baselen + 4" is
-seen as an offset into the array.
+>> arch/riscv/kvm/aia_imsic.c:237:9: error: call to undeclared function 'arch_atomic_long_fetch_or'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     237 |         return arch_atomic_long_fetch_or(val, (atomic_long_t *)ptr);
+         |                ^
+   arch/riscv/kvm/aia_imsic.c:237:9: note: did you mean 'raw_atomic_long_fetch_or'?
+   include/linux/atomic/atomic-long.h:1087:1: note: 'raw_atomic_long_fetch_or' declared here
+    1087 | raw_atomic_long_fetch_or(long i, atomic_long_t *v)
+         | ^
+   1 error generated.
 
-I don't see that kind of warning elsewhere, so just go with the simple
-rework.
 
-Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-----
-v2: fix typo in array length, and make sure it still addresses the warning
----
- fs/smb/server/smb_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vim +/arch_atomic_long_fetch_or +237 arch/riscv/kvm/aia_imsic.c
 
-diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-index a7e81067bc991..39c6c8d7d0623 100644
---- a/fs/smb/server/smb_common.c
-+++ b/fs/smb/server/smb_common.c
-@@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn, const char *longname,
- 	out[baselen + 3] = PERIOD;
- 
- 	if (dot_present)
--		memcpy(&out[baselen + 4], extension, 4);
-+		memcpy(out + baselen + 4, extension, 4);
- 	else
- 		out[baselen + 4] = '\0';
- 	smbConvertToUTF16((__le16 *)shortname, out, PATH_MAX,
+2f68d542041204 Anup Patel 2023-06-15  232  
+2f68d542041204 Anup Patel 2023-06-15  233  static unsigned long imsic_mrif_atomic_or(struct imsic_mrif *mrif,
+2f68d542041204 Anup Patel 2023-06-15  234  					  unsigned long *ptr,
+2f68d542041204 Anup Patel 2023-06-15  235  					  unsigned long val)
+2f68d542041204 Anup Patel 2023-06-15  236  {
+2f68d542041204 Anup Patel 2023-06-15 @237  	return arch_atomic_long_fetch_or(val, (atomic_long_t *)ptr);
+2f68d542041204 Anup Patel 2023-06-15  238  }
+2f68d542041204 Anup Patel 2023-06-15  239  
+
+:::::: The code at line 237 was first introduced by commit
+:::::: 2f68d5420412040ec974557198d6a886708479c0 RISC-V: KVM: Add in-kernel virtualization of AIA IMSIC
+
+:::::: TO: Anup Patel <apatel@ventanamicro.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
