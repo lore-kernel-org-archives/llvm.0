@@ -1,109 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0835395
-	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 07:51:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4CDC433CA;
-	Mon, 19 Jun 2023 07:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D355395
+	for <llvm@lists.linux.dev>; Mon, 19 Jun 2023 07:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC68C433C8;
+	Mon, 19 Jun 2023 07:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1687161108;
-	bh=07LwwkP+NNXtay8tIMz8QNwZopUbd2A/gSwYi8NHw9Y=;
-	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=HQ9H30PqzCF5jQboa6kKVV9iDwS3XanC9KgmVNKxiFaG44sAGaC3Eiwr3pNMGrcYb
-	 uzOEUK9IjSObdhFbjNf9fQP9Eda0Ry0CoX8aJNcb846WXHLvAlBrnzdjWhmYfIVWLG
-	 sTVMjsGjglegu6WAr7T7vyOBNRKatrJHF8CwId18=
-Subject: Patch "MIPS: Move '-Wa,-msoft-float' check from as-option to cc-option" has been added to the 6.1-stable tree
-To: gregkh@linuxfoundation.org,llvm@lists.linux.dev,naresh.kamboju@linaro.org,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org,tsbogend@alpha.franken.de
-Cc: <stable-commits@vger.kernel.org>
-From: <gregkh@linuxfoundation.org>
-Date: Mon, 19 Jun 2023 09:51:30 +0200
-In-Reply-To: <20230612-6-1-asssembler-target-llvm-17-v1-2-75605d553401@kernel.org>
-Message-ID: <2023061930-lumpiness-perpetual-8837@gregkh>
+	s=korg; t=1687161115;
+	bh=wcUFCTgaQzOZpExfHFs7UPcmfiTCw61/ZsId+1DngaM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LDhMTQB+nLNSZH8KLJtCtru9gT8PJM8FnYCvCdr9lTYVhknLTaa+dPsLi4e6qNBCX
+	 wU1nhHPF7Ec9b9CXy3F7EsHFXvs9FvGrslHnW9cuIt2cSC2jox/Q/7n6KrHtCt529L
+	 +YudYYV0R7X75c5CVWQ5XXje2fcVTPxeN3m2l1eU=
+Date: Mon, 19 Jun 2023 09:51:44 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sashal@kernel.org, ndesaulniers@google.com, naresh.kamboju@linaro.org,
+	stable@vger.kernel.org, llvm@lists.linux.dev,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>, tsbogend@alpha.franken.de,
+	linux-mips@vger.kernel.org,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH 6.1 0/4] Update as-{instr,option} to use KBUILD_AFLAGS
+Message-ID: <2023061934-scuttle-unveiled-1801@gregkh>
+References: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
-X-stable: commit
-X-Patchwork-Hint: ignore 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org>
 
+On Wed, Jun 14, 2023 at 11:04:34AM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> This series backports commit d5c8d6e0fa61 ("kbuild: Update assembler
+> calls to use proper flags and language target") to linux-6.1.y to
+> address a recent issue caused by a change in behavior in clang:
+> 
+> https://lore.kernel.org/CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com/
+> https://lore.kernel.org/20230612185424.GA2891387@dev-arch.thelio-3990X/
+> 
+> While that was not the original intention of the aforementioned change,
+> it ends up resolving the issue for the same reason, by not passing flags
+> that are not supported or necessary for the current language target
+> (KBUILD_CFLAGS for .c files and KBUILD_AFLAGS for .S files) when testing
+> flags for that language target.
+> 
+> All patches except the second one are direct backports from mainline.
+> The second patch is a stable specific patch because the upstream
+> solution could break stable due to the minimum supported version of
+> binutils in mainline being a newer version than 6.1 and earlier; it
+> chooses to do the more conservative fix, which was alluded to in the
+> changelog of the upstream commit.
+> 
+> For now, this is just a 6.1 issue. If the issue occurs in older
+> releases, I will send separate backports. If there are any issues or
+> objections to this series, please let me know.
 
-This is a note to let you know that I've just added the patch titled
+All now queued up, thanks.
 
-    MIPS: Move '-Wa,-msoft-float' check from as-option to cc-option
-
-to the 6.1-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-
-The filename of the patch is:
-     mips-move-wa-msoft-float-check-from-as-option-to-cc-option.patch
-and it can be found in the queue-6.1 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
-
-
-From nathan@kernel.org Wed Jun 14 20:04:42 2023
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 14 Jun 2023 11:04:36 -0700
-Subject: MIPS: Move '-Wa,-msoft-float' check from as-option to cc-option
-To: gregkh@linuxfoundation.org, sashal@kernel.org, ndesaulniers@google.com
-Cc: naresh.kamboju@linaro.org, stable@vger.kernel.org, llvm@lists.linux.dev,  Nathan Chancellor <nathan@kernel.org>, tsbogend@alpha.franken.de,  linux-mips@vger.kernel.org
-Message-ID: <20230612-6-1-asssembler-target-llvm-17-v1-2-75605d553401@kernel.org>
-
-From: Nathan Chancellor <nathan@kernel.org>
-
-This patch is for linux-6.1.y and earlier, it has no direct mainline
-equivalent.
-
-In order to backport commit d5c8d6e0fa61 ("kbuild: Update assembler
-calls to use proper flags and language target") to resolve a separate
-issue regarding PowerPC, the problem noticed and fixed by
-commit 80a20d2f8288 ("MIPS: Always use -Wa,-msoft-float and eliminate
-GAS_HAS_SET_HARDFLOAT") needs to be addressed. Unfortunately, 6.1 and
-earlier do not contain commit e4412739472b ("Documentation: raise
-minimum supported version of binutils to 2.25"), so it cannot be assumed
-that all supported versions of GNU as have support for -msoft-float.
-
-In order to switch from KBUILD_CFLAGS to KBUILD_AFLAGS in as-option
-without consequence, move the '-Wa,-msoft-float' check to cc-option,
-including '$(cflags-y)' directly to avoid the issue mentioned in
-commit 80a20d2f8288 ("MIPS: Always use -Wa,-msoft-float and eliminate
-GAS_HAS_SET_HARDFLOAT").
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Cc: tsbogend@alpha.franken.de
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -109,7 +109,7 @@ endif
- # (specifically newer than 2.24.51.20140728) we then also need to explicitly
- # set ".set hardfloat" in all files which manipulate floating point registers.
- #
--ifneq ($(call as-option,-Wa$(comma)-msoft-float,),)
-+ifneq ($(call cc-option,$(cflags-y) -Wa$(comma)-msoft-float,),)
- 	cflags-y		+= -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float
- endif
- 
-
-
-Patches currently in stable-queue which might be from nathan@kernel.org are
-
-queue-6.1/riscv-purgatory-remove-pgo-flags.patch
-queue-6.1/powerpc-purgatory-remove-pgo-flags.patch
-queue-6.1/mips-move-wa-msoft-float-check-from-as-option-to-cc-option.patch
-queue-6.1/kexec-support-purgatories-with-.text.hot-sections.patch
-queue-6.1/mips-prefer-cc-option-for-additions-to-cflags.patch
-queue-6.1/x86-purgatory-remove-pgo-flags.patch
-queue-6.1/x86-boot-compressed-prefer-cc-option-for-cflags-additions.patch
-queue-6.1/kbuild-update-assembler-calls-to-use-proper-flags-and-language-target.patch
+greg k-h
