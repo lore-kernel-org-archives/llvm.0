@@ -1,192 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B3E15AE;
-	Tue, 20 Jun 2023 04:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C42C433CD;
-	Tue, 20 Jun 2023 04:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687234778;
-	bh=NyGsLeW/FztEsf9dVsONe46AWBlbnmJSRV1nyDFVDmM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SyYSgxyRvMQ8bpj+1tiIcMRWk9Q70jG/7TLqBfKKy3zECmTd3QV/+M7adHuWfbg5z
-	 HswzlZkElK3j8hqijaUg3Ant3XNG94VmIBvI7gEnLscldIiyESkU/2vW97lJfx6pW9
-	 SxSEI8ds3VW0pXcBTMlMC2jBZjnrZmPk+ONpMHyQCTyxE9PpzshdH+Y9yo0Knpkt9x
-	 +NlNo4ZmmOKQT4VUiAX6qfPMdu95kzDFiSRFMkvZlAytkmrkTpK1uxBNoyCiWllxUv
-	 E1N4G3G7CrmWVXbzHGP4rRuCm9CzTe/J4FboxWm9y+PwWvNDemNb8YVszXybGz+iwK
-	 ZP5I3S++JFuTw==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-55b21c3f359so2660717eaf.0;
-        Mon, 19 Jun 2023 21:19:38 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzA1nk5Vj6tUZwoAfM1PJo1qrQd4epmieO5NMsrJKCIzALprxnH
-	z1RptUcevx+XJr1NgbIBKhdQc0cNtZWWME6O/kk=
-X-Google-Smtp-Source: ACHHUZ50dBIk80zRdS9T10z5yvKFkNOL2YvbT9WJB+0+jV9iiQvBtez20V9tVjAvd8EezQ0PGvBQj2XapoOMQguh5H0=
-X-Received: by 2002:a4a:c607:0:b0:558:b793:f10c with SMTP id
- l7-20020a4ac607000000b00558b793f10cmr5116789ooq.3.1687234777440; Mon, 19 Jun
- 2023 21:19:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DF71FA9;
+	Tue, 20 Jun 2023 05:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687240559; x=1718776559;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wTpmMXRtxg1A3TQTPk0QjDxNjsJSOtuUCpqRsXXHgcA=;
+  b=D022uSyQYxi0eyLt9SZ1bPL/1f4SnTRPH7edYaAqGyT84Yh3SnIZo0//
+   9MyPu0rIIbXH2Jn8kNJE1YhT9AwLEqeIOQ5Ak7nJwnJ0x0zfuwkdG/vZ7
+   kOP1wmrynpaktstTIFOvgoROKSigl40INt3XpkPOHaC8MgADbvZzKQxLD
+   vfui+yM2+INmMVm8yNvdEAwgBkFl+4uCrCBhibUOfbdjrmYxILiGlv5Wi
+   Xt0ic7OY8EnIKF+OWtcAfRvUh+5/efMDo3RAffen1gU0S1wY0rBtpd9l4
+   3XY5VeIa+7TAFKRjOX8Z6LxolrLaVfkPjb1K1FFJ4/c913xiSp/2pcHym
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446150482"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="446150482"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:55:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="888127426"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="888127426"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 19 Jun 2023 22:55:56 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBULL-0005Ym-2x;
+	Tue, 20 Jun 2023 05:55:55 +0000
+Date: Tue, 20 Jun 2023 13:55:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous
+ prototype for function 'assabet_init_irq'
+Message-ID: <202306201322.xTUPn7A1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com> <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
- <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com> <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh> <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com> <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
-In-Reply-To: <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 20 Jun 2023 13:19:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
-Message-ID: <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To: Shreeya Patel <shreeya.patel@collabora.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>, 
-	=?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>, 
-	Michal Marek <michal.lkml@markovi.net>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev, 
-	"gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>, 
-	Guillaume Charles Tucker <guillaume.tucker@collabora.com>, denys.f@collabora.com, 
-	Nick Desaulniers <ndesaulniers@google.com>, kernelci@lists.linux.dev, 
-	Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 12, 2023 at 7:10=E2=80=AFPM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
->
-> Hi Masahiro,
->
->
-> On 24/05/23 02:57, Nick Desaulniers wrote:
-> > On Tue, May 23, 2023 at 3:27=E2=80=AFAM Shreeya Patel
-> > <shreeya.patel@collabora.com> wrote:
-> >> Hi Nick and Masahiro,
-> >>
-> >> On 23/05/23 01:22, Nick Desaulniers wrote:
-> >>> On Mon, May 22, 2023 at 9:52=E2=80=AFAM Greg KH <gregkh@linuxfoundati=
-on.org> wrote:
-> >>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Ca=C3=B1uelo wrote=
-:
-> >>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@goo=
-gle.com> wrote:
-> >>>>>> It could be; if the link order was changed, it's possible that thi=
-s
-> >>>>>> target may be hitting something along the lines of:
-> >>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "stat=
-ic
-> >>>>>> initialization order fiasco"
-> >>>>>>
-> >>>>>> I'm struggling to think of how this appears in C codebases, but I
-> >>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
-> >>>>>> think I was playing with converting Kbuild to use Ninja rather tha=
-n
-> >>>>>> Make; the resulting kernel image wouldn't boot because I had modif=
-ied
-> >>>>>> the order the object files were linked in.  If you were to randoml=
-y
-> >>>>>> shuffle the object files in the kernel, I recall some hazard that =
-may
-> >>>>>> prevent boot.
-> >>>>> I thought that was specifically a C++ problem? But then again, the
-> >>>>> kernel docs explicitly say that the ordering of obj-y goals in kbui=
-ld is
-> >>>>> significant in some instances [1]:
-> >>>> Yes, it matters, you can not change it.  If you do, systems will bre=
-ak.
-> >>>> It is the only way we have of properly ordering our init calls withi=
-n
-> >>>> the same "level".
-> >>> Ah, right it was the initcall ordering. Thanks for the reminder.
-> >>>
-> >>> (There's a joke in there similar to the use of regexes to solve a
-> >>> problem resulting in two new problems; initcalls have levels for
-> >>> ordering, but we still have (unexpressed) dependencies between calls
-> >>> of the same level; brittle!).
-> >>>
-> >>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
-> >>>
-> >>> Ricardo,
-> >>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
-> >>> mentions that there's a kernel command line param `initcall_debug`.
-> >>> Perhaps that can be used to see if
-> >>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
-> >>> ordering, resulting in a config that cannot boot?
-> >>
-> >> Here are the links to Lava jobs ran with initcall_debug added to the
-> >> kernel command line.
-> >>
-> >> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
-> >> https://lava.collabora.dev/scheduler/job/10417706
-> >> <https://lava.collabora.dev/scheduler/job/10417706>
-> >>
-> >> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d792=
-6
-> >> https://lava.collabora.dev/scheduler/job/10418012
-> >> <https://lava.collabora.dev/scheduler/job/10418012>
-> > Thanks!
-> >
-> > Yeah, I can see a diff in the initcall ordering as a result of
-> > commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
-> >
-> > https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f=
-4
-> >
-> > Not just different orderings, but some initcalls seem unique to the
-> > before vs. after, which is troubling. (example init_events and
-> > init_fs_sysctls respectively)
-> >
-> > That isn't conclusive evidence that changes to initcall ordering are
-> > to blame, but I suspect confirming that precisely to be very very time
-> > consuming.
-> >
-> > Masahiro, what are your thoughts on reverting 5750121ae738? There are
-> > conflicts in Kbuild and Makefile when reverting 5750121ae738 on
-> > mainline.
->
-> I'm not sure if you followed the conversation but we are still seeing
-> this regression with the latest kernel builds and would like to know if
-> you plan to revert 5750121ae738?
+Hi Nathan,
 
+First bad commit (maybe != root cause):
 
-Reverting 5750121ae738 does not solve the issue
-because the issue happens even before 5750121ae738.
-multi_v7_defconfig + debug.config + CONFIG_MODULES=3Dn
-fails to boot in the same way.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   692b7dc87ca6d55ab254f8259e6f970171dc9d01
+commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+date:   5 months ago
+config: arm-neponset_defconfig (https://download.01.org/0day-ci/archive/20230620/202306201322.xTUPn7A1-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201322.xTUPn7A1-lkp@intel.com/reproduce)
 
-The revert would hide the issue on a particular build setup.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306201322.xTUPn7A1-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-I submitted a patch to more pin-point the issue.
-Let's see how it goes.
-https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
-
-
-(BTW, the initcall order is unrelated)
-
-
-
-
-
->
->
-> Thanks,
-> Shreeya Patel
->
-> >>
-> >> Thanks,
-> >> Shreeya Patel
-> >>
-> >
-
+>> arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous prototype for function 'assabet_init_irq' [-Wmissing-prototypes]
+   void __init assabet_init_irq(void)
+               ^
+   arch/arm/mach-sa1100/assabet.c:746:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init assabet_init_irq(void)
+   ^
+   static 
+   1 warning generated.
 --
-Best Regards
-Masahiro Yamada
+>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
+   int __init sa11x0_pm_init(void)
+              ^
+   arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init sa11x0_pm_init(void)
+   ^
+   static 
+   1 warning generated.
+--
+>> arch/arm/common/sa1111.c:699:1: warning: no previous prototype for function 'sa1111_configure_smc' [-Wmissing-prototypes]
+   sa1111_configure_smc(struct sa1111 *sachip, int sdram, unsigned int drac,
+   ^
+   arch/arm/common/sa1111.c:698:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   1 warning generated.
+--
+   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'me' not described in '__sa1111_probe'
+   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'mem' not described in '__sa1111_probe'
+   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'irq' not described in '__sa1111_probe'
+>> arch/arm/common/sa1111.c:802: warning: expecting prototype for sa1111_probe(). Prototype was for __sa1111_probe() instead
+--
+>> drivers/gpio/gpio-sa1100.c:309:13: warning: no previous prototype for function 'sa1100_init_gpio' [-Wmissing-prototypes]
+   void __init sa1100_init_gpio(void)
+               ^
+   drivers/gpio/gpio-sa1100.c:309:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init sa1100_init_gpio(void)
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/video/fbdev/sa1100fb.c:1219:12: warning: no previous prototype for function 'sa1100fb_init' [-Wmissing-prototypes]
+   int __init sa1100fb_init(void)
+              ^
+   drivers/video/fbdev/sa1100fb.c:1219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init sa1100fb_init(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/assabet_init_irq +746 arch/arm/mach-sa1100/assabet.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  745  
+b955153bfa68d7 Russell King   2016-08-31 @746  void __init assabet_init_irq(void)
+b955153bfa68d7 Russell King   2016-08-31  747  {
+b955153bfa68d7 Russell King   2016-08-31  748  	u32 def_val;
+b955153bfa68d7 Russell King   2016-08-31  749  
+b955153bfa68d7 Russell King   2016-08-31  750  	sa1100_init_irq();
+b955153bfa68d7 Russell King   2016-08-31  751  
+b955153bfa68d7 Russell King   2016-08-31  752  	if (machine_has_neponset())
+b955153bfa68d7 Russell King   2016-08-31  753  		def_val = ASSABET_BCR_DB1111;
+b955153bfa68d7 Russell King   2016-08-31  754  	else
+b955153bfa68d7 Russell King   2016-08-31  755  		def_val = ASSABET_BCR_DB1110;
+b955153bfa68d7 Russell King   2016-08-31  756  
+b955153bfa68d7 Russell King   2016-08-31  757  	/*
+b955153bfa68d7 Russell King   2016-08-31  758  	 * Angel sets this, but other bootloaders may not.
+b955153bfa68d7 Russell King   2016-08-31  759  	 *
+b955153bfa68d7 Russell King   2016-08-31  760  	 * This must precede any driver calls to BCR_set() or BCR_clear().
+b955153bfa68d7 Russell King   2016-08-31  761  	 */
+20a451f8db4a81 Linus Walleij  2021-07-20  762  	assabet_init_gpio((void *)&ASSABET_BCR, def_val);
+b955153bfa68d7 Russell King   2016-08-31  763  }
+b955153bfa68d7 Russell King   2016-08-31  764  
+
+:::::: The code at line 746 was first introduced by commit
+:::::: b955153bfa68d7a9fa2be40bb606cf9578b66511 ARM: sa1100/assabet: add BCR/BSR GPIO driver
+
+:::::: TO: Russell King <rmk+kernel@armlinux.org.uk>
+:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
