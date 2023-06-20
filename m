@@ -1,46 +1,49 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5882AB42;
-	Tue, 20 Jun 2023 23:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8472AB42;
+	Tue, 20 Jun 2023 23:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687304326; x=1718840326;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IWX877ljS5TrdErB6dI12/acfC3iVAP8dfJ0jvQtyEQ=;
-  b=jWm4fImNJ6iZwOdexU5WWu6mPs++I1DUIiLh6VYdNUXY7zNQQkTQARCC
-   KTChx5L8cJH7m1czQAfYDid469BSFccCo+Y1xxVUyn9qQf7PwGGVbhBD/
-   2ZIQ3Q0uX4uXYq7aQhGib7lhfY9YgfdJ2jhIJxcNq3xuEcAQTMo9FdP2i
-   R1I64e64qubIkBVrsM/begCrrGvciXBbj+/p/6HbekMNWMB/j/jqeY5Sv
-   CftIUTr/wryHgq9NWwIqT0dlzUgBwOKs+2V/1g2DFqzy57yF0ID+v3lGW
-   zwvGddfJS7dqxICKQ5RHoo/ZeUT7Abx9hbGRzFEav7QuS8TgKYSsFbNJV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="423678218"
+  t=1687304988; x=1718840988;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yjG5HbXpzyMj0TodosWe+wCE8+H6yKMdv5B0rKBSF0w=;
+  b=A13lpcQBddZOoNYsdtjQvFe9Mu+XZjF7ziDlzfiJ+jwI/IJLABhiiaU6
+   iD4H1CD28cwLR/UgAzoWUIUWXxkVgTy0kivCKE5aoF2OdgIJMMpLeu4zz
+   MafNv+P+zJPQU7d9ZTzg08RrGVRe6x11ay6z5DpiMrd6uZvXE583CicWh
+   YQrqPK7Ad2LPk+KatXPtAbrV+pMpF+r+qCJ5PCxC1UT02jsbE50/xFWCq
+   vlUZ5Aakk+Ed8fNCHUZEkO18eGmGbWxTlpQ26M4JJ3vDD6oGbZ0PqDvBZ
+   j+TUHC3qAfdBurwpcFQ1xPSwSMzzkNvWrfB2H6SwBv99E4Cz7e5fBe76K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357508092"
 X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="423678218"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:38:45 -0700
+   d="scan'208";a="357508092"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:49:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="717399847"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804142637"
 X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="717399847"
+   d="scan'208";a="804142637"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2023 16:38:43 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 16:49:44 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qBkvq-0006LE-2d;
-	Tue, 20 Jun 2023 23:38:42 +0000
-Date: Wed, 21 Jun 2023 07:38:29 +0800
+	id 1qBl6W-0006Lg-07;
+	Tue, 20 Jun 2023 23:49:44 +0000
+Date: Wed, 21 Jun 2023 07:49:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: "Luke D. Jones" <luke@ljones.dev>, hdegoede@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [stable:linux-5.15.y 36/9999] fs/gfs2/rgrp.c:994:12: warning: stack
- frame size (1056) exceeds limit (1024) in 'gfs2_ri_update'
-Message-ID: <202306210722.cJWYeZkQ-lkp@intel.com>
+	corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, markgross@kernel.org,
+	jdelvare@suse.com, linux@roeck-us.net,
+	"Luke D. Jones" <luke@ljones.dev>
+Subject: Re: [PATCH v3 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+Message-ID: <202306210717.OFFdFt8Q-lkp@intel.com>
+References: <20230620030033.55033-2-luke@ljones.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,80 +52,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230620030033.55033-2-luke@ljones.dev>
 
-Hi Kees,
+Hi Luke,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   471e639e59d128f4bf58000a118b2ceca3893f98
-commit: 33db9912ff7c491f839c89a08e98f755aa09598f [36/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-config: riscv-randconfig-r004-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210722.cJWYeZkQ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210722.cJWYeZkQ-lkp@intel.com/reproduce)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc7 next-20230620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-ASUS-screenpad/20230620-110305
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230620030033.55033-2-luke%40ljones.dev
+patch subject: [PATCH v3 1/1] platform/x86: asus-wmi: add support for ASUS screenpad
+config: x86_64-randconfig-a001-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210717.OFFdFt8Q-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210717.OFFdFt8Q-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306210722.cJWYeZkQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306210717.OFFdFt8Q-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/gfs2/rgrp.c:994:12: warning: stack frame size (1056) exceeds limit (1024) in 'gfs2_ri_update' [-Wframe-larger-than]
-   static int gfs2_ri_update(struct gfs2_inode *ip)
-              ^
-   905/1056 (85.70%) spills, 151/1056 (14.30%) variables
-   fs/gfs2/rgrp.c:2058:5: warning: stack frame size (1248) exceeds limit (1024) in 'gfs2_inplace_reserve' [-Wframe-larger-than]
-   int gfs2_inplace_reserve(struct gfs2_inode *ip, struct gfs2_alloc_parms *ap)
-       ^
-   1204/1248 (96.47%) spills, 44/1248 (3.53%) variables
-   2 warnings generated.
---
->> drivers/net/ethernet/intel/fm10k/fm10k_main.c:1413:12: warning: stack frame size (1360) exceeds limit (1024) in 'fm10k_poll' [-Wframe-larger-than]
-   static int fm10k_poll(struct napi_struct *napi, int budget)
-              ^
-   1181/1360 (86.84%) spills, 179/1360 (13.16%) variables
+>> drivers/platform/x86/asus-wmi.c:3293:41: warning: variable 'bd' is uninitialized when used here [-Wuninitialized]
+           brightness = read_screenpad_brightness(bd);
+                                                  ^~
+   drivers/platform/x86/asus-wmi.c:3285:29: note: initialize the variable 'bd' to silence this warning
+           struct backlight_device *bd;
+                                      ^
+                                       = NULL
    1 warning generated.
 
 
-vim +/gfs2_ri_update +994 fs/gfs2/rgrp.c
+vim +/bd +3293 drivers/platform/x86/asus-wmi.c
 
-0e27c18c30f685 Bob Peterson      2014-10-29   986  
-6c53267f05dc66 Robert Peterson   2007-05-10   987  /**
-6c53267f05dc66 Robert Peterson   2007-05-10   988   * gfs2_ri_update - Pull in a new resource index from the disk
-6c53267f05dc66 Robert Peterson   2007-05-10   989   * @ip: pointer to the rindex inode
-6c53267f05dc66 Robert Peterson   2007-05-10   990   *
-6c53267f05dc66 Robert Peterson   2007-05-10   991   * Returns: 0 on successful update, error code otherwise
-6c53267f05dc66 Robert Peterson   2007-05-10   992   */
-6c53267f05dc66 Robert Peterson   2007-05-10   993  
-8339ee543ece6e Steven Whitehouse 2011-08-31  @994  static int gfs2_ri_update(struct gfs2_inode *ip)
-6c53267f05dc66 Robert Peterson   2007-05-10   995  {
-6c53267f05dc66 Robert Peterson   2007-05-10   996  	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
-6c53267f05dc66 Robert Peterson   2007-05-10   997  	int error;
-6c53267f05dc66 Robert Peterson   2007-05-10   998  
-8339ee543ece6e Steven Whitehouse 2011-08-31   999  	do {
-4306629e1c0fd0 Andrew Price      2012-04-16  1000  		error = read_rindex_entry(ip);
-8339ee543ece6e Steven Whitehouse 2011-08-31  1001  	} while (error == 0);
-8339ee543ece6e Steven Whitehouse 2011-08-31  1002  
-8339ee543ece6e Steven Whitehouse 2011-08-31  1003  	if (error < 0)
-6c53267f05dc66 Robert Peterson   2007-05-10  1004  		return error;
-b3b94faa5fe596 David Teigland    2006-01-16  1005  
-778721510e8420 Bob Peterson      2020-11-24  1006  	if (RB_EMPTY_ROOT(&sdp->sd_rindex_tree)) {
-778721510e8420 Bob Peterson      2020-11-24  1007  		fs_err(sdp, "no resource groups found in the file system.\n");
-778721510e8420 Bob Peterson      2020-11-24  1008  		return -ENOENT;
-778721510e8420 Bob Peterson      2020-11-24  1009  	}
-0e27c18c30f685 Bob Peterson      2014-10-29  1010  	set_rgrp_preferences(sdp);
-0e27c18c30f685 Bob Peterson      2014-10-29  1011  
-cf45b752c9f239 Bob Peterson      2008-01-31  1012  	sdp->sd_rindex_uptodate = 1;
-b3b94faa5fe596 David Teigland    2006-01-16  1013  	return 0;
-6c53267f05dc66 Robert Peterson   2007-05-10  1014  }
-b3b94faa5fe596 David Teigland    2006-01-16  1015  
-
-:::::: The code at line 994 was first introduced by commit
-:::::: 8339ee543ece6e2dcc1bbd97d5350163c198cf00 GFS2: Make resource groups "append only" during life of fs
-
-:::::: TO: Steven Whitehouse <swhiteho@redhat.com>
-:::::: CC: Steven Whitehouse <swhiteho@redhat.com>
+  3282	
+  3283	static int asus_screenpad_init(struct asus_wmi *asus)
+  3284	{
+  3285		struct backlight_device *bd;
+  3286		struct backlight_properties props;
+  3287		int power, brightness;
+  3288	
+  3289		power = read_screenpad_backlight_power(asus);
+  3290		if (power < 0)
+  3291			return power;
+  3292	
+> 3293		brightness = read_screenpad_brightness(bd);
+  3294		if (brightness < 0)
+  3295			return brightness;
+  3296	
+  3297		memset(&props, 0, sizeof(struct backlight_properties));
+  3298		props.type = BACKLIGHT_RAW; /* ensure this bd is last to be picked */
+  3299		props.max_brightness = 255;
+  3300		bd = backlight_device_register("asus_screenpad",
+  3301					       &asus->platform_device->dev, asus,
+  3302					       &asus_screenpad_bl_ops, &props);
+  3303		if (IS_ERR(bd)) {
+  3304			pr_err("Could not register backlight device\n");
+  3305			return PTR_ERR(bd);
+  3306		}
+  3307	
+  3308		asus->screenpad_backlight_device = bd;
+  3309		/*
+  3310		 * Counter an odd behaviour where default is set to < 13 if it was 0 on boot.
+  3311		 * 60 is subjective, but accepted as a good compromise to retain visibility.
+  3312		 */
+  3313		if (brightness < 60)
+  3314			brightness = 60;
+  3315	
+  3316		asus->driver->screenpad_brightness = brightness;
+  3317		bd->props.brightness = brightness;
+  3318		bd->props.power = power;
+  3319		backlight_update_status(bd);
+  3320	
+  3321		return 0;
+  3322	}
+  3323	
 
 -- 
 0-DAY CI Kernel Test Service
