@@ -1,53 +1,54 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2C52AB42
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:41:27 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6687466137bso1664704b3a.0
-        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D50315495
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:41:29 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-54fdf8c79a3so2656294a12.3
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687293687; x=1689885687;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687293688; x=1689885688;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EF5pfw7nSexoxaL00DnHZHZZwsqD5TiJVywKTlCaMwA=;
-        b=hWeNrmljP93jSxzhei/v39dLMKKk8J0YPTwSLxt5ZzC4WcVPNA2EvxRCDsFALqOObQ
-         5n78ddONrxtndrMaDx2gXwTlxmmDPr2C+PDk/8GXeTc4ULf1Afo6qoU02tM404eSlicn
-         tEWUGOJg+ubOS0NfeHea5dQmwj94A0cDG2vPtukz4N37AZ7CoHDWbyIBvYrV7hO6B3bs
-         AH3+Wgs1WAAx2OVmkoHiglujxQjdDAgoWN0EinCzyei3djV4G7lcZIkowpVErsPfzUq8
-         50+RIIc3XEt10bFk3/HdloIXez5+lzfUkiSJO3yS2bL24Ec6kqsXAM1alFmWBv3M57Ok
-         6DQQ==
+        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
+        b=kTkoFl/hOE6DUn0o/TxNy8ei8a0pwF3wJ8WdqIIbNXUDBDjEdeDGAmfD2+RKWGXJTd
+         T3K28E5f3GbYQN1zmSPmZIin3KKlSUuGyR86CjJT1U2jBF/N3FKoBM9bMwkagOXfEehr
+         LE1fzTMO5bKWhTaPLlsyizdUF9TGPy6aFiOY/vnQgdbBWCVEGtA3s/FI33EEAwItrMJh
+         VjtW979fJDNufkx776qo5gq8zTqT3t96sPZU5T73gmbYeidCAK2U6H9M5XTJ3SV4eQVW
+         XmwzVsS4j/HUUONtDF+aGJdqhuO6ywBlWfNmAig3j5c9MqBK1xx+AEcWUY6eaTj23qt/
+         6u3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687293687; x=1689885687;
+        d=1e100.net; s=20221208; t=1687293688; x=1689885688;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EF5pfw7nSexoxaL00DnHZHZZwsqD5TiJVywKTlCaMwA=;
-        b=RDgbYnrfLJ/RtmKUkkJFZIWUFk9LvkSpY+k/MNVA3c/NMqi1prTOaH9ky16EACc2xK
-         oHINA9aW3a+PCORXY9uosC6HeNDS0xVYievREUt1jrObmTSS/UK7ddfnIrRjLPMkHA1S
-         vrbdUvD83QgSz4XiliHJpJ6JR7me0NGuWRx2Q97vextXbGODng/DKNTgAFjeuXcSxI5w
-         867kEVm0oaF6vvoFN6D+4lkNPPGuCyvJt11jRgcCWG5Nd/KROO5ouBBCqIPz6ca3akfh
-         R+iqURSwx4ar8dDt6NkMhs29svToshZ0v3wE7h6V/ZsVnDXTTNPIf372OuZjJSwyJ7wO
-         UgZw==
-X-Gm-Message-State: AC+VfDwEFg5wx4s+a1cDiHC/elYy9rw22CO4SaiGsF/ETZo8BYspLMsg
-	+W/7b7VG/bZAkvXv+ZpiK8ZVjQ==
-X-Google-Smtp-Source: ACHHUZ6ffVx6Cvd8xsXtqOUfPvX7b64/KBe6+XkBWdmb3+gj5EE2y4oGpVnTGcclXeauAdY0SmiHkA==
-X-Received: by 2002:a05:6a20:3d85:b0:118:a48:8977 with SMTP id s5-20020a056a203d8500b001180a488977mr10690039pzi.3.1687293686986;
-        Tue, 20 Jun 2023 13:41:26 -0700 (PDT)
+        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
+        b=LDwHVhzRJ2EhRvEneBzPxCu4J6UJOioPFh5ShlpXLlr+HU/6r0CJWAwbiXYD0rs5Y5
+         AcpZ0gxyftHnqHyg0vlNKqbEV/vitxdATSsVXlkUJjyKNvRAUZwAtilHKgFi9yI/Gl9c
+         sZ6tMeBDk4AH5ugMBdx2fkfOo7f3Z7dGetXIKlQ5qTqHVsi62SwdWNFVL2h2dG1Uohrk
+         bLcWk3n6pxbqEobbMSm3t7szFA5wfChBOBnuLa6Vqj/hEO0S3zCshBQTyQz91HDhX3OU
+         ndHm7CIS4mq65Y5tUKiRC/P0DNecn/BAZOIw2VjzzLP2+t2yNcqipMk6piCe0rAPGSDn
+         8ydw==
+X-Gm-Message-State: AC+VfDzU8GdAT5ysKfQpRmA96Gy+GS+lYhjqv/8emiLd0F/cvevzopbp
+	b/xPFSZqsMoImxEjVFtTRnzLTw==
+X-Google-Smtp-Source: ACHHUZ4aN+60FiuHJ8u8JkwcNH+wuIJ6cgDETNgmrC7TB9kOIDKZRE8DYgI1KARaEW/l8jTpFSXGNw==
+X-Received: by 2002:a05:6a20:432a:b0:115:5910:c82d with SMTP id h42-20020a056a20432a00b001155910c82dmr4124776pzk.43.1687293688585;
+        Tue, 20 Jun 2023 13:41:28 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id c21-20020a62e815000000b00668738796b6sm1677820pfi.52.2023.06.20.13.41.26
+        by smtp.gmail.com with ESMTPSA id 5-20020aa79145000000b006689ecd0ff4sm1442001pfi.208.2023.06.20.13.41.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 13:41:26 -0700 (PDT)
-Date: Tue, 20 Jun 2023 13:41:26 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 13:39:03 PDT (-0700)
-Subject:     Re: [PATCH v3] RISC-V: Enable dead code elimination
-In-Reply-To: <CAKwvOdnZ8+CrBGCDhzi8o8UrOjg-CyuRO=OLKpx9X4iGheV77Q@mail.gmail.com>
-CC: falcon@tinylab.org, Conor Dooley <conor@kernel.org>, guoren@kernel.org,
-  linux-riscv@lists.infradead.org, npiggin@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-  paulburton@kernel.org, vincent.chen@sifive.com, tim.bird@sony.com, llvm@lists.linux.dev
-From: Palmer Dabbelt <palmer@rivosinc.com>
+        Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
+Date: Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 13:40:46 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
+CC: Conor Dooley <conor@kernel.org>, jszhang@kernel.org, llvm@lists.linux.dev,
+  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, maskray@google.com,
+  Ard Biesheuvel <ardb@kernel.org>
+From: Palmer Dabbelt <palmer@dabbelt.com>
 To: ndesaulniers@google.com
-Message-ID: <mhng-fc838dfb-f78e-4a40-8c39-bdc4ddee3df8@palmer-ri-x1c9a>
+Message-ID: <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,44 +58,51 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Tue, 20 Jun 2023 13:26:53 PDT (-0700), ndesaulniers@google.com wrote:
-> On Tue, Jun 20, 2023 at 4:17 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
+> On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
 >>
->> On Tue, 20 Jun 2023 13:13:06 PDT (-0700), ndesaulniers@google.com wrote:
->> > On Wed, May 17, 2023 at 04:29:36PM +0800, Zhangjin Wu wrote:
->> >> Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
->> >> the user to enable dead code elimination. In order for this to work,
->> >> ensure that we keep the alternative table by annotating them with KEEP.
->> >>
+>> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+>> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+>> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>>
+>> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+>> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+>> > > >> series is based on 6.4-rc2.
+>> > > >
+>> > > > Thanks.
+>> > >
+>> > > Sorry to be so slow here, but I think this is causing LLD to hang on
+>> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
+>> > > other things I have in flight still.
 >> >
->> > Just cross referencing the report from Palmer against v2; I see orphan
->> > section warnings from the linker related to the EFI stub when building
->> > allmodconfig with this patch applied.
->> >
->> > v2: thread for reference.
->> > https://lore.kernel.org/linux-riscv/CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com/
+>> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
+>> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
 >>
->> Sorry for replying to the v2, I'm marking that as superseeded in
->> patchwork.  IIUC it is a real issue on your end too?  I'm also not 100%
->> sure about the hang, I just let LLD cook for about 10 minutes before I
->> noticed it was still running and posted.
+>> Just FYI Nick, there's been some concurrent work here from different
+>> people working on the same thing & the v3 you linked (from Zhangjin) was
+>> superseded by this v2 (from Jisheng).
 >
-> Yes; if this is merged, our CI builds of ARCH=riscv allmodconfig will go red.
+> Ah! I've been testing the deprecated patch set, sorry I just looked on
+> lore for "dead code" on riscv-linux and grabbed the first thread,
+> without noticing the difference in authors or new version numbers for
+> distinct series. ok, nevermind my noise.  I'll follow up with the
+> correct patch set, sorry!
+
+Ya, I hadn't even noticed the v3 because I pretty much only look at 
+patchwork these days.  Like we talked about in IRC, I'm going to go test 
+the merge of this one and see what's up -- I've got it staged at 
+<https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>, 
+though that won't be a stable hash if it's actually broken...
+
 >
-> I assume a linker script somewhere needs to be updated, but I haven't
-> found if/where the efi stub's is.
->
-> drivers/firmware/efi/libstub/zboot.lds perhaps?
->
-> On Tue, Jun 20, 2023 at 4:22 PM Conor Dooley <conor@kernel.org> wrote:
 >>
->> Repeating myself for the sake of the archives or w/e, two different
->> submitters with differing version numbers. The v2 from Jisheng is more
->> recent than the v3 here from Zhangjin, they agreed in this mail thread
->> to merge their work.
-
-Thanks, so we're going to jump over there.
-
+>> Cheers,
+>> Conor.
+>
+>
 >
 > -- 
 > Thanks,
