@@ -1,207 +1,131 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27641FDC
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 07:05:32 +0000 (UTC)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f9b1a117caso15307095e9.0
-        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 00:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687244730; x=1689836730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=04zh36AvJbipRw33shUJK56XIsvBY+yjxSjK/IpcInY=;
-        b=pVRj8ZNa+CHcw80+9IiyfhCGHM+LVg/cqHWIN/Mr+Koo/wowzbt3iwfwiG6HBc4Oi5
-         MRMUNw61+oFadBUq7207Td4d0hq8kVaE/vVJCQ77dWLXv481VPvmuHDrQEmPgc+8lXGv
-         HqA1qwqEL3YV3thkSwlE/BJCTZ3gpNW0UBFFlEir7rhzJWovLP6OpDHuVELXjPyj4G39
-         frmRYQRtceV3aJYn37fnMGMmlAN/V0+h2WNAXT8cUSo8gEpmsfMdYnPrkdtqaDc7UUjJ
-         c9KNeQrnWHee7nUcu1fLNd7TGEZQ6UuzRbYVz30LYJSf1kpHaJ3KQcG/Esn7E+NIpuMs
-         Cmwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687244730; x=1689836730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=04zh36AvJbipRw33shUJK56XIsvBY+yjxSjK/IpcInY=;
-        b=RCe8vcvxJkrw/UwigetlDdyw8iyIdSX8ewWfKT5v1qetc+GOLiRT1vd/kqnrqA35rt
-         lhNNUBOPThSXfPyf6yQr6DSa/Qf8qeMnCJsFWTiE6VQOyC5DJTbpbyDK9GKCCJJrAl51
-         0h6eZuXSfy4iE+AIrdHZmprubiMmI0bwn3cWCsWrWCcSj5Z7FzNuP1IInMBBFAFEQhrQ
-         uS6yagHYAKvD1oQiihiaPAfS0NnGYEKBP3K54lFYkDJqFnDWXBMa+EtUpJ9PpjIztsDW
-         RXj+o5skNjplMxwPPUx8+xiHhr7WzKevC4MeanG7KYMtzkvRADrIFNPo8CB+JdSua+k9
-         3++w==
-X-Gm-Message-State: AC+VfDzgJ+7rkhvWCI2mHiCGYvtcca+fZEZJaTm+ePcQKZuiEtrw56Ww
-	ldUFqK+L0VjXCNJHjSogE/3H4uVWU51IWkAII666HQ==
-X-Google-Smtp-Source: ACHHUZ70GU/k1IaUxTC0p5wUDRx4EiR/t5mGWrdG4FwgA8LfklmJYFRxH5rGeLs0WvjZehTF0hk+UZ3ABmLtZcIvUKI=
-X-Received: by 2002:a05:600c:cc:b0:3f7:e520:dc86 with SMTP id
- u12-20020a05600c00cc00b003f7e520dc86mr7738643wmm.32.1687244730686; Tue, 20
- Jun 2023 00:05:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05DDE566;
+	Tue, 20 Jun 2023 10:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687257796; x=1718793796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uWQlpkSqYtXGwmGI3si1xIcWLNSUgBELgGDSlST7O7g=;
+  b=K/gPUDf4c/E5qSJrX3HG/oAzHnZO57LZhJQs0mRHZUqxZhk4EKgHsZSD
+   lqDLX09UlfENgJ3+haJR7nDgzuWJS0bcnyfq+D18vgrYUI92jsZbNl+KC
+   j9xRBZVfhYjalQapcD2Biv/JOIs9nSdYylUH+4ke0WF0zT1/vOMBwwVH0
+   NY7YoyF/wZvyOb57HfqGQxDkN/mFpzjfPUg7+kE4LbCUaaY2cENBGkUO1
+   GB4BkM8eF9sNG1LAsHweT2jd7eEYf4CS/mOPE2d//P9nrfd0DBl4+RoWK
+   9VOnYC1GBhgJyF+dXjX1R18lQ73TdkOB1EcLiYlCCwsHK0Mm6z4gxRkcX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="425781892"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="425781892"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 03:43:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="858538335"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="858538335"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jun 2023 03:43:12 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBYpL-0005oo-1x;
+	Tue, 20 Jun 2023 10:43:11 +0000
+Date: Tue, 20 Jun 2023 18:42:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeremy Sowden <jeremy@azazel.net>,
+	Netfilter Devel <netfilter-devel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH nf-next] lib/ts_bm: add helper to reduce indentation and
+ improve readability
+Message-ID: <202306201819.BoQ5IT7Y-lkp@intel.com>
+References: <20230619190803.1906012-1-jeremy@azazel.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306110855.7TlBCIzI-lkp@intel.com> <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
- <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
-In-Reply-To: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Tue, 20 Jun 2023 09:05:19 +0200
-Message-ID: <CAHVXubgVo=6czfDCdweAjc0NHbCk-_+zL+_MHca=3ax5Fo1HgQ@mail.gmail.com>
-Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
- symbol 'misaligned_access_speed'; recompile with -fPIC
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619190803.1906012-1-jeremy@azazel.net>
 
-On Wed, Jun 14, 2023 at 6:40=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Tue, Jun 13, 2023 at 4:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosi=
-nc.com> wrote:
-> >
-> > On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.co=
-m> wrote:
-> > >
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git master
-> > > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
-> > > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatab=
-le kernels with early alternatives using -fno-pie
-> > > date:   10 days ago
-> > > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-=
-ci/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
-> > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.=
-git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > > reproduce (this is a W=3D1 build):
-> > >         mkdir -p ~/bin
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install riscv cross compiling tool for clang build
-> > >         # apt-get install binutils-riscv64-linux-gnu
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
-nux.git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/ker=
-nel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
-e.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
-e.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
-version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI=
--lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
-ol 'misaligned_access_speed'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
-probe_func) in archive vmlinux.a
-> > > --
-> > > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against sy=
-mbol 'misaligned_access_speed'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
-probe_func) in archive vmlinux.a
-> > > --
-> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
-ol 'riscv_cbom_block_size'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_p=
-atch_func) in archive vmlinux.a
-> > > --
-> > > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against sy=
-mbol 'riscv_cbom_block_size'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_p=
-atch_func) in archive vmlinux.a
-> > > --
-> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
-ol '__per_cpu_offset'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(mm/percpu.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
-probe_func) in archive vmlinux.a
-> > > --
-> > > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against sy=
-mbol '__per_cpu_offset'; recompile with -fPIC
-> > >    >>> defined in vmlinux.a(mm/percpu.o)
-> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
-)
-> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
-probe_func) in archive vmlinux.a
-> > >
-> >
-> > So I looked into those errors, the config is basically =3D RELOCATABLE =
-+
-> > MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
->
-> Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
-> -fPIC? If so, why is LLD complaining about -fPIC not being used?
->
-> arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE =3D=3D y.
->
-> Is it possible that -fpie was dropped for these object files, or
-> -fno-pic or -fno-pie was added to the cflags for these object files
-> somehow?
+Hi Jeremy,
 
-There was a runtime issue where I had to drop the -fPIE for those
-files because some part *may* be executed before the MMU is enabled,
-so any access to a global symbol through the GOT needs a relocation
-which is "done" only virtually.
+kernel test robot noticed the following build warnings:
 
-commit 8dc2a7e8027f ("riscv: Fix relocatable kernels with early
-alternatives using -fno-pie") added the -fno-pie flag, but not the
-medany because the medany is correctly set in errata/thead/Makefile
-only when EARLY_ALTERNATIVES is set.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc7 next-20230620]
+[cannot apply to nf-next/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So to me we do not need the medany flag if !EARLY_ALTERNATIVES since
-the code is not executed with MMU off and then medlow should work.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Sowden/lib-ts_bm-add-helper-to-reduce-indentation-and-improve-readability/20230620-031043
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230619190803.1906012-1-jeremy%40azazel.net
+patch subject: [PATCH nf-next] lib/ts_bm: add helper to reduce indentation and improve readability
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230620/202306201819.BoQ5IT7Y-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201819.BoQ5IT7Y-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306201819.BoQ5IT7Y-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> lib/ts_bm.c:101:34: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+                           bs = bm->bad_shift[text[shift-i]];
+                                                         ^
+   lib/ts_bm.c:79:16: note: initialize the variable 'i' to silence this warning
+           unsigned int i, text_len, consumed = state->offset;
+                         ^
+                          = 0
+   1 warning generated.
 
 
->
-> I've filed
-> https://github.com/ClangBuiltLinux/linux/issues/1872
-> to track this.
->
-> > medany, which makes sense since we only need this code to be medany
-> > when EARLY_ALTERNATIVES is enabled (because the code would be executed
-> > with mmu off, which is not the case here).
-> >
-> > I can fix those errors by adding the medany flag, but I'm not sure
-> > actually we want to do that since we do not need it and gcc does not
-> > complain: any idea?
-> >
-> > Alex
-> >
-> >
-> >
-> > > --
-> > > 0-DAY CI Kernel Test Service
-> > > https://github.com/intel/lkp-tests/wiki
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+vim +/i +101 lib/ts_bm.c
+
+    75	
+    76	static unsigned int bm_find(struct ts_config *conf, struct ts_state *state)
+    77	{
+    78		struct ts_bm *bm = ts_config_priv(conf);
+    79		unsigned int i, text_len, consumed = state->offset;
+    80		const u8 *text;
+    81		int shift = bm->patlen - 1, bs;
+    82		const u8 icase = conf->flags & TS_IGNORECASE;
+    83	
+    84		for (;;) {
+    85			text_len = conf->get_next_block(consumed, &text, conf, state);
+    86	
+    87			if (unlikely(text_len == 0))
+    88				break;
+    89	
+    90			while (shift < text_len) {
+    91				DEBUGP("Searching in position %d (%c)\n",
+    92				       shift, text[shift]);
+    93	
+    94				if (patmtch(&bm->pattern[bm->patlen-1], &text[shift],
+    95					    bm->patlen, icase)) {
+    96					/* London calling... */
+    97					DEBUGP("found!\n");
+    98					return consumed + (shift-(bm->patlen-1));
+    99				}
+   100	
+ > 101				bs = bm->bad_shift[text[shift-i]];
+   102	
+   103				/* Now jumping to... */
+   104				shift = max_t(int, shift-i+bs, shift+bm->good_shift[i]);
+   105			}
+   106			consumed += text_len;
+   107		}
+   108	
+   109		return UINT_MAX;
+   110	}
+   111	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
