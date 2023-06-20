@@ -1,152 +1,207 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DF71FA9;
-	Tue, 20 Jun 2023 05:55:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687240559; x=1718776559;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wTpmMXRtxg1A3TQTPk0QjDxNjsJSOtuUCpqRsXXHgcA=;
-  b=D022uSyQYxi0eyLt9SZ1bPL/1f4SnTRPH7edYaAqGyT84Yh3SnIZo0//
-   9MyPu0rIIbXH2Jn8kNJE1YhT9AwLEqeIOQ5Ak7nJwnJ0x0zfuwkdG/vZ7
-   kOP1wmrynpaktstTIFOvgoROKSigl40INt3XpkPOHaC8MgADbvZzKQxLD
-   vfui+yM2+INmMVm8yNvdEAwgBkFl+4uCrCBhibUOfbdjrmYxILiGlv5Wi
-   Xt0ic7OY8EnIKF+OWtcAfRvUh+5/efMDo3RAffen1gU0S1wY0rBtpd9l4
-   3XY5VeIa+7TAFKRjOX8Z6LxolrLaVfkPjb1K1FFJ4/c913xiSp/2pcHym
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446150482"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="446150482"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:55:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="888127426"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="888127426"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 19 Jun 2023 22:55:56 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qBULL-0005Ym-2x;
-	Tue, 20 Jun 2023 05:55:55 +0000
-Date: Tue, 20 Jun 2023 13:55:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous
- prototype for function 'assabet_init_irq'
-Message-ID: <202306201322.xTUPn7A1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27641FDC
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 07:05:32 +0000 (UTC)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f9b1a117caso15307095e9.0
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 00:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687244730; x=1689836730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=04zh36AvJbipRw33shUJK56XIsvBY+yjxSjK/IpcInY=;
+        b=pVRj8ZNa+CHcw80+9IiyfhCGHM+LVg/cqHWIN/Mr+Koo/wowzbt3iwfwiG6HBc4Oi5
+         MRMUNw61+oFadBUq7207Td4d0hq8kVaE/vVJCQ77dWLXv481VPvmuHDrQEmPgc+8lXGv
+         HqA1qwqEL3YV3thkSwlE/BJCTZ3gpNW0UBFFlEir7rhzJWovLP6OpDHuVELXjPyj4G39
+         frmRYQRtceV3aJYn37fnMGMmlAN/V0+h2WNAXT8cUSo8gEpmsfMdYnPrkdtqaDc7UUjJ
+         c9KNeQrnWHee7nUcu1fLNd7TGEZQ6UuzRbYVz30LYJSf1kpHaJ3KQcG/Esn7E+NIpuMs
+         Cmwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687244730; x=1689836730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=04zh36AvJbipRw33shUJK56XIsvBY+yjxSjK/IpcInY=;
+        b=RCe8vcvxJkrw/UwigetlDdyw8iyIdSX8ewWfKT5v1qetc+GOLiRT1vd/kqnrqA35rt
+         lhNNUBOPThSXfPyf6yQr6DSa/Qf8qeMnCJsFWTiE6VQOyC5DJTbpbyDK9GKCCJJrAl51
+         0h6eZuXSfy4iE+AIrdHZmprubiMmI0bwn3cWCsWrWCcSj5Z7FzNuP1IInMBBFAFEQhrQ
+         uS6yagHYAKvD1oQiihiaPAfS0NnGYEKBP3K54lFYkDJqFnDWXBMa+EtUpJ9PpjIztsDW
+         RXj+o5skNjplMxwPPUx8+xiHhr7WzKevC4MeanG7KYMtzkvRADrIFNPo8CB+JdSua+k9
+         3++w==
+X-Gm-Message-State: AC+VfDzgJ+7rkhvWCI2mHiCGYvtcca+fZEZJaTm+ePcQKZuiEtrw56Ww
+	ldUFqK+L0VjXCNJHjSogE/3H4uVWU51IWkAII666HQ==
+X-Google-Smtp-Source: ACHHUZ70GU/k1IaUxTC0p5wUDRx4EiR/t5mGWrdG4FwgA8LfklmJYFRxH5rGeLs0WvjZehTF0hk+UZ3ABmLtZcIvUKI=
+X-Received: by 2002:a05:600c:cc:b0:3f7:e520:dc86 with SMTP id
+ u12-20020a05600c00cc00b003f7e520dc86mr7738643wmm.32.1687244730686; Tue, 20
+ Jun 2023 00:05:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202306110855.7TlBCIzI-lkp@intel.com> <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
+ <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
+In-Reply-To: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Tue, 20 Jun 2023 09:05:19 +0200
+Message-ID: <CAHVXubgVo=6czfDCdweAjc0NHbCk-_+zL+_MHca=3ax5Fo1HgQ@mail.gmail.com>
+Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
+ symbol 'misaligned_access_speed'; recompile with -fPIC
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nathan,
+On Wed, Jun 14, 2023 at 6:40=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Tue, Jun 13, 2023 at 4:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosi=
+nc.com> wrote:
+> >
+> > On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.co=
+m> wrote:
+> > >
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git master
+> > > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
+> > > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatab=
+le kernels with early alternatives using -fno-pie
+> > > date:   10 days ago
+> > > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-=
+ci/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
+> > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.=
+git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > > reproduce (this is a W=3D1 build):
+> > >         mkdir -p ~/bin
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # install riscv cross compiling tool for clang build
+> > >         # apt-get install binutils-riscv64-linux-gnu
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
+nux.git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+> > >         git remote add linus https://git.kernel.org/pub/scm/linux/ker=
+nel/git/torvalds/linux.git
+> > >         git fetch --no-tags linus master
+> > >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
+e.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
+e.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
+version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI=
+-lkp@intel.com/
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
+ol 'misaligned_access_speed'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
+probe_func) in archive vmlinux.a
+> > > --
+> > > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against sy=
+mbol 'misaligned_access_speed'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
+probe_func) in archive vmlinux.a
+> > > --
+> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
+ol 'riscv_cbom_block_size'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_p=
+atch_func) in archive vmlinux.a
+> > > --
+> > > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against sy=
+mbol 'riscv_cbom_block_size'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_p=
+atch_func) in archive vmlinux.a
+> > > --
+> > > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symb=
+ol '__per_cpu_offset'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(mm/percpu.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
+probe_func) in archive vmlinux.a
+> > > --
+> > > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against sy=
+mbol '__per_cpu_offset'; recompile with -fPIC
+> > >    >>> defined in vmlinux.a(mm/percpu.o)
+> > >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42=
+)
+> > >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_=
+probe_func) in archive vmlinux.a
+> > >
+> >
+> > So I looked into those errors, the config is basically =3D RELOCATABLE =
++
+> > MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
+>
+> Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
+> -fPIC? If so, why is LLD complaining about -fPIC not being used?
+>
+> arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE =3D=3D y.
+>
+> Is it possible that -fpie was dropped for these object files, or
+> -fno-pic or -fno-pie was added to the cflags for these object files
+> somehow?
 
-First bad commit (maybe != root cause):
+There was a runtime issue where I had to drop the -fPIE for those
+files because some part *may* be executed before the MMU is enabled,
+so any access to a global symbol through the GOT needs a relocation
+which is "done" only virtually.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   692b7dc87ca6d55ab254f8259e6f970171dc9d01
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-date:   5 months ago
-config: arm-neponset_defconfig (https://download.01.org/0day-ci/archive/20230620/202306201322.xTUPn7A1-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201322.xTUPn7A1-lkp@intel.com/reproduce)
+commit 8dc2a7e8027f ("riscv: Fix relocatable kernels with early
+alternatives using -fno-pie") added the -fno-pie flag, but not the
+medany because the medany is correctly set in errata/thead/Makefile
+only when EARLY_ALTERNATIVES is set.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306201322.xTUPn7A1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous prototype for function 'assabet_init_irq' [-Wmissing-prototypes]
-   void __init assabet_init_irq(void)
-               ^
-   arch/arm/mach-sa1100/assabet.c:746:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init assabet_init_irq(void)
-   ^
-   static 
-   1 warning generated.
---
->> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
-   int __init sa11x0_pm_init(void)
-              ^
-   arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init sa11x0_pm_init(void)
-   ^
-   static 
-   1 warning generated.
---
->> arch/arm/common/sa1111.c:699:1: warning: no previous prototype for function 'sa1111_configure_smc' [-Wmissing-prototypes]
-   sa1111_configure_smc(struct sa1111 *sachip, int sdram, unsigned int drac,
-   ^
-   arch/arm/common/sa1111.c:698:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   1 warning generated.
---
-   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'me' not described in '__sa1111_probe'
-   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'mem' not described in '__sa1111_probe'
-   arch/arm/common/sa1111.c:802: warning: Function parameter or member 'irq' not described in '__sa1111_probe'
->> arch/arm/common/sa1111.c:802: warning: expecting prototype for sa1111_probe(). Prototype was for __sa1111_probe() instead
---
->> drivers/gpio/gpio-sa1100.c:309:13: warning: no previous prototype for function 'sa1100_init_gpio' [-Wmissing-prototypes]
-   void __init sa1100_init_gpio(void)
-               ^
-   drivers/gpio/gpio-sa1100.c:309:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sa1100_init_gpio(void)
-   ^
-   static 
-   1 warning generated.
---
->> drivers/video/fbdev/sa1100fb.c:1219:12: warning: no previous prototype for function 'sa1100fb_init' [-Wmissing-prototypes]
-   int __init sa1100fb_init(void)
-              ^
-   drivers/video/fbdev/sa1100fb.c:1219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init sa1100fb_init(void)
-   ^
-   static 
-   1 warning generated.
+So to me we do not need the medany flag if !EARLY_ALTERNATIVES since
+the code is not executed with MMU off and then medlow should work.
 
 
-vim +/assabet_init_irq +746 arch/arm/mach-sa1100/assabet.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  745  
-b955153bfa68d7 Russell King   2016-08-31 @746  void __init assabet_init_irq(void)
-b955153bfa68d7 Russell King   2016-08-31  747  {
-b955153bfa68d7 Russell King   2016-08-31  748  	u32 def_val;
-b955153bfa68d7 Russell King   2016-08-31  749  
-b955153bfa68d7 Russell King   2016-08-31  750  	sa1100_init_irq();
-b955153bfa68d7 Russell King   2016-08-31  751  
-b955153bfa68d7 Russell King   2016-08-31  752  	if (machine_has_neponset())
-b955153bfa68d7 Russell King   2016-08-31  753  		def_val = ASSABET_BCR_DB1111;
-b955153bfa68d7 Russell King   2016-08-31  754  	else
-b955153bfa68d7 Russell King   2016-08-31  755  		def_val = ASSABET_BCR_DB1110;
-b955153bfa68d7 Russell King   2016-08-31  756  
-b955153bfa68d7 Russell King   2016-08-31  757  	/*
-b955153bfa68d7 Russell King   2016-08-31  758  	 * Angel sets this, but other bootloaders may not.
-b955153bfa68d7 Russell King   2016-08-31  759  	 *
-b955153bfa68d7 Russell King   2016-08-31  760  	 * This must precede any driver calls to BCR_set() or BCR_clear().
-b955153bfa68d7 Russell King   2016-08-31  761  	 */
-20a451f8db4a81 Linus Walleij  2021-07-20  762  	assabet_init_gpio((void *)&ASSABET_BCR, def_val);
-b955153bfa68d7 Russell King   2016-08-31  763  }
-b955153bfa68d7 Russell King   2016-08-31  764  
-
-:::::: The code at line 746 was first introduced by commit
-:::::: b955153bfa68d7a9fa2be40bb606cf9578b66511 ARM: sa1100/assabet: add BCR/BSR GPIO driver
-
-:::::: TO: Russell King <rmk+kernel@armlinux.org.uk>
-:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> I've filed
+> https://github.com/ClangBuiltLinux/linux/issues/1872
+> to track this.
+>
+> > medany, which makes sense since we only need this code to be medany
+> > when EARLY_ALTERNATIVES is enabled (because the code would be executed
+> > with mmu off, which is not the case here).
+> >
+> > I can fix those errors by adding the medany flag, but I'm not sure
+> > actually we want to do that since we do not need it and gcc does not
+> > complain: any idea?
+> >
+> > Alex
+> >
+> >
+> >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests/wiki
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
