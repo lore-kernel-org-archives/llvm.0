@@ -1,174 +1,94 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22741168CA
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 15:07:23 +0000 (UTC)
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4717a29e19bso1185826e0c.3
-        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 08:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687273643; x=1689865643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nu+Xr6h3aJ6hrDihAENTAwjE21lX4dsN0DdvvEc0zpY=;
-        b=4uNSAlI4tPJM+0kDEQ3Xs8m8o+h885+DYvUyEEqM1Q3xUaL/Zkac4rYDVD5VV3k69y
-         QnJ+X6pZflYUWAfDmGx3KQbOCUfSElOR8MWCOyxMQigZTQB0F5U/vXfgQz+nVHm7JgFe
-         zPxHHx0QiAS6zIRh5LTna1ZDaAT0LM1d3CYeqQBXg8Lvxt+HiMz1jiJCsSLDmHtZX11G
-         EpfV9JeKtWMhTkP+hF8WhgfPf+D0P5ODet5RxxWMwun9woKcQyCvPe794rr3cZawXdtp
-         J25Wo4tc74aotGpx3E9VgQhnLQmyiDFwzEmS7CM7u6MHsfy/y7YIEbkaEg3cgkWmLefz
-         C2+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687273643; x=1689865643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nu+Xr6h3aJ6hrDihAENTAwjE21lX4dsN0DdvvEc0zpY=;
-        b=fYkw8IGGnDEgj9GUHpAI9bSadNmn7jA5Lcsz28nu+NKe3zqZN/KxP/YGGhkJhS6kMr
-         Lc3RzF2FeNzKkKnu71nswtb0n+lGrtOWWE+W6PW0i7gtiTBXeGZ0S5AQTJFbQfEz4UR4
-         /NC0FFgMmeesZyGX3nGD8dp5Es827lgWmSf3avvOr8/oOzsj84vmj8ED8PidSmhxcCFo
-         BwhyTJl6ByT/ZMhfjJ24dBbSdtzfp2XIf1AQjCQQsqbbX8UwmssfCRqwJoSUBR8GbP5U
-         xwUgN0kZQ8hwp1uPiXX4o3wpdKw3hb7e1lp1GX90UgkQt2NdMib7tEufAM5oXGUtIZW3
-         3gyA==
-X-Gm-Message-State: AC+VfDw00d/AXxTc58rRldTzsTBhme1Gt7LRyuP12XMcL+FRGFH5eIcu
-	mS8x1Zqy3GgMUhmfe+OSY9PH5VCmF4yksHaT8n3thw==
-X-Google-Smtp-Source: ACHHUZ5vngzvnC7UegKxQKg2uyHGXDbhDi5IOIg/YI2HnKU4l09bZNgBzggiucC0ZQ4lI+/z7uZrliKEuxvWJA1puIM=
-X-Received: by 2002:a67:ce84:0:b0:440:b0eb:4fd7 with SMTP id
- c4-20020a67ce84000000b00440b0eb4fd7mr3963408vse.23.1687273642685; Tue, 20 Jun
- 2023 08:07:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825F72AB5B
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 17:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EEA8C433C8;
+	Tue, 20 Jun 2023 17:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687283124;
+	bh=s1tq1ZDjdzFB2GkT5pO6cNB1MDeTYdM68tmhr1OE9PQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Bn01cZPlsTPkLSSJI+6+6aZbotW6eFX0AVgIoaXdsZrryG17lqJUyPR0gG8oTTQkf
+	 fA6itNU9zy8R3YQe93nVawa9N/M9WNXVGcIJ8yiIPH+v32o7zG4nIEOEC/JWFSdIPc
+	 5Bu9Lx2KdMrO2D5NlyEYt8HD2S7GRMCYdyJuSqyoY/YIystZEx8XmrvagJtfgR4YFr
+	 bseQxUJxEIurhAFbR274/EgyKVOVghAaM/peJfiVqV4CNE18DPwiOlt6PMJxGCPIcj
+	 GJmZMIh4YH3QoGhgoBEqauOaBZeCsG+ouHcDXytIgaZvND2+IBL5jZM6lkwunyvuMu
+	 b/kDaXZWiBXTw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 20 Jun 2023 17:44:50 +0000
+Subject: [PATCH 6.3] riscv: Link with '-z norelro'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230615145607.3469985-1-revest@chromium.org> <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
- <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
- <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com> <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
- <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
-In-Reply-To: <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 20 Jun 2023 11:07:10 -0400
-Message-ID: <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-To: Yonghong Song <yhs@meta.com>
-Cc: Florent Revest <revest@chromium.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, song@kernel.org, 
-	yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, trix@redhat.com, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230620-6-3-fix-got-relro-error-lld-v1-1-f3e71ec912d1@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJHlkWQC/x3NywqDMBCF4VeRWXdKkoH08iqli0RHDaRJmZEii
+ O9u7PLnwHc2UJbECs9uA+Ff0lRLC3vpoJ9DmRjT0BqccWS8M+iRcEwrTnVB4SwVWaQK5jwgPW4
+ jWevu3kRoQgzKGCWUfj6NT9CF5Ry+ws34377AXwne+34AtHwpposAAAA=
+To: gregkh@linuxfoundation.org, sashal@kernel.org
+Cc: palmer@dabbelt.com, conor@kernel.org, ndesaulniers@google.com, 
+ nathan@kernel.org, linux-riscv@lists.infradead.org, stable@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1838; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=s1tq1ZDjdzFB2GkT5pO6cNB1MDeTYdM68tmhr1OE9PQ=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkTn27JOxd3cO3pT4z33m7YLTUn/NUSca0JUxvTwxvP/
+ jrjedn5W0cpC4MYB4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYiLY5I8O53D8ck/R22ZhP
+ TSzvFpoZ5GFtpiw3tUxzv+f2eU2xl9kZGX6+aM2+opszZa+ZUqbTpwonxznXmUqWi4RPf6Am7pF
+ 4mRMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Jun 20, 2023 at 10:53=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
-:
->
->
->
-> On 6/20/23 7:38 AM, Nick Desaulniers wrote:
-> > 3. you did not run defconfig/menuconfig to have kconfig check for
-> > DWARFv5 support.
->
-> Yes, I didn't run defconfig/menuconfig.
+This patch fixes a stable only patch, so it has no direct upstream
+equivalent.
 
-That doesn't mean the odd combo of clang+gas doesn't work.
+After a stable only patch to explicitly handle the '.got' section to
+handle an orphan section warning from the linker, certain configurations
+error when linking with ld.lld, which enables relro by default:
 
-Just like how using scripts/config is a hazard since it also doesn't
-run kconfig and allows you to set incompatible configurations. Garbage
-in; garbage out.
+  ld.lld: error: section: .got is not contiguous with other relro sections
 
->
-> >
-> > The kconfigs should prevent you from selecting DWARFv5 if your
-> > toolchain combination doesn't support it; if you run kconfig.
-> >
-> >> /tmp/video-bios-59fa52.s:4: Error: file number less than one
-> >> /tmp/video-bios-59fa52.s:5: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:6: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:7: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:8: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:9: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:10: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/video-bios-59fa52.s:68: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> clang: error: assembler command failed with exit code 1 (use -v to see
-> >> invocation)
-> >> make[4]: *** [/home/yhs/work/bpf-next/scripts/Makefile.build:252:
-> >> arch/x86/realmode/rm/video-bios.o] Error 1
-> >> make[4]: *** Waiting for unfinished jobs....
-> >> /tmp/wakemain-88777c.s: Assembler messages:
-> >> /tmp/wakemain-88777c.s:4: Error: junk at end of line, first unrecogniz=
-ed
-> >> character is `"'
-> >> /tmp/wakemain-88777c.s:4: Error: file number less than one
-> >> /tmp/wakemain-88777c.s:5: Error: junk at end of line, first unrecogniz=
-ed
-> >> character is `"'
-> >> /tmp/wakemain-88777c.s:6: Error: junk at end of line, first unrecogniz=
-ed
-> >> character is `"'
-> >> /tmp/wakemain-88777c.s:7: Error: junk at end of line, first unrecogniz=
-ed
-> >> character is `"'
-> >> /tmp/wakemain-88777c.s:8: Error: junk at end of line, first unrecogniz=
-ed
-> >> character is `"'
-> >> /tmp/wakemain-88777c.s:81: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> /tmp/wakemain-88777c.s:312: Error: junk at end of line, first
-> >> unrecognized character is `"'
-> >> clang: error: assembler command failed with exit code 1 (use -v to see
-> >> invocation)
-> >>
-> >> Potentially because of my local gnu assembler 2.30-120.el8 won't work
-> >
-> > It's recorded in lib/Kconfig.debug that 2.35.2 is required for DWARFv5
-> > support if you're using GAS.  My machine has 2.40.
-> >
-> >> with some syntax generated by clang. Mixing clang compiler and arbitra=
-ry
-> >> gnu assembler are not a good idea (see the above example). It might
-> >
-> > I agree, but for older branches of stable which are still supported,
-> > we didn't quite have clang assembler support usable.  We still need to
-> > support those branches of stable.
->
-> Thanks Florent pointing out 5.10 stable kernels which have this issue.
+This has come up with other architectures before, such as arm and arm64
+in commit 0cda9bc15dfc ("ARM: 9038/1: Link with '-z norelro'") and
+commit 3b92fa7485eb ("arm64: link with -z norelro regardless of
+CONFIG_RELOCATABLE"). Additionally, '-z norelro' is used unconditionally
+for RISC-V upstream after commit 26e7aacb83df ("riscv: Allow to
+downgrade paging mode from the command line"), which alluded to this
+issue for the same reason. Bring 6.3 in line with mainline and link with
+'-z norelro', which resolves the above link failure.
 
-No, all kernels have this issue, when using `LLVM=3D1 LLVM_IAS=3D0`.  It's
-more likely that someone is using that combination for branches of
-stable that predate 4.19 (such as 4.14) but we do still try to support
-that combination somewhat, even if we recommend just using `LLVM=3D1`.
-Interop between toolchains is still important, even if "why would you
-do that?"
+Fixes: e6d1562dd4e9 ("riscv: vmlinux.lds.S: Explicitly handle '.got' section")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306192231.DJmWr6BX-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/riscv/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I am okay with backporting to old stable kernels if that is needed.
-> But the patch going to bpf-next should not have a bug-fix tag and
-> the patch commit message can be tweaked for backport to 5.10 though.
->
-> >
-> >> work with close-to-latest gnu assembler.
-> >>
-> >> To support function name like '<fname>.isra', some llvm work will be
-> >> needed, and it may take some time.
-> >>
-> >> So in my opinion, this patch is NOT a bug fix. It won't affect distro.
-> >> Whether we should backport to the old kernel, I am not sure whether it
-> >> is absolutely necessary as casual build can always remove LLVM_IAS=3D0=
- or
-> >> hack the kernel source itself.
-> >
-> >
-> >
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index b05e833a022d..d46b6722710f 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -7,7 +7,7 @@
+ #
+ 
+ OBJCOPYFLAGS    := -O binary
+-LDFLAGS_vmlinux :=
++LDFLAGS_vmlinux := -z norelro
+ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+ 	LDFLAGS_vmlinux := --no-relax
+ 	KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
 
+---
+base-commit: f2427f9a3730e9a1a11b69f6b767f7f2fad87523
+change-id: 20230620-6-3-fix-got-relro-error-lld-397f3112860b
 
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
---=20
-Thanks,
-~Nick Desaulniers
