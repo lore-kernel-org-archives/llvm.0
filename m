@@ -1,84 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4252310E3
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 01:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687224064;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zSo/XB0k3TDhBnFueM4wXVbhNeQgIZyrVQwT/EGZdqA=;
-	b=O0OXD1B03+Pxe7Gxs9DcQMD8ROkW/bzpFS5gr2xpc2gG9L3HOGKcouLNF46kjujw0NWpRi
-	opKveVOx1vOps+s1OPqN5C/CqYFgWQ0bJI3X/fNsbLxvGnVJ2Z3PCCsqmjTqs9WoucrQO4
-	A4NZ7gSDjlk6r2taSBDhDuEaVo9pbqs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-tO8NBuuvMAWELlW5Cm0gMA-1; Mon, 19 Jun 2023 21:21:03 -0400
-X-MC-Unique: tO8NBuuvMAWELlW5Cm0gMA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0817E3C0E203
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 01:21:03 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EB88E1415102;
-	Tue, 20 Jun 2023 01:21:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc7,
- mainline.kernel.org-clang, 692b7dc8)
-Date: Tue, 20 Jun 2023 01:21:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3D915B2;
+	Tue, 20 Jun 2023 03:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687231977; x=1718767977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vz9Elmf3UeS0RL3UTjU7uNXgCY47ti7fqCDYGrkHqhs=;
+  b=m9tobE2MoUEA6+xAN6tKuRg6pC29TlEust+Ya/vQLh8zFCy7h5Ov0a+k
+   dnK/cCILG9kowFVDJIsIJMVu126+qtzxGYWxeztBdhOsyPWUR1xzXVpWY
+   I4nevD/Ahas2SpikE0RihUsSgVayUbTOjj4Z038Yf6vkL3bYONatz3C3h
+   O/mTTSD+bkp5Ueod1obFWkRr/GWwEM/tNCSwlYv9HF9/hpFvnWE6OvAdd
+   iN6A1hUpDlb53yQ5CmtPD18ohDitiANmX25UBdqn3eD4E00/ZuHT4STCD
+   KnvA/i7/5wlo3wZg5fJoMAwoaFKxLVR1NKZS1l+c/tngcEBH1PjAaTawh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="359758204"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="359758204"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:32:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="691279341"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="691279341"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2023 20:32:50 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBS6s-0005RH-0F;
+	Tue, 20 Jun 2023 03:32:50 +0000
+Date: Tue, 20 Jun 2023 11:32:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com, daniel@ffwll.ch,
+	tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
+	christian.koenig@amd.com, bskeggs@redhat.com,
+	Liam.Howlett@oracle.com, matthew.brost@intel.com,
+	boris.brezillon@collabora.com, alexdeucher@gmail.com,
+	ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+	jason@jlekstrand.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>,
+	Donald Robson <donald.robson@imgtec.com>,
+	Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA
+ mappings
+Message-ID: <202306201123.4nvLB3cQ-lkp@intel.com>
+References: <20230620004217.4700-4-dakr@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <48699.123061921210300168@us-mta-397.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620004217.4700-4-dakr@redhat.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Danilo,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 2222dcb0775d36de28992f56455ab3967b30d380]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-execution-context-for-GEM-buffers-v4/20230620-084448
+base:   2222dcb0775d36de28992f56455ab3967b30d380
+patch link:    https://lore.kernel.org/r/20230620004217.4700-4-dakr%40redhat.com
+patch subject: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA mappings
+config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230620/202306201123.4nvLB3cQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201123.4nvLB3cQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306201123.4nvLB3cQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/drm_gpuva_mgr.c:676:7: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+     676 |         return WARN(check_add_overflow(addr, range, &end),
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     677 |                     "GPUVA address limited to %lu bytes, see Documentation.\n",
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                               %u
+     678 |                     MTREE_INDEX_SIZE);
+         |                     ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/drm_gpuva_mgr.c:663:26: note: expanded from macro 'MTREE_INDEX_SIZE'
+     663 | #define MTREE_INDEX_SIZE sizeof(MTREE_INDEX_TYPE)
+         |                          ^
+   include/asm-generic/bug.h:133:29: note: expanded from macro 'WARN'
+     133 |                 __WARN_printf(TAINT_WARN, format);                      \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/asm-generic/bug.h:97:48: note: expanded from macro '__WARN_printf'
+      97 |                 warn_slowpath_fmt(__FILE__, __LINE__, taint, arg);      \
+         |                                                              ^~~
+   drivers/gpu/drm/drm_gpuva_mgr.c:1314:25: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    1314 |         struct drm_gpuva *va, *prev = NULL;
+         |                                ^
+   2 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'hyperv-fixes-signed-20230619' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/hyperv/linux
+vim +676 drivers/gpu/drm/drm_gpuva_mgr.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/93015
+   668	
+   669	static inline bool
+   670	drm_gpuva_check_overflow(u64 addr, u64 range)
+   671	{
+   672		MTREE_INDEX_TYPE end;
+   673	
+   674		return WARN(check_add_overflow(addr, range, &end),
+   675			    "GPUVA address limited to %lu bytes, see Documentation.\n",
+ > 676			    MTREE_INDEX_SIZE);
+   677	}
+   678	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36354=
-3
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
