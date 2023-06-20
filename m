@@ -1,78 +1,188 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39DB16400;
-	Tue, 20 Jun 2023 13:22:55 +0000 (UTC)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1qBaqt-00087y-00; Tue, 20 Jun 2023 14:52:55 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id F1BACC0346; Tue, 20 Jun 2023 14:50:37 +0200 (CEST)
-Date: Tue, 20 Jun 2023 14:50:37 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, trix@redhat.com, jiaxun.yang@flygoat.com,
-	linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Mark core_vpe_count() as __init
-Message-ID: <20230620125037.GC10520@alpha.franken.de>
-References: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370D72F5B
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:24:59 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b52bf6e66aso21498845ad.3
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 06:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687267498; x=1689859498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=re+SyBILUicxlS34iUets7Pi+i9q+UR/ma+OQFUNz3A=;
+        b=MYxidG8ghbS9JZpyM0oIyctDaxTcuG0OjKbKNW5EmF0G2lZtyabzimYhrZkGaI1XQ3
+         UQmJwgKBI3acaQe8oPPZ0xWIvVQYUF5tEZjvjsek+aLid2jDgKfL91VBZSRhlJIS9BrD
+         E7ALLVoCgge9Jk8TCSdpdFBuDz9UR6cXt3CSY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687267498; x=1689859498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=re+SyBILUicxlS34iUets7Pi+i9q+UR/ma+OQFUNz3A=;
+        b=O0inHyN4NjFzzUW4J4zM4JPjk0aCZOl1F1oKiQPF3JRsuGn3DSfKbJ/xr+QpnbDhi6
+         jggR786ic/JzXXjWREeZ6t2HGCFB1efQ78NpaOuSVqpIwyCyG+jNwP5xLAgxIxJLp+kV
+         oYRD48fvoMgm4YTbyALuQND1NXta2pojohYCpl0hCmbRJEkK5peHM0JN7vHfs8m+UCaU
+         fTo1pWls9EmocVzy1mSOD2oIaDb+xYLu2z/N+eMLI2bain80zeH//h/VdqihOkXbB6tH
+         2rXOPfb4ayJAk23giOX6SK9swN1htKaQTS+U+7bg5I5Zew1gT9xzrxC2wTkuN8YgqaDn
+         ZU7Q==
+X-Gm-Message-State: AC+VfDzNZLiDcFNc/7ECa1H3J8TNPO7lpiHVl8y865jghZMaOUS+S+c3
+	t5gCvddLiZBfJcliW6SwTfpBWhIIToL0qjCNy3mnng==
+X-Google-Smtp-Source: ACHHUZ5K3/8TLzGIfM4jjvCSa4fJcEYPFzG/qAHAv1A2vluglx+NqbztVcunHa0YS421ZIYE+QiMZfeSH0B6my2vaRA=
+X-Received: by 2002:a17:902:e548:b0:1b6:788a:551d with SMTP id
+ n8-20020a170902e54800b001b6788a551dmr2794705plf.44.1687267498470; Tue, 20 Jun
+ 2023 06:24:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615-mips-mark-core_vpe_count-as-init-v1-1-99c124367ea8@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20230615145607.3469985-1-revest@chromium.org> <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
+ <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com> <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
+In-Reply-To: <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
+From: Florent Revest <revest@chromium.org>
+Date: Tue, 20 Jun 2023 15:24:47 +0200
+Message-ID: <CABRcYm+-x-Dou0zMgTPEXL+7dLoE7xDFQSLR+sU_Pyjg9=Ub0g@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To: Yonghong Song <yhs@meta.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, song@kernel.org, 
+	yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, trix@redhat.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 15, 2023 at 09:21:18AM -0700, Nathan Chancellor wrote:
-> After commit 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters"),
-> modpost complains when building with clang:
-> 
->   WARNING: modpost: vmlinux.o: section mismatch in reference: core_vpe_count (section: .text) -> smp_max_threads (section: .init.data)
-> 
-> This warning occurs when core_vpe_count() is not inlined, as it appears
-> that a non-init function is referring to an init symbol. However, this
-> is not a problem in practice because core_vpe_count() is only called
-> from __init functions, cps_smp_setup() and cps_prepare_cpus().
-> 
-> Resolve the warning by marking core_vpe_count() as __init, as it is only
-> called in an init context so it can refer to init functions and symbols
-> and have its memory freed on boot.
-> 
-> Fixes: 96cb8ae28c65 ("MIPS: Rework smt cmdline parameters")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/mips/kernel/smp-cps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index bea6a13ea464..92575222713b 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -29,7 +29,7 @@ static DECLARE_BITMAP(core_power, NR_CPUS);
->  
->  struct core_boot_config *mips_cps_core_bootcfg;
->  
-> -static unsigned core_vpe_count(unsigned int cluster, unsigned core)
-> +static unsigned __init core_vpe_count(unsigned int cluster, unsigned core)
->  {
->  	return min(smp_max_threads, mips_cps_numvps(cluster, core));
->  }
-> 
-> ---
-> base-commit: 5cad8323040bb8d47e130c10ea4dcb7175c7602a
-> change-id: 20230615-mips-mark-core_vpe_count-as-init-600dc73e367d
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+On Mon, Jun 19, 2023 at 8:17=E2=80=AFPM Yonghong Song <yhs@meta.com> wrote:
+>
+>
+>
+> On 6/19/23 7:03 AM, Florent Revest wrote:
+> > On Fri, Jun 16, 2023 at 6:57=E2=80=AFPM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> >>
+> >> On Thu, Jun 15, 2023 at 7:56=E2=80=AFAM Florent Revest <revest@chromiu=
+m.org> wrote:
+> >>>
+> >>> When building a kernel with LLVM=3D1, LLVM_IAS=3D0 and CONFIG_KASAN=
+=3Dy, LLVM
+> >>> leaves DWARF tags for the "asan.module_ctor" & co symbols. In turn,
+> >>> pahole creates BTF_KIND_FUNC entries for these and this makes the BTF
+> >>> metadata validation fail because they contain a dot.
+> >>>
+> >>> In a dramatic turn of event, this BTF verification failure can cause
+> >>> the netfilter_bpf initialization to fail, causing netfilter_core to
+> >>> free the netfilter_helper hashmap and netfilter_ftp to trigger a
+> >>> use-after-free. The risk of u-a-f in netfilter will be addressed
+> >>> separately but the existence of "asan.module_ctor" debug info under s=
+ome
+> >>> build conditions sounds like a good enough reason to accept functions
+> >>> that contain dots in BTF.
+> >>
+> >> I don't see much harm in allowing dots. There are also all those .isra
+> >> and other modifications to functions that we currently don't have in
+> >> BTF, but with the discussions about recording function addrs we might
+> >> eventually have those as well. So:
+> >>
+> >> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> >
+> > Thanks Andrii! :)
+> >
+> >>> Cc: stable@vger.kernel.org
+> >>> Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSe=
+c")
+> >
+> > So do you think these trailers should be kept ? I suppose we can
+> > either see this as a "new feature" to accommodate .isra that should go
+> > through bpf-next or as a bug fix that goes through bpf and gets
+> > backported to stable (without this, BTF wouldn't work on old kernels
+> > built under a new clang and with LLVM_IAS=3D0 and CONFIG_KASAN=3Dy so t=
+his
+> > sounds like a legitimate bug fix to me, I just wanted to double check)
+>
+> How many people really build the kernel with
+>     LLVM=3D1 LLVM_IAS=3D0
+> which uses clang compiler ans gcc 'as'.
+> I think distro most likely won't do this if they intend to
+> build the kernel with clang.
 
-applied to mips-next.
+I tend to agree with you
 
-Thomas.
+> Note that
+>     LLVM=3D1
+> implies to use both clang compiler and clang assembler.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+However, this is only true since:
+f12b034afeb3 ("scripts/Makefile.clang: default to LLVM_IAS=3D1")
+
+5.10 stable for example does not have that commit and LLVM_IAS=3D0 is
+still the default there. (actually that's how I stumbled upon this: by
+building a 5.10 LTS and then finding a way to reproduce it upstream by
+disabling LLVM_IAS)
+
+> Using clang17 and 'LLVM=3D1 LLVM_IAS=3D0', with latest bpf-next,
+> I actually hit some build errors like:
+>
+> /tmp/video-bios-59fa52.s: Assembler messages:
+> /tmp/video-bios-59fa52.s:4: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:4: Error: file number less than one
+> /tmp/video-bios-59fa52.s:5: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:6: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:7: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:8: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:9: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:10: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/video-bios-59fa52.s:68: Error: junk at end of line, first
+> unrecognized character is `"'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+> make[4]: *** [/home/yhs/work/bpf-next/scripts/Makefile.build:252:
+> arch/x86/realmode/rm/video-bios.o] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+> /tmp/wakemain-88777c.s: Assembler messages:
+> /tmp/wakemain-88777c.s:4: Error: junk at end of line, first unrecognized
+> character is `"'
+> /tmp/wakemain-88777c.s:4: Error: file number less than one
+> /tmp/wakemain-88777c.s:5: Error: junk at end of line, first unrecognized
+> character is `"'
+> /tmp/wakemain-88777c.s:6: Error: junk at end of line, first unrecognized
+> character is `"'
+> /tmp/wakemain-88777c.s:7: Error: junk at end of line, first unrecognized
+> character is `"'
+> /tmp/wakemain-88777c.s:8: Error: junk at end of line, first unrecognized
+> character is `"'
+> /tmp/wakemain-88777c.s:81: Error: junk at end of line, first
+> unrecognized character is `"'
+> /tmp/wakemain-88777c.s:312: Error: junk at end of line, first
+> unrecognized character is `"'
+> clang: error: assembler command failed with exit code 1 (use -v to see
+> invocation)
+>
+> Potentially because of my local gnu assembler 2.30-120.el8 won't work
+> with some syntax generated by clang. Mixing clang compiler and arbitrary
+> gnu assembler are not a good idea (see the above example). It might
+> work with close-to-latest gnu assembler.
+
+I did not hit this bug with clang 17 and bpf-next so it's probably an
+incompatibility with that gnu assembler indeed.
+
+> To support function name like '<fname>.isra', some llvm work will be
+> needed, and it may take some time.
+>
+> So in my opinion, this patch is NOT a bug fix. It won't affect distro.
+> Whether we should backport to the old kernel, I am not sure whether it
+> is absolutely necessary as casual build can always remove LLVM_IAS=3D0 or
+> hack the kernel source itself.
+
+If you think it's not worth backporting to 5.10 (where LLVM_IAS=3D0 is
+the default) then I could drop these trailers and send it to bpf-next
+with a different justification. Either way is fine by me.
