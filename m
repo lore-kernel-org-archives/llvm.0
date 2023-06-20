@@ -1,71 +1,77 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D53182D9
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:13:12 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b52864b701so39975035ad.3
-        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:13:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE09717FFF
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:17:27 +0000 (UTC)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-39ea511930eso3358214b6e.1
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687291992; x=1689883992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GmrSYTSQ2qUkhlzSpM0GcnhNM2r70wuMDYnO5JFeaLA=;
-        b=gEGUXxiXONvsoVfzKoaFB6BPub3fU+DFlJ0bRt7Vxj0aQBADH03HLEgMl4I1rePXGX
-         Oe1tjtOVf3ljedV8ZqTqcDiOKoP33OCQ1lrB5R6EMdRVB5Fs1VXb+j8OtzpNhPyO3NPw
-         9OIQaKNBiKriAp1zVBnjvOXZmf35TDm97PWiOEm0njo3cEqrcElcJc7+Mxv38NMHdooS
-         ofOW3UXZ+8tOpkJNnYPHiv34ir5wZYwal22B1f1yI6AUm9SXROVtf1FOpnQ4Zh3cXC5R
-         TWk3LCy+jjyRHvzaoXDMXFpgFu/enVGW6jiQxCnrv1zn54hpR/MMJdZyipOEM6h0guzG
-         BCsA==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687292246; x=1689884246;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j61lPz1ySH8VrcE5kFsDOYTdEi2FoYJLs1a7W9C6KgU=;
+        b=GiwlIgQPYygCWhdB2eZ1JY5cMATuumlvdNVT9RL36gMQrzlqUkSxnJwQWw51VyF/uf
+         jas2j1KhAiMkCTHiUfurwIbQYqs2vZl+OEKey7XXa05FVh+SOF37ZfiEwzDusksrNPEq
+         i5M6zy2rZoNk3PW83CrWH1um1gq7tVlyEC7FL0KGI5IGaHT3Vn9ZKhbh1gq/zK86T+x/
+         4XBcbit2aBfoMb60DGRgu0WAZDY8iXzdXFJv1/yZr2FkWvuEY9mbfEkk66KgyMZc/h9N
+         SmxzrebYgAgSiY3hY2mm1+PaNZv9qOZJSH58m0+mz/hlbt47qu7LXkuDWqDKzrn7kEXH
+         sv7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687291992; x=1689883992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1687292246; x=1689884246;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GmrSYTSQ2qUkhlzSpM0GcnhNM2r70wuMDYnO5JFeaLA=;
-        b=Cdjd8LyFFW5Ru4OryujLKGK/Yj113loTHbEhuoODfyui8Flx4htcFAG/TKfu3wTdew
-         y9M5KnKPsw+hmsrP77zkkHKGb3Q78ebtKFPRsjvTALamhgt06kq3Mxzr3AxRr2pbSCIt
-         rHEBHU2f6r7DYD8nDVA39zaD27iccGTWpSxq3oDeU1GGkBbCk6x091GnnOfmYMthAnU5
-         XtWrqqZZW7QMIUyvVFSPLlLlclH8sNI2QxrIsg+0I2kj9yUgWmPIzOOHKLjIgTlOXtJQ
-         pATxh88JT/h7Xj61COUnJDGViASRxz6tXPdLGRGyQ4qm3b9upUYfpJ5FuxpDm46ZgRSg
-         N3+A==
-X-Gm-Message-State: AC+VfDw0Btz2YRQQWwNJr4zy6a22SCcDQWLFcCBYmAjYd7O6AL5zQg6O
-	Xxrja6Vkq4dQY+kjPZFNEHCD8g==
-X-Google-Smtp-Source: ACHHUZ6R39K1FnSTyHu9gjeCYRKQ9F5Jm/s2hzxrwffi4i/maQOWNihzpUGJp129d9ztVWFXyz8Tvw==
-X-Received: by 2002:a17:902:c14b:b0:1b3:c98e:a114 with SMTP id 11-20020a170902c14b00b001b3c98ea114mr12444603plj.45.1687291992114;
-        Tue, 20 Jun 2023 13:13:12 -0700 (PDT)
-Received: from google.com ([2620:15c:2d1:203:2565:1a14:4024:2d88])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b001ae5d21f760sm2007132plb.146.2023.06.20.13.13.11
+        bh=j61lPz1ySH8VrcE5kFsDOYTdEi2FoYJLs1a7W9C6KgU=;
+        b=bnilNFM97yBlYMc+NfMPht1yntHpfZScD5mg4CCn/qWQyfE8kMhqUrcsOvQH5fLzRk
+         YkkN8SdzBoEWnaMssmXUoL+c/PrAd52Pq79twWfj02FRJM/47ES/vp03MNu6o+SkmSND
+         gCOILk0jQ+bYw+NHvA6euIxs/+3/HbuqpCqCkZNqpaO5sMiz1C7oJc9iheEbpBdjwMIR
+         CBIfvGkoj7VXuKk2bIrwXtUSq/j5hl97f66+VeUEdZLnHR7k/WDJKi4Yl2Gs7YrDncfg
+         N+VYRHKe+2AqBsFs+jpec5FmypvTszX/0yZRkt4GZuahxqcAG90NAENFcG0c/h+rFJrB
+         siDQ==
+X-Gm-Message-State: AC+VfDwqYhuJurb6oWr7Ui33fmg4yBhaY/EapcPTZBLPiQRB4x2usbFA
+	5X95+R8Ml1mDoPD8fYJiez3+UQ==
+X-Google-Smtp-Source: ACHHUZ48+YUD2VZh8/4myxORawpTx1nMloZt9tP8SC5pqwZ2kn4iEdNtzxofzmWvJJqDA3VO0aH/UA==
+X-Received: by 2002:a05:6808:2393:b0:397:fbe7:a0fb with SMTP id bp19-20020a056808239300b00397fbe7a0fbmr17793969oib.18.1687292246737;
+        Tue, 20 Jun 2023 13:17:26 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id o17-20020a634e51000000b0052c3f0ae381sm1771597pgl.78.2023.06.20.13.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 13:13:11 -0700 (PDT)
-Date: Tue, 20 Jun 2023 13:13:06 -0700
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Zhangjin Wu <falcon@tinylab.org>
-Cc: palmer@rivosinc.com, conor@kernel.org, guoren@kernel.org,
-	linux-riscv@lists.infradead.org, npiggin@gmail.com,
-	paul.walmsley@sifive.com, paulburton@kernel.org,
-	vincent.chen@sifive.com, tim.bird@sony.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] RISC-V: Enable dead code elimination
-Message-ID: <ZJIIUn8Da15neIwI@google.com>
-References: <20230517082936.37563-1-falcon@tinylab.org>
+        Tue, 20 Jun 2023 13:17:26 -0700 (PDT)
+Date: Tue, 20 Jun 2023 13:17:26 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 13:16:47 PDT (-0700)
+Subject:     Re: [PATCH v3] RISC-V: Enable dead code elimination
+In-Reply-To: <ZJIIUn8Da15neIwI@google.com>
+CC: falcon@tinylab.org, Conor Dooley <conor@kernel.org>, guoren@kernel.org,
+  linux-riscv@lists.infradead.org, npiggin@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+  paulburton@kernel.org, vincent.chen@sifive.com, tim.bird@sony.com, llvm@lists.linux.dev
+From: Palmer Dabbelt <palmer@rivosinc.com>
+To: ndesaulniers@google.com
+Message-ID: <mhng-ae249af7-37cc-400c-be0d-c1fa6f75c8ef@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517082936.37563-1-falcon@tinylab.org>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 17, 2023 at 04:29:36PM +0800, Zhangjin Wu wrote:
-> Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
-> the user to enable dead code elimination. In order for this to work,
-> ensure that we keep the alternative table by annotating them with KEEP.
-> 
+On Tue, 20 Jun 2023 13:13:06 PDT (-0700), ndesaulniers@google.com wrote:
+> On Wed, May 17, 2023 at 04:29:36PM +0800, Zhangjin Wu wrote:
+>> Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
+>> the user to enable dead code elimination. In order for this to work,
+>> ensure that we keep the alternative table by annotating them with KEEP.
+>>
+>
+> Just cross referencing the report from Palmer against v2; I see orphan
+> section warnings from the linker related to the EFI stub when building
+> allmodconfig with this patch applied.
+>
+> v2: thread for reference.
+> https://lore.kernel.org/linux-riscv/CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com/
 
-Just cross referencing the report from Palmer against v2; I see orphan
-section warnings from the linker related to the EFI stub when building
-allmodconfig with this patch applied.
-
-v2: thread for reference.
-https://lore.kernel.org/linux-riscv/CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com/
+Sorry for replying to the v2, I'm marking that as superseeded in 
+patchwork.  IIUC it is a real issue on your end too?  I'm also not 100% 
+sure about the hang, I just let LLD cook for about 10 minutes before I 
+noticed it was still running and posted.
