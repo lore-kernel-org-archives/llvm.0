@@ -1,89 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4BD17FFF
-	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:13:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4991C433C8;
-	Tue, 20 Jun 2023 20:13:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687291990;
-	bh=Up7OY2tx2Bu7OREXkSV0cO4hmudyAUm7ranaZzjRagc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FRhUHZZ65pqJtvqL9yGGffR5fAed0s7h9/Adr7f9XAnI6s0nvTGO2xtSL9IAQEaht
-	 e0OdeMajo3Mhx6E4yZ+Rhulm/rixmS+fQenrM/3qlmVG8pNpAvgQCkxcZnitFog+dY
-	 3bP8Wx2Zr57SS5IcaNEOTknP7mvaIdIeKLDJH2xWgmwioCrZxZhRP1Te/GN5IgdKnC
-	 40wkS47hnmAZZGBQEwok8w94MqAUJfMTHNp2kWiR9/ggLaA7sfbeRh3OGpKCs/AojC
-	 MkO4vvCFv4kl7zW8q2HDxiNcZyKFFy5HtEVzVENIuzECMDev3Iw8OZLgr032l38/A2
-	 XmSKSaGRx1oxw==
-Date: Tue, 20 Jun 2023 21:13:05 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, jszhang@kernel.org,
-	llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-	aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, Fangrui Song <maskray@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230620-gibberish-unblended-f4b50c7fe369@spud>
-References: <mhng-41a06775-95dc-4747-aaab-2c5c83fd6422@palmer-ri-x1c9>
- <mhng-57559277-afaa-4a85-a3ad-b9be6dba737f@palmer-ri-x1c9>
- <CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D53182D9
+	for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 20:13:12 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b52864b701so39975035ad.3
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 13:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687291992; x=1689883992;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmrSYTSQ2qUkhlzSpM0GcnhNM2r70wuMDYnO5JFeaLA=;
+        b=gEGUXxiXONvsoVfzKoaFB6BPub3fU+DFlJ0bRt7Vxj0aQBADH03HLEgMl4I1rePXGX
+         Oe1tjtOVf3ljedV8ZqTqcDiOKoP33OCQ1lrB5R6EMdRVB5Fs1VXb+j8OtzpNhPyO3NPw
+         9OIQaKNBiKriAp1zVBnjvOXZmf35TDm97PWiOEm0njo3cEqrcElcJc7+Mxv38NMHdooS
+         ofOW3UXZ+8tOpkJNnYPHiv34ir5wZYwal22B1f1yI6AUm9SXROVtf1FOpnQ4Zh3cXC5R
+         TWk3LCy+jjyRHvzaoXDMXFpgFu/enVGW6jiQxCnrv1zn54hpR/MMJdZyipOEM6h0guzG
+         BCsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687291992; x=1689883992;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GmrSYTSQ2qUkhlzSpM0GcnhNM2r70wuMDYnO5JFeaLA=;
+        b=Cdjd8LyFFW5Ru4OryujLKGK/Yj113loTHbEhuoODfyui8Flx4htcFAG/TKfu3wTdew
+         y9M5KnKPsw+hmsrP77zkkHKGb3Q78ebtKFPRsjvTALamhgt06kq3Mxzr3AxRr2pbSCIt
+         rHEBHU2f6r7DYD8nDVA39zaD27iccGTWpSxq3oDeU1GGkBbCk6x091GnnOfmYMthAnU5
+         XtWrqqZZW7QMIUyvVFSPLlLlclH8sNI2QxrIsg+0I2kj9yUgWmPIzOOHKLjIgTlOXtJQ
+         pATxh88JT/h7Xj61COUnJDGViASRxz6tXPdLGRGyQ4qm3b9upUYfpJ5FuxpDm46ZgRSg
+         N3+A==
+X-Gm-Message-State: AC+VfDw0Btz2YRQQWwNJr4zy6a22SCcDQWLFcCBYmAjYd7O6AL5zQg6O
+	Xxrja6Vkq4dQY+kjPZFNEHCD8g==
+X-Google-Smtp-Source: ACHHUZ6R39K1FnSTyHu9gjeCYRKQ9F5Jm/s2hzxrwffi4i/maQOWNihzpUGJp129d9ztVWFXyz8Tvw==
+X-Received: by 2002:a17:902:c14b:b0:1b3:c98e:a114 with SMTP id 11-20020a170902c14b00b001b3c98ea114mr12444603plj.45.1687291992114;
+        Tue, 20 Jun 2023 13:13:12 -0700 (PDT)
+Received: from google.com ([2620:15c:2d1:203:2565:1a14:4024:2d88])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b001ae5d21f760sm2007132plb.146.2023.06.20.13.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 13:13:11 -0700 (PDT)
+Date: Tue, 20 Jun 2023 13:13:06 -0700
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Zhangjin Wu <falcon@tinylab.org>
+Cc: palmer@rivosinc.com, conor@kernel.org, guoren@kernel.org,
+	linux-riscv@lists.infradead.org, npiggin@gmail.com,
+	paul.walmsley@sifive.com, paulburton@kernel.org,
+	vincent.chen@sifive.com, tim.bird@sony.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v3] RISC-V: Enable dead code elimination
+Message-ID: <ZJIIUn8Da15neIwI@google.com>
+References: <20230517082936.37563-1-falcon@tinylab.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qnIKHjmO/IECDseO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com>
+In-Reply-To: <20230517082936.37563-1-falcon@tinylab.org>
 
+On Wed, May 17, 2023 at 04:29:36PM +0800, Zhangjin Wu wrote:
+> Select CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION for RISC-V, allowing
+> the user to enable dead code elimination. In order for this to work,
+> ensure that we keep the alternative table by annotating them with KEEP.
+> 
 
---qnIKHjmO/IECDseO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just cross referencing the report from Palmer against v2; I see orphan
+section warnings from the linker related to the EFI stub when building
+allmodconfig with this patch applied.
 
-On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
-> On Mon, Jun 19, 2023 at 6:06=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.co=
-m> wrote:
-> > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
-> > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
-> > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
-> > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
-
-> > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
-> > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
-> > >> series is based on 6.4-rc2.
-> > >
-> > > Thanks.
-> >
-> > Sorry to be so slow here, but I think this is causing LLD to hang on
-> > allmodconfig.  I'm still getting to the bottom of it, there's a few
-> > other things I have in flight still.
->=20
-> Confirmed with v3 on mainline (linux-next is pretty red at the moment).
-> https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab=
-=2Eorg/
-
-Just FYI Nick, there's been some concurrent work here from different
-people working on the same thing & the v3 you linked (from Zhangjin) was
-superseded by this v2 (from Jisheng).
-
-Cheers,
-Conor.
-
---qnIKHjmO/IECDseO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJIIUQAKCRB4tDGHoIJi
-0pwKAPwN0fl/0BvxzqWUorGfL8WNfDjmU0SS2DfTLOj65jF6NgD+OGR2qRbVJjsn
-RR7ojSY2OsUPffu6ghob8ys0ss+XpgI=
-=V3r5
------END PGP SIGNATURE-----
-
---qnIKHjmO/IECDseO--
+v2: thread for reference.
+https://lore.kernel.org/linux-riscv/CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com/
