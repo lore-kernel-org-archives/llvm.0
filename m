@@ -1,46 +1,59 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862FD18C35;
-	Wed, 21 Jun 2023 16:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687364895; x=1718900895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lD08uLgUK9ZigDPBHDtgSA0rj18RciqVRTnE8VS7w1k=;
-  b=boRO8UeOhE0YYswiADrGKFhGmPu3YvbR4MfrKcYM6ocD0ifQt35ap8gz
-   VMN7V5q4Iz3xuZ1hftePALcwUUP9Gz39qxf+jJQMVSHI5L3qu8XT3ID6R
-   OXMWi9HTxnkanjZCtHEC0ruSBFAB2FfdlVM5sstOOlmQ3ZP+WsBthmQay
-   sX68hRH5ENwzJQ7W1K725uYb9tdI516kipLRvTwMNFMISZwqCf9eBqh6l
-   N/NOujE5AVoofPa+c+zIg6SBV9c5ph7ZCC6npQphFynskUxblgyGF7Ll2
-   DZtHvKHzyOzFoeB1KHUBkA6BAu57ePpLNLLjCqFFyo0EtOKAGFJt88/D/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360241095"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="360241095"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 09:28:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="859040594"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="859040594"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jun 2023 09:28:12 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qC0gl-0006wT-1v;
-	Wed, 21 Jun 2023 16:28:11 +0000
-Date: Thu, 22 Jun 2023 00:27:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	thomas_os@shipmail.org, boris.brezillon@collabora.com,
-	arunpravin.paneerselvam@amd.com, dakr@redhat.com,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] drm: add drm_exec selftests v4
-Message-ID: <202306220013.JRZDDrkO-lkp@intel.com>
-References: <20230621133700.7588-2-christian.koenig@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B702E18B07
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 16:42:04 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-54fac329a71so3265753a12.1
+        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 09:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687365724; x=1689957724;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pZeysVMxLr4V+mtdvRA0frrYDzh/8CDiDj5/Ledzf8A=;
+        b=bQJ6bOWQGKdsl9spwn87pEoV4njOCTfT+23Efi4pw7BInh8dGPzR+q2+IY0HwHp4oz
+         sdB65Ay702xN0sDc7ieTiRZ16ZJNsqnX6h5TCbFM0/IOL7ncNWDFfyqAFONlcNUunt4i
+         PVoqr1Vy0/m3mH1FHzxaymLGgUdVBOfq43ZwKRMzj69HwWZTtwFbguFuEMzZRDOPBoiU
+         T6jsJ7rg7fPs/FoAUDu+8La+j20luJ6TpClQLudLgZFR774UjJf4L3Fg5RwXvQgtIRFT
+         1/nPRA80kf6KO21z7oCj/P7V77dwqcB6u8ATGvesiWPG//mFKSleIPdVeKMRr8D9sLwv
+         47cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687365724; x=1689957724;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pZeysVMxLr4V+mtdvRA0frrYDzh/8CDiDj5/Ledzf8A=;
+        b=fiaU0RQ6SGkXowvLblGSW7mkgFa+Gc5Di7kZmwLqS4FMkcq3hyNtjEY8kpIVf+fNL8
+         Jbftwiq4Afu/rBYKuXEr6kd8F3Zwzia27m6DrH2eoER7jVxuSyKVMZHJ/GFweJUHAiy4
+         9Ztc/SxnhIICHlRJSEmWX4QXmItsaNYJ95gOnXobBR6h8C7KmSlts9VT9DeOtRbIiLfz
+         t6wAbqWOTECJiu6x4DgoahT+ReYJRGHdAxI18FbfkqPuMcW6jZhZMF6JQgN95xqP44Hn
+         4kfpWzJZDWXnafBgRiOxPopURjwwzMn+j2SaagsEHLfY3ZDixNlSNz4nIeEID/e4ZPv9
+         mv2w==
+X-Gm-Message-State: AC+VfDx4SL1zgPaEnvwWpS0tBTwnUZFnoT7Wl5Ql0gB4tjY0rQEsd17H
+	ShslMRU3agTyLYhxGuHEZCQ=
+X-Google-Smtp-Source: ACHHUZ6wjy33jCOordhGlER/jnFO55zfxhPkZeTwr+8ezi8uYHYbzmDJrgs5j9sgURuC5Hbp7PYOlA==
+X-Received: by 2002:a17:902:fa8d:b0:1b0:7739:657a with SMTP id lc13-20020a170902fa8d00b001b07739657amr8509709plb.50.1687365723865;
+        Wed, 21 Jun 2023 09:42:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e17-20020a17090301d100b001ae365072ccsm3755503plh.122.2023.06.21.09.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 09:42:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 21 Jun 2023 09:42:01 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kees Cook <keescook@chromium.org>
+Cc: Marco Elver <elver@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
+Message-ID: <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
+References: <20230405022356.gonna.338-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,65 +62,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621133700.7588-2-christian.koenig@amd.com>
+In-Reply-To: <20230405022356.gonna.338-kees@kernel.org>
 
-Hi Christian,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Tue, Apr 04, 2023 at 07:23:59PM -0700, Kees Cook wrote:
+> The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
+> leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
+> match Clang's stricter behavior.
+> 
+> Cc: Marco Elver <elver@google.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Miroslav Benes <mbenes@suse.cz>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc7 next-20230621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This patch, presumably as side effect, enables CONFIG_ARCH_STM32
+for arm64:allmodconfig. As consequence, CONFIG_STM32_RPROC is enabled
+as well. This in turn results in the following build error.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/drm-add-drm_exec-selftests-v4/20230621-213827
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230621133700.7588-2-christian.koenig%40amd.com
-patch subject: [PATCH 2/2] drm: add drm_exec selftests v4
-config: hexagon-randconfig-r015-20230621 (https://download.01.org/0day-ci/archive/20230622/202306220013.JRZDDrkO-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220013.JRZDDrkO-lkp@intel.com/reproduce)
+Building arm64:allmodconfig ... failed
+--------------
+Error log:
+In file included from include/linux/printk.h:564,
+                 from include/asm-generic/bug.h:22,
+                 from arch/arm64/include/asm/bug.h:26,
+                 from include/linux/bug.h:5,
+                 from include/linux/fortify-string.h:5,
+                 from include/linux/string.h:254,
+                 from include/linux/dma-mapping.h:7,
+                 from drivers/remoteproc/stm32_rproc.c:9:
+drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
+drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306220013.JRZDDrkO-lkp@intel.com/
+I did not try to understand what is going on, but reverting this
+patch fixes the problem.
 
-All warnings (new ones prefixed by >>):
+---
+bisect script:
 
->> drivers/gpu/drm/tests/drm_exec_test.c:134:2: warning: variable '__drm_exec_retry_ptr' set but not used [-Wunused-but-set-variable]
-     134 |         drm_exec_until_all_locked(&exec)
-         |         ^
-   include/drm/drm_exec.h:78:13: note: expanded from macro 'drm_exec_until_all_locked'
-      78 |         for (void *__drm_exec_retry_ptr; ({                     \
-         |                    ^
-   1 warning generated.
+rm .config
+make-arm64 mrproper
+make-arm64 -j allmodconfig
+if ! grep -q CONFIG_ARCH_STM32 .config; then
+    exit 1
+fi
+exit 0
 
-
-vim +/__drm_exec_retry_ptr +134 drivers/gpu/drm/tests/drm_exec_test.c
-
-   121	
-   122	static void test_prepare_array(struct kunit *test)
-   123	{
-   124		struct drm_gem_object gobj1 = { };
-   125		struct drm_gem_object gobj2 = { };
-   126		struct drm_gem_object *array[] = { &gobj1, &gobj2 };
-   127		struct drm_exec exec;
-   128		int ret;
-   129	
-   130		drm_gem_private_object_init(&dev, &gobj1, PAGE_SIZE);
-   131		drm_gem_private_object_init(&dev, &gobj2, PAGE_SIZE);
-   132	
-   133		drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
- > 134		drm_exec_until_all_locked(&exec)
-   135			ret = drm_exec_prepare_array(&exec, array, ARRAY_SIZE(array),
-   136						     1);
-   137		KUNIT_EXPECT_EQ(test, ret, 0);
-   138		drm_exec_fini(&exec);
-   139	}
-   140	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+bisect log:
+# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# good: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good e867e67cd55ae460c860ffd896c7fc96add2821c
+# good: [0ab4015a11182e2a19c3dd52db85418f370cef39] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+git bisect good 0ab4015a11182e2a19c3dd52db85418f370cef39
+# good: [50b29407850776d7c61461f883e5896dcea596a4] Merge branch 'driver-core-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+git bisect good 50b29407850776d7c61461f883e5896dcea596a4
+# good: [04d46f23e86112fc9d6469fc0155ce19faabc181] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+git bisect good 04d46f23e86112fc9d6469fc0155ce19faabc181
+# good: [bdd44289ba061dab3863ff80a5999d4c6160b93d] Merge branch 'gpio/for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+git bisect good bdd44289ba061dab3863ff80a5999d4c6160b93d
+# good: [c7d13e64a19b0bbed1a6eb18e9b4fd55f7530e5d] Merge branch 'at24/for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+git bisect good c7d13e64a19b0bbed1a6eb18e9b4fd55f7530e5d
+# good: [6477d1cebd3339658f8421e05380576ed535677c] Merge branch 'rust-next' of https://github.com/Rust-for-Linux/linux.git
+git bisect good 6477d1cebd3339658f8421e05380576ed535677c
+# bad: [d01a77afd6bef1b3a2ed15e8ca6887ca7da0cddc] lib/string_helpers: Change returned value of the strreplace()
+git bisect bad d01a77afd6bef1b3a2ed15e8ca6887ca7da0cddc
+# bad: [d67790ddf0219aa0ad3e13b53ae0a7619b3425a2] overflow: Add struct_size_t() helper
+git bisect bad d67790ddf0219aa0ad3e13b53ae0a7619b3425a2
+# bad: [30ad0627f169f56180e668e7223eaa43aa190a75] dlm: Replace all non-returning strlcpy with strscpy
+git bisect bad 30ad0627f169f56180e668e7223eaa43aa190a75
+# bad: [3bf301e1ab85e18ed0e337ce124dc71d6d7b5fd7] string: Add Kunit tests for strcat() family
+git bisect bad 3bf301e1ab85e18ed0e337ce124dc71d6d7b5fd7
+# bad: [ead62aa370a81c4fb42a44c4edeafe13e0a3a703] fortify: strscpy: Fix flipped q and p docstring typo
+git bisect bad ead62aa370a81c4fb42a44c4edeafe13e0a3a703
+# bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
+git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
+# first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
