@@ -1,56 +1,51 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35E910FB;
-	Wed, 21 Jun 2023 01:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E6515BC;
+	Wed, 21 Jun 2023 02:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687311293; x=1718847293;
+  t=1687313763; x=1718849763;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rXs2HEdQtBy2ef3AWHhr1OpTYy55CdS5OXi3yf9DqkU=;
-  b=DvqmiBBEubDh73eAXbM3vpc3T7eEdzzl9bIKsSMSuRXJgChu3ei1s1Ti
-   i4w/ToZPsidAjojg7d6xbY9g0fYG3or4u5SI+OPwNfSON8kneA1LBZ/jd
-   fZlqyx+UJWcpYXv6TXwQnbqg1xdtl/5XaBh3SVml0beYnAoIQkP4BJgOY
-   JQyf8XTHHmvxH6+wTJz4W+ktlDBXXODYJwomOzVyjmsbnTQ6RIWWM7jHU
-   CIOGK1yZZ5+Lh5vksdQErXgt3O74MZlG9zapyaLwh5Set2U7qpVZV6CQT
-   yGHtGyxMN+xfzY62oDgn7lEeK6iJpX6b8cK2f1l/HvgmN1UpOc5sPar7u
+  bh=6m8oZcodhtix0QwhxR/xmxGRXoNB5c0KxxyIl1Y1I6M=;
+  b=n9N8uwfAmRFJz9ospGFXGmBGPZ9kCXhJBnREZRSd0SzRFd93gEmb4KaO
+   2/07kGZqnUjk2M7RMw0ZZcwEQgVqbD9jwdoQDes16cg8Frwi7jWd7DL4h
+   wmcPXDQVv5KUyzXwgSJx37O5nEjvaDYenInmH+X/j+KMtR/cHctpBeli5
+   6TnVguXOcvLEM+ajg9fIGCYW6BabTT4Qoy0fViV2ylt385p4UKPGLCedF
+   N5LjI7kuE0a1wEsjqPm91bbJ5Z9C1kIjoddPISa+3Q9PFKsTqX+tgJbhJ
+   YaVX3iK6sNCx/W0Z957qaf6PK1Bti8DfBsP8JKcRZsEgx44X8Ia+QzRo1
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="446407125"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="446407125"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 18:34:52 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="362581733"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="362581733"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 19:15:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743972754"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="743972754"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="858802795"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="858802795"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 18:34:48 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jun 2023 19:15:50 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qBmkB-0006Pc-2l;
-	Wed, 21 Jun 2023 01:34:47 +0000
-Date: Wed, 21 Jun 2023 09:33:51 +0800
+	id 1qBnNt-0006Ro-2C;
+	Wed, 21 Jun 2023 02:15:49 +0000
+Date: Wed, 21 Jun 2023 10:15:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Minda Chen <minda.chen@starfivetech.com>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Roger Quadros <rogerq@kernel.org>
+To: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Message-ID: <202306210917.dFnmlrv2-lkp@intel.com>
-References: <20230619094759.21013-5-minda.chen@starfivetech.com>
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+	hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
+	willy@infradead.org, agordeev@linux.ibm.com,
+	wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+	David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+	nathan@kernel.org, glaubitz@physik.fu-berlin.de,
+	Baoquan He <bhe@redhat.com>, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <202306211030.DioMEPhl-lkp@intel.com>
+References: <20230620131356.25440-3-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,43 +54,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230619094759.21013-5-minda.chen@starfivetech.com>
+In-Reply-To: <20230620131356.25440-3-bhe@redhat.com>
 
-Hi Minda,
+Hi Baoquan,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.4-rc7 next-20230620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
-patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-config: hexagon-randconfig-r045-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230620131356.25440-3-bhe%40redhat.com
+patch subject: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306210917.dFnmlrv2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306211030.DioMEPhl-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/rt9455_charger.ko] undefined!
->> ERROR: modpost: "devm_usb_get_phy_by_phandle" [drivers/power/supply/isp1704_charger.ko] undefined!
->> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/isp1704_charger.ko] undefined!
->> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/bq256xx_charger.ko] undefined!
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for USB_PHY
-   Depends on [n]: USB_SUPPORT [=n]
-   Selected by [m]:
-   - PHY_STARFIVE_JH7110_PCIE [=m]
+>> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
 
 -- 
 0-DAY CI Kernel Test Service
