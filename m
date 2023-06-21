@@ -1,44 +1,59 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160391DDC2;
-	Wed, 21 Jun 2023 18:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687372283; x=1718908283;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vfZV5Ip9584RpmiuEphRKpt7DdbJbjAeaEZE7KmdUHk=;
-  b=eievdNTf51ooFdmPcTcjSlUhCgpNnLDDpJT6dYpH98boe6Q4y88kQpuY
-   QVNwYmEXOfdDeTrKyIyNyjPeOIinIyhmoYszr6X7zG0lV/xURdZLQrSod
-   3fBgPVtQIUEMzyWiTr+Yd4kcOyOuEQgVSN2nPwxDAGeufwXC4sHTtm6B7
-   3LaT6Wk4KfnaKNkqsNnqlpX350yP0CAbZYWqFTAOESzWSWVG2DZ7bk7iS
-   WRYKBnzI1kL+Zn9dY6Gn7fhxhn33/1ZZqJNO81PuCzm4jay+KnDf6Cvv1
-   HZOyyzBKWAkQ2RdvYjBY6/qSFl7DyqCw8vkVLDFYDGgz9IX+B5WxXO45f
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="359131869"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="359131869"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 11:31:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="838723061"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="838723061"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2023 11:31:16 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qC2br-00071N-0P;
-	Wed, 21 Jun 2023 18:31:15 +0000
-Date: Thu, 22 Jun 2023 02:31:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [vsyrjala:dpt_debug_2 2/3]
- drivers/gpu/drm/i915/display/intel_dpt.c:92:14: warning: format specifies
- type 'unsigned long long' but the argument has type 'dma_addr_t' (aka
- 'unsigned int')
-Message-ID: <202306220217.ngXJHivB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A420419534
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 18:33:30 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-25efb821778so2297052a91.3
+        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 11:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687372410; x=1689964410;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
+        b=hIQg4b6dBFhr8M1cB2wCKdDIS2BqrZFkxpeYC9/r/Fm4/PFRkhINjLnndweKacJ7IP
+         V8cig2c3cCv7oAvLssc4iBdvgeuMqkMdvBVCb2TTShovFY5Gf4Mfmm1haAIxoTVhcXAh
+         OT5ZmbC2Hz2Fbpo93tqT6X9u8qiANoR9cGeOw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687372410; x=1689964410;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
+        b=FhhnvvVmAcQkpreUusOwQNERpFO51N9dyIRNXVKp/lvc3pJ7TRkTYL3yHEBbWkWmvG
+         Xn1w14jxFS515tC202/E+Cn8isw0kflMXf7ye9GDjpMHSG5jDV/Sw7CVsT5AtUDl70D7
+         XYe0MfTqNIlblzPnXdU/XVN05cKJ70hbqwHLHvksFzE/s9/a3qKrmXHOim40Nc4pa9Ja
+         PNxI30qyEAoHBzb0P40RLI/9HdlZir3cAG0/34u7cGcov2Kk1i4f+KK3ls+CpDXWkThL
+         OUjvdORHSd8JUUOxO7j9FEhFKN00UjQNQUY+1RqM5WJl2Sy0du7Vqbp6OrOPMES4rYxO
+         yb1w==
+X-Gm-Message-State: AC+VfDwWWSKEUs/NFPcz8iE1YKMjIo5jaJH0/DrUS9wlrbSMZnjFbfSj
+	ezIdTwq36KxZ9e2HO40qSLU3uQ==
+X-Google-Smtp-Source: ACHHUZ55HAlLqELh2ztTLy1Zy882zddDnIs2ffNwpxg18Goh1qFJ8fhZuoht6oim3Oz/H9kVw+iajg==
+X-Received: by 2002:a17:90a:69a2:b0:25b:f9ce:d8df with SMTP id s31-20020a17090a69a200b0025bf9ced8dfmr13250289pjj.8.1687372409966;
+        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i18-20020a17090ad35200b0025e0bea16eesm3466415pjx.42.2023.06.21.11.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
+Date: Wed, 21 Jun 2023 11:33:29 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Bart Van Assche <bvanassche@acm.org>,
+	Azeem Shaikh <azeemshaikh38@gmail.com>,
+	Krishna Gudipati <kgudipat@brocade.com>,
+	James Bottomley <JBottomley@parallels.com>,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] scsi: bfa: fix function pointer type mismatch for
+ hcb_qe->cbfn
+Message-ID: <202306211133.DD89F45965@keescook>
+References: <20230616092233.3229414-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,58 +62,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230616092233.3229414-1-arnd@kernel.org>
 
-tree:   https://github.com/vsyrjala/linux.git dpt_debug_2
-head:   2f46ac9af5a093e6b0363752c07692d34672ff3a
-commit: 5eeedbfbcc698af4c74b3bfabf7fae2a309ed466 [2/3] dpt debug
-config: i386-randconfig-i014-20230621 (https://download.01.org/0day-ci/archive/20230622/202306220217.ngXJHivB-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220217.ngXJHivB-lkp@intel.com/reproduce)
+On Fri, Jun 16, 2023 at 11:22:09AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Some callback functions used here take a boolean argument, others
+> take a status argument. This breaks KCFI type checking, so clang
+> now warns about the function pointer cast:
+> 
+> drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> 
+> Assuming the code is actually correct here and the callers always match
+> the argument types of the callee, rework this to replace the explicit
+> cast with a union of the two pointer types. This does not change the
+> behavior of the code, so if something is actually broken here, a larger
+> rework may be necessary.
+> 
+> Fixes: 37ea0558b87ab ("[SCSI] bfa: Added support to collect and reset fcport stats")
+> Fixes: 3ec4f2c8bff25 ("[SCSI] bfa: Added support to configure QOS and collect stats.")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306220217.ngXJHivB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_dpt.c:92:14: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-                           dpt, i++, page_to_phys(page));
-                                     ^~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:469:46: note: expanded from macro 'drm_err'
-           __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-                                                ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:456:48: note: expanded from macro '__drm_printk'
-           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-                                                  ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   arch/x86/include/asm/io.h:159:31: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)    ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +92 drivers/gpu/drm/i915/display/intel_dpt.c
-
-    82	
-    83	static void intel_dpt_debug(struct i915_address_space *vm)
-    84	{
-    85		struct i915_dpt *dpt = i915_vm_to_dpt(vm);
-    86		struct page *page;
-    87		struct sgt_iter iter;
-    88		int i = 0;
-    89	
-    90		for_each_sgt_page(page, iter, dpt->obj->mm.pages)
-    91			drm_err(&vm->i915->drm, "dpt %p [%d] physical address 0x%llx\n",
-  > 92				dpt, i++, page_to_phys(page));
-    93	}
-    94	
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
