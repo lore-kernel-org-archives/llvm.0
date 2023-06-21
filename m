@@ -1,45 +1,56 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3B515A9;
-	Wed, 21 Jun 2023 01:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35E910FB;
+	Wed, 21 Jun 2023 01:34:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687310632; x=1718846632;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xvdUH0eCOCrl6pNmUpPVf1XV+p/Ejc/EKefYFVPG1io=;
-  b=fad9nw27YWmcp/bOnH5Hwxw1sBR2LXnhMpSIsNvdKqmGdBKvwJDJ2fjK
-   S71ldgy5AvBo0plUhF8Zk0INfg90zFxBKZLk1tFLHo19XIYpuhXfgpYb1
-   HN2NpnhDC1bN0y3EPJYR5SpBsGl8CBtEZ+2B8JCofbe6C1oPRrCuUouNk
-   eX+3EvSqliMhQfNj0ehHo3jvXpOsrAMfk/LY/HsLhMJqgBEK8HXc3j3wP
-   eRyVQxEMdHAY6AV0+ogh+ZBNWHZFsHiLWtBsZr+K5XXbT0d171IDOWgMU
-   6EwSkoJmJ40eFB/XmRR5k3Tk3M0Fr6HmNtYXJca39kL78d8v7LlxeU5Pj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="389419646"
+  t=1687311293; x=1718847293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rXs2HEdQtBy2ef3AWHhr1OpTYy55CdS5OXi3yf9DqkU=;
+  b=DvqmiBBEubDh73eAXbM3vpc3T7eEdzzl9bIKsSMSuRXJgChu3ei1s1Ti
+   i4w/ToZPsidAjojg7d6xbY9g0fYG3or4u5SI+OPwNfSON8kneA1LBZ/jd
+   fZlqyx+UJWcpYXv6TXwQnbqg1xdtl/5XaBh3SVml0beYnAoIQkP4BJgOY
+   JQyf8XTHHmvxH6+wTJz4W+ktlDBXXODYJwomOzVyjmsbnTQ6RIWWM7jHU
+   CIOGK1yZZ5+Lh5vksdQErXgt3O74MZlG9zapyaLwh5Set2U7qpVZV6CQT
+   yGHtGyxMN+xfzY62oDgn7lEeK6iJpX6b8cK2f1l/HvgmN1UpOc5sPar7u
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="446407125"
 X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="389419646"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 18:23:49 -0700
+   d="scan'208";a="446407125"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 18:34:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="717425037"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743972754"
 X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="717425037"
+   d="scan'208";a="743972754"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2023 18:23:48 -0700
+  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 18:34:48 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qBmZX-0006PK-2J;
-	Wed, 21 Jun 2023 01:23:47 +0000
-Date: Wed, 21 Jun 2023 09:23:23 +0800
+	id 1qBmkB-0006Pc-2l;
+	Wed, 21 Jun 2023 01:34:47 +0000
+Date: Wed, 21 Jun 2023 09:33:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+To: Minda Chen <minda.chen@starfivetech.com>,
 	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [esmil:jh7100-dmapool 19/39] arch/hexagon/kernel/dma.c:24:2: error:
- call to undeclared function 'hexagon_flush_dcache_range'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202306210901.C8pP4HB5-lkp@intel.com>
+	Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Roger Quadros <rogerq@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Minda Chen <minda.chen@starfivetech.com>,
+	Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+Message-ID: <202306210917.dFnmlrv2-lkp@intel.com>
+References: <20230619094759.21013-5-minda.chen@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,90 +59,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230619094759.21013-5-minda.chen@starfivetech.com>
 
-tree:   https://github.com/esmil/linux jh7100-dmapool
-head:   41d6f3f3b3698aab55a40592597677c448a7093a
-commit: 801f1883c4bb70cc8c7725b85e220adc36a77a94 [19/39] dma-mapping: replace custom code with generic implementation
-config: hexagon-randconfig-r016-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210901.C8pP4HB5-lkp@intel.com/config)
+Hi Minda,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.4-rc7 next-20230620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
+patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+config: hexagon-randconfig-r045-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210901.C8pP4HB5-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306210901.C8pP4HB5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306210917.dFnmlrv2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from arch/hexagon/kernel/dma.c:8:
-   In file included from include/linux/dma-map-ops.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/hexagon/kernel/dma.c:8:
-   In file included from include/linux/dma-map-ops.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/hexagon/kernel/dma.c:8:
-   In file included from include/linux/dma-map-ops.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   arch/hexagon/kernel/dma.c:19:27: error: use of undeclared identifier 'paddr'
-      19 |         hexagon_inv_dcache_range(paddr, paddr + size);
-         |                                  ^
-   arch/hexagon/kernel/dma.c:19:34: error: use of undeclared identifier 'paddr'
-      19 |         hexagon_inv_dcache_range(paddr, paddr + size);
-         |                                         ^
->> arch/hexagon/kernel/dma.c:24:2: error: call to undeclared function 'hexagon_flush_dcache_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      24 |         hexagon_flush_dcache_range(paddr, paddr + size);
-         |         ^
-   arch/hexagon/kernel/dma.c:24:2: note: did you mean 'hexagon_clean_dcache_range'?
-   arch/hexagon/include/asm/cacheflush.h:75:13: note: 'hexagon_clean_dcache_range' declared here
-      75 | extern void hexagon_clean_dcache_range(unsigned long start, unsigned long end);
-         |             ^
-   arch/hexagon/kernel/dma.c:24:29: error: use of undeclared identifier 'paddr'
-      24 |         hexagon_flush_dcache_range(paddr, paddr + size);
-         |                                    ^
-   arch/hexagon/kernel/dma.c:24:36: error: use of undeclared identifier 'paddr'
-      24 |         hexagon_flush_dcache_range(paddr, paddr + size);
-         |                                           ^
-   6 warnings and 5 errors generated.
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/rt9455_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy_by_phandle" [drivers/power/supply/isp1704_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/isp1704_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/bq256xx_charger.ko] undefined!
 
-
-vim +/hexagon_flush_dcache_range +24 arch/hexagon/kernel/dma.c
-
-    21	
-    22	static inline void arch_dma_cache_wback_inv(phys_addr_t start, size_t size)
-    23	{
-  > 24		hexagon_flush_dcache_range(paddr, paddr + size);
-    25	}
-    26	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for USB_PHY
+   Depends on [n]: USB_SUPPORT [=n]
+   Selected by [m]:
+   - PHY_STARFIVE_JH7110_PCIE [=m]
 
 -- 
 0-DAY CI Kernel Test Service
