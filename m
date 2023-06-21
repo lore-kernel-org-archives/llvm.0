@@ -1,84 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBF0F9D6
-	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 19:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687375817;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dSWrppQiYH3aQlfPFN2CF13uOq1CU1FQCtC26t2rFdI=;
-	b=cFC1Px3rWRn2QLZw+WPIb7RdCqLN4Hn4NqxI/B+YxZ4bJeXKqqAfnrI0c9NTrmqs7Hxvwo
-	UKidIzx+V0wHcZdu64HPvYggYpnWhJx9Xk/9G/8vSlGqfgg+Cmub/uIlaqGRRJk5pv99vi
-	WNF0jMlPZ/gBpFxXzcQnxfna6loP8zI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-pPoCTIbWP5in_4iJsc7nQQ-1; Wed, 21 Jun 2023 15:30:14 -0400
-X-MC-Unique: pPoCTIbWP5in_4iJsc7nQQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6354D2A59557
-	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 19:30:08 +0000 (UTC)
-Received: from [172.64.4.14] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EAF1914682F8;
-	Wed, 21 Jun 2023 19:30:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc7,
- mainline.kernel.org-clang, 00703497)
-Date: Wed, 21 Jun 2023 19:30:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E93F17724
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 19:46:23 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso3389180b3a.2
+        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 12:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687376782; x=1689968782;
+        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yAEYX8p4xEPzztgSX6jBgXp6p/Xb2RUIX5fAtspxlsk=;
+        b=O+py1+Rpcwp6w+AR4wey7NcLDxvddKtqNBonT+E2kowjbpXM93WK2d43d5Lo5eadvb
+         i1DD8KpxveaNKlUarBlGyvv63EeTdAtgxwo23u1pgyTF7sMO2mlwVF04KbyxzEbx2IBq
+         SVO7gg7973NHQ5PTrGDCCXBdnKUOJiIhuf0NTRX3jPr5EEE369JzQbXVvqwODDHVK80h
+         H5vDaJf2v9Gcr8imIk5JdCHcKtI0UlFmWGXHvOMXroAd/7QvwD7ulLCMX3q7tP2dskCM
+         GDPPpffLk6SXcGT+pZT3hWOQu6LHlBrT6Gd4QG7Dye4iUkxqC2t1+iztrMudIflP44WK
+         oUJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687376782; x=1689968782;
+        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yAEYX8p4xEPzztgSX6jBgXp6p/Xb2RUIX5fAtspxlsk=;
+        b=Mjev1gMCBaT6qiYXFj5rJPzkI9vl2/rfOEP/3FjQ9L7+/Xnk6EEHA46ND+tis19d9P
+         UnFWIOLVetYEoAwUf3OVFq4A16lVu31eq5ePpsjxi0oN1R+judNqGmYyF+wX501Ry78T
+         BIquMFnjbtMq8F7O+H9iGqgHHEY8ARsMDbE1Yo3y9Kxxble43aLDR1/4Ajj/2jCx6XOX
+         UEatqPfChJIISORhIBDNO7SdvvytnBnjSUSGPfNkjpRyLPEhkvs7HO0zopVm1a+kw0/t
+         pHmHOXa48sRbd/7grmFbC2Hncb9Yx7RsRldKBrKNPkB10ILDTQ5J0D4Vp4atfye0Enk7
+         H9aA==
+X-Gm-Message-State: AC+VfDxBXhZnXRMnlMjcufhiIWchFG6m8cPvYfWNDd/bWtr+cMRuVtEW
+	NUK4Yt3d5qMQBggRFB7ru/DgVg==
+X-Google-Smtp-Source: ACHHUZ7++iionK3i1+rBjCBOM2BOzaovcT/5zgI9IHyrmKGBJktrKL9rdXh969Ib7fB+ucArnYBWvQ==
+X-Received: by 2002:a05:6a20:13d9:b0:123:89f0:ec6b with SMTP id ho25-20020a056a2013d900b0012389f0ec6bmr1062014pzc.47.1687376782376;
+        Wed, 21 Jun 2023 12:46:22 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id fe15-20020a056a002f0f00b006687f6727e1sm3222011pfb.206.2023.06.21.12.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 12:46:21 -0700 (PDT)
+Date: Wed, 21 Jun 2023 12:46:21 -0700 (PDT)
+X-Google-Original-Date: Wed, 21 Jun 2023 12:45:41 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
+CC: bjorn@kernel.org, Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+  llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+  Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: ndesaulniers@google.com, nathan@kernel.org
+Message-ID: <mhng-ad2d02fa-2d4d-4bf1-ab2a-fd84fa4bcb40@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <22183.123062115301500163@us-mta-269.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Wed, 21 Jun 2023 11:19:31 PDT (-0700), Palmer Dabbelt wrote:
+> On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
+>> Conor Dooley <conor@kernel.org> writes:
+>>
+>> [...]
+>>
+>>>> So I'm no longer actually sure there's a hang, just something slow.
+>>>> That's even more of a grey area, but I think it's sane to call a 1-hour
+>>>> link time a regression -- unless it's expected that this is just very
+>>>> slow to link?
+>>>
+>>> I dunno, if it was only a thing for allyesconfig, then whatever - but
+>>> it's gonna significantly increase build times for any large kernels if LLD
+>>> is this much slower than LD. Regression in my book.
+>>>
+>>> I'm gonna go and experiment with mixed toolchain builds, I'll report
+>>> back..
+>>
+>> I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
+>> HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
+>>
+>>   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
+>>   |     --toolchain=llvm-16 --runtime docker --directory . -k \
+>>   |     allyesconfig
+>>
+>> Took forever, but passed after 2.5h.
+>
+> Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
+> checking top sometimes), it's at 1.5h but even that seems quite long.
+>
+> I guess this is sort of up to the LLVM folks: if it's expected that DCE
+> takes a very long time to link then I'm not opposed to allowing it, but
+> if this is probably a bug in LLD then it seems best to turn it off until
+> we sort things out over there.
+>
+> I think maybe Nick or Nathan is the best bet to know?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Looks like it's about 2h for me.  I'm going to drop these from my 
+staging tree in the interest of making progress on other stuff, but if 
+this is just expected behavior them I'm OK taking them (though that's 
+too much compute for me to test regularly):
 
+$ time ../../../../llvm/install/bin/ld.lld -melf64lriscv -z noexecstack -r -o vmlinux.o --whole-archive vmlinux.a --no-whole-archive --start-group ./drivers/firmware/efi/libstub/lib.a --end-group                                                                                                                                    
 
-Kernel information:
-    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/mst/vhost
+real    111m50.678s
+user    111m18.739s
+sys     1m13.147s
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/93258
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36434=
-7
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>> CONFIG_CC_VERSION_TEXT="Debian clang version 16.0.6 (++20230610113307+7cbf1a259152-1~exp1~20230610233402.106)"
+>>
+>>
+>> Björn
