@@ -1,109 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7264FC8C0
-	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 08:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687337468;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uwyBlKAjWWqC2ADnT8omvFeBUBts/JlKuShTUrNb9VA=;
-	b=e6+0LnVAlwcO5XqxEys2fKA7OLiscrfN8nY2JlaKxXEIuCwMOSTtY6Qtv/nPMxzGaUAh6E
-	HFRD5TdhGLpBKh+KhEMU4nDCr856uyAr5zEbl0Tibgyq9QOL3+g7Cc2Ok2Qgel7/lfGv2G
-	mu9MjOFO2yY3KpvnHkeDR+qVESgQgf8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-ZaFiW99aNIaeRMC_Bh02Dw-1; Wed, 21 Jun 2023 04:51:04 -0400
-X-MC-Unique: ZaFiW99aNIaeRMC_Bh02Dw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AC25805C3F;
-	Wed, 21 Jun 2023 08:50:59 +0000 (UTC)
-Received: from localhost (ovpn-12-166.pek2.redhat.com [10.72.12.166])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 4175F492B02;
-	Wed, 21 Jun 2023 08:50:57 +0000 (UTC)
-Date: Wed, 21 Jun 2023 16:50:53 +0800
-From: Baoquan He <bhe@redhat.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-	christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-	agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-	schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-	deller@gmx.de, nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-	Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZJK57Uw5ZYQZY3d+@MiWiFi-R3L-srv>
-References: <20230620131356.25440-3-bhe@redhat.com>
- <202306211030.DioMEPhl-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002E5C2DE
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 09:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=YGAjFCPPEDmRlHxNKozvmFJN8CRVKmi74gig/bzaVnI=; b=LiDb+DkjazX6QuMd6qNXUjrM0M
+	NK/IYXnN5GNENo3hHKhXxhQgKy89SLho0Abds00xLded015Dg5idJ12Mlcm8DmF+R3whIUBpCQ7z4
+	oKsa0PY1cnjbbP1JnB7Ju33dclISf59zA/W4hDcJXjS6UiB3hiNiDD9zsUClxu7RdfW4j3svKLJi5
+	S3BPqjkEVYrz7O/1Sx4V+Lts76xkHHu93YohE5cV6PQUXf8Fd/YrCTk3orAi9mGXrHmUPRElcIpGT
+	YeapTVwp2pyBJ/D+/eN7KBOLsMoOPkBL/4uYiNzQePLBGatgciiEBzbkuyYZWhj8WM05/aaXJZ28x
+	fCP0MWrA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qBtRV-0002Ke-0N; Wed, 21 Jun 2023 10:43:57 +0200
+Received: from [178.197.248.44] (helo=linux.home)
+	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qBtRU-000N9r-8i; Wed, 21 Jun 2023 10:43:56 +0200
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To: Yonghong Song <yhs@meta.com>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Florent Revest <revest@chromium.org>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev,
+ ast@kernel.org, andrii@kernel.org, song@kernel.org, yhs@fb.com,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, trix@redhat.com,
+ stable@vger.kernel.org
+References: <20230615145607.3469985-1-revest@chromium.org>
+ <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
+ <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
+ <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
+ <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
+ <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
+ <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
+ <2dcc697a-46fe-0933-0508-90ebad9ac8f3@meta.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <b0084c8b-fe32-f1db-ad01-961265ce00fb@iogearbox.net>
+Date: Wed, 21 Jun 2023 10:43:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202306211030.DioMEPhl-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+In-Reply-To: <2dcc697a-46fe-0933-0508-90ebad9ac8f3@meta.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26945/Tue Jun 20 09:30:24 2023)
 
-Hi,
+On 6/21/23 5:28 AM, Yonghong Song wrote:
+> On 6/20/23 8:07 AM, Nick Desaulniers wrote:
+[...]
+>> No, all kernels have this issue, when using `LLVM=1 LLVM_IAS=0`.  It's
+>> more likely that someone is using that combination for branches of
+>> stable that predate 4.19 (such as 4.14) but we do still try to support
+>> that combination somewhat, even if we recommend just using `LLVM=1`.
+>> Interop between toolchains is still important, even if "why would you
+>> do that?"
+> 
+> Okay, yes, although 'LLVM=1' is recommended way to compiler clang
+> based kernel, users can certainly do 'LLVM=1 LLVM_IAS=0' as well
+> although not recommended. Then it is okay to put a bug fix in
+> the commit message. Just need to clarify that
+>    - > 5.10 kernel, LLVM=1 (LLVM_IAS=0 is not the default)
+>      is recommended but user can still have LLVM=1 LLVM_IAS=0
+>      to trigger the issue
+>    - <= 5.10 kernel, LLVM=1 (LLVM_IAS=0 is the default) is
+>      recommended in which case gnu as will be used.
 
-On 06/21/23 at 10:15am, kernel test robot wrote:
-> Hi Baoquan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230620131356.25440-3-bhe%40redhat.com
-> patch subject: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-> config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306211030.DioMEPhl-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
+Given this was already applied to bpf few days ago, I've just updated the
+commit message to reflect the above. Agree that this is valuable info to
+retain for the log.
 
-I followed steps in your reproduce link, didn't reproduce the error as
-above line reported. I can still see those PCI_IOMAP warning, however
-they will disappear when rebuilding. The clone3 warning can always ben
-seen. I didn't see the symbol ioremap error. Could you double check if
-anything missed in steps?
-
-[root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-Compiler will be installed in /root/0day
-make --keep-going LLVM=1 CROSS_COMPILE=hexagon-linux- LLVM_IAS=1 --jobs=48 W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-make[1]: Entering directory '/root/linux/build_dir'
-  GEN     Makefile
-ld.lld: /lib64/libtinfo.so.6: no version information available (required by ld.lld)
-tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
-tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
-tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
-tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
-tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
-tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
-  CALL    ../scripts/checksyscalls.sh
-clang: /lib64/libtinfo.so.6: no version information available (required by clang)
-<stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
- 1519 | #warning syscall clone3 not implemented
-      |  ^
-1 warning generated.
-make[1]: Leaving directory '/root/linux/build_dir'
-[root@dell-pem620-01 linux]# 
-
-
+Thanks everyone,
+Daniel
