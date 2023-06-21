@@ -1,89 +1,84 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A420419534
-	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 18:33:30 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-25efb821778so2297052a91.3
-        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 11:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687372410; x=1689964410;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
-        b=hIQg4b6dBFhr8M1cB2wCKdDIS2BqrZFkxpeYC9/r/Fm4/PFRkhINjLnndweKacJ7IP
-         V8cig2c3cCv7oAvLssc4iBdvgeuMqkMdvBVCb2TTShovFY5Gf4Mfmm1haAIxoTVhcXAh
-         OT5ZmbC2Hz2Fbpo93tqT6X9u8qiANoR9cGeOw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687372410; x=1689964410;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
-        b=FhhnvvVmAcQkpreUusOwQNERpFO51N9dyIRNXVKp/lvc3pJ7TRkTYL3yHEBbWkWmvG
-         Xn1w14jxFS515tC202/E+Cn8isw0kflMXf7ye9GDjpMHSG5jDV/Sw7CVsT5AtUDl70D7
-         XYe0MfTqNIlblzPnXdU/XVN05cKJ70hbqwHLHvksFzE/s9/a3qKrmXHOim40Nc4pa9Ja
-         PNxI30qyEAoHBzb0P40RLI/9HdlZir3cAG0/34u7cGcov2Kk1i4f+KK3ls+CpDXWkThL
-         OUjvdORHSd8JUUOxO7j9FEhFKN00UjQNQUY+1RqM5WJl2Sy0du7Vqbp6OrOPMES4rYxO
-         yb1w==
-X-Gm-Message-State: AC+VfDwWWSKEUs/NFPcz8iE1YKMjIo5jaJH0/DrUS9wlrbSMZnjFbfSj
-	ezIdTwq36KxZ9e2HO40qSLU3uQ==
-X-Google-Smtp-Source: ACHHUZ55HAlLqELh2ztTLy1Zy882zddDnIs2ffNwpxg18Goh1qFJ8fhZuoht6oim3Oz/H9kVw+iajg==
-X-Received: by 2002:a17:90a:69a2:b0:25b:f9ce:d8df with SMTP id s31-20020a17090a69a200b0025bf9ced8dfmr13250289pjj.8.1687372409966;
-        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i18-20020a17090ad35200b0025e0bea16eesm3466415pjx.42.2023.06.21.11.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
-Date: Wed, 21 Jun 2023 11:33:29 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Bart Van Assche <bvanassche@acm.org>,
-	Azeem Shaikh <azeemshaikh38@gmail.com>,
-	Krishna Gudipati <kgudipat@brocade.com>,
-	James Bottomley <JBottomley@parallels.com>,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] scsi: bfa: fix function pointer type mismatch for
- hcb_qe->cbfn
-Message-ID: <202306211133.DD89F45965@keescook>
-References: <20230616092233.3229414-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BFE2595
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 18:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687373407;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FtR8c+krJEgLRkkbXF1Fse1bBUsp2kP/YOIy23GrlSc=;
+	b=Zmd3kUDBce7oQiH8TWbQ6VOI8E2K4Rg/VC0PbugA+He/3453RQSjSPOqfZRtdCs4aVAxJF
+	cwEHJXJFXRwMJ7SOjP7PxlDipu0HGJ7ietdaLE282Qt3sjQVsER1iIE+h0BF+GK71MhQH4
+	aKojXyuTJhVWEibCxypq9/S9QiBKzV8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-9-uqRl9iOiOW-WvPr4rKjlpw-1; Wed, 21 Jun 2023 14:50:06 -0400
+X-MC-Unique: uqRl9iOiOW-WvPr4rKjlpw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B2371C07590
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 18:50:06 +0000 (UTC)
+Received: from [172.64.4.14] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 048ED112132C;
+	Wed, 21 Jun 2023 18:50:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc7,
+ mainline.kernel.org-clang, 2214170c)
+Date: Wed, 21 Jun 2023 18:50:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616092233.3229414-1-arnd@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <32935.123062114500601371@us-mta-9.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 16, 2023 at 11:22:09AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Some callback functions used here take a boolean argument, others
-> take a status argument. This breaks KCFI type checking, so clang
-> now warns about the function pointer cast:
-> 
-> drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-> 
-> Assuming the code is actually correct here and the callers always match
-> the argument types of the callee, rework this to replace the explicit
-> cast with a union of the two pointer types. This does not change the
-> behavior of the code, so if something is actually broken here, a larger
-> rework may be necessary.
-> 
-> Fixes: 37ea0558b87ab ("[SCSI] bfa: Added support to collect and reset fcport stats")
-> Fixes: 3ec4f2c8bff25 ("[SCSI] bfa: Added support to configure QOS and collect stats.")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
--- 
-Kees Cook
+
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.4-rc7' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/broonie/spi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/93256
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36433=
+7
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
