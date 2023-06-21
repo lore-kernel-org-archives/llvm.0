@@ -1,87 +1,115 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002E5C2DE
-	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 09:00:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=YGAjFCPPEDmRlHxNKozvmFJN8CRVKmi74gig/bzaVnI=; b=LiDb+DkjazX6QuMd6qNXUjrM0M
-	NK/IYXnN5GNENo3hHKhXxhQgKy89SLho0Abds00xLded015Dg5idJ12Mlcm8DmF+R3whIUBpCQ7z4
-	oKsa0PY1cnjbbP1JnB7Ju33dclISf59zA/W4hDcJXjS6UiB3hiNiDD9zsUClxu7RdfW4j3svKLJi5
-	S3BPqjkEVYrz7O/1Sx4V+Lts76xkHHu93YohE5cV6PQUXf8Fd/YrCTk3orAi9mGXrHmUPRElcIpGT
-	YeapTVwp2pyBJ/D+/eN7KBOLsMoOPkBL/4uYiNzQePLBGatgciiEBzbkuyYZWhj8WM05/aaXJZ28x
-	fCP0MWrA==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1qBtRV-0002Ke-0N; Wed, 21 Jun 2023 10:43:57 +0200
-Received: from [178.197.248.44] (helo=linux.home)
-	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1qBtRU-000N9r-8i; Wed, 21 Jun 2023 10:43:56 +0200
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-To: Yonghong Song <yhs@meta.com>, Nick Desaulniers <ndesaulniers@google.com>
-Cc: Florent Revest <revest@chromium.org>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev,
- ast@kernel.org, andrii@kernel.org, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, nathan@kernel.org, trix@redhat.com,
- stable@vger.kernel.org
-References: <20230615145607.3469985-1-revest@chromium.org>
- <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
- <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
- <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
- <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
- <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
- <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
- <2dcc697a-46fe-0933-0508-90ebad9ac8f3@meta.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b0084c8b-fe32-f1db-ad01-961265ce00fb@iogearbox.net>
-Date: Wed, 21 Jun 2023 10:43:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6B0C2DE;
+	Wed, 21 Jun 2023 09:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687338785; x=1718874785;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=79kA+sOgMQsTImS0HgJYpy/ecHv21tR8XYFCb5wjiQo=;
+  b=jqrFRuIjWpCyZIqOL0TDbTS2kvkj5Exqg8G+JMoFjmyW0EbvXBpiAnpP
+   rpEFTiyvDvhR7tTzGRu1v2Z5FMOOLftQ9ti06QrUVDOipofL4gF/pHwko
+   qqiGnfaw63eUGGEdsyjVnmgMgYp/vR7HAAgZOOI7BX1zqX10Y0CuXPS7I
+   yMTfsvluid50hdZ4q3hz2RUqSSUXd9FQg3u8RNCRyHXzoubgzUBecf09O
+   2278oG4CN/WqGoD3K+r7qcTH0S/ecTJTA/m/xG9h88TNMUyFM9/mvxyeA
+   EtxXsTqWBDPPvmQmSfnMtjA5xveDGg5EqqdxQupZ2h6bGUecLWILWaopU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="423781231"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="423781231"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 02:13:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804290115"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="804290115"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 02:13:02 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qBttd-0006hF-2j;
+	Wed, 21 Jun 2023 09:13:01 +0000
+Date: Wed, 21 Jun 2023 17:12:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:jitalloc/v2.2 10/12] arch/riscv/mm/init.c:1377:4: error: field
+ designator 'text' does not refer to any field in type 'struct execmem_range'
+Message-ID: <202306211704.0qHZKXAQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <2dcc697a-46fe-0933-0508-90ebad9ac8f3@meta.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26945/Tue Jun 20 09:30:24 2023)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/21/23 5:28 AM, Yonghong Song wrote:
-> On 6/20/23 8:07 AM, Nick Desaulniers wrote:
-[...]
->> No, all kernels have this issue, when using `LLVM=1 LLVM_IAS=0`.  It's
->> more likely that someone is using that combination for branches of
->> stable that predate 4.19 (such as 4.14) but we do still try to support
->> that combination somewhat, even if we recommend just using `LLVM=1`.
->> Interop between toolchains is still important, even if "why would you
->> do that?"
-> 
-> Okay, yes, although 'LLVM=1' is recommended way to compiler clang
-> based kernel, users can certainly do 'LLVM=1 LLVM_IAS=0' as well
-> although not recommended. Then it is okay to put a bug fix in
-> the commit message. Just need to clarify that
->    - > 5.10 kernel, LLVM=1 (LLVM_IAS=0 is not the default)
->      is recommended but user can still have LLVM=1 LLVM_IAS=0
->      to trigger the issue
->    - <= 5.10 kernel, LLVM=1 (LLVM_IAS=0 is the default) is
->      recommended in which case gnu as will be used.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git jitalloc/v2.2
+head:   4d3b7e33eca22e1fe243f586c13c875d248d29f6
+commit: 5f24f0d18c8afbea8c6adc7274c588f256197685 [10/12] arch: make execmem setup available regardless of CONFIG_MODULES
+config: riscv-randconfig-r034-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211704.0qHZKXAQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211704.0qHZKXAQ-lkp@intel.com/reproduce)
 
-Given this was already applied to bpf few days ago, I've just updated the
-commit message to reflect the above. Agree that this is valuable info to
-retain for the log.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306211704.0qHZKXAQ-lkp@intel.com/
 
-Thanks everyone,
-Daniel
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/mm/init.c:1377:4: error: field designator 'text' does not refer to any field in type 'struct execmem_range'
+    1377 |                 .text = {
+         |                 ~^~~~~~~~
+    1378 |                         .pgprot = PAGE_KERNEL_READ_EXEC,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1379 |                         .alignment = 1,
+         |                         ~~~~~~~~~~~~~~~
+    1380 |                 },
+         |                 ~
+>> arch/riscv/mm/init.c:1394:21: error: no member named 'text' in 'struct execmem_range'
+    1394 |         execmem_params.jit.text.start = VMALLOC_START;
+         |         ~~~~~~~~~~~~~~~~~~ ^
+   arch/riscv/mm/init.c:1395:21: error: no member named 'text' in 'struct execmem_range'
+    1395 |         execmem_params.jit.text.end = VMALLOC_END;
+         |         ~~~~~~~~~~~~~~~~~~ ^
+   3 errors generated.
+
+
+vim +1377 arch/riscv/mm/init.c
+
+  1367	
+  1368	#if defined(CONFIG_MMU) && defined(CONFIG_EXECMEM)
+  1369	static struct execmem_params execmem_params __ro_after_init = {
+  1370		.modules = {
+  1371			.text = {
+  1372				.pgprot = PAGE_KERNEL,
+  1373				.alignment = 1,
+  1374			},
+  1375		},
+  1376		.jit = {
+> 1377			.text = {
+  1378				.pgprot = PAGE_KERNEL_READ_EXEC,
+  1379				.alignment = 1,
+  1380			},
+  1381		},
+  1382	};
+  1383	
+  1384	struct execmem_params __init *execmem_arch_params(void)
+  1385	{
+  1386	#ifdef CONFIG_64BIT
+  1387		execmem_params.modules.text.start = MODULES_VADDR;
+  1388		execmem_params.modules.text.end = MODULES_END;
+  1389	#else
+  1390		execmem_params.modules.text.start = VMALLOC_START;
+  1391		execmem_params.modules.text.end = VMALLOC_END;
+  1392	#endif
+  1393	
+> 1394		execmem_params.jit.text.start = VMALLOC_START;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
