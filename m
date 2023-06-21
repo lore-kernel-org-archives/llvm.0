@@ -1,282 +1,1539 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC5A3D8B;
-	Wed, 21 Jun 2023 05:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687326913; x=1718862913;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AnKoyt07jyE0JSq/KjyoMyx60atWQ9DwUQeQAPnkltI=;
-  b=Dm1EUJXE8ERN6W+EGqe7lsNh48iM4jjmH/gB5LtRayzApu2Wq+z1xdi3
-   hQk1wpFQZVVtHCKl1AjrUmPLVQuUAX6tSdNtqnNA2JMebF/gNzUs4gogQ
-   8sqqA0KB1AzDDOhDnbq218cWjgAPyP2hEZ2ETcdVAJOvJ/b7BW8dStMzB
-   DqEI1qG2ofOl8D348FIoDO7fZl48KosktUEPBVflz/bB6/Mp3jrnSH/zZ
-   CZqHlT1XIf07ZUbf2/v8po5YaMypGwCxZ9uBtC33iQn55iJO7cJniiFOa
-   cMo3N+fhAgrgfRaxaZdSwy3tllGIT4c5A47bLQRD2IylfvBgOgP0VQtDr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357572539"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="357572539"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 22:55:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="744035640"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="744035640"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 22:54:58 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qBqnx-0006bH-2A;
-	Wed, 21 Jun 2023 05:54:57 +0000
-Date: Wed, 21 Jun 2023 13:54:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
- within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
- union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
- 'struct dw_edma_v0_ch_regs' being packed, wh...
-Message-ID: <202306211351.AsP2oCg8-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2388834
+	for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 06:21:26 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-668709767b1so2389841b3a.2
+        for <llvm@lists.linux.dev>; Tue, 20 Jun 2023 23:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1687328485; x=1689920485;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6YTKT2JNJbc4nKPF4TKXn98jR2IwE8uDiMRfvMTA2g=;
+        b=c2pIr9QcZeK5wKef1Wzou0xYtg2sQ7ymdgwvKn17ZoY3o1twZB8UhM2/B77hJ8aavL
+         E0VYt/KDEeyUVEH8ph0EqmqoAn82qTnbUC50OZXHuKANrexTSS+m/W5sb+Es//ntK+t2
+         c0fhJhuh8JrIhYcFmQP2V96+PxgaVx48rKowx/aD8BhqgF1mgjCqeaEccfthq1CwiRiU
+         rhusUk7e589bEDlyScNlrYKKGp+Mo6EYZ8OCcXtpaZKQsqfz9SvA1KtJVPRd+122oCl4
+         AOhuyrwaSYQzu+HMHvm9+oJn8S/HNEJn51KI/DxJfS27hu6ay5gIfehcaegITPZGvNdl
+         ugMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687328485; x=1689920485;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P6YTKT2JNJbc4nKPF4TKXn98jR2IwE8uDiMRfvMTA2g=;
+        b=SQdQQFv24WKO4fFh0zQaL0uYBELxQJB5d8018YkGf2Iilv1/Nb6hEx4+CSerADFoCS
+         JFjYi7K7BMtg+yn7BLGwBPhRbx789WQ7PmrpWqDkyJ5baJCon5cKvKeniW1HXz0m2OTC
+         i7nuYLytcacXP5yuUTkyQF/Dxvemr59yTqz48gtsgYMab7F+u07nEno7mjqFACn2RMRG
+         LBhRGPcFcdsM+mUTWityk/lHs6TdPOdtMUAe1R0f3oKzq+CHLU79vtdR7ldhwtsrz7v+
+         MtIvgIRXWF4btQHVE9Y2xgpcMcnXw0kqLvhkDyvWRgdW6Wb6uEj9cUWjnsmEaaYBsJ/h
+         1qBg==
+X-Gm-Message-State: AC+VfDyvWUtGCjB4iEbMA6/UABAXB2ERpdyAR8E+q6WVahd6SLBC8D6Q
+	PBFZWjjAlJ4KnP3LqBPQk/n+yBxcyZNh5A3SnaoVRg==
+X-Google-Smtp-Source: ACHHUZ7XQL0IqRWexvtv94/DCpSF4UMDa2B76pvnb21cm8BqAPQr+jTMxWrVfI089w8IwHDUWUpJAg==
+X-Received: by 2002:a05:6a00:2d04:b0:65c:2ea:2c5e with SMTP id fa4-20020a056a002d0400b0065c02ea2c5emr14875122pfb.29.1687328484277;
+        Tue, 20 Jun 2023 23:21:24 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 17-20020aa79251000000b0063b6cccd5dfsm2207671pfp.195.2023.06.20.23.21.23
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 23:21:23 -0700 (PDT)
+Message-ID: <649296e3.a70a0220.40c83.4ecf@mx.google.com>
+Date: Tue, 20 Jun 2023 23:21:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20230621
+Subject: next/master build: 197 builds: 8 failed, 189 passed, 52 errors,
+ 50 warnings (next-20230621)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e660abd551f1172e428b4e4003de887176a8a1fd
-commit: df99e7bbbec3180693b3d932a9cbc88346e2a30e ARM: omap1: use pci_remap_iospace() for omap_cf
-date:   1 year, 2 months ago
-config: arm-randconfig-r004-20230621 (https://download.01.org/0day-ci/archive/20230621/202306211351.AsP2oCg8-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211351.AsP2oCg8-lkp@intel.com/reproduce)
+next/master build: 197 builds: 8 failed, 189 passed, 52 errors, 50 warnings=
+ (next-20230621)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306211351.AsP2oCg8-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230621/
 
-All warnings (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230621
+Git Commit: 15e71592dbae49a674429c618a10401d7f992ac3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-   In file included from drivers/dma/dw-edma/dw-edma-v0-debugfs.c:13:
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-      37 |         } sar;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-      44 |         } dar;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-      51 |         } llp;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     172 |         } rd_err_status;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     182 |         } rd_done_imwr;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     189 |         } rd_abort_imwr;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-      71 |         } wr_engine_hshake_cnt;
-         |           ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-      79 |         } rd_engine_hshake_cnt;
-         |           ^
-   8 warnings generated.
+Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
+arm64:
+    allmodconfig: (clang-17) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   26  
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   27  struct dw_edma_v0_ch_regs {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   28  	u32 ch_control1;				/* 0x0000 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   29  	u32 ch_control2;				/* 0x0004 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   30  	u32 transfer_size;				/* 0x0008 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   31  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   32  		u64 reg;				/* 0x000c..0x0010 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   33  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   34  			u32 lsb;			/* 0x000c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   35  			u32 msb;			/* 0x0010 */
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   36  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  @37  	} sar;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   38  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   39  		u64 reg;				/* 0x0014..0x0018 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   40  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   41  			u32 lsb;			/* 0x0014 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   42  			u32 msb;			/* 0x0018 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   43  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  @44  	} dar;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   45  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   46  		u64 reg;				/* 0x001c..0x0020 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   47  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   48  			u32 lsb;			/* 0x001c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   49  			u32 msb;			/* 0x0020 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   50  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  @51  	} llp;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   52  } __packed;
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   53  
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   54  struct dw_edma_v0_ch {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   55  	struct dw_edma_v0_ch_regs wr;			/* 0x0200 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   56  	u32 padding_1[55];				/* 0x0224..0x02fc */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   57  	struct dw_edma_v0_ch_regs rd;			/* 0x0300 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   58  	u32 padding_2[55];				/* 0x0324..0x03fc */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   59  } __packed;
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   60  
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04   61  struct dw_edma_v0_unroll {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   62  	u32 padding_1;					/* 0x00f8 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   63  	u32 wr_engine_chgroup;				/* 0x0100 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   64  	u32 rd_engine_chgroup;				/* 0x0104 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   65  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   66  		u64 reg;				/* 0x0108..0x010c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   67  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   68  			u32 lsb;			/* 0x0108 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   69  			u32 msb;			/* 0x010c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   70  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  @71  	} wr_engine_hshake_cnt;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   72  	u32 padding_2[2];				/* 0x0110..0x0114 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   73  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   74  		u64 reg;				/* 0x0120..0x0124 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   75  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   76  			u32 lsb;			/* 0x0120 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   77  			u32 msb;			/* 0x0124 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18   78  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  @79  	} rd_engine_hshake_cnt;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   80  	u32 padding_3[2];				/* 0x0120..0x0124 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   81  	u32 wr_ch0_pwr_en;				/* 0x0128 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   82  	u32 wr_ch1_pwr_en;				/* 0x012c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   83  	u32 wr_ch2_pwr_en;				/* 0x0130 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   84  	u32 wr_ch3_pwr_en;				/* 0x0134 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   85  	u32 wr_ch4_pwr_en;				/* 0x0138 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   86  	u32 wr_ch5_pwr_en;				/* 0x013c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   87  	u32 wr_ch6_pwr_en;				/* 0x0140 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   88  	u32 wr_ch7_pwr_en;				/* 0x0144 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   89  	u32 padding_4[8];				/* 0x0148..0x0164 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   90  	u32 rd_ch0_pwr_en;				/* 0x0168 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   91  	u32 rd_ch1_pwr_en;				/* 0x016c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   92  	u32 rd_ch2_pwr_en;				/* 0x0170 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   93  	u32 rd_ch3_pwr_en;				/* 0x0174 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   94  	u32 rd_ch4_pwr_en;				/* 0x0178 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   95  	u32 rd_ch5_pwr_en;				/* 0x018c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   96  	u32 rd_ch6_pwr_en;				/* 0x0180 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   97  	u32 rd_ch7_pwr_en;				/* 0x0184 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   98  	u32 padding_5[30];				/* 0x0188..0x01fc */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18   99  	struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* 0x0200..0x1120 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  100  } __packed;
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  101  
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  102  struct dw_edma_v0_legacy {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  103  	u32 viewport_sel;				/* 0x00f8 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  104  	struct dw_edma_v0_ch_regs ch;			/* 0x0100..0x0120 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  105  } __packed;
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  106  
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  107  struct dw_edma_v0_regs {
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  108  	/* eDMA global registers */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  109  	u32 ctrl_data_arb_prior;			/* 0x0000 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  110  	u32 padding_1;					/* 0x0004 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  111  	u32 ctrl;					/* 0x0008 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  112  	u32 wr_engine_en;				/* 0x000c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  113  	u32 wr_doorbell;				/* 0x0010 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  114  	u32 padding_2;					/* 0x0014 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  115  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  116  		u64 reg;				/* 0x0018..0x001c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  117  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  118  			u32 lsb;			/* 0x0018 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  119  			u32 msb;			/* 0x001c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  120  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  121  	} wr_ch_arb_weight;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  122  	u32 padding_3[3];				/* 0x0020..0x0028 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  123  	u32 rd_engine_en;				/* 0x002c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  124  	u32 rd_doorbell;				/* 0x0030 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  125  	u32 padding_4;					/* 0x0034 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  126  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  127  		u64 reg;				/* 0x0038..0x003c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  128  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  129  			u32 lsb;			/* 0x0038 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  130  			u32 msb;			/* 0x003c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  131  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  132  	} rd_ch_arb_weight;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  133  	u32 padding_5[3];				/* 0x0040..0x0048 */
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  134  	/* eDMA interrupts registers */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  135  	u32 wr_int_status;				/* 0x004c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  136  	u32 padding_6;					/* 0x0050 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  137  	u32 wr_int_mask;				/* 0x0054 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  138  	u32 wr_int_clear;				/* 0x0058 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  139  	u32 wr_err_status;				/* 0x005c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  140  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  141  		u64 reg;				/* 0x0060..0x0064 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  142  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  143  			u32 lsb;			/* 0x0060 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  144  			u32 msb;			/* 0x0064 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  145  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  146  	} wr_done_imwr;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  147  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  148  		u64 reg;				/* 0x0068..0x006c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  149  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  150  			u32 lsb;			/* 0x0068 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  151  			u32 msb;			/* 0x006c */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  152  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  153  	} wr_abort_imwr;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  154  	u32 wr_ch01_imwr_data;				/* 0x0070 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  155  	u32 wr_ch23_imwr_data;				/* 0x0074 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  156  	u32 wr_ch45_imwr_data;				/* 0x0078 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  157  	u32 wr_ch67_imwr_data;				/* 0x007c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  158  	u32 padding_7[4];				/* 0x0080..0x008c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  159  	u32 wr_linked_list_err_en;			/* 0x0090 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  160  	u32 padding_8[3];				/* 0x0094..0x009c */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  161  	u32 rd_int_status;				/* 0x00a0 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  162  	u32 padding_9;					/* 0x00a4 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  163  	u32 rd_int_mask;				/* 0x00a8 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  164  	u32 rd_int_clear;				/* 0x00ac */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  165  	u32 padding_10;					/* 0x00b0 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  166  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  167  		u64 reg;				/* 0x00b4..0x00b8 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  168  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  169  			u32 lsb;			/* 0x00b4 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  170  			u32 msb;			/* 0x00b8 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  171  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18 @172  	} rd_err_status;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  173  	u32 padding_11[2];				/* 0x00bc..0x00c0 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  174  	u32 rd_linked_list_err_en;			/* 0x00c4 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  175  	u32 padding_12;					/* 0x00c8 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  176  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  177  		u64 reg;				/* 0x00cc..0x00d0 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  178  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  179  			u32 lsb;			/* 0x00cc */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  180  			u32 msb;			/* 0x00d0 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  181  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18 @182  	} rd_done_imwr;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  183  	union {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  184  		u64 reg;				/* 0x00d4..0x00d8 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  185  		struct {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  186  			u32 lsb;			/* 0x00d4 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  187  			u32 msb;			/* 0x00d8 */
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  188  		};
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18 @189  	} rd_abort_imwr;
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  190  	u32 rd_ch01_imwr_data;				/* 0x00dc */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  191  	u32 rd_ch23_imwr_data;				/* 0x00e0 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  192  	u32 rd_ch45_imwr_data;				/* 0x00e4 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  193  	u32 rd_ch67_imwr_data;				/* 0x00e8 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  194  	u32 padding_13[4];				/* 0x00ec..0x00f8 */
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  195  	/* eDMA channel context grouping */
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  196  	union dw_edma_v0_type {
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  197  		struct dw_edma_v0_legacy legacy;	/* 0x00f8..0x0120 */
-b79f17517ad8c92 Gustavo Pimentel 2021-02-18  198  		struct dw_edma_v0_unroll unroll;	/* 0x00f8..0x1120 */
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  199  	} type;
-04e0a39fc10f82a Gustavo Pimentel 2021-02-18  200  } __packed;
-7e4b8a4fbe2ceca Gustavo Pimentel 2019-06-04  201  
+arm:
+    allmodconfig: (clang-17) FAIL
+    mxs_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
-:::::: The code at line 37 was first introduced by commit
-:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+i386:
+    allmodconfig: (clang-17) FAIL
 
-:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+    tinyconfig (gcc-10): 1 warning
+
+arm64:
+    allmodconfig (clang-17): 13 errors
+    allmodconfig (gcc-10): 3 errors, 1 warning
+
+arm:
+    allmodconfig (clang-17): 15 errors
+    mxs_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+    allmodconfig (clang-17): 13 errors
+    tinyconfig (gcc-10): 1 warning
+
+mips:
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 2 warnings
+
+x86_64:
+    allnoconfig (gcc-10): 3 warnings
+    tinyconfig (gcc-10): 1 warning
+    x86_64_defconfig (gcc-10): 3 warnings
+    x86_64_defconfig+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+crypto (gcc-10): 3 warnings
+    x86_64_defconfig+debug (gcc-10): 3 warnings
+    x86_64_defconfig+ima (gcc-10): 3 warnings
+    x86_64_defconfig+kselftest (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 3 warnings
+    x86_64_defconfig+x86_kvm_guest (gcc-10): 3 warnings
+
+Errors summary:
+
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    3    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    2    drivers/md/raid1-10.c:119:25: error: casting from randomized struc=
+ture pointer type 'struct block_device *' to 'struct md_rdev *'
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    drivers/remoteproc/stm32_rproc.c:646:16: error: format =E2=80=98%z=
+x=E2=80=99 expects argument of type =E2=80=98size_t=E2=80=99, but argument =
+4 has type =E2=80=98int=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/remoteproc/stm32_rproc.c:125:16: error: format =E2=80=98%x=
+=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, but argu=
+ment 4 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98long unsigned int=E2=
+=80=99} [-Werror=3Dformat=3D]
+    1    drivers/remoteproc/stm32_rproc.c:122:15: error: format =E2=80=98%x=
+=E2=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, but argu=
+ment 5 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98long unsigned int=E2=
+=80=99} [-Werror=3Dformat=3D]
+    1    drivers/irqchip/irq-mxs.c:12:10: fatal error: linux/irqchip/mxs.h:=
+ No such file or directory
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    9    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redunda=
+nt UACCESS disable
+    3    kernel/umh.c:497:12: warning: =E2=80=98proc_cap_handler=E2=80=99 d=
+efined but not used [-Wunused-function]
+    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x1e72: redunda=
+nt UACCESS disable
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1a40: redunda=
+nt UACCESS disable
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x18ad: redunda=
+nt UACCESS disable
+    1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
+ndant UACCESS disable
+    1    kernel/umh.c:497:12: warning: 'proc_cap_handler' defined but not u=
+sed [-Wunused-function]
+    1    cc1: all warnings being treated as errors
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 15 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/md/raid1-10.c:119:25: error: casting from randomized structure =
+pointer type 'struct block_device *' to 'struct md_rdev *'
+    drivers/md/raid1-10.c:119:25: error: casting from randomized structure =
+pointer type 'struct block_device *' to 'struct md_rdev *'
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 3 errors, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/remoteproc/stm32_rproc.c:122:15: error: format =E2=80=98%x=E2=
+=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, but argumen=
+t 5 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98long unsigned int=E2=80=
+=99} [-Werror=3Dformat=3D]
+    drivers/remoteproc/stm32_rproc.c:125:16: error: format =E2=80=98%x=E2=
+=80=99 expects argument of type =E2=80=98unsigned int=E2=80=99, but argumen=
+t 4 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98long unsigned int=E2=80=
+=99} [-Werror=3Dformat=3D]
+    drivers/remoteproc/stm32_rproc.c:646:16: error: format =E2=80=98%zx=E2=
+=80=99 expects argument of type =E2=80=98size_t=E2=80=99, but argument 4 ha=
+s type =E2=80=98int=E2=80=99 [-Werror=3Dformat=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
+ UACCESS disable
+    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    drivers/irqchip/irq-mxs.c:12:10: fatal error: linux/irqchip/mxs.h: No s=
+uch file or directory
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/umh.c:497:12: warning: =E2=80=98proc_cap_handler=E2=80=99 define=
+d but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/umh.c:497:12: warning: =E2=80=98proc_cap_handler=E2=80=99 define=
+d but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/umh.c:497:12: warning: =E2=80=98proc_cap_handler=E2=80=99 define=
+d but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    kernel/umh.c:497:12: warning: 'proc_cap_handler' defined but not used [=
+-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x18ad: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
+s, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1a40: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
+nings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1e72: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1e72: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1899: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
