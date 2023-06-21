@@ -1,43 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BBBC8E2;
-	Wed, 21 Jun 2023 09:34:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAEDC8E2;
+	Wed, 21 Jun 2023 09:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687340069; x=1718876069;
+  t=1687340706; x=1718876706;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5SD7Jpxt5xIT/ETfZCzwbjc8uwve0GImOGM1e0tLvpg=;
-  b=G3Mi/0McdctnOM/WDwuU8xbSZlWx2rw4ntYCJUCGkvktio6RPXIFFTfR
-   e0jvK5/cxOAHeDafyLFxu8T8fWiJORlScnahKE860aQFDNfGn7iqFepBc
-   aMe+YIw2WP0pP4OZaqkcr4fmODYhVDeVRzcSbOwrd0GdO/nRngGbj4bi5
-   GXoY8QCpodt5M7lVqZDLa0WWCowmoY7pStUAf5r7pt+jzB47S4Z4jQKva
-   HSFFiT1i9vqotNC/guIkTJ8ODHtgDXU+sEwmwkxCPfZ7T4VFBLdzp943g
-   taV72aMW7DvD8Vk68ofwWMRZLs67m0PFS0RHGWOz86uHMTudYOn7Y1PQd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="426075908"
+  bh=0KnqTDNj3EkXmgS8QfrgW5loyaa3u6mZyf4tFEoQsIE=;
+  b=CVvp7+41AGPVnF15fMVpM9GDC8Y4U1uGR8EkXYAvXcwFropJJI2KmxvN
+   xqMarkRMoJyTVlhAzSCYtDylZWDakQ9ay/LbMDI6rvPOXVHi/RZ7Qo/k8
+   ifreMms+OQWtE4MVA3a/gxHyk1UWsK3rjobZM1Zjv8KduaUzE9U7a1YYE
+   gl9bMblf69s1U71Vl1NsRzBmIZGeyDjAmZTNHCDhs8OP/uSZR1WQkbsO0
+   D6jlRaNQSOYEOVMFrJbF968oOIL/3CszryKPu3rFv7IPweO8NnQMAvC/U
+   YM48lHqHD80Rm2yTnX/ZdPM6fGXTZoHeEcjRMhlGbYDz3/47bvVVsha83
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344859637"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="426075908"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 02:34:05 -0700
+   d="scan'208";a="344859637"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 02:45:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="664585733"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827373369"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="664585733"
+   d="scan'208";a="827373369"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jun 2023 02:34:03 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 02:45:04 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qBuDz-0006jb-0Q;
-	Wed, 21 Jun 2023 09:34:03 +0000
-Date: Wed, 21 Jun 2023 17:32:51 +0800
+	id 1qBuOd-0006kV-1u;
+	Wed, 21 Jun 2023 09:45:03 +0000
+Date: Wed, 21 Jun 2023 17:44:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 11012/11071] drivers/irqchip/irq-mxs.c:12:10:
- fatal error: 'linux/irqchip/mxs.h' file not found
-Message-ID: <202306211736.SNdmUKzi-lkp@intel.com>
+Subject: [linux-next:master 9707/11436] lcs.c:undefined reference to
+ `fddi_type_trans'
+Message-ID: <202306211734.nx6uUSBS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,41 +49,25 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   15e71592dbae49a674429c618a10401d7f992ac3
-commit: 4e96d4b02cf0aa1dd1c7f0fe2c2dc43dec9f03ec [11012/11071] Merge branch 'irq/irqchip-next' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
-config: arm-randconfig-r016-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211736.SNdmUKzi-lkp@intel.com/config)
+commit: 1282723361209d06fb1466ffb90e63b1161320b6 [9707/11436] s390/net: lcs: use IS_ENABLED() for kconfig detection
+config: s390-randconfig-r036-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211734.nx6uUSBS-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211736.SNdmUKzi-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211734.nx6uUSBS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306211736.SNdmUKzi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306211734.nx6uUSBS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-mxs.c:12:10: fatal error: 'linux/irqchip/mxs.h' file not found
-      12 | #include <linux/irqchip/mxs.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +12 drivers/irqchip/irq-mxs.c
-
-5b7e5676209120 drivers/irqchip/irq-mxs.c Arnd Bergmann 2023-05-16 @12  #include <linux/irqchip/mxs.h>
-83a84efcefe8d7 arch/arm/mach-mxs/icoll.c Shawn Guo     2012-08-20  13  #include <linux/irqdomain.h>
-289569f902dc70 arch/arm/mach-mxs/icoll.c Shawn Guo     2010-12-18  14  #include <linux/io.h>
-83a84efcefe8d7 arch/arm/mach-mxs/icoll.c Shawn Guo     2012-08-20  15  #include <linux/of.h>
-8256aa7129f5d0 arch/arm/mach-mxs/icoll.c Shawn Guo     2013-03-25  16  #include <linux/of_address.h>
-83a84efcefe8d7 arch/arm/mach-mxs/icoll.c Shawn Guo     2012-08-20  17  #include <linux/of_irq.h>
-cec6bae8ca0417 arch/arm/mach-mxs/icoll.c Shawn Guo     2013-03-25  18  #include <linux/stmp_device.h>
-4e0a1b8c070fe2 arch/arm/mach-mxs/icoll.c Shawn Guo     2012-08-20  19  #include <asm/exception.h>
-289569f902dc70 arch/arm/mach-mxs/icoll.c Shawn Guo     2010-12-18  20  
-
-:::::: The code at line 12 was first introduced by commit
-:::::: 5b7e5676209120814dbb9fec8bc3769f0f7a7958 irqchip/mxs: Include linux/irqchip/mxs.h
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Marc Zyngier <maz@kernel.org>
+   s390x-linux-ld: drivers/net/ethernet/sfc/ef100_netdev.o: in function `ef100_netdev_event':
+   ef100_netdev.c:(.text+0x134): undefined reference to `efx_tc_netdev_event'
+   s390x-linux-ld: drivers/net/ethernet/sfc/ef100_netdev.o: in function `ef100_netevent_event':
+   ef100_netdev.c:(.text+0x89a): undefined reference to `efx_tc_netevent_event'
+   s390x-linux-ld: drivers/s390/net/lcs.o: in function `lcs_new_device':
+>> lcs.c:(.text+0xe26): undefined reference to `fddi_type_trans'
+>> s390x-linux-ld: lcs.c:(.text+0xe36): undefined reference to `alloc_fddidev'
 
 -- 
 0-DAY CI Kernel Test Service
