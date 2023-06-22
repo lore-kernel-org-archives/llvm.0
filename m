@@ -1,182 +1,133 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4867C1F182;
-	Thu, 22 Jun 2023 18:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687457752; x=1718993752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LqHYatwS9he45PlnmiG0fLcLzzMWMxq5QFiD20ydpu8=;
-  b=C26uW3XC6Uldj80/pz28+/C8vSAthRFPL7+SINS1B+cFC9b0ZblhIk9/
-   tWvnGzU0KxpPYe22w3VOJd9kZo7pTdXsazpg9jPyjwNpgnDI7Ke/UH6zK
-   93GsgmFsaBJ0xxxjT0TjZEnD/ifIbe6f+qpoPP/cADS8mlAsIZ25U1MlT
-   31R1LNvq1ctl170B4uY2texF1FjB8pKZq3vFMsjQJQ2tRk4rFx+lC82nz
-   P0zKdHtJXiK9pxvExVieS2XaqQde1s+X1Dh+whbjMmKl0Ujc+5wX8CZuX
-   vSkuyhdaLHhOm7mxLfLN/nsXnLV3w+9mHRKUELp5/EPoTnJsv8n2jXj2H
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="446947737"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="446947737"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 11:15:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="839162330"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="839162330"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2023 11:15:45 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCOqP-0007jf-0f;
-	Thu, 22 Jun 2023 18:15:45 +0000
-Date: Fri, 23 Jun 2023 02:14:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tommaso Merciai <tomm.merciai@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-	martin.hecht@avnet.eu, michael.roeder@avnet.eu,
-	linuxfancy@googlegroups.com, hdegoede@redhat.com,
-	Tommaso Merciai <tomm.merciai@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Gerald Loacker <gerald.loacker@wolfvision.net>,
-	Mikhail Rudenko <mike.rudenko@gmail.com>,
-	Nicholas Roth <nicholas@rothemail.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/3] media: i2c: Add support for alvium camera
-Message-ID: <202306230242.H8qeniQt-lkp@intel.com>
-References: <20230620122225.58862-4-tomm.merciai@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0FC20690
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 21:41:11 +0000 (UTC)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-62fe6580f17so60219816d6.0
+        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 14:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687470071; x=1690062071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKMhtKFgdWfySpTweTXU9j4cru4Ry9zStYx1evxgaA8=;
+        b=Y87dbw+cg+wTMcIpPAtf85ukrOYybmHletqopcUQkoSrYPCxLkeUlvHLlbETcKGAsq
+         ZNmZck/5BEnT8PesoEeeDhOXhQ48R6+TZ8vVR7DhbrSAUoqxT7zZv5AgWdC4lhSfZakI
+         g+Q1KhqrS0QbfALMKqALAWQJjiM+o+sRmd+v+dBmGGlGwBy1i3uvNkxst1ywqA/cC8kk
+         0EGRHcCeYrPMwgH7SKkgS+4wrp/CcpVAV3U9eftiJIHmApYlAqUg0VREho4AabQEtA9/
+         WdSj9HxWNNhpMhGAL8FAVQb/EzlwW61rZjQ7yjeEd4niYKFiUkp4Rayk8LLmVJbH0faV
+         DqjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687470071; x=1690062071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PKMhtKFgdWfySpTweTXU9j4cru4Ry9zStYx1evxgaA8=;
+        b=gUGkr6BeZAK/Mztq7pZXZvYNf8ktR17UMhYeiBm10QsdzayRpcEZrObWetBY4n6Ax7
+         Db0ygojPEfrmcp1W4PFXwOWY5DyqoIy1IDgV8RVzumseFlyyotyJ8L0aXtOJ9tCqpD2X
+         saQN/lu14jsLtyJF+8ZoTdNWweCDph5OolcNyumQViBZtjfiLU9XUgZNZWSH6xMxreV/
+         Gh2g8NLI0QTluTzBbJPguy3iq1Fh2Ug5f0ScY9fM8uI6FCO88IeT+pOPLyqE1bHbXjeX
+         ggLZ2vkBEqvpSj2GM+ifPDeN91a9TkNGQQBbSIpj0G2jxqo9oAP4d0Dqg8qkJTAhFC5W
+         j7+w==
+X-Gm-Message-State: AC+VfDyix8OX6Yt9AfB1oSbMN2XaMGreBUXkb+YWfzpoiPnL+PBBBAyS
+	ivMqQ22WW0mZbRnt/VEfw5hdVtpG85e//2Vw26kGLA==
+X-Google-Smtp-Source: ACHHUZ6mCI1jN5S3s7ShvvInAUX/6XlWctrvaeIXm/Y08Ms1/dqk8yh1L7hnRjD6E7oASdxzNWEi8VTMlPOi9UYUjdc=
+X-Received: by 2002:a05:6214:2a8b:b0:62d:df48:baf0 with SMTP id
+ jr11-20020a0562142a8b00b0062ddf48baf0mr23221940qvb.61.1687470070594; Thu, 22
+ Jun 2023 14:41:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620122225.58862-4-tomm.merciai@gmail.com>
+References: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a> <mhng-ad2d02fa-2d4d-4bf1-ab2a-fd84fa4bcb40@palmer-ri-x1c9a>
+In-Reply-To: <mhng-ad2d02fa-2d4d-4bf1-ab2a-fd84fa4bcb40@palmer-ri-x1c9a>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 22 Jun 2023 14:40:59 -0700
+Message-ID: <CAKwvOd=bHe07O=eBimOg5G-XxXgs6=h5OXzkfS+ayfuAHGOUew@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: nathan@kernel.org, bjorn@kernel.org, Conor Dooley <conor@kernel.org>, 
+	jszhang@kernel.org, llvm@lists.linux.dev, 
+	Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, 
+	Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tommaso,
+On Wed, Jun 21, 2023 at 12:46=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com=
+> wrote:
+>
+> On Wed, 21 Jun 2023 11:19:31 PDT (-0700), Palmer Dabbelt wrote:
+> > On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
+> >> Conor Dooley <conor@kernel.org> writes:
+> >>
+> >> [...]
+> >>
+> >>>> So I'm no longer actually sure there's a hang, just something slow.
+> >>>> That's even more of a grey area, but I think it's sane to call a 1-h=
+our
+> >>>> link time a regression -- unless it's expected that this is just ver=
+y
+> >>>> slow to link?
+> >>>
+> >>> I dunno, if it was only a thing for allyesconfig, then whatever - but
+> >>> it's gonna significantly increase build times for any large kernels i=
+f LLD
+> >>> is this much slower than LD. Regression in my book.
+> >>>
+> >>> I'm gonna go and experiment with mixed toolchain builds, I'll report
+> >>> back..
+> >>
+> >> I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enab=
+le
+> >> HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-1=
+6:
+> >>
+> >>   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
+> >>   |     --toolchain=3Dllvm-16 --runtime docker --directory . -k \
+> >>   |     allyesconfig
+> >>
+> >> Took forever, but passed after 2.5h.
+> >
+> > Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
+> > checking top sometimes), it's at 1.5h but even that seems quite long.
+> >
+> > I guess this is sort of up to the LLVM folks: if it's expected that DCE
+> > takes a very long time to link then I'm not opposed to allowing it, but
+> > if this is probably a bug in LLD then it seems best to turn it off unti=
+l
+> > we sort things out over there.
+> >
+> > I think maybe Nick or Nathan is the best bet to know?
+>
+> Looks like it's about 2h for me.  I'm going to drop these from my
+> staging tree in the interest of making progress on other stuff, but if
+> this is just expected behavior them I'm OK taking them (though that's
+> too much compute for me to test regularly):
+>
+> $ time ../../../../llvm/install/bin/ld.lld -melf64lriscv -z noexecstack -=
+r -o vmlinux.o --whole-archive vmlinux.a --no-whole-archive --start-group .=
+/drivers/firmware/efi/libstub/lib.a --end-group
+>
+> real    111m50.678s
+> user    111m18.739s
+> sys     1m13.147s
 
-kernel test robot noticed the following build errors:
+Ah, I think you meant s/allmodconfig/allyesconfig/ in your initial
+report.  That makes more sense, and I can reproduce.  Let me work on a
+report.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on robh/for-next linus/master v6.4-rc7 next-20230622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/dt-bindings-vendor-prefixes-Add-prefix-alliedvision/20230620-202420
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230620122225.58862-4-tomm.merciai%40gmail.com
-patch subject: [PATCH v7 3/3] media: i2c: Add support for alvium camera
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20230623/202306230242.H8qeniQt-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230242.H8qeniQt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306230242.H8qeniQt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/media/i2c/alvium-csi2.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/i2c/alvium-csi2.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/i2c/alvium-csi2.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/i2c/alvium-csi2.c:23:
->> drivers/media/i2c/alvium-csi2.h:15:10: fatal error: 'media/v4l2-cci.h' file not found
-      15 | #include <media/v4l2-cci.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+>
+> >> CONFIG_CC_VERSION_TEXT=3D"Debian clang version 16.0.6 (++2023061011330=
+7+7cbf1a259152-1~exp1~20230610233402.106)"
+> >>
+> >>
+> >> Bj=C3=B6rn
 
 
-vim +15 drivers/media/i2c/alvium-csi2.h
 
-    12	
-    13	#include <linux/kernel.h>
-    14	#include <linux/regulator/consumer.h>
-  > 15	#include <media/v4l2-cci.h>
-    16	#include <media/v4l2-common.h>
-    17	#include <media/v4l2-ctrls.h>
-    18	#include <media/v4l2-fwnode.h>
-    19	#include <media/v4l2-subdev.h>
-    20	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Thanks,
+~Nick Desaulniers
