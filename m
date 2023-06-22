@@ -1,158 +1,284 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243B017C9;
-	Thu, 22 Jun 2023 01:52:51 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9257A1063;
-	Wed, 21 Jun 2023 18:53:29 -0700 (PDT)
-Received: from [10.162.40.20] (unknown [10.162.40.20])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 491493F64C;
-	Wed, 21 Jun 2023 18:52:40 -0700 (PDT)
-Message-ID: <6302d09f-0332-b8dc-cb91-8958a9bb9713@arm.com>
-Date: Thu, 22 Jun 2023 07:22:37 +0530
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909B917C9;
+	Thu, 22 Jun 2023 02:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687399530; x=1718935530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tqwmf7UCG/Oox40h1Vsl9C4SJhX8muGiwDzjdWU/aV8=;
+  b=BPV5JzH93YWBBi2EqQ8n72f+MJuPG58NlClaGUPHbaxk0Yu8k/LbeAi6
+   EMikNTpkGDCWSFSUlk/OsWIpf+o/A6hf+bVjTLK99iGYlOWDXNn2YVML9
+   8DAFJyUNo6wWdVmAD/wMRQXSclQ2+wVNWjNx5lJW7ONxlkBkNvaNW3T+M
+   h7V1whTG5iWA+dR6PpguSEM6syAn/q1Ym0xBbIQxT8rwPMzU2sFhwD/zg
+   MsrZBj+Ia5rk8SfBeM/EuOJoWBHgUXT1dsfl0t0Vsk+9YrPzZ8jRKTz+B
+   1KL69fGaw78vSrlSGBmucjCAbypQsMUHftigp2T/foyQbFgMfyylo1zOq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="424031079"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="424031079"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 19:05:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="714723808"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="714723808"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2023 19:05:25 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qC9hM-0007FT-2g;
+	Thu, 22 Jun 2023 02:05:24 +0000
+Date: Thu, 22 Jun 2023 10:05:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Markus Schneider-Pargmann <msp@baylibre.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Tinghan Shen <tinghan.shen@mediatek.com>,
+	Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: Re: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
+Message-ID: <202306220952.WMdPoLzE-lkp@intel.com>
+References: <20230619085344.2885311-9-msp@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-To: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
- kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, will@kernel.org, mark.rutland@arm.com,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
- Rob Herring <robh@kernel.org>, Suzuki Poulose <suzuki.poulose@arm.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org
-References: <20230615133239.442736-6-anshuman.khandual@arm.com>
- <202306160706.Uei5XDoi-lkp@intel.com>
- <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com> <ZIwpma4SAJ/ZUyh5@arm.com>
- <f624966d-5973-0aed-bd73-29ef0530e5ce@arm.com> <87wmzzq0p4.wl-maz@kernel.org>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <87wmzzq0p4.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619085344.2885311-9-msp@baylibre.com>
+
+Hi Markus,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc7 next-20230621]
+[cannot apply to mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/dt-bindings-power-Add-MT8365-power-domains/20230619-165759
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230619085344.2885311-9-msp%40baylibre.com
+patch subject: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
+config: arm64-randconfig-r011-20230621 (https://download.01.org/0day-ci/archive/20230622/202306220952.WMdPoLzE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220952.WMdPoLzE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306220952.WMdPoLzE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/soc/mediatek/mtk-pm-domains.c:27:
+>> drivers/soc/mediatek/mt8365-pm-domains.h:69:42: warning: implicit conversion from 'unsigned long' to 'u8' (aka 'unsigned char') changes value from 384 to 128 [-Wconstant-conversion]
+      69 |                 .caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +69 drivers/soc/mediatek/mt8365-pm-domains.h
 
-On 6/19/23 14:38, Marc Zyngier wrote:
-> On Mon, 19 Jun 2023 06:45:07 +0100,
-> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>
->>
->>
->> On 6/16/23 14:51, Catalin Marinas wrote:
->>> On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
->>>> On 6/16/23 05:12, kernel test robot wrote:
->>>>> kernel test robot noticed the following build errors:
->>>>>
->>>>> [auto build test ERROR on arm64/for-next/core]
->>>>> [also build test ERROR on tip/perf/core acme/perf/core linus/master v6.4-rc6 next-20230615]
->>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>>>> And when submitting patch, we suggest to use '--base' as documented in
->>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>>>
->>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
->>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
->>>>> patch link:    https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual%40arm.com
->>>>> patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
->>>>> config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
->>>>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
->>>>> reproduce (this is a W=1 build):
->>>>>         mkdir -p ~/bin
->>>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>>         chmod +x ~/bin/make.cross
->>>>>         # install arm cross compiling tool for clang build
->>>>>         # apt-get install binutils-arm-linux-gnueabi
->>>>>         git remote add arm64 https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->>>>>         git fetch arm64 for-next/core
->>>>>         git checkout arm64/for-next/core
->>>>>         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-anshuman.khandual@arm.com
->>>>>         # save the config file
->>>>>         mkdir build_dir && cp config build_dir/.config
->>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
->>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/perf/
->>>>
->>>> I am unable to reproduce this on mainline 6.4-rc6 via default cross compiler
->>>> on a W=1 build. Looking at all other problems reported on the file, it seems
->>>> something is not right here. Reported build problems around these callbacks,
->>>> i.e armv8pmu_branch_XXXX() do not make sense as they are available via config
->>>> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 in this
->>>> test config.
->>>
->>> Have you tried applying this series on top of the arm64 for-next/core
->>> branch? That's what the robot it testing (in the absence of a --base
->>> option when generating the patches).
->>
->> Right, it turned out to be a build problem on arm (32 bit) platform instead.
->> After arm_pmuv3.c moved into common ./drivers/perf from ./arch/arm64/kernel/,
->> it can no longer access arch/arm64/include/asm/perf_event.h defined functions
->> without breaking arm (32) bit. The following code block needs to be moved out
->> from arch/arm64/include/asm/perf_event.h into include/linux/perf/arm_pmuv3.h
->> (which is preferred as all call sites are inside drivers/perf/arm_pmuv3.c) or
->> may be arm_pmu.h (which is one step higher in the abstraction).
-> 
-> No, that's the wrong approach. The 32bit backend must have its own
-> stubs for the stuff it implements or not.
+     8	
+     9	/*
+    10	 * MT8365 power domain support
+    11	 */
+    12	
+    13	#define MT8365_BUS_PROT_INFRA_WR_TOPAXI(_mask)				\
+    14			BUS_PROT_INFRA_WR(_mask,				\
+    15					  MT8365_INFRA_TOPAXI_PROTECTEN_SET,	\
+    16					  MT8365_INFRA_TOPAXI_PROTECTEN_CLR,	\
+    17					  MT8365_INFRA_TOPAXI_PROTECTEN_STA1)
+    18	
+    19	#define MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(_mask)			\
+    20			BUS_PROT_INFRA_WR(_mask,				\
+    21					  MT8365_INFRA_TOPAXI_PROTECTEN_1_SET,	\
+    22					  MT8365_INFRA_TOPAXI_PROTECTEN_1_CLR,	\
+    23					  MT8365_INFRA_TOPAXI_PROTECTEN_1_STA1)
+    24	
+    25	#define MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(port)			\
+    26			BUS_PROT_SMI_WR(BIT(port),				\
+    27					MT8365_SMI_COMMON_CLAMP_EN_SET,		\
+    28					MT8365_SMI_COMMON_CLAMP_EN_CLR,		\
+    29					MT8365_SMI_COMMON_CLAMP_EN)
+    30	
+    31	#define MT8365_BUS_PROT_WAY_EN(_set_mask, _set, _sta_mask, _sta)	\
+    32			_BUS_PROT(_set_mask, _set, _set, _sta_mask, _sta,	\
+    33				  BUS_PROT_COMPONENT_INFRA |			\
+    34				  BUS_PROT_STA_COMPONENT_INFRA_NAO |		\
+    35				  BUS_PROT_INVERTED |				\
+    36				  BUS_PROT_REG_UPDATE)
+    37	
+    38	static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
+    39		[MT8365_POWER_DOMAIN_MM] = {
+    40			.name = "mm",
+    41			.sta_mask = PWR_STATUS_DISP,
+    42			.ctl_offs = 0x30c,
+    43			.pwr_sta_offs = 0x0180,
+    44			.pwr_sta2nd_offs = 0x0184,
+    45			.sram_pdn_bits = GENMASK(8, 8),
+    46			.sram_pdn_ack_bits = GENMASK(12, 12),
+    47			.bp_cfg = {
+    48				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+    49					MT8365_INFRA_TOPAXI_PROTECTEN_1_MM2INFRA_AXI_GALS_MST_0 |
+    50					MT8365_INFRA_TOPAXI_PROTECTEN_1_MM2INFRA_AXI_GALS_MST_1),
+    51				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
+    52					MT8365_INFRA_TOPAXI_PROTECTEN_MM_M0 |
+    53					MT8365_INFRA_TOPAXI_PROTECTEN_MDMCU_M1 |
+    54					MT8365_INFRA_TOPAXI_PROTECTEN_MM2INFRA_AXI_GALS_SLV_0 |
+    55					MT8365_INFRA_TOPAXI_PROTECTEN_MM2INFRA_AXI_GALS_SLV_1),
+    56				MT8365_BUS_PROT_WAY_EN(
+    57					MT8365_INFRA_TOPAXI_SI0_WAY_EN_MMAPB_S,
+    58					MT8365_INFRA_TOPAXI_SI0_CTL,
+    59					MT8365_INFRA_NAO_TOPAXI_SI0_CTRL_UPDATED,
+    60					MT8365_INFRA_NAO_TOPAXI_SI0_STA),
+    61				MT8365_BUS_PROT_WAY_EN(
+    62					MT8365_INFRA_TOPAXI_SI2_WAY_EN_PERI_M1,
+    63					MT8365_INFRA_TOPAXI_SI2_CTL,
+    64					MT8365_INFRA_NAO_TOPAXI_SI2_CTRL_UPDATED,
+    65					MT8365_INFRA_NAO_TOPAXI_SI2_STA),
+    66				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
+    67					MT8365_INFRA_TOPAXI_PROTECTEN_MMAPB_S),
+    68			},
+  > 69			.caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
+    70		},
+    71		[MT8365_POWER_DOMAIN_VENC] = {
+    72			.name = "venc",
+    73			.sta_mask = PWR_STATUS_VENC,
+    74			.ctl_offs = 0x0304,
+    75			.pwr_sta_offs = 0x0180,
+    76			.pwr_sta2nd_offs = 0x0184,
+    77			.sram_pdn_bits = GENMASK(8, 8),
+    78			.sram_pdn_ack_bits = GENMASK(12, 12),
+    79			.bp_cfg = {
+    80				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(1),
+    81			},
+    82		},
+    83		[MT8365_POWER_DOMAIN_AUDIO] = {
+    84			.name = "audio",
+    85			.sta_mask = PWR_STATUS_AUDIO,
+    86			.ctl_offs = 0x0314,
+    87			.pwr_sta_offs = 0x0180,
+    88			.pwr_sta2nd_offs = 0x0184,
+    89			.sram_pdn_bits = GENMASK(12, 8),
+    90			.sram_pdn_ack_bits = GENMASK(17, 13),
+    91			.bp_cfg = {
+    92				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+    93					MT8365_INFRA_TOPAXI_PROTECTEN_1_PWRDNREQ_MP1_L2C_AFIFO |
+    94					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_AUDIO_M),
+    95			},
+    96			.caps = MTK_SCPD_ACTIVE_WAKEUP,
+    97		},
+    98		[MT8365_POWER_DOMAIN_CONN] = {
+    99			.name = "conn",
+   100			.sta_mask = PWR_STATUS_CONN,
+   101			.ctl_offs = 0x032c,
+   102			.pwr_sta_offs = 0x0180,
+   103			.pwr_sta2nd_offs = 0x0184,
+   104			.sram_pdn_bits = 0,
+   105			.sram_pdn_ack_bits = 0,
+   106			.bp_cfg = {
+   107				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
+   108					MT8365_INFRA_TOPAXI_PROTECTEN_AP2CONN_AHB),
+   109				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+   110					MT8365_INFRA_TOPAXI_PROTECTEN_1_CONN2INFRA_AXI_GALS_MST),
+   111				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
+   112					MT8365_INFRA_TOPAXI_PROTECTEN_CONN2INFRA_AHB),
+   113				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+   114					MT8365_INFRA_TOPAXI_PROTECTEN_1_INFRA2CONN_AHB_GALS_SLV),
+   115			},
+   116			.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_KEEP_DEFAULT_OFF,
+   117		},
+   118		[MT8365_POWER_DOMAIN_MFG] = {
+   119			.name = "mfg",
+   120			.sta_mask = PWR_STATUS_MFG,
+   121			.ctl_offs = 0x0338,
+   122			.pwr_sta_offs = 0x0180,
+   123			.pwr_sta2nd_offs = 0x0184,
+   124			.sram_pdn_bits = GENMASK(9, 8),
+   125			.sram_pdn_ack_bits = GENMASK(13, 12),
+   126			.bp_cfg = {
+   127				MT8365_BUS_PROT_INFRA_WR_TOPAXI(BIT(25)),
+   128				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
+   129					MT8365_INFRA_TOPAXI_PROTECTEN_MFG_M0 |
+   130					MT8365_INFRA_TOPAXI_PROTECTEN_INFRA2MFG),
+   131			},
+   132		},
+   133		[MT8365_POWER_DOMAIN_CAM] = {
+   134			.name = "cam",
+   135			.sta_mask = BIT(25),
+   136			.ctl_offs = 0x0344,
+   137			.pwr_sta_offs = 0x0180,
+   138			.pwr_sta2nd_offs = 0x0184,
+   139			.sram_pdn_bits = GENMASK(9, 8),
+   140			.sram_pdn_ack_bits = GENMASK(13, 12),
+   141			.bp_cfg = {
+   142				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+   143					MT8365_INFRA_TOPAXI_PROTECTEN_1_CAM2MM_AXI_GALS_MST),
+   144				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(2),
+   145			},
+   146		},
+   147		[MT8365_POWER_DOMAIN_VDEC] = {
+   148			.name = "vdec",
+   149			.sta_mask = BIT(31),
+   150			.ctl_offs = 0x0370,
+   151			.pwr_sta_offs = 0x0180,
+   152			.pwr_sta2nd_offs = 0x0184,
+   153			.sram_pdn_bits = GENMASK(8, 8),
+   154			.sram_pdn_ack_bits = GENMASK(12, 12),
+   155			.bp_cfg = {
+   156				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(3),
+   157			},
+   158		},
+   159		[MT8365_POWER_DOMAIN_APU] = {
+   160			.name = "apu",
+   161			.sta_mask = BIT(16),
+   162			.ctl_offs = 0x0378,
+   163			.pwr_sta_offs = 0x0180,
+   164			.pwr_sta2nd_offs = 0x0184,
+   165			.sram_pdn_bits = GENMASK(14, 8),
+   166			.sram_pdn_ack_bits = GENMASK(21, 15),
+   167			.bp_cfg = {
+   168				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+   169					MT8365_INFRA_TOPAXI_PROTECTEN_1_APU2AP |
+   170					MT8365_INFRA_TOPAXI_PROTECTEN_1_APU_CBIP_GALS_MST),
+   171				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(4),
+   172			},
+   173		},
+   174		[MT8365_POWER_DOMAIN_DSP] = {
+   175			.name = "dsp",
+   176			.sta_mask = BIT(17),
+   177			.ctl_offs = 0x037C,
+   178			.pwr_sta_offs = 0x0180,
+   179			.pwr_sta2nd_offs = 0x0184,
+   180			.sram_pdn_bits = GENMASK(11, 8),
+   181			.sram_pdn_ack_bits = GENMASK(15, 12),
+   182			.bp_cfg = {
+   183				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
+   184					MT8365_INFRA_TOPAXI_PROTECTEN_1_PWRDNREQ_INFRA_GALS_ADB |
+   185					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_DSP_M |
+   186					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_DSP_S),
+   187			},
+   188			.caps = MTK_SCPD_ACTIVE_WAKEUP,
+   189		},
+   190	};
+   191	
 
-Okay.
-
-
-> 
-> Just add something like the patch below, and please *test* that a
-> 32bit VM using PMUv3 doesn't have any regression.
-
-Sure.
-
-> 
-> Thanks,
-> 
-> 	M.
-> 
->>From 017362ca518e6d6ac3262514d1f7f27e73232799 Mon Sep 17 00:00:00 2001
-> From: Marc Zyngier <maz@kernel.org>
-> Date: Mon, 19 Jun 2023 10:05:52 +0100
-> Subject: [PATCH] 32bit hack
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->  arch/arm/include/asm/arm_pmuv3.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-> index f4db3e75d75f..c4bcb7a18267 100644
-> --- a/arch/arm/include/asm/arm_pmuv3.h
-> +++ b/arch/arm/include/asm/arm_pmuv3.h
-> @@ -244,4 +244,22 @@ static inline bool is_pmuv3p5(int pmuver)
->  	return pmuver >= ARMV8_PMU_DFR_VER_V3P5;
->  }
->  
-> +/* BRBE stubs */
-
-These stubs also need to be wrapped around with #ifdef CONFIG_PERF_EVENTS
-
-> +static inline void armv8pmu_branch_enable(struct perf_event *event) { }
-> +static inline void armv8pmu_branch_disable(struct perf_event *event) { }
-> +static inline void armv8pmu_branch_read(struct pmu_hw_events * cpuc,
-> +					struct perf_event *event) { }
-> +static inline void armv8pmu_branch_save(struct arm_pmu *armpmu, void *ctx) {}
-> +static inline void armv8pmu_branch_reset(void) {}
-> +static inline bool armv8pmu_branch_attr_valid(struct perf_event *event)
-> +{
-> +	return false;
-> +}
-> +static inline void armv8pmu_branch_probe(struct arm_pmu *armpmu) {}
-> +static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *armpmu)
-> +{
-> +	return 0;
-> +}
-> +static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *armpmu) {}
-> +
->  #endif
-
-Sure, will make all the necessary changes.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
