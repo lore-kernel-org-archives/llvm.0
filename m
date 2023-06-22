@@ -1,102 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C95A101EE
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 08:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC56C433C0;
-	Thu, 22 Jun 2023 08:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1687421303;
-	bh=yFq9Zyr6bfzKa8zhqccBba3/9IvWR8bp0YdV2XNmgvo=;
-	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=zkPIBCJaqlv0ttgXKfzaTcGZPsNUdUcwvubcFmV8eQzsvbl+hyPJxF8pUB6yITACb
-	 xQst4kN9hyyamesm3RnDqZP5Uj/n7LTWRxwQacBC6/pgxPtn1IukkPZ0HwaSW7jNzY
-	 Jx+h9Ukhybgd3wA66jemstEG51NsfDVBkyP9h7Q4=
-Subject: Patch "riscv: Link with '-z norelro'" has been added to the 6.3-stable tree
-To: 202306192231.DJmWr6BX-lkp@intel.com,conor@kernel.org,gregkh@linuxfoundation.org,linux-riscv@lists.infradead.org,lkp@intel.com,llvm@lists.linux.dev,nathan@kernel.org,ndesaulniers@google.com,palmer@dabbelt.com,palmer@rivosinc.com,sashal@kernel.org
-Cc: <stable-commits@vger.kernel.org>
-From: <gregkh@linuxfoundation.org>
-Date: Thu, 22 Jun 2023 10:08:21 +0200
-In-Reply-To: <20230620-6-3-fix-got-relro-error-lld-v1-1-f3e71ec912d1@kernel.org>
-Message-ID: <2023062221-moving-eastward-9967@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB29F80C
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 09:10:45 +0000 (UTC)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D0B8660706C;
+	Thu, 22 Jun 2023 10:10:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1687425038;
+	bh=5uxh5lKnVnM46Q8SEQodnpqC2oAD7Fjq5YEoHjE5Sx4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KPUAgmSdKBe8F1sbK0PJohKxD/iIlloBxRbdx2mXToR6bT0FdS/9cnpdpHyDyWPiV
+	 9LYisjtoi9lQjkY6At9xAj4YncbpeIshMKIzGUJIMWyOqj3QittZD7V+6FnIquTZnH
+	 kyANnfNm+j8bI8c/535TwPqRf62LvcR+18KpLAlQcC1hEy8GqAeUwjX2JbLeasux8I
+	 JMqpyRqAtZuGljolnyporGOo6z6ZzqXm//GGQROy/CNoq5PYvnLri1W+ItKNrAnqxa
+	 9CVUOFrfDlfafgmh31726rulYjimvN7Q790qDQmFLPxCVksLehwVx3/BZVXkSSbYjN
+	 y7zmKhrAZTPiw==
+Message-ID: <99adec72-da7b-ce46-27be-b823a208a39e@collabora.com>
+Date: Thu, 22 Jun 2023 11:10:34 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
-X-stable: commit
-X-Patchwork-Hint: ignore 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 8/8] leds: leds-mt6323: Add support for WLEDs and
+ MT6332
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: pavel@ucw.cz, lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+ linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kernel@collabora.com, llvm@lists.linux.dev
+References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
+ <20230621213124.GA2689001@dev-arch.thelio-3990X>
+Content-Language: en-US
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230621213124.GA2689001@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Il 21/06/23 23:31, Nathan Chancellor ha scritto:
+> Hi Angelo,
+> 
+> On Thu, Jun 01, 2023 at 01:08:13PM +0200, AngeloGioacchino Del Regno wrote:
+>> Add basic code to turn on and off WLEDs and wire up MT6332 support
+>> to take advantage of it.
+>> This is a simple approach due to the aforementioned PMIC supporting
+>> only on/off status so, at the time of writing, it is impossible for me
+>> to validate more advanced functionality due to lack of hardware.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> After this patch as commit 9bb0a9e0626c ("leds: leds-mt6323: Add support
+> for WLEDs and MT6332") in -next, I see the following warnings from
+> clang, which are basically flagging potential kernel Control Flow
+> Integrity [1] violations that will be visible at runtime (this warning
+> is not enabled for the kernel yet but we would like it to be):
+> 
+>    drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>      598 |                         leds->led[reg]->cdev.brightness_set_blocking =
+>          |                                                                      ^
+>      599 |                                                 mt6323_wled_set_brightness;
+>          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>      600 |                         leds->led[reg]->cdev.brightness_get =
+>          |                                                             ^
+>      601 |                                                 mt6323_get_wled_brightness;
+>          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
+> 
+>  From what I can tell/understand, 'enum led_brightness' is obsolete and
+> the value that is passed via ->brightness_set_blocking() is an 'unsigned
+> int' as well but it seems 'enum led_brightness' is used as the parameter
+> in a lot of different callback implementations, so the prototype cannot
+> be easily updated without a lot of extra work. Is there any reason not
+> to just do something like this to avoid this issue?
+> 
+
+I don't think that this would bring any issue to the table.
+
+The rework will possibly be done globally, for all drivers, when time comes... so
+feel free to send the proposed patch.
+
+Thanks,
+Angelo
+
+> [1]: https://lwn.net/Articles/898040/
+> 
+> Cheers,
+> Nathan
+> 
+> diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
+> index e8fecfc2e90a..24f35bdb55fb 100644
+> --- a/drivers/leds/leds-mt6323.c
+> +++ b/drivers/leds/leds-mt6323.c
+> @@ -76,7 +76,7 @@ struct mt6323_led {
+>   	int			id;
+>   	struct mt6323_leds	*parent;
+>   	struct led_classdev	cdev;
+> -	unsigned int		current_brightness;
+> +	enum led_brightness	current_brightness;
+>   };
+>   
+>   /**
+> @@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
+>   	return 0;
+>   }
+>   
+> -static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
+> +static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
+>   {
+>   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+>   	struct mt6323_leds *leds = led->parent;
+> @@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
+>   }
+>   
+>   static int mt6323_wled_set_brightness(struct led_classdev *cdev,
+> -				      unsigned int brightness)
+> +				      enum led_brightness brightness)
+>   {
+>   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+>   	struct mt6323_leds *leds = led->parent;
 
 
-This is a note to let you know that I've just added the patch titled
-
-    riscv: Link with '-z norelro'
-
-to the 6.3-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-
-The filename of the patch is:
-     riscv-link-with-z-norelro.patch
-and it can be found in the queue-6.3 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
-
-
-From nathan@kernel.org  Thu Jun 22 09:37:45 2023
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 20 Jun 2023 17:44:50 +0000
-Subject: riscv: Link with '-z norelro'
-To: gregkh@linuxfoundation.org, sashal@kernel.org
-Cc: palmer@dabbelt.com, conor@kernel.org, ndesaulniers@google.com, nathan@kernel.org, linux-riscv@lists.infradead.org, stable@vger.kernel.org, llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Message-ID: <20230620-6-3-fix-got-relro-error-lld-v1-1-f3e71ec912d1@kernel.org>
-
-From: Nathan Chancellor <nathan@kernel.org>
-
-This patch fixes a stable only patch, so it has no direct upstream
-equivalent.
-
-After a stable only patch to explicitly handle the '.got' section to
-handle an orphan section warning from the linker, certain configurations
-error when linking with ld.lld, which enables relro by default:
-
-  ld.lld: error: section: .got is not contiguous with other relro sections
-
-This has come up with other architectures before, such as arm and arm64
-in commit 0cda9bc15dfc ("ARM: 9038/1: Link with '-z norelro'") and
-commit 3b92fa7485eb ("arm64: link with -z norelro regardless of
-CONFIG_RELOCATABLE"). Additionally, '-z norelro' is used unconditionally
-for RISC-V upstream after commit 26e7aacb83df ("riscv: Allow to
-downgrade paging mode from the command line"), which alluded to this
-issue for the same reason. Bring 6.3 in line with mainline and link with
-'-z norelro', which resolves the above link failure.
-
-Fixes: e6d1562dd4e9 ("riscv: vmlinux.lds.S: Explicitly handle '.got' section")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306192231.DJmWr6BX-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/riscv/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -7,7 +7,7 @@
- #
- 
- OBJCOPYFLAGS    := -O binary
--LDFLAGS_vmlinux :=
-+LDFLAGS_vmlinux := -z norelro
- ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
- 	LDFLAGS_vmlinux := --no-relax
- 	KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-
-
-Patches currently in stable-queue which might be from nathan@kernel.org are
-
-queue-6.3/riscv-link-with-z-norelro.patch
