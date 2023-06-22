@@ -1,206 +1,182 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A10200AC
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 17:06:56 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so712a12.0
-        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 10:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687453615; x=1690045615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cgDsKIvWGO5gn/exYyUdan0EdWpwSIBfqo1P7aqIWXE=;
-        b=7n6Db3cDup8SiTVfbFWDitZGZd1Ih5EpRY7no8Q080DrHg2IIeJAolKaQASpDLDpZs
-         v9jF9hMMNV7eSmPTn/LkZrJbdpnwCxveLyQc2KF+rN/KkQSSF3nfLM7MrWZi10jbSWoc
-         OTrREBezO68LcityxSKmHctOQd6PPnBa0nWelWhidSk7ivy5Kzrg+m4Mc9xZyDTPvH2r
-         IVzrG0lTIUSt3YWJYzCR60qBb91uQsO33PMcNeiaQzcGic8YlinKOTLlvVSpdh/mCDXj
-         4q4hk30K/UkPtEDHa2s43RPeITy7FkGOYiaO4dT77KCUodAVJt2x/ahYqUtQleaniJ6Z
-         xrrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687453615; x=1690045615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cgDsKIvWGO5gn/exYyUdan0EdWpwSIBfqo1P7aqIWXE=;
-        b=iZH5jpO9afMTg4CbEh7uL24dbXo8U4pBOluluR/c5WmyspRwjjUoebKyCBzKMsLd9K
-         0C3Jkixw00msihsct6x22Zbr0TB3zUmmyQGdY5YNj+I6QtKj+ROffsvrM/je0SZxkcLS
-         9xjxfU+3H7HQZGSkVnPJyAAJ0xaVSIaVd/ezYS8sH4AuDsSpOxtDKbMgnyC37LAAuzfB
-         1WF1FDZeoljXqW74KmSQk/ynCiXBcQGzODX6uCvQSsgcgNw1I7mxL4G3lD61dismW2mh
-         j4w6xODzy7EUcvT0lWPSDvUBPSNmrO637Uod8CtkJjRDiEr7jELnBYswRcGp1yC6x0tB
-         ZHVA==
-X-Gm-Message-State: AC+VfDz4OVHYKBHQf/ptfdemJwDl6+WCr7RSOGKTmH66qNRlIRsFuERp
-	1L7xm6SxERQZxmn8xhyzWh9AX1ZZp1dQkqJ5qxwAkA==
-X-Google-Smtp-Source: ACHHUZ6ktb/rssyE8rTUZJ2PZb/fhd5ss+nrO8ogXVAD2LHhw+MBFxQFKPTq+d7sqWXcSN3kMWM3MsaOiKVJUwKbmag=
-X-Received: by 2002:a50:9fc4:0:b0:519:6a72:aeea with SMTP id
- c62-20020a509fc4000000b005196a72aeeamr810590edf.7.1687453614987; Thu, 22 Jun
- 2023 10:06:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4867C1F182;
+	Thu, 22 Jun 2023 18:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687457752; x=1718993752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LqHYatwS9he45PlnmiG0fLcLzzMWMxq5QFiD20ydpu8=;
+  b=C26uW3XC6Uldj80/pz28+/C8vSAthRFPL7+SINS1B+cFC9b0ZblhIk9/
+   tWvnGzU0KxpPYe22w3VOJd9kZo7pTdXsazpg9jPyjwNpgnDI7Ke/UH6zK
+   93GsgmFsaBJ0xxxjT0TjZEnD/ifIbe6f+qpoPP/cADS8mlAsIZ25U1MlT
+   31R1LNvq1ctl170B4uY2texF1FjB8pKZq3vFMsjQJQ2tRk4rFx+lC82nz
+   P0zKdHtJXiK9pxvExVieS2XaqQde1s+X1Dh+whbjMmKl0Ujc+5wX8CZuX
+   vSkuyhdaLHhOm7mxLfLN/nsXnLV3w+9mHRKUELp5/EPoTnJsv8n2jXj2H
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="446947737"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="446947737"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 11:15:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="839162330"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="839162330"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2023 11:15:45 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qCOqP-0007jf-0f;
+	Thu, 22 Jun 2023 18:15:45 +0000
+Date: Fri, 23 Jun 2023 02:14:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tommaso Merciai <tomm.merciai@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+	martin.hecht@avnet.eu, michael.roeder@avnet.eu,
+	linuxfancy@googlegroups.com, hdegoede@redhat.com,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Mikhail Rudenko <mike.rudenko@gmail.com>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/3] media: i2c: Add support for alvium camera
+Message-ID: <202306230242.H8qeniQt-lkp@intel.com>
+References: <20230620122225.58862-4-tomm.merciai@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
- <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
-In-Reply-To: <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Thu, 22 Jun 2023 10:06:42 -0700
-Message-ID: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Tom Rini <trini@konsulko.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620122225.58862-4-tomm.merciai@gmail.com>
 
-On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
-org> wrote:
-> >
-> > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
-> > > Hi Masahiro,
-> > >
-> > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple i=
-s
-> > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> > > >
-> > > > As a result, the linker script is preprocessed with predefined macr=
-os
-> > > > for the build host instead of the target.
-> > > >
-> > > > Assuming you use an x86 build machine, compare the following:
-> > > >
-> > > >  $ clang -dM -E -x c /dev/null
-> > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> > > >
-> > > > There is no actual problem presumably because our linker scripts do=
- not
-> > > > rely on such predefined macros, but it is better to define correct =
-ones.
-> > > >
-> > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.l=
-ds.S
-> > > > will be processed with the proper target triple.
-> > > >
-> > > > Reported-by: Tom Rini <trini@konsulko.com>
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > ---
-> > > >
-> > > >  scripts/Makefile.clang | 3 +--
-> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > > index 70b354fa1cb4..93ca059cc3b8 100644
-> > > > --- a/scripts/Makefile.clang
-> > > > +++ b/scripts/Makefile.clang
-> > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warning-=
-option
-> > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
-> > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
-> > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
-> > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
-> > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
-> > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
-> > > >  export CLANG_FLAGS
-> > > > --
-> > > > 2.37.2
-> > > >
-> > >
-> > > I am doubling back to this change, as the lack of '--target' in
-> > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new chang=
-e
-> > > that rejects '-mbig-endian' and '-mlittle-endian' when not supported =
-by
-> > > the target, which breaks the arm64 vDSO build when preprocessing its
-> > > linker script:
-> > >
-> > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-> > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper virt=
-config menuconfig arch/arm64/kernel/vdso/
-> > >   ...
-> > >   clang: error: unsupported option '-mbig-endian' for target 'x86_64-=
-pc-linux-gnu'
-> > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vds=
-o/vdso.lds] Error 1
-> > >   ...
-> > >
-> > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b67311989=
-56c522c93d0df1050
-> > >   https://github.com/ClangBuiltLinux/linux/issues/1859
-> > >
-> > > This change resolves that issue. I was able to figure out why those n=
-ew
-> > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
-> > > CHECKFLAGS. The following diff resolves it for me:
-> > >
-> > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> > > index a7a4ee66a9d3..ef7b05ae92ce 100644
-> > > --- a/arch/mips/Makefile
-> > > +++ b/arch/mips/Makefile
-> > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-table=
-s
-> > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
-> > >
-> > >  ifdef CONFIG_MIPS
-> > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null=
- | \
-> > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -d=
-M -E -x c /dev/null | \
-> > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\=
-$$/&&/g')
-> > >  endif
-> > >
-> > > I will run this change plus that diff through my build matrix to see =
-if
-> > > any other issues pop up. If not, I will respond with some tags and
-> > > perhaps this could be taken as a fix for 6.4 so that it could
-> > > potentially be backported?
-> >
-> > I found two more issues lurking in PowerPC. I have attached suggested
-> > patches for all the issues I have uncovered to this email, please feel
-> > free to use them or do something different if you feel there is a bette=
-r
-> > fix. With those issues resolved in one way or another, consider the
-> > original change:
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > If it would work better for you, I am more than happy to take over this
-> > series as well.
-> >
-> > Cheers,
-> > Nathan
->
-> Thanks. All the three patches look good to me.
->
-> I will apply them, then mine on top.
+Hi Tommaso,
 
-Drive-by reply from
-https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
+kernel test robot noticed the following build errors:
 
-Hi Masahiro, one nit:) If the patch still has time to adjust the
-commit message, perhaps consider replacing
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on robh/for-next linus/master v6.4-rc7 next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
+url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/dt-bindings-vendor-prefixes-Add-prefix-alliedvision/20230620-202420
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230620122225.58862-4-tomm.merciai%40gmail.com
+patch subject: [PATCH v7 3/3] media: i2c: Add support for alvium camera
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20230623/202306230242.H8qeniQt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230242.H8qeniQt-lkp@intel.com/reproduce)
 
-as the former is a deprecated driver option since Clang 3.x (long time ago)=
-.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230242.H8qeniQt-lkp@intel.com/
 
-> Assuming you use an x86 build machine, compare the following:
+All errors (new ones prefixed by >>):
 
-You may drop "Assuming you use an x86 build machine" and add
---target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
-:)
+   In file included from drivers/media/i2c/alvium-csi2.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/alvium-csi2.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/alvium-csi2.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/i2c/alvium-csi2.c:23:
+>> drivers/media/i2c/alvium-csi2.h:15:10: fatal error: 'media/v4l2-cci.h' file not found
+      15 | #include <media/v4l2-cci.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+vim +15 drivers/media/i2c/alvium-csi2.h
+
+    12	
+    13	#include <linux/kernel.h>
+    14	#include <linux/regulator/consumer.h>
+  > 15	#include <media/v4l2-cci.h>
+    16	#include <media/v4l2-common.h>
+    17	#include <media/v4l2-ctrls.h>
+    18	#include <media/v4l2-fwnode.h>
+    19	#include <media/v4l2-subdev.h>
+    20	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
