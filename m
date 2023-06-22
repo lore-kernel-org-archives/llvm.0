@@ -1,112 +1,105 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB491ED23
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 13:10:54 +0000 (UTC)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-471b1ba1a7dso1905910e0c.2
-        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 06:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687439453; x=1690031453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
-        b=yGJPcTf5yJ0LAQHbCs0//5u7zTlviWAP4S4kkO82hHeGqqVnJDo/C15mxkMnjVBse6
-         sfzsKQg/tJSVZGfVAk+tv2ZXymwjUI5lj9RIwv2zgWtET1Lze47M1HqsNjk9drvIftQ0
-         pVzHirWFhN1bcVZtplp/G3rDRFkBvIk7Ohha7vbGdSWN68j99aBXZCkf8V4jrhPnbTP+
-         nhOe8iYPriWxHdLafESB8L8s6g/NsqEs7txzboyYTOG09Qzhiu6TWoV4V1fLyW2wxBud
-         pWUKDeA7HjpbY62da6LVs0OiSI+2C/hOb/HcR/1eqFf7XNA9+3dGBuxxi6RAqth1l4dS
-         18Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687439453; x=1690031453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
-        b=L1B8RQ06XnOA9nkOVVABSGv9hhq+Wf0et43eVYhxj3Wt8CryaQD2Ar326ZZK6gdcvX
-         jKCTl/KGthLdkbriUfuhM1niwh6Dm/JukZgmikk3LgnycnPxW5ziMxysMDr6no0t1DHq
-         9t8BO+leZXtIUKoEC9qZhqZbZY2dqa9quEeQ+Q/enIYChpdBWvsxASNF2hm96O3zsnOS
-         Cew4AJ+LDFk/jIMiUw9CiuY/q0gEFmXFzdLIFnJKDQ56E2g/30SP9ZzEkD77Sbx061Bp
-         VkgDG5JaEnS576Ap6xEeZs4k/J0l6V3MT/u2ThBRykxbeeAdL3vyaOG3vanALRMzKhpF
-         SqPQ==
-X-Gm-Message-State: AC+VfDyEOUXppvdehhYJ2WIVx5TgwQLvc0cRapx91tNXxGRy5WXBggDD
-	SaU0zuhExztmAc8bWZ8PVCagMSWuliKQIoMQ19JwCQ==
-X-Google-Smtp-Source: ACHHUZ51ts75wkyfRCqdLOdLzUY3leYxdAIzn0un4E/YRo60Xqah11aqcikjs7PUlI+S5vg4oKw+3YC6Mm8RyX4xhqs=
-X-Received: by 2002:a1f:e784:0:b0:471:6119:95cc with SMTP id
- e126-20020a1fe784000000b00471611995ccmr7694191vkh.14.1687439453218; Thu, 22
- Jun 2023 06:10:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B393AA98;
+	Thu, 22 Jun 2023 15:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E905C433C0;
+	Thu, 22 Jun 2023 15:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687449397;
+	bh=KuNfl/le8W+tk5pj4CEfMdhcf3haC1/lnKFZoEA+xQ8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=DkEDIT4UBYHIa99zqkTxpmTrj4B/F3AK2eaeyiXA4pIt+ZstWnbGy1jV9/rFeJ3Sm
+	 OX0+mkZeAyml/vm0tc2UUgIqKzrc7UL9QohZBE/H8xjEZUj0pyCWOoMda1PLv2EhNe
+	 qGohq7oWexD1eoMC04cR0aKmyUWxc1LEip0FIAJRNvEzff3cDZRw1L+/+aDpyqbjnp
+	 11HDjYwel8qzRaKAqb8mkaouY1PTLcJiobdnhQSwVRzU9FJNrU/7UQJDLuMnZ0SpUD
+	 jBFiids4vJJx/WVOFVn9dA9rZQby1ODx+Q2ui3Rzwi8N6EYvaBOyZbG7LXseb9dEOA
+	 M9Rn/oS54iUMA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 22 Jun 2023 15:56:19 +0000
+Subject: [PATCH] clk: ralink: mtmips: Fix uninitialized use of ret in
+ mtmips_register_{fixed,factor}_clocks()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230621182558.544417-11-brgl@bgdev.pl> <202306220657.ikVUl0zU-lkp@intel.com>
-In-Reply-To: <202306220657.ikVUl0zU-lkp@intel.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 22 Jun 2023 15:10:42 +0200
-Message-ID: <CAMRc=McU+eo3TSFmpR71mak08qJsA19hz8rZo5qk=rMbxoKOzQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 10/12] net: stmmac: replace the int_snapshot_en
- field with a flag
-To: kernel test robot <lkp@intel.com>
-Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Jose Abreu <joabreu@synopsys.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACJvlGQC/x2NSw6CQBAFr0J6bSfziWi8CnEBTKsvYENm+AXC3
+ Z24rFpUHZQkQhI9ioOiLEgYNIO9FNR+an0LI2QmZ5w3pXP8xZg41j2047bveJ0VignZ7BLYXk0
+ TjPelvd8oR8YoL2z/QfU8zx8nr3sycAAAAA==
+To: tsbogend@alpha.franken.de
+Cc: sergio.paracuellos@gmail.com, sboyd@kernel.org, nathan@kernel.org, 
+ ndesaulniers@google.com, trix@redhat.com, linux-clk@vger.kernel.org, 
+ linux-mips@vger.kernel.org, patches@lists.linux.dev, llvm@lists.linux.dev
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2238; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=KuNfl/le8W+tk5pj4CEfMdhcf3haC1/lnKFZoEA+xQ8=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDClT8k3W7xfiYss4OC/2w2LP13xJWld9nMv+hl7qa1gwd
+ d7iC+e7OkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEDP0YGeb++aLxN1z75LLv
+ u16dZ5P6HXd5qv7OL96FZvv7yh/Oc33M8D/l6z7ZfA6D07JSd048mv3/kHNG2qkad4P3U//pmys
+ vVeADAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, Jun 22, 2023 at 1:31=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Bartosz,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on net-next/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewsk=
-i/net-stmmac-replace-has_integrated_pcs-field-with-a-flag/20230622-022944
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20230621182558.544417-11-brgl%40=
-bgdev.pl
-> patch subject: [PATCH net-next 10/12] net: stmmac: replace the int_snapsh=
-ot_en field with a flag
-> config: i386-randconfig-i012-20230621 (https://download.01.org/0day-ci/ar=
-chive/20230622/202306220657.ikVUl0zU-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
-8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220657=
-.ikVUl0zU-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306220657.ikVUl0zU-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:612:2: error: use of=
- undeclared identifier 'priv'
->            priv->plat->flags &=3D ~STMMAC_FLAG_INT_SNAPSHOT_EN;
->            ^
->    1 error generated.
->
+Clang warns:
 
-Eek, must have disabled this driver in my config by accident. Now fixed for=
- v2.
+  drivers/clk/ralink/clk-mtmips.c:309:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    309 |         return ret;
+        |                ^~~
+  drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable 'ret' to silence this warning
+    285 |         int ret, i;
+        |                ^
+        |                 = 0
+  drivers/clk/ralink/clk-mtmips.c:359:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    359 |         return ret;
+        |                ^~~
+  drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable 'ret' to silence this warning
+    335 |         int ret, i;
+        |                ^
+        |                 = 0
+  2 errors generated.
 
-Bart
+Set ret to the return value of clk_hw_register_fixed_rate() using the
+PTR_ERR() macro, which ensures ret is not used uninitialized, clearing
+up the warning.
+
+Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for MTMIPS SoCs")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1879
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/clk/ralink/clk-mtmips.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk-mtmips.c
+index 9322c6210a33..1e7991439527 100644
+--- a/drivers/clk/ralink/clk-mtmips.c
++++ b/drivers/clk/ralink/clk-mtmips.c
+@@ -292,6 +292,7 @@ static int mtmips_register_fixed_clocks(struct clk_hw_onecell_data *clk_data,
+ 						      sclk->parent, 0,
+ 						      sclk->rate);
+ 		if (IS_ERR(sclk->hw)) {
++			ret = PTR_ERR(sclk->hw);
+ 			pr_err("Couldn't register fixed clock %d\n", idx);
+ 			goto err_clk_unreg;
+ 		}
+@@ -342,6 +343,7 @@ static int mtmips_register_factor_clocks(struct clk_hw_onecell_data *clk_data,
+ 						  sclk->parent, sclk->flags,
+ 						  sclk->mult, sclk->div);
+ 		if (IS_ERR(sclk->hw)) {
++			ret = PTR_ERR(sclk->hw);
+ 			pr_err("Couldn't register factor clock %d\n", idx);
+ 			goto err_clk_unreg;
+ 		}
+
+---
+base-commit: fd99ac5055d4705e91c73d1adba18bc71c8511a8
+change-id: 20230622-mips-ralink-clk-wuninitialized-150bd0336187
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
