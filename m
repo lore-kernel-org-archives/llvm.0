@@ -1,54 +1,57 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909B917C9;
-	Thu, 22 Jun 2023 02:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687399530; x=1718935530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tqwmf7UCG/Oox40h1Vsl9C4SJhX8muGiwDzjdWU/aV8=;
-  b=BPV5JzH93YWBBi2EqQ8n72f+MJuPG58NlClaGUPHbaxk0Yu8k/LbeAi6
-   EMikNTpkGDCWSFSUlk/OsWIpf+o/A6hf+bVjTLK99iGYlOWDXNn2YVML9
-   8DAFJyUNo6wWdVmAD/wMRQXSclQ2+wVNWjNx5lJW7ONxlkBkNvaNW3T+M
-   h7V1whTG5iWA+dR6PpguSEM6syAn/q1Ym0xBbIQxT8rwPMzU2sFhwD/zg
-   MsrZBj+Ia5rk8SfBeM/EuOJoWBHgUXT1dsfl0t0Vsk+9YrPzZ8jRKTz+B
-   1KL69fGaw78vSrlSGBmucjCAbypQsMUHftigp2T/foyQbFgMfyylo1zOq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="424031079"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="424031079"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 19:05:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="714723808"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="714723808"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2023 19:05:25 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qC9hM-0007FT-2g;
-	Thu, 22 Jun 2023 02:05:24 +0000
-Date: Thu, 22 Jun 2023 10:05:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tinghan Shen <tinghan.shen@mediatek.com>,
-	Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: Re: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
-Message-ID: <202306220952.WMdPoLzE-lkp@intel.com>
-References: <20230619085344.2885311-9-msp@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1DD188
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 03:11:19 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-54f71fa7e41so3703020a12.3
+        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 20:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687403478; x=1689995478;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VAqfKy9L7gl2qfZmHwhpMjSx7czuoKau/UFIXqH952U=;
+        b=Ux9IDPHbFSScf+uqQMasT6bNz9Ff2jg/GwkYrg0QL2Hg6USun6agaDett+qxyqxyat
+         pMIF6usSBX6lKywrdZJZdb/n/R+LVUewkhGsf35GPCsRXGSvg7X/XlPbGvdUUHLNQPE3
+         Bb8sMkFiWTcFd/SfMYOAGAkbmRMJBt97skYLA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687403478; x=1689995478;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VAqfKy9L7gl2qfZmHwhpMjSx7czuoKau/UFIXqH952U=;
+        b=Gd2vTR0Yr0hMshmqHUgLVFtHLInr/JSfFCEov3n3iaV7WCnZptbs/vB57bR+pmiY93
+         GQyE1Z3JQ587OlnQFyGw4pJ6gRctwh3OUTWRHGJirFN+xMZtbk40nGyM6PpMq75dCALg
+         PUxjehEiZgKoGiJBSjfKpy3mwCiJygrJusCK9AAQQNwdwWj6BSulHCFz2so2oMcIa0rl
+         yEKaeUISTMKmuPb/KhadbvGLTi9xt/LCAm1X8FOw+vTToz+7mBGbz8jx5v1pbMFhKH3f
+         iPFBnO7qEjTfWMa3QJsYRA1Sfp/4K9T47iAqOSUho1wdVXe/ynvV0FOKWo1IqdcMUNRd
+         NHZA==
+X-Gm-Message-State: AC+VfDza9pOomkcZcHMjJeroK8KvP8xLfilQGN8bfajyBEdnBzCwQGlp
+	VqCApV0IHfcRiswN5vSnFnU+ZQ==
+X-Google-Smtp-Source: ACHHUZ4vMlPLBOvhTnJarXHJcpoo4MCFhQd8JrGzTMgDccm3BRjpYcAhpJYvO9CJvJ4TSIFEuQmTgw==
+X-Received: by 2002:a17:90a:974c:b0:25e:c420:6a71 with SMTP id i12-20020a17090a974c00b0025ec4206a71mr12453181pjw.32.1687403478670;
+        Wed, 21 Jun 2023 20:11:18 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b17-20020a170902d51100b001aaef9d0102sm4161321plg.197.2023.06.21.20.11.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 20:11:17 -0700 (PDT)
+Date: Wed, 21 Jun 2023 20:11:17 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Marco Elver <elver@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
+Message-ID: <202306212011.435B7C8ED@keescook>
+References: <20230405022356.gonna.338-kees@kernel.org>
+ <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
+ <202306211051.1D4038323@keescook>
+ <5fbe4977-c56d-2d97-bea3-28148807b5d9@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,228 +60,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230619085344.2885311-9-msp@baylibre.com>
+In-Reply-To: <5fbe4977-c56d-2d97-bea3-28148807b5d9@roeck-us.net>
 
-Hi Markus,
+On Wed, Jun 21, 2023 at 05:50:53PM -0700, Guenter Roeck wrote:
+> On 6/21/23 10:52, Kees Cook wrote:
+> > On Wed, Jun 21, 2023 at 09:42:01AM -0700, Guenter Roeck wrote:
+> > > Hi,
+> > > 
+> > > On Tue, Apr 04, 2023 at 07:23:59PM -0700, Kees Cook wrote:
+> > > > The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
+> > > > leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
+> > > > match Clang's stricter behavior.
+> > > > 
+> > > > Cc: Marco Elver <elver@google.com>
+> > > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > > Cc: Nicolas Schier <nicolas@fjasle.eu>
+> > > > Cc: Tom Rix <trix@redhat.com>
+> > > > Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> > > > Cc: Miroslav Benes <mbenes@suse.cz>
+> > > > Cc: linux-kbuild@vger.kernel.org
+> > > > Cc: llvm@lists.linux.dev
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > 
+> > > This patch, presumably as side effect, enables CONFIG_ARCH_STM32
+> > > for arm64:allmodconfig. As consequence, CONFIG_STM32_RPROC is enabled
+> > > as well. This in turn results in the following build error.
+> > > 
+> > > Building arm64:allmodconfig ... failed
+> > > --------------
+> > > Error log:
+> > > In file included from include/linux/printk.h:564,
+> > >                   from include/asm-generic/bug.h:22,
+> > >                   from arch/arm64/include/asm/bug.h:26,
+> > >                   from include/linux/bug.h:5,
+> > >                   from include/linux/fortify-string.h:5,
+> > >                   from include/linux/string.h:254,
+> > >                   from include/linux/dma-mapping.h:7,
+> > >                   from drivers/remoteproc/stm32_rproc.c:9:
+> > > drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
+> > > drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
+> > > 
+> > > I did not try to understand what is going on, but reverting this
+> > > patch fixes the problem.
+> > 
+> > Well that is really weird! I will investigate... this patch should be
+> > pretty self-contained...
+> > 
+> Meh, it is. Sorry for the noise. My bisect script was wrong.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc7 next-20230621]
-[cannot apply to mbgg-mediatek/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/dt-bindings-power-Add-MT8365-power-domains/20230619-165759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230619085344.2885311-9-msp%40baylibre.com
-patch subject: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
-config: arm64-randconfig-r011-20230621 (https://download.01.org/0day-ci/archive/20230622/202306220952.WMdPoLzE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220952.WMdPoLzE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306220952.WMdPoLzE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/soc/mediatek/mtk-pm-domains.c:27:
->> drivers/soc/mediatek/mt8365-pm-domains.h:69:42: warning: implicit conversion from 'unsigned long' to 'u8' (aka 'unsigned char') changes value from 384 to 128 [-Wconstant-conversion]
-      69 |                 .caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +69 drivers/soc/mediatek/mt8365-pm-domains.h
-
-     8	
-     9	/*
-    10	 * MT8365 power domain support
-    11	 */
-    12	
-    13	#define MT8365_BUS_PROT_INFRA_WR_TOPAXI(_mask)				\
-    14			BUS_PROT_INFRA_WR(_mask,				\
-    15					  MT8365_INFRA_TOPAXI_PROTECTEN_SET,	\
-    16					  MT8365_INFRA_TOPAXI_PROTECTEN_CLR,	\
-    17					  MT8365_INFRA_TOPAXI_PROTECTEN_STA1)
-    18	
-    19	#define MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(_mask)			\
-    20			BUS_PROT_INFRA_WR(_mask,				\
-    21					  MT8365_INFRA_TOPAXI_PROTECTEN_1_SET,	\
-    22					  MT8365_INFRA_TOPAXI_PROTECTEN_1_CLR,	\
-    23					  MT8365_INFRA_TOPAXI_PROTECTEN_1_STA1)
-    24	
-    25	#define MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(port)			\
-    26			BUS_PROT_SMI_WR(BIT(port),				\
-    27					MT8365_SMI_COMMON_CLAMP_EN_SET,		\
-    28					MT8365_SMI_COMMON_CLAMP_EN_CLR,		\
-    29					MT8365_SMI_COMMON_CLAMP_EN)
-    30	
-    31	#define MT8365_BUS_PROT_WAY_EN(_set_mask, _set, _sta_mask, _sta)	\
-    32			_BUS_PROT(_set_mask, _set, _set, _sta_mask, _sta,	\
-    33				  BUS_PROT_COMPONENT_INFRA |			\
-    34				  BUS_PROT_STA_COMPONENT_INFRA_NAO |		\
-    35				  BUS_PROT_INVERTED |				\
-    36				  BUS_PROT_REG_UPDATE)
-    37	
-    38	static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
-    39		[MT8365_POWER_DOMAIN_MM] = {
-    40			.name = "mm",
-    41			.sta_mask = PWR_STATUS_DISP,
-    42			.ctl_offs = 0x30c,
-    43			.pwr_sta_offs = 0x0180,
-    44			.pwr_sta2nd_offs = 0x0184,
-    45			.sram_pdn_bits = GENMASK(8, 8),
-    46			.sram_pdn_ack_bits = GENMASK(12, 12),
-    47			.bp_cfg = {
-    48				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-    49					MT8365_INFRA_TOPAXI_PROTECTEN_1_MM2INFRA_AXI_GALS_MST_0 |
-    50					MT8365_INFRA_TOPAXI_PROTECTEN_1_MM2INFRA_AXI_GALS_MST_1),
-    51				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
-    52					MT8365_INFRA_TOPAXI_PROTECTEN_MM_M0 |
-    53					MT8365_INFRA_TOPAXI_PROTECTEN_MDMCU_M1 |
-    54					MT8365_INFRA_TOPAXI_PROTECTEN_MM2INFRA_AXI_GALS_SLV_0 |
-    55					MT8365_INFRA_TOPAXI_PROTECTEN_MM2INFRA_AXI_GALS_SLV_1),
-    56				MT8365_BUS_PROT_WAY_EN(
-    57					MT8365_INFRA_TOPAXI_SI0_WAY_EN_MMAPB_S,
-    58					MT8365_INFRA_TOPAXI_SI0_CTL,
-    59					MT8365_INFRA_NAO_TOPAXI_SI0_CTRL_UPDATED,
-    60					MT8365_INFRA_NAO_TOPAXI_SI0_STA),
-    61				MT8365_BUS_PROT_WAY_EN(
-    62					MT8365_INFRA_TOPAXI_SI2_WAY_EN_PERI_M1,
-    63					MT8365_INFRA_TOPAXI_SI2_CTL,
-    64					MT8365_INFRA_NAO_TOPAXI_SI2_CTRL_UPDATED,
-    65					MT8365_INFRA_NAO_TOPAXI_SI2_STA),
-    66				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
-    67					MT8365_INFRA_TOPAXI_PROTECTEN_MMAPB_S),
-    68			},
-  > 69			.caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
-    70		},
-    71		[MT8365_POWER_DOMAIN_VENC] = {
-    72			.name = "venc",
-    73			.sta_mask = PWR_STATUS_VENC,
-    74			.ctl_offs = 0x0304,
-    75			.pwr_sta_offs = 0x0180,
-    76			.pwr_sta2nd_offs = 0x0184,
-    77			.sram_pdn_bits = GENMASK(8, 8),
-    78			.sram_pdn_ack_bits = GENMASK(12, 12),
-    79			.bp_cfg = {
-    80				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(1),
-    81			},
-    82		},
-    83		[MT8365_POWER_DOMAIN_AUDIO] = {
-    84			.name = "audio",
-    85			.sta_mask = PWR_STATUS_AUDIO,
-    86			.ctl_offs = 0x0314,
-    87			.pwr_sta_offs = 0x0180,
-    88			.pwr_sta2nd_offs = 0x0184,
-    89			.sram_pdn_bits = GENMASK(12, 8),
-    90			.sram_pdn_ack_bits = GENMASK(17, 13),
-    91			.bp_cfg = {
-    92				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-    93					MT8365_INFRA_TOPAXI_PROTECTEN_1_PWRDNREQ_MP1_L2C_AFIFO |
-    94					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_AUDIO_M),
-    95			},
-    96			.caps = MTK_SCPD_ACTIVE_WAKEUP,
-    97		},
-    98		[MT8365_POWER_DOMAIN_CONN] = {
-    99			.name = "conn",
-   100			.sta_mask = PWR_STATUS_CONN,
-   101			.ctl_offs = 0x032c,
-   102			.pwr_sta_offs = 0x0180,
-   103			.pwr_sta2nd_offs = 0x0184,
-   104			.sram_pdn_bits = 0,
-   105			.sram_pdn_ack_bits = 0,
-   106			.bp_cfg = {
-   107				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
-   108					MT8365_INFRA_TOPAXI_PROTECTEN_AP2CONN_AHB),
-   109				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-   110					MT8365_INFRA_TOPAXI_PROTECTEN_1_CONN2INFRA_AXI_GALS_MST),
-   111				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
-   112					MT8365_INFRA_TOPAXI_PROTECTEN_CONN2INFRA_AHB),
-   113				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-   114					MT8365_INFRA_TOPAXI_PROTECTEN_1_INFRA2CONN_AHB_GALS_SLV),
-   115			},
-   116			.caps = MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_KEEP_DEFAULT_OFF,
-   117		},
-   118		[MT8365_POWER_DOMAIN_MFG] = {
-   119			.name = "mfg",
-   120			.sta_mask = PWR_STATUS_MFG,
-   121			.ctl_offs = 0x0338,
-   122			.pwr_sta_offs = 0x0180,
-   123			.pwr_sta2nd_offs = 0x0184,
-   124			.sram_pdn_bits = GENMASK(9, 8),
-   125			.sram_pdn_ack_bits = GENMASK(13, 12),
-   126			.bp_cfg = {
-   127				MT8365_BUS_PROT_INFRA_WR_TOPAXI(BIT(25)),
-   128				MT8365_BUS_PROT_INFRA_WR_TOPAXI(
-   129					MT8365_INFRA_TOPAXI_PROTECTEN_MFG_M0 |
-   130					MT8365_INFRA_TOPAXI_PROTECTEN_INFRA2MFG),
-   131			},
-   132		},
-   133		[MT8365_POWER_DOMAIN_CAM] = {
-   134			.name = "cam",
-   135			.sta_mask = BIT(25),
-   136			.ctl_offs = 0x0344,
-   137			.pwr_sta_offs = 0x0180,
-   138			.pwr_sta2nd_offs = 0x0184,
-   139			.sram_pdn_bits = GENMASK(9, 8),
-   140			.sram_pdn_ack_bits = GENMASK(13, 12),
-   141			.bp_cfg = {
-   142				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-   143					MT8365_INFRA_TOPAXI_PROTECTEN_1_CAM2MM_AXI_GALS_MST),
-   144				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(2),
-   145			},
-   146		},
-   147		[MT8365_POWER_DOMAIN_VDEC] = {
-   148			.name = "vdec",
-   149			.sta_mask = BIT(31),
-   150			.ctl_offs = 0x0370,
-   151			.pwr_sta_offs = 0x0180,
-   152			.pwr_sta2nd_offs = 0x0184,
-   153			.sram_pdn_bits = GENMASK(8, 8),
-   154			.sram_pdn_ack_bits = GENMASK(12, 12),
-   155			.bp_cfg = {
-   156				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(3),
-   157			},
-   158		},
-   159		[MT8365_POWER_DOMAIN_APU] = {
-   160			.name = "apu",
-   161			.sta_mask = BIT(16),
-   162			.ctl_offs = 0x0378,
-   163			.pwr_sta_offs = 0x0180,
-   164			.pwr_sta2nd_offs = 0x0184,
-   165			.sram_pdn_bits = GENMASK(14, 8),
-   166			.sram_pdn_ack_bits = GENMASK(21, 15),
-   167			.bp_cfg = {
-   168				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-   169					MT8365_INFRA_TOPAXI_PROTECTEN_1_APU2AP |
-   170					MT8365_INFRA_TOPAXI_PROTECTEN_1_APU_CBIP_GALS_MST),
-   171				MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(4),
-   172			},
-   173		},
-   174		[MT8365_POWER_DOMAIN_DSP] = {
-   175			.name = "dsp",
-   176			.sta_mask = BIT(17),
-   177			.ctl_offs = 0x037C,
-   178			.pwr_sta_offs = 0x0180,
-   179			.pwr_sta2nd_offs = 0x0184,
-   180			.sram_pdn_bits = GENMASK(11, 8),
-   181			.sram_pdn_ack_bits = GENMASK(15, 12),
-   182			.bp_cfg = {
-   183				MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
-   184					MT8365_INFRA_TOPAXI_PROTECTEN_1_PWRDNREQ_INFRA_GALS_ADB |
-   185					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_DSP_M |
-   186					MT8365_INFRA_TOPAXI_PROTECTEN_1_AUDIO_BUS_DSP_S),
-   187			},
-   188			.caps = MTK_SCPD_ACTIVE_WAKEUP,
-   189		},
-   190	};
-   191	
+Oh, okay; whew! I was really scratching my head. :)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
