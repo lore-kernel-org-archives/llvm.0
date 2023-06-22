@@ -1,200 +1,112 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298B31E522;
-	Thu, 22 Jun 2023 12:52:33 +0000 (UTC)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35M9L2eg030159;
-	Thu, 22 Jun 2023 08:52:25 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r99r5gm94-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jun 2023 08:52:25 -0400
-Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35MCpcSB002072;
-	Thu, 22 Jun 2023 08:52:24 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r99r5gm8w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jun 2023 08:52:24 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 35MCqNpH035861
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 22 Jun 2023 08:52:23 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 22 Jun
- 2023 08:52:22 -0400
-Received: from ASHBMBX8.ad.analog.com ([fe80::30b9:230c:9621:902f]) by
- ASHBMBX8.ad.analog.com ([fe80::30b9:230c:9621:902f%9]) with mapi id
- 15.02.0986.014; Thu, 22 Jun 2023 08:52:22 -0400
-From: "Paller, Kim Seer" <KimSeer.Paller@analog.com>
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC: Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "oe-kbuild-all@lists.linux.dev"
-	<oe-kbuild-all@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [jic23-iio:testing 6/10] drivers/iio/adc/max14001.c:135:13:
- warning: result of comparison of constant 18446744073709551615 with
- expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned
- char: (unsigned char)0, signed char: (unsi...
-Thread-Topic: [jic23-iio:testing 6/10] drivers/iio/adc/max14001.c:135:13:
- warning: result of comparison of constant 18446744073709551615 with
- expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned
- char: (unsigned char)0, signed char: (unsi...
-Thread-Index: AQHZpBoMRQgB2IdeHUCavmdJyiD/i6+U8NlAgAB7cwCAAVfhwA==
-Date: Thu, 22 Jun 2023 12:52:22 +0000
-Message-ID: <20868cd2c20c48c58460c6a4bde685ce@analog.com>
-References: <202306211545.7b6CdqsL-lkp@intel.com>
-	<CAHp75VcNj-P_WCvx2Pf9sj_ir2oKf2AZ-mdTP=KHSuPY7WcjeA@mail.gmail.com>
-	<010ac7c3707f4eb0aef285b5e823f8e3@analog.com>
- <20230621130552.00001574@Huawei.com>
-In-Reply-To: <20230621130552.00001574@Huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jYTNCaGJHeGxjakpjWVhCd1pHRjBZVnh5YjJGdGFXNW5YREE1WkRnME9X?=
- =?utf-8?B?STJMVE15WkRNdE5HRTBNQzA0TldWbExUWmlPRFJpWVRJNVpUTTFZbHh0YzJk?=
- =?utf-8?B?elhHMXpaeTA1WldZM09XWmtZaTB4TUdaaUxURXhaV1V0WVdVM1pTMDRORE5o?=
- =?utf-8?B?TldKallUZ3pNVFJjWVcxbExYUmxjM1JjT1dWbU56bG1aR1F0TVRCbVlpMHhN?=
- =?utf-8?B?V1ZsTFdGbE4yVXRPRFF6WVRWaVkyRTRNekUwWW05a2VTNTBlSFFpSUhONlBT?=
- =?utf-8?B?SXhNRFF3TmlJZ2REMGlNVE16TXpFNU1URTVNemsxTURZME5EWXlJaUJvUFNK?=
- =?utf-8?B?dlRGSm9ja1pEUzNRMFJUUmhTVFpSYzJwUE1uVTRhWGxOV1c4OUlpQnBaRDBp?=
- =?utf-8?B?SWlCaWJEMGlNQ0lnWW04OUlqRWlJR05wUFNKalFVRkJRVVZTU0ZVeFVsTlNW?=
- =?utf-8?B?VVpPUTJkVlFVRkZiME5CUVVOUGFXczVhRU5MV0ZwQldrVlRjMHhzZEU1YVRW?=
- =?utf-8?B?ZHJVa3QzZFZjd01XdDRXVVJCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJTRUZCUVVGRVlVRlJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlJVRkJVVUZDUVVGQlFYWmthR3Q0WjBGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VW8wUVVGQlFtaEJSMUZCWVZGQ1prRklUVUZhVVVKcVFVaFZRV05uUW14QlJq?=
- =?utf-8?B?aEJZMEZDZVVGSE9FRmhaMEpzUVVkTlFXUkJRbnBCUmpoQldtZENhRUZIZDBG?=
- =?utf-8?B?amQwSnNRVVk0UVZwblFuWkJTRTFCWVZGQ01FRkhhMEZrWjBKc1FVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFXZEJRVUZCUVVGdVowRkJRVWRGUVZwQlFuQkJSamhCWTNkQ2JFRkhUVUZr?=
- =?utf-8?B?VVVKNVFVZFZRVmgzUW5kQlNFbEJZbmRDY1VGSFZVRlpkMEl3UVVoTlFWaDNR?=
- =?utf-8?B?akJCUjJ0QldsRkNlVUZFUlVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJV?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVU5CUVVGQlFVRkRaVUZCUVVGWlVVSnJRVWRyUVZoM1Fu?=
- =?utf-8?B?cEJSMVZCV1hkQ01VRklTVUZhVVVKbVFVaEJRV05uUW5aQlIyOUJXbEZDYWtG?=
- =?utf-8?B?SVVVRmpkMEptUVVoUlFXRlJRbXhCU0VsQlRXZEJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUWtGQlFVRkJRVUZCUVVGSlFVRkJRVUZCUVQwOUlpOCtQQzl0?=
- =?utf-8?B?WlhSaFBnPT0=?=
-x-dg-rorf: true
-x-originating-ip: [10.116.184.234]
-x-adiruleop-newscl: Rule Triggered
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB491ED23
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 13:10:54 +0000 (UTC)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-471b1ba1a7dso1905910e0c.2
+        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 06:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687439453; x=1690031453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
+        b=yGJPcTf5yJ0LAQHbCs0//5u7zTlviWAP4S4kkO82hHeGqqVnJDo/C15mxkMnjVBse6
+         sfzsKQg/tJSVZGfVAk+tv2ZXymwjUI5lj9RIwv2zgWtET1Lze47M1HqsNjk9drvIftQ0
+         pVzHirWFhN1bcVZtplp/G3rDRFkBvIk7Ohha7vbGdSWN68j99aBXZCkf8V4jrhPnbTP+
+         nhOe8iYPriWxHdLafESB8L8s6g/NsqEs7txzboyYTOG09Qzhiu6TWoV4V1fLyW2wxBud
+         pWUKDeA7HjpbY62da6LVs0OiSI+2C/hOb/HcR/1eqFf7XNA9+3dGBuxxi6RAqth1l4dS
+         18Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687439453; x=1690031453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P2ExnUNvm4puj2j+jBwDuVgUcMJgNpTHsaeUbPYv1HA=;
+        b=L1B8RQ06XnOA9nkOVVABSGv9hhq+Wf0et43eVYhxj3Wt8CryaQD2Ar326ZZK6gdcvX
+         jKCTl/KGthLdkbriUfuhM1niwh6Dm/JukZgmikk3LgnycnPxW5ziMxysMDr6no0t1DHq
+         9t8BO+leZXtIUKoEC9qZhqZbZY2dqa9quEeQ+Q/enIYChpdBWvsxASNF2hm96O3zsnOS
+         Cew4AJ+LDFk/jIMiUw9CiuY/q0gEFmXFzdLIFnJKDQ56E2g/30SP9ZzEkD77Sbx061Bp
+         VkgDG5JaEnS576Ap6xEeZs4k/J0l6V3MT/u2ThBRykxbeeAdL3vyaOG3vanALRMzKhpF
+         SqPQ==
+X-Gm-Message-State: AC+VfDyEOUXppvdehhYJ2WIVx5TgwQLvc0cRapx91tNXxGRy5WXBggDD
+	SaU0zuhExztmAc8bWZ8PVCagMSWuliKQIoMQ19JwCQ==
+X-Google-Smtp-Source: ACHHUZ51ts75wkyfRCqdLOdLzUY3leYxdAIzn0un4E/YRo60Xqah11aqcikjs7PUlI+S5vg4oKw+3YC6Mm8RyX4xhqs=
+X-Received: by 2002:a1f:e784:0:b0:471:6119:95cc with SMTP id
+ e126-20020a1fe784000000b00471611995ccmr7694191vkh.14.1687439453218; Thu, 22
+ Jun 2023 06:10:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-GUID: tM4RXYYdHvat-5HqjEQfSFlDtcLHH4kb
-X-Proofpoint-ORIG-GUID: jLdwf3nlBJNlf-pOkXi5WYn5z5SjTNAI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_08,2023-06-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0
- suspectscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220108
+References: <20230621182558.544417-11-brgl@bgdev.pl> <202306220657.ikVUl0zU-lkp@intel.com>
+In-Reply-To: <202306220657.ikVUl0zU-lkp@intel.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 22 Jun 2023 15:10:42 +0200
+Message-ID: <CAMRc=McU+eo3TSFmpR71mak08qJsA19hz8rZo5qk=rMbxoKOzQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 10/12] net: stmmac: replace the int_snapshot_en
+ field with a flag
+To: kernel test robot <lkp@intel.com>
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Richard Cochran <richardcochran@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEpvbmF0aGFuIENhbWVyb24g
-PEpvbmF0aGFuLkNhbWVyb25ASHVhd2VpLmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDIx
-LCAyMDIzIDg6MDYgUE0NCj4gVG86IFBhbGxlciwgS2ltIFNlZXIgPEtpbVNlZXIuUGFsbGVyQGFu
-YWxvZy5jb20+DQo+IENjOiBBbmR5IFNoZXZjaGVua28gPGFuZHkuc2hldmNoZW5rb0BnbWFpbC5j
-b20+OyBsbHZtQGxpc3RzLmxpbnV4LmRldjsgb2UtDQo+IGtidWlsZC1hbGxAbGlzdHMubGludXgu
-ZGV2OyBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4gU3ViamVjdDogUmU6IFtq
-aWMyMy1paW86dGVzdGluZyA2LzEwXSBkcml2ZXJzL2lpby9hZGMvbWF4MTQwMDEuYzoxMzU6MTM6
-DQo+IHdhcm5pbmc6IHJlc3VsdCBvZiBjb21wYXJpc29uIG9mIGNvbnN0YW50IDE4NDQ2NzQ0MDcz
-NzA5NTUxNjE1IHdpdGgNCj4gZXhwcmVzc2lvbiBvZiB0eXBlICd0eXBlb2YgKF9HZW5lcmljKCht
-YXNrKSwgY2hhcjogKHVuc2lnbmVkIGNoYXIpMCwgdW5zaWduZWQNCj4gY2hhcjogKHVuc2lnbmVk
-IGNoYXIpMCwgc2lnbmVkIGNoYXI6ICh1bnNpLi4uDQo+IA0KPiBbRXh0ZXJuYWxdDQo+IA0KPiBP
-biBXZWQsIDIxIEp1biAyMDIzIDA4OjU4OjQ3ICswMDAwDQo+ICJQYWxsZXIsIEtpbSBTZWVyIiA8
-S2ltU2Vlci5QYWxsZXJAYW5hbG9nLmNvbT4gd3JvdGU6DQo+IA0KPiA+ID4gLS0tLS1PcmlnaW5h
-bCBNZXNzYWdlLS0tLS0NCj4gPiA+IEZyb206IEFuZHkgU2hldmNoZW5rbyA8YW5keS5zaGV2Y2hl
-bmtvQGdtYWlsLmNvbT4NCj4gPiA+IFNlbnQ6IFdlZG5lc2RheSwgSnVuZSAyMSwgMjAyMyA0OjI1
-IFBNDQo+ID4gPiBUbzoga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+ID4gPiBD
-YzogUGFsbGVyLCBLaW0gU2VlciA8S2ltU2Vlci5QYWxsZXJAYW5hbG9nLmNvbT47DQo+ID4gPiBs
-bHZtQGxpc3RzLmxpbnV4LmRldjsgb2UtIGtidWlsZC1hbGxAbGlzdHMubGludXguZGV2OyBKb25h
-dGhhbg0KPiA+ID4gQ2FtZXJvbiA8Sm9uYXRoYW4uQ2FtZXJvbkBodWF3ZWkuY29tPg0KPiA+ID4g
-U3ViamVjdDogUmU6IFtqaWMyMy1paW86dGVzdGluZyA2LzEwXSBkcml2ZXJzL2lpby9hZGMvbWF4
-MTQwMDEuYzoxMzU6MTM6DQo+ID4gPiB3YXJuaW5nOiByZXN1bHQgb2YgY29tcGFyaXNvbiBvZiBj
-b25zdGFudCAxODQ0Njc0NDA3MzcwOTU1MTYxNSB3aXRoDQo+ID4gPiBleHByZXNzaW9uIG9mIHR5
-cGUgJ3R5cGVvZiAoX0dlbmVyaWMoKG1hc2spLCBjaGFyOiAodW5zaWduZWQgY2hhcikwLA0KPiA+
-ID4gdW5zaWduZWQNCj4gPiA+IGNoYXI6ICh1bnNpZ25lZCBjaGFyKTAsIHNpZ25lZCBjaGFyOiAo
-dW5zaS4uLg0KPiA+ID4NCj4gPiA+IFtFeHRlcm5hbF0NCj4gPiA+DQo+ID4gPiBPbiBXZWQsIEp1
-biAyMSwgMjAyMyBhdCAxMDoxOeKAr0FNIGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29t
-Pg0KPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4gdHJlZToNCj4gPiA+IGh0dHBzOi8vdXJsZGVm
-ZW5zZS5jb20vdjMvX19odHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VyDQo+
-ID4gPiBuZWwvZ2l0L2ppDQo+ID4gPiBjMjMvaWlvLmdpdF9fOyEhQTNOaThDUzB5MlkhNDVvXy1N
-TXI0eHE0ZV85UFdwSy1zUV9xSEJiRmJiUzdRMkotDQo+ID4gPiBmTm1UdlNQQVFYallocExZRHRl
-R0hTZVdFYmRJQXYzNjRIaVFCUXkydFhNZG56M29lc1BKdnlERVZnJA0KPiA+ID4gdGVzdGluZw0K
-PiA+ID4gPiBoZWFkOiAgIDI1ZTIwMWNjNmZmMjcwYWJjMDYyZTEzZmY5MTIyOTIwOTdjYjI4MjcN
-Cj4gPiA+ID4gY29tbWl0OiBkM2U5M2I2N2Y5MzRhNDc3YzU4NTFkNTc1YTIyNzhmMDdjNjI0MmZi
-IFs2LzEwXSBpaW86IGFkYzoNCj4gPiA+ID4gbWF4MTQwMDE6IE5ldyBkcml2ZXINCj4gPiA+ID4g
-Y29uZmlnOiB4ODZfNjQtYWxseWVzY29uZmlnDQo+ID4gPiA+IChodHRwczovL3VybGRlZmVuc2Uu
-Y29tL3YzL19faHR0cHM6Ly9kb3dubG9hZC4wMS5vcmcvMGRheS1jaS9hcmNoaQ0KPiA+ID4gPiB2
-ZS8yDQo+ID4gPiA+IDAyMzA2MjEvMjAyMzA2MjExNTQ1LjdiNkNkcXNMLQ0KPiA+ID4gbGtwQGlu
-dGVsLmNvbS9jb25maWdfXzshIUEzTmk4Q1MweTJZITQ1bw0KPiA+ID4gPiBfLU1NcjR4cTRlXzlQ
-V3BLLXNRX3FIQmJGYmJTN1EySi0NCj4gPiA+IGZObVR2U1BBUVhqWWhwTFlEdGVHSFNlV0ViZElB
-djM2NEhpUUINCj4gPiA+ID4gUXkydFhNZG56M29lc09nS2h4OVpRJCApDQo+ID4gPiA+IGNvbXBp
-bGVyOiBjbGFuZyB2ZXJzaW9uIDE1LjAuNw0KPiA+ID4gPiAoaHR0cHM6Ly91cmxkZWZlbnNlLmNv
-bS92My9fX2h0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC4NCj4gPiA+ID4gZ2l0
-Xw0KPiA+ID4gPiBfOyEhQTNOaThDUzB5MlkhNDVvXy1NTXI0eHE0ZV85UFdwSy1zUV9xSEJiRmJi
-UzdRMkotDQo+ID4gPiBmTm1UdlNQQVFYallocExZRHQNCj4gPiA+ID4gZUdIU2VXRWJkSUF2MzY0
-SGlRQlF5MnRYTWRuejNvZXNPeDk3bUwwUSQNCj4gPiA+ID4gOGRmZGNjN2I3YmY2NjgzNGE3NjFi
-ZDhkZTQ0NTg0MGVmNjhlNGQxYSkNCj4gPiA+ID4gcmVwcm9kdWNlOg0KPiA+ID4gPiAoaHR0cHM6
-Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8vZG93bmxvYWQuMDEub3JnLzBkYXktY2kvYXJj
-aGkNCj4gPiA+ID4gdmUvMg0KPiA+ID4gPiAwMjMwNjIxLzIwMjMwNjIxMTU0NS43YjZDZHFzTC0N
-Cj4gPiA+IGxrcEBpbnRlbC5jb20vcmVwcm9kdWNlX187ISFBM05pOENTMHkyWSENCj4gPiA+ID4g
-NDVvXy1NTXI0eHE0ZV85UFdwSy1zUV9xSEJiRmJiUzdRMkotDQo+ID4gPiBmTm1UdlNQQVFYallo
-cExZRHRlR0hTZVdFYmRJQXYzNjRIDQo+ID4gPiA+IGlRQlF5MnRYTWRuejNvZXNPRE1pQUZyZyQg
-KQ0KPiA+ID4gPg0KPiA+ID4gPiBJZiB5b3UgZml4IHRoZSBpc3N1ZSBpbiBhIHNlcGFyYXRlIHBh
-dGNoL2NvbW1pdCAoaS5lLiBub3QganVzdCBhDQo+ID4gPiA+IG5ldyB2ZXJzaW9uIG9mIHRoZSBz
-YW1lIHBhdGNoL2NvbW1pdCksIGtpbmRseSBhZGQgZm9sbG93aW5nIHRhZ3MNCj4gPiA+ID4gfCBS
-ZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+ID4gPiA+IHwg
-Q2xvc2VzOg0KPiA+ID4gPiB8IGh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwczovL2xv
-cmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWwNCj4gPiA+ID4gfCBsLzIwDQo+ID4gPiA+IHwgMjMw
-NjIxMTU0NS43YjZDZHFzTC1sa3BAaW50ZWwuY29tL19fOyEhQTNOaThDUzB5MlkhNDVvXy0NCj4g
-PiA+IE1NcjR4cTRlXzlQVw0KPiA+ID4gPiB8IHBLLXNRX3FIQmJGYmJTN1EySi0NCj4gPiA+IGZO
-bVR2U1BBUVhqWWhwTFlEdGVHSFNlV0ViZElBdjM2NEhpUUJReTJ0WE1kbnozb2UNCj4gPiA+ID4g
-fCBzT1ZHQjBoVFEkDQo+ID4gPiA+DQo+ID4gPiA+IEFsbCB3YXJuaW5ncyAobmV3IG9uZXMgcHJl
-Zml4ZWQgYnkgPj4pOg0KPiA+ID4NCj4gPiA+IE9rYXksIHlvdSBldmVuIGhhdmVuJ3QgY29tcGls
-ZWQgeW91ciBjb2RlIDotKCBUaGlzIHNob3VsZCBwcm9iYWJseQ0KPiA+ID4gdXNlIG9uZSBvZiB0
-aGUgZnVuY3Rpb25zIGZyb20gYml0ZmllbGQuaC4NCj4gPiA+IExpa2UgdTMyX2VuY29kZV9iaXRz
-KCkuDQo+ID4NCj4gPiBJIHdhc27igJl0IGFibGUgdG8gZW5jb3VudGVyIGFuZCB0cmlnZ2VyIHRo
-aXMga2luZCBvZiB3YXJuaW5nIGluIG15DQo+ID4gYnVpbGQuIEkgYnVpbHQgYW5kIHRlc3RlZCB0
-aGUgY29kZSB3aXRoIHJwaTQgYW5kIGxpbnV4IGtlcm5lbCBzb3VyY2UgdHJlZSBiZWZvcmUNCj4g
-c2VuZGluZyB0aGUgcGF0Y2guDQo+ID4gUGVyaGFwcyBJIG1pc3NlZCBzb21ldGhpbmcuIEkgd2ls
-bCBjaGVjayBhbmQgdHJ5IHRvIHJlc29sdmUgdGhpcyB3YXJuaW5nLg0KPiANCj4gQWxzbyBwYXNz
-ZWQgbXkgKGFkbWl0dGVkbHkgbGltaXRlZCB0aGVzZSBkYXlzIGFzIDAtZGF5IGRvZXMgc3VjaCBh
-IGdvb2Qgam9iKQ0KPiBsb2NhbCBidWlsZCB0ZXN0cy4NCj4gSSBndWVzcyBzb21lIC8gbW9zdCBj
-b21waWxlcnMgY291bGQgc2VlIGl0IGlzIGNvbnN0YW50LCBidXQgYSBsZXNzIG9ic2VydmFudCBv
-bmUNCj4gYXBwYXJlbnRseSBkb2Vzbid0Lg0KPiANCj4gSXQncyBvbmx5IGNhbGxlZCBmcm9tIG9u
-ZSBwbGFjZSwgSSdkIGp1c3QgcHV0IHRoZSBjb2RlIGlubGluZSBzbyB0aGF0IHRoZSBjb25zdGFu
-dA0KPiBuYXR1cmUgb2YgdGhhdCB2YXJpYWJsZSBpcyBleHBsaWNpdC4gIE9yIHBhc3MgaW4gdGhl
-IEZJRUxEX1BSRVAoKSB2YWx1ZSByYXRoZXIgdGhhbg0KPiBjb21wdXRpbmcgaXQgaW4gdGhlIGZ1
-bmN0aW9uLg0KPiANCj4gU2VuZCBhIG5ldyB2ZXJzaW9uIGFuZCBJJ2xsIHN3aXRjaCBpdCBpbiBm
-b3IgdGhlIG9uZSBpbiB0aGUgdHJlZSBjdXJyZW50bHkuDQo+IA0KPiBIb3dldmVyLCBpdCBsb29r
-cyBsaWtlIHRoYXQgY29kZSB3YXMgbWVhbnQgdG8gZG8gYSByZWFkIG1vZGlmeSB3cml0ZSBjeWNs
-ZSBhbmQNCj4gZG9lc24ndCB1c2UgdGhlIHZhbHVlIHJlYWQuICBTbyBwcm9iYWJseSBhIGJ1ZyB0
-aGVyZSBhbnl3YXkuDQoNCkkgdGhpbmsgSSBmb3VuZCB0aGUgcHJvYmxlbSwgdGhlIGNvZGUgZGly
-ZWN0bHkgYXNzaWduIGEgYml0IHdpdGhvdXQgcmV0YWluaW5nIHRoZSANCmNmZyByZWcgZGVmYXVs
-dCB2YWx1ZS4gVGhlcmUgc2hvdWxkIGJlIGEgYml0d2lzZSBPUiBpbiB0aGUgb3BlcmFuZHMuIFRo
-aXMgbWlnaHQgDQpyZXNvbHZlIHRoZSB3YXJuaW5nLiBIb3dldmVyLCBJIGZvdW5kIGl0IGRpZmZp
-Y3VsdCB0byByZXBsaWNhdGUgdGhlIGJ1aWxkIHByb2Nlc3Mgb2YgMC1kYXkuIA0KSSB3aWxsIHNl
-bmQgdGhlIG5ldyB2ZXJzaW9uIGxhdGVyLg0KDQpUaGFua3MgYW5kIGJlc3QgcmVnYXJkcywNCg0K
-S2ltIFNlZXIgUGFsbGVyDQo=
+On Thu, Jun 22, 2023 at 1:31=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Bartosz,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewsk=
+i/net-stmmac-replace-has_integrated_pcs-field-with-a-flag/20230622-022944
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20230621182558.544417-11-brgl%40=
+bgdev.pl
+> patch subject: [PATCH net-next 10/12] net: stmmac: replace the int_snapsh=
+ot_en field with a flag
+> config: i386-randconfig-i012-20230621 (https://download.01.org/0day-ci/ar=
+chive/20230622/202306220657.ikVUl0zU-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
+8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220657=
+.ikVUl0zU-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306220657.ikVUl0zU-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:612:2: error: use of=
+ undeclared identifier 'priv'
+>            priv->plat->flags &=3D ~STMMAC_FLAG_INT_SNAPSHOT_EN;
+>            ^
+>    1 error generated.
+>
+
+Eek, must have disabled this driver in my config by accident. Now fixed for=
+ v2.
+
+Bart
