@@ -1,56 +1,49 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C7517D0;
-	Thu, 22 Jun 2023 03:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8709D17D0;
+	Thu, 22 Jun 2023 04:10:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687404633; x=1718940633;
+  t=1687407034; x=1718943034;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AZvU9ZeEZYTZ0Y5lwWUlf/o2NDHD8zNYuhg9CSqAe5k=;
-  b=S7N4uPTuEfnhAyiyKuqGsGbcgYt6BwO4m0sdQtjfTKZmn02lAJybrm/I
-   VSse/psOBbPu/hL8/OB3LROWp4Z2qfOYJ4MGxvZ0EzSZyksqeJkMctpSg
-   pfN+88f0Zoi0ExQXW5OYvqqG2bG+1IYfq3HbUix1K8ExaiD+y7BkJJYdk
-   YgFo/E5f1eN+n8pR13e3l+4YOJAZHDfhR6JGTpDbUVi+5T9549mQGmySc
-   bcTijXW0cikqhvjesN5WE79MtJZkUOXHTfeXVSI1OTiDpKQG5xn3wofwp
-   Fl86pdGBBIKBj0Gx0LfmHztllJsUWeSCdRGm1BomOzC46QjE3FOEemQES
+  bh=OpwDpPau9AQnWP8p0KdWhexr5emxOCDtM5hNbv3OmHY=;
+  b=iSpi4O2EM9aKdDyUvzX60GiEtDFyPbvM5Di/GFPCqKhb+PcPi7DbAGOI
+   r7KBpei9aEtFne+MUE+R+3UstIx2VvmwP3fmaCIalwrNJPnsGD63zX3SI
+   w/iqiIflhwGF3AeM3uinm/yLxpYyKtFo4P6Fwfs5FKj+BvgJOBZDjA8mO
+   tgYDKsHW9TqDCmmEqQb32RZEKfJdg+7RK2nSU0bHN9WPipJwYK4LhJrWA
+   1hmejasQ2O+wNlOpfkk1PpPt6Tj/mHWIW5vbaAyK98zlmSNj3CggB/epq
+   9G8KPfVU6bMs2weacE30lG8SIR9ke+qy4IRon+yXgVwiDYqYdt3sPxzM+
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357869009"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360397919"
 X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="357869009"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 20:30:32 -0700
+   d="scan'208";a="360397919"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:10:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="827727304"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804627027"
 X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="827727304"
+   d="scan'208";a="804627027"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 20:30:28 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 21:10:29 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qCB1f-0007In-31;
-	Thu, 22 Jun 2023 03:30:27 +0000
-Date: Thu, 22 Jun 2023 11:29:43 +0800
+	id 1qCBeO-0007Jv-1j;
+	Thu, 22 Jun 2023 04:10:28 +0000
+Date: Thu, 22 Jun 2023 12:10:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jack Zhu <jack.zhu@starfivetech.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	bryan.odonoghue@linaro.org, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Eugen Hristev <eugen.hristev@collabora.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To: Besar Wicaksono <bwicaksono@nvidia.com>, suzuki.poulose@arm.com,
+	robin.murphy@arm.com, ilkka@os.amperecomputing.com,
+	catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, jack.zhu@starfivetech.com,
-	changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
-Message-ID: <202306221112.MnLtMzRo-lkp@intel.com>
-References: <20230619112838.19797-6-jack.zhu@starfivetech.com>
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, treding@nvidia.com,
+	jonathanh@nvidia.com, vsethi@nvidia.com, rwiley@nvidia.com,
+	efunsten@nvidia.com, Besar Wicaksono <bwicaksono@nvidia.com>
+Subject: Re: [PATCH v4] perf: arm_cspmu: Separate Arm and vendor module
+Message-ID: <202306221135.Z877Um2S-lkp@intel.com>
+References: <20230620041438.32514-1-bwicaksono@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,99 +52,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230619112838.19797-6-jack.zhu@starfivetech.com>
+In-Reply-To: <20230620041438.32514-1-bwicaksono@nvidia.com>
 
-Hi Jack,
+Hi Besar,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on robh/for-next linus/master v6.4-rc7 next-20230621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on ea8d1c062a0e876e999e4f347daeb598d5e677ab]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jack-Zhu/media-dt-bindings-Add-JH7110-Camera-Subsystem/20230619-193105
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230619112838.19797-6-jack.zhu%40starfivetech.com
-patch subject: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Besar-Wicaksono/perf-arm_cspmu-Separate-Arm-and-vendor-module/20230620-121723
+base:   ea8d1c062a0e876e999e4f347daeb598d5e677ab
+patch link:    https://lore.kernel.org/r/20230620041438.32514-1-bwicaksono%40nvidia.com
+patch subject: [PATCH v4] perf: arm_cspmu: Separate Arm and vendor module
+config: arm64-randconfig-r011-20230621 (https://download.01.org/0day-ci/archive/20230622/202306221135.Z877Um2S-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221135.Z877Um2S-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306221112.MnLtMzRo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221135.Z877Um2S-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/starfive/camss/stf_camss.c:173:13: warning: variable 'pad_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (port == STF_PORT_DVP) {
-                      ^~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:178:18: note: uninitialized use occurs here
-           for (i = 0; i < pad_num; ++i) {
-                           ^~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:173:9: note: remove the 'if' if its condition is always true
-           } else if (port == STF_PORT_DVP) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:168:25: note: initialize the variable 'pad_num' to silence this warning
-           unsigned int i, pad_num;
-                                  ^
-                                   = 0
-   1 warning generated.
---
->> drivers/media/platform/starfive/camss/stf_isp.c:113:13: warning: variable 'formats' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (pad == STF_ISP_PAD_SRC) {
-                      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:127:18: note: uninitialized use occurs here
-           for (i = 0; i < formats->nfmts; i++) {
-                           ^~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:113:9: note: remove the 'if' if its condition is always true
-           } else if (pad == STF_ISP_PAD_SRC) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:105:40: note: initialize the variable 'formats' to silence this warning
-           const struct isp_format_table *formats;
-                                                 ^
-                                                  = NULL
+>> drivers/perf/arm_cspmu/arm_cspmu.c:386:30: warning: no previous prototype for function 'arm_cspmu_impl_match_get' [-Wmissing-prototypes]
+     386 | struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
+         |                              ^
+   drivers/perf/arm_cspmu/arm_cspmu.c:386:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     386 | struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
+         | ^
+         | static 
    1 warning generated.
 
 
-vim +173 drivers/media/platform/starfive/camss/stf_camss.c
+vim +/arm_cspmu_impl_match_get +386 drivers/perf/arm_cspmu/arm_cspmu.c
 
-   156	
-   157	static int stfcamss_subdev_notifier_bound(struct v4l2_async_notifier *async,
-   158						  struct v4l2_subdev *subdev,
-   159						  struct v4l2_async_subdev *asd)
-   160	{
-   161		struct stfcamss *stfcamss =
-   162			container_of(async, struct stfcamss, notifier);
-   163		struct stfcamss_async_subdev *csd =
-   164			container_of(asd, struct stfcamss_async_subdev, asd);
-   165		enum stf_port_num port = csd->port;
-   166		struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
-   167		struct media_pad *pad[STF_PADS_NUM];
-   168		unsigned int i, pad_num;
-   169	
-   170		if (port == STF_PORT_CSI2RX) {
-   171			pad[0] = &isp_dev->pads[STF_PAD_SINK];
-   172			pad_num = 1;
- > 173		} else if (port == STF_PORT_DVP) {
-   174			dev_err(stfcamss->dev, "Not support DVP sensor\n");
-   175			return -EPERM;
-   176		}
-   177	
-   178		for (i = 0; i < pad_num; ++i) {
-   179			int ret;
-   180	
-   181			ret = v4l2_create_fwnode_links_to_pad(subdev, pad[i], 0);
-   182			if (ret < 0)
-   183				return ret;
-   184		}
-   185	
-   186		return 0;
-   187	}
-   188	
+   385	
+ > 386	struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
+   387	{
+   388		struct arm_cspmu_impl_match *match = impl_match;
+   389	
+   390		for (; match->pmiidr_val; match++) {
+   391			u32 mask = match->pmiidr_mask;
+   392	
+   393			if ((match->pmiidr_val & mask) == (pmiidr & mask))
+   394				break;
+   395		}
+   396	
+   397		return match;
+   398	}
+   399	
 
 -- 
 0-DAY CI Kernel Test Service
