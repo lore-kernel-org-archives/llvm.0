@@ -1,141 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC051EA98;
-	Thu, 22 Jun 2023 16:54:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E05C433C8;
-	Thu, 22 Jun 2023 16:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687452852;
-	bh=WvPMeVtT8HySVlQQYfCD9Qi6NPFDyHkTCRsPrIqcEts=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SX7wwboWbkVlRORAbsFOmJf2/KjqoskquLbeQwt+WXUKFFFnqejBShUZNP5XQqqW5
-	 Gru5bbKxs0zW/wV9kc4I5TKWsKB4mpc6m/Rlep7PmPdqLgn6mOOz6Kus6gzuDeoVAn
-	 xLCsreE+Ecnf7a1GwyDPTTHbxWEkcJRSSylevY3IM4wnhmsxXyXylitOf09tivZUs7
-	 2HpPWw+jNAth/cJN/BGsX+iR18YKfUIOM2rj1uHUzhDLBkkH24CN9biidt0kit6Lvi
-	 Yv7MCDrlnip/SDDTMrnNPh3Lff+sgVqReI55CVfw9JiFuu3hiKLGie9mRWHKoSF6Om
-	 mkCMBtHv0JaTg==
-Date: Thu, 22 Jun 2023 17:54:05 +0100
-From: Lee Jones <lee@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, sean.wang@mediatek.com,
-	pavel@ucw.cz, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, trix@redhat.com,
-	linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] leds: leds-mt6323: Adjust return/parameter types in wled
- get/set callbacks
-Message-ID: <20230622165405.GX10378@google.com>
-References: <20230622-mt6323-wled-wincompatible-function-pointer-types-strict-v1-1-6ad256f220e8@kernel.org>
- <CAKwvOd=jHrch4a-AZgXmScGKW2Fs4MHwH0iaW_8PgR=iYfvrEg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A10200AC
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 17:06:56 +0000 (UTC)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so712a12.0
+        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 10:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687453615; x=1690045615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cgDsKIvWGO5gn/exYyUdan0EdWpwSIBfqo1P7aqIWXE=;
+        b=7n6Db3cDup8SiTVfbFWDitZGZd1Ih5EpRY7no8Q080DrHg2IIeJAolKaQASpDLDpZs
+         v9jF9hMMNV7eSmPTn/LkZrJbdpnwCxveLyQc2KF+rN/KkQSSF3nfLM7MrWZi10jbSWoc
+         OTrREBezO68LcityxSKmHctOQd6PPnBa0nWelWhidSk7ivy5Kzrg+m4Mc9xZyDTPvH2r
+         IVzrG0lTIUSt3YWJYzCR60qBb91uQsO33PMcNeiaQzcGic8YlinKOTLlvVSpdh/mCDXj
+         4q4hk30K/UkPtEDHa2s43RPeITy7FkGOYiaO4dT77KCUodAVJt2x/ahYqUtQleaniJ6Z
+         xrrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687453615; x=1690045615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cgDsKIvWGO5gn/exYyUdan0EdWpwSIBfqo1P7aqIWXE=;
+        b=iZH5jpO9afMTg4CbEh7uL24dbXo8U4pBOluluR/c5WmyspRwjjUoebKyCBzKMsLd9K
+         0C3Jkixw00msihsct6x22Zbr0TB3zUmmyQGdY5YNj+I6QtKj+ROffsvrM/je0SZxkcLS
+         9xjxfU+3H7HQZGSkVnPJyAAJ0xaVSIaVd/ezYS8sH4AuDsSpOxtDKbMgnyC37LAAuzfB
+         1WF1FDZeoljXqW74KmSQk/ynCiXBcQGzODX6uCvQSsgcgNw1I7mxL4G3lD61dismW2mh
+         j4w6xODzy7EUcvT0lWPSDvUBPSNmrO637Uod8CtkJjRDiEr7jELnBYswRcGp1yC6x0tB
+         ZHVA==
+X-Gm-Message-State: AC+VfDz4OVHYKBHQf/ptfdemJwDl6+WCr7RSOGKTmH66qNRlIRsFuERp
+	1L7xm6SxERQZxmn8xhyzWh9AX1ZZp1dQkqJ5qxwAkA==
+X-Google-Smtp-Source: ACHHUZ6ktb/rssyE8rTUZJ2PZb/fhd5ss+nrO8ogXVAD2LHhw+MBFxQFKPTq+d7sqWXcSN3kMWM3MsaOiKVJUwKbmag=
+X-Received: by 2002:a50:9fc4:0:b0:519:6a72:aeea with SMTP id
+ c62-20020a509fc4000000b005196a72aeeamr810590edf.7.1687453614987; Thu, 22 Jun
+ 2023 10:06:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=jHrch4a-AZgXmScGKW2Fs4MHwH0iaW_8PgR=iYfvrEg@mail.gmail.com>
+References: <20230409145358.2538266-1-masahiroy@kernel.org>
+ <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
+ <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
+In-Reply-To: <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com>
+From: Fangrui Song <maskray@google.com>
+Date: Thu, 22 Jun 2023 10:06:42 -0700
+Message-ID: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tom Rini <trini@konsulko.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 22 Jun 2023, Nick Desaulniers wrote:
+On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+> >
+> > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
+> > > Hi Masahiro,
+> > >
+> > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple i=
+s
+> > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> > > >
+> > > > As a result, the linker script is preprocessed with predefined macr=
+os
+> > > > for the build host instead of the target.
+> > > >
+> > > > Assuming you use an x86 build machine, compare the following:
+> > > >
+> > > >  $ clang -dM -E -x c /dev/null
+> > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> > > >
+> > > > There is no actual problem presumably because our linker scripts do=
+ not
+> > > > rely on such predefined macros, but it is better to define correct =
+ones.
+> > > >
+> > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.l=
+ds.S
+> > > > will be processed with the proper target triple.
+> > > >
+> > > > Reported-by: Tom Rini <trini@konsulko.com>
+> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > ---
+> > > >
+> > > >  scripts/Makefile.clang | 3 +--
+> > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > > index 70b354fa1cb4..93ca059cc3b8 100644
+> > > > --- a/scripts/Makefile.clang
+> > > > +++ b/scripts/Makefile.clang
+> > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warning-=
+option
+> > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
+> > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
+> > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
+> > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
+> > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
+> > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
+> > > >  export CLANG_FLAGS
+> > > > --
+> > > > 2.37.2
+> > > >
+> > >
+> > > I am doubling back to this change, as the lack of '--target' in
+> > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new chang=
+e
+> > > that rejects '-mbig-endian' and '-mlittle-endian' when not supported =
+by
+> > > the target, which breaks the arm64 vDSO build when preprocessing its
+> > > linker script:
+> > >
+> > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+> > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper virt=
+config menuconfig arch/arm64/kernel/vdso/
+> > >   ...
+> > >   clang: error: unsupported option '-mbig-endian' for target 'x86_64-=
+pc-linux-gnu'
+> > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vds=
+o/vdso.lds] Error 1
+> > >   ...
+> > >
+> > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b67311989=
+56c522c93d0df1050
+> > >   https://github.com/ClangBuiltLinux/linux/issues/1859
+> > >
+> > > This change resolves that issue. I was able to figure out why those n=
+ew
+> > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> > > CHECKFLAGS. The following diff resolves it for me:
+> > >
+> > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > > index a7a4ee66a9d3..ef7b05ae92ce 100644
+> > > --- a/arch/mips/Makefile
+> > > +++ b/arch/mips/Makefile
+> > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-table=
+s
+> > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
+> > >
+> > >  ifdef CONFIG_MIPS
+> > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null=
+ | \
+> > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -d=
+M -E -x c /dev/null | \
+> > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+> > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\=
+$$/&&/g')
+> > >  endif
+> > >
+> > > I will run this change plus that diff through my build matrix to see =
+if
+> > > any other issues pop up. If not, I will respond with some tags and
+> > > perhaps this could be taken as a fix for 6.4 so that it could
+> > > potentially be backported?
+> >
+> > I found two more issues lurking in PowerPC. I have attached suggested
+> > patches for all the issues I have uncovered to this email, please feel
+> > free to use them or do something different if you feel there is a bette=
+r
+> > fix. With those issues resolved in one way or another, consider the
+> > original change:
+> >
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > If it would work better for you, I am more than happy to take over this
+> > series as well.
+> >
+> > Cheers,
+> > Nathan
+>
+> Thanks. All the three patches look good to me.
+>
+> I will apply them, then mine on top.
 
-> On Thu, Jun 22, 2023 at 9:12 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Clang's kernel Control Flow Integrity (kCFI) is a compiler-based
-> > security mitigation that ensures the target of an indirect function call
-> > matches the expected type of the call and trapping if they do not match
-> > exactly. The warning -Wincompatible-function-pointer-types-strict aims
-> > to catch these issues at compile time, which reveals:
-> >
-> >  drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
-> >    598 |                         leds->led[reg]->cdev.brightness_set_blocking =
-> >        |                                                                      ^
-> >    599 |                                                 mt6323_wled_set_brightness;
-> >        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-> >    600 |                         leds->led[reg]->cdev.brightness_get =
-> >        |                                                             ^
-> >    601 |                                                 mt6323_get_wled_brightness;
-> >        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  2 errors generated.
-> >
-> > While 'unsigned int' is ABI compatible with 'enum led_brightness' (hence
-> > no warning from -Wincompatible-function-pointer-types) and the callers
-> > of these callbacks use/pass the values as 'unsigned int', the mismatch
-> > between the prototype and the called function will trip kCFI at runtime.
-> >
-> > Change the types in the implementations to match the prototypes, clearing
-> > up the warning and avoiding kCFI failures.
-> >
-> > Fixes: 9bb0a9e0626c ("leds: leds-mt6323: Add support for WLEDs and MT6332")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Thanks for the patch! Consider additionally having
-> mt6323_get_wled_brightness return LED_OFF rather than 0 in its
-> ternary.
+Drive-by reply from
+https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
 
-https://elixir.bootlin.com/linux/latest/source/include/linux/leds.h#L32
+Hi Masahiro, one nit:) If the patch still has time to adjust the
+commit message, perhaps consider replacing
 
-Perhaps this is not relevant for this older driver though?
+-target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
 
-I'd really like some more information from Pavel on the history.
+as the former is a deprecated driver option since Clang 3.x (long time ago)=
+.
 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> 
-> > ---
-> >  drivers/leds/leds-mt6323.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
-> > index e8fecfc2e90a..24f35bdb55fb 100644
-> > --- a/drivers/leds/leds-mt6323.c
-> > +++ b/drivers/leds/leds-mt6323.c
-> > @@ -76,7 +76,7 @@ struct mt6323_led {
-> >         int                     id;
-> >         struct mt6323_leds      *parent;
-> >         struct led_classdev     cdev;
-> > -       unsigned int            current_brightness;
-> > +       enum led_brightness     current_brightness;
-> >  };
-> >
-> >  /**
-> > @@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
-> >         return 0;
-> >  }
-> >
-> > -static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
-> > +static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
-> >  {
-> >         struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
-> >         struct mt6323_leds *leds = led->parent;
-> > @@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
-> >  }
-> >
-> >  static int mt6323_wled_set_brightness(struct led_classdev *cdev,
-> > -                                     unsigned int brightness)
-> > +                                     enum led_brightness brightness)
-> >  {
-> >         struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
-> >         struct mt6323_leds *leds = led->parent;
-> >
-> > ---
-> > base-commit: 7bd932d9adbcc5c5370d968bdb0b00385606bf3a
-> > change-id: 20230621-mt6323-wled-wincompatible-function-pointer-types-strict-334f06d92ffb
-> >
-> > Best regards,
-> > --
-> > Nathan Chancellor <nathan@kernel.org>
-> >
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+> Assuming you use an x86 build machine, compare the following:
 
--- 
-Lee Jones [李琼斯]
+You may drop "Assuming you use an x86 build machine" and add
+--target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
+:)
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
