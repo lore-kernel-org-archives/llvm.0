@@ -1,57 +1,56 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1DD188
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 03:11:19 +0000 (UTC)
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-54f71fa7e41so3703020a12.3
-        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 20:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687403478; x=1689995478;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VAqfKy9L7gl2qfZmHwhpMjSx7czuoKau/UFIXqH952U=;
-        b=Ux9IDPHbFSScf+uqQMasT6bNz9Ff2jg/GwkYrg0QL2Hg6USun6agaDett+qxyqxyat
-         pMIF6usSBX6lKywrdZJZdb/n/R+LVUewkhGsf35GPCsRXGSvg7X/XlPbGvdUUHLNQPE3
-         Bb8sMkFiWTcFd/SfMYOAGAkbmRMJBt97skYLA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687403478; x=1689995478;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VAqfKy9L7gl2qfZmHwhpMjSx7czuoKau/UFIXqH952U=;
-        b=Gd2vTR0Yr0hMshmqHUgLVFtHLInr/JSfFCEov3n3iaV7WCnZptbs/vB57bR+pmiY93
-         GQyE1Z3JQ587OlnQFyGw4pJ6gRctwh3OUTWRHGJirFN+xMZtbk40nGyM6PpMq75dCALg
-         PUxjehEiZgKoGiJBSjfKpy3mwCiJygrJusCK9AAQQNwdwWj6BSulHCFz2so2oMcIa0rl
-         yEKaeUISTMKmuPb/KhadbvGLTi9xt/LCAm1X8FOw+vTToz+7mBGbz8jx5v1pbMFhKH3f
-         iPFBnO7qEjTfWMa3QJsYRA1Sfp/4K9T47iAqOSUho1wdVXe/ynvV0FOKWo1IqdcMUNRd
-         NHZA==
-X-Gm-Message-State: AC+VfDza9pOomkcZcHMjJeroK8KvP8xLfilQGN8bfajyBEdnBzCwQGlp
-	VqCApV0IHfcRiswN5vSnFnU+ZQ==
-X-Google-Smtp-Source: ACHHUZ4vMlPLBOvhTnJarXHJcpoo4MCFhQd8JrGzTMgDccm3BRjpYcAhpJYvO9CJvJ4TSIFEuQmTgw==
-X-Received: by 2002:a17:90a:974c:b0:25e:c420:6a71 with SMTP id i12-20020a17090a974c00b0025ec4206a71mr12453181pjw.32.1687403478670;
-        Wed, 21 Jun 2023 20:11:18 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b17-20020a170902d51100b001aaef9d0102sm4161321plg.197.2023.06.21.20.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 20:11:17 -0700 (PDT)
-Date: Wed, 21 Jun 2023 20:11:17 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Marco Elver <elver@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
-Message-ID: <202306212011.435B7C8ED@keescook>
-References: <20230405022356.gonna.338-kees@kernel.org>
- <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
- <202306211051.1D4038323@keescook>
- <5fbe4977-c56d-2d97-bea3-28148807b5d9@roeck-us.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C7517D0;
+	Thu, 22 Jun 2023 03:30:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687404633; x=1718940633;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZvU9ZeEZYTZ0Y5lwWUlf/o2NDHD8zNYuhg9CSqAe5k=;
+  b=S7N4uPTuEfnhAyiyKuqGsGbcgYt6BwO4m0sdQtjfTKZmn02lAJybrm/I
+   VSse/psOBbPu/hL8/OB3LROWp4Z2qfOYJ4MGxvZ0EzSZyksqeJkMctpSg
+   pfN+88f0Zoi0ExQXW5OYvqqG2bG+1IYfq3HbUix1K8ExaiD+y7BkJJYdk
+   YgFo/E5f1eN+n8pR13e3l+4YOJAZHDfhR6JGTpDbUVi+5T9549mQGmySc
+   bcTijXW0cikqhvjesN5WE79MtJZkUOXHTfeXVSI1OTiDpKQG5xn3wofwp
+   Fl86pdGBBIKBj0Gx0LfmHztllJsUWeSCdRGm1BomOzC46QjE3FOEemQES
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357869009"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="357869009"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 20:30:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="827727304"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="827727304"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 20:30:28 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qCB1f-0007In-31;
+	Thu, 22 Jun 2023 03:30:27 +0000
+Date: Thu, 22 Jun 2023 11:29:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jack Zhu <jack.zhu@starfivetech.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+	bryan.odonoghue@linaro.org, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Eugen Hristev <eugen.hristev@collabora.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, jack.zhu@starfivetech.com,
+	changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
+Message-ID: <202306221112.MnLtMzRo-lkp@intel.com>
+References: <20230619112838.19797-6-jack.zhu@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,58 +59,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5fbe4977-c56d-2d97-bea3-28148807b5d9@roeck-us.net>
+In-Reply-To: <20230619112838.19797-6-jack.zhu@starfivetech.com>
 
-On Wed, Jun 21, 2023 at 05:50:53PM -0700, Guenter Roeck wrote:
-> On 6/21/23 10:52, Kees Cook wrote:
-> > On Wed, Jun 21, 2023 at 09:42:01AM -0700, Guenter Roeck wrote:
-> > > Hi,
-> > > 
-> > > On Tue, Apr 04, 2023 at 07:23:59PM -0700, Kees Cook wrote:
-> > > > The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
-> > > > leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
-> > > > match Clang's stricter behavior.
-> > > > 
-> > > > Cc: Marco Elver <elver@google.com>
-> > > > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > > > Cc: Nathan Chancellor <nathan@kernel.org>
-> > > > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > > > Cc: Nicolas Schier <nicolas@fjasle.eu>
-> > > > Cc: Tom Rix <trix@redhat.com>
-> > > > Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> > > > Cc: Miroslav Benes <mbenes@suse.cz>
-> > > > Cc: linux-kbuild@vger.kernel.org
-> > > > Cc: llvm@lists.linux.dev
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > 
-> > > This patch, presumably as side effect, enables CONFIG_ARCH_STM32
-> > > for arm64:allmodconfig. As consequence, CONFIG_STM32_RPROC is enabled
-> > > as well. This in turn results in the following build error.
-> > > 
-> > > Building arm64:allmodconfig ... failed
-> > > --------------
-> > > Error log:
-> > > In file included from include/linux/printk.h:564,
-> > >                   from include/asm-generic/bug.h:22,
-> > >                   from arch/arm64/include/asm/bug.h:26,
-> > >                   from include/linux/bug.h:5,
-> > >                   from include/linux/fortify-string.h:5,
-> > >                   from include/linux/string.h:254,
-> > >                   from include/linux/dma-mapping.h:7,
-> > >                   from drivers/remoteproc/stm32_rproc.c:9:
-> > > drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
-> > > drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
-> > > 
-> > > I did not try to understand what is going on, but reverting this
-> > > patch fixes the problem.
-> > 
-> > Well that is really weird! I will investigate... this patch should be
-> > pretty self-contained...
-> > 
-> Meh, it is. Sorry for the noise. My bisect script was wrong.
+Hi Jack,
 
-Oh, okay; whew! I was really scratching my head. :)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on robh/for-next linus/master v6.4-rc7 next-20230621]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jack-Zhu/media-dt-bindings-Add-JH7110-Camera-Subsystem/20230619-193105
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230619112838.19797-6-jack.zhu%40starfivetech.com
+patch subject: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221112.MnLtMzRo-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/starfive/camss/stf_camss.c:173:13: warning: variable 'pad_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (port == STF_PORT_DVP) {
+                      ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/starfive/camss/stf_camss.c:178:18: note: uninitialized use occurs here
+           for (i = 0; i < pad_num; ++i) {
+                           ^~~~~~~
+   drivers/media/platform/starfive/camss/stf_camss.c:173:9: note: remove the 'if' if its condition is always true
+           } else if (port == STF_PORT_DVP) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/starfive/camss/stf_camss.c:168:25: note: initialize the variable 'pad_num' to silence this warning
+           unsigned int i, pad_num;
+                                  ^
+                                   = 0
+   1 warning generated.
+--
+>> drivers/media/platform/starfive/camss/stf_isp.c:113:13: warning: variable 'formats' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pad == STF_ISP_PAD_SRC) {
+                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/starfive/camss/stf_isp.c:127:18: note: uninitialized use occurs here
+           for (i = 0; i < formats->nfmts; i++) {
+                           ^~~~~~~
+   drivers/media/platform/starfive/camss/stf_isp.c:113:9: note: remove the 'if' if its condition is always true
+           } else if (pad == STF_ISP_PAD_SRC) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/starfive/camss/stf_isp.c:105:40: note: initialize the variable 'formats' to silence this warning
+           const struct isp_format_table *formats;
+                                                 ^
+                                                  = NULL
+   1 warning generated.
+
+
+vim +173 drivers/media/platform/starfive/camss/stf_camss.c
+
+   156	
+   157	static int stfcamss_subdev_notifier_bound(struct v4l2_async_notifier *async,
+   158						  struct v4l2_subdev *subdev,
+   159						  struct v4l2_async_subdev *asd)
+   160	{
+   161		struct stfcamss *stfcamss =
+   162			container_of(async, struct stfcamss, notifier);
+   163		struct stfcamss_async_subdev *csd =
+   164			container_of(asd, struct stfcamss_async_subdev, asd);
+   165		enum stf_port_num port = csd->port;
+   166		struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
+   167		struct media_pad *pad[STF_PADS_NUM];
+   168		unsigned int i, pad_num;
+   169	
+   170		if (port == STF_PORT_CSI2RX) {
+   171			pad[0] = &isp_dev->pads[STF_PAD_SINK];
+   172			pad_num = 1;
+ > 173		} else if (port == STF_PORT_DVP) {
+   174			dev_err(stfcamss->dev, "Not support DVP sensor\n");
+   175			return -EPERM;
+   176		}
+   177	
+   178		for (i = 0; i < pad_num; ++i) {
+   179			int ret;
+   180	
+   181			ret = v4l2_create_fwnode_links_to_pad(subdev, pad[i], 0);
+   182			if (ret < 0)
+   183				return ret;
+   184		}
+   185	
+   186		return 0;
+   187	}
+   188	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
