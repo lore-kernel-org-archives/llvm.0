@@ -1,122 +1,179 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AD663E
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 00:50:57 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1b520c77de0so32913485ad.0
-        for <llvm@lists.linux.dev>; Wed, 21 Jun 2023 17:50:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21B2816
+	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 01:09:56 +0000 (UTC)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKFwsp030817;
+	Thu, 22 Jun 2023 01:09:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=QAeToPgYMsMT/GjqoK+iW38tUJzbKupscB5oVEXfS7U=;
+ b=q5yODYKec2qE3RdThkEI9TN4dVPNlT3zws3hlpJ1Z84BL8Xh9KmM7+h9uvaGg1Tug/sw
+ Dqd6OmYoQJ7MME8mjNt2Pv1I3m6a0MMDIkuoahNGpFWuKxxp70PhZwuhZRnnkC6zvyjz
+ yuW4njxwN9JQRKokW9cJXtT+6v906ZMy28pr2KXGQXdMlM2VHFWfcjt2lr7HiN4wEuJd
+ pA404golx+lskg9uGvxlPJ2w6ZqWtmdh3gb5+C+kVaA6mszgnkHc0RIUCjCpIEu6lUj0
+ eqNFM83uxbdQkD41zK/Q8Rz8xc2fOIFoZZ3hvZtaVJMqQYDhb8Sz1+eFCegbCKgygIIE tA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r93e1gr6x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 22 Jun 2023 01:09:47 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LMUJuj008323;
+	Thu, 22 Jun 2023 01:09:46 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r93972uqn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 22 Jun 2023 01:09:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PQry4UFpZAJBbmqgjro2xEi8z1M25k7L50n3SPvIuKDn1j6na+ICWIhW+0PGMpLi37uwWMwk+q/H7Acrt7DaaQJ4HSq1FE9TdHA3zEU1NAqa5/bsWNcdNNvI7Pj/4tcFjrOB6jvYGZiKpg3LoTvDs1NwcsfJzYbRiG1q55JF10cGRRSOQNMQomy+apUgVLWezDE0NH0WUJqIh9d8YPxGneY4ANHel4LuWBsuot7gi0UGPJnBa/fB6kzBQO9qNnvrwZhRH4cyq5eIEjzexomfXnL4qNPRM/IE/6Mt4TdZvyPZYueaV4WHAIaZ3kY/Zqp5V2EI7ByOjZEARm4bHKd6xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QAeToPgYMsMT/GjqoK+iW38tUJzbKupscB5oVEXfS7U=;
+ b=CifAkxAcuRBUQ+3M4eDRd8J7BD4HMZ3MvMkVq08htyBLX0KW8zqPW4tpFXB9rhNMsg59/nY052hoKqu9Ro0/RTkoeLYSMYV4zJk02Vf42+hMuFFhxEpiWRK52YSXRZuh9FX/C4AsdhfhlCYUq4O4QygM6nTJimg/M5BcShKyMltCT0BXdg9i/l0GDZ2FV/NxKthsusagvPRtxdQmNLc05GigISk5SxIwm3o6DHcFrYmwUzZyVV+YS+ax+YLDdcfnNkKHg4LTb3LEtxdJiNogev6WsIvx0flUfYJKQtUdxVQT2/aWzpdT0QJKjUE9rUZCiu7444TPlW9q+z9Nzh3HaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687395057; x=1689987057;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=YNnfLof80DYRhJzNzeXS0S7oXvTEkEp18dIa/GFxd8U=;
-        b=O+N9o0Xn9Ur3aYZ+8k6IZyPyQ/ODYR5uUlT/tmJx4rKO/eGGdN8F5nCfOWV3ZAq8gr
-         R8n6VOGMhTpJaafQAh5401KAVo/A8p4ErmOylXNQDvjF/qoeuOziVzBjXKt9UaRZRUYK
-         W2wK3aUBB0RElMIhL9Dct03zwUucBpD/rlhUFXtcJcAFDbWTUb9MiVX/UyvAdfxcTGJl
-         WnFDgqymWyNfGTqoW6WUiSJrBtMpkPRXcGRIxGTc1vTiXAZMtGTsD+ZSYnNiE4dprcGk
-         0tImjvth0+TxSnxUeSq6gfyf9CoaYh6ivLVjgYrJ/+QlPl801WP20cVXwQ0onRV+5gog
-         NpgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687395057; x=1689987057;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YNnfLof80DYRhJzNzeXS0S7oXvTEkEp18dIa/GFxd8U=;
-        b=Lvpgg5rcifNKhX4bc3b+tpAwqaRIGDnqdNrItwFUC6fIXGqtpfn1Cq1QODv3ofoZ1Y
-         kivp7+UtHkSUEauF/EPh2all9V/B5Z9scRyvhDKb5JcfaPlgi2h4ePHjUlxPhZWUMrbC
-         QQ1fnvMlfGqfsA7g9NRiqFUBfuFvdNTkdy+z2/MfOnsfVS3/E7LC2QTp8Pl7seWIB30B
-         MVLMTLz/8qDsHX4JSEfdRzETY10ZzzQnzptSW8oYUpBRn+EFL44eUGNEMpykMTVUczbo
-         NQvYe1xBFwe3HVMJjXYSqFvnT0Rl/L9EQQoDovLgszYmoedOamWE18OD1XXajygVH6Fi
-         TaVg==
-X-Gm-Message-State: AC+VfDxFekP+c2WmhZwIvyIh0XgX53Gh0/GY6GwVEOkO0lQs2FM6OrB6
-	oIYdroDlZX3PESflJukYMKA=
-X-Google-Smtp-Source: ACHHUZ59/kLruU5N+IKAtTqbHgrt1BPIyAQdjeF0dVqOKxHz27D9SmufuvJNkxrPeSLkKJr08V1brA==
-X-Received: by 2002:a17:903:24c:b0:1b0:f727:bc41 with SMTP id j12-20020a170903024c00b001b0f727bc41mr7747529plh.42.1687395056754;
-        Wed, 21 Jun 2023 17:50:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170902f68c00b001ab061e352bsm4051896plg.195.2023.06.21.17.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 17:50:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5fbe4977-c56d-2d97-bea3-28148807b5d9@roeck-us.net>
-Date: Wed, 21 Jun 2023 17:50:53 -0700
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QAeToPgYMsMT/GjqoK+iW38tUJzbKupscB5oVEXfS7U=;
+ b=KRzAZbpJIbEBhZzl4/cgQ0so2DxrINW4H3ceN/UoSo141xQsvP9OW69K8CzbDZ0a+DNsoil3YnpSL1peGEAf+9ROhblokjbEzyI5HRMkLSDkZ8YRXbeZ4LmR/xEliwlcc9QBTiD+Ma1pyV95/jfXWPprYLlrftdGGI2yGBFw0w8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH7PR10MB6554.namprd10.prod.outlook.com (2603:10b6:510:205::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 01:09:43 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::b77c:5f48:7b34:39c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::b77c:5f48:7b34:39c0%7]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
+ 01:09:43 +0000
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: James Smart <james.smart@broadcom.com>,
+        Dick Kennedy
+ <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann
+ <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+ <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        Justin Tee
+ <justin.tee@broadcom.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo
+ A. R. Silva" <gustavoars@kernel.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: lpfc: fix lpfc_name struct packing
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1zg4sqp4j.fsf@ca-mkp.ca.oracle.com>
+References: <20230616090705.2623408-1-arnd@kernel.org>
+Date: Wed, 21 Jun 2023 21:09:41 -0400
+In-Reply-To: <20230616090705.2623408-1-arnd@kernel.org> (Arnd Bergmann's
+	message of "Fri, 16 Jun 2023 11:06:56 +0200")
+Content-Type: text/plain
+X-ClientProxiedBy: SA1P222CA0192.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c4::13) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: Marco Elver <elver@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
- Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20230405022356.gonna.338-kees@kernel.org>
- <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
- <202306211051.1D4038323@keescook>
-From: Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <202306211051.1D4038323@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB6554:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68dc3c92-f25e-419f-c6aa-08db72bd5c94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	lxT8CKWBwybT1hrD1rdxYW0IZRqyqS0sLgrNC3lXtokbW6KkmRw6TvNaXju1SJdfWITC8chM1O5Tp1q3NZsU6ZuE9is9iH3XFcpntskMa9cgXn8znF9TDFAMHV/lKb/q0KgvdsOANFHjHFrLhM/lyfuXo8pm5Z5g3O0iWY1O2dTCcOAm3tD4gHg0pScg64YexT3+2+zWDbg8eTFm2wq7F3aIGGH1crtmk6QV+gayaHJ7Tq46IwmxKb8prl69LEakiRZsmIwRRd5kAG71KPpU48wKR6CBlr/6V15UODGzzA/9So02fJO0ETmwPGRJ+xKMyLJfMjj1aHIiGxxMJ2DRj0lC+0YtEepXzywCIiN63puy/EFH5uImkvfd/nlSpDPqKqcGvaGLZOGAh9fsdORzCTMZMq53qFFwKW0OzdaDLG6+Sq/d4YZ4ybT3IQzLlSl7k0EWp4s/Ug52xDurC+XASPy4HXaF0CI98IybG7bEetkEb6fy4xwqOrZ5O3aUP45nPFrcn3Ku05ywWRWa5OtEKzfQE+yIB1W0iuqCREU34zmEoaXAygUxQ9vcGdcVi98S
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199021)(558084003)(66946007)(4326008)(6916009)(66476007)(66556008)(316002)(5660300002)(7416002)(8676002)(8936002)(41300700001)(2906002)(6486002)(54906003)(86362001)(478600001)(38100700002)(6506007)(6512007)(26005)(186003)(36916002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?2gZ9c5tYqYXHRelDjnYPsOVq93VHgzF2H0BRq2XK17sIRFzTxA40I2sHEHHi?=
+ =?us-ascii?Q?qZo1FyUTh+PQVXGsrtJcuZ2TbQf2TC9hsHq4XujnN9pa4jMn982W/4YR6RBw?=
+ =?us-ascii?Q?dK7Uf40X1o0HBRcGHgyDXCZLTq8CaCr7WyM7S0vqo8sj7p3+BrkuzuJcKMY7?=
+ =?us-ascii?Q?1UzwG2sxh0s0MVdukIxCak77c6pQZFEg6cGT9xFrBc72U2ujbMm1vS37jlVb?=
+ =?us-ascii?Q?4VJY+HV6F4YUKe1c1v4f5V80oZZS3vLHc2KgcM8hChwwQhueNLPab+5opnD2?=
+ =?us-ascii?Q?+K69Sk9xN8BL9sJy3Kuiw4UbrF3+h+bJ8chAlMap8+f70Si+Qod7E8COE/Pg?=
+ =?us-ascii?Q?P7xGa225UYrx7EZ/9YNkbm5w3Nc1uLMRm9bKjjzjvaJcYiYZEm+JFKXQtUx7?=
+ =?us-ascii?Q?/h9n0N5uG6oZrMgQQe+7pjiP369+TxRHCe+NHOMAr+LffPdk4i+MuYmO4Wsp?=
+ =?us-ascii?Q?WP9mwWsCWQRZBa1XrM5zYN1EwRdCXuQAdND+czLsbGKEmWL0GGZRRZWiqswA?=
+ =?us-ascii?Q?oeco812BN1UJdnJ2Rk0wpsbtkZOeeFXz5fhRJ4QYXmrsXklRQKwwnMx8NFqW?=
+ =?us-ascii?Q?EZIDLrEpWrhtbgcqsSQrvvqNMASBGzZ0MkJQ24KLNnZnakMM7AeOSNN0mIUb?=
+ =?us-ascii?Q?pKXbv0dnJ8rkiSNJ6u1fQodQU1mdxGGBiCVw1U2yWk60jO5ekzB+kxkDwRU6?=
+ =?us-ascii?Q?umWTwOv0cjtgQrFbjKLiYN3gX68GDwMqFrCVxjWoyfPIl69Ox7RAnyHZu9xH?=
+ =?us-ascii?Q?eqQwnqtLwCkYL6X8TvKggJzeMiM2ll/woMlLL5H91kYfHiNZOI2wyNuI1Q09?=
+ =?us-ascii?Q?9DpCp+e9sRKSB8ndTZE7eh5fvNTNKbPuHNvQUMCmat7i86s2COK8P1FiX+Y7?=
+ =?us-ascii?Q?9SqieKsHmB9oR5C/1bqxJaI92CyDBygtZwZP1LgYbNY6TOCcnixIsQt5R6I8?=
+ =?us-ascii?Q?TZ2oqFq1M5ftOipsSf6TYjDu/fSc8vWpLFqbNSsyXMP+mve2iu6deX3ph4m5?=
+ =?us-ascii?Q?9ierseQ+YYsOZZiQCx0w/r/h8JfX8ghtz3QxJIKTLth13zsGCaIPrUcoYgn6?=
+ =?us-ascii?Q?Wy6V6LRYfUAdBMm8ETu7yI8a+Qox+v3Tu9EOLtjD+GCDXcl4xaVhHS/FF3CI?=
+ =?us-ascii?Q?nunkgrhwLG88MjVYgWe8FPyhgCaikTOkwqBwZjHklj/t20R3AVtzYqvxKveN?=
+ =?us-ascii?Q?22w6dPBUSxWq37rB3CtSgDPoQ7TWsLxmLMriQ7DRlUGwIFag6D+7SKUhmhcn?=
+ =?us-ascii?Q?roBr4FPAMUELfGW6PL9La1D8zP6S4fMcv6Vwltw6U8bcDyP1tOkH4723XMOW?=
+ =?us-ascii?Q?L32SBDF/zgUwZQNQrXSRXoFnv+Pbab4ZzTbRXcarAEbIT28Eicss9UXrEtJf?=
+ =?us-ascii?Q?SfWIGLzPWeu1bq5UZY2WLmJ7IiZAObyUpiG7SybDrRUv+xeO26rtWD0qmAom?=
+ =?us-ascii?Q?kKFKXywGdXeQQrDpQLvDyx+8OA5rGc4CK7yHQod3d1Gk1jX3f9kulAKYW+5n?=
+ =?us-ascii?Q?zMx9fvVmuPwvnsVGDe/6xfn5g8JqUUAd677XbKgLpySxnYOWLSX7O4oRjfSK?=
+ =?us-ascii?Q?pXVN4ME1qIPIZhDm71D6pwVhI4S21cknAEdT5zkFKMxJz8M4zk82DzgmEuLc?=
+ =?us-ascii?Q?jw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?us-ascii?Q?C0ZBj3DwEhW4uxLFesEhxoUuRq1fjtCxpIrE5a8PL+LxeCdZzJ4LSnQoR9i/?=
+ =?us-ascii?Q?6h1SFU8w+IF4BxgCC0Z3LxR00J5UdI1+pdARG/EdLCAns4vZLblzTsOjwdRr?=
+ =?us-ascii?Q?Kw3+W0+N/4Qoh6y2VHeUnpkFK4aRAJ+Q7ljjEF6EQLJ1Z6dIXvEc9Qa13M2l?=
+ =?us-ascii?Q?5hlc2joT3ibxTOO79D8TVhmOhAcGiSIQfGF7sulnSemAXm9on0/OKBvbskf7?=
+ =?us-ascii?Q?0pe3VkMO3ycaJ5AQu4rvY/Sfq5/n02iS9Ch37971iVImHyWEqrBNQH40VnRl?=
+ =?us-ascii?Q?f1ROUp1qCN1SDLup2lAKo0QZ9YRCB4io3oWbCSK7i4T8Ag7T9hn9zjCgxo0M?=
+ =?us-ascii?Q?AHGU5TmVH94WG/kKLwKDgaSlXmntfQDZsh4KkMgTkyw8Pigg7xrewN94b9c5?=
+ =?us-ascii?Q?j6MBrEuGrktG6DBFaNuDad+xku+kKIjUQkbLzs5pTGxb3vRHKzIrkc4/g1j4?=
+ =?us-ascii?Q?EnzZhjZxAdSLbbDi7rbKXh6wfzOQ0IsIGzwz3TsYmn4lhUIuqwtghPHjzTSs?=
+ =?us-ascii?Q?yIf+vYU42K91H/CWhJo3PGudUm5zfGRgjLp9/eXkejq9hI1JBA4DaW0aG638?=
+ =?us-ascii?Q?6uvTROIFpe2yr2wuFE93i62rTxS/4pJiiJvvUZqLfUzEY/WGl6dUKhLCTLzj?=
+ =?us-ascii?Q?9OWeaEL4zAn5wluaLw9FavV/3tvI1sVLR87WxF7NGm65ZH/0ASjAIzR0Pxwj?=
+ =?us-ascii?Q?Hab4YlrmjiXT+bHcRA+r2LbJc2RS+QuHzl9uxBh9QLtePv5mGdWaTHPuNbg+?=
+ =?us-ascii?Q?k//dgKJLwWmufldGoAGqE8wk6hbyNT041z6+mQFZpIpIglQA0G3bPiu81l2N?=
+ =?us-ascii?Q?46/FfDcHBtgITvQ9btZ45fRwyJcy/COhsfiLwprhHuvmJq00dz9MEB1udEE/?=
+ =?us-ascii?Q?ByspvrwAjyn9kHW3d045hewJX/FTFT10r3fPE47XNfx7YV/JC85YQfncOkFF?=
+ =?us-ascii?Q?K43eURrDBAI7vblrnzHhnzxuDkX7czpx3OnlwqL2BUoW9qi74tzk1hYYt7rl?=
+ =?us-ascii?Q?/wRVm35FkGzwkrme6dI/1db6zw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68dc3c92-f25e-419f-c6aa-08db72bd5c94
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 01:09:43.2170
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3vkm8ADQYr6yRjWYbgqjJGWbGjBPC9+62zdzi/UoB/NTpsuuXSr1i414uCSegmlL+rZTnxNmvPjKUo6ZD6nj7z42WSTBff+v2wleBUs0lsc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6554
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=991 adultscore=0
+ spamscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220006
+X-Proofpoint-GUID: 9RlAAI_y7yoZqqgg9MWl5ub_FGIIL9tZ
+X-Proofpoint-ORIG-GUID: 9RlAAI_y7yoZqqgg9MWl5ub_FGIIL9tZ
 
-On 6/21/23 10:52, Kees Cook wrote:
-> On Wed, Jun 21, 2023 at 09:42:01AM -0700, Guenter Roeck wrote:
->> Hi,
->>
->> On Tue, Apr 04, 2023 at 07:23:59PM -0700, Kees Cook wrote:
->>> The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
->>> leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
->>> match Clang's stricter behavior.
->>>
->>> Cc: Marco Elver <elver@google.com>
->>> Cc: Masahiro Yamada <masahiroy@kernel.org>
->>> Cc: Nathan Chancellor <nathan@kernel.org>
->>> Cc: Nick Desaulniers <ndesaulniers@google.com>
->>> Cc: Nicolas Schier <nicolas@fjasle.eu>
->>> Cc: Tom Rix <trix@redhat.com>
->>> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
->>> Cc: Miroslav Benes <mbenes@suse.cz>
->>> Cc: linux-kbuild@vger.kernel.org
->>> Cc: llvm@lists.linux.dev
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>> ---
->>
->> This patch, presumably as side effect, enables CONFIG_ARCH_STM32
->> for arm64:allmodconfig. As consequence, CONFIG_STM32_RPROC is enabled
->> as well. This in turn results in the following build error.
->>
->> Building arm64:allmodconfig ... failed
->> --------------
->> Error log:
->> In file included from include/linux/printk.h:564,
->>                   from include/asm-generic/bug.h:22,
->>                   from arch/arm64/include/asm/bug.h:26,
->>                   from include/linux/bug.h:5,
->>                   from include/linux/fortify-string.h:5,
->>                   from include/linux/string.h:254,
->>                   from include/linux/dma-mapping.h:7,
->>                   from drivers/remoteproc/stm32_rproc.c:9:
->> drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
->> drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
->>
->> I did not try to understand what is going on, but reverting this
->> patch fixes the problem.
-> 
-> Well that is really weird! I will investigate... this patch should be
-> pretty self-contained...
-> 
-Meh, it is. Sorry for the noise. My bisect script was wrong.
 
-Guenter
+Arnd,
 
+> clang points out that the lpfc_name structure has an 8-byte alignement
+> requirement on most architectures, but is embedded in a number of
+> other structures that are forced to be only 1-byte aligned:
+
+Applied to 6.5/scsi-staging, thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
