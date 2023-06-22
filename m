@@ -1,133 +1,80 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB29F80C
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 09:10:45 +0000 (UTC)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D0B8660706C;
-	Thu, 22 Jun 2023 10:10:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1687425038;
-	bh=5uxh5lKnVnM46Q8SEQodnpqC2oAD7Fjq5YEoHjE5Sx4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KPUAgmSdKBe8F1sbK0PJohKxD/iIlloBxRbdx2mXToR6bT0FdS/9cnpdpHyDyWPiV
-	 9LYisjtoi9lQjkY6At9xAj4YncbpeIshMKIzGUJIMWyOqj3QittZD7V+6FnIquTZnH
-	 kyANnfNm+j8bI8c/535TwPqRf62LvcR+18KpLAlQcC1hEy8GqAeUwjX2JbLeasux8I
-	 JMqpyRqAtZuGljolnyporGOo6z6ZzqXm//GGQROy/CNoq5PYvnLri1W+ItKNrAnqxa
-	 9CVUOFrfDlfafgmh31726rulYjimvN7Q790qDQmFLPxCVksLehwVx3/BZVXkSSbYjN
-	 y7zmKhrAZTPiw==
-Message-ID: <99adec72-da7b-ce46-27be-b823a208a39e@collabora.com>
-Date: Thu, 22 Jun 2023 11:10:34 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84DE3AABB;
+	Thu, 22 Jun 2023 10:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4208C433C0;
+	Thu, 22 Jun 2023 10:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687428932;
+	bh=ddwNq7oMVHZRi+PxOrJpIvndAOCIW9Xj14GqlgpwMA0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AfDR9xsGjodZLtdc65RB5nqBaVJu06rRUp21I7Hw3wetmfaWPNi5vdgNf3cKJBu8H
+	 wMZFvpAjv3u2x+bNi7eJ8BvWZWlyz/JE98CtHOH6xXFwIKcDSHvB7mezD7Gf7nIDud
+	 UX3pVYcs3yx6tjdW/kJIxuu7k5MF2OPL6AKGmdG/0pEoOYr5B1npe5I2VelDSACJdK
+	 MvgcTNwzAnG0s8LZVrTalK5QshnpzfVoPY/dXX8dZEi8olKSURfIUwzlzm1Aw4sMMf
+	 oIPXM+hczyzpELBKEMapdd7lRZO4iUzlWI2X31WaWhvwIEGX1Y3cnc9svGRVYLlGtc
+	 VTVqaOnaQ6XdA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Maxim Mikityanskiy <maxtram95@gmail.com>,
+	Adham Faris <afaris@nvidia.com>,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] mlx5: avoid integer overflow warning for large page size
+Date: Thu, 22 Jun 2023 12:15:02 +0200
+Message-Id: <20230622101525.3321642-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 8/8] leds: leds-mt6323: Add support for WLEDs and
- MT6332
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: pavel@ucw.cz, lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org, kernel@collabora.com, llvm@lists.linux.dev
-References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
- <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
- <20230621213124.GA2689001@dev-arch.thelio-3990X>
-Content-Language: en-US
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230621213124.GA2689001@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 21/06/23 23:31, Nathan Chancellor ha scritto:
-> Hi Angelo,
-> 
-> On Thu, Jun 01, 2023 at 01:08:13PM +0200, AngeloGioacchino Del Regno wrote:
->> Add basic code to turn on and off WLEDs and wire up MT6332 support
->> to take advantage of it.
->> This is a simple approach due to the aforementioned PMIC supporting
->> only on/off status so, at the time of writing, it is impossible for me
->> to validate more advanced functionality due to lack of hardware.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> After this patch as commit 9bb0a9e0626c ("leds: leds-mt6323: Add support
-> for WLEDs and MT6332") in -next, I see the following warnings from
-> clang, which are basically flagging potential kernel Control Flow
-> Integrity [1] violations that will be visible at runtime (this warning
-> is not enabled for the kernel yet but we would like it to be):
-> 
->    drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
->      598 |                         leds->led[reg]->cdev.brightness_set_blocking =
->          |                                                                      ^
->      599 |                                                 mt6323_wled_set_brightness;
->          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->      600 |                         leds->led[reg]->cdev.brightness_get =
->          |                                                             ^
->      601 |                                                 mt6323_get_wled_brightness;
->          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->    2 errors generated.
-> 
->  From what I can tell/understand, 'enum led_brightness' is obsolete and
-> the value that is passed via ->brightness_set_blocking() is an 'unsigned
-> int' as well but it seems 'enum led_brightness' is used as the parameter
-> in a lot of different callback implementations, so the prototype cannot
-> be easily updated without a lot of extra work. Is there any reason not
-> to just do something like this to avoid this issue?
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-I don't think that this would bring any issue to the table.
+Build testing with 'make LLVM=1 W=1' shows a warning about a
+condition that is always true on configurations with 64KB
+pages:
 
-The rework will possibly be done globally, for all drivers, when time comes... so
-feel free to send the proposed patch.
+drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:32:22: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
 
-Thanks,
-Angelo
+Change the condition in a way that lets clang know this
+is intentional.
 
-> [1]: https://lwn.net/Articles/898040/
-> 
-> Cheers,
-> Nathan
-> 
-> diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
-> index e8fecfc2e90a..24f35bdb55fb 100644
-> --- a/drivers/leds/leds-mt6323.c
-> +++ b/drivers/leds/leds-mt6323.c
-> @@ -76,7 +76,7 @@ struct mt6323_led {
->   	int			id;
->   	struct mt6323_leds	*parent;
->   	struct led_classdev	cdev;
-> -	unsigned int		current_brightness;
-> +	enum led_brightness	current_brightness;
->   };
->   
->   /**
-> @@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
->   	return 0;
->   }
->   
-> -static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
-> +static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
->   {
->   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
->   	struct mt6323_leds *leds = led->parent;
-> @@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
->   }
->   
->   static int mt6323_wled_set_brightness(struct led_classdev *cdev,
-> -				      unsigned int brightness)
-> +				      enum led_brightness brightness)
->   {
->   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
->   	struct mt6323_leds *leds = led->parent;
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+index 36826b5824847..b9f62e531bd4c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+@@ -29,7 +29,8 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *params,
+ 			      struct mlx5_core_dev *mdev)
+ {
+ 	/* AF_XDP doesn't support frames larger than PAGE_SIZE. */
+-	if (xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
++	if ((PAGE_SIZE < U16_MAX && xsk->chunk_size > PAGE_SIZE)
++	    || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
+ 		mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u, %lu]\n", xsk->chunk_size,
+ 			      MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
+ 		return false;
+-- 
+2.39.2
 
