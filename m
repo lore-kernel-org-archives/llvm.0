@@ -1,33 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4614022557
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 21:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5D7C433C0;
-	Thu, 22 Jun 2023 21:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687470810;
-	bh=PJGfxTyAnCqu8Vna68rQ2voA4n9bS/jsrshp8nOUR3k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s2Y6v8fxX47hw/xJfyeIYjRJzAWpg8aRRtbtReWBMPAgcH9AfSyoIsdC7/mZGL2eX
-	 e0+EZzJOrFT4sygyF0qGhmEKCrOUa6w73xYFv6j8L/2hBJ5qwKfEPu6CqbArm0/VU0
-	 dD2y/4hj2fhuO3cGQiFQNfRHww0m43HysUddCGxJy4smBIuqFKNMWCdI3HfIkicAYA
-	 cFOgxJU9LLNLfHnpqlY3KMIWoftnhwzzzSRFUxEVcsrTs26WY/ijGDjN4vFQixpkVn
-	 XJy5AFHSUd3UqWfbGzcClQwAAoxRgXpeBFVI/v+Yv0+O48ThhxXoaR4cA9sgspSXPR
-	 CPDbi17v2qfdg==
-Date: Thu, 22 Jun 2023 21:53:27 +0000
-From: Nathan Chancellor <nathan@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: bjorn@kernel.org, ndesaulniers@google.com,
-	Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-	llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-	aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230622215327.GA1135447@dev-arch.thelio-3990X>
-References: <87wmzwn1po.fsf@all.your.base.are.belong.to.us>
- <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8883320690;
+	Thu, 22 Jun 2023 22:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687471849; x=1719007849;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tMCdOecJ6kaSDao+sC1xyRJf86ppTCRtmGd3WMAKh28=;
+  b=I1rsDz+31wuz/0GIKm3Za9Uz3M6DTLX0CnwYhhUDL4VoiGS3JZRFuyvP
+   UHDtHgublEX8c8rpj43QxeGEHDk4BKYMerda8B7KIeF3ZSQ2iwFmY++uI
+   G+eQiIB+7FMDLx229MkqpmURbcFzmVSD0IWbdReFmjv6MqFwaVt0tHKZc
+   2EZqqa8b4d+skd7i1+1KFhs5de61zGuZ7cNvy1TKyXgQKxXVy8LHIHwxN
+   a8HMPenHAESyVogVT/0zAtR+8chTgea963MkfvMoHZVCCP1nfw5mV5Q0C
+   C6lH4mbw1EUegp6FNhscpdrU9PRgbiFngGy7nPKeB6pXJIPTbEmUMyEhF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="350388252"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="350388252"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 15:10:48 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749508754"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="749508754"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 15:10:47 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qCSVr-0007mz-0F;
+	Thu, 22 Jun 2023 22:10:47 +0000
+Date: Fri, 23 Jun 2023 06:10:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 21/75] drivers/tty/serial/serial_core.c:3511:3:
+ error: initializer element is not a compile-time constant
+Message-ID: <202306230617.8edLg1Rf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,88 +44,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
 
-On Wed, Jun 21, 2023 at 11:19:31AM -0700, Palmer Dabbelt wrote:
-> On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
-> > Conor Dooley <conor@kernel.org> writes:
-> > 
-> > [...]
-> > 
-> > > > So I'm no longer actually sure there's a hang, just something
-> > > > slow.  That's even more of a grey area, but I think it's sane to
-> > > > call a 1-hour link time a regression -- unless it's expected
-> > > > that this is just very slow to link?
-> > > 
-> > > I dunno, if it was only a thing for allyesconfig, then whatever - but
-> > > it's gonna significantly increase build times for any large kernels if LLD
-> > > is this much slower than LD. Regression in my book.
-> > > 
-> > > I'm gonna go and experiment with mixed toolchain builds, I'll report
-> > > back..
-> > 
-> > I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
-> > HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
-> > 
-> >   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
-> >   |     --toolchain=llvm-16 --runtime docker --directory . -k \
-> >   |     allyesconfig
-> > 
-> > Took forever, but passed after 2.5h.
-> 
-> Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
-> checking top sometimes), it's at 1.5h but even that seems quite long.
-> 
-> I guess this is sort of up to the LLVM folks: if it's expected that DCE
-> takes a very long time to link then I'm not opposed to allowing it, but if
-> this is probably a bug in LLD then it seems best to turn it off until we
-> sort things out over there.
-> 
-> I think maybe Nick or Nathan is the best bet to know?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   48bbb2920f04e3004c9ea9bce4ea600d9c17c599
+commit: 4d452b7101d5c1df0477776fdc0ad38d3e4034a5 [21/75] serial: make strlen of sysrq_toggle_seq[] a global constant
+config: i386-randconfig-i002-20230622 (https://download.01.org/0day-ci/archive/20230623/202306230617.8edLg1Rf-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230617.8edLg1Rf-lkp@intel.com/reproduce)
 
-I can confirm a regression with allyesconfig but not allmodconfig using
-LLVM 16.0.6 on my 80-core Ampere Altra system.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230617.8edLg1Rf-lkp@intel.com/
 
-allmodconfig: 8m 4s
-allmodconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 7m 4s
-allyesconfig: 1h 58m 30s
-allyesconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 12m 41s
+All errors (new ones prefixed by >>):
 
-I am sure there is something that ld.lld can do better, given GNU ld
-does not have any problems as earlier established, so that should
-definitely be explored further. I see Nick already had a response about
-writing up a report (I wrote most of this before that email so I am
-still sending this one).
+>> drivers/tty/serial/serial_core.c:3511:3: error: initializer element is not a compile-time constant
+                   strlen(CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-However, allyesconfig is pretty special and not really indicative of a
-"real world" kernel build in my opinion (which will either be a fully
-modular kernel to allow use on a wide range of hardware or a monolithic
-kernel with just the drivers needed for a specific platform, which will
-be much smaller than allyesconfig); it has given us problems with large
-kernels before on other architectures.
 
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is already marked with 'depends on
-EXPERT' and its help text mentions its perils, so it does not seem
-unreasonable to me to add an additional dependency on !COMPILE_TEST so
-that allmodconfig and allyesconfig cannot flip this on, something like
-the following perhaps?
+vim +3511 drivers/tty/serial/serial_core.c
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 32c24950c4ce..25434cbd2a6e 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1388,7 +1388,7 @@ config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
- config LD_DEAD_CODE_DATA_ELIMINATION
- 	bool "Dead code and data elimination (EXPERIMENTAL)"
- 	depends on HAVE_LD_DEAD_CODE_DATA_ELIMINATION
--	depends on EXPERT
-+	depends on EXPERT && !COMPILE_TEST
- 	depends on $(cc-option,-ffunction-sections -fdata-sections)
- 	depends on $(ld-option,--gc-sections)
- 	help
+  3506	
+  3507	#ifdef CONFIG_MAGIC_SYSRQ_SERIAL
+  3508	static const u8 sysrq_toggle_seq[] = CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE;
+  3509	/* Ideally, this would be strlen(sysrq_toggle_seq), but clang disagrees. */
+  3510	static const unsigned int sysrq_toggle_seq_len =
+> 3511			strlen(CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE);
+  3512	
 
-If applying that dependency to all architectures is too much, the
-selection in arch/riscv/Kconfig could be gated on the same condition.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
