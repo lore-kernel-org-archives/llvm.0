@@ -1,208 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F7B642
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB13AC433C8
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687498871;
-	bh=qPapvU2ug5XUbs86vSozf1HW7Fb3vlj9IaJ8Cc/jUhc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nc6tMgv5HOQX4XZ9WiULPUOvoFoQr1wOklN1Ab/DKOFOR1LR/VPo6fglicjtk6nQL
-	 7bVs+K3n1Om48IszfVTJzdmt95vDF3BJ5Al5CXjce8zVZdF6qix6H9GdjnK2VA102z
-	 J/86+fiwxg0uUj3IDhln0JWz+sIJbKakfNjmgc70IlepZwLrPZuIFgknJYptlfgwWb
-	 IXmHDWFKkSZOOeCbUhT+VEoL58A5djkE7LxWdfejRtdKZP36sg4kPw6IbH0hb8GnAQ
-	 Yvg3Q+LFIYX8Cy1J0DOJKdLSZWGkDivSNYSuCUw1Cc5Hf8XmASjR/4GA1eA0SbBzud
-	 Ug1f50gFCOaRQ==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-19674cab442so175950fac.3
-        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 22:41:11 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzr6qEn2F8nUWuwr1lpq8U8AnuZ2SW3ezDPJ3LoaYpryOkyIHLs
-	pxDgZmqr4riVCFu9RGFRq9tN1t1PS7qcZQ/Hqy4=
-X-Google-Smtp-Source: ACHHUZ7cMLVT4f0AnUJoGvZXjHjFR76NxU3gpI2Rf4Fsv/8GBKrljZEFaW5o+/iwXTDhjTp30q16bid6On7xomQ1uyE=
-X-Received: by 2002:a05:6871:288:b0:1a6:c3d3:969c with SMTP id
- i8-20020a056871028800b001a6c3d3969cmr19108557oae.45.1687498870905; Thu, 22
- Jun 2023 22:41:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C48A3B;
+	Fri, 23 Jun 2023 05:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687499161; x=1719035161;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8GNiX3M77PVeymdNW0lw2a6lhQqDnRvS7gvXn3WLmq8=;
+  b=OFJocRf2wLPCm64zz4TaZfrbyj7y3ay803K886BOtF1vSP6T2LbKsUj0
+   MCfxLBb0ScOYcjrgNjVcJHdCtzpDfsT2JMiojQZNjnI4z/DPdNyNOOpwR
+   jZGGIdWLo0UWbauRZq7Iq17fbdLzqh2NcSVhcncK4pFtKm7Nlck57IrDD
+   TnfNGEuU26qEPVsDU2dmQILHoY9uUOeQyI2FpX0W1YDHlyJ10SxMnv7Cc
+   VEUsxJBCWundBk87Hy0uZ2s+o/7QsUn9g2+w4xXRpK/w36obxidlaRfz5
+   73dUrs7bcyMU3NKjepq0LvxLqcn00sSNpekSAqPUM6Q/RkJKYFwZ9ImVq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="426678378"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="426678378"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 22:46:00 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749662464"
+X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
+   d="scan'208";a="749662464"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 22:45:59 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qCZcM-000817-0y;
+	Fri, 23 Jun 2023 05:45:58 +0000
+Date: Fri, 23 Jun 2023 13:45:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org
+Subject: [sailus-media-tree:master 57/58]
+ include/media/v4l2-subdev.h:1159:25: error: no member named 'entity' in
+ 'struct v4l2_subdev'
+Message-ID: <202306231315.r0N0wLfe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
- <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
-In-Reply-To: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 23 Jun 2023 14:40:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-To: Fangrui Song <maskray@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Tom Rini <trini@konsulko.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 23, 2023 at 2:07=E2=80=AFAM Fangrui Song <maskray@google.com> w=
-rote:
->
-> On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
-> >
-> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
-> > > > Hi Masahiro,
-> > > >
-> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
-> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
- is
-> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
-> > > > >
-> > > > > As a result, the linker script is preprocessed with predefined ma=
-cros
-> > > > > for the build host instead of the target.
-> > > > >
-> > > > > Assuming you use an x86 build machine, compare the following:
-> > > > >
-> > > > >  $ clang -dM -E -x c /dev/null
-> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-> > > > >
-> > > > > There is no actual problem presumably because our linker scripts =
-do not
-> > > > > rely on such predefined macros, but it is better to define correc=
-t ones.
-> > > > >
-> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
-.lds.S
-> > > > > will be processed with the proper target triple.
-> > > > >
-> > > > > Reported-by: Tom Rini <trini@konsulko.com>
-> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > > ---
-> > > > >
-> > > > >  scripts/Makefile.clang | 3 +--
-> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
-> > > > > --- a/scripts/Makefile.clang
-> > > > > +++ b/scripts/Makefile.clang
-> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
-g-option
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
-> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
-> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
-> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
-> > > > >  export CLANG_FLAGS
-> > > > > --
-> > > > > 2.37.2
-> > > > >
-> > > >
-> > > > I am doubling back to this change, as the lack of '--target' in
-> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
-nge
-> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
-d by
-> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
-s
-> > > > linker script:
-> > > >
-> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
-> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
-rtconfig menuconfig arch/arm64/kernel/vdso/
-> > > >   ...
-> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
-4-pc-linux-gnu'
-> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
-dso/vdso.lds] Error 1
-> > > >   ...
-> > > >
-> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
-8956c522c93d0df1050
-> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
-> > > >
-> > > > This change resolves that issue. I was able to figure out why those=
- new
-> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
-> > > > CHECKFLAGS. The following diff resolves it for me:
-> > > >
-> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
-> > > > --- a/arch/mips/Makefile
-> > > > +++ b/arch/mips/Makefile
-> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
-les
-> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
-> > > >
-> > > >  ifdef CONFIG_MIPS
-> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
-ll | \
-> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
--dM -E -x c /dev/null | \
-> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
-/\$$/&&/g')
-> > > >  endif
-> > > >
-> > > > I will run this change plus that diff through my build matrix to se=
-e if
-> > > > any other issues pop up. If not, I will respond with some tags and
-> > > > perhaps this could be taken as a fix for 6.4 so that it could
-> > > > potentially be backported?
-> > >
-> > > I found two more issues lurking in PowerPC. I have attached suggested
-> > > patches for all the issues I have uncovered to this email, please fee=
-l
-> > > free to use them or do something different if you feel there is a bet=
-ter
-> > > fix. With those issues resolved in one way or another, consider the
-> > > original change:
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > If it would work better for you, I am more than happy to take over th=
-is
-> > > series as well.
-> > >
-> > > Cheers,
-> > > Nathan
-> >
-> > Thanks. All the three patches look good to me.
-> >
-> > I will apply them, then mine on top.
->
-> Drive-by reply from
-> https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
->
-> Hi Masahiro, one nit:) If the patch still has time to adjust the
-> commit message, perhaps consider replacing
->
-> -target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
->
-> as the former is a deprecated driver option since Clang 3.x (long time ag=
-o).
->
-> > Assuming you use an x86 build machine, compare the following:
->
-> You may drop "Assuming you use an x86 build machine" and add
-> --target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
-> :)
+Hi Sakari,
 
-Thanks for the suggestion, but I do not want to change the commit ID
-unless there is something terribly wrong.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Nathan recorded the commit ID in the CBL bug tracker.
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   e03cd35afd1787dc8daadbd61ad47da455bc76eb
+commit: 8e18f69a26469c79a76acf172967833adb89c55e [57/58] media: i2c: Select V4L2_FWNODE and VIDEO_V4L2_SUBDEV_API for sensors
+config: i386-randconfig-i014-20230623 (https://download.01.org/0day-ci/archive/20230623/202306231315.r0N0wLfe-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231315.r0N0wLfe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306231315.r0N0wLfe-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/v4l2-core/tuner-core.c:30:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:15:
+>> include/media/v4l2-subdev.h:1159:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   In file included from drivers/media/v4l2-core/tuner-core.c:30:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:15:
+   include/media/v4l2-subdev.h:1179:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   In file included from drivers/media/v4l2-core/tuner-core.c:30:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:15:
+   include/media/v4l2-subdev.h:1199:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   3 errors generated.
+--
+   In file included from drivers/media/v4l2-core/v4l2-subdev.c:23:
+   In file included from include/media/v4l2-device.h:13:
+>> include/media/v4l2-subdev.h:1159:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   In file included from drivers/media/v4l2-core/v4l2-subdev.c:23:
+   In file included from include/media/v4l2-device.h:13:
+   include/media/v4l2-subdev.h:1179:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   In file included from drivers/media/v4l2-core/v4l2-subdev.c:23:
+   In file included from include/media/v4l2-device.h:13:
+   include/media/v4l2-subdev.h:1199:25: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (WARN_ON(pad >= sd->entity.num_pads))
+                              ~~  ^
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-subdev.c:55:10: error: call to undeclared function '__v4l2_subdev_state_alloc'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           state = __v4l2_subdev_state_alloc(sd, "fh->state->lock", &key);
+                   ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:55:8: error: incompatible integer to pointer conversion assigning to 'struct v4l2_subdev_state *' from 'int' [-Wint-conversion]
+           state = __v4l2_subdev_state_alloc(sd, "fh->state->lock", &key);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-subdev.c:66:2: error: call to undeclared function '__v4l2_subdev_state_free'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __v4l2_subdev_state_free(fh->state);
+           ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:91:32: error: no member named 'entity' in 'struct v4l2_subdev'
+           if (sd->v4l2_dev->mdev && sd->entity.graph_obj.mdev->dev) {
+                                     ~~  ^
+   drivers/media/v4l2-core/v4l2-subdev.c:94:15: error: no member named 'entity' in 'struct v4l2_subdev'
+                   owner = sd->entity.graph_obj.mdev->dev->driver->owner;
+                           ~~  ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:179:8: error: call to undeclared function 'v4l2_subdev_state_get_stream_format'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   if (!v4l2_subdev_state_get_stream_format(state, pad, stream))
+                        ^
+   drivers/media/v4l2-core/v4l2-subdev.c:179:8: note: did you mean 'v4l2_subdev_get_pad_format'?
+   include/media/v4l2-subdev.h:1153:1: note: 'v4l2_subdev_get_pad_format' declared here
+   v4l2_subdev_get_pad_format(struct v4l2_subdev *sd,
+   ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:504:9: error: call to undeclared function 'v4l2_subdev_get_unlocked_active_state'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                                v4l2_subdev_get_unlocked_active_state(sd);
+                                ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:502:41: warning: pointer/integer type mismatch in conditional expression ('struct v4l2_subdev_state *' and 'int') [-Wconditional-type-mismatch]
+           return which == V4L2_SUBDEV_FORMAT_TRY ?
+                                                  ^
+   drivers/media/v4l2-core/v4l2-subdev.c:899:39: error: no member named 'entity' in 'struct v4l2_subdev'
+                           const struct media_pad *pads = sd->entity.pads;
+                                                          ~~  ^
+   drivers/media/v4l2-core/v4l2-subdev.c:905:31: error: no member named 'entity' in 'struct v4l2_subdev'
+                           if (route->sink_pad >= sd->entity.num_pads)
+                                                  ~~  ^
+   drivers/media/v4l2-core/v4l2-subdev.c:912:33: error: no member named 'entity' in 'struct v4l2_subdev'
+                           if (route->source_pad >= sd->entity.num_pads)
+                                                    ~~  ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:979:4: error: call to undeclared function 'v4l2_subdev_lock_state'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           v4l2_subdev_lock_state(state);
+                           ^
+>> drivers/media/v4l2-core/v4l2-subdev.c:984:4: error: call to undeclared function 'v4l2_subdev_unlock_state'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           v4l2_subdev_unlock_state(state);
+                           ^
+   1 warning and 15 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
+   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && MEDIA_CONTROLLER [=n]
+   Selected by [y]:
+   - VIDEO_CAMERA_SENSOR [=y] && MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && MEDIA_CAMERA_SUPPORT [=y]
 
 
+vim +1159 include/media/v4l2-subdev.h
 
---=20
-Best Regards
-Masahiro Yamada
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1143  
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1144  /**
+2f91838c3b717b Tomi Valkeinen        2022-04-12  1145   * v4l2_subdev_get_pad_format - ancillary routine to call
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1146   *	&struct v4l2_subdev_pad_config->try_fmt
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1147   *
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1148   * @sd: pointer to &struct v4l2_subdev
+0d346d2a6f54f0 Tomi Valkeinen        2021-06-10  1149   * @state: pointer to &struct v4l2_subdev_state
+0d346d2a6f54f0 Tomi Valkeinen        2021-06-10  1150   * @pad: index of the pad in the &struct v4l2_subdev_state->pads array
+02679876b74d26 Mauro Carvalho Chehab 2017-12-19  1151   */
+8ecbde62c063d7 Hans Verkuil          2020-07-17  1152  static inline struct v4l2_mbus_framefmt *
+2f91838c3b717b Tomi Valkeinen        2022-04-12  1153  v4l2_subdev_get_pad_format(struct v4l2_subdev *sd,
+0d346d2a6f54f0 Tomi Valkeinen        2021-06-10  1154  			   struct v4l2_subdev_state *state,
+ab9bb73a066459 Mauro Carvalho Chehab 2017-12-19  1155  			   unsigned int pad)
+ab9bb73a066459 Mauro Carvalho Chehab 2017-12-19  1156  {
+2ba3e38517f5a4 Sakari Ailus          2022-08-26  1157  	if (WARN_ON(!state))
+2ba3e38517f5a4 Sakari Ailus          2022-08-26  1158  		return NULL;
+ab9bb73a066459 Mauro Carvalho Chehab 2017-12-19 @1159  	if (WARN_ON(pad >= sd->entity.num_pads))
+ab9bb73a066459 Mauro Carvalho Chehab 2017-12-19  1160  		pad = 0;
+0d346d2a6f54f0 Tomi Valkeinen        2021-06-10  1161  	return &state->pads[pad].try_fmt;
+7cd5a16b22af7d Stanimir Varbanov     2010-05-21  1162  }
+7cd5a16b22af7d Stanimir Varbanov     2010-05-21  1163  
+
+:::::: The code at line 1159 was first introduced by commit
+:::::: ab9bb73a0664595b76bb6e4a7ae10064aa58379f media: v4l2-subdev: get rid of __V4L2_SUBDEV_MK_GET_TRY() macro
+
+:::::: TO: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
