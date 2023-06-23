@@ -1,105 +1,86 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3580A100C3
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 16:32:00 +0000 (UTC)
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-763ddc4259dso68098685a.3
-        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 09:32:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45FC8C16
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 16:32:42 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1b512309d18so4809485ad.3
+        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 09:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687537920; x=1690129920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yjZj3NJ6tNL43fD8olUI2ckbffSX6NxYGeL5Kbsd15w=;
-        b=R1isnHBBwVrgX9qa7AlsKhyGqLKNWhaxQDytnzIrvagW7RrRJJd/7E4Jv7J5xW37fN
-         ZJiwLTMzva5iBTSQRN1jHnvm4kJDixA4gECanSgwBdUDVFzAZjwVMSUrMribVOeO1dbj
-         TOYp58RsjRx4zs5ztbwLxPDHKfGhf0vTGXUAWId9gmOVFHxaMvnIPglVs+EVJ/o8OQoT
-         Q/H747d/lPF0u1HAY7OhMjerSUExP5JUZAm/zKMTRZqruSemOEYyLG3YUxumw03PcXVp
-         bsn/lCwZMelCPLy8OoCoeyE14XDebACrCq2aNBWvsLUxah47fqSMBXe7gKKlKjwTvjtv
-         EUYw==
+        d=chromium.org; s=google; t=1687537962; x=1690129962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A/ctcywp7aSY6bqn8fc8UYikW0ADqbI6njwx/CrZFMU=;
+        b=QrcLfKebeRTWvt4YKw8UFWfYt25NNrQQfX99Oy6r+vCqro5wELxb3cYBNFN16R3mZE
+         wFm8qKDe+LeIdcpuYKHxWJTLSCg/HePLqdZerEDwZRLgp62N7xiQGzLXsd3i5aFoj3Jt
+         e+GfvgP5S9iBaVw76byCwgEpHcics5pmXMa7E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687537920; x=1690129920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yjZj3NJ6tNL43fD8olUI2ckbffSX6NxYGeL5Kbsd15w=;
-        b=kuoua80soZ1E5iOLr7iKzCHc9b7/zgiWlH3nHkEstDHeppf/eKJk4Tmws+xxF+tgzs
-         6uNZ3i6qpVG0iOnSMfQMcoXYy5QPTWHyMsXJ1byhozqgnu4YohZYQe2mFh2/e84+snCh
-         QRBzz0jTbENlb9DhGIwBjsy53T9TevFZrtwmT3sGLoxO9ATYOvpmK8Ab5rhZPyK8+XTf
-         TPSBg5HJ8bULhgMb98iu1Hd4shyrnFhP8A6HdZ0oLoI6U3BkLsWHFkibrvJqO9bYzw6W
-         r2LF2IWEDJedyCszkgxTqw2bZ1WizSqKbVCgPwphpC2nKq6y2sZ0y+9pPvePfpWxIxk8
-         tqWQ==
-X-Gm-Message-State: AC+VfDzKk581+24Irq+pPK1uSrJBDGGTc0b7D0TdVkwmY15WrHHVJofq
-	8b87l+TP9SBMq6bZVl4nzucpMdYLHF4qABD24mXcMw==
-X-Google-Smtp-Source: ACHHUZ44biYyPh1FafPEljQhdi4AermpdroWBXD6UfAZJZCAYGcnGRDXk1RfO12+Wn89bZ+YwJ3JJ2rnwlhgyM4rHQA=
-X-Received: by 2002:a05:6214:2a8e:b0:626:3dee:6091 with SMTP id
- jr14-20020a0562142a8e00b006263dee6091mr26135505qvb.49.1687537919844; Fri, 23
- Jun 2023 09:31:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687537962; x=1690129962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A/ctcywp7aSY6bqn8fc8UYikW0ADqbI6njwx/CrZFMU=;
+        b=VnvCpd74XSkgB6emrm5AJcV9AkSeFmKdD+A/tf4xXEoy6DzMxb8m+o/zhrQGL8i4Ni
+         aasmqBTbiBJqPEvdxtOGP0S0lQyvQElV4CdWVvhTSq5gv8q/GGaDFxfrvrRq/Yq3GwFb
+         eR7i0qovmxIYVI/fjAxzN+RKWe4NhLNl+2hxa1mlsVG8pxz1JrEVZnHyRS9ncisOihSd
+         5lcpekl8ygSCCLHLqhbOtxh9UzCFRXxGyaFBU0HJmO2F6VXaE2YRM6VdbQhuNRNE/U2B
+         9beY+JK5y8PAI0ninr75jVoxSET12SyzMohSahpwFZx32HOuGtn79I1uz1lsI6CHLuej
+         WQYw==
+X-Gm-Message-State: AC+VfDxhBLmr0S35CmNR0qCC6BmIguCX3LNMIgJjIPDxb5Kl0ICSg6JR
+	8M299pJ2uUoQS+XRBssso5o8Mg==
+X-Google-Smtp-Source: ACHHUZ7y3G0c/1K1ZxsQD1CmVObEWMkld+khXvdLHXCeF0xmvtbL20p/dlmeD6u4oVOhycyAEXH/Og==
+X-Received: by 2002:a17:902:aa0a:b0:1b5:4679:568f with SMTP id be10-20020a170902aa0a00b001b54679568fmr10746105plb.45.1687537962012;
+        Fri, 23 Jun 2023 09:32:42 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id iw13-20020a170903044d00b001aaf536b1e3sm7442562plb.123.2023.06.23.09.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 09:32:41 -0700 (PDT)
+Date: Fri, 23 Jun 2023 09:32:40 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+Message-ID: <202306230932.539C9DC0@keescook>
+References: <20230623001140.1111494-4-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230623134351.1898379-1-kernel@xen0n.name> <20230623134351.1898379-9-kernel@xen0n.name>
-In-Reply-To: <20230623134351.1898379-9-kernel@xen0n.name>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 23 Jun 2023 09:31:49 -0700
-Message-ID: <CAKwvOdnimxv8oJ4mVY74zqtt1x7KTMrWvn2_T9x22SFDbU6rHQ@mail.gmail.com>
-Subject: Re: [PATCH 8/9] Makefile: Add loongarch target flag for Clang compilation
-To: WANG Xuerui <kernel@xen0n.name>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Rui <wangrui@loongson.cn>, 
-	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623001140.1111494-4-samitolvanen@google.com>
 
-On Fri, Jun 23, 2023 at 6:44=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
-te:
->
-> From: WANG Xuerui <git@xen0n.name>
->
-> The LoongArch kernel is 64-bit and built with the soft-float ABI,
-> hence the loongarch64-linux-gnusf target. (The "libc" part doesn't
-> matter.)
+On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
+> Hi folks,
+> 
+> The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+> where the compiler injects indirectly called functions to object
+> files that otherwise contain no executable code, and are not
+> processed by objtool or don't have CFI enabled. This results in
+> missing or incorrect type hashes during boot and when modules are
+> loaded.
+> 
+> Sami Tolvanen (2):
+>   kbuild: Fix CFI failures with GCOV
+>   kbuild: Disable GCOV for *.mod.o
+> 
+>  init/Makefile             | 1 +
+>  scripts/Makefile.modfinal | 2 +-
+>  scripts/Makefile.vmlinux  | 1 +
+>  3 files changed, 3 insertions(+), 1 deletion(-)
 
-Technically, IIRC llvm may make different decisions on libcall
-optimizations based on the libc part of the target triple.  For
-instance, is bcmp defined in that libc or not?  That's why we specify
--gnu or -musl (I forgot we did that for hexagon) explicitly rather
-than leave that part of the triple blank.  Minutia that doesn't need
-to be in this commit message, but now it's explicitly documented on
-LKML and linkable-to.
+Nice hunting!
 
->
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Should these get Cc: stable tags maybe?
 
-> ---
->  scripts/Makefile.clang | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 058a4c0f864e..6c23c6af797f 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -4,6 +4,7 @@
->  CLANG_TARGET_FLAGS_arm         :=3D arm-linux-gnueabi
->  CLANG_TARGET_FLAGS_arm64       :=3D aarch64-linux-gnu
->  CLANG_TARGET_FLAGS_hexagon     :=3D hexagon-linux-musl
-> +CLANG_TARGET_FLAGS_loongarch   :=3D loongarch64-linux-gnusf
->  CLANG_TARGET_FLAGS_m68k                :=3D m68k-linux-gnu
->  CLANG_TARGET_FLAGS_mips                :=3D mipsel-linux-gnu
->  CLANG_TARGET_FLAGS_powerpc     :=3D powerpc64le-linux-gnu
-> --
-> 2.40.0
->
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+Kees Cook
