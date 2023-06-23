@@ -1,85 +1,89 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734D3100D8;
-	Fri, 23 Jun 2023 19:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687549161; x=1719085161;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C0OCDbKtMBf0UrjLUm+vZksqXDd2f96Ac+0SmxATfmk=;
-  b=ZwZF2jjs++DO5xJfcuoIKnoOn9g8jFtQIVT3g008Du8q1n76xL+Tljkm
-   y5IuDuX2r7GDId9lSYSqba3oua3IQSeZWeoxgSSUfRr4bl9x9YFi/wLNQ
-   irVt9BOEdMCPVVfRFgl4L5ZjhDus4v7gPwB7+94KyuzNfaGfpaUqKyZ/B
-   wg4E7PINVQAjhSTzK7MH1gGJGwXZ7Cui5Oi5B6CWJnMUZ18Rs9TehiYSw
-   pmy4ngT+Yvxwyvwk6Ec3HVJVQaSgrnyK/IwlBHNCaU+1/8/ItFqdmIF70
-   yW9pH4zQ1DsS4VbTwSpfMlHanw1rfiNT1WvBXl3qxm3WBivibOXBAuXO5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="359711399"
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="359711399"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 12:39:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="889580506"
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="889580506"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2023 12:39:18 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCmcn-0008VT-1q;
-	Fri, 23 Jun 2023 19:39:17 +0000
-Date: Sat, 24 Jun 2023 03:38:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shyam Prasad N <sprasad@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	Steve French <stfrench@microsoft.com>
-Subject: [cifs:for-next 13/13] fs/smb/client/cifs_debug.c:167:1: error:
- expected statement
-Message-ID: <202306240307.Q3coT9og-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AEC11C80
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 20:39:24 +0000 (UTC)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-3fde1d6b1c4so11021551cf.0
+        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 13:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687552763; x=1690144763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
+        b=DjWYIE/gzUN0Iiva7mkvSSuTrCrrIFG8+k9bfhLiENXZkHv0LSIRyQV0CuChbMfFTm
+         4XSOIKNbfzd17E1SrZaTFUnAK5r2Xto887LdsWzt0fv8zc62b52Q8Z2eUB00mpYhgcRO
+         bWbHk+wzyFGPDcE3AVUhrqiEWJwLl8WMKYzfzcDRLojb49S4oKYZNbBs7c/tsEfEKjyz
+         Iay+x8Z6UtF/8ZP5ziuj5VMwzouWdrJ6SIbaqVPE5JnHoUibJhC8vHHs0fCZyvJjAiZR
+         DRuJ0HBURTHIY6tpRH7FpoYKCTsR01ENJ31VSTIKCGbqZKIlZgfL2p7cvhAN4WZLqRBr
+         n50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687552763; x=1690144763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KtZOBLXx1qaVh8dEPlOQudc9UC+Jo33p6yGPUYlrsSo=;
+        b=IEKcFcAb2A4IbDAQS4rY/EGxThd3f8Cwa3333lpYmNK0TEtDrS3A70xQuxWbyJ5/Xe
+         vDR3VOy7hUMYtGxf6O9CHZtaOuMOCYZHDKVLTSjzzZ+4HN+f8b7Hn+4br+QbEgTSLG4m
+         mV+cfyU5GAEnQHOA7yS78CFdLhjUUwBmU1B2GgO86eSEg6usKPqVnELjmn6LMegMke16
+         Q5opAApQBcT9uzttOncGM2DXu1Ido9rNqfTLVpcUj7eKTmq/3d81oSIpJ5iv89dAsVuH
+         Vxm0tvhQ+YhEIk0IBTlkSQYjl18SFzJI2gHuP5kSIUPPk17KZ2vU6NulaN4Fx1m7+o30
+         YnbA==
+X-Gm-Message-State: AC+VfDy4t7+1miXH2HrgGPO+twyBfQlOE7a60j0Y6b41Klbuo3KnJDI1
+	yc3199b7iI1IjV7h8Gzzqe8JX11sXTITnQeTh6NCYbty9zuOy8vxQdI=
+X-Google-Smtp-Source: ACHHUZ5C+T2n2aljTSPuz46L0evX9FbO0qx+MAMVKiVyMT4wrARHms0ylsHGzLcHQiWlg0CE6es1Md6wWggP55Pgz9w=
+X-Received: by 2002:a05:622a:1708:b0:3fb:426f:19c0 with SMTP id
+ h8-20020a05622a170800b003fb426f19c0mr29888257qtk.29.1687552763059; Fri, 23
+ Jun 2023 13:39:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230623001140.1111494-4-samitolvanen@google.com> <202306230932.539C9DC0@keescook>
+In-Reply-To: <202306230932.539C9DC0@keescook>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 23 Jun 2023 13:38:45 -0700
+Message-ID: <CABCJKufmB+MwjEu=wjina1-F0q9vT--ig=SyLAGuXQViLV_1Uw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+To: Kees Cook <keescook@chromium.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-head:   33bc5dec2b4fd8d00fed51183615d91badf607d6
-commit: 33bc5dec2b4fd8d00fed51183615d91badf607d6 [13/13] cifs: display the endpoint IP details in DebugData
-config: i386-randconfig-r001-20230622 (https://download.01.org/0day-ci/archive/20230624/202306240307.Q3coT9og-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230624/202306240307.Q3coT9og-lkp@intel.com/reproduce)
+On Fri, Jun 23, 2023 at 9:32=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
+> > Hi folks,
+> >
+> > The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+> > where the compiler injects indirectly called functions to object
+> > files that otherwise contain no executable code, and are not
+> > processed by objtool or don't have CFI enabled. This results in
+> > missing or incorrect type hashes during boot and when modules are
+> > loaded.
+> >
+> > Sami Tolvanen (2):
+> >   kbuild: Fix CFI failures with GCOV
+> >   kbuild: Disable GCOV for *.mod.o
+> >
+> >  init/Makefile             | 1 +
+> >  scripts/Makefile.modfinal | 2 +-
+> >  scripts/Makefile.vmlinux  | 1 +
+> >  3 files changed, 3 insertions(+), 1 deletion(-)
+>
+> Nice hunting!
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> Should these get Cc: stable tags maybe?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306240307.Q3coT9og-lkp@intel.com/
+I was under the impression that Fixes: tags would be sufficient these
+days, but agreed, explicit Cc: probably wouldn't hurt.
 
-All errors (new ones prefixed by >>):
-
->> fs/smb/client/cifs_debug.c:167:1: error: expected statement
-   }
-   ^
-   1 error generated.
-
-
-vim +167 fs/smb/client/cifs_debug.c
-
-33bc5dec2b4fd8 fs/smb/client/cifs_debug.c Shyam Prasad N 2023-06-09  166  
-85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20 @167  }
-85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20  168  
-
-:::::: The code at line 167 was first introduced by commit
-:::::: 85150929a15b4e0a225434d5970bba14ebdf31f1 cifs: dump channel info in DebugData
-
-:::::: TO: Aurelien Aptel <aaptel@suse.com>
-:::::: CC: Steve French <stfrench@microsoft.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sami
