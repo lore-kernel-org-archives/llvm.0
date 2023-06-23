@@ -1,116 +1,77 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3544210F7
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 08:51:32 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f955def3a5so406842e87.0
-        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 01:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1687510291; x=1690102291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBp/5we+F098cYxjClAH39IPPmeDVkhswEY+vCjkrLU=;
-        b=Ldb53M44W8TbeL/H4zJekM/7x63/asS5bW6zXQ9hJOyWbKLNY7keLnKXhRj4QrC0l/
-         DLXXI4bXuMJbOq8ckfyr5v1acn0wXTqUNlru42rjmYpwkXm+H96OgZgoI/kCnW2k7oxl
-         5Da53GQIaNEpKCSkb9q0VDRLUTm8EeZ/Egqsr8ggJ3t+EiI4Mf3FiuOKj5/uk1Ro4Szo
-         5fx2JdV1Gj8eUq+940HvdiGUJOJJoB464Of3kP4xSxRYeC/5T4GTYNjml1HW49/4/0Mg
-         nTS0IoQC1ppNOJGvTDABxyXAPGh/iA1087WWe5v1Fr96c6G0LMb6JgKCuGj+56lCYl3C
-         Jyww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687510291; x=1690102291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBp/5we+F098cYxjClAH39IPPmeDVkhswEY+vCjkrLU=;
-        b=ZkVs0uMycYmq0yDXdTIAcE+EZZiUHJYXAeukvCXGpavMkyaBGs09V1cvIuGxK6zhwO
-         Fjjdz8gNFEcIUq3TIBi2FJZJXoLySlfomy4m72ISsjqhV9ZCDZN+A3rYMvHaHL+6T49l
-         2knjo2YKMq9zuqM4Ah3meOZG+Ao7KRLA84KrYlJopXzy/Mr2tFS02i5iowrcwuUY5mBx
-         GmrQwKt79sb2zR65slKQ01FUfDzyeDM/N+aYVcKcuIzQ1mSUvVVFpj8KwJtcUITUos1r
-         5f6+qS6Y/RhyqcYYLxhWf+kU02mUgzTuGk0v14vzdZJnpBqQylAMcaJdeZ0jK56c6s7/
-         qk4w==
-X-Gm-Message-State: AC+VfDwOZurZcLjFbMvQPedhjaWG2etsmTCXV7H1fOxO0iFopmvaqZ0H
-	vbIMjFBmm7J3jrYUAo5qrxf3DA==
-X-Google-Smtp-Source: ACHHUZ4bJ8bVgtgP/IjbqRrFOwLkmmEY0vE1BaZUiA+/j8tie7A0E3PJlHa8tG/xQQi6uTLzNyUNhA==
-X-Received: by 2002:a19:6544:0:b0:4f6:d7b:2f19 with SMTP id c4-20020a196544000000b004f60d7b2f19mr11832148lfj.24.1687510290980;
-        Fri, 23 Jun 2023 01:51:30 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:9cb8:f81f:3342:3b44? ([2a02:8011:e80c:0:9cb8:f81f:3342:3b44])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1c6a17000000b003eddc6aa5fasm1671290wmc.39.2023.06.23.01.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 01:51:30 -0700 (PDT)
-Message-ID: <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
-Date: Fri, 23 Jun 2023 09:51:29 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932475698
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 10:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=DZQQmjQ1drwcgq6Oa05wX61/L3ksY1VFD/yuj1ZSbCU=; b=Slb6Zo8nbLsH9VzI4HIiUYvaGW
+	XkE1nMQYkl1kV6+8WonAHB6G+7fY0d7KSiDeHoRWGCWc27CZrUoqco1Yl3WAl6vILgCyQQ/kbWt9X
+	aGPf2QPuzSpW2uaReFapa7G8lxByjtd599oist8mgTHM6TLIEFBiSUjVV5Tsbf5H8C6nNti1tVwvS
+	S32Ned2ANqs3HF7JeLYu3VFHb7LiRAdRKKoImXHGaI+OJS5b1+RHKVswUENLsTm81A+I0DfpbVZc1
+	Q1AcHtKA0B7qBHXXK2LRW+cg8SLoKsjy6b54p7/5liYFhVAvoEtI75WuwXqr1QchE6PuIuP6vuX6c
+	spL1xD5w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1qCcqy-002Bi3-23;
+	Fri, 23 Jun 2023 09:13:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 36C3B300392;
+	Fri, 23 Jun 2023 11:13:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1C460245257D7; Fri, 23 Jun 2023 11:13:13 +0200 (CEST)
+Date: Fri, 23 Jun 2023 11:13:13 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+Message-ID: <20230623091313.GS4253@hirez.programming.kicks-ass.net>
+References: <20230623001140.1111494-4-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] bpf: Replace deprecated -target with --target= for Clang
-Content-Language: en-GB
-To: Fangrui Song <maskray@google.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230623020908.1410959-1-maskray@google.com>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230623020908.1410959-1-maskray@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623001140.1111494-4-samitolvanen@google.com>
 
-2023-06-23 02:09 UTC+0000 ~ Fangrui Song <maskray@google.com>
-> -target has been deprecated since Clang 3.4 in 2013. Use the preferred
-> --target=bpf form instead. This matches how we use --target= in
-> scripts/Makefile.clang.
-
-This seems to be the relevant commit, for reference:
-
-https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a68135afc7f95def6277
-
+On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
+> Hi folks,
 > 
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> ---
->  Documentation/bpf/bpf_devel_QA.rst              | 10 +++++-----
->  Documentation/bpf/btf.rst                       |  4 ++--
->  Documentation/bpf/llvm_reloc.rst                |  6 +++---
->  drivers/hid/bpf/entrypoints/Makefile            |  2 +-
->  kernel/bpf/preload/iterators/Makefile           |  2 +-
->  samples/bpf/Makefile                            |  6 +++---
->  samples/bpf/gnu/stubs.h                         |  3 ++-
->  samples/bpf/test_lwt_bpf.sh                     |  2 +-
->  samples/hid/Makefile                            |  6 +++---
->  tools/bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++--
->  tools/bpf/bpftool/Makefile                      |  2 +-
->  tools/bpf/runqslower/Makefile                   |  2 +-
->  tools/build/feature/Makefile                    |  2 +-
->  tools/perf/Documentation/perf-config.txt        |  2 +-
->  tools/perf/Makefile.perf                        |  4 ++--
->  tools/perf/util/llvm-utils.c                    |  4 ++--
->  tools/testing/selftests/bpf/Makefile            |  6 +++---
->  tools/testing/selftests/bpf/gnu/stubs.h         |  3 ++-
->  tools/testing/selftests/hid/Makefile            |  6 +++---
->  tools/testing/selftests/net/Makefile            |  4 ++--
->  tools/testing/selftests/tc-testing/Makefile     |  2 +-
->  21 files changed, 42 insertions(+), 40 deletions(-)
+> The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+> where the compiler injects indirectly called functions to object
+> files that otherwise contain no executable code, and are not
+> processed by objtool or don't have CFI enabled. This results in
+> missing or incorrect type hashes during boot and when modules are
+> loaded.
+> 
+> Sami Tolvanen (2):
+>   kbuild: Fix CFI failures with GCOV
+>   kbuild: Disable GCOV for *.mod.o
+> 
+>  init/Makefile             | 1 +
+>  scripts/Makefile.modfinal | 2 +-
+>  scripts/Makefile.vmlinux  | 1 +
+>  3 files changed, 3 insertions(+), 1 deletion(-)
 > 
 
-> diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
-> index 719225b16626..cc37155fbfa5 100644
-> --- a/samples/bpf/gnu/stubs.h
-> +++ b/samples/bpf/gnu/stubs.h
-> @@ -1 +1,2 @@
-> -/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-> +/* SPDX-License-Identifier: GPL-2.0 */
+Urgh, tricky stuff this.
 
-Are these necessary, seeing that the files only contain this single-line
-comment?
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-> +/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
-
-Other than this, the change looks good, thanks. Although it should
-probably target bpf-next rather than bpf?
-
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-
+And yes, objtool essentially assumes vmlinux.o is complete and does LTO
+like passes. Is there something kbuild can do to ensure noting else gets
+linked in after this?
