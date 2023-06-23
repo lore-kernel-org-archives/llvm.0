@@ -1,91 +1,177 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932EC79CF;
-	Fri, 23 Jun 2023 13:16:47 +0000 (UTC)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1qCgeU-0002sh-00; Fri, 23 Jun 2023 15:16:38 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 32743C0301; Fri, 23 Jun 2023 15:09:23 +0200 (CEST)
-Date: Fri, 23 Jun 2023 15:09:23 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: sergio.paracuellos@gmail.com, sboyd@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, linux-clk@vger.kernel.org,
-	linux-mips@vger.kernel.org, patches@lists.linux.dev,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] clk: ralink: mtmips: Fix uninitialized use of ret in
- mtmips_register_{fixed,factor}_clocks()
-Message-ID: <20230623130923.GB11636@alpha.franken.de>
-References: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D1823102;
+	Fri, 23 Jun 2023 13:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+	t=1687527855; bh=IRnQjd+50zNSbl5gfok3N2S0Jg+9Z4fkKrrLulCYgAU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jBYwNFvAZtvh5weJO87WvoPnD0vpgGxNBYxenSAK4gnQ9KmrG3BnzhhnkWqMKoKgb
+	 vb0Yqr0llRUyT+De4OoHeaQTyWD4tdaWBYRB+S3XVp7H/rgy17Rt2BnBhce+lGAiJv
+	 ksfdcKBmIXr/whec8cjaLK0fSsArdAEyhi0wdRzw=
+Received: from ld50.lan (unknown [101.88.25.181])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BEC90605EB;
+	Fri, 23 Jun 2023 21:44:14 +0800 (CST)
+From: WANG Xuerui <kernel@xen0n.name>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Rui <wangrui@loongson.cn>,
+	Xi Ruoyao <xry111@xry111.site>,
+	loongarch@lists.linux.dev,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	WANG Xuerui <git@xen0n.name>
+Subject: [PATCH 6/9] LoongArch: Simplify the invtlb wrappers
+Date: Fri, 23 Jun 2023 21:43:48 +0800
+Message-Id: <20230623134351.1898379-7-kernel@xen0n.name>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230623134351.1898379-1-kernel@xen0n.name>
+References: <20230623134351.1898379-1-kernel@xen0n.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622-mips-ralink-clk-wuninitialized-v1-1-ea9041240d10@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 22, 2023 at 03:56:19PM +0000, Nathan Chancellor wrote:
-> Clang warns:
-> 
->   drivers/clk/ralink/clk-mtmips.c:309:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->     309 |         return ret;
->         |                ^~~
->   drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable 'ret' to silence this warning
->     285 |         int ret, i;
->         |                ^
->         |                 = 0
->   drivers/clk/ralink/clk-mtmips.c:359:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->     359 |         return ret;
->         |                ^~~
->   drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable 'ret' to silence this warning
->     335 |         int ret, i;
->         |                ^
->         |                 = 0
->   2 errors generated.
-> 
-> Set ret to the return value of clk_hw_register_fixed_rate() using the
-> PTR_ERR() macro, which ensures ret is not used uninitialized, clearing
-> up the warning.
-> 
-> Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for MTMIPS SoCs")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1879
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/clk/ralink/clk-mtmips.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk-mtmips.c
-> index 9322c6210a33..1e7991439527 100644
-> --- a/drivers/clk/ralink/clk-mtmips.c
-> +++ b/drivers/clk/ralink/clk-mtmips.c
-> @@ -292,6 +292,7 @@ static int mtmips_register_fixed_clocks(struct clk_hw_onecell_data *clk_data,
->  						      sclk->parent, 0,
->  						      sclk->rate);
->  		if (IS_ERR(sclk->hw)) {
-> +			ret = PTR_ERR(sclk->hw);
->  			pr_err("Couldn't register fixed clock %d\n", idx);
->  			goto err_clk_unreg;
->  		}
-> @@ -342,6 +343,7 @@ static int mtmips_register_factor_clocks(struct clk_hw_onecell_data *clk_data,
->  						  sclk->parent, sclk->flags,
->  						  sclk->mult, sclk->div);
->  		if (IS_ERR(sclk->hw)) {
-> +			ret = PTR_ERR(sclk->hw);
->  			pr_err("Couldn't register factor clock %d\n", idx);
->  			goto err_clk_unreg;
->  		}
-> 
-> ---
-> base-commit: fd99ac5055d4705e91c73d1adba18bc71c8511a8
-> change-id: 20230622-mips-ralink-clk-wuninitialized-150bd0336187
+From: WANG Xuerui <git@xen0n.name>
 
-applied to mips-next.
+Of the 3 existing invtlb wrappers, invtlb_info is not used at all,
+so it is removed; invtlb_all and invtlb_addr have their unused
+argument(s) removed from their signatures.
 
-Thomas.
+Also, the invtlb instruction has been supported by upstream LoongArch
+toolchains from day one, so ditch the raw opcode trickery and just use
+plain inline asm for it.
 
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+---
+ arch/loongarch/include/asm/tlb.h | 45 ++++++++++++--------------------
+ arch/loongarch/mm/tlb.c          | 10 +++----
+ 2 files changed, 21 insertions(+), 34 deletions(-)
+
+diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
+index 0dc9ee2b05d2..5e6ee9a15f0f 100644
+--- a/arch/loongarch/include/asm/tlb.h
++++ b/arch/loongarch/include/asm/tlb.h
+@@ -88,52 +88,39 @@ enum invtlb_ops {
+ 	INVTLB_GID_ADDR = 0x16,
+ };
+ 
+-/*
+- * invtlb op info addr
+- * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
+- * (addr << 10) | (info << 5) | op
+- */
+ static inline void invtlb(u32 op, u32 info, u64 addr)
+ {
+ 	__asm__ __volatile__(
+-		"parse_r addr,%0\n\t"
+-		"parse_r info,%1\n\t"
+-		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
+-		:
+-		: "r"(addr), "r"(info), "i"(op)
+-		:
+-		);
+-}
+-
+-static inline void invtlb_addr(u32 op, u32 info, u64 addr)
+-{
+-	__asm__ __volatile__(
+-		"parse_r addr,%0\n\t"
+-		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
+-		:
+-		: "r"(addr), "i"(op)
++		"invtlb %0, %1, %2\n\t"
+ 		:
++		: "i"(op), "r"(info), "r"(addr)
++		: "memory"
+ 		);
+ }
+ 
+-static inline void invtlb_info(u32 op, u32 info, u64 addr)
++static inline void invtlb_addr(u32 op, u64 addr)
+ {
++	/*
++	 * The ISA manual says $zero shall be used in case a particular op
++	 * does not take the respective argument, hence the invtlb helper is
++	 * not re-used to make sure this is the case.
++	 */
+ 	__asm__ __volatile__(
+-		"parse_r info,%0\n\t"
+-		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
+-		:
+-		: "r"(info), "i"(op)
++		"invtlb %0, $zero, %1\n\t"
+ 		:
++		: "i"(op), "r"(addr)
++		: "memory"
+ 		);
+ }
+ 
+-static inline void invtlb_all(u32 op, u32 info, u64 addr)
++static inline void invtlb_all(u32 op)
+ {
++	/* Similar to invtlb_addr, ensure the operands are actually $zero. */
+ 	__asm__ __volatile__(
+-		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
++		"invtlb %0, $zero, $zero\n\t"
+ 		:
+ 		: "i"(op)
+-		:
++		: "memory"
+ 		);
+ }
+ 
+diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
+index 00bb563e3c89..de04d2624ef4 100644
+--- a/arch/loongarch/mm/tlb.c
++++ b/arch/loongarch/mm/tlb.c
+@@ -17,19 +17,19 @@
+ 
+ void local_flush_tlb_all(void)
+ {
+-	invtlb_all(INVTLB_CURRENT_ALL, 0, 0);
++	invtlb_all(INVTLB_CURRENT_ALL);
+ }
+ EXPORT_SYMBOL(local_flush_tlb_all);
+ 
+ void local_flush_tlb_user(void)
+ {
+-	invtlb_all(INVTLB_CURRENT_GFALSE, 0, 0);
++	invtlb_all(INVTLB_CURRENT_GFALSE);
+ }
+ EXPORT_SYMBOL(local_flush_tlb_user);
+ 
+ void local_flush_tlb_kernel(void)
+ {
+-	invtlb_all(INVTLB_CURRENT_GTRUE, 0, 0);
++	invtlb_all(INVTLB_CURRENT_GTRUE);
+ }
+ EXPORT_SYMBOL(local_flush_tlb_kernel);
+ 
+@@ -100,7 +100,7 @@ void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ 		end &= (PAGE_MASK << 1);
+ 
+ 		while (start < end) {
+-			invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, 0, start);
++			invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, start);
+ 			start += (PAGE_SIZE << 1);
+ 		}
+ 	} else {
+@@ -131,7 +131,7 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
+ void local_flush_tlb_one(unsigned long page)
+ {
+ 	page &= (PAGE_MASK << 1);
+-	invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, 0, page);
++	invtlb_addr(INVTLB_ADDR_GTRUE_OR_ASID, page);
+ }
+ 
+ static void __update_hugetlb(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.40.0
+
