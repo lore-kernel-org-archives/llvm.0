@@ -1,124 +1,194 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F53423109;
-	Fri, 23 Jun 2023 22:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687560204; x=1719096204;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MhZLju72Wu953YaQliJabK/FxTEhlQ/IuuKL76TUfzs=;
-  b=n+iyhOqk/lnmP2J18u1fmgZQEI8mzUqSkzanfOPyFLMJiCfMsyxzOrF4
-   VkOqZ6Up8fLE3viugrj2BOADLeYFCMqshhJDVnV7LxOLHyYQnwkwsIsZP
-   woci7z6/9YyinoDqBH89JpxtnwOLOPkwvYrkEWEWh1Sb96g6TTH8/TAw/
-   NL0SBV7nDCnF62vcy7zrNnbY8+XUh5m99DKd9qWU4CS5rMFPlppwkfA7a
-   p4ylSBjmz0CdS0Pom4OQ1B+fqTtu8ChvfVc169IKyDkbzPGZwOz99Ud7h
-   kBGkt9dplk0dqYMaHHaSVwdypgh1mUMpUU2zYW8nCdfkf79WF65FgXTNP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="364323804"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="364323804"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 15:43:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="718679708"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="718679708"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2023 15:43:21 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCpUu-0008Zf-0c;
-	Fri, 23 Jun 2023 22:43:20 +0000
-Date: Sat, 24 Jun 2023 06:43:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: [tip:locking/core 37/43]
- drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame size
- (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait'
-Message-ID: <202306240641.rigy2zg2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BD0443E
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 23:18:55 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bd5f59fb71dso1136021276.3
+        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 16:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687562334; x=1690154334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o5h2Fku8APXH3iOdYKNWdhjGBKRm3o6/JPRIVNrW9qA=;
+        b=QFfPEzgVXYAeQa/6a5IBaDl9QfzWAr6OxLdvn4H9sUUu1YPmlx9TYMKYcOkzf8Dri+
+         I+EW41qX0D4ZLpiWpESkGo34UvdXh1t4YXWQjbcFDqWssJDjt7mcSlWmal0Io/ON+E4J
+         QYEv3qDTt/TaPxDICboK4LH8hXpS/ZaV3vealWnFLolM7YMeOqg7dpU8bsTECkoLaCAe
+         vdvmxkAQUYI0zrdjEpHv3RFRNQsZzBzcLy4T+Lo0cXVco+/1cQdBdoa9TMn4Az3qKXYR
+         R/2Xy40EeDFEzF5J83APlgmNUsCx/Bt4V/JP3RTpBKSMDAA/ziEa/sGACVr25XR1AUJ8
+         X54g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687562334; x=1690154334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o5h2Fku8APXH3iOdYKNWdhjGBKRm3o6/JPRIVNrW9qA=;
+        b=DYByhImPF1rJ/2+9bL2Ra5BF13vo9gGc22lDcW7vYYv3iCXmo6+443PhBXKi9QHj7Y
+         +vZtO6jJDhgyBeiQgXglefk6Zjbn8cYFo3khyAnMt5ElV1dOTqCrQVIeIURrxTrRp0HU
+         EsuzV9a0aT0aS9cB/M3jwCV0tDfnUMoqnCuYnXPE0id3WguuMFICu7B/5nYGPM5+rAuM
+         mp3GyMhnEx4+Yv93tdZSnIpehfY0/ta34vyK2T1dFEl61Nyr8UkpVHcEqLgDC24dzA97
+         IPA19CX/lJ1Sx2t8lB5JxQ65px9QWS5zk13sHf8yPEvhyKoICk/WZtbJ2tSNehiCned3
+         rdkQ==
+X-Gm-Message-State: AC+VfDx4+3j8kEbLa5GtHn/Ake/lboYOxD3McDghIlWP1nlPw0qa7NJI
+	uAEJdfTIsnw6KsRIwRBD5SUYhBDGmGlCKsDn2OI=
+X-Google-Smtp-Source: ACHHUZ64Ie2Q4TyVcEiEZZRvHCNcp3rrPGp7VLcfz4WgjiET7zv1uOAZWjP5DPConbdo8r3WXueFReyEKBSOKG0ki6g=
+X-Received: by 2002:a25:4050:0:b0:bfe:9259:8f1a with SMTP id
+ n77-20020a254050000000b00bfe92598f1amr10554353yba.50.1687562333975; Fri, 23
+ Jun 2023 16:18:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
+ <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net> <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
+ <CAM9d7chvZjZ4YVc6j3w7OkdHteyJ0GUZboieu9G7jAWBevoZqA@mail.gmail.com>
+ <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com> <CAKwvOdk6TTNhu_+FdONTXPo9Z8u5D4-5kf-rMN8oK4+6fMyc-w@mail.gmail.com>
+ <CABPqkBQVfQFJKCdHXEMGFcupzvy8zq14F52eLW5s9vr2Shmi6w@mail.gmail.com>
+ <85822c3c-2254-52cc-e6b1-9c89adb63771@amd.com> <CAKwvOdkfEexsE07XXGW3FF+nMt-pR8uv2EA7QzsPbEZsSQBO-Q@mail.gmail.com>
+ <85aabdc8-07cd-3285-1f3f-605f9ebbab18@amd.com> <b6a503b7-b421-a5c0-1cc8-4f1567b8d9de@amd.com>
+ <CAKwvOdmY7qoSG61f7UouWFz+gNN531FhpHbqawrAKCNKNDJHnw@mail.gmail.com>
+In-Reply-To: <CAKwvOdmY7qoSG61f7UouWFz+gNN531FhpHbqawrAKCNKNDJHnw@mail.gmail.com>
+From: Namhyung Kim <namhyung@gmail.com>
+Date: Fri, 23 Jun 2023 16:18:42 -0700
+Message-ID: <CAM9d7cg=HzWGgHvTUkkuRM+Y2tZgVACEV52a=vWqqa1mBMzuBw@mail.gmail.com>
+Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
+ with '-a'.
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>, Stephane Eranian <eranian@google.com>, 
+	Slade Watkins <srw@sladewatkins.net>, linux-perf-users <linux-perf-users@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Ian Rogers <irogers@google.com>, 
+	Kees Cook <keescook@chromium.org>, sandipan.das@amd.com, 
+	Bill Wendling <morbo@google.com>, clang-built-linux <llvm@lists.linux.dev>, Yonghong Song <yhs@fb.com>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+Hi Nick,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+On Fri, Jun 23, 2023 at 9:23=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Tue, Oct 11, 2022 at 10:05=E2=80=AFPM Ravi Bangoria <ravi.bangoria@amd=
+.com> wrote:
+> >
+> > On 12-Oct-22 9:36 AM, Ravi Bangoria wrote:
+> > > On 12-Oct-22 3:02 AM, Nick Desaulniers wrote:
+> > >> On Thu, Oct 6, 2022 at 8:56 PM Ravi Bangoria <ravi.bangoria@amd.com>=
+ wrote:
+> > >>>
+> > >>> +cc: PeterZ
+> > >>>
+> > >>>>>>>> +Ravi who may be able to say if there are any issues with the =
+precise
+> > >>>>>>>> sampling on AMD.
+> > >>>>>>>
+> > >>>>>>> Afaik cvcles:pp will use IBS but it doesn't support per-task pr=
+ofiling
+> > >>>>>>> since it has no task context.  Ravi is working on it..
+> > >>>>>>
+> > >>>>>> Right.
+> > >>>>>> https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@=
+amd.com
+> > >>>>>
+> > >>>>> Cool, thanks for working on this Ravi.
+> > >>>>>
+> > >>>>> I'm not sure yet whether I may replace the kernel on my corporate
+> > >>>>> provided workstation, so I'm not sure yet I can help test that pa=
+tch.
+> > >>>>>
+> > >>>>> Can you confirm that
+> > >>>>> $ perf record -e cycles:pp --freq=3D128 --call-graph lbr -- <comm=
+and to profile>
+> > >>>>>
+> > >>>>> works with just that patch applied? Or is there more work require=
+d?
+> > >>>>> What is the status of that patch?
+> > >>>>>
+> > >>>>> For context, we had difficulty upstreaming support for instrument=
+ation
+> > >>>>> based profile guided optimizations in the Linux kernel.
+> > >>>>> https://lore.kernel.org/lkml/CAHk-=3DwhqCT0BeqBQhW8D-YoLLgp_eFY=
+=3D8Y=3D9ieREM5xx0ef08w@mail.gmail.com/
+> > >>>>> We'd like to be able to use either instrumentation or sampling to
+> > >>>>> optimize our builds.  The major barrier to sample based approache=
+s are
+> > >>>>> architecture / micro architecture issues with sample based profil=
+e
+> > >>>>> data collection, and bitrot of data processing utilities.
+> > >>>>> https://github.com/google/autofdo/issues/144
+> > >>>>
+> > >>>> On existing AMD Zen2, Zen3 the following cmdline:
+> > >>>> $ perf record -e cycles:pp --freq=3D128 --call-graph lbr -- <comma=
+nd to profile>
+> > >>>>
+> > >>>> does not work. I see two reasons:
+> > >>>>
+> > >>>> 1. cycles:pp is likely converted into IBS op in cycle mode.
+> > >>>>     Current kernels do not support IBS in per-thread mode.
+> > >>>>     This is purely a kernel limitation
+> > >>>
+> > >>> Right, it's purely a kernel limitation. And below simple patch on t=
+op
+> > >>> of event-context rewrite patch[1] should be sufficient to make cycl=
+es:pp
+> > >>> working in per-process mode on AMD Zen.
+> > >>>
+> > >>> ---
+> > >>> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> > >>> index c251bc44c088..de01b5d27e40 100644
+> > >>> --- a/arch/x86/events/amd/ibs.c
+> > >>> +++ b/arch/x86/events/amd/ibs.c
+> > >>> @@ -665,7 +665,7 @@ static struct perf_ibs perf_ibs_fetch =3D {
+> > >>>
+> > >>>  static struct perf_ibs perf_ibs_op =3D {
+> > >>>         .pmu =3D {
+> > >>> -               .task_ctx_nr    =3D perf_invalid_context,
+> > >>> +               .task_ctx_nr    =3D perf_hw_context,
+> > >>>
+> > >>>                 .event_init     =3D perf_ibs_init,
+> > >>>                 .add            =3D perf_ibs_add,
+> > >>> ---
+> > >>>
+> > >>> [1]: https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangori=
+a@amd.com
+> > >>
+> > >> Hi Ravi,
+> > >> I didn't see the above diff in
+> > >> https://lore.kernel.org/lkml/20221008062424.313-1-ravi.bangoria@amd.=
+com/
+> > >> Was there another distinct patch you were going to send for the abov=
+e?
+> > >
+> > > Yes Nick. I was planning to send it once the rewrite stuff goes in.
+> >
+> > Hi Nick,
+> >
+> > Since you have practical use case, would it be possible to run your wor=
+kflow
+> > with perf rewrite and IBS patches applied? It will help us in finding/f=
+ixing
+> > more bugs and upstreaming these changes.
+>
+> Hi Ravi,
+> Sorry, I'm not able to load a custom kernel image on my employer
+> provided workstation, and I never got approval to expense hardware for
+> testing this otherwise.
+>
+> Was there ever any update on this? I'm on 6.1.25 now and still cant run
+> $ perf record -e cycles:pp --call-graph lbr <any command to profile>
+> $ cat /proc/cpuinfo
+> ...
+> model name      : AMD Ryzen Threadripper PRO 3995WX 64-Cores
+> ...
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   b33eb50a92b0a298fa8a6ac350e741c3ec100f6d
-commit: 1d78814d41701c216e28fcf2656526146dec4a1a [37/43] locking/atomic: scripts: simplify raw_atomic*() definitions
-config: arm-randconfig-r016-20230622 (https://download.01.org/0day-ci/archive/20230624/202306240641.rigy2zg2-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230624/202306240641.rigy2zg2-lkp@intel.com/reproduce)
+The commit 30093056f7b2 ("perf/amd/ibs: Make IBS a core pmu") in v6.2.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306240641.rigy2zg2-lkp@intel.com/
+  $ git name-rev --tags --refs=3Dv[2-6].* 30093056f7b2
+  30093056f7b2 v6.2-rc1~176^2~16
 
-All warnings (new ones prefixed by >>):
+https://git.kernel.org/torvalds/c/30093056f7b2
 
->> drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame size (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait' [-Wframe-larger-than]
-   static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-               ^
-   1 warning generated.
-
-
-vim +/ipmi_panic_request_and_wait +5194 drivers/char/ipmi/ipmi_msghandler.c
-
-895dcfd1cab84d Corey Minyard  2012-03-28  5190  
-895dcfd1cab84d Corey Minyard  2012-03-28  5191  /*
-895dcfd1cab84d Corey Minyard  2012-03-28  5192   * Inside a panic, send a message and wait for a response.
-895dcfd1cab84d Corey Minyard  2012-03-28  5193   */
-a567b6230066e3 Corey Minyard  2018-04-05 @5194  static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5195  					struct ipmi_addr *addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5196  					struct kernel_ipmi_msg *msg)
-895dcfd1cab84d Corey Minyard  2012-03-28  5197  {
-895dcfd1cab84d Corey Minyard  2012-03-28  5198  	struct ipmi_smi_msg  smi_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5199  	struct ipmi_recv_msg recv_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5200  	int rv;
-895dcfd1cab84d Corey Minyard  2012-03-28  5201  
-895dcfd1cab84d Corey Minyard  2012-03-28  5202  	smi_msg.done = dummy_smi_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5203  	recv_msg.done = dummy_recv_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5204  	atomic_add(2, &panic_done_count);
-895dcfd1cab84d Corey Minyard  2012-03-28  5205  	rv = i_ipmi_request(NULL,
-895dcfd1cab84d Corey Minyard  2012-03-28  5206  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5207  			    addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5208  			    0,
-895dcfd1cab84d Corey Minyard  2012-03-28  5209  			    msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5210  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5211  			    &smi_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5212  			    &recv_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5213  			    0,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5214  			    intf->addrinfo[0].address,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5215  			    intf->addrinfo[0].lun,
-895dcfd1cab84d Corey Minyard  2012-03-28  5216  			    0, 1); /* Don't retry, and don't wait. */
-895dcfd1cab84d Corey Minyard  2012-03-28  5217  	if (rv)
-895dcfd1cab84d Corey Minyard  2012-03-28  5218  		atomic_sub(2, &panic_done_count);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5219  	else if (intf->handlers->flush_messages)
-82802f968bd311 Hidehiro Kawai 2015-07-27  5220  		intf->handlers->flush_messages(intf->send_info);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5221  
-895dcfd1cab84d Corey Minyard  2012-03-28  5222  	while (atomic_read(&panic_done_count) != 0)
-895dcfd1cab84d Corey Minyard  2012-03-28  5223  		ipmi_poll(intf);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5224  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5225  
-
-:::::: The code at line 5194 was first introduced by commit
-:::::: a567b6230066e3a2c964e2dc914e7f9a436806c4 ipmi: Change ipmi_smi_t to struct ipmi_smi *
-
-:::::: TO: Corey Minyard <cminyard@mvista.com>
-:::::: CC: Corey Minyard <cminyard@mvista.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Namhyung
