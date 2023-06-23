@@ -1,101 +1,208 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7167FC;
-	Fri, 23 Jun 2023 04:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687493647; x=1719029647;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pezzVGVqtBDROV1XjDruKDPfTik1gHEt+FcVzS1lrbs=;
-  b=k6P0/e2qw1mnCNzvnSkek8BcBM4z/+u1clxaODYNjyySPFXYF4bfqK5H
-   KcWrLxTrh3qgZ2iaw6q0D+b4qPw6qHk6Tmug1uZLn8W71LaNzEoYlzzEL
-   NYUJ5IyeKHUq7KkAnFaf9PHRGifCUNkk7rHdqGycmAI+u035SEhe9gM7a
-   Y90ga6PcqkKJkcjojnf4fWgOS7bzrucpbPa3E+UbeisfBtRqX0pGL89nQ
-   K8nnfW7PetEOMaWQ3j8XiOM1xkvyTvjRqSaqql94iO6RgTDOzmJ0E6FDU
-   UYJNibZx52aDEdB/7ugFsHDmyC14cjhxNfvj6dxiMbtaobp4bCYqfhvTY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="359543347"
-X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="359543347"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 21:14:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="665342239"
-X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="665342239"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2023 21:13:56 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCYBH-0007yl-2f;
-	Fri, 23 Jun 2023 04:13:55 +0000
-Date: Fri, 23 Jun 2023 12:13:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Syed Saba Kareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
-	alsa-devel@alsa-project.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
-	Sunil-kumar.Dommati@amd.com,
-	Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	V Sujith Kumar Reddy <vsujithkumar.reddy@amd.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
-	Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 05/12] ASoC: amd: acp: remove the redundant acp
- enable/disable interrupts functions
-Message-ID: <202306231233.NynpYomQ-lkp@intel.com>
-References: <20230622152406.3709231-9-Syed.SabaKareem@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F7B642
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB13AC433C8
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 05:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687498871;
+	bh=qPapvU2ug5XUbs86vSozf1HW7Fb3vlj9IaJ8Cc/jUhc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nc6tMgv5HOQX4XZ9WiULPUOvoFoQr1wOklN1Ab/DKOFOR1LR/VPo6fglicjtk6nQL
+	 7bVs+K3n1Om48IszfVTJzdmt95vDF3BJ5Al5CXjce8zVZdF6qix6H9GdjnK2VA102z
+	 J/86+fiwxg0uUj3IDhln0JWz+sIJbKakfNjmgc70IlepZwLrPZuIFgknJYptlfgwWb
+	 IXmHDWFKkSZOOeCbUhT+VEoL58A5djkE7LxWdfejRtdKZP36sg4kPw6IbH0hb8GnAQ
+	 Yvg3Q+LFIYX8Cy1J0DOJKdLSZWGkDivSNYSuCUw1Cc5Hf8XmASjR/4GA1eA0SbBzud
+	 Ug1f50gFCOaRQ==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-19674cab442so175950fac.3
+        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 22:41:11 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzr6qEn2F8nUWuwr1lpq8U8AnuZ2SW3ezDPJ3LoaYpryOkyIHLs
+	pxDgZmqr4riVCFu9RGFRq9tN1t1PS7qcZQ/Hqy4=
+X-Google-Smtp-Source: ACHHUZ7cMLVT4f0AnUJoGvZXjHjFR76NxU3gpI2Rf4Fsv/8GBKrljZEFaW5o+/iwXTDhjTp30q16bid6On7xomQ1uyE=
+X-Received: by 2002:a05:6871:288:b0:1a6:c3d3:969c with SMTP id
+ i8-20020a056871028800b001a6c3d3969cmr19108557oae.45.1687498870905; Thu, 22
+ Jun 2023 22:41:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622152406.3709231-9-Syed.SabaKareem@amd.com>
+References: <20230409145358.2538266-1-masahiroy@kernel.org>
+ <20230531213319.GA2201875@dev-arch.thelio-3990X> <20230602152519.GA3007575@dev-arch.thelio-3990X>
+ <CAK7LNARjB8vgk-hsZmGqB0mwz=OBgyDtqBKJ2cueE+yQ02CQiA@mail.gmail.com> <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
+In-Reply-To: <CAFP8O3J1aiAgKzZ82erJseb_wwU7F2=+T0xCZ0BbcFKJOAQfUg@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 23 Jun 2023 14:40:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
+Message-ID: <CAK7LNAT+zj7fpE_-QewdCVFzz3smZq7V6XART+yOqKcAZCiTFA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To: Fangrui Song <maskray@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tom Rini <trini@konsulko.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Syed,
+On Fri, Jun 23, 2023 at 2:07=E2=80=AFAM Fangrui Song <maskray@google.com> w=
+rote:
+>
+> On Sat, Jun 3, 2023 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+> >
+> > On Sat, Jun 3, 2023 at 12:25=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 02:33:23PM -0700, Nathan Chancellor wrote:
+> > > > Hi Masahiro,
+> > > >
+> > > > On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > > > > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple=
+ is
+> > > > > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> > > > >
+> > > > > As a result, the linker script is preprocessed with predefined ma=
+cros
+> > > > > for the build host instead of the target.
+> > > > >
+> > > > > Assuming you use an x86 build machine, compare the following:
+> > > > >
+> > > > >  $ clang -dM -E -x c /dev/null
+> > > > >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> > > > >
+> > > > > There is no actual problem presumably because our linker scripts =
+do not
+> > > > > rely on such predefined macros, but it is better to define correc=
+t ones.
+> > > > >
+> > > > > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *=
+.lds.S
+> > > > > will be processed with the proper target triple.
+> > > > >
+> > > > > Reported-by: Tom Rini <trini@konsulko.com>
+> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > ---
+> > > > >
+> > > > >  scripts/Makefile.clang | 3 +--
+> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > > > index 70b354fa1cb4..93ca059cc3b8 100644
+> > > > > --- a/scripts/Makefile.clang
+> > > > > +++ b/scripts/Makefile.clang
+> > > > > @@ -38,6 +38,5 @@ CLANG_FLAGS       +=3D -Werror=3Dunknown-warnin=
+g-option
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dignored-optimization-argument
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Doption-ignored
+> > > > >  CLANG_FLAGS        +=3D -Werror=3Dunused-command-line-argument
+> > > > > -KBUILD_CFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > -KBUILD_AFLAGS      +=3D $(CLANG_FLAGS)
+> > > > > +KBUILD_CPPFLAGS    +=3D $(CLANG_FLAGS)
+> > > > >  export CLANG_FLAGS
+> > > > > --
+> > > > > 2.37.2
+> > > > >
+> > > >
+> > > > I am doubling back to this change, as the lack of '--target' in
+> > > > KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new cha=
+nge
+> > > > that rejects '-mbig-endian' and '-mlittle-endian' when not supporte=
+d by
+> > > > the target, which breaks the arm64 vDSO build when preprocessing it=
+s
+> > > > linker script:
+> > > >
+> > > >   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper vi=
+rtconfig menuconfig arch/arm64/kernel/vdso/
+> > > >   ...
+> > > >   clang: error: unsupported option '-mbig-endian' for target 'x86_6=
+4-pc-linux-gnu'
+> > > >   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/v=
+dso/vdso.lds] Error 1
+> > > >   ...
+> > > >
+> > > >   https://github.com/llvm/llvm-project/commit/d81ce04587c006b673119=
+8956c522c93d0df1050
+> > > >   https://github.com/ClangBuiltLinux/linux/issues/1859
+> > > >
+> > > > This change resolves that issue. I was able to figure out why those=
+ new
+> > > > warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> > > > CHECKFLAGS. The following diff resolves it for me:
+> > > >
+> > > > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > > > index a7a4ee66a9d3..ef7b05ae92ce 100644
+> > > > --- a/arch/mips/Makefile
+> > > > +++ b/arch/mips/Makefile
+> > > > @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tab=
+les
+> > > >  KBUILD_LDFLAGS               +=3D -m $(ld-emul)
+> > > >
+> > > >  ifdef CONFIG_MIPS
+> > > > -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/nu=
+ll | \
+> > > > +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) =
+-dM -E -x c /dev/null | \
+> > > >       grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+> > > >       sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's=
+/\$$/&&/g')
+> > > >  endif
+> > > >
+> > > > I will run this change plus that diff through my build matrix to se=
+e if
+> > > > any other issues pop up. If not, I will respond with some tags and
+> > > > perhaps this could be taken as a fix for 6.4 so that it could
+> > > > potentially be backported?
+> > >
+> > > I found two more issues lurking in PowerPC. I have attached suggested
+> > > patches for all the issues I have uncovered to this email, please fee=
+l
+> > > free to use them or do something different if you feel there is a bet=
+ter
+> > > fix. With those issues resolved in one way or another, consider the
+> > > original change:
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > If it would work better for you, I am more than happy to take over th=
+is
+> > > series as well.
+> > >
+> > > Cheers,
+> > > Nathan
+> >
+> > Thanks. All the three patches look good to me.
+> >
+> > I will apply them, then mine on top.
+>
+> Drive-by reply from
+> https://github.com/ClangBuiltLinux/continuous-integration2/pull/585
+>
+> Hi Masahiro, one nit:) If the patch still has time to adjust the
+> commit message, perhaps consider replacing
+>
+> -target aarch64-linux-gnu with --target=3Daarch64-linux-gnu
+>
+> as the former is a deprecated driver option since Clang 3.x (long time ag=
+o).
+>
+> > Assuming you use an x86 build machine, compare the following:
+>
+> You may drop "Assuming you use an x86 build machine" and add
+> --target=3Dx86_64-linux-gnu to the `clang -dM -E -x c /dev/null` command
+> :)
 
-kernel test robot noticed the following build errors:
+Thanks for the suggestion, but I do not want to change the commit ID
+unless there is something terribly wrong.
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on linus/master v6.4-rc7 next-20230622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Nathan recorded the commit ID in the CBL bug tracker.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Syed-Saba-Kareem/ASoC-amd-acp-remove-acp-poweroff-function/20230622-233145
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230622152406.3709231-9-Syed.SabaKareem%40amd.com
-patch subject: [PATCH 05/12] ASoC: amd: acp: remove the redundant acp enable/disable interrupts functions
-config: i386-buildonly-randconfig-r006-20230622 (https://download.01.org/0day-ci/archive/20230623/202306231233.NynpYomQ-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231233.NynpYomQ-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306231233.NynpYomQ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: acp_enable_interrupts
-   >>> referenced by acp-renoir.c:191 (sound/soc/amd/acp/acp-renoir.c:191)
-   >>>               sound/soc/amd/acp/acp-renoir.o:(renoir_audio_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: acp_disable_interrupts
-   >>> referenced by acp-renoir.c:202 (sound/soc/amd/acp/acp-renoir.c:202)
-   >>>               sound/soc/amd/acp/acp-renoir.o:(renoir_audio_remove) in archive vmlinux.a
-   pahole: .tmp_vmlinux.btf: Invalid argument
-   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Best Regards
+Masahiro Yamada
