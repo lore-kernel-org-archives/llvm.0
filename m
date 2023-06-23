@@ -1,173 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FAA621085
-	for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 23:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2B9C433C9;
-	Thu, 22 Jun 2023 23:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687475886;
-	bh=IYLn4He+dUn8jWbCQgvPNmcloMkzjwQQPUXE3ulHjvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FqI9zOD6e2gifJtG76n7U3TKoxxXnwhs8M0UVHn+MoXE52sfvxjhrHr/L4bynI5IZ
-	 TZz+VD9RENvfCSgpMrQ+VF28i/dHiYcg5WBUO0ZV71CJjU2f6kFZKxFqsj2xtYvLFm
-	 suhnTWft40hlVMtigVCYunFiJmuRyrTRdzytgoLMZsJgLoWFTivJb8PzlQ56DsMB49
-	 cy5YFWPHgQLkN3WrMjyBuCOV0t8GnsE1F90PVMexwe7AWSbULY3qNWGwgH/Evp5Edy
-	 658iKVi1zSDH43vP0xDQt24YoAQV/VwSrEa6Ia5CbjSdLXQ18zRTmcXovIRetKlWap
-	 lXG6bkPQ3NRZA==
-Date: Thu, 22 Jun 2023 23:18:03 +0000
-From: Nathan Chancellor <nathan@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: bjorn@kernel.org, ndesaulniers@google.com,
-	Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-	llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-	aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230622231803.GA1790165@dev-arch.thelio-3990X>
-References: <20230622215327.GA1135447@dev-arch.thelio-3990X>
- <mhng-6c34765c-126d-4e6c-8904-e002d49a4336@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD3D7F
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 00:11:44 +0000 (UTC)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-55384b34f86so73186a12.2
+        for <llvm@lists.linux.dev>; Thu, 22 Jun 2023 17:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687479104; x=1690071104;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5oekcbpWaYM+RGe3QAFehRbvyX8WllQ5GlGqpNCW54M=;
+        b=Rdb6IeNa+bN582kGK3qp4Ii4rozTCVuUQQpEgBAs6zPE7ZRSP7TQtPZ3NPBWlRL1tM
+         t04koMz43/pvfmmFxz/6CBOzsO9Vs7uk+c7s8NDsE+N0GSQp3PzITuPhz9a7gTu2Mi5N
+         J3weAAdvQPHuoOLsMrmnUfuI3Y426aWWtjCblobFURtiRe9q8ccjcp58x0iIuZr8IG2W
+         lZY9bsnUTX4RfzQ5RagfFmnXCn3hj889q6PoX7fMeBzJSgmpXXSagS0qrBu5GZxo4j4L
+         xnF/sFFXm28NDNZCMab0/wcgJ/P8/CqAiVT9dDqOZ3DagKfQzFIFSag822sHncBtM7Hd
+         KPuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687479104; x=1690071104;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5oekcbpWaYM+RGe3QAFehRbvyX8WllQ5GlGqpNCW54M=;
+        b=ehlXCwug6LL9HKkUHLTxkpYY4eeEeYdaGOBet/F8dzy0o7w0bNEtLislbwx5nixoRH
+         p0SxZQ++O4IRbDwg/D2OmhE2wFONejzPpZyp/sif8sge4R1papxiUJxO371T+sXJTwH3
+         T90ibbq7h+xpsNOqVpptbTmMCqg6YjeJ3tBJztoprsgkigSL36V+Ki4B3axn5ha2EP0w
+         f864KQQkp3P4imerHDQgs/gaDRrYy47BYOv9oy8wLJtpQ2EQd6DQSw/rq2/9q9TTXYBl
+         RqqiKw6ic18BYO2BiiFWCzZGe1ll+Cg6X7aC7b3Ycvj56FTEVY4TMVLEgdhn1Q9FNg9A
+         2Sww==
+X-Gm-Message-State: AC+VfDwdGNNMkVomvlV6mNIWUonjKqRmOtVPSRVpWL6y3dXnVQ5+887N
+	ARSSjg06Q8QjueeGpeqYkGgdf1Kpoy4OpwaRnJM=
+X-Google-Smtp-Source: ACHHUZ5Bbdj/Ngjl/Z69q7NG5fA7CX/VyQT7dEAumQtyQESFxG0Anm7Rfy27RCjzekbHKI25dJxcWZNJOXP3l8fny+w=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a63:5b15:0:b0:557:3c4e:5769 with SMTP
+ id p21-20020a635b15000000b005573c4e5769mr787928pgb.3.1687479104229; Thu, 22
+ Jun 2023 17:11:44 -0700 (PDT)
+Date: Fri, 23 Jun 2023 00:11:41 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-6c34765c-126d-4e6c-8904-e002d49a4336@palmer-ri-x1c9a>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=693; i=samitolvanen@google.com;
+ h=from:subject; bh=6A3Z0VekOrcAMCMCoSBjX+Qi/VC1cWGyR/zEJyxpVoc=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBklOM8IwI7R/Crn8VEyZ1topwBBLxf1CeJ9XSJl
+ p3FBTr7u5OJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZJTjPAAKCRBMtfaEi7xW
+ 7mugC/9MpcW5D0WhaaWUZM8C+JzHLa9JJbPhg9hFYjXWL+Rwxh6hi7X6iGTW5gfIJ2Ar6ogm/yU
+ CuPjeOilA9lpCS7UZBbG95xG49nZ/T69c4bYi7G0hi99r4WW+ToN9ZF82izlKGmIekKCiFrDLgl
+ Ie7NTBQ3yMll03uKWi0Gyq2joN795JLMIwr2A9Oi/NIU72vxhUv+PXRI1J5M4wZRXeobAMojmpk
+ QMPTRn5yh+fLLhBgDQRyRcdtWq5c0DPnomwNttFc1ilPg5KLH1kHpp5S4p4Bksp4NgGMPLIUssg
+ WkN6j6kOkknD8IWznyBNa9tVZsk53Jzg239w4PWwE+R4AcnRxTNxy7U8fTDYtw9maeU7mQxh14q
+ XtqdL7lx4s0aLqIv7ME/NinZ58oXfTbHrEbE0wMhuMK55Zr7nyQ1ix/ciaj1PTZH4XZpFRX0gdH 1BvtUZoas2rrY8vuyqrgYGXm/VXk2gJ/TA/uTdSdfEFtbUTTtI/ov2gNFSkKVyePeWVmY=
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230623001140.1111494-4-samitolvanen@google.com>
+Subject: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 22, 2023 at 03:16:51PM -0700, Palmer Dabbelt wrote:
-> On Thu, 22 Jun 2023 14:53:27 PDT (-0700), nathan@kernel.org wrote:
-> > On Wed, Jun 21, 2023 at 11:19:31AM -0700, Palmer Dabbelt wrote:
-> > > On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
-> > > > Conor Dooley <conor@kernel.org> writes:
-> > > >
-> > > > [...]
-> > > >
-> > > > > > So I'm no longer actually sure there's a hang, just something
-> > > > > > slow.  That's even more of a grey area, but I think it's sane to
-> > > > > > call a 1-hour link time a regression -- unless it's expected
-> > > > > > that this is just very slow to link?
-> > > > >
-> > > > > I dunno, if it was only a thing for allyesconfig, then whatever - but
-> > > > > it's gonna significantly increase build times for any large kernels if LLD
-> > > > > is this much slower than LD. Regression in my book.
-> > > > >
-> > > > > I'm gonna go and experiment with mixed toolchain builds, I'll report
-> > > > > back..
-> > > >
-> > > > I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
-> > > > HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
-> > > >
-> > > >   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
-> > > >   |     --toolchain=llvm-16 --runtime docker --directory . -k \
-> > > >   |     allyesconfig
-> > > >
-> > > > Took forever, but passed after 2.5h.
-> > > 
-> > > Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
-> > > checking top sometimes), it's at 1.5h but even that seems quite long.
-> > > 
-> > > I guess this is sort of up to the LLVM folks: if it's expected that DCE
-> > > takes a very long time to link then I'm not opposed to allowing it, but if
-> > > this is probably a bug in LLD then it seems best to turn it off until we
-> > > sort things out over there.
-> > > 
-> > > I think maybe Nick or Nathan is the best bet to know?
-> > 
-> > I can confirm a regression with allyesconfig but not allmodconfig using
-> > LLVM 16.0.6 on my 80-core Ampere Altra system.
-> > 
-> > allmodconfig: 8m 4s
-> > allmodconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 7m 4s
-> > allyesconfig: 1h 58m 30s
-> > allyesconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 12m 41s
-> 
-> Are those backwards?  I'm getting super slow builds after merging the patch
-> set, not before -- though apologize in advance if I'm reading it wrong, I'm
-> well on my way to falling asleep already ;)
+Hi folks,
 
-I know I already responded to you around this on IRC but I will do it
-here too for the benefit of others following this thread.
+The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+where the compiler injects indirectly called functions to object
+files that otherwise contain no executable code, and are not
+processed by objtool or don't have CFI enabled. This results in
+missing or incorrect type hashes during boot and when modules are
+loaded.
 
-These numbers are from the patchset applied on top of dad9774deaf1
-("Merge tag 'timers-urgent-2023-06-21' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip"); in other words,
-allmodconfig and allyesconfig have CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
-so turning it off is basically like building allmodconfig and
-allyesconfig before the patchset was applied.
+Sami Tolvanen (2):
+  kbuild: Fix CFI failures with GCOV
+  kbuild: Disable GCOV for *.mod.o
 
-> > I am sure there is something that ld.lld can do better, given GNU ld
-> > does not have any problems as earlier established, so that should
-> > definitely be explored further. I see Nick already had a response about
-> > writing up a report (I wrote most of this before that email so I am
-> > still sending this one).
-> > 
-> > However, allyesconfig is pretty special and not really indicative of a
-> > "real world" kernel build in my opinion (which will either be a fully
-> > modular kernel to allow use on a wide range of hardware or a monolithic
-> > kernel with just the drivers needed for a specific platform, which will
-> > be much smaller than allyesconfig); it has given us problems with large
-> > kernels before on other architectures.
-> 
-> I totally agree that allyesconfig is an oddity, but it's something that does
-> get regularly build tested so a big build time hit there is going to cause
-> trouble -- maybe not for users, but it'll be a problem for maintainers and
-> that's way more likely to get me yelled at ;)
+ init/Makefile             | 1 +
+ scripts/Makefile.modfinal | 2 +-
+ scripts/Makefile.vmlinux  | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-Agreed. That comment was more around justification for opting out of
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION with these configurations, since
-CONFIG_COMPILE_TEST has effective become "am I allmodconfig or
-allyesconfig?" nowadays.
 
-> > CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is already marked with 'depends on
-> > EXPERT' and its help text mentions its perils, so it does not seem
-> > unreasonable to me to add an additional dependency on !COMPILE_TEST so
-> > that allmodconfig and allyesconfig cannot flip this on, something like
-> > the following perhaps?
-> > 
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 32c24950c4ce..25434cbd2a6e 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1388,7 +1388,7 @@ config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> >  config LD_DEAD_CODE_DATA_ELIMINATION
-> >  	bool "Dead code and data elimination (EXPERIMENTAL)"
-> >  	depends on HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> > -	depends on EXPERT
-> > +	depends on EXPERT && !COMPILE_TEST
-> >  	depends on $(cc-option,-ffunction-sections -fdata-sections)
-> >  	depends on $(ld-option,--gc-sections)
-> >  	help
-> > 
-> > If applying that dependency to all architectures is too much, the
-> > selection in arch/riscv/Kconfig could be gated on the same condition.
-> 
-> Is the regression for all ports, or just RISC-V?  I'm fine gating this with
-> some sort of Kconfig flag, if it's just impacting RISC-V then it seems sane
-> to keep it over here.
+base-commit: 007034977130b49b618a5206aad54f634d9f169c
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-I am not sure. Only mips selects HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-unconditionally and we don't test ARCH=mips all{mod,yes}config (not sure
-why off the top of my head). powerpc selects it when using objtool for
-mcount generation, which only happens for ppc32 (which we don't test
-heavily or with large kernels) or using '-mprofile-kernel', which clang
-does not support.
-
-If you wanted to restrict it to just LD_IS_BFD in arch/riscv/Kconfig,
-that would be fine with me too.
-
-  select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if LD_IS_BFD
-
-Nick said he would work on a report for the LLVM side, so as long as
-this issue is handled in some way to avoid regressing LLD builds until
-it is resolved, I don't think there is anything else for the kernel to
-do. We like to have breadcrumbs via issue links, not sure if the report
-will be internal to Google or on LLVM's issue tracker though;
-regardless, we will have to touch this block to add a version check
-later, at which point we can add a link to the fix in LLD.
-
-Cheers,
-Nathan
