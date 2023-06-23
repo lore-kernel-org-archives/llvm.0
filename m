@@ -1,111 +1,85 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7ED101E0
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 19:34:18 +0000 (UTC)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51bea30ccbcso1045736a12.0
-        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 12:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687548856; x=1690140856;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H1ZT5uDPau+Z6seT0VZfhVr+ahIhi7iWdRJoe/etFv4=;
-        b=Ga21f79gjb+9easZoKovji8g4g11xJgyPFQJzr6lhb20ePubndme/Xrkqp0rqw1sUL
-         /RNDkj2GR7udd6C4bladNUy+lPjc+2pvY0OU9CIs5WRW+xZjBpLLMmPS+0jRDS6mq7qQ
-         Fb5T4Gei1qLWwJVPI4lmHfw7Iww4a6N8GNRTo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687548856; x=1690140856;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H1ZT5uDPau+Z6seT0VZfhVr+ahIhi7iWdRJoe/etFv4=;
-        b=SL6jbQqGLuVzJ9vwO/JqsRPViGU7bVBvzePWr/Q5Q47ockNc2M4nbpjXOdtL3nn74h
-         bCsuVIbQh6ZS3Olhq3zl3Fm49jkqEtSzmAA9kjKqMTSK9PNzLqaWFaz1qt2xR2y69R7x
-         o2751QUEAo2qREDY89dN7dAcUzSUh9H52j0V9HA9bdveUpO69A43r7XistxD7u7Wxb7/
-         7W/TwV8aJYlbtLAkSB0p7pNGOlxtMOdkfWZdK9aHfdRSeWpsfgt+rx++l6Qj8mK4lhiu
-         QYqv1lFRv4chePsq12h6jDLoItd+DGH3U7X6P0TyqUe7Iqt0f/T/Uhx9hZYrlfxeC2i0
-         a7vA==
-X-Gm-Message-State: AC+VfDyEm1QNGFO7ZnuKt8m71u765UiTM0BaW/y6EtEzUhGBYCRKBJr2
-	JE9Cbu3SOAwYydNtPwUCv5Gl5KjYVzPuJDK060zBdw==
-X-Google-Smtp-Source: ACHHUZ5EPiw8xiBAdSti4yyVNPBhaLpUIHhGTlQ3R7frz2AjfJf3lARrQLbYVZNItlE2KRj094PCVA==
-X-Received: by 2002:aa7:c60d:0:b0:51b:eb35:f8c9 with SMTP id h13-20020aa7c60d000000b0051beb35f8c9mr4164073edq.2.1687548856237;
-        Fri, 23 Jun 2023 12:34:16 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id b17-20020a056402139100b0051bee1eadccsm1645086edv.31.2023.06.23.12.34.15
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 12:34:15 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51be527628fso1035936a12.3
-        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 12:34:15 -0700 (PDT)
-X-Received: by 2002:aa7:d5c6:0:b0:51b:e803:83d4 with SMTP id
- d6-20020aa7d5c6000000b0051be80383d4mr4768055eds.21.1687548855130; Fri, 23 Jun
- 2023 12:34:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734D3100D8;
+	Fri, 23 Jun 2023 19:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687549161; x=1719085161;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C0OCDbKtMBf0UrjLUm+vZksqXDd2f96Ac+0SmxATfmk=;
+  b=ZwZF2jjs++DO5xJfcuoIKnoOn9g8jFtQIVT3g008Du8q1n76xL+Tljkm
+   y5IuDuX2r7GDId9lSYSqba3oua3IQSeZWeoxgSSUfRr4bl9x9YFi/wLNQ
+   irVt9BOEdMCPVVfRFgl4L5ZjhDus4v7gPwB7+94KyuzNfaGfpaUqKyZ/B
+   wg4E7PINVQAjhSTzK7MH1gGJGwXZ7Cui5Oi5B6CWJnMUZ18Rs9TehiYSw
+   pmy4ngT+Yvxwyvwk6Ec3HVJVQaSgrnyK/IwlBHNCaU+1/8/ItFqdmIF70
+   yW9pH4zQ1DsS4VbTwSpfMlHanw1rfiNT1WvBXl3qxm3WBivibOXBAuXO5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="359711399"
+X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
+   d="scan'208";a="359711399"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 12:39:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="889580506"
+X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
+   d="scan'208";a="889580506"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2023 12:39:18 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qCmcn-0008VT-1q;
+	Fri, 23 Jun 2023 19:39:17 +0000
+Date: Sat, 24 Jun 2023 03:38:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shyam Prasad N <sprasad@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+	Steve French <stfrench@microsoft.com>
+Subject: [cifs:for-next 13/13] fs/smb/client/cifs_debug.c:167:1: error:
+ expected statement
+Message-ID: <202306240307.Q3coT9og-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAPM=9twNnV4zMCvrPkw3H-ajZOH-01JVh_kDrxdPYQErz8ZTdA@mail.gmail.com>
- <CAHk-=wi=eDN4Ub0qSN27ztBAvHSXCyiY2stu3_XbTpYpQX4x7w@mail.gmail.com>
- <CAHk-=wg9p+oJtzC0582vke8whcWPNSC9eq0Z6kdnSqWMEpah7g@mail.gmail.com> <CAKwvOd=dUWWSzQEWdguhe3SjYTw7a76skx370DbU2Y+5o=M8BA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=dUWWSzQEWdguhe3SjYTw7a76skx370DbU2Y+5o=M8BA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 23 Jun 2023 12:33:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgsK5H=ejAfFaABzK5PCb3=wqarq+L5frcTjRJkON9S+Q@mail.gmail.com>
-Message-ID: <CAHk-=wgsK5H=ejAfFaABzK5PCb3=wqarq+L5frcTjRJkON9S+Q@mail.gmail.com>
-Subject: Re: arm32 build warnings in workqueue.c
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Dave Airlie <airlied@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 23 Jun 2023 at 12:16, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> >
-> > -       movabsq $137438953440, %rcx             # imm = 0x1FFFFFFFE0
-> > -       andq    %rax, %rcx
-> > -       movabsq $68719476704, %rdx              # imm = 0xFFFFFFFE0
-> > -       cmpq    %rdx, %rcx
-> > +       shrq    $5, %rax
-> > +       cmpl    $2147483647, %eax               # imm = 0x7FFFFFFF
-> >
-> > in several places.
->
-> Sorry, are those equivalent?  Before looks to me like:
->
-> if (0xFFFFFFFE0 - (0x1FFFFFFFE0 & rax))
->
-> and after
->
-> if (0x7FFFFFFF - (rax >> 5))
+tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+head:   33bc5dec2b4fd8d00fed51183615d91badf607d6
+commit: 33bc5dec2b4fd8d00fed51183615d91badf607d6 [13/13] cifs: display the endpoint IP details in DebugData
+config: i386-randconfig-r001-20230622 (https://download.01.org/0day-ci/archive/20230624/202306240307.Q3coT9og-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230624/202306240307.Q3coT9og-lkp@intel.com/reproduce)
 
-I cut off some of the other changes, with the old (confused) code also doing
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306240307.Q3coT9og-lkp@intel.com/
 
--       shrq    $5, %rax
+All errors (new ones prefixed by >>):
 
-later.
+>> fs/smb/client/cifs_debug.c:167:1: error: expected statement
+   }
+   ^
+   1 error generated.
 
-And yes, as far as I can tell, the comparisons are 100% equivalent.
-Look at what happens when you shift that big mask down by 5..
 
-> > My guess is that clang keeps an enum as an enum as long as possible -
-> > including past some (really) simple simplification phases of the
-> > optimizer.
->
-> I don't think so.
-> https://godbolt.org/z/M8746c49z
-> That's LLVM IR as soon as it leaves the front end.
+vim +167 fs/smb/client/cifs_debug.c
 
-Hmm. I have
+33bc5dec2b4fd8 fs/smb/client/cifs_debug.c Shyam Prasad N 2023-06-09  166  
+85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20 @167  }
+85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20  168  
 
-     clang version 15.0.7 (Fedora 15.0.7-2.fc37)
+:::::: The code at line 167 was first introduced by commit
+:::::: 85150929a15b4e0a225434d5970bba14ebdf31f1 cifs: dump channel info in DebugData
 
-and you can probably check the code generation of the current kernel
-with and without that patch.
+:::::: TO: Aurelien Aptel <aaptel@suse.com>
+:::::: CC: Steve French <stfrench@microsoft.com>
 
-It might depend on exact config file - I'll send you mine in a
-separate email to not pollute the mailing list.
-
-                Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
