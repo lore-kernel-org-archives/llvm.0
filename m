@@ -1,90 +1,109 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE82230E8;
-	Fri, 23 Jun 2023 11:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687518790; x=1719054790;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PcjBkB0YxCCGmeKAP8imTFlIqIx/eceN102NpEurFIU=;
-  b=V1hSWlflAoGymyfNxnkCJ3lzQEHX+rgmhPDL8uzATBkcRAjmImWI5bIn
-   7HqCqLHMnKF8HA8gs3Hnqts7J1rbPFb0Jj/WcgyKbyu4CXHua3xn8JrMS
-   3gSaWK4ImLmvi8wIcbcimw9hSZ1P46ehzz17SQVRQw2/Pwo9gw2GFi+5E
-   43M66b1DUwvoqotQHErepjnquOKlD7tLPi04LnoQ7ufalASw4uPR5TKca
-   sdfa3zvvQrLK7+WZnKY9Su7sU4j9GbUKJ2ShTAQELJLn5KxTQzsyliKvh
-   AMIk8sRovxhBNZ161Nb9bI8YHu4oaUpysQ1xjcKfP96Cmv4oK7ibYY20s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="426727461"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="426727461"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 04:13:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="744966853"
-X-IronPort-AV: E=Sophos;i="6.01,151,1684825200"; 
-   d="scan'208";a="744966853"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Jun 2023 04:13:06 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCeiv-0008Dz-2x;
-	Fri, 23 Jun 2023 11:13:05 +0000
-Date: Fri, 23 Jun 2023 19:12:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [linux-next:master 10675/12162] drivers/clk/imx/clk-imx31.c:14:10:
- fatal error: 'soc/imx/timer.h' file not found
-Message-ID: <202306231959.rM5kD1QX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAAA230FA
+	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 11:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=D0ozaDmhNyFK25SoDuRwst2ICRzooGIruMu1J/0UTdw=; b=e1VU5HupzKjPk3tMn37weKC8T1
+	Df1rHFJLyS3VCJbM9W9xH+rDHA24BxaSXm97nyn8vtwSmOLplRM2ZDCtGw+4a6TjR7AjmkoE7e3WM
+	IeNesvLOTnPILGjPWBqyUEq2PniAppsVbh3FrVT29eidMgR7UlyvrLrj4qR3c/QZntS3HScTq2sLX
+	x1HLlKfB1VC8ypOT+frAyYy08Ax0GAZxV93p6Kbjl2H7UH8cgYjVKV1D8pIYVXY7pXyu3b8jEhSC5
+	LhQtrKd4nRYZKTNDsfWIx0mOmSHJ/gGRl96XDvwWvaGYx9AgEM8MaoWTZ0pZT7NMFtNipd6FQ4gk9
+	dvEdDP0w==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qCezJ-0000a8-PL; Fri, 23 Jun 2023 13:30:01 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qCezJ-000G0O-7d; Fri, 23 Jun 2023 13:30:01 +0200
+Subject: Re: [PATCH] bpf: Replace deprecated -target with --target= for Clang
+To: Quentin Monnet <quentin@isovalent.com>, Fangrui Song
+ <maskray@google.com>, Alexei Starovoitov <ast@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230623020908.1410959-1-maskray@google.com>
+ <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <bab57007-ddf6-7134-cefd-dfd1c8be17be@iogearbox.net>
+Date: Fri, 23 Jun 2023 13:30:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <a5d419e4-f2ea-27f6-9259-a7b6486ab616@isovalent.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26948/Fri Jun 23 09:28:15 2023)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   8d2be868b42c08290509c60515865f4de24ea704
-commit: 9e9d7570485d724838322714cd413eb90d9459f4 [10675/12162] clocksource/drivers/imx-gpt: Fold <soc/imx/timer.h> into its only user
-config: arm-randconfig-r016-20230622 (https://download.01.org/0day-ci/archive/20230623/202306231959.rM5kD1QX-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306231959.rM5kD1QX-lkp@intel.com/reproduce)
+On 6/23/23 10:51 AM, Quentin Monnet wrote:
+> 2023-06-23 02:09 UTC+0000 ~ Fangrui Song <maskray@google.com>
+>> -target has been deprecated since Clang 3.4 in 2013. Use the preferred
+>> --target=bpf form instead. This matches how we use --target= in
+>> scripts/Makefile.clang.
+> 
+> This seems to be the relevant commit, for reference:
+> 
+> https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a68135afc7f95def6277
+> 
+>>
+>> Signed-off-by: Fangrui Song <maskray@google.com>
+>> ---
+>>   Documentation/bpf/bpf_devel_QA.rst              | 10 +++++-----
+>>   Documentation/bpf/btf.rst                       |  4 ++--
+>>   Documentation/bpf/llvm_reloc.rst                |  6 +++---
+>>   drivers/hid/bpf/entrypoints/Makefile            |  2 +-
+>>   kernel/bpf/preload/iterators/Makefile           |  2 +-
+>>   samples/bpf/Makefile                            |  6 +++---
+>>   samples/bpf/gnu/stubs.h                         |  3 ++-
+>>   samples/bpf/test_lwt_bpf.sh                     |  2 +-
+>>   samples/hid/Makefile                            |  6 +++---
+>>   tools/bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++--
+>>   tools/bpf/bpftool/Makefile                      |  2 +-
+>>   tools/bpf/runqslower/Makefile                   |  2 +-
+>>   tools/build/feature/Makefile                    |  2 +-
+>>   tools/perf/Documentation/perf-config.txt        |  2 +-
+>>   tools/perf/Makefile.perf                        |  4 ++--
+>>   tools/perf/util/llvm-utils.c                    |  4 ++--
+>>   tools/testing/selftests/bpf/Makefile            |  6 +++---
+>>   tools/testing/selftests/bpf/gnu/stubs.h         |  3 ++-
+>>   tools/testing/selftests/hid/Makefile            |  6 +++---
+>>   tools/testing/selftests/net/Makefile            |  4 ++--
+>>   tools/testing/selftests/tc-testing/Makefile     |  2 +-
+>>   21 files changed, 42 insertions(+), 40 deletions(-)
+>>
+> 
+>> diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
+>> index 719225b16626..cc37155fbfa5 100644
+>> --- a/samples/bpf/gnu/stubs.h
+>> +++ b/samples/bpf/gnu/stubs.h
+>> @@ -1 +1,2 @@
+>> -/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> Are these necessary, seeing that the files only contain this single-line
+> comment?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306231959.rM5kD1QX-lkp@intel.com/
+Yeah, lets drop that one. Otherwise looks good. Could you split out the tools/perf/
+changes into a separate commit? I would assume that Arnaldo wants to take these
+changes via perf tree instead.
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/imx/clk-imx31.c:14:10: fatal error: 'soc/imx/timer.h' file not found
-   #include <soc/imx/timer.h>
-            ^~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/clk/imx/clk-imx35.c:13:10: fatal error: 'soc/imx/timer.h' file not found
-   #include <soc/imx/timer.h>
-            ^~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +14 drivers/clk/imx/clk-imx31.c
-
-0931aff7226abb drivers/clk/imx/clk-imx31.c   Shawn Guo    2015-05-15 @14  #include <soc/imx/timer.h>
-0c831317e77b55 arch/arm/mach-imx/clk-imx31.c Shawn Guo    2015-04-25  15  #include <asm/irq.h>
-95878cbed89504 arch/arm/mach-imx/clk-imx31.c Sascha Hauer 2012-03-18  16  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 0931aff7226abb7e1dab018488e363294385fa66 ARM: imx: define an enum for gpt timer device type
-
-:::::: TO: Shawn Guo <shawn.guo@linaro.org>
-:::::: CC: Shawn Guo <shawn.guo@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> +/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
+> 
+> Other than this, the change looks good, thanks. Although it should
+> probably target bpf-next rather than bpf?
+> 
+> Acked-by: Quentin Monnet <quentin@isovalent.com>
