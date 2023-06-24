@@ -1,120 +1,162 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCCA3C3C;
-	Sat, 24 Jun 2023 19:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1687633637;
-	bh=IFHbcQKorjSN9Dp63NRvEuStEH8On6qKJMUm6jbMLyU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=bPJaTSzlxk2dTxP4Glpfe28xB11ohsQBlz3qYXP/NnIlJUGBzVvYCHyHE3RWEDbpJ
-	 ROc91PUW1neKVeD7CKszABYLjjlw3LnE7equmTGybo3m8KMz3DkF36bVZTzWILWbJh
-	 1Vftct6yiQaaVC5Yxj49NmPHBuy2Eh9tyINqv3y8=
-Received: from [IPv6:240e:358:11d2:6c00:dc73:854d:832e:2] (unknown [IPv6:240e:358:11d2:6c00:dc73:854d:832e:2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 6703E65ECA;
-	Sat, 24 Jun 2023 15:07:13 -0400 (EDT)
-Message-ID: <7142bd60ca9764fe836a76d61513bbcc66ded783.camel@xry111.site>
-Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
-From: Xi Ruoyao <xry111@xry111.site>
-To: WANG Xuerui <kernel@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Rui <wangrui@loongson.cn>, loongarch@lists.linux.dev, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org,  WANG Xuerui <git@xen0n.name>
-Date: Sun, 25 Jun 2023 03:07:09 +0800
-In-Reply-To: <20230624184055.3000636-8-kernel@xen0n.name>
-References: <20230624184055.3000636-1-kernel@xen0n.name>
-	 <20230624184055.3000636-8-kernel@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E566AA8;
+	Sat, 24 Jun 2023 21:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687641201; x=1719177201;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cuCjv82KMYnE/rvAlPkCqzGdS0EwUnAzwioM7xu1I5Y=;
+  b=MJQoAiqV687X1t05dBqNfxAr9RpsyA+qVyxr5RUJEoMYcBwuLTtmVQEc
+   BAMfBBU05MNRgUja0sYlb1P3Jcc6ji8v0u+eJgu1Le8WOwUAjH0AZSeL/
+   eWbMVbQrZ2ttQ+5S1rId76PH0caUVUR908TxQ7er/0yDOXTk+rHpfh2f3
+   YZmXsJ419P4ZOf1VDyCNSWt91hP0AwFuJUZ7oESzjyeHGRtMUV0TPlGzi
+   2gaOWly8+hU2KsBdMcl/hh+P5hpnAoUllA0puqvM64cd7FBnG1ZC95vhx
+   aqla9BvSLqnf6tACrf/6XZ4/n6Y2NJ3vXEcjPRdbxhFzUTjJkkF6w8tqb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="363535467"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="363535467"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 14:13:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="805567186"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="805567186"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jun 2023 14:13:18 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qDAZJ-0009R7-2G;
+	Sat, 24 Jun 2023 21:13:17 +0000
+Date: Sun, 25 Jun 2023 05:12:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: lib/test_bitmap.c:920:2: error: call to __compiletime_assert_372
+ declared with 'error' attribute: BUILD_BUG_ON failed:
+ !__builtin_constant_p(res)
+Message-ID: <202306250533.CBxzOSEh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 2023-06-25 at 02:40 +0800, WANG Xuerui wrote:
-> From: WANG Xuerui <git@xen0n.name>
->=20
-> Now the arch code is mostly ready for LLVM/Clang consumption, it is
-> time
-> to re-organize the CFLAGS a little to actually enable the LLVM build.
->=20
-> In particular, -mexplicit-relocs and -mdirect-extern-access are not
-> necessary nor supported on Clang; feature detection via cc-option
-> would
-> not work, because that way the broken combo of "new GNU as + old GCC"
-> would seem to get "fixed", but actually produce broken kernels.
-> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
-> regress UX for those building their own kernels.
->=20
-> A build with !RELOCATABLE && !MODULE is confirmed working within a
-> QEMU
-> environment; support for the two features are currently blocked on
-> LLVM/Clang, and will come later.
->=20
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> ---
-> =C2=A0arch/loongarch/Makefile | 6 +++++-
-> =C2=A01 file changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index 366771016b99..82c619791a63 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0+=3D -static -n
-> -nostdlib
-> =C2=A0
-> =C2=A0# When the assembler supports explicit relocation hint, we must use=
- it.
-> =C2=A0# GCC may have -mexplicit-relocs off by default if it was built wit=
-h an old
-> -# assembler, so we force it via an option.
-> +# assembler, so we force it via an option. For LLVM/Clang the desired be=
-havior
-> +# is the default
+Hi Alexander,
 
-Actually -mdirect-extern-access is also a part of the desired behavior.
-Though it's not strictly needed, it is a micro-optimization to avoid
-unnecessary GOT accesses.  Maybe with Clang the LTO pass can optimize
-them away but I'm not sure.
+FYI, the error/warning still remains.
 
-Ok with the flags change (for now) but the comment can be more accurate.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a92b7d26c743b9dc06d520f863d624e94978a1d9
+commit: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+date:   12 months ago
+config: x86_64-buildonly-randconfig-r003-20230624 (https://download.01.org/0day-ci/archive/20230625/202306250533.CBxzOSEh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230625/202306250533.CBxzOSEh-lkp@intel.com/reproduce)
 
-> , and the flag is not supported, so don't pass it if Clang is
-> +# being used.
-> =C2=A0#
-> =C2=A0# When the assembler does not supports explicit relocation hint, we=
- can't use
-> =C2=A0# it.=C2=A0 Disable it if the compiler supports it.
-> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0+=3D -static -n -nostdlib
-> =C2=A0# combination of a "new" assembler and "old" compiler is not suppor=
-ted.=C2=A0 Either
-> =C2=A0# upgrade the compiler or downgrade the assembler.
-> =C2=A0ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
-> +ifndef CONFIG_CC_IS_CLANG
-> =C2=A0cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0+=3D -mexplicit-relocs
-> =C2=A0KBUILD_CFLAGS_KERNEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0+=3D -mdirect-extern-access
-> +endif
-> =C2=A0else
-> =C2=A0cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0+=3D $(call cc-option,-mno-explicit-relocs)
-> =C2=A0KBUILD_AFLAGS_KERNEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0+=3D -Wa,-mla-global-with-pcrel
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306250533.CBxzOSEh-lkp@intel.com/
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+All errors (new ones prefixed by >>):
+
+>> lib/test_bitmap.c:920:2: error: call to __compiletime_assert_372 declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+           BUILD_BUG_ON(!__builtin_constant_p(res));
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:295:1: note: expanded from here
+   __compiletime_assert_372
+   ^
+   1 error generated.
+
+
+vim +/error +920 lib/test_bitmap.c
+
+   871	
+   872	static void __init test_bitmap_const_eval(void)
+   873	{
+   874		DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+   875		unsigned long initvar = BIT(2);
+   876		unsigned long bitopvar = 0;
+   877		unsigned long var = 0;
+   878		int res;
+   879	
+   880		/*
+   881		 * Compilers must be able to optimize all of those to compile-time
+   882		 * constants on any supported optimization level (-O2, -Os) and any
+   883		 * architecture. Otherwise, trigger a build bug.
+   884		 * The whole function gets optimized out then, there's nothing to do
+   885		 * in runtime.
+   886		 */
+   887	
+   888		/*
+   889		 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
+   890		 * Clang on s390 optimizes bitops at compile-time as intended, but at
+   891		 * the same time stops treating @bitmap and @bitopvar as compile-time
+   892		 * constants after regular test_bit() is executed, thus triggering the
+   893		 * build bugs below. So, call const_test_bit() there directly until
+   894		 * the compiler is fixed.
+   895		 */
+   896		bitmap_clear(bitmap, 0, BITS_PER_LONG);
+   897	#if defined(__s390__) && defined(__clang__)
+   898		if (!const_test_bit(7, bitmap))
+   899	#else
+   900		if (!test_bit(7, bitmap))
+   901	#endif
+   902			bitmap_set(bitmap, 5, 2);
+   903	
+   904		/* Equals to `unsigned long bitopvar = BIT(20)` */
+   905		__change_bit(31, &bitopvar);
+   906		bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+   907	
+   908		/* Equals to `unsigned long var = BIT(25)` */
+   909		var |= BIT(25);
+   910		if (var & BIT(0))
+   911			var ^= GENMASK(9, 6);
+   912	
+   913		/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
+   914		res = bitmap_weight(bitmap, 20);
+   915		BUILD_BUG_ON(!__builtin_constant_p(res));
+   916		BUILD_BUG_ON(res != 2);
+   917	
+   918		/* !(BIT(31) & BIT(18)) == 1 */
+   919		res = !test_bit(18, &bitopvar);
+ > 920		BUILD_BUG_ON(!__builtin_constant_p(res));
+   921		BUILD_BUG_ON(!res);
+   922	
+   923		/* BIT(2) & GENMASK(14, 8) == 0 */
+   924		res = initvar & GENMASK(14, 8);
+   925		BUILD_BUG_ON(!__builtin_constant_p(res));
+   926		BUILD_BUG_ON(res);
+   927	
+   928		/* ~BIT(25) */
+   929		BUILD_BUG_ON(!__builtin_constant_p(~var));
+   930		BUILD_BUG_ON(~var != ~BIT(25));
+   931	}
+   932	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
