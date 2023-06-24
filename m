@@ -1,45 +1,54 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E566AA8;
-	Sat, 24 Jun 2023 21:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F1BEAFD;
+	Sat, 24 Jun 2023 23:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687641201; x=1719177201;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cuCjv82KMYnE/rvAlPkCqzGdS0EwUnAzwioM7xu1I5Y=;
-  b=MJQoAiqV687X1t05dBqNfxAr9RpsyA+qVyxr5RUJEoMYcBwuLTtmVQEc
-   BAMfBBU05MNRgUja0sYlb1P3Jcc6ji8v0u+eJgu1Le8WOwUAjH0AZSeL/
-   eWbMVbQrZ2ttQ+5S1rId76PH0caUVUR908TxQ7er/0yDOXTk+rHpfh2f3
-   YZmXsJ419P4ZOf1VDyCNSWt91hP0AwFuJUZ7oESzjyeHGRtMUV0TPlGzi
-   2gaOWly8+hU2KsBdMcl/hh+P5hpnAoUllA0puqvM64cd7FBnG1ZC95vhx
-   aqla9BvSLqnf6tACrf/6XZ4/n6Y2NJ3vXEcjPRdbxhFzUTjJkkF6w8tqb
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="363535467"
+  t=1687649668; x=1719185668;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uSich5WtIL4xEDBsn+PUSmiT50AF+RCLc8UMqP5tImA=;
+  b=Kox0T0vk10oRBNLnPo8erjBEidnzQMqWPog1vNTdr3a/2yz1HkPTRh/P
+   YOyN9CeLYUy7zzQduV7c/JkHh1gkjp2d+00HB0MVYJFlm6JjPrbhB2oMW
+   cYqUu9Ad2TFy8be12ItJ72d2vRPTVvfPLYDQee54J6Vf/l56HXcJm0f+d
+   16iuXq2aX4WjDb1KiTvnOwNxfyDLy11KB7+LrNoYC6SYdoV6/uvJSU2+H
+   os9J5NNIvFIHRAP0qDSe1GqCwFXw0k4tkiCRkyv1BgG7MBb7xmzsLdlgu
+   zILeIWs2xaWNqgSkiU5GgyzCNEMOiEOK0+aT5z5zxrzYuaJQJu3wbVndH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="391122036"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="363535467"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 14:13:20 -0700
+   d="scan'208";a="391122036"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 16:34:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="805567186"
+X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="839837858"
 X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="805567186"
+   d="scan'208";a="839837858"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jun 2023 14:13:18 -0700
+  by orsmga004.jf.intel.com with ESMTP; 24 Jun 2023 16:34:22 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qDAZJ-0009R7-2G;
-	Sat, 24 Jun 2023 21:13:17 +0000
-Date: Sun, 25 Jun 2023 05:12:36 +0800
+	id 1qDClq-0009Xr-05;
+	Sat, 24 Jun 2023 23:34:22 +0000
+Date: Sun, 25 Jun 2023 07:34:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
+	tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
+	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+	gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
+	nicolas.dufresne@collabora.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: lib/test_bitmap.c:920:2: error: call to __compiletime_assert_372
- declared with 'error' attribute: BUILD_BUG_ON failed:
- !__builtin_constant_p(res)
-Message-ID: <202306250533.CBxzOSEh-lkp@intel.com>
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v3 01/11] media: videobuf2: Access vb2_queue bufs array
+ through helper functions
+Message-ID: <202306250705.Ts4zHhMG-lkp@intel.com>
+References: <20230622131349.144160-2-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,114 +57,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230622131349.144160-2-benjamin.gaignard@collabora.com>
 
-Hi Alexander,
+Hi Benjamin,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a92b7d26c743b9dc06d520f863d624e94978a1d9
-commit: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
-date:   12 months ago
-config: x86_64-buildonly-randconfig-r003-20230624 (https://download.01.org/0day-ci/archive/20230625/202306250533.CBxzOSEh-lkp@intel.com/config)
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v6.4-rc7 next-20230623]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230622-214122
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230622131349.144160-2-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v3 01/11] media: videobuf2: Access vb2_queue bufs array through helper functions
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230625/202306250705.Ts4zHhMG-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230625/202306250533.CBxzOSEh-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230625/202306250705.Ts4zHhMG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306250533.CBxzOSEh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306250705.Ts4zHhMG-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> lib/test_bitmap.c:920:2: error: call to __compiletime_assert_372 declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
-           BUILD_BUG_ON(!__builtin_constant_p(res));
-           ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:295:1: note: expanded from here
-   __compiletime_assert_372
-   ^
+>> drivers/staging/media/atomisp/pci/atomisp_ioctl.c:1080:22: error: passing 'struct vb2_queue' to parameter of incompatible type 'struct vb2_queue *'; take the address with &
+           vb = vb2_get_buffer(pipe->vb_queue, buf->index);
+                               ^~~~~~~~~~~~~~
+                               &
+   include/media/videobuf2-core.h:1239:67: note: passing argument to parameter 'q' here
+   static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+                                                                     ^
    1 error generated.
 
 
-vim +/error +920 lib/test_bitmap.c
+vim +1080 drivers/staging/media/atomisp/pci/atomisp_ioctl.c
 
-   871	
-   872	static void __init test_bitmap_const_eval(void)
-   873	{
-   874		DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-   875		unsigned long initvar = BIT(2);
-   876		unsigned long bitopvar = 0;
-   877		unsigned long var = 0;
-   878		int res;
-   879	
-   880		/*
-   881		 * Compilers must be able to optimize all of those to compile-time
-   882		 * constants on any supported optimization level (-O2, -Os) and any
-   883		 * architecture. Otherwise, trigger a build bug.
-   884		 * The whole function gets optimized out then, there's nothing to do
-   885		 * in runtime.
-   886		 */
-   887	
-   888		/*
-   889		 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
-   890		 * Clang on s390 optimizes bitops at compile-time as intended, but at
-   891		 * the same time stops treating @bitmap and @bitopvar as compile-time
-   892		 * constants after regular test_bit() is executed, thus triggering the
-   893		 * build bugs below. So, call const_test_bit() there directly until
-   894		 * the compiler is fixed.
-   895		 */
-   896		bitmap_clear(bitmap, 0, BITS_PER_LONG);
-   897	#if defined(__s390__) && defined(__clang__)
-   898		if (!const_test_bit(7, bitmap))
-   899	#else
-   900		if (!test_bit(7, bitmap))
-   901	#endif
-   902			bitmap_set(bitmap, 5, 2);
-   903	
-   904		/* Equals to `unsigned long bitopvar = BIT(20)` */
-   905		__change_bit(31, &bitopvar);
-   906		bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-   907	
-   908		/* Equals to `unsigned long var = BIT(25)` */
-   909		var |= BIT(25);
-   910		if (var & BIT(0))
-   911			var ^= GENMASK(9, 6);
-   912	
-   913		/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-   914		res = bitmap_weight(bitmap, 20);
-   915		BUILD_BUG_ON(!__builtin_constant_p(res));
-   916		BUILD_BUG_ON(res != 2);
-   917	
-   918		/* !(BIT(31) & BIT(18)) == 1 */
-   919		res = !test_bit(18, &bitopvar);
- > 920		BUILD_BUG_ON(!__builtin_constant_p(res));
-   921		BUILD_BUG_ON(!res);
-   922	
-   923		/* BIT(2) & GENMASK(14, 8) == 0 */
-   924		res = initvar & GENMASK(14, 8);
-   925		BUILD_BUG_ON(!__builtin_constant_p(res));
-   926		BUILD_BUG_ON(res);
-   927	
-   928		/* ~BIT(25) */
-   929		BUILD_BUG_ON(!__builtin_constant_p(~var));
-   930		BUILD_BUG_ON(~var != ~BIT(25));
-   931	}
-   932	
+  1065	
+  1066	static int atomisp_dqbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer *buf)
+  1067	{
+  1068		struct video_device *vdev = video_devdata(file);
+  1069		struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+  1070		struct atomisp_sub_device *asd = pipe->asd;
+  1071		struct atomisp_device *isp = video_get_drvdata(vdev);
+  1072		struct ia_css_frame *frame;
+  1073		struct vb2_buffer *vb;
+  1074		int ret;
+  1075	
+  1076		ret = vb2_ioctl_dqbuf(file, fh, buf);
+  1077		if (ret)
+  1078			return ret;
+  1079	
+> 1080		vb = vb2_get_buffer(pipe->vb_queue, buf->index);
+  1081		frame = vb_to_frame(vb);
+  1082	
+  1083		buf->reserved = asd->frame_status[buf->index];
+  1084	
+  1085		/*
+  1086		 * Hack:
+  1087		 * Currently frame_status in the enum type which takes no more lower
+  1088		 * 8 bit.
+  1089		 * use bit[31:16] for exp_id as it is only in the range of 1~255
+  1090		 */
+  1091		buf->reserved &= 0x0000ffff;
+  1092		if (!(buf->flags & V4L2_BUF_FLAG_ERROR))
+  1093			buf->reserved |= frame->exp_id;
+  1094		buf->reserved2 = pipe->frame_config_id[buf->index];
+  1095	
+  1096		dev_dbg(isp->dev,
+  1097			"dqbuf buffer %d (%s) with exp_id %d, isp_config_id %d\n",
+  1098			buf->index, vdev->name, buf->reserved >> 16, buf->reserved2);
+  1099		return 0;
+  1100	}
+  1101	
 
 -- 
 0-DAY CI Kernel Test Service
