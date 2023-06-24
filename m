@@ -1,146 +1,93 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA40F634;
-	Sat, 24 Jun 2023 04:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687579234; x=1719115234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DR/sOI0ICzHnAXoF490smBlO7L9ZNpDvfA83VAhdgTE=;
-  b=WFaXWvd4OhU5yeff9/JnNkHJqxrwJ64+vvXOnweGNuC2SdASlNZb3go+
-   10oD38GnzvPgulTGv/WCyrlKV3+/fCbMl3/e4tLE1EXzonRasdsGok0UE
-   7wmdvnnWSnguFhEnS57Vix5FyX0y6UabujoYapR+DpjT3HwkP6pKX5ucj
-   Z5Fy8GNyD4tYLz9jonefSHtS5Nq8V1Q4VVjn4XMFsykqbaPHXUuW6iBrA
-   mLHzZWJv72illP65WFbYqzw3okN6gaGavF4Fj4Ysp1r6sX2Y+MZDUsMQW
-   jPPe5rkd5Jg9wmnV5Y/zc93vvSi5PoGkOOPaYcbWhFFq7XXkiNDHsTKDE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="447288283"
-X-IronPort-AV: E=Sophos;i="6.01,154,1684825200"; 
-   d="scan'208";a="447288283"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 21:00:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="805403896"
-X-IronPort-AV: E=Sophos;i="6.01,154,1684825200"; 
-   d="scan'208";a="805403896"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2023 21:00:27 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qCuRm-0008i5-0l;
-	Sat, 24 Jun 2023 04:00:26 +0000
-Date: Sat, 24 Jun 2023 12:00:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: sean.wang@mediatek.com, nbd@nbd.name, lorenzo.bianconi@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	sean.wang@mediatek.com, Soul.Huang@mediatek.com,
-	Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-	Deren.Wu@mediatek.com, km.lin@mediatek.com,
-	jenhao.yang@mediatek.com, robin.chiu@mediatek.com,
-	Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-	ted.huang@mediatek.com, Stella.Chang@mediatek.com,
-	Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-	arowa@google.org, frankgor@google.com, kuabhs@google.com,
-	druth@google.com, abhishekpandit@google.com, shawnku@google.com,
-	linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	Jing Cai <jing.cai@mediatek.com>, Chris Lu <chris.lu@mediatek.com>
-Subject: Re: [PATCH v7 3/3] Bluetooth: btusb: mediatek: add MediaTek
- devcoredump support
-Message-ID: <202306241129.L50H0ubx-lkp@intel.com>
-References: <ed1d0e9fe7758dac8a05dcff97c7dcb8e9b0be39.1687565769.git.objelf@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009911367
+	for <llvm@lists.linux.dev>; Sat, 24 Jun 2023 08:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8D0C433CA
+	for <llvm@lists.linux.dev>; Sat, 24 Jun 2023 08:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687596245;
+	bh=ihxks+scKC1i2YhsRQdM12a0Piaf0uWSJk4+096CVCk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QK9soT9zj3KgxF3awi6GX6hKzk6+xu8UdcVpKTZ2TyT0mDrZt/CLyuV0nonDBF/Yv
+	 MUAqRDanKvaR5AEGsNEEy9Vk2atCyXPkiQBBF/GFm3lllgsTCpBALc79zvEUxSJXvi
+	 WuaCo6SdIqswSNF2H7l1HO371kMrBq70FY956KSECE5OqYgCdIvRCEV5JJbeqQ4LBv
+	 FfHw76weLo3Wcdl6di4ZsOY3G0AIQMoBPSLi+UZ3LCPoNiRG3OVmbEypmQIKhfMjLZ
+	 VSSp4vqeyOnFlf1v+o+Xicg/O95hNr3gCs8+sYf/Ci91P3V+pbVEdEM5kilIxXFdLA
+	 ahaxPOCx+TaTw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-55e04a83465so1099694eaf.3
+        for <llvm@lists.linux.dev>; Sat, 24 Jun 2023 01:44:05 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxB1AEJQg//5sUTrTI4yWTebl7rC9qkqdRJTn7gAqlIAS304Dtu
+	z4O5Ylr0WQWPvskVOjVHR3kPbTTTAXkoum0cPzU=
+X-Google-Smtp-Source: ACHHUZ7R9os95T2sTExvHh1CgAU0Gz8vTFQrGw5KklR4TI2FUhxaKw1sKZqykCjrgxzbxtbCD4H4ICfSl0K5o9tIuhc=
+X-Received: by 2002:a4a:dc19:0:b0:560:c7dd:e19e with SMTP id
+ p25-20020a4adc19000000b00560c7dde19emr7070257oov.3.1687596244708; Sat, 24 Jun
+ 2023 01:44:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed1d0e9fe7758dac8a05dcff97c7dcb8e9b0be39.1687565769.git.objelf@gmail.com>
+References: <20230623001140.1111494-4-samitolvanen@google.com>
+ <202306230932.539C9DC0@keescook> <CABCJKufmB+MwjEu=wjina1-F0q9vT--ig=SyLAGuXQViLV_1Uw@mail.gmail.com>
+In-Reply-To: <CABCJKufmB+MwjEu=wjina1-F0q9vT--ig=SyLAGuXQViLV_1Uw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 24 Jun 2023 17:43:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATwOtsGPf7mcHAyKiw65kjBBK-wrqi4YrvAHTrDDcrHUg@mail.gmail.com>
+Message-ID: <CAK7LNATwOtsGPf7mcHAyKiw65kjBBK-wrqi4YrvAHTrDDcrHUg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix CFI failures with GCOV_PROFILE_ALL
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Kees Cook <keescook@chromium.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Sat, Jun 24, 2023 at 5:39=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
+>
+> On Fri, Jun 23, 2023 at 9:32=E2=80=AFAM Kees Cook <keescook@chromium.org>=
+ wrote:
+> >
+> > On Fri, Jun 23, 2023 at 12:11:41AM +0000, Sami Tolvanen wrote:
+> > > Hi folks,
+> > >
+> > > The following two patches fix CFI failures with GCOV_PROFILE_ALL,
+> > > where the compiler injects indirectly called functions to object
+> > > files that otherwise contain no executable code, and are not
+> > > processed by objtool or don't have CFI enabled. This results in
+> > > missing or incorrect type hashes during boot and when modules are
+> > > loaded.
+> > >
+> > > Sami Tolvanen (2):
+> > >   kbuild: Fix CFI failures with GCOV
+> > >   kbuild: Disable GCOV for *.mod.o
+> > >
+> > >  init/Makefile             | 1 +
+> > >  scripts/Makefile.modfinal | 2 +-
+> > >  scripts/Makefile.vmlinux  | 1 +
+> > >  3 files changed, 3 insertions(+), 1 deletion(-)
+> >
+> > Nice hunting!
+> >
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> >
+> > Should these get Cc: stable tags maybe?
+>
+> I was under the impression that Fixes: tags would be sufficient these
+> days, but agreed, explicit Cc: probably wouldn't hurt.
+>
+> Sami
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on next-20230623]
-[cannot apply to bluetooth/master wireless/main wireless-next/main linus/master v6.4-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Both applied to linux-kbuild.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/sean-wang-mediatek-com/Bluetooth-btmtk-introduce-btmtk-reset-work/20230624-100756
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/ed1d0e9fe7758dac8a05dcff97c7dcb8e9b0be39.1687565769.git.objelf%40gmail.com
-patch subject: [PATCH v7 3/3] Bluetooth: btusb: mediatek: add MediaTek devcoredump support
-config: x86_64-buildonly-randconfig-r002-20230622 (https://download.01.org/0day-ci/archive/20230624/202306241129.L50H0ubx-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230624/202306241129.L50H0ubx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306241129.L50H0ubx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/bluetooth/btmtk.c:381:32: error: no member named 'dump' in 'struct hci_dev'
-                   schedule_delayed_work(&hdev->dump.dump_timeout,
-                                          ~~~~  ^
-   1 error generated.
+I also think Fixes: tags would be enough
+to make them back-ported.
 
 
-vim +381 drivers/bluetooth/btmtk.c
-
-   364	
-   365	int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
-   366	{
-   367		struct btmediatek_data *data = hci_get_priv(hdev);
-   368		int err;
-   369	
-   370		if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-   371			return 0;
-   372	
-   373		switch (data->cd_info.state) {
-   374		case HCI_DEVCOREDUMP_IDLE:
-   375			err = hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
-   376			if (err < 0)
-   377				break;
-   378			data->cd_info.cnt = 0;
-   379	
-   380			/* It is supposed coredump can be done within 5 seconds */
- > 381			schedule_delayed_work(&hdev->dump.dump_timeout,
-   382					      msecs_to_jiffies(5000));
-   383			fallthrough;
-   384		case HCI_DEVCOREDUMP_ACTIVE:
-   385		default:
-   386			err = hci_devcd_append(hdev, skb);
-   387			if (err < 0)
-   388				break;
-   389			data->cd_info.cnt++;
-   390	
-   391			/* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
-   392			if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
-   393			    skb->len > sizeof(MTK_COREDUMP_END) &&
-   394			    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
-   395				    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
-   396				bt_dev_info(hdev, "Mediatek coredump end");
-   397				hci_devcd_complete(hdev);
-   398			}
-   399	
-   400			break;
-   401		}
-   402	
-   403		if (err < 0)
-   404			kfree_skb(skb);
-   405	
-   406		return err;
-   407	}
-   408	EXPORT_SYMBOL_GPL(btmtk_process_coredump);
-   409	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Best Regards
+Masahiro Yamada
