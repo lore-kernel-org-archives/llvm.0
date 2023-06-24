@@ -1,194 +1,84 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BD0443E
-	for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 23:18:55 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bd5f59fb71dso1136021276.3
-        for <llvm@lists.linux.dev>; Fri, 23 Jun 2023 16:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687562334; x=1690154334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o5h2Fku8APXH3iOdYKNWdhjGBKRm3o6/JPRIVNrW9qA=;
-        b=QFfPEzgVXYAeQa/6a5IBaDl9QfzWAr6OxLdvn4H9sUUu1YPmlx9TYMKYcOkzf8Dri+
-         I+EW41qX0D4ZLpiWpESkGo34UvdXh1t4YXWQjbcFDqWssJDjt7mcSlWmal0Io/ON+E4J
-         QYEv3qDTt/TaPxDICboK4LH8hXpS/ZaV3vealWnFLolM7YMeOqg7dpU8bsTECkoLaCAe
-         vdvmxkAQUYI0zrdjEpHv3RFRNQsZzBzcLy4T+Lo0cXVco+/1cQdBdoa9TMn4Az3qKXYR
-         R/2Xy40EeDFEzF5J83APlgmNUsCx/Bt4V/JP3RTpBKSMDAA/ziEa/sGACVr25XR1AUJ8
-         X54g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687562334; x=1690154334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o5h2Fku8APXH3iOdYKNWdhjGBKRm3o6/JPRIVNrW9qA=;
-        b=DYByhImPF1rJ/2+9bL2Ra5BF13vo9gGc22lDcW7vYYv3iCXmo6+443PhBXKi9QHj7Y
-         +vZtO6jJDhgyBeiQgXglefk6Zjbn8cYFo3khyAnMt5ElV1dOTqCrQVIeIURrxTrRp0HU
-         EsuzV9a0aT0aS9cB/M3jwCV0tDfnUMoqnCuYnXPE0id3WguuMFICu7B/5nYGPM5+rAuM
-         mp3GyMhnEx4+Yv93tdZSnIpehfY0/ta34vyK2T1dFEl61Nyr8UkpVHcEqLgDC24dzA97
-         IPA19CX/lJ1Sx2t8lB5JxQ65px9QWS5zk13sHf8yPEvhyKoICk/WZtbJ2tSNehiCned3
-         rdkQ==
-X-Gm-Message-State: AC+VfDx4+3j8kEbLa5GtHn/Ake/lboYOxD3McDghIlWP1nlPw0qa7NJI
-	uAEJdfTIsnw6KsRIwRBD5SUYhBDGmGlCKsDn2OI=
-X-Google-Smtp-Source: ACHHUZ64Ie2Q4TyVcEiEZZRvHCNcp3rrPGp7VLcfz4WgjiET7zv1uOAZWjP5DPConbdo8r3WXueFReyEKBSOKG0ki6g=
-X-Received: by 2002:a25:4050:0:b0:bfe:9259:8f1a with SMTP id
- n77-20020a254050000000b00bfe92598f1amr10554353yba.50.1687562333975; Fri, 23
- Jun 2023 16:18:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE50718D
+	for <llvm@lists.linux.dev>; Sat, 24 Jun 2023 00:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687565466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cPl1RCxi61wnK0uGeZhRG0TwShWi3KAYlokxfLvagFc=;
+	b=ZRrP8yGgziqFzL4PiHNO8Kz4F2wxJb8l+USALvtRdUlFpZ2zMhQQj2jSl6SoSlAUXH0/F9
+	WmyIreFXDDpV90bm2sAWa2uo687yERz6kiX22KILaThwc4BsHQGSAXmAByGTO8cXidjVc4
+	J3HgpHLmNJOoWrbhuCIQtgQ92bGvuVA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-O0QkTHkaN-ioUqm7rVubuQ-1; Fri, 23 Jun 2023 20:11:04 -0400
+X-MC-Unique: O0QkTHkaN-ioUqm7rVubuQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E80A8E44E0
+	for <llvm@lists.linux.dev>; Sat, 24 Jun 2023 00:11:03 +0000 (UTC)
+Received: from [172.64.4.14] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 412EA140EBB8;
+	Sat, 24 Jun 2023 00:11:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0-rc7,
+ mainline.kernel.org-clang, 61dabacd)
+Date: Sat, 24 Jun 2023 00:11:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
- <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net> <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
- <CAM9d7chvZjZ4YVc6j3w7OkdHteyJ0GUZboieu9G7jAWBevoZqA@mail.gmail.com>
- <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com> <CAKwvOdk6TTNhu_+FdONTXPo9Z8u5D4-5kf-rMN8oK4+6fMyc-w@mail.gmail.com>
- <CABPqkBQVfQFJKCdHXEMGFcupzvy8zq14F52eLW5s9vr2Shmi6w@mail.gmail.com>
- <85822c3c-2254-52cc-e6b1-9c89adb63771@amd.com> <CAKwvOdkfEexsE07XXGW3FF+nMt-pR8uv2EA7QzsPbEZsSQBO-Q@mail.gmail.com>
- <85aabdc8-07cd-3285-1f3f-605f9ebbab18@amd.com> <b6a503b7-b421-a5c0-1cc8-4f1567b8d9de@amd.com>
- <CAKwvOdmY7qoSG61f7UouWFz+gNN531FhpHbqawrAKCNKNDJHnw@mail.gmail.com>
-In-Reply-To: <CAKwvOdmY7qoSG61f7UouWFz+gNN531FhpHbqawrAKCNKNDJHnw@mail.gmail.com>
-From: Namhyung Kim <namhyung@gmail.com>
-Date: Fri, 23 Jun 2023 16:18:42 -0700
-Message-ID: <CAM9d7cg=HzWGgHvTUkkuRM+Y2tZgVACEV52a=vWqqa1mBMzuBw@mail.gmail.com>
-Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
- with '-a'.
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Ravi Bangoria <ravi.bangoria@amd.com>, Stephane Eranian <eranian@google.com>, 
-	Slade Watkins <srw@sladewatkins.net>, linux-perf-users <linux-perf-users@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Ian Rogers <irogers@google.com>, 
-	Kees Cook <keescook@chromium.org>, sandipan.das@amd.com, 
-	Bill Wendling <morbo@google.com>, clang-built-linux <llvm@lists.linux.dev>, Yonghong Song <yhs@fb.com>, 
-	Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <22256.123062320110400550@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Nick,
+Hi, we tested your kernel and here are the results:
 
-On Fri, Jun 23, 2023 at 9:23=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Tue, Oct 11, 2022 at 10:05=E2=80=AFPM Ravi Bangoria <ravi.bangoria@amd=
-.com> wrote:
-> >
-> > On 12-Oct-22 9:36 AM, Ravi Bangoria wrote:
-> > > On 12-Oct-22 3:02 AM, Nick Desaulniers wrote:
-> > >> On Thu, Oct 6, 2022 at 8:56 PM Ravi Bangoria <ravi.bangoria@amd.com>=
- wrote:
-> > >>>
-> > >>> +cc: PeterZ
-> > >>>
-> > >>>>>>>> +Ravi who may be able to say if there are any issues with the =
-precise
-> > >>>>>>>> sampling on AMD.
-> > >>>>>>>
-> > >>>>>>> Afaik cvcles:pp will use IBS but it doesn't support per-task pr=
-ofiling
-> > >>>>>>> since it has no task context.  Ravi is working on it..
-> > >>>>>>
-> > >>>>>> Right.
-> > >>>>>> https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@=
-amd.com
-> > >>>>>
-> > >>>>> Cool, thanks for working on this Ravi.
-> > >>>>>
-> > >>>>> I'm not sure yet whether I may replace the kernel on my corporate
-> > >>>>> provided workstation, so I'm not sure yet I can help test that pa=
-tch.
-> > >>>>>
-> > >>>>> Can you confirm that
-> > >>>>> $ perf record -e cycles:pp --freq=3D128 --call-graph lbr -- <comm=
-and to profile>
-> > >>>>>
-> > >>>>> works with just that patch applied? Or is there more work require=
-d?
-> > >>>>> What is the status of that patch?
-> > >>>>>
-> > >>>>> For context, we had difficulty upstreaming support for instrument=
-ation
-> > >>>>> based profile guided optimizations in the Linux kernel.
-> > >>>>> https://lore.kernel.org/lkml/CAHk-=3DwhqCT0BeqBQhW8D-YoLLgp_eFY=
-=3D8Y=3D9ieREM5xx0ef08w@mail.gmail.com/
-> > >>>>> We'd like to be able to use either instrumentation or sampling to
-> > >>>>> optimize our builds.  The major barrier to sample based approache=
-s are
-> > >>>>> architecture / micro architecture issues with sample based profil=
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
+
+
+Kernel information:
+    Commit message: Merge tag 'sound-6.4' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/tiwai/sound
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/93551
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36533=
+2
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
 e
-> > >>>>> data collection, and bitrot of data processing utilities.
-> > >>>>> https://github.com/google/autofdo/issues/144
-> > >>>>
-> > >>>> On existing AMD Zen2, Zen3 the following cmdline:
-> > >>>> $ perf record -e cycles:pp --freq=3D128 --call-graph lbr -- <comma=
-nd to profile>
-> > >>>>
-> > >>>> does not work. I see two reasons:
-> > >>>>
-> > >>>> 1. cycles:pp is likely converted into IBS op in cycle mode.
-> > >>>>     Current kernels do not support IBS in per-thread mode.
-> > >>>>     This is purely a kernel limitation
-> > >>>
-> > >>> Right, it's purely a kernel limitation. And below simple patch on t=
-op
-> > >>> of event-context rewrite patch[1] should be sufficient to make cycl=
-es:pp
-> > >>> working in per-process mode on AMD Zen.
-> > >>>
-> > >>> ---
-> > >>> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> > >>> index c251bc44c088..de01b5d27e40 100644
-> > >>> --- a/arch/x86/events/amd/ibs.c
-> > >>> +++ b/arch/x86/events/amd/ibs.c
-> > >>> @@ -665,7 +665,7 @@ static struct perf_ibs perf_ibs_fetch =3D {
-> > >>>
-> > >>>  static struct perf_ibs perf_ibs_op =3D {
-> > >>>         .pmu =3D {
-> > >>> -               .task_ctx_nr    =3D perf_invalid_context,
-> > >>> +               .task_ctx_nr    =3D perf_hw_context,
-> > >>>
-> > >>>                 .event_init     =3D perf_ibs_init,
-> > >>>                 .add            =3D perf_ibs_add,
-> > >>> ---
-> > >>>
-> > >>> [1]: https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangori=
-a@amd.com
-> > >>
-> > >> Hi Ravi,
-> > >> I didn't see the above diff in
-> > >> https://lore.kernel.org/lkml/20221008062424.313-1-ravi.bangoria@amd.=
-com/
-> > >> Was there another distinct patch you were going to send for the abov=
-e?
-> > >
-> > > Yes Nick. I was planning to send it once the rewrite stuff goes in.
-> >
-> > Hi Nick,
-> >
-> > Since you have practical use case, would it be possible to run your wor=
-kflow
-> > with perf rewrite and IBS patches applied? It will help us in finding/f=
-ixing
-> > more bugs and upstreaming these changes.
->
-> Hi Ravi,
-> Sorry, I'm not able to load a custom kernel image on my employer
-> provided workstation, and I never got approval to expense hardware for
-> testing this otherwise.
->
-> Was there ever any update on this? I'm on 6.1.25 now and still cant run
-> $ perf record -e cycles:pp --call-graph lbr <any command to profile>
-> $ cat /proc/cpuinfo
-> ...
-> model name      : AMD Ryzen Threadripper PRO 3995WX 64-Cores
-> ...
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-The commit 30093056f7b2 ("perf/amd/ibs: Make IBS a core pmu") in v6.2.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-  $ git name-rev --tags --refs=3Dv[2-6].* 30093056f7b2
-  30093056f7b2 v6.2-rc1~176^2~16
-
-https://git.kernel.org/torvalds/c/30093056f7b2
-
-Thanks,
-Namhyung
