@@ -1,44 +1,44 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E047464
-	for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 20:06:02 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6686c74183cso2442889b3a.1
-        for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 13:06:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07D07464
+	for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 20:06:04 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1b7f223994fso9449255ad.3
+        for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 13:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687723561; x=1690315561;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687723564; x=1690315564;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
         bh=6SoUflbTM/FpgEV6FO9AKFH9tH6vucslhbHlIS2yfeM=;
-        b=HEBsbjGGx1kZCdDVvczFGgbEwibjlGcvAqUzs3KSeYavcoe0OQew/dJPuWJ2fDU8aO
-         LwX7avZVqftVOAzbT3yiuaZXEQxShYdl7QdLan6mHMYEKOXGTW54kY4333QO2wpM6yzn
-         P42LegXOak5nhVcXYqUPTiDv4fscpl/u5jfHgkV7c1ujC1xrRbtzXArl/xAeQ3/m7x0Y
-         32WMkMRZP5G0ubGoVNeS9mXC0J1h1dnB20GWh474Yz4RdqPFmKVLuojNVKijCQ3rOuCJ
-         6Aqnff7fvv0b8omHT3Lc47IOnbX3bqUeL7EGNiTWfUHJJ0TgShiTIpRi6Ng/dtp1LJGU
-         eFIA==
+        b=ZLPdvBMxDTBShZwleMmWJaWVBmf53QN+HrNSZlrWzo2JWiNkfCHstLeTirA6+d9FQ3
+         VqvooySACl3hpPCtF26veDxBeCd+DkDQywGxkxOAhFexK6Sm+ziuAmOEcLTk2w9p+EB4
+         7S+MzM/fwiVCvviLrsr76YVVZio8p/LJi0aEdyDeYi8PfQq0ekupSbLbvj4h9ONc5ZS4
+         Fj6a2JJUcq6M8fN2YNAdlkG6K30KjKjfqwAWiAdQ5ROrYrHGxUFmjanw/l0wh+0dPXCR
+         GWELy3E4TbHoRay8ZUnfazzSjzyI3RJ4YK/xWoepy8lBe5rNih5RWySluB+VGM0/oqdt
+         AWOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687723561; x=1690315561;
+        d=1e100.net; s=20221208; t=1687723564; x=1690315564;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
         bh=6SoUflbTM/FpgEV6FO9AKFH9tH6vucslhbHlIS2yfeM=;
-        b=EUo2Y+UcEe13PIccEywUOchAr1trCD04lJgcNr+a2XsZzPgHl7CZNfiLl4QZRonGam
-         EUIbaQ4l7mnyfMj5GYwJSD7uxXopI+YzBkNvzPwiu7xdc2o0ukGzipuWbToG8b9EBRae
-         HfALcI/wQTI6d7LThK0PMlnRyTQOFpMR3veDY6IoTwzkEyIl2IoiaGfm0EkOvUsSwo96
-         l8YemZlCOAIWvtf8ZcjmjDIrl3iTr5OEFgZ4FhdFwXDMeufHxZRh5EDKqwrhgEt8sN3m
-         c5oqr2sphUGjaf7HmHmGcM+XuBJ8J19SBgebiyU+peSgmeRdcIaSUdYtjUTabMJmIi2h
-         wQBA==
-X-Gm-Message-State: AC+VfDz9VmlIsOzEPw2rhH1ABp3pT7Asg/R9sKGgd376aroS3InZ/cZq
-	QhZORwxgpuTSeY05AIDgXLuElg==
-X-Google-Smtp-Source: ACHHUZ6YpB0pPhcNFt6HBv132zCVyQgfSQKH6WBiygV4lwtb4ywoYCMuSo9j3IXzVhyHYdf/1av8EQ==
-X-Received: by 2002:a05:6a20:918d:b0:126:f0d8:445e with SMTP id v13-20020a056a20918d00b00126f0d8445emr2746471pzd.32.1687723561054;
-        Sun, 25 Jun 2023 13:06:01 -0700 (PDT)
+        b=R0zYcTfSIoN36J7GtNkQh8TjttlBEqEVZfcQzYiZZub+jB+5daAM6ZO5ya+EdGVIcj
+         gm3F1QBTEwQxPvrs8dnv6+rNb2mBBYNIE+++BMBQkfGShjUulH2jHrtdbXMoi2+32a4o
+         RnOcodelU238w+r62ALhCL4cFAio9qL4zcktQAh8R/hH85YE/U6bgE0bYv1aL7RcUGVh
+         bb2RP9JB9WNQPpQgxDqwv1bMTlcNJv3mRvxD1KUhOMKcF6UMDGQoqhZCIkA9Hz/DbS3S
+         xfzw/eFS0qsbTG83y4PwTBLRDlpZy+yDQs6dRJFGjy0DAnmGPZo+ZDJR0ZwpK+Pu4XzS
+         mEyw==
+X-Gm-Message-State: AC+VfDx4QWRKR0o81/AQQ1W/kBZwa+ptBM+wosH/h7a/HVuocDtr9U8v
+	w3+vNdl99R8ELOdcEMPvL94NLA==
+X-Google-Smtp-Source: ACHHUZ7qoTL6Fs6w5qVttplqtoBlBRnylqxh9Grb6wLCiQBLyYog7SpdpXr7h1pf1VjgHeT8B6f7mg==
+X-Received: by 2002:a17:902:ecc5:b0:1b7:f98d:5567 with SMTP id a5-20020a170902ecc500b001b7f98d5567mr2921712plh.68.1687723563907;
+        Sun, 25 Jun 2023 13:06:03 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id p2-20020a62ab02000000b0067777e960d9sm456469pff.155.2023.06.25.13.05.59
+        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b00192aa53a7d5sm2813875plr.8.2023.06.25.13.06.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 13:05:59 -0700 (PDT)
-Date: Sun, 25 Jun 2023 13:05:59 -0700 (PDT)
+        Sun, 25 Jun 2023 13:06:03 -0700 (PDT)
+Date: Sun, 25 Jun 2023 13:06:03 -0700 (PDT)
 X-Google-Original-Date: Sun, 25 Jun 2023 13:05:16 PDT (-0700)
 Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
 In-Reply-To: <20230625-radish-comic-b0861fb96023@spud>
@@ -57,6 +57,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Message-ID: <20230625200603.abt6pjWpTgwV1EN0XmFtO85Vov-DuR_xA1LfoZMCEvA@z>
 
 On Sun, 25 Jun 2023 05:43:13 PDT (-0700), Conor Dooley wrote:
 > On Sun, Jun 25, 2023 at 08:24:56PM +0800, Jisheng Zhang wrote:
