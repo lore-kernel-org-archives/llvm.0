@@ -1,186 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A727620
-	for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 01:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687655715;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KiamuhZaAd4YgPQ9PfX/2grjHw3MqsEpAzaxP15cekg=;
-	b=h53AEcOG+ZLzBRqr3SDaCetUY9SORHC9SudG9EGVeIz/hZTrSP+msJ4IQ1KHcFpZbaXiQe
-	tT8SvH2vAEo/JGm2j7wBdolXWfr7m6lTqL6P9LA6ZJDuiP1S54t7nFlXYmQdkE3oJ4pzbu
-	hLgQ5Nz4QNo+Ck7CKcIaz3kY5BGl2fA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-6J9cT1aAMAOGf3KidcVA5Q-1; Sat, 24 Jun 2023 21:15:10 -0400
-X-MC-Unique: 6J9cT1aAMAOGf3KidcVA5Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AE398E44F9;
-	Sun, 25 Jun 2023 01:15:09 +0000 (UTC)
-Received: from localhost (ovpn-12-72.pek2.redhat.com [10.72.12.72])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0978B200BA8B;
-	Sun, 25 Jun 2023 01:15:08 +0000 (UTC)
-Date: Sun, 25 Jun 2023 09:15:05 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-	hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
-	willy@infradead.org, agordeev@linux.ibm.com,
-	wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-	David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
-	glaubitz@physik.fu-berlin.de, Brian Cain <bcain@quicinc.com>,
-	linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZJeVGTRuSGfiz0C5@MiWiFi-R3L-srv>
-References: <20230620131356.25440-3-bhe@redhat.com>
- <202306211030.DioMEPhl-lkp@intel.com>
- <ZJK57Uw5ZYQZY3d+@MiWiFi-R3L-srv>
- <20230621190834.GA842758@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBE37F;
+	Sun, 25 Jun 2023 02:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BBCC433C0;
+	Sun, 25 Jun 2023 02:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687659216;
+	bh=tO8ygIBNQgDG09IQJY8tRBeB8/twzooSyi/a2iRZmPU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DJSJvVSnJxdBSrlwsxs04gMyVeUDOC7H0y9BM7ozxTP8SmX5s6EYRpQjgtqA9EkPT
+	 x8B6f7hZPd8zd0PU7/P80D2Fjg7///2oJp7TKxhDR3997mz/Oy+p2OK7pbjEiWGCC1
+	 tcvBKjCWATgBYtwdSdpQe8q41uJhIU8n6WhCvFyhfInooMZH7Pq0Mxm1nf1816+HCR
+	 9Zf7DOgKIW5/KERl3dxloK87us+Lq7e2+IrjsF1sJnOcH28rHK8SbtGmk6sTKhoyv9
+	 XkGA3PpXqkKIiTP6H4vruwDzWuBaTT24lzf6u8Dek3AgyEiHjyC0oPvgH44WvjJ19Z
+	 1Zih4s+D970jA==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-98e0c1d5289so85430466b.2;
+        Sat, 24 Jun 2023 19:13:35 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyucCILlQ2vWks5BrT30T5hSmAJvs5FO1MNm6Qfhe/zhGyasu+o
+	qYEjq1kZdWVlNKYPjse0aeqnJiZWYta4livnWBI=
+X-Google-Smtp-Source: ACHHUZ7e7ZGxx17j1nJTkWVwVj2OgSY6k/JVOZOyZm7hb2/sSdTOvJSRHjCeW++9haXDHPqDDAMFjsqdjN7hU/an2lk=
+X-Received: by 2002:a17:906:30c1:b0:98d:63c5:d132 with SMTP id
+ b1-20020a17090630c100b0098d63c5d132mr4946746ejb.72.1687659214276; Sat, 24 Jun
+ 2023 19:13:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621190834.GA842758@dev-arch.thelio-3990X>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+References: <20230624184055.3000636-1-kernel@xen0n.name> <20230624184055.3000636-8-kernel@xen0n.name>
+In-Reply-To: <20230624184055.3000636-8-kernel@xen0n.name>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 25 Jun 2023 10:13:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+Message-ID: <CAAhV-H54bZ5_OSXtcq3B3d4bZj4GBTOf7Z8aA6Jm7uGdKTj_ug@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] LoongArch: Tweak CFLAGS for Clang compatibility
+To: WANG Xuerui <kernel@xen0n.name>
+Cc: WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06/21/23 at 07:08pm, Nathan Chancellor wrote:
-> On Wed, Jun 21, 2023 at 04:50:53PM +0800, Baoquan He wrote:
-> > Hi,
-> > 
-> > On 06/21/23 at 10:15am, kernel test robot wrote:
-> > > Hi Baoquan,
-> > > 
-> > > kernel test robot noticed the following build errors:
-> > > 
-> > > [auto build test ERROR on akpm-mm/mm-everything]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > > patch link:    https://lore.kernel.org/r/20230620131356.25440-3-bhe%40redhat.com
-> > > patch subject: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-> > > config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306211030.DioMEPhl-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
-> > 
-> > I followed steps in your reproduce link, didn't reproduce the error as
-> > above line reported. I can still see those PCI_IOMAP warning, however
-> > they will disappear when rebuilding. The clone3 warning can always ben
-> > seen. I didn't see the symbol ioremap error. Could you double check if
-> > anything missed in steps?
-> > 
-> > [root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> > Compiler will be installed in /root/0day
-> > make --keep-going LLVM=1 CROSS_COMPILE=hexagon-linux- LLVM_IAS=1 --jobs=48 W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-> > make[1]: Entering directory '/root/linux/build_dir'
-> >   GEN     Makefile
-> > ld.lld: /lib64/libtinfo.so.6: no version information available (required by ld.lld)
-> 
-> Hmmm, seems like a dynamic linking issue, likely because either libtinfo
-> is not available or the version on your system is older or newer than
-> the one that the compiler was built with.
-> 
-> Intel folks, you can opt out of this particular library dependency with
-> '-DLLVM_ENABLE_TERMINFO=OFF' to cmake, which will make it easier for
-> others to use it; the compiler can still output color on most terminals
-> even without libtinfo.
-> 
-> > tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
-> > tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
-> >   CALL    ../scripts/checksyscalls.sh
-> > clang: /lib64/libtinfo.so.6: no version information available (required by clang)
-> > <stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
-> >  1519 | #warning syscall clone3 not implemented
-> >       |  ^
-> > 1 warning generated.
-> > make[1]: Leaving directory '/root/linux/build_dir'
-> > [root@dell-pem620-01 linux]# 
-> > 
-> > 
-> 
-> I am able to reproduce this with the kernel.org LLVM builds that I do,
-> which should not have that library dependency:
-> 
-> https://mirrors.edge.kernel.org/pub/tools/llvm/
-> 
-> $ curl -LSso .config https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config
-> 
-> $ make -skj"$(nproc)" ARCH=hexagon LLVM=$(realpath llvm-16.0.6-x86_64/bin)/ olddefconfig all
-> ...
-> make[5]: *** No rule to make target 'arch/hexagon/mm/ioremap.o', needed by 'arch/hexagon/mm/built-in.a'.
-> ...
-> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
-> ...
-> 
-> The first issue is resolved with:
-> 
-> diff --git a/arch/hexagon/mm/Makefile b/arch/hexagon/mm/Makefile
-> index 49911a906fd0..ba4b04d962d6 100644
-> --- a/arch/hexagon/mm/Makefile
-> +++ b/arch/hexagon/mm/Makefile
-> @@ -3,5 +3,5 @@
->  # Makefile for Hexagon memory management subsystem
+Hi, Ruoyao,
+
+On Sun, Jun 25, 2023 at 2:42=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> From: WANG Xuerui <git@xen0n.name>
+>
+> Now the arch code is mostly ready for LLVM/Clang consumption, it is time
+> to re-organize the CFLAGS a little to actually enable the LLVM build.
+>
+> In particular, -mexplicit-relocs and -mdirect-extern-access are not
+> necessary nor supported on Clang; feature detection via cc-option would
+> not work, because that way the broken combo of "new GNU as + old GCC"
+> would seem to get "fixed", but actually produce broken kernels.
+> Explicitly depending on CONFIG_CC_IS_CLANG is thus necessary to not
+> regress UX for those building their own kernels.
+>
+> A build with !RELOCATABLE && !MODULE is confirmed working within a QEMU
+> environment; support for the two features are currently blocked on
+> LLVM/Clang, and will come later.
+>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/Makefile | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 366771016b99..82c619791a63 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -51,7 +51,9 @@ LDFLAGS_vmlinux                       +=3D -static -n -=
+nostdlib
+>
+>  # When the assembler supports explicit relocation hint, we must use it.
+>  # GCC may have -mexplicit-relocs off by default if it was built with an =
+old
+> -# assembler, so we force it via an option.
+> +# assembler, so we force it via an option. For LLVM/Clang the desired be=
+havior
+> +# is the default, and the flag is not supported, so don't pass it if Cla=
+ng is
+> +# being used.
 >  #
->  
-> -obj-y := init.o ioremap.o uaccess.o vm_fault.o cache.o
-> +obj-y := init.o uaccess.o vm_fault.o cache.o
->  obj-y += copy_to_user.o copy_from_user.o vm_tlb.o
+>  # When the assembler does not supports explicit relocation hint, we can'=
+t use
+>  # it.  Disable it if the compiler supports it.
+> @@ -61,8 +63,10 @@ LDFLAGS_vmlinux                      +=3D -static -n -=
+nostdlib
+>  # combination of a "new" assembler and "old" compiler is not supported. =
+ Either
+>  # upgrade the compiler or downgrade the assembler.
+>  ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+> +ifndef CONFIG_CC_IS_CLANG
+>  cflags-y                       +=3D -mexplicit-relocs
+>  KBUILD_CFLAGS_KERNEL           +=3D -mdirect-extern-access
+> +endif
+I prefer to drop CONFIG_CC_IS_CLANG and use
+cflags-y                       +=3D $(call cc-option,-mexplicit-relocs)
+KBUILD_CFLAGS_KERNEL           +=3D $(call cc-option,-mdirect-extern-access=
+)
 
-Ah, right, arch/hexagon/mm/ioremap.c is removed, I forgot change that in
-Makefile. Thanks.
+Then Patch-6 can be merged in this.
 
-> 
-> For the second issue, it seems that ioremap is exported in
-> arch/hexagon/kernel/hexagon_ksyms.c but ioremap() is a static inline
-> function with CONFIG_GENERIC_IOREMAP. I think we can just remove the
-> ioremap and iounmap exports now, as ioremap() calls ioremap_prot(),
-> which is exported, and iounmap() is exported in mm/ioremap.c.
-> 
-> diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
-> index ec56ce2d92a2..36a80e31d187 100644
-> --- a/arch/hexagon/kernel/hexagon_ksyms.c
-> +++ b/arch/hexagon/kernel/hexagon_ksyms.c
-> @@ -14,12 +14,10 @@
->  EXPORT_SYMBOL(__clear_user_hexagon);
->  EXPORT_SYMBOL(raw_copy_from_user);
->  EXPORT_SYMBOL(raw_copy_to_user);
-> -EXPORT_SYMBOL(iounmap);
->  EXPORT_SYMBOL(__vmgetie);
->  EXPORT_SYMBOL(__vmsetie);
->  EXPORT_SYMBOL(__vmyield);
->  EXPORT_SYMBOL(empty_zero_page);
-> -EXPORT_SYMBOL(ioremap);
->  EXPORT_SYMBOL(memcpy);
->  EXPORT_SYMBOL(memset);
->  
-> 
-> With those two diffs, the randconfig the robot provides builds and links
-> without any errors.
+What's your opinion?
 
-Thanks a lot, I will add this into patch 02/19 of v8 post.
-
+Huacai
+>  else
+>  cflags-y                       +=3D $(call cc-option,-mno-explicit-reloc=
+s)
+>  KBUILD_AFLAGS_KERNEL           +=3D -Wa,-mla-global-with-pcrel
+> --
+> 2.40.0
+>
