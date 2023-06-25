@@ -1,54 +1,48 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F1BEAFD;
-	Sat, 24 Jun 2023 23:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687649668; x=1719185668;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uSich5WtIL4xEDBsn+PUSmiT50AF+RCLc8UMqP5tImA=;
-  b=Kox0T0vk10oRBNLnPo8erjBEidnzQMqWPog1vNTdr3a/2yz1HkPTRh/P
-   YOyN9CeLYUy7zzQduV7c/JkHh1gkjp2d+00HB0MVYJFlm6JjPrbhB2oMW
-   cYqUu9Ad2TFy8be12ItJ72d2vRPTVvfPLYDQee54J6Vf/l56HXcJm0f+d
-   16iuXq2aX4WjDb1KiTvnOwNxfyDLy11KB7+LrNoYC6SYdoV6/uvJSU2+H
-   os9J5NNIvFIHRAP0qDSe1GqCwFXw0k4tkiCRkyv1BgG7MBb7xmzsLdlgu
-   zILeIWs2xaWNqgSkiU5GgyzCNEMOiEOK0+aT5z5zxrzYuaJQJu3wbVndH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="391122036"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="391122036"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2023 16:34:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10751"; a="839837858"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="839837858"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jun 2023 16:34:22 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qDClq-0009Xr-05;
-	Sat, 24 Jun 2023 23:34:22 +0000
-Date: Sun, 25 Jun 2023 07:34:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
-	tfiga@chromium.org, m.szyprowski@samsung.com, ming.qian@nxp.com,
-	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-	gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
-	nicolas.dufresne@collabora.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v3 01/11] media: videobuf2: Access vb2_queue bufs array
- through helper functions
-Message-ID: <202306250705.Ts4zHhMG-lkp@intel.com>
-References: <20230622131349.144160-2-benjamin.gaignard@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A727620
+	for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 01:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687655715;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KiamuhZaAd4YgPQ9PfX/2grjHw3MqsEpAzaxP15cekg=;
+	b=h53AEcOG+ZLzBRqr3SDaCetUY9SORHC9SudG9EGVeIz/hZTrSP+msJ4IQ1KHcFpZbaXiQe
+	tT8SvH2vAEo/JGm2j7wBdolXWfr7m6lTqL6P9LA6ZJDuiP1S54t7nFlXYmQdkE3oJ4pzbu
+	hLgQ5Nz4QNo+Ck7CKcIaz3kY5BGl2fA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-6J9cT1aAMAOGf3KidcVA5Q-1; Sat, 24 Jun 2023 21:15:10 -0400
+X-MC-Unique: 6J9cT1aAMAOGf3KidcVA5Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AE398E44F9;
+	Sun, 25 Jun 2023 01:15:09 +0000 (UTC)
+Received: from localhost (ovpn-12-72.pek2.redhat.com [10.72.12.72])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0978B200BA8B;
+	Sun, 25 Jun 2023 01:15:08 +0000 (UTC)
+Date: Sun, 25 Jun 2023 09:15:05 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+	hch@lst.de, christophe.leroy@csgroup.eu, rppt@kernel.org,
+	willy@infradead.org, agordeev@linux.ibm.com,
+	wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+	David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+	glaubitz@physik.fu-berlin.de, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZJeVGTRuSGfiz0C5@MiWiFi-R3L-srv>
+References: <20230620131356.25440-3-bhe@redhat.com>
+ <202306211030.DioMEPhl-lkp@intel.com>
+ <ZJK57Uw5ZYQZY3d+@MiWiFi-R3L-srv>
+ <20230621190834.GA842758@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,83 +51,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622131349.144160-2-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230621190834.GA842758@dev-arch.thelio-3990X>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 
-Hi Benjamin,
+On 06/21/23 at 07:08pm, Nathan Chancellor wrote:
+> On Wed, Jun 21, 2023 at 04:50:53PM +0800, Baoquan He wrote:
+> > Hi,
+> > 
+> > On 06/21/23 at 10:15am, kernel test robot wrote:
+> > > Hi Baoquan,
+> > > 
+> > > kernel test robot noticed the following build errors:
+> > > 
+> > > [auto build test ERROR on akpm-mm/mm-everything]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > > patch link:    https://lore.kernel.org/r/20230620131356.25440-3-bhe%40redhat.com
+> > > patch subject: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+> > > config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config)
+> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306211030.DioMEPhl-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > >> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
+> > 
+> > I followed steps in your reproduce link, didn't reproduce the error as
+> > above line reported. I can still see those PCI_IOMAP warning, however
+> > they will disappear when rebuilding. The clone3 warning can always ben
+> > seen. I didn't see the symbol ioremap error. Could you double check if
+> > anything missed in steps?
+> > 
+> > [root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> > Compiler will be installed in /root/0day
+> > make --keep-going LLVM=1 CROSS_COMPILE=hexagon-linux- LLVM_IAS=1 --jobs=48 W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> > make[1]: Entering directory '/root/linux/build_dir'
+> >   GEN     Makefile
+> > ld.lld: /lib64/libtinfo.so.6: no version information available (required by ld.lld)
+> 
+> Hmmm, seems like a dynamic linking issue, likely because either libtinfo
+> is not available or the version on your system is older or newer than
+> the one that the compiler was built with.
+> 
+> Intel folks, you can opt out of this particular library dependency with
+> '-DLLVM_ENABLE_TERMINFO=OFF' to cmake, which will make it easier for
+> others to use it; the compiler can still output color on most terminals
+> even without libtinfo.
+> 
+> > tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
+> > tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+> >   CALL    ../scripts/checksyscalls.sh
+> > clang: /lib64/libtinfo.so.6: no version information available (required by clang)
+> > <stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
+> >  1519 | #warning syscall clone3 not implemented
+> >       |  ^
+> > 1 warning generated.
+> > make[1]: Leaving directory '/root/linux/build_dir'
+> > [root@dell-pem620-01 linux]# 
+> > 
+> > 
+> 
+> I am able to reproduce this with the kernel.org LLVM builds that I do,
+> which should not have that library dependency:
+> 
+> https://mirrors.edge.kernel.org/pub/tools/llvm/
+> 
+> $ curl -LSso .config https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config
+> 
+> $ make -skj"$(nproc)" ARCH=hexagon LLVM=$(realpath llvm-16.0.6-x86_64/bin)/ olddefconfig all
+> ...
+> make[5]: *** No rule to make target 'arch/hexagon/mm/ioremap.o', needed by 'arch/hexagon/mm/built-in.a'.
+> ...
+> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
+> ...
+> 
+> The first issue is resolved with:
+> 
+> diff --git a/arch/hexagon/mm/Makefile b/arch/hexagon/mm/Makefile
+> index 49911a906fd0..ba4b04d962d6 100644
+> --- a/arch/hexagon/mm/Makefile
+> +++ b/arch/hexagon/mm/Makefile
+> @@ -3,5 +3,5 @@
+>  # Makefile for Hexagon memory management subsystem
+>  #
+>  
+> -obj-y := init.o ioremap.o uaccess.o vm_fault.o cache.o
+> +obj-y := init.o uaccess.o vm_fault.o cache.o
+>  obj-y += copy_to_user.o copy_from_user.o vm_tlb.o
 
-kernel test robot noticed the following build errors:
+Ah, right, arch/hexagon/mm/ioremap.c is removed, I forgot change that in
+Makefile. Thanks.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master v6.4-rc7 next-20230623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> For the second issue, it seems that ioremap is exported in
+> arch/hexagon/kernel/hexagon_ksyms.c but ioremap() is a static inline
+> function with CONFIG_GENERIC_IOREMAP. I think we can just remove the
+> ioremap and iounmap exports now, as ioremap() calls ioremap_prot(),
+> which is exported, and iounmap() is exported in mm/ioremap.c.
+> 
+> diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
+> index ec56ce2d92a2..36a80e31d187 100644
+> --- a/arch/hexagon/kernel/hexagon_ksyms.c
+> +++ b/arch/hexagon/kernel/hexagon_ksyms.c
+> @@ -14,12 +14,10 @@
+>  EXPORT_SYMBOL(__clear_user_hexagon);
+>  EXPORT_SYMBOL(raw_copy_from_user);
+>  EXPORT_SYMBOL(raw_copy_to_user);
+> -EXPORT_SYMBOL(iounmap);
+>  EXPORT_SYMBOL(__vmgetie);
+>  EXPORT_SYMBOL(__vmsetie);
+>  EXPORT_SYMBOL(__vmyield);
+>  EXPORT_SYMBOL(empty_zero_page);
+> -EXPORT_SYMBOL(ioremap);
+>  EXPORT_SYMBOL(memcpy);
+>  EXPORT_SYMBOL(memset);
+>  
+> 
+> With those two diffs, the randconfig the robot provides builds and links
+> without any errors.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230622-214122
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230622131349.144160-2-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v3 01/11] media: videobuf2: Access vb2_queue bufs array through helper functions
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230625/202306250705.Ts4zHhMG-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230625/202306250705.Ts4zHhMG-lkp@intel.com/reproduce)
+Thanks a lot, I will add this into patch 02/19 of v8 post.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306250705.Ts4zHhMG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/media/atomisp/pci/atomisp_ioctl.c:1080:22: error: passing 'struct vb2_queue' to parameter of incompatible type 'struct vb2_queue *'; take the address with &
-           vb = vb2_get_buffer(pipe->vb_queue, buf->index);
-                               ^~~~~~~~~~~~~~
-                               &
-   include/media/videobuf2-core.h:1239:67: note: passing argument to parameter 'q' here
-   static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
-                                                                     ^
-   1 error generated.
-
-
-vim +1080 drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-
-  1065	
-  1066	static int atomisp_dqbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer *buf)
-  1067	{
-  1068		struct video_device *vdev = video_devdata(file);
-  1069		struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
-  1070		struct atomisp_sub_device *asd = pipe->asd;
-  1071		struct atomisp_device *isp = video_get_drvdata(vdev);
-  1072		struct ia_css_frame *frame;
-  1073		struct vb2_buffer *vb;
-  1074		int ret;
-  1075	
-  1076		ret = vb2_ioctl_dqbuf(file, fh, buf);
-  1077		if (ret)
-  1078			return ret;
-  1079	
-> 1080		vb = vb2_get_buffer(pipe->vb_queue, buf->index);
-  1081		frame = vb_to_frame(vb);
-  1082	
-  1083		buf->reserved = asd->frame_status[buf->index];
-  1084	
-  1085		/*
-  1086		 * Hack:
-  1087		 * Currently frame_status in the enum type which takes no more lower
-  1088		 * 8 bit.
-  1089		 * use bit[31:16] for exp_id as it is only in the range of 1~255
-  1090		 */
-  1091		buf->reserved &= 0x0000ffff;
-  1092		if (!(buf->flags & V4L2_BUF_FLAG_ERROR))
-  1093			buf->reserved |= frame->exp_id;
-  1094		buf->reserved2 = pipe->frame_config_id[buf->index];
-  1095	
-  1096		dev_dbg(isp->dev,
-  1097			"dqbuf buffer %d (%s) with exp_id %d, isp_config_id %d\n",
-  1098			buf->index, vdev->name, buf->reserved >> 16, buf->reserved2);
-  1099		return 0;
-  1100	}
-  1101	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
