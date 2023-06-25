@@ -1,144 +1,279 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B6D1104
-	for <llvm@lists.linux.dev>; Sun, 25 Jun 2023 12:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC56C433C8;
-	Sun, 25 Jun 2023 12:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687696998;
-	bh=uw+THhCcFwsu2QuqBbqVeEBv0iNk0Ab27RGodyuvtLs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ncFKjJEUCyQW3JK+9ueyHlu+2WwftBNfqS7BLGzYCY3LOKe+03s1rVSappC7BnKcY
-	 xzHvmyRTr9HobXJHODEpqL23UGYvWkh8Xb757DExVQPvGXx2sie1373q0qacF7WA1l
-	 KPYOuBcgmJDFFl7Csll9L7UZlIDNRjTGK1znm0nXZ/Y7Mxk7K0ex1nfDoQ07VKbTij
-	 g3ctPgYJ7LsAh2PYjpx2Y/IK1mjycvnv6cBo42+zS6COvu/ax+DvrHjcHk4RgPM7KN
-	 Dyngujvl96O9Eb9wjblTvRRuPuzCGUfmyaLnURs6hGGDH0Q5s/bovTim73wB0OdpxQ
-	 Ax8zTzd/jEErQ==
-Date: Sun, 25 Jun 2023 13:43:13 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jisheng Zhang <jszhang@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, bjorn@kernel.org,
-	llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-	aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230625-radish-comic-b0861fb96023@spud>
-References: <20230622215327.GA1135447@dev-arch.thelio-3990X>
- <mhng-6c34765c-126d-4e6c-8904-e002d49a4336@palmer-ri-x1c9a>
- <20230622231803.GA1790165@dev-arch.thelio-3990X>
- <ZJXTwqZIkXLxXaSi@google.com>
- <ZJgyGD8ZSjVmiprB@xhacker>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD7663C5;
+	Sun, 25 Jun 2023 15:31:04 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so1142970e87.0;
+        Sun, 25 Jun 2023 08:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687707062; x=1690299062;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPfAWbbsynVcpfTqxjuy1xkvQeLgFDy+XFs6rfeDUk0=;
+        b=XzhcWDVCHZwRy2vQHRHF2gGQatMHsvGqUhi4mvJaSK54mVwCtHTOEkXLAHj8/gdUxS
+         sUzweBLSNQe4R7rUXa1boXrKjkC2sEQDTzIfPnuWKAhOvDs2CiLyiztDtYtRoVilCdNI
+         oEfA0eXIyVU27bl1+9atY3VbyKj35o5y3ez6Bmr5F5oEMhTaLF1SbPhvIy9GMLvGTcTV
+         IyTARp9FQ4GAy3Gt1K0ji0JzR+Ja5mtXspJiUFR0wjzxLYjMrFqdYqLuflnDxTGG81Rl
+         i0s6x1pnQOVSInpPrATzP6XUQE6ebZmNy/uhyqRyrf6dG7LVyLlo2KZaQptJVn+flZZt
+         RMxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687707062; x=1690299062;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qPfAWbbsynVcpfTqxjuy1xkvQeLgFDy+XFs6rfeDUk0=;
+        b=XkUHvcicwB28lRMiWNjy0bR4LtpwE8F9KRMReZEBrC0ClsUagC7LfJjsqBT26xnlzc
+         AQdbMoeJjmrK1GuPx67DbfaqwOHQs9WqpPrO91mr6/yVTiZnFRMzw2scueaL8fCu2F+j
+         XXr9uaKXyiiw9K/sX2ZFdguekrRmfM+ySSOHltq+k+9kdYwxqBqTEj/AzZoSfgcAmbXu
+         wRdES9KYSHQbx6UyhahSpPqvD5kujrspU+ibj43bQSI6MUdEIGNArgQN7fKKOGz/GpCt
+         5vnNGazu6rVbX1nCPE9EulxwqHhZKQtcqCJoZu9AM2yoV/jumNVMLcUMh0Uazgcvs/as
+         8E2w==
+X-Gm-Message-State: AC+VfDyBbBwa+g+ncvrTb9xVITrLjliQQzLEUYugxSF2iHzaZS2sMw2C
+	E9c17ClORug/jouAH0VzfAsnuopKVegpMPShE7I=
+X-Google-Smtp-Source: ACHHUZ64pspJmcfMnNf0zXJx9qSTTGdi/TFG2yp/Oww3plre+ByHhqW97KKhoqIzOePHL+ksONGcQMMc/p4WsNUgAuk=
+X-Received: by 2002:a19:7108:0:b0:4f3:8507:d90d with SMTP id
+ m8-20020a197108000000b004f38507d90dmr14437095lfc.34.1687707062134; Sun, 25
+ Jun 2023 08:31:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Cddf6K/j8n8gvZx4"
-Content-Disposition: inline
-In-Reply-To: <ZJgyGD8ZSjVmiprB@xhacker>
+References: <202306251539.R34e3RXd-lkp@intel.com>
+In-Reply-To: <202306251539.R34e3RXd-lkp@intel.com>
+From: Steve French <smfrench@gmail.com>
+Date: Sun, 25 Jun 2023 10:30:50 -0500
+Message-ID: <CAH2r5mup6woFss05nQ2PA88UkFowzxdnBvztVycE=wcW5bTLMA@mail.gmail.com>
+Subject: Re: [cifs:for-next 13/14] fs/smb/client/cifs_debug.c:167:1: warning:
+ label at end of compound statement is a C2x extension
+To: kernel test robot <lkp@intel.com>
+Cc: Shyam Prasad N <sprasad@microsoft.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, Steve French <stfrench@microsoft.com>
+Content-Type: multipart/mixed; boundary="000000000000ec7c7305fef5eba1"
 
-
---Cddf6K/j8n8gvZx4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--000000000000ec7c7305fef5eba1
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 25, 2023 at 08:24:56PM +0800, Jisheng Zhang wrote:
-> On Fri, Jun 23, 2023 at 10:17:54AM -0700, Nick Desaulniers wrote:
-> > On Thu, Jun 22, 2023 at 11:18:03PM +0000, Nathan Chancellor wrote:
-> > > If you wanted to restrict it to just LD_IS_BFD in arch/riscv/Kconfig,
-> > > that would be fine with me too.
-> > >=20
-> > >   select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if LD_IS_BFD
-> >=20
-> > Hi Jisheng, would you mind sending a v3 with the attached patch applied
-> > on top / at the end of your series?
->=20
-> Hi Nick, Nathan, Palmer,
->=20
-> I saw the series has been applied to riscv-next, so I'm not sure which
-> solution would it be, Palmer to apply Nick's patch to riscv-next or
-> I to send out v3, any suggestion is appreciated.
+Updated Shyam's patch to address this and a sparse warning and a
+checkpatch warning
 
-I don't see what you are seeing w/ riscv/for-next. HEAD is currently at
-4681dacadeef ("riscv: replace deprecated scall with ecall") and there
-are no patches from your series in the branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/log/?h=3Dfo=
-r-next
 
-Cheers,
-Conor.
+On Sun, Jun 25, 2023 at 2:14=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+> head:   d75e841ced93ce9cd86dc46b8a9453241dcbc61b
+> commit: 33bc5dec2b4fd8d00fed51183615d91badf607d6 [13/14] cifs: display th=
+e endpoint IP details in DebugData
+> config: hexagon-randconfig-r045-20230625 (https://download.01.org/0day-ci=
+/archive/20230625/202306251539.R34e3RXd-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230625/202306251539=
+.R34e3RXd-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306251539.R34e3RXd-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from fs/smb/client/cifs_debug.c:15:
+>    In file included from include/uapi/linux/ethtool.h:19:
+>    In file included from include/linux/if_ether.h:19:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val =3D __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
+m macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>          |                                                   ^
+>    In file included from fs/smb/client/cifs_debug.c:15:
+>    In file included from include/uapi/linux/ethtool.h:19:
+>    In file included from include/linux/if_ether.h:19:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
+m macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                                                   ^
+>    In file included from fs/smb/client/cifs_debug.c:15:
+>    In file included from include/uapi/linux/ethtool.h:19:
+>    In file included from include/linux/if_ether.h:19:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+> >> fs/smb/client/cifs_debug.c:167:1: warning: label at end of compound st=
+atement is a C2x extension [-Wc2x-extensions]
+>      167 | }
+>          | ^
+>    7 warnings generated.
+>
+>
+> vim +167 fs/smb/client/cifs_debug.c
+>
+> 33bc5dec2b4fd8 fs/smb/client/cifs_debug.c Shyam Prasad N 2023-06-09  166
+> 85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20 @167 =
+ }
+> 85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20  168
+>
+> :::::: The code at line 167 was first introduced by commit
+> :::::: 85150929a15b4e0a225434d5970bba14ebdf31f1 cifs: dump channel info i=
+n DebugData
+>
+> :::::: TO: Aurelien Aptel <aaptel@suse.com>
+> :::::: CC: Steve French <stfrench@microsoft.com>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-> > > Nick said he would work on a report for the LLVM side, so as long as
-> > > this issue is handled in some way to avoid regressing LLD builds until
-> > > it is resolved, I don't think there is anything else for the kernel to
-> > > do. We like to have breadcrumbs via issue links, not sure if the repo=
-rt
-> > > will be internal to Google or on LLVM's issue tracker though;
-> > > regardless, we will have to touch this block to add a version check
-> > > later, at which point we can add a link to the fix in LLD.
-> >=20
-> > https://github.com/ClangBuiltLinux/linux/issues/1881
->=20
-> > From 3e5e010958ee41b9fb408cfade8fb017c2fe7169 Mon Sep 17 00:00:00 2001
-> > From: Nick Desaulniers <ndesaulniers@google.com>
-> > Date: Fri, 23 Jun 2023 10:06:17 -0700
-> > Subject: [PATCH] riscv: disable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for =
-LLD
-> >=20
-> > Linking allyesconfig with ld.lld-17 with CONFIG_DEAD_CODE_ELIMINATION=
-=3Dy
-> > takes hours.  Assuming this is a performance regression that can be
-> > fixed, tentatively disable this for now so that allyesconfig builds
-> > don't start timing out.  If and when there's a fix to ld.lld, this can
-> > be converted to a version check instead so that users of older but still
-> > supported versions of ld.lld don't hurt themselves by enabling
-> > CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dy.
-> >=20
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1881
-> > Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> > Hi Jisheng, would you mind sending a v3 with this patch on top/at the
-> > end of your patch series?
-> >=20
-> >  arch/riscv/Kconfig | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 8effe5bb7788..0573991e9b78 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -116,7 +116,8 @@ config RISCV
-> >  	select HAVE_KPROBES if !XIP_KERNEL
-> >  	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
-> >  	select HAVE_KRETPROBES if !XIP_KERNEL
-> > -	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> > +	# https://github.com/ClangBuiltLinux/linux/issues/1881
-> > +	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
-> >  	select HAVE_MOVE_PMD
-> >  	select HAVE_MOVE_PUD
-> >  	select HAVE_PCI
-> > --=20
-> > 2.41.0.162.gfafddb0af9-goog
-> >=20
->=20
 
---Cddf6K/j8n8gvZx4
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+--=20
+Thanks,
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJg2YQAKCRB4tDGHoIJi
-0nAEAQD701JCrnWdXplFizS5WQslP2hoBx5xuZNxyoFFL/ExAQD+MaFPDb9nGQgJ
-B4z5ajWVB8vRrPS6gu9KMtAmSWLjKgo=
-=3gUZ
------END PGP SIGNATURE-----
+Steve
 
---Cddf6K/j8n8gvZx4--
+--000000000000ec7c7305fef5eba1
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0002-cifs-display-the-endpoint-IP-details-in-DebugData.patch"
+Content-Disposition: attachment; 
+	filename="0002-cifs-display-the-endpoint-IP-details-in-DebugData.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljbl76ch0>
+X-Attachment-Id: f_ljbl76ch0
+
+RnJvbSA1ZTVmMzA0NTVjMjRiYjRiM2RkNWNjYThjOWFjMjA3NjdlNWE2ZjQ1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
+PgpEYXRlOiBGcmksIDkgSnVuIDIwMjMgMTI6NDY6MzQgKzAwMDAKU3ViamVjdDogW1BBVENIIDIv
+Ml0gY2lmczogZGlzcGxheSB0aGUgZW5kcG9pbnQgSVAgZGV0YWlscyBpbiBEZWJ1Z0RhdGEKCldp
+dGggbXVsdGljaGFubmVsLCBpdCBpcyB1c2VmdWwgdG8ga25vdyB0aGUgc3JjIHBvcnQgZGV0YWls
+cwpmb3IgZWFjaCBjaGFubmVsLiBUaGlzIGNoYW5nZSB3aWxsIHByaW50IHRoZSBpcCBhZGRyIGFu
+ZApwb3J0IGRldGFpbHMgZm9yIGJvdGggdGhlIHNvY2tldCBkZXN0IGFuZCBzcmMgZW5kcG9pbnRz
+LgoKU2lnbmVkLW9mZi1ieTogU2h5YW0gUHJhc2FkIE4gPHNwcmFzYWRAbWljcm9zb2Z0LmNvbT4K
+UmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPgpDbG9zZXM6IGh0
+dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzA2MjUxNTM5LlIzNGUzUlhk
+LWxrcEBpbnRlbC5jb20vClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWlj
+cm9zb2Z0LmNvbT4KLS0tCiBmcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYyB8IDUzICsrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0
+aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy9zbWIvY2xpZW50L2NpZnNf
+ZGVidWcuYyBiL2ZzL3NtYi9jbGllbnQvY2lmc19kZWJ1Zy5jCmluZGV4IGIyNzlmNzQ1NDY2ZS4u
+MmM3NzFjODRiOTcwIDEwMDY0NAotLS0gYS9mcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYworKysg
+Yi9mcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYwpAQCAtMTMsNiArMTMsNyBAQAogI2luY2x1ZGUg
+PGxpbnV4L3Byb2NfZnMuaD4KICNpbmNsdWRlIDxsaW51eC91YWNjZXNzLmg+CiAjaW5jbHVkZSA8
+dWFwaS9saW51eC9ldGh0b29sLmg+CisjaW5jbHVkZSA8bmV0L2luZXRfc29jay5oPgogI2luY2x1
+ZGUgImNpZnNwZHUuaCIKICNpbmNsdWRlICJjaWZzZ2xvYi5oIgogI2luY2x1ZGUgImNpZnNwcm90
+by5oIgpAQCAtMTQ3LDYgKzE0OCwyMCBAQCBjaWZzX2R1bXBfY2hhbm5lbChzdHJ1Y3Qgc2VxX2Zp
+bGUgKm0sIGludCBpLCBzdHJ1Y3QgY2lmc19jaGFuICpjaGFuKQogCQkgICBpbl9mbGlnaHQoc2Vy
+dmVyKSwKIAkJICAgYXRvbWljX3JlYWQoJnNlcnZlci0+aW5fc2VuZCksCiAJCSAgIGF0b21pY19y
+ZWFkKCZzZXJ2ZXItPm51bV93YWl0ZXJzKSk7CisKKyNpZm5kZWYgQ09ORklHX0NJRlNfU01CX0RJ
+UkVDVAorCWlmIChzZXJ2ZXItPnNzb2NrZXQpIHsKKwkJc3RydWN0IHNvY2thZGRyIHNyYzsKKwkJ
+aW50IGFkZHJsZW47CisKKwkJYWRkcmxlbiA9IGtlcm5lbF9nZXRzb2NrbmFtZShzZXJ2ZXItPnNz
+b2NrZXQsICZzcmMpOworCQlpZiAoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2lu
+KSAmJiBhZGRybGVuICE9IHNpemVvZihzdHJ1Y3Qgc29ja2FkZHJfaW42KSkKKwkJCXJldHVybjsK
+KworCQlzZXFfcHJpbnRmKG0sICJcblx0XHRJUCBhZGRyOiBkc3Q6ICVwSVNwYywgc3JjOiAlcElT
+cGMiLCAmc2VydmVyLT5kc3RhZGRyLCAmc3JjKTsKKwl9CisjZW5kaWYKKwogfQogCiBzdGF0aWMg
+aW5saW5lIGNvbnN0IGNoYXIgKnNtYl9zcGVlZF90b19zdHIoc2l6ZV90IGJwcykKQEAgLTI2Myw3
+ICsyNzgsNyBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZmlsZXNfcHJvY19zaG93KHN0cnVjdCBz
+ZXFfZmlsZSAqbSwgdm9pZCAqdikKIHN0YXRpYyBpbnQgY2lmc19kZWJ1Z19kYXRhX3Byb2Nfc2hv
+dyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnYpCiB7CiAJc3RydWN0IG1pZF9xX2VudHJ5ICpt
+aWRfZW50cnk7Ci0Jc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAqc2VydmVyOworCXN0cnVjdCBUQ1Bf
+U2VydmVyX0luZm8gKnNlcnZlciwgKm5zZXJ2ZXI7CiAJc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAq
+Y2hhbl9zZXJ2ZXI7CiAJc3RydWN0IGNpZnNfc2VzICpzZXM7CiAJc3RydWN0IGNpZnNfdGNvbiAq
+dGNvbjsKQEAgLTMxOCw3ICszMzMsNyBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZGF0YV9wcm9j
+X3Nob3coc3RydWN0IHNlcV9maWxlICptLCB2b2lkICp2KQogCiAJYyA9IDA7CiAJc3Bpbl9sb2Nr
+KCZjaWZzX3RjcF9zZXNfbG9jayk7Ci0JbGlzdF9mb3JfZWFjaF9lbnRyeShzZXJ2ZXIsICZjaWZz
+X3RjcF9zZXNfbGlzdCwgdGNwX3Nlc19saXN0KSB7CisJbGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZl
+KHNlcnZlciwgbnNlcnZlciwgJmNpZnNfdGNwX3Nlc19saXN0LCB0Y3Bfc2VzX2xpc3QpIHsKIAkJ
+LyogY2hhbm5lbCBpbmZvIHdpbGwgYmUgcHJpbnRlZCBhcyBhIHBhcnQgb2Ygc2Vzc2lvbnMgYmVs
+b3cgKi8KIAkJaWYgKENJRlNfU0VSVkVSX0lTX0NIQU4oc2VydmVyKSkKIAkJCWNvbnRpbnVlOwpA
+QCAtMzk2LDYgKzQxMSwyOSBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZGF0YV9wcm9jX3Nob3co
+c3RydWN0IHNlcV9maWxlICptLCB2b2lkICp2KQogCQkJYXRvbWljX3JlYWQoJnNlcnZlci0+c21i
+ZF9jb25uLT5tcl9yZWFkeV9jb3VudCksCiAJCQlhdG9taWNfcmVhZCgmc2VydmVyLT5zbWJkX2Nv
+bm4tPm1yX3VzZWRfY291bnQpKTsKIHNraXBfcmRtYToKKyNlbHNlCisJCWlmIChzZXJ2ZXItPnNz
+b2NrZXQpIHsKKwkJCXN0cnVjdCBzb2NrYWRkciBzcmM7CisJCQlpbnQgYWRkcmxlbjsKKworCQkJ
+Lyoga2VybmVsX2dldHNvY2tuYW1lIGNhbiBibG9jay4gc28gZHJvcCB0aGUgbG9jayBmaXJzdCAq
+LworCQkJc2VydmVyLT5zcnZfY291bnQrKzsKKwkJCXNwaW5fdW5sb2NrKCZjaWZzX3RjcF9zZXNf
+bG9jayk7CisKKwkJCWFkZHJsZW4gPSBrZXJuZWxfZ2V0c29ja25hbWUoc2VydmVyLT5zc29ja2V0
+LCAmc3JjKTsKKwkJCWlmICgoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2luKSkg
+JiYKKwkJCSAgICAoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2luNikpKSB7CisJ
+CQkJc3Bpbl9sb2NrKCZjaWZzX3RjcF9zZXNfbG9jayk7CisJCQkJZ290byBza2lwX2FkZHJfZGV0
+YWlsczsKKwkJCX0KKworCQkJc2VxX3ByaW50ZihtLCAiXG5JUCBhZGRyOiBkc3Q6ICVwSVNwYywg
+c3JjOiAlcElTcGMiLCAmc2VydmVyLT5kc3RhZGRyLCAmc3JjKTsKKworCQkJY2lmc19wdXRfdGNw
+X3Nlc3Npb24oc2VydmVyLCAwKTsKKwkJCXNwaW5fbG9jaygmY2lmc190Y3Bfc2VzX2xvY2spOwor
+CQl9CisKK3NraXBfYWRkcl9kZXRhaWxzOgogI2VuZGlmCiAJCXNlcV9wcmludGYobSwgIlxuTnVt
+YmVyIG9mIGNyZWRpdHM6ICVkLCVkLCVkIERpYWxlY3QgMHgleCIsCiAJCQlzZXJ2ZXItPmNyZWRp
+dHMsCkBAIC00OTMsNyArNTMxLDE4IEBAIHN0YXRpYyBpbnQgY2lmc19kZWJ1Z19kYXRhX3Byb2Nf
+c2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnYpCiAJCQkJc2VxX3ByaW50ZihtLCAiXG5c
+blx0RXh0cmEgQ2hhbm5lbHM6ICV6dSAiLAogCQkJCQkgICBzZXMtPmNoYW5fY291bnQtMSk7CiAJ
+CQkJZm9yIChqID0gMTsgaiA8IHNlcy0+Y2hhbl9jb3VudDsgaisrKSB7CisJCQkJCS8qCisJCQkJ
+CSAqIGtlcm5lbF9nZXRzb2NrbmFtZSBjYW4gYmxvY2sgaW5zaWRlCisJCQkJCSAqIGNpZnNfZHVt
+cF9jaGFubmVsLiBzbyBkcm9wIHRoZSBsb2NrIGZpcnN0CisJCQkJCSAqLworCQkJCQlzZXJ2ZXIt
+PnNydl9jb3VudCsrOworCQkJCQlzcGluX3VubG9jaygmY2lmc190Y3Bfc2VzX2xvY2spOworCiAJ
+CQkJCWNpZnNfZHVtcF9jaGFubmVsKG0sIGosICZzZXMtPmNoYW5zW2pdKTsKKworCQkJCQljaWZz
+X3B1dF90Y3Bfc2Vzc2lvbihzZXJ2ZXIsIDApOworCQkJCQlzcGluX2xvY2soJmNpZnNfdGNwX3Nl
+c19sb2NrKTsKKwogCQkJCQlpZiAoQ0lGU19DSEFOX05FRURTX1JFQ09OTkVDVChzZXMsIGopKQog
+CQkJCQkJc2VxX3B1dHMobSwgIlx0RElTQ09OTkVDVEVEICIpOwogCQkJCQlpZiAoQ0lGU19DSEFO
+X0lOX1JFQ09OTkVDVChzZXMsIGopKQotLSAKMi4zNC4xCgo=
+--000000000000ec7c7305fef5eba1--
