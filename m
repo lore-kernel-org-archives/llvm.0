@@ -1,279 +1,128 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD7663C5;
-	Sun, 25 Jun 2023 15:31:04 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so1142970e87.0;
-        Sun, 25 Jun 2023 08:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687707062; x=1690299062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qPfAWbbsynVcpfTqxjuy1xkvQeLgFDy+XFs6rfeDUk0=;
-        b=XzhcWDVCHZwRy2vQHRHF2gGQatMHsvGqUhi4mvJaSK54mVwCtHTOEkXLAHj8/gdUxS
-         sUzweBLSNQe4R7rUXa1boXrKjkC2sEQDTzIfPnuWKAhOvDs2CiLyiztDtYtRoVilCdNI
-         oEfA0eXIyVU27bl1+9atY3VbyKj35o5y3ez6Bmr5F5oEMhTaLF1SbPhvIy9GMLvGTcTV
-         IyTARp9FQ4GAy3Gt1K0ji0JzR+Ja5mtXspJiUFR0wjzxLYjMrFqdYqLuflnDxTGG81Rl
-         i0s6x1pnQOVSInpPrATzP6XUQE6ebZmNy/uhyqRyrf6dG7LVyLlo2KZaQptJVn+flZZt
-         RMxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687707062; x=1690299062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qPfAWbbsynVcpfTqxjuy1xkvQeLgFDy+XFs6rfeDUk0=;
-        b=XkUHvcicwB28lRMiWNjy0bR4LtpwE8F9KRMReZEBrC0ClsUagC7LfJjsqBT26xnlzc
-         AQdbMoeJjmrK1GuPx67DbfaqwOHQs9WqpPrO91mr6/yVTiZnFRMzw2scueaL8fCu2F+j
-         XXr9uaKXyiiw9K/sX2ZFdguekrRmfM+ySSOHltq+k+9kdYwxqBqTEj/AzZoSfgcAmbXu
-         wRdES9KYSHQbx6UyhahSpPqvD5kujrspU+ibj43bQSI6MUdEIGNArgQN7fKKOGz/GpCt
-         5vnNGazu6rVbX1nCPE9EulxwqHhZKQtcqCJoZu9AM2yoV/jumNVMLcUMh0Uazgcvs/as
-         8E2w==
-X-Gm-Message-State: AC+VfDyBbBwa+g+ncvrTb9xVITrLjliQQzLEUYugxSF2iHzaZS2sMw2C
-	E9c17ClORug/jouAH0VzfAsnuopKVegpMPShE7I=
-X-Google-Smtp-Source: ACHHUZ64pspJmcfMnNf0zXJx9qSTTGdi/TFG2yp/Oww3plre+ByHhqW97KKhoqIzOePHL+ksONGcQMMc/p4WsNUgAuk=
-X-Received: by 2002:a19:7108:0:b0:4f3:8507:d90d with SMTP id
- m8-20020a197108000000b004f38507d90dmr14437095lfc.34.1687707062134; Sun, 25
- Jun 2023 08:31:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D06B7C;
+	Sun, 25 Jun 2023 16:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687712327; x=1719248327;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wvYTBAUfqZCX+rchOTcyoZSkQ68pK7tRktmXOWnLbC0=;
+  b=nKaRuXfwyJyhwUnnB2U8EtsCyPN32BBWzk9aUzY/puqWY2XAyKUx2d/n
+   Ht+oit/3HpVa9YH4BlqY0zec4RPuzeHKrgZ9x6+z1+xCilL2LvLo/koR6
+   ++8N5Errda5nqoBn4k0FraCzDAWZ7iBpztlQkunPxYXUxQar/3cnCcHhn
+   FaPd/pi3NOwu3R43483T4xJ4koSozo8NmTpzOEK79Y+493HgemM4chymf
+   kGECszQXzc7v9yfcMMVRKWKmHVCTrjxpkyDaIPd7lkSZ8xwPoTlabZmn4
+   usO4257SH0Y/jNjHIQRCMPO0c8RfY1X7TGZNNqV0fMOpNnsRilxQZFKJ2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="341430678"
+X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
+   d="scan'208";a="341430678"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2023 09:58:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="719085642"
+X-IronPort-AV: E=Sophos;i="6.01,157,1684825200"; 
+   d="scan'208";a="719085642"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Jun 2023 09:58:45 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qDT4W-000A8r-2C;
+	Sun, 25 Jun 2023 16:58:44 +0000
+Date: Mon, 26 Jun 2023 00:58:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qingsong Chen <changxian.cqs@antgroup.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 4/8] rust: kernel: add some info handler
+ TargetOperations
+Message-ID: <202306260042.e8UKaBKy-lkp@intel.com>
+References: <20230625121657.3631109-5-changxian.cqs@antgroup.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202306251539.R34e3RXd-lkp@intel.com>
-In-Reply-To: <202306251539.R34e3RXd-lkp@intel.com>
-From: Steve French <smfrench@gmail.com>
-Date: Sun, 25 Jun 2023 10:30:50 -0500
-Message-ID: <CAH2r5mup6woFss05nQ2PA88UkFowzxdnBvztVycE=wcW5bTLMA@mail.gmail.com>
-Subject: Re: [cifs:for-next 13/14] fs/smb/client/cifs_debug.c:167:1: warning:
- label at end of compound statement is a C2x extension
-To: kernel test robot <lkp@intel.com>
-Cc: Shyam Prasad N <sprasad@microsoft.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, Steve French <stfrench@microsoft.com>
-Content-Type: multipart/mixed; boundary="000000000000ec7c7305fef5eba1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230625121657.3631109-5-changxian.cqs@antgroup.com>
 
---000000000000ec7c7305fef5eba1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Qingsong,
 
-Updated Shyam's patch to address this and a sparse warning and a
-checkpatch warning
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on linus/master v6.4-rc7 next-20230623]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Sun, Jun 25, 2023 at 2:14=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-> head:   d75e841ced93ce9cd86dc46b8a9453241dcbc61b
-> commit: 33bc5dec2b4fd8d00fed51183615d91badf607d6 [13/14] cifs: display th=
-e endpoint IP details in DebugData
-> config: hexagon-randconfig-r045-20230625 (https://download.01.org/0day-ci=
-/archive/20230625/202306251539.R34e3RXd-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
-4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230625/202306251539=
-.R34e3RXd-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306251539.R34e3RXd-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from fs/smb/client/cifs_debug.c:15:
->    In file included from include/uapi/linux/ethtool.h:19:
->    In file included from include/linux/if_ether.h:19:
->    In file included from include/linux/skbuff.h:17:
->    In file included from include/linux/bvec.h:10:
->    In file included from include/linux/highmem.h:12:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
-:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      547 |         val =3D __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      560 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_=
-IOBASE + addr));
->          |                                                         ~~~~~~=
-~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
-m macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from fs/smb/client/cifs_debug.c:15:
->    In file included from include/uapi/linux/ethtool.h:19:
->    In file included from include/linux/if_ether.h:19:
->    In file included from include/linux/skbuff.h:17:
->    In file included from include/linux/bvec.h:10:
->    In file included from include/linux/highmem.h:12:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
-:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      573 |         val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_=
-IOBASE + addr));
->          |                                                         ~~~~~~=
-~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
-m macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from fs/smb/client/cifs_debug.c:15:
->    In file included from include/uapi/linux/ethtool.h:19:
->    In file included from include/linux/if_ether.h:19:
->    In file included from include/linux/skbuff.h:17:
->    In file included from include/linux/bvec.h:10:
->    In file included from include/linux/highmem.h:12:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
-:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      584 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBA=
-SE + addr);
->          |                                                       ~~~~~~~~=
-~~ ^
->    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
-c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBA=
-SE + addr);
->          |                                                       ~~~~~~~~=
-~~ ^
-> >> fs/smb/client/cifs_debug.c:167:1: warning: label at end of compound st=
-atement is a C2x extension [-Wc2x-extensions]
->      167 | }
->          | ^
->    7 warnings generated.
->
->
-> vim +167 fs/smb/client/cifs_debug.c
->
-> 33bc5dec2b4fd8 fs/smb/client/cifs_debug.c Shyam Prasad N 2023-06-09  166
-> 85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20 @167 =
- }
-> 85150929a15b4e fs/cifs/cifs_debug.c       Aurelien Aptel 2019-11-20  168
->
-> :::::: The code at line 167 was first introduced by commit
-> :::::: 85150929a15b4e0a225434d5970bba14ebdf31f1 cifs: dump channel info i=
-n DebugData
->
-> :::::: TO: Aurelien Aptel <aaptel@suse.com>
-> :::::: CC: Steve French <stfrench@microsoft.com>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+url:    https://github.com/intel-lab-lkp/linux/commits/Qingsong-Chen/rust-kernel-add-basic-abstractions-for-device-mapper/20230625-201850
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20230625121657.3631109-5-changxian.cqs%40antgroup.com
+patch subject: [RFC PATCH 4/8] rust: kernel: add some info handler TargetOperations
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230626/202306260042.e8UKaBKy-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230626/202306260042.e8UKaBKy-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306260042.e8UKaBKy-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
---=20
-Thanks,
+>> error[E0308]: mismatched types
+   --> rust/kernel/device_mapper.rs:145:34
+   |
+   145 |               (*$tt).$filed = Some(TargetType::$func::<T>);
+   |                               ---- ^^^^^^^^^^^^^^^^^^^^^^ incorrect number of function parameters
+   |                               |
+   |                               arguments to this enum variant are incorrect
+   ...
+   170 | /                 check_target_operations!(
+   171 | |                     tt,
+   172 | |                     (HAS_CTR, ctr, dm_ctr_fn),
+   173 | |                     (HAS_DTR, dtr, dm_dtr_fn),
+   ...   |
+   195 | |                     (HAS_REPORT_ZONES, report_zones, dm_report_zones_fn),
+   196 | |                 );
+   | |_________________- in this macro invocation
+   |
+   = note: expected fn pointer `unsafe extern "C" fn(*mut dm_target) -> _`
+   found fn item `unsafe extern "C" fn(*mut dm_target, *mut dm_report_zones_args, u32) -> _ {TargetType::dm_report_zones_fn::<T>}`
+   help: the type constructed contains `unsafe extern "C" fn(*mut dm_target, *mut dm_report_zones_args, u32) -> i32 {TargetType::dm_report_zones_fn::<T>}` due to the type of the argument passed
+   --> rust/kernel/device_mapper.rs:145:29
+   |
+   145 |               (*$tt).$filed = Some(TargetType::$func::<T>);
+   |                               ^^^^^----------------------^
+   |                                    |
+   |                                    this argument influences the type of `Some`
+   ...
+   170 | /                 check_target_operations!(
+   171 | |                     tt,
+   172 | |                     (HAS_CTR, ctr, dm_ctr_fn),
+   173 | |                     (HAS_DTR, dtr, dm_dtr_fn),
+   ...   |
+   195 | |                     (HAS_REPORT_ZONES, report_zones, dm_report_zones_fn),
+   196 | |                 );
+   | |_________________- in this macro invocation
+   note: tuple variant defined here
+   --> /opt/cross/rustc-1.68.2-bindgen-0.56.0/rustup/toolchains/1.68.2-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:570:5
+   |
+   570 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+   |     ^^^^
+   = note: this error originates in the macro `check_target_operations` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0609]: no field `next_sector` on type `dm_report_zones_args`
+   --> rust/kernel/device_mapper.rs:657:34
+   |
+   657 |         unsafe { (*self.0.get()).next_sector as _ }
+   |                                  ^^^^^^^^^^^ unknown field
 
-Steve
-
---000000000000ec7c7305fef5eba1
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0002-cifs-display-the-endpoint-IP-details-in-DebugData.patch"
-Content-Disposition: attachment; 
-	filename="0002-cifs-display-the-endpoint-IP-details-in-DebugData.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljbl76ch0>
-X-Attachment-Id: f_ljbl76ch0
-
-RnJvbSA1ZTVmMzA0NTVjMjRiYjRiM2RkNWNjYThjOWFjMjA3NjdlNWE2ZjQ1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTaHlhbSBQcmFzYWQgTiA8c3ByYXNhZEBtaWNyb3NvZnQuY29t
-PgpEYXRlOiBGcmksIDkgSnVuIDIwMjMgMTI6NDY6MzQgKzAwMDAKU3ViamVjdDogW1BBVENIIDIv
-Ml0gY2lmczogZGlzcGxheSB0aGUgZW5kcG9pbnQgSVAgZGV0YWlscyBpbiBEZWJ1Z0RhdGEKCldp
-dGggbXVsdGljaGFubmVsLCBpdCBpcyB1c2VmdWwgdG8ga25vdyB0aGUgc3JjIHBvcnQgZGV0YWls
-cwpmb3IgZWFjaCBjaGFubmVsLiBUaGlzIGNoYW5nZSB3aWxsIHByaW50IHRoZSBpcCBhZGRyIGFu
-ZApwb3J0IGRldGFpbHMgZm9yIGJvdGggdGhlIHNvY2tldCBkZXN0IGFuZCBzcmMgZW5kcG9pbnRz
-LgoKU2lnbmVkLW9mZi1ieTogU2h5YW0gUHJhc2FkIE4gPHNwcmFzYWRAbWljcm9zb2Z0LmNvbT4K
-UmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPgpDbG9zZXM6IGh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzA2MjUxNTM5LlIzNGUzUlhk
-LWxrcEBpbnRlbC5jb20vClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWlj
-cm9zb2Z0LmNvbT4KLS0tCiBmcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYyB8IDUzICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0
-aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy9zbWIvY2xpZW50L2NpZnNf
-ZGVidWcuYyBiL2ZzL3NtYi9jbGllbnQvY2lmc19kZWJ1Zy5jCmluZGV4IGIyNzlmNzQ1NDY2ZS4u
-MmM3NzFjODRiOTcwIDEwMDY0NAotLS0gYS9mcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYworKysg
-Yi9mcy9zbWIvY2xpZW50L2NpZnNfZGVidWcuYwpAQCAtMTMsNiArMTMsNyBAQAogI2luY2x1ZGUg
-PGxpbnV4L3Byb2NfZnMuaD4KICNpbmNsdWRlIDxsaW51eC91YWNjZXNzLmg+CiAjaW5jbHVkZSA8
-dWFwaS9saW51eC9ldGh0b29sLmg+CisjaW5jbHVkZSA8bmV0L2luZXRfc29jay5oPgogI2luY2x1
-ZGUgImNpZnNwZHUuaCIKICNpbmNsdWRlICJjaWZzZ2xvYi5oIgogI2luY2x1ZGUgImNpZnNwcm90
-by5oIgpAQCAtMTQ3LDYgKzE0OCwyMCBAQCBjaWZzX2R1bXBfY2hhbm5lbChzdHJ1Y3Qgc2VxX2Zp
-bGUgKm0sIGludCBpLCBzdHJ1Y3QgY2lmc19jaGFuICpjaGFuKQogCQkgICBpbl9mbGlnaHQoc2Vy
-dmVyKSwKIAkJICAgYXRvbWljX3JlYWQoJnNlcnZlci0+aW5fc2VuZCksCiAJCSAgIGF0b21pY19y
-ZWFkKCZzZXJ2ZXItPm51bV93YWl0ZXJzKSk7CisKKyNpZm5kZWYgQ09ORklHX0NJRlNfU01CX0RJ
-UkVDVAorCWlmIChzZXJ2ZXItPnNzb2NrZXQpIHsKKwkJc3RydWN0IHNvY2thZGRyIHNyYzsKKwkJ
-aW50IGFkZHJsZW47CisKKwkJYWRkcmxlbiA9IGtlcm5lbF9nZXRzb2NrbmFtZShzZXJ2ZXItPnNz
-b2NrZXQsICZzcmMpOworCQlpZiAoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2lu
-KSAmJiBhZGRybGVuICE9IHNpemVvZihzdHJ1Y3Qgc29ja2FkZHJfaW42KSkKKwkJCXJldHVybjsK
-KworCQlzZXFfcHJpbnRmKG0sICJcblx0XHRJUCBhZGRyOiBkc3Q6ICVwSVNwYywgc3JjOiAlcElT
-cGMiLCAmc2VydmVyLT5kc3RhZGRyLCAmc3JjKTsKKwl9CisjZW5kaWYKKwogfQogCiBzdGF0aWMg
-aW5saW5lIGNvbnN0IGNoYXIgKnNtYl9zcGVlZF90b19zdHIoc2l6ZV90IGJwcykKQEAgLTI2Myw3
-ICsyNzgsNyBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZmlsZXNfcHJvY19zaG93KHN0cnVjdCBz
-ZXFfZmlsZSAqbSwgdm9pZCAqdikKIHN0YXRpYyBpbnQgY2lmc19kZWJ1Z19kYXRhX3Byb2Nfc2hv
-dyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnYpCiB7CiAJc3RydWN0IG1pZF9xX2VudHJ5ICpt
-aWRfZW50cnk7Ci0Jc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAqc2VydmVyOworCXN0cnVjdCBUQ1Bf
-U2VydmVyX0luZm8gKnNlcnZlciwgKm5zZXJ2ZXI7CiAJc3RydWN0IFRDUF9TZXJ2ZXJfSW5mbyAq
-Y2hhbl9zZXJ2ZXI7CiAJc3RydWN0IGNpZnNfc2VzICpzZXM7CiAJc3RydWN0IGNpZnNfdGNvbiAq
-dGNvbjsKQEAgLTMxOCw3ICszMzMsNyBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZGF0YV9wcm9j
-X3Nob3coc3RydWN0IHNlcV9maWxlICptLCB2b2lkICp2KQogCiAJYyA9IDA7CiAJc3Bpbl9sb2Nr
-KCZjaWZzX3RjcF9zZXNfbG9jayk7Ci0JbGlzdF9mb3JfZWFjaF9lbnRyeShzZXJ2ZXIsICZjaWZz
-X3RjcF9zZXNfbGlzdCwgdGNwX3Nlc19saXN0KSB7CisJbGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZl
-KHNlcnZlciwgbnNlcnZlciwgJmNpZnNfdGNwX3Nlc19saXN0LCB0Y3Bfc2VzX2xpc3QpIHsKIAkJ
-LyogY2hhbm5lbCBpbmZvIHdpbGwgYmUgcHJpbnRlZCBhcyBhIHBhcnQgb2Ygc2Vzc2lvbnMgYmVs
-b3cgKi8KIAkJaWYgKENJRlNfU0VSVkVSX0lTX0NIQU4oc2VydmVyKSkKIAkJCWNvbnRpbnVlOwpA
-QCAtMzk2LDYgKzQxMSwyOSBAQCBzdGF0aWMgaW50IGNpZnNfZGVidWdfZGF0YV9wcm9jX3Nob3co
-c3RydWN0IHNlcV9maWxlICptLCB2b2lkICp2KQogCQkJYXRvbWljX3JlYWQoJnNlcnZlci0+c21i
-ZF9jb25uLT5tcl9yZWFkeV9jb3VudCksCiAJCQlhdG9taWNfcmVhZCgmc2VydmVyLT5zbWJkX2Nv
-bm4tPm1yX3VzZWRfY291bnQpKTsKIHNraXBfcmRtYToKKyNlbHNlCisJCWlmIChzZXJ2ZXItPnNz
-b2NrZXQpIHsKKwkJCXN0cnVjdCBzb2NrYWRkciBzcmM7CisJCQlpbnQgYWRkcmxlbjsKKworCQkJ
-Lyoga2VybmVsX2dldHNvY2tuYW1lIGNhbiBibG9jay4gc28gZHJvcCB0aGUgbG9jayBmaXJzdCAq
-LworCQkJc2VydmVyLT5zcnZfY291bnQrKzsKKwkJCXNwaW5fdW5sb2NrKCZjaWZzX3RjcF9zZXNf
-bG9jayk7CisKKwkJCWFkZHJsZW4gPSBrZXJuZWxfZ2V0c29ja25hbWUoc2VydmVyLT5zc29ja2V0
-LCAmc3JjKTsKKwkJCWlmICgoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2luKSkg
-JiYKKwkJCSAgICAoYWRkcmxlbiAhPSBzaXplb2Yoc3RydWN0IHNvY2thZGRyX2luNikpKSB7CisJ
-CQkJc3Bpbl9sb2NrKCZjaWZzX3RjcF9zZXNfbG9jayk7CisJCQkJZ290byBza2lwX2FkZHJfZGV0
-YWlsczsKKwkJCX0KKworCQkJc2VxX3ByaW50ZihtLCAiXG5JUCBhZGRyOiBkc3Q6ICVwSVNwYywg
-c3JjOiAlcElTcGMiLCAmc2VydmVyLT5kc3RhZGRyLCAmc3JjKTsKKworCQkJY2lmc19wdXRfdGNw
-X3Nlc3Npb24oc2VydmVyLCAwKTsKKwkJCXNwaW5fbG9jaygmY2lmc190Y3Bfc2VzX2xvY2spOwor
-CQl9CisKK3NraXBfYWRkcl9kZXRhaWxzOgogI2VuZGlmCiAJCXNlcV9wcmludGYobSwgIlxuTnVt
-YmVyIG9mIGNyZWRpdHM6ICVkLCVkLCVkIERpYWxlY3QgMHgleCIsCiAJCQlzZXJ2ZXItPmNyZWRp
-dHMsCkBAIC00OTMsNyArNTMxLDE4IEBAIHN0YXRpYyBpbnQgY2lmc19kZWJ1Z19kYXRhX3Byb2Nf
-c2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnYpCiAJCQkJc2VxX3ByaW50ZihtLCAiXG5c
-blx0RXh0cmEgQ2hhbm5lbHM6ICV6dSAiLAogCQkJCQkgICBzZXMtPmNoYW5fY291bnQtMSk7CiAJ
-CQkJZm9yIChqID0gMTsgaiA8IHNlcy0+Y2hhbl9jb3VudDsgaisrKSB7CisJCQkJCS8qCisJCQkJ
-CSAqIGtlcm5lbF9nZXRzb2NrbmFtZSBjYW4gYmxvY2sgaW5zaWRlCisJCQkJCSAqIGNpZnNfZHVt
-cF9jaGFubmVsLiBzbyBkcm9wIHRoZSBsb2NrIGZpcnN0CisJCQkJCSAqLworCQkJCQlzZXJ2ZXIt
-PnNydl9jb3VudCsrOworCQkJCQlzcGluX3VubG9jaygmY2lmc190Y3Bfc2VzX2xvY2spOworCiAJ
-CQkJCWNpZnNfZHVtcF9jaGFubmVsKG0sIGosICZzZXMtPmNoYW5zW2pdKTsKKworCQkJCQljaWZz
-X3B1dF90Y3Bfc2Vzc2lvbihzZXJ2ZXIsIDApOworCQkJCQlzcGluX2xvY2soJmNpZnNfdGNwX3Nl
-c19sb2NrKTsKKwogCQkJCQlpZiAoQ0lGU19DSEFOX05FRURTX1JFQ09OTkVDVChzZXMsIGopKQog
-CQkJCQkJc2VxX3B1dHMobSwgIlx0RElTQ09OTkVDVEVEICIpOwogCQkJCQlpZiAoQ0lGU19DSEFO
-X0lOX1JFQ09OTkVDVChzZXMsIGopKQotLSAKMi4zNC4xCgo=
---000000000000ec7c7305fef5eba1--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
