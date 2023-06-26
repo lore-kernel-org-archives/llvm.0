@@ -1,83 +1,79 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48E12906;
-	Mon, 26 Jun 2023 08:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687769341; x=1719305341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YQaF166oug6ylisXZvhibKOVqmr79D7iJaBzmGONrUU=;
-  b=VZ/SPyECPS8QiJYGSMJDhQzNBi7Jf2oRG7YicTPnPByoFW+x0lq3KKo0
-   7MbJgqJ+WL+zRfDJ7mbkzU2VQVb7QnY6XZUEpCwcwQIpnGtgQVautn+jA
-   UesAqwL+EF3tpnW4YP5tTHQz0q6ROV2d88MdMzddnv8Pnran6cYveFDRD
-   HMgXtNIUK5xqB65gM0fOPZx2PSaMHAcVKz1kwYk2sl3nsLhGTml1mw9pd
-   RX2ngweFgANoTWLtJF1aqWGwwV2yOdK7/VBoplbohpkPnFGjxQT1T4bQk
-   9MqbSRoxMx1ZRiEPjKBEvfST5GeorP0XZix7bSBsLWmyHCgQAGE0RJ2aZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="358708234"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="358708234"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 01:48:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10752"; a="745711382"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="745711382"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2023 01:48:57 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1qDhu4-006iZB-0e;
-	Mon, 26 Jun 2023 11:48:56 +0300
-Date: Mon, 26 Jun 2023 11:48:55 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Okan Sahin <okan.sahin@analog.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Lee Jones <lee@kernel.org>
-Subject: Re: [linux-next:master 11546/12162] drivers/mfd/max77541.c:176:18:
- warning: cast to smaller integer type 'enum max7754x_ids' from 'const void
- *'
-Message-ID: <ZJlQ9w89k7x88ovM@smile.fi.intel.com>
-References: <202306260401.qZlYQpV2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7D11FA3;
+	Mon, 26 Jun 2023 09:10:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4526C433C8;
+	Mon, 26 Jun 2023 09:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687770641;
+	bh=bkEzN7NEeSuJMSS4LbC9r8tnxCY2Dyrv80RPlDqBdBI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fFv7QpxevJNhOVyBMTQQSBPkWul0PqSqgUUbhkOVdWIZHUT60QMzZNJgmdo2QQ6mG
+	 aG4RZTwp5uNPO/yk23DusKoabAVLqbKo8esdTECwzJUlOfoiuQcKJo7tiy5FjiDkiy
+	 BUDCWQf7V3gdfj56oF2MW8t8/pEBSUau+6xt1wD9aMq+ky2w2Z1oIM7BgVLOaLySeU
+	 wHYf1ujoP9aCvRO5XPeIcutZFK2nk4g7KQNH7Lc4jF0CaiCfs/n4PdRZEDDTcn3oqG
+	 wbb7Vwxl0UgprK+0gEAbcH4pgV9TaXHsj7mEJEaYDOjS8m18z4OHIorpKzE2pWc94v
+	 FWxWBpyxOLZdg==
+Date: Mon, 26 Jun 2023 10:10:35 +0100
+From: Lee Jones <lee@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sean.wang@mediatek.com, pavel@ucw.cz, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, ndesaulniers@google.com,
+	trix@redhat.com, linux-leds@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] leds: leds-mt6323: Adjust return/parameter types in wled
+ get/set callbacks
+Message-ID: <20230626091035.GZ10378@google.com>
+References: <20230622-mt6323-wled-wincompatible-function-pointer-types-strict-v1-1-6ad256f220e8@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202306260401.qZlYQpV2-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230622-mt6323-wled-wincompatible-function-pointer-types-strict-v1-1-6ad256f220e8@kernel.org>
 
-On Mon, Jun 26, 2023 at 04:53:43AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   8d2be868b42c08290509c60515865f4de24ea704
-> commit: e0cbc202388af454eb771043b20db6dfe68199ec [11546/12162] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC Support
-> config: x86_64-randconfig-r003-20230626 (https://download.01.org/0day-ci/archive/20230626/202306260401.qZlYQpV2-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230626/202306260401.qZlYQpV2-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306260401.qZlYQpV2-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/mfd/max77541.c:176:18: warning: cast to smaller integer type 'enum max7754x_ids' from 'const void *' [-Wvoid-pointer-to-enum-cast]
->            max77541->id  = (enum max7754x_ids)device_get_match_data(dev);
+On Thu, 22 Jun 2023, Nathan Chancellor wrote:
 
-	max77541->id  = (enum max7754x_ids)(uintptr_t)device_get_match_data(dev);
+> Clang's kernel Control Flow Integrity (kCFI) is a compiler-based
+> security mitigation that ensures the target of an indirect function call
+> matches the expected type of the call and trapping if they do not match
+> exactly. The warning -Wincompatible-function-pointer-types-strict aims
+> to catch these issues at compile time, which reveals:
+> 
+>  drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>    598 |                         leds->led[reg]->cdev.brightness_set_blocking =
+>        |                                                                      ^
+>    599 |                                                 mt6323_wled_set_brightness;
+>        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>    600 |                         leds->led[reg]->cdev.brightness_get =
+>        |                                                             ^
+>    601 |                                                 mt6323_get_wled_brightness;
+>        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  2 errors generated.
+> 
+> While 'unsigned int' is ABI compatible with 'enum led_brightness' (hence
+> no warning from -Wincompatible-function-pointer-types) and the callers
+> of these callbacks use/pass the values as 'unsigned int', the mismatch
+> between the prototype and the called function will trip kCFI at runtime.
+> 
+> Change the types in the implementations to match the prototypes, clearing
+> up the warning and avoiding kCFI failures.
+> 
+> Fixes: 9bb0a9e0626c ("leds: leds-mt6323: Add support for WLEDs and MT6332")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/leds/leds-mt6323.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-should fix it.
+Applied, thanks
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
