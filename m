@@ -1,50 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3217F8F6A;
-	Mon, 26 Jun 2023 13:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F543947A;
+	Mon, 26 Jun 2023 13:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687785968; x=1719321968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l3I567JqO5KMCBIUecx9Hm3MVttkk0qQQyX2t1ijyJc=;
-  b=SYzS6GWTJb2CaZlv+Kz86EPY+CpltajP2GJv4xDkXGtpYMI53r9VFgeM
-   VL/GFbnr1TvBJCVdCkTSJowMVAF8H3F67jlwpyPR4pSw/zpSyQSPuzFdO
-   PrYgSoTwfJRl1Wn3SubxEokNp4G13W5M0XGCUk6wL6zNFb1PnBR7J1HXH
-   YSpMnJrRb9k35fpQfchXVxlShf8AWxfLFsazweklde4EqInryJLDN+3S0
-   y5QdrSxNKUCMr2uCg+ftLrdbmnivLtXTpEcxlxIHxk1HQGLUmepfVwN9t
-   szu4xKp1KUbT5yySsCmAIZQkplc4UY93HIfFkA2zZRTzN/10JG+apsKRw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="358760548"
+  t=1687786751; x=1719322751;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=xOg20E9f1n3I03kJ5H2YgXDDsJyOE9BoJ/x7fIh/E+4=;
+  b=ELbKJNncaDc5fytlWBQFNK0nUhNxZDBbE1OrFO+8lWFQpWKpIz2W3TFz
+   lyzNqTCSvRIepmnxrovTbp+3hyUXl076Tt4ReV7YG82/yZ8KpKtFPwBeX
+   siYtCg5LPKYGvrz41BcwqX435Kt8yx1BxY1lmngGcR2ewba2lu+TaCeU6
+   vto14sNmfHgnnrj5GfnomMB1C2Wpknmmam+K+7JqovA5PsKKms0oHIPmm
+   TVtd4z1Z0lOi4caWC68Ytf3NGo+UtILv1GCOdADM/2CM4TAJE6uTaGWBW
+   rcYGcvZ2DVlga8Fac/H3eAa0L3f23fjS2wGs6BPP5t8CqAb7wl+qR0s34
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="363815569"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="358760548"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 06:26:07 -0700
+   d="scan'208";a="363815569"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 06:39:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="719353606"
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="1046502806"
 X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="719353606"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Jun 2023 06:26:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1qDmEF-0002hf-2o;
-	Mon, 26 Jun 2023 16:26:03 +0300
-Date: Mon, 26 Jun 2023 16:26:03 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: lib/test_bitmap.c:920:2: error: call to __compiletime_assert_372
- declared with 'error' attribute: BUILD_BUG_ON failed:
- !__builtin_constant_p(res)
-Message-ID: <ZJmR6zrjDZgDvWCA@smile.fi.intel.com>
-References: <202306250533.CBxzOSEh-lkp@intel.com>
- <ZJlNMwzlt2MGTvBp@smile.fi.intel.com>
- <0e50e878-3944-c57c-1dbf-10d260f05afc@intel.com>
+   d="scan'208";a="1046502806"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2023 06:39:09 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qDmQv-000AiH-0K;
+	Mon, 26 Jun 2023 13:39:09 +0000
+Date: Mon, 26 Jun 2023 21:39:02 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/bpf/btf.o):(function
+ btf_parse_vmlinux: .text+0x4848): relocation R_RISCV_PCREL_HI20 out of
+ range: -525535 is not in [-524288, 524287]; references __start_BTF
+Message-ID: <202306262145.vzymyN85-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,36 +45,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0e50e878-3944-c57c-1dbf-10d260f05afc@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Jun 26, 2023 at 01:57:46PM +0200, Alexander Lobakin wrote:
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Date: Mon, 26 Jun 2023 11:32:51 +0300
-> > On Sun, Jun 25, 2023 at 05:12:36AM +0800, kernel test robot wrote:
-> >> Hi Alexander,
-> >>
-> >> FYI, the error/warning still remains.
-> > 
-> > Alexander, do you have anything to present to fix this? Or is your plan to send
-> > something after v6.5-rc1?
-> 
-> I was waiting for an email from Nick (or some further update of the
-> GitHub issue page) to clarify whether the compiler should be fixed or I
-> should work around this in the code.
+CC: linux-kernel@vger.kernel.org
+TO: Jesse Taube <mr.bossman075@gmail.com>
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Okay, got it! Maybe you can ping him?
+Hi Jesse,
 
-> If the latter, I could send a fix
-> this week, so that it could even hit the bitmap pull request.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-It could hit a PR after v6.5-rc1 (Linus expects the following: a) the PR
-to be send in the _first_ week of merge window with rare exceptions, and
-b) the commits in PR has to be sit in Linux Next for a while, usually
-a couple of weeks).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6995e2de6891c724bfeb2db33d7b87775f913ad1
+commit: 49f965b6fbca63904d7397ce96066fa992f401a3 soc: canaan: Make K210_SYSCTL depend on CLK_K210
+date:   3 months ago
+config: riscv-randconfig-r003-20230626 (https://download.01.org/0day-ci/archive/20230626/202306262145.vzymyN85-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230626/202306262145.vzymyN85-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306262145.vzymyN85-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(kernel/bpf/btf.o):(function btf_parse_vmlinux: .text+0x4848): relocation R_RISCV_PCREL_HI20 out of range: -525535 is not in [-524288, 524287]; references __start_BTF
+   >>> referenced by btf.c:525 (kernel/bpf/btf.c:525)
+   >>> defined in vmlinux.a(kernel/bpf/btf.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/bpf/btf.o):(function btf_parse_vmlinux: .text+0x4854): relocation R_RISCV_PCREL_HI20 out of range: -525535 is not in [-524288, 524287]; references __stop_BTF
+   >>> referenced by btf.c:525 (kernel/bpf/btf.c:525)
+   >>> defined in vmlinux.a(kernel/bpf/btf.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x1a0): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_symbol: .text+0x44c): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_num_syms
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_symbol: .text+0x460): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_symbol: .text+0x464): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x55c): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x5a8): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_expand_symbol: .text+0x5b0): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x6e8): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x6f8): relocation R_RISCV_PCREL_HI20 out of range: -524978 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+..
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
