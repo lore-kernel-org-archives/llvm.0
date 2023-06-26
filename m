@@ -1,79 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7D11FA3;
-	Mon, 26 Jun 2023 09:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4526C433C8;
-	Mon, 26 Jun 2023 09:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687770641;
-	bh=bkEzN7NEeSuJMSS4LbC9r8tnxCY2Dyrv80RPlDqBdBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fFv7QpxevJNhOVyBMTQQSBPkWul0PqSqgUUbhkOVdWIZHUT60QMzZNJgmdo2QQ6mG
-	 aG4RZTwp5uNPO/yk23DusKoabAVLqbKo8esdTECwzJUlOfoiuQcKJo7tiy5FjiDkiy
-	 BUDCWQf7V3gdfj56oF2MW8t8/pEBSUau+6xt1wD9aMq+ky2w2Z1oIM7BgVLOaLySeU
-	 wHYf1ujoP9aCvRO5XPeIcutZFK2nk4g7KQNH7Lc4jF0CaiCfs/n4PdRZEDDTcn3oqG
-	 wbb7Vwxl0UgprK+0gEAbcH4pgV9TaXHsj7mEJEaYDOjS8m18z4OHIorpKzE2pWc94v
-	 FWxWBpyxOLZdg==
-Date: Mon, 26 Jun 2023 10:10:35 +0100
-From: Lee Jones <lee@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: sean.wang@mediatek.com, pavel@ucw.cz, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, ndesaulniers@google.com,
-	trix@redhat.com, linux-leds@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] leds: leds-mt6323: Adjust return/parameter types in wled
- get/set callbacks
-Message-ID: <20230626091035.GZ10378@google.com>
-References: <20230622-mt6323-wled-wincompatible-function-pointer-types-strict-v1-1-6ad256f220e8@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F1B7464
+	for <llvm@lists.linux.dev>; Mon, 26 Jun 2023 09:35:46 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b80f2ed810so1182155ad.0
+        for <llvm@lists.linux.dev>; Mon, 26 Jun 2023 02:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1687772145; x=1690364145;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UH3eVzjLKwWmRMVYeQqwjO56lgLsezdOhj6baGSx02Y=;
+        b=3hM6JJc0ratZSvh21uiSdvkVjR4ktcXaTY4LK9w32/dAX0DIFFh/a8E9Pp7m2S93RH
+         b7Ht6k3Ix7VzvE3OANMoLvOvSxGgJFzO+bPYdsKpEofi0Z8+wGUX2vDpgvvR+NG0ymgG
+         JOxOPRmN6MpDN61JdGall+pz8XE5HITPCvz5Ml7ZjBpX9G8NB30UGk2kZXyePsKyWU+Q
+         5xOjewpiPq8xRHBhzqHSdIfPbFteH9HsQ8KiZbZW4NdQR+ot4kzmIQgjFSMjH001Oz8f
+         DZJGP9EGMkDLrHYJbsY5ClNNC3JFTBowla4jXwBiNmtlJPBke+NBYWbhaBCLAHX+JITY
+         c68w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687772145; x=1690364145;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UH3eVzjLKwWmRMVYeQqwjO56lgLsezdOhj6baGSx02Y=;
+        b=DHIMBc95jcVRET6N2xz9dl+fkzxrKT5mIZdiXjSfaJj8xfObdQ28T/YalFdf5z8Qwx
+         5ZfbHPX+FVZlWn4kHVVSodJgSgaJehE4wv01XtTjaf47KFPu2Gyxlla/BOY8An7sBnPp
+         peXKfYVhmIQuQ6vjJ+7Xqmx/VNyFozFmm2lmVWLVbs/0S2chbEOsxdABLJzBSOx9BVEf
+         q4Dy2Rtrn5HBwazM9QQOWz33i0ypqaPrYyN5YXLRCJP0F8+riOZvGJlQwwZkM3Affsz4
+         F7jLSnOO6zcN75Q9OETFhWoCA0yskabOF4bMPPKL9Nxt+5+Sl9yg7PX7gbjtRTFC6NaT
+         zTWg==
+X-Gm-Message-State: AC+VfDxHPJ6iMWJkS/IhQJfjzSXpxRReQUV44oamvSxORUcZ0953vbbk
+	yTQ5tsywBCVQw4hoEP/FmNmK2HWNSrBpScS1AJ4=
+X-Google-Smtp-Source: ACHHUZ5O4pENI0bKJDaxZfS7vETurKhCiJehYkrdaqcTZ7rGvl5FEWCT3ZUp+9MKNUa4ZWBn7JHbzA==
+X-Received: by 2002:a17:902:db10:b0:1b6:7f96:42ca with SMTP id m16-20020a170902db1000b001b67f9642camr3364373plx.66.1687772145529;
+        Mon, 26 Jun 2023 02:35:45 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902bd0700b001b6740207dbsm3475093pls.214.2023.06.26.02.35.44
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 02:35:45 -0700 (PDT)
+Message-ID: <64995bf1.170a0220.73bbf.56f6@mx.google.com>
+Date: Mon, 26 Jun 2023 02:35:45 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230622-mt6323-wled-wincompatible-function-pointer-types-strict-v1-1-6ad256f220e8@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20230626
+Subject: next/master build: 13 builds: 0 failed, 13 passed (next-20230626)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Thu, 22 Jun 2023, Nathan Chancellor wrote:
+next/master build: 13 builds: 0 failed, 13 passed (next-20230626)
 
-> Clang's kernel Control Flow Integrity (kCFI) is a compiler-based
-> security mitigation that ensures the target of an indirect function call
-> matches the expected type of the call and trapping if they do not match
-> exactly. The warning -Wincompatible-function-pointer-types-strict aims
-> to catch these issues at compile time, which reveals:
-> 
->  drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
->    598 |                         leds->led[reg]->cdev.brightness_set_blocking =
->        |                                                                      ^
->    599 |                                                 mt6323_wled_set_brightness;
->        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->  drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->    600 |                         leds->led[reg]->cdev.brightness_get =
->        |                                                             ^
->    601 |                                                 mt6323_get_wled_brightness;
->        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->  2 errors generated.
-> 
-> While 'unsigned int' is ABI compatible with 'enum led_brightness' (hence
-> no warning from -Wincompatible-function-pointer-types) and the callers
-> of these callbacks use/pass the values as 'unsigned int', the mismatch
-> between the prototype and the called function will trip kCFI at runtime.
-> 
-> Change the types in the implementations to match the prototypes, clearing
-> up the warning and avoiding kCFI failures.
-> 
-> Fixes: 9bb0a9e0626c ("leds: leds-mt6323: Add support for WLEDs and MT6332")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/leds/leds-mt6323.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230626/
 
-Applied, thanks
+Tree: next
+Branch: master
+Git Describe: next-20230626
+Git Commit: 60e7c4a25da68cd826719b685babbd23e73b85b0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
--- 
-Lee Jones [李琼斯]
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
