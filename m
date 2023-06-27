@@ -1,42 +1,56 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CE679F2;
-	Tue, 27 Jun 2023 07:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9CA15ACE;
+	Tue, 27 Jun 2023 08:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687849856; x=1719385856;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lKOdJctQb5N8L2XnCI2A0MC/l6kXHY7vFjxyPcKQSa0=;
-  b=RmbfWIUF9ILDF+DXoLp7Jaf49RYt65Ub44qjUFTXW76lD9f8zmpWmmmA
-   qYm4XFOOkXAXYKDU837GF6DrfvRwjdR8/ssDQqmdGSgbPOIKu9wOOez6T
-   1wU/U6hRLAcQ72sijHrfOCIzVrs34AxbdGNrr9uzmJRfPRvkl17tz1xLI
-   0sEzcIpKBX/qPeeH7rOBfrqhpBrXH41v1WU13UaWE/MxwOuK0Hk8WLqiR
-   x13OX85G+zPQ50wovBXmKuF8Rlu7U5k0mpLNPj+/0xEG+cYWpu5iwWSGY
-   kCHj3grgshSB2/jBIxBt/KV6Ir/Gh2dWny46v6kPYoz3NQwOlIebn7I0c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="425163269"
+  t=1687854128; x=1719390128;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sfuE8q/3lqwwL754PtpWUP9ndf3pvT8nlm8myNt2UcU=;
+  b=IDxyypxUFUkJk/CKDomjnQDsSfEFbv7ZnW/UgA6qdkNerxOZy4QbH9Fg
+   lMY9YxdhLmlv50rbfs29/pmGFcXEpbwh1cvsYvdHpxw8oXqpMGE6vNasi
+   Q/ZEJdqjp6eUDadNj6iYvLD49+jrSVCv7BHUOqwCD8DD/Jxr7EOVy2ron
+   PJX2Oe21i4XxwEaRZ0vsikSUVe5/nYeqIuhdaNSnPQcYdp5t3KTnpOf21
+   aIym+PE9w1pyFbzTXRrMAjBld5hg9eUYMNiKX65d6rKAMQWpnOXSI9Fnx
+   hJQwt+2xKb0c8coDnjo1KK5HGXcicPlTKOt1Sekx12/IVg8+maz5+AIRL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="392005624"
 X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="425163269"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 00:10:41 -0700
+   d="scan'208";a="392005624"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 01:22:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="829553701"
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="861022715"
 X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="829553701"
+   d="scan'208";a="861022715"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Jun 2023 00:10:40 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 27 Jun 2023 01:22:01 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qE2pr-000Bmf-1S;
-	Tue, 27 Jun 2023 07:09:59 +0000
-Date: Tue, 27 Jun 2023 15:09:54 +0800
+	id 1qE3xZ-000BoL-0T;
+	Tue, 27 Jun 2023 08:22:01 +0000
+Date: Tue, 27 Jun 2023 16:21:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/030-misc 17/26] error[E0405]: cannot find trait
- `Tuple` in module `core::marker`
-Message-ID: <202306271558.b4TYkBnI-lkp@intel.com>
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Mrunal Patel <mpatel@redhat.com>,
+	Ryan Phillips <rphillips@redhat.com>,
+	Brent Rowsell <browsell@redhat.com>, Peter Hunt <pehunt@redhat.com>,
+	Phil Auld <pauld@redhat.com>, Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3 5/9] cgroup/cpuset: Add cpuset.cpus.exclusive for v2
+Message-ID: <202306271649.1FoknGfO-lkp@intel.com>
+References: <20230627005529.1564984-6-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,38 +59,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230627005529.1564984-6-longman@redhat.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/030-misc
-head:   8bad6a3027f8f281867a06f8fa01642cd5f7a98b
-commit: 49e57e6eb761f760944a91c621cac881d45523dc [17/26] rust: Fixes for 1.67.0
-config: x86_64-buildonly-randconfig-r002-20230626 (https://download.01.org/0day-ci/archive/20230627/202306271558.b4TYkBnI-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230627/202306271558.b4TYkBnI-lkp@intel.com/reproduce)
+Hi Waiman,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20230626]
+[also build test ERROR on v6.4]
+[cannot apply to tj-cgroup/for-next linus/master v6.4 v6.4-rc7 v6.4-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/cgroup-cpuset-Inherit-parent-s-load-balance-state-in-v2/20230627-090025
+base:   next-20230626
+patch link:    https://lore.kernel.org/r/20230627005529.1564984-6-longman%40redhat.com
+patch subject: [PATCH v3 5/9] cgroup/cpuset: Add cpuset.cpus.exclusive for v2
+config: riscv-randconfig-r015-20230627 (https://download.01.org/0day-ci/archive/20230627/202306271649.1FoknGfO-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230627/202306271649.1FoknGfO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306271558.b4TYkBnI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306271649.1FoknGfO-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0405]: cannot find trait `Tuple` in module `core::marker`
-   --> rust/alloc/boxed.rs:1872:26
-   |
-   1872 | impl<Args: core::marker::Tuple, F: FnOnce<Args> + ?Sized, A: Allocator> FnOnce<Args> for Box<F, A> {
-   |                          ^^^^^ not found in `core::marker`
---
->> error[E0405]: cannot find trait `Tuple` in module `core::marker`
-   --> rust/alloc/boxed.rs:1881:26
-   |
-   1881 | impl<Args: core::marker::Tuple, F: FnMut<Args> + ?Sized, A: Allocator> FnMut<Args> for Box<F, A> {
-   |                          ^^^^^ not found in `core::marker`
---
->> error[E0405]: cannot find trait `Tuple` in module `core::marker`
-   --> rust/alloc/boxed.rs:1888:26
-   |
-   1888 | impl<Args: core::marker::Tuple, F: Fn<Args> + ?Sized, A: Allocator> Fn<Args> for Box<F, A> {
-   |                          ^^^^^ not found in `core::marker`
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     743 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/cgroup/cpuset.c:29:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> kernel/cgroup/cpuset.c:699:8: error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not assignable
+     699 |         cpus1 = cpumask_empty(cs1->exclusive_cpus)
+         |         ~~~~~ ^
+   kernel/cgroup/cpuset.c:701:8: error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not assignable
+     701 |         cpus2 = cpumask_empty(cs2->exclusive_cpus)
+         |         ~~~~~ ^
+   13 warnings and 2 errors generated.
+
+
+vim +699 kernel/cgroup/cpuset.c
+
+   689	
+   690	/*
+   691	 * cpu_exclusive_check() - check if two cpusets are exclusive
+   692	 *
+   693	 * Return 0 if exclusive, -EINVAL if not
+   694	 */
+   695	static inline bool cpu_exclusive_check(struct cpuset *cs1, struct cpuset *cs2)
+   696	{
+   697		cpumask_var_t cpus1, cpus2;
+   698	
+ > 699		cpus1 = cpumask_empty(cs1->exclusive_cpus)
+   700			? cs1->cpus_allowed : cs1->exclusive_cpus;
+   701		cpus2 = cpumask_empty(cs2->exclusive_cpus)
+   702			? cs2->cpus_allowed : cs2->exclusive_cpus;
+   703	
+   704		if (cpumask_intersects(cpus1, cpus2))
+   705			return -EINVAL;
+   706		return 0;
+   707	}
+   708	
 
 -- 
 0-DAY CI Kernel Test Service
