@@ -1,77 +1,165 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDB11386;
-	Tue, 27 Jun 2023 08:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687854888; x=1719390888;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=rO5d6eJVnjclI79/gdLC3qnZXV+fqM/bfTQfWr7iNHM=;
-  b=I5Iw8CPMAtIEJbx2d/79YZvQ0a4EWrR/l6PeihWWwmj5Na5WWsrER45Z
-   vKgDSFt3XN6nw+0mL2u8QceCm6YkKdbiahe0pmlEXdXhCTu7wDfFbteiX
-   B/0DrQGqNcEdjbTqjXtMdjj7SoIrLTcSSL8EeZyCoa+NAfm0q2XWvJRRI
-   DAwPRSwWwx8T3VOIBzRBloirnM6Fe2IXwfPlSqIu5e4BTWvDJHWFN5M5T
-   r8j5eGJ/J+jcr5d6cKKYC46kRp9iAkyjkh6INd1on6zkcMc7M5UanVMcm
-   TRnCLH/vK+mVSzMEHDvZTioOCjpg2oiiqxmRhVMvlPJinCuGxfmaTJRMk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="341854444"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="341854444"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 01:34:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="719700786"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="719700786"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Jun 2023 01:34:41 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qE49B-000Bof-0y;
-	Tue, 27 Jun 2023 08:34:01 +0000
-Date: Tue, 27 Jun 2023 16:33:10 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [stable:linux-5.10.y 1755/9999] fs/freevxfs/vxfs_olt.o: warning:
- objtool: .text: unexpected end of section
-Message-ID: <202306271602.C1jbpWOA-lkp@intel.com>
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC7B10F9;
+	Tue, 27 Jun 2023 09:29:38 +0000 (UTC)
+Received: from loongson.cn (unknown [10.20.42.170])
+	by gateway (Coremail) with SMTP id _____8BxlfD6q5pkWAUDAA--.4773S3;
+	Tue, 27 Jun 2023 17:29:31 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxniP5q5pkwcULAA--.7400S3;
+	Tue, 27 Jun 2023 17:29:29 +0800 (CST)
+Message-ID: <b0a6db96-1062-ce90-f8da-b9866b3c8166@loongson.cn>
+Date: Tue, 27 Jun 2023 17:29:29 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 5/8] LoongArch: Simplify the invtlb wrappers
+Content-Language: en-US
+To: WANG Xuerui <kernel@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+ loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ WANG Xuerui <git@xen0n.name>
+References: <20230625095644.3156349-1-kernel@xen0n.name>
+ <20230625095644.3156349-6-kernel@xen0n.name>
+From: bibo mao <maobibo@loongson.cn>
+In-Reply-To: <20230625095644.3156349-6-kernel@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxniP5q5pkwcULAA--.7400S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr1UCr1xCw17JF4xCr17Arc_yoW5tw4fpF
+	y3CF47KFs7tF1fWa97Jr1vvr43Jrn8G34SvF9IgFnYkF1DX340grs8Ar4qyry5Ja9YyrW7
+	ZF4Yyry5uFsYv3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4R6wDU
+	UUU
 
-TO: Kees Cook <keescook@chromium.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Marco Elver <elver@google.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
-CC: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-Hi Kees,
 
-FYI, the error/warning still remains.
+在 2023/6/25 17:56, WANG Xuerui 写道:
+> From: WANG Xuerui <git@xen0n.name>
+> 
+> The invtlb instruction has been supported by upstream LoongArch
+> toolchains from day one, so ditch the raw opcode trickery and just use
+> plain inline asm for it.
+> 
+> While at it, also make the invtlb asm statements barriers, for proper
+> modeling of the side effects. The functions are also marked as
+> __always_inline instead of just "inline", because they cannot work at
+> all if not inlined: the op argument will not be compile-time const in
+> that case, thus failing to satisfy the "i" constraint.
+> 
+> The signature of the other more specific invtlb wrappers contain unused
+> arguments right now, but these are not removed right away in order for
+> the patch to be focused. In the meantime, assertions are added to ensure
+> no accidental misuse happens before the refactor. (The more specific
+> wrappers cannot re-use the generic invtlb wrapper, because the ISA
+> manual says $zero shall be used in case a particular op does not take
+> the respective argument: re-using the generic wrapper would mean losing
+> control over the register usage.)
+> 
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/include/asm/tlb.h | 43 ++++++++++++++------------------
+>  1 file changed, 19 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
+> index 0dc9ee2b05d2..da7a3b5b9374 100644
+> --- a/arch/loongarch/include/asm/tlb.h
+> +++ b/arch/loongarch/include/asm/tlb.h
+> @@ -88,52 +88,47 @@ enum invtlb_ops {
+>  	INVTLB_GID_ADDR = 0x16,
+>  };
+>  
+> -/*
+> - * invtlb op info addr
+> - * (0x1 << 26) | (0x24 << 20) | (0x13 << 15) |
+> - * (addr << 10) | (info << 5) | op
+> - */
+> -static inline void invtlb(u32 op, u32 info, u64 addr)
+> +static __always_inline void invtlb(u32 op, u32 info, u64 addr)
+>  {
+>  	__asm__ __volatile__(
+> -		"parse_r addr,%0\n\t"
+> -		"parse_r info,%1\n\t"
+> -		".word ((0x6498000) | (addr << 10) | (info << 5) | %2)\n\t"
+> -		:
+> -		: "r"(addr), "r"(info), "i"(op)
+> +		"invtlb %0, %1, %2\n\t"
+>  		:
+> +		: "i"(op), "r"(info), "r"(addr)
+> +		: "memory"
+>  		);
+>  }
+>  
+> -static inline void invtlb_addr(u32 op, u32 info, u64 addr)
+> +static __always_inline void invtlb_addr(u32 op, u32 info, u64 addr)
+>  {
+> +	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
+>  	__asm__ __volatile__(
+> -		"parse_r addr,%0\n\t"
+> -		".word ((0x6498000) | (addr << 10) | (0 << 5) | %1)\n\t"
+> -		:
+> -		: "r"(addr), "i"(op)
+> +		"invtlb %0, $zero, %1\n\t"
+>  		:
+> +		: "i"(op), "r"(addr)
+> +		: "memory"
+>  		);
+>  }
+>  
+> -static inline void invtlb_info(u32 op, u32 info, u64 addr)
+> +static __always_inline void invtlb_info(u32 op, u32 info, u64 addr)
+>  {
+> +	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
+>  	__asm__ __volatile__(
+> -		"parse_r info,%0\n\t"
+> -		".word ((0x6498000) | (0 << 10) | (info << 5) | %1)\n\t"
+> -		:
+> -		: "r"(info), "i"(op)
+> +		"invtlb %0, %1, $zero\n\t"
+>  		:
+> +		: "i"(op), "r"(info)
+> +		: "memory"
+>  		);
+>  }
+macro parse_r is not used here, and it is not used any more.
+Can you remove definition of this macro also?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   ef0d5feb32ab7007d1316e9c5037cd7d9f7febbf
-commit: 58823a9b097cf36dd59c4d463396e15a5ec4efb7 [1755/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-config: x86_64-randconfig-a004-20230626 (https://download.01.org/0day-ci/archive/20230627/202306271602.C1jbpWOA-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230627/202306271602.C1jbpWOA-lkp@intel.com/reproduce)
+Regards
+Bibo Mao
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306271602.C1jbpWOA-lkp@intel.com/
+>  
+> -static inline void invtlb_all(u32 op, u32 info, u64 addr)
+> +static __always_inline void invtlb_all(u32 op, u32 info, u64 addr)
+>  {
+> +	BUILD_BUG_ON(!__builtin_constant_p(info) || info != 0);
+> +	BUILD_BUG_ON(!__builtin_constant_p(addr) || addr != 0);
+>  	__asm__ __volatile__(
+> -		".word ((0x6498000) | (0 << 10) | (0 << 5) | %0)\n\t"
+> +		"invtlb %0, $zero, $zero\n\t"
+>  		:
+>  		: "i"(op)
+> -		:
+> +		: "memory"
+>  		);
+>  }
+>  
 
-All warnings (new ones prefixed by >>):
-
->> fs/freevxfs/vxfs_olt.o: warning: objtool: .text: unexpected end of section
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
