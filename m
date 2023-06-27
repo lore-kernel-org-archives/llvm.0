@@ -1,88 +1,84 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C685F4A27
-	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 19:53:16 +0000 (UTC)
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-40079620a83so67971cf.0
-        for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 12:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687895595; x=1690487595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZLuI5nD00PYdmR0TV738RD1rmcrLwafP6/VBiaRjU1Q=;
-        b=cSzqkm1d1b4AFhkJhViS8sDaJIf+PxUmJXSE1RGhTP6iCCCv38N0BIynlZA09gF4vP
-         CpD6cB948INT3shzg+B7IOADAv1mqcb/d284GyeFR7u9Nxq4fDQ/N55DBiaX1FAvlzfk
-         Diqjm5prhKaUtRZovQzs1wF6v5Q6+/PTGp2bJ1qMeOcIgAPHCQA7qRmQdIafxnNqmWqw
-         MmjY3XWZjlu7Udq8ZL4PTQmd0SnSMlK0whx7TLERo3Mx3XYKbbGU17QRSaLVpQvt3Swx
-         Vpc3OrS2B1C1fo8P7o8jU3KS9Lj2Cj+HHmHBerMNwmv6JLhJCO1FQ9ZNhdOIV5ceoHUs
-         sJ8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687895595; x=1690487595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZLuI5nD00PYdmR0TV738RD1rmcrLwafP6/VBiaRjU1Q=;
-        b=EHo1iulGI2hINvgCm+1KlEUl6bQsonoelZIRpiOozaJof/43CDmuOdmfUhX5n3Hf3G
-         EfaV/NBExNt1RwR8mKgcs6yjXXx8gD4dsuddtiaqnJEanjPCpDbYggu8sJDiQ9EBn3vj
-         DxAAgyu/6KMtoDLJyIbN4xEnR5fxn9jNvBkZdavSROmlC/AoxkQ/8y+SUhSg0fQryqnN
-         0AKrHmd1KvzRaSinp15/0D40cOobX98gbeoMPBl7ZUg/QfKTxN7SQ6Mf7u+O6GNdHL0E
-         IRPmz4Iqf1StGakZ9TEG71ArYrqSpdhiUxnHlmvF1TUF3mjiTwY2TE5W5FAODn6uDF9m
-         4Wpg==
-X-Gm-Message-State: AC+VfDxL5AtwUXt7NxbTHF20dfbwEUcd6qUl+H7ALs0d7WTrpiE0gaL1
-	Qks0cmdlP/SglS1gn+NVXXBRYvm3ILa6vpycba7dJw==
-X-Google-Smtp-Source: ACHHUZ4WywyCYGtPMuvdFcpW2dqCRu0tWKd63P8E6CytwoFeUoTgkNgf73pWryoHaPsc+KPEWJlGKZA+hMjAqZ0nE+U=
-X-Received: by 2002:a05:622a:285:b0:3f8:175a:4970 with SMTP id
- z5-20020a05622a028500b003f8175a4970mr37184qtw.18.1687895595463; Tue, 27 Jun
- 2023 12:53:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57501306E
+	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 20:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687896068;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bBAtSUY7GgzhStCKHRFtNnHCuw7oxfqunLAbM678HR0=;
+	b=Wg+BPZLQ7n8EysDM1OvR4wpQqeN52VUSnu4un0FwpbZ/jr4dqm3KvU82EVyCleKooIIiD7
+	jXqeR/WzFEKtJCrFgw2HRLyYhTaMibJAJx61Z4lHzDXR7tFu23/WCDOMM1ffca6wJQ6FVM
+	X43d3pR2+saUcOWS7iZGVE6ylwfn+kA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-QTImyjbqPEa8YZxJVIWRrA-1; Tue, 27 Jun 2023 16:01:04 -0400
+X-MC-Unique: QTImyjbqPEa8YZxJVIWRrA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30A9A8631DB
+	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 20:01:04 +0000 (UTC)
+Received: from [172.64.9.13] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1CE53111F3B0;
+	Tue, 27 Jun 2023 20:01:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, dedbf31a)
+Date: Tue, 27 Jun 2023 20:01:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230624002708.1907962-1-maskray@google.com> <ff7c875a-8893-9b7d-e2fa-200f1601e666@meta.com>
- <CAM9d7cjyKmKk+z1z8qatjaC7xwwJa_PFE0DJzJ=_mFjS6taz_A@mail.gmail.com>
-In-Reply-To: <CAM9d7cjyKmKk+z1z8qatjaC7xwwJa_PFE0DJzJ=_mFjS6taz_A@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Tue, 27 Jun 2023 12:53:04 -0700
-Message-ID: <CAFP8O3L_fGJWAcNEhFGBZF4mRi6ObOyupto5o4z80Zaa3x7PDw@mail.gmail.com>
-Subject: Re: [PATCH] perf: Replace deprecated -target with --target= for Clang
-To: Namhyung Kim <namhyung@gmail.com>
-Cc: Yonghong Song <yhs@meta.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <77962.123062716010402245@us-mta-253.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 27, 2023 at 12:29=E2=80=AFPM Namhyung Kim <namhyung@gmail.com> =
-wrote:
->
-> Hi Fangui and Yonghong,
->
-> On Sun, Jun 25, 2023 at 11:25=E2=80=AFAM Yonghong Song <yhs@meta.com> wro=
-te:
-> >
-> >
-> >
-> > On 6/23/23 5:27 PM, Fangrui Song wrote:
-> > > -target has been deprecated since Clang 3.4 in 2013. Use the preferre=
-d
-> > > --target=3Dbpf form instead. This matches how we use --target=3D in
-> > > scripts/Makefile.clang.
-> > >
-> > > Link: https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de=
-0a68135afc7f95def6277
-> > > Signed-off-by: Fangrui Song <maskray@google.com>
-> >
-> > Acked-by: Yonghong Song <yhs@fb.com>
->
-> After 10 years of deprecation, time to change. :)
->
-> Applied to perf-tools-next, thanks!
+Hi, we tested your kernel and here are the results:
 
-Thank you!
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+Kernel information:
+    Commit message: Merge tag 'linux-kselftest-next-6.5-rc1' of git://git.k=
+ernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/93847
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36637=
+5
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
