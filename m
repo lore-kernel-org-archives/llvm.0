@@ -1,73 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3831E13072;
-	Tue, 27 Jun 2023 16:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA8FC433C0;
-	Tue, 27 Jun 2023 16:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687883536;
-	bh=p3EvKGU59+hD5m9qSyESw/ZXbFaiyZSKzEhNI6ZWGL8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gWLGnVhWDBHvyqAfkgUtlAd3ilHkpkaHbBFmRiVOjFf3qmweZDmdzxz6NYrfyRdhh
-	 1gpGzcqDNeWx0ulFx+9eDzml0CN7Bs0imCY52jKXfeD9lJvyjUXnphHkWR/41PLKmJ
-	 Mr3+DjDcM9varbMfJmFJgUk/z7dMC/Wqs5Fs04h7UJhP+4+L8uzxOCw5OO66V98u3H
-	 mPXSfnZECFE1/rpHOkTFcN8MFYqG7B1OQTayVz3hM9lrp6hGn2rnEgxTfOjspQb4XG
-	 56bWfIDMAWbtrsfGwwsAltwW6CYb8UfFhTQ8CsfvsRPAoozWh7J7EOFPFPO11rLdIQ
-	 1dXWqFuaVH5aw==
-Date: Tue, 27 Jun 2023 09:32:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: WANG Xuerui <kernel@xen0n.name>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Rui <wangrui@loongson.cn>,
-	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH 0/2] Fix cross-compilation issues with Clang
-Message-ID: <20230627163214.GA665894@dev-arch.thelio-3990X>
-References: <20230627130122.1491765-1-kernel@xen0n.name>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249CF1306E
+	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 19:29:49 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bfee679b7efso4813714276.0
+        for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 12:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687894189; x=1690486189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XWTyrHWo3DH4WeJQJV3ZkbmX57NNeA9KlEEZWcqodA4=;
+        b=kmfeeAkPPfIIrgdhOd0Wz4grrEpQXcJmqHZ9HzQ7fuysvUZaCgExi22n1Bd0FYEXa2
+         TjrE9q5kPQe+asD1MQsO/KQw9jNjLqwHALeKqPUWj3pQmhn7/nSkIGlqf3z/X61xjh/R
+         myalWcsWU5YNZyIHwdJgQSDQVhJoGUC/LQINYA3cW8I1OueqF48HhicinqWQyRKHq2Yc
+         9Wj0GmeNw10ae8KihoCV4p3gfxAoiPGK94CwRt0+F9xfmGWLsi9wv/evVGUy8lhHyUv0
+         1yQA4cZ+v37F/eLCdaqLgyGyLvqzjd6JdzNw9iBMXhQcf8D62KtWLIQNh1mswSGQ/KSZ
+         Znkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687894189; x=1690486189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XWTyrHWo3DH4WeJQJV3ZkbmX57NNeA9KlEEZWcqodA4=;
+        b=A7bz6UfWoon1MBzIELgBlW60WhBP0Eu6T8h084/D2UWbhbaNWgcXHI+xVBmwFvCJOA
+         LxUq0+OkGNvSuLevb4rjw6ItNpCgFETM2S7QQ8tPthHso6uiLdBJIWtGadrrDj/6PHUd
+         LXrUZA/tqaae+fil1eofgxgkCE+JuIFuoNXxJpUlAyIBEvQsDGbbVEgAuzD0qPvNxpT8
+         p8OUwjwiYQXglvEuP3/Dv4WZsRBBwbcNBaElnwbDnIKr07HXS9AEF3MSnlMAbVc4s6x1
+         xdhrIR2IJSTdgtrzCpaRyLl1CSRUgN9aGoQJcy9VV2v8hpKpIwgSRMUJN9KTBRRRfWSh
+         0BCg==
+X-Gm-Message-State: AC+VfDzvXVMaNc1vFlEJzQK1prPOcmsrlLf1zWyrbhhvorpWghYyfecg
+	obWg7QqE/ZgEiDoYC0GrR+26GlZvPFS2/g53d/Y=
+X-Google-Smtp-Source: ACHHUZ56nLE7/aI1LmL+DMoeX705IRHIayduaPNCBJtfc5MDE2Q8Y9FjW+iOMmg2yR7Tp6iZIqy4yeFOLbNspBtvAXk=
+X-Received: by 2002:a25:6fc6:0:b0:c24:dea:a5e1 with SMTP id
+ k189-20020a256fc6000000b00c240deaa5e1mr6059171ybc.3.1687894188822; Tue, 27
+ Jun 2023 12:29:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627130122.1491765-1-kernel@xen0n.name>
+References: <20230624002708.1907962-1-maskray@google.com> <ff7c875a-8893-9b7d-e2fa-200f1601e666@meta.com>
+In-Reply-To: <ff7c875a-8893-9b7d-e2fa-200f1601e666@meta.com>
+From: Namhyung Kim <namhyung@gmail.com>
+Date: Tue, 27 Jun 2023 12:29:37 -0700
+Message-ID: <CAM9d7cjyKmKk+z1z8qatjaC7xwwJa_PFE0DJzJ=_mFjS6taz_A@mail.gmail.com>
+Subject: Re: [PATCH] perf: Replace deprecated -target with --target= for Clang
+To: Yonghong Song <yhs@meta.com>
+Cc: Fangrui Song <maskray@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 27, 2023 at 09:01:20PM +0800, WANG Xuerui wrote:
-> From: WANG Xuerui <git@xen0n.name>
-> 
-> Hi,
-> 
-> Just some quick fixes to the recently accepted Clang patches, thanks to
-> Nathan's followup testing. (I test-compiled natively so didn't notice
+Hi Fangui and Yonghong,
 
-It is good to hear that everything works natively as well :)
+On Sun, Jun 25, 2023 at 11:25=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
+:
+>
+>
+>
+> On 6/23/23 5:27 PM, Fangrui Song wrote:
+> > -target has been deprecated since Clang 3.4 in 2013. Use the preferred
+> > --target=3Dbpf form instead. This matches how we use --target=3D in
+> > scripts/Makefile.clang.
+> >
+> > Link: https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a=
+68135afc7f95def6277
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-> that cross-compilation was broken, and by chance the LLVM snapshot I
-> used didn't contain the breaking commit either.)
+After 10 years of deprecation, time to change. :)
 
-And we can already see this effort making the compiler better! The
-problematic LLVM patch is only a week old so we were able to catch it
-before it made it into a released version. Thanks again for the work you
-have done getting this working so far.
-
-Cheers,
-Nathan
-
-> 
-> With an additional LLVM patch https://reviews.llvm.org/D153865 the Clang
-> builds should now get fixed.
-> 
-> WANG Xuerui (2):
->   LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
->   LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
-> 
->  arch/loongarch/Makefile      | 2 +-
->  arch/loongarch/vdso/Makefile | 5 +----
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> -- 
-> 2.40.0
-> 
+Applied to perf-tools-next, thanks!
