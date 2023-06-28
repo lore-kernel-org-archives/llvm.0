@@ -1,84 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390B8BE5A
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 02:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687919430;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=da6LkPfSYF+kQcOG0jWHfRuYO/QyhVMGu/TNChTmAYc=;
-	b=Jd7ahen3bhhBJIGnFAqJNMdMpd8GVQh7ax49YzYsoh7dY460qHw88W/YCtKXd2wKkvDBCr
-	dbUh+dCcMeVOU8TcdfsqYbrf8HV3bARguoZLODcyqlCIPP7Q4rxEzkqGxnV3/z8sfR0xmd
-	D2tXBIsFNI7RcSr0JPnIZzGAlMRjqSo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-195-SJdF99LXPtm7vnpYz7uaRw-1; Tue, 27 Jun 2023 22:30:27 -0400
-X-MC-Unique: SJdF99LXPtm7vnpYz7uaRw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A22A101A54E
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 02:30:27 +0000 (UTC)
-Received: from [172.64.9.13] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9EE4BF5CD0;
-	Wed, 28 Jun 2023 02:30:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 98be618a)
-Date: Wed, 28 Jun 2023 02:30:06 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61624C98;
+	Wed, 28 Jun 2023 04:22:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5495DC433CB;
+	Wed, 28 Jun 2023 04:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687926150;
+	bh=E3cMC1OQGi1J1pe3NYVGtGoJHPH7rhJK8+ImhoRtZnM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=blRrkp5fGfDYZjME7oxp79y1t4UBgdiSTArjFD9e0VObw8M2NnRSWAVZ07eqnO6Zb
+	 BWNDzpydl1KBnMBI7oxdWEb3kIx6Uajkrdhe7n7YYiYrmpFrcXwDaAVEJfUYZFhkza
+	 GAhshZngBARHXJvRCCNUvbAeVr27B8dfQwdWCzIhBIkhMoXXRKotWhfDBq1ZXvkv1R
+	 R8656hY7K9DcrLOglckLAhRS+8tmxUv1xoNKnVAm4xngmm30VSfH7IFHfp0XDK3AV1
+	 QzgSFflZno0YbV7f4aEJ7mia9DtOUsdXRpUq0lz4NFh9zHICVq7ifRdhSJJh8O6hW8
+	 BcnOEaGDX8IQg==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso4671152a12.1;
+        Tue, 27 Jun 2023 21:22:30 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyi3wPf8CW3nBqrWMsn3VJ1bfYT8uwFESULbk/Kgq9ay18UVyFQ
+	ccLpK5IfCLivjr0NiWkIpB1Dh2bOU7M1ZRcNpLk=
+X-Google-Smtp-Source: ACHHUZ4uzjpla0PpOSz7jN5NaYu5agLcovOE+HYx95odgKreDQRpg1KAvz2GEMXy5EMzysJilLMiKt2x2E5aG/OwbKs=
+X-Received: by 2002:a05:6402:12d3:b0:51d:988d:5ed8 with SMTP id
+ k19-20020a05640212d300b0051d988d5ed8mr5576748edx.29.1687926148447; Tue, 27
+ Jun 2023 21:22:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <04477.123062722302700409@us-mta-195.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230627130122.1491765-1-kernel@xen0n.name> <20230627130122.1491765-2-kernel@xen0n.name>
+ <20230627162456.GA223742@dev-arch.thelio-3990X>
+In-Reply-To: <20230627162456.GA223742@dev-arch.thelio-3990X>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 28 Jun 2023 12:22:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5P1+hToeNFO2Np5v2EorPK4B9Fmh5U4n+aHRDsaOnYcw@mail.gmail.com>
+Message-ID: <CAAhV-H5P1+hToeNFO2Np5v2EorPK4B9Fmh5U4n+aHRDsaOnYcw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] LoongArch: vDSO: Use CLANG_FLAGS instead of filtering
+ out '--target='
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, WANG Rui <wangrui@loongson.cn>, 
+	Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Queued for loongarch-next, thanks.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Huacai
 
-
-Kernel information:
-    Commit message: Merge tag 'Smack-for-6.5' of https://github.com/cschauf=
-ler/smack-next
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/93891
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36654=
-0
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
+On Wed, Jun 28, 2023 at 12:24=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> On Tue, Jun 27, 2023 at 09:01:21PM +0800, WANG Xuerui wrote:
+> > From: WANG Xuerui <git@xen0n.name>
+> >
+> > This is a port of commit 76d7fff22be3e ("MIPS: VDSO: Use CLANG_FLAGS
+> > instead of filtering out '--target=3D'") to arch/loongarch, for fixing
+> > cross-compilation with Clang.
+> >
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1787#issuecomment=
+-1608306002
+> > Signed-off-by: WANG Xuerui <git@xen0n.name>
+>
+> Thanks for the patch!
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >  arch/loongarch/vdso/Makefile | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> >
+> > diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefil=
 e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> > index 3f9df4d9930f..a50308b6fc25 100644
+> > --- a/arch/loongarch/vdso/Makefile
+> > +++ b/arch/loongarch/vdso/Makefile
+> > @@ -12,12 +12,9 @@ ccflags-vdso :=3D \
+> >       $(filter -E%,$(KBUILD_CFLAGS)) \
+> >       $(filter -march=3D%,$(KBUILD_CFLAGS)) \
+> >       $(filter -m%-float,$(KBUILD_CFLAGS)) \
+> > +     $(CLANG_FLAGS) \
+> >       -D__VDSO__
+> >
+> > -ifeq ($(cc-name),clang)
+> > -ccflags-vdso +=3D $(filter --target=3D%,$(KBUILD_CFLAGS))
+> > -endif
+> > -
+> >  cflags-vdso :=3D $(ccflags-vdso) \
+> >       -isystem $(shell $(CC) -print-file-name=3Dinclude) \
+> >       $(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+> > --
+> > 2.40.0
+> >
