@@ -1,198 +1,107 @@
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2085.outbound.protection.outlook.com [40.107.8.85])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1499C7E2;
-	Wed, 28 Jun 2023 01:33:43 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oEaD0IzYMGq6D6fHQHdw29A19hIW0KH5XAuXEdxCMF2PvaBtdJKSEdu1VlWHEUeRlTSf+3jMnOyIt6BNbj79OP86alc/Mm3Srr0eAiAsv812HRJaIKTaNuUttm3cSFT2IMjCqMPaBfTsC1yMHQhsCTViafcUUMlGW5tKq2lP0VpVAxSZMqFKpHYqhz2IsK4R7OZZNaAzFe0NRAzy0mlhexj3WmxlpAmjdNtnN7Y8izc/J6DdNqgx5+NfL4trKjcpBH7H//XqvkjPYm3jcnqSalEWbETK3peJvv9BlMQJRxWn2ejRhkQYa6/8tYKnGR97fY8d0jBc9Qawj78c3ImkkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GuIv/V+W21r2uXGIE1iJSAXD0RrZMHPZv0SySYXPsuA=;
- b=hapxDj0KFW1L9QmpEBMoGsr3XpuwFphLIMEjV3PWKhzYL+n8q3l/War3R6EdO/nL3vmCQ5WRWyPIHrMXs9QEr9SpQDvsCOYT5HuQ518fq82patme3112ivPibOt6mHFVkcTZZj3sYI98HlBZwUqusL0mmGi5GMGLH/WZm9xlOEd8FLDnbufO07E1gh5by1pu/DZ46MzAOv3A1Z1Ih/47KhggEkm4BI76MhoYMhqaGcpI85CjAwh3CFAT0dj+n1Ogs546AiIU6Nz0GHL7va2fShULuHsfjnbRA4Azi3xktr1NfqudWJg5UiOu9vNMUCJ07Ofe+FaCveQjudSs0pJLUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GuIv/V+W21r2uXGIE1iJSAXD0RrZMHPZv0SySYXPsuA=;
- b=GKKIX/W/b2O1udP+gQQnGtQqpQzRmjbEu/mAT6WSMcuphSg1mKSyWQ5+AHIScZCin4sB4r6mY2BkO3L6gtTTnbF8y/aiJtdiRevus7xR3GLQ4+nfrZhEwm+Cx/JI4wPqhBzkGwtnfQ8b0WaejpU+bJsv4KUod/GvpUsK8rjqS80=
-Received: from PAXPR04MB8304.eurprd04.prod.outlook.com (2603:10a6:102:1bc::10)
- by DB9PR04MB9891.eurprd04.prod.outlook.com (2603:10a6:10:4c3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
- 2023 01:33:40 +0000
-Received: from PAXPR04MB8304.eurprd04.prod.outlook.com
- ([fe80::afa2:7d30:d400:646]) by PAXPR04MB8304.eurprd04.prod.outlook.com
- ([fe80::afa2:7d30:d400:646%4]) with mapi id 15.20.6521.026; Wed, 28 Jun 2023
- 01:33:40 +0000
-From: Zhipeng Wang <zhipeng.wang_1@nxp.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>, kernel test robot <lkp@intel.com>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, Linux Memory
- Management List <linux-mm@kvack.org>
-Subject: RE: [EXT] Re: [linux-next:master 5324/12162]
- drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
- 'allowlist'
-Thread-Topic: [EXT] Re: [linux-next:master 5324/12162]
- drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
- 'allowlist'
-Thread-Index: AQHZp/r6SO1bSbTk1US8u/cgJNW4sK+fcIiA
-Date: Wed, 28 Jun 2023 01:33:40 +0000
-Message-ID:
- <PAXPR04MB8304F58EE8AE785A8B823C09EB24A@PAXPR04MB8304.eurprd04.prod.outlook.com>
-References: <202306250025.savpMM8L-lkp@intel.com>
- <20230626065345.2i562lyf23fantlm@vireshk-i7>
-In-Reply-To: <20230626065345.2i562lyf23fantlm@vireshk-i7>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8304:EE_|DB9PR04MB9891:EE_
-x-ms-office365-filtering-correlation-id: 945a7f49-ad8d-4641-3aab-08db7777b3c9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- LVdMOGSXim2TMiaapG8+013KyyPZVoB6/BnxUS6jM7XAvHdWU23WztCeoRE09ReC3NIakbUKiugxk2siloPyvqEYTLhfHXCP1ZvuO4aAqXpROcNFa8FAdYShXdCfQlVzTe4evweg/iROqGCDqOPS3xBIi43Jg3TrsK5BnwfGheGrPYhV/t3WliTjFGFZZVVmrinoC6s0PG5wtRNlQrsCsTHaYSCHBA/pk0CQo/r3LVFURXWaBRbsMTyELZBML0bdbDgWEDhTMm5p9WVjpppuvjcDNWteEne8E87xErdUwDfsCkqx1FKx/ose+W7aoYjX31iWORfE1SpdgA74RjPGWl/g0WgLainUUDILBK5QKm7eHwsSzVHWz38jYtRR8QE59LTIlQMYgFl7Q4dehV1wpwS8TUV4zUP/HEEXTn/GmRSJc8CHJIDVyVReGUX2u+ketBSZtb0Mc7/8Vbs0cYZM+/Soeyu0zfulG2+NRtQRZZ6M6eEUOgODqunppPt6hU2rrAPrq4T20ZZrfolk0uJQcPVJEOXnk6J/L3rl85uGeZ8TDA6Bu4i7to8qq5I6OaTvTd7EHtmziztS1Z6m1ir7QNJ8K+y+7LrLZJ92agcG1fsDJ7/aKVYnqgeUm2rY/8uE
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8304.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199021)(26005)(86362001)(41300700001)(966005)(9686003)(7696005)(71200400001)(45080400002)(54906003)(110136005)(83380400001)(478600001)(186003)(76116006)(6506007)(2906002)(5660300002)(52536014)(33656002)(66556008)(122000001)(66446008)(66946007)(66476007)(38100700002)(55016003)(53546011)(8936002)(8676002)(316002)(4326008)(64756008)(38070700005)(554374003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?gb2312?B?aDl2TGtUTzYvRFY1RUVoWWFGbFBieHJQa05pQ2M1VHFQZ0p3U09BcTJFRFdv?=
- =?gb2312?B?aDltRVFteTFoM3JEZ0cxZVZkai9ZSUN4WEhEWnNtblgrR00ydWgxQ1Vxd0tD?=
- =?gb2312?B?YmhmdmJIODB2bVNZNGw0cUxUdUdCa2NnL1VKK0NCSUxpT1BWUkJxZnRKWWVY?=
- =?gb2312?B?T3RvTFdvbjBlYmtuU0pra2NyNDc0MWpZdm1tU0EzeEd6UVEzQWI5eDFpZXNw?=
- =?gb2312?B?VC8wbm13akx2K1BkclYvS2RVS05meUpGSTVDa2ZEV1V5L0x1TVJDTGVWcWIv?=
- =?gb2312?B?QVZuM1F5cUdZUWpGYXFqQVRMdjVpZjl2ZmJWREZ0TXhkUHBpazlrNW1uNndz?=
- =?gb2312?B?c0lQU3pUaXM5RmFQVkx2MXZuRkdKZlFaZ0luNkpSUmpPOGd5NVprRGcrOTVN?=
- =?gb2312?B?NDlWTXBXYXhrTGFjT2U5OEpGWExHN0FtVFo5aUVyNXVhbmRvT290WlMwWDlH?=
- =?gb2312?B?V1ZGZzJQWlE1bjZOVzErSzNJbXh5N2FIaU9STHpFT1o0Zk5XK0tQYVNkZDd2?=
- =?gb2312?B?T05CdDA0MGJBSjdXaDZQSjhyMjcvcjBpM1dvMFVobzBNQjNyWW1xQUZ6OFFJ?=
- =?gb2312?B?TWNLV3ZoS2ptUnk4RnFTQU1pMVJIUk5EZWtqZ3VYWjA0WnRRQnBHaG9FUlh4?=
- =?gb2312?B?ZDVqNGRNUDA3RlI1UUZNMkF4ZU9oRlpaaC9WSm5ObW1tUWZiaCtyRnUrZmkx?=
- =?gb2312?B?TmpaMXBxMzQvemhCenBXT3hiaEU5Y3B0aVRVaDI0QmtKWlh1UzMvTUllU0xB?=
- =?gb2312?B?L3IzZlY5QlBTd2VUMW1QVlpudjlhYnVVZGdYejUybnRxRytWSEN2cVNSUkhD?=
- =?gb2312?B?N3BvZ1RIUHlNMUs3akxUazFKaFhOeW16a04yOUJkc0RabmE4dW5NVGRHeCtL?=
- =?gb2312?B?eUZCTDloNEdUaUtBbUpCWm9yeStwN3pYbEplR2ZsNHdJcENMS2hvNkQ1QWVz?=
- =?gb2312?B?RG1PTXFqeHV1SE5tRWRzMXEvdnNQR2hzUWxRNFRLK0NDYjJWSTNBZ1IxVmp4?=
- =?gb2312?B?ZjZ4UFNBcDhqbzZmVkhvU2xzQXBLVjd6Z0dSVVBHZXlUZDFWa0V2OWEzZG5a?=
- =?gb2312?B?aCtIbjdyWE1ieFcxSWp4bzhYR20waHRDMDl0YkEraTZwVVFNd2RjdndWWkZL?=
- =?gb2312?B?N001Mmpnc1g4b2ZSb2FRRmR6dGhCNHJwdlJTbVZQMStUVkVweVltOVhZRU9K?=
- =?gb2312?B?OFNTb0NSQnptcXVSQStsYVRKL1oyV3JhVzIrRFZ2YlpPQ3UxVTBlaDFOZjJ1?=
- =?gb2312?B?MnhKQkRUbzFUSWFTY3JHR1REcDA2Mmo4V0JoQ2RKN2dvU1FHQXVmbDh4SzNW?=
- =?gb2312?B?QVBZRUVxa3dxcW5TVHlJcVpJODA5NjFYajRjTkcydGp6cUVyVXM1NEt4azRn?=
- =?gb2312?B?UEFTRitpS05pU3Z3dVlsdmNWMndXS25YUWZ0cHFWWjYwbWF0S2RSZFh6TG1K?=
- =?gb2312?B?SjBBZVBGRktqN09CWURsRDRCZm5LQldhZXo5alRNbU40MzhZazhVeGhqRS9N?=
- =?gb2312?B?Um1kQ2RMR2tLYmVpSlpFL2VtWlMwaE9YUndUTDVWR1NSUjBCRE9sdVpzVHdy?=
- =?gb2312?B?bUZkbWlTUnVmZEFkVFhEV2UwRU55SDExVTJJdFFwVWNNbWpsM1NZeUVSTFQy?=
- =?gb2312?B?c1hOdEtQKzVBTkRVazBnVlVNRERuSXV3SVBxaXgwcFZjSlFndEdhUGFZY2s4?=
- =?gb2312?B?dko1SkNoQ2xXWFM1dFJMeW1nNzRudnJwR201M2Z6RllsTzZhRVAzei9qbm9R?=
- =?gb2312?B?L080TDNDdWtkTTFEWk10NE13cUxqeU1zbDVDSUZrWE1Ydlo1T05lTWtaR1Fj?=
- =?gb2312?B?djVnYXpHeXhndkVaaitDenJOOHc5L0hyWG42azdGR2YyVFRGYUtCQkt6bXlZ?=
- =?gb2312?B?TFU5SWxkODlNa3lNVG56WVN3QklnRHEyQzloK09FdzZnaHpLeWFUbUlnYzls?=
- =?gb2312?B?Q2lSOUJQTTY0VFMwWEE3WE4vc2cvMXJqNENCY3l0WktzcmFCRmp2NjRZODNt?=
- =?gb2312?B?R0JCTnZ0SExaUCtTWVNaSEtnVFh0bEs0M1lxVWFVNklVSEd1cE1xUjlvNXEz?=
- =?gb2312?B?bVFqYkJXSmloZXhScFdpZnJqUkFYZzk4VXk5YVVZWmZoTm0wazhuQ0YySmND?=
- =?gb2312?Q?i7WSd2wIUdhgGKAtFwKuNs7d2?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A28215A4;
+	Wed, 28 Jun 2023 02:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687917636; x=1719453636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eAtorlL9hKbOWTYbIFentcep4Cr94YB9cjfXVwCiIj8=;
+  b=H72jGYaRVSMf/RBdFVdgRm33QcUpSW9asBFokfceIL3nb25+3SIFcLue
+   evoGEUSAr+X4i9W6XCmwwCUfqvoQUUdcPea02KWmvEQPCvKgFH1gBGjpV
+   oJWf00Ez2t18CG9N8jF+byxFFTOtcXcwzyZBGHqvfCdM1WxuOfdQrnkdx
+   Ku7VqIPQa1Mq1gAslaCqEPKhcLcw7BFo8xV2NewytjZrvpPkGQwcrPghh
+   bd/VVaFLpe5UUjUoevgDtDlYMXUALl4uDonGPTTtdq/ArDH9lZJYSSuXz
+   YNpca0nk3WPtsi8M5YKZyU3OT4Ou6RNgPp5p+dkjt9T+/+ELFVs0A+Um+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361768852"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="361768852"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694106856"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="694106856"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 19:00:31 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qEKTu-000CSr-2O;
+	Wed, 28 Jun 2023 02:00:30 +0000
+Date: Wed, 28 Jun 2023 10:00:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	virtualization@lists.linux-foundation.org,
+	David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>, Michal Hocko <mhocko@suse.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v1 3/5] mm/memory_hotplug: make
+ offline_and_remove_memory() timeout instead of failing on fatal signals
+Message-ID: <202306280935.dKTWlHFD-lkp@intel.com>
+References: <20230627112220.229240-4-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8304.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 945a7f49-ad8d-4641-3aab-08db7777b3c9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2023 01:33:40.3707
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c1wKPLt0SD0Umf89UXY5SEL5tgMDUFDjVmBZ1dRT0Yi8F5SZb6OoFgOQ4JY3tu23F4D9SDGmSpak6dY8Qm7n5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9891
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627112220.229240-4-david@redhat.com>
 
-SGksDQoNCkknbSBzb3JyeSBmb3IgcmVzcG9uZGluZyBzbyBsYXRlLiBJIGhhdmUgYWxzbyB0cmll
-ZCB0byByZXByb2R1Y2UgdGhpcyBpc3N1ZSBtYW55IHRpbWVzIGFuZCBJIGhhdmUgbm90IHJlcHJv
-ZHVjZWQgaXQuDQoNCg0KQlJzLA0KWmhpcGVuZw0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gRnJvbTogVmlyZXNoIEt1bWFyIDx2aXJlc2gua3VtYXJAbGluYXJvLm9yZz4NCj4g
-U2VudDogMjAyM8TqNtTCMjbI1SAxNDo1NA0KPiBUbzoga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBp
-bnRlbC5jb20+DQo+IENjOiBaaGlwZW5nIFdhbmcgPHpoaXBlbmcud2FuZ18xQG54cC5jb20+OyBs
-bHZtQGxpc3RzLmxpbnV4LmRldjsNCj4gb2Uta2J1aWxkLWFsbEBsaXN0cy5saW51eC5kZXY7IExp
-bnV4IE1lbW9yeSBNYW5hZ2VtZW50IExpc3QNCj4gPGxpbnV4LW1tQGt2YWNrLm9yZz4NCj4gU3Vi
-amVjdDogW0VYVF0gUmU6IFtsaW51eC1uZXh0Om1hc3RlciA1MzI0LzEyMTYyXQ0KPiBkcml2ZXJz
-L2NwdWZyZXEvY3B1ZnJlcS1kdC1wbGF0ZGV2LmM6MTg6MzQ6IHdhcm5pbmc6IHVudXNlZCB2YXJp
-YWJsZQ0KPiAnYWxsb3dsaXN0Jw0KPg0KPiBDYXV0aW9uOiBUaGlzIGlzIGFuIGV4dGVybmFsIGVt
-YWlsLiBQbGVhc2UgdGFrZSBjYXJlIHdoZW4gY2xpY2tpbmcgbGlua3Mgb3INCj4gb3BlbmluZyBh
-dHRhY2htZW50cy4gV2hlbiBpbiBkb3VidCwgcmVwb3J0IHRoZSBtZXNzYWdlIHVzaW5nIHRoZSAn
-UmVwb3J0DQo+IHRoaXMgZW1haWwnIGJ1dHRvbg0KPg0KPg0KPiBPbiAyNS0wNi0yMywgMDA6Mjgs
-IGtlcm5lbCB0ZXN0IHJvYm90IHdyb3RlOg0KPiA+IHRyZWU6DQo+IGh0dHBzOi8vZ2l0Lmtlcm4v
-DQo+IGVsLm9yZyUyRnB1YiUyRnNjbSUyRmxpbnV4JTJGa2VybmVsJTJGZ2l0JTJGbmV4dCUyRmxp
-bnV4LW5leHQuZ2l0JmRhdA0KPiBhPTA1JTdDMDElN0N6aGlwZW5nLndhbmdfMSU0MG54cC5jb20l
-N0NiNTY5NzNhOThjMGE0ZDI4MGIzYjA4ZA0KPiBiNzYxMjE4YzAlN0M2ODZlYTFkM2JjMmI0YzZm
-YTkyY2Q5OWM1YzMwMTYzNSU3QzAlN0MwJTdDNjM4MjMzDQo+IDU5MjM2NDUzMzEyNiU3Q1Vua25v
-d24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNHdMakF3TURBaUxDSg0KPiBRSWpvaVYybHVNeklp
-TENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZzZGF0DQo+IGE9
-bDBXM0RGU3FDemZxb0FoUWZETmc3OG43b2doS3FHaDZVM2VKaVl1MmU2MCUzRCZyZXNlcnZlZD0w
-DQo+IG1hc3Rlcg0KPiA+IGhlYWQ6ICAgOGQyYmU4NjhiNDJjMDgyOTA1MDljNjA1MTU4NjVmNGRl
-MjRlYTcwNA0KPiA+IGNvbW1pdDogM2IwNjJhMDg2OTg0ZDM1YTNjNmQzYTFjNzg0MWQwYWE3M2Fh
-NzZhZiBbNTMyNC8xMjE2Ml0NCj4gY3B1ZnJlcToNCj4gPiBkdC1wbGF0ZGV2OiBTdXBwb3J0IGJ1
-aWxkaW5nIGFzIG1vZHVsZQ0KPiA+IGNvbmZpZzogaTM4Ni1yYW5kY29uZmlnLXIwMzUtMjAyMzA2
-MjQNCj4gPiAoaHR0cHM6Ly9kb3cvDQo+ID4NCj4gbmxvYWQuMDEub3JnJTJGMGRheS1jaSUyRmFy
-Y2hpdmUlMkYyMDIzMDYyNSUyRjIwMjMwNjI1MDAyNS5zYXZwTU0NCj4gOEwtbGsNCj4gPg0KPiBw
-JTQwaW50ZWwuY29tJTJGY29uZmlnJmRhdGE9MDUlN0MwMSU3Q3poaXBlbmcud2FuZ18xJTQwbnhw
-LmNvbSU3DQo+IENiNTY5Nw0KPiA+DQo+IDNhOThjMGE0ZDI4MGIzYjA4ZGI3NjEyMThjMCU3QzY4
-NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1DQo+ICU3QzAlN0MwDQo+ID4gJTdDNjM4MjMz
-NTkyMzY0NTMzMTI2JTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5SldJam9pTUM0dw0KPiBMakF3
-TURBaUxDSlENCj4gPg0KPiBJam9pVjJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAl
-M0QlN0MzMDAwJTdDJTdDJTdDJnNkYXRhPQ0KPiBsVHFJcg0KPiA+IFNVU01ybDJOdWNpVkhQYk5W
-REwzN1MlMkJEVkxxNFhKRVVtRUNzd0ElM0QmcmVzZXJ2ZWQ9MCkNCj4gPiBjb21waWxlcjogY2xh
-bmcgdmVyc2lvbiAxNS4wLjcNCj4gPiAoaHR0cHM6Ly9naXQvDQo+ID4NCj4gaHViLmNvbSUyRmxs
-dm0lMkZsbHZtLXByb2plY3QuZ2l0JmRhdGE9MDUlN0MwMSU3Q3poaXBlbmcud2FuZ18xJTQwDQo+
-IG54cC4NCj4gPg0KPiBjb20lN0NiNTY5NzNhOThjMGE0ZDI4MGIzYjA4ZGI3NjEyMThjMCU3QzY4
-NmVhMWQzYmMyYjRjNmZhOTJjDQo+IGQ5OWM1YzMwMQ0KPiA+DQo+IDYzNSU3QzAlN0MwJTdDNjM4
-MjMzNTkyMzY0NTMzMTI2JTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGUNCj4geUpXSWpvaU1DNHdM
-DQo+ID4NCj4gakF3TURBaUxDSlFJam9pVjJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZN
-bjAlM0QlN0MzMDAwJTdDJQ0KPiA3QyU3QyYNCj4gPg0KPiBzZGF0YT1yYlIwd05jYTBSZTJBMWJj
-Z25XV1BkMmZuTjlNZmZnUGVRV2k2eEFVWGxVJTNEJnJlc2VydmVkPQ0KPiAwDQo+ID4gOGRmZGNj
-N2I3YmY2NjgzNGE3NjFiZDhkZTQ0NTg0MGVmNjhlNGQxYSkNCj4gPiByZXByb2R1Y2U6DQo+ID4g
-KGh0dHBzOi8vZG93Lw0KPiA+DQo+IG5sb2FkLjAxLm9yZyUyRjBkYXktY2klMkZhcmNoaXZlJTJG
-MjAyMzA2MjUlMkYyMDIzMDYyNTAwMjUuc2F2cE1NDQo+IDhMLWxrDQo+ID4NCj4gcCU0MGludGVs
-LmNvbSUyRnJlcHJvZHVjZSZkYXRhPTA1JTdDMDElN0N6aGlwZW5nLndhbmdfMSU0MG54cC5jbw0K
-PiBtJTdDYjUNCj4gPg0KPiA2OTczYTk4YzBhNGQyODBiM2IwOGRiNzYxMjE4YzAlN0M2ODZlYTFk
-M2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYNCj4gMzUlN0MwJQ0KPiA+DQo+IDdDMCU3QzYzODIzMzU5
-MjM2NDUzMzEyNiU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNA0KPiB3TGpBd01E
-QWlMDQo+ID4NCj4gQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNE
-JTdDMzAwMCU3QyU3QyU3QyZzZA0KPiBhdGE9WncNCj4gPiBHaEV1azBla3RQbW9rQkFjYmxwb1ds
-MTJESTFuUVYyS0J3WHZxJTJGa0FFJTNEJnJlc2VydmVkPTApDQo+ID4NCj4gPiBJZiB5b3UgZml4
-IHRoZSBpc3N1ZSBpbiBhIHNlcGFyYXRlIHBhdGNoL2NvbW1pdCAoaS5lLiBub3QganVzdCBhIG5l
-dw0KPiA+IHZlcnNpb24gb2YgdGhlIHNhbWUgcGF0Y2gvY29tbWl0KSwga2luZGx5IGFkZCBmb2xs
-b3dpbmcgdGFncw0KPiA+IHwgUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50
-ZWwuY29tPg0KPiA+IHwgQ2xvc2VzOg0KPiA+IHwgaHR0cHM6Ly9sby8NCj4gPiB8DQo+IHJlLmtl
-cm5lbC5vcmclMkZvZS1rYnVpbGQtYWxsJTJGMjAyMzA2MjUwMDI1LnNhdnBNTThMLWxrcCU0MGlu
-dGVsLmNvDQo+ID4gfA0KPiBtJTJGJmRhdGE9MDUlN0MwMSU3Q3poaXBlbmcud2FuZ18xJTQwbnhw
-LmNvbSU3Q2I1Njk3M2E5OGMwYTRkDQo+IDI4MGIzYjANCj4gPiB8DQo+IDhkYjc2MTIxOGMwJTdD
-Njg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzODINCj4gMzM1OTIz
-Ng0KPiA+IHwNCj4gNDUzMzEyNiU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNHdM
-akF3TURBaUxDSlFJam9pVg0KPiAybHVNeklpDQo+ID4gfA0KPiBMQ0pCVGlJNklrMWhhV3dpTENK
-WFZDSTZNbjAlM0QlN0MzMDAwJTdDJTdDJTdDJnNkYXRhPTdCZjU3T2FyTw0KPiAlMkJRMVcNCj4g
-PiB8IDE2WEowJTJCSXZLTWlFSVFIajBSRWQwT3p0ejVqSDBVJTNEJnJlc2VydmVkPTANCj4gPg0K
-PiA+IEFsbCB3YXJuaW5ncyAobmV3IG9uZXMgcHJlZml4ZWQgYnkgPj4pOg0KPiA+DQo+ID4gPj4g
-ZHJpdmVycy9jcHVmcmVxL2NwdWZyZXEtZHQtcGxhdGRldi5jOjE4OjM0OiB3YXJuaW5nOiB1bnVz
-ZWQNCj4gPiA+PiB2YXJpYWJsZSAnYWxsb3dsaXN0JyBbLVd1bnVzZWQtY29uc3QtdmFyaWFibGVd
-DQo+ID4gICAgc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQgYWxsb3dsaXN0W10gX19p
-bml0Y29uc3QgPSB7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0K
-PiA+ID4+IGRyaXZlcnMvY3B1ZnJlcS9jcHVmcmVxLWR0LXBsYXRkZXYuYzoxMDU6MzQ6IHdhcm5p
-bmc6IHVudXNlZA0KPiA+ID4+IHZhcmlhYmxlICdibG9ja2xpc3QnIFstV3VudXNlZC1jb25zdC12
-YXJpYWJsZV0NCj4gPiAgICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBibG9ja2xp
-c3RbXSBfX2luaXRjb25zdCA9IHsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBeDQo+ID4gICAgMiB3YXJuaW5ncyBnZW5lcmF0ZWQuDQo+ID4NCj4NCj4gSGksDQo+DQo+
-IERvIHlvdSBoYXZlIGFueSBwYXRjaCB0byBmaXggdGhpcyA/IEkgYW0gbm90IHN1cmUgd2h5IHRo
-ZSBlcnJvciBpcyBjb21pbmcgaGVyZQ0KPiBhbmQgSSBhbSBub3QgYWJsZSB0byByZXByb2R1Y2Ug
-aXQgdG9vLg0KPg0KPiAtLQ0KPiB2aXJlc2gNCg==
+Hi David,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Hildenbrand/mm-memory_hotplug-check-for-fatal-signals-only-in-offline_pages/20230627-192444
+base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
+patch link:    https://lore.kernel.org/r/20230627112220.229240-4-david%40redhat.com
+patch subject: [PATCH v1 3/5] mm/memory_hotplug: make offline_and_remove_memory() timeout instead of failing on fatal signals
+config: x86_64-randconfig-x006-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306280935.dKTWlHFD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/memory_hotplug.c:163:13: warning: unused variable 'mhp_offlining_timer_active' [-Wunused-variable]
+   static bool mhp_offlining_timer_active;
+               ^
+   mm/memory_hotplug.c:166:13: warning: unused function 'mhp_offline_timer_fn' [-Wunused-function]
+   static void mhp_offline_timer_fn(struct timer_list *unused)
+               ^
+   2 warnings generated.
+
+
+vim +/mhp_offlining_timer_active +163 mm/memory_hotplug.c
+
+   154	
+   155	/*
+   156	 * Protected by the device hotplug lock: offline_and_remove_memory()
+   157	 * will activate a timer such that offlining cannot be stuck forever.
+   158	 *
+   159	 * With an active timer, fatal signals will be ignored, because they can be
+   160	 * counter-productive when dying user space triggers device unplug/driver
+   161	 * unloading that ends up offlining+removing device memory.
+   162	 */
+ > 163	static bool mhp_offlining_timer_active;
+   164	static atomic_t mhp_offlining_timer_expired;
+   165	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
