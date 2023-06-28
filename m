@@ -1,130 +1,96 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F7BA923;
-	Wed, 28 Jun 2023 18:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687978014; x=1719514014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1CN8Q/5r/FFePJl54pKbSgDC9Hrr/L46Q/P9NSB4QKY=;
-  b=JnsGEuxsm41JOcT6IMbUff9khQrioRV14M67xbCdM/1pVHbye0WmEke0
-   U8XS28p5NpbevgJ+n3jFBbs/Fcx3y23+3X6A+hqTgxfENUx/Pz8cHgxJ3
-   U/rqjiFlZOGlHA9WD6s40J4mS9dpvPZnP85xTSmryWUrmYriF+P8cun5+
-   a0+IIFA4Gfz3Y7s9NsBgBP25u3a5ZMwjk5QF/WbmcA+l8ZlX6Nz5GSXey
-   2vbB/r5gn6EXn1BJfkUXkgANTrwiKjAk9JgUKd5aMVmwQpM39/doNn6pn
-   XtFOx+154nTAJsU/vbe0dieKT1wC31Lg1QDCbk6Tclaxnh0z4rR6jazB2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="351721416"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="351721416"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 11:46:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="782400315"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="782400315"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2023 11:46:51 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEaBm-000DRJ-2T;
-	Wed, 28 Jun 2023 18:46:50 +0000
-Date: Thu, 29 Jun 2023 02:46:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Helge Deller <deller@gmx.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-4.14.y 4888/4896]
- drivers/video/fbdev/imsttfb.c:1457:3: error: void function 'init_imstt'
- should not return a value
-Message-ID: <202306290259.KMN4oRNH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7BB10940
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 19:49:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEB4C433C8;
+	Wed, 28 Jun 2023 19:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687981744;
+	bh=F1SDy6om5FvcGfWGnomK4jMWzXGYxk5LjwftHO75iUE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=USQqeiQ+R5urRUVwMUdR9enMdsK+s/6hobILgsdWjPqekIX4T7xppnc0GQrmZDn2V
+	 RlyMrO7KvbuP3u/WmnwH+S7VX4UtNlA60bO2n/ysV2/IeozQFh9syFJc01vCQLMn4i
+	 lpL5aUFa8tfTDEUk/8IpYGV6dop9ohyKK9kmioOkVEgVg1mVI8Dr5JnTBcA0r9wuI+
+	 FY5hXuu+7tEFmudiB5/XmwP/t6YGi7UbYbbhr8ZVsoLR4E+Lc4D7cC4RYW0EkEnXtX
+	 f/JaxY5ProNb82XEKFCX4Y3+t7ArxCAVSsDdBJP21BksDxKT8EPS8CratwmkeHwv2n
+	 1GIKIaPXhpShg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+	(envelope-from <mchehab@kernel.org>)
+	id 1qEb9x-001Nj0-23;
+	Wed, 28 Jun 2023 21:49:01 +0200
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Zhou jie <zhoujie@nfschina.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH] media: wl128x: fix a clang warning
+Date: Wed, 28 Jun 2023 21:48:53 +0200
+Message-ID: <6badd27ebfa718d5737f517f18b29a3e0f6e43f8.1687981726.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
-head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
-commit: 8f05ae0e3fdd533865dbd1b0b2632986c0706a50 [4888/4896] fbdev: imsttfb: Release framebuffer and dealloc cmap on error path
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230629/202306290259.KMN4oRNH-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290259.KMN4oRNH-lkp@intel.com/reproduce)
+Clang-16 produces this warning, which is fatal with CONFIG_WERROR:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290259.KMN4oRNH-lkp@intel.com/
+	../drivers/media/radio/wl128x/fmdrv_common.c:1237:19: error: variable 'cmd_cnt' set but not used [-Werror,-Wunused-but-set-variable]
+	        int ret, fw_len, cmd_cnt;
+	                         ^
+	1 error generated.
 
-All errors (new ones prefixed by >>):
+What happens is that cmd_cnt tracks the amount of firmware data packets
+were transfered, which is printed only when debug is used.
 
->> drivers/video/fbdev/imsttfb.c:1457:3: error: void function 'init_imstt' should not return a value [-Wreturn-type]
-                   return -ENODEV;
-                   ^      ~~~~~~~
-   1 error generated.
+Switch to use the firmware count, as the message is all about reporting
+a partial firmware transfer.
 
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/radio/wl128x/fmdrv_common.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-vim +/init_imstt +1457 drivers/video/fbdev/imsttfb.c
-
-  1418	
-  1419		if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> 3) > info->fix.smem_len
-  1420		    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres))) {
-  1421			printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->var.yres, info->var.bits_per_pixel);
-  1422			framebuffer_release(info);
-  1423			return;
-  1424		}
-  1425	
-  1426		sprintf(info->fix.id, "IMS TT (%s)", par->ramdac == IBM ? "IBM" : "TVP");
-  1427		info->fix.mmio_len = 0x1000;
-  1428		info->fix.accel = FB_ACCEL_IMS_TWINTURBO;
-  1429		info->fix.type = FB_TYPE_PACKED_PIXELS;
-  1430		info->fix.visual = info->var.bits_per_pixel == 8 ? FB_VISUAL_PSEUDOCOLOR
-  1431								: FB_VISUAL_DIRECTCOLOR;
-  1432		info->fix.line_length = info->var.xres * (info->var.bits_per_pixel >> 3);
-  1433		info->fix.xpanstep = 8;
-  1434		info->fix.ypanstep = 1;
-  1435		info->fix.ywrapstep = 0;
-  1436	
-  1437		info->var.accel_flags = FB_ACCELF_TEXT;
-  1438	
-  1439	//	if (par->ramdac == IBM)
-  1440	//		imstt_cursor_init(info);
-  1441		if (info->var.green.length == 6)
-  1442			set_565(par);
-  1443		else
-  1444			set_555(par);
-  1445		set_imstt_regvals(info, info->var.bits_per_pixel);
-  1446	
-  1447		info->var.pixclock = 1000000 / getclkMHz(par);
-  1448	
-  1449		info->fbops = &imsttfb_ops;
-  1450		info->flags = FBINFO_DEFAULT |
-  1451	                      FBINFO_HWACCEL_COPYAREA |
-  1452		              FBINFO_HWACCEL_FILLRECT |
-  1453		              FBINFO_HWACCEL_YPAN;
-  1454	
-  1455		if (fb_alloc_cmap(&info->cmap, 0, 0)) {
-  1456			framebuffer_release(info);
-> 1457			return -ENODEV;
-  1458		}
-  1459	
-  1460		if (register_framebuffer(info) < 0) {
-  1461			fb_dealloc_cmap(&info->cmap);
-  1462			framebuffer_release(info);
-  1463			return;
-  1464		}
-  1465	
-  1466		tmp = (read_reg_le32(par->dc_regs, SSTATUS) & 0x0f00) >> 8;
-  1467		fb_info(info, "%s frame buffer; %uMB vram; chip version %u\n",
-  1468			info->fix.id, info->fix.smem_len >> 20, tmp);
-  1469	}
-  1470	
-
+diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
+index cbd49dff6d74..b31b7ed60bbe 100644
+--- a/drivers/media/radio/wl128x/fmdrv_common.c
++++ b/drivers/media/radio/wl128x/fmdrv_common.c
+@@ -1234,9 +1234,8 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 	struct bts_action *action;
+ 	struct bts_action_delay *delay;
+ 	u8 *fw_data;
+-	int ret, fw_len, cmd_cnt;
++	int ret, fw_len;
+ 
+-	cmd_cnt = 0;
+ 	set_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
+ 
+ 	ret = request_firmware(&fw_entry, fw_name,
+@@ -1272,7 +1271,6 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 			if (ret)
+ 				goto rel_fw;
+ 
+-			cmd_cnt++;
+ 			break;
+ 
+ 		case ACTION_DELAY:	/* Delay */
+@@ -1284,7 +1282,7 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 		fw_data += (sizeof(struct bts_action) + (action->size));
+ 		fw_len -= (sizeof(struct bts_action) + (action->size));
+ 	}
+-	fmdbg("Firmware commands(%d) loaded to chip\n", cmd_cnt);
++	fmdbg("Transfered only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
+ rel_fw:
+ 	release_firmware(fw_entry);
+ 	clear_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
