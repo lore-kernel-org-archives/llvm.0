@@ -1,96 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7BB10940
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 19:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEB4C433C8;
-	Wed, 28 Jun 2023 19:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687981744;
-	bh=F1SDy6om5FvcGfWGnomK4jMWzXGYxk5LjwftHO75iUE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=USQqeiQ+R5urRUVwMUdR9enMdsK+s/6hobILgsdWjPqekIX4T7xppnc0GQrmZDn2V
-	 RlyMrO7KvbuP3u/WmnwH+S7VX4UtNlA60bO2n/ysV2/IeozQFh9syFJc01vCQLMn4i
-	 lpL5aUFa8tfTDEUk/8IpYGV6dop9ohyKK9kmioOkVEgVg1mVI8Dr5JnTBcA0r9wuI+
-	 FY5hXuu+7tEFmudiB5/XmwP/t6YGi7UbYbbhr8ZVsoLR4E+Lc4D7cC4RYW0EkEnXtX
-	 f/JaxY5ProNb82XEKFCX4Y3+t7ArxCAVSsDdBJP21BksDxKT8EPS8CratwmkeHwv2n
-	 1GIKIaPXhpShg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.96)
-	(envelope-from <mchehab@kernel.org>)
-	id 1qEb9x-001Nj0-23;
-	Wed, 28 Jun 2023 21:49:01 +0200
-From: Mauro Carvalho Chehab <mchehab@kernel.org>
-To: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Zhou jie <zhoujie@nfschina.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH] media: wl128x: fix a clang warning
-Date: Wed, 28 Jun 2023 21:48:53 +0200
-Message-ID: <6badd27ebfa718d5737f517f18b29a3e0f6e43f8.1687981726.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.41.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC60210944
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 20:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687983608;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5BiGP7ITj+WntmaHNlY1r2NRRZYl++znJ0jEErqT/3w=;
+	b=WzgUnJRuni8RPrtUO/9WlcWYMS+COxsI1hp5CfE+kthPW7edRJhTzkJw7hn0N2GakBLrki
+	EFj61dVjNfDOIssThOLQnM/ab6+jrgp6KL4UklrYgmnjTtudylCA9Mm+8Gh8sUnJn2HASI
+	5jr/w6rwjv2ubd/ifOt0aMpPNfooWZ8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-509-ycYQUiEKO9SyimJGRofdWw-1; Wed, 28 Jun 2023 16:20:06 -0400
+X-MC-Unique: ycYQUiEKO9SyimJGRofdWw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9E5F381BDE3
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 20:20:05 +0000 (UTC)
+Received: from [172.64.9.13] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A68A6C09A07;
+	Wed, 28 Jun 2023 20:20:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, 77b1a7f7)
+Date: Wed, 28 Jun 2023 20:20:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <22341.123062816200600270@us-mta-509.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang-16 produces this warning, which is fatal with CONFIG_WERROR:
+Hi, we tested your kernel and here are the results:
 
-	../drivers/media/radio/wl128x/fmdrv_common.c:1237:19: error: variable 'cmd_cnt' set but not used [-Werror,-Wunused-but-set-variable]
-	        int ret, fw_len, cmd_cnt;
-	                         ^
-	1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-What happens is that cmd_cnt tracks the amount of firmware data packets
-were transfered, which is printed only when debug is used.
 
-Switch to use the firmware count, as the message is all about reporting
-a partial firmware transfer.
+Kernel information:
+    Commit message: Merge tag 'mm-nonmm-stable-2023-06-24-19-23' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
- drivers/media/radio/wl128x/fmdrv_common.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94052
 
-diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-index cbd49dff6d74..b31b7ed60bbe 100644
---- a/drivers/media/radio/wl128x/fmdrv_common.c
-+++ b/drivers/media/radio/wl128x/fmdrv_common.c
-@@ -1234,9 +1234,8 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
- 	struct bts_action *action;
- 	struct bts_action_delay *delay;
- 	u8 *fw_data;
--	int ret, fw_len, cmd_cnt;
-+	int ret, fw_len;
- 
--	cmd_cnt = 0;
- 	set_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
- 
- 	ret = request_firmware(&fw_entry, fw_name,
-@@ -1272,7 +1271,6 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
- 			if (ret)
- 				goto rel_fw;
- 
--			cmd_cnt++;
- 			break;
- 
- 		case ACTION_DELAY:	/* Delay */
-@@ -1284,7 +1282,7 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
- 		fw_data += (sizeof(struct bts_action) + (action->size));
- 		fw_len -= (sizeof(struct bts_action) + (action->size));
- 	}
--	fmdbg("Firmware commands(%d) loaded to chip\n", cmd_cnt);
-+	fmdbg("Transfered only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
- rel_fw:
- 	release_firmware(fw_entry);
- 	clear_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
--- 
-2.41.0
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36704=
+5
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
