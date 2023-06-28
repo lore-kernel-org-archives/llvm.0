@@ -1,107 +1,84 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A28215A4;
-	Wed, 28 Jun 2023 02:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687917636; x=1719453636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eAtorlL9hKbOWTYbIFentcep4Cr94YB9cjfXVwCiIj8=;
-  b=H72jGYaRVSMf/RBdFVdgRm33QcUpSW9asBFokfceIL3nb25+3SIFcLue
-   evoGEUSAr+X4i9W6XCmwwCUfqvoQUUdcPea02KWmvEQPCvKgFH1gBGjpV
-   oJWf00Ez2t18CG9N8jF+byxFFTOtcXcwzyZBGHqvfCdM1WxuOfdQrnkdx
-   Ku7VqIPQa1Mq1gAslaCqEPKhcLcw7BFo8xV2NewytjZrvpPkGQwcrPghh
-   bd/VVaFLpe5UUjUoevgDtDlYMXUALl4uDonGPTTtdq/ArDH9lZJYSSuXz
-   YNpca0nk3WPtsi8M5YKZyU3OT4Ou6RNgPp5p+dkjt9T+/+ELFVs0A+Um+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361768852"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="361768852"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694106856"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="694106856"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 19:00:31 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEKTu-000CSr-2O;
-	Wed, 28 Jun 2023 02:00:30 +0000
-Date: Wed, 28 Jun 2023 10:00:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	virtualization@lists.linux-foundation.org,
-	David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>, Michal Hocko <mhocko@suse.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v1 3/5] mm/memory_hotplug: make
- offline_and_remove_memory() timeout instead of failing on fatal signals
-Message-ID: <202306280935.dKTWlHFD-lkp@intel.com>
-References: <20230627112220.229240-4-david@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390B8BE5A
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 02:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687919430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=da6LkPfSYF+kQcOG0jWHfRuYO/QyhVMGu/TNChTmAYc=;
+	b=Jd7ahen3bhhBJIGnFAqJNMdMpd8GVQh7ax49YzYsoh7dY460qHw88W/YCtKXd2wKkvDBCr
+	dbUh+dCcMeVOU8TcdfsqYbrf8HV3bARguoZLODcyqlCIPP7Q4rxEzkqGxnV3/z8sfR0xmd
+	D2tXBIsFNI7RcSr0JPnIZzGAlMRjqSo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-195-SJdF99LXPtm7vnpYz7uaRw-1; Tue, 27 Jun 2023 22:30:27 -0400
+X-MC-Unique: SJdF99LXPtm7vnpYz7uaRw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A22A101A54E
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 02:30:27 +0000 (UTC)
+Received: from [172.64.9.13] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9EE4BF5CD0;
+	Wed, 28 Jun 2023 02:30:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, 98be618a)
+Date: Wed, 28 Jun 2023 02:30:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627112220.229240-4-david@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <04477.123062722302700409@us-mta-195.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Hildenbrand/mm-memory_hotplug-check-for-fatal-signals-only-in-offline_pages/20230627-192444
-base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
-patch link:    https://lore.kernel.org/r/20230627112220.229240-4-david%40redhat.com
-patch subject: [PATCH v1 3/5] mm/memory_hotplug: make offline_and_remove_memory() timeout instead of failing on fatal signals
-config: x86_64-randconfig-x006-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306280935.dKTWlHFD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/memory_hotplug.c:163:13: warning: unused variable 'mhp_offlining_timer_active' [-Wunused-variable]
-   static bool mhp_offlining_timer_active;
-               ^
-   mm/memory_hotplug.c:166:13: warning: unused function 'mhp_offline_timer_fn' [-Wunused-function]
-   static void mhp_offline_timer_fn(struct timer_list *unused)
-               ^
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/mhp_offlining_timer_active +163 mm/memory_hotplug.c
+Kernel information:
+    Commit message: Merge tag 'Smack-for-6.5' of https://github.com/cschauf=
+ler/smack-next
 
-   154	
-   155	/*
-   156	 * Protected by the device hotplug lock: offline_and_remove_memory()
-   157	 * will activate a timer such that offlining cannot be stuck forever.
-   158	 *
-   159	 * With an active timer, fatal signals will be ignored, because they can be
-   160	 * counter-productive when dying user space triggers device unplug/driver
-   161	 * unloading that ends up offlining+removing device memory.
-   162	 */
- > 163	static bool mhp_offlining_timer_active;
-   164	static atomic_t mhp_offlining_timer_expired;
-   165	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/93891
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36654=
+0
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
