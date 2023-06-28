@@ -1,36 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBF5D52D
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 18:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C82C433C0;
-	Wed, 28 Jun 2023 18:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687976780;
-	bh=5dS/hp0ttb4kLhVLrgEpv9hH1IBgDRlNs5EqvxHGAR0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nf2oa1nwOcm0vc7JNCj8SIS7lrTcwZ8lq/XEN9Kis6Wbd8261hsN26HYgBohT4bBp
-	 595fi07GoTc7w6Zyz1Fn/JCV9NrQt+S3EzjAsZllZJbpFAxc+jELRp1PRb8cu6d7cH
-	 7yePjmudRkPshnFauhGxbgtM0HiMNqYS3z+lJRhIqz0c4uyqyhC2tVtvq4h2glG8bI
-	 Ov3folZmHWZJ68nRLrzj4Q5i9CPqmkDpU6cKCTDNehumCf+R95dl9JUFjuHbFjhe+L
-	 5Zi6HRnsu7ya2B1LZcdVMPOcC1L/jRRq6GMrJYFrBt+gk2nODpkbwc9vLlBjyWc03E
-	 IoW5qUrTCCFyg==
-Date: Wed, 28 Jun 2023 11:26:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
-Message-ID: <20230628182617.GA911656@dev-arch.thelio-3990X>
-References: <20230616144854.3818934-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F7BA923;
+	Wed, 28 Jun 2023 18:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687978014; x=1719514014;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1CN8Q/5r/FFePJl54pKbSgDC9Hrr/L46Q/P9NSB4QKY=;
+  b=JnsGEuxsm41JOcT6IMbUff9khQrioRV14M67xbCdM/1pVHbye0WmEke0
+   U8XS28p5NpbevgJ+n3jFBbs/Fcx3y23+3X6A+hqTgxfENUx/Pz8cHgxJ3
+   U/rqjiFlZOGlHA9WD6s40J4mS9dpvPZnP85xTSmryWUrmYriF+P8cun5+
+   a0+IIFA4Gfz3Y7s9NsBgBP25u3a5ZMwjk5QF/WbmcA+l8ZlX6Nz5GSXey
+   2vbB/r5gn6EXn1BJfkUXkgANTrwiKjAk9JgUKd5aMVmwQpM39/doNn6pn
+   XtFOx+154nTAJsU/vbe0dieKT1wC31Lg1QDCbk6Tclaxnh0z4rR6jazB2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="351721416"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="351721416"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 11:46:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="782400315"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="782400315"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2023 11:46:51 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qEaBm-000DRJ-2T;
+	Wed, 28 Jun 2023 18:46:50 +0000
+Date: Thu, 29 Jun 2023 02:46:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Helge Deller <deller@gmx.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-4.14.y 4888/4896]
+ drivers/video/fbdev/imsttfb.c:1457:3: error: void function 'init_imstt'
+ should not return a value
+Message-ID: <202306290259.KMN4oRNH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,148 +48,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230616144854.3818934-1-arnd@kernel.org>
 
-On Fri, Jun 16, 2023 at 04:48:47PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> In some configurations, gcc decides not to inline the register accessor functions,
-> which in turn leads to lots of temporary hantro_reg structures on the stack that
-> cannot be eliminated because they escape into an uninlined function:
-> 
-> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> 
-> Mark all of these as __always_inline so the compiler is able to completely
-> eliminate the temporary structures instead, which brings the stack usage
-> back down to just the normal local variables.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
-> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
+commit: 8f05ae0e3fdd533865dbd1b0b2632986c0706a50 [4888/4896] fbdev: imsttfb: Release framebuffer and dealloc cmap on error path
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230629/202306290259.KMN4oRNH-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290259.KMN4oRNH-lkp@intel.com/reproduce)
 
-For what it's worth, this patch massively helps with avoiding a warning
-with clang 16.x and older, for presumably a similar reason, since this
-happens with allmodconfig, which turns on a bunch of sanitizers.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306290259.KMN4oRNH-lkp@intel.com/
 
-https://github.com/ClangBuiltLinux/linux/issues/1875
+All errors (new ones prefixed by >>):
 
-Before this change:
+>> drivers/video/fbdev/imsttfb.c:1457:3: error: void function 'init_imstt' should not return a value [-Wreturn-type]
+                   return -ENODEV;
+                   ^      ~~~~~~~
+   1 error generated.
 
-  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (2096) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
-  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
-      ^
-  238/2096 (11.35%) spills, 1858/2096 (88.65%) variables
 
-After this change:
+vim +/init_imstt +1457 drivers/video/fbdev/imsttfb.c
 
-  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (496) exceeds limit (200) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
-  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
-      ^
-  265/496 (53.43%) spills, 231/496 (46.57%) variables
+  1418	
+  1419		if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> 3) > info->fix.smem_len
+  1420		    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres))) {
+  1421			printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->var.yres, info->var.bits_per_pixel);
+  1422			framebuffer_release(info);
+  1423			return;
+  1424		}
+  1425	
+  1426		sprintf(info->fix.id, "IMS TT (%s)", par->ramdac == IBM ? "IBM" : "TVP");
+  1427		info->fix.mmio_len = 0x1000;
+  1428		info->fix.accel = FB_ACCEL_IMS_TWINTURBO;
+  1429		info->fix.type = FB_TYPE_PACKED_PIXELS;
+  1430		info->fix.visual = info->var.bits_per_pixel == 8 ? FB_VISUAL_PSEUDOCOLOR
+  1431								: FB_VISUAL_DIRECTCOLOR;
+  1432		info->fix.line_length = info->var.xres * (info->var.bits_per_pixel >> 3);
+  1433		info->fix.xpanstep = 8;
+  1434		info->fix.ypanstep = 1;
+  1435		info->fix.ywrapstep = 0;
+  1436	
+  1437		info->var.accel_flags = FB_ACCELF_TEXT;
+  1438	
+  1439	//	if (par->ramdac == IBM)
+  1440	//		imstt_cursor_init(info);
+  1441		if (info->var.green.length == 6)
+  1442			set_565(par);
+  1443		else
+  1444			set_555(par);
+  1445		set_imstt_regvals(info, info->var.bits_per_pixel);
+  1446	
+  1447		info->var.pixclock = 1000000 / getclkMHz(par);
+  1448	
+  1449		info->fbops = &imsttfb_ops;
+  1450		info->flags = FBINFO_DEFAULT |
+  1451	                      FBINFO_HWACCEL_COPYAREA |
+  1452		              FBINFO_HWACCEL_FILLRECT |
+  1453		              FBINFO_HWACCEL_YPAN;
+  1454	
+  1455		if (fb_alloc_cmap(&info->cmap, 0, 0)) {
+  1456			framebuffer_release(info);
+> 1457			return -ENODEV;
+  1458		}
+  1459	
+  1460		if (register_framebuffer(info) < 0) {
+  1461			fb_dealloc_cmap(&info->cmap);
+  1462			framebuffer_release(info);
+  1463			return;
+  1464		}
+  1465	
+  1466		tmp = (read_reg_le32(par->dc_regs, SSTATUS) & 0x0f00) >> 8;
+  1467		fb_info(info, "%s frame buffer; %uMB vram; chip version %u\n",
+  1468			info->fix.id, info->fix.smem_len >> 20, tmp);
+  1469	}
+  1470	
 
-If this could be picked up either before the 6.5 media pull goes out or
-at some point during the -rc cycle, that would be great!
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-> index 6523ffb748812..6c5e56ce5b351 100644
-> --- a/drivers/media/platform/verisilicon/hantro.h
-> +++ b/drivers/media/platform/verisilicon/hantro.h
-> @@ -370,26 +370,26 @@ extern int hantro_debug;
->  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
->  
->  /* Structure access helpers. */
-> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
-> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
->  {
->  	return container_of(fh, struct hantro_ctx, fh);
->  }
->  
->  /* Register accessors. */
-> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
-> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
->  				      u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->  	writel_relaxed(val, vpu->enc_base + reg);
->  }
->  
-> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->  	writel(val, vpu->enc_base + reg);
->  }
->  
-> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
-> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->  {
->  	u32 val = readl(vpu->enc_base + reg);
->  
-> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->  	return val;
->  }
->  
-> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
-> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
->  				      u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->  	writel_relaxed(val, vpu->dec_base + reg);
->  }
->  
-> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->  	writel(val, vpu->dec_base + reg);
->  }
->  
-> -static inline void hantro_write_addr(struct hantro_dev *vpu,
-> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
->  				     unsigned long offset,
->  				     dma_addr_t addr)
->  {
->  	vdpu_write(vpu, addr & 0xffffffff, offset);
->  }
->  
-> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
-> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->  {
->  	u32 val = readl(vpu->dec_base + reg);
->  
-> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->  	return val;
->  }
->  
-> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
-> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->  				 const struct hantro_reg *reg,
->  				 u32 val)
->  {
-> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->  	return v;
->  }
->  
-> -static inline void hantro_reg_write(struct hantro_dev *vpu,
-> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
->  				    const struct hantro_reg *reg,
->  				    u32 val)
->  {
->  	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
->  }
->  
-> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
-> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
->  				      const struct hantro_reg *reg,
->  				      u32 val)
->  {
-> -- 
-> 2.39.2
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
