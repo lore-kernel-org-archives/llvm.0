@@ -1,151 +1,186 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD5CD513
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 18:19:44 +0000 (UTC)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SHwYmn020828
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 11:19:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=z0e8QttLPh/Q/9kNelSZTNeMoB4d8XPy6uAeGGRHDJE=;
- b=Sk8OibaWF5PZvTwQEeOU/jmAzItcoR2TAgesKoUjwVBC+85zto95Om++ikJz3cA2/BBK
- nIGDZSWDXULhMZdTIDaqi90Cxvv0uNTKgDCze4dYyKcwCjznKmYJoYLBJuwhnHyzMDLq
- Rq015CyZFnx3lOu1nhhIE9yrgPdpNY0gGGo= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgreh0xr8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 11:19:43 -0700
-Received: from twshared18891.17.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 28 Jun 2023 11:19:42 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 994FE22169B1E; Wed, 28 Jun 2023 11:19:26 -0700 (PDT)
-From: Yonghong Song <yhs@fb.com>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-        Petr Mladek
-	<pmladek@suse.com>, Song Liu <song@kernel.org>,
-        Steven Rostedt
-	<rostedt@goodmis.org>
-CC: Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
-        Leizhen
-	<thunder.leizhen@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global functions
-Date: Wed, 28 Jun 2023 11:19:26 -0700
-Message-ID: <20230628181926.4102448-1-yhs@fb.com>
-X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: sBGkioak1AVTJw7gYa4prUETlvR1iWpT
-X-Proofpoint-ORIG-GUID: sBGkioak1AVTJw7gYa4prUETlvR1iWpT
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBF5D52D
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 18:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C82C433C0;
+	Wed, 28 Jun 2023 18:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687976780;
+	bh=5dS/hp0ttb4kLhVLrgEpv9hH1IBgDRlNs5EqvxHGAR0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nf2oa1nwOcm0vc7JNCj8SIS7lrTcwZ8lq/XEN9Kis6Wbd8261hsN26HYgBohT4bBp
+	 595fi07GoTc7w6Zyz1Fn/JCV9NrQt+S3EzjAsZllZJbpFAxc+jELRp1PRb8cu6d7cH
+	 7yePjmudRkPshnFauhGxbgtM0HiMNqYS3z+lJRhIqz0c4uyqyhC2tVtvq4h2glG8bI
+	 Ov3folZmHWZJ68nRLrzj4Q5i9CPqmkDpU6cKCTDNehumCf+R95dl9JUFjuHbFjhe+L
+	 5Zi6HRnsu7ya2B1LZcdVMPOcC1L/jRRq6GMrJYFrBt+gk2nODpkbwc9vLlBjyWc03E
+	 IoW5qUrTCCFyg==
+Date: Wed, 28 Jun 2023 11:26:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
+Message-ID: <20230628182617.GA911656@dev-arch.thelio-3990X>
+References: <20230616144854.3818934-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_13,2023-06-27_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616144854.3818934-1-arnd@kernel.org>
 
-Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-stripped all function/variable suffixes started with '.' regardless
-of whether those suffixes are generated at LTO mode or not. In fact,
-as far as I know, in LTO mode, when a static function/variable is
-promoted to the global scope, '.llvm.<...>' suffix is added.
+On Fri, Jun 16, 2023 at 04:48:47PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> In some configurations, gcc decides not to inline the register accessor functions,
+> which in turn leads to lots of temporary hantro_reg structures on the stack that
+> cannot be eliminated because they escape into an uninlined function:
+> 
+> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> 
+> Mark all of these as __always_inline so the compiler is able to completely
+> eliminate the temporary structures instead, which brings the stack usage
+> back down to just the normal local variables.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
+> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-The existing mechanism breaks live patch for a LTO kernel even if
-no <symbol>.llvm.<...> symbols are involved. For example, for the following
-kernel symbols:
-  $ grep bpf_verifier_vlog /proc/kallsyms
-  ffffffff81549f60 t bpf_verifier_vlog
-  ffffffff8268b430 d bpf_verifier_vlog._entry
-  ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
-  ffffffff82e12a1f d bpf_verifier_vlog.__already_done
-'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
-'__already_done' are static variables used inside 'bpf_verifier_vlog',
-so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
-Note that the func-level to file-level static function promotion also
-happens without LTO.
+For what it's worth, this patch massively helps with avoiding a warning
+with clang 16.x and older, for presumably a similar reason, since this
+happens with allmodconfig, which turns on a bunch of sanitizers.
 
-Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism=
- will
-return 4 symbols to live patch subsystem which current live patching
-subsystem cannot handle it. With non-LTO kernel, only one symbol
-is returned.
+https://github.com/ClangBuiltLinux/linux/issues/1875
 
-In [1], we have a lengthy discussion, the suggestion is to separate two
-cases:
-  (1). new symbols with suffix which are generated regardless of whether
-       LTO is enabled or not, and
-  (2). new symbols with suffix generated only when LTO is enabled.
+Before this change:
 
-The cleanup_symbol_name() should only remove suffixes for case (2).
-Case (1) should not be changed so it can work uniformly with or without LTO.
+  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (2096) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+      ^
+  238/2096 (11.35%) spills, 1858/2096 (88.65%) variables
 
-This patch removed LTO-only suffix '.llvm.<...>' so live patching and
-tracing should work the same way for non-LTO kernel.
-The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the=
- same
-filtering pattern so both kernel and kallsyms tool have the same
-expectation on the order of symbols.
+After this change:
 
- [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@ke=
-rnel.org/T/#u
+  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (496) exceeds limit (200) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+      ^
+  265/496 (53.43%) spills, 231/496 (46.57%) variables
 
-Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-Reported-by: Song Liu <song@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/kallsyms.c  | 5 ++---
- scripts/kallsyms.c | 6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+If this could be picked up either before the 6.5 media pull goes out or
+at some point during the -rc cycle, that would be great!
 
-Changelogs:
-  v1 -> v2:
-    . add 'Reported-by: Song Liu <song@kernel.org>'
-    . also fix in scripts/kallsyms.c.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 77747391f49b..4874508bb950 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
- 	 * LLVM appends various suffixes for local functions and variables that
- 	 * must be promoted to global scope as part of LTO.  This can break
- 	 * hooking of static functions with kprobes. '.' is not a valid
--	 * character in an identifier in C. Suffixes observed:
-+	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
- 	 * - foo.llvm.[0-9a-f]+
--	 * - foo.[0-9a-f]+
- 	 */
--	res =3D strchr(s, '.');
-+	res =3D strstr(s, ".llvm.");
- 	if (res) {
- 		*res =3D '\0';
- 		return true;
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 0d2db41177b2..13af6d0ff845 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
- 	 * ASCII[_]   =3D 5f
- 	 * ASCII[a-z] =3D 61,7a
- 	 *
--	 * As above, replacing '.' with '\0' does not affect the main sorting,
--	 * but it helps us with subsorting.
-+	 * As above, replacing the first '.' in ".llvm." with '\0' does not
-+	 * affect the main sorting, but it helps us with subsorting.
- 	 */
--	p =3D strchr(s, '.');
-+	p =3D strstr(s, ".llvm.");
- 	if (p)
- 		*p =3D '\0';
- }
---=20
-2.34.1
-
+> ---
+>  drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+> index 6523ffb748812..6c5e56ce5b351 100644
+> --- a/drivers/media/platform/verisilicon/hantro.h
+> +++ b/drivers/media/platform/verisilicon/hantro.h
+> @@ -370,26 +370,26 @@ extern int hantro_debug;
+>  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
+>  
+>  /* Structure access helpers. */
+> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+>  {
+>  	return container_of(fh, struct hantro_ctx, fh);
+>  }
+>  
+>  /* Register accessors. */
+> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
+> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
+>  				      u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel_relaxed(val, vpu->enc_base + reg);
+>  }
+>  
+> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel(val, vpu->enc_base + reg);
+>  }
+>  
+> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>  {
+>  	u32 val = readl(vpu->enc_base + reg);
+>  
+> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>  	return val;
+>  }
+>  
+> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+>  				      u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel_relaxed(val, vpu->dec_base + reg);
+>  }
+>  
+> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel(val, vpu->dec_base + reg);
+>  }
+>  
+> -static inline void hantro_write_addr(struct hantro_dev *vpu,
+> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
+>  				     unsigned long offset,
+>  				     dma_addr_t addr)
+>  {
+>  	vdpu_write(vpu, addr & 0xffffffff, offset);
+>  }
+>  
+> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>  {
+>  	u32 val = readl(vpu->dec_base + reg);
+>  
+> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>  	return val;
+>  }
+>  
+> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>  				 const struct hantro_reg *reg,
+>  				 u32 val)
+>  {
+> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>  	return v;
+>  }
+>  
+> -static inline void hantro_reg_write(struct hantro_dev *vpu,
+> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
+>  				    const struct hantro_reg *reg,
+>  				    u32 val)
+>  {
+>  	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
+>  }
+>  
+> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
+> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
+>  				      const struct hantro_reg *reg,
+>  				      u32 val)
+>  {
+> -- 
+> 2.39.2
+> 
