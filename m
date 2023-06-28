@@ -1,92 +1,196 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A470D52A;
-	Wed, 28 Jun 2023 15:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687966084; x=1719502084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s3pAHWHbgTHI2Pri/uRlZesknz1ogXXp0gk7P8LjtiI=;
-  b=LDY3yvd49iRY+1B1KXs1WM62u3JOZhg9wSyWKFHpmhcmicx1iQ6NnjKR
-   4dEn+5UiMkRsQ28AJqzNBHQl6phoHY4hCWzsezUZ8xHqfAx2As0FoC6t2
-   Udrm1EXM05wWdn83X1mkyKVLDuGzUxHEMAjzIttSqrIK7bQWrloQMWEwK
-   L8sv4eizWmetb7PSf+xbYT1uMoEO6TMWyyvCwKviye+Ojwiqg6plx5AWT
-   xHCzHQYXlki7/ksf4pul3o4nztu1GrmEgfhfIzfoML9hgwEcn8fcp64wR
-   ItRC0blBT2rBDhwNn1nVeVIhj9YWe7xLMRI1qPseszesB1PJ3xJVy0HMz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360731334"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="360731334"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 08:27:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="787081290"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="787081290"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2023 08:27:45 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEX57-000DKf-0H;
-	Wed, 28 Jun 2023 15:27:45 +0000
-Date: Wed, 28 Jun 2023 23:27:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: drivers/thermal/qcom/tsens-v0_1.c:296:31: warning: unused variable
- 'ops_v0_1'
-Message-ID: <202306282315.6mHC7VVw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C724C8E3;
+	Wed, 28 Jun 2023 15:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF122C433C0;
+	Wed, 28 Jun 2023 15:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687966766;
+	bh=kHh+sYBCt/nKBznzRlFaUB0KuqMGCD9lLNqnOwpcU4Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=trR9vzqoI7oumADi+xmhgUwnls6FmHdYHnhdtB6UhMD5V6+VYqGHkZhCqSUggYa2N
+	 YTiNyyXaa4YXXEtILp8J57bAHOtrjvn72gV3kXN8IcYO8i+4H2REw4purf2ywHoK6c
+	 LcHIrTV01NZgarNrdZMSSZ38krekzHYXJYy0Wc5FOGeRU49EIrVTG3yEP+LPp8h9kJ
+	 ccQ90SkqPx4cYJ5VBpWdydBaO+eCYJTkponC5YxP2yBI8fVR7BQsyv4RAQvetUQMHm
+	 Osm9t/xdpa+vlb1ubjuqp3ybqljuFlyqUuR3r1rMsUgQL8x8DXGeZw6cDfH1Vd/HxO
+	 OrVG0EpdGmlAQ==
+Date: Wed, 28 Jun 2023 08:39:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Zhipeng Wang <zhipeng.wang_1@nxp.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	kernel test robot <lkp@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [EXT] Re: [linux-next:master 5324/12162]
+ drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
+ 'allowlist'
+Message-ID: <20230628153923.GA254367@dev-arch.thelio-3990X>
+References: <202306250025.savpMM8L-lkp@intel.com>
+ <20230626065345.2i562lyf23fantlm@vireshk-i7>
+ <PAXPR04MB8304F58EE8AE785A8B823C09EB24A@PAXPR04MB8304.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PAXPR04MB8304F58EE8AE785A8B823C09EB24A@PAXPR04MB8304.eurprd04.prod.outlook.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6aeadf7896bff4ca230702daba8788455e6b866e
-commit: 6812d1dfbca99cd5032683354bf50e0002b2aa02 thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
-date:   2 days ago
-config: arm-randconfig-r046-20230628 (https://download.01.org/0day-ci/archive/20230628/202306282315.6mHC7VVw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306282315.6mHC7VVw-lkp@intel.com/reproduce)
+On Wed, Jun 28, 2023 at 01:33:40AM +0000, Zhipeng Wang wrote:
+> Hi,
+> 
+> I'm sorry for responding so late. I have also tried to reproduce this issue many times and I have not reproduced it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306282315.6mHC7VVw-lkp@intel.com/
+I can reproduce this with the configuration that the robot provided,
+even with GCC.
 
-All warnings (new ones prefixed by >>):
+  $ curl -LSso .config https://download.01.org/0day-ci/archive/20230625/202306250025.savpMM8L-lkp@intel.com/config
 
->> drivers/thermal/qcom/tsens-v0_1.c:296:31: warning: unused variable 'ops_v0_1' [-Wunused-const-variable]
-     296 | static const struct tsens_ops ops_v0_1 = {
-         |                               ^
-   1 warning generated.
+  $ make -skj"$(nproc)" ARCH=i386 CROSS_COMPILE=x86_64-linux- W=1 olddefconfig drivers/cpufreq/cpufreq-dt-platdev.o
+  drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
+    102 | static const struct of_device_id blocklist[] __initconst = {
+        |                                  ^~~~~~~~~
+  drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
+     17 | static const struct of_device_id allowlist[] __initconst = {
+        |                                  ^~~~~~~~~
 
+The W=1 is the key here, this warning is not enabled in a normal build. This
+configuration does not have CONFIG_OF=y, so of_match_node() is just defined as
+NULL, meaning these variables are indeed unused.
 
-vim +/ops_v0_1 +296 drivers/thermal/qcom/tsens-v0_1.c
+However, I am kind of confused as to how the robot landed on 3b062a08698 as the
+problematic commit, as I can reproduce these warnings without it.
 
-c19970548edc35 Amit Kucheria    2019-03-20  295  
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01 @296  static const struct tsens_ops ops_v0_1 = {
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  297  	.init		= init_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  298  	.calibrate	= tsens_calibrate_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  299  	.get_temp	= get_temp_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  300  };
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  301  
+Cheers,
+Nathan
 
-:::::: The code at line 296 was first introduced by commit
-:::::: 51d78b8b1beba247e1e4314420d98acb0732c4b7 thermal/drivers/tsens: Drop single-cell code for mdm9607
-
-:::::: TO: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > -----Original Message-----
+> > From: Viresh Kumar <viresh.kumar@linaro.org>
+> > Sent: 2023年6月26日 14:54
+> > To: kernel test robot <lkp@intel.com>
+> > Cc: Zhipeng Wang <zhipeng.wang_1@nxp.com>; llvm@lists.linux.dev;
+> > oe-kbuild-all@lists.linux.dev; Linux Memory Management List
+> > <linux-mm@kvack.org>
+> > Subject: [EXT] Re: [linux-next:master 5324/12162]
+> > drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
+> > 'allowlist'
+> >
+> > Caution: This is an external email. Please take care when clicking links or
+> > opening attachments. When in doubt, report the message using the 'Report
+> > this email' button
+> >
+> >
+> > On 25-06-23, 00:28, kernel test robot wrote:
+> > > tree:
+> > https://git.kern/
+> > el.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fnext%2Flinux-next.git&dat
+> > a=05%7C01%7Czhipeng.wang_1%40nxp.com%7Cb56973a98c0a4d280b3b08d
+> > b761218c0%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638233
+> > 592364533126%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
+> > QIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdat
+> > a=l0W3DFSqCzfqoAhQfDNg78n7oghKqGh6U3eJiYu2e60%3D&reserved=0
+> > master
+> > > head:   8d2be868b42c08290509c60515865f4de24ea704
+> > > commit: 3b062a086984d35a3c6d3a1c7841d0aa73aa76af [5324/12162]
+> > cpufreq:
+> > > dt-platdev: Support building as module
+> > > config: i386-randconfig-r035-20230624
+> > > (https://dow/
+> > >
+> > nload.01.org%2F0day-ci%2Farchive%2F20230625%2F202306250025.savpMM
+> > 8L-lk
+> > >
+> > p%40intel.com%2Fconfig&data=05%7C01%7Czhipeng.wang_1%40nxp.com%7
+> > Cb5697
+> > >
+> > 3a98c0a4d280b3b08db761218c0%7C686ea1d3bc2b4c6fa92cd99c5c301635
+> > %7C0%7C0
+> > > %7C638233592364533126%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+> > LjAwMDAiLCJQ
+> > >
+> > IjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=
+> > lTqIr
+> > > SUSMrl2NuciVHPbNVDL37S%2BDVLq4XJEUmECswA%3D&reserved=0)
+> > > compiler: clang version 15.0.7
+> > > (https://git/
+> > >
+> > hub.com%2Fllvm%2Fllvm-project.git&data=05%7C01%7Czhipeng.wang_1%40
+> > nxp.
+> > >
+> > com%7Cb56973a98c0a4d280b3b08db761218c0%7C686ea1d3bc2b4c6fa92c
+> > d99c5c301
+> > >
+> > 635%7C0%7C0%7C638233592364533126%7CUnknown%7CTWFpbGZsb3d8e
+> > yJWIjoiMC4wL
+> > >
+> > jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%
+> > 7C%7C&
+> > >
+> > sdata=rbR0wNca0Re2A1bcgnWWPd2fnN9MffgPeQWi6xAUXlU%3D&reserved=
+> > 0
+> > > 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> > > reproduce:
+> > > (https://dow/
+> > >
+> > nload.01.org%2F0day-ci%2Farchive%2F20230625%2F202306250025.savpMM
+> > 8L-lk
+> > >
+> > p%40intel.com%2Freproduce&data=05%7C01%7Czhipeng.wang_1%40nxp.co
+> > m%7Cb5
+> > >
+> > 6973a98c0a4d280b3b08db761218c0%7C686ea1d3bc2b4c6fa92cd99c5c3016
+> > 35%7C0%
+> > >
+> > 7C0%7C638233592364533126%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
+> > wLjAwMDAiL
+> > >
+> > CJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sd
+> > ata=Zw
+> > > GhEuk0ektPmokBAcblpoWl12DI1nQV2KBwXvq%2FkAE%3D&reserved=0)
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new
+> > > version of the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes:
+> > > | https://lo/
+> > > |
+> > re.kernel.org%2Foe-kbuild-all%2F202306250025.savpMM8L-lkp%40intel.co
+> > > |
+> > m%2F&data=05%7C01%7Czhipeng.wang_1%40nxp.com%7Cb56973a98c0a4d
+> > 280b3b0
+> > > |
+> > 8db761218c0%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6382
+> > 3359236
+> > > |
+> > 4533126%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
+> > 2luMzIi
+> > > |
+> > LCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=7Bf57OarO
+> > %2BQ1W
+> > > | 16XJ0%2BIvKMiEIQHj0REd0Oztz5jH0U%3D&reserved=0
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused
+> > > >> variable 'allowlist' [-Wunused-const-variable]
+> > >    static const struct of_device_id allowlist[] __initconst = {
+> > >                                     ^
+> > > >> drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: unused
+> > > >> variable 'blocklist' [-Wunused-const-variable]
+> > >    static const struct of_device_id blocklist[] __initconst = {
+> > >                                     ^
+> > >    2 warnings generated.
+> > >
+> >
+> > Hi,
+> >
+> > Do you have any patch to fix this ? I am not sure why the error is coming here
+> > and I am not able to reproduce it too.
+> >
+> > --
+> > viresh
