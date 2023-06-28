@@ -1,120 +1,153 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45902103
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 06:45:04 +0000 (UTC)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 35S1R5ri018088
-	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 23:45:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=/1iNjEhSI1x//A140OvaC7WQBC5Y/8Enz6JnfFqod+s=;
- b=TJtVZKmhMRM2FZRHTG94BmIMi40TlUcDt5UoFXsyAkCBlnoAJgzVZoY9AM+d/9eurVTF
- jxP5zyzg94dF9UnEC5zGq3Pde3rd2MEurD1EEbu2ah93ZOmKp0zG74UpwjHB9UlR9Kr6
- QBcT8E5s4Y1PE+9s5qcbW95lPaVrW99WT40= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3rfp4gcbjc-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 27 Jun 2023 23:44:54 -0700
-Received: from twshared18891.17.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 27 Jun 2023 23:44:52 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 0F701220F0921; Tue, 27 Jun 2023 23:44:33 -0700 (PDT)
-From: Yonghong Song <yhs@fb.com>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-        Petr Mladek
-	<pmladek@suse.com>, Song Liu <song@kernel.org>
-CC: Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
-        Leizhen
-	<thunder.leizhen@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [PATCH] kallsyms: strip LTO-only suffixes from promoted global functions
-Date: Tue, 27 Jun 2023 23:44:33 -0700
-Message-ID: <20230628064433.2859335-1-yhs@fb.com>
-X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LtCYgY6WJXKVUaQ77bLG4HBaHnocPaoM
-X-Proofpoint-GUID: LtCYgY6WJXKVUaQ77bLG4HBaHnocPaoM
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B688833;
+	Wed, 28 Jun 2023 09:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1D3C433CB;
+	Wed, 28 Jun 2023 09:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687944824;
+	bh=CrYGMFVkuZ18bbqqXmjfHXjWhRbYeT+J+BKK1daGGTM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kOuXnRg1BENhX68oF4wUvOmW/QKYKiFbeB0wy5Ut2FxM4NX35vw0HSBU3KmtU25Oc
+	 dD2GnXVvObPqkTvkdH7Sm4c9s0P8eZa2vrfUMQlMnJr5eD1rOrOq5Se46/4/K4o6NH
+	 9UJlVx63Axich432Zg3l3EzUS3KMKanaVvVm3MzNM3uHSJBqv9YnS3FJuQTZWk0b4H
+	 MHT1zgheuTxilkJYVIJEkC2eKTdTkqy0Wv0g7hLWKSbB63HFEiy+Q2BmVACbpRl7CZ
+	 SLTLNlty4b8+YHM2M9KQVJxy8R9ZhO+Eqi+ESZ7RRwEDZljTsvl2/JZ/gZn0NZg/Qt
+	 kVGUOaZzCtibQ==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso3236670a12.2;
+        Wed, 28 Jun 2023 02:33:44 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx5Mk7ugBOyJCfxCaVWXt0LSZaXEmOqYZhAH2Yzbmv5iPnVrEcW
+	+aivV+rfKCsUuiVsknjYX6iVdgjpc+QifTeS8rI=
+X-Google-Smtp-Source: ACHHUZ7bRzRsDllhNLipd/qefy1r65bKvlwuhhM1+DNN01yuN/J3IxfKXTbbm1Hh31Dk7m5G6zYrn7LxlzhxhZiIySE=
+X-Received: by 2002:a05:6402:755:b0:51a:4842:ecdc with SMTP id
+ p21-20020a056402075500b0051a4842ecdcmr23379907edy.1.1687944823012; Wed, 28
+ Jun 2023 02:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_03,2023-06-27_01,2023-05-22_02
+References: <20230625095644.3156349-1-kernel@xen0n.name> <20230625095644.3156349-2-kernel@xen0n.name>
+In-Reply-To: <20230625095644.3156349-2-kernel@xen0n.name>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 28 Jun 2023 17:33:31 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5hBes5R30mFBW7asX8wPWeSQ+J-=GypnoMoO=-CR3cNg@mail.gmail.com>
+Message-ID: <CAAhV-H5hBes5R30mFBW7asX8wPWeSQ+J-=GypnoMoO=-CR3cNg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] LoongArch: Calculate various sizes in the linker script
+To: WANG Xuerui <kernel@xen0n.name>
+Cc: WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-stripped all function/variable suffixes started with '.' regardless
-of whether those suffixes are generated at LTO mode or not. In fact,
-as far as I know, in LTO mode, when a static function/variable is
-promoted to the global scope, '.llvm.<...>' suffix is added.
+On Sun, Jun 25, 2023 at 5:57=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> From: WANG Rui <wangrui@loongson.cn>
+>
+> Taking the address delta between symbols in different sections is not
+> supported by the LLVM IAS. Instead, do this in the linker script, so
+> the same data can be properly referenced in assembly.
+>
+> Signed-off-by: WANG Rui <wangrui@loongson.cn>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/kernel/efi-header.S  | 6 +++---
+>  arch/loongarch/kernel/head.S        | 8 ++++----
+>  arch/loongarch/kernel/vmlinux.lds.S | 7 +++++++
+>  3 files changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/e=
+fi-header.S
+> index 8c1d229a2afa..5f23b85d78ca 100644
+> --- a/arch/loongarch/kernel/efi-header.S
+> +++ b/arch/loongarch/kernel/efi-header.S
+> @@ -24,7 +24,7 @@
+>         .byte   0x02                                    /* MajorLinkerVer=
+sion */
+>         .byte   0x14                                    /* MinorLinkerVer=
+sion */
+>         .long   __inittext_end - .Lefi_header_end       /* SizeOfCode */
+> -       .long   _end - __initdata_begin                 /* SizeOfInitiali=
+zedData */
+> +       .long   _kernel_vsize                           /* SizeOfInitiali=
+zedData */
+>         .long   0                                       /* SizeOfUninitia=
+lizedData */
+>         .long   __efistub_efi_pe_entry - _head          /* AddressOfEntry=
+Point */
+>         .long   .Lefi_header_end - _head                /* BaseOfCode */
+> @@ -79,9 +79,9 @@
+>                 IMAGE_SCN_MEM_EXECUTE                   /* Characteristic=
+s */
+>
+>         .ascii  ".data\0\0\0"
+> -       .long   _end - __initdata_begin                 /* VirtualSize */
+> +       .long   _kernel_vsize                           /* VirtualSize */
+>         .long   __initdata_begin - _head                /* VirtualAddress=
+ */
+> -       .long   _edata - __initdata_begin               /* SizeOfRawData =
+*/
+> +       .long   _kernel_rsize                           /* SizeOfRawData =
+*/
+>         .long   __initdata_begin - _head                /* PointerToRawDa=
+ta */
+>
+>         .long   0                                       /* PointerToReloc=
+ations */
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index 0d8180153ec0..53b883db0786 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -23,7 +23,7 @@ _head:
+>         .word   MZ_MAGIC                /* "MZ", MS-DOS header */
+>         .org    0x8
+>         .dword  kernel_entry            /* Kernel entry point */
+> -       .dword  _end - _text            /* Kernel image effective size */
+> +       .dword  _kernel_asize           /* Kernel image effective size */
+>         .quad   PHYS_LINK_KADDR         /* Kernel image load offset from =
+start of RAM */
+>         .org    0x38                    /* 0x20 ~ 0x37 reserved */
+>         .long   LINUX_PE_MAGIC
+> @@ -32,9 +32,9 @@ _head:
+>  pe_header:
+>         __EFI_PE_HEADER
+>
+> -SYM_DATA(kernel_asize, .long _end - _text);
+> -SYM_DATA(kernel_fsize, .long _edata - _text);
+> -SYM_DATA(kernel_offset, .long kernel_offset - _text);
+> +SYM_DATA(kernel_asize, .long _kernel_asize);
+> +SYM_DATA(kernel_fsize, .long _kernel_fsize);
+> +SYM_DATA(kernel_offset, .long _kernel_offset);
+>
+>  #endif
+>
+> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/=
+vmlinux.lds.S
+> index 0c7b041be9d8..79f238df029e 100644
+> --- a/arch/loongarch/kernel/vmlinux.lds.S
+> +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> @@ -136,6 +136,13 @@ SECTIONS
+>         DWARF_DEBUG
+>         ELF_DETAILS
+>
+> +       /* header symbols */
+> +       _kernel_asize =3D _end - _text;
+> +       _kernel_fsize =3D _edata - _text;
+> +       _kernel_offset =3D kernel_offset - _text;
+When !CONFIG_EFI_STUB there is a build error, I fixed it when I applied.
 
-The existing mechanism breaks live patch for a LTO kernel even if
-no <symbol>.llvm.<...> symbols are involved. For example, for the following
-kernel symbols:
-  $ grep bpf_verifier_vlog /proc/kallsyms
-  ffffffff81549f60 t bpf_verifier_vlog
-  ffffffff8268b430 d bpf_verifier_vlog._entry
-  ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
-  ffffffff82e12a1f d bpf_verifier_vlog.__already_done
-'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
-'__already_done' are static variables used inside 'bpf_verifier_vlog',
-so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
-Note that the func-level to file-level static function promotion also
-happens without LTO.
-
-Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism=
- will
-return 4 symbols to live patch subsystem which current live patching
-subsystem cannot handle it. With non-LTO kernel, only one symbol
-is returned.
-
-In [1], we have a lengthy discussion, the suggestion is to separate two
-cases:
-  (1). new symbols with suffix which are generated regardless of whether
-       LTO is enabled or not, and
-  (2). new symbols with suffix generated only when LTO is enabled.
-
-The cleanup_symbol_name() should only remove suffixes for case (2).
-Case (1) should not be changed so it can work uniformly with or without LTO.
-
-This patch removed LTO-only suffix '.llvm.<...>' so live patching and
-tracing should work the same way for non-LTO kernel.
-
- [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@ke=
-rnel.org/T/#u
-
-Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/kallsyms.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 77747391f49b..4874508bb950 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
- 	 * LLVM appends various suffixes for local functions and variables that
- 	 * must be promoted to global scope as part of LTO.  This can break
- 	 * hooking of static functions with kprobes. '.' is not a valid
--	 * character in an identifier in C. Suffixes observed:
-+	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
- 	 * - foo.llvm.[0-9a-f]+
--	 * - foo.[0-9a-f]+
- 	 */
--	res =3D strchr(s, '.');
-+	res =3D strstr(s, ".llvm.");
- 	if (res) {
- 		*res =3D '\0';
- 		return true;
---=20
-2.34.1
-
+Huacai
+> +       _kernel_vsize =3D _end - __initdata_begin;
+> +       _kernel_rsize =3D _edata - __initdata_begin;
+> +
+>         .gptab.sdata : {
+>                 *(.gptab.data)
+>                 *(.gptab.sdata)
+> --
+> 2.40.0
+>
+>
