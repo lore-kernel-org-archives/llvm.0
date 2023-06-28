@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC60210944
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 20:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C12107B1
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 21:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687983608;
+	s=mimecast20190719; t=1687989006;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=5BiGP7ITj+WntmaHNlY1r2NRRZYl++znJ0jEErqT/3w=;
-	b=WzgUnJRuni8RPrtUO/9WlcWYMS+COxsI1hp5CfE+kthPW7edRJhTzkJw7hn0N2GakBLrki
-	EFj61dVjNfDOIssThOLQnM/ab6+jrgp6KL4UklrYgmnjTtudylCA9Mm+8Gh8sUnJn2HASI
-	5jr/w6rwjv2ubd/ifOt0aMpPNfooWZ8=
+	bh=Dc7aAWbDD939VnVYpM3Cl82oLFe3UxLypAU6OOMyRB0=;
+	b=Gw32rIURQFlRYh8rV4EA1OcuoS9PMhDIpxO9j2aIAgbwrENcwWGRAL3ngOwoQLzcnzGjja
+	TPT/bPxI43JZ3jflFEXHgXvaMiVU9NwN3/v25HP6WOsr+0NfN8woYqqkfpX7YcuMAQAbbY
+	OJwzdtYAVJkFPCum3g5y8q4QgcDp82I=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-ycYQUiEKO9SyimJGRofdWw-1; Wed, 28 Jun 2023 16:20:06 -0400
-X-MC-Unique: ycYQUiEKO9SyimJGRofdWw-1
+ us-mta-606-rOXkQgBpNOCbdcKQoZ0IKw-1; Wed, 28 Jun 2023 17:50:04 -0400
+X-MC-Unique: rOXkQgBpNOCbdcKQoZ0IKw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9E5F381BDE3
-	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 20:20:05 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16EEA2812952
+	for <llvm@lists.linux.dev>; Wed, 28 Jun 2023 21:50:04 +0000 (UTC)
 Received: from [172.64.9.13] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A68A6C09A07;
-	Wed, 28 Jun 2023 20:20:05 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 06D42C09A07;
+	Wed, 28 Jun 2023 21:50:04 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 77b1a7f7)
-Date: Wed, 28 Jun 2023 20:20:05 -0000
+ mainline.kernel.org-clang, 1b2c92a1)
+Date: Wed, 28 Jun 2023 21:50:04 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <22341.123062816200600270@us-mta-509.us.mimecast.lan>
+Message-Id: <96179.123062817500401358@us-mta-606.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,16 +52,16 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'mm-nonmm-stable-2023-06-24-19-23' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+    Commit message: x86/mem_encrypt: Remove stale mem_encrypt_init() declar=
+ation
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94052
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94070
 
 One or more kernel builds failed:
     Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36704=
-5
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36709=
+3
 
 
 If you find a failure unrelated to your changes, please ask the test mainta=
