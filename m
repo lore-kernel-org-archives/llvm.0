@@ -1,44 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDBC8489;
-	Thu, 29 Jun 2023 22:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7A88489;
+	Thu, 29 Jun 2023 22:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688078834; x=1719614834;
+  t=1688079425; x=1719615425;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Z4DZUk4bC9zqB10uPLjcgH0wKZ/KReTVtEhniq3lETk=;
-  b=juj21gm10neD1/isR4/usaXD+gvZYyWiLMPx0QBRGcfZrHow8xDA9OwH
-   yXgDHCAc+uW/DF3IkgQ6gbVKlXv6q8wwbwn774lhh3kQHBSAGakgL/U1m
-   QDjTSDUBUinHOVL18+7gaJn6J5rULsztHg3Ztk92SGTh/glrS29hGV+AO
-   oAMQTRBUxhv/IfxN/4IkT1v9U8Q18U0nHS9m3bSAyJKp85PGgy8ajWpH8
-   1rsEGBr0KPSmJaUl5IuanvbPpb8a3axQ4H/TcLbr/DovX+dStOx83j3A6
-   al6kRqeMqcRU6zyW67QDltYiZh1aDJEaKE5Nb2utYOtPDT6JtKA9oHld2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="362287696"
+  bh=Sot15ZusZgl5Q8RuumvSgYebRWa3GISjcm0NGSMOPOs=;
+  b=EgDlEx75m6WiUZ9QUw8wO5jSUdI9RwPeDegZ9VcMFMJZGvTYL5XgThw6
+   V/OnsvqeiPqQV7842bT6f5W8AUwmkffektkLY4uSkIZgBqdwKkEs7BCJp
+   hT3sencUvVw2iUrJc24F+FzAy/FKmqcIea349AMK24AMUASpv7HD1sZaq
+   4jas96sYwii+jZcEaeI15D3zhYwY2+yBRHULxQ9CZeIrrjOIVshjkOl3y
+   UCJkGIZTSHSXm+rL/CVgSkH5NnAezOHKSluXtkLuUz6Q7zaRILTGFvdCP
+   9KaQuDhlbmoAkslweZ0z8O1rcNG5wixuQZsFzX3Q+oUPJTicOToUvZtRd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="352073957"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="362287696"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:47:04 -0700
+   d="scan'208";a="352073957"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:57:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="747179630"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="807526054"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="747179630"
+   d="scan'208";a="807526054"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jun 2023 15:47:01 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Jun 2023 15:57:02 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF0Pl-000ESz-06;
-	Thu, 29 Jun 2023 22:47:01 +0000
-Date: Fri, 30 Jun 2023 06:46:30 +0800
+	id 1qF0ZR-000ETd-1F;
+	Thu, 29 Jun 2023 22:57:01 +0000
+Date: Fri, 30 Jun 2023 06:56:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Eric Garver <eric@garver.life>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>,
 	Ilya Maximets <i.maximets@ovn.org>
 Subject: Re: [PATCH net-next 2/2] net: openvswitch: add drop action
-Message-ID: <202306300645.towwST4X-lkp@intel.com>
+Message-ID: <202306300609.tdRdZscy-lkp@intel.com>
 References: <20230629203005.2137107-3-eric@garver.life>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,30 +60,86 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Garver/net-openvswit
 base:   net-next/main
 patch link:    https://lore.kernel.org/r/20230629203005.2137107-3-eric%40garver.life
 patch subject: [PATCH net-next 2/2] net: openvswitch: add drop action
-config: mips-randconfig-r036-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300645.towwST4X-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300645.towwST4X-lkp@intel.com/reproduce)
+config: hexagon-randconfig-r045-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300609.tdRdZscy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300609.tdRdZscy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306300645.towwST4X-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306300609.tdRdZscy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   In file included from net/openvswitch/actions.c:8:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/openvswitch/actions.c:8:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/openvswitch/actions.c:8:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
 >> net/openvswitch/actions.c:1483:4: error: expected expression
-                           u32 reason = nla_get_u32(a);
-                           ^
+    1483 |                         u32 reason = nla_get_u32(a);
+         |                         ^
 >> net/openvswitch/actions.c:1485:4: error: use of undeclared identifier 'reason'
-                           reason |= SKB_DROP_REASON_SUBSYS_OPENVSWITCH <<
-                           ^
+    1485 |                         reason |= SKB_DROP_REASON_SUBSYS_OPENVSWITCH <<
+         |                         ^
    net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
-                           if (reason == OVS_XLATE_OK)
-                               ^
+    1488 |                         if (reason == OVS_XLATE_OK)
+         |                             ^
+   net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
+   net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
    net/openvswitch/actions.c:1491:26: error: use of undeclared identifier 'reason'
-                           kfree_skb_reason(skb, reason);
-                                                 ^
-   4 errors generated.
+    1491 |                         kfree_skb_reason(skb, reason);
+         |                                               ^
+   6 warnings and 6 errors generated.
 
 
 vim +1483 net/openvswitch/actions.c
