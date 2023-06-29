@@ -1,25 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932D7125C3
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 15:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8BCC433C8;
-	Thu, 29 Jun 2023 15:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1688053014;
-	bh=kSpwvCZSrV4ZbYU3Q5FvpCaAemmPCQQhwe8ZxmoemxI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=KVC28lW5yxngXLh5CccM8D8GYCbNrX2qHUHcnIIazRGP+JOx0zBuezE5LJR1VYZUD
-	 h5XRSfxiyXKlFyLAge4GsKqyWVi4IZtqkqV/Xfsxap2UKkUdYmcIdEs3QR0Y0qGNwr
-	 8PyTNSfEyEyrAh0Zwitxg0LlDGXYaXbrxejHBWLU=
-Date: Thu, 29 Jun 2023 17:36:51 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Borislav Petkov <bp@alien8.de>, linux-usb@vger.kernel.org
-Subject: UBSAN spat in valid xhci code in Linus's current tree (6.4+)
-Message-ID: <2023062945-fencing-pebble-0411@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31221426A;
+	Thu, 29 Jun 2023 18:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688062750; x=1719598750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9DOLFbhO0O3J0HemaMykBjcHL+MYDHY5ezxdTvkUU38=;
+  b=VzJ9WSWoUFwMdlzIyvZcZgzPzXCYVUhqd3at8dJqz68VyemUYK8a9YVH
+   ukv4Ze5+YHCcTPvEs5VX4oLXw0oLte1OdmM+Ej0OXR6wqb6agDA0YN43E
+   9QCt7Ti4lDPwewjHq6S2yMXNJ/9TnqYn7SNijDJGjEKNYufmFRl50vv5A
+   80DD2yfTsw0GCoF0YS6f+i0BMovv/MhSEbo5Y/CR0PwiCr0JsCcKq5mkO
+   jQE3w7xUj9ezrJgj2wY9yc/JBVhNzYiM64CdRtbiwL28Mq1H1j46xmf6X
+   vlTlYEEenlJMJ/gVhzhPzKC/nu6dU/8rI9ONo1nzf/MGnHvB9pFdEE6fp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="362228698"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="362228698"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 11:16:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="752736543"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="752736543"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Jun 2023 11:16:37 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qEwC4-000EKH-0s;
+	Thu, 29 Jun 2023 18:16:36 +0000
+Date: Fri, 30 Jun 2023 02:15:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3364:5: warning: stack frame
+ size (2208) exceeds limit (2048) in 'psp_init_ta_microcode'
+Message-ID: <202306300240.df8pU5Dy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,36 +48,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Kees.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3a8a670eeeaa40d87bd38a587438952741980c18
+commit: 994a97447e38182f530f246117a882c074d02af7 drm/amd: Parse both v1 and v2 TA microcode headers using same function
+date:   6 months ago
+config: arm64-randconfig-r026-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300240.df8pU5Dy-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300240.df8pU5Dy-lkp@intel.com/reproduce)
 
-Boris just reported to me a UBSAN splat in the USB xhci driver in
-Linus's tree that wasn't present in 6.4-final, and given that no USB
-changes are merged yet there, I was confused.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306300240.df8pU5Dy-lkp@intel.com/
 
-Turns out, I think you all missed a "variable length" structure in the
-xhci driver, which UBSAN is calling out a being an overrun, when really
-it isn't (it's just written that way...)
+All warnings (new ones prefixed by >>):
 
-The splat is:
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3116:5: warning: stack frame size (2688) exceeds limit (2048) in 'psp_init_sos_microcode' [-Wframe-larger-than]
+   int psp_init_sos_microcode(struct psp_context *psp,
+       ^
+   2603/2688 (96.84%) spills, 85/2688 (3.16%) variables
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3364:5: warning: stack frame size (2208) exceeds limit (2048) in 'psp_init_ta_microcode' [-Wframe-larger-than]
+   int psp_init_ta_microcode(struct psp_context *psp, const char *chip_name)
+       ^
+   2114/2208 (95.74%) spills, 94/2208 (4.26%) variables
+   2 warnings generated.
 
-UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31
-index 1 is out of range for type '__le32 [1]'
-CPU: 0 PID: 1556 Comm: kworker/0:2 Not tainted 6.4.0+ #7
 
+vim +/psp_init_ta_microcode +3364 drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
 
-And yes, the code there:
-	ssp_cap->bmSublinkSpeedAttr[offset++] = cpu_to_le32(attr);
+  3363	
+> 3364	int psp_init_ta_microcode(struct psp_context *psp, const char *chip_name)
+  3365	{
+  3366		const struct common_firmware_header *hdr;
+  3367		struct amdgpu_device *adev = psp->adev;
+  3368		char fw_name[PSP_FW_NAME_LEN];
+  3369		int err;
+  3370	
+  3371		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_ta.bin", chip_name);
+  3372		err = request_firmware(&adev->psp.ta_fw, fw_name, adev->dev);
+  3373		if (err)
+  3374			return err;
+  3375		err = amdgpu_ucode_validate(adev->psp.ta_fw);
+  3376		if (err)
+  3377			return err;
+  3378	
+  3379		hdr = (const struct common_firmware_header *)adev->psp.ta_fw->data;
+  3380		switch (le16_to_cpu(hdr->header_version_major)) {
+  3381		case 1:
+  3382			err = parse_ta_v1_microcode(psp);
+  3383			break;
+  3384		case 2:
+  3385			err = parse_ta_v2_microcode(psp);
+  3386			break;
+  3387		default:
+  3388			dev_err(adev->dev, "unsupported TA header version\n");
+  3389			err = -EINVAL;
+  3390		}
+  3391	
+  3392		if (err) {
+  3393			dev_err(adev->dev, "fail to initialize ta microcode\n");
+  3394			release_firmware(adev->psp.ta_fw);
+  3395			adev->psp.ta_fw = NULL;
+  3396		}
+  3397	
+  3398		return err;
+  3399	}
+  3400	
 
-is accessing the ssp_cap->bmSublinkSpeedAttr field with is declared as:
-	_le32 bmSublinkSpeedAttr[1]; /* list of sublink speed attrib entries */
-
-in include/uapi/linux/usb/ch9.h
-
-So perhaps 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC") should be
-reverted for now?  Or this field fixed up to properly be marked as a
-variable length array of at least one entry?
-
-thanks,
-
-greg k-h
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
