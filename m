@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3274613AD4
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C9EC43397;
-	Thu, 29 Jun 2023 19:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5051640B
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40363C433CA;
+	Thu, 29 Jun 2023 19:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688065316;
-	bh=79EBLaewXb9IalwFaobTLtD7YnNOccMgry1S3tMOf78=;
+	s=k20201202; t=1688065324;
+	bh=JuEdJkTxJsu5xv1odLx+nTh70ThqVTpEoCBCZ/YJMns=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QpEJ5JzAr5WUyXU3tiHYt4cG6qiDfUnmIadyoTviVkBnBPbMk/jJkGOpw17OayRj/
-	 9gKnlMK+XnsQAdLxXMl4Zpy8EdLs92eFZEzIuhNbi2rZWpW1RLYx999qZhDX6hQOCy
-	 kpIQk0Hx/AcG3/NLCeIHMMZajV3P9m+RddNKU+bagSAR4vQ1GawOg1Rg9rouldsM4h
-	 DbH7sjyfTCHy5vdReDiNSXgTLudQkTbDbX2JxN8zPOHa6nf/Tz4NbLLTZOKC3/1qQX
-	 LAyLpy1nviE5I9wdQ+XbGPX5p+nOT3E4fHn5E7+TlR6AX6b99SHjQiFmwjAO21nlHV
-	 3sHovqtPKtTNQ==
+	b=QWdQ6YGU1xJmNRES3OLNKD3PhJpajamSeqpcjSUa4nPlEeutjz86ugG+2QWDMC0qd
+	 UTRw9Ji/4UGhFiS3j9Rg0qsoSXgArGvyctvDtF4EBXWe8xQZG5Lnd8t3f6XRs6D3pq
+	 pJjjvK1j2eC9Wyio8HO4RKulA6SXXbATsXxATZCLwWzWZ0WSpAu9LK3yRYBi7pOJfj
+	 sN9mhh20KnCL1xFj8a/ns3Ygh5Lc75zE54w+P83HavGHISwrpaqH8KwsdggllGyJ2K
+	 03kwwffrgRjjBl6GZeKgxvyA7gUywMRF+hXNVSDJglYbsOTUmlG8phOqpbbVnloRwJ
+	 l6GfmdPcFgmXg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 12/12] workqueue: clean up WORK_* constant types, clarify masking
-Date: Thu, 29 Jun 2023 15:01:32 -0400
-Message-Id: <20230629190134.907949-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 5/5] workqueue: clean up WORK_* constant types, clarify masking
+Date: Thu, 29 Jun 2023 15:01:56 -0400
+Message-Id: <20230629190158.908169-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230629190134.907949-1-sashal@kernel.org>
-References: <20230629190134.907949-1-sashal@kernel.org>
+In-Reply-To: <20230629190158.908169-1-sashal@kernel.org>
+References: <20230629190158.908169-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,7 +41,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.35
+X-stable-base: Linux 5.15.118
 Content-Transfer-Encoding: 8bit
 
 From: Linus Torvalds <torvalds@linux-foundation.org>
@@ -98,7 +98,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index a0143dd244300..3ca41b9da6473 100644
+index 7fee9b6cfedef..20a47eb94b0f3 100644
 --- a/include/linux/workqueue.h
 +++ b/include/linux/workqueue.h
 @@ -68,7 +68,6 @@ enum {
@@ -138,10 +138,10 @@ index a0143dd244300..3ca41b9da6473 100644
  	atomic_long_t data;
  	struct list_head entry;
 diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 4dd494f786bcd..1e1557e42d2cc 100644
+index 2d27bed9881dd..8e108c040cc35 100644
 --- a/kernel/workqueue.c
 +++ b/kernel/workqueue.c
-@@ -698,12 +698,17 @@ static void clear_work_data(struct work_struct *work)
+@@ -697,12 +697,17 @@ static void clear_work_data(struct work_struct *work)
  	set_work_data(work, WORK_STRUCT_NO_POOL, 0);
  }
  
@@ -160,7 +160,7 @@ index 4dd494f786bcd..1e1557e42d2cc 100644
  	else
  		return NULL;
  }
-@@ -731,8 +736,7 @@ static struct worker_pool *get_work_pool(struct work_struct *work)
+@@ -730,8 +735,7 @@ static struct worker_pool *get_work_pool(struct work_struct *work)
  	assert_rcu_or_pool_mutex();
  
  	if (data & WORK_STRUCT_PWQ)
@@ -170,7 +170,7 @@ index 4dd494f786bcd..1e1557e42d2cc 100644
  
  	pool_id = data >> WORK_OFFQ_POOL_SHIFT;
  	if (pool_id == WORK_OFFQ_POOL_NONE)
-@@ -753,8 +757,7 @@ static int get_work_pool_id(struct work_struct *work)
+@@ -752,8 +756,7 @@ static int get_work_pool_id(struct work_struct *work)
  	unsigned long data = atomic_long_read(&work->data);
  
  	if (data & WORK_STRUCT_PWQ)
