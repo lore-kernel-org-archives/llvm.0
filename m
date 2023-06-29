@@ -1,41 +1,36 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4611FD0;
-	Thu, 29 Jun 2023 03:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688008030; x=1719544030;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=4CG/fMw67DblqeB7vzKBxeWLJCt+yMwNmxPLK8DEwvQ=;
-  b=l8995tIHAFzo0HWq2N7oMuCcj07pzY7hRQ4Nojs+HifkUpclJEpeQTP4
-   jWUc5cxr/vqfVLBR/nFwaxI5otkc7JRkJ2h2g/nv2qA9sTkZAjwY13Qfu
-   5CC5op16ud1S13K4IJ3eR3CrzpziqMLbhFoEF9mT5FFxLQCQuQb7IoHom
-   Z2rS/A3L1C7ASgPjfodBfQYcZJkD55yQnTDUPZ0LaKpKcwmjUzZp97PuV
-   k5QEf/aHoBxkE8lzQB0obHDcGsFFeCivSuzwB9roSbK6TcdrSsOOxjTK1
-   rqIpOdwANAQdPmLfMhzdN6ROev3FjuOt445dbdts15lJTvBcoFutih1+N
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="346778023"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="346778023"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 20:07:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="720418368"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="720418368"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2023 20:07:06 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEhzt-000DjX-2T;
-	Thu, 29 Jun 2023 03:07:05 +0000
-Date: Thu, 29 Jun 2023 11:06:26 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [stable:linux-4.14.y 3914/9999] crypto/async_tx/async_pq.o: warning:
- objtool: async_syndrome_val()+0x4d8: undefined stack state
-Message-ID: <202306291158.kEly4qeQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BCF1C07
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 03:35:32 +0000 (UTC)
+Received: from cwcc.thunk.org (pool-173-48-117-150.bstnma.fios.verizon.net [173.48.117.150])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35T3Z9nZ001101
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Jun 2023 23:35:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1688009712; bh=8kjIV4lIzkhZOX9U+hzvz1B+7tNY+I1GSOViXiuWJss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dqn7Txnw2HRfGKZv/SAQj+uRsMBt9ipF6TT9l9Tf1LmeYLlvHcKMAbos2A301QRhU
+	 wSGJMn6pTGOVWeem9IHvo/YR5RLozu7G0qPdt0+WuK+yS4fPdmLf2Tq9o6CtqE0SSD
+	 FQhe2RP8sHKDirowwmFlL2e+C0R5wuPM0VF3OGhh/HCmHULMVkYJklSjCPZp4ZXq5f
+	 aPhpWpUAokngFhmk6qYpcGZtechu/JDejwTSf5Pa2HDk85seIqt8UFA1QO1uGlP7uJ
+	 qx5+98AXYWsHXNW6IffoeZ3W+EiR1nyagV0hSuARL+zIKnrtrE9h3S6rCrfLj3+P7q
+	 vyXx49HEp7Frw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 68B9115C027F; Wed, 28 Jun 2023 23:35:09 -0400 (EDT)
+Date: Wed, 28 Jun 2023 23:35:09 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: syzbot <syzbot+f4cf49c6365d87eb8e0e@syzkaller.appspotmail.com>
+Cc: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] [ext4?] UBSAN: shift-out-of-bounds in
+ ext4_handle_clustersize
+Message-ID: <20230629033509.GI8954@mit.edu>
+References: <000000000000edf08305feb6a5f6@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,32 +39,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <000000000000edf08305feb6a5f6@google.com>
 
-TO: Arnd Bergmann <arnd@arndb.de>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Herbert Xu <herbert@gondor.apana.org.au>
-CC: Sasha Levin <sashal@kernel.org>
+On Thu, Jun 22, 2023 at 05:01:44AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    1b29d271614a Merge tag 'staging-6.4-rc7' of git://git.kern..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15fefd03280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f4cf49c6365d87eb8e0e
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-Hi Arnd,
+> UBSAN: shift-out-of-bounds in fs/ext4/super.c:4401:27
+> shift exponent 374 is too large for 32-bit type 'int'
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+fs/ext4/super.c:4401 is:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
-head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
-commit: 5385e6b7ea431b3725650bbc0e65103687134771 [3914/9999] crypto: ccp -- don't "select" CONFIG_DMADEVICES
-config: x86_64-randconfig-x016-20230628 (https://download.01.org/0day-ci/archive/20230629/202306291158.kEly4qeQ-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291158.kEly4qeQ-lkp@intel.com/reproduce)
+	clustersize = BLOCK_SIZE << le32_to_cpu(es->s_log_cluster_size);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306291158.kEly4qeQ-lkp@intel.com/
+... however earlier, in ext4_load_super() we check to make sure that
+(es->s_log_cluster_size) is no more than 20 (EXT4_MAX_BLOCK_LOG_SIZE -
+EXT4_MIN_BLOCK_LOG_SIZE).
 
-All warnings (new ones prefixed by >>):
+So it's likely this is either a while pointer corrupting the
+superblock after we've checked the value, but before we try to use it
+later.... or this is another "some thread is actively writing to the
+block device while we are in the process of mounting the file system".
 
->> crypto/async_tx/async_pq.o: warning: objtool: async_syndrome_val()+0x4d8: undefined stack state
+Since it's only occurred once, and we have no reproducer, it's
+impossible to say, but we'll just ignore this for now.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	      	       	     	  	      - Ted
