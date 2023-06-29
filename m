@@ -1,84 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52FD10ED
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 01:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688001004;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZTciiNx9W1KrWyPVGBCmAcVuK+WVRoRsJ9hZ8fv37lw=;
-	b=gj9EyXe4azkleGnITcT9oyNUAD4Mg9G9T8Zd0GjyeJd40eeAXSNIxfDdP+04Q4ZMX7Ixf/
-	ijr/Oc3gm91l4yWPQApf+dSv85GJMt6K4dfIZxrn33pun5C6fg3cjiypFvzBzD5Je4YAUx
-	Tuxh3GoY+IQswgHOE/MmQcckys4Id14=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-y4qUCcJdOuWn5rrD91LM5Q-1; Wed, 28 Jun 2023 21:10:02 -0400
-X-MC-Unique: y4qUCcJdOuWn5rrD91LM5Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B453800B35
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 01:10:02 +0000 (UTC)
-Received: from [172.64.9.13] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 88DB9F41C9;
-	Thu, 29 Jun 2023 01:10:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 3a8a670e)
-Date: Thu, 29 Jun 2023 01:10:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C221380;
+	Thu, 29 Jun 2023 02:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688004191; x=1719540191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MqID3aXABUv7nc8CmrZcB8I0Vz3+y578ADvOER6lS44=;
+  b=JlJ3riuJ1I25WpwwluRx2/bcM20XZ8SfPB0nxU/3rFNFTp8+BIt6eZ8+
+   PMjxwoXzesFrd+DxKrg0ga+2YAwwG6KUAoetZFRR5zlz+zyXjkqv+Oxut
+   EWouaL7/eT9BAHCS+pjexntJm0EfnF9HIQsgfn1j+X/uMwjsfcgNF2oH1
+   UmNlkE5reiAVQKk+8l/B11dPgn2dGG1k8AFan1kKfAfmlZWfaZWVF2XWL
+   p22Qsbm5zV1SpS/CoGzNqdDkP6eRm5HiPvKTz0EQjXDbnfLCH+etijwrH
+   jiXoU+C1eRsSf6xX3MU3Nv1BajX5+aCoOvuMr13cVVzL0X756nuz7KIEA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392726378"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="392726378"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:03:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047611857"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="1047611857"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 19:03:04 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qEgzv-000DgL-2I;
+	Thu, 29 Jun 2023 02:03:03 +0000
+Date: Thu, 29 Jun 2023 10:02:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable
+ system with disabled E-cores
+Message-ID: <202306290948.ThmHeSqf-lkp@intel.com>
+References: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <20499.123062821100201120@us-mta-451.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Srinivas,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.4 next-20230628]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Pandruvada/cpufreq-intel_pstate-Fix-scaling-for-hybrid-capable-system-with-disabled-E-cores/20230629-065506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230628225341.3718351-1-srinivas.pandruvada%40linux.intel.com
+patch subject: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
+config: i386-buildonly-randconfig-r004-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306290948.ThmHeSqf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/cpufreq/intel_pstate.c:1975:10: error: use of undeclared identifier 'HYBRID_SCALING_FACTOR'
+                   return HYBRID_SCALING_FACTOR;
+                          ^
+>> drivers/cpufreq/intel_pstate.c:1979:10: error: call to undeclared function 'core_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   return core_get_scaling();
+                          ^
+   drivers/cpufreq/intel_pstate.c:1979:10: note: did you mean 'core_get_val'?
+   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
+   static u64 core_get_val(struct cpudata *cpudata, int pstate)
+              ^
+>> drivers/cpufreq/intel_pstate.c:1990:9: error: call to undeclared function 'intel_pstate_cppc_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           return intel_pstate_cppc_get_scaling(cpu);
+                  ^
+>> drivers/cpufreq/intel_pstate.c:2350:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
+           .get_scaling = core_get_scaling,
+                          ^~~~~~~~~~~~~~~~
+                          core_get_val
+   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
+   static u64 core_get_val(struct cpudata *cpudata, int pstate)
+              ^
+>> drivers/cpufreq/intel_pstate.c:2350:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
+           .get_scaling = core_get_scaling,
+                          ^~~~~~~~~~~~~~~~
+   drivers/cpufreq/intel_pstate.c:2380:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
+           .get_scaling = core_get_scaling,
+                          ^~~~~~~~~~~~~~~~
+                          core_get_val
+   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
+   static u64 core_get_val(struct cpudata *cpudata, int pstate)
+              ^
+   drivers/cpufreq/intel_pstate.c:2380:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
+           .get_scaling = core_get_scaling,
+                          ^~~~~~~~~~~~~~~~
+   7 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'net-next-6.5' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net-next
+vim +/HYBRID_SCALING_FACTOR +1975 drivers/cpufreq/intel_pstate.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94098
+  1967	
+  1968	static int hwp_get_cpu_scaling(int cpu)
+  1969	{
+  1970		u8 cpu_type = 0;
+  1971	
+  1972		smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
+  1973		/* P-cores have a smaller perf level-to-freqency scaling factor. */
+  1974		if (cpu_type == 0x40)
+> 1975			return HYBRID_SCALING_FACTOR;
+  1976	
+  1977		/* Use default core scaling for E-cores */
+  1978		if (cpu_type == 0x20)
+> 1979			return core_get_scaling();
+  1980	
+  1981		/*
+  1982		 * If reached here, it means that, this system is either non
+  1983		 * hybrid system (like Tiger Lake) or hybrid capable system (like
+  1984		 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
+  1985		 * support is 0).
+  1986		 * All non hybrid systems, don't publish nominal_frequency
+  1987		 * field (means nominal frequency = 0), In that case
+  1988		 * the legacy core scaling is used.
+  1989		 */
+> 1990		return intel_pstate_cppc_get_scaling(cpu);
+  1991	}
+  1992	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36720=
-1
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
