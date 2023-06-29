@@ -1,102 +1,84 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B3114298;
-	Thu, 29 Jun 2023 19:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688066981; x=1719602981;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JeQCZ/qBvTUpg29R7lpL3Y5r6MiEliTWnefc7dGvqBI=;
-  b=laxRkE7NpG+YEXJ3NYbJI8zd+0zSAvoEJQsaA9iN4FmlKH/eFuLxmDfz
-   WBlqLKCaMNb4bBwFVMpCdVWPkE9r0liYEkFb5gU8H8SdrvwWlx4XtkuAA
-   +KQjJYLwxGYdKF6yyfCqB4jviM2+wjkOPrioHvqcTzcr2EO+QCkzJlGEw
-   ag7iv0jIHMEqk20I08dNrcLxOMb04HxVfMipVjPdf1zYcnorgwlVUPEPR
-   VyiyNQu+CNgQCzlGPBmiFNNWHr32A6U1/0Bi6Ir21+y2WrsV9G93AdHYT
-   HRKCwMUz/F8TBPY90p3H8pqrPOPn7Ac7eKrs28KVXtd1vuwl7rp+b8T4J
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="359690239"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="359690239"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 12:29:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1047931244"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="1047931244"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2023 12:29:38 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qExKj-000EM5-2L;
-	Thu, 29 Jun 2023 19:29:37 +0000
-Date: Fri, 30 Jun 2023 03:29:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: [stable:linux-5.15.y 55/9999] arch/x86/kvm/hyperv.c:2185:5: warning:
- stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
-Message-ID: <202306300342.ctG3yOfI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E066114298
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688067065;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=US9SUqTkwAbeVc73T8BkKiepBSkUXtmkE6l5IBhQoio=;
+	b=DYQZNAEnrKyxoqHEDjQWEAT8/byVD3Xnynrwzj+36bXuNbiTt3fhsK/F3KMjA7mQxlTHhl
+	0R09AR17BXc2iwrgtwf98aT16+/HmchBNuGEVArXHfj4oYjYgwAowkhzQ7nSfIJoKjqkSe
+	LG7MfL/IIS6zUuBQLlMfXOx1mxJwSu0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-57-nYL9e3Z3MseYv4E-BmeDAw-1; Thu, 29 Jun 2023 15:31:04 -0400
+X-MC-Unique: nYL9e3Z3MseYv4E-BmeDAw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED8338CDA24
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:31:03 +0000 (UTC)
+Received: from [172.64.10.50] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D49D940C2063;
+	Thu, 29 Jun 2023 19:31:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, 86e203ed)
+Date: Thu, 29 Jun 2023 19:31:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <62486.123062915310401339@us-mta-57.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vitaly,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   4af60700a60cc45ee4fb6d579cccf1b7bca20c34
-commit: cb188e07105f2216f5efbefac95df4b6ce266906 [55/9999] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230630/202306300342.ctG3yOfI-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300342.ctG3yOfI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306300342.ctG3yOfI-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
-   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-       ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+Kernel information:
+    Commit message: Merge tag 'input-for-v6.5-rc0' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/dtor/input
 
-4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
-e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
-4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
-e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
-e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
-e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
-e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
-b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
-e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
-0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
-e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94240
 
-:::::: The code at line 2185 was first introduced by commit
-:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36766=
+3
 
-:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
