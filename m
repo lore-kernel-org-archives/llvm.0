@@ -1,93 +1,130 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EDA10784;
-	Thu, 29 Jun 2023 23:39:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688081957; x=1719617957;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=w6vWHxz+rgCvYphTY2G6Lv5BvclrewW2Ri9H4QlQQiE=;
-  b=mb2cp9WkdDdYsLsByV6qLRN8b05whNdxG6gJO7YnXsC+LXiTCYs4aCVY
-   7hs9h+TRs3Z8iGCGkTnvpNs7aGPDu5BhvyqPMwjVpsVusoN34RQm7AlPT
-   NB9LZWahxzfUzL9YVm9oOx/Gm9Wil4p/sH+U1dyyvRkJxKhSstcQUKWU7
-   mabkq/o0qUv2ARplYuCMB9R1wJ3m3AeUivoALMDo2XyH0pATaHEvAGYAl
-   fi8bUvlbOsulbg9Mir4JJOjPRDZwwtDNiaK0+1ZjvqJH1bNPpglbZ5UlQ
-   BIl6s4ij9bCU7iBdtYvMj2fXUozqukZ4czCmcNeEMpSV4dCbTLm1Cykoz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347040374"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="347040374"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 16:39:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1048009380"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="1048009380"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2023 16:39:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qF1E8-000EWH-04;
-	Thu, 29 Jun 2023 23:39:04 +0000
-Date: Fri, 30 Jun 2023 07:38:15 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH] objtool: Make 'sec-address' always on
-Message-ID: <202306300717.hia1E3f7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601E510784
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 23:42:50 +0000 (UTC)
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so751969a12.1
+        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 16:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688082169; x=1690674169;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UqxiJ+wxeOup3g+v1VHpaHDKWQztxMxqi0mk+NuRGI0=;
+        b=JFJLqtpj9HP+j2cx8ibkcKdNPfiT4hV/vniOYA+lGlaubKwrgLdo+IqDliWWwLVCXX
+         4qew4YCgpeJ+l4vse/+P1GvQa9jQXWVMLPPTY3qpJN27Hmlq9pzgTTZEY2+pn0z1Aj8p
+         79cdHWQKV0ftUG/JgX3DNIHwG8NSV5ICPDKYxyHYfpwN4H/eVvGqmtkgalPEpyICaibJ
+         0c+7yff/jYz47CVInUbsucKWyflvKPxTnOQMV+WuJ2Z++mVSI7L2HmleoB3tBQ10iaV7
+         MRMwpvNfl3kbYyTuBd31uPvUplw64d49c+MrqsgTUd5I9XF4J3ViZ/E2QrStaqYWMsm+
+         9Iow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688082169; x=1690674169;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UqxiJ+wxeOup3g+v1VHpaHDKWQztxMxqi0mk+NuRGI0=;
+        b=egYUMYvnZibDObIbCUK16vfHlRfvpkFLFe7naYZDeUbdyMRyZ/3DcWiW9OLUTJQcUB
+         MxSViayFbp8dm9TY24iPYWym7xuJqVVeLrz4ItIttS1reinClagjnjoUXIqGz94gcARo
+         JnKzWG8W9WFnaLydQvjkpegfVFlZ1z9dSUXXn/1HZCVxh3zK46azAvYjWjKakYlwiQto
+         67Rx2Z26U8Q1A+YV3udlZLYO5P6dTa+KXOKLyrphRSQVLVmEzmOT3M00PDCo11qphIyj
+         7XF8iCqOv5MefKre+ZNujdut8eW+EkCyRhAIcq4n7ddqgRDgm4Cucl5HoUkyAspuxkcV
+         6VXQ==
+X-Gm-Message-State: AC+VfDxM7o0fsVJFM1tWRh8O39L3e4kgR7TKLVaP3P9/xswoEIocJv94
+	nh6RV6vD36/TwX2HfuDFgzi8nX4rBDOK0cl/pEc=
+X-Google-Smtp-Source: ACHHUZ6vUtYaX6I26hwq42e3qYc1jUuPZEmeaRTh+ELGRVrZOZ5ozI8rE+BXZrWz8EZenOof5u9+N5+gcL+j0v40i44=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a63:5264:0:b0:55b:4410:aafb with SMTP
+ id s36-20020a635264000000b0055b4410aafbmr800040pgl.3.1688082169612; Thu, 29
+ Jun 2023 16:42:49 -0700 (PDT)
+Date: Thu, 29 Jun 2023 23:42:45 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3098; i=samitolvanen@google.com;
+ h=from:subject; bh=P9om0lNdUWwXNFZNNgw3dgHTOqlhC0p07z6I9F32sio=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBknhb0iAHV/FdV5QB/CkNhg1kTCcn5k/bF4Y9dp
+ ECoQTCJMMqJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZJ4W9AAKCRBMtfaEi7xW
+ 7i3FC/9JJjrQvfbLQqh+/oUlKPBRc4ccqjtDtqPRPN/vvj/gmo24gT4SK4QiKLSQOxPwvm1UYRc
+ rK/IByu9EOG9Amh2WhwDzJ1nZYo2pgbyx2XJANKacsIKE5HIGPVj0yiD542YbVQqh0XWYsYek/H
+ ZRc06Ds03/YmsEuHZcdu4MOGWxg6lOkQioXBZJILg52my7uo56gX00XNbros1ISh0dOmzpYI2sI
+ vhHY/HaOmJhMvCombyTLDqHjPjrVtYq/Em7SZFf2q/REezKhd+Z9hwTtquIG2+4QwUFw4Df/qte
+ wXI8fR+3YoCmQewZNZXGh85dQI+D7vwL6sG67LjmVtNmiSQuO9b/2AYH2ev3X8o5bkX9w7Wrprg
+ WCLz2/XvMdKNiNDO0+b1C0Aabc87+JeYRFjsHUJAk7cQtHTF81tldyVFJ1j+qCNqUQbMBOrsDF2 WWkOlKAn+fRlG+AC1RuBn0hFhfbL5MTzy1vwk61Ofy/VmNnAJnSk8aurKOLWLlBhgAA58=
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230629234244.1752366-8-samitolvanen@google.com>
+Subject: [PATCH 0/6] riscv: KCFI support
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-In-Reply-To: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
-References: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
-TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-TO: Josh Poimboeuf <jpoimboe@kernel.org>
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: linuxppc-dev@lists.ozlabs.org
-CC: linux-kernel@vger.kernel.org
+This series adds KCFI support for RISC-V. KCFI is a fine-grained
+forward-edge control-flow integrity scheme supported in Clang >=16,
+which ensures indirect calls in instrumented code can only branch to
+functions whose type matches the function pointer type, thus making
+code reuse attacks more difficult.
 
-Hi Christophe,
+Patch 1 implements a pt_regs based syscall wrapper to address
+function pointer type mismatches in syscall handling. Patches 2 and 3
+annotate indirectly called assembly functions with CFI types. Patch 4
+implements error handling for indirect call checks. Patch 5 disables
+CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
+to be enabled for RISC-V.
 
-kernel test robot noticed the following build warnings:
+Note that Clang 16 has a generic architecture-agnostic KCFI
+implementation, which does work with the kernel, but doesn't produce
+a stable code sequence for indirect call checks, which means
+potential failures just trap and won't result in informative error
+messages. Clang 17 includes a RISC-V specific back-end implementation
+for KCFI, which emits a predictable code sequence for the checks and a
+.kcfi_traps section with locations of the traps, which patch 5 uses to
+produce more useful errors.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.4 next-20230629]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The type mismatch fixes and annotations in the first three patches
+also become necessary in future if the kernel decides to support
+fine-grained CFI implemented using the hardware landing pad
+feature proposed in the in-progress Zicfisslp extension. Once the
+specification is ratified and hardware support emerges, implementing
+runtime patching support that replaces KCFI instrumentation with
+Zicfisslp landing pads might also be feasible (similarly to KCFI to
+FineIBT patching on x86_64), allowing distributions to ship a unified
+kernel binary for all devices.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/objtool-Make-sec-address-always-on/20230621-232305
-base:   linus/master
-patch link:    https://lore.kernel.org/r/e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH] objtool: Make 'sec-address' always on
-config: x86_64-randconfig-x001-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300717.hia1E3f7-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300717.hia1E3f7-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306300717.hia1E3f7-lkp@intel.com/
+Sami Tolvanen (6):
+  riscv: Implement syscall wrappers
+  riscv: Add types to indirectly called assembly functions
+  riscv: Add ftrace_stub_graph
+  riscv: Add CFI error handling
+  riscv/purgatory: Disable CFI
+  riscv: Allow CONFIG_CFI_CLANG to be selected
 
-All warnings (new ones prefixed by >>):
+ arch/riscv/Kconfig                       |  3 +
+ arch/riscv/include/asm/cfi.h             | 22 ++++++
+ arch/riscv/include/asm/insn.h            | 10 +++
+ arch/riscv/include/asm/syscall.h         |  5 +-
+ arch/riscv/include/asm/syscall_wrapper.h | 87 ++++++++++++++++++++++++
+ arch/riscv/kernel/Makefile               |  2 +
+ arch/riscv/kernel/cfi.c                  | 77 +++++++++++++++++++++
+ arch/riscv/kernel/compat_syscall_table.c |  8 ++-
+ arch/riscv/kernel/mcount.S               |  9 ++-
+ arch/riscv/kernel/suspend_entry.S        |  5 +-
+ arch/riscv/kernel/sys_riscv.c            |  6 ++
+ arch/riscv/kernel/syscall_table.c        |  8 ++-
+ arch/riscv/kernel/traps.c                |  4 +-
+ arch/riscv/purgatory/Makefile            |  4 ++
+ 14 files changed, 238 insertions(+), 12 deletions(-)
+ create mode 100644 arch/riscv/include/asm/cfi.h
+ create mode 100644 arch/riscv/include/asm/syscall_wrapper.h
+ create mode 100644 arch/riscv/kernel/cfi.c
 
->> fs/reiserfs/lbalance.o: warning: objtool: leaf_move_items+0xf5b (.text+0xf5b): stack state mismatch: cfa1=4+160 cfa2=4+152
->> fs/reiserfs/lbalance.o: warning: objtool: leaf_cut_from_buffer+0x2091 (.text+0x4931): stack state mismatch: cfa1=4+240 cfa2=4+224
->> fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_boundary_item+0x35ef (.text+0xae3f): stack state mismatch: cfa1=4+248 cfa2=4+240
->> fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely+0xe41 (.text+0xbdf1): stack state mismatch: cfa1=4+256 cfa2=4+248
---
->> fs/reiserfs/do_balan.o: warning: objtool: replace_key+0x497 (.text+0xc67): stack state mismatch: cfa1=4+112 cfa2=4+128
->> fs/reiserfs/do_balan.o: warning: objtool: balance_leaf+0xcb30 (.text+0x10490): stack state mismatch: cfa1=4+440 cfa2=4+456
---
->> fs/reiserfs/ibalance.o: warning: objtool: balance_internal+0x4f7c (.text+0x4f7c): stack state mismatch: cfa1=4+304 cfa2=4+312
->> fs/reiserfs/ibalance.o: warning: objtool: internal_move_pointers_items+0x8e0 (.text+0x7ab0): stack state mismatch: cfa1=4+232 cfa2=4+224
 
+base-commit: c6b0271053e7a5ae57511363213777f706b60489
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0.255.g8b1d071c50-goog
+
