@@ -1,45 +1,43 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7A88489;
-	Thu, 29 Jun 2023 22:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8962210784;
+	Thu, 29 Jun 2023 23:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688079425; x=1719615425;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sot15ZusZgl5Q8RuumvSgYebRWa3GISjcm0NGSMOPOs=;
-  b=EgDlEx75m6WiUZ9QUw8wO5jSUdI9RwPeDegZ9VcMFMJZGvTYL5XgThw6
-   V/OnsvqeiPqQV7842bT6f5W8AUwmkffektkLY4uSkIZgBqdwKkEs7BCJp
-   hT3sencUvVw2iUrJc24F+FzAy/FKmqcIea349AMK24AMUASpv7HD1sZaq
-   4jas96sYwii+jZcEaeI15D3zhYwY2+yBRHULxQ9CZeIrrjOIVshjkOl3y
-   UCJkGIZTSHSXm+rL/CVgSkH5NnAezOHKSluXtkLuUz6Q7zaRILTGFvdCP
-   9KaQuDhlbmoAkslweZ0z8O1rcNG5wixuQZsFzX3Q+oUPJTicOToUvZtRd
+  t=1688081284; x=1719617284;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tejttgQ4EyBz9Bxvk+OL8J2809bCqrZ4OrLeqzrRDt8=;
+  b=YIsMUe+9z4MqH92EgM2i886hs8Nf75kiFhWkRZejXQ1bQyVD61hBPTtT
+   RqGg29lvZiqewgeFUXVftXass8JUTXiHD7BlrCq/otvg4lz/xcrPYkaop
+   icKyuQlmOvzjWmFTu4UGL7YLzAbjGl94kn7dvy1aZDZveh3O/0rwZKAdP
+   DRg8PIVlqK3yG1nKfuVHsfh4HKWZW9pP09J/TQ6MoWqK8BzgrGDOUafOY
+   /S0NPrbRQATF2mM0tLDYNmefZ3hNvW3YUjV3zOfGEbGOqoIeBD/rXogEE
+   5H3HVT3+xN9zHxqgA6d1Tg6bK5v0JiCe+QmMOUXVMoAZyzbybHLCgMEtE
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="352073957"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="352081498"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="352073957"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:57:04 -0700
+   d="scan'208";a="352081498"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 16:28:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="807526054"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717594220"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="807526054"
+   d="scan'208";a="717594220"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Jun 2023 15:57:02 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2023 16:28:02 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF0ZR-000ETd-1F;
-	Thu, 29 Jun 2023 22:57:01 +0000
-Date: Fri, 30 Jun 2023 06:56:54 +0800
+	id 1qF13R-000EUb-34;
+	Thu, 29 Jun 2023 23:28:01 +0000
+Date: Fri, 30 Jun 2023 07:27:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Garver <eric@garver.life>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>,
-	Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [PATCH net-next 2/2] net: openvswitch: add drop action
-Message-ID: <202306300609.tdRdZscy-lkp@intel.com>
-References: <20230629203005.2137107-3-eric@garver.life>
+To: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robertosassu:ima-evm-lsms-v2-devel-v5 29/31]
+ security/integrity/evm/evm_main.c:928:5: warning: no previous prototype for
+ function 'evm_inode_init_security'
+Message-ID: <202306300758.36V96Hbv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,322 +46,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230629203005.2137107-3-eric@garver.life>
 
-Hi Eric,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Garver/net-openvswitch-add-drop-reasons/20230630-043307
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230629203005.2137107-3-eric%40garver.life
-patch subject: [PATCH net-next 2/2] net: openvswitch: add drop action
-config: hexagon-randconfig-r045-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300609.tdRdZscy-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300609.tdRdZscy-lkp@intel.com/reproduce)
+tree:   https://github.com/robertosassu/linux ima-evm-lsms-v2-devel-v5
+head:   bfb2bf0637de1448be0ddf96352a705a2f9140ac
+commit: f09f34b28a814ba2d9819e3b50dfac00c06d9020 [29/31] evm: Move to LSM infrastructure
+config: x86_64-randconfig-x004-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300758.36V96Hbv-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300758.36V96Hbv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306300609.tdRdZscy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306300758.36V96Hbv-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/openvswitch/actions.c:8:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/openvswitch/actions.c:8:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/openvswitch/actions.c:8:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> net/openvswitch/actions.c:1483:4: error: expected expression
-    1483 |                         u32 reason = nla_get_u32(a);
-         |                         ^
->> net/openvswitch/actions.c:1485:4: error: use of undeclared identifier 'reason'
-    1485 |                         reason |= SKB_DROP_REASON_SUBSYS_OPENVSWITCH <<
-         |                         ^
-   net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
-    1488 |                         if (reason == OVS_XLATE_OK)
-         |                             ^
-   net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
-   net/openvswitch/actions.c:1488:8: error: use of undeclared identifier 'reason'
-   net/openvswitch/actions.c:1491:26: error: use of undeclared identifier 'reason'
-    1491 |                         kfree_skb_reason(skb, reason);
-         |                                               ^
-   6 warnings and 6 errors generated.
+>> security/integrity/evm/evm_main.c:928:5: warning: no previous prototype for function 'evm_inode_init_security' [-Wmissing-prototypes]
+   int evm_inode_init_security(struct inode *inode, struct inode *dir,
+       ^
+   security/integrity/evm/evm_main.c:928:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int evm_inode_init_security(struct inode *inode, struct inode *dir,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +1483 net/openvswitch/actions.c
+vim +/evm_inode_init_security +928 security/integrity/evm/evm_main.c
 
-  1285	
-  1286	/* Execute a list of actions against 'skb'. */
-  1287	static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,
-  1288				      struct sw_flow_key *key,
-  1289				      const struct nlattr *attr, int len)
-  1290	{
-  1291		const struct nlattr *a;
-  1292		int rem;
-  1293	
-  1294		for (a = attr, rem = len; rem > 0;
-  1295		     a = nla_next(a, &rem)) {
-  1296			int err = 0;
-  1297	
-  1298			if (trace_ovs_do_execute_action_enabled())
-  1299				trace_ovs_do_execute_action(dp, skb, key, a, rem);
-  1300	
-  1301			switch (nla_type(a)) {
-  1302			case OVS_ACTION_ATTR_OUTPUT: {
-  1303				int port = nla_get_u32(a);
-  1304				struct sk_buff *clone;
-  1305	
-  1306				/* Every output action needs a separate clone
-  1307				 * of 'skb', In case the output action is the
-  1308				 * last action, cloning can be avoided.
-  1309				 */
-  1310				if (nla_is_last(a, rem)) {
-  1311					do_output(dp, skb, port, key);
-  1312					/* 'skb' has been used for output.
-  1313					 */
-  1314					return 0;
-  1315				}
-  1316	
-  1317				clone = skb_clone(skb, GFP_ATOMIC);
-  1318				if (clone)
-  1319					do_output(dp, clone, port, key);
-  1320				OVS_CB(skb)->cutlen = 0;
-  1321				break;
-  1322			}
-  1323	
-  1324			case OVS_ACTION_ATTR_TRUNC: {
-  1325				struct ovs_action_trunc *trunc = nla_data(a);
-  1326	
-  1327				if (skb->len > trunc->max_len)
-  1328					OVS_CB(skb)->cutlen = skb->len - trunc->max_len;
-  1329				break;
-  1330			}
-  1331	
-  1332			case OVS_ACTION_ATTR_USERSPACE:
-  1333				output_userspace(dp, skb, key, a, attr,
-  1334							     len, OVS_CB(skb)->cutlen);
-  1335				OVS_CB(skb)->cutlen = 0;
-  1336				break;
-  1337	
-  1338			case OVS_ACTION_ATTR_HASH:
-  1339				execute_hash(skb, key, a);
-  1340				break;
-  1341	
-  1342			case OVS_ACTION_ATTR_PUSH_MPLS: {
-  1343				struct ovs_action_push_mpls *mpls = nla_data(a);
-  1344	
-  1345				err = push_mpls(skb, key, mpls->mpls_lse,
-  1346						mpls->mpls_ethertype, skb->mac_len);
-  1347				break;
-  1348			}
-  1349			case OVS_ACTION_ATTR_ADD_MPLS: {
-  1350				struct ovs_action_add_mpls *mpls = nla_data(a);
-  1351				__u16 mac_len = 0;
-  1352	
-  1353				if (mpls->tun_flags & OVS_MPLS_L3_TUNNEL_FLAG_MASK)
-  1354					mac_len = skb->mac_len;
-  1355	
-  1356				err = push_mpls(skb, key, mpls->mpls_lse,
-  1357						mpls->mpls_ethertype, mac_len);
-  1358				break;
-  1359			}
-  1360			case OVS_ACTION_ATTR_POP_MPLS:
-  1361				err = pop_mpls(skb, key, nla_get_be16(a));
-  1362				break;
-  1363	
-  1364			case OVS_ACTION_ATTR_PUSH_VLAN:
-  1365				err = push_vlan(skb, key, nla_data(a));
-  1366				break;
-  1367	
-  1368			case OVS_ACTION_ATTR_POP_VLAN:
-  1369				err = pop_vlan(skb, key);
-  1370				break;
-  1371	
-  1372			case OVS_ACTION_ATTR_RECIRC: {
-  1373				bool last = nla_is_last(a, rem);
-  1374	
-  1375				err = execute_recirc(dp, skb, key, a, last);
-  1376				if (last) {
-  1377					/* If this is the last action, the skb has
-  1378					 * been consumed or freed.
-  1379					 * Return immediately.
-  1380					 */
-  1381					return err;
-  1382				}
-  1383				break;
-  1384			}
-  1385	
-  1386			case OVS_ACTION_ATTR_SET:
-  1387				err = execute_set_action(skb, key, nla_data(a));
-  1388				break;
-  1389	
-  1390			case OVS_ACTION_ATTR_SET_MASKED:
-  1391			case OVS_ACTION_ATTR_SET_TO_MASKED:
-  1392				err = execute_masked_set_action(skb, key, nla_data(a));
-  1393				break;
-  1394	
-  1395			case OVS_ACTION_ATTR_SAMPLE: {
-  1396				bool last = nla_is_last(a, rem);
-  1397	
-  1398				err = sample(dp, skb, key, a, last);
-  1399				if (last)
-  1400					return err;
-  1401	
-  1402				break;
-  1403			}
-  1404	
-  1405			case OVS_ACTION_ATTR_CT:
-  1406				if (!is_flow_key_valid(key)) {
-  1407					err = ovs_flow_key_update(skb, key);
-  1408					if (err)
-  1409						return err;
-  1410				}
-  1411	
-  1412				err = ovs_ct_execute(ovs_dp_get_net(dp), skb, key,
-  1413						     nla_data(a));
-  1414	
-  1415				/* Hide stolen IP fragments from user space. */
-  1416				if (err)
-  1417					return err == -EINPROGRESS ? 0 : err;
-  1418				break;
-  1419	
-  1420			case OVS_ACTION_ATTR_CT_CLEAR:
-  1421				err = ovs_ct_clear(skb, key);
-  1422				break;
-  1423	
-  1424			case OVS_ACTION_ATTR_PUSH_ETH:
-  1425				err = push_eth(skb, key, nla_data(a));
-  1426				break;
-  1427	
-  1428			case OVS_ACTION_ATTR_POP_ETH:
-  1429				err = pop_eth(skb, key);
-  1430				break;
-  1431	
-  1432			case OVS_ACTION_ATTR_PUSH_NSH: {
-  1433				u8 buffer[NSH_HDR_MAX_LEN];
-  1434				struct nshhdr *nh = (struct nshhdr *)buffer;
-  1435	
-  1436				err = nsh_hdr_from_nlattr(nla_data(a), nh,
-  1437							  NSH_HDR_MAX_LEN);
-  1438				if (unlikely(err))
-  1439					break;
-  1440				err = push_nsh(skb, key, nh);
-  1441				break;
-  1442			}
-  1443	
-  1444			case OVS_ACTION_ATTR_POP_NSH:
-  1445				err = pop_nsh(skb, key);
-  1446				break;
-  1447	
-  1448			case OVS_ACTION_ATTR_METER:
-  1449				if (ovs_meter_execute(dp, skb, key, nla_get_u32(a))) {
-  1450					consume_skb(skb);
-  1451					return 0;
-  1452				}
-  1453				break;
-  1454	
-  1455			case OVS_ACTION_ATTR_CLONE: {
-  1456				bool last = nla_is_last(a, rem);
-  1457	
-  1458				err = clone(dp, skb, key, a, last);
-  1459				if (last)
-  1460					return err;
-  1461	
-  1462				break;
-  1463			}
-  1464	
-  1465			case OVS_ACTION_ATTR_CHECK_PKT_LEN: {
-  1466				bool last = nla_is_last(a, rem);
-  1467	
-  1468				err = execute_check_pkt_len(dp, skb, key, a, last);
-  1469				if (last)
-  1470					return err;
-  1471	
-  1472				break;
-  1473			}
-  1474	
-  1475			case OVS_ACTION_ATTR_DEC_TTL:
-  1476				err = execute_dec_ttl(skb, key);
-  1477				if (err == -EHOSTUNREACH)
-  1478					return dec_ttl_exception_handler(dp, skb,
-  1479									 key, a);
-  1480				break;
-  1481	
-  1482			case OVS_ACTION_ATTR_DROP:
-> 1483				u32 reason = nla_get_u32(a);
-  1484	
-> 1485				reason |= SKB_DROP_REASON_SUBSYS_OPENVSWITCH <<
-  1486						SKB_DROP_REASON_SUBSYS_SHIFT;
-  1487	
-  1488				if (reason == OVS_XLATE_OK)
-  1489					break;
-  1490	
-  1491				kfree_skb_reason(skb, reason);
-  1492				return 0;
-  1493			}
-  1494	
-  1495			if (unlikely(err)) {
-  1496				kfree_skb(skb);
-  1497				return err;
-  1498			}
-  1499		}
-  1500	
-  1501		consume_skb(skb);
-  1502		return 0;
-  1503	}
-  1504	
+66dbc325afcef9 Mimi Zohar            2011-03-15  924  
+cb72318069d5e9 Mimi Zohar            2011-03-09  925  /*
+9eea2904292c2d Roberto Sassu         2021-05-14  926   * evm_inode_init_security - initializes security.evm HMAC value
+cb72318069d5e9 Mimi Zohar            2011-03-09  927   */
+f48c517832579b Roberto Sassu         2023-05-23 @928  int evm_inode_init_security(struct inode *inode, struct inode *dir,
+f48c517832579b Roberto Sassu         2023-05-23  929  			    const struct qstr *qstr, struct xattr *xattrs,
+f48c517832579b Roberto Sassu         2023-05-23  930  			    int *xattr_count)
+cb72318069d5e9 Mimi Zohar            2011-03-09  931  {
+650b29dbdf2caf Thiago Jung Bauermann 2019-06-11  932  	struct evm_xattr *xattr_data;
+36218195f215df Roberto Sassu         2023-03-31  933  	struct xattr *xattr, *evm_xattr;
+36218195f215df Roberto Sassu         2023-03-31  934  	bool evm_protected_xattrs = false;
+cb72318069d5e9 Mimi Zohar            2011-03-09  935  	int rc;
+cb72318069d5e9 Mimi Zohar            2011-03-09  936  
+36218195f215df Roberto Sassu         2023-03-31  937  	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
+36218195f215df Roberto Sassu         2023-03-31  938  		return 0;
+36218195f215df Roberto Sassu         2023-03-31  939  
+36218195f215df Roberto Sassu         2023-03-31  940  	/*
+36218195f215df Roberto Sassu         2023-03-31  941  	 * security_inode_init_security() makes sure that the xattrs array is
+36218195f215df Roberto Sassu         2023-03-31  942  	 * contiguous, there is enough space for security.evm, and that there is
+36218195f215df Roberto Sassu         2023-03-31  943  	 * a terminator at the end of the array.
+36218195f215df Roberto Sassu         2023-03-31  944  	 */
+36218195f215df Roberto Sassu         2023-03-31  945  	for (xattr = xattrs; xattr->name; xattr++) {
+36218195f215df Roberto Sassu         2023-03-31  946  		if (evm_protected_xattr(xattr->name))
+36218195f215df Roberto Sassu         2023-03-31  947  			evm_protected_xattrs = true;
+36218195f215df Roberto Sassu         2023-03-31  948  	}
+36218195f215df Roberto Sassu         2023-03-31  949  
+36218195f215df Roberto Sassu         2023-03-31  950  	/* EVM xattr not needed. */
+36218195f215df Roberto Sassu         2023-03-31  951  	if (!evm_protected_xattrs)
+5a4730ba9517cf Mimi Zohar            2011-08-11  952  		return 0;
+cb72318069d5e9 Mimi Zohar            2011-03-09  953  
+f48c517832579b Roberto Sassu         2023-05-23  954  	evm_xattr = lsm_get_xattr_slot(xattrs, xattr_count);
+36218195f215df Roberto Sassu         2023-03-31  955  	/*
+36218195f215df Roberto Sassu         2023-03-31  956  	 * Array terminator (xattr name = NULL) must be the first non-filled
+36218195f215df Roberto Sassu         2023-03-31  957  	 * xattr slot.
+36218195f215df Roberto Sassu         2023-03-31  958  	 */
+36218195f215df Roberto Sassu         2023-03-31  959  	WARN_ONCE(evm_xattr != xattr,
+36218195f215df Roberto Sassu         2023-03-31  960  		  "%s: xattrs terminator is not the first non-filled slot\n",
+36218195f215df Roberto Sassu         2023-03-31  961  		  __func__);
+f48c517832579b Roberto Sassu         2023-05-23  962  
+cb72318069d5e9 Mimi Zohar            2011-03-09  963  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+cb72318069d5e9 Mimi Zohar            2011-03-09  964  	if (!xattr_data)
+cb72318069d5e9 Mimi Zohar            2011-03-09  965  		return -ENOMEM;
+cb72318069d5e9 Mimi Zohar            2011-03-09  966  
+650b29dbdf2caf Thiago Jung Bauermann 2019-06-11  967  	xattr_data->data.type = EVM_XATTR_HMAC;
+f48c517832579b Roberto Sassu         2023-05-23  968  	rc = evm_init_hmac(inode, xattrs, xattr_data->digest);
+cb72318069d5e9 Mimi Zohar            2011-03-09  969  	if (rc < 0)
+cb72318069d5e9 Mimi Zohar            2011-03-09  970  		goto out;
+cb72318069d5e9 Mimi Zohar            2011-03-09  971  
+cb72318069d5e9 Mimi Zohar            2011-03-09  972  	evm_xattr->value = xattr_data;
+cb72318069d5e9 Mimi Zohar            2011-03-09  973  	evm_xattr->value_len = sizeof(*xattr_data);
+9548906b2bb7ff Tetsuo Handa          2013-07-25  974  	evm_xattr->name = XATTR_EVM_SUFFIX;
+cb72318069d5e9 Mimi Zohar            2011-03-09  975  	return 0;
+cb72318069d5e9 Mimi Zohar            2011-03-09  976  out:
+cb72318069d5e9 Mimi Zohar            2011-03-09  977  	kfree(xattr_data);
+cb72318069d5e9 Mimi Zohar            2011-03-09  978  	return rc;
+cb72318069d5e9 Mimi Zohar            2011-03-09  979  }
+cb72318069d5e9 Mimi Zohar            2011-03-09  980  EXPORT_SYMBOL_GPL(evm_inode_init_security);
+cb72318069d5e9 Mimi Zohar            2011-03-09  981  
+
+:::::: The code at line 928 was first introduced by commit
+:::::: f48c517832579b520e79af7f9194fd5538f23d98 evm: Align evm_inode_init_security() definition with LSM infrastructure
+
+:::::: TO: Roberto Sassu <roberto.sassu@huawei.com>
+:::::: CC: Roberto Sassu <roberto.sassu@huawei.com>
 
 -- 
 0-DAY CI Kernel Test Service
