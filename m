@@ -1,223 +1,121 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D85848D;
-	Thu, 29 Jun 2023 08:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF571848D;
+	Thu, 29 Jun 2023 08:05:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688025920; x=1719561920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=5Y+YCSow5LvUte0a0y0qeDa2mDYP7COwAuMVhjDb7ms=;
-  b=iJf3c2K3RmPpiseOjIXOzKXXbQVmwrqZRk9MEghLANCKbWgC1LRT7DwZ
-   BeqOtXlcfb1AdFGaKFittx8ktZ2T9U1DaC9/+npj453CTcRfTi0+SRWZP
-   Oo9JnLqtZeU55bGE2av98eQxdw/rhRXinJhQa97/rl1BI6RQHys+7ESgn
-   s9L8wOPpQz6quZW/CAevXvGGH2UfeMVtmbdAHJns+YVhf7cdghBTnyhhE
-   9QunDjCsfKruclAK4DaRIwknkSaLmAc+JinhYKrRlZsmFFP5Iv67YZwUY
-   CsxawfRrVgGTZFUWKAdn3xuNOEJsKhJFjcgKl6Mw3kpXr/R/gfBYcvcVe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="364596599"
+  t=1688025925; x=1719561925;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Hcb2M6Bb4ZcAv3IeqR45Lpxo/ozuWy0A9CJqBTrH4NI=;
+  b=iqYsrY44QL/GNGtJ05lwjy7kS0uhXA1PKVIXBPUlM0Cr/uRln6sCdEgl
+   GrnEfYCvn+NKxAAxegpJCVxnQ9XZC/DdnkkylmV570jSfPEvL2kYMVr8K
+   5LmuzvN8lAlAu+lZFPSrLkv3gfT4AqmuRAz+U9msTP/iLrOhTd4vRabQN
+   Iv61XlJfcOaGxE0nmS29UJtzYjNoWZ7grZVHDr8Z0S5la8K7QbhvjRbpU
+   sIEmXYM0PR+QrtrA6MJYh4paROz/mGFXuEecDJG9nY29sG4x8f2uuBmyC
+   sYXxpVgJcJoxhvRczI3RzQ2IByvPFKTNGtYm0QC804WB7MjZ18cShQufP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="428067177"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="364596599"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:05:19 -0700
+   d="scan'208";a="428067177"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:05:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="807220312"
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="830441665"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="807220312"
+   d="scan'208";a="830441665"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Jun 2023 01:05:16 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 29 Jun 2023 01:05:16 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qEmeR-000Dys-37;
+	id 1qEmeR-000Dyj-2k;
 	Thu, 29 Jun 2023 08:05:15 +0000
-Date: Thu, 29 Jun 2023 16:04:21 +0800
+Date: Thu, 29 Jun 2023 16:04:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
-	Andy Chiu <andy.chiu@sifive.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	linux-kernel@vger.kernel.org, linux@rivosinc.com,
-	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>,
-	Darius Rad <darius@bluespec.com>
-Subject: Re: [PATCH v3] riscv: Discard vector state on syscalls
-Message-ID: <202306291513.DwaMo6k7-lkp@intel.com>
-References: <20230629062730.985184-1-bjorn@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-4.14.y 5611/9999]
+ drivers/gpu/drm/i915/i915_gem_stolen.o: warning: objtool:
+ gen6_get_stolen_reserved()+0x9a: can't find switch jump table
+Message-ID: <202306291636.PKz8aSbv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230629062730.985184-1-bjorn@kernel.org>
 
-Hi Björn,
+TO: Chris Wilson <chris@chris-wilson.co.uk>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Zhenyu Wang <zhenyuw@linux.intel.com>
+CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-kernel test robot noticed the following build errors:
+Hi Chris,
 
-[auto build test ERROR on 488833ccdcac118da16701f4ee0673b20ba47fe3]
+First bad commit (maybe != root cause):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/riscv-Discard-vector-state-on-syscalls/20230629-142852
-base:   488833ccdcac118da16701f4ee0673b20ba47fe3
-patch link:    https://lore.kernel.org/r/20230629062730.985184-1-bjorn%40kernel.org
-patch subject: [PATCH v3] riscv: Discard vector state on syscalls
-config: riscv-randconfig-r042-20230629 (https://download.01.org/0day-ci/archive/20230629/202306291513.DwaMo6k7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291513.DwaMo6k7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
+commit: 1e066477433b1a6451abda0307c13a06a23cdaa2 [5611/9999] drm/i915: Force VT'd workarounds when running as a guest OS
+config: x86_64-randconfig-x016-20230628 (https://download.01.org/0day-ci/archive/20230629/202306291636.PKz8aSbv-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291636.PKz8aSbv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306291513.DwaMo6k7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306291636.PKz8aSbv-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     751 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     759 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     768 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     777 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     786 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> arch/riscv/kernel/traps.c:299:3: error: call to undeclared function 'riscv_v_vstate_discard'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     299 |                 riscv_v_vstate_discard(regs);
-         |                 ^
-   arch/riscv/kernel/traps.c:299:3: note: did you mean 'riscv_v_vstate_query'?
-   arch/riscv/include/asm/vector.h:206:20: note: 'riscv_v_vstate_query' declared here
-     206 | static inline bool riscv_v_vstate_query(struct pt_regs *regs) { return false; }
-         |                    ^
-   13 warnings and 1 error generated.
-
-
-vim +/riscv_v_vstate_discard +299 arch/riscv/kernel/traps.c
-
-   290	
-   291	asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
-   292	{
-   293		if (user_mode(regs)) {
-   294			ulong syscall = regs->a7;
-   295	
-   296			regs->epc += 4;
-   297			regs->orig_a0 = regs->a0;
-   298	
- > 299			riscv_v_vstate_discard(regs);
-   300	
-   301			syscall = syscall_enter_from_user_mode(regs, syscall);
-   302	
-   303			if (syscall < NR_syscalls)
-   304				syscall_handler(regs, syscall);
-   305			else
-   306				regs->a0 = -ENOSYS;
-   307	
-   308			syscall_exit_to_user_mode(regs);
-   309		} else {
-   310			irqentry_state_t state = irqentry_nmi_enter(regs);
-   311	
-   312			do_trap_error(regs, SIGILL, ILL_ILLTRP, regs->epc,
-   313				"Oops - environment call from U-mode");
-   314	
-   315			irqentry_nmi_exit(regs, state);
-   316		}
-   317	
+   In file included from drivers/gpu/drm/i915/i915_gem_stolen.c:31:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:63:
+   In file included from drivers/gpu/drm/i915/intel_uc.h:31:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   drivers/gpu/drm/i915/i915_gem_object.h:289:1: warning: attribute declaration must precede definition [-Wignored-attributes]
+   __deprecated
+   ^
+   include/linux/compiler-gcc.h:106:37: note: expanded from macro '__deprecated'
+   #define __deprecated    __attribute__((deprecated))
+                                          ^
+   include/drm/drm_gem.h:247:20: note: previous definition is here
+   static inline void drm_gem_object_reference(struct drm_gem_object *obj)
+                      ^
+   In file included from drivers/gpu/drm/i915/i915_gem_stolen.c:31:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:63:
+   In file included from drivers/gpu/drm/i915/intel_uc.h:31:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   drivers/gpu/drm/i915/i915_gem_object.h:299:1: warning: attribute declaration must precede definition [-Wignored-attributes]
+   __deprecated
+   ^
+   include/linux/compiler-gcc.h:106:37: note: expanded from macro '__deprecated'
+   #define __deprecated    __attribute__((deprecated))
+                                          ^
+   include/drm/drm_gem.h:285:20: note: previous definition is here
+   static inline void drm_gem_object_unreference(struct drm_gem_object *obj)
+                      ^
+   In file included from drivers/gpu/drm/i915/i915_gem_stolen.c:31:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:63:
+   In file included from drivers/gpu/drm/i915/intel_uc.h:31:
+   In file included from drivers/gpu/drm/i915/i915_vma.h:34:
+   drivers/gpu/drm/i915/i915_gem_object.h:302:1: warning: attribute declaration must precede definition [-Wignored-attributes]
+   __deprecated
+   ^
+   include/linux/compiler-gcc.h:106:37: note: expanded from macro '__deprecated'
+   #define __deprecated    __attribute__((deprecated))
+                                          ^
+   include/drm/drm_gem.h:273:1: note: previous definition is here
+   drm_gem_object_unreference_unlocked(struct drm_gem_object *obj)
+   ^
+   In file included from drivers/gpu/drm/i915/i915_gem_stolen.c:31:
+   drivers/gpu/drm/i915/i915_drv.h:3591:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+           return i915_reset_backoff(error) | i915_terminally_wedged(error);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                            ||
+   drivers/gpu/drm/i915/i915_drv.h:3591:9: note: cast one or both operands to int to silence this warning
+   4 warnings generated.
+>> drivers/gpu/drm/i915/i915_gem_stolen.o: warning: objtool: gen6_get_stolen_reserved()+0x9a: can't find switch jump table
 
 -- 
 0-DAY CI Kernel Test Service
