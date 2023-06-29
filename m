@@ -1,147 +1,142 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C221380;
-	Thu, 29 Jun 2023 02:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688004191; x=1719540191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MqID3aXABUv7nc8CmrZcB8I0Vz3+y578ADvOER6lS44=;
-  b=JlJ3riuJ1I25WpwwluRx2/bcM20XZ8SfPB0nxU/3rFNFTp8+BIt6eZ8+
-   PMjxwoXzesFrd+DxKrg0ga+2YAwwG6KUAoetZFRR5zlz+zyXjkqv+Oxut
-   EWouaL7/eT9BAHCS+pjexntJm0EfnF9HIQsgfn1j+X/uMwjsfcgNF2oH1
-   UmNlkE5reiAVQKk+8l/B11dPgn2dGG1k8AFan1kKfAfmlZWfaZWVF2XWL
-   p22Qsbm5zV1SpS/CoGzNqdDkP6eRm5HiPvKTz0EQjXDbnfLCH+etijwrH
-   jiXoU+C1eRsSf6xX3MU3Nv1BajX5+aCoOvuMr13cVVzL0X756nuz7KIEA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392726378"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="392726378"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:03:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047611857"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="1047611857"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 19:03:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEgzv-000DgL-2I;
-	Thu, 29 Jun 2023 02:03:03 +0000
-Date: Thu, 29 Jun 2023 10:02:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable
- system with disabled E-cores
-Message-ID: <202306290948.ThmHeSqf-lkp@intel.com>
-References: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EE71842
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 02:25:33 +0000 (UTC)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qs2NT5Y5RzqSqY;
+	Thu, 29 Jun 2023 10:25:13 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 29 Jun 2023 10:25:31 +0800
+Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
+ functions
+To: Yonghong Song <yhs@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>, Steven Rostedt
+	<rostedt@goodmis.org>
+CC: Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230628181926.4102448-1-yhs@fb.com>
+From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <0bcb9470-4b39-1fe1-fcab-4d945f10fe7b@huawei.com>
+Date: Thu, 29 Jun 2023 10:25:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
-
-Hi Srinivas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.4 next-20230628]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Pandruvada/cpufreq-intel_pstate-Fix-scaling-for-hybrid-capable-system-with-disabled-E-cores/20230629-065506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230628225341.3718351-1-srinivas.pandruvada%40linux.intel.com
-patch subject: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
-config: i386-buildonly-randconfig-r004-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290948.ThmHeSqf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cpufreq/intel_pstate.c:1975:10: error: use of undeclared identifier 'HYBRID_SCALING_FACTOR'
-                   return HYBRID_SCALING_FACTOR;
-                          ^
->> drivers/cpufreq/intel_pstate.c:1979:10: error: call to undeclared function 'core_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   return core_get_scaling();
-                          ^
-   drivers/cpufreq/intel_pstate.c:1979:10: note: did you mean 'core_get_val'?
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
->> drivers/cpufreq/intel_pstate.c:1990:9: error: call to undeclared function 'intel_pstate_cppc_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           return intel_pstate_cppc_get_scaling(cpu);
-                  ^
->> drivers/cpufreq/intel_pstate.c:2350:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-                          core_get_val
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
->> drivers/cpufreq/intel_pstate.c:2350:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-   drivers/cpufreq/intel_pstate.c:2380:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-                          core_get_val
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
-   drivers/cpufreq/intel_pstate.c:2380:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-   7 errors generated.
+In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 
 
-vim +/HYBRID_SCALING_FACTOR +1975 drivers/cpufreq/intel_pstate.c
 
-  1967	
-  1968	static int hwp_get_cpu_scaling(int cpu)
-  1969	{
-  1970		u8 cpu_type = 0;
-  1971	
-  1972		smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
-  1973		/* P-cores have a smaller perf level-to-freqency scaling factor. */
-  1974		if (cpu_type == 0x40)
-> 1975			return HYBRID_SCALING_FACTOR;
-  1976	
-  1977		/* Use default core scaling for E-cores */
-  1978		if (cpu_type == 0x20)
-> 1979			return core_get_scaling();
-  1980	
-  1981		/*
-  1982		 * If reached here, it means that, this system is either non
-  1983		 * hybrid system (like Tiger Lake) or hybrid capable system (like
-  1984		 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
-  1985		 * support is 0).
-  1986		 * All non hybrid systems, don't publish nominal_frequency
-  1987		 * field (means nominal frequency = 0), In that case
-  1988		 * the legacy core scaling is used.
-  1989		 */
-> 1990		return intel_pstate_cppc_get_scaling(cpu);
-  1991	}
-  1992	
+On 2023/6/29 2:19, Yonghong Song wrote:
+> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> stripped all function/variable suffixes started with '.' regardless
+> of whether those suffixes are generated at LTO mode or not. In fact,
+> as far as I know, in LTO mode, when a static function/variable is
+> promoted to the global scope, '.llvm.<...>' suffix is added.
+> 
+> The existing mechanism breaks live patch for a LTO kernel even if
+> no <symbol>.llvm.<...> symbols are involved. For example, for the following
+> kernel symbols:
+>   $ grep bpf_verifier_vlog /proc/kallsyms
+>   ffffffff81549f60 t bpf_verifier_vlog
+>   ffffffff8268b430 d bpf_verifier_vlog._entry
+>   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+> Note that the func-level to file-level static function promotion also
+> happens without LTO.
+> 
+> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
+> return 4 symbols to live patch subsystem which current live patching
+> subsystem cannot handle it. With non-LTO kernel, only one symbol
+> is returned.
+> 
+> In [1], we have a lengthy discussion, the suggestion is to separate two
+> cases:
+>   (1). new symbols with suffix which are generated regardless of whether
+>        LTO is enabled or not, and
+>   (2). new symbols with suffix generated only when LTO is enabled.
+> 
+> The cleanup_symbol_name() should only remove suffixes for case (2).
+> Case (1) should not be changed so it can work uniformly with or without LTO.
+> 
+> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+> tracing should work the same way for non-LTO kernel.
+> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the same
+> filtering pattern so both kernel and kallsyms tool have the same
+> expectation on the order of symbols.
+
+Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+> 
+>  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
+> 
+> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> Reported-by: Song Liu <song@kernel.org>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/kallsyms.c  | 5 ++---
+>  scripts/kallsyms.c | 6 +++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> Changelogs:
+>   v1 -> v2:
+>     . add 'Reported-by: Song Liu <song@kernel.org>'
+>     . also fix in scripts/kallsyms.c.
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b..4874508bb950 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+>  	 * LLVM appends various suffixes for local functions and variables that
+>  	 * must be promoted to global scope as part of LTO.  This can break
+>  	 * hooking of static functions with kprobes. '.' is not a valid
+> -	 * character in an identifier in C. Suffixes observed:
+> +	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
+>  	 * - foo.llvm.[0-9a-f]+
+> -	 * - foo.[0-9a-f]+
+>  	 */
+> -	res = strchr(s, '.');
+> +	res = strstr(s, ".llvm.");
+>  	if (res) {
+>  		*res = '\0';
+>  		return true;
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 0d2db41177b2..13af6d0ff845 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
+>  	 * ASCII[_]   = 5f
+>  	 * ASCII[a-z] = 61,7a
+>  	 *
+> -	 * As above, replacing '.' with '\0' does not affect the main sorting,
+> -	 * but it helps us with subsorting.
+> +	 * As above, replacing the first '.' in ".llvm." with '\0' does not
+> +	 * affect the main sorting, but it helps us with subsorting.
+>  	 */
+> -	p = strchr(s, '.');
+> +	p = strstr(s, ".llvm.");
+>  	if (p)
+>  		*p = '\0';
+>  }
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+  Zhen Lei
