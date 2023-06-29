@@ -1,45 +1,48 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C1B1426A;
-	Thu, 29 Jun 2023 18:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688063222; x=1719599222;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kXWlA25OKblCbht8VwZcfw0HuPpiuAcNgSWfWSmsxAw=;
-  b=hV8BG9Y5q8Fsw1JYcE0f1bObLkcglzqHX1v5KrumX5ih7dbbhcaIYE8y
-   6nTuSYXeGWc44M49IrKyimZs7Z+gDS+4fleiXBFjte62Sv5Iu5FzzCxt6
-   HWSFh6RnAYJMqwDsFJTE0SgXSGPW2yYUBcT8vf5UnAbXv/SIQADcnxLoi
-   O04jUGfO20qAaW86JmA/ww08nYPHoJnC48Bc0SIVa+DFlA9TTLRrjxsiu
-   0mWHU+FnZ+WeVXC8cG46e/SkEmzHtH+1FqrvTrEFQH6swDtgme+AWe6+q
-   fBw6ApdjDGJQiKf91ZhB9DDkbqsJyAvuxANt5ERql7k44ILfq9pTvx3Rx
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="364768895"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="364768895"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 11:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="862027911"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="862027911"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2023 11:26:37 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qEwLk-000EKn-28;
-	Thu, 29 Jun 2023 18:26:36 +0000
-Date: Fri, 30 Jun 2023 02:26:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:splice-fix-corruption 1/4] mm/filemap.c:2848:17:
- warning: comparison of distinct pointer types ('typeof ((typeof ((1UL << 18)
- - src_offset % (1UL << 18)))__builtin_choose_expr(((!!(sizeof ((typeof ((1UL
- << 18) - src_offset % (1UL << 18)) *)1 == (typeof ((1UL << 18) - dst_offset
- % (...
-Message-ID: <202306300201.MxUr8OYn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC58D14273
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 18:58:45 +0000 (UTC)
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-262fa79e9b3so614608a91.0
+        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688065125; x=1690657125;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
+        b=FqDckJGHOAILns8g8SssjEEqPgFGcqCyYEpxv0IIM+kBYWw18HQ3wDZvDveym6Iexv
+         MuHvgZIebcIjQg0yrloXjPPrh9JqXGUM7vT/pkXe7VZ3HOOu4XClZnKHCXl4HzTZj6XZ
+         brONgjMBygrSxQDYjk6T4XM5k4ImQ0xpweSjI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688065125; x=1690657125;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
+        b=dbTdCyTIYSi2I63Zq06Yy2aInxLY14ACDFYGW4GuANnEuouZLhBXWn7fMbPIrQSWbG
+         +7ieN4opdYL320FS/aWhbJPIRCzOQF/c4ErVsetUzWdURVMij77gVgR0EVNrEjph/Kjl
+         4lNvU4FWxZlW44ZYJemK2m76MfjGahOnmCT9jvs5VBIh0/RT3wYbcw2sa9ep1NWZovQ8
+         fob1FCzuiFko/7REzs7DgeLckFUWkKM/qKu+78HYO8+xeHC96xd6Pq1RfxUx9GqEV8/K
+         hpv5DWzzyoGfasvdaWNJeAPHOOBxi7HSpF15xFzKnOw+FD+wiVhKVUVO9LqSoTwWcc2I
+         3W4A==
+X-Gm-Message-State: ABy/qLbd5OjQilb3UEWLvBvzZO0X5iE3bNsqRWcQpdzjhOeq6HJ+dJiw
+	cY2iD3V/jn5h9Z2awsx9hadx8A==
+X-Google-Smtp-Source: APBJJlE2bSL3RaiK4vRaauIvsS0try4vm6SYiy+L//V/kX9bwLc2aK/E9ffrCixlwmqbMMkIt+XsuQ==
+X-Received: by 2002:a17:902:f544:b0:1b5:2b12:6f50 with SMTP id h4-20020a170902f54400b001b52b126f50mr121980plf.12.1688065125035;
+        Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x3-20020a1709027c0300b001ae5d21f760sm9382247pll.146.2023.06.29.11.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 11:58:44 -0700 (PDT)
+Date: Thu, 29 Jun 2023 11:58:43 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Borislav Petkov <bp@alien8.de>, linux-usb@vger.kernel.org
+Subject: Re: UBSAN spat in valid xhci code in Linus's current tree (6.4+)
+Message-ID: <202306291147.4CE126CE5@keescook>
+References: <2023062945-fencing-pebble-0411@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,233 +51,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2023062945-fencing-pebble-0411@gregkh>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git splice-fix-corruption
-head:   b7635ac359c8d2a679e0c0bd9bf7acab652ff3fb
-commit: 018eeae5c2f650da68338bfc464de887af53ff1f [1/4] splice: Fix corruption of spliced data after splice() returns
-config: hexagon-randconfig-r041-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300201.MxUr8OYn-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300201.MxUr8OYn-lkp@intel.com/reproduce)
+On Thu, Jun 29, 2023 at 05:36:51PM +0200, Greg KH wrote:
+> Boris just reported to me a UBSAN splat in the USB xhci driver in
+> Linus's tree that wasn't present in 6.4-final, and given that no USB
+> changes are merged yet there, I was confused.
+> 
+> Turns out, I think you all missed a "variable length" structure in the
+> xhci driver, which UBSAN is calling out a being an overrun, when really
+> it isn't (it's just written that way...)
+> 
+> The splat is:
+> 
+> UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31
+> index 1 is out of range for type '__le32 [1]'
+> CPU: 0 PID: 1556 Comm: kworker/0:2 Not tainted 6.4.0+ #7
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306300201.MxUr8OYn-lkp@intel.com/
+This is fixed here, a couple weeks ago, but maybe it missed your tree:
+https://lore.kernel.org/lkml/20230614181307.gonna.256-kees@kernel.org/
 
-All warnings (new ones prefixed by >>):
+Would you prefer I carry it?
 
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> mm/filemap.c:2848:17: warning: comparison of distinct pointer types ('typeof ((typeof ((1UL << 18) - src_offset % (1UL << 18)))__builtin_choose_expr(((!!(sizeof ((typeof ((1UL << 18) - src_offset % (1UL << 18)) *)1 == (typeof ((1UL << 18) - dst_offset % (1UL << 18)) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((1UL << 18) - src_offset % (1UL << 18)) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)((1UL << 18) - dst_offset % (1UL << 18)) * 0L)) : (int *)8))))), (((1UL << 18) - src_offset % (1UL << 18)) < ((1UL << 18) - dst_offset % (1UL << 18)) ? ((1UL << 18) - src_offset % (1UL << 18)) : ((1UL << 18) - dst_offset % (1UL << 18))), ({
-       typeof ((1UL << 18) - src_offset % (1UL << 18)) __UNIQUE_ID___x324 = ((1UL << 18) - src_offset % (1UL << 18));
-       typeof ((1UL << 18) - dst_offset % (1UL << 18)) __UNIQUE_ID___y325 = ((1UL << 18) - dst_offset % (1UL << 18));
-       ((__UNIQUE_ID___x324) < (__UNIQUE_ID___y325) ? (__UNIQUE_ID___x324) : (__UNIQUE_ID___y325));
-   }))) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    2848 |                 size_t part = min3(PAGE_SIZE - src_offset % PAGE_SIZE,
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2849 |                                    PAGE_SIZE - dst_offset % PAGE_SIZE,
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2850 |                                    size);
-         |                                    ~~~~~
-   include/linux/minmax.h:82:23: note: expanded from macro 'min3'
-      82 | #define min3(x, y, z) min((typeof(x))min(x, y), z)
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-      67 | #define min(x, y)       __careful_cmp(x, y, <)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> mm/filemap.c:2916:9: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof ((1UL << 18) - offset % (1UL << 18)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-    2916 |         size = min(size, PAGE_SIZE - offset % PAGE_SIZE);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-      67 | #define min(x, y)       __careful_cmp(x, y, <)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   8 warnings generated.
+> So perhaps 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC") should be
+> reverted for now?  Or this field fixed up to properly be marked as a
+> variable length array of at least one entry?
 
+We've been turning these things on further and further so we can catch
+stuff like this (and we did while it lived in -next). FWIW, it shouldn't
+cause any problems beyond the splat (i.e. everything should continue
+working normally).
 
-vim +2848 mm/filemap.c
-
-  2840	
-  2841	static inline void copy_folio_to_folio(struct folio *src, size_t src_offset,
-  2842					       struct folio *dst, size_t dst_offset,
-  2843					       size_t size)
-  2844	{
-  2845		void *p, *q;
-  2846	
-  2847		while (size > 0) {
-> 2848			size_t part = min3(PAGE_SIZE - src_offset % PAGE_SIZE,
-  2849					   PAGE_SIZE - dst_offset % PAGE_SIZE,
-  2850					   size);
-  2851	
-  2852			p = kmap_local_folio(src, src_offset);
-  2853			q = kmap_local_folio(dst, dst_offset);
-  2854			memcpy(q, p, part);
-  2855			kunmap_local(p);
-  2856			kunmap_local(q);
-  2857			src_offset += part;
-  2858			dst_offset += part;
-  2859			size -= part;
-  2860		}
-  2861	}
-  2862	
-  2863	/*
-  2864	 * Splice data from a folio into a pipe.  The folio is stolen if no one else is
-  2865	 * using it and copied otherwise.  We can't put the folio into the pipe still
-  2866	 * attached to the pagecache as that allows someone to modify it after the
-  2867	 * splice.
-  2868	 */
-  2869	ssize_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
-  2870				       struct folio *folio, loff_t fpos, size_t size)
-  2871	{
-  2872		struct address_space *mapping;
-  2873		struct folio *copy = NULL;
-  2874		struct page *page;
-  2875		unsigned int flags = 0;
-  2876		ssize_t ret;
-  2877		size_t spliced = 0, offset = offset_in_folio(folio, fpos);
-  2878	
-  2879		folio_lock(folio);
-  2880	
-  2881		mapping = folio_mapping(folio);
-  2882		ret = -ENODATA;
-  2883		if (!folio->mapping)
-  2884			goto err_unlock; /* Truncated */
-  2885		ret = -EIO;
-  2886		if (!folio_test_uptodate(folio))
-  2887			goto err_unlock;
-  2888	
-  2889		/*
-  2890		 * At least for ext2 with nobh option, we need to wait on writeback
-  2891		 * completing on this folio, since we'll remove it from the pagecache.
-  2892		 * Otherwise truncate wont wait on the folio, allowing the disk blocks
-  2893		 * to be reused by someone else before we actually wrote our data to
-  2894		 * them. fs corruption ensues.
-  2895		 */
-  2896		folio_wait_writeback(folio);
-  2897	
-  2898		if (folio_has_private(folio) &&
-  2899		    !filemap_release_folio(folio, GFP_KERNEL))
-  2900			goto need_copy;
-  2901	
-  2902		/* If we succeed in removing the mapping, set LRU flag and add it. */
-  2903		if (remove_mapping(mapping, folio)) {
-  2904			folio_unlock(folio);
-  2905			flags = PIPE_BUF_FLAG_LRU;
-  2906			goto add_to_pipe;
-  2907		}
-  2908	
-  2909	need_copy:
-  2910		folio_unlock(folio);
-  2911	
-  2912		copy = folio_alloc(GFP_KERNEL, 0);
-  2913		if (!copy)
-  2914			return -ENOMEM;
-  2915	
-> 2916		size = min(size, PAGE_SIZE - offset % PAGE_SIZE);
-  2917		copy_folio_to_folio(folio, offset, copy, 0, size);
-  2918		folio = copy;
-  2919		offset = 0;
-  2920	
-  2921	add_to_pipe:
-  2922		page = folio_page(folio, offset / PAGE_SIZE);
-  2923		size = min(size, folio_size(folio) - offset);
-  2924		offset %= PAGE_SIZE;
-  2925	
-  2926		while (spliced < size &&
-  2927		       !pipe_full(pipe->head, pipe->tail, pipe->max_usage)) {
-  2928			struct pipe_buffer *buf = pipe_head_buf(pipe);
-  2929			size_t part = min_t(size_t, PAGE_SIZE - offset, size - spliced);
-  2930	
-  2931			*buf = (struct pipe_buffer) {
-  2932				.ops	= &page_cache_pipe_buf_ops,
-  2933				.page	= page,
-  2934				.offset	= offset,
-  2935				.len	= part,
-  2936				.flags	= flags,
-  2937			};
-  2938			folio_get(folio);
-  2939			pipe->head++;
-  2940			page++;
-  2941			spliced += part;
-  2942			offset = 0;
-  2943		}
-  2944	
-  2945		if (copy)
-  2946			folio_put(copy);
-  2947		return spliced;
-  2948	
-  2949	err_unlock:
-  2950		folio_unlock(folio);
-  2951		return ret;
-  2952	}
-  2953	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
