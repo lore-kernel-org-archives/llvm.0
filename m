@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5051640B
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:02:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40363C433CA;
-	Thu, 29 Jun 2023 19:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4C91643B
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:02:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3658C433CC;
+	Thu, 29 Jun 2023 19:02:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688065324;
-	bh=JuEdJkTxJsu5xv1odLx+nTh70ThqVTpEoCBCZ/YJMns=;
+	s=k20201202; t=1688065331;
+	bh=qRBKFNeiJBoqbeHoZJUmMJ3MazBbqECGWW/+9Cqg73Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QWdQ6YGU1xJmNRES3OLNKD3PhJpajamSeqpcjSUa4nPlEeutjz86ugG+2QWDMC0qd
-	 UTRw9Ji/4UGhFiS3j9Rg0qsoSXgArGvyctvDtF4EBXWe8xQZG5Lnd8t3f6XRs6D3pq
-	 pJjjvK1j2eC9Wyio8HO4RKulA6SXXbATsXxATZCLwWzWZ0WSpAu9LK3yRYBi7pOJfj
-	 sN9mhh20KnCL1xFj8a/ns3Ygh5Lc75zE54w+P83HavGHISwrpaqH8KwsdggllGyJ2K
-	 03kwwffrgRjjBl6GZeKgxvyA7gUywMRF+hXNVSDJglYbsOTUmlG8phOqpbbVnloRwJ
-	 l6GfmdPcFgmXg==
+	b=AFwY5x+rlPHAP/XP3fw3nJRIpU1zHC2LhlOLc/sPORNYgUpVr3nJwuQmqB6LXAjLI
+	 YUZu0b7mc7d6jCs/ql4MofWGqT89PWEGmpDaXwC4T4drgxKYyy+bWbaZ3ZLT1JGWQy
+	 bik/0qAN0wn07/bns9PPMLKjCmygpAhtRfpCBtlKpV8LYralG+gu4nDLRq0pq3FMgX
+	 Oa/OZS2HrS7inExZBJMd2yhcQ4Qbq7L0Ex+3c17L/uWXFapxFfMWPoKxo6r5vkj71j
+	 J64ETch8UEcP9nxygfNLbQ+salaeJcqL9ZT3hxqmNN/DUaX165fORs4bDSIH/eIXLO
+	 rE/6EfJC2wNAA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 5/5] workqueue: clean up WORK_* constant types, clarify masking
-Date: Thu, 29 Jun 2023 15:01:56 -0400
-Message-Id: <20230629190158.908169-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 4/4] workqueue: clean up WORK_* constant types, clarify masking
+Date: Thu, 29 Jun 2023 15:02:04 -0400
+Message-Id: <20230629190206.908243-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230629190158.908169-1-sashal@kernel.org>
-References: <20230629190158.908169-1-sashal@kernel.org>
+In-Reply-To: <20230629190206.908243-1-sashal@kernel.org>
+References: <20230629190206.908243-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,7 +41,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.118
+X-stable-base: Linux 5.10.185
 Content-Transfer-Encoding: 8bit
 
 From: Linus Torvalds <torvalds@linux-foundation.org>
@@ -98,10 +98,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 7fee9b6cfedef..20a47eb94b0f3 100644
+index 2fa9b311e5663..460c58fa011ae 100644
 --- a/include/linux/workqueue.h
 +++ b/include/linux/workqueue.h
-@@ -68,7 +68,6 @@ enum {
+@@ -73,7 +73,6 @@ enum {
  	WORK_OFFQ_FLAG_BASE	= WORK_STRUCT_COLOR_SHIFT,
  
  	__WORK_OFFQ_CANCELING	= WORK_OFFQ_FLAG_BASE,
@@ -109,7 +109,7 @@ index 7fee9b6cfedef..20a47eb94b0f3 100644
  
  	/*
  	 * When a work item is off queue, its high bits point to the last
-@@ -79,12 +78,6 @@ enum {
+@@ -84,12 +83,6 @@ enum {
  	WORK_OFFQ_POOL_SHIFT	= WORK_OFFQ_FLAG_BASE + WORK_OFFQ_FLAG_BITS,
  	WORK_OFFQ_LEFT		= BITS_PER_LONG - WORK_OFFQ_POOL_SHIFT,
  	WORK_OFFQ_POOL_BITS	= WORK_OFFQ_LEFT <= 31 ? WORK_OFFQ_LEFT : 31,
@@ -122,7 +122,7 @@ index 7fee9b6cfedef..20a47eb94b0f3 100644
  
  	/* bit mask for work_busy() return values */
  	WORK_BUSY_PENDING	= 1 << 0,
-@@ -94,6 +87,14 @@ enum {
+@@ -99,6 +92,14 @@ enum {
  	WORKER_DESC_LEN		= 24,
  };
  
@@ -138,10 +138,10 @@ index 7fee9b6cfedef..20a47eb94b0f3 100644
  	atomic_long_t data;
  	struct list_head entry;
 diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 2d27bed9881dd..8e108c040cc35 100644
+index b9041ab881bc8..fa0a0e59b3851 100644
 --- a/kernel/workqueue.c
 +++ b/kernel/workqueue.c
-@@ -697,12 +697,17 @@ static void clear_work_data(struct work_struct *work)
+@@ -679,12 +679,17 @@ static void clear_work_data(struct work_struct *work)
  	set_work_data(work, WORK_STRUCT_NO_POOL, 0);
  }
  
@@ -160,7 +160,7 @@ index 2d27bed9881dd..8e108c040cc35 100644
  	else
  		return NULL;
  }
-@@ -730,8 +735,7 @@ static struct worker_pool *get_work_pool(struct work_struct *work)
+@@ -712,8 +717,7 @@ static struct worker_pool *get_work_pool(struct work_struct *work)
  	assert_rcu_or_pool_mutex();
  
  	if (data & WORK_STRUCT_PWQ)
@@ -170,7 +170,7 @@ index 2d27bed9881dd..8e108c040cc35 100644
  
  	pool_id = data >> WORK_OFFQ_POOL_SHIFT;
  	if (pool_id == WORK_OFFQ_POOL_NONE)
-@@ -752,8 +756,7 @@ static int get_work_pool_id(struct work_struct *work)
+@@ -734,8 +738,7 @@ static int get_work_pool_id(struct work_struct *work)
  	unsigned long data = atomic_long_read(&work->data);
  
  	if (data & WORK_STRUCT_PWQ)
