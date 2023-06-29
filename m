@@ -1,190 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC543D74
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 07:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994CEC433C0;
-	Thu, 29 Jun 2023 07:03:44 +0000 (UTC)
-Message-ID: <567481c3-08bc-3bb8-5538-0d296ee539d9@xs4all.nl>
-Date: Thu, 29 Jun 2023 09:03:42 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E7F5257;
+	Thu, 29 Jun 2023 07:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688023400; x=1719559400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=74L0FNsCDZ5Sbc+RH88Wm9TjQdzKD1PxAYE2xBAuh/8=;
+  b=Ygy8FB/C50WFQjlKr55+0eEcA69A3ZhqJBWOpEmz8yGdCgvdd0Hpy+/N
+   u63O4sXkNcYXu0I7S7PxDejt0zPgHA3wyImrHWTMYphehpG3vq2QyVFCE
+   UEfEtXYVOQlI4qESb5/scPh9Hlls7uIfbWpw9jzz5hgNys56OWgEBGTKB
+   wnQXXZ93YMTe4V6mLjDIeKNNGGR0BZ92PIUJZHS6zxuXM8KwFvn22k+1x
+   BBhG19esahpAP/azZ1Mca57WZ6Br3FWSkkAo+zssyA+XsfjVvboYCPPlb
+   /Dp0g4ANAGz5xquyuJIYGpaUUzgGoUYZ78Un2wPq2CuFP0+GPOWA1fq7b
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425714105"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="425714105"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 00:23:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047687351"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="1047687351"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2023 00:23:15 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qElzm-000Dwj-1p;
+	Thu, 29 Jun 2023 07:23:14 +0000
+Date: Thu, 29 Jun 2023 15:22:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andreas Hindborg <nmi@metaspace.dk>, Ming Lei <ming.lei@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hans Holmberg <Hans.Holmberg@wdc.com>,
+	Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	Christoph Hellwig <hch@infradead.org>,
+	Matias Bjorling <Matias.Bjorling@wdc.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	linux-kernel@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>,
+	gost.dev@samsung.com, Minwoo Im <minwoo.im.dev@gmail.com>
+Subject: Re: [PATCH v4 3/4] ublk: enable zoned storage support
+Message-ID: <202306291515.z7ox8OTz-lkp@intel.com>
+References: <20230628190649.11233-4-nmi@metaspace.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, linux-media@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230616144854.3818934-1-arnd@kernel.org>
- <20230628182617.GA911656@dev-arch.thelio-3990X>
-Content-Language: en-US
-From: Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230628182617.GA911656@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628190649.11233-4-nmi@metaspace.dk>
 
-Hi all,
+Hi Andreas,
 
-On 6/28/23 20:26, Nathan Chancellor wrote:
-> On Fri, Jun 16, 2023 at 04:48:47PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> In some configurations, gcc decides not to inline the register accessor functions,
->> which in turn leads to lots of temporary hantro_reg structures on the stack that
->> cannot be eliminated because they escape into an uninlined function:
->>
->> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
->>
->> Mark all of these as __always_inline so the compiler is able to completely
->> eliminate the temporary structures instead, which brings the stack usage
->> back down to just the normal local variables.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
->> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> For what it's worth, this patch massively helps with avoiding a warning
-> with clang 16.x and older, for presumably a similar reason, since this
-> happens with allmodconfig, which turns on a bunch of sanitizers.
-> 
-> https://github.com/ClangBuiltLinux/linux/issues/1875
-> 
-> Before this change:
-> 
->    drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (2096) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
->    int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
->        ^
->    238/2096 (11.35%) spills, 1858/2096 (88.65%) variables
-> 
-> After this change:
-> 
->    drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (496) exceeds limit (200) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
->    int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
->        ^
->    265/496 (53.43%) spills, 231/496 (46.57%) variables
-> 
-> If this could be picked up either before the 6.5 media pull goes out or
-> at some point during the -rc cycle, that would be great!
+kernel test robot noticed the following build errors:
 
-Once the merge window closes I'll make a PR to get it in 6.5.
+[auto build test ERROR on 3261ea42710e9665c9151006049411bd23b5411f]
 
-Regards,
+url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/ublk-change-ublk-IO-command-defines-to-enum/20230629-031015
+base:   3261ea42710e9665c9151006049411bd23b5411f
+patch link:    https://lore.kernel.org/r/20230628190649.11233-4-nmi%40metaspace.dk
+patch subject: [PATCH v4 3/4] ublk: enable zoned storage support
+config: i386-randconfig-i006-20230628 (https://download.01.org/0day-ci/archive/20230629/202306291515.z7ox8OTz-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291515.z7ox8OTz-lkp@intel.com/reproduce)
 
-	Hans
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306291515.z7ox8OTz-lkp@intel.com/
 
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> 
->> ---
->>   drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
->>   1 file changed, 11 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
->> index 6523ffb748812..6c5e56ce5b351 100644
->> --- a/drivers/media/platform/verisilicon/hantro.h
->> +++ b/drivers/media/platform/verisilicon/hantro.h
->> @@ -370,26 +370,26 @@ extern int hantro_debug;
->>   	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
->>   
->>   /* Structure access helpers. */
->> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
->> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
->>   {
->>   	return container_of(fh, struct hantro_ctx, fh);
->>   }
->>   
->>   /* Register accessors. */
->> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
->> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
->>   				      u32 val, u32 reg)
->>   {
->>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->>   	writel_relaxed(val, vpu->enc_base + reg);
->>   }
->>   
->> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->>   {
->>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->>   	writel(val, vpu->enc_base + reg);
->>   }
->>   
->> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->>   {
->>   	u32 val = readl(vpu->enc_base + reg);
->>   
->> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->>   	return val;
->>   }
->>   
->> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
->> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
->>   				      u32 val, u32 reg)
->>   {
->>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->>   	writel_relaxed(val, vpu->dec_base + reg);
->>   }
->>   
->> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
->>   {
->>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
->>   	writel(val, vpu->dec_base + reg);
->>   }
->>   
->> -static inline void hantro_write_addr(struct hantro_dev *vpu,
->> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
->>   				     unsigned long offset,
->>   				     dma_addr_t addr)
->>   {
->>   	vdpu_write(vpu, addr & 0xffffffff, offset);
->>   }
->>   
->> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->>   {
->>   	u32 val = readl(vpu->dec_base + reg);
->>   
->> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->>   	return val;
->>   }
->>   
->> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->>   				 const struct hantro_reg *reg,
->>   				 u32 val)
->>   {
->> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->>   	return v;
->>   }
->>   
->> -static inline void hantro_reg_write(struct hantro_dev *vpu,
->> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
->>   				    const struct hantro_reg *reg,
->>   				    u32 val)
->>   {
->>   	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
->>   }
->>   
->> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
->> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
->>   				      const struct hantro_reg *reg,
->>   				      u32 val)
->>   {
->> -- 
->> 2.39.2
->>
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __udivdi3
+   >>> referenced by ublk_drv-zoned.c:16 (drivers/block/ublk_drv-zoned.c:16)
+   >>>               drivers/block/ublk_drv-zoned.o:(ublk_set_nr_zones) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
