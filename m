@@ -1,142 +1,93 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EE71842
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 02:25:33 +0000 (UTC)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qs2NT5Y5RzqSqY;
-	Thu, 29 Jun 2023 10:25:13 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 10:25:31 +0800
-Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
- functions
-To: Yonghong Song <yhs@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
-	Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>, Steven Rostedt
-	<rostedt@goodmis.org>
-CC: Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20230628181926.4102448-1-yhs@fb.com>
-From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0bcb9470-4b39-1fe1-fcab-4d945f10fe7b@huawei.com>
-Date: Thu, 29 Jun 2023 10:25:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8635510EB
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 02:41:50 +0000 (UTC)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T1id4S002290;
+	Thu, 29 Jun 2023 02:41:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=Tbg5+mKfxrq7tt83Imhc7cghgkrAGv/odQicgErRYco=;
+ b=cRMtLc7b277znIkio/uciXbpt8jOypYiXUdww26DWCsIsxAk1NGLFXbnR8whgARnpZGs
+ KPWm5MVGpgPPEdEpPUhKaLWr6oVbQP9cwtDpeZhhdSfqoHQYf7xNq7l5NPoPRBQkKHbt
+ 04h7ufyar1w9RdYbYk/CsFCp8yHHBOQ9137Xoo8POt/lgtW2rG8lwZf4d+PVa9TQFlkI
+ ZBCuMZKhcyAVTeAuiGBgvNh7AK0YSZUAhG6T+rlFfo+HdIQT4nwl5bALZWvk92aAqXIH
+ 1Jhro4vDtGo+Tr1KGxBSZNLXNgOGyVH2aEJ9nG2CnkgroEEPB3Tbz9YJ9FJVsZ38VV4Z WA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rds1ua3f6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Jun 2023 02:41:36 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35T2CuQ2004055;
+	Thu, 29 Jun 2023 02:41:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpxcvekn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Jun 2023 02:41:34 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35T2fYLD009945;
+	Thu, 29 Jun 2023 02:41:34 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rdpxcveka-1;
+	Thu, 29 Jun 2023 02:41:33 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: lpfc: fix lpfc_name struct packing
+Date: Wed, 28 Jun 2023 22:41:27 -0400
+Message-Id: <168800630153.587979.15904389303880305259.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230616090705.2623408-1-arnd@kernel.org>
+References: <20230616090705.2623408-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306290022
+X-Proofpoint-GUID: w93DFv3IXslOC6X0l4GF1DxXJIw1L124
+X-Proofpoint-ORIG-GUID: w93DFv3IXslOC6X0l4GF1DxXJIw1L124
 
+On Fri, 16 Jun 2023 11:06:56 +0200, Arnd Bergmann wrote:
 
+> clang points out that the lpfc_name structure has an 8-byte alignement requirement
+> on most architectures, but is embedded in a number of other structures that are
+> forced to be only 1-byte aligned:
+> 
+> drivers/scsi/lpfc/lpfc_hw.h:1516:30: error: field pe within 'struct lpfc_fdmi_reg_port_list' is less aligned than 'struct lpfc_fdmi_port_entry' and is usually due to 'struct lpfc_fdmi_reg_port_list' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+>         struct lpfc_fdmi_port_entry pe;
+> drivers/scsi/lpfc/lpfc_hw.h:850:19: error: field portName within 'struct _ADISC' is less aligned than 'struct lpfc_name' and is usually due to 'struct _ADISC' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+> drivers/scsi/lpfc/lpfc_hw.h:851:19: error: field nodeName within 'struct _ADISC' is less aligned than 'struct lpfc_name' and is usually due to 'struct _ADISC' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+> drivers/scsi/lpfc/lpfc_hw.h:922:19: error: field portName within 'struct _RNID' is less aligned than 'struct lpfc_name' and is usually due to 'struct _RNID' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+> drivers/scsi/lpfc/lpfc_hw.h:923:19: error: field nodeName within 'struct _RNID' is less aligned than 'struct lpfc_name' and is usually due to 'struct _RNID' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+> 
+> [...]
 
-On 2023/6/29 2:19, Yonghong Song wrote:
-> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> stripped all function/variable suffixes started with '.' regardless
-> of whether those suffixes are generated at LTO mode or not. In fact,
-> as far as I know, in LTO mode, when a static function/variable is
-> promoted to the global scope, '.llvm.<...>' suffix is added.
-> 
-> The existing mechanism breaks live patch for a LTO kernel even if
-> no <symbol>.llvm.<...> symbols are involved. For example, for the following
-> kernel symbols:
->   $ grep bpf_verifier_vlog /proc/kallsyms
->   ffffffff81549f60 t bpf_verifier_vlog
->   ffffffff8268b430 d bpf_verifier_vlog._entry
->   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
->   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
-> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
-> '__already_done' are static variables used inside 'bpf_verifier_vlog',
-> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
-> Note that the func-level to file-level static function promotion also
-> happens without LTO.
-> 
-> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
-> return 4 symbols to live patch subsystem which current live patching
-> subsystem cannot handle it. With non-LTO kernel, only one symbol
-> is returned.
-> 
-> In [1], we have a lengthy discussion, the suggestion is to separate two
-> cases:
->   (1). new symbols with suffix which are generated regardless of whether
->        LTO is enabled or not, and
->   (2). new symbols with suffix generated only when LTO is enabled.
-> 
-> The cleanup_symbol_name() should only remove suffixes for case (2).
-> Case (1) should not be changed so it can work uniformly with or without LTO.
-> 
-> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
-> tracing should work the same way for non-LTO kernel.
-> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the same
-> filtering pattern so both kernel and kallsyms tool have the same
-> expectation on the order of symbols.
+Applied to 6.5/scsi-queue, thanks!
 
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
-
-> 
->  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
-> 
-> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> Reported-by: Song Liu <song@kernel.org>
-> Signed-off-by: Yonghong Song <yhs@fb.com>
-> ---
->  kernel/kallsyms.c  | 5 ++---
->  scripts/kallsyms.c | 6 +++---
->  2 files changed, 5 insertions(+), 6 deletions(-)
-> 
-> Changelogs:
->   v1 -> v2:
->     . add 'Reported-by: Song Liu <song@kernel.org>'
->     . also fix in scripts/kallsyms.c.
-> 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 77747391f49b..4874508bb950 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
->  	 * LLVM appends various suffixes for local functions and variables that
->  	 * must be promoted to global scope as part of LTO.  This can break
->  	 * hooking of static functions with kprobes. '.' is not a valid
-> -	 * character in an identifier in C. Suffixes observed:
-> +	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
->  	 * - foo.llvm.[0-9a-f]+
-> -	 * - foo.[0-9a-f]+
->  	 */
-> -	res = strchr(s, '.');
-> +	res = strstr(s, ".llvm.");
->  	if (res) {
->  		*res = '\0';
->  		return true;
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 0d2db41177b2..13af6d0ff845 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
->  	 * ASCII[_]   = 5f
->  	 * ASCII[a-z] = 61,7a
->  	 *
-> -	 * As above, replacing '.' with '\0' does not affect the main sorting,
-> -	 * but it helps us with subsorting.
-> +	 * As above, replacing the first '.' in ".llvm." with '\0' does not
-> +	 * affect the main sorting, but it helps us with subsorting.
->  	 */
-> -	p = strchr(s, '.');
-> +	p = strstr(s, ".llvm.");
->  	if (p)
->  		*p = '\0';
->  }
-> 
+[1/1] scsi: lpfc: fix lpfc_name struct packing
+      https://git.kernel.org/mkp/scsi/c/00c2cae6b66a
 
 -- 
-Regards,
-  Zhen Lei
+Martin K. Petersen	Oracle Linux Engineering
