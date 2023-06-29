@@ -1,47 +1,47 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC58D14273
-	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 18:58:45 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-262fa79e9b3so614608a91.0
-        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E6914269
+	for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 19:00:18 +0000 (UTC)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-666e6541c98so973284b3a.2
+        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 12:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688065125; x=1690657125;
+        d=chromium.org; s=google; t=1688065218; x=1690657218;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
-        b=FqDckJGHOAILns8g8SssjEEqPgFGcqCyYEpxv0IIM+kBYWw18HQ3wDZvDveym6Iexv
-         MuHvgZIebcIjQg0yrloXjPPrh9JqXGUM7vT/pkXe7VZ3HOOu4XClZnKHCXl4HzTZj6XZ
-         brONgjMBygrSxQDYjk6T4XM5k4ImQ0xpweSjI=
+        bh=RzTSZl4ZrMV7S9CxcKysPR5GZsJOMyGfyeQpbnniNwY=;
+        b=bYMJnnMVkMD1qGU3V/p2Ksfzduhx5dbgVJffIfoqMFs2zQyvuRMkPgL+1BjBND7Muc
+         Jcam2Ox77QJytBsj2kM1hw+xGiYGSBwXNo9sr6RzzrTeGKQiPC8WsvifCXYovFYAH8iX
+         8wXcab/QlDRfTxuLZB3G+PdjQ5GcfjrTk25jY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065125; x=1690657125;
+        d=1e100.net; s=20221208; t=1688065218; x=1690657218;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
-        b=dbTdCyTIYSi2I63Zq06Yy2aInxLY14ACDFYGW4GuANnEuouZLhBXWn7fMbPIrQSWbG
-         +7ieN4opdYL320FS/aWhbJPIRCzOQF/c4ErVsetUzWdURVMij77gVgR0EVNrEjph/Kjl
-         4lNvU4FWxZlW44ZYJemK2m76MfjGahOnmCT9jvs5VBIh0/RT3wYbcw2sa9ep1NWZovQ8
-         fob1FCzuiFko/7REzs7DgeLckFUWkKM/qKu+78HYO8+xeHC96xd6Pq1RfxUx9GqEV8/K
-         hpv5DWzzyoGfasvdaWNJeAPHOOBxi7HSpF15xFzKnOw+FD+wiVhKVUVO9LqSoTwWcc2I
-         3W4A==
-X-Gm-Message-State: ABy/qLbd5OjQilb3UEWLvBvzZO0X5iE3bNsqRWcQpdzjhOeq6HJ+dJiw
-	cY2iD3V/jn5h9Z2awsx9hadx8A==
-X-Google-Smtp-Source: APBJJlE2bSL3RaiK4vRaauIvsS0try4vm6SYiy+L//V/kX9bwLc2aK/E9ffrCixlwmqbMMkIt+XsuQ==
-X-Received: by 2002:a17:902:f544:b0:1b5:2b12:6f50 with SMTP id h4-20020a170902f54400b001b52b126f50mr121980plf.12.1688065125035;
-        Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
+        bh=RzTSZl4ZrMV7S9CxcKysPR5GZsJOMyGfyeQpbnniNwY=;
+        b=hoIqu2kc9NwQdOkWqkkVKYKy51xFSxCpEPc7c/m455MuaYYC32deA5LyAET8xUH6ll
+         hLq9NJ876nGJrba2j4b8ERUhkPPL7uTpIGryn+iNUOZTYjCxCSywkwIT/OsVPDvVZjzv
+         jG2pnYqfiafBKezY+DpGsfolA19jn6iD97dU4am5sYTIPf2FHzDdf6dk37u3O68nFmnS
+         8B6O2hOOLTUgCv8Wk/GD1WQ4NudrIqB8NmiITSGXH1WLOJjlHZvkVWmdR3Jg62f4Nu+4
+         5CNcvQYw8aie8iVR97MnZQ2jTr+MjWHZksBZTVBvtAQ3ydLdHIx+ApjdEfMlklsRozap
+         MyIw==
+X-Gm-Message-State: AC+VfDy8qccW4uVnLj8/QUgPGrRHBvXewmvpiUcUNR6ZqzwreW0PMOHm
+	/Cskhmld7fQGVhhcsbMBMPN25Q==
+X-Google-Smtp-Source: ACHHUZ6UmgnsuBwbjXdkwkW0c7gX7XjDQZrqe1/4vO5USaZh7WQ07jAviGsUCR0heTlL1OVpHkpx3w==
+X-Received: by 2002:a05:6a20:a10c:b0:11d:9307:8acb with SMTP id q12-20020a056a20a10c00b0011d93078acbmr408192pzk.45.1688065218303;
+        Thu, 29 Jun 2023 12:00:18 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x3-20020a1709027c0300b001ae5d21f760sm9382247pll.146.2023.06.29.11.58.43
+        by smtp.gmail.com with ESMTPSA id w2-20020a636202000000b005439aaf0301sm9060262pgb.64.2023.06.29.12.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 11:58:44 -0700 (PDT)
-Date: Thu, 29 Jun 2023 11:58:43 -0700
+        Thu, 29 Jun 2023 12:00:17 -0700 (PDT)
+Date: Thu, 29 Jun 2023 12:00:17 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Greg KH <gregkh@linuxfoundation.org>
 Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
 	Borislav Petkov <bp@alien8.de>, linux-usb@vger.kernel.org
 Subject: Re: UBSAN spat in valid xhci code in Linus's current tree (6.4+)
-Message-ID: <202306291147.4CE126CE5@keescook>
+Message-ID: <202306291159.44DFB7CE6E@keescook>
 References: <2023062945-fencing-pebble-0411@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,35 +54,9 @@ Content-Disposition: inline
 In-Reply-To: <2023062945-fencing-pebble-0411@gregkh>
 
 On Thu, Jun 29, 2023 at 05:36:51PM +0200, Greg KH wrote:
-> Boris just reported to me a UBSAN splat in the USB xhci driver in
-> Linus's tree that wasn't present in 6.4-final, and given that no USB
-> changes are merged yet there, I was confused.
-> 
-> Turns out, I think you all missed a "variable length" structure in the
-> xhci driver, which UBSAN is calling out a being an overrun, when really
-> it isn't (it's just written that way...)
-> 
-> The splat is:
-> 
-> UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31
-> index 1 is out of range for type '__le32 [1]'
-> CPU: 0 PID: 1556 Comm: kworker/0:2 Not tainted 6.4.0+ #7
+> in include/uapi/linux/usb/ch9.h
 
-This is fixed here, a couple weeks ago, but maybe it missed your tree:
-https://lore.kernel.org/lkml/20230614181307.gonna.256-kees@kernel.org/
-
-Would you prefer I carry it?
-
-> So perhaps 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC") should be
-> reverted for now?  Or this field fixed up to properly be marked as a
-> variable length array of at least one entry?
-
-We've been turning these things on further and further so we can catch
-stuff like this (and we did while it lived in -next). FWIW, it shouldn't
-cause any problems beyond the splat (i.e. everything should continue
-working normally).
-
--Kees
+Oh wait, this is a _different_ one in ch9. I'll send a patch...
 
 -- 
 Kees Cook
