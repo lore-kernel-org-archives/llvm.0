@@ -1,42 +1,56 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A1D134B5;
-	Fri, 30 Jun 2023 12:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688126427; x=1719662427;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5jOmnjHXIKQVYrRMQpofDCwF1+31IdyvbBMDxUzmlzM=;
-  b=ERmxYh7jsYBRrYQMjpMG7J6PfV05RIu2ssYiEgGWblB7z/ThH73HqaR9
-   NXwk8lamATnPktBcFT8n5LtjZOG/YVa5N2vZGbo/2TF77lN2MGtxWVDVi
-   eH04WCslYHO3L5KuA9k5eI5L2eLtfD+q9/eLc9dnVUZxtKgos8+r6ktj0
-   yvnB6S3VnyusYm0kpavqgwgL8yzO+teudWSwwZ/vgg+EEuAhKrHJFkYe6
-   S1IH4jWc424UXmkMCLLSHL1fpxeb+8YxoGbQoZY/rrzaJsTKltWzR4ouE
-   WI66dPYd+pVSxnfe3aQ2K/7QvHEw3j195VwVFww0hu4Z68xgBCqkLpIs4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="393105015"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="393105015"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 05:00:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="711791585"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="711791585"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2023 05:00:25 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFCnY-000Ew9-1O;
-	Fri, 30 Jun 2023 12:00:24 +0000
-Date: Fri, 30 Jun 2023 19:59:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:iov-extract 11/20] net/9p/trans_common.c:16:6: error:
- conflicting types for 'p9_unpin_pages'
-Message-ID: <202306301931.4Y3Srl04-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F6314AB4
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 12:13:31 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso2861587e87.3
+        for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 05:13:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688127210; x=1690719210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7twfZotfcVAo8HDyHViXvS6PUSJNCPNn24nmZO5Ouw=;
+        b=WNjV4Mw1Fod95iFm7lO7tuiDyjHZVX5fSVy8qc2hsOVo6QATOdhnEO0wjDFo8fEv58
+         Ei9zrNHj18XKP7LXlxwQ+1XqpY0K2F8XErKC1AHd1WeMkvXGVQWCQVVnqCanLZ6QK6+e
+         euafEWSaCiW0qgFrPtnWtkccmdBxKVpuPAqPKvb7xQ2XCpIcx4fkkgspECdBswmhgXfZ
+         fmJz1pWMA1MSPBRPF1y9w666DPVyrHjF1e3iFycOuUAvxWKailmDyIp2eR+nftJvObQR
+         i4WU3SDi+BA2NzrRV+NATwPhKSyvcVAVeV2tAurURMf8ECNr77RWy2WYJh72yqgTn/kt
+         fmXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688127210; x=1690719210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I7twfZotfcVAo8HDyHViXvS6PUSJNCPNn24nmZO5Ouw=;
+        b=lWSJmGq63332TqD2LOhs58VzcXeJjqSExI08HIQ+cmINwVCVn5/q0ePtTZZH3IDVKB
+         HByVo/fcGrneHetijGPIOt3eiCf+Sjng07/c6PA+BPJBo9oCbhYdBWWQ2DhQ/l2r5WAN
+         4bfaySj6tMh0UfEjBTx5WbpPzfEZ/E3kd2bnzrRWVRtx3gbdgd05Bj47zoTQSrmSCpri
+         9T1CytwB/k3Xyy4MbGFyQrUBu1yKVO6b3Wi6mBta01NxVlg1+1QNh4o9aZWLyMNztK3Q
+         PouGbpXhIvkaZo0XhRQY5VTF+U3HOpyOUcDxx0L8+uCvnbfNfr6kQphnpXYWvkLtrZMi
+         v/VA==
+X-Gm-Message-State: ABy/qLbpkId28vbtZ/X1kUVLTBMmJrUWny1E7gvNHApwUydtKBvdRrbF
+	t8kJC7/QPbbLTgDsXwDXv3zn8A==
+X-Google-Smtp-Source: APBJJlGHAhFmWKRIdbg7zEy5w4+o+FvHdIq/YMx829mO5Tmp54dmAHDACR1wM+u0dNEGS2XhmkhKyg==
+X-Received: by 2002:a05:6512:3e26:b0:4fb:780c:fce9 with SMTP id i38-20020a0565123e2600b004fb780cfce9mr2527865lfv.58.1688127209799;
+        Fri, 30 Jun 2023 05:13:29 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id p20-20020a1c7414000000b003fa973e6612sm13742006wmc.44.2023.06.30.05.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 05:13:28 -0700 (PDT)
+Date: Fri, 30 Jun 2023 15:13:24 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Anna Schumaker <anna@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-nfs@vger.kernel.org,
+	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] SUNRPC: clean up integer overflow check
+Message-ID: <ac54a100-9e7f-47bf-a415-ca3784c08b1e@kadam.mountain>
+References: <2390fdc8-13fa-4456-ab67-44f0744db412@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +59,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2390fdc8-13fa-4456-ab67-44f0744db412@moroto.mountain>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git iov-extract
-head:   19ee2529bb48ab3bba1d2cfc7a0811ae08a22505
-commit: d2c1ef131970d6dd345eebda1d47874dd2ab18ac [11/20] 9p: Pin pages rather than ref'ing if appropriate
-config: hexagon-randconfig-r024-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301931.4Y3Srl04-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301931.4Y3Srl04-lkp@intel.com/reproduce)
+We were kind of having a discussion about static checkers earlier...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301931.4Y3Srl04-lkp@intel.com/
+The point of static checkers is to find code that doesn't behave as the
+authors intended.  It can be tricky to determine what is intentional or
+not.
 
-All errors (new ones prefixed by >>):
+If you have a condition which can never be true then that's fairly
+suspicious.  Why would we write a condition like that?  But you have to
+look at the context.
 
->> net/9p/trans_common.c:16:6: error: conflicting types for 'p9_unpin_pages'
-      16 | void p9_unpin_pages(struct page **pages, int nr_pages,
-         |      ^
-   net/9p/trans_common.h:7:6: note: previous declaration is here
-       7 | void p9_unpin_pages(struct page **pages, int nr_pages);
-         |      ^
->> net/9p/trans_common.c:23:4: error: call to undeclared function 'page_put_unpin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      23 |                         page_put_unpin(pages[i], cleanup_mode);
-         |                         ^
-   net/9p/trans_common.c:23:4: note: did you mean 'page_put_link'?
-   include/linux/fs.h:2887:13: note: 'page_put_link' declared here
-    2887 | extern void page_put_link(void *);
-         |             ^
-   2 errors generated.
+	if (!p) {
 
+Maybe that's part of a macro and even though "p" can't be NULL here, it
+can be NULL in other places.  So we can't warning about bogus NULL
+checks if they are inside a macro.  There is a valid reason to check.
 
-vim +/p9_unpin_pages +16 net/9p/trans_common.c
+With NULL checks, people add a lot of unnecessary NULL checks just out
+of caution.  So even though the NULL checks are unnecessary, they aren't
+harmful.  You only want to warn about them if there is something else to
+make them suspicious.  For example, the if the pointer is an error
+pointer but you're checking for NULL then probably that's not
+intentional.  Or people think that list_for_each() loops exit with the
+iterator set to NULL but that's not how it works so those checks should
+trigger a warning.
 
-    10	
-    11	/**
-    12	 * p9_unpin_pages - Unpin pages after the transaction.
-    13	 * @pages: array of pages to be put
-    14	 * @nr_pages: size of array
-    15	 */
-  > 16	void p9_unpin_pages(struct page **pages, int nr_pages,
-    17			    unsigned int cleanup_mode)
-    18	{
-    19		int i;
-    20	
-    21		for (i = 0; i < nr_pages; i++)
-    22			if (pages[i])
-  > 23				page_put_unpin(pages[i], cleanup_mode);
+Maybe we have a condition "if (unsigned_val < 0", and that's very
+suspicious, but maybe the context is:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	if (unsigned_val < 0 || unsigned_val > 10)
+
+In that context we can see what the intention was, and that condition
+will clamp the value regardless of the type of unsigned_val so it works
+as intended.  It's not a bug.  The static checker should not warn about
+that.
+
+Another impossible condition could look like:
+
+	if (x & SOMETHING_ZERO) {
+
+Quite often the SOMETHING_ZERO is because it depends on the .config.  So
+in Smatch what I do is I make a list of macros which can be zero or not
+depending on the .config.  In a lot of cases, what was intended was:
+
+	if (x & (1 << SOMETHING_ZERO)) {
+
+That's a useful warning, but you have to create that list of allowed
+defines otherwise it generates too many false positives.
+
+So here we have:
+
+	if (u32_val > SOMETHING) {
+
+The condition is impossible when the code is compiled on a 64-bit
+system, but a human reading the code can see that it is an integer
+overflow check and Smatch can see that too.  I haven't looked at Clang
+or GCC internals to see how hard it would be to fix them.  Maybe it's
+really hard to fix?
+
+With static checkers we have to accept the checker is going to get it
+wrong some times.  The checker is going to warn about code that works
+as intended and it's going to miss over 97% of bugs.  But hopefully
+it generates enough warnings to be worth the time it takes and the
+number of false positives is small enough so you can keep up.
+
+regards,
+dan carpenter
