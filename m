@@ -1,51 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC1D522E;
-	Fri, 30 Jun 2023 06:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B79120F1;
+	Fri, 30 Jun 2023 07:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688107603; x=1719643603;
+  t=1688109379; x=1719645379;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=48q1NTvqt0qgKBQfVueuQcWYPjiExBBEJFG3i8T9p1k=;
-  b=Xox8ql/i4LXN4fVcFO0qanb4MvY/ZuGY/IbkizKUmHnNuxZ2ODTj3aZu
-   a8RoeK+QKL9dFUFZcWfNW56ZCM45xf1hoKFdICyviMx2+Js/oZAzXGOcc
-   Y216jDZk4OiOMBt5z0P76yAtmQadHTbEgWaxV7wUNMQWQRok0icxFv3Gy
-   qjxwYW1T6lD74YxUCCOUgLwQP6gu++oR8lqkzDlnX5XMYlQ3DG66ROZNr
-   Ba00arLoIez0qsllW7XFIlVT67sRrvfDAzWCwX5bwmBS6n5YmNQhF+47O
-   HzfNpHSV/VO0hTP3HPM4VQ8vQcFUffPIBlE/2H9boratJG/T8NW5uZ4kT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365814575"
+  bh=ZPlTEoRvLPdtiM7QmevtpXxE1s/I7bz8Wr3DJatvhw4=;
+  b=HdnpbmbyGMhwXyBw5//pPhidhgS90/U1Iu7FYd43J0a9PYQZIqHKRJHi
+   LRpbCp7Ee1VYJwJur9TiGBr5ow6ZAjDsVrYHuubi+hrogRzUVEcvz1L/p
+   3x0ONl+vOVtRg57KWMzu4SMQGLzK9OAuyIn2hYVdJc047Bog61OTzREB/
+   CkNvXZ7AJITvQ9ou8RQiubBzwFlH6OzAtS6KqEitD3419jqAVn+rNDP8D
+   ltcXBuvcIoNRpwREfrN3xgqwEFyhPDoyZaBGEOPWx6JD4wBYtU1fAeDkn
+   1HPzrrsBk0WbLp9ZXbnl+iIFRa33VdlpFqi6fS8leUOFrNC77uy3TtTa4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347114770"
 X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="365814575"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:45:22 -0700
+   d="scan'208";a="347114770"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 00:16:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717686999"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="717686999"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694934919"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="694934919"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2023 23:45:16 -0700
+  by orsmga006.jf.intel.com with ESMTP; 30 Jun 2023 00:16:17 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF7sa-000EmB-0I;
-	Fri, 30 Jun 2023 06:45:16 +0000
-Date: Fri, 30 Jun 2023 14:44:26 +0800
+	id 1qF8Ma-000En3-2W;
+	Fri, 30 Jun 2023 07:16:16 +0000
+Date: Fri, 30 Jun 2023 15:15:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: jeffxu@chromium.org, skhan@linuxfoundation.org, keescook@chromium.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-	dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
-	jeffxu@google.com, jorgelo@chromium.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, jannh@google.com,
-	linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
- MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-Message-ID: <202306301413.VtwSCI1F-lkp@intel.com>
-References: <20230630031721.623955-2-jeffxu@google.com>
+To: Qingsong Chen <changxian.cqs@antgroup.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 8/8] samples: rust: add a device mapper linear target
+Message-ID: <202306301458.mlsxCJLl-lkp@intel.com>
+References: <20230625121657.3631109-9-changxian.cqs@antgroup.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,95 +46,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
+In-Reply-To: <20230625121657.3631109-9-changxian.cqs@antgroup.com>
 
-Hi,
+Hi Qingsong,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on rust/rust-next]
+[also build test WARNING on linus/master next-20230630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
-patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-config: riscv-randconfig-r042-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Qingsong-Chen/rust-kernel-add-basic-abstractions-for-device-mapper/20230625-201850
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20230625121657.3631109-9-changxian.cqs%40antgroup.com
+patch subject: [RFC PATCH 8/8] samples: rust: add a device mapper linear target
+config: x86_64-randconfig-x001-20230629 (https://download.01.org/0day-ci/archive/20230630/202306301458.mlsxCJLl-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301458.mlsxCJLl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301413.VtwSCI1F-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301458.mlsxCJLl-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
-     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-         |                      ^
->> mm/memfd.c:311:17: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL'
-     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-         |                               ^
->> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
-     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-         |                                           ^
-   3 errors generated.
-
-
-vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
-
-   270	
-   271	static int sysctl_memfd_noexec(void)
-   272	{
- > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-   274	#ifdef CONFIG_SYSCTL
-   275		struct pid_namespace *ns;
-   276	
-   277		ns = task_active_pid_ns(current);
-   278		if (ns)
-   279			sysctl = ns->memfd_noexec_scope;
-   280	#endif
-   281		return sysctl;
-   282	}
-   283	
-   284	SYSCALL_DEFINE2(memfd_create,
-   285			const char __user *, uname,
-   286			unsigned int, flags)
-   287	{
-   288		char comm[TASK_COMM_LEN];
-   289		unsigned int *file_seals;
-   290		struct file *file;
-   291		int fd, error;
-   292		char *name;
-   293		long len;
-   294		int sysctl = sysctl_memfd_noexec();
-   295	
-   296		if (!(flags & MFD_HUGETLB)) {
-   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
-   298				return -EINVAL;
-   299		} else {
-   300			/* Allow huge page size encoding in flags. */
-   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
-   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
-   303				return -EINVAL;
-   304		}
-   305	
-   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-   308			return -EINVAL;
-   309	
-   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
- > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-   312				flags |= MFD_NOEXEC_SEAL;
-   313			else
-   314				flags |= MFD_EXEC;
-   315	
-   316			pr_warn_once(
-   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-   318				task_pid_nr(current), get_task_comm(comm, current));
-   319		}
-   320	
- > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
+>> warning: unused import: `core::ops::Range`
+   --> samples/rust/rust_dm_linear.rs:7:5
+   |
+   7 | use core::ops::Range;
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+--
+>> warning: unused import: `kernel::bindings::PAGE_SECTORS_SHIFT`
+   --> samples/rust/rust_dm_linear.rs:9:5
+   |
+   9 | use kernel::bindings::PAGE_SECTORS_SHIFT;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -- 
 0-DAY CI Kernel Test Service
