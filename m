@@ -1,94 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CDA156CB
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 19:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7867BC433C0;
-	Fri, 30 Jun 2023 19:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3BE174CA;
+	Fri, 30 Jun 2023 19:28:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE726C433C0;
+	Fri, 30 Jun 2023 19:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688152080;
-	bh=17MXOGeiI3F3FBpWaJtF9ruFS/NqAZ5ZllRZXut7AOU=;
+	s=k20201202; t=1688153308;
+	bh=zX7DtgKaXqa8tSnrkMuQTXY6UheSPHRSG4DhhcbKq+g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bgwsTvAvkh4gCPbOx2sT1SZmELaQ8AlxcMn4Y4vR8uravryYhFKtVaqyfFatd3Lwg
-	 h1qs8GsBfu/X4timESeOK4csKXK9w/vwGrB897jXL9Amps+ksxBuk1KYs3h9u1sVhG
-	 MVBpTiVVoBxaiQdXxwF5LjBu76UmBa9oLcg4ZBm9K6w3Y/6m9dIQebsRcZ/06IjzPk
-	 9uj+dIc5E+uzQFUjp0sBWv9d9nQeobGBaPX+DQTbyYZSs3e5HDrQzaKEkSM8HCI1ZG
-	 83tvDErk8o04Xe7qWN+IucnZRL0w6neppqbWb7BfYai4eERz/HBtfnTSeaHKSo7apR
-	 odtwAbfzF6tLw==
-Date: Fri, 30 Jun 2023 20:07:56 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] riscv: Allow CONFIG_CFI_CLANG to be selected
-Message-ID: <20230630-rake-clubbed-bba8a9c27219@spud>
-References: <20230629234244.1752366-8-samitolvanen@google.com>
- <20230629234244.1752366-14-samitolvanen@google.com>
+	b=ryup1iNS7cnCw2wiYI3YEs2N7PeCMaMxWV1gkQER97KVMF9lUTjIK9fzk3DQSkk6q
+	 M+MqgMxaw01mt5CQJkyVoO9FEbADys+v/GY8cYOOAo8cGz0mR5z1t2Z2jbWiWBHe3a
+	 2SUPqi1E9SO46ZJpEI6KSX8OMAPW2qgfncFFfHniX5QNV9jHuH2YBR0CH4Oe9KVhoC
+	 Mi4/QItY+2LBUukkmIeMd8s+nPBYMevX7Wwbj1GsdziHcoAtWeZDF/tFvAn8Ar88eI
+	 RjrS0eVk052IzxtszvnH8y3/MNlfF+v+hiJeG9qiwYwudNCWMxPTjEBAgyj6rmJdq9
+	 JLEUuTBhVG9vA==
+Date: Fri, 30 Jun 2023 12:28:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Aurelien Aptel <aaptel@nvidia.com>,
+	netdev@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Willem de Bruijn <willemb@google.com>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+	Christoph Hellwig <hch@lst.de>, Chaitanya Kulkarni <kch@nvidia.com>,
+	linux-nvme@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
+ sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+Message-ID: <20230630192825.GA2745548@dev-arch.thelio-3990X>
+References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
+ <20230620145338.1300897-1-dhowells@redhat.com>
+ <20230620145338.1300897-11-dhowells@redhat.com>
+ <58466.1688074499@warthog.procyon.org.uk>
+ <20230629164318.44f45caf@kernel.org>
+ <20230630161043.GA2902645@dev-arch.thelio-3990X>
+ <20230630091442.172ec67f@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="nIytQ0cE4OI/O9o2"
-Content-Disposition: inline
-In-Reply-To: <20230629234244.1752366-14-samitolvanen@google.com>
-
-
---nIytQ0cE4OI/O9o2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230630091442.172ec67f@kernel.org>
 
-On Thu, Jun 29, 2023 at 11:42:51PM +0000, Sami Tolvanen wrote:
-> Select ARCH_SUPPORTS_CFI_CLANG to allow CFI_CLANG to be selected
-> on riscv.
->=20
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  arch/riscv/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 20a40927175e..2699e1f8fe33 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -44,6 +44,7 @@ config RISCV
->  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
->  	select ARCH_SUPPORTS_HUGETLBFS if MMU
->  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
-> +	select ARCH_SUPPORTS_CFI_CLANG
+On Fri, Jun 30, 2023 at 09:14:42AM -0700, Jakub Kicinski wrote:
+> On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
+> > > Let me CC llvm@ in case someone's there is willing to make 
+> > > the compiler warn about this.
+> > 
+> > Turns out clang already has a warning for this, -Wcomma:
+> > 
+> >   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma operator here [-Werror,-Wcomma]
+> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+> >         |                                                           ^
+> >   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to silence warning
+> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >         |                         (void)(                           )
+> >   1 error generated.
+> > 
+> > Let me do some wider build testing to see if it is viable to turn this
+> > on for the whole kernel because it seems worth it, at least in this
+> > case. There are a lot of cases where a warning won't be emitted (see the
+> > original upstream review for a list: https://reviews.llvm.org/D3976) but
+> > something is better than nothing, right? :)
 
-Please add new entries in alphanumerical order, thanks.
+Well, that was a pipe dream :/ In ARCH=arm multi_v7_defconfig alone,
+there are 289 unique instances of the warning (although a good number
+have multiple instances per line, so it is not quite as bad as it seems,
+but still bad):
 
->  	select ARCH_USES_CFI_TRAPS if CFI_CLANG
->  	select ARCH_USE_MEMTEST
->  	select ARCH_USE_QUEUED_RWLOCKS
-> --=20
-> 2.41.0.255.g8b1d071c50-goog
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+$ rg -- -Wcomma arm-multi_v7_defconfig.log | sort | uniq -c | wc -l
+289
 
---nIytQ0cE4OI/O9o2
-Content-Type: application/pgp-signature; name="signature.asc"
+https://gist.github.com/nathanchance/907867e0a7adffc877fd39fd08853801
 
------BEGIN PGP SIGNATURE-----
+Probably not a good sign of the signal to noise ratio, I looked through
+a good handful and all the cases I saw were not interesting... Perhaps
+the warning could be tuned further to become useful for the kernel but
+in its current form, it is definitely a no-go :/
 
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8oDAAKCRB4tDGHoIJi
-0tBQAPjbTVlYsXsyPEXbChKm896xE4tK0LzcWglSDjocpk2uAQCf4jf8R7g7Veb7
-13b70HROD+koWjNEGZd6gmiTTxBFDQ==
-=/P/0
------END PGP SIGNATURE-----
+> Ah, neat. Misleading indentation is another possible angle, I reckon,
+> but not sure if that's enabled/possible to enable for the entire kernel
 
---nIytQ0cE4OI/O9o2--
+Yeah, I was surprised there was no warning for misleading indentation...
+it is a part of -Wall for both clang and GCC, so it is on for the
+kernel, it just appears not to trigger in this case.
+
+> either :( We test-build with W=1 in networking, FWIW, so W=1 would be
+> enough for us.
+
+Unfortunately, even in its current form, it is way too noisy for W=1, as
+the qualifier for W=1 is "do not occur too often". Probably could be
+placed under W=2 but it still has the problem of wading through every
+instance and it is basically a no-op because nobody tests with W=2.
+
+Cheers,
+Nathan
