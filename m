@@ -1,44 +1,46 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2011FB8;
-	Fri, 30 Jun 2023 08:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9FA1FB8;
+	Fri, 30 Jun 2023 09:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688114962; x=1719650962;
+  t=1688116883; x=1719652883;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=foIZ/6+yXPObI0e8ZC8E/MW66KSDHlhEW1hYPbizjpU=;
-  b=XAf3TaLO4GBA/Iz1dbOo48OWFEiPO9Q7YD/HNnOyuRXX3XHdOzQMBJg3
-   gFWmbaZXzz7+6iqgtlutVIPBosG4goXShR/58FNmAzmIf3FOFdvTlNdj4
-   NGpnBKd1BSUb64OHO+6uDNrzuNk4wAnuwQCY/Zenu7L/0RX5T7roDtw4/
-   EAGqyKqsAUfNrtNrMdIGsev4fpnlZ8Pyp64kMTgSSvXMbM6FGUKRrVxI5
-   MUF9fsfbZU98Pfo9o5LaGUbtJr2+vowAxwUqU/9WSxg6a5x53rxcSL8zY
-   0Qe5KNp4RasmKryzIAYq/LiO6uluM/7ibbid9HjuibjLbJDfG1GDXgL4r
+  bh=9bmomT27I0zqHjHtqcdMPLO/YYB1lfOp8mwImTK4BGI=;
+  b=PC12zPhtGld5pPA3UxsVs4gXvRM6UQz6J4vbEfB1NngCWMN6aksxhiCS
+   yr/Z3b6PyrQNFZh/psQFFlOwa8uE5kj7TfL6EkE1MsANn+uSjUJJMX4E6
+   ELeM6DXh9Uw0cZzUIlWZa6XDNlNJMq4KmNypRk+L+nQYFgqBPjVbWtgqi
+   NJwEu/8+qfOYLkX++CjIUFrr9K+GcZJ2iUTP628aMi4zzwhxW8ayKr34V
+   uD5RnYJ1a6jFWtrPORgxzY3KwhJLIEfZPMmTzOBwc1wSI8YpRwdov6h+E
+   4DkxaoOG0SxxgiaHLGgCOBMBOI13zD/Z3Z/RvT5wvS2DlS1/7/px3NjzC
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448726728"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365838969"
 X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="448726728"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 01:49:21 -0700
+   d="scan'208";a="365838969"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:21:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841785951"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694960821"
 X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="841785951"
+   d="scan'208";a="694960821"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jun 2023 01:49:19 -0700
+  by orsmga006.jf.intel.com with ESMTP; 30 Jun 2023 02:21:19 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF9oc-000Ept-2S;
-	Fri, 30 Jun 2023 08:49:18 +0000
-Date: Fri, 30 Jun 2023 16:49:16 +0800
+	id 1qFAJb-000Eqf-0b;
+	Fri, 30 Jun 2023 09:21:19 +0000
+Date: Fri, 30 Jun 2023 17:20:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Jing Cai <jing.cai@mediatek.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but
- not used
-Message-ID: <202306301631.cFuy7ZmI-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+	Chris Lu <chris.lu@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>
+Subject: [linux-next:master 12628/12815] drivers/bluetooth/btmtk.c:386:32:
+ error: no member named 'dump' in 'struct hci_dev'
+Message-ID: <202306301709.lvrxzyCj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,128 +50,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Christophe,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e55e5df193d247a38a5e1ac65a5316a0adcc22fa
-commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
-date:   10 months ago
-config: powerpc-randconfig-r022-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6352a698ca5bf26a9199202666b16cf741f579f6
+commit: 872f8c253cb9e84cb3e7f381dd81c7791c64a05a [12628/12815] Bluetooth: btusb: mediatek: add MediaTek devcoredump support
+config: x86_64-randconfig-r023-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301709.lvrxzyCj-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301709.lvrxzyCj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301631.cFuy7ZmI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301709.lvrxzyCj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
->> arch/powerpc/math-emu/fcmpu.c:13:2: error: variable 'A_c' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_D(A);
-           ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-   #define FP_DECL_D(X)            _FP_DECL(2,X)
-                                   ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-                ^
-   <scratch space>:161:1: note: expanded from here
-   A_c
-   ^
->> arch/powerpc/math-emu/fcmpu.c:14:2: error: variable 'B_c' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_D(B);
-           ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-   #define FP_DECL_D(X)            _FP_DECL(2,X)
-                                   ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-                ^
-   <scratch space>:167:1: note: expanded from here
-   B_c
-   ^
-   arch/powerpc/math-emu/fcmpu.c:11:1: error: no previous prototype for function 'fcmpu' [-Werror,-Wmissing-prototypes]
-   fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-   ^
-   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   4 errors generated.
---
->> arch/powerpc/math-emu/fsel.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fsel.c:11:1: error: no previous prototype for function 'fsel' [-Werror,-Wmissing-prototypes]
-   fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
-   ^
-   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 errors generated.
---
->> arch/powerpc/math-emu/fctiwz.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fctiwz.c:11:1: error: no previous prototype for function 'fctiwz' [-Werror,-Wmissing-prototypes]
-   fctiwz(u32 *frD, void *frB)
-   ^
-   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 errors generated.
---
->> arch/powerpc/math-emu/fctiw.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fctiw.c:11:1: error: no previous prototype for function 'fctiw' [-Werror,-Wmissing-prototypes]
-   fctiw(u32 *frD, void *frB)
-   ^
-   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 errors generated.
+>> drivers/bluetooth/btmtk.c:386:32: error: no member named 'dump' in 'struct hci_dev'
+                   schedule_delayed_work(&hdev->dump.dump_timeout,
+                                          ~~~~  ^
+   1 error generated.
 
 
-vim +/_fex +15 arch/powerpc/math-emu/fcmpu.c
+vim +386 drivers/bluetooth/btmtk.c
 
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16   9  
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  10  int
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  12  {
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @13  	FP_DECL_D(A);
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @14  	FP_DECL_D(B);
-d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 @15  	FP_DECL_EX;
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  16  	int code[4] = { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  17  	long cmp;
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  18  
-
-:::::: The code at line 15 was first introduced by commit
-:::::: d2b194ed820880eb19c43b9c10d9f5f30026ee54 powerpc/math-emu: Use kernel generic math-emu code
-
-:::::: TO: Kumar Gala <galak@kernel.crashing.org>
-:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+   369	
+   370	int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
+   371	{
+   372		struct btmediatek_data *data = hci_get_priv(hdev);
+   373		int err;
+   374	
+   375		if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
+   376			return 0;
+   377	
+   378		switch (data->cd_info.state) {
+   379		case HCI_DEVCOREDUMP_IDLE:
+   380			err = hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
+   381			if (err < 0)
+   382				break;
+   383			data->cd_info.cnt = 0;
+   384	
+   385			/* It is supposed coredump can be done within 5 seconds */
+ > 386			schedule_delayed_work(&hdev->dump.dump_timeout,
+   387					      msecs_to_jiffies(5000));
+   388			fallthrough;
+   389		case HCI_DEVCOREDUMP_ACTIVE:
+   390		default:
+   391			err = hci_devcd_append(hdev, skb);
+   392			if (err < 0)
+   393				break;
+   394			data->cd_info.cnt++;
+   395	
+   396			/* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
+   397			if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
+   398			    skb->len > sizeof(MTK_COREDUMP_END) &&
+   399			    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
+   400				    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
+   401				bt_dev_info(hdev, "Mediatek coredump end");
+   402				hci_devcd_complete(hdev);
+   403			}
+   404	
+   405			break;
+   406		}
+   407	
+   408		if (err < 0)
+   409			kfree_skb(skb);
+   410	
+   411		return err;
+   412	}
+   413	EXPORT_SYMBOL_GPL(btmtk_process_coredump);
+   414	
 
 -- 
 0-DAY CI Kernel Test Service
