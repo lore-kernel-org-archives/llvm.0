@@ -1,46 +1,54 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9FA1FB8;
-	Fri, 30 Jun 2023 09:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688116883; x=1719652883;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9bmomT27I0zqHjHtqcdMPLO/YYB1lfOp8mwImTK4BGI=;
-  b=PC12zPhtGld5pPA3UxsVs4gXvRM6UQz6J4vbEfB1NngCWMN6aksxhiCS
-   yr/Z3b6PyrQNFZh/psQFFlOwa8uE5kj7TfL6EkE1MsANn+uSjUJJMX4E6
-   ELeM6DXh9Uw0cZzUIlWZa6XDNlNJMq4KmNypRk+L+nQYFgqBPjVbWtgqi
-   NJwEu/8+qfOYLkX++CjIUFrr9K+GcZJ2iUTP628aMi4zzwhxW8ayKr34V
-   uD5RnYJ1a6jFWtrPORgxzY3KwhJLIEfZPMmTzOBwc1wSI8YpRwdov6h+E
-   4DkxaoOG0SxxgiaHLGgCOBMBOI13zD/Z3Z/RvT5wvS2DlS1/7/px3NjzC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365838969"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="365838969"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:21:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694960821"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="694960821"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jun 2023 02:21:19 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFAJb-000Eqf-0b;
-	Fri, 30 Jun 2023 09:21:19 +0000
-Date: Fri, 30 Jun 2023 17:20:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jing Cai <jing.cai@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Chris Lu <chris.lu@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>
-Subject: [linux-next:master 12628/12815] drivers/bluetooth/btmtk.c:386:32:
- error: no member named 'dump' in 'struct hci_dev'
-Message-ID: <202306301709.lvrxzyCj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B466F10781
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 09:47:02 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso14947075e9.0
+        for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 02:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688118421; x=1690710421;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GclBgXm9Q3XbGCOTf6wDEXPVGEyfn5qEyPiaLKc6uYM=;
+        b=iROPQ3uyJUbR73/EmgO0lq8jkRTRpaKxc9hXMOAfFJ6YSLlWACsaSPgz4BOsX/XyBm
+         wifYby5SEIu+SProcw2R39cSI9PU9BKgmJux76CtYbtmLr3V2ia28uWftCJgqkBwXUJ0
+         A1z0qE46cVI9UGK7hSe+Hm0mJDmZv4CxMGaNL+2mLEZGI7TX9I8zVOZVEO9Ih7HA+A91
+         ulycw9uLpfM6MdQxkriibHCINZzd/lAPc1szOulfozPdr6kWOeTYQd4yaMWLlU+IkvXi
+         vKjOcFP+ZR3UUhNnJ3Us79yWg40DfN4vSBTZYdUvTIN0gw/QHhkXchXziIlBgCOfVaRN
+         iziw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688118421; x=1690710421;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GclBgXm9Q3XbGCOTf6wDEXPVGEyfn5qEyPiaLKc6uYM=;
+        b=BPy2MWO+r1JVLIA8OpOFOuY2b4Iy+Hhc9M53Jv7Sy/EKwEXP+saXE5UECDuLyBD7fg
+         e07h30X82f4FQSQXZBmWCaiklRGZZhAdKYMfm2jwC51/4JPNUWMdG27shyIKoTGi9S2t
+         Im0NpSuCJHALQpEF3GhTacWHFbwxubTdf1NEogot4z/gjNQoo99WUBYlweqwRB+GfKU+
+         gE+oinw2f9MQ+BiSg4SL+J43SlKxU4HfEsxaIVAC9c7+yKFlcsI8IbVoDAVTUgZ9Q26s
+         0PGuzM5JNyVDJ2QZyog48b6IsYL33laE5Nu9NMuCv0bctnHLjIS7vgq1DzslR2sWx/yb
+         HLzA==
+X-Gm-Message-State: AC+VfDx59tvwa/zTgY6kD3Uik0ckartR2Fr0gbXT8kyBzYJ1N4V01u/p
+	XOHvSiVM8SRuKNw/rHhr8vj/mw==
+X-Google-Smtp-Source: ACHHUZ5ZhQr9vrR7J5QnqBkd72WjZ2AWUvoM0O8d2CRpMrfzaYrD2py75FQQRIBDIuytsk2U5d/Cww==
+X-Received: by 2002:a05:600c:3552:b0:3fa:94ea:583c with SMTP id i18-20020a05600c355200b003fa94ea583cmr7336415wmq.8.1688118420757;
+        Fri, 30 Jun 2023 02:47:00 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c210600b003fafe32c8f6sm12264726wml.10.2023.06.30.02.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 02:46:58 -0700 (PDT)
+Date: Fri, 30 Jun 2023 12:46:53 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Anna Schumaker <anna@kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-nfs@vger.kernel.org,
+	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+Subject: [PATCH] SUNRPC: clean up integer overflow check
+Message-ID: <2390fdc8-13fa-4456-ab67-44f0744db412@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,76 +57,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6352a698ca5bf26a9199202666b16cf741f579f6
-commit: 872f8c253cb9e84cb3e7f381dd81c7791c64a05a [12628/12815] Bluetooth: btusb: mediatek: add MediaTek devcoredump support
-config: x86_64-randconfig-r023-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301709.lvrxzyCj-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301709.lvrxzyCj-lkp@intel.com/reproduce)
+This integer overflow check works as intended but Clang and GCC and warn
+about it when compiling with W=1.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301709.lvrxzyCj-lkp@intel.com/
+    include/linux/sunrpc/xdr.h:539:17: error: comparison is always false
+    due to limited range of data type [-Werror=type-limits]
 
-All errors (new ones prefixed by >>):
+Use size_mul() to prevent the integer overflow.  It silences the warning
+and it's cleaner as well.
 
->> drivers/bluetooth/btmtk.c:386:32: error: no member named 'dump' in 'struct hci_dev'
-                   schedule_delayed_work(&hdev->dump.dump_timeout,
-                                          ~~~~  ^
-   1 error generated.
+Reported-by: Dmitry Antipov <dmantipov@yandex.ru>
+Closes: https://lore.kernel.org/all/20230601143332.255312-1-dmantipov@yandex.ru/
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+Btw, since the Clang developers are automatically CC'd, here is how I
+silenced this type of false positive in Smatch:
 
+1) Check that longs are 64 bit.
+2) Check that the right hand side has a SIZE_MAX.  SIZE_MAX is defined
+   as -1UL so you want both the type and the value to match.
+3) Then on the other the other side, check that the type is uint.
 
-vim +386 drivers/bluetooth/btmtk.c
+I'm looking at this code now in Smatch and it's kind of ugly, and also
+there are some other places where I need to apply the same logic...
 
-   369	
-   370	int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
-   371	{
-   372		struct btmediatek_data *data = hci_get_priv(hdev);
-   373		int err;
-   374	
-   375		if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-   376			return 0;
-   377	
-   378		switch (data->cd_info.state) {
-   379		case HCI_DEVCOREDUMP_IDLE:
-   380			err = hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
-   381			if (err < 0)
-   382				break;
-   383			data->cd_info.cnt = 0;
-   384	
-   385			/* It is supposed coredump can be done within 5 seconds */
- > 386			schedule_delayed_work(&hdev->dump.dump_timeout,
-   387					      msecs_to_jiffies(5000));
-   388			fallthrough;
-   389		case HCI_DEVCOREDUMP_ACTIVE:
-   390		default:
-   391			err = hci_devcd_append(hdev, skb);
-   392			if (err < 0)
-   393				break;
-   394			data->cd_info.cnt++;
-   395	
-   396			/* Mediatek coredump data would be more than MTK_COREDUMP_NUM */
-   397			if (data->cd_info.cnt > MTK_COREDUMP_NUM &&
-   398			    skb->len > sizeof(MTK_COREDUMP_END) &&
-   399			    !memcmp((char *)&skb->data[skb->len - sizeof(MTK_COREDUMP_END)],
-   400				    MTK_COREDUMP_END, sizeof(MTK_COREDUMP_END) - 1)) {
-   401				bt_dev_info(hdev, "Mediatek coredump end");
-   402				hci_devcd_complete(hdev);
-   403			}
-   404	
-   405			break;
-   406		}
-   407	
-   408		if (err < 0)
-   409			kfree_skb(skb);
-   410	
-   411		return err;
-   412	}
-   413	EXPORT_SYMBOL_GPL(btmtk_process_coredump);
-   414	
+ include/linux/sunrpc/xdr.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
+diff --git a/include/linux/sunrpc/xdr.h b/include/linux/sunrpc/xdr.h
+index f89ec4b5ea16..dbf7620a2853 100644
+--- a/include/linux/sunrpc/xdr.h
++++ b/include/linux/sunrpc/xdr.h
+@@ -775,9 +775,7 @@ xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
+ 
+ 	if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+ 		return -EBADMSG;
+-	if (len > SIZE_MAX / sizeof(*p))
+-		return -EBADMSG;
+-	p = xdr_inline_decode(xdr, len * sizeof(*p));
++	p = xdr_inline_decode(xdr, size_mul(len, sizeof(*p)));
+ 	if (unlikely(!p))
+ 		return -EBADMSG;
+ 	if (array == NULL)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
