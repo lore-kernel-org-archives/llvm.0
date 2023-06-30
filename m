@@ -1,84 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EE01FCE
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 05:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688103065;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9Ft9kDnichzinFb8wxjcGKtsDMHgEcRnxePIz8JTnv4=;
-	b=hrK+LPp3T5G7lhfIvGDqJz/5JG3jlmRbMLaJYd/J34I573pkY6IqW3waM8tUZueCGxcBtv
-	3PxvisvIQ5lNVORZxjQKOZaO788Lo0KlECFbxTrVwZ4PNnF5hdOwE7BdFhIqlvgw+t1Qlw
-	T2k12CVraDW5sT1PMjGyysltphHbdjA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-J5FRk0qSNY2vD2LnaNrBoQ-1; Fri, 30 Jun 2023 01:31:03 -0400
-X-MC-Unique: J5FRk0qSNY2vD2LnaNrBoQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0EF5488D1A3
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 05:31:03 +0000 (UTC)
-Received: from [172.64.10.50] (unknown [10.30.33.227])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EBF21200BA8D;
-	Fri, 30 Jun 2023 05:31:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 1e6d5dea)
-Date: Fri, 30 Jun 2023 05:31:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D552C3FD4
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 06:06:22 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-666ed230c81so1385067b3a.0
+        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 23:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688105182; x=1690697182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FoQDqvgFjP9yIbNKgNX/63X8qzFVfopYrI03Z5gPuZs=;
+        b=YIKi3vyfcjrWLRboUKSiLakgNi2F9x57FRd5SmknzlK3rspfA0uYAcbIhva27p6QDz
+         VU5AX/yNquCmAikErptNFkBPOfwyqHl0kAYMpW4+IlPDwlBrRasgxaovywpLeExT3ZqU
+         JCKifxzyzqnZevbuBVTmJnjYMVAOWWUk47QApDTdKRzmfa29nq/JAmAP64gD5zidjyq1
+         8ZhbPCstfVz7ar1prAb8AoriRanmtjjldx/lrJ8YsqnAFNdGc3JDtUiyUodxszLFAleW
+         B3IKc3dCKQ/GjJQrdaJMRrkkH+ri00sxmpv33BVLxzFA5LCZt/4TODK9ozApWnjLPOrX
+         0msA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688105182; x=1690697182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FoQDqvgFjP9yIbNKgNX/63X8qzFVfopYrI03Z5gPuZs=;
+        b=AAtuF/pJmGT1v7CjPai4LUof6zJBYvQljIkATWjLwCixuV7KM99mbW/71ZtVNCKgS4
+         IadvPPoyhGZjsfECnxclK4p1I1zQyJI40dqHarV/M8uraUkWkmK2JKjrvNafwEKx4wRy
+         hze3Xuu6joELvACdzYBxLL+78HbAUo7j1EIDoXrdu8vPbNF7TOYAdy/guoV8VMM2B5o0
+         qOQCho8sjMNUsAFLOC2P1U0EPa3dvsv+Zs+lPNfqwpF0Ski/9ZmzIyLpKyb5cgMWZM1L
+         VRODFj1sXlz2VjHa7RKp5IgCr8TB8iP1Bqgy7jve/r0gOM6QuKDJE4qfPqOLQUkzChsW
+         GaLw==
+X-Gm-Message-State: ABy/qLbHVibUlhds3iuPoqsejc/oTYtK4th8dRuQeWnaUztbaVbEgjPe
+	cnSbtODPob2T/UpildvSFSHt/Q==
+X-Google-Smtp-Source: APBJJlHu5lo/ftGXXxmHcultaYkBbYMsHO52f4I9kLJs5dcbCEzDSBQuwf5ZAjZlxyBZksdGLuqLCQ==
+X-Received: by 2002:a05:6a00:2282:b0:668:7325:e184 with SMTP id f2-20020a056a00228200b006687325e184mr2392442pfe.16.1688105182122;
+        Thu, 29 Jun 2023 23:06:22 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b0064fe06fe712sm9232900pfi.129.2023.06.29.23.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 23:06:21 -0700 (PDT)
+Date: Fri, 30 Jun 2023 11:36:19 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Zhipeng Wang <zhipeng.wang_1@nxp.com>,
+	kernel test robot <lkp@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [EXT] Re: [linux-next:master 5324/12162]
+ drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
+ 'allowlist'
+Message-ID: <20230630060619.zsfw4aynce7wt7cv@vireshk-i7>
+References: <202306250025.savpMM8L-lkp@intel.com>
+ <20230626065345.2i562lyf23fantlm@vireshk-i7>
+ <PAXPR04MB8304F58EE8AE785A8B823C09EB24A@PAXPR04MB8304.eurprd04.prod.outlook.com>
+ <20230628153923.GA254367@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <34756.123063001310300289@us-mta-227.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628153923.GA254367@dev-arch.thelio-3990X>
 
-Hi, we tested your kernel and here are the results:
+On 28-06-23, 08:39, Nathan Chancellor wrote:
+> On Wed, Jun 28, 2023 at 01:33:40AM +0000, Zhipeng Wang wrote:
+> > Hi,
+> > 
+> > I'm sorry for responding so late. I have also tried to reproduce this issue many times and I have not reproduced it.
+> 
+> I can reproduce this with the configuration that the robot provided,
+> even with GCC.
+> 
+>   $ curl -LSso .config https://download.01.org/0day-ci/archive/20230625/202306250025.savpMM8L-lkp@intel.com/config
+> 
+>   $ make -skj"$(nproc)" ARCH=i386 CROSS_COMPILE=x86_64-linux- W=1 olddefconfig drivers/cpufreq/cpufreq-dt-platdev.o
+>   drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
+>     102 | static const struct of_device_id blocklist[] __initconst = {
+>         |                                  ^~~~~~~~~
+>   drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
+>      17 | static const struct of_device_id allowlist[] __initconst = {
+>         |                                  ^~~~~~~~~
+> 
+> The W=1 is the key here, this warning is not enabled in a normal build. This
+> configuration does not have CONFIG_OF=y, so of_match_node() is just defined as
+> NULL, meaning these variables are indeed unused.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Ahh. Sent a patch to fix it now. Thanks.
 
+> However, I am kind of confused as to how the robot landed on 3b062a08698 as the
+> problematic commit, as I can reproduce these warnings without it.
 
-Kernel information:
-    Commit message: Merge tag 'dma-mapping-6.5-2023-06-28' of git://git.inf=
-radead.org/users/hch/dma-mapping
+Right.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94316
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36792=
-0
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+viresh
