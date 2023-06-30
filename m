@@ -1,58 +1,51 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D552C3FD4
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 06:06:22 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-666ed230c81so1385067b3a.0
-        for <llvm@lists.linux.dev>; Thu, 29 Jun 2023 23:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688105182; x=1690697182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FoQDqvgFjP9yIbNKgNX/63X8qzFVfopYrI03Z5gPuZs=;
-        b=YIKi3vyfcjrWLRboUKSiLakgNi2F9x57FRd5SmknzlK3rspfA0uYAcbIhva27p6QDz
-         VU5AX/yNquCmAikErptNFkBPOfwyqHl0kAYMpW4+IlPDwlBrRasgxaovywpLeExT3ZqU
-         JCKifxzyzqnZevbuBVTmJnjYMVAOWWUk47QApDTdKRzmfa29nq/JAmAP64gD5zidjyq1
-         8ZhbPCstfVz7ar1prAb8AoriRanmtjjldx/lrJ8YsqnAFNdGc3JDtUiyUodxszLFAleW
-         B3IKc3dCKQ/GjJQrdaJMRrkkH+ri00sxmpv33BVLxzFA5LCZt/4TODK9ozApWnjLPOrX
-         0msA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688105182; x=1690697182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FoQDqvgFjP9yIbNKgNX/63X8qzFVfopYrI03Z5gPuZs=;
-        b=AAtuF/pJmGT1v7CjPai4LUof6zJBYvQljIkATWjLwCixuV7KM99mbW/71ZtVNCKgS4
-         IadvPPoyhGZjsfECnxclK4p1I1zQyJI40dqHarV/M8uraUkWkmK2JKjrvNafwEKx4wRy
-         hze3Xuu6joELvACdzYBxLL+78HbAUo7j1EIDoXrdu8vPbNF7TOYAdy/guoV8VMM2B5o0
-         qOQCho8sjMNUsAFLOC2P1U0EPa3dvsv+Zs+lPNfqwpF0Ski/9ZmzIyLpKyb5cgMWZM1L
-         VRODFj1sXlz2VjHa7RKp5IgCr8TB8iP1Bqgy7jve/r0gOM6QuKDJE4qfPqOLQUkzChsW
-         GaLw==
-X-Gm-Message-State: ABy/qLbHVibUlhds3iuPoqsejc/oTYtK4th8dRuQeWnaUztbaVbEgjPe
-	cnSbtODPob2T/UpildvSFSHt/Q==
-X-Google-Smtp-Source: APBJJlHu5lo/ftGXXxmHcultaYkBbYMsHO52f4I9kLJs5dcbCEzDSBQuwf5ZAjZlxyBZksdGLuqLCQ==
-X-Received: by 2002:a05:6a00:2282:b0:668:7325:e184 with SMTP id f2-20020a056a00228200b006687325e184mr2392442pfe.16.1688105182122;
-        Thu, 29 Jun 2023 23:06:22 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b0064fe06fe712sm9232900pfi.129.2023.06.29.23.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 23:06:21 -0700 (PDT)
-Date: Fri, 30 Jun 2023 11:36:19 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Zhipeng Wang <zhipeng.wang_1@nxp.com>,
-	kernel test robot <lkp@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [EXT] Re: [linux-next:master 5324/12162]
- drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: unused variable
- 'allowlist'
-Message-ID: <20230630060619.zsfw4aynce7wt7cv@vireshk-i7>
-References: <202306250025.savpMM8L-lkp@intel.com>
- <20230626065345.2i562lyf23fantlm@vireshk-i7>
- <PAXPR04MB8304F58EE8AE785A8B823C09EB24A@PAXPR04MB8304.eurprd04.prod.outlook.com>
- <20230628153923.GA254367@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDD0522E;
+	Fri, 30 Jun 2023 06:34:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688106862; x=1719642862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lp8GVKCOH/lzScTS9lpD0yx5G69PduR8vAhXSWXJjbc=;
+  b=Y9GmXPkuXLafQjvDSDVgnhnoG/zP+EnwcoNAcnRcqa/4HRBbI6g4/z51
+   q+QUVDl28810iGVEcrOVifeOPlBeIV0cCZb3yVZ0C3FD1PxIsE++lgJGy
+   yUMB7nqNr+on7x+2yLoFpEHtw4pugZQZFs6YEEgHO/AbgRf08923J3pyb
+   0n5vt7WEhEg1d38itvmL6o3Ny9mfA+dYcabk+ItxpPii3x6DrzePPRy3S
+   GL85LQrtECxcWux238ykXT8mS0re++GYkmiSfUXHg7VBz087sR4fKXpb4
+   OsZ0mXXB+eiKChDvnPVXtrTTxQHfpg/J9EhJeGeuGzL5c5EBRCFr5ZzMI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="364905092"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="364905092"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:34:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694926264"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="694926264"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 23:34:16 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qF7hv-000Elx-2x;
+	Fri, 30 Jun 2023 06:34:15 +0000
+Date: Fri, 30 Jun 2023 14:33:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: jeffxu@chromium.org, skhan@linuxfoundation.org, keescook@chromium.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+	dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
+	jeffxu@google.com, jorgelo@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, jannh@google.com,
+	linux-hardening@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
+ MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+Message-ID: <202306301435.dpXv0GwQ-lkp@intel.com>
+References: <20230630031721.623955-2-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,37 +54,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628153923.GA254367@dev-arch.thelio-3990X>
+In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
 
-On 28-06-23, 08:39, Nathan Chancellor wrote:
-> On Wed, Jun 28, 2023 at 01:33:40AM +0000, Zhipeng Wang wrote:
-> > Hi,
-> > 
-> > I'm sorry for responding so late. I have also tried to reproduce this issue many times and I have not reproduced it.
-> 
-> I can reproduce this with the configuration that the robot provided,
-> even with GCC.
-> 
->   $ curl -LSso .config https://download.01.org/0day-ci/archive/20230625/202306250025.savpMM8L-lkp@intel.com/config
-> 
->   $ make -skj"$(nproc)" ARCH=i386 CROSS_COMPILE=x86_64-linux- W=1 olddefconfig drivers/cpufreq/cpufreq-dt-platdev.o
->   drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
->     102 | static const struct of_device_id blocklist[] __initconst = {
->         |                                  ^~~~~~~~~
->   drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
->      17 | static const struct of_device_id allowlist[] __initconst = {
->         |                                  ^~~~~~~~~
-> 
-> The W=1 is the key here, this warning is not enabled in a normal build. This
-> configuration does not have CONFIG_OF=y, so of_match_node() is just defined as
-> NULL, meaning these variables are indeed unused.
+Hi,
 
-Ahh. Sent a patch to fix it now. Thanks.
+kernel test robot noticed the following build errors:
 
-> However, I am kind of confused as to how the robot landed on 3b062a08698 as the
-> problematic commit, as I can reproduce these warnings without it.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Right.
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
+patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+config: hexagon-randconfig-r005-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301435.dpXv0GwQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/memfd.c:12:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/memfd.c:12:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/memfd.c:12:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
+     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
+         |                      ^
+>> mm/memfd.c:311:17: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL'
+     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
+         |                               ^
+>> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
+     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
+         |                                           ^
+   6 warnings and 3 errors generated.
+
+
+vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
+
+   270	
+   271	static int sysctl_memfd_noexec(void)
+   272	{
+ > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
+   274	#ifdef CONFIG_SYSCTL
+   275		struct pid_namespace *ns;
+   276	
+   277		ns = task_active_pid_ns(current);
+   278		if (ns)
+   279			sysctl = ns->memfd_noexec_scope;
+   280	#endif
+   281		return sysctl;
+   282	}
+   283	
+   284	SYSCALL_DEFINE2(memfd_create,
+   285			const char __user *, uname,
+   286			unsigned int, flags)
+   287	{
+   288		char comm[TASK_COMM_LEN];
+   289		unsigned int *file_seals;
+   290		struct file *file;
+   291		int fd, error;
+   292		char *name;
+   293		long len;
+   294		int sysctl = sysctl_memfd_noexec();
+   295	
+   296		if (!(flags & MFD_HUGETLB)) {
+   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
+   298				return -EINVAL;
+   299		} else {
+   300			/* Allow huge page size encoding in flags. */
+   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
+   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
+   303				return -EINVAL;
+   304		}
+   305	
+   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
+   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
+   308			return -EINVAL;
+   309	
+   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+ > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
+   312				flags |= MFD_NOEXEC_SEAL;
+   313			else
+   314				flags |= MFD_EXEC;
+   315	
+   316			pr_warn_once(
+   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+   318				task_pid_nr(current), get_task_comm(comm, current));
+   319		}
+   320	
+ > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
