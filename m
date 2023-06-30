@@ -1,153 +1,84 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F40017744;
-	Fri, 30 Jun 2023 19:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688154405; x=1719690405;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5gtlQGYMm1ULeNUjSy6Nn3R1aUjHM5HNjqOWPEVH1+8=;
-  b=d62NB7RDcuGY9CSmJ+BkgRQ5OJR0tzjECiX5VCV77r9WbJgV5IK9ogMN
-   uVaVKjQnwlJp9RUas5i4cHee2zWBou7Cwti0mTsVcpWkxh23XLPDNYvvB
-   0F2QjwMx5jJtor/ofFWP0xCH6WsXI7QOZ8MY3Y67UhQKEzEoWfKiVrDkU
-   zmpPZb+aWfprqRkbUYdU5eqIOuStDQK86Xd65ou5zs/lA9uHlk1PpvzuE
-   0W6omHEnDrwU+wxOJ5kyulWrfnKJzug8v/l/egOhjx0d7T+1G8B53HA1U
-   21CTDofUGeMUrUN7VtTJofsoOJYAD7emE/FS8R4iWs3HWiM5Y2uiIGWdi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="359955251"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="359955251"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 12:46:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="721080924"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="721080924"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2023 12:46:41 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFK4n-000FJl-0N;
-	Fri, 30 Jun 2023 19:46:41 +0000
-Date: Sat, 1 Jul 2023 03:45:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [linux-next:master 7313/12815]
- drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5:
- warning: stack frame size (2208) exceeds limit (2048) in
- 'rockchip_vpu981_av1_dec_run'
-Message-ID: <202307010357.sY3iLanr-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE58417737
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 20:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688155867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hKj1IoMJ0U8c8vQyFGd73BmoUUX5l3ti8STedYWCx2Q=;
+	b=blHOumlC4puHf9tGzO6LNvEtiBhCEgdKrjB5e/AdxzXjDkh2jBTXy85xXbLCHdvGr016lU
+	jYKjNvykIvmjiACKQkuppHfCcPOXeclymGtFcIwgNWiSX8Tz+cVexJ2ST3+2it+1m20R4C
+	hcZwK7+2h5CGcQxZ2QiUJ7xTlvYxM18=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-jjAys9YENNqFHZH1_hOP4Q-1; Fri, 30 Jun 2023 16:11:06 -0400
+X-MC-Unique: jjAys9YENNqFHZH1_hOP4Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9BF21C05AEA
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 20:11:05 +0000 (UTC)
+Received: from [172.64.9.34] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C98D1200BA8D;
+	Fri, 30 Jun 2023 20:11:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, b30d7a77)
+Date: Fri, 30 Jun 2023 20:11:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <46740.123063016110600543@us-mta-292.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6352a698ca5bf26a9199202666b16cf741f579f6
-commit: 727a400686a2c0d25015c9e44916a59b72882f83 [7313/12815] media: verisilicon: Add Rockchip AV1 decoder
-config: riscv-randconfig-r021-20230701 (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307010357.sY3iLanr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5: warning: stack frame size (2208) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Wframe-larger-than]
-   int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
-       ^
-   375/2208 (16.98%) spills, 1833/2208 (83.02%) variables
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/rockchip_vpu981_av1_dec_run +1888 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+Kernel information:
+    Commit message: Merge tag 'perf-tools-for-v6.5-1-2023-06-28' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next
 
-  1887	
-> 1888	int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
-  1889	{
-  1890		struct hantro_dev *vpu = ctx->dev;
-  1891		struct vb2_v4l2_buffer *vb2_src;
-  1892		int ret;
-  1893	
-  1894		hantro_start_prepare_run(ctx);
-  1895	
-  1896		ret = rockchip_vpu981_av1_dec_prepare_run(ctx);
-  1897		if (ret)
-  1898			goto prepare_error;
-  1899	
-  1900		vb2_src = hantro_get_src_buf(ctx);
-  1901		if (!vb2_src) {
-  1902			ret = -EINVAL;
-  1903			goto prepare_error;
-  1904		}
-  1905	
-  1906		rockchip_vpu981_av1_dec_clean_refs(ctx);
-  1907		rockchip_vpu981_av1_dec_frame_ref(ctx, vb2_src->vb2_buf.timestamp);
-  1908	
-  1909		rockchip_vpu981_av1_dec_set_parameters(ctx);
-  1910		rockchip_vpu981_av1_dec_set_global_model(ctx);
-  1911		rockchip_vpu981_av1_dec_set_tile_info(ctx);
-  1912		rockchip_vpu981_av1_dec_set_reference_frames(ctx);
-  1913		rockchip_vpu981_av1_dec_set_segmentation(ctx);
-  1914		rockchip_vpu981_av1_dec_set_loopfilter(ctx);
-  1915		rockchip_vpu981_av1_dec_set_picture_dimensions(ctx);
-  1916		rockchip_vpu981_av1_dec_set_cdef(ctx);
-  1917		rockchip_vpu981_av1_dec_set_lr(ctx);
-  1918		rockchip_vpu981_av1_dec_set_prob(ctx);
-  1919	
-  1920		hantro_reg_write(vpu, &av1_dec_mode, AV1_DEC_MODE);
-  1921		hantro_reg_write(vpu, &av1_dec_out_ec_byte_word, 0);
-  1922		hantro_reg_write(vpu, &av1_write_mvs_e, 1);
-  1923		hantro_reg_write(vpu, &av1_dec_out_ec_bypass, 1);
-  1924		hantro_reg_write(vpu, &av1_dec_clk_gate_e, 1);
-  1925	
-  1926		hantro_reg_write(vpu, &av1_dec_abort_e, 0);
-  1927		hantro_reg_write(vpu, &av1_dec_tile_int_e, 0);
-  1928	
-  1929		hantro_reg_write(vpu, &av1_dec_alignment, 64);
-  1930		hantro_reg_write(vpu, &av1_apf_disable, 0);
-  1931		hantro_reg_write(vpu, &av1_apf_threshold, 8);
-  1932		hantro_reg_write(vpu, &av1_dec_buswidth, 2);
-  1933		hantro_reg_write(vpu, &av1_dec_max_burst, 16);
-  1934		hantro_reg_write(vpu, &av1_error_conceal_e, 0);
-  1935		hantro_reg_write(vpu, &av1_axi_rd_ostd_threshold, 64);
-  1936		hantro_reg_write(vpu, &av1_axi_wr_ostd_threshold, 64);
-  1937	
-  1938		hantro_reg_write(vpu, &av1_ext_timeout_cycles, 0xfffffff);
-  1939		hantro_reg_write(vpu, &av1_ext_timeout_override_e, 1);
-  1940		hantro_reg_write(vpu, &av1_timeout_cycles, 0xfffffff);
-  1941		hantro_reg_write(vpu, &av1_timeout_override_e, 1);
-  1942	
-  1943		rockchip_vpu981_av1_dec_set_output_buffer(ctx);
-  1944		rockchip_vpu981_av1_dec_set_input_buffer(ctx, vb2_src);
-  1945	
-  1946		hantro_end_prepare_run(ctx);
-  1947	
-  1948		hantro_reg_write(vpu, &av1_dec_e, 1);
-  1949	
-  1950		return 0;
-  1951	
-  1952	prepare_error:
-  1953		hantro_end_prepare_run(ctx);
-  1954		hantro_irq_done(vpu, VB2_BUF_STATE_ERROR);
-  1955		return ret;
-  1956	}
-  1957	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94431
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36828=
+9
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
