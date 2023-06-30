@@ -1,37 +1,37 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDD0522E;
-	Fri, 30 Jun 2023 06:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC1D522E;
+	Fri, 30 Jun 2023 06:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688106862; x=1719642862;
+  t=1688107603; x=1719643603;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Lp8GVKCOH/lzScTS9lpD0yx5G69PduR8vAhXSWXJjbc=;
-  b=Y9GmXPkuXLafQjvDSDVgnhnoG/zP+EnwcoNAcnRcqa/4HRBbI6g4/z51
-   q+QUVDl28810iGVEcrOVifeOPlBeIV0cCZb3yVZ0C3FD1PxIsE++lgJGy
-   yUMB7nqNr+on7x+2yLoFpEHtw4pugZQZFs6YEEgHO/AbgRf08923J3pyb
-   0n5vt7WEhEg1d38itvmL6o3Ny9mfA+dYcabk+ItxpPii3x6DrzePPRy3S
-   GL85LQrtECxcWux238ykXT8mS0re++GYkmiSfUXHg7VBz087sR4fKXpb4
-   OsZ0mXXB+eiKChDvnPVXtrTTxQHfpg/J9EhJeGeuGzL5c5EBRCFr5ZzMI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="364905092"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="364905092"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:34:21 -0700
+  bh=48q1NTvqt0qgKBQfVueuQcWYPjiExBBEJFG3i8T9p1k=;
+  b=Xox8ql/i4LXN4fVcFO0qanb4MvY/ZuGY/IbkizKUmHnNuxZ2ODTj3aZu
+   a8RoeK+QKL9dFUFZcWfNW56ZCM45xf1hoKFdICyviMx2+Js/oZAzXGOcc
+   Y216jDZk4OiOMBt5z0P76yAtmQadHTbEgWaxV7wUNMQWQRok0icxFv3Gy
+   qjxwYW1T6lD74YxUCCOUgLwQP6gu++oR8lqkzDlnX5XMYlQ3DG66ROZNr
+   Ba00arLoIez0qsllW7XFIlVT67sRrvfDAzWCwX5bwmBS6n5YmNQhF+47O
+   HzfNpHSV/VO0hTP3HPM4VQ8vQcFUffPIBlE/2H9boratJG/T8NW5uZ4kT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365814575"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="365814575"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:45:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694926264"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717686999"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="694926264"
+   d="scan'208";a="717686999"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 23:34:16 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2023 23:45:16 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF7hv-000Elx-2x;
-	Fri, 30 Jun 2023 06:34:15 +0000
-Date: Fri, 30 Jun 2023 14:33:57 +0800
+	id 1qF7sa-000EmB-0I;
+	Fri, 30 Jun 2023 06:45:16 +0000
+Date: Fri, 30 Jun 2023 14:44:26 +0800
 From: kernel test robot <lkp@intel.com>
 To: jeffxu@chromium.org, skhan@linuxfoundation.org, keescook@chromium.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -44,7 +44,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-security-module@vger.kernel.org
 Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
  MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-Message-ID: <202306301435.dpXv0GwQ-lkp@intel.com>
+Message-ID: <202306301413.VtwSCI1F-lkp@intel.com>
 References: <20230630031721.623955-2-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -66,68 +66,17 @@ url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-me
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
 patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-config: hexagon-randconfig-r005-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/config)
+config: riscv-randconfig-r042-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301435.dpXv0GwQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301413.VtwSCI1F-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
 >> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
      273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
          |                      ^
@@ -137,7 +86,7 @@ All errors (new ones prefixed by >>):
 >> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
      321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
          |                                           ^
-   6 warnings and 3 errors generated.
+   3 errors generated.
 
 
 vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
