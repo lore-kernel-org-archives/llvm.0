@@ -1,42 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F80134DD;
-	Fri, 30 Jun 2023 12:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D2B10796;
+	Fri, 30 Jun 2023 12:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688129610; x=1719665610;
+  t=1688129611; x=1719665611;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EtfM2CwPe9Irmz+ypq78MR9V52Na5zLxHKaDpjWUiHY=;
-  b=cqSwFGpoarwg6qnCS6oMUYOHBi3uO+kDbksvPySvj/ZLdKdjIDS7wxkp
-   mzqn3r+vbm8XQNHqvKFZlAVMpGuMij9rGbdK5ZZDrdhaSvBg6MHlTxeJ8
-   FGjzrB0qIsDxu7D50UTmYEJjG1wc1eFy8PbGOLHj6CRYg4yMiscXH5oZ8
-   2/fuI1Crzzq9y2fVL94dWuXRk5M76M1SdBdn6qmlr6LZeUASoyeLVnCGA
-   7tNjNo95oWfXbFsCdQdGLfYBSmUuNQZY/ltQ6GBxuyQokMICvyX5neaA2
-   DUoMmSfT72SSHF9Qe9ecoBVG2WSTA+ZxV1qOMvhHuXghbrSpdBLo4abDs
+  bh=jzENdzmRwZNpVaqEWzMmDLP8Z3ycyRJH+ZHfqR0TqbQ=;
+  b=U1xZTVFWT2HzphqBsJA9dXkZxm7NaKJi/M/N93diLOjNniPTMKVHEqsv
+   Kpjp6BQEfKsQD5GhHtfymqTkUl8AJ52BcwFpSuoycofb4AeYfPkRA463v
+   1yZT3VwollUNSC3tKW24V+nXpQ/4QPa9J+KsUyY5hETIao2Ne4r4vhHGx
+   DaPgS50iGcUVrRRpZZTYKW0BB3Ml8Ki14ywSnD3/GoRlXJhqtsi4YOg6/
+   t06oGxos9zMjpNTIPf1EdtWskArBM9tzmuSGkizIpd0x18jFRCZ5q/1mh
+   rV2thHhzzPIjd8tSqX52wpbuLqBvQRdshyrvrzp76FTgUxdNt/+NeWa/w
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="359863777"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="393112184"
 X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="359863777"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 05:53:28 -0700
+   d="scan'208";a="393112184"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 05:53:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="787714115"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="720949145"
 X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="787714115"
+   d="scan'208";a="720949145"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 05:53:26 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2023 05:53:26 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qFDcr-000EyD-2z;
+	id 1qFDcr-000EyG-38;
 	Fri, 30 Jun 2023 12:53:25 +0000
-Date: Fri, 30 Jun 2023 20:53:09 +0800
+Date: Fri, 30 Jun 2023 20:53:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:iov-extract 12/20] crypto/af_alg.c:1047:9: error: use
- of undeclared identifier 'READ_FROM_ITER'
-Message-ID: <202306302028.9vYZW3xA-lkp@intel.com>
+Subject: [dhowells-fs:iov-extract 17/20] fs/nfs/direct.c:833:7: error: call
+ to undeclared function 'iov_iter_extract_mode'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202306302024.pxF1j60X-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,257 +49,230 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git iov-extract
 head:   19ee2529bb48ab3bba1d2cfc7a0811ae08a22505
-commit: e023d59c1edc81db977ee1f8c9a2155097d29544 [12/20] af_alg: Set READ_FROM_ITER/WRITE_TO_ITER flag
-config: hexagon-randconfig-r024-20230630 (https://download.01.org/0day-ci/archive/20230630/202306302028.9vYZW3xA-lkp@intel.com/config)
+commit: 9b9620b5c075475d9da8e6e6a03f00bd5d2147fe [17/20] nfs: Pin pages rather than ref'ing if appropriate
+config: riscv-randconfig-r042-20230629 (https://download.01.org/0day-ci/archive/20230630/202306302024.pxF1j60X-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306302028.9vYZW3xA-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306302024.pxF1j60X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306302028.9vYZW3xA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306302024.pxF1j60X-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from crypto/af_alg.c:11:
-   In file included from include/crypto/if_alg.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from crypto/af_alg.c:11:
-   In file included from include/crypto/if_alg.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from crypto/af_alg.c:11:
-   In file included from include/crypto/if_alg.h:14:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> crypto/af_alg.c:1047:9: error: use of undeclared identifier 'READ_FROM_ITER'
-    1047 |                                                   READ_FROM_ITER);
-         |                                                   ^
->> crypto/af_alg.c:1252:22: error: use of undeclared identifier 'WRITE_TO_ITER'
-    1252 |                                          ALG_MAX_PAGES, WRITE_TO_ITER);
-         |                                                         ^
-   6 warnings and 2 errors generated.
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     743 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/nfs/direct.c:46:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   fs/nfs/direct.c:339:7: error: use of undeclared identifier 'WRITE_TO_ITER'
+     339 |                                                 WRITE_TO_ITER, &pgbase);
+         |                                                 ^
+   fs/nfs/direct.c:797:7: error: use of undeclared identifier 'READ_FROM_ITER'
+     797 |                                                 READ_FROM_ITER, &pgbase);
+         |                                                 ^
+>> fs/nfs/direct.c:833:7: error: call to undeclared function 'iov_iter_extract_mode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     833 |                                          iov_iter_extract_mode(iter, FOLL_SOURCE_BUF));
+         |                                          ^
+   fs/nfs/direct.c:833:7: note: did you mean 'iov_iter_extract_pages'?
+   include/linux/uio.h:385:9: note: 'iov_iter_extract_pages' declared here
+     385 | ssize_t iov_iter_extract_pages(struct iov_iter *i, struct page ***pages,
+         |         ^
+   fs/nfs/direct.c:833:35: error: use of undeclared identifier 'FOLL_SOURCE_BUF'
+     833 |                                          iov_iter_extract_mode(iter, FOLL_SOURCE_BUF));
+         |                                                                      ^
+   13 warnings and 4 errors generated.
 
 
-vim +/READ_FROM_ITER +1047 crypto/af_alg.c
+vim +/iov_iter_extract_mode +833 fs/nfs/direct.c
 
-   918	
-   919	/**
-   920	 * af_alg_sendmsg - implementation of sendmsg system call handler
-   921	 *
-   922	 * The sendmsg system call handler obtains the user data and stores it
-   923	 * in ctx->tsgl_list. This implies allocation of the required numbers of
-   924	 * struct af_alg_tsgl.
-   925	 *
-   926	 * In addition, the ctx is filled with the information sent via CMSG.
-   927	 *
-   928	 * @sock: socket of connection to user space
-   929	 * @msg: message from user space
-   930	 * @size: size of message from user space
-   931	 * @ivsize: the size of the IV for the cipher operation to verify that the
-   932	 *	   user-space-provided IV has the right size
-   933	 * Return: the number of copied data upon success, < 0 upon error
-   934	 */
-   935	int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
-   936			   unsigned int ivsize)
-   937	{
-   938		struct sock *sk = sock->sk;
-   939		struct alg_sock *ask = alg_sk(sk);
-   940		struct af_alg_ctx *ctx = ask->private;
-   941		struct af_alg_tsgl *sgl;
-   942		struct af_alg_control con = {};
-   943		long copied = 0;
-   944		bool enc = false;
-   945		bool init = false;
-   946		int err = 0;
-   947	
-   948		if (msg->msg_controllen) {
-   949			err = af_alg_cmsg_send(msg, &con);
-   950			if (err)
-   951				return err;
-   952	
-   953			init = true;
-   954			switch (con.op) {
-   955			case ALG_OP_ENCRYPT:
-   956				enc = true;
-   957				break;
-   958			case ALG_OP_DECRYPT:
-   959				enc = false;
-   960				break;
-   961			default:
-   962				return -EINVAL;
-   963			}
-   964	
-   965			if (con.iv && con.iv->ivlen != ivsize)
-   966				return -EINVAL;
-   967		}
-   968	
-   969		lock_sock(sk);
-   970		if (ctx->init && !ctx->more) {
-   971			if (ctx->used) {
-   972				err = -EINVAL;
-   973				goto unlock;
-   974			}
-   975	
-   976			pr_info_once(
-   977				"%s sent an empty control message without MSG_MORE.\n",
-   978				current->comm);
-   979		}
-   980		ctx->init = true;
-   981	
-   982		if (init) {
-   983			ctx->enc = enc;
-   984			if (con.iv)
-   985				memcpy(ctx->iv, con.iv->iv, ivsize);
-   986	
-   987			ctx->aead_assoclen = con.aead_assoclen;
-   988		}
-   989	
-   990		while (size) {
-   991			struct scatterlist *sg;
-   992			size_t len = size;
-   993			ssize_t plen;
-   994	
-   995			/* use the existing memory in an allocated page */
-   996			if (ctx->merge) {
-   997				sgl = list_entry(ctx->tsgl_list.prev,
-   998						 struct af_alg_tsgl, list);
-   999				sg = sgl->sg + sgl->cur - 1;
-  1000				len = min_t(size_t, len,
-  1001					    PAGE_SIZE - sg->offset - sg->length);
-  1002	
-  1003				err = memcpy_from_msg(page_address(sg_page(sg)) +
-  1004						      sg->offset + sg->length,
-  1005						      msg, len);
-  1006				if (err)
-  1007					goto unlock;
-  1008	
-  1009				sg->length += len;
-  1010				ctx->merge = (sg->offset + sg->length) &
-  1011					     (PAGE_SIZE - 1);
-  1012	
-  1013				ctx->used += len;
-  1014				copied += len;
-  1015				size -= len;
-  1016				continue;
-  1017			}
-  1018	
-  1019			if (!af_alg_writable(sk)) {
-  1020				err = af_alg_wait_for_wmem(sk, msg->msg_flags);
-  1021				if (err)
-  1022					goto unlock;
-  1023			}
-  1024	
-  1025			/* allocate a new page */
-  1026			len = min_t(unsigned long, len, af_alg_sndbuf(sk));
-  1027	
-  1028			err = af_alg_alloc_tsgl(sk);
-  1029			if (err)
-  1030				goto unlock;
-  1031	
-  1032			sgl = list_entry(ctx->tsgl_list.prev, struct af_alg_tsgl,
-  1033					 list);
-  1034			sg = sgl->sg;
-  1035			if (sgl->cur)
-  1036				sg_unmark_end(sg + sgl->cur - 1);
-  1037	
-  1038			if (msg->msg_flags & MSG_SPLICE_PAGES) {
-  1039				struct sg_table sgtable = {
-  1040					.sgl		= sg,
-  1041					.nents		= sgl->cur,
-  1042					.orig_nents	= sgl->cur,
-  1043				};
-  1044	
-  1045				plen = extract_iter_to_sg(&msg->msg_iter, len, &sgtable,
-  1046							  MAX_SGL_ENTS - sgl->cur,
-> 1047							  READ_FROM_ITER);
-  1048				if (plen < 0) {
-  1049					err = plen;
-  1050					goto unlock;
-  1051				}
-  1052	
-  1053				for (; sgl->cur < sgtable.nents; sgl->cur++)
-  1054					get_page(sg_page(&sg[sgl->cur]));
-  1055				len -= plen;
-  1056				ctx->used += plen;
-  1057				copied += plen;
-  1058				size -= plen;
-  1059			} else {
-  1060				do {
-  1061					struct page *pg;
-  1062					unsigned int i = sgl->cur;
-  1063	
-  1064					plen = min_t(size_t, len, PAGE_SIZE);
-  1065	
-  1066					pg = alloc_page(GFP_KERNEL);
-  1067					if (!pg) {
-  1068						err = -ENOMEM;
-  1069						goto unlock;
-  1070					}
-  1071	
-  1072					sg_assign_page(sg + i, pg);
-  1073	
-  1074					err = memcpy_from_msg(
-  1075						page_address(sg_page(sg + i)),
-  1076						msg, plen);
-  1077					if (err) {
-  1078						__free_page(sg_page(sg + i));
-  1079						sg_assign_page(sg + i, NULL);
-  1080						goto unlock;
-  1081					}
-  1082	
-  1083					sg[i].length = plen;
-  1084					len -= plen;
-  1085					ctx->used += plen;
-  1086					copied += plen;
-  1087					size -= plen;
-  1088					sgl->cur++;
-  1089				} while (len && sgl->cur < MAX_SGL_ENTS);
-  1090			}
-  1091	
-  1092			if (!size)
-  1093				sg_mark_end(sg + sgl->cur - 1);
-  1094	
-  1095			ctx->merge = plen & (PAGE_SIZE - 1);
-  1096		}
-  1097	
-  1098		err = 0;
-  1099	
-  1100		ctx->more = msg->msg_flags & MSG_MORE;
-  1101	
-  1102	unlock:
-  1103		af_alg_data_wakeup(sk);
-  1104		release_sock(sk);
-  1105	
-  1106		return copied ?: err;
-  1107	}
-  1108	EXPORT_SYMBOL_GPL(af_alg_sendmsg);
-  1109	
+   758	
+   759	
+   760	/*
+   761	 * NB: Return the value of the first error return code.  Subsequent
+   762	 *     errors after the first one are ignored.
+   763	 */
+   764	/*
+   765	 * For each wsize'd chunk of the user's buffer, dispatch an NFS WRITE
+   766	 * operation.  If nfs_writedata_alloc() or get_user_pages() fails,
+   767	 * bail and stop sending more writes.  Write length accounting is
+   768	 * handled automatically by nfs_direct_write_result().  Otherwise, if
+   769	 * no requests have been sent, just return an error.
+   770	 */
+   771	static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+   772						       struct iov_iter *iter,
+   773						       loff_t pos, int ioflags)
+   774	{
+   775		struct nfs_pageio_descriptor desc;
+   776		struct inode *inode = dreq->inode;
+   777		ssize_t result = 0;
+   778		size_t requested_bytes = 0;
+   779		size_t wsize = max_t(size_t, NFS_SERVER(inode)->wsize, PAGE_SIZE);
+   780	
+   781		trace_nfs_direct_write_schedule_iovec(dreq);
+   782	
+   783		nfs_pageio_init_write(&desc, inode, ioflags, false,
+   784				      &nfs_direct_write_completion_ops);
+   785		desc.pg_dreq = dreq;
+   786		get_dreq(dreq);
+   787		inode_dio_begin(inode);
+   788	
+   789		NFS_I(inode)->write_io += iov_iter_count(iter);
+   790		while (iov_iter_count(iter)) {
+   791			struct page **pagevec = NULL;
+   792			size_t bytes;
+   793			size_t pgbase;
+   794			unsigned npages, i;
+   795	
+   796			result = iov_iter_extract_pages(iter, &pagevec, wsize, INT_MAX,
+   797							READ_FROM_ITER, &pgbase);
+   798			if (result < 0)
+   799				break;
+   800	
+   801			bytes = result;
+   802			npages = (result + pgbase + PAGE_SIZE - 1) / PAGE_SIZE;
+   803			for (i = 0; i < npages; i++) {
+   804				struct nfs_page *req;
+   805				unsigned int req_len = min_t(size_t, bytes, PAGE_SIZE - pgbase);
+   806	
+   807				req = nfs_page_create_from_page(dreq->ctx, pagevec[i],
+   808								pgbase, pos, req_len);
+   809				if (IS_ERR(req)) {
+   810					result = PTR_ERR(req);
+   811					break;
+   812				}
+   813	
+   814				if (desc.pg_error < 0) {
+   815					nfs_free_request(req);
+   816					result = desc.pg_error;
+   817					break;
+   818				}
+   819	
+   820				nfs_lock_request(req);
+   821				if (!nfs_pageio_add_request(&desc, req)) {
+   822					result = desc.pg_error;
+   823					nfs_unlock_and_release_request(req);
+   824					break;
+   825				}
+   826				pgbase = 0;
+   827				bytes -= req_len;
+   828				requested_bytes += req_len;
+   829				pos += req_len;
+   830				dreq->bytes_left -= req_len;
+   831			}
+   832			nfs_direct_release_pages(pagevec, npages,
+ > 833						 iov_iter_extract_mode(iter, FOLL_SOURCE_BUF));
+   834			kvfree(pagevec);
+   835			if (result < 0)
+   836				break;
+   837		}
+   838		nfs_pageio_complete(&desc);
+   839	
+   840		/*
+   841		 * If no bytes were started, return the error, and let the
+   842		 * generic layer handle the completion.
+   843		 */
+   844		if (requested_bytes == 0) {
+   845			inode_dio_end(inode);
+   846			nfs_direct_req_release(dreq);
+   847			return result < 0 ? result : -EIO;
+   848		}
+   849	
+   850		if (put_dreq(dreq))
+   851			nfs_direct_write_complete(dreq);
+   852		return requested_bytes;
+   853	}
+   854	
 
 -- 
 0-DAY CI Kernel Test Service
