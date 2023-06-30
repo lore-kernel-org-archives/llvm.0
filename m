@@ -1,43 +1,51 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C312EC3;
-	Fri, 30 Jun 2023 02:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807131FA0;
+	Fri, 30 Jun 2023 03:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688092691; x=1719628691;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rfYuid5WhN1TcedRrZPGcCTN+9vw/Umg8m0NoOqlJd8=;
-  b=YvhLgLSMI9EYqopBieg3XibDjBslm0gktuHGuu2BDKCFZ6Ko6ig5vy2S
-   Ro+qRo9/DxoDOgVaVRWgi8nGmEEKDvO8FczFwfIJov2SoWsb7LE6TSKr9
-   DQLgXoW3NkPfXKnbj2EFZjcYw2THxIlzG5CJS94DxM4nh6XtGmzGZVh4T
-   eflqtIqFHw7Rob+oh0u4CTPbRLQPVA2KkfmW6qWQ4V4QlD5k1l35RXzw3
-   4v6waQlbUWbLGguMCgOHv2mTghIfpmlCSkgMcNEgqxPn0dZAoVuIqS0t8
-   7dds71hnG0xoQOasCUyo8lsj/vrfPvtlfmpj+R4u85Y5um+dDLF+3VrBz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="425982568"
+  t=1688095216; x=1719631216;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CleN5csZxWjHwwb4MOnNoiZ8h4BJOgyw+uua6zQ7x1U=;
+  b=WUeAial2pUBQcsKhjfbLCxsr2Xpg1Qc6yBqNobwwk9Bo34ECTulqoYL1
+   ScTSfo/pV0ZrDoSrDV270NqIKn90GPPrsefcukiVG7ZRA16H3YDchSYxX
+   H6guaciLQErYw6hemUCPOVjp8guFAz+xnACLNRFvzy2MqwcfL/kF7ikQp
+   5WtTlXOH0CzgYbrPQXt4GJr/1l09qL/EXHZWVPRBWI/4QFFPgbOfcmxzO
+   jbqpb+gMCZ9snbYnFYdstzIKCWBGgjyUMNQC12TUDhYJPijDTDNLC2yeL
+   yb2Osl79pIoPm/Y4z1SAv6r+ZtqnjWFJ6UQwxTWPr7CuuCQqOCJhwiO7y
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="393027490"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="425982568"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 19:38:10 -0700
+   d="scan'208";a="393027490"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 20:20:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="862140671"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1048058620"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="862140671"
+   d="scan'208";a="1048058620"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2023 19:38:09 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2023 20:20:10 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qF41Q-000EcH-0G;
-	Fri, 30 Jun 2023 02:38:08 +0000
-Date: Fri, 30 Jun 2023 10:37:23 +0800
+	id 1qF4g5-000Ee1-1N;
+	Fri, 30 Jun 2023 03:20:09 +0000
+Date: Fri, 30 Jun 2023 11:19:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jyri Sarha <jyri.sarha@intel.com>
+To: Wei Hu <weh@microsoft.com>, netdev@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+	longli@microsoft.com, sharmaajay@microsoft.com, jgg@ziepe.ca,
+	leon@kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
+	wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	vkuznets@redhat.com, ssengar@linux.microsoft.com,
+	shradhagupta@linux.microsoft.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jsarha:no_wname_in_kcontrol_name 2/2]
- sound/soc/sof/topology.c:856:12: error: label at end of compound statement:
- expected statement
-Message-ID: <202306301027.MGaRoqpG-lkp@intel.com>
+Subject: Re: [PATCH v3 1/1] RDMA/mana_ib: Add EQ interrupt support to mana ib
+ driver.
+Message-ID: <202306301145.qNZGZ0MP-lkp@intel.com>
+References: <20230615111412.1687573-1-weh@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,72 +54,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230615111412.1687573-1-weh@microsoft.com>
 
-tree:   https://github.com/jsarha/linux no_wname_in_kcontrol_name
-head:   64b366f30bf75f5525ef9b88f0b9cf810cc160bc
-commit: 64b366f30bf75f5525ef9b88f0b9cf810cc160bc [2/2] ASoC: SOF: topology: Add a token for dropping widget name in kcontrol name
-config: x86_64-randconfig-x006-20230629 (https://download.01.org/0day-ci/archive/20230630/202306301027.MGaRoqpG-lkp@intel.com/config)
+Hi Wei,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on horms-ipvs/master v6.4 next-20230629]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Hu/RDMA-mana_ib-Add-EQ-interrupt-support-to-mana-ib-driver/20230615-191709
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230615111412.1687573-1-weh%40microsoft.com
+patch subject: [PATCH v3 1/1] RDMA/mana_ib: Add EQ interrupt support to mana ib driver.
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230630/202306301145.qNZGZ0MP-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301027.MGaRoqpG-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301145.qNZGZ0MP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301027.MGaRoqpG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301145.qNZGZ0MP-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> sound/soc/sof/topology.c:856:12: error: label at end of compound statement: expected statement
-                           default:
-                                   ^
-                                    ;
-   1 error generated.
+>> drivers/infiniband/hw/mana/main.c:150:20: warning: unused variable 'ibdev' [-Wunused-variable]
+           struct ib_device *ibdev = ucontext->ibucontext.device;
+                             ^
+   1 warning generated.
 
 
-vim +856 sound/soc/sof/topology.c
+vim +/ibdev +150 drivers/infiniband/hw/mana/main.c
 
-   824	
-   825	static int sof_dapm_widget_init(struct snd_soc_component *scomp,
-   826					struct snd_soc_dapm_widget *w,
-   827					struct snd_soc_tplg_vendor_array *array,
-   828					int array_size)
-   829	{
-   830		while (array_size > 0) {
-   831			int asize, type, i;
-   832	
-   833			asize = le32_to_cpu(array->size);
-   834	
-   835			/* validate asize */
-   836			if (asize <= 0) {
-   837				dev_err(scomp->dev, "error: invalid array size 0x%x\n",
-   838					asize);
-   839				return -EINVAL;
-   840			}
-   841	
-   842			/* make sure there is enough data before parsing */
-   843			array_size -= asize;
-   844			if (array_size < 0) {
-   845				dev_err(scomp->dev, "error: invalid array size 0x%x\n",
-   846					asize);
-   847				return -EINVAL;
-   848			}
-   849			type = le32_to_cpu(array->type);
-   850	
-   851			for (i = 0; i < le32_to_cpu(array->num_elems); i++) {
-   852				switch (le32_to_cpu(array->value[i].token)) {
-   853				case SOF_TKN_COMP_NO_WNAME_IN_KCONTROL_NAME:
-   854					sof_w_no_wname_in_long_name(scomp, w, type, &array->value[i]);
-   855					break;
- > 856				default:
-   857				}
-   858			}
-   859	
-   860			/* next array */
-   861			array = (struct snd_soc_tplg_vendor_array *)((u8 *)array + asize);
-   862		}
-   863		return 0;
-   864	}
-   865	
+   145	
+   146	static void mana_ib_destroy_eq(struct mana_ib_ucontext *ucontext,
+   147				       struct mana_ib_dev *mdev)
+   148	{
+   149		struct gdma_context *gc = mdev->gdma_dev->gdma_context;
+ > 150		struct ib_device *ibdev = ucontext->ibucontext.device;
+   151		struct gdma_queue *eq;
+   152		int i;
+   153	
+   154		if (!ucontext->eqs)
+   155			return;
+   156	
+   157		for (i = 0; i < gc->max_num_queues; i++) {
+   158			eq = ucontext->eqs[i].eq;
+   159			if (!eq)
+   160				continue;
+   161	
+   162			mana_gd_destroy_queue(gc, eq);
+   163		}
+   164	
+   165		kfree(ucontext->eqs);
+   166		ucontext->eqs = NULL;
+   167	}
+   168	
 
 -- 
 0-DAY CI Kernel Test Service
