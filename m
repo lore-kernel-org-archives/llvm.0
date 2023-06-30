@@ -1,96 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2971643A
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 15:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E29C433C0;
-	Fri, 30 Jun 2023 15:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54458168A4;
+	Fri, 30 Jun 2023 16:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10FFC433C8;
+	Fri, 30 Jun 2023 16:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688140469;
-	bh=3UxnCn0uKRWtw0gFGbXkslK1m3C/e7mRctYkrXYRER8=;
+	s=k20201202; t=1688141446;
+	bh=65l3uxIkPZ2teqmqxsQP31N9JJV0zpume1JU++/LnAI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nEOT2RDrMyVotMws4YABB+hxaLTELOoPVGVFqSiq41H6IesDtPs9UZC4zDuYg0Up2
-	 Zg8PXkbR9PFVqlQFtCJfssEp4HZn+zk7axTiOO9n3ygma+ddLKYrTgl/25YkAiE5/f
-	 0h/0KkksDmvOVZnVhbwvXuJMA5L9GwEppi025BMB5dDcsEgFeQc/OMgw3ZuKgtFwPm
-	 udXrOkNqKPkjxumsMI0uKSXPPULvFjUQjqT16FeMgxCpqV9b0OV9OldFpZP2ghh6NC
-	 cwK6+LM3KIomgurPZMzIBYcJTYao2gw57JCI6PJB4LAmyLFvzVlsbi/8PXlmZBU1xC
-	 z473u/Jpk3YXQ==
-Date: Fri, 30 Jun 2023 08:54:27 -0700
+	b=dq19zYXMqF5Odo1p5GFM9j0nL2LZbW9qCerBaCPD8Oh6xhb8sATyqGZUXXM9H9unc
+	 eRT4kJN5byP86KaZkhnglG8iXD2T0YGHFmLTrQrj3hvDckwk2jEc9VSNh2t9S/gxtJ
+	 0Dx4t8ni/nfwppvYEAAUncwVBPXcvfHU7DJrXLg3fET5wHbfrq5/jlIApbGWZ57tzU
+	 idF/ITTbqiOgio39UFgA608R07VkW9agfG8sIhl0EcPgKzi45w4hBlJ3dOUUDCHDjR
+	 kxdILhNhzz3xw0Nm/HMh5YNMZKfqYFnsjYN/yyZRKtIIckltFJimgsA/AudefjbpOn
+	 X66t6KgUID+dQ==
+Date: Fri, 30 Jun 2023 09:10:43 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Zhou jie <zhoujie@nfschina.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] media: wl128x: fix a clang warning
-Message-ID: <20230630155427.GA2889176@dev-arch.thelio-3990X>
-References: <6badd27ebfa718d5737f517f18b29a3e0f6e43f8.1687981726.git.mchehab@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Aurelien Aptel <aaptel@nvidia.com>,
+	netdev@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Willem de Bruijn <willemb@google.com>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+	Christoph Hellwig <hch@lst.de>, Chaitanya Kulkarni <kch@nvidia.com>,
+	linux-nvme@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
+ sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+Message-ID: <20230630161043.GA2902645@dev-arch.thelio-3990X>
+References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
+ <20230620145338.1300897-1-dhowells@redhat.com>
+ <20230620145338.1300897-11-dhowells@redhat.com>
+ <58466.1688074499@warthog.procyon.org.uk>
+ <20230629164318.44f45caf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6badd27ebfa718d5737f517f18b29a3e0f6e43f8.1687981726.git.mchehab@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230629164318.44f45caf@kernel.org>
 
-On Wed, Jun 28, 2023 at 09:48:53PM +0200, Mauro Carvalho Chehab wrote:
-> Clang-16 produces this warning, which is fatal with CONFIG_WERROR:
+On Thu, Jun 29, 2023 at 04:43:18PM -0700, Jakub Kicinski wrote:
+> On Thu, 29 Jun 2023 22:34:59 +0100 David Howells wrote:
+> >                 if (!sendpage_ok(page))
+> > -                       msg.msg_flags &= ~MSG_SPLICE_PAGES,
+> > +                       msg.msg_flags &= ~MSG_SPLICE_PAGES;
 > 
-> 	../drivers/media/radio/wl128x/fmdrv_common.c:1237:19: error: variable 'cmd_cnt' set but not used [-Werror,-Wunused-but-set-variable]
-> 	        int ret, fw_len, cmd_cnt;
-> 	                         ^
-> 	1 error generated.
+> 😵️
 > 
-> What happens is that cmd_cnt tracks the amount of firmware data packets
-> were transfered, which is printed only when debug is used.
+> Let me CC llvm@ in case someone's there is willing to make 
+> the compiler warn about this.
+> 
 
-Alternatively, fmdbg() could be defined with no_printk(), so that the
-variable appears used in all configurations, but this does not seem
-unreasonable either.
+Turns out clang already has a warning for this, -Wcomma:
 
-> Switch to use the firmware count, as the message is all about reporting
-> a partial firmware transfer.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->  drivers/media/radio/wl128x/fmdrv_common.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-> index cbd49dff6d74..b31b7ed60bbe 100644
-> --- a/drivers/media/radio/wl128x/fmdrv_common.c
-> +++ b/drivers/media/radio/wl128x/fmdrv_common.c
-> @@ -1234,9 +1234,8 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
->  	struct bts_action *action;
->  	struct bts_action_delay *delay;
->  	u8 *fw_data;
-> -	int ret, fw_len, cmd_cnt;
-> +	int ret, fw_len;
->  
-> -	cmd_cnt = 0;
->  	set_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
->  
->  	ret = request_firmware(&fw_entry, fw_name,
-> @@ -1272,7 +1271,6 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
->  			if (ret)
->  				goto rel_fw;
->  
-> -			cmd_cnt++;
->  			break;
->  
->  		case ACTION_DELAY:	/* Delay */
-> @@ -1284,7 +1282,7 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
->  		fw_data += (sizeof(struct bts_action) + (action->size));
->  		fw_len -= (sizeof(struct bts_action) + (action->size));
->  	}
-> -	fmdbg("Firmware commands(%d) loaded to chip\n", cmd_cnt);
-> +	fmdbg("Transfered only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
->  rel_fw:
->  	release_firmware(fw_entry);
->  	clear_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
-> -- 
-> 2.41.0
-> 
+  drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma operator here [-Werror,-Wcomma]
+   1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+        |                                                           ^
+  drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to silence warning
+   1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        |                         (void)(                           )
+  1 error generated.
+
+Let me do some wider build testing to see if it is viable to turn this
+on for the whole kernel because it seems worth it, at least in this
+case. There are a lot of cases where a warning won't be emitted (see the
+original upstream review for a list: https://reviews.llvm.org/D3976) but
+something is better than nothing, right? :)
+
+Cheers,
+Nathan
