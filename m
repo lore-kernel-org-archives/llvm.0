@@ -1,93 +1,84 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B79120F1;
-	Fri, 30 Jun 2023 07:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688109379; x=1719645379;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZPlTEoRvLPdtiM7QmevtpXxE1s/I7bz8Wr3DJatvhw4=;
-  b=HdnpbmbyGMhwXyBw5//pPhidhgS90/U1Iu7FYd43J0a9PYQZIqHKRJHi
-   LRpbCp7Ee1VYJwJur9TiGBr5ow6ZAjDsVrYHuubi+hrogRzUVEcvz1L/p
-   3x0ONl+vOVtRg57KWMzu4SMQGLzK9OAuyIn2hYVdJc047Bog61OTzREB/
-   CkNvXZ7AJITvQ9ou8RQiubBzwFlH6OzAtS6KqEitD3419jqAVn+rNDP8D
-   ltcXBuvcIoNRpwREfrN3xgqwEFyhPDoyZaBGEOPWx6JD4wBYtU1fAeDkn
-   1HPzrrsBk0WbLp9ZXbnl+iIFRa33VdlpFqi6fS8leUOFrNC77uy3TtTa4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347114770"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="347114770"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 00:16:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694934919"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="694934919"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jun 2023 00:16:17 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qF8Ma-000En3-2W;
-	Fri, 30 Jun 2023 07:16:16 +0000
-Date: Fri, 30 Jun 2023 15:15:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qingsong Chen <changxian.cqs@antgroup.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 8/8] samples: rust: add a device mapper linear target
-Message-ID: <202306301458.mlsxCJLl-lkp@intel.com>
-References: <20230625121657.3631109-9-changxian.cqs@antgroup.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E88F8BEA
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 07:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688109668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+5+7quqx0o6esChZvcv0r559zcDYYqjv7R6nJ41LgaQ=;
+	b=ictJ+TeihwG8eOUGZockrWyyw5N2B0go5xCmlmwBj/y5MiMFc74Sy0RBu8ZXZy1KEgiIeq
+	+pKDLikOTXlA/pWeqMLWN6qkZvpUnbM74xcYLVZp7tCihaqtPPLXO5QqFcQKqYIlhJ6VbB
+	pnEl1hEDgiCH6ISZRoWldZ69zkgp0O8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-215-7jC7DbGwM4SPAmYidZpb6A-1; Fri, 30 Jun 2023 03:21:07 -0400
+X-MC-Unique: 7jC7DbGwM4SPAmYidZpb6A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE2081C05ED6
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 07:21:06 +0000 (UTC)
+Received: from [172.64.10.50] (unknown [10.30.33.227])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 96428200BA8D;
+	Fri, 30 Jun 2023 07:21:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, 075e3335)
+Date: Fri, 30 Jun 2023 07:21:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230625121657.3631109-9-changxian.cqs@antgroup.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <79688.123063003210700153@us-mta-215.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Qingsong,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-[auto build test WARNING on rust/rust-next]
-[also build test WARNING on linus/master next-20230630]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qingsong-Chen/rust-kernel-add-basic-abstractions-for-device-mapper/20230625-201850
-base:   https://github.com/Rust-for-Linux/linux rust-next
-patch link:    https://lore.kernel.org/r/20230625121657.3631109-9-changxian.cqs%40antgroup.com
-patch subject: [RFC PATCH 8/8] samples: rust: add a device mapper linear target
-config: x86_64-randconfig-x001-20230629 (https://download.01.org/0day-ci/archive/20230630/202306301458.mlsxCJLl-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301458.mlsxCJLl-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'memblock-v6.5-rc1' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/rppt/memblock
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301458.mlsxCJLl-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94323
 
-All warnings (new ones prefixed by >>):
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36795=
+0
 
->> warning: unused import: `core::ops::Range`
-   --> samples/rust/rust_dm_linear.rs:7:5
-   |
-   7 | use core::ops::Range;
-   |     ^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` on by default
---
->> warning: unused import: `kernel::bindings::PAGE_SECTORS_SHIFT`
-   --> samples/rust/rust_dm_linear.rs:9:5
-   |
-   9 | use kernel::bindings::PAGE_SECTORS_SHIFT;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
