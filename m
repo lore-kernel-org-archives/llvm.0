@@ -1,107 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3BE174CA;
-	Fri, 30 Jun 2023 19:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE726C433C0;
-	Fri, 30 Jun 2023 19:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6727B168B7
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 19:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3291C433C8;
+	Fri, 30 Jun 2023 19:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688153308;
-	bh=zX7DtgKaXqa8tSnrkMuQTXY6UheSPHRSG4DhhcbKq+g=;
+	s=k20201202; t=1688154305;
+	bh=Gz3EGjK0wDfPFqqPSFx9EN34bJyDZae+TOOU/oFUqkc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ryup1iNS7cnCw2wiYI3YEs2N7PeCMaMxWV1gkQER97KVMF9lUTjIK9fzk3DQSkk6q
-	 M+MqgMxaw01mt5CQJkyVoO9FEbADys+v/GY8cYOOAo8cGz0mR5z1t2Z2jbWiWBHe3a
-	 2SUPqi1E9SO46ZJpEI6KSX8OMAPW2qgfncFFfHniX5QNV9jHuH2YBR0CH4Oe9KVhoC
-	 Mi4/QItY+2LBUukkmIeMd8s+nPBYMevX7Wwbj1GsdziHcoAtWeZDF/tFvAn8Ar88eI
-	 RjrS0eVk052IzxtszvnH8y3/MNlfF+v+hiJeG9qiwYwudNCWMxPTjEBAgyj6rmJdq9
-	 JLEUuTBhVG9vA==
-Date: Fri, 30 Jun 2023 12:28:25 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Aurelien Aptel <aaptel@nvidia.com>,
-	netdev@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	David Ahern <dsahern@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Willem de Bruijn <willemb@google.com>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-	Christoph Hellwig <hch@lst.de>, Chaitanya Kulkarni <kch@nvidia.com>,
-	linux-nvme@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
- sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-Message-ID: <20230630192825.GA2745548@dev-arch.thelio-3990X>
-References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
- <20230620145338.1300897-1-dhowells@redhat.com>
- <20230620145338.1300897-11-dhowells@redhat.com>
- <58466.1688074499@warthog.procyon.org.uk>
- <20230629164318.44f45caf@kernel.org>
- <20230630161043.GA2902645@dev-arch.thelio-3990X>
- <20230630091442.172ec67f@kernel.org>
+	b=l5/CBbIcmZzqWROpNGgc/CmzTwFgP9rZyUp8A1QdPu09GeFAvlgHUKihV/9/2Aw6u
+	 R+PXolwZe2WHbRCTHJoUfCMuGRw0mDVGN66Yq88BTSVGEbUmY5EQv2I2QAFL9NJuDD
+	 TH2dhHu7yOItVSw/NKDvESkPX/CnEiJC5zQ0SsvYhRXAZ5SDR4QeYW8w/FDFnf/pJw
+	 zX0/cp+PhPwofjT0SfaQc9vFU3+4trABpM5XZGlQ8+exl/2CZO1QXVJtPmwhzp8tYm
+	 sl0n+0EPVyol/zkeqcPIFHdVCTR4bOSZvgoU6Qkl+S/aFrSC4qVYiS7jyyCubZD0CF
+	 SjJI/7ADIBSYQ==
+Date: Fri, 30 Jun 2023 20:45:01 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] riscv: KCFI support
+Message-ID: <20230630-imprecise-ibuprofen-98f70a8665da@spud>
+References: <20230629234244.1752366-8-samitolvanen@google.com>
+ <20230630-phrasing-strung-12e53988ad81@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5RH3lh36f2f8cAFF"
+Content-Disposition: inline
+In-Reply-To: <20230630-phrasing-strung-12e53988ad81@spud>
+
+
+--5RH3lh36f2f8cAFF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630091442.172ec67f@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 30, 2023 at 09:14:42AM -0700, Jakub Kicinski wrote:
-> On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
-> > > Let me CC llvm@ in case someone's there is willing to make 
-> > > the compiler warn about this.
-> > 
-> > Turns out clang already has a warning for this, -Wcomma:
-> > 
-> >   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma operator here [-Werror,-Wcomma]
-> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
-> >         |                                                           ^
-> >   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to silence warning
-> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
-> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >         |                         (void)(                           )
-> >   1 error generated.
-> > 
-> > Let me do some wider build testing to see if it is viable to turn this
-> > on for the whole kernel because it seems worth it, at least in this
-> > case. There are a lot of cases where a warning won't be emitted (see the
-> > original upstream review for a list: https://reviews.llvm.org/D3976) but
-> > something is better than nothing, right? :)
+On Fri, Jun 30, 2023 at 07:48:23PM +0100, Conor Dooley wrote:
+> Hey Sami,
+>=20
+> On Thu, Jun 29, 2023 at 11:42:45PM +0000, Sami Tolvanen wrote:
+> > This series adds KCFI support for RISC-V. KCFI is a fine-grained
+> > forward-edge control-flow integrity scheme supported in Clang >=3D16,
+> > which ensures indirect calls in instrumented code can only branch to
+> > functions whose type matches the function pointer type, thus making
+> > code reuse attacks more difficult.
+>=20
+> > base-commit: c6b0271053e7a5ae57511363213777f706b60489
+>=20
+> Could you please rebase this on top of v6.5-rc1 when that comes out?
+> This base-commit is some random commit from Linus' tree, that because we
+> are currently in the merge window has is not in the RISC-V trees yet,
+> and means the series wasn't applied by our CI stuff.
 
-Well, that was a pipe dream :/ In ARCH=arm multi_v7_defconfig alone,
-there are 289 unique instances of the warning (although a good number
-have multiple instances per line, so it is not quite as bad as it seems,
-but still bad):
+In other news, I gave it a go with 03b118c7e456 ("[SLP] Fix crash on
+attempt to access on invalid iterator state.") & have been running it
+for a bit. All seems in order so far, nice :)
 
-$ rg -- -Wcomma arm-multi_v7_defconfig.log | sort | uniq -c | wc -l
-289
+--5RH3lh36f2f8cAFF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-https://gist.github.com/nathanchance/907867e0a7adffc877fd39fd08853801
+-----BEGIN PGP SIGNATURE-----
 
-Probably not a good sign of the signal to noise ratio, I looked through
-a good handful and all the cases I saw were not interesting... Perhaps
-the warning could be tuned further to become useful for the kernel but
-in its current form, it is definitely a no-go :/
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8wvQAKCRB4tDGHoIJi
+0n7sAPoCIPcrVQj6zFZMwpWtS5syPkfKJvsn7z+aOpGtLJuswgEA0cHVGWrRG5F/
+7pkuFFiHmNuHKoATNB+0d+B3WOzhAAA=
+=a0Pn
+-----END PGP SIGNATURE-----
 
-> Ah, neat. Misleading indentation is another possible angle, I reckon,
-> but not sure if that's enabled/possible to enable for the entire kernel
-
-Yeah, I was surprised there was no warning for misleading indentation...
-it is a part of -Wall for both clang and GCC, so it is on for the
-kernel, it just appears not to trigger in this case.
-
-> either :( We test-build with W=1 in networking, FWIW, so W=1 would be
-> enough for us.
-
-Unfortunately, even in its current form, it is way too noisy for W=1, as
-the qualifier for W=1 is "do not occur too often". Probably could be
-placed under W=2 but it still has the problem of wading through every
-instance and it is basically a no-op because nobody tests with W=2.
-
-Cheers,
-Nathan
+--5RH3lh36f2f8cAFF--
