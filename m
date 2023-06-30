@@ -1,82 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6727B168B7
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 19:45:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3291C433C8;
-	Fri, 30 Jun 2023 19:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688154305;
-	bh=Gz3EGjK0wDfPFqqPSFx9EN34bJyDZae+TOOU/oFUqkc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l5/CBbIcmZzqWROpNGgc/CmzTwFgP9rZyUp8A1QdPu09GeFAvlgHUKihV/9/2Aw6u
-	 R+PXolwZe2WHbRCTHJoUfCMuGRw0mDVGN66Yq88BTSVGEbUmY5EQv2I2QAFL9NJuDD
-	 TH2dhHu7yOItVSw/NKDvESkPX/CnEiJC5zQ0SsvYhRXAZ5SDR4QeYW8w/FDFnf/pJw
-	 zX0/cp+PhPwofjT0SfaQc9vFU3+4trABpM5XZGlQ8+exl/2CZO1QXVJtPmwhzp8tYm
-	 sl0n+0EPVyol/zkeqcPIFHdVCTR4bOSZvgoU6Qkl+S/aFrSC4qVYiS7jyyCubZD0CF
-	 SjJI/7ADIBSYQ==
-Date: Fri, 30 Jun 2023 20:45:01 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] riscv: KCFI support
-Message-ID: <20230630-imprecise-ibuprofen-98f70a8665da@spud>
-References: <20230629234244.1752366-8-samitolvanen@google.com>
- <20230630-phrasing-strung-12e53988ad81@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F40017744;
+	Fri, 30 Jun 2023 19:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688154405; x=1719690405;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5gtlQGYMm1ULeNUjSy6Nn3R1aUjHM5HNjqOWPEVH1+8=;
+  b=d62NB7RDcuGY9CSmJ+BkgRQ5OJR0tzjECiX5VCV77r9WbJgV5IK9ogMN
+   uVaVKjQnwlJp9RUas5i4cHee2zWBou7Cwti0mTsVcpWkxh23XLPDNYvvB
+   0F2QjwMx5jJtor/ofFWP0xCH6WsXI7QOZ8MY3Y67UhQKEzEoWfKiVrDkU
+   zmpPZb+aWfprqRkbUYdU5eqIOuStDQK86Xd65ou5zs/lA9uHlk1PpvzuE
+   0W6omHEnDrwU+wxOJ5kyulWrfnKJzug8v/l/egOhjx0d7T+1G8B53HA1U
+   21CTDofUGeMUrUN7VtTJofsoOJYAD7emE/FS8R4iWs3HWiM5Y2uiIGWdi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="359955251"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="359955251"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 12:46:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="721080924"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="721080924"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2023 12:46:41 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qFK4n-000FJl-0N;
+	Fri, 30 Jun 2023 19:46:41 +0000
+Date: Sat, 1 Jul 2023 03:45:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [linux-next:master 7313/12815]
+ drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5:
+ warning: stack frame size (2208) exceeds limit (2048) in
+ 'rockchip_vpu981_av1_dec_run'
+Message-ID: <202307010357.sY3iLanr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="5RH3lh36f2f8cAFF"
-Content-Disposition: inline
-In-Reply-To: <20230630-phrasing-strung-12e53988ad81@spud>
-
-
---5RH3lh36f2f8cAFF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 30, 2023 at 07:48:23PM +0100, Conor Dooley wrote:
-> Hey Sami,
->=20
-> On Thu, Jun 29, 2023 at 11:42:45PM +0000, Sami Tolvanen wrote:
-> > This series adds KCFI support for RISC-V. KCFI is a fine-grained
-> > forward-edge control-flow integrity scheme supported in Clang >=3D16,
-> > which ensures indirect calls in instrumented code can only branch to
-> > functions whose type matches the function pointer type, thus making
-> > code reuse attacks more difficult.
->=20
-> > base-commit: c6b0271053e7a5ae57511363213777f706b60489
->=20
-> Could you please rebase this on top of v6.5-rc1 when that comes out?
-> This base-commit is some random commit from Linus' tree, that because we
-> are currently in the merge window has is not in the RISC-V trees yet,
-> and means the series wasn't applied by our CI stuff.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6352a698ca5bf26a9199202666b16cf741f579f6
+commit: 727a400686a2c0d25015c9e44916a59b72882f83 [7313/12815] media: verisilicon: Add Rockchip AV1 decoder
+config: riscv-randconfig-r021-20230701 (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/reproduce)
 
-In other news, I gave it a go with 03b118c7e456 ("[SLP] Fix crash on
-attempt to access on invalid iterator state.") & have been running it
-for a bit. All seems in order so far, nice :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307010357.sY3iLanr-lkp@intel.com/
 
---5RH3lh36f2f8cAFF
-Content-Type: application/pgp-signature; name="signature.asc"
+All warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5: warning: stack frame size (2208) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Wframe-larger-than]
+   int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+       ^
+   375/2208 (16.98%) spills, 1833/2208 (83.02%) variables
+   1 warning generated.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8wvQAKCRB4tDGHoIJi
-0n7sAPoCIPcrVQj6zFZMwpWtS5syPkfKJvsn7z+aOpGtLJuswgEA0cHVGWrRG5F/
-7pkuFFiHmNuHKoATNB+0d+B3WOzhAAA=
-=a0Pn
------END PGP SIGNATURE-----
 
---5RH3lh36f2f8cAFF--
+vim +/rockchip_vpu981_av1_dec_run +1888 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+
+  1887	
+> 1888	int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+  1889	{
+  1890		struct hantro_dev *vpu = ctx->dev;
+  1891		struct vb2_v4l2_buffer *vb2_src;
+  1892		int ret;
+  1893	
+  1894		hantro_start_prepare_run(ctx);
+  1895	
+  1896		ret = rockchip_vpu981_av1_dec_prepare_run(ctx);
+  1897		if (ret)
+  1898			goto prepare_error;
+  1899	
+  1900		vb2_src = hantro_get_src_buf(ctx);
+  1901		if (!vb2_src) {
+  1902			ret = -EINVAL;
+  1903			goto prepare_error;
+  1904		}
+  1905	
+  1906		rockchip_vpu981_av1_dec_clean_refs(ctx);
+  1907		rockchip_vpu981_av1_dec_frame_ref(ctx, vb2_src->vb2_buf.timestamp);
+  1908	
+  1909		rockchip_vpu981_av1_dec_set_parameters(ctx);
+  1910		rockchip_vpu981_av1_dec_set_global_model(ctx);
+  1911		rockchip_vpu981_av1_dec_set_tile_info(ctx);
+  1912		rockchip_vpu981_av1_dec_set_reference_frames(ctx);
+  1913		rockchip_vpu981_av1_dec_set_segmentation(ctx);
+  1914		rockchip_vpu981_av1_dec_set_loopfilter(ctx);
+  1915		rockchip_vpu981_av1_dec_set_picture_dimensions(ctx);
+  1916		rockchip_vpu981_av1_dec_set_cdef(ctx);
+  1917		rockchip_vpu981_av1_dec_set_lr(ctx);
+  1918		rockchip_vpu981_av1_dec_set_prob(ctx);
+  1919	
+  1920		hantro_reg_write(vpu, &av1_dec_mode, AV1_DEC_MODE);
+  1921		hantro_reg_write(vpu, &av1_dec_out_ec_byte_word, 0);
+  1922		hantro_reg_write(vpu, &av1_write_mvs_e, 1);
+  1923		hantro_reg_write(vpu, &av1_dec_out_ec_bypass, 1);
+  1924		hantro_reg_write(vpu, &av1_dec_clk_gate_e, 1);
+  1925	
+  1926		hantro_reg_write(vpu, &av1_dec_abort_e, 0);
+  1927		hantro_reg_write(vpu, &av1_dec_tile_int_e, 0);
+  1928	
+  1929		hantro_reg_write(vpu, &av1_dec_alignment, 64);
+  1930		hantro_reg_write(vpu, &av1_apf_disable, 0);
+  1931		hantro_reg_write(vpu, &av1_apf_threshold, 8);
+  1932		hantro_reg_write(vpu, &av1_dec_buswidth, 2);
+  1933		hantro_reg_write(vpu, &av1_dec_max_burst, 16);
+  1934		hantro_reg_write(vpu, &av1_error_conceal_e, 0);
+  1935		hantro_reg_write(vpu, &av1_axi_rd_ostd_threshold, 64);
+  1936		hantro_reg_write(vpu, &av1_axi_wr_ostd_threshold, 64);
+  1937	
+  1938		hantro_reg_write(vpu, &av1_ext_timeout_cycles, 0xfffffff);
+  1939		hantro_reg_write(vpu, &av1_ext_timeout_override_e, 1);
+  1940		hantro_reg_write(vpu, &av1_timeout_cycles, 0xfffffff);
+  1941		hantro_reg_write(vpu, &av1_timeout_override_e, 1);
+  1942	
+  1943		rockchip_vpu981_av1_dec_set_output_buffer(ctx);
+  1944		rockchip_vpu981_av1_dec_set_input_buffer(ctx, vb2_src);
+  1945	
+  1946		hantro_end_prepare_run(ctx);
+  1947	
+  1948		hantro_reg_write(vpu, &av1_dec_e, 1);
+  1949	
+  1950		return 0;
+  1951	
+  1952	prepare_error:
+  1953		hantro_end_prepare_run(ctx);
+  1954		hantro_irq_done(vpu, VB2_BUF_STATE_ERROR);
+  1955		return ret;
+  1956	}
+  1957	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
