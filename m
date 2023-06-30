@@ -1,82 +1,89 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1B914AB4;
-	Fri, 30 Jun 2023 12:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688127687; x=1719663687;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=+ZDLGPj7J48w0XqFNiONkapFVGymUoH4WRqyaLgIkv8=;
-  b=DDud1ohCON0ScazMbP86rjrAXxLqzkzi98dbaMNKa/EmpY4TH0ifHash
-   lkTbrstXKzkkz+SM4RfqnUEJ4ayBLFfmZ/sauROxiOA0JhxgCqf+Q/SFJ
-   X6EVHxg3laUSf3wCXxWWckbBYgsvMbt6TW/8c9dZcz+qHhSZX7y0dCF5K
-   DmRylXu4zOsKIbKCqfWDZmrhko1qnuWhiEDUQhc2IYMF38YjYzpsPMN16
-   eeaeV6abSz6MO108MFwxkYno4daWkRMgrx2JAfozX4w//vyLgGyoMgA/7
-   vQtU4ALfWerTO8YTpcNMfK9C8xOYZDjR1t3xIFq0YZnt7BMwqpkwL8iyv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="364958173"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="364958173"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 05:21:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1048213668"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="1048213668"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2023 05:21:25 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFD7t-000Ex8-0b;
-	Fri, 30 Jun 2023 12:21:25 +0000
-Date: Fri, 30 Jun 2023 20:21:23 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [stable:linux-6.1.y 4267/7107] error: unknown target CPU '8540'
-Message-ID: <202306302004.rqllCOkx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6491C1FAA
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 12:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825D7C433CB;
+	Fri, 30 Jun 2023 12:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1688128621;
+	bh=c350ESZGWpi7StoatukQWJZpbWswxl0Lt+3NLEC0n8Y=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=GQnTAbH9m1Nm0opSpMsyUQmgxS+lNoRn2rkuO1TfNmBB7BIglLEnijj3A9Pvvi3FD
+	 o8CMN2OQiRqp95xDdwU8ZNFf9m96P0ykNxJ/WWa8fZAJS7KXlLhPzD/ZAb6Z8V2HeD
+	 BCkt3DKp3bu3mRCjCJbyMvrzxGO3BCKdph3CCe8wpQiOcrP2tyMn8IeJxc2kNNhcbR
+	 fymGCa2WPN3TOe/FdGkc7OmEdt9dnVLHBxYZueOydzTjSnavlRovr7M3jRjtZm7TlL
+	 MQ4aO2IQju4ywPK6PMqPqrhvBvdZV0llfWG+3mmO3zDVWjwf6RN+bL8oqOJy//RTKI
+	 RT/MIj2+zadQQ==
+Message-ID: <1529de75f7a35e7847c292705c936cdb4649be39.camel@kernel.org>
+Subject: Re: [PATCH] SUNRPC: clean up integer overflow check
+From: Jeff Layton <jlayton@kernel.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>, Trond Myklebust
+	 <trond.myklebust@hammerspace.com>, Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Anna Schumaker <anna@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, 
+ Neil Brown <neilb@suse.de>, Olga Kornievskaia <kolga@netapp.com>, Dai Ngo
+ <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, linux-nfs@vger.kernel.org,  llvm@lists.linux.dev,
+ kernel-janitors@vger.kernel.org
+Date: Fri, 30 Jun 2023 08:36:59 -0400
+In-Reply-To: <2390fdc8-13fa-4456-ab67-44f0744db412@moroto.mountain>
+References: <2390fdc8-13fa-4456-ab67-44f0744db412@moroto.mountain>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Michael Ellerman <mpe@ellerman.id.au>
+On Fri, 2023-06-30 at 12:46 +0300, Dan Carpenter wrote:
+> This integer overflow check works as intended but Clang and GCC and warn
+> about it when compiling with W=3D1.
+>=20
+>     include/linux/sunrpc/xdr.h:539:17: error: comparison is always false
+>     due to limited range of data type [-Werror=3Dtype-limits]
+>=20
+> Use size_mul() to prevent the integer overflow.  It silences the warning
+> and it's cleaner as well.
+>=20
+> Reported-by: Dmitry Antipov <dmantipov@yandex.ru>
+> Closes: https://lore.kernel.org/all/20230601143332.255312-1-dmantipov@yan=
+dex.ru/
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+> Btw, since the Clang developers are automatically CC'd, here is how I
+> silenced this type of false positive in Smatch:
+>=20
+> 1) Check that longs are 64 bit.
+> 2) Check that the right hand side has a SIZE_MAX.  SIZE_MAX is defined
+>    as -1UL so you want both the type and the value to match.
+> 3) Then on the other the other side, check that the type is uint.
+>=20
+> I'm looking at this code now in Smatch and it's kind of ugly, and also
+> there are some other places where I need to apply the same logic...
+>=20
+>  include/linux/sunrpc/xdr.h | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/include/linux/sunrpc/xdr.h b/include/linux/sunrpc/xdr.h
+> index f89ec4b5ea16..dbf7620a2853 100644
+> --- a/include/linux/sunrpc/xdr.h
+> +++ b/include/linux/sunrpc/xdr.h
+> @@ -775,9 +775,7 @@ xdr_stream_decode_uint32_array(struct xdr_stream *xdr=
+,
+> =20
+>  	if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+>  		return -EBADMSG;
+> -	if (len > SIZE_MAX / sizeof(*p))
+> -		return -EBADMSG;
+> -	p =3D xdr_inline_decode(xdr, len * sizeof(*p));
+> +	p =3D xdr_inline_decode(xdr, size_mul(len, sizeof(*p)));
+>  	if (unlikely(!p))
+>  		return -EBADMSG;
+>  	if (array =3D=3D NULL)
 
-Hi Christophe,
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
-head:   a1c449d00ff8ce2c5fcea5f755df682d1f6bc2ef
-commit: da0beae2449376326086e9f57468fd2b64736d2a [4267/7107] powerpc/64: Set default CPU in Kconfig
-config: powerpc-mpc8560_ads_defconfig (https://download.01.org/0day-ci/archive/20230630/202306302004.rqllCOkx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306302004.rqllCOkx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306302004.rqllCOkx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   clang: error: unsupported argument '-me500' to option '-Wa,'
-   make[2]: *** [scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
->> error: unknown target CPU '8540'
-   note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
-   make[2]: *** [scripts/Makefile.build:118: scripts/mod/devicetable-offsets.s] Error 1
-   make[2]: Target 'scripts/mod/' not remade because of errors.
-   make[1]: *** [Makefile:1288: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:238: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Jeff Layton <jlayton@kernel.org>
