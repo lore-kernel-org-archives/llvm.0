@@ -1,83 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AC6187E
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 07:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688110809;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FSOWpplcjBr73/M+aaQm9jvECnuVztbjd6uwGHLkOgQ=;
-	b=QVTJFZEZY62nj8qeidjyRD4m2bJgLrDbdRjoQMs3mMv8l05jhOhIF8T9NzX7gXdc8D6/JZ
-	80TsQG6wUBCUvfgI07w+XzL/bh8oioQtbdYEAMVnTeqQYUCdlgRodl+C2/WjQf1x/G+giO
-	YIfO6GcW75zKk3Ecf8HXGrUUgUZBrjA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-yPnKseQMMxaJoQf88XBEgQ-1; Fri, 30 Jun 2023 03:40:08 -0400
-X-MC-Unique: yPnKseQMMxaJoQf88XBEgQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDD6487323D
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 07:40:07 +0000 (UTC)
-Received: from [172.64.9.34] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C8DE2492C13;
-	Fri, 30 Jun 2023 07:40:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, e55e5df1)
-Date: Fri, 30 Jun 2023 07:40:07 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2011FB8;
+	Fri, 30 Jun 2023 08:49:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688114962; x=1719650962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=foIZ/6+yXPObI0e8ZC8E/MW66KSDHlhEW1hYPbizjpU=;
+  b=XAf3TaLO4GBA/Iz1dbOo48OWFEiPO9Q7YD/HNnOyuRXX3XHdOzQMBJg3
+   gFWmbaZXzz7+6iqgtlutVIPBosG4goXShR/58FNmAzmIf3FOFdvTlNdj4
+   NGpnBKd1BSUb64OHO+6uDNrzuNk4wAnuwQCY/Zenu7L/0RX5T7roDtw4/
+   EAGqyKqsAUfNrtNrMdIGsev4fpnlZ8Pyp64kMTgSSvXMbM6FGUKRrVxI5
+   MUF9fsfbZU98Pfo9o5LaGUbtJr2+vowAxwUqU/9WSxg6a5x53rxcSL8zY
+   0Qe5KNp4RasmKryzIAYq/LiO6uluM/7ibbid9HjuibjLbJDfG1GDXgL4r
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448726728"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="448726728"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 01:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841785951"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="841785951"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jun 2023 01:49:19 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qF9oc-000Ept-2S;
+	Fri, 30 Jun 2023 08:49:18 +0000
+Date: Fri, 30 Jun 2023 16:49:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but
+ not used
+Message-ID: <202306301631.cFuy7ZmI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <22898.123063003400800215@us-mta-518.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Christophe,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e55e5df193d247a38a5e1ac65a5316a0adcc22fa
+commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
+date:   10 months ago
+config: powerpc-randconfig-r022-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301631.cFuy7ZmI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+>> arch/powerpc/math-emu/fcmpu.c:13:2: error: variable 'A_c' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_D(A);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:161:1: note: expanded from here
+   A_c
+   ^
+>> arch/powerpc/math-emu/fcmpu.c:14:2: error: variable 'B_c' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_D(B);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:167:1: note: expanded from here
+   B_c
+   ^
+   arch/powerpc/math-emu/fcmpu.c:11:1: error: no previous prototype for function 'fcmpu' [-Werror,-Wmissing-prototypes]
+   fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+   ^
+   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   4 errors generated.
+--
+>> arch/powerpc/math-emu/fsel.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fsel.c:11:1: error: no previous prototype for function 'fsel' [-Werror,-Wmissing-prototypes]
+   fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
+   ^
+   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
+--
+>> arch/powerpc/math-emu/fctiwz.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiwz.c:11:1: error: no previous prototype for function 'fctiwz' [-Werror,-Wmissing-prototypes]
+   fctiwz(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
+--
+>> arch/powerpc/math-emu/fctiw.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiw.c:11:1: error: no previous prototype for function 'fctiw' [-Werror,-Wmissing-prototypes]
+   fctiw(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: csky: fix up lock_mm_and_find_vma() conversion
+vim +/_fex +15 arch/powerpc/math-emu/fcmpu.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94326
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16   9  
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  10  int
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  12  {
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @13  	FP_DECL_D(A);
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @14  	FP_DECL_D(B);
+d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 @15  	FP_DECL_EX;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  16  	int code[4] = { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  17  	long cmp;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  18  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36796=
-4
+:::::: The code at line 15 was first introduced by commit
+:::::: d2b194ed820880eb19c43b9c10d9f5f30026ee54 powerpc/math-emu: Use kernel generic math-emu code
 
+:::::: TO: Kumar Gala <galak@kernel.crashing.org>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
