@@ -1,35 +1,54 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E010174C2
-	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 17:48:56 +0000 (UTC)
-Received: from cwcc.thunk.org (pool-173-48-82-24.bstnma.fios.verizon.net [173.48.82.24])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35UHmjnn030007
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Jun 2023 13:48:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1688147328; bh=OqlaOFsP/6utk43neMzoLHFhY4L+KrVOKmknc6WOFHU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=c6z9Bqo6IwH/NlNSb3oiBJXdjOUU4gcaKxdzHTzNZQoGq9t04WDQ9VOcejj17L3GR
-	 GXD8xo26n3o+OqcKi1m5Fd0UfUWPRSVCRjKxQRCs4U/dP2l+2M0sP1tsU6GlviSTsa
-	 zmQOsiQXllUgCTIGyDpET09bVpxslkpY2DW6JNctddKYyfvi1qyFxx0KAIewSuxXHD
-	 y6uTbrL9ngETIwgbV0IrbIa4gzTIGa/DU4f9k5JYmMVI9IQbQLxsL8OTHzrEoEmV38
-	 yVsY1iHovrotSWvzMSMr7VDZ3UbqBgHtm30+2SuvnR07S75qRrKQSgV4VY53gYUbbH
-	 Belu3NgmFdgIQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id A9FF415C027F; Fri, 30 Jun 2023 13:48:45 -0400 (EDT)
-Date: Fri, 30 Jun 2023 13:48:45 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: syzbot <syzbot+b960a0fea3fa8df1cd22@syzkaller.appspotmail.com>
-Cc: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] [ext4?] general protection fault in ext4_quota_read
-Message-ID: <20230630174845.GD591635@mit.edu>
-References: <0000000000007720b405ff59d161@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D035917724
+	for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 18:25:14 +0000 (UTC)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3909756b8b1so1319603b6e.1
+        for <llvm@lists.linux.dev>; Fri, 30 Jun 2023 11:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688149513; x=1690741513;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyMHPqgFkqrCLjrfJwzZAICfyuA66R9v5BF7rbPVGX0=;
+        b=MI6CfwF1+eJVWXjXK7CR+OIYgxY+N1GRO+e/xgPwtHEJQyPVUhxTk4Y9C54iU8f0+z
+         ay/X77swuw7F68CSZe5aL5aiwPsTPwx6br1922syGJNYPEN5svfu2HZEuxh00cN7w1Zw
+         pJ3JDDUxLmza1gMe7we3AVEIN1nIvxAnZhTDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688149513; x=1690741513;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kyMHPqgFkqrCLjrfJwzZAICfyuA66R9v5BF7rbPVGX0=;
+        b=SkFHnTITgyFXmRP8EqVDi6Wt1dJC3M0+yHGMUEo6ocBhdlTxGk2yh2OWkuksG0qGCf
+         WMT09SuXDYPZ6+qAsLO3/8rhnkfxQgP5AMxiRa9s3D8Fk854IE0zLaS2lxZJAWjFEG7c
+         HxFRHqwZ0Lp+p5xhiyRt6YpS/7+YOSkRx1lFVXyUasp2G0MJDOd1IssnXqzbb1mgcg+i
+         ME+ugIKtllZ5KJuO4DCJtpGNrxSO085bh5yIhh0X1Vhn0+RqNtm0N+pQr3TjYiTNaUk2
+         rQzoOmgF1gsCgjTi2tEXmtgJk/TUFhkDXm20Npb0F5hipwd245qSTu2c3Dzo72OZT/vl
+         +POw==
+X-Gm-Message-State: AC+VfDwYBEBGGjHiHPytiNpjXYBTFxdhH2CFVYncNxp1jz7+L/3YkXsj
+	JGxNEYLhi3aXQkU9ZqqOyRE+ig==
+X-Google-Smtp-Source: ACHHUZ4eIjI6ILzn5IHdnhn6/8uGaeOlIGsrOXUs9ILUhXM6HRgK78y9vpFuktGOCts3Mvge7PXhPg==
+X-Received: by 2002:a05:6808:1b23:b0:3a3:6113:ce79 with SMTP id bx35-20020a0568081b2300b003a36113ce79mr3297214oib.40.1688149513722;
+        Fri, 30 Jun 2023 11:25:13 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id fe21-20020a056a002f1500b0066ebaeb149dsm9530556pfb.88.2023.06.30.11.25.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 11:25:13 -0700 (PDT)
+Date: Fri, 30 Jun 2023 11:25:12 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] riscv: Add types to indirectly called assembly
+ functions
+Message-ID: <202306301125.B58257BE4B@keescook>
+References: <20230629234244.1752366-8-samitolvanen@google.com>
+ <20230629234244.1752366-10-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,68 +57,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000007720b405ff59d161@google.com>
+In-Reply-To: <20230629234244.1752366-10-samitolvanen@google.com>
 
-On Fri, Jun 30, 2023 at 07:41:54AM -0700, syzbot wrote:
-> Hello,
+On Thu, Jun 29, 2023 at 11:42:47PM +0000, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, assembly functions indirectly called
+> from C code must be annotated with type identifiers to pass CFI
+> checking. Use the SYM_TYPED_START macro to add types to the
+> relevant functions.
 > 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    6995e2de6891 Linux 6.4
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=175bc8bf280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f4df35260418daa6
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b960a0fea3fa8df1cd22
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e661af280000
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-There is a syz reproducer, but no C reprodducer.  Looking at the syz
-reproducer, though, it looks like this is another one of these "let's
-flip the mounted file system between r/o and r/w", with the added
-"fun" that it appears that the mounted file system has a corrupted set
-of quota inodes.  (See below.)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Looking at the stack trace, it looks like we're passing an invalid
-inode pointer to ext4_quota_read() from do_insert_tree() which is
-ultimately called from dquot_file_open() while trying to open an ext4
-file.
-
-Jan, since I know you're working on reworking the quota code to handle
-crazy (and as Linus says, crazy userspace doesn't come more crazy than
-syzbot) r/o <-> r/w racing remounts with quota enabled, over to you.  :-)
-
-       		     	   	    	 - Ted
-
-e2fsck 1.47.0 (5-Feb-2023)
-Pass 1: Checking inodes, blocks, and sizes
-Inode 3, i_blocks is 16, should be 8.  Fix? no
-
-Inode 15, i_size is 360287970189639690, should be 4096.  Fix? no
-
-Inode 16, i_size is 9000, should be 20480.  Fix? no
-
-Pass 2: Checking directory structure
-Pass 3: Checking directory connectivity
-Pass 4: Checking reference counts
-Pass 5: Checking group summary information
-Block bitmap differences:  -10
-Fix? no
-
-Free blocks count wrong for group #0 (41, counted=18).
-Fix? no
-
-Free blocks count wrong (41, counted=18).
-Fix? no
-
-Padding at end of block bitmap is not set. Fix? no
-
-[ERROR] ../../../../lib/support/quotaio_tree.c:546:check_reference: Illegal reference (975616 >= 6) in user quota file
-Update quota info for quota type 0? no
-
-[ERROR] ../../../../lib/support/quotaio_tree.c:546:check_reference: Illegal reference (196613 >= 6) in group quota file
-Update quota info for quota type 1? no
-
-
-syzkaller: ********** WARNING: Filesystem still has errors **********
-
-syzkaller: 17/32 files (0.0% non-contiguous), 0/41 blocks
+-- 
+Kees Cook
