@@ -1,71 +1,158 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f206.google.com (mail-pl1-f206.google.com [209.85.214.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791EA441B;
-	Sat,  1 Jul 2023 08:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688199246; x=1719735246;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mZ2nGTYAWiHpDRm/SOo5zqQOhYqH6RSAz7mNe3RQ21o=;
-  b=FpZAeeGXabnCLgoi1D5lHjUtzUfcb20DB7SqC8Dcy4Ik+IsBOKK6g0Nt
-   eJ4+CzWCsmb7XUzl//bMt4UxYlOqbfYDQW9t58pfyIJPm25pRBzTQufC7
-   7MjBl0n1HJXw2AM8/QbQzn+YcDySV9Nmdw9kjI77TE6dT+WAeudmpKq56
-   loYX4oG72hxWmuvcsf8rHVAqhZC9AGp1xtYnJCcGTAglItGSMQP4tupSh
-   MslDRW/mOBkXEfZqbMCld1gJBApZDwP3Btkdrup0zlojtUH092DepBzUN
-   OCcdkLuHUK7WH7FKAcQmmWZiKd28BEo9Gazy/QSmOl6CZJy5GrpYTZvuA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="428610071"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="428610071"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 01:14:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="783328575"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="783328575"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2023 01:14:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFVk3-000Fs9-1x;
-	Sat, 01 Jul 2023 08:14:03 +0000
-Date: Sat, 1 Jul 2023 16:13:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:splice-fix-corruption 3/4] ld.lld: error: undefined
- symbol: folio_total_mapcount
-Message-ID: <202307011618.qtnPIiyW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1382A3C3E
+	for <llvm@lists.linux.dev>; Sat,  1 Jul 2023 08:18:12 +0000 (UTC)
+Received: by mail-pl1-f206.google.com with SMTP id d9443c01a7336-1b84c7a26c9so26182875ad.0
+        for <llvm@lists.linux.dev>; Sat, 01 Jul 2023 01:18:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688199492; x=1690791492;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kl2x0AU2cVQ7FABz0Ni0VamxuimXbmE6PGKzfnhMtgg=;
+        b=iVa+EA8h772T0J1oSOpgeIV+ewd0SSRQjuggLaInpDsgvH1ouAYK2cRloavUjjbwb7
+         TF0hGWUTwa02UG/1P/yfWFHkFDKq8Gr1ZWbuYyAwR+C9A+QP114o/y4LmiK+F/Ng/8Lw
+         n5bSWB+qU1YPjizq9jtChk0zIMXpWGHr450UvGB33PDfDW/191y+l6NgX9LPaBnWKk0f
+         2z89IEdfmKD9XKJFDD7GXG7jBhVEjOCVDQWr+2J+Dz69BpchGDzIsYJOv7RY0zOBFWBG
+         6X40wGQ9YGCMVJ47RUtIRJ3v9jyTfljEgmGk0r00dtrvw/IRqRfe1XIY+rL9JaKelYSQ
+         C94Q==
+X-Gm-Message-State: ABy/qLainO5OqQd6HgD60QIjNzHr/lYO5ePtOZIhHaP0H0dLIC6ibfkU
+	K7Gkv8wAr+CZL6saCk04bSmm17rCTIDRLNa7Noa/Y/udrexG
+X-Google-Smtp-Source: APBJJlGccHk7QEpk/UvKZCBy/s3KpeQDJmQrdgCA3vn/un1ZtCcypYiO4dbHyGYlRoL5PUrPtJ7Q65nSoscavg0DxZX/aY2bdtbU
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a17:903:905:b0:1ae:531f:366a with SMTP id
+ ll5-20020a170903090500b001ae531f366amr2974798plb.5.1688199492420; Sat, 01 Jul
+ 2023 01:18:12 -0700 (PDT)
+Date: Sat, 01 Jul 2023 01:18:12 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000e4cc105ff68937b@google.com>
+Subject: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
+From: syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
+To: bpf@vger.kernel.org, chris@chrisdown.name, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev, mcgrof@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git splice-fix-corruption
-head:   b7635ac359c8d2a679e0c0bd9bf7acab652ff3fb
-commit: a7899df4243c815f5fff96738d4d3179b9113698 [3/4] splice: Remove some now-unused bits
-config: riscv-randconfig-r042-20230629 (https://download.01.org/0day-ci/archive/20230701/202307011618.qtnPIiyW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230701/202307011618.qtnPIiyW-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307011618.qtnPIiyW-lkp@intel.com/
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    533925cb7604 Merge tag 'riscv-for-linus-6.5-mw1' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=151dba0ca80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=998aa1e85d118b55
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3705186451a87fd93b8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a4eb98a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec1a6f280000
 
->> ld.lld: error: undefined symbol: folio_total_mapcount
-   >>> referenced by splice.c
-   >>>               fs/splice.o:(__se_sys_vmsplice) in archive vmlinux.a
-   >>> referenced by splice.c
-   >>>               fs/splice.o:(__se_sys_vmsplice) in archive vmlinux.a
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/03caccccf2c4/disk-533925cb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2fc5ec527ecb/vmlinux-533925cb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1c17e9d79ab7/bzImage-533925cb.xz
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000007: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000038-0x000000000000003f]
+CPU: 1 PID: 5014 Comm: syz-executor823 Not tainted 6.4.0-syzkaller-08881-g533925cb7604 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:idempotent kernel/module/main.c:3078 [inline]
+RIP: 0010:init_module_from_file+0x1c1/0x6a0 kernel/module/main.c:3124
+Code: 0f 84 c0 01 00 00 e8 7e ee 12 00 4d 89 e7 49 83 ef 08 74 61 e8 70 ee 12 00 4c 89 fa 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 59 04 00 00 4d 3b 2f 0f 84 ae 00 00 00 e8 47 ee
+RSP: 0018:ffffc900033ffd28 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 000000000000002e RCX: 0000000000000000
+RDX: 0000000000000007 RSI: ffffffff8170eaa0 RDI: ffffc9000336fe28
+RBP: ffff88807adaa280 R08: 0000000000000001 R09: fffff5200067ff97
+R10: 0000000000000003 R11: 0000000000000001 R12: ffffc9000336fe28
+R13: ffff8880752b54c0 R14: ffffffff91f19290 R15: 000000000000003e
+FS:  0000555556cec3c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000073bff000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __do_sys_finit_module kernel/module/main.c:3171 [inline]
+ __se_sys_finit_module kernel/module/main.c:3154 [inline]
+ __x64_sys_finit_module+0xfd/0x190 kernel/module/main.c:3154
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4b273fcfa9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd7aa7c1f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+RAX: ffffffffffffffda RBX: 0000000000018ef9 RCX: 00007f4b273fcfa9
+RDX: 0000000000000002 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd7aa7c2ac
+R13: 00007ffd7aa7c2e0 R14: 00007ffd7aa7c2c0 R15: 000000000000000a
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:idempotent kernel/module/main.c:3078 [inline]
+RIP: 0010:init_module_from_file+0x1c1/0x6a0 kernel/module/main.c:3124
+Code: 0f 84 c0 01 00 00 e8 7e ee 12 00 4d 89 e7 49 83 ef 08 74 61 e8 70 ee 12 00 4c 89 fa 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 59 04 00 00 4d 3b 2f 0f 84 ae 00 00 00 e8 47 ee
+RSP: 0018:ffffc900033ffd28 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 000000000000002e RCX: 0000000000000000
+RDX: 0000000000000007 RSI: ffffffff8170eaa0 RDI: ffffc9000336fe28
+RBP: ffff88807adaa280 R08: 0000000000000001 R09: fffff5200067ff97
+R10: 0000000000000003 R11: 0000000000000001 R12: ffffc9000336fe28
+R13: ffff8880752b54c0 R14: ffffffff91f19290 R15: 000000000000003e
+FS:  0000555556cec3c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000073bff000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 84 c0 01 00 00    	je     0x1c6
+   6:	e8 7e ee 12 00       	callq  0x12ee89
+   b:	4d 89 e7             	mov    %r12,%r15
+   e:	49 83 ef 08          	sub    $0x8,%r15
+  12:	74 61                	je     0x75
+  14:	e8 70 ee 12 00       	callq  0x12ee89
+  19:	4c 89 fa             	mov    %r15,%rdx
+  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  23:	fc ff df
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 59 04 00 00    	jne    0x48d
+  34:	4d 3b 2f             	cmp    (%r15),%r13
+  37:	0f 84 ae 00 00 00    	je     0xeb
+  3d:	e8                   	.byte 0xe8
+  3e:	47 ee                	rex.RXB out %al,(%dx)
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
