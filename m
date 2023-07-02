@@ -1,165 +1,149 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921BD2116;
-	Sun,  2 Jul 2023 16:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CA12116;
+	Sun,  2 Jul 2023 18:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688316707; x=1719852707;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V12x7NTZ/flFdp7UzRsu6hXAL+WmLfM4kk6JDQLCYk8=;
-  b=IWExDzpWA0GrBtPCP6mGHYWlhLbjBnI8KzLKkKGtyWO69ELf5PP3P6yc
-   ByxaFtCC1qYyriGExyQ5YyTF06fPBl4hrkqiXCBye9LenZEgyyvnR8GhW
-   /q4rSiZIPkNc4RJRmP6nr2qpNlQY+IG1Gl9EncIFmscTf+NZp3HbNpxZi
-   5/X8wVVyKoCXTB+Fz7BIMWGRWmKgIFX0gIDiLi+t8AXMJHXvg9R8wYsaT
-   JvMwc5clQGtXAUr4fL/8GYFW84n7XYw60gQz6/c8hpO9S6ak2+zYgwtZN
-   mdxkPaIWynKGp69Z+PohSFfbwJNKl1ppq5vDHh4gSrFF5OXs+zsrcRqnA
+  t=1688322227; x=1719858227;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9eDmJgwgTgQHOhTWsQfso5wZJaBs0Z+CuKeorj8/dFA=;
+  b=h5+nhDgv+xGKxUGcgji+fyp2ndKClCoIKmmf/RQdWw8dxvrAfgMiwGQD
+   eKYide/Bu28RtzSJn6L+Idui3SEIn7stgSHKu1TcK46m9LkVvbCqXKm6O
+   8ode4tzpbXHtuanOa0NOmskSWoUg4NBX6aGJ8TidVV5d8j54Vq/UyqggX
+   PZsHbYdVrfRwOc6Y0vJX6UQjwWg1bu+og248VhgNvbAL6Jw+y22dQDwgd
+   dn3MLzIrNekuGM0sqXxmSFRT3ErIv9zhUnltvR6SQKjmw5NONwlz+Hl9Y
+   rcJUtxWSCRHNu7S+rnJqyZA3jyhPWxk0MeH1E+RguFs6n4S829q5D+574
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="449094911"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361581256"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="449094911"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 09:51:46 -0700
+   d="scan'208";a="361581256"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 11:23:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="695563738"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="1048818160"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="695563738"
+   d="scan'208";a="1048818160"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Jul 2023 09:51:43 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 02 Jul 2023 11:23:45 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qG0IZ-000Gm7-0E;
-	Sun, 02 Jul 2023 16:51:43 +0000
-Date: Mon, 3 Jul 2023 00:51:06 +0800
+	id 1qG1jc-000GoF-1C;
+	Sun, 02 Jul 2023 18:23:44 +0000
+Date: Mon, 3 Jul 2023 02:23:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+To: Hans de Goede <hdegoede@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Kenny Ho <Kenny.Ho@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1348:18: error: result of
- comparison of constant 4294967296 with expression of type 'resource_size_t'
- (aka 'unsigned int') is always false
-Message-ID: <202307030049.yGsrirGh-lkp@intel.com>
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: [jmondi:tmp/ov2680 9/29] drivers/media/i2c/ov2680.c:24:10: fatal
+ error: 'media/v4l2-cci.h' file not found
+Message-ID: <202307030246.SNalyiyb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   995b406c7e972fab181a4bb57f3b95e59b8e5bf3
-commit: 1b320ad3f5a88602aef2f207bc211539a5496702 drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR
-date:   3 weeks ago
-config: i386-buildonly-randconfig-r004-20230702 (https://download.01.org/0day-ci/archive/20230703/202307030049.yGsrirGh-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030049.yGsrirGh-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git tmp/ov2680
+head:   225bc92c21983173d3c13a0db0b83e466bd03753
+commit: a92430c91d2bc5db479b35b6983cc71bdf5c180b [9/29] media: ov2680: Convert to new CCI register access helpers
+config: hexagon-randconfig-r041-20230703 (https://download.01.org/0day-ci/archive/20230703/202307030246.SNalyiyb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030246.SNalyiyb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307030049.yGsrirGh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307030246.SNalyiyb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1348:18: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                       res->start > 0x100000000ull)
-                       ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from drivers/media/i2c/ov2680.c:17:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/ov2680.c:17:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/ov2680.c:17:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/media/i2c/ov2680.c:24:10: fatal error: 'media/v4l2-cci.h' file not found
+      24 | #include <media/v4l2-cci.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
-vim +1348 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+vim +24 drivers/media/i2c/ov2680.c
 
-d38ceaf99ed015 Alex Deucher    2015-04-20  1313  
-d6895ad39f3b39 Christian König 2017-02-28  1314  /**
-d6895ad39f3b39 Christian König 2017-02-28  1315   * amdgpu_device_resize_fb_bar - try to resize FB BAR
-d6895ad39f3b39 Christian König 2017-02-28  1316   *
-d6895ad39f3b39 Christian König 2017-02-28  1317   * @adev: amdgpu_device pointer
-d6895ad39f3b39 Christian König 2017-02-28  1318   *
-d6895ad39f3b39 Christian König 2017-02-28  1319   * Try to resize FB BAR to make all VRAM CPU accessible. We try very hard not
-d6895ad39f3b39 Christian König 2017-02-28  1320   * to fail, but if any of the BARs is not accessible after the size we abort
-d6895ad39f3b39 Christian König 2017-02-28  1321   * driver loading by returning -ENODEV.
-d6895ad39f3b39 Christian König 2017-02-28  1322   */
-d6895ad39f3b39 Christian König 2017-02-28  1323  int amdgpu_device_resize_fb_bar(struct amdgpu_device *adev)
-d6895ad39f3b39 Christian König 2017-02-28  1324  {
-453f617a30aa12 Nirmoy Das      2021-01-07  1325  	int rbar_size = pci_rebar_bytes_to_size(adev->gmc.real_vram_size);
-31b8adab3247ea Christian König 2017-11-15  1326  	struct pci_bus *root;
-31b8adab3247ea Christian König 2017-11-15  1327  	struct resource *res;
-31b8adab3247ea Christian König 2017-11-15  1328  	unsigned i;
-d6895ad39f3b39 Christian König 2017-02-28  1329  	u16 cmd;
-d6895ad39f3b39 Christian König 2017-02-28  1330  	int r;
-d6895ad39f3b39 Christian König 2017-02-28  1331  
-0c03b912d7f846 pding           2017-11-07  1332  	/* Bypass for VF */
-0c03b912d7f846 pding           2017-11-07  1333  	if (amdgpu_sriov_vf(adev))
-0c03b912d7f846 pding           2017-11-07  1334  		return 0;
-0c03b912d7f846 pding           2017-11-07  1335  
-b7221f2b4655bb Alex Deucher    2020-06-08  1336  	/* skip if the bios has already enabled large BAR */
-b7221f2b4655bb Alex Deucher    2020-06-08  1337  	if (adev->gmc.real_vram_size &&
-b7221f2b4655bb Alex Deucher    2020-06-08  1338  	    (pci_resource_len(adev->pdev, 0) >= adev->gmc.real_vram_size))
-b7221f2b4655bb Alex Deucher    2020-06-08  1339  		return 0;
-b7221f2b4655bb Alex Deucher    2020-06-08  1340  
-31b8adab3247ea Christian König 2017-11-15  1341  	/* Check if the root BUS has 64bit memory resources */
-31b8adab3247ea Christian König 2017-11-15  1342  	root = adev->pdev->bus;
-31b8adab3247ea Christian König 2017-11-15  1343  	while (root->parent)
-31b8adab3247ea Christian König 2017-11-15  1344  		root = root->parent;
-31b8adab3247ea Christian König 2017-11-15  1345  
-31b8adab3247ea Christian König 2017-11-15  1346  	pci_bus_for_each_resource(root, res, i) {
-0ebb7c5405941b Christian König 2018-01-07  1347  		if (res && res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
-31b8adab3247ea Christian König 2017-11-15 @1348  		    res->start > 0x100000000ull)
-31b8adab3247ea Christian König 2017-11-15  1349  			break;
-31b8adab3247ea Christian König 2017-11-15  1350  	}
-31b8adab3247ea Christian König 2017-11-15  1351  
-31b8adab3247ea Christian König 2017-11-15  1352  	/* Trying to resize is pointless without a root hub window above 4GB */
-31b8adab3247ea Christian König 2017-11-15  1353  	if (!res)
-31b8adab3247ea Christian König 2017-11-15  1354  		return 0;
-31b8adab3247ea Christian König 2017-11-15  1355  
-453f617a30aa12 Nirmoy Das      2021-01-07  1356  	/* Limit the BAR size to what is available */
-453f617a30aa12 Nirmoy Das      2021-01-07  1357  	rbar_size = min(fls(pci_rebar_get_possible_sizes(adev->pdev, 0)) - 1,
-453f617a30aa12 Nirmoy Das      2021-01-07  1358  			rbar_size);
-453f617a30aa12 Nirmoy Das      2021-01-07  1359  
-d6895ad39f3b39 Christian König 2017-02-28  1360  	/* Disable memory decoding while we change the BAR addresses and size */
-d6895ad39f3b39 Christian König 2017-02-28  1361  	pci_read_config_word(adev->pdev, PCI_COMMAND, &cmd);
-d6895ad39f3b39 Christian König 2017-02-28  1362  	pci_write_config_word(adev->pdev, PCI_COMMAND,
-d6895ad39f3b39 Christian König 2017-02-28  1363  			      cmd & ~PCI_COMMAND_MEMORY);
-d6895ad39f3b39 Christian König 2017-02-28  1364  
-d6895ad39f3b39 Christian König 2017-02-28  1365  	/* Free the VRAM and doorbell BAR, we most likely need to move both. */
-06ec907054c5a4 Alex Deucher    2017-12-14  1366  	amdgpu_device_doorbell_fini(adev);
-d6895ad39f3b39 Christian König 2017-02-28  1367  	if (adev->asic_type >= CHIP_BONAIRE)
-d6895ad39f3b39 Christian König 2017-02-28  1368  		pci_release_resource(adev->pdev, 2);
-d6895ad39f3b39 Christian König 2017-02-28  1369  
-d6895ad39f3b39 Christian König 2017-02-28  1370  	pci_release_resource(adev->pdev, 0);
-d6895ad39f3b39 Christian König 2017-02-28  1371  
-d6895ad39f3b39 Christian König 2017-02-28  1372  	r = pci_resize_resource(adev->pdev, 0, rbar_size);
-d6895ad39f3b39 Christian König 2017-02-28  1373  	if (r == -ENOSPC)
-d6895ad39f3b39 Christian König 2017-02-28  1374  		DRM_INFO("Not enough PCI address space for a large BAR.");
-d6895ad39f3b39 Christian König 2017-02-28  1375  	else if (r && r != -ENOTSUPP)
-d6895ad39f3b39 Christian König 2017-02-28  1376  		DRM_ERROR("Problem resizing BAR0 (%d).", r);
-d6895ad39f3b39 Christian König 2017-02-28  1377  
-d6895ad39f3b39 Christian König 2017-02-28  1378  	pci_assign_unassigned_bus_resources(adev->pdev->bus);
-d6895ad39f3b39 Christian König 2017-02-28  1379  
-d6895ad39f3b39 Christian König 2017-02-28  1380  	/* When the doorbell or fb BAR isn't available we have no chance of
-d6895ad39f3b39 Christian König 2017-02-28  1381  	 * using the device.
-d6895ad39f3b39 Christian König 2017-02-28  1382  	 */
-06ec907054c5a4 Alex Deucher    2017-12-14  1383  	r = amdgpu_device_doorbell_init(adev);
-d6895ad39f3b39 Christian König 2017-02-28  1384  	if (r || (pci_resource_flags(adev->pdev, 0) & IORESOURCE_UNSET))
-d6895ad39f3b39 Christian König 2017-02-28  1385  		return -ENODEV;
-d6895ad39f3b39 Christian König 2017-02-28  1386  
-d6895ad39f3b39 Christian König 2017-02-28  1387  	pci_write_config_word(adev->pdev, PCI_COMMAND, cmd);
-d6895ad39f3b39 Christian König 2017-02-28  1388  
-d6895ad39f3b39 Christian König 2017-02-28  1389  	return 0;
-d6895ad39f3b39 Christian König 2017-02-28  1390  }
-a05502e5cfa9ab Horace Chen     2017-09-29  1391  
-
-:::::: The code at line 1348 was first introduced by commit
-:::::: 31b8adab3247eaa6cffbaa59276456b694718cc8 drm/amdgpu: require a root bus window above 4GB for BAR resize
-
-:::::: TO: Christian König <christian.koenig@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+    23	
+  > 24	#include <media/v4l2-cci.h>
+    25	#include <media/v4l2-common.h>
+    26	#include <media/v4l2-ctrls.h>
+    27	#include <media/v4l2-subdev.h>
+    28	
 
 -- 
 0-DAY CI Kernel Test Service
