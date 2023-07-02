@@ -1,43 +1,46 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CA12116;
-	Sun,  2 Jul 2023 18:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4101C3C2A;
+	Sun,  2 Jul 2023 19:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688322227; x=1719858227;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9eDmJgwgTgQHOhTWsQfso5wZJaBs0Z+CuKeorj8/dFA=;
-  b=h5+nhDgv+xGKxUGcgji+fyp2ndKClCoIKmmf/RQdWw8dxvrAfgMiwGQD
-   eKYide/Bu28RtzSJn6L+Idui3SEIn7stgSHKu1TcK46m9LkVvbCqXKm6O
-   8ode4tzpbXHtuanOa0NOmskSWoUg4NBX6aGJ8TidVV5d8j54Vq/UyqggX
-   PZsHbYdVrfRwOc6Y0vJX6UQjwWg1bu+og248VhgNvbAL6Jw+y22dQDwgd
-   dn3MLzIrNekuGM0sqXxmSFRT3ErIv9zhUnltvR6SQKjmw5NONwlz+Hl9Y
-   rcJUtxWSCRHNu7S+rnJqyZA3jyhPWxk0MeH1E+RguFs6n4S829q5D+574
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361581256"
+  t=1688327211; x=1719863211;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bjkZcrlCYzUk4zYchWcObPkc5bbNOF9ptg5FMavZJA8=;
+  b=khBIVHkv3rkQ6fRv4IXUXpm6+C6+DBnQXnTa8O5/2IWwEoDnuzEYStzx
+   UZ61L964R13LsifKydLlVuxkce/AaoZfxWdenhgtJvPcTgitlRhog/+4e
+   NZcX+zqno9e7wHq8lfISzt5Db0VNKxyRQT9qxihFLr7JaTnhWHJZTdQE6
+   7oQNQ9WitOyI6uImVmUJUibaRZgw/V7eGvYf9KtrKPf9Eh7NUdyibOhvw
+   bdVJvaeha5ZbKfLlO9o8HrThGXckLNg/l9oScju2NzmQBq1IGz0mMZYcO
+   aOVNpcYWuiS+YGxDqC4hFlbn1t5BWmMsZELSAnUBAabXZj5TviPP2jwT3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="426416411"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="361581256"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 11:23:46 -0700
+   d="scan'208";a="426416411"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 12:46:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="1048818160"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="718395415"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="1048818160"
+   d="scan'208";a="718395415"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Jul 2023 11:23:45 -0700
+  by orsmga002.jf.intel.com with ESMTP; 02 Jul 2023 12:46:47 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qG1jc-000GoF-1C;
-	Sun, 02 Jul 2023 18:23:44 +0000
-Date: Mon, 3 Jul 2023 02:23:42 +0800
+	id 1qG31y-000Gr5-1i;
+	Sun, 02 Jul 2023 19:46:46 +0000
+Date: Mon, 3 Jul 2023 03:45:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
+To: Jackie Liu <liu.yun@linux.dev>, olsajiri@gmail.com, andrii@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Subject: [jmondi:tmp/ov2680 9/29] drivers/media/i2c/ov2680.c:24:10: fatal
- error: 'media/v4l2-cci.h' file not found
-Message-ID: <202307030246.SNalyiyb-lkp@intel.com>
+	martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+	bpf@vger.kernel.org, liuyun01@kylinos.cn
+Subject: Re: [PATCH v2 1/2] libbpf: kprobe.multi: cross filter using
+ available_filter_functions and kallsyms
+Message-ID: <202307030355.TdXOHklM-lkp@intel.com>
+References: <20230701080817.1768865-1-liu.yun@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,104 +49,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230701080817.1768865-1-liu.yun@linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git tmp/ov2680
-head:   225bc92c21983173d3c13a0db0b83e466bd03753
-commit: a92430c91d2bc5db479b35b6983cc71bdf5c180b [9/29] media: ov2680: Convert to new CCI register access helpers
-config: hexagon-randconfig-r041-20230703 (https://download.01.org/0day-ci/archive/20230703/202307030246.SNalyiyb-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030246.SNalyiyb-lkp@intel.com/reproduce)
+Hi Jackie,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on bpf/master linus/master v6.4 next-20230630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jackie-Liu/libbpf-kprobe-multi-Filter-with-available_filter_functions_addrs/20230701-161010
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230701080817.1768865-1-liu.yun%40linux.dev
+patch subject: [PATCH v2 1/2] libbpf: kprobe.multi: cross filter using available_filter_functions and kallsyms
+config: x86_64-buildonly-randconfig-r001-20230702 (https://download.01.org/0day-ci/archive/20230703/202307030355.TdXOHklM-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030355.TdXOHklM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307030246.SNalyiyb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307030355.TdXOHklM-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/i2c/ov2680.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/i2c/ov2680.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/i2c/ov2680.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/media/i2c/ov2680.c:24:10: fatal error: 'media/v4l2-cci.h' file not found
-      24 | #include <media/v4l2-cci.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
-
-
-vim +24 drivers/media/i2c/ov2680.c
-
-    23	
-  > 24	#include <media/v4l2-cci.h>
-    25	#include <media/v4l2-common.h>
-    26	#include <media/v4l2-ctrls.h>
-    27	#include <media/v4l2-subdev.h>
-    28	
+>> libbpf.c:10626:57: error: 'fscanf' may overflow; destination buffer in argument 4 has size 256, but the corresponding specifier may require size 500 [-Werror,-Wfortify-source]
+                   ret = fscanf(f, "%llx %*c %499s%*[^\n]\n", &sym_addr, sym_name);
+                                                                         ^
+   1 error generated.
+   make[5]: *** [tools/build/Makefile.build:97: tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
+   make[5]: *** Waiting for unfinished jobs....
+   make[4]: *** [Makefile:157: tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2
+   make[3]: *** [Makefile:63: tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2
+   make[2]: *** [Makefile:76: bpf/resolve_btfids] Error 2 shuffle=967315254
+   make[1]: *** [Makefile:1446: tools/bpf/resolve_btfids] Error 2 shuffle=967315254
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2 shuffle=967315254
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
