@@ -1,140 +1,166 @@
-Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2772717C9
-	for <llvm@lists.linux.dev>; Sun,  2 Jul 2023 15:15:58 +0000 (UTC)
-Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b7f5436076so34469615ad.1
-        for <llvm@lists.linux.dev>; Sun, 02 Jul 2023 08:15:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688310958; x=1690902958;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uqx05DsOQphTiupSJnXSJDQY0vj7xZsIgdvTNkwdc4I=;
-        b=YNUGPfUvxIIeJkv9pc2oc6b7aQwd90FSRmXPWAqgAU8s11ubsw5Yr8F9tKNyO4wSBt
-         qpaaLG1SrY28FfWq+tceV7v2uxHZw9RRpEQgZlXkUMWAzUXdm0AvAy/iJOkFFD6cQLhq
-         wwwy9UqVV8dnJntuYEwDeNJPQMn+WxOJO4MOtWNxkZ17Awy7Jc5qGYOam/qNr39wt+lD
-         1pxIAg+VaTYDuld6PJSuX7vLSH8fZ511LGFJyTDFelhSA+FdpGYbs3UK2sj6yZ6GLWnL
-         ENQPn2X8XYW85a10dYN8wC6INizDK+QzKfZVnEBeUM1KBF5i0OqEtDcAQF4hf0aeHkDY
-         mAwQ==
-X-Gm-Message-State: ABy/qLZxP2TAuB+i4rNKGJgddc1t8zBavqgtKK5kBbl8drxgPgBJGttb
-	A7PWE2cdCEXcNko9bkfHrZUHeHGH9EQbWu7PyQnm/KUlAfy4
-X-Google-Smtp-Source: APBJJlGq9lPKarcsUF7brIRq5xJr+f1dOKBFojk/wn5gzcGstP+bS9/Z+X3ogEpttE7OoTGn0J2Nzuo+izXpAWX/Up0fjn2Y/sb+
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921BD2116;
+	Sun,  2 Jul 2023 16:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688316707; x=1719852707;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V12x7NTZ/flFdp7UzRsu6hXAL+WmLfM4kk6JDQLCYk8=;
+  b=IWExDzpWA0GrBtPCP6mGHYWlhLbjBnI8KzLKkKGtyWO69ELf5PP3P6yc
+   ByxaFtCC1qYyriGExyQ5YyTF06fPBl4hrkqiXCBye9LenZEgyyvnR8GhW
+   /q4rSiZIPkNc4RJRmP6nr2qpNlQY+IG1Gl9EncIFmscTf+NZp3HbNpxZi
+   5/X8wVVyKoCXTB+Fz7BIMWGRWmKgIFX0gIDiLi+t8AXMJHXvg9R8wYsaT
+   JvMwc5clQGtXAUr4fL/8GYFW84n7XYw60gQz6/c8hpO9S6ak2+zYgwtZN
+   mdxkPaIWynKGp69Z+PohSFfbwJNKl1ppq5vDHh4gSrFF5OXs+zsrcRqnA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="449094911"
+X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
+   d="scan'208";a="449094911"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 09:51:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="695563738"
+X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
+   d="scan'208";a="695563738"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Jul 2023 09:51:43 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qG0IZ-000Gm7-0E;
+	Sun, 02 Jul 2023 16:51:43 +0000
+Date: Mon, 3 Jul 2023 00:51:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Kenny Ho <Kenny.Ho@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1348:18: error: result of
+ comparison of constant 4294967296 with expression of type 'resource_size_t'
+ (aka 'unsigned int') is always false
+Message-ID: <202307030049.yGsrirGh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:e847:b0:1b8:919e:bd with SMTP id
- t7-20020a170902e84700b001b8919e00bdmr1177364plg.13.1688310958243; Sun, 02 Jul
- 2023 08:15:58 -0700 (PDT)
-Date: Sun, 02 Jul 2023 08:15:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000efc64705ff8286a1@google.com>
-Subject: [syzbot] [wireless?] WARNING in rate_control_rate_init (2)
-From: syzbot <syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com>
-To: davem@davemloft.net, edumazet@google.com, johannes@sipsolutions.net, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   995b406c7e972fab181a4bb57f3b95e59b8e5bf3
+commit: 1b320ad3f5a88602aef2f207bc211539a5496702 drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR
+date:   3 weeks ago
+config: i386-buildonly-randconfig-r004-20230702 (https://download.01.org/0day-ci/archive/20230703/202307030049.yGsrirGh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030049.yGsrirGh-lkp@intel.com/reproduce)
 
-syzbot found the following issue on:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307030049.yGsrirGh-lkp@intel.com/
 
-HEAD commit:    6e2332e0ab53 Merge tag 'cgroup-for-6.5' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e1c60b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f24c1070268858
-dashboard link: https://syzkaller.appspot.com/bug?extid=62d7eef57b09bfebcd84
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171c0767280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10113ebd280000
+All errors (new ones prefixed by >>):
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-6e2332e0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5c6bc163c340/vmlinux-6e2332e0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f1e705993336/bzImage-6e2332e0.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5126 at net/mac80211/rate.c:48 rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
-Modules linked in:
-CPU: 0 PID: 5126 Comm: syz-executor279 Not tainted 6.4.0-syzkaller-01647-g6e2332e0ab53 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
-Code: f7 48 c7 c2 00 84 7f 8b be 09 03 00 00 48 c7 c7 c0 83 7f 8b c6 05 f9 bc d6 04 01 e8 22 ac d6 f7 e9 d8 fd ff ff e8 a8 16 f6 f7 <0f> 0b e8 c1 32 83 00 31 ff 89 c3 89 c6 e8 b6 12 f6 f7 85 db 75 27
-RSP: 0018:ffffc90003197280 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8881070796c0 RCX: 0000000000000000
-RDX: ffff88802a51cb80 RSI: ffffffff898db228 RDI: 0000000000000005
-RBP: ffff8880255c0000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: ffff888021f30de0 R15: ffff888032530000
-FS:  000055555570f300(0000) GS:ffff88806b600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 000000001f594000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- sta_apply_auth_flags.constprop.0+0x424/0x4a0 net/mac80211/cfg.c:1678
- sta_apply_parameters+0xaf8/0x16f0 net/mac80211/cfg.c:2005
- ieee80211_add_station+0x3d0/0x620 net/mac80211/cfg.c:2070
- rdev_add_station net/wireless/rdev-ops.h:201 [inline]
- nl80211_new_station+0x1258/0x1b20 net/wireless/nl80211.c:7564
- genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:725 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:748
- ____sys_sendmsg+0x722/0x900 net/socket.c:2504
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc033504a69
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe0868f2d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 000000000000ae5a RCX: 00007fc033504a69
-RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007ffe0868f478 R09: 00007ffe0868f478
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe0868f2ec
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1348:18: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+                       res->start > 0x100000000ull)
+                       ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   1 error generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +1348 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+d38ceaf99ed015 Alex Deucher    2015-04-20  1313  
+d6895ad39f3b39 Christian König 2017-02-28  1314  /**
+d6895ad39f3b39 Christian König 2017-02-28  1315   * amdgpu_device_resize_fb_bar - try to resize FB BAR
+d6895ad39f3b39 Christian König 2017-02-28  1316   *
+d6895ad39f3b39 Christian König 2017-02-28  1317   * @adev: amdgpu_device pointer
+d6895ad39f3b39 Christian König 2017-02-28  1318   *
+d6895ad39f3b39 Christian König 2017-02-28  1319   * Try to resize FB BAR to make all VRAM CPU accessible. We try very hard not
+d6895ad39f3b39 Christian König 2017-02-28  1320   * to fail, but if any of the BARs is not accessible after the size we abort
+d6895ad39f3b39 Christian König 2017-02-28  1321   * driver loading by returning -ENODEV.
+d6895ad39f3b39 Christian König 2017-02-28  1322   */
+d6895ad39f3b39 Christian König 2017-02-28  1323  int amdgpu_device_resize_fb_bar(struct amdgpu_device *adev)
+d6895ad39f3b39 Christian König 2017-02-28  1324  {
+453f617a30aa12 Nirmoy Das      2021-01-07  1325  	int rbar_size = pci_rebar_bytes_to_size(adev->gmc.real_vram_size);
+31b8adab3247ea Christian König 2017-11-15  1326  	struct pci_bus *root;
+31b8adab3247ea Christian König 2017-11-15  1327  	struct resource *res;
+31b8adab3247ea Christian König 2017-11-15  1328  	unsigned i;
+d6895ad39f3b39 Christian König 2017-02-28  1329  	u16 cmd;
+d6895ad39f3b39 Christian König 2017-02-28  1330  	int r;
+d6895ad39f3b39 Christian König 2017-02-28  1331  
+0c03b912d7f846 pding           2017-11-07  1332  	/* Bypass for VF */
+0c03b912d7f846 pding           2017-11-07  1333  	if (amdgpu_sriov_vf(adev))
+0c03b912d7f846 pding           2017-11-07  1334  		return 0;
+0c03b912d7f846 pding           2017-11-07  1335  
+b7221f2b4655bb Alex Deucher    2020-06-08  1336  	/* skip if the bios has already enabled large BAR */
+b7221f2b4655bb Alex Deucher    2020-06-08  1337  	if (adev->gmc.real_vram_size &&
+b7221f2b4655bb Alex Deucher    2020-06-08  1338  	    (pci_resource_len(adev->pdev, 0) >= adev->gmc.real_vram_size))
+b7221f2b4655bb Alex Deucher    2020-06-08  1339  		return 0;
+b7221f2b4655bb Alex Deucher    2020-06-08  1340  
+31b8adab3247ea Christian König 2017-11-15  1341  	/* Check if the root BUS has 64bit memory resources */
+31b8adab3247ea Christian König 2017-11-15  1342  	root = adev->pdev->bus;
+31b8adab3247ea Christian König 2017-11-15  1343  	while (root->parent)
+31b8adab3247ea Christian König 2017-11-15  1344  		root = root->parent;
+31b8adab3247ea Christian König 2017-11-15  1345  
+31b8adab3247ea Christian König 2017-11-15  1346  	pci_bus_for_each_resource(root, res, i) {
+0ebb7c5405941b Christian König 2018-01-07  1347  		if (res && res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
+31b8adab3247ea Christian König 2017-11-15 @1348  		    res->start > 0x100000000ull)
+31b8adab3247ea Christian König 2017-11-15  1349  			break;
+31b8adab3247ea Christian König 2017-11-15  1350  	}
+31b8adab3247ea Christian König 2017-11-15  1351  
+31b8adab3247ea Christian König 2017-11-15  1352  	/* Trying to resize is pointless without a root hub window above 4GB */
+31b8adab3247ea Christian König 2017-11-15  1353  	if (!res)
+31b8adab3247ea Christian König 2017-11-15  1354  		return 0;
+31b8adab3247ea Christian König 2017-11-15  1355  
+453f617a30aa12 Nirmoy Das      2021-01-07  1356  	/* Limit the BAR size to what is available */
+453f617a30aa12 Nirmoy Das      2021-01-07  1357  	rbar_size = min(fls(pci_rebar_get_possible_sizes(adev->pdev, 0)) - 1,
+453f617a30aa12 Nirmoy Das      2021-01-07  1358  			rbar_size);
+453f617a30aa12 Nirmoy Das      2021-01-07  1359  
+d6895ad39f3b39 Christian König 2017-02-28  1360  	/* Disable memory decoding while we change the BAR addresses and size */
+d6895ad39f3b39 Christian König 2017-02-28  1361  	pci_read_config_word(adev->pdev, PCI_COMMAND, &cmd);
+d6895ad39f3b39 Christian König 2017-02-28  1362  	pci_write_config_word(adev->pdev, PCI_COMMAND,
+d6895ad39f3b39 Christian König 2017-02-28  1363  			      cmd & ~PCI_COMMAND_MEMORY);
+d6895ad39f3b39 Christian König 2017-02-28  1364  
+d6895ad39f3b39 Christian König 2017-02-28  1365  	/* Free the VRAM and doorbell BAR, we most likely need to move both. */
+06ec907054c5a4 Alex Deucher    2017-12-14  1366  	amdgpu_device_doorbell_fini(adev);
+d6895ad39f3b39 Christian König 2017-02-28  1367  	if (adev->asic_type >= CHIP_BONAIRE)
+d6895ad39f3b39 Christian König 2017-02-28  1368  		pci_release_resource(adev->pdev, 2);
+d6895ad39f3b39 Christian König 2017-02-28  1369  
+d6895ad39f3b39 Christian König 2017-02-28  1370  	pci_release_resource(adev->pdev, 0);
+d6895ad39f3b39 Christian König 2017-02-28  1371  
+d6895ad39f3b39 Christian König 2017-02-28  1372  	r = pci_resize_resource(adev->pdev, 0, rbar_size);
+d6895ad39f3b39 Christian König 2017-02-28  1373  	if (r == -ENOSPC)
+d6895ad39f3b39 Christian König 2017-02-28  1374  		DRM_INFO("Not enough PCI address space for a large BAR.");
+d6895ad39f3b39 Christian König 2017-02-28  1375  	else if (r && r != -ENOTSUPP)
+d6895ad39f3b39 Christian König 2017-02-28  1376  		DRM_ERROR("Problem resizing BAR0 (%d).", r);
+d6895ad39f3b39 Christian König 2017-02-28  1377  
+d6895ad39f3b39 Christian König 2017-02-28  1378  	pci_assign_unassigned_bus_resources(adev->pdev->bus);
+d6895ad39f3b39 Christian König 2017-02-28  1379  
+d6895ad39f3b39 Christian König 2017-02-28  1380  	/* When the doorbell or fb BAR isn't available we have no chance of
+d6895ad39f3b39 Christian König 2017-02-28  1381  	 * using the device.
+d6895ad39f3b39 Christian König 2017-02-28  1382  	 */
+06ec907054c5a4 Alex Deucher    2017-12-14  1383  	r = amdgpu_device_doorbell_init(adev);
+d6895ad39f3b39 Christian König 2017-02-28  1384  	if (r || (pci_resource_flags(adev->pdev, 0) & IORESOURCE_UNSET))
+d6895ad39f3b39 Christian König 2017-02-28  1385  		return -ENODEV;
+d6895ad39f3b39 Christian König 2017-02-28  1386  
+d6895ad39f3b39 Christian König 2017-02-28  1387  	pci_write_config_word(adev->pdev, PCI_COMMAND, cmd);
+d6895ad39f3b39 Christian König 2017-02-28  1388  
+d6895ad39f3b39 Christian König 2017-02-28  1389  	return 0;
+d6895ad39f3b39 Christian König 2017-02-28  1390  }
+a05502e5cfa9ab Horace Chen     2017-09-29  1391  
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+:::::: The code at line 1348 was first introduced by commit
+:::::: 31b8adab3247eaa6cffbaa59276456b694718cc8 drm/amdgpu: require a root bus window above 4GB for BAR resize
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+:::::: TO: Christian König <christian.koenig@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
