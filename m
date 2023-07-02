@@ -1,197 +1,140 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDF420FE;
-	Sun,  2 Jul 2023 13:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688304462; x=1719840462;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I4RGcFfF+g/0roxDgi4+b7sM5Rv7gJ8tRkl8SFre26g=;
-  b=gXQFROIXl854xt+DGAxJagmEyw5wGYIVR7LEN80/91Yt3Al3h0Zjuym9
-   1kTPg635CbA3ZZfJacz2l7tnCxxpP5CpUxcmvPTcSjDpuhPYbm9tAJv2W
-   PfFYF2z1v36hkkBLDNFr7P7zauJessuRYhplIR88G04tWrv9sA46XvLrf
-   fE7uy8oHHh11cLKEXw+QQQLQgkQ/tk6Yaixoe9BRN770gljVrMbBcjPq6
-   Ocnn/h9XAz7UyjLNbyywfGgHfAG24GIe5zWPnMPla5FL+fAxfCSkHXFBX
-   Poi/CIFczgPM23wz7RDef18+sNXnA0iiPKdv40RvBlZg+wFNLqOUGfSEQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="393440000"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="393440000"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:27:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="964886598"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="964886598"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Jul 2023 06:27:39 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qFx75-000GfT-0h;
-	Sun, 02 Jul 2023 13:27:39 +0000
-Date: Sun, 2 Jul 2023 21:26:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:vhost-page-frag 1/2] include/linux/mm.h:1169:28: error:
- static declaration of 'virt_to_head_page' follows non-static declaration
-Message-ID: <202307022101.wW0u489f-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2772717C9
+	for <llvm@lists.linux.dev>; Sun,  2 Jul 2023 15:15:58 +0000 (UTC)
+Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b7f5436076so34469615ad.1
+        for <llvm@lists.linux.dev>; Sun, 02 Jul 2023 08:15:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688310958; x=1690902958;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Uqx05DsOQphTiupSJnXSJDQY0vj7xZsIgdvTNkwdc4I=;
+        b=YNUGPfUvxIIeJkv9pc2oc6b7aQwd90FSRmXPWAqgAU8s11ubsw5Yr8F9tKNyO4wSBt
+         qpaaLG1SrY28FfWq+tceV7v2uxHZw9RRpEQgZlXkUMWAzUXdm0AvAy/iJOkFFD6cQLhq
+         wwwy9UqVV8dnJntuYEwDeNJPQMn+WxOJO4MOtWNxkZ17Awy7Jc5qGYOam/qNr39wt+lD
+         1pxIAg+VaTYDuld6PJSuX7vLSH8fZ511LGFJyTDFelhSA+FdpGYbs3UK2sj6yZ6GLWnL
+         ENQPn2X8XYW85a10dYN8wC6INizDK+QzKfZVnEBeUM1KBF5i0OqEtDcAQF4hf0aeHkDY
+         mAwQ==
+X-Gm-Message-State: ABy/qLZxP2TAuB+i4rNKGJgddc1t8zBavqgtKK5kBbl8drxgPgBJGttb
+	A7PWE2cdCEXcNko9bkfHrZUHeHGH9EQbWu7PyQnm/KUlAfy4
+X-Google-Smtp-Source: APBJJlGq9lPKarcsUF7brIRq5xJr+f1dOKBFojk/wn5gzcGstP+bS9/Z+X3ogEpttE7OoTGn0J2Nzuo+izXpAWX/Up0fjn2Y/sb+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a17:902:e847:b0:1b8:919e:bd with SMTP id
+ t7-20020a170902e84700b001b8919e00bdmr1177364plg.13.1688310958243; Sun, 02 Jul
+ 2023 08:15:58 -0700 (PDT)
+Date: Sun, 02 Jul 2023 08:15:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000efc64705ff8286a1@google.com>
+Subject: [syzbot] [wireless?] WARNING in rate_control_rate_init (2)
+From: syzbot <syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, johannes@sipsolutions.net, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/gestionlin/linux.git vhost-page-frag
-head:   43d9a865a0a23c03923aae2db7a33d78be36c595
-commit: 53f6f24c5ff57ba7933cab95bb643d725484ea38 [1/2] net: introduce page_frag_cache_drain()
-config: arm-randconfig-r046-20230702 (https://download.01.org/0day-ci/archive/20230702/202307022101.wW0u489f-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230702/202307022101.wW0u489f-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307022101.wW0u489f-lkp@intel.com/
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    6e2332e0ab53 Merge tag 'cgroup-for-6.5' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e1c60b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f24c1070268858
+dashboard link: https://syzkaller.appspot.com/bug?extid=62d7eef57b09bfebcd84
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171c0767280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10113ebd280000
 
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:162:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     162 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 r->sig[3] = op(a3, b3);                                 \
-         |                 ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:976:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:162:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     162 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
-     140 |                 r->sig[2] = op(a2, b2);                                 \
-         |                 ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:976:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:173:27: note: expanded from macro '_SIG_SET_OP'
-     173 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
-     185 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:976:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
-     173 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                 ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:976:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
-     174 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
-     185 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:976:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     186 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
-     174 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                 ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
->> include/linux/mm.h:1169:28: error: static declaration of 'virt_to_head_page' follows non-static declaration
-    1169 | static inline struct page *virt_to_head_page(const void *x)
-         |                            ^
-   include/linux/gfp.h:316:26: note: previous implicit declaration is here
-     316 |         __page_frag_cache_drain(virt_to_head_page(nc->va), nc->pagecnt_bias);
-         |                                 ^
-   28 warnings and 3 errors generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/arm/kernel/asm-offsets.s] Error 1 shuffle=1564733078
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1287: prepare0] Error 2 shuffle=1564733078
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2 shuffle=1564733078
-   make: Target 'prepare' not remade because of errors.
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-6e2332e0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5c6bc163c340/vmlinux-6e2332e0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f1e705993336/bzImage-6e2332e0.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5126 at net/mac80211/rate.c:48 rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
+Modules linked in:
+CPU: 0 PID: 5126 Comm: syz-executor279 Not tainted 6.4.0-syzkaller-01647-g6e2332e0ab53 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
+Code: f7 48 c7 c2 00 84 7f 8b be 09 03 00 00 48 c7 c7 c0 83 7f 8b c6 05 f9 bc d6 04 01 e8 22 ac d6 f7 e9 d8 fd ff ff e8 a8 16 f6 f7 <0f> 0b e8 c1 32 83 00 31 ff 89 c3 89 c6 e8 b6 12 f6 f7 85 db 75 27
+RSP: 0018:ffffc90003197280 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8881070796c0 RCX: 0000000000000000
+RDX: ffff88802a51cb80 RSI: ffffffff898db228 RDI: 0000000000000005
+RBP: ffff8880255c0000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff888021f30de0 R15: ffff888032530000
+FS:  000055555570f300(0000) GS:ffff88806b600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000080 CR3: 000000001f594000 CR4: 0000000000350ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sta_apply_auth_flags.constprop.0+0x424/0x4a0 net/mac80211/cfg.c:1678
+ sta_apply_parameters+0xaf8/0x16f0 net/mac80211/cfg.c:2005
+ ieee80211_add_station+0x3d0/0x620 net/mac80211/cfg.c:2070
+ rdev_add_station net/wireless/rdev-ops.h:201 [inline]
+ nl80211_new_station+0x1258/0x1b20 net/wireless/nl80211.c:7564
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:725 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:748
+ ____sys_sendmsg+0x722/0x900 net/socket.c:2504
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc033504a69
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe0868f2d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000000000000ae5a RCX: 00007fc033504a69
+RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 00007ffe0868f478 R09: 00007ffe0868f478
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe0868f2ec
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
-vim +/virt_to_head_page +1169 include/linux/mm.h
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-70b50f94f1644e Andrea Arcangeli   2011-11-02  1168  
-b49af68ff9fc5d Christoph Lameter  2007-05-06 @1169  static inline struct page *virt_to_head_page(const void *x)
-b49af68ff9fc5d Christoph Lameter  2007-05-06  1170  {
-b49af68ff9fc5d Christoph Lameter  2007-05-06  1171  	struct page *page = virt_to_page(x);
-ccaafd7fd039ae Joonsoo Kim        2015-02-10  1172  
-1d798ca3f16437 Kirill A. Shutemov 2015-11-06  1173  	return compound_head(page);
-b49af68ff9fc5d Christoph Lameter  2007-05-06  1174  }
-b49af68ff9fc5d Christoph Lameter  2007-05-06  1175  
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-:::::: The code at line 1169 was first introduced by commit
-:::::: b49af68ff9fc5d6e0d96704a1843968b91cc73c6 Add virt_to_head_page and consolidate code in slab and slub
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-:::::: TO: Christoph Lameter <clameter@sgi.com>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
