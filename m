@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ADDDDA5
-	for <llvm@lists.linux.dev>; Sat,  1 Jul 2023 22:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDF3A31
+	for <llvm@lists.linux.dev>; Sun,  2 Jul 2023 05:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688251866;
+	s=mimecast20190719; t=1688274604;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZBRrve1ol8P/ckUlxTBAiF+c7BeFMj6h6atJoZeC5lw=;
-	b=N2gxvG64ekpToPjNWHhjGg4GC4efAGiQlVqrBWPn0yxcfmyXxIiku7K6wSZfdr66BEca/r
-	qoPsggNTH8oNeJHoKYICBkPVm2rpONruTvwrIbgZa9RZ2b0qC0u+EUpU1q382rooCmkYaY
-	AG3tFzo5nc0D+Iplb8FYczHgNRtbweg=
+	bh=8/t0rsh01XxfZjNqtQzN79wjTq9E0N5JCgtHCn4Rd58=;
+	b=M5l4FoDRoVxtWaxJ/HI07DBV+fr400tyaTF6FmPb5whTBMRfJgZSfH4j60p7+uyw+mxKXK
+	vHxjhgSi0oPLBqH45X2qaSH/yBSXOPAvUZ/DYnbSsouD/h8OnMCm1tlwqCg8Lobvyfe705
+	m3kas/yveQsKm+mfK/xlF6Ob9lIJqDw=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-u9mCKM62NgCeS7PkVgS3tQ-1; Sat, 01 Jul 2023 18:51:04 -0400
-X-MC-Unique: u9mCKM62NgCeS7PkVgS3tQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-179-_nivKgO_Ocm9jW96YlUMBw-1; Sun, 02 Jul 2023 01:10:03 -0400
+X-MC-Unique: _nivKgO_Ocm9jW96YlUMBw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 597BB81DA5D
-	for <llvm@lists.linux.dev>; Sat,  1 Jul 2023 22:51:04 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FE75803FDF
+	for <llvm@lists.linux.dev>; Sun,  2 Jul 2023 05:10:03 +0000 (UTC)
 Received: from [172.64.9.34] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4530740C2063;
-	Sat,  1 Jul 2023 22:51:04 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 285221121314;
+	Sun,  2 Jul 2023 05:10:03 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, dfab92f2)
-Date: Sat, 01 Jul 2023 22:51:04 -0000
+ mainline.kernel.org-clang, 995b406c)
+Date: Sun, 02 Jul 2023 05:10:03 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <94459.123070118510400259@us-mta-160.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <70316.123070201100300121@us-mta-179.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,15 +52,15 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'nfs-for-6.5-1' of git://git.linux-nfs.org/pr=
-ojects/trondmy/linux-nfs
+    Commit message: Merge tag 'csky-for-linus-6.5' of https://github.com/c-=
+sky/csky-linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94492
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94494
 
 One or more kernel builds failed:
     Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36850=
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36851=
 8
 
 
