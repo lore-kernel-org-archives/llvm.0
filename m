@@ -1,37 +1,37 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBD3100C4;
-	Mon,  3 Jul 2023 15:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A60100C7;
+	Mon,  3 Jul 2023 16:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688399540; x=1719935540;
+  t=1688400258; x=1719936258;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kg4H8EJxzT+JmzsPx5yMUTbVFym+TvfIau+EfU0TlSE=;
-  b=Un+z0rrLkgsPRtv5bH6BrYWARrzOMjHfBNuc0cRjAr8vWHo/F9iwrLjp
-   Uv5sm2Oq0strXNCFzFxcjF9apVyQAF6gggBo7IxQylR8k+dzQ3KNHzD3E
-   d+V2RyziS0nRuJx6l91/s4fWwIjwbhnTumOl4oxa6MlhyO8T3WcsEAMXe
-   G9ogiIODs4rKGdHHz2XtcoVD4qsgEVhKOakj1Qe/bgQaWPaLH37oK0wCs
-   nNZm6YE78MbGx+A6Jij+wu8+HQO2AuGuvfjNGukkUh7vvCung22aLn/+H
-   ASaAEJZmtnfZ8tn0+cxgNZM77Hvaajz0fMeYHh7S077JDwe8QHciyomLS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="365488059"
+  bh=kX5puoO1YG91SpdGKxc7/lR05dmWp+5de2zwGoA2J7Q=;
+  b=OE5fck0hio6jKi8vbmyY0HiJabwsxq2FjDEh1hiZhPwy2z/kIZgtO2ao
+   +wqc19BoyceTWojEVcV8+fbhn5EU7MMaLdR0TBzCbGXqQeGJSGsmV4z1W
+   fNKn80DJPFqkak3s0fqG99fuDB3twFgB2fAhH7Z1gqe6i1BRTV6KPXBmR
+   7QbgZs6KBPzJhcTZCWvhX0dc0fXBPj9CdsUlnymY29e3nP6jIrxFpAEDa
+   ugDZUinQmSJEDESon9aOy7+5KoqlKVt9MxNVZyXi1BP+/hqPGugCR7ML8
+   F5sc1LFEdhi+BekIZr0FHA+MHM1upmIwi0k/3E93Nl2U5UeMuwM/ZmWrF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393658430"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="365488059"
+   d="scan'208";a="393658430"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:52:19 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 09:02:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="965225256"
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="965227921"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="965225256"
+   d="scan'208";a="965227921"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jul 2023 08:52:14 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jul 2023 09:02:14 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qGLqX-000HSJ-0u;
-	Mon, 03 Jul 2023 15:52:13 +0000
-Date: Mon, 3 Jul 2023 23:51:46 +0800
+	id 1qGM0D-000HSo-1y;
+	Mon, 03 Jul 2023 16:02:13 +0000
+Date: Tue, 4 Jul 2023 00:01:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ryan Roberts <ryan.roberts@arm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -48,7 +48,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Ryan Roberts <ryan.roberts@arm.com>,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-Message-ID: <202307032325.u93xmWbG-lkp@intel.com>
+Message-ID: <202307032330.TguyNttt-lkp@intel.com>
 References: <20230703135330.1865927-5-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -75,14 +75,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/mm-Non-pmd-m
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
 patch link:    https://lore.kernel.org/r/20230703135330.1865927-5-ryan.roberts%40arm.com
 patch subject: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230703/202307032325.u93xmWbG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032325.u93xmWbG-lkp@intel.com/reproduce)
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230703/202307032330.TguyNttt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032330.TguyNttt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307032325.u93xmWbG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307032330.TguyNttt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
@@ -96,14 +96,14 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
    In file included from mm/memory.c:42:
    In file included from include/linux/kernel_stat.h:9:
    In file included from include/linux/interrupt.h:11:
@@ -114,11 +114,11 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
    In file included from mm/memory.c:42:
    In file included from include/linux/kernel_stat.h:9:
    In file included from include/linux/interrupt.h:11:
@@ -129,42 +129,42 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/io.h:13:
    In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> mm/memory.c:4271:2: error: implicit declaration of function 'set_ptes' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
-           ^
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> mm/memory.c:4271:2: error: call to undeclared function 'set_ptes'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4271 |         set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
+         |         ^
    mm/memory.c:4271:2: note: did you mean 'set_pte'?
    arch/um/include/asm/pgtable.h:232:20: note: 'set_pte' declared here
-   static inline void set_pte(pte_t *pteptr, pte_t pteval)
-                      ^
->> mm/memory.c:4274:2: error: implicit declaration of function 'update_mmu_cache_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
-           ^
+     232 | static inline void set_pte(pte_t *pteptr, pte_t pteval)
+         |                    ^
+>> mm/memory.c:4274:2: error: call to undeclared function 'update_mmu_cache_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4274 |         update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
+         |         ^
    12 warnings and 2 errors generated.
 
 
