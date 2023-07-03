@@ -1,97 +1,180 @@
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7F4803;
-	Mon,  3 Jul 2023 07:03:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-	by domac.alu.hr (Postfix) with ESMTP id EAF6E60174;
-	Mon,  3 Jul 2023 09:03:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1688367827; bh=fTkNvNkC3bfADJTtHrYMWZPvdHPtIONvisUsl8eELX4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GraudTOQKeqXAqjbHkfZyD0UDKV1F87M/pxF8SVONRpI3+BFrbr/foqDs770cS2rK
-	 nfacrS9b8bqYrGt3K6O3eAPrI8RQknKy6M5jAgXnzU2BhD2T+mq3MVSJk90y8jv78Z
-	 TCeWCSnPrZNgXZPvUgcyMp6GEveJEcq4pfX/3LDwOHrf44a19m/kkAAaQcifbyiwNX
-	 qcPA6UrcXPrNkv0A5UTHVwBnTC0R4kpIryzbei6x+QiUp/jtEIQIK0jU6M+/7f4yzw
-	 MwgDNfjVx3HsGOURR+kul/xlcQeQjjdBGjgzH4w8IO0BGsR7Q/WXhvZpBVj992WJCA
-	 MbOaqSnvtDl0A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BcVV5PcK91mB; Mon,  3 Jul 2023 09:03:45 +0200 (CEST)
-Received: from [10.0.2.76] (grf-nat.grf.hr [161.53.83.23])
-	by domac.alu.hr (Postfix) with ESMTPSA id DEC9E60173;
-	Mon,  3 Jul 2023 09:03:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1688367825; bh=fTkNvNkC3bfADJTtHrYMWZPvdHPtIONvisUsl8eELX4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=x9zfkzo8tnfYDsWS8YCC5k1UW5CLJwCXhRt6CWRfT/P2DL+gjDYXJOdPzea3+QcjI
-	 H7h2mMVEN5QysCdGAZHSn56iLXcam5NEShN1uxuRKISAxQ/G+Mf5uwWxMPyybc6gKg
-	 NXwHWX5flheEB5teyvGloa9/HCNjsZ30W4eDJqF89eaNmwW7dHEueTNME5SLbqy4OJ
-	 POcomGS+dpnLNF80kf9Ld/yG1E3K82iQMLV0jTvypjvRoNA10O+e8/qUy148oGHEid
-	 vzgWtQXjt03lsVXVqB/k3HRzkNIBNtEvK2E63fkRcxhvpVv+t6vWStfkijwGnXh0Aw
-	 yZkRh6swc/akw==
-Message-ID: <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
-Date: Mon, 3 Jul 2023 09:03:38 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA71E3D9E;
+	Mon,  3 Jul 2023 10:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688378884; x=1719914884;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rpugh4B1xgPFn4/PuIXqwCZ5ungVvtdQWodCf3TM2Bg=;
+  b=Llyx64TsnWtWKcEF8RzqPkCMV9VnrHN0H27A1j3dTvKXUQkfTHz6uzmk
+   MvRmnU3KBu0WqHCqN2nY5EHZQUCZHDfcrhKM10Wxhd+SC2zHTtYZ9impR
+   N7GcotswmAjsSOP6DAF/OY5vN4gbX2cahfyls5N3hjYHAGy6OAKo1Aa0l
+   VsoJPQ1qyCHgYV3TmKVT3kZQJgIcDTt40P8VSRTK5YahTUQaoegQdGDMX
+   LD99wm1w3M5Zkm8/U3cmuQOXJX74UZm+RF6MKWG+6vVfRl6VsSElsGPx/
+   027qtXELdJteU8uy+O9y+wWLUV2bYEAfuRh8eiaIVsEVXFBt4ppd3didX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="352668457"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="352668457"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 03:08:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788475014"
+X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
+   d="scan'208";a="788475014"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2023 03:08:02 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGGTR-000HJt-2s;
+	Mon, 03 Jul 2023 10:08:01 +0000
+Date: Mon, 3 Jul 2023 18:07:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geliang Tang <geliang.tang@suse.com>, mptcp@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Geliang Tang <geliang.tang@suse.com>
+Subject: Re: [PATCH mptcp-next v3 2/5] net: socket: add socket_create wrapper
+Message-ID: <202307031701.pEfe6hVq-lkp@intel.com>
+References: <bf1cd56ede55306b3272c6b3069830ea6a189c97.1688366249.git.geliang.tang@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
-To: Kees Cook <keescook@chromium.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Bagas Sanjaya <bagasdotme@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
- Linux Regressions <regressions@lists.linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
- <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
- <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
- <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
- <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
- <202307022230.6121D6896@keescook>
-Content-Language: en-US, hr
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <202307022230.6121D6896@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bf1cd56ede55306b3272c6b3069830ea6a189c97.1688366249.git.geliang.tang@suse.com>
 
-On 3.7.2023. 7:41, Kees Cook wrote:
-> On Mon, Jul 03, 2023 at 07:18:57AM +0200, Mirsad Goran Todorovac wrote:
->> I apologise for confusion. In fact, I have cloned the Torvalds tree after
->> 6.4.1 was released, but I actually cloned the Torvalds tree, not the 6.4.1
->> from the stable branch as the Subject line might have misled.
-> 
-> Thanks, no worries! I got myself confused too. :)
-> 
-> The config you sent looks like I'd expect now too. Questions for you, if
-> you have time to diagnose further:
-> 
-> - Are you able to catch the very beginning of the crash, where the Oops
->    starts?
+Hi Geliang,
 
-It scrolls up very quickly. Couldn't catch that with the camera.
+kernel test robot noticed the following build warnings:
 
-> - Does pstore work for you to catch the crash?
+[auto build test WARNING on mptcp/export]
+[also build test WARNING on mptcp/export-net bpf-next/master bpf/master linus/master v6.4 next-20230703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Haven't tried that yet. I will have to do some homework.
+url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/Squash-to-selftests-bpf-add-two-mptcp-netns-helpers/20230703-144151
+base:   https://github.com/multipath-tcp/mptcp_net-next.git export
+patch link:    https://lore.kernel.org/r/bf1cd56ede55306b3272c6b3069830ea6a189c97.1688366249.git.geliang.tang%40suse.com
+patch subject: [PATCH mptcp-next v3 2/5] net: socket: add socket_create wrapper
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230703/202307031701.pEfe6hVq-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307031701.pEfe6hVq-lkp@intel.com/reproduce)
 
-> - Can you try booting with this patch applied?
->    https://lore.kernel.org/lkml/20230629190900.never.787-kees@kernel.org/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307031701.pEfe6hVq-lkp@intel.com/
 
-Sure, but after 4 PM UTC+02 I suppose.
+All warnings (new ones prefixed by >>):
 
-> I'll try to see if I can figure out anything more from the images you
-> posted.
+   In file included from net/socket.c:55:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/socket.c:55:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/socket.c:55:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/socket.c:1591:5: warning: no previous prototype for function 'socket_create' [-Wmissing-prototypes]
+    1591 | int socket_create(struct socket_args *args, struct socket **res)
+         |     ^
+   net/socket.c:1591:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1591 | int socket_create(struct socket_args *args, struct socket **res)
+         | ^
+         | static 
+   13 warnings generated.
 
-I really couldn't figure out myself what went wrong with this one?
 
-Best regards,
-Mirsad Todorovac
+vim +/socket_create +1591 net/socket.c
 
+  1590	
+> 1591	int socket_create(struct socket_args *args, struct socket **res)
+  1592	{
+  1593		return sock_create(args->family, args->type, args->protocol, res);
+  1594	}
+  1595	EXPORT_SYMBOL(socket_create);
+  1596	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
