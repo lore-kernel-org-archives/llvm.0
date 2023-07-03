@@ -1,1206 +1,172 @@
-Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC37137A
-	for <llvm@lists.linux.dev>; Mon,  3 Jul 2023 10:42:58 +0000 (UTC)
-Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b8071502d2so60708025ad.2
-        for <llvm@lists.linux.dev>; Mon, 03 Jul 2023 03:42:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688380978; x=1690972978;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0hTTuLmZnGpvEn8HYNxZkLSLDrqh7PUM5SevNCYkDSs=;
-        b=KcE6QoLh7+9/RWryIm1KEfOJCrYr9iAjH8yc2Z4pLyzzEhPC7EmR3D8rEUlg2BhHuC
-         Hn4qE4aSiLCWOTUnaNVT9pvymjhOVN/s7Bj5bIL736vmLCrPluCbj7pSm/8kkSJneiG9
-         u2dEsJybhwEKcPQ20udvYqpESFbtl36Kj/pciHzFqNGcDhNGmkuXGQpuVKGAS1Xn8plM
-         rNdLClujX2iq/brU5aqUy5f3HqHDkKqALZq4ZUxsAUNyhR5VWWSWO2vY8bv9qUctzw1K
-         F1F0UJB587R0aENcZCGqBPvY0RLNwBQO1G2+HR6jciuZaPC7TLmXtZqrZsgyY6LTPIdJ
-         kWVw==
-X-Gm-Message-State: ABy/qLbb2YzpVEUJus2W3194dTe17Ssh+5BZBmYCHXxO1Vu+b7k4bEKu
-	EIQyNhZ8/4wNcgA/VTpZqcVKXH4jxKExrrC/58HiStXlR4/V
-X-Google-Smtp-Source: APBJJlFNf0574orWPRyEjT20tj8wIh4w7qYtJOJcwIdo+/8lxNRYLtKzgHnaX6UN/64l9LW+qURvnupFshxYIIJJ+pN3QFkQPlD8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6651D8F73;
+	Mon,  3 Jul 2023 11:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688383266; x=1719919266;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=jxtnnqRDvYHvbIWYsjGtw7p9POh3XYBbcogEd6yeS10=;
+  b=XT/nQ0PSWZ2hL6Z4k6M1GC7E8S6nJ4WJv1JzMrWUkXjfo4j/Qf31qk3Y
+   qIZ5RAR3Q+XP/1ppdBCbO49BoLn6JUXKCJyvTu6eJGpCPIMS9Ln2tL2sz
+   sotWmBQZhTUVvMpP6xtHyLhuxyG1jt2WZJmbNGBC/kEacSSL1nAywMc1o
+   gHSjRol8d9ObbGwtUOb6m7+5hM8/aLgtyzQBHZKhu68RuhngVZJWb0goL
+   tz1lTWAB83SQZzRjxXNTvbvrdFLb+MyeEO1qQED2KsWF38JXeNdDKxzAi
+   bkP1G56MzoXVBq/DUVMoGpMiEqaPqbL8RAkVxx+vYkfQ1NhXC5VbI+h/2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="360334870"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="360334870"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 04:21:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="753714026"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="753714026"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Jul 2023 04:21:04 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGHc7-000HLg-05;
+	Mon, 03 Jul 2023 11:21:03 +0000
+Date: Mon, 3 Jul 2023 19:20:22 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: error: unknown target CPU 'loongson2f'
+Message-ID: <202307031940.prkmP97f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:8642:b0:1b8:9eca:d6a7 with SMTP id
- y2-20020a170902864200b001b89ecad6a7mr544505plt.7.1688380978400; Mon, 03 Jul
- 2023 03:42:58 -0700 (PDT)
-Date: Mon, 03 Jul 2023 03:42:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000076961f05ff92d4e0@google.com>
-Subject: [syzbot] [modules?] WARNING in init_module_from_file
-From: syzbot <syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, chris@chrisdown.name, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev, mcgrof@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+CC: linux-kernel@vger.kernel.org
+TO: Nathan Chancellor <nathan@kernel.org>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-syzbot found the following issue on:
+Hi Nathan,
 
-HEAD commit:    3a8a670eeeaa Merge tag 'net-next-6.5' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b009e7280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ce7f4ca96cdf82c7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c2bdc9d24e4a7abe741
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1465b04f280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127c9dfb280000
+FYI, the error/warning still remains.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/384ffdcca292/non_bootable_disk-3a8a670e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a940531a9b86/vmlinux-3a8a670e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4f3cbae5be61/Image-3a8a670e.gz.xz
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
+commit: 13ceb48bc19c563e05f407e663aaa4105fdfd408 MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
+date:   1 year, 7 months ago
+config: mips-lemote2f_defconfig (https://download.01.org/0day-ci/archive/20230703/202307031940.prkmP97f-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307031940.prkmP97f-lkp@intel.com/reproduce)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307031940.prkmP97f-lkp@intel.com/
 
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Not tainted 6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 000000000000083a x12: 00000000000002be
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : ffff00007f9b8cc8 x4 : 0000000000000000 x3 : ffff7ffffd5f8000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 00000000000008a6 x12: 00000000000002e2
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000912 x12: 0000000000000306
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 000000000000097e x12: 000000000000032a
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 00000000000009ea x12: 000000000000034e
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000a56 x12: 0000000000000372
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000ac2 x12: 0000000000000396
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000b2e x12: 00000000000003ba
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000b9a x12: 00000000000003de
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000c06 x12: 0000000000000402
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-__do_kernel_fault: 233598 callbacks suppressed
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000c75 x12: 0000000000000427
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : ffff00007f9b8cc8 x4 : 0000000000000000 x3 : ffff7ffffd5f8000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000ce1 x12: 000000000000044b
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000d4d x12: 000000000000046f
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000db9 x12: 0000000000000493
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000e25 x12: 00000000000004b7
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000e91 x12: 00000000000004db
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000efd x12: 00000000000004ff
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000f69 x12: 0000000000000523
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000000fd5 x12: 0000000000000547
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000001041 x12: 000000000000056b
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-__do_kernel_fault: 219598 callbacks suppressed
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 00000000000010b0 x12: 0000000000000590
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : ffff00007f9b8cc8 x4 : 0000000000000000 x3 : ffff7ffffd5f8000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 000000000000111c x12: 00000000000005b4
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000001188 x12: 00000000000005d8
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 00000000000011f4 x12: 00000000000005fc
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000001260 x12: 0000000000000620
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 00000000000012cc x12: 0000000000000644
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-lr : __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-sp : ffff800082b2baa0
-x29: ffff800082b2baa0 x28: f4ff0000035fde80 x27: 0000000000000000
-x26: ffff800082680358 x25: ffff80008267fb58 x24: f6ff000003101dc0
-x23: 00000000a0400009 x22: 0000000000000025 x21: ffff800082833d08
-x20: ffff800082b2bb60 x19: 0000000097c18007 x18: 00000000fffffffb
-x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
-x14: ffff80008240b048 x13: 0000000000001338 x12: 0000000000000668
-x11: 2073736572646461 x10: ffff8000824bb048 x9 : 00000000ffffe000
-x8 : ffff80008240b048 x7 : ffff8000824bb048 x6 : 0000000000000000
-x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : f4ff0000035fde80
-Call trace:
- __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
- do_bad_area arch/arm64/mm/fault.c:493 [inline]
- do_translation_fault+0x50/0xb8 arch/arm64/mm/fault.c:746
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:880
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:369
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:429
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- idempotent kernel/module/main.c:3077 [inline]
- init_module_from_file+0xd4/0x2b4 kernel/module/main.c:3124
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module kernel/module/main.c:3154 [inline]
- __arm64_sys_finit_module+0x64/0xa0 kernel/module/main.c:3154
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-Ignoring spurious kernel translation fault at virtual address ffff800082833d08
-WARNING: CPU: 0 PID: 3090 at arch/arm64/mm/fault.c:388 __do_kernel_fault+0x158/0x1c0 arch/arm64/mm/fault.c:388
-Modules linked in:
-CPU: 0 PID: 3090 Comm: syz-executor297 Tainted: G        W          6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __do_kernel
+All errors (new ones prefixed by >>):
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+   clang: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+>> error: unknown target CPU 'loongson2f'
+   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   scripts/extract-cert.c:46:14: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
+      46 |         while ((e = ERR_get_error_line(&file, &line))) {
+         |                     ^
+   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
+     422 | OSSL_DEPRECATEDIN_3_0
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:59:9: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
+      59 |         while (ERR_get_error_line(&file, &line)) {}
+         |                ^
+   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
+     422 | OSSL_DEPRECATEDIN_3_0
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines' is deprecated [-Wdeprecated-declarations]
+     124 |                 ENGINE_load_builtin_engines();
+         |                 ^
+   /usr/include/openssl/engine.h:358:1: note: 'ENGINE_load_builtin_engines' has been explicitly marked deprecated here
+     358 | OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated [-Wdeprecated-declarations]
+     126 |                 e = ENGINE_by_id("pkcs11");
+         |                     ^
+   /usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been explicitly marked deprecated here
+     336 | OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+     128 |                 if (ENGINE_init(e))
+         |                     ^
+   /usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been explicitly marked deprecated here
+     620 | OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is deprecated [-Wdeprecated-declarations]
+     133 |                         ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0), "Set PKCS#11 PIN");
+         |                              ^
+   /usr/include/openssl/engine.h:478:1: note: 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
+     478 | OSSL_DEPRECATEDIN_3_0
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   scripts/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is deprecated [-Wdeprecated-declarations]
+     134 |                 ENGINE_ctrl_cmd(e, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
+         |                 ^
+   /usr/include/openssl/engine.h:450:1: note: 'ENGINE_ctrl_cmd' has been explicitly marked deprecated here
+     450 | OSSL_DEPRECATEDIN_3_0 int ENGINE_ctrl_cmd(ENGINE *e, const char *cmd_name,
+         | ^
+   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
+     182 | #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+         |                                                 ^
+   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
+      62 | #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+         |                                                    ^
+   7 warnings generated.
+>> error: unknown target CPU 'loongson2f'
+   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target 'missing-syscalls' not remade because of errors.
+   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
