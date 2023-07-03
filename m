@@ -1,44 +1,60 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE3B101E1;
-	Mon,  3 Jul 2023 17:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688405120; x=1719941120;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qB0M/UxMptx5ZGchVdDoi+8zk5iR+pMU7fN7C+gn2Zg=;
-  b=fYGmz4Z3Iz4i8qwC5oaLjOZtvXSOmzYcNe+v9YcJOJ3tWk56shMkpHNy
-   3A4HsuFIMxhn/BTgBbupOHM0gHvnPVLc89FB8maDydZeUW/ylAPtRq0eT
-   Uix19llR1p8Tw37Ln+V2ZjmkpbLPJEYJVDMc7xnqO3oUo0qoOxLSRNLBY
-   d1NQEW0z52ECk4s3WHKnFBEIQOsWrJ9YuHeDv8uGkqwLwCetu2Pq4z6Ke
-   VhFB4XlQ/tXr5J4jl4E4bV/3WrikwO02Y6RkAb76Dy0sNlTlzagyMinff
-   abLNH4uNiLlF26BlCK76nGymwGfckdCAcWnODOYcg1DZI0cKg2god1Yku
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="428974468"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="428974468"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 10:25:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="863147898"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="863147898"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2023 10:25:17 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qGNIa-000HWJ-29;
-	Mon, 03 Jul 2023 17:25:16 +0000
-Date: Tue, 4 Jul 2023 01:24:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric DeVolder <eric.devolder@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 62/89] include/linux/kexec.h:41:2: error:
- KEXEC_SOURCE_MEMORY_LIMIT not defined
-Message-ID: <202307040131.41upArk4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E54111A5
+	for <llvm@lists.linux.dev>; Mon,  3 Jul 2023 19:03:25 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-55b1238cab4so2412803a12.2
+        for <llvm@lists.linux.dev>; Mon, 03 Jul 2023 12:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688411004; x=1691003004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2RYZRLdkNoiixgGGXsCAsn40wE9t2aXAfVNzXokwOc=;
+        b=YRPxXzGc4UuYzbUAXbPHrASt5qkMMnE+qv577e9xoiY0qIQ7l7/oStaFPnopW0oxCG
+         AiMz0AKa25o4ThiYM9wkdLrVxFOwAPhvifaGRw8kbuk8uVl7dBiKjQXarb5rYmbfnA5T
+         IQdEBHnH5pwK+Uopjec2Mgd0ZJHfOnt6eNkLs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688411004; x=1691003004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e2RYZRLdkNoiixgGGXsCAsn40wE9t2aXAfVNzXokwOc=;
+        b=XqANRucZPTkdQsbyODTg6XxJDXdtcB8hIYRZxlgDrZPOBi8ikc+rSY3RD2PRTX828I
+         UNyQ/hWPgV3Rdx2rYE3pOZRfawSy8RjXgDobm+2QJP194KJQSvsBaFWMVjXoFphbStCf
+         9Y2An5NxPCm3LNjrpG5GLuw/H9zneR1p7fQJGnJAudTdTbde0HiuhwcjX4IODXQOwmQU
+         aFrf2diAIiUixpgv4iREqhsxLE5xXvvAgiKwO+o08oz8G/+aJFZvyxM9HuTY/7bJwV6V
+         ori3am08qodT94htsuCnsJa6bAf4CX8usYwdMTHIqb18U7FT5f1cDBzv2vUj551HRB4u
+         4bCQ==
+X-Gm-Message-State: AC+VfDxfqa9w9I4RYK/u2w5j1O5WNsawkYaM6voXiNoQ3tPOyBkP1RpI
+	xF/0AQD4t2E7TxQMouEo8ytlQA==
+X-Google-Smtp-Source: ACHHUZ6IXmGjtNBPTn5F9tKfIIbMruqpzIVIdDTQJTrxxqTXR2sQw4qGgV7Jdg1/hPAZMZHNu2YuRg==
+X-Received: by 2002:a05:6a20:1013:b0:128:ffb7:dcff with SMTP id gs19-20020a056a20101300b00128ffb7dcffmr10025060pzc.11.1688411004501;
+        Mon, 03 Jul 2023 12:03:24 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x16-20020a056a00271000b0067459e92801sm12973915pfv.64.2023.07.03.12.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 12:03:23 -0700 (PDT)
+Date: Mon, 3 Jul 2023 12:03:23 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+Message-ID: <202307031149.823F9A3@keescook>
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+ <ZKIoBVzrjZ+Ybxy9@debian.me>
+ <202307022018.B26F5795@keescook>
+ <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
+ <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
+ <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
+ <202307022230.6121D6896@keescook>
+ <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,141 +63,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
 
-Hi Eric,
+On Mon, Jul 03, 2023 at 09:03:38AM +0200, Mirsad Goran Todorovac wrote:
+> On 3.7.2023. 7:41, Kees Cook wrote:
+> > On Mon, Jul 03, 2023 at 07:18:57AM +0200, Mirsad Goran Todorovac wrote:
+> > > I apologise for confusion. In fact, I have cloned the Torvalds tree after
+> > > 6.4.1 was released, but I actually cloned the Torvalds tree, not the 6.4.1
+> > > from the stable branch as the Subject line might have misled.
+> > 
+> > Thanks, no worries! I got myself confused too. :)
+> > 
+> > The config you sent looks like I'd expect now too. Questions for you, if
+> > you have time to diagnose further:
+> > 
+> > - Are you able to catch the very beginning of the crash, where the Oops
+> >    starts?
+> 
+> It scrolls up very quickly. Couldn't catch that with the camera.
+> 
+> > - Does pstore work for you to catch the crash?
+> 
+> Haven't tried that yet. I will have to do some homework.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Try adding this to the .config:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   f30ee81787a5abee6c7c72b0fcc30d428319c449
-commit: c717f7a0e6b98a52da146e1c09e4c5d92934ca41 [62/89] arm/kexec: refactor for kernel/Kconfig.kexec
-config: arm-randconfig-r032-20230703 (https://download.01.org/0day-ci/archive/20230704/202307040131.41upArk4-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230704/202307040131.41upArk4-lkp@intel.com/reproduce)
+# Enable PSTORE support
+CONFIG_PSTORE=y
+CONFIG_PSTORE_DEFAULT_KMSG_BYTES=10240
+CONFIG_PSTORE_COMPRESS=y
+CONFIG_PSTORE_DEFLATE_COMPRESS=y
+# Enable UEFI pstore backend
+CONFIG_EFI_VARS_PSTORE=y
+# CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE is not set
+# Enable ACPI ERST pstore backend
+CONFIG_ACPI=y
+CONFIG_ACPI_APEI=y
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307040131.41upArk4-lkp@intel.com/
+A go write-up about using it is here:
+https://blogs.oracle.com/linux/post/pstore-linux-kernel-persistent-storage-file-system
+and covers the systemd-pstore details too. Note that in the config I
+suggested, I've enabled the efi backend by default.
 
-All errors (new ones prefixed by >>):
+> > - Can you try booting with this patch applied?
+> >    https://lore.kernel.org/lkml/20230629190900.never.787-kees@kernel.org/
+> 
+> Sure, but after 4 PM UTC+02 I suppose.
 
-   In file included from fs/proc/vmcore.c:22:
-   In file included from include/linux/crash_dump.h:5:
->> include/linux/kexec.h:41:2: error: KEXEC_SOURCE_MEMORY_LIMIT not defined
-      41 | #error KEXEC_SOURCE_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:45:2: error: KEXEC_DESTINATION_MEMORY_LIMIT not defined
-      45 | #error KEXEC_DESTINATION_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:49:2: error: KEXEC_CONTROL_MEMORY_LIMIT not defined
-      49 | #error KEXEC_CONTROL_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:57:2: error: KEXEC_CONTROL_PAGE_SIZE not defined
-      57 | #error KEXEC_CONTROL_PAGE_SIZE not defined
-         |  ^
->> include/linux/kexec.h:61:2: error: KEXEC_ARCH not defined
-      61 | #error KEXEC_ARCH not defined
-         |  ^
-   5 errors generated.
---
-   In file included from kernel/kexec_core.c:15:
->> include/linux/kexec.h:41:2: error: KEXEC_SOURCE_MEMORY_LIMIT not defined
-      41 | #error KEXEC_SOURCE_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:45:2: error: KEXEC_DESTINATION_MEMORY_LIMIT not defined
-      45 | #error KEXEC_DESTINATION_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:49:2: error: KEXEC_CONTROL_MEMORY_LIMIT not defined
-      49 | #error KEXEC_CONTROL_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:57:2: error: KEXEC_CONTROL_PAGE_SIZE not defined
-      57 | #error KEXEC_CONTROL_PAGE_SIZE not defined
-         |  ^
->> include/linux/kexec.h:61:2: error: KEXEC_ARCH not defined
-      61 | #error KEXEC_ARCH not defined
-         |  ^
->> kernel/kexec_core.c:179:15: error: use of undeclared identifier 'KEXEC_DESTINATION_MEMORY_LIMIT'
-     179 |                 if (mend >= KEXEC_DESTINATION_MEMORY_LIMIT)
-         |                             ^
->> kernel/kexec_core.c:388:17: error: use of undeclared identifier 'KEXEC_CONTROL_MEMORY_LIMIT'
-     388 |                 if ((epfn >= (KEXEC_CONTROL_MEMORY_LIMIT >> PAGE_SHIFT)) ||
-         |                               ^
-   kernel/kexec_core.c:454:18: error: use of undeclared identifier 'KEXEC_CONTROL_MEMORY_LIMIT'
-     454 |                 if (hole_end > KEXEC_CRASH_CONTROL_MEMORY_LIMIT)
-         |                                ^
-   include/linux/kexec.h:65:42: note: expanded from macro 'KEXEC_CRASH_CONTROL_MEMORY_LIMIT'
-      65 | #define KEXEC_CRASH_CONTROL_MEMORY_LIMIT KEXEC_CONTROL_MEMORY_LIMIT
-         |                                          ^
->> kernel/kexec_core.c:721:6: error: use of undeclared identifier 'KEXEC_SOURCE_MEMORY_LIMIT'
-     721 |                                 (KEXEC_SOURCE_MEMORY_LIMIT >> PAGE_SHIFT)) {
-         |                                  ^
->> kernel/kexec_core.c:1061:4: error: call to undeclared function 'crash_setup_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1061 |                         crash_setup_regs(&fixed_regs, regs);
-         |                         ^
-   10 errors generated.
---
-   In file included from security/security.c:23:
-   In file included from include/linux/ima.h:13:
->> include/linux/kexec.h:41:2: error: KEXEC_SOURCE_MEMORY_LIMIT not defined
-      41 | #error KEXEC_SOURCE_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:45:2: error: KEXEC_DESTINATION_MEMORY_LIMIT not defined
-      45 | #error KEXEC_DESTINATION_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:49:2: error: KEXEC_CONTROL_MEMORY_LIMIT not defined
-      49 | #error KEXEC_CONTROL_MEMORY_LIMIT not defined
-         |  ^
->> include/linux/kexec.h:57:2: error: KEXEC_CONTROL_PAGE_SIZE not defined
-      57 | #error KEXEC_CONTROL_PAGE_SIZE not defined
-         |  ^
->> include/linux/kexec.h:61:2: error: KEXEC_ARCH not defined
-      61 | #error KEXEC_ARCH not defined
-         |  ^
-   In file included from security/security.c:26:
-   include/linux/mman.h:154:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     154 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:132:21: note: expanded from macro '_calc_vm_trans'
-     132 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 5 errors generated.
+Cool. xhci-hub is in your backtrace, and the above patch was made for
+something very similar (though, again, I don't see why you're getting a
+_crash_, it should _warn_ and continue normally). And, actually, also
+include this patch:
+https://lore.kernel.org/lkml/20230614181307.gonna.256-kees@kernel.org/
 
+> > I'll try to see if I can figure out anything more from the images you
+> > posted.
 
-vim +41 include/linux/kexec.h
+Yeah, the xhci-hub bit is the only clue I can see here. It's also in the
+IRQ handler, which reminds me of this bug that we still don't have a
+root-cause for the _crash_ during the warning here:
+https://lore.kernel.org/oe-lkp/202306131354.A499DE60@keescook/
+but I the new patch I linked to above fixes the source of the warning.
 
-dc009d92435f99 Eric W. Biederman  2005-06-25  39  
-dc009d92435f99 Eric W. Biederman  2005-06-25  40  #ifndef KEXEC_SOURCE_MEMORY_LIMIT
-dc009d92435f99 Eric W. Biederman  2005-06-25 @41  #error KEXEC_SOURCE_MEMORY_LIMIT not defined
-dc009d92435f99 Eric W. Biederman  2005-06-25  42  #endif
-dc009d92435f99 Eric W. Biederman  2005-06-25  43  
-dc009d92435f99 Eric W. Biederman  2005-06-25  44  #ifndef KEXEC_DESTINATION_MEMORY_LIMIT
-dc009d92435f99 Eric W. Biederman  2005-06-25 @45  #error KEXEC_DESTINATION_MEMORY_LIMIT not defined
-dc009d92435f99 Eric W. Biederman  2005-06-25  46  #endif
-dc009d92435f99 Eric W. Biederman  2005-06-25  47  
-dc009d92435f99 Eric W. Biederman  2005-06-25  48  #ifndef KEXEC_CONTROL_MEMORY_LIMIT
-dc009d92435f99 Eric W. Biederman  2005-06-25 @49  #error KEXEC_CONTROL_MEMORY_LIMIT not defined
-dc009d92435f99 Eric W. Biederman  2005-06-25  50  #endif
-dc009d92435f99 Eric W. Biederman  2005-06-25  51  
-7e01b5acd88b3f Martin Schwidefsky 2015-04-16  52  #ifndef KEXEC_CONTROL_MEMORY_GFP
-dc5cccacf4272d Russell King       2016-08-02  53  #define KEXEC_CONTROL_MEMORY_GFP (GFP_KERNEL | __GFP_NORETRY)
-7e01b5acd88b3f Martin Schwidefsky 2015-04-16  54  #endif
-7e01b5acd88b3f Martin Schwidefsky 2015-04-16  55  
-163f6876f5c3ff Huang Ying         2008-08-15  56  #ifndef KEXEC_CONTROL_PAGE_SIZE
-163f6876f5c3ff Huang Ying         2008-08-15 @57  #error KEXEC_CONTROL_PAGE_SIZE not defined
-dc009d92435f99 Eric W. Biederman  2005-06-25  58  #endif
-dc009d92435f99 Eric W. Biederman  2005-06-25  59  
-dc009d92435f99 Eric W. Biederman  2005-06-25  60  #ifndef KEXEC_ARCH
-dc009d92435f99 Eric W. Biederman  2005-06-25 @61  #error KEXEC_ARCH not defined
-dc009d92435f99 Eric W. Biederman  2005-06-25  62  #endif
-dc009d92435f99 Eric W. Biederman  2005-06-25  63  
+> I really couldn't figure out myself what went wrong with this one?
 
-:::::: The code at line 41 was first introduced by commit
-:::::: dc009d92435f99498cbc579ce76bf28e837e2c14 [PATCH] kexec: add kexec syscalls
+Having the crash scroll off the page is pretty frustrating. I wonder if
+the kernel crash handler could changed to repeat the RIP at the end of
+the crash...
 
-:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
