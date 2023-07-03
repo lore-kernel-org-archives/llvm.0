@@ -1,46 +1,30 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06880FBE1;
-	Mon,  3 Jul 2023 15:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688396417; x=1719932417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/SC299MI8hD9SblfQRCs0VfwFMe1NbrckktWFQkiWMQ=;
-  b=VOF02uVe5eDsjqGdALOLg/z0ZJsd4qagUWYU+iEOZEbwMTnqOuvmN+qv
-   fIiVYs13L8EPIDF57GxAC08uqhcIPQHtKa0UFr3eT5QmmLtbvkLXcflYH
-   gAgyf/9CnxdLKjwRgOXp4rQOPEUNlapBNSp1UlEGO9q6SUS04LEvaYp0o
-   emJwnAGdbdGhGYCzqLH5Bv5QW8/uFie1oa4z8ZMh7+2e90r1h1S8f8Q37
-   hezoYsenl7vY4xmCte8WbTjjSEDibjwCkmVBtikxRLMaBspTwUcI8P7g+
-   PvKy+1/xZNdz84qkHRO/O4K6D57XPzouRyLt6iPAef2ZzoFpMAZA8k9PD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="343235543"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="343235543"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:00:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="965206484"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="965206484"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jul 2023 08:00:13 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qGL2C-000HQj-1g;
-	Mon, 03 Jul 2023 15:00:12 +0000
-Date: Mon, 3 Jul 2023 22:59:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Mengqi <guomengqi3@huawei.com>, tony@atomide.com,
-	haojian.zhuang@linaro.org, linus.walleij@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	guomengqi3@huawei.com
-Subject: Re: [PATCH] pinctrl: single: Fix memleak in pcs_dt_node_to_map
-Message-ID: <202307032226.op2VP7X5-lkp@intel.com>
-References: <20230703081716.15810-1-guomengqi3@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F79100A0
+	for <llvm@lists.linux.dev>; Mon,  3 Jul 2023 15:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92862C433C7;
+	Mon,  3 Jul 2023 15:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1688396621;
+	bh=QaNWgfQP+jFKpzJKdvnOLzgnGgIT9p6iW+rItqul7nM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kweRJAaPoSxF8xXCd0HCrTRADBTTOP7Auy1OW/gk4679XBPrRDby/tn6M3k6LjGCx
+	 c5K/Nx291poJKlUPRPlBS4ggL7+TqR3zEqJklWJo3eK1yYv4Hi+kiYf9ZV0BA8UfNL
+	 einWpmsT5TjL/XoGfp9NQorTjBX7tK6jl2uPgqkUVcWt1ATuIrNomvnpEO29GSr2+Y
+	 9B3Ig3AmOaJUyahp8h8hgujpO+LXnJbjVvn9d6YEQ5BXk5NK0Kweu5w9eRb0KErLbD
+	 A4h8NFrGCvH880wmRoj8Xxq6goSEVh6SUdOpLIUeuh21pKjjlgMJU1Ck4OKDPxX9iv
+	 +JXBKOi9XVYWA==
+Date: Mon, 3 Jul 2023 08:03:39 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, llvm@lists.linux.dev,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Apply clang '--target=' KBUILD_CPPFLAGS shuffle to linux-6.4.y and
+ linux-6.3.y
+Message-ID: <20230703150339.GA1975402@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,35 +33,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230703081716.15810-1-guomengqi3@huawei.com>
 
-Hi Guo,
+Hi Greg and Sasha,
 
-kernel test robot noticed the following build errors:
+Please consider applying the following patches to 6.4 and 6.3, they
+should apply cleanly.
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+08f6554ff90e ("mips: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation")
+a7e5eb53bf9b ("powerpc/vdso: Include CLANG_FLAGS explicitly in ldflags-y")
+cff6e7f50bd3 ("kbuild: Add CLANG_FLAGS to as-instr")
+43fc0a99906e ("kbuild: Add KBUILD_CPPFLAGS to as-option invocation")
+feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guo-Mengqi/pinctrl-single-Fix-memleak-in-pcs_dt_node_to_map/20230703-162502
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230703081716.15810-1-guomengqi3%40huawei.com
-patch subject: [PATCH] pinctrl: single: Fix memleak in pcs_dt_node_to_map
-config: i386-randconfig-i011-20230703 (https://download.01.org/0day-ci/archive/20230703/202307032226.op2VP7X5-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032226.op2VP7X5-lkp@intel.com/reproduce)
+They resolve and help avoid build breakage with tip of tree clang, which
+has become a little stricter in the flags that it will accept for a
+particular target, which requires '--target=' to be passed along to all
+invocations of $(CC). Our continuous integration does not currently show
+any breakage with 6.1 and earlier; should these patches be needed there,
+I will send them at a later time.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307032226.op2VP7X5-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "pinmux_func_name_to_selector" [drivers/pinctrl/pinctrl-single.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
