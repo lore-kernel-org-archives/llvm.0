@@ -1,95 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F85F1100;
-	Tue,  4 Jul 2023 21:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1F9C433C7;
-	Tue,  4 Jul 2023 21:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688506614;
-	bh=eKyZ9PkJ+ke344sHii+bCX3P4/oDphlbXbihKHuI0wc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=KbyZEpz7LvuMZPUZ+VDakZRe1vQSYrRAkkHStQga6b9oeMtoBkNCgunC864yhA5lO
-	 NrrRbVrBbsrq2SCSESAQjQtGu9y56YMwKa5cleuC1UbKT4h68/vEl7/L54aBckiYb1
-	 Iy4TyoOW9Loq0nnh0NyFEPTe79+ee65BGcRGn9EGtaWpqGjxNUtmjUITBGrShJtVjE
-	 i0Qyjjx9XtP4sHAB/K5OHDYyczO0nQlDIziJLgcpRQXUmTWwVNqDqsnXSA7+5rZdtP
-	 lM8HgFiGDSkEsY3JVKafmZqkYGV3KDqLW52mbn8ypfUeIJJPvHj8T3TKvNxmc/SC4P
-	 NONZUDeTMYycA==
-Date: Tue, 04 Jul 2023 14:36:51 -0700
-From: Kees Cook <kees@kernel.org>
-To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
- Kees Cook <keescook@chromium.org>
-CC: Guenter Roeck <linux@roeck-us.net>, Bagas Sanjaya <bagasdotme@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
- Linux Regressions <regressions@lists.linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-hardening@vger.kernel.org
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
-User-Agent: K-9 Mail for Android
-In-Reply-To: <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr> <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook> <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net> <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net> <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr> <202307022230.6121D6896@keescook> <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr> <202307031149.823F9A3@keescook> <202307031606.3FD9D0D@keescook> <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
-Message-ID: <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDDE1110;
+	Tue,  4 Jul 2023 22:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688508363; x=1720044363;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QJ7OnmOaD++0fOQ31OFSLWvaWJCiMXxP1z62rqOiouU=;
+  b=PZXjjnP73UaOIC5QHaqJjTWlY+quCeefQLEhgn+CxQCHrFv5uA3ZNDRU
+   RvPlUQeQHXzYEqgqmdcVNO4/JBNol5yQIp+WcD/jggn8TGEA6SMm5Xer1
+   sUaImLm4535/U2fFyl1genxgGxEsEOLWxIfW3iJJZ42pCKb7jW8Lzpslj
+   QHP05Xb/59w+SDWZoS3W4NCn77yvZA9NAZJKhF0EiIBwDalSms0uzIqtI
+   KTOEzuiQBF3ko4S0lOpZdAJzriNwLsFGXe76ycT1moc0FGUhJKS3QdXRf
+   qhCxdbPkUW1UevSvyDfXz/rTIgaNO7zlGBQBZ1EIw7Yy7kiMEez+C+DXB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="363233965"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="363233965"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 15:06:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="863533390"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="863533390"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jul 2023 15:06:01 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGo9o-000Ia9-1G;
+	Tue, 04 Jul 2023 22:06:00 +0000
+Date: Wed, 5 Jul 2023 06:05:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric DeVolder <eric.devolder@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 72/100] arch/riscv/kernel/crash_core.c:8:20:
+ error: use of undeclared identifier 'VA_BITS'
+Message-ID: <202307050623.1pK6zLcS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On July 4, 2023 10:20:11 AM PDT, Mirsad Todorovac <mirsad=2Etodorovac@alu=
-=2Eunizg=2Ehr> wrote:
->On 7/4/23 01:09, Kees Cook wrote:> On Mon, Jul 03, 2023 at 12:03:23PM -07=
-00, Kees Cook wrote:
->>> Cool=2E xhci-hub is in your backtrace, and the above patch was made fo=
-r
->>> something very similar (though, again, I don't see why you're getting =
-a
->>> _crash_, it should _warn_ and continue normally)=2E And, actually, als=
-o
->>> include this patch:
->>> https://lore=2Ekernel=2Eorg/lkml/20230614181307=2Egonna=2E256-kees@ker=
-nel=2Eorg/
->>=20
->> This is now in Linus's tree:
->> 09b69dd4378b ("usb: ch9: Replace 1-element array with flexible array")
->>=20
->> Please also still try with the first patch I mentioned, which is very s=
-imilar:
->> https://lore=2Ekernel=2Eorg/lkml/20230629190900=2Enever=2E787-kees@kern=
-el=2Eorg/
->
->Hi,
->
->I have finally built w both patches (and recommended PSTORE settings were
->default already)=2E
+Hi Eric,
 
-Were you able to find the crashes saved by pstore?
+First bad commit (maybe != root cause):
 
->
->This second patch fixes the booting problem, but alas there is still a pr=
-oblem -
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   8d20350d536e5ecb12482b7ccc6cd04fe0ae6c11
+commit: 4820d7a789905ed86ada5b25aa5d74fad6af3a51 [72/100] riscv/kexec: refactor for kernel/Kconfig.kexec
+config: riscv-randconfig-r004-20230704 (https://download.01.org/0day-ci/archive/20230705/202307050623.1pK6zLcS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050623.1pK6zLcS-lkp@intel.com/reproduce)
 
-Ah! That's great! They're is still an unexpected crash source, but the tri=
-gger is fixed=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307050623.1pK6zLcS-lkp@intel.com/
 
->all Wayland and X11=2Eorg GUI applications fail to start, with errors lik=
-e this one:
->
->Jul  4 19:09:07 defiant kernel: [   40=2E529719] invalid opcode: 0000 [#1=
-] PREEMPT SMP NOPTI
+All error/warnings (new ones prefixed by >>):
 
-Hmm, is CONFIG_UBSAN_TRAP set?
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     743 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/crash_core.c:4:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> arch/riscv/kernel/crash_core.c:8:20: error: use of undeclared identifier 'VA_BITS'
+       8 |         VMCOREINFO_NUMBER(VA_BITS);
+         |                           ^
+>> arch/riscv/kernel/crash_core.c:12:57: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
+      12 |         vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+         |                                                        ~~~     ^~~~~~~~~~~~~
+         |                                                        %x
+   arch/riscv/include/asm/pgtable.h:865:24: note: expanded from macro 'VMALLOC_START'
+     865 | #define VMALLOC_START           0
+         |                                 ^
+>> arch/riscv/kernel/crash_core.c:14:57: error: use of undeclared identifier 'VMEMMAP_START'
+      14 |         vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+         |                                                                ^
+>> arch/riscv/kernel/crash_core.c:15:55: error: use of undeclared identifier 'VMEMMAP_END'; did you mean 'MEMREMAP_ENC'?
+      15 |         vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+         |                                                              ^~~~~~~~~~~
+         |                                                              MEMREMAP_ENC
+   include/linux/io.h:145:2: note: 'MEMREMAP_ENC' declared here
+     145 |         MEMREMAP_ENC = 1 << 3,
+         |         ^
+   14 warnings and 3 errors generated.
 
->Jul  4 19:09:07 defiant kernel: [   40=2E529726] RIP: 0010:alloc_pid+0x46=
-c/0x480
 
-Hmm, is this patch in your kernel?
-https://git=2Ekernel=2Eorg/linus/b69f0aeb068980af983d399deafc7477cec8bc04
+vim +/VA_BITS +8 arch/riscv/kernel/crash_core.c
 
+649d6b1019a2f2 Xianting Tian 2022-10-26   5  
+649d6b1019a2f2 Xianting Tian 2022-10-26   6  void arch_crash_save_vmcoreinfo(void)
+649d6b1019a2f2 Xianting Tian 2022-10-26   7  {
+649d6b1019a2f2 Xianting Tian 2022-10-26  @8  	VMCOREINFO_NUMBER(VA_BITS);
+649d6b1019a2f2 Xianting Tian 2022-10-26   9  	VMCOREINFO_NUMBER(phys_ram_base);
+649d6b1019a2f2 Xianting Tian 2022-10-26  10  
+649d6b1019a2f2 Xianting Tian 2022-10-26  11  	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+649d6b1019a2f2 Xianting Tian 2022-10-26 @12  	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+649d6b1019a2f2 Xianting Tian 2022-10-26  13  	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+649d6b1019a2f2 Xianting Tian 2022-10-26 @14  	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+649d6b1019a2f2 Xianting Tian 2022-10-26 @15  	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
 
---=20
-Kees Cook
+:::::: The code at line 8 was first introduced by commit
+:::::: 649d6b1019a2f243bc3a98cb85902a8ebf74289a RISC-V: Add arch_crash_save_vmcoreinfo support
+
+:::::: TO: Xianting Tian <xianting.tian@linux.alibaba.com>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
