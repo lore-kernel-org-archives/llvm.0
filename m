@@ -1,153 +1,78 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mail.lineo.co.jp (mail.lineo.co.jp [203.141.200.203])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09C120E0;
-	Tue,  4 Jul 2023 07:25:27 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:120:3210:4004:7029:e9d0:4fb5] (unknown [IPv6:2a01:e0a:120:3210:4004:7029:e9d0:4fb5])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id A82F26606F62;
-	Tue,  4 Jul 2023 08:25:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1688455525;
-	bh=2q/4L5hciz2ggZ1t2Z3WwVMh1AIANxAxCXBk1pjMMOk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YEAR3PQMyYh0gLR4d0SnDmZFC+Iv3RaXAuUtAxKKe/692jOINj0sAwIDkv92Syibh
-	 Fs7Zch9PulHSWesouSbvVuQHif9c9g+BSoQL/i1Xgz5LBrDqaSVfVLP6miI7BwwMRj
-	 cysKbHLVRq2EbWaSqRDsKK7Tu+HZaXDbe7VAEy73pereTMyy1riXYPnZSALZuU+Mqx
-	 7/RHt7ylqI4X8gA3I7lA6QhLtucHwrBn4PggjqXNkcFvRIlSONRPXE87/27nK84//l
-	 nvuWKlHxudjjAZ09w/H+qil59pjGbaKEZGZ1SFwttaOjwxpnwm0V2E8M9DCfWBQfdo
-	 mzymAkYHRnJ6w==
-Message-ID: <408859fe-89b9-cfb6-ef5b-01513e64bee1@collabora.com>
-Date: Tue, 4 Jul 2023 09:25:23 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D185258
+	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 09:06:25 +0000 (UTC)
+Received: from [172.31.7.30] (vpn1.lineo.co.jp [203.141.200.204])
+	by mail.lineo.co.jp (Postfix) with ESMTPSA id AA81780ACB788;
+	Tue,  4 Jul 2023 17:58:06 +0900 (JST)
+Message-ID: <327e5e5a-5aec-316f-c4b1-b1dfcbb4c44c@lineo.co.jp>
+Date: Tue, 4 Jul 2023 17:58:06 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [linux-next:master 7313/12815]
- drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5:
- warning: stack frame size (2208) exceeds limit (2048) in
- 'rockchip_vpu981_av1_dec_run'
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Content-Language: en-US
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Hans Verkuil <hverkuil@xs4all.nl>
-References: <202307010357.sY3iLanr-lkp@intel.com>
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <202307010357.sY3iLanr-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Yuta Hayama <hayama@lineo.co.jp>
+To: rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Yuta Hayama <hayama@lineo.co.jp>
+Subject: Rust for linux build error due to Clang (bindgen) version
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+I am a beginner in Rust and LLVM, so sorry if this is a rudimentary question.
+I tried to build with CONFIG_RUST=y on the torvalds/linux kernel and got the
+following error:
+
+$ LANG=C make O=../build_6.5rc_pre LLVM=1
+
+... (snip)
+
+  RUSTC L rust/core.o
+  EXPORTS rust/exports_core_generated.h
+  RUSTC P rust/libmacros.so
+  BINDGEN rust/bindings/bindings_generated.rs
+thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at_/home/lineo/kernel/git_kernel_org/torvalds_linux/linux/include/linux/compiler_types_h_146_2)" is not a valid Ident', /home/lineo/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.24/src/fallback.rs:693:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+make[2]: *** [/home/lineo/kernel/git.kernel.org/torvalds.linux/linux/rust/Makefile:310: rust/bindings/bindings_generated.rs] Error 1
+make[2]: *** Deleting file 'rust/bindings/bindings_generated.rs'
+make[1]: *** [/home/lineo/kernel/git.kernel.org/torvalds.linux/linux/Makefile:1293: prepare] Error 2
+make[1]: Leaving directory '/home/lineo/kernel/git.kernel.org/torvalds.linux/build_6.5rc_pre'
+make: *** [Makefile:226: __sub-make] Error 2
+
+The versions of the tools and other items used are as follows:
+
+kernel:  torvalds/linux a1257b5e3b7f8a21faf462d0118067fe31e71ffb
+rustc:   1.68.2
+bindgen: 0.56.0
+clang:   17.0.0
 
 
-Le 30/06/2023 à 21:45, kernel test robot a écrit :
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   6352a698ca5bf26a9199202666b16cf741f579f6
-> commit: 727a400686a2c0d25015c9e44916a59b72882f83 [7313/12815] media: verisilicon: Add Rockchip AV1 decoder
-> config: riscv-randconfig-r021-20230701 (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230701/202307010357.sY3iLanr-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307010357.sY3iLanr-lkp@intel.com/
+This issue seems similar to what is described at the following URL.
+https://stackoverflow.com/questions/76443280/rust-bindgen-causes-a-is-not-a-valid-ident-error-on-build
 
-Arnd have already send a patch to fix this kind of problem:
-https://lore.kernel.org/lkml/20230616144854.3818934-2-arnd@kernel.org/T/
+If this explanation is correct, then a Clang earlier than 16 or bindgen 0.62.0
+or later is needed to avoid this issue. And I searched the ML and found that
+a patch to fix it already exists.
+https://lore.kernel.org/rust-for-linux/20230612194311.24826-1-aakashsensharma@gmail.com/
+
+But I think this patch is still in the rust-dev branch of the rust-for-linux
+tree and has not been merged into the mainline. The current mainline kernel
+seems to have a issue where if the Clang is too new (16 or later), the build
+fails even though `make rustavailable` passes.
+
+Does this mean we need something like max-tool-version.sh? But that might be
+a bit silly... If such "error occurs because the tool is too new" is repeated
+in the future, I feel that it is necessary to check not only the lower limit of
+the tool version, but also the upper limit.
+
 
 Regards,
-Benjamin
 
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1888:5: warning: stack frame size (2208) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Wframe-larger-than]
->     int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
->         ^
->     375/2208 (16.98%) spills, 1833/2208 (83.02%) variables
->     1 warning generated.
->
->
-> vim +/rockchip_vpu981_av1_dec_run +1888 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
->
->    1887	
->> 1888	int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
->    1889	{
->    1890		struct hantro_dev *vpu = ctx->dev;
->    1891		struct vb2_v4l2_buffer *vb2_src;
->    1892		int ret;
->    1893	
->    1894		hantro_start_prepare_run(ctx);
->    1895	
->    1896		ret = rockchip_vpu981_av1_dec_prepare_run(ctx);
->    1897		if (ret)
->    1898			goto prepare_error;
->    1899	
->    1900		vb2_src = hantro_get_src_buf(ctx);
->    1901		if (!vb2_src) {
->    1902			ret = -EINVAL;
->    1903			goto prepare_error;
->    1904		}
->    1905	
->    1906		rockchip_vpu981_av1_dec_clean_refs(ctx);
->    1907		rockchip_vpu981_av1_dec_frame_ref(ctx, vb2_src->vb2_buf.timestamp);
->    1908	
->    1909		rockchip_vpu981_av1_dec_set_parameters(ctx);
->    1910		rockchip_vpu981_av1_dec_set_global_model(ctx);
->    1911		rockchip_vpu981_av1_dec_set_tile_info(ctx);
->    1912		rockchip_vpu981_av1_dec_set_reference_frames(ctx);
->    1913		rockchip_vpu981_av1_dec_set_segmentation(ctx);
->    1914		rockchip_vpu981_av1_dec_set_loopfilter(ctx);
->    1915		rockchip_vpu981_av1_dec_set_picture_dimensions(ctx);
->    1916		rockchip_vpu981_av1_dec_set_cdef(ctx);
->    1917		rockchip_vpu981_av1_dec_set_lr(ctx);
->    1918		rockchip_vpu981_av1_dec_set_prob(ctx);
->    1919	
->    1920		hantro_reg_write(vpu, &av1_dec_mode, AV1_DEC_MODE);
->    1921		hantro_reg_write(vpu, &av1_dec_out_ec_byte_word, 0);
->    1922		hantro_reg_write(vpu, &av1_write_mvs_e, 1);
->    1923		hantro_reg_write(vpu, &av1_dec_out_ec_bypass, 1);
->    1924		hantro_reg_write(vpu, &av1_dec_clk_gate_e, 1);
->    1925	
->    1926		hantro_reg_write(vpu, &av1_dec_abort_e, 0);
->    1927		hantro_reg_write(vpu, &av1_dec_tile_int_e, 0);
->    1928	
->    1929		hantro_reg_write(vpu, &av1_dec_alignment, 64);
->    1930		hantro_reg_write(vpu, &av1_apf_disable, 0);
->    1931		hantro_reg_write(vpu, &av1_apf_threshold, 8);
->    1932		hantro_reg_write(vpu, &av1_dec_buswidth, 2);
->    1933		hantro_reg_write(vpu, &av1_dec_max_burst, 16);
->    1934		hantro_reg_write(vpu, &av1_error_conceal_e, 0);
->    1935		hantro_reg_write(vpu, &av1_axi_rd_ostd_threshold, 64);
->    1936		hantro_reg_write(vpu, &av1_axi_wr_ostd_threshold, 64);
->    1937	
->    1938		hantro_reg_write(vpu, &av1_ext_timeout_cycles, 0xfffffff);
->    1939		hantro_reg_write(vpu, &av1_ext_timeout_override_e, 1);
->    1940		hantro_reg_write(vpu, &av1_timeout_cycles, 0xfffffff);
->    1941		hantro_reg_write(vpu, &av1_timeout_override_e, 1);
->    1942	
->    1943		rockchip_vpu981_av1_dec_set_output_buffer(ctx);
->    1944		rockchip_vpu981_av1_dec_set_input_buffer(ctx, vb2_src);
->    1945	
->    1946		hantro_end_prepare_run(ctx);
->    1947	
->    1948		hantro_reg_write(vpu, &av1_dec_e, 1);
->    1949	
->    1950		return 0;
->    1951	
->    1952	prepare_error:
->    1953		hantro_end_prepare_run(ctx);
->    1954		hantro_irq_done(vpu, VB2_BUF_STATE_ERROR);
->    1955		return ret;
->    1956	}
->    1957	
->
+Yuta Hayama
