@@ -1,151 +1,128 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459F05663
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 10:24:00 +0000 (UTC)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-98e39784a85so978505366b.1
-        for <llvm@lists.linux.dev>; Tue, 04 Jul 2023 03:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688466238; x=1691058238;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
-        b=mOwGBPhiUibe9TZEveAD5uwTEzZO42X9132eJViv6MRt+PGT9b5GJMp5GwYq7tV296
-         vsqRJpvLfzby4/86k//5QIA5DHCQdyL8tawK4VrDht4jCbFfP6nSi/mx8DyFGlqQ8ar5
-         1jSxs6wI61xswGUk2RQwyh8WuHWiwzPuEFF/KpNMRkaXAM7RhbTrnXaqs4x3RZQR0gKP
-         /KKfv0mm92IddImVSz+aZ9cBN4qn5gjpBw2ZfOUe3Df1KzcFIXSKyC2z0E3VxwoJbdzw
-         NrvthTtklqwh1ZBSsYNuj2Nuv6aeNsi72NbC8TEotLJ55UI4etsuJdyqfjPWdy/yrmg/
-         gTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688466238; x=1691058238;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
-        b=j+MkheNUjigoFaPPjn1e7wvjJtJVOqtA+HMhMZ4eceDqoncvMkaxb64Q6Yzq/iLsS1
-         QHs32ZDNn6j3zYU8D0nbeJhVnRghON0+ZyomrE/RcX2edP2KGTfOj/YgTMSoJNquIcS6
-         P03P/66DLT3NErnXHYTCuQwWYMU1lsKvv80B836LX1VaDPNRQCIGL1Fa4XSZ4Ck91tMV
-         hyfsCx7RA5mJNTHnxaw4vQpxCKC48PXrfPCp6gIqn1u6QFNXI7xE4368e4LJRMxD9b+i
-         3wIY7e5/XX9FIhSEXy/ztBw3cNQc92fnCwVzX24vRd+/CGXXll+bZfMqUIl28YCMXCk0
-         K0cw==
-X-Gm-Message-State: ABy/qLaSwtkW4SjU9NNxVbRzsOd+buco2y6Q3a+y/FjtKyMXyQzEpDQE
-	451rFlfAZeSO5+5C3xLsHcPmfILN3bAfBrRfNu0=
-X-Google-Smtp-Source: APBJJlEAlGOxHf9AN/Vw4ySd7uIusXyxdktq7C6hpD1W72WxF0+WYXaZ3XEi4FK7aHV0ixLwVlFpErv9bnrqsTnnl+4=
-X-Received: by 2002:a17:906:c3a4:b0:98d:4ae:8db9 with SMTP id
- t36-20020a170906c3a400b0098d04ae8db9mr11136259ejz.19.1688466238030; Tue, 04
- Jul 2023 03:23:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D307EBC;
+	Tue,  4 Jul 2023 10:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688467373; x=1720003373;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2PUhTok0jcdvIxFCL6V04bVuutu3tC1f/b0Wg4mYHuc=;
+  b=mMFEj9NsIdTmbOgOX70pKMYvryMR5l0PEwnhLdW5HYnG5IJCo20ZBD82
+   fs3p/UQGkCeci0kYDQGNn1rV0hJurrG8faoubEM1RYcJ8j4YlUboVmxJd
+   nHl4FY8mBmBR5iIjrqQiqlcfrs3tTYtzi1p04IDAxa6RZZF9l6BwySec5
+   wsJFgxZM/5eVljPxAv2jGXvKprm86lmKS4W6P8Nwjlyx+7sDguAi3B9c7
+   Zy+Cu4M/2JyHjTihLYbPKeMQoNJDRlmr+hrC3cXR1BT28v2NnmCkj16us
+   sLWn4QbW+Z02Pu3gYJzwGkFY7zw7B3fPKp9n0z+tCI7G5RtKY9XyMm+Lv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="363128093"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="363128093"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 03:42:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808886860"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="808886860"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Jul 2023 03:42:50 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGdUg-000ICX-0c;
+	Tue, 04 Jul 2023 10:42:50 +0000
+Date: Tue, 4 Jul 2023 18:42:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:debugfs_cleanup 1/7] drivers/hwmon/oxp-sensors.c:437:9:
+ error: call to undeclared function 'devm_device_add_groups'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202307041842.rnp7Za0Z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <87ttukdcow.fsf@laura> <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-From: Jonathan Wakely <jwakely.gcc@gmail.com>
-Date: Tue, 4 Jul 2023 11:23:46 +0100
-Message-ID: <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Olivier Dion <odion@efficios.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com, 
-	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
-	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Tue, 4 Jul 2023 at 10:47, Peter Zijlstra wrote:
->
-> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
->
-> >   int x = 0;
-> >   int y = 0;
-> >   int r0, r1;
-> >
-> >   int dummy;
-> >
-> >   void t0(void)
-> >   {
-> >           __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
-> >
-> >           __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
-> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> >
-> >           r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
-> >   }
-> >
-> >   void t1(void)
-> >   {
-> >           __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
-> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> >           r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
-> >   }
-> >
-> >   // BUG_ON(r0 == 0 && r1 == 0)
-> >
-> > On x86-64 (gcc 13.1 -O2) we get:
-> >
-> >   t0():
-> >           movl    $1, x(%rip)
-> >           movl    $1, %eax
-> >           xchgl   dummy(%rip), %eax
-> >           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
-> >           movl    y(%rip), %eax
-> >           movl    %eax, r0(%rip)
-> >           ret
-> >   t1():
-> >           movl    $1, y(%rip)
-> >           lock orq $0, (%rsp)
-> >           movl    x(%rip), %eax
-> >           movl    %eax, r1(%rip)
-> >           ret
->
-> So I would expect the compilers to do better here. It should know those
-> __atomic_thread_fence() thingies are superfluous and simply not emit
-> them. This could even be done as a peephole pass later, where it sees
-> consecutive atomic ops and the second being a no-op.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
+head:   3b24ae38f8fe0b3d0877a909072bf871c65654a9
+commit: 1893121f03c6880cd4942d43f47fd7318a713809 [1/7] driver core: remove devm_device_add_groups()
+config: x86_64-randconfig-x001-20230703 (https://download.01.org/0day-ci/archive/20230704/202307041842.rnp7Za0Z-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230704/202307041842.rnp7Za0Z-lkp@intel.com/reproduce)
 
-Right, I don't see why we need a whole set of new built-ins that say
-"this fence isn't needed if the adjacent atomic op already implies a
-fence". If the adjacent atomic op already implies a fence for a given
-ISA, then the compiler should already be able to elide the explicit
-fence.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307041842.rnp7Za0Z-lkp@intel.com/
 
-So just write your code with the explicit fence, and rely on the
-compiler to optimize it properly. Admittedly, today's compilers don't
-do that optimization well, but they also don't support your proposed
-built-ins, so you're going to have to wait for compilers to make
-improvements either way.
+All errors (new ones prefixed by >>):
 
-https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4455.html
-discusses that compilers could (and should) optimize around atomics
-better.
+>> drivers/hwmon/oxp-sensors.c:437:9: error: call to undeclared function 'devm_device_add_groups'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   ret = devm_device_add_groups(dev, oxp_ec_groups);
+                         ^
+   drivers/hwmon/oxp-sensors.c:437:9: note: did you mean 'devm_device_add_group'?
+   include/linux/device.h:1167:18: note: 'devm_device_add_group' declared here
+   int __must_check devm_device_add_group(struct device *dev,
+                    ^
+   1 error generated.
 
->
-> > On x86-64 (clang 16 -O2) we get:
-> >
-> >   t0():
-> >           movl    $1, x(%rip)
-> >           movl    $1, %eax
-> >           xchgl   %eax, dummy(%rip)
-> >           mfence                    ;; Redundant with previous exchange.
->
-> And that's just terrible :/ Nobody should be using MFENCE for this. And
-> using MFENCE after a LOCK prefixes instruction (implicit in this case)
-> is just fail, because I don't think C++ atomics cover MMIO and other
-> such 'lovely' things.
->
-> >           movl    y(%rip), %eax
-> >           movl    %eax, r0(%rip)
-> >           retq
-> >   t1():
-> >           movl    $1, y(%rip)
-> >           mfence
-> >           movl    x(%rip), %eax
-> >           movl    %eax, r1(%rip)
-> >           retq
->
+
+vim +/devm_device_add_groups +437 drivers/hwmon/oxp-sensors.c
+
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  411  
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  412  /* Initialization logic */
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  413  static int oxp_platform_probe(struct platform_device *pdev)
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  414  {
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  415  	const struct dmi_system_id *dmi_entry;
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  416  	struct device *dev = &pdev->dev;
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  417  	struct device *hwdev;
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  418  	int ret;
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  419  
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  420  	/*
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  421  	 * Have to check for AMD processor here because DMI strings are the
+ebd4bfee2b972d Derek J. Clark            2022-12-28  422  	 * same between Intel and AMD boards, the only way to tell them apart
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  423  	 * is the CPU.
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  424  	 * Intel boards seem to have different EC registers and values to
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  425  	 * read/write.
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  426  	 */
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  427  	dmi_entry = dmi_first_match(dmi_table);
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  428  	if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  429  		return -ENODEV;
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  430  
+5d06ec4279a860 Joaquín Ignacio Aramendía 2023-04-29  431  	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+3ca0f12a02582c Joaquín Ignacio Aramendía 2022-11-25  432  
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  433  	switch (board) {
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  434  	case aok_zoe_a1:
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  435  	case oxp_mini_amd_a07:
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  436  	case oxp_mini_amd_pro:
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11 @437  		ret = devm_device_add_groups(dev, oxp_ec_groups);
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  438  		if (ret)
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  439  			return ret;
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  440  		break;
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  441  	default:
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  442  		break;
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  443  	}
+be144ee4912721 Joaquín Ignacio Aramendía 2023-06-11  444  
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  445  	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  446  						     &oxp_ec_chip_info, NULL);
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  447  
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  448  	return PTR_ERR_OR_ZERO(hwdev);
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  449  }
+ed264e8a7d18c5 Joaquín Ignacio Aramendía 2022-11-04  450  
+
+:::::: The code at line 437 was first introduced by commit
+:::::: be144ee49127216b456da26f1a32b6ba281ac505 hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
+
+:::::: TO: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+:::::: CC: Guenter Roeck <linux@roeck-us.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
