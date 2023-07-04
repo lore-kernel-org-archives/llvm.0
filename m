@@ -1,150 +1,92 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702DD7ED
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 05:30:56 +0000 (UTC)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A1C923F328
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 05:21:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1688448098;
-	bh=1v+am1Z8ymQUGghyM5chvEt9+BuF/dKqLqYQx56m9zI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=Ww71aXkw6LHlz3VZtLTlzA6XJUoP4o459CfviZLjE37O8JvuBVHs+nm4dfU2S2hki
-	 IvvkEmFTMKnBcK8DezrSs3LpV5+AtpHZ+k7k9lkl+ONgTHgDGspYPYZp96M3C3Ia01
-	 hrfvkte4n9BJx4vyBFgnsFURvUH25Wjg4y9902bh5FBn7HkcXTaitZ5K/0zSPTyv1C
-	 fdvJAl+rAFnZh4yNKGaPpgo8j0u0wF4mH+cZMr3LpkXS5qVsi5EZjApoCY1ICc89GS
-	 ZoVTiOUtpJZSBfMp13plxStKFFp4H0SxvrUaHy3AjWxNXYCaPH7n+ZOcnAx70po8E7
-	 QebnXk96cvNSA==
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-992e6840901so450508866b.0
-        for <llvm@lists.linux.dev>; Mon, 03 Jul 2023 22:21:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688448098; x=1691040098;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1v+am1Z8ymQUGghyM5chvEt9+BuF/dKqLqYQx56m9zI=;
-        b=Mjmqw9T9fdivc748ngpTdFyagQ76qTaJ3rvhV1uDoi8V2HWvuiByiJc3QUnTH1jwB7
-         wayU3XHubskNYi4A4QrYgR5S5V8EO4yfuDVA7ByDQiMUbS8kWMRsfxahMVATPYp+KVtp
-         lflbg/5bDVKrEMIglx6MLA+saC7+ptlq+JK0vT29p7Ut+qC/MUtDJjhiYPQ5rgh/jE+v
-         BxS9Ff2qL0ghaMO4jwKooiliykSv9zIsopMIT4m5zqRyqDRSmbYyiO0r3eYcnyQgnSJU
-         7qdfOAMcTAFByujWcq1fPBqhrpRJhFWqMDAIBfHYJZQdY121iR5fknUbbtpw9glqGY0A
-         ovGg==
-X-Gm-Message-State: AC+VfDzKtnffJUQdyO5eQobJgcTXw/OvwjDCamSchm8clF6sqMPzaQDT
-	OTmBTWxIe7vaFOzl50SUZ+1QPU8DCAFLP21Qa/AovHPWl5tTumN+JbKj+lvlkQ3lRj/jFerFk0/
-	lI9coNqPWko7zQ04wAs50VJzLeUxSoZo=
-X-Received: by 2002:a17:907:6e1b:b0:98e:1c4b:10e2 with SMTP id sd27-20020a1709076e1b00b0098e1c4b10e2mr13287228ejc.20.1688448098177;
-        Mon, 03 Jul 2023 22:21:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6KaBtBsknIGzT43R9yW1TZOTc6kL/88ouJOfFvTX2qde5kXfxpEFdhmAwOmJNRYKLkFyB6Sg==
-X-Received: by 2002:a17:907:6e1b:b0:98e:1c4b:10e2 with SMTP id sd27-20020a1709076e1b00b0098e1c4b10e2mr13287209ejc.20.1688448097892;
-        Mon, 03 Jul 2023 22:21:37 -0700 (PDT)
-Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-95-234-206-203.retail.telecomitalia.it. [95.234.206.203])
-        by smtp.gmail.com with ESMTPSA id a10-20020a17090640ca00b0098e025cda3bsm12706377ejk.141.2023.07.03.22.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 22:21:37 -0700 (PDT)
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] btf, scripts: rust: drop is_rust_module.sh
-Date: Tue,  4 Jul 2023 07:21:36 +0200
-Message-Id: <20230704052136.155445-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9135ED9;
+	Tue,  4 Jul 2023 07:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688454824; x=1719990824;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wGvgCLgL0q5WNPmwsWiv1l+OZfTQdHb1jN4eEDBhx+A=;
+  b=aViCJdYbUTyK4fnibgUUQhGvxEMQcPo1gk5sX8r3sDAbUs+HeJ2VSagt
+   1dDlzGqXuC+24GqUSnYNG+Trm+TCVYkm7906q7Ekan6a7tIaRM0RL6l7k
+   xyqM+WQOZfu4fYieoHodGpLxwdjBPy24216cZC8WEs4HcqkgwGCAFhLZL
+   fcim3uIYTcopONZJYLVSvFBkwNqRGhIi5XfMHW3LNszZkR3em4PyW6wqR
+   U1xGyv96H8T8yN+ljPVy3vdY8p2ZfycZuvBiBbgOcVgx2Hp9pDf29TV3O
+   2NzY1XsTWbSKRSlq8aNTulisgNFMyPCeDuohRnwzES/w+unZEoIlFgIIj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="347845189"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="347845189"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:13:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="718814872"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="718814872"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2023 00:13:41 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGaEG-000I43-2H;
+	Tue, 04 Jul 2023 07:13:40 +0000
+Date: Tue, 4 Jul 2023 15:13:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric DeVolder <eric.devolder@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 12987/13166] ld.lld: error: undefined symbol:
+ machine_kexec_cleanup
+Message-ID: <202307041537.G8Z4pB7K-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-With commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-we are now able to use pahole directly to identify Rust compilation
-units (CUs) and exclude them from generating BTF debugging information
-(when DEBUG_INFO_BTF is enabled).
+Hi Eric,
 
-And if pahole doesn't support the --lang-exclude flag, we can't enable
-both RUST and DEBUG_INFO_BTF at the same time.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-So, in any case, the script is_rust_module.sh is just redundant and we
-can drop it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1c6f93977947dbba1fc4d250c4eb8a7d4cfdecf1
+commit: 0fd6d7a6e290d94f18134302d49162c22dff01c9 [12987/13166] mips/kexec: refactor for kernel/Kconfig.kexec
+config: mips-randconfig-r002-20230703 (https://download.01.org/0day-ci/archive/20230704/202307041537.G8Z4pB7K-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230704/202307041537.G8Z4pB7K-lkp@intel.com/reproduce)
 
-NOTE: we may also be able to drop the "Rust loadable module" mark
-inside Rust modules, but it seems safer to keep it for now to make sure
-we are not breaking any external tool that may potentially rely on it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307041537.G8Z4pB7K-lkp@intel.com/
 
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- rust/macros/module.rs     |  2 +-
- scripts/Makefile.modfinal |  2 --
- scripts/is_rust_module.sh | 16 ----------------
- 3 files changed, 1 insertion(+), 19 deletions(-)
- delete mode 100755 scripts/is_rust_module.sh
+Note: the linux-next/master HEAD 1c6f93977947dbba1fc4d250c4eb8a7d4cfdecf1 builds fine.
+      It may have been fixed somewhere.
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index fb1244f8c2e6..d62d8710d77a 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -199,7 +199,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-             /// Used by the printing macros, e.g. [`info!`].
-             const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
- 
--            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
-+            /// The \"Rust loadable module\" mark.
-             //
-             // This may be best done another way later on, e.g. as a new modinfo
-             // key or a new section. For the moment, keep it simple.
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index fc19f67039bd..b3a6aa8fbe8c 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
-       cmd_btf_ko = 							\
- 	if [ ! -f vmlinux ]; then					\
- 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
--	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
--		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
- 	else								\
- 		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
- 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
-diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
-deleted file mode 100755
-index 464761a7cf7f..000000000000
---- a/scripts/is_rust_module.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--#
--# is_rust_module.sh module.ko
--#
--# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
--
--set -e
--
--# Using the `16_` prefix ensures other symbols with the same substring
--# are not picked up (even if it would be unlikely). The last part is
--# used just in case LLVM decides to use the `.` suffix.
--#
--# In the future, checking for the `.comment` section may be another
--# option, see https://github.com/rust-lang/rust/pull/97550.
--${NM} "$*" | grep -qE '^[0-9a-fA-F]+ [Rr] _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: machine_kexec_cleanup
+   >>> referenced by kexec_core.c
+   >>>               kernel/kexec_core.o:(kimage_free) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: machine_crash_shutdown
+   >>> referenced by kexec_core.c
+   >>>               kernel/kexec_core.o:(__crash_kexec) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: machine_kexec
+   >>> referenced by kexec_core.c
+   >>>               kernel/kexec_core.o:(__crash_kexec) in archive vmlinux.a
+   >>> referenced by kexec_core.c
+   >>>               kernel/kexec_core.o:(kernel_kexec) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: machine_shutdown
+   >>> referenced by kexec_core.c
+   >>>               kernel/kexec_core.o:(kernel_kexec) in archive vmlinux.a
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
