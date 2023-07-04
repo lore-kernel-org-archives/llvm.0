@@ -1,84 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AD66128
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 19:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688500205;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9G5OYWi2EGCIN+pi3EKqauK/MPPvAgAX4eUV0I+w7Mo=;
-	b=NDI3woKttTAlDTHZdA+l5x/0xZdjIe4x7HvJZSsmvBgVarzX4IHuVZoOb0G2+CfFUgNYuS
-	QyEfFNXz+Pq/bSjJJKUwQmeorn9ShJVOygZsnU0qf90fCM3pmB1mhhAy9FJ2Gkj13m8NLE
-	7duu9X4kw2+iI2MFwofNfhcW6YbaT4k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-nnPxC9odPm6BBdGi7RVs_Q-1; Tue, 04 Jul 2023 15:50:04 -0400
-X-MC-Unique: nnPxC9odPm6BBdGi7RVs_Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC3B780027F
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 19:50:03 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C7AEB2166B31;
-	Tue,  4 Jul 2023 19:50:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 538140ca)
-Date: Tue, 04 Jul 2023 19:50:03 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC6F6128;
+	Tue,  4 Jul 2023 19:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688500448; x=1720036448;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6H7Uav+540qIGXzUwwOKNXWwL6NrxClpdVBYfGRoUrs=;
+  b=PoyYS67rCkYn13654QjoK4mYvNKDoBrVKISz2OC87hmDFVQ5uDyijHWE
+   cutexg0Dgjn7h1RucNabEOcg/yHk6KP8wdTEu8OTeXuptYWJPbN+Mmup9
+   258X63UZiXmqg3U76dT/ogp2pCVAF3qGUr1xp1bi4CHKXTRVYjrqVwJ3J
+   GvEO80cvi0+CrFEpYs24WjD/RvLd0xUEBkYMfNS7d8TFXnN3x6Gv4ybWi
+   rqOCFcwZX5so5KAAPF6uTOSj0Yr/1lpDT7lUzvn6cITr6M+Kx731pEOBh
+   eyWeSHKa5WgwOLO5FKIOrmDD3EVD9v7DgrjXuqemn+pJlcbKkbMQon6kG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="365750835"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="365750835"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 12:54:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="712953150"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="712953150"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 04 Jul 2023 12:54:06 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGm69-000IVP-2G;
+	Tue, 04 Jul 2023 19:54:05 +0000
+Date: Wed, 5 Jul 2023 03:53:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/topology 9/39]
+ arch/x86/kernel/cpu/mce/inject.c:437:28: error: no member named 'topo' in
+ 'struct cpuinfo_topology'
+Message-ID: <202307050329.SJ4qd5hh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <59505.123070415500400249@us-mta-197.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Thomas,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topology
+head:   3f2657ab54543fb9ee5894d239f8b7131a6ffac8
+commit: ea35973627dfe1f61f68306a3664dcfea513d0c8 [9/39] x86/cpu: Move x86_max_cores into topology info
+config: x86_64-randconfig-r003-20230704 (https://download.01.org/0day-ci/archive/20230705/202307050329.SJ4qd5hh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050329.SJ4qd5hh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307050329.SJ4qd5hh-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/mce/inject.c:437:28: error: no member named 'topo' in 'struct cpuinfo_topology'
+           cores_per_node = (c->topo.topo.num_cores_per_pkg * smp_num_siblings) /
+                             ~~~~~~~ ^
+   1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'ovl-update-6.5-2' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/overlayfs/vfs
+vim +437 arch/x86/kernel/cpu/mce/inject.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94803
+   431	
+   432	static u32 get_nbc_for_node(int node_id)
+   433	{
+   434		struct cpuinfo_x86 *c = &boot_cpu_data;
+   435		u32 cores_per_node;
+   436	
+ > 437		cores_per_node = (c->topo.topo.num_cores_per_pkg * smp_num_siblings) /
+   438			amd_get_nodes_per_socket();
+   439	
+   440		return cores_per_node * node_id;
+   441	}
+   442	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36945=
-1
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
