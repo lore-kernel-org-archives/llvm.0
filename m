@@ -1,147 +1,209 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCFF6FA8
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 17:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1688491164;
-	bh=XoqjGAAisrMB/Pfyua6e1oRHYcJ+y87IfUpKWBoC9wk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=N2D2FNXOyS0ABkYSbbOai7GzSARmAlho0m8eLsvqFxANOIuMOhO1LxydQEjhJqWyn
-	 s4diZvaronIi3ssoqSJLXbG2Evq/maxxdpiOJUSEh/lXO8vRT9kOiXIgk6/vlSH72L
-	 SoAmwZR1oFltK2T3OZT7oqpbU9kE+AnZRPw+R71IXS3aARtVDA+vkBW3RoghrODyGA
-	 LNHHXSzwcvpj5hUxSspofjvrHBgPIgFJeLfkY/HYpuR6P21DoPavis1F8YwgHyI9Cm
-	 lKxMFY44J/zevh4FFKsVftiCQZvvfa9EmOv/54AsOL+YBt7uD0VDfqyCww4cIbuzEA
-	 6CZ5BEHfIqYSw==
-Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwTzv6tQ7z1C97;
-	Tue,  4 Jul 2023 13:19:23 -0400 (EDT)
-From: Olivier Dion <odion@efficios.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
- Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-In-Reply-To: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
-Organization: EfficiOS
-References: <87ttukdcow.fsf@laura>
- <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
-Date: Tue, 04 Jul 2023 13:19:23 -0400
-Message-ID: <87ilazd278.fsf@laura>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6FF6FA8;
+	Tue,  4 Jul 2023 17:20:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by domac.alu.hr (Postfix) with ESMTP id 0F87860173;
+	Tue,  4 Jul 2023 19:20:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1688491219; bh=+6JdSu7BcDFK7ZOljaSFRxSZv0Eu5iA6op5oUrhlHyc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DmOehv+X7QPHhO9xb0CcvA+VFzxgVTu1rxP+oBUAdCUA8RofkAfGyErSXAG92PL6x
+	 ilP/PeA2rc4TdeJc9oHSqPCpNICj6Mm/5QLJpaBaWhMQunZuDDeO37G0PE2IvEr+su
+	 vh89aq1lM7KlAACW9fyOUPXXbOD3iobI3l+NoIOWAmv4qQ7Feg9PH8DQNesVbKTmcI
+	 vHl6DAVzrnEJPds/xtqzTV57LwsKfrKrhc5AEKdmd7UUEG4zWhS6AJbMLH7zC3OUZu
+	 32c6wfB06lzRkXF7xA4M5WuAig3teFFJq6VCo/nEe5092CvW76NkMsM9Fra0HK9GkT
+	 wXTeh1H9nQh+w==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cJTGGTi_coK5; Tue,  4 Jul 2023 19:20:16 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+	by domac.alu.hr (Postfix) with ESMTPSA id DC54560133;
+	Tue,  4 Jul 2023 19:20:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1688491216; bh=+6JdSu7BcDFK7ZOljaSFRxSZv0Eu5iA6op5oUrhlHyc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ntv0B6rC/cKTyP5TqGSt61kbFILPKtNwfArfuz6bf+t4/OxTIFSogJ9G7jrcSEb3W
+	 bO0kw20NhQqNGcucsPev7wxyDZfQ3OJBFc5/7r10M9WxsWCJFSErNDihim4p4480ti
+	 50WrkC9FVIhVD6MRJkyzwMEhoL0Uyoyc1MM9iVvSVw5XTBcxacXtBcdiZPUOf9ucYp
+	 UShByqxyYaiq2BCrSyHWc5YauTOm0wOUp367Z2BrUQbOUyXKPzA7PrIHDPtcMhh9cr
+	 +zfVWW9NeCKfq2AQ5DGE7tYs3fAt4sQFYZ3cHm7SuX8vSw7Rcp0zw4l3r+M+DXhtQu
+	 Vta//ZuaTTjUQ==
+Message-ID: <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
+Date: Tue, 4 Jul 2023 19:20:11 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Bagas Sanjaya <bagasdotme@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
+ Linux Regressions <regressions@lists.linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-hardening@vger.kernel.org
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+ <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
+ <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
+ <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
+ <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
+ <202307022230.6121D6896@keescook>
+ <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
+ <202307031149.823F9A3@keescook> <202307031606.3FD9D0D@keescook>
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <202307031606.3FD9D0D@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
->> This is a request for comments on extending the atomic builtins API to
->> help avoiding redundant memory barriers.  Indeed, there are
->
-> What atomic builtins API are you talking about?  The kernel's?  That's 
-> what it sounded like when I first read this sentence -- why else post 
-> your message on a kernel mailing list?
-
-Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
-for the confusion.
-
-[...]
-
->> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
->> have implicit memory barriers before/after the operations [1-2], while
->> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
->> do not have any ordering guarantees of an atomic thread fence
->> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
->
-> After reading what you wrote below, I realized that the API you're 
-> thinking of modifying is the one used by liburcu for user programs.  
-> It's a shame you didn't mention this in either the subject line or the 
-> first few paragraphs of the email; that would have made understanding 
-> the message a little easier.
-
-Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
-the toolchain's atomic builtins and not the LKMM itself.  The reason why
-we've reached out to the Linux kernel developers is because the
-original Userspace RCU uatomic API is based on the LKMM.
-
-> In any case, your proposal seems reasonable to me at first glance, with 
-> two possible exceptions:
->
-> 1.	I can see why you have special fences for before/after load, 
-> 	store, and rmw operations.  But why clear?  In what way is 
-> 	clearing an atomic variable different from storing a 0 in it?
-
-We could indeed group the clear with the store.
-
-We had two approaches in mind:
-
-  a) A before/after pair by category of operation:
-
-     - load
-     - store
-     - RMW
-  
-  b) A before/after pair for every operation:
-
-     - load
-     - store
-     - exchange
-     - compare_exchange
-     - {add,sub,and,xor,or,nand}_fetch
-     - fetch_{add,sub,and,xor,or,nand}
-     - test_and_set
-     - clear
-
-If we go for the grouping in a), we have to take into account that the
-barriers emitted need to cover the worse case scenario.  As an example,
-Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
-returned value is not used.
-
-Therefore, for the grouping in a), all RMW would need to emit a memory
-barrier (with Clang on x86-64).  But with the scheme in b), we can emit
-the barrier explicitly for the exchange operation.  We however question
-the usefulness of this kind of optimization made by the compiler, since
-a user should use a store operation instead.
-
-> 2.	You don't have a special fence for use after initializing an 
-> 	atomic.  This operation can be treated specially, because at the 
-> 	point where an atomic is initialized, it generally has not yet 
-> 	been made visible to any other threads.
-
-I assume that you're referring to something like std::atomic_init from
-C++11 and deprecated in C++20?  I do not see any scenario on any
-architecture where a compiler would emit an atomic operation for the
-initialization of an atomic variable.  If a memory barrier is required
-in this situation, then an explicit one can be emitted using the
-existing API.
-
-In our case -- with the compiler's atomic builtins -- the initialization
-of a variable can be done without any atomic operations and does not
-require any memory barrier.  This is a consequence of being capable of
-working with integral-scalar/pointer type without an atomic qualifier.
-
-> Therefore the fence which would normally appear after a store (or
-> clear) generally need not appear after an initialization, and you
-> might want to add a special API to force the generation of such a
-> fence.
-
-I am puzzled by this.  Initialization of a shared variable does not need
-to be atomic until its publication.  Could you expand on this?
-
-Thanks for the feedback,
-	Olivier
-
--- 
-Olivier Dion
-EfficiOS Inc.
-https://www.efficios.com
+T24gNy80LzIzIDAxOjA5LCBLZWVzIENvb2sgd3JvdGU6PiBPbiBNb24sIEp1bCAwMywgMjAy
+MyBhdCAxMjowMzoyM1BNIC0wNzAwLCBLZWVzIENvb2sgd3JvdGU6DQo+PiBDb29sLiB4aGNp
+LWh1YiBpcyBpbiB5b3VyIGJhY2t0cmFjZSwgYW5kIHRoZSBhYm92ZSBwYXRjaCB3YXMgbWFk
+ZSBmb3INCj4+IHNvbWV0aGluZyB2ZXJ5IHNpbWlsYXIgKHRob3VnaCwgYWdhaW4sIEkgZG9u
+J3Qgc2VlIHdoeSB5b3UncmUgZ2V0dGluZyBhDQo+PiBfY3Jhc2hfLCBpdCBzaG91bGQgX3dh
+cm5fIGFuZCBjb250aW51ZSBub3JtYWxseSkuIEFuZCwgYWN0dWFsbHksIGFsc28NCj4+IGlu
+Y2x1ZGUgdGhpcyBwYXRjaDoNCj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAy
+MzA2MTQxODEzMDcuZ29ubmEuMjU2LWtlZXNAa2VybmVsLm9yZy8NCj4gDQo+IFRoaXMgaXMg
+bm93IGluIExpbnVzJ3MgdHJlZToNCj4gMDliNjlkZDQzNzhiICgidXNiOiBjaDk6IFJlcGxh
+Y2UgMS1lbGVtZW50IGFycmF5IHdpdGggZmxleGlibGUgYXJyYXkiKQ0KPiANCj4gUGxlYXNl
+IGFsc28gc3RpbGwgdHJ5IHdpdGggdGhlIGZpcnN0IHBhdGNoIEkgbWVudGlvbmVkLCB3aGlj
+aCBpcyB2ZXJ5IHNpbWlsYXI6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAy
+MzA2MjkxOTA5MDAubmV2ZXIuNzg3LWtlZXNAa2VybmVsLm9yZy8NCg0KSGksDQoNCkkgaGF2
+ZSBmaW5hbGx5IGJ1aWx0IHcgYm90aCBwYXRjaGVzIChhbmQgcmVjb21tZW5kZWQgUFNUT1JF
+IHNldHRpbmdzIHdlcmUNCmRlZmF1bHQgYWxyZWFkeSkuDQoNClRoaXMgc2Vjb25kIHBhdGNo
+IGZpeGVzIHRoZSBib290aW5nIHByb2JsZW0sIGJ1dCBhbGFzIHRoZXJlIGlzIHN0aWxsIGEg
+cHJvYmxlbSAtDQphbGwgV2F5bGFuZCBhbmQgWDExLm9yZyBHVUkgYXBwbGljYXRpb25zIGZh
+aWwgdG8gc3RhcnQsIHdpdGggZXJyb3JzIGxpa2UgdGhpcyBvbmU6DQoNCkp1bCAgNCAxOTow
+OTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTcxOV0gaW52YWxpZCBvcGNvZGU6IDAw
+MDAgWyMxXSBQUkVFTVBUIFNNUCBOT1BUSQ0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2Vy
+bmVsOiBbICAgNDAuNTI5NzIzXSBDUFU6IDAgUElEOiAzNDkyIENvbW06IHRodW5kZXJiaXJk
+IE5vdCB0YWludGVkIDYuNC4wLXJjMi1jcmFzaDIta2VlczItMDAwMDEtZzJkNDdjNjk1NmFi
+My1kaXJ0eSAjNQ0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAuNTI5
+NzI1XSBIYXJkd2FyZSBuYW1lOiBBU1JvY2sgWDY3MEUgUEcgTGlnaHRuaW5nL1g2NzBFIFBH
+IExpZ2h0bmluZywgQklPUyAxLjIxIDA0LzI2LzIwMjMNCkp1bCAgNCAxOTowOTowNyBkZWZp
+YW50IGtlcm5lbDogWyAgIDQwLjUyOTcyNl0gUklQOiAwMDEwOmFsbG9jX3BpZCsweDQ2Yy8w
+eDQ4MA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAuNTI5NzMwXSBD
+b2RlOiAwMCA5MiA0OSBjNyBjNCBmNCBmZiBmZiBmZiBlOCA1MCBiYyAxNSAwMSA0YyA4OSBm
+ZiBlOCA2OCA1MCAxMyAwMCBlOSBlYyBmZCBmZiBmZiBiZSAwMiAwMCAwMCAwMCBlOCA4OSA1
+ZiA3MSAwMCBlOSBmOCBmZSBmZiBmZiA8MGY+IDBiIDQ5IGM3IGM0IGY0IGZmIGZmIGZmIGU5
+IGI5IGZiIGZmIGZmIDY2IDBmIDFmIDQ0IDAwIDAwIDkwIDkwDQpKdWwgIDQgMTk6MDk6MDcg
+ZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3MzFdIFJTUDogMDAxODpmZmZmYWQ4YzQ1MzEz
+YzQ4IEVGTEFHUzogMDAwMTAyMDINCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDog
+WyAgIDQwLjUyOTczM10gUkFYOiAwMDAwMDAwMDgwMDAwMDAwIFJCWDogMDAwMDAwMDAwMDAw
+MDAwMSBSQ1g6IDAwMDAwMDAwMDAwMDAwMDANCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtl
+cm5lbDogWyAgIDQwLjUyOTczNF0gUkRYOiAwMDAwMDAwMDAwMDAwMDAwIFJTSTogMDAwMDAw
+MDAwMDAwMDAwMCBSREk6IDAwMDAwMDAwMDAwMDAwMDANCkp1bCAgNCAxOTowOTowNyBkZWZp
+YW50IGtlcm5lbDogWyAgIDQwLjUyOTczNF0gUkJQOiBmZmZmYWQ4YzQ1MzEzYzk4IFIwODog
+MDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAwMDAwMDANCkp1bCAgNCAxOTowOTow
+NyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTczNV0gUjEwOiAwMDAwMDAwMDAwMDAwMDAw
+IFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZmZmY5Y2JkZmYxYzYzYTgNCkp1bCAgNCAx
+OTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTczNV0gUjEzOiBmZmZmOWNiZGU5
+YjA4NzUwIFIxNDogMDAwMDAwMDAwMDAwMDAwMSBSMTU6IGZmZmY5Y2JkZmYxYzYzYTgNCkp1
+bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTczNl0gRlM6ICAwMDAw
+N2Y1MGQ4NjNlNzgwKDAwMDApIEdTOmZmZmY5Y2NjOTdhMDAwMDAoMDAwMCkga25sR1M6MDAw
+MDAwMDAwMDAwMDAwMA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAu
+NTI5NzM3XSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUw
+MDMzDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3MzddIENS
+MjogMDAwMDAwMDAwMDAwMDAwMCBDUjM6IDAwMDAwMDAxYjBhZTAwMDAgQ1I0OiAwMDAwMDAw
+MDAwNzUwZWYwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3
+MzhdIFBLUlU6IDU1NTU1NTU0DQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsg
+ICA0MC41Mjk3MzldIENhbGwgVHJhY2U6DQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJu
+ZWw6IFsgICA0MC41Mjk3MzldICA8VEFTSz4NCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtl
+cm5lbDogWyAgIDQwLjUyOTc0MV0gIGNvcHlfcHJvY2VzcysweDE2NWYvMHgyMTEwDQpKdWwg
+IDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NDRdICBrZXJuZWxfY2xv
+bmUrMHg5ZC8weDNhMA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAu
+NTI5NzQ1XSAgPyBmaW5kX2hlbGRfbG9jaysweDMxLzB4YTANCkp1bCAgNCAxOTowOTowNyBk
+ZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTc0N10gID8gbW50cHV0X25vX2V4cGlyZSsweDg5
+LzB4NGYwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NDld
+ICA/IGxvY2tfcmVsZWFzZSsweGM0LzB4MjcwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBr
+ZXJuZWw6IFsgICA0MC41Mjk3NTFdICBfX2RvX3N5c19jbG9uZSsweDY2LzB4YTANCkp1bCAg
+NCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTc1NF0gIF9feDY0X3N5c19j
+bG9uZSsweDI1LzB4NDANCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQw
+LjUyOTc1NV0gIGRvX3N5c2NhbGxfNjQrMHg1OS8weDkwDQpKdWwgIDQgMTk6MDk6MDcgZGVm
+aWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NThdICA/IHN5c2NhbGxfZXhpdF90b191c2VyX21v
+ZGUrMHgzOS8weDYwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41
+Mjk3NjBdICA/IGRvX3N5c2NhbGxfNjQrMHg2OS8weDkwDQpKdWwgIDQgMTk6MDk6MDcgZGVm
+aWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NjFdICA/IGlycWVudHJ5X2V4aXRfdG9fdXNlcl9t
+b2RlKzB4MjcvMHg0MA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAu
+NTI5NzYyXSAgPyBpcnFlbnRyeV9leGl0KzB4NzcvMHhiMA0KSnVsICA0IDE5OjA5OjA3IGRl
+ZmlhbnQga2VybmVsOiBbICAgNDAuNTI5NzY0XSAgPyBleGNfcGFnZV9mYXVsdCsweGFlLzB4
+MjQwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NjVdICBl
+bnRyeV9TWVNDQUxMXzY0X2FmdGVyX2h3ZnJhbWUrMHg3Mi8weGRjDQpKdWwgIDQgMTk6MDk6
+MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NjddIFJJUDogMDAzMzoweDdmNTBkODEx
+ZWEzZA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAgNDAuNTI5NzY5XSBD
+b2RlOiA1YiA0MSA1YyBjMyA2NiAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCBmMyAwZiAxZSBm
+YSA0OCA4OSBmOCA0OCA4OSBmNyA0OCA4OSBkNiA0OCA4OSBjYSA0ZCA4OSBjMiA0ZCA4OSBj
+OCA0YyA4YiA0YyAyNCAwOCAwZiAwNSA8NDg+IDNkIDAxIGYwIGZmIGZmIDczIDAxIGMzIDQ4
+IDhiIDBkIGMzIGEzIDBmIDAwIGY3IGQ4IDY0IDg5IDAxIDQ4DQpKdWwgIDQgMTk6MDk6MDcg
+ZGVmaWFudCBrZXJuZWw6IFsgICA0MC41Mjk3NzBdIFJTUDogMDAyYjowMDAwN2ZmY2M0NDlj
+ZTU4IEVGTEFHUzogMDAwMDAyNDYgT1JJR19SQVg6IDAwMDAwMDAwMDAwMDAwMzgNCkp1bCAg
+NCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTc3MV0gUkFYOiBmZmZmZmZm
+ZmZmZmZmZmRhIFJCWDogMDAwMDAwMDAwMDAwMDA1MSBSQ1g6IDAwMDA3ZjUwZDgxMWVhM2QN
+Ckp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTc3MV0gUkRYOiAw
+MDAwMDAwMDAwMDAwMDAwIFJTSTogMDAwMDAwMDAwMDAwMDAwMCBSREk6IDAwMDAwMDAwMzAw
+MDAwMTENCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUyOTc3Ml0g
+UkJQOiAwMDAwMDAwMDAwMDAwMDAxIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDA3
+ZjUwZDgyYjk3YzANCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjUy
+OTc3Ml0gUjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6
+IDAwMDAwMDAwMDAwMDAwMTENCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAg
+IDQwLjUyOTc3M10gUjEzOiAwMDAwN2Y1MGQ3ZTE2OTgwIFIxNDogMDAwMDdmNTBkODYzZTZj
+MCBSMTU6IDAwMDA3ZjUwZDgyYmEzYzANCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5l
+bDogWyAgIDQwLjUyOTc3NV0gIDwvVEFTSz4NCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtl
+cm5lbDogWyAgIDQwLjUyOTc3Nl0gTW9kdWxlcyBsaW5rZWQgaW46IGJpbmZtdF9taXNjIGYy
+ZnMgY3JjMzJfZ2VuZXJpYyBsejRoY19jb21wcmVzcyBsejRfY29tcHJlc3MgbmxzX2lzbzg4
+NTlfMSBpbnRlbF9yYXBsX21zciBpbnRlbF9yYXBsX2NvbW1vbiBzbmRfaGRhX2NvZGVjX3Jl
+YWx0ZWsgc25kX2hkYV9jb2RlY19nZW5lcmljIGxlZHRyaWdfYXVkaW8gc25kX2hkYV9jb2Rl
+Y19oZG1pIGVkYWNfbWNlX2FtZCBjcmN0MTBkaWZfcGNsbXVsIHNuZF9oZGFfaW50ZWwgcG9s
+eXZhbF9jbG11bG5pIHNuZF9pbnRlbF9kc3BjZmcgcG9seXZhbF9nZW5lcmljIGdoYXNoX2Ns
+bXVsbmlfaW50ZWwgc25kX2ludGVsX3Nkd19hY3BpIHNuZF9zZXFfbWlkaSBzaGE1MTJfc3Nz
+ZTMgc25kX3NlcV9taWRpX2V2ZW50IHNuZF9oZGFfY29kZWMgYWVzbmlfaW50ZWwgc25kX2hk
+YV9jb3JlIGNyeXB0b19zaW1kIGNyeXB0ZCBzbmRfaHdkZXAgam95ZGV2IGlucHV0X2xlZHMg
+c25kX3Jhd21pZGkgcmFwbCBhbWRncHUgc25kX3BjbSBjY3Agd21pX2Jtb2Ygc25kX3NlcSBr
+MTB0ZW1wIHNuZF9zZXFfZGV2aWNlIGlvbW11X3YyIHNuZF90aW1lciBkcm1fYnVkZHkgZ3B1
+X3NjaGVkIGRybV9zdWJhbGxvY19oZWxwZXIgZHJtX3R0bV9oZWxwZXIgdHRtIGRybV9kaXNw
+bGF5X2hlbHBlciBjZWMgc25kIGRybV9rbXNfaGVscGVyIGkyY19hbGdvX2JpdCBzeXNjb3B5
+YXJlYSBzeXNmaWxscmVjdCBzeXNpbWdibHQgc291bmRjb3JlIG1hY19oaWQgc2NoX2ZxX2Nv
+ZGVsIG1zciBwYXJwb3J0X3BjIHBwZGV2IGxwIHBhcnBvcnQgcmFtb29wcyBwc3RvcmVfYmxr
+IHJlZWRfc29sb21vbiBwc3RvcmVfem9uZSBmdXNlIGVmaV9wc3RvcmUgZHJtIGlwX3RhYmxl
+cyB4X3RhYmxlcyBhdXRvZnM0IGJ0cmZzIGJsYWtlMmJfZ2VuZXJpYyB4b3IgcmFpZDZfcHEg
+aGlkX2dlbmVyaWMgbnZtZSBudm1lX2NvcmUgYWhjaSB4aGNpX3BjaSBpMmNfcGlpeDQgY3Jj
+MzJfcGNsbXVsIG52bWVfY29tbW9uIGxpYmFoY2kgeGhjaV9wY2lfcmVuZXNhcyByODE2OSBy
+ZWFsdGVrIHZpZGVvIHdtaQ0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVsOiBbICAg
+NDAuNTI5Nzk5XSAgZ3Bpb19hbWRwdA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2VybmVs
+OiBbICAgNDAuNTI5ODAxXSAtLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAwIF0tLS0N
+Ckp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2NTQ4OV0gUklQOiAw
+MDEwOmFsbG9jX3BpZCsweDQ2Yy8weDQ4MA0KSnVsICA0IDE5OjA5OjA3IGRlZmlhbnQga2Vy
+bmVsOiBbICAgNDAuODY1NDkxXSBDb2RlOiAwMCA5MiA0OSBjNyBjNCBmNCBmZiBmZiBmZiBl
+OCA1MCBiYyAxNSAwMSA0YyA4OSBmZiBlOCA2OCA1MCAxMyAwMCBlOSBlYyBmZCBmZiBmZiBi
+ZSAwMiAwMCAwMCAwMCBlOCA4OSA1ZiA3MSAwMCBlOSBmOCBmZSBmZiBmZiA8MGY+IDBiIDQ5
+IGM3IGM0IGY0IGZmIGZmIGZmIGU5IGI5IGZiIGZmIGZmIDY2IDBmIDFmIDQ0IDAwIDAwIDkw
+IDkwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJuZWw6IFsgICA0MC44NjU0OTJdIFJT
+UDogMDAxODpmZmZmYWQ4YzQ1MzEzYzQ4IEVGTEFHUzogMDAwMTAyMDINCkp1bCAgNCAxOTow
+OTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2NTQ5NF0gUkFYOiAwMDAwMDAwMDgwMDAw
+MDAwIFJCWDogMDAwMDAwMDAwMDAwMDAwMSBSQ1g6IDAwMDAwMDAwMDAwMDAwMDANCkp1bCAg
+NCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2NTQ5NV0gUkRYOiAwMDAwMDAw
+MDAwMDAwMDAwIFJTSTogMDAwMDAwMDAwMDAwMDAwMCBSREk6IDAwMDAwMDAwMDAwMDAwMDAN
+Ckp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2NTQ5NV0gUkJQOiBm
+ZmZmYWQ4YzQ1MzEzYzk4IFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAw
+MDAwMDANCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2NTQ5Nl0g
+UjEwOiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZmZmY5
+Y2JkZmYxYzYzYTgNCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAgIDQwLjg2
+NTQ5N10gUjEzOiBmZmZmOWNiZGU5YjA4NzUwIFIxNDogMDAwMDAwMDAwMDAwMDAwMSBSMTU6
+IGZmZmY5Y2JkZmYxYzYzYTgNCkp1bCAgNCAxOTowOTowNyBkZWZpYW50IGtlcm5lbDogWyAg
+IDQwLjg2NTQ5N10gRlM6ICAwMDAwN2Y1MGQ4NjNlNzgwKDAwMDApIEdTOmZmZmY5Y2NjOTdh
+MDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KSnVsICA0IDE5OjA5OjA3IGRl
+ZmlhbnQga2VybmVsOiBbICAgNDAuODY1NDk4XSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAw
+MDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFudCBrZXJu
+ZWw6IFsgICA0MC44NjU0OTldIENSMjogMDAwMDAwMDAwMDAwMDAwMCBDUjM6IDAwMDAwMDAx
+YjBhZTAwMDAgQ1I0OiAwMDAwMDAwMDAwNzUwZWYwDQpKdWwgIDQgMTk6MDk6MDcgZGVmaWFu
+dCBrZXJuZWw6IFsgICA0MC44NjU1MDBdIFBLUlU6IDU1NTU1NTU0DQoNClRoZSBpbnRlcnBy
+ZXRhdGlvbiBvZiB0aGVzZSBmaW5kaW5ncyBpcyBiZXlvbmQgdGhlIHNjb3BlIG9mIG15IGtu
+b3dsZWRnZS4NCg0KSSBob3BlIHlvdSBjYW4gbWFrZSBhbnkgdXNlIG9mIHRoZW0uDQoNCkJl
+c3QgcmVnYXJkcywNCk1pcnNhZCBUb2Rvcm92YWMNCg==
