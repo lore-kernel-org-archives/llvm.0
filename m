@@ -1,84 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D187D567B
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 15:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688484666;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=I2HxMvCxeEKVDUWoA4AzfpkQemvzJnmHsU/FshPOfis=;
-	b=HcGAx7HbriHMLiHDpZH85jCV25tPRSqF+R6NPmFDFd/MtjwVB3d0276EbyneAOqVd61Tve
-	ur2oNT2w+NUUIY53pDgZv0PgBvh5yVoNodIavAnWL+2Hu25xk1YDWE66U+EPzrw6zmDAfN
-	c4LIhuXafV2etQ+s+pqO18mZJJoG9vo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-LcseYBxgPPymg_jwYS2lrQ-1; Tue, 04 Jul 2023 11:31:04 -0400
-X-MC-Unique: LcseYBxgPPymg_jwYS2lrQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4DCA8022EF
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 15:31:04 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C2A715230A6;
-	Tue,  4 Jul 2023 15:31:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, b5641a5d)
-Date: Tue, 04 Jul 2023 15:31:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624696AB0;
+	Tue,  4 Jul 2023 15:57:00 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g+eC6bQJ3ueS8Ayb0KzJkY4xIeIQj4leqUcC5Fa85BOxNK+u4JbXhN8Hmsrannz+LUgNHn+KvpcYKplr4KQPHUec/kh2dFLYJcjocWsX6xdCZDGh1ULiP0WYUsO8Fdq3WbY6Psg01wJ0PAGlfo4XKo4/wkL7jsJ/f/lLLe1E4yBWJoiQFsjlPQO+qbuZKljVIBTDQpUepB+OsM8EaC7IxYJRkCNCtjd/XCAyZRBI3VpyQpKMOhFnXZWdnvGgFLWFlqzwqFudnQs68shy6DgGc1vyUGHPYPcV/IRabIg7ja1PsJXRYJjHfkS8DD9tbheVGvTN/57ikf57Wk5tGNTTcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T1xjS3H/COFM1zaTUlCFb3X5PxbGcPPRNY3qlRTa+ag=;
+ b=of6PA5gcyEkuaS0LJWhrcMngfengi0Gh6AFa8cWShzUSKi1wQTW5xEbcx1kb6PBw+at/KvBpSzQc9LjXiIVSvo/AjzL/rjY2tkeLRVF4CmJBuNo49j5DKUz8aAVQ4iBqbl1MDYWgzgzcqCozY8V12Ys/yLUu1yVItZMexzQpWPBE9xypOhwbDcRoJOO9XHYMbnaAJ8VKSllrhk1w0h7hgSs/YQmeKd7K09ZfQE7JU3IR3FLQRyE2zFFZrRfny6FF/uCVQs0jj83r8gcRI//HTzU3fO7f+5CcoUBXgSAQkC/t1hwzIqS8S+Jb9+fFwsxr4kkh5Zr17mUI9NV9DzoW3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T1xjS3H/COFM1zaTUlCFb3X5PxbGcPPRNY3qlRTa+ag=;
+ b=VNk83aSkRaHsXAUr8HvcltJqNxD43km5omfFHgaoB7LIOjOmKeA4E3tf0AhgLI3b2t7NGlHYwfs2F3ufCmFf2G4kDXwn6wBHFeXOsnue3LRxMpj0XHc0kCoF1GSpJsEZn3uS5BB0Zj+65wfhHpYlnbNrrw79uZsihGNYrU8iOeeVqvZqtTjUXWMIEQSM5Tbj8Q1wbZudgUVMASIDHpDnOvQMEqkIsoZsPIkh2fKYKYAStt2Pd+bY2R953827Q9aKlFvclBsqBYLTmIU5tMT0E0dYd1joy6+XIghGoEqfkowHG97ZARlw3l99R3eNyzbLlMLTagjICCykDaRWLm20PQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB2743.namprd12.prod.outlook.com (2603:10b6:a03:61::28)
+ by SJ2PR12MB8738.namprd12.prod.outlook.com (2603:10b6:a03:548::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Tue, 4 Jul
+ 2023 15:56:58 +0000
+Received: from BYAPR12MB2743.namprd12.prod.outlook.com
+ ([fe80::ecb0:2f8e:c4bf:b471]) by BYAPR12MB2743.namprd12.prod.outlook.com
+ ([fe80::ecb0:2f8e:c4bf:b471%7]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 15:56:57 +0000
+From: Rahul Rameshbabu <rrameshbabu@nvidia.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev,  oe-kbuild-all@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  Jiri Kosina <jkosina@suse.cz>
+Subject: Re: drivers/hid/hid-nvidia-shield.c:59:2: warning: field  within
+ 'struct thunderstrike_hostcmd_resp_report' is less aligned than 'union
+ thunderstrike_hostcmd_resp_report::(anonymous at
+ drivers/hid/hid-nvidia-shield.c:59:2)' and is usually due to 'struct
+ thund...
+In-Reply-To: <202307041500.6bKn7nCl-lkp@intel.com> (kernel test robot's
+	message of "Tue, 4 Jul 2023 15:13:08 +0800")
+References: <202307041500.6bKn7nCl-lkp@intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Date: Tue, 04 Jul 2023 08:56:39 -0700
+Message-ID: <87a5wb7jrc.fsf@nvidia.com>
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR07CA0106.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::47) To BYAPR12MB2743.namprd12.prod.outlook.com
+ (2603:10b6:a03:61::28)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <35473.123070411310400439@us-mta-176.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2743:EE_|SJ2PR12MB8738:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c73f267-cd10-4cad-c81f-08db7ca74ba3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	4ihSOPrq4VpZDRQaPtVuapYGyzxg1PpHaQiSnmbbzEoLrZ92Oy5Gw5NZ3K3sC9UsmIcxHJTkzen571TufDzA3WkAsbzZsk/jUNsZQDh34oaaOe/rDTVuQOEIYlvklTdn/nHVbD/eeW38OptGbBIjyo6TDNRhapmKTYStsYNbCgN4xLZEgHYSzf2U/Iy8RM+T7lYGpbiDAoOi8Zoe+k4upThEwM9Z0V9TwgadAk/ovrrc8TTZmpDTr9rZ5Nr9nxKMjhXD3tDU2oj4rDKWr/9XUrLRWme8G3XmjSNIpkDMYjidy3B5232kGh58cVz7EVGB4242xTuaoavOU7noLxK4VbhVTMpYmUoauS7fAkz59pkqvS0Vk6C05cANaG/bBgxl6C5/Ylo9QGrS1KPwbWo8XNP8CjwYB3SqEAMYRL6w5eBYSUkHltUE4Nf3+oe9NPvfb0682fOXlW0amHYxsqe9XLYu8zIc7uc6isGScSTGy6eVKcZCn6br4/4UCtcdHy4D+PTfAItAmziY9OKocFbQML7s9KdnuRGx5WAfHrCTbOiL11xbzjM+ClOQ31mPFHAJZ9wkYL9D3QVAfxoDLD/PvqgVfIYEHgiqEUXPjWeeD/QJfdMdIi9Fh+tym/lk/WNsp4jSBoyuIx01lEW2Iouobw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(136003)(396003)(346002)(451199021)(26005)(2906002)(6486002)(38100700002)(2616005)(83380400001)(186003)(6666004)(966005)(6512007)(41300700001)(86362001)(6506007)(316002)(478600001)(66556008)(36756003)(66946007)(66476007)(6916009)(4326008)(5660300002)(8936002)(8676002)(219693005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?2XKQ/XnW4Y3ffgg6lYUOOEoAipShFBrhnfzpRgqUC9CjHfJsrd+TrXi/mq82?=
+ =?us-ascii?Q?ZmC9QVkVDxJTxJd4W3owuPCv/8TPB4HStXT1SUoQhWSTJs60QZYdiT/YmJeb?=
+ =?us-ascii?Q?EU8f0Rz3ggyhHFQdj2OkGvkH6ZRJ8miC+rI0fB0OToyq5A7j4URqMBfzrKIV?=
+ =?us-ascii?Q?/CpVZsPhFSvq7GkJA9Ag6st13H9aoa1U30gxc/fv3WXCcV/ML0bWtxYu+jcT?=
+ =?us-ascii?Q?P/q3Aa5DcdABrmxyj4RNUGTPMMhM48M9jG2Ye9pFPSwYih4xrVcYGg6my2ME?=
+ =?us-ascii?Q?YA7Jz3U7o54dpf9wEF4UfOoMQwVRaHfCIWZHqwaUdEUCfgO/ZKqROrPa8LF5?=
+ =?us-ascii?Q?O8A05RaH/bfZPGT1b71OH09bye3dbMlN7IaoK8VgzYgZWc3d2E2fgTUaXQ+g?=
+ =?us-ascii?Q?BaxNCqxC4/YqiXnmZhpdW0Ecje5ZTCWli/Hc4bOFpLda0XuYHR76C5eP1La8?=
+ =?us-ascii?Q?rnAAsFN/yT6VHUGMzYjI2pfasP8j2ZDKZyQMBhPbfTCGh4oikkTBRD189CFk?=
+ =?us-ascii?Q?L9pJTwVwQRaC+ra0i66NiM/W4fGqBkWChKiwUOzcjSBecYUetsWj7Dnk6DRl?=
+ =?us-ascii?Q?TvmFA3gq52xQs4LI1MiXpCl6mpMvaeFumnhKm+0CXvrawoPCyrlz0aZAU7qf?=
+ =?us-ascii?Q?F1Yura26YA7FLR2kDBoItrEg4e4Ja+xItVwW+Ch9FhPmRVrzQyKGokLqcxZH?=
+ =?us-ascii?Q?qCMEpQcy4DJvCzT22LuNDNJ4EQxMDnzBjsqyahmxx1gXChSwed50Bqqo49wt?=
+ =?us-ascii?Q?pKjTpsL6+7fJAjCKLmxYGrG36TIu+jDVF80SBKN6xCB01shSooNAzKZFDEEK?=
+ =?us-ascii?Q?2OhYM0Sl6LrEQwU1GopPdT+ol7bU8QB29SQ2WlB7p2/0R4Tg9q2HcJ0m6NH+?=
+ =?us-ascii?Q?HV9eoXO2PfDVzCAb1lgsdwW1kRc6FHyZEUg+BqUQnORoVQ352amQX489Boy+?=
+ =?us-ascii?Q?OxZTwk58T9OELYe3KBvpYC7Vmc9pDWJ+ULbETh9DWf5spvYOzpWzyLsXjmDe?=
+ =?us-ascii?Q?T+YV63NWhgI6DWSw9gG3HwF0KZXuV2BRpBF3rarzj7RkfRRwI8OISzWVPf6x?=
+ =?us-ascii?Q?nfYQKazCAPTy9cffgB4nFRZMB/dun1Lg17UeqrceOZ0TQenPfarFx3qXSiqG?=
+ =?us-ascii?Q?Ui/K4lMJHURU6TMJaMOgfYJFvvAYRuEYiptqTooHmszBF46C4DWMGj3sb4CF?=
+ =?us-ascii?Q?V4hNdJ7Z+Lam/E87U2KgxJxlrRMIm2FiJTsbopkv89YRFlCY+qgQpEAofx92?=
+ =?us-ascii?Q?Ja4kpZm8T0HD8f6hoPbYiXiecOIgPKC0P6fl6D+xqu2Fego72ejuQt0xddFv?=
+ =?us-ascii?Q?bK6FUqciyxFgpKYt3sRGgk91fMLlYkaVfA/s+aL5eqPUzQ33Mciv+MkS6Kuy?=
+ =?us-ascii?Q?9ppxW3yTNRLb8b+OvV11ZQqPYGgBYQGaPaGZ/4lDPaPzw5P6VORr0zG5puBD?=
+ =?us-ascii?Q?sExVu1wpdhg76uqXRMSTRLmhswPHK7tQK1sZEWrNztut6jVlhnh6zOysFray?=
+ =?us-ascii?Q?cFgMwnT8NRJSsGYipROnyeG0J5ymOVtRpe2T/k50zpebF7WkqTBKQRNg0TqY?=
+ =?us-ascii?Q?kd7gLcOJr+MHmhAwvoj1bxvj2v4WEMBnuT+ehRk5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c73f267-cd10-4cad-c81f-08db7ca74ba3
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2743.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 15:56:57.5137
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7rX/UNoGwTpFAXaPcYoq9ftElVyNrIv7b4R3FU9x1fsWJEztkWuRwq9pz/zPuFbmn70fb+iOCJIuYD8xHOomGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8738
 
-Hi, we tested your kernel and here are the results:
+On Tue, 04 Jul, 2023 15:13:08 +0800 kernel test robot <lkp@intel.com> wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   24be4d0b46bb0c3c1dc7bacd30957d6144a70dfc
+> commit: 09308562d4afb1abc66366608fa1cb9de783272f HID: nvidia-shield: Initial driver implementation with Thunderstrike support
+> date:   4 weeks ago
+> config: arm-randconfig-r014-20230704 (https://download.01.org/0day-ci/archive/20230704/202307041500.6bKn7nCl-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce: (https://download.01.org/0day-ci/archive/20230704/202307041500.6bKn7nCl-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307041500.6bKn7nCl-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> drivers/hid/hid-nvidia-shield.c:59:2: warning: field  within 'struct thunderstrike_hostcmd_resp_report' is less aligned than 'union thunderstrike_hostcmd_resp_report::(anonymous at drivers/hid/hid-nvidia-shield.c:59:2)' and is usually due to 'struct thunderstrike_hostcmd_resp_report' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+>            union {
+>            ^
+>    1 warning generated.
+>
+>
+> vim +59 drivers/hid/hid-nvidia-shield.c
+>
+>     53	
+>     54	struct thunderstrike_hostcmd_resp_report {
+>     55		u8 report_id; /* THUNDERSTRIKE_HOSTCMD_RESP_REPORT_ID */
+>     56		u8 cmd_id;
+>     57		u8 reserved_at_10;
+>     58	
+>   > 59		union {
+>     60			struct thunderstrike_hostcmd_board_info board_info;
+>     61			struct thunderstrike_hostcmd_haptics motors;
+>     62			__le16 fw_version;
+>     63			u8 payload[30];
+>     64		};
+>     65	} __packed;
+>     66	static_assert(sizeof(struct thunderstrike_hostcmd_resp_report) ==
+>     67		      THUNDERSTRIKE_HOSTCMD_REPORT_SIZE);
+>     68	
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Will send out a fix for this soon.
 
-
-Kernel information:
-    Commit message: mm: don't do validate_mm() unnecessarily and without mm=
-ap locking
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94766
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36932=
-1
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- Rahul Rameshbabu
