@@ -1,128 +1,151 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D9C525B
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 09:46:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=FwpevetY3qEoIfFRnsl4wjyTfmQ8ybzfoGFpZ0wcNEw=; b=Ob1q3Yp0F/vKHRXDHBRSDYFMkM
-	KZ0jQ0OGEJWwHXE8IyKnqLNZc6NVskS6JGN6JyLgvTxtPrjna9DMHH7e139KwlnR69haN+C0JZETd
-	edL3Gxdg3sYChxvULplriLkSCcwS4hjr/WcgQ1ZTO+se6AXcOPIm/asXWmVapcyUJPj1fBg7k/RE0
-	QXFXPQZT21fvihLFHEn8gpM4GQ6DL6IQM3bvRQuIr5cY9ZW5svQ4cuZtpcWjqXHXTJbTLqk4CnIBi
-	Eyse70yVPsxcfAtrUJp7PPL9ffEWPO41nqgyEsFRonTlwIjzVnRYoHOEbx/lgcCls9hF+NP6O4Xqq
-	MFq/HH7g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1qGcc9-0091z6-Pk; Tue, 04 Jul 2023 09:46:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 37CD2300023;
-	Tue,  4 Jul 2023 11:46:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 052A02028FBD7; Tue,  4 Jul 2023 11:46:27 +0200 (CEST)
-Date: Tue, 4 Jul 2023 11:46:27 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Olivier Dion <odion@efficios.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-Message-ID: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-References: <87ttukdcow.fsf@laura>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459F05663
+	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 10:24:00 +0000 (UTC)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-98e39784a85so978505366b.1
+        for <llvm@lists.linux.dev>; Tue, 04 Jul 2023 03:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688466238; x=1691058238;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
+        b=mOwGBPhiUibe9TZEveAD5uwTEzZO42X9132eJViv6MRt+PGT9b5GJMp5GwYq7tV296
+         vsqRJpvLfzby4/86k//5QIA5DHCQdyL8tawK4VrDht4jCbFfP6nSi/mx8DyFGlqQ8ar5
+         1jSxs6wI61xswGUk2RQwyh8WuHWiwzPuEFF/KpNMRkaXAM7RhbTrnXaqs4x3RZQR0gKP
+         /KKfv0mm92IddImVSz+aZ9cBN4qn5gjpBw2ZfOUe3Df1KzcFIXSKyC2z0E3VxwoJbdzw
+         NrvthTtklqwh1ZBSsYNuj2Nuv6aeNsi72NbC8TEotLJ55UI4etsuJdyqfjPWdy/yrmg/
+         gTxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688466238; x=1691058238;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vx7ppah8AFGnktLnnie0w36X7NdKzmPV1iXgMAT5r4s=;
+        b=j+MkheNUjigoFaPPjn1e7wvjJtJVOqtA+HMhMZ4eceDqoncvMkaxb64Q6Yzq/iLsS1
+         QHs32ZDNn6j3zYU8D0nbeJhVnRghON0+ZyomrE/RcX2edP2KGTfOj/YgTMSoJNquIcS6
+         P03P/66DLT3NErnXHYTCuQwWYMU1lsKvv80B836LX1VaDPNRQCIGL1Fa4XSZ4Ck91tMV
+         hyfsCx7RA5mJNTHnxaw4vQpxCKC48PXrfPCp6gIqn1u6QFNXI7xE4368e4LJRMxD9b+i
+         3wIY7e5/XX9FIhSEXy/ztBw3cNQc92fnCwVzX24vRd+/CGXXll+bZfMqUIl28YCMXCk0
+         K0cw==
+X-Gm-Message-State: ABy/qLaSwtkW4SjU9NNxVbRzsOd+buco2y6Q3a+y/FjtKyMXyQzEpDQE
+	451rFlfAZeSO5+5C3xLsHcPmfILN3bAfBrRfNu0=
+X-Google-Smtp-Source: APBJJlEAlGOxHf9AN/Vw4ySd7uIusXyxdktq7C6hpD1W72WxF0+WYXaZ3XEi4FK7aHV0ixLwVlFpErv9bnrqsTnnl+4=
+X-Received: by 2002:a17:906:c3a4:b0:98d:4ae:8db9 with SMTP id
+ t36-20020a170906c3a400b0098d04ae8db9mr11136259ejz.19.1688466238030; Tue, 04
+ Jul 2023 03:23:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ttukdcow.fsf@laura>
+References: <87ttukdcow.fsf@laura> <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+From: Jonathan Wakely <jwakely.gcc@gmail.com>
+Date: Tue, 4 Jul 2023 11:23:46 +0100
+Message-ID: <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Olivier Dion <odion@efficios.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+On Tue, 4 Jul 2023 at 10:47, Peter Zijlstra wrote:
+>
+> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+>
+> >   int x = 0;
+> >   int y = 0;
+> >   int r0, r1;
+> >
+> >   int dummy;
+> >
+> >   void t0(void)
+> >   {
+> >           __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
+> >
+> >           __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
+> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
+> >
+> >           r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
+> >   }
+> >
+> >   void t1(void)
+> >   {
+> >           __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
+> >           __atomic_thread_fence(__ATOMIC_SEQ_CST);
+> >           r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
+> >   }
+> >
+> >   // BUG_ON(r0 == 0 && r1 == 0)
+> >
+> > On x86-64 (gcc 13.1 -O2) we get:
+> >
+> >   t0():
+> >           movl    $1, x(%rip)
+> >           movl    $1, %eax
+> >           xchgl   dummy(%rip), %eax
+> >           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
+> >           movl    y(%rip), %eax
+> >           movl    %eax, r0(%rip)
+> >           ret
+> >   t1():
+> >           movl    $1, y(%rip)
+> >           lock orq $0, (%rsp)
+> >           movl    x(%rip), %eax
+> >           movl    %eax, r1(%rip)
+> >           ret
+>
+> So I would expect the compilers to do better here. It should know those
+> __atomic_thread_fence() thingies are superfluous and simply not emit
+> them. This could even be done as a peephole pass later, where it sees
+> consecutive atomic ops and the second being a no-op.
 
->   int x = 0;
->   int y = 0;
->   int r0, r1;
-> 
->   int dummy;
-> 
->   void t0(void)
->   {
->           __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
-> 
->           __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
->           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> 
->           r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
->   }
-> 
->   void t1(void)
->   {
->           __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
->           __atomic_thread_fence(__ATOMIC_SEQ_CST);
->           r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
->   }
-> 
->   // BUG_ON(r0 == 0 && r1 == 0)
-> 
-> On x86-64 (gcc 13.1 -O2) we get:
-> 
->   t0():
->           movl    $1, x(%rip)
->           movl    $1, %eax
->           xchgl   dummy(%rip), %eax
->           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
->           movl    y(%rip), %eax
->           movl    %eax, r0(%rip)
->           ret
->   t1():
->           movl    $1, y(%rip)
->           lock orq $0, (%rsp)
->           movl    x(%rip), %eax
->           movl    %eax, r1(%rip)
->           ret
+Right, I don't see why we need a whole set of new built-ins that say
+"this fence isn't needed if the adjacent atomic op already implies a
+fence". If the adjacent atomic op already implies a fence for a given
+ISA, then the compiler should already be able to elide the explicit
+fence.
 
-So I would expect the compilers to do better here. It should know those
-__atomic_thread_fence() thingies are superfluous and simply not emit
-them. This could even be done as a peephole pass later, where it sees
-consecutive atomic ops and the second being a no-op.
+So just write your code with the explicit fence, and rely on the
+compiler to optimize it properly. Admittedly, today's compilers don't
+do that optimization well, but they also don't support your proposed
+built-ins, so you're going to have to wait for compilers to make
+improvements either way.
 
-> On x86-64 (clang 16 -O2) we get:
-> 
->   t0():
->           movl    $1, x(%rip)
->           movl    $1, %eax
->           xchgl   %eax, dummy(%rip)
->           mfence                    ;; Redundant with previous exchange.
+https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4455.html
+discusses that compilers could (and should) optimize around atomics
+better.
 
-And that's just terrible :/ Nobody should be using MFENCE for this. And
-using MFENCE after a LOCK prefixes instruction (implicit in this case)
-is just fail, because I don't think C++ atomics cover MMIO and other
-such 'lovely' things.
-
->           movl    y(%rip), %eax
->           movl    %eax, r0(%rip)
->           retq
->   t1():
->           movl    $1, y(%rip)
->           mfence
->           movl    x(%rip), %eax
->           movl    %eax, r1(%rip)
->           retq
-
+>
+> > On x86-64 (clang 16 -O2) we get:
+> >
+> >   t0():
+> >           movl    $1, x(%rip)
+> >           movl    $1, %eax
+> >           xchgl   %eax, dummy(%rip)
+> >           mfence                    ;; Redundant with previous exchange.
+>
+> And that's just terrible :/ Nobody should be using MFENCE for this. And
+> using MFENCE after a LOCK prefixes instruction (implicit in this case)
+> is just fail, because I don't think C++ atomics cover MMIO and other
+> such 'lovely' things.
+>
+> >           movl    y(%rip), %eax
+> >           movl    %eax, r0(%rip)
+> >           retq
+> >   t1():
+> >           movl    $1, y(%rip)
+> >           mfence
+> >           movl    x(%rip), %eax
+> >           movl    %eax, r1(%rip)
+> >           retq
+>
