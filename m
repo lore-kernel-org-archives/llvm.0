@@ -1,117 +1,147 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED15C6D18;
-	Tue,  4 Jul 2023 16:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688487241; x=1720023241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R8g1bwf5c8d/A4CHf60RuC/ImvuRfeDIvX+0Z0/qH3U=;
-  b=EbU0FkwptdeZIzySSINKeeZ0Sz/Ir26jrl5Gsp3cSOdYAhlkhEUhEM7b
-   nmq/23uOhG6+M/QYzH5I7693SXXhvsU0Zyx/GsA9bbY3nQhPvLDdeq810
-   kVeXbZfodFfLqA89vYdw9HZsq3BGcMUpk6ThQXxx7Wfn+esDCchqzx7dt
-   LQtpdKSIXj6y2KWg6cHOJ7L0ZlNgEeJTJ2nUhcZUDcbIIpb6DTHcf1IAI
-   uV/E7BFkmCI9KAiXqXheAVf8M+1tWRaT6oUOROp87Lu8EzGB5miCGHhAD
-   EI1lbzV6wykBymzTftm6ZW6TdYF2rCnlhGcRPE2eQ+YfnreOFvxFM3XsG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="360631608"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="360631608"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 09:14:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="832212766"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="832212766"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Jul 2023 09:13:59 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qGif9-000IMT-09;
-	Tue, 04 Jul 2023 16:13:59 +0000
-Date: Wed, 5 Jul 2023 00:13:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] mm: memory-failure: add missing set_mce_nospec() for
- memory_failure()
-Message-ID: <202307050036.KEckskkD-lkp@intel.com>
-References: <20230704121948.1331846-1-linmiaohe@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCFF6FA8
+	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 17:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1688491164;
+	bh=XoqjGAAisrMB/Pfyua6e1oRHYcJ+y87IfUpKWBoC9wk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=N2D2FNXOyS0ABkYSbbOai7GzSARmAlho0m8eLsvqFxANOIuMOhO1LxydQEjhJqWyn
+	 s4diZvaronIi3ssoqSJLXbG2Evq/maxxdpiOJUSEh/lXO8vRT9kOiXIgk6/vlSH72L
+	 SoAmwZR1oFltK2T3OZT7oqpbU9kE+AnZRPw+R71IXS3aARtVDA+vkBW3RoghrODyGA
+	 LNHHXSzwcvpj5hUxSspofjvrHBgPIgFJeLfkY/HYpuR6P21DoPavis1F8YwgHyI9Cm
+	 lKxMFY44J/zevh4FFKsVftiCQZvvfa9EmOv/54AsOL+YBt7uD0VDfqyCww4cIbuzEA
+	 6CZ5BEHfIqYSw==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwTzv6tQ7z1C97;
+	Tue,  4 Jul 2023 13:19:23 -0400 (EDT)
+From: Olivier Dion <odion@efficios.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+ Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
+ Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+In-Reply-To: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Organization: EfficiOS
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Date: Tue, 04 Jul 2023 13:19:23 -0400
+Message-ID: <87ilazd278.fsf@laura>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704121948.1331846-1-linmiaohe@huawei.com>
+Content-Type: text/plain
 
-Hi Miaohe,
+On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+>> This is a request for comments on extending the atomic builtins API to
+>> help avoiding redundant memory barriers.  Indeed, there are
+>
+> What atomic builtins API are you talking about?  The kernel's?  That's 
+> what it sounded like when I first read this sentence -- why else post 
+> your message on a kernel mailing list?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
+for the confusion.
 
-[auto build test WARNING on akpm-mm/mm-everything]
+[...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/mm-memory-failure-add-missing-set_mce_nospec-for-memory_failure/20230704-202035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230704121948.1331846-1-linmiaohe%40huawei.com
-patch subject: [RFC PATCH] mm: memory-failure: add missing set_mce_nospec() for memory_failure()
-config: arm64-randconfig-r003-20230704 (https://download.01.org/0day-ci/archive/20230705/202307050036.KEckskkD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050036.KEckskkD-lkp@intel.com/reproduce)
+>> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
+>> have implicit memory barriers before/after the operations [1-2], while
+>> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
+>> do not have any ordering guarantees of an atomic thread fence
+>> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+>
+> After reading what you wrote below, I realized that the API you're 
+> thinking of modifying is the one used by liburcu for user programs.  
+> It's a shame you didn't mention this in either the subject line or the 
+> first few paragraphs of the email; that would have made understanding 
+> the message a little easier.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307050036.KEckskkD-lkp@intel.com/
+Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
+the toolchain's atomic builtins and not the LKMM itself.  The reason why
+we've reached out to the Linux kernel developers is because the
+original Userspace RCU uatomic API is based on the LKMM.
 
-All warnings (new ones prefixed by >>):
+> In any case, your proposal seems reasonable to me at first glance, with 
+> two possible exceptions:
+>
+> 1.	I can see why you have special fences for before/after load, 
+> 	store, and rmw operations.  But why clear?  In what way is 
+> 	clearing an atomic variable different from storing a 0 in it?
 
->> mm/memory-failure.c:2406:9: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
-    2406 |                                 if (!entry.flags & MF_SW_SIMULATED)
-         |                                     ^            ~
-   mm/memory-failure.c:2406:9: note: add parentheses after the '!' to evaluate the bitwise operator first
-    2406 |                                 if (!entry.flags & MF_SW_SIMULATED)
-         |                                     ^                             
-         |                                      (                            )
-   mm/memory-failure.c:2406:9: note: add parentheses around left hand side expression to silence this warning
-    2406 |                                 if (!entry.flags & MF_SW_SIMULATED)
-         |                                     ^           
-         |                                     (           )
-   1 warning generated.
+We could indeed group the clear with the store.
 
+We had two approaches in mind:
 
-vim +2406 mm/memory-failure.c
+  a) A before/after pair by category of operation:
 
-  2387	
-  2388	static void memory_failure_work_func(struct work_struct *work)
-  2389	{
-  2390		struct memory_failure_cpu *mf_cpu;
-  2391		struct memory_failure_entry entry = { 0, };
-  2392		unsigned long proc_flags;
-  2393		int gotten;
-  2394	
-  2395		mf_cpu = container_of(work, struct memory_failure_cpu, work);
-  2396		for (;;) {
-  2397			spin_lock_irqsave(&mf_cpu->lock, proc_flags);
-  2398			gotten = kfifo_get(&mf_cpu->fifo, &entry);
-  2399			spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
-  2400			if (!gotten)
-  2401				break;
-  2402			if (entry.flags & MF_SOFT_OFFLINE)
-  2403				soft_offline_page(entry.pfn, entry.flags);
-  2404			else
-  2405				if (!memory_failure(entry.pfn, entry.flags))
-> 2406					if (!entry.flags & MF_SW_SIMULATED)
-  2407						set_mce_nospec(entry.pfn);
-  2408		}
-  2409	}
-  2410	
+     - load
+     - store
+     - RMW
+  
+  b) A before/after pair for every operation:
+
+     - load
+     - store
+     - exchange
+     - compare_exchange
+     - {add,sub,and,xor,or,nand}_fetch
+     - fetch_{add,sub,and,xor,or,nand}
+     - test_and_set
+     - clear
+
+If we go for the grouping in a), we have to take into account that the
+barriers emitted need to cover the worse case scenario.  As an example,
+Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
+returned value is not used.
+
+Therefore, for the grouping in a), all RMW would need to emit a memory
+barrier (with Clang on x86-64).  But with the scheme in b), we can emit
+the barrier explicitly for the exchange operation.  We however question
+the usefulness of this kind of optimization made by the compiler, since
+a user should use a store operation instead.
+
+> 2.	You don't have a special fence for use after initializing an 
+> 	atomic.  This operation can be treated specially, because at the 
+> 	point where an atomic is initialized, it generally has not yet 
+> 	been made visible to any other threads.
+
+I assume that you're referring to something like std::atomic_init from
+C++11 and deprecated in C++20?  I do not see any scenario on any
+architecture where a compiler would emit an atomic operation for the
+initialization of an atomic variable.  If a memory barrier is required
+in this situation, then an explicit one can be emitted using the
+existing API.
+
+In our case -- with the compiler's atomic builtins -- the initialization
+of a variable can be done without any atomic operations and does not
+require any memory barrier.  This is a consequence of being capable of
+working with integral-scalar/pointer type without an atomic qualifier.
+
+> Therefore the fence which would normally appear after a store (or
+> clear) generally need not appear after an initialization, and you
+> might want to add a special API to force the generation of such a
+> fence.
+
+I am puzzled by this.  Initialization of a shared variable does not need
+to be atomic until its publication.  Could you expand on this?
+
+Thanks for the feedback,
+	Olivier
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
