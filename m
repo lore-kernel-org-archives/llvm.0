@@ -1,130 +1,163 @@
-Received: from mail-pj1-f80.google.com (mail-pj1-f80.google.com [209.85.216.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03246128
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 19:20:04 +0000 (UTC)
-Received: by mail-pj1-f80.google.com with SMTP id 98e67ed59e1d1-2631fc29e8aso5780001a91.3
-        for <llvm@lists.linux.dev>; Tue, 04 Jul 2023 12:20:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688498404; x=1691090404;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V8z37kh0jEmMsrs2uPjnY0ZT+diXbQGQ7dVapIGO4DM=;
-        b=mEbHBL2+e+EAr65boHOEH68SB/njIsJFfQmizC6Oz4NVRhwkxWzC6WdNMzhKCnrNGB
-         3EgWJV3tUkv4bZ7OqMb2HwCwBaLthZGWNAvV5Hw3B5ULWath5HICiCAU6g+7zhrX1wy2
-         sKLiGimLZ0bnwcgZz/zNF95PgD+d8xoPuc1WIign9j1h8it9PlgsbXbEJ33Ct5TsIXa/
-         Ese9ucrigha2y9sOA/u9VtZCtvzWcM0Ps+EH1QnOctVrNHN9zE9appfG7tFF3yFuSMCk
-         FKYObOByQQwwMjCoRzFVoVBronburTSYXECetT4vM1IKmLPm802TXZCXSs3vSN8Q2BfU
-         TiIg==
-X-Gm-Message-State: ABy/qLb97u0nx341veI4T/NkSZdBV/f4WttDvAvaifscvreEnAP57aSm
-	lfeK84+ncOv1lR8V+24PKQ02gH7rS9uO5h4dBS35T0WPlb5z
-X-Google-Smtp-Source: APBJJlG9YYe0A7uM8mB8AtPSgQnqfOQAVjw7tR+Ui/9RajSTtuAzEDx/fnnPxE4xrZz0oqnm3iM77B6HgcZzgD6885P6iTdubzsL
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF936128;
+	Tue,  4 Jul 2023 19:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688499187; x=1720035187;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oNIEdHaEiR8OxME2pFIicwMil9EV3QsKKDNNQ7UDEoo=;
+  b=ZqLPOIM1MEy26Dxfxawobu+wWznPjMrwfDFTds4ErvVwVjzUE0H6AdMI
+   FkItW2d8Fn3cMrgiAiaVjFvLm28CFIFwpqzlyYkH3zOVFLP4L3A+DF9Qi
+   DtiK8iqTEHpCMV4idsGtkFV7rxiFF2ANgT7z/OFuCTrHJNjg3S8H1wosk
+   HOEEKIVO7oa6NOE58R3+DLyJDZiPmDXjSDpmZXnE2/QzF/X4zcuJfvBb6
+   woB34v9tWj4m9qG38B4zGXQswfybAev79UeuV4DBRVCfDZ+MTZxkrtATy
+   5Kc2ncIUFXur9JniZ+OJoucOI0uvnBAwhKSiVtUWVejl/e1nTmWmD7JZ/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="429221405"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="429221405"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 12:33:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="788939366"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="788939366"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Jul 2023 12:33:05 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGllp-000IUJ-0B;
+	Tue, 04 Jul 2023 19:33:05 +0000
+Date: Wed, 5 Jul 2023 03:32:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org
+Subject: [tiwai-sound:test/snd_ctl_remove-lock-fix 33/38]
+ sound/soc/codecs/sigmadsp.c:676:45: error: no member named 'kctl' in 'struct
+ sigmadsp_control'
+Message-ID: <202307050346.R8ow8O6J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:e001:b0:262:ffa8:f49d with SMTP id
- u1-20020a17090ae00100b00262ffa8f49dmr10469123pjy.9.1688498404107; Tue, 04 Jul
- 2023 12:20:04 -0700 (PDT)
-Date: Tue, 04 Jul 2023 12:20:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000094ac8b05ffae2bf2@google.com>
-Subject: [syzbot] [modules?] general protection fault in sys_finit_module
-From: syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, chris@chrisdown.name, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev, mcgrof@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git test/snd_ctl_remove-lock-fix
+head:   6dd4ae925ae5b90ccfbcb11dce06fd505cc18bc8
+commit: f6df559bc59a922fc6bd100cd018207323c3f9d1 [33/38] ASoC: sigmadsp: Simplify with snd_ctl_activate_id()
+config: hexagon-randconfig-r045-20230703 (https://download.01.org/0day-ci/archive/20230705/202307050346.R8ow8O6J-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050346.R8ow8O6J-lkp@intel.com/reproduce)
 
-syzbot found the following issue on:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307050346.R8ow8O6J-lkp@intel.com/
 
-HEAD commit:    995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13db8c0ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d6670ca80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103be50b280000
+All errors (new ones prefixed by >>):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d61d1dbcb956/disk-995b406c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f471061e6439/vmlinux-995b406c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9dcd428320a5/bzImage-995b406c.xz
+   In file included from sound/soc/codecs/sigmadsp.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/sigmadsp.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/sigmadsp.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> sound/soc/codecs/sigmadsp.c:676:45: error: no member named 'kctl' in 'struct sigmadsp_control'
+     676 |         changed = snd_ctl_activate_id(card, &ctrl->kctl->id, active);
+         |                                              ~~~~  ^
+   6 warnings and 1 error generated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in idempotent kernel/module/main.c:3078 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in init_module_from_file kernel/module/main.c:3124 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __do_sys_finit_module kernel/module/main.c:3171 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __se_sys_finit_module+0x371/0x8d0 kernel/module/main.c:3154
-Read of size 8 at addr ffffc90003b1fd60 by task syz-executor680/5015
+vim +676 sound/soc/codecs/sigmadsp.c
 
-CPU: 1 PID: 5015 Comm: syz-executor680 Not tainted 6.4.0-syzkaller-10098-g995b406c7e97 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:364 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:475
- kasan_report+0x175/0x1b0 mm/kasan/report.c:588
- idempotent kernel/module/main.c:3078 [inline]
- init_module_from_file kernel/module/main.c:3124 [inline]
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module+0x371/0x8d0 kernel/module/main.c:3154
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7faed3af4ce9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd8021778 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-RAX: ffffffffffffffda RBX: 000000000000da09 RCX: 00007faed3af4ce9
-RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffcd8021918 R09: 00007ffcd8021918
-R10: 00007ffcd80211f0 R11: 0000000000000246 R12: 00007ffcd802178c
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+   667	
+   668	static void sigmadsp_activate_ctrl(struct sigmadsp *sigmadsp,
+   669		struct sigmadsp_control *ctrl, unsigned int samplerate_mask)
+   670	{
+   671		struct snd_card *card = sigmadsp->component->card->snd_card;
+   672		bool active;
+   673		int changed;
+   674	
+   675		active = sigmadsp_samplerate_valid(ctrl->samplerates, samplerate_mask);
+ > 676		changed = snd_ctl_activate_id(card, &ctrl->kctl->id, active);
+   677		if (active && changed > 0) {
+   678			mutex_lock(&sigmadsp->lock);
+   679			if (ctrl->cached)
+   680				sigmadsp_ctrl_write(sigmadsp, ctrl, ctrl->cache);
+   681			mutex_unlock(&sigmadsp->lock);
+   682		}
+   683	}
+   684	
 
-Memory state around the buggy address:
- ffffc90003b1fc00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003b1fc80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90003b1fd00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                                       ^
- ffffc90003b1fd80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003b1fe00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
