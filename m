@@ -1,93 +1,144 @@
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F3B53B1
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 13:29:36 +0000 (UTC)
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-440c5960b58so1708418137.3
-        for <llvm@lists.linux.dev>; Tue, 04 Jul 2023 06:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688477375; x=1691069375;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XmB7Lt1kdBVFrZQRN7GBaRqYcNVkYfgU/8oYqlFezt4=;
-        b=ajJ4UiuFndj1QghyWQgPkL/JxKC3j1CBoSonKOyfUJJL7j07mh4qPoGIsk56/chegt
-         xpzBz4hA+2qF8Iyg+suTKjFLkDI9hiAyA43m8+N0/78KMweoPyissSbRCxDPlEZlbe9B
-         QQq2iQaIM63wFhEmEq36Es23XFItAVroZiyNHk0nsjNxChQS4gcw5rx0S+jPQJsKNUDF
-         qgt/yD4FKjpTxS/+okX250KkIfpcfwON3oS8NF1OyVkfF/+c6WS0nNI/C+dSZIpBKbWs
-         v+0j+vAEGllmImrMMhN+l6gMWa+85tjTmTlkC8lX6fitTHJJ5jx3Q8ckwwVni/moruf8
-         7wBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688477375; x=1691069375;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmB7Lt1kdBVFrZQRN7GBaRqYcNVkYfgU/8oYqlFezt4=;
-        b=XAFKZULbVpdpmfgMKRjn75or6oT9IUk+M56xSzBnsBEA17/N8Qrgni4FLrg11C8OKq
-         46xh1q7Y4emYfb+MAAX7Ct0V+qm6iDgM0Y8AKiUZjYVMhCBsVutaCXxsE8I/qaeoTfPh
-         4NmoTJ76Epx2DjqI0NuCEqVwEA7ttIbo5E160GcQbdXBGN54YPmGqLait1FKSslv7ib/
-         i+6axBh/H4fE42rkHHILqVuJH418j+hiqhWp5e+r11UtyBs3FL2XWYLgKnBofKi72jFP
-         5qkfFfyhOgoKEvd2r6nGrZfEv387MDcHNvfAr9I/zP98Z8nM8VYOlnxsCPXDJRzfxdvK
-         ZuJA==
-X-Gm-Message-State: ABy/qLbimkZ/RSetPHM8H41E1Z8HumosM+JECOk4H9grlifImr7BlsjF
-	v9wllW83L6LqPUVwbxyjTVc=
-X-Google-Smtp-Source: APBJJlG6UXeTK7QCoVEmWgU5r0gDS1LYzy0V2HuWLufr6jmxSy6vhodnImbYXmBhc6oWC5DcwYECTg==
-X-Received: by 2002:a05:6102:50d:b0:443:92af:a851 with SMTP id l13-20020a056102050d00b0044392afa851mr5784886vsa.32.1688477375412;
-        Tue, 04 Jul 2023 06:29:35 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id v13-20020a67ac0d000000b00440978082a6sm3673732vse.8.2023.07.04.06.29.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 06:29:34 -0700 (PDT)
-Message-ID: <5164d21e-1ceb-35cf-1d1d-6c32fcdcc4c5@gmail.com>
-Date: Tue, 4 Jul 2023 10:29:29 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED91611A;
+	Tue,  4 Jul 2023 14:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688481600; x=1720017600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5hYH7tLrYTCicGEb2ZU/Jy0zLcHGqGEEfkxY390VHa0=;
+  b=gAH+RVMM6agq6KPhr2fnPmny3vNAuRP+ZAggxMy3TouH1tQvBmB3jqG+
+   cLEW/CNnQMPCx+jqqt+7zD9DX3BmigleW8SRb5ia+rvegZsq6pu5/CpUX
+   WjKZFlPi+BYiQdEhBCQJ7mFnbHp9cKiFMTEg3q2q4TY6Dd/v+ao493/Kw
+   VJqK9ssdMol7jXtGPTPIAE/eRUXQPjVxE8UEQPPwQaqSrYAHrTH/AzC9Q
+   Oek/K046/O/kw46oZHwmd6W4WK2IaoOGTJbKl/Ry0uFVPbsWjOlhhc9GZ
+   8l7HCb2TgBp63GW2IRle0QoU+AA/qrDhw+MrWSkkuWpGWkVrRi07eUpRE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="343469956"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="343469956"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 07:39:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="718940903"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="718940903"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2023 07:39:55 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGhC7-000IIp-2s;
+	Tue, 04 Jul 2023 14:39:55 +0000
+Date: Tue, 4 Jul 2023 22:39:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@iki.fi>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Subject: Re: [PATCH 5/5] media: i2c: imx219: Simplify code handling in s_fmt
+Message-ID: <202307042233.nrNvmP4V-lkp@intel.com>
+References: <20230704104057.149837-6-jacopo.mondi@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] btf, scripts: rust: drop is_rust_module.sh
-To: Andrea Righi <andrea.righi@canonical.com>, Miguel Ojeda
- <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20230704052136.155445-1-andrea.righi@canonical.com>
-Content-Language: en-US
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230704052136.155445-1-andrea.righi@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704104057.149837-6-jacopo.mondi@ideasonboard.com>
 
-On 7/4/23 02:21, Andrea Righi wrote:
-> With commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-> we are now able to use pahole directly to identify Rust compilation
-> units (CUs) and exclude them from generating BTF debugging information
-> (when DEBUG_INFO_BTF is enabled).
-> 
-> And if pahole doesn't support the --lang-exclude flag, we can't enable
-> both RUST and DEBUG_INFO_BTF at the same time.
-> 
-> So, in any case, the script is_rust_module.sh is just redundant and we
-> can drop it.
-> 
-> NOTE: we may also be able to drop the "Rust loadable module" mark
-> inside Rust modules, but it seems safer to keep it for now to make sure
-> we are not breaking any external tool that may potentially rely on it.
+Hi Jacopo,
 
-Keep it, I think it can be useful with tooling like kmod.
+kernel test robot noticed the following build warnings:
 
-> 
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> ---
-> [...]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v6.4 next-20230704]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacopo-Mondi/media-i2c-imx219-Rename-mbus-codes-array/20230704-184252
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230704104057.149837-6-jacopo.mondi%40ideasonboard.com
+patch subject: [PATCH 5/5] media: i2c: imx219: Simplify code handling in s_fmt
+config: i386-randconfig-r005-20230704 (https://download.01.org/0day-ci/archive/20230704/202307042233.nrNvmP4V-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230704/202307042233.nrNvmP4V-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307042233.nrNvmP4V-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/i2c/imx219.c:755:15: warning: unused variable 'i' [-Wunused-variable]
+           unsigned int i;
+                        ^
+   1 warning generated.
+
+
+vim +/i +755 drivers/media/i2c/imx219.c
+
+1283b3b8f82b90 Dave Stevenson 2020-01-20  747  
+1283b3b8f82b90 Dave Stevenson 2020-01-20  748  static int imx219_set_pad_format(struct v4l2_subdev *sd,
+0d346d2a6f54f0 Tomi Valkeinen 2021-06-10  749  				 struct v4l2_subdev_state *sd_state,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  750  				 struct v4l2_subdev_format *fmt)
+1283b3b8f82b90 Dave Stevenson 2020-01-20  751  {
+1283b3b8f82b90 Dave Stevenson 2020-01-20  752  	struct imx219 *imx219 = to_imx219(sd);
+1283b3b8f82b90 Dave Stevenson 2020-01-20  753  	const struct imx219_mode *mode;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  754  	int exposure_max, exposure_def, hblank;
+22da1d56e98215 Lad Prabhakar  2020-03-10 @755  	unsigned int i;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  756  
+1283b3b8f82b90 Dave Stevenson 2020-01-20  757  	mode = v4l2_find_nearest_size(supported_modes,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  758  				      ARRAY_SIZE(supported_modes),
+1283b3b8f82b90 Dave Stevenson 2020-01-20  759  				      width, height,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  760  				      fmt->format.width, fmt->format.height);
+563219f153d5f7 Jacopo Mondi   2023-07-04  761  
+7471d0495584f7 Jacopo Mondi   2023-07-04  762  	imx219_update_pad_format(imx219, mode, &fmt->format, fmt->format.code);
+563219f153d5f7 Jacopo Mondi   2023-07-04  763  
+563219f153d5f7 Jacopo Mondi   2023-07-04  764  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+1283b3b8f82b90 Dave Stevenson 2020-01-20  765  		imx219->mode = mode;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  766  		/* Update limits and set FPS to default */
+1283b3b8f82b90 Dave Stevenson 2020-01-20  767  		__v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MIN,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  768  					 IMX219_VTS_MAX - mode->height, 1,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  769  					 mode->vts_def - mode->height);
+1283b3b8f82b90 Dave Stevenson 2020-01-20  770  		__v4l2_ctrl_s_ctrl(imx219->vblank,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  771  				   mode->vts_def - mode->height);
+1283b3b8f82b90 Dave Stevenson 2020-01-20  772  		/* Update max exposure while meeting expected vblanking */
+1283b3b8f82b90 Dave Stevenson 2020-01-20  773  		exposure_max = mode->vts_def - 4;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  774  		exposure_def = (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
+1283b3b8f82b90 Dave Stevenson 2020-01-20  775  			exposure_max : IMX219_EXPOSURE_DEFAULT;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  776  		__v4l2_ctrl_modify_range(imx219->exposure,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  777  					 imx219->exposure->minimum,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  778  					 exposure_max, imx219->exposure->step,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  779  					 exposure_def);
+1283b3b8f82b90 Dave Stevenson 2020-01-20  780  		/*
+1283b3b8f82b90 Dave Stevenson 2020-01-20  781  		 * Currently PPL is fixed to IMX219_PPL_DEFAULT, so hblank
+1283b3b8f82b90 Dave Stevenson 2020-01-20  782  		 * depends on mode->width only, and is not changeble in any
+1283b3b8f82b90 Dave Stevenson 2020-01-20  783  		 * way other than changing the mode.
+1283b3b8f82b90 Dave Stevenson 2020-01-20  784  		 */
+1283b3b8f82b90 Dave Stevenson 2020-01-20  785  		hblank = IMX219_PPL_DEFAULT - mode->width;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  786  		__v4l2_ctrl_modify_range(imx219->hblank, hblank, hblank, 1,
+1283b3b8f82b90 Dave Stevenson 2020-01-20  787  					 hblank);
+1283b3b8f82b90 Dave Stevenson 2020-01-20  788  	}
+1283b3b8f82b90 Dave Stevenson 2020-01-20  789  
+563219f153d5f7 Jacopo Mondi   2023-07-04  790  	*v4l2_subdev_get_pad_format(sd, sd_state, 0) = fmt->format;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  791  
+1283b3b8f82b90 Dave Stevenson 2020-01-20  792  	return 0;
+1283b3b8f82b90 Dave Stevenson 2020-01-20  793  }
+1283b3b8f82b90 Dave Stevenson 2020-01-20  794  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
