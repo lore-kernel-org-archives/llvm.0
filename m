@@ -1,83 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D8A806
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 20:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688503870;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Q4w48ZKVtKic//oFbBFZf1cCiMI1ffqngOdAzY0RlVQ=;
-	b=hDx2W0BR81NpC1ji9F3FLDcIIy+sVeLrF7dnpjpjv1KDl2Zc2YE1s15MAPrB94N1BX6sTB
-	HUE9j1HK9i8okTaYIaZ23yxYtlcB+EhTubjNJ6vFKsmSE67jzmmF5OYHuDGObs6EBpKwYg
-	cGoq5SDH9eQLE5y7yIHNgNhdkd+2Arw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-IXamuZrHMFyR8_i7eUTybQ-1; Tue, 04 Jul 2023 16:51:08 -0400
-X-MC-Unique: IXamuZrHMFyR8_i7eUTybQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 964DD2A59544
-	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 20:51:08 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 85262C00049;
-	Tue,  4 Jul 2023 20:51:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, 03275585)
-Date: Tue, 04 Jul 2023 20:51:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66057806
+	for <llvm@lists.linux.dev>; Tue,  4 Jul 2023 21:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04F5C433C7;
+	Tue,  4 Jul 2023 21:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1688505909;
+	bh=qc56JTBHGohk1G3UBHSzdTOuW9NcRbtT8225a+8pH5Q=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=emtK38XlrYPJvK7UxLe0VHhghuLKeQeRWePjA6wNBBOj1orrQ4WKXP0zh1qDSfs/X
+	 dt1Z+Zi/mi6s9iVRg+51zLHKddCU/OAd/H0TKxYaO11JosTLjcx0/eMzvZOMH6RFVG
+	 zxCWgQn5rkYEJgfACQxzGz5C+dh48ltQeTxlPfTIwvzCzelcL35jIXmfPOn8izeKZd
+	 s2mt441asHp+men5mUbS3CcW5B2JrH1kUXrytQ8Lkr8pG4/p8evSADchqrLnhxTYFk
+	 72W0GgjMcy0qoiTiVIFbCRPCJfsGi/XT9DVw3djQjRumGduewmom3KfKs0UYPM4I2F
+	 0/Q4/FkK9i+7w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 7E9CFCE0CC2; Tue,  4 Jul 2023 14:25:09 -0700 (PDT)
+Date: Tue, 4 Jul 2023 14:25:09 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Olivier Dion <odion@efficios.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+Message-ID: <3f740262-821b-4f39-8f1a-c6d02253986c@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+ <87ilazd278.fsf@laura>
+ <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <90196.123070416510800183@us-mta-138.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Jul 04, 2023 at 04:25:45PM -0400, Alan Stern wrote:
+> On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+[ . . . ]
 
+> > I am puzzled by this.  Initialization of a shared variable does not need
+> > to be atomic until its publication.  Could you expand on this?
+> 
+> In the kernel, I believe it sometimes happens that an atomic variable 
+> may be published before it is initialized.  (If that's wrong, Paul or 
+> Peter can correct me.)  But since this doesn't apply to the situations 
+> you're concerned with, you can forget I mentioned it.
 
-Kernel information:
-    Commit message: afs: Fix accidental truncation when storing data
+Both use cases exist.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94815
+A global atomic is implicitly published at compile time.  If the desired
+initial value is not known until multiple threads are running, then it
+is necessary to be careful.  Hence double-check locking and its various
+replacements.  (Clearly, if you can determine the initial value before
+going multithreaded, life is simpler.)
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36949=
-6
+And dynamically allocated or on-stack storage is the other case, where
+there is a point in time when the storage is private even after multiple
+threads are running.
 
+Or am I missing the point?
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+							Thanx, Paul
