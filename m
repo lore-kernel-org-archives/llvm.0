@@ -1,89 +1,84 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E43134C5
-	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 21:54:03 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-55adfa61199so54590a12.2
-        for <llvm@lists.linux.dev>; Wed, 05 Jul 2023 14:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688594043; x=1691186043;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Liimh1L4HJOY8OXGuengeZBXQw3nbaSrFK0qkUkfJCs=;
-        b=HFFLDf1nKMBiNkEDGGknlZd0lGZnl0k4TCqvFA5zwVNWuk7IlzvTt5cWGTCU3wbezy
-         3cscNV9rbOUEkZgYIm+Ix5i0RPFVtlrZHHMHBHIZXyDQ/LJ0VHfJey04tcyFGLaPbCey
-         fqlj4vKpCkqvwE+zhZO4XJoF7gTzxKu8sdunI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688594043; x=1691186043;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Liimh1L4HJOY8OXGuengeZBXQw3nbaSrFK0qkUkfJCs=;
-        b=JRm0Fqe8ZlOV34HVLuGOFz05nK+HZuGA+wXPceOxePNQe8k7p0SsVHKC/ATvRbFm6W
-         6P5U7z+1CcXuBhzmMAvUc0k/O1Cdqqcz/7EzP3pjAJBiCb/z8lnUbQ7E/UiRmR2KSGOK
-         1krwpTr2tdoZq99yWgTvH+JysAxRGukVDkM7QK0Fa9rCoFtm34n0qmxj8VwVNSSVBGUO
-         6TiUOeTKiEkWSOqy1A7K/jO1A3C2ooDVME79x3K5wO+yrIWttLbguCuplShYHeuVGA8n
-         BY0W4pcdrfOZUDodlGNseakZpJbtdAnW22z6MtJoqKSQVRDl4SZpcTcHnO8149EZ42rF
-         NfJQ==
-X-Gm-Message-State: ABy/qLYp7u6QDG7JAIr/HkSi5bbaOJgGTa4YyW/630OEh7N9Ef8S4Wbk
-	BGBMf30vJs4Bbp4wEejVKbEiaA==
-X-Google-Smtp-Source: APBJJlH7J8n+IUqKejrXtfTB5wxONrffa3P712Yi+AN6QPnr1lntlUu05kUEIE1E/pnCtMwAOY3vWQ==
-X-Received: by 2002:a17:90b:e83:b0:263:6114:f0f9 with SMTP id fv3-20020a17090b0e8300b002636114f0f9mr16144191pjb.42.1688594043310;
-        Wed, 05 Jul 2023 14:54:03 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b12-20020a17090a550c00b00263154aab24sm45869pji.57.2023.07.05.14.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 14:54:02 -0700 (PDT)
-Date: Wed, 5 Jul 2023 14:54:01 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Jann Horn <jannh@google.com>, Kees Cook <kees@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux LLVM <llvm@lists.linux.dev>,
-	the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: CONFIG_UBSAN_TRAP #UD error message on x86 [was: Re:
- [CRASH][BISECTED] 6.4.1 crash in boot]
-Message-ID: <202307051453.007A5ED7@keescook>
-References: <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
- <202307031149.823F9A3@keescook>
- <202307031606.3FD9D0D@keescook>
- <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
- <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org>
- <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
- <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
- <CAG48ez0kmSqS_WJ1=neKpxKmMMkPYgNHfBD6ZSif_EWnso84wQ@mail.gmail.com>
- <202307051405.E746464@keescook>
- <20230705213113.GC2813335@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72267134C5
+	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 22:21:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688595664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4sP+X34MsNv74errL+gSsv56BBEhHXksVboNQJ4B/1s=;
+	b=fCtlV/mc4GCOINc3LfBY2iHOSizFKf4QjCYrlxs5A8hPIf5tKoFPcYXuQjzUKhcSe5ZEta
+	47hp36+khsvH+de/S93XM7TIyhlTiuJ2Kb/5tkqZmm0+Ovou07jpCX+1GYox+29aI0c/2Q
+	Q3SwtZe02LJSK4JBXKSHJtWnmxJ8SQM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-vOnDlvqQNCGvAdozi6WIPw-1; Wed, 05 Jul 2023 18:21:03 -0400
+X-MC-Unique: vOnDlvqQNCGvAdozi6WIPw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AEFB4858290
+	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 22:21:02 +0000 (UTC)
+Received: from [172.64.15.54] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9AAEBC478DD;
+	Wed,  5 Jul 2023 22:21:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, 73a3fcda)
+Date: Wed, 05 Jul 2023 22:21:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705213113.GC2813335@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <13578.123070518210300695@us-mta-563.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 05, 2023 at 11:31:13PM +0200, Peter Zijlstra wrote:
-> On Wed, Jul 05, 2023 at 02:08:09PM -0700, Kees Cook wrote:
-> 
-> > > Even just a "WARNING: CONFIG_UBSAN_TRAP active, #UD might be caused by
-> > > that" on every #UD that does not come from a known BUG() location or
-> > > such might be better than nothing...
-> > 
-> > I've considered it, but usually CONFIG_UBSAN_TRAP isn't accidentally
-> > set. Also, the crash info is something we can get help from on the
-> > compiler side, to mark up where the traps are, similar to what we do
-> > with KCFI, but it hasn't happened yet for x86. For example, arm64
-> > already encodes the details in the trap instruction itself:
-> > https://git.kernel.org/linus/25b84002afb9dc9a91a7ea67166879c13ad82422
-> 
-> Right, so you could easily use a different #UD instruction that has an
-> immediate, something like:
-> 
->   0f b9 40 ff          ud1    -0x1(%rax),%rax
+Hi, we tested your kernel and here are the results:
 
-Ah yeah, that would be easier, probably. It could match what arm64 does.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
--- 
-Kees Cook
+
+Kernel information:
+    Commit message: Merge tag 'f2fs-for-6.5-rc1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/jaegeuk/f2fs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94957
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36996=
+5
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
