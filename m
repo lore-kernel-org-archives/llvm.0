@@ -1,236 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491267F6;
-	Wed,  5 Jul 2023 02:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D19C433C7;
-	Wed,  5 Jul 2023 02:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688523001;
-	bh=0RXVtrB0FoWlqLqj3GuhEFh6R++jmGgbW8HINllGCLs=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=AWcU1MY/jciOkKbUW/JRZsw5KyS6LeKrA+n7+Rx00yg2dG+WiCeWWW9e1hc/71tfx
-	 mBPikkYNoPJk/rk8+lHymdIdntDzO+a+a2eO+WOHg8amuVOV1+226aserM+xWUWj5A
-	 DzcsBp65+mzNJZX9tMGMDYumDKtfPGvjTO/xVCXmruTaArK4Az02J4byAB9860OLVE
-	 6Jd8/TdJz9DLx6im/khwNm9XeyiwlZNT6oRIJM5cvMo8GReR36++l+4OJvL7eJ5NT2
-	 WFTffhL162vEGWKaOkVmvlwkDETQfGmM3bQjUNKckjTNPs+SB6+BiShMpAkr61J5OX
-	 PCO3MBPj7bpfg==
-Date: Tue, 04 Jul 2023 19:09:59 -0700
-From: Kees Cook <kees@kernel.org>
-To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
- Kees Cook <keescook@chromium.org>
-CC: Guenter Roeck <linux@roeck-us.net>, Bagas Sanjaya <bagasdotme@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
- Linux Regressions <regressions@lists.linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-hardening@vger.kernel.org
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
-User-Agent: K-9 Mail for Android
-In-Reply-To: <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr> <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook> <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net> <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net> <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr> <202307022230.6121D6896@keescook> <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr> <202307031149.823F9A3@keescook> <202307031606.3FD9D0D@keescook> <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr> <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org> <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
-Message-ID: <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591554C7E;
+	Wed,  5 Jul 2023 04:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688531452; x=1720067452;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=84aTN3DMOl1ZTyWwGezoKTAMEsc6BiJKaJjLi0xsoro=;
+  b=nbcyX7v0vbKUquHZQjKfo0RIFeh43zQvxIrBOl5YaBkPunFfRed59FZt
+   QPtijfa7yudH2XHpr+fsFi8svETBtQGRvL3nI8hWOA+VC5N3L0Hz0fNT/
+   33sj1MYIPKjz61pNblUlsbGwhoxKxFOybdoI2U8p2ah5eEBvin95NaFng
+   gfOLbSheFwxBFsWSXc7kkPX+e1oHIaQ32XgA13gEYHFAsUk+SC4JeiQ0q
+   zRXHdt/+yfapC/+vObQqh47C1XNJ2Crgkx/x/8LPCa0nS7CswJpQ9O0aQ
+   I2goxtregq21yuLQp5PhG/OZ9NNnWwrOVIEk278cm7BW5is/HzFN99MnD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="393996441"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="393996441"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 21:30:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="722251111"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="722251111"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Jul 2023 21:30:48 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qGuAB-0000MS-1T;
+	Wed, 05 Jul 2023 04:30:47 +0000
+Date: Wed, 5 Jul 2023 12:29:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marek Vasut <marex@denx.de>, linux-leds@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Isai Gaspar <isaiezequiel.gaspar@nxp.com>,
+	Marek Vasut <marex@denx.de>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] leds: pca995x: Add support for PCA995X chips
+Message-ID: <202307051216.4riLLcLt-lkp@intel.com>
+References: <20230705000407.153005-2-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705000407.153005-2-marex@denx.de>
 
-On July 4, 2023 4:15:20 PM PDT, Mirsad Todorovac <mirsad=2Etodorovac@alu=2E=
-unizg=2Ehr> wrote:
->On 7/4/23 23:36, Kees Cook wrote:
->> On July 4, 2023 10:20:11 AM PDT, Mirsad Todorovac <mirsad=2Etodorovac@a=
-lu=2Eunizg=2Ehr> wrote:
->>> On 7/4/23 01:09, Kees Cook wrote:> On Mon, Jul 03, 2023 at 12:03:23PM =
--0700, Kees Cook wrote:
->>>>> Cool=2E xhci-hub is in your backtrace, and the above patch was made =
-for
->>>>> something very similar (though, again, I don't see why you're gettin=
-g a
->>>>> _crash_, it should _warn_ and continue normally)=2E And, actually, a=
-lso
->>>>> include this patch:
->>>>> https://lore=2Ekernel=2Eorg/lkml/20230614181307=2Egonna=2E256-kees@k=
-ernel=2Eorg/
->>>>=20
->>>> This is now in Linus's tree:
->>>> 09b69dd4378b ("usb: ch9: Replace 1-element array with flexible array"=
-)
->>>>=20
->>>> Please also still try with the first patch I mentioned, which is very=
- similar:
->>>> https://lore=2Ekernel=2Eorg/lkml/20230629190900=2Enever=2E787-kees@ke=
-rnel=2Eorg/
->>>=20
->>> Hi,
->>>=20
->>> I have finally built w both patches (and recommended PSTORE settings w=
-ere
->>> default already)=2E
->>=20
->> Were you able to find the crashes saved by pstore?
->
->No, only lktdm and invalid opcode crashes =2E=2E=2E
->
->P=2ES=2E
->
->Actually, I have recovered some pstore records=2E Please find them in the=
- attachment:
->
->>> This second patch fixes the booting problem, but alas there is still a=
- problem -
->>=20
->> Ah! That's great! They're is still an unexpected crash source, but the =
-trigger is fixed=2E
->
->Glad I could be of help=2E
->
->>> all Wayland and X11=2Eorg GUI applications fail to start, with errors =
-like this one:
->>>=20
->>> Jul  4 19:09:07 defiant kernel: [   40=2E529719] invalid opcode: 0000 =
-[#1] PREEMPT SMP NOPTI
->>=20
->> Hmm, is CONFIG_UBSAN_TRAP set?
->
->marvin@defiant:~/linux/kernel/linux_torvalds$ grep CONFIG_UBSAN_TRAP =2Ec=
-onfig
->CONFIG_UBSAN_TRAP=3Dy
+Hi Marek,
 
-Ah-ha! Turn that off please=2E With it off you will get much more useful r=
-eports from USBAN=2E
+kernel test robot noticed the following build warnings:
 
->marvin@defiant:~/linux/kernel/linux_torvalds$
->
->>> Jul  4 19:09:07 defiant kernel: [   40=2E529726] RIP: 0010:alloc_pid+0=
-x46c/0x480
->>=20
->> Hmm, is this patch in your kernel?
->> https://git=2Ekernel=2Eorg/linus/b69f0aeb068980af983d399deafc7477cec8bc=
-04
->
->No, it wasn't=2E I had only these:
->
->marvin@defiant:~/linux/kernel/linux_torvalds$ more =2E=2E/kees-[12]=2Epat=
-ch
->::::::::::::::
->=2E=2E/kees-1=2Epatch
->::::::::::::::
->diff --git a/include/uapi/linux/usb/ch9=2Eh b/include/uapi/linux/usb/ch9=
-=2Eh
->index b17e3a21b15f=2E=2E82ec6af71a1d 100644
->--- a/include/uapi/linux/usb/ch9=2Eh
->+++ b/include/uapi/linux/usb/ch9=2Eh
->@@ -376,7 +376,10 @@ struct usb_string_descriptor {
-> 	__u8  bLength;
-> 	__u8  bDescriptorType;
-> -	__le16 wData[1];		/* UTF-16LE encoded */
->+	union {
->+		__le16 legacy_padding;
->+		__DECLARE_FLEX_ARRAY(__le16, wData);	/* UTF-16LE encoded */
->+	};
-> } __attribute__ ((packed));
->  /* note that "string" zero is special, it holds language codes that
->::::::::::::::
->=2E=2E/kees-2=2Epatch
->::::::::::::::
->diff --git a/include/uapi/linux/usb/ch9=2Eh b/include/uapi/linux/usb/ch9=
-=2Eh
->index b17e3a21b15f=2E=2E3ff98c7ba7e3 100644
->--- a/include/uapi/linux/usb/ch9=2Eh
->+++ b/include/uapi/linux/usb/ch9=2Eh
->@@ -981,7 +981,11 @@ struct usb_ssp_cap_descriptor {
-> #define USB_SSP_MIN_RX_LANE_COUNT		(0xf << 8)
-> #define USB_SSP_MIN_TX_LANE_COUNT		(0xf << 12)
-> 	__le16 wReserved;
->-	__le32 bmSublinkSpeedAttr[1]; /* list of sublink speed attrib entries *=
-/
->+	union {
->+		__le32 legacy_padding;
->+		/* list of sublink speed attrib entries */
->+		__DECLARE_FLEX_ARRAY(__le32, bmSublinkSpeedAttr);
->+	};
-> #define USB_SSP_SUBLINK_SPEED_SSID	(0xf)		/* sublink speed ID */
-> #define USB_SSP_SUBLINK_SPEED_LSE	(0x3 << 4)	/* Lanespeed exponent */
-> #define USB_SSP_SUBLINK_SPEED_LSE_BPS		0
->marvin@defiant:~/linux/kernel/linux_torvalds$
->
->---------------------------------------------------------
->
->Now it works=2E Succeeded boot and running of X apps with the new git pul=
-l
->torvalds tree and the kees-2=2Epatch=2E
+[auto build test WARNING on lee-leds/for-leds-next]
+[also build test WARNING on krzk-dt/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Perfect! Okay, so it looks like all the issues are known and fixed=2E I'll=
- work with Greg to get the other ch9 patch landed=2E
+url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/leds-pca995x-Add-support-for-PCA995X-chips/20230705-080506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20230705000407.153005-2-marex%40denx.de
+patch subject: [PATCH v2 2/2] leds: pca995x: Add support for PCA995X chips
+config: s390-randconfig-r025-20230705 (https://download.01.org/0day-ci/archive/20230705/202307051216.4riLLcLt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230705/202307051216.4riLLcLt-lkp@intel.com/reproduce)
 
->
->Praise God!
->
->This is the git log --oneline:
->
->d528014517f2 (HEAD, origin/master, origin/HEAD) Revert "=2Egitignore: ign=
-ore *=2Ecover and *=2Embx"
->04f2933d375e Merge tag 'core_guards_for_6=2E5_rc1' of git://git=2Ekernel=
-=2Eorg/pub/scm/linux/kernel/git/peterz/queue
->03275585cabd afs: Fix accidental truncation when storing data
->538140ca602b Merge tag 'ovl-update-6=2E5-2' of git://git=2Ekernel=2Eorg/p=
-ub/scm/linux/kernel/git/overlayfs/vfs
->94c76955e86a Merge tag 'gfs2-v6=2E4-rc5-fixes' of git://git=2Ekernel=2Eor=
-g/pub/scm/linux/kernel/git/gfs2/linux-gfs2
->ccf46d853183 Merge tag 'pm-6=2E5-rc1-2' of git://git=2Ekernel=2Eorg/pub/s=
-cm/linux/kernel/git/rafael/linux-pm
->b869e9f49964 Merge tag 'clk-for-linus' of git://git=2Ekernel=2Eorg/pub/sc=
-m/linux/kernel/git/clk/linux
->406fb9eb198a Merge tag 'firewire-6=2E5-rc1' of git://git=2Ekernel=2Eorg/p=
-ub/scm/linux/kernel/git/ieee1394/linux1394
->f1962207150c module: fix init_module_from_file() error handling
->40c565a429d7 Merge branches 'pm-cpufreq' and 'pm-cpuidle'
->f679e89acdd3 clk: tegra: Avoid calling an uninitialized function
->
->So, the included patch is:
->
->marvin@defiant:~/linux/kernel/linux_torvalds$ git diff
->diff --git a/include/uapi/linux/usb/ch9=2Eh b/include/uapi/linux/usb/ch9=
-=2Eh
->index 82ec6af71a1d=2E=2E62d318377379 100644
->--- a/include/uapi/linux/usb/ch9=2Eh
->+++ b/include/uapi/linux/usb/ch9=2Eh
->@@ -984,7 +984,11 @@ struct usb_ssp_cap_descriptor {
-> #define USB_SSP_MIN_RX_LANE_COUNT              (0xf << 8)
-> #define USB_SSP_MIN_TX_LANE_COUNT              (0xf << 12)
->        __le16 wReserved;
->-       __le32 bmSublinkSpeedAttr[1]; /* list of sublink speed attrib ent=
-ries */
->+       union {
->+               __le32 legacy_padding;
->+               /* list of sublink speed attrib entries */
->+               __DECLARE_FLEX_ARRAY(__le32, bmSublinkSpeedAttr);
->+       };
-> #define USB_SSP_SUBLINK_SPEED_SSID     (0xf)           /* sublink speed =
-ID */
-> #define USB_SSP_SUBLINK_SPEED_LSE      (0x3 << 4)      /* Lanespeed expo=
-nent */
-> #define USB_SSP_SUBLINK_SPEED_LSE_BPS          0
->marvin@defiant:~/linux/kernel/linux_torvalds$
->
->This means vanilla torvalds tree + https://lore=2Ekernel=2Eorg/lkml/20230=
-629190900=2Enever=2E787-kees@kernel=2Eorg/
->works, but vanilla torvalds tree w/o patch still crashes=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307051216.4riLLcLt-lkp@intel.com/
 
-Great, thanks again for testing it all!
+All warnings (new ones prefixed by >>):
 
--Keed
+   In file included from drivers/leds/leds-pca995x.c:16:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/leds/leds-pca995x.c:16:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/leds/leds-pca995x.c:16:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/leds/leds-pca995x.c:177:34: warning: unused variable 'pca995x_of_match' [-Wunused-const-variable]
+     177 | static const struct of_device_id pca995x_of_match[] = {
+         |                                  ^
+   13 warnings generated.
 
->
->I am still rather new to the utilisation of the PSTORE subsystem=2E
->
->Best regards,
->Mirsad Todorovac
 
---=20
-Kees Cook
+vim +/pca995x_of_match +177 drivers/leds/leds-pca995x.c
+
+   176	
+ > 177	static const struct of_device_id pca995x_of_match[] = {
+   178		{ .compatible = "nxp,pca9952",  .data = (void *)0 /* non-B chip */ },
+   179		{ .compatible = "nxp,pca9955b", .data = (void *)1 /* B-type chip */ },
+   180		{},
+   181	};
+   182	MODULE_DEVICE_TABLE(i2c, pca995x_of_match);
+   183	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
