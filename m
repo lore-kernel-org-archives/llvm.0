@@ -1,84 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0969314AAE
-	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 19:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1688584806;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KWw/d4qbCASfsCZ3m7f98ZfI4BA+Hl7XVjo489Rbbgo=;
-	b=S0iRh/OyPcd+iYKM4XAZcQ3Kb7qyf35OgXYVzb7ZXahkcOaY29KEqf88uRtOdHrGw3FjWL
-	7iIRXzZMWsQoJ9yi6SmEZSBaall4XfJ5EtBWycj2jmHiwxBlpNegVz6QttsN4bL6U4RfLh
-	zf3UuONumNgT0giviT34RI4HlGs4qgo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-474-B0kCkWGiOSCvdnTzjqvMyA-1; Wed, 05 Jul 2023 15:20:05 -0400
-X-MC-Unique: B0kCkWGiOSCvdnTzjqvMyA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6172B8030AC
-	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 19:20:05 +0000 (UTC)
-Received: from [172.64.15.54] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4DAF24087C6A;
-	Wed,  5 Jul 2023 19:20:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
- mainline.kernel.org-clang, fe1de551)
-Date: Wed, 05 Jul 2023 19:20:05 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC552F38
+	for <llvm@lists.linux.dev>; Wed,  5 Jul 2023 20:42:27 +0000 (UTC)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-634efb81e8dso732096d6.1
+        for <llvm@lists.linux.dev>; Wed, 05 Jul 2023 13:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688589746; x=1691181746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k9IOBh2dErzq5pc0UHadZ7sAXf6kWe3n0/dn9RfHGYo=;
+        b=dh4WoR3tlKTcrXQJem35j9FNYUIenpsZPsRsu3o2yL/euzR3wgpNzFqRsyPvjtniX9
+         BGsTSgz5HwMiKXmztwf6HK4vEMBgpB3lkyj2Cz211Vf4iA518z0wdqt9dCU0H2kDwDO7
+         0tDgNaFk3pNdxVbcagamldZztzPyJDuioE1zv9d4+rARk5gQ3SJC+ChUBasjRWHRlwe3
+         D126qlNKwo+q/dkpU41pQ2FTa+o3P/2ij5eqp4c71aNUxifzhGntBeO1zSGWy1Je06Kx
+         1FuuX3Tky8IM1L5vLiI/e3mB66822aXFocZSTtzWT5cFoQ9Pq3Nn0sUAB/1QwATZD6N+
+         M+eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688589746; x=1691181746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k9IOBh2dErzq5pc0UHadZ7sAXf6kWe3n0/dn9RfHGYo=;
+        b=RALqZHZGKwiWK+Yt6WHH8zADkNCMrCig5djS2yjREzBCzgihwpn16gXU8KgvdtryvP
+         Xp0CFSekv+RrogmIzbTKPMELELpa7AKGikuPeTsFMLCo53gfZ14cW0uMZqXjpjecX8H7
+         Y1I3PXnDY+WQpKAmzRzs8645hwu06DnKDE4H5BAdLl07If58fqrux1aJZRcPJBRSafPb
+         dpKm9OlmPWDNZ0JlRmUP46HW6qpdLwCVGsMfOwwZaTfgOP6KhmDOBSR9Fbmx95Q9tBTm
+         jMqBGyi23htvFRQMGx8siKLYwlzBuGxkYucMxj08rjXpqRHKiZfF/x5+hpGue5W7xPKq
+         zICw==
+X-Gm-Message-State: ABy/qLa4wzVaKh5xOyKGPgYk4FKd3HvlekvsnLGJh/OtWUyL+hAk0VNq
+	pxGmjVtL1opRx3X/30HjtpJCt1yLwG4Rz2S8NSRQ7Q==
+X-Google-Smtp-Source: APBJJlGWRpwfhA4itLA+4UG2F5/nsuTLfZv6whI8ChgzNcaYXQwv2I0wbKEv2ceM7nlvKMw4nMyhYlyjVDw07pw7s9E=
+X-Received: by 2002:a05:6214:b6c:b0:636:cc82:8cb4 with SMTP id
+ ey12-20020a0562140b6c00b00636cc828cb4mr12099439qvb.33.1688589746277; Wed, 05
+ Jul 2023 13:42:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <78589.123070515200501478@us-mta-474.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230629234244.1752366-8-samitolvanen@google.com> <20230630-phrasing-strung-12e53988ad81@spud>
+In-Reply-To: <20230630-phrasing-strung-12e53988ad81@spud>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 5 Jul 2023 13:41:49 -0700
+Message-ID: <CABCJKue+4E7mbzkZqsUYzwUf9VY4+nY6+5E1aF_XyQito_399g@mail.gmail.com>
+Subject: Re: [PATCH 0/6] riscv: KCFI support
+To: Conor Dooley <conor@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Hi Conor,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+On Fri, Jun 30, 2023 at 11:48=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> Hey Sami,
+>
+> On Thu, Jun 29, 2023 at 11:42:45PM +0000, Sami Tolvanen wrote:
+> > This series adds KCFI support for RISC-V. KCFI is a fine-grained
+> > forward-edge control-flow integrity scheme supported in Clang >=3D16,
+> > which ensures indirect calls in instrumented code can only branch to
+> > functions whose type matches the function pointer type, thus making
+> > code reuse attacks more difficult.
+>
+> > base-commit: c6b0271053e7a5ae57511363213777f706b60489
+>
+> Could you please rebase this on top of v6.5-rc1 when that comes out?
+> This base-commit is some random commit from Linus' tree, that because we
+> are currently in the merge window has is not in the RISC-V trees yet,
+> and means the series wasn't applied by our CI stuff.
 
+Sure, I'll send v2 rebased on top of -rc1 once it's out. The random
+commit was the ToT at the time this series was sent out.
 
-Kernel information:
-    Commit message: Merge tag 'soundwire-6.5-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/vkoul/soundwire
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/94937
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/36989=
-8
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Sami
