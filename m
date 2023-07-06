@@ -1,89 +1,84 @@
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14766A47;
-	Thu,  6 Jul 2023 05:02:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-	by domac.alu.hr (Postfix) with ESMTP id 2D58C60171;
-	Thu,  6 Jul 2023 07:02:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1688619755; bh=x+TliPLqS2k/24Fs2irqgh/j+t+Qk21Wb7pLn+QCGj4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=1tscRhauMmSuk4ljitKrOhDn1XJXmMU4sdOn4Heu8jYvATLNW1n29UvEsuDduYMLr
-	 rMuLAjWisOVw/9dx+p4+aQZ628rxU4dBBx39MNPDJ87XG/lH3kFtVzJjU+WDxXSXjr
-	 fBaGOKWqk31dgt21db5jAG8Lbs2/MlAUtP++1ZCrKghqQf1U9WAe/EkxdfcoyRTaR1
-	 TBtfXuTl6vhiU1pLGi/xawCxCV9H30NmW4CdgSagkmE93N7OfI22SHq7i7+IVTTF+h
-	 1ZDqZ6XGbdSh4uOWjZIOY8y92btNGTwQTBAw7S5rLVPyAiFCP6A9aYZuUHuG9z5Ur9
-	 QKZlBA8EVQK1w==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9kGYQNc82_0p; Thu,  6 Jul 2023 07:02:33 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-	by domac.alu.hr (Postfix) with ESMTPSA id E61326016E;
-	Thu,  6 Jul 2023 07:02:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-	t=1688619753; bh=x+TliPLqS2k/24Fs2irqgh/j+t+Qk21Wb7pLn+QCGj4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=B9/8kyiw6ezkyKM+F9IPFO898PSbHHlSWE0n2B6RqWo1Ot/OZvqcKrwyR4yriMElg
-	 UbrYZRCeOBz+bQ+1qiZ2juhWI+AI5CA2AaxcvsXm01kJU09iRF2X2NnRv2wVkwJ6KX
-	 wYNUiBlhXF6z25hrmAbYEoEA5yDsGCbYaYWPoPXrDgK9YVS9+jFZqTLAolJZ5DNJbC
-	 Vq4ssmnysgU9mb1wH15pLKWO1Wo+G+51KOT9demKQQxk5zVjGIwAI57G4SsKbPtpnL
-	 vlaQMrcBEB4IgE1c8qYdjW5yL0pc2zrRMlxiASuzxFRDv+DMP2aa1amIiSxXviT6ky
-	 682ZxRHfegnrw==
-Message-ID: <f189719f-c7b9-e247-9251-8a336e41141d@alu.unizg.hr>
-Date: Thu, 6 Jul 2023 07:02:11 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567A910EF
+	for <llvm@lists.linux.dev>; Thu,  6 Jul 2023 06:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688623263;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Wop915USl48WrzPYyFcDpDTGsk6Lq0TI590svb65mhc=;
+	b=cfxYmggDFYJUHJhLCjIbI3CgStLUzb7h/GY3/9m+tP1eqDZM8NDs4e/wzzo5+Qc66KqUHo
+	nCTY2BRPm0RD0RD5btvSA2O6ZcbQiZ5M/xoa6HvqdXxpTr6yEJY5HSEYdTCdV/Nj4nkGZT
+	pgB0wWJaVp05c9yztfXLbCoKFI50yt8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-489-tqkO-1jYNgeveBPGLkZ4Mg-1; Thu, 06 Jul 2023 02:01:01 -0400
+X-MC-Unique: tqkO-1jYNgeveBPGLkZ4Mg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF92D29AB3F0
+	for <llvm@lists.linux.dev>; Thu,  6 Jul 2023 06:01:00 +0000 (UTC)
+Received: from [172.64.15.54] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE94D1121331;
+	Thu,  6 Jul 2023 06:01:00 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.4.0,
+ mainline.kernel.org-clang, c17414a2)
+Date: Thu, 06 Jul 2023 06:01:00 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
-To: Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Bagas Sanjaya <bagasdotme@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux LLVM <llvm@lists.linux.dev>, linux-kbuild@vger.kernel.org,
- Linux Regressions <regressions@lists.linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, linux-hardening@vger.kernel.org
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
- <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
- <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
- <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
- <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
- <202307022230.6121D6896@keescook>
- <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
- <202307031149.823F9A3@keescook> <202307031606.3FD9D0D@keescook>
- <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
- <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org>
- <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
- <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
-Content-Language: en-US
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <03293.123070602010100206@us-mta-489.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/5/23 04:09, Kees Cook wrote:
->>>
->>> Hmm, is CONFIG_UBSAN_TRAP set?
->>
->> marvin@defiant:~/linux/kernel/linux_torvalds$ grep CONFIG_UBSAN_TRAP .config
->> CONFIG_UBSAN_TRAP=y
-> 
-> Ah-ha! Turn that off please. With it off you will get much more useful reports from USBAN.
+Hi, we tested your kernel and here are the results:
 
-Done that. And it appears to work.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-Great job.
 
-There should be a way to store the earliest kernel messages while in the initrd phase, but
-I can't think of any either ...
+Kernel information:
+    Commit message: Merge tag 'sh-for-v6.5-tag1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/glaubitz/sh-linux
 
-Have a nice day!
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/94975
 
-Best regards,
-Mirsad Todorovac
+One or more kernel builds failed:
+    Unrecognized or new issues:
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/37002=
+0
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
