@@ -1,114 +1,253 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BDD8F4B
-	for <llvm@lists.linux.dev>; Thu,  6 Jul 2023 16:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1688661478;
-	bh=lwhfZRazYulsiYsKZXPsOI+0dCJb/SmcqpyPmq8W+xg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=V5+vwnmtFaeTpMVye7LZyjBp+CBcvDlhWRyHsGt6a09D3mQLNDKSZBwx7LP/WTs7Z
-	 j7g912oLYj3A1TIQF0gX9a1OGn25C6l3MchqXU7clXjKOcWt+ynjy61eOFNruLf1iY
-	 tg2y2Vy3sCo6b/upoVrH2APR6rYVy+9DXWHUhMmiitkV0U8/IomVQVD26FX6oPE3uu
-	 0mYGe7xioVr8UKoI1Rc7qmcLG+sQY6LIId0IB8HaEez2S9gEMqzdXg0jdTnbQjgoZQ
-	 cg9era4hELiMQ78azUIkk7MOGe6rKbmwYf3pPReaRG79ioKXnQ2II/cZgbuxlQwCEw
-	 15Bdg97bULYcg==
-Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QxhzB3Jcxz1C9p;
-	Thu,  6 Jul 2023 12:37:58 -0400 (EDT)
-From: Olivier Dion <odion@efficios.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
- Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-In-Reply-To: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
-Organization: EfficiOS
-References: <87ttukdcow.fsf@laura>
- <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
- <87ilazd278.fsf@laura>
- <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
-Date: Thu, 06 Jul 2023 12:37:58 -0400
-Message-ID: <87sfa1atcp.fsf@laura>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82627BA55
+	for <llvm@lists.linux.dev>; Thu,  6 Jul 2023 17:31:53 +0000 (UTC)
+Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b855dc0f0cso13483615ad.1
+        for <llvm@lists.linux.dev>; Thu, 06 Jul 2023 10:31:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688664713; x=1691256713;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MiGTyBPtLwypnQLrO6poXWE8HNsaMeTcj1EiLqNtIak=;
+        b=SiAWsbG+ZvKx02d4D2eMo09qq9FVfp49e8OAZbVEgNCLFvWOsu0AXXQTDJHthpt7H/
+         8kPqcimBjNHp7J9NGOUSOmq9ZknMnqrcYhyIA+U/1lb+YuSRCrOOd6sY/4KGlHQsahA7
+         2hlHM3b2rmrOZtU+iN3FA2YJpGO6dBsGEs/lFbzVEyonL69dRdQA1L9C52UyZQ6JwQTP
+         KQu7OvHRs7TSBK6z1obLsVDs1pmSF+ki1W8W5Twt7aOBonxzvk0wPlFynDrmiewTlcLV
+         tn1agfDwPpfgeIzLuuDYQjvJBon3Aq8+cWbyfhU0UGUg2GCel4WUmVdn/6JJDspHKX1y
+         aH9Q==
+X-Gm-Message-State: ABy/qLbPuXEwhIYh+weOlXar1fXDeoNG4loOxXflSrbrG6Lx4UqlsH9N
+	fDwFplb+q7vhz9ld6gkvjWXI6gPz+eMclsFoywbQRnXts+R8
+X-Google-Smtp-Source: APBJJlGdGYWuER7dPL08sX9M7YVYlkdTtp2LZHLxB4usjFOf6PHao51vrXkPbX7cE+jDoZWAKstDhXGG1EgiUnimEdrH2Af4RSbE
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a17:902:d2cf:b0:1b8:9b39:7cb6 with SMTP id
+ n15-20020a170902d2cf00b001b89b397cb6mr2301958plc.4.1688664712899; Thu, 06 Jul
+ 2023 10:31:52 -0700 (PDT)
+Date: Thu, 06 Jul 2023 10:31:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b767405ffd4e4ec@google.com>
+Subject: [syzbot] [ext4?] possible deadlock in ext4_xattr_inode_iget (2)
+From: syzbot <syzbot+352d78bd60c8e9d6ecdc@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, elic@nvidia.com, jasowang@redhat.com, 
+	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mst@redhat.com, 
+	nathan@kernel.org, ndesaulniers@google.com, parav@nvidia.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 04 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
->> On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
->> > On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
-[...]
-> Oh, is that it?  Then I misunderstood entirely; I thought you were 
-> talking about augmenting the set of functions or macros made available 
-> in liburcu.  I did not realize you intended to change the compilers.
+Hello,
 
-Yes.  We want to extend the atomic builtins API of the toolchains.
+syzbot found the following issue on:
 
->> Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
->> the toolchain's atomic builtins and not the LKMM itself.  The reason why
->> we've reached out to the Linux kernel developers is because the
->> original Userspace RCU uatomic API is based on the LKMM.
->
-> But why do you want to change the compilers to better support urcu?  
-> That seems like going about things backward; wouldn't it make more sense 
-> to change urcu to better match the facilities offered by the current 
-> compilers?
+HEAD commit:    995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=108a1a6f280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7406f415f386e786
+dashboard link: https://syzkaller.appspot.com/bug?extid=352d78bd60c8e9d6ecdc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10fca8b8a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c6f3dca80000
 
-The initial motivation for the migration of the Userspace RCU atomics
-API from custom inline assembler (mimicking the LKMM) to the C11/C++11
-memory model was for supporting userspace tools such as TSAN.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bf7e228b7235/disk-995b406c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c80e997d9074/vmlinux-995b406c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/826390d53480/bzImage-995b406c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/45c2258308a9/mount_0.gz
 
-We did that by porting everything to the compiler's atomic builtins API.
-However, because of the "fully-ordered" atomic semantic of the LKMM, we
-had no other choices than to add memory fences which are redundant on
-some strongly ordered architectures.
+The issue was bisected to:
 
-> What if everybody started to do this: modifying the compilers to better 
-> support their pet projects?  The end result would be chaos!
+commit a3c06ae158dd6fa8336157c31d9234689d068d02
+Author: Parav Pandit <parav@nvidia.com>
+Date:   Tue Jan 5 10:32:03 2021 +0000
 
-This is why we are starting this discussion which involves members of
-the Kernel and toolchains communities.  We have prior experience, e.g. with
-asm gotos which were implemented in GCC, and Clang afterward, in
-response to Linux Kernel tracepoint's requirements.
+    vdpa_sim_net: Add support for user supported devices
 
-Note that the motivation for supporting TSAN in Userspace RCU is coming
-from the requirements of the ISC for the BIND 9 project.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1613da4f280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1513da4f280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1113da4f280000
 
-[...]
->> If we go for the grouping in a), we have to take into account that the
->> barriers emitted need to cover the worse case scenario.  As an example,
->> Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
->> returned value is not used.
->> 
->> Therefore, for the grouping in a), all RMW would need to emit a memory
->> barrier (with Clang on x86-64).  But with the scheme in b), we can emit
->> the barrier explicitly for the exchange operation.  We however question
->> the usefulness of this kind of optimization made by the compiler, since
->> a user should use a store operation instead.
->
-> So in the end you settled on a compromise?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+352d78bd60c8e9d6ecdc@syzkaller.appspotmail.com
+Fixes: a3c06ae158dd ("vdpa_sim_net: Add support for user supported devices")
 
-We have not settled on anything yet.  Choosing between options a) and b)
-is open to discussion.
+EXT4-fs: Warning: mounting with an experimental mount option 'dioread_nolock' for blocksize < PAGE_SIZE
+EXT4-fs (loop0): 1 truncate cleaned up
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-syzkaller-10098-g995b406c7e97 #0 Not tainted
+------------------------------------------------------
+syz-executor118/5116 is trying to acquire lock:
+ffff888077fdc000 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+ffff888077fdc000 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: ext4_xattr_inode_iget+0x173/0x400 fs/ext4/xattr.c:461
 
-[...]
+but task is already holding lock:
+ffff888077fdc888 (&ei->i_data_sem/3){++++}-{3:3}, at: ext4_setattr+0x1988/0x2880 fs/ext4/inode.c:5397
+
+which lock already depends on the new lock.
 
 
-        Thanks,
-        Olivier
--- 
-Olivier Dion
-EfficiOS Inc.
-https://www.efficios.com
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&ei->i_data_sem/3){++++}-{3:3}:
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       ext4_update_i_disksize fs/ext4/ext4.h:3363 [inline]
+       ext4_xattr_inode_write fs/ext4/xattr.c:1446 [inline]
+       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1594 [inline]
+       ext4_xattr_set_entry+0x3046/0x3810 fs/ext4/xattr.c:1719
+       ext4_xattr_ibody_set+0x131/0x3a0 fs/ext4/xattr.c:2273
+       ext4_xattr_set_handle+0x968/0x1510 fs/ext4/xattr.c:2430
+       ext4_xattr_set+0x144/0x360 fs/ext4/xattr.c:2544
+       ext4_xattr_user_set+0xbd/0x100 fs/ext4/xattr_user.c:41
+       __vfs_setxattr+0x173/0x1e0 fs/xattr.c:201
+       __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:235
+       __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:296
+       vfs_setxattr+0x143/0x340 fs/xattr.c:322
+       do_setxattr+0x147/0x190 fs/xattr.c:630
+       setxattr+0x146/0x160 fs/xattr.c:653
+       path_setxattr+0x197/0x1c0 fs/xattr.c:672
+       __do_sys_setxattr fs/xattr.c:688 [inline]
+       __se_sys_setxattr fs/xattr.c:684 [inline]
+       __x64_sys_setxattr+0xc4/0x160 fs/xattr.c:684
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3142 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+       validate_chain kernel/locking/lockdep.c:3876 [inline]
+       __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+       lock_acquire kernel/locking/lockdep.c:5761 [inline]
+       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:771 [inline]
+       ext4_xattr_inode_iget+0x173/0x400 fs/ext4/xattr.c:461
+       ext4_xattr_inode_get+0x162/0x830 fs/ext4/xattr.c:535
+       ext4_xattr_move_to_block fs/ext4/xattr.c:2626 [inline]
+       ext4_xattr_make_inode_space fs/ext4/xattr.c:2728 [inline]
+       ext4_expand_extra_isize_ea+0xf51/0x1810 fs/ext4/xattr.c:2820
+       __ext4_expand_extra_isize+0x33e/0x470 fs/ext4/inode.c:5769
+       ext4_try_to_expand_extra_isize fs/ext4/inode.c:5812 [inline]
+       __ext4_mark_inode_dirty+0x51b/0x800 fs/ext4/inode.c:5890
+       ext4_setattr+0x1a02/0x2880 fs/ext4/inode.c:5400
+       notify_change+0xb2c/0x1180 fs/attr.c:483
+       do_truncate+0x143/0x200 fs/open.c:66
+       handle_truncate fs/namei.c:3295 [inline]
+       do_open fs/namei.c:3640 [inline]
+       path_openat+0x2047/0x2710 fs/namei.c:3793
+       do_filp_open+0x1ba/0x410 fs/namei.c:3820
+       do_sys_openat2+0x160/0x1c0 fs/open.c:1407
+       do_sys_open fs/open.c:1422 [inline]
+       __do_sys_creat fs/open.c:1498 [inline]
+       __se_sys_creat fs/open.c:1492 [inline]
+       __x64_sys_creat+0xcd/0x120 fs/open.c:1492
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ei->i_data_sem/3);
+                               lock(&ea_inode->i_rwsem#8/1);
+                               lock(&ei->i_data_sem/3);
+  lock(&ea_inode->i_rwsem#8/1);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor118/5116:
+ #0: ffff888078b76410 (sb_writers#4){.+.+}-{0:0}, at: do_open fs/namei.c:3629 [inline]
+ #0: ffff888078b76410 (sb_writers#4){.+.+}-{0:0}, at: path_openat+0x1959/0x2710 fs/namei.c:3793
+ #1: ffff888077fdca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+ #1: ffff888077fdca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:64
+ #2: ffff888077fdcba0 (mapping.invalidate_lock){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:816 [inline]
+ #2: ffff888077fdcba0 (mapping.invalidate_lock){++++}-{3:3}, at: ext4_setattr+0x6f2/0x2880 fs/ext4/inode.c:5357
+ #3: ffff888077fdc888 (&ei->i_data_sem/3){++++}-{3:3}, at: ext4_setattr+0x1988/0x2880 fs/ext4/inode.c:5397
+ #4: ffff888077fdc6c8 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_trylock_xattr fs/ext4/xattr.h:162 [inline]
+ #4: ffff888077fdc6c8 (&ei->xattr_sem){++++}-{3:3}, at: ext4_try_to_expand_extra_isize fs/ext4/inode.c:5809 [inline]
+ #4: ffff888077fdc6c8 (&ei->xattr_sem){++++}-{3:3}, at: __ext4_mark_inode_dirty+0x48f/0x800 fs/ext4/inode.c:5890
+
+stack backtrace:
+CPU: 1 PID: 5116 Comm: syz-executor118 Not tainted 6.4.0-syzkaller-10098-g995b406c7e97 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x2df/0x3b0 kernel/locking/lockdep.c:2195
+ check_prev_add kernel/locking/lockdep.c:3142 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+ validate_chain kernel/locking/lockdep.c:3876 [inline]
+ __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+ lock_acquire kernel/locking/lockdep.c:5761 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+ down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:771 [inline]
+ ext4_xattr_inode_iget+0x173/0x400 fs/ext4/xattr.c:461
+ ext4_xattr_inode_get+0x162/0x830 fs/ext4/xattr.c:535
+ ext4_xattr_move_to_block fs/ext4/xattr.c:2626 [inline]
+ ext4_xattr_make_inode_space fs/ext4/xattr.c:2728 [inline]
+ ext4_expand_extra_isize_ea+0xf51/0x1810 fs/ext4/xattr.c:2820
+ __ext4_expand_extra_isize+0x33e/0x470 fs/ext4/inode.c:5769
+ ext4_try_to_expand_extra_isize fs/ext4/inode.c:5812 [inline]
+ __ext4_mark_inode_dirty+0x51b/0x800 fs/ext4/inode.c:5890
+ ext4_setattr+0x1a02/0x2880 fs/ext4/inode.c:5400
+ notify_change+0xb2c/0x1180 fs/attr.c:483
+ do_truncate+0x143/0x200 fs/open.c:66
+ handle_truncate fs/namei.c:3295 [inline]
+ do_open fs/namei.c:3640 [inline]
+ path_openat+0x2047/0x2710 fs/namei.c:3793
+ do_filp_open+0x1ba/0x410 fs/namei.c:3820
+ do_sys_openat2+0x160/0x1c0 fs/open.c:1407
+ do_sys_open fs/open.c:1422 [inline]
+ __do_sys_creat fs/open.c:1498 [inline]
+ __se_sys_creat fs/open.c:1492 [inline]
+ __x64_sys_creat+0xcd/0x120 fs/open.c:1492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f29661c09c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd8f5d8168 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 0031656c69662f2e RCX: 00007f29661c09c9
+RDX: 00007f29661c09c9 RSI: 0000000000000108 RDI: 0000000020000000
+RBP: 0000000000000000 R08: 00007ffd8f5d8190 R09: 00007ffd8f5d8190
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd8f5d818c
+R13: 00007ffd8f5d81c0 R14: 00007ffd8f5d81a0 R15: 000000000000003a
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
