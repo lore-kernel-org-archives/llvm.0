@@ -1,93 +1,114 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0971A8C17;
-	Thu,  6 Jul 2023 16:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688660569; x=1720196569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A2nGMFf1p7LMm7ceGrBrg0MJ9N4lP5wXQN0dF60tUXg=;
-  b=lpq1IpY6qJBCg9hYQh4QGyPhEBdP90IRypFROrOdFftAK3tKQsKudZL6
-   B+s+FSuxdL4RHvfOw15K20Ze+B6n1pDnLJ2tDt/eZc+/aDXp3QZnkInZq
-   yki+JaZ9xPpyTNE6DEJPoB5/8J/JRCSAzLfglF9YYJHgvBtuj+Z6NyhRi
-   ICF5xu0HU6WRT/sQAx0CsBm7Bl/SvigbYn+sr80kJEN9uYzsqYM/tlOV0
-   tyAVHJMqPpnlnIuhP1F3WGfHQj5df9ZTYovwxRL0CZlGkcZJmGHQmDDB9
-   fPTAhs+b3x/3cHob1ovJk0XrzwyI6fpGm3CKGqa8XtrLH2m8hdpZVYtPq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="394409836"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="394409836"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 09:22:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="669789947"
-X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
-   d="scan'208";a="669789947"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jul 2023 09:22:38 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qHRkc-0001Rn-0I;
-	Thu, 06 Jul 2023 16:22:38 +0000
-Date: Fri, 7 Jul 2023 00:21:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC
- step size
-Message-ID: <202307070032.1IfXtrSq-lkp@intel.com>
-References: <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BDD8F4B
+	for <llvm@lists.linux.dev>; Thu,  6 Jul 2023 16:38:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1688661478;
+	bh=lwhfZRazYulsiYsKZXPsOI+0dCJb/SmcqpyPmq8W+xg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=V5+vwnmtFaeTpMVye7LZyjBp+CBcvDlhWRyHsGt6a09D3mQLNDKSZBwx7LP/WTs7Z
+	 j7g912oLYj3A1TIQF0gX9a1OGn25C6l3MchqXU7clXjKOcWt+ynjy61eOFNruLf1iY
+	 tg2y2Vy3sCo6b/upoVrH2APR6rYVy+9DXWHUhMmiitkV0U8/IomVQVD26FX6oPE3uu
+	 0mYGe7xioVr8UKoI1Rc7qmcLG+sQY6LIId0IB8HaEez2S9gEMqzdXg0jdTnbQjgoZQ
+	 cg9era4hELiMQ78azUIkk7MOGe6rKbmwYf3pPReaRG79ioKXnQ2II/cZgbuxlQwCEw
+	 15Bdg97bULYcg==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QxhzB3Jcxz1C9p;
+	Thu,  6 Jul 2023 12:37:58 -0400 (EDT)
+From: Olivier Dion <odion@efficios.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+ Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
+ Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+In-Reply-To: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
+Organization: EfficiOS
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+ <87ilazd278.fsf@laura>
+ <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
+Date: Thu, 06 Jul 2023 12:37:58 -0400
+Message-ID: <87sfa1atcp.fsf@laura>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain
 
-Hi Arseniy,
+On Tue, 04 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
+>> On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+>> > On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+[...]
+> Oh, is that it?  Then I misunderstood entirely; I thought you were 
+> talking about augmenting the set of functions or macros made available 
+> in liburcu.  I did not realize you intended to change the compilers.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Yes.  We want to extend the atomic builtins API of the toolchains.
 
-[auto build test ERROR on mtd/mtd/next]
-[also build test ERROR on mtd/nand/next linus/master next-20230706]
-[cannot apply to mtd/mtd/fixes robh/for-next v6.4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>> Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
+>> the toolchain's atomic builtins and not the LKMM itself.  The reason why
+>> we've reached out to the Linux kernel developers is because the
+>> original Userspace RCU uatomic API is based on the LKMM.
+>
+> But why do you want to change the compilers to better support urcu?  
+> That seems like going about things backward; wouldn't it make more sense 
+> to change urcu to better match the facilities offered by the current 
+> compilers?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/dt-bindings-nand-meson-support-for-512B-ECC-step-size/20230628-174345
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
-patch link:    https://lore.kernel.org/r/20230628092937.538683-3-AVKrasnov%40sberdevices.ru
-patch subject: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC step size
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230707/202307070032.1IfXtrSq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230707/202307070032.1IfXtrSq-lkp@intel.com/reproduce)
+The initial motivation for the migration of the Userspace RCU atomics
+API from custom inline assembler (mimicking the LKMM) to the C11/C++11
+memory model was for supporting userspace tools such as TSAN.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307070032.1IfXtrSq-lkp@intel.com/
+We did that by porting everything to the compiler's atomic builtins API.
+However, because of the "fully-ordered" atomic semantic of the LKMM, we
+had no other choices than to add memory fences which are redundant on
+some strongly ordered architectures.
 
-All errors (new ones prefixed by >>):
+> What if everybody started to do this: modifying the compilers to better 
+> support their pet projects?  The end result would be chaos!
 
->> drivers/mtd/nand/raw/meson_nand.c:244:59: error: initializer element is not a compile-time constant
-     244 | static const struct nand_ecc_step_info axg_stepinfo[] = { axg_stepinfo_1024, axg_stepinfo_512 };
-         |                                                           ^~~~~~~~~~~~~~~~~
-   1 error generated.
+This is why we are starting this discussion which involves members of
+the Kernel and toolchains communities.  We have prior experience, e.g. with
+asm gotos which were implemented in GCC, and Clang afterward, in
+response to Linux Kernel tracepoint's requirements.
+
+Note that the motivation for supporting TSAN in Userspace RCU is coming
+from the requirements of the ISC for the BIND 9 project.
+
+[...]
+>> If we go for the grouping in a), we have to take into account that the
+>> barriers emitted need to cover the worse case scenario.  As an example,
+>> Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
+>> returned value is not used.
+>> 
+>> Therefore, for the grouping in a), all RMW would need to emit a memory
+>> barrier (with Clang on x86-64).  But with the scheme in b), we can emit
+>> the barrier explicitly for the exchange operation.  We however question
+>> the usefulness of this kind of optimization made by the compiler, since
+>> a user should use a store operation instead.
+>
+> So in the end you settled on a compromise?
+
+We have not settled on anything yet.  Choosing between options a) and b)
+is open to discussion.
+
+[...]
 
 
-vim +244 drivers/mtd/nand/raw/meson_nand.c
-
-   243	
- > 244	static const struct nand_ecc_step_info axg_stepinfo[] = { axg_stepinfo_1024, axg_stepinfo_512 };
-   245	
-
+        Thanks,
+        Olivier
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
