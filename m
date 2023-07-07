@@ -1,111 +1,187 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520CEC8E6
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 14:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64269D2F1
+	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 15:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1688738646;
-	bh=5jbxwb1aPjrUPrfRW2dBw44je1ZzASY+efNvvqqX77E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=bO3WwwnpXUmsPeGK/VzYP/BxzqqbcJ7yGTLa5EXcqB47OM/KCOQR6Ptnr0kd+OaoR
-	 30bCgjYNw3wdiJH/NdPy47S/pkF3Pa6TUZFEzO6PaXd1dvc6lI5lYvSKA7Ougu/uGX
-	 7AD+uLdlxq8Io9UN/Ct5sKi8eY9tsvDuH08qOA49etvJOVyArVsRSzTXYozDjMo8W2
-	 xPd0RWL9TovbU1wfZasC2NkuyxuR6wQwVlJKNWdnvGYWctuT1vlPmL6xqry0tDAfWY
-	 hTgl2Y6JdrUMNmoYVC6StSKbi0STZqAoF0xMHH9xAD9td4KpECLi4ZhQxdfKTtxpyo
-	 O6uKAeMA1W4tA==
-Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyFWB6FM1z1G4y;
-	Fri,  7 Jul 2023 10:04:06 -0400 (EDT)
-From: Olivier Dion <odion@efficios.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com, Alan
- Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Nicholas
- Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade
- Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul
- E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, gcc@gcc.gnu.org,
- llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-In-Reply-To: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-Organization: EfficiOS
-References: <87ttukdcow.fsf@laura>
- <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-Date: Fri, 07 Jul 2023 10:04:06 -0400
-Message-ID: <87cz13hl7t.fsf@laura>
+	s=smtpout1; t=1688743875;
+	bh=6r0pVTMiXPIZxuj/C4xxxu1nMFpZhaCFC1W3fq20TXI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FhFFgHuTdpwQ36mN93527p/AICqsZ5lB/YjyN69PD4017Iki3cN4uXGK0oAyzRNw0
+	 6mvCFv026mjMRE4lEzF2LcIC82byjyYDs99uXizssVVk2UdekAMg7ZTrxApZUQLodC
+	 KGvmhoTdjtccOt83XDbM547OTeQrcq42/8kBB09xGzCXO7ur1XzEcocHOg7g3BagIc
+	 xMm+XTDpJhqDd0FB51ZNRS/tYZWObEqD9OoQt4jRGUgkvGCmLALh2prjw9HCG4E1NH
+	 YHqzx2EHUg8UZa6brQuJzJm9d6Q9+N0mpynIUlR/zTdRlN+oTyPoFykhkaxl6sbqFz
+	 p9LcYkmT47vRA==
+Received: from [172.16.0.85] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyHRj4PP0z1G9d;
+	Fri,  7 Jul 2023 11:31:13 -0400 (EDT)
+Message-ID: <ecf1b725-1351-3460-4a99-7a03f15af152@efficios.com>
+Date: Fri, 7 Jul 2023 11:31:46 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+Content-Language: en-US
+To: Jonathan Wakely <jwakely.gcc@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Olivier Dion <odion@efficios.com>, rnk@google.com,
+ Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
+ <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
+ David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>,
+ Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, gcc@gcc.gnu.org,
+ llvm@lists.linux.dev
+References: <87ttukdcow.fsf@laura>
+ <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+ <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAH6eHdQQWO2AYQRXnAATt6nvcyDjKj-_5Ktt2ze6F158hBon=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 04 Jul 2023, Peter Zijlstra <peterz@infradead.org> wrote:
-> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
-[...]
->> On x86-64 (gcc 13.1 -O2) we get:
->> 
->>   t0():
->>           movl    $1, x(%rip)
->>           movl    $1, %eax
->>           xchgl   dummy(%rip), %eax
->>           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
->>           movl    y(%rip), %eax
->>           movl    %eax, r0(%rip)
->>           ret
->>   t1():
->>           movl    $1, y(%rip)
->>           lock orq $0, (%rsp)
->>           movl    x(%rip), %eax
->>           movl    %eax, r1(%rip)
->>           ret
->
-> So I would expect the compilers to do better here. It should know those
-> __atomic_thread_fence() thingies are superfluous and simply not emit
-> them. This could even be done as a peephole pass later, where it sees
-> consecutive atomic ops and the second being a no-op.
+On 7/4/23 06:23, Jonathan Wakely wrote:
+> On Tue, 4 Jul 2023 at 10:47, Peter Zijlstra wrote:
+>>
+>> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+>>
+>>>    int x = 0;
+>>>    int y = 0;
+>>>    int r0, r1;
+>>>
+>>>    int dummy;
+>>>
+>>>    void t0(void)
+>>>    {
+>>>            __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
+>>>
+>>>            __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
+>>>            __atomic_thread_fence(__ATOMIC_SEQ_CST);
+>>>
+>>>            r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
+>>>    }
+>>>
+>>>    void t1(void)
+>>>    {
+>>>            __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
+>>>            __atomic_thread_fence(__ATOMIC_SEQ_CST);
+>>>            r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
+>>>    }
+>>>
+>>>    // BUG_ON(r0 == 0 && r1 == 0)
+>>>
+>>> On x86-64 (gcc 13.1 -O2) we get:
+>>>
+>>>    t0():
+>>>            movl    $1, x(%rip)
+>>>            movl    $1, %eax
+>>>            xchgl   dummy(%rip), %eax
+>>>            lock orq $0, (%rsp)       ;; Redundant with previous exchange.
+>>>            movl    y(%rip), %eax
+>>>            movl    %eax, r0(%rip)
+>>>            ret
+>>>    t1():
+>>>            movl    $1, y(%rip)
+>>>            lock orq $0, (%rsp)
+>>>            movl    x(%rip), %eax
+>>>            movl    %eax, r1(%rip)
+>>>            ret
+>>
+>> So I would expect the compilers to do better here. It should know those
+>> __atomic_thread_fence() thingies are superfluous and simply not emit
+>> them. This could even be done as a peephole pass later, where it sees
+>> consecutive atomic ops and the second being a no-op.
+> 
+> Right, I don't see why we need a whole set of new built-ins that say
+> "this fence isn't needed if the adjacent atomic op already implies a
+> fence". If the adjacent atomic op already implies a fence for a given
+> ISA, then the compiler should already be able to elide the explicit
+> fence.
+> 
+> So just write your code with the explicit fence, and rely on the
+> compiler to optimize it properly. Admittedly, today's compilers don't
+> do that optimization well, but they also don't support your proposed
+> built-ins, so you're going to have to wait for compilers to make
+> improvements either way.
 
-Indeed, a peephole optimization could work for this Dekker, if the
-compiler adds the pattern for it.  However, AFAIK, a peephole can not be
-applied when the two fences are in different basic blocks.  For example,
-only emitting a fence on a compare_exchange success.  This limitation
-implies that the optimization can not be done across functions/modules
-(shared libraries).  For example, it would be interesting to be able to
-promote an acquire fence of a pthread_mutex_lock() to a full fence on
-weakly ordered architectures while preventing a redundant fence on
-strongly ordered architectures.
+Emitting the redundant fences is the plan we have for liburcu.  The
+current situation unfortunately requires users to choose between
+generation of inefficient code with C11 or implement their own inline
+assembler until the compilers catch up.
 
-We know that at least Clang has such peephole optimizations for some
-architecture backends.  It seems however that they do not recognize
-lock-prefixed instructions as fence.  AFAIK, GCC does not have that kind
-of optimization.
+> 
+> https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4455.html
+> discusses that compilers could (and should) optimize around atomics
+> better.
 
-We are also aware that some research has been done on this topic [0].
-The idea is to use PRE for elimiation of redundant fences.  This would
-work across multiple basic blocks, although the paper focus on
-intra-procedural eliminations.  However, it seems that the latest work
-on that [1] has never been completed [2].
+Our understanding of the C11/C++11 memory model is that it aims at
+defining the weakest possible guarantees for each ordering to be as
+efficient as possible on weakly ordered architectures.  However, when
+writing portable code in practice, the C11/C++11 memory model force the
+programmer to insert memory fences which are redundant on strongly
+ordered architectures.
 
-Our proposed approach provides a mean for the user to express -- and
-document -- the wanted semantic in the source code.  This allows the
-compiler to only emit wanted fences, therefore not relying on
-architecture specific backend optimizations.  In other words, this
-applies even on unoptimized binaries.
+We want something that can apply across procedures from different
+modules: e.g. a mutex lock operation (glibc) has an acquire semantic
+using a RMW operation that the caller could promote to a full fence.
+The peephole optimizations cannot do this because they focus on a single
+basic block.  PRE can apply across procedures, but would rely on LTO and
+possibly function annotation across modules.  I am not aware of any
+progress in that research field in the past 6 years. [1-2]
 
-[...]
+The new atomic builtins we propose allow the user to better express its
+intent to the compiler, allowing for better code generation.  Therefore,
+reducing the number of emitted redundant fences, without having to rely on
+optimizations.
 
-	Thanks,
-        Olivier
+It should be noted that the builtins extensions we propose are not
+entirely free.  Here are our perceived downsides of introducing those
+APIs:
 
-  [0] https://dl.acm.org/doi/10.1145/3033019.3033021
+- They add complexity to the atomic builtins API.
 
-  [1] https://discourse.llvm.org/t/fence-elimination-pass-proposal/33679
+- They add constraints which need to be taken into account for future
+   architecture-specific backend optimizations, as an example the (broken)
+   xchg RELEASE | RELAXED -> store on x86 (Clang) [3].
 
-  [2] https://reviews.llvm.org/D5758
+   If an atomic op class (e.g. rmw) can be optimized to a weaker
+   instruction by the architecture backend, then the emission of a
+   before/after-fence associated with this class of atomic op, must be
+   pessimistic and assume the weakest instruction pattern which can
+   be generated.
+
+There are optimizations of atomics and redundant fences in Clang.  The
+redundant fences optimizations appear to be limited to a peephole, which
+does not appear to leverage the fact that lock-prefixed atomic
+operations act as implicit fences on x86.  Perhaps this could be a
+low-hanging fruit for optimization.
+
+We have not observed any similar optimizations in gcc as of today, which
+appears to be a concern for many users. [4-7]
+
+Thanks,
+
+Mathieu
+
+[1] https://dl.acm.org/doi/10.1145/3033019.3033021
+[2] https://reviews.llvm.org/D5758
+[3] https://github.com/llvm/llvm-project/issues/60418
+[4] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86056
+[5] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68622
+[6] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86072
+[7] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63273
+
 -- 
-Olivier Dion
+Mathieu Desnoyers
 EfficiOS Inc.
 https://www.efficios.com
+
