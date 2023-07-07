@@ -1,97 +1,111 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EFE33D0;
-	Fri,  7 Jul 2023 13:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688736903; x=1720272903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zJMl5SY47pBGwDkNPoefM/yltDD51XulbBFX8TC/LJw=;
-  b=cKV0b8mvz/6XF9yPvh1+WkeYIdWjM5SCdjiK6KL9rLB+FhgY4mKNLulF
-   6q7tx7TEeQJv1K4fhASR7BRBL/+smNl5JBKUqwe9XbVpqH1olQGNssEhU
-   3T6AXLMx6p34JSqhsmNd7hY5YydOA05vu7XPEAu9sYFGl4vooiPLtD6Hc
-   EGN52aGXr6DIY1Lor3kcCCAlq6X2SLnSbLP99kDHEquvUsXTsLdBUUCLS
-   oCuSkluY94+LKf/1B4ewoLFsBT2VaS9HoSt62/6kRsJqhFoT6VdTJ6Bmx
-   I5awONVNUGGmR68Rz2BCSRXTtRdAfjnLCdh6W3TrpxY7S7p02Z0JdIaFc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="366471757"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="366471757"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 06:33:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="966656794"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="966656794"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2023 06:33:00 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qHlZz-000212-2G;
-	Fri, 07 Jul 2023 13:32:59 +0000
-Date: Fri, 7 Jul 2023 21:32:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org,
-	peng.fan@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	shengjiu.wang@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: imx: imx8: add audio clock mux driver
-Message-ID: <202307072131.S4pYlrxM-lkp@intel.com>
-References: <1688449175-1677-4-git-send-email-shengjiu.wang@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520CEC8E6
+	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 14:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1688738646;
+	bh=5jbxwb1aPjrUPrfRW2dBw44je1ZzASY+efNvvqqX77E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=bO3WwwnpXUmsPeGK/VzYP/BxzqqbcJ7yGTLa5EXcqB47OM/KCOQR6Ptnr0kd+OaoR
+	 30bCgjYNw3wdiJH/NdPy47S/pkF3Pa6TUZFEzO6PaXd1dvc6lI5lYvSKA7Ougu/uGX
+	 7AD+uLdlxq8Io9UN/Ct5sKi8eY9tsvDuH08qOA49etvJOVyArVsRSzTXYozDjMo8W2
+	 xPd0RWL9TovbU1wfZasC2NkuyxuR6wQwVlJKNWdnvGYWctuT1vlPmL6xqry0tDAfWY
+	 hTgl2Y6JdrUMNmoYVC6StSKbi0STZqAoF0xMHH9xAD9td4KpECLi4ZhQxdfKTtxpyo
+	 O6uKAeMA1W4tA==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyFWB6FM1z1G4y;
+	Fri,  7 Jul 2023 10:04:06 -0400 (EDT)
+From: Olivier Dion <odion@efficios.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com, Alan
+ Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>,
+ Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Nicholas
+ Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade
+ Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul
+ E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, gcc@gcc.gnu.org,
+ llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+In-Reply-To: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+Organization: EfficiOS
+References: <87ttukdcow.fsf@laura>
+ <20230704094627.GS4253@hirez.programming.kicks-ass.net>
+Date: Fri, 07 Jul 2023 10:04:06 -0400
+Message-ID: <87cz13hl7t.fsf@laura>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1688449175-1677-4-git-send-email-shengjiu.wang@nxp.com>
+Content-Type: text/plain
 
-Hi Shengjiu,
+On Tue, 04 Jul 2023, Peter Zijlstra <peterz@infradead.org> wrote:
+> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+[...]
+>> On x86-64 (gcc 13.1 -O2) we get:
+>> 
+>>   t0():
+>>           movl    $1, x(%rip)
+>>           movl    $1, %eax
+>>           xchgl   dummy(%rip), %eax
+>>           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
+>>           movl    y(%rip), %eax
+>>           movl    %eax, r0(%rip)
+>>           ret
+>>   t1():
+>>           movl    $1, y(%rip)
+>>           lock orq $0, (%rsp)
+>>           movl    x(%rip), %eax
+>>           movl    %eax, r1(%rip)
+>>           ret
+>
+> So I would expect the compilers to do better here. It should know those
+> __atomic_thread_fence() thingies are superfluous and simply not emit
+> them. This could even be done as a peephole pass later, where it sees
+> consecutive atomic ops and the second being a no-op.
 
-kernel test robot noticed the following build errors:
+Indeed, a peephole optimization could work for this Dekker, if the
+compiler adds the pattern for it.  However, AFAIK, a peephole can not be
+applied when the two fences are in different basic blocks.  For example,
+only emitting a fence on a compare_exchange success.  This limitation
+implies that the optimization can not be done across functions/modules
+(shared libraries).  For example, it would be interesting to be able to
+promote an acquire fence of a pthread_mutex_lock() to a full fence on
+weakly ordered architectures while preventing a redundant fence on
+strongly ordered architectures.
 
-[auto build test ERROR on abelvesa/clk/imx]
-[also build test ERROR on linus/master v6.4 next-20230707]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We know that at least Clang has such peephole optimizations for some
+architecture backends.  It seems however that they do not recognize
+lock-prefixed instructions as fence.  AFAIK, GCC does not have that kind
+of optimization.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shengjiu-Wang/dt-bindings-clock-imx8-acm-Add-audio-clock-mux-support/20230704-141425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
-patch link:    https://lore.kernel.org/r/1688449175-1677-4-git-send-email-shengjiu.wang%40nxp.com
-patch subject: [PATCH 3/3] clk: imx: imx8: add audio clock mux driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230707/202307072131.S4pYlrxM-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230707/202307072131.S4pYlrxM-lkp@intel.com/reproduce)
+We are also aware that some research has been done on this topic [0].
+The idea is to use PRE for elimiation of redundant fences.  This would
+work across multiple basic blocks, although the paper focus on
+intra-procedural eliminations.  However, it seems that the latest work
+on that [1] has never been completed [2].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307072131.S4pYlrxM-lkp@intel.com/
+Our proposed approach provides a mean for the user to express -- and
+document -- the wanted semantic in the source code.  This allows the
+compiler to only emit wanted fences, therefore not relying on
+architecture specific backend optimizations.  In other words, this
+applies even on unoptimized binaries.
 
-All errors (new ones prefixed by >>):
+[...]
 
->> ld.lld: error: duplicate symbol: init_module
-   >>> defined at clk-imx8qxp.c
-   >>>            drivers/clk/imx/clk-imx8qxp.o:(init_module)
-   >>> defined at clk-imx8-acm.c
-   >>>            drivers/clk/imx/clk-imx8-acm.o:(.init.text+0x4)
---
->> ld.lld: error: duplicate symbol: cleanup_module
-   >>> defined at clk-imx8qxp.c
-   >>>            drivers/clk/imx/clk-imx8qxp.o:(cleanup_module)
-   >>> defined at clk-imx8-acm.c
-   >>>            drivers/clk/imx/clk-imx8-acm.o:(.exit.text+0x4)
+	Thanks,
+        Olivier
 
+  [0] https://dl.acm.org/doi/10.1145/3033019.3033021
+
+  [1] https://discourse.llvm.org/t/fence-elimination-pass-proposal/33679
+
+  [2] https://reviews.llvm.org/D5758
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
