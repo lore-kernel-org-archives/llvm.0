@@ -1,159 +1,97 @@
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3E2BA47
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 10:58:18 +0000 (UTC)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qy8lg6DvPz9v7gD
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 18:29:35 +0800 (CST)
-Received: from [10.81.205.205] (unknown [10.81.205.205])
-	by APP1 (Coremail) with SMTP id LxC2BwBn7gmH66dk1qY5BA--.59757S2;
-	Fri, 07 Jul 2023 11:40:19 +0100 (CET)
-Message-ID: <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
-Date: Fri, 7 Jul 2023 12:40:07 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EFE33D0;
+	Fri,  7 Jul 2023 13:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688736903; x=1720272903;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zJMl5SY47pBGwDkNPoefM/yltDD51XulbBFX8TC/LJw=;
+  b=cKV0b8mvz/6XF9yPvh1+WkeYIdWjM5SCdjiK6KL9rLB+FhgY4mKNLulF
+   6q7tx7TEeQJv1K4fhASR7BRBL/+smNl5JBKUqwe9XbVpqH1olQGNssEhU
+   3T6AXLMx6p34JSqhsmNd7hY5YydOA05vu7XPEAu9sYFGl4vooiPLtD6Hc
+   EGN52aGXr6DIY1Lor3kcCCAlq6X2SLnSbLP99kDHEquvUsXTsLdBUUCLS
+   oCuSkluY94+LKf/1B4ewoLFsBT2VaS9HoSt62/6kRsJqhFoT6VdTJ6Bmx
+   I5awONVNUGGmR68Rz2BCSRXTtRdAfjnLCdh6W3TrpxY7S7p02Z0JdIaFc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="366471757"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="366471757"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 06:33:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="966656794"
+X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
+   d="scan'208";a="966656794"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jul 2023 06:33:00 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qHlZz-000212-2G;
+	Fri, 07 Jul 2023 13:32:59 +0000
+Date: Fri, 7 Jul 2023 21:32:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org,
+	peng.fan@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	shengjiu.wang@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] clk: imx: imx8: add audio clock mux driver
+Message-ID: <202307072131.S4pYlrxM-lkp@intel.com>
+References: <1688449175-1677-4-git-send-email-shengjiu.wang@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-To: Olivier Dion <odion@efficios.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
- Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
- <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- gcc@gcc.gnu.org, llvm@lists.linux.dev
-References: <87ttukdcow.fsf@laura>
-From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <87ttukdcow.fsf@laura>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwBn7gmH66dk1qY5BA--.59757S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw15tr4xKFy5GrWruF45Wrg_yoWrXr4UpF
-	W8KFy8Kw1kGrn7Zw1kAa1DC3yruan5tay5WFy8Ar1UCw1ag3WIvr47KrZ0vrZrAF4kJw1j
-	qrs0v3W3W34DJFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-	07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-	7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688449175-1677-4-git-send-email-shengjiu.wang@nxp.com>
 
-Hi all,
+Hi Shengjiu,
 
+kernel test robot noticed the following build errors:
 
-Am 7/3/2023 um 9:20 PM schrieb Olivier Dion:
-> Hi all,
->
-> This is a request for comments on extending the atomic builtins API to
-> help avoiding redundant memory barriers.  Indeed, there are
-> discrepancies between the Linux kernel consistency memory model (LKMM)
-> and the C11/C++11 memory consistency model [0].  For example,
-> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
-> have implicit memory barriers before/after the operations [1-2], while
-> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
-> do not have any ordering guarantees of an atomic thread fence
-> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+[auto build test ERROR on abelvesa/clk/imx]
+[also build test ERROR on linus/master v6.4 next-20230707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Shengjiu-Wang/dt-bindings-clock-imx8-acm-Add-audio-clock-mux-support/20230704-141425
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
+patch link:    https://lore.kernel.org/r/1688449175-1677-4-git-send-email-shengjiu.wang%40nxp.com
+patch subject: [PATCH 3/3] clk: imx: imx8: add audio clock mux driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230707/202307072131.S4pYlrxM-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230707/202307072131.S4pYlrxM-lkp@intel.com/reproduce)
 
-The issues run quite a bit deeper than this. The two models have two 
-completely different perspectives that are quite much incompatible.
-I think all you can really do is bridge the gap at the level of the 
-generated assembly.
-I.e., don't bridge the gap between LKMM and the C11 MCM. Bridge the gap 
-between the assembly code generated by C11 atomics and the one generated 
-by LKMM. But I'm not sure that's really the task here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307072131.S4pYlrxM-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
->
-> [...] For example, to make Read-Modify-Write (RMW) operations match
-> the Linux kernel "full barrier before/after" semantics, the liburcu's
-> uatomic API has to emit both a SEQ_CST RMW operation and a subsequent
-> thread fence SEQ_CST, which leads to duplicated barriers in some cases.
+>> ld.lld: error: duplicate symbol: init_module
+   >>> defined at clk-imx8qxp.c
+   >>>            drivers/clk/imx/clk-imx8qxp.o:(init_module)
+   >>> defined at clk-imx8-acm.c
+   >>>            drivers/clk/imx/clk-imx8-acm.o:(.init.text+0x4)
+--
+>> ld.lld: error: duplicate symbol: cleanup_module
+   >>> defined at clk-imx8qxp.c
+   >>>            drivers/clk/imx/clk-imx8qxp.o:(cleanup_module)
+   >>> defined at clk-imx8-acm.c
+   >>>            drivers/clk/imx/clk-imx8-acm.o:(.exit.text+0x4)
 
-
-Does it have to though? Can't you just do e.g. an release RMW operation 
-followed by an after_atomic  fence?
-And for loads, a SEQ_CST fence followed by an acquire load? Analogously 
-(but: mirrored) for stores.
-
-
-
->    // Always emit thread fence.
->    __atomic_thread_fence_{before,after}_load(int load_memorder,
->                                              int fence_memorder)
->
->    // NOP for store_memorder == SEQ_CST.
->    // Otherwise, emit thread fence.
->    __atomic_thread_fence_{before,after}_store(int store_memorder,
->                                               int fence_memorder)
->
->     // NOP for clear_memorder == SEQ_CST.
->     // Otherwise, emit thread fence.
->    __atomic_thread_fence_{before,after}_clear(int clear_memorder,
->                                               int fence_memorder)
->
->     // Always NOP.
->    __atomic_thread_fence_{before,after}_rmw(int rmw_memorder,
->                                             int fence_memorder)
-
-
-I currently don't feel comfortable adding such extensions to LKMM (or a 
-compiler API for that matter).
-
-
-You mentioned that the goal is to check some code written using LKMM 
-primitives with TSAN due to some formal requirements. What exactly do 
-these requirements entail? Do you need to check the code exactly as it 
-will be executed (modulo the TSAN instrumentation)? Is it an option to 
-map to normal builtins with suboptimal performance just for the 
-verification purpose, but then run the slightly more optimized original 
-code later?
-
-Specifically for TSAN's ordering requirements, you may need to make 
-LKMM's RMWs into acq+rel with an extra mb, even if all that extra 
-ordering isn't necessary at the assembler level.
-
-
-Also note that no matter what you do, due to the two different 
-perspectives, TSAN's hb relation may introduce false positive data races 
-w.r.t. LKMM.  For example, if the happens-before ordering is guaranteed 
-through pb starting with coe/fre.
-
-Without thinking too hard, it seems to me no matter what fences and 
-barriers you introduce, TSAN will not see this kind of ordering and 
-consider the situation a data race.
-
-(And at least in our own verification methodology for rcu/smr, ordering 
-through fre appears when the rscs reads something that is later 
-overwritten by the writer. Not sure off the top of my head if this fre 
-ordering is what prevents the data race though, or there's some 
-additional ordering that TSAN may also detect.
-
-As a side note, according to LKMM we would also have data races in our 
-critical sections, but I believe use of rcu_dereference would fix that, 
-so you may not experience such data races in your code).
-
-
-best wishes,
-jonas
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
