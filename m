@@ -1,144 +1,173 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E71C2CF
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 20:46:08 +0000 (UTC)
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-765a311a7a9so118173285a.0
-        for <llvm@lists.linux.dev>; Fri, 07 Jul 2023 13:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688762767; x=1691354767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0aYVMvYe1G1Ct9F0r9UZVqRVY35bvxFcxuMPw9DOHvw=;
-        b=lkuqLxF14A/w/d+fV/ttf+K3Ub3mN4dsNqaNLTsP+ZDcGTajiX2EvRqyzkSjnpw90h
-         2/kSM88bqsMjXMcVJVwmaRQGqOm4/nSCxcUal0Du0s8hegtUlJy/KdIPSt3tU5D0lEw0
-         WN36Zgo/31PlXBRBCDW4zoA6ZdCUY76aH/bC14sD01W8wnDCdG9bYPTUABJxt5CYePd+
-         lDwNBBGzo8oQPeOZ7xteUlOayvMdyzlP9mBMsp2tPYiyDWDygUa0ybaVaKei63uKBEih
-         5lPTF8ShwuPVLnHlcCIXQLPBhagZJxmmubKJEEIZbSH7Snzkbfqr4uNsd1A2DxzC8zKa
-         yTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688762767; x=1691354767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0aYVMvYe1G1Ct9F0r9UZVqRVY35bvxFcxuMPw9DOHvw=;
-        b=F80Vc560gCC15OY6AhNoMX/ON37WhtGmuyzokecW4490Pq5b6+WQX3Iyklhw+ZP95c
-         IT28AUOy7B1B5+183tSpC1o3dqsIArk2d5FTil8/nI1aEXFSVqbNiSWAxbJ3hBUzxURN
-         K8fJTkoycL3sEI+Gz6CIX8eQf/nZn+VgAP3Zh6LeH9F86FidNhO9++dxBXbGl8SPRNDU
-         0RU6Szr0r/xO1oMQzmswP8gJi1e3GN8M7uv9IznHTYa+ZdpK2qUtEL/siSNEvbmOr1BZ
-         i2MraYZiRtR4yAwoa2uhb8poukBmsLfuUaSZqYhs4sMEQQMl6oDuZSv/M+uP2cy9Y59T
-         ROZg==
-X-Gm-Message-State: ABy/qLZPAe+aAAjgGpxzyByUHbjdY9Z0BG4o0pwgqoN3nn6QgB0vmJTX
-	u/PA+x+cm88e0CC/LWuIB/AqaOjnbvriCmRx/qqdag==
-X-Google-Smtp-Source: APBJJlHUf0rmBIyOI/T2pORO24BydSGObRtEeKTOwPbRW6TmxkjVJRfSahixaV1hd2/4VLJVPsq9WGAU0WIhQb6nXas=
-X-Received: by 2002:a05:620a:2687:b0:765:449d:1397 with SMTP id
- c7-20020a05620a268700b00765449d1397mr10632093qkp.13.1688762767012; Fri, 07
- Jul 2023 13:46:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441341775B;
+	Fri,  7 Jul 2023 21:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688763854; x=1720299854;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0lf4CsjZMU8LnsYZKbaFdjeTxKhkqzrAQoTvX3+RECU=;
+  b=LHIq8nhCPvyYiA5JObgKAkbaDQipFiMOoMNs9mnHpuikNhnn/MB4cSUT
+   2KlNY6aAw9k8S28sKc8nTFJH9vWAlyhxCp7zlvLBj8buqY5+Cp/MkU2DY
+   xEmRwaSMBSKaTPEG2As6tWkrGrXsZK2H0OKcA1g9pMhfy18pfvJKmUtgV
+   mHaRp0ZTquih3/+Sog4qfCnufy2wUPDFnifp3fuE3v3aMj3nXh5BFI9Oz
+   std8THufgeW7KrbKUmxAta3cGB7f7IhV/gD/a+yTPmGQwiYiHW8VQsq7+
+   cruyAu4WvoH6vmgg+rytUsEkbgSydXWFVHZkOhaPmtdSP/lKkv2vKuUh7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="353831012"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="353831012"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 14:04:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="670288208"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="670288208"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jul 2023 14:04:10 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qHscb-0002IG-2Z;
+	Fri, 07 Jul 2023 21:04:09 +0000
+Date: Sat, 8 Jul 2023 05:03:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but
+ not used
+Message-ID: <202307080446.rpYEMqQ2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
- <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-11-dhowells@redhat.com>
- <58466.1688074499@warthog.procyon.org.uk> <20230629164318.44f45caf@kernel.org>
- <20230630161043.GA2902645@dev-arch.thelio-3990X> <20230630091442.172ec67f@kernel.org>
- <20230630192825.GA2745548@dev-arch.thelio-3990X>
-In-Reply-To: <20230630192825.GA2745548@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Jul 2023 13:45:55 -0700
-Message-ID: <CAKwvOd=H3R0sZjFSNs4xyFdw5yGgxSWk2=v+dmR5TrZfjjXaWA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES)
- rather then sendpage
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, David Howells <dhowells@redhat.com>, 
-	Aurelien Aptel <aaptel@nvidia.com>, netdev@vger.kernel.org, 
-	Alexander Duyck <alexander.duyck@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, David Ahern <dsahern@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>, 
-	Willem de Bruijn <willemb@google.com>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>, 
-	Christoph Hellwig <hch@lst.de>, Chaitanya Kulkarni <kch@nvidia.com>, linux-nvme@lists.infradead.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 30, 2023 at 12:28=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> On Fri, Jun 30, 2023 at 09:14:42AM -0700, Jakub Kicinski wrote:
-> > On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
-> > > > Let me CC llvm@ in case someone's there is willing to make
-> > > > the compiler warn about this.
-> > >
-> > > Turns out clang already has a warning for this, -Wcomma:
-> > >
-> > >   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma op=
-erator here [-Werror,-Wcomma]
-> > >    1017 |                         msg.msg_flags &=3D ~MSG_SPLICE_PAGE=
-S,
-> > >         |                                                           ^
-> > >   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to si=
-lence warning
-> > >    1017 |                         msg.msg_flags &=3D ~MSG_SPLICE_PAGE=
-S,
-> > >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >         |                         (void)(                           )
-> > >   1 error generated.
-> > >
-> > > Let me do some wider build testing to see if it is viable to turn thi=
-s
-> > > on for the whole kernel because it seems worth it, at least in this
-> > > case. There are a lot of cases where a warning won't be emitted (see =
-the
-> > > original upstream review for a list: https://reviews.llvm.org/D3976) =
-but
-> > > something is better than nothing, right? :)
->
-> Well, that was a pipe dream :/ In ARCH=3Darm multi_v7_defconfig alone,
-> there are 289 unique instances of the warning (although a good number
-> have multiple instances per line, so it is not quite as bad as it seems,
-> but still bad):
->
-> $ rg -- -Wcomma arm-multi_v7_defconfig.log | sort | uniq -c | wc -l
-> 289
->
-> https://gist.github.com/nathanchance/907867e0a7adffc877fd39fd08853801
+Hi Christophe,
 
-It's definitely interesting to take a look at some of these cases.
-Some are pretty funny IMO.
+First bad commit (maybe != root cause):
 
->
-> Probably not a good sign of the signal to noise ratio, I looked through
-> a good handful and all the cases I saw were not interesting... Perhaps
-> the warning could be tuned further to become useful for the kernel but
-> in its current form, it is definitely a no-go :/
->
-> > Ah, neat. Misleading indentation is another possible angle, I reckon,
-> > but not sure if that's enabled/possible to enable for the entire kernel
->
-> Yeah, I was surprised there was no warning for misleading indentation...
-> it is a part of -Wall for both clang and GCC, so it is on for the
-> kernel, it just appears not to trigger in this case.
->
-> > either :( We test-build with W=3D1 in networking, FWIW, so W=3D1 would =
-be
-> > enough for us.
->
-> Unfortunately, even in its current form, it is way too noisy for W=3D1, a=
-s
-> the qualifier for W=3D1 is "do not occur too often". Probably could be
-> placed under W=3D2 but it still has the problem of wading through every
-> instance and it is basically a no-op because nobody tests with W=3D2.
->
-> Cheers,
-> Nathan
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4f6b6c2b2f86b7878a770736bf478d8a263ff0bc
+commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
+date:   10 months ago
+config: powerpc-randconfig-r033-20230708 (https://download.01.org/0day-ci/archive/20230708/202307080446.rpYEMqQ2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230708/202307080446.rpYEMqQ2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307080446.rpYEMqQ2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+      14 |         FP_DECL_EX;
+         |         ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+      94 | #define FP_DECL_EX int _fex = 0
+         |                        ^
+   arch/powerpc/math-emu/fsel.c:11:1: warning: no previous prototype for function 'fsel' [-Wmissing-prototypes]
+      11 | fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
+         | ^
+   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      10 | int
+         | ^
+         | static 
+   2 warnings generated.
+--
+>> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but not used [-Wunused-but-set-variable]
+      13 |         FP_DECL_D(A);
+         |         ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+      73 | #define FP_DECL_D(X)            _FP_DECL(2,X)
+         |                                 ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+      28 |   _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+         |              ^
+   <scratch space>:171:1: note: expanded from here
+     171 | A_c
+         | ^
+>> arch/powerpc/math-emu/fcmpu.c:14:2: warning: variable 'B_c' set but not used [-Wunused-but-set-variable]
+      14 |         FP_DECL_D(B);
+         |         ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+      73 | #define FP_DECL_D(X)            _FP_DECL(2,X)
+         |                                 ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+      28 |   _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+         |              ^
+   <scratch space>:177:1: note: expanded from here
+     177 | B_c
+         | ^
+>> arch/powerpc/math-emu/fcmpu.c:15:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+      15 |         FP_DECL_EX;
+         |         ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+      94 | #define FP_DECL_EX int _fex = 0
+         |                        ^
+   arch/powerpc/math-emu/fcmpu.c:11:1: warning: no previous prototype for function 'fcmpu' [-Wmissing-prototypes]
+      11 | fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+         | ^
+   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      10 | int
+         | ^
+         | static 
+   4 warnings generated.
+--
+>> arch/powerpc/math-emu/fctiwz.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+      14 |         FP_DECL_EX;
+         |         ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+      94 | #define FP_DECL_EX int _fex = 0
+         |                        ^
+   arch/powerpc/math-emu/fctiwz.c:11:1: warning: no previous prototype for function 'fctiwz' [-Wmissing-prototypes]
+      11 | fctiwz(u32 *frD, void *frB)
+         | ^
+   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      10 | int
+         | ^
+         | static 
+   2 warnings generated.
+--
+>> arch/powerpc/math-emu/fctiw.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
+      14 |         FP_DECL_EX;
+         |         ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+      94 | #define FP_DECL_EX int _fex = 0
+         |                        ^
+   arch/powerpc/math-emu/fctiw.c:11:1: warning: no previous prototype for function 'fctiw' [-Wmissing-prototypes]
+      11 | fctiw(u32 *frD, void *frB)
+         | ^
+   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      10 | int
+         | ^
+         | static 
+   2 warnings generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/_fex +14 arch/powerpc/math-emu/fsel.c
+
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16   9  
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  10  int
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  11  fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  12  {
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  13  	FP_DECL_D(A);
+d2b194ed820880 arch/powerpc/math-emu/fsel.c Kumar Gala     2008-06-04 @14  	FP_DECL_EX;
+^1da177e4c3f41 arch/ppc/math-emu/fsel.c     Linus Torvalds 2005-04-16  15  
+
+:::::: The code at line 14 was first introduced by commit
+:::::: d2b194ed820880eb19c43b9c10d9f5f30026ee54 powerpc/math-emu: Use kernel generic math-emu code
+
+:::::: TO: Kumar Gala <galak@kernel.crashing.org>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
