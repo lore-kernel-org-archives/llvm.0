@@ -1,117 +1,180 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DB610977
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 21:50:35 +0000 (UTC)
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6237faa8677so14198016d6.1
-        for <llvm@lists.linux.dev>; Fri, 07 Jul 2023 14:50:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF9817ABD
+	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 22:27:35 +0000 (UTC)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7659dc74da1so219735685a.3
+        for <llvm@lists.linux.dev>; Fri, 07 Jul 2023 15:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688766634; x=1691358634;
+        d=google.com; s=20221208; t=1688768855; x=1691360855;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
-        b=l7nzQ6ic8JvejRrTXeSP9pxsZ4sZpYgEseqeeNmP9tOIRZNTCYJOGUj3u6v5xmSkKd
-         OsGDSBLhMCQCLTDROiZOQPSY4n3XvefXTb8Zu3G6/DKWn449TmE86ze0rC9zM0hq/t31
-         W184sHYkrvflPMo7snf9U29pvGHJZG3E9J66dE3tnh4VgWlH6fT1cWJBoqz2VLzpBBuY
-         r+lZmj1ies7BcP3uSA6UegEarirOuydiO6La9+kxtMfMMXAsUY03/e6ZKuY6Wgmmq22C
-         b8N5z2jOmAGYsC9KQjpfqsh1MiRObcU//UJbLJ0KeKi4ZI2Z1bbDwf1hDh9JlRpZ5He7
-         Y1Ng==
+        bh=M11brMTtotbFVLzj4X4lTncnHIwCm2Zf8rkXtvsipsQ=;
+        b=vC6qWQxkXGfXOLG5MVnh7rjsbsQpPKJlKIIfsHZnJyTf9E5goqA5DN13jqiy7u/qoX
+         +pl6G4Ft4je/wY2W6JSrIJSdDan2iGXNbv4U1UABZRQe/TrzD3dHxf3aiZcLB5EENUBN
+         Mbnu9hXeoNdXMTOUqZiv1L4jOEf2l5SJ+Eprv51B5XVR2dwlcTOjl8qPhGcOI1twm8MF
+         nb2u7YKdlLiKTEuGDSJxcvNj0YkWT4LxpbzkpbZsgzN8mWStoCe4WFBAkdhzAevJKbGh
+         rlQfJuL/vlPaJ2ez5sBj9bd9dvZryk1VxpDtVFPwxd5cPUAwwdVEqJj71uucgfQuQ/q6
+         g71g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766634; x=1691358634;
+        d=1e100.net; s=20221208; t=1688768855; x=1691360855;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
-        b=MA2L+p51XUwaun01tcfwLjHPM9lSAey3cYKN0JjaDXgexBKH+64k8wq4LE4LJJE7uN
-         sGRNgKkMOSo+/nt95rPyXkZ01e4EuxgXHb3RdbP6cNe7vK9jy1YPNr9/1YLjPZejbar9
-         QWruiw0z59eqXVJCTsXRd3lTFtk7rkvfvjqpe06DzXON19n/dqsR7uAF4wvuULLMMpjR
-         3zFAafV4XlsXSimNhZnYNkhdsKdLkMpTEFKx3dOCpqwKLX98ZBEHhquM17zPRGwcbVBa
-         3s5gSy37sf3bj4tCOJFA9AAyEq9/m9cGUYQ2R9JjN/OvUjXfDNQS/FtUriYOSOqTvXJg
-         Z6Ug==
-X-Gm-Message-State: ABy/qLYLpCil8SBKhsv2ReobbbBXvfpoZM0pJtpj0ZcE7KW41fRaJZzA
-	XFgI8Rlj504L8zyf5PDsPgYk4c/i/7KWHdYilvzs6A==
-X-Google-Smtp-Source: APBJJlGlQcMZJ3Ushv3xcZlmwD9Pa978expjejTPgbABddwl3wCKInGfLZ2iqBhhPxZWR1b1uxBwbCLiukFcHrak5qI=
-X-Received: by 2002:a0c:e54d:0:b0:634:7c34:6c96 with SMTP id
- n13-20020a0ce54d000000b006347c346c96mr5045432qvm.7.1688766633968; Fri, 07 Jul
- 2023 14:50:33 -0700 (PDT)
+        bh=M11brMTtotbFVLzj4X4lTncnHIwCm2Zf8rkXtvsipsQ=;
+        b=UGXFy5Iydqvhjn/AOz6Qo+VbGB6wl5sSyOihq0cPsnnXUVLbYEVBHl6HyChp5Ag2mI
+         OiXtA/GmjlAgyu0qaUH/oT6UZafWBGA9klAOfvyJz/FbsfmL3SjbNaL0GJgZCmELtAyp
+         lGC5SMijHNFm0bY1ARzPVVYx6O8bQJevYgjFFihuo0k1l83Wi4O8xMBtN3CTVrVueAHJ
+         4ChquBvYdb2OXsD3ifHmbFK1phX9s5l+1o6tA0wDzaioRYcVxcrCVnEsQmz9qPfEdVQC
+         l6HGJCzk6LFR9bL3aaF0auJQYWsR1OMpA5obcl00GDa9nmEjLlmr6uk7BSrXvpT1Dx09
+         PXwg==
+X-Gm-Message-State: ABy/qLas1dn0j4HI6zP+xcmQv6AQoYYbtm59cMr+h6TUvpLXrjJXCNet
+	EJVbNGtvawbp4dwt/je1dz3NOS5KewLLlzKIJe/YjA==
+X-Google-Smtp-Source: APBJJlH89jF/4fQmPOPYtbkj8S3UrudUI50F/TSq49MlnMtbZRNScnk727WYFAglj3OAFCeaVzlUJdA5SnBQJFc2H1Y=
+X-Received: by 2002:a05:620a:2588:b0:767:2f4a:e07a with SMTP id
+ x8-20020a05620a258800b007672f4ae07amr6955904qko.68.1688768854702; Fri, 07 Jul
+ 2023 15:27:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230703113737.694995-1-arnd@kernel.org> <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
-In-Reply-To: <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
+References: <20230628181926.4102448-1-yhs@fb.com>
+In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Jul 2023 14:50:23 -0700
-Message-ID: <CAKwvOdmedTDChYYSgdC0LQGOdrzm1ua--kUcz-KGXi4TnxcvUg@mail.gmail.com>
-Subject: Re: [PATCH] sunrpc: avoid constant-out-of-range warning with clang
-To: Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, 
-	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Neil Brown <neilb@suse.de>, Olga Kornievskaia <kolga@netapp.com>, 
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Dan Carpenter <error27@gmail.com>, 
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 7 Jul 2023 15:27:23 -0700
+Message-ID: <CAKwvOdm_Cp9dF1yseTXvOOtFMsOPzCBWhfszAt0k5SXXyFyjtw@mail.gmail.com>
+Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global functions
+To: Yonghong Song <yhs@fb.com>
+Cc: Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Fangrui Song <maskray@google.com>, kernel-team@fb.com, 
+	Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>, "KE . LI" <like1@oppo.com>, 
+	Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 3, 2023 at 5:42=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
+On Wed, Jun 28, 2023 at 11:19=E2=80=AFAM Yonghong Song <yhs@fb.com> wrote:
 >
-> On Mon, Jul 03, 2023 at 01:37:22PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The overflow check in xdr_stream_decode_uint32_array() was added for
-> > 32-bit systems, but on 64-bit builds it causes a build warning when
-> > building with clang and W=3D1:
-> >
-> > In file included from init/do_mounts.c:22:
-> > include/linux/sunrpc/xdr.h:778:10: error: result of comparison of const=
-ant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int'=
-) is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-> >   778 |         if (len > SIZE_MAX / sizeof(*p))
-> >
-> > Shut up the warning with a type cast.
-> >
-> > Fixes: 23a9dbbe0faf1 ("NFSD: prevent integer overflow on 32 bit systems=
-")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  include/linux/sunrpc/xdr.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/sunrpc/xdr.h b/include/linux/sunrpc/xdr.h
-> > index f89ec4b5ea169..6736121ee6a03 100644
-> > --- a/include/linux/sunrpc/xdr.h
-> > +++ b/include/linux/sunrpc/xdr.h
-> > @@ -775,7 +775,7 @@ xdr_stream_decode_uint32_array(struct xdr_stream *x=
-dr,
-> >
-> >       if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
-> >               return -EBADMSG;
-> > -     if (len > SIZE_MAX / sizeof(*p))
-> > +     if ((size_t)len > SIZE_MAX / sizeof(*p))
-> >               return -EBADMSG;
-> >       p =3D xdr_inline_decode(xdr, len * sizeof(*p));
+> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions"=
+)
+> stripped all function/variable suffixes started with '.' regardless
+> of whether those suffixes are generated at LTO mode or not. In fact,
+> as far as I know, in LTO mode, when a static function/variable is
+> promoted to the global scope, '.llvm.<...>' suffix is added.
 >
-> I sent a patch for this last week that takes a different approach.
+> The existing mechanism breaks live patch for a LTO kernel even if
+> no <symbol>.llvm.<...> symbols are involved. For example, for the followi=
+ng
+> kernel symbols:
+>   $ grep bpf_verifier_vlog /proc/kallsyms
+>   ffffffff81549f60 t bpf_verifier_vlog
+>   ffffffff8268b430 d bpf_verifier_vlog._entry
+>   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog=
+.'.
+> Note that the func-level to file-level static function promotion also
+> happens without LTO.
 >
-> https://lore.kernel.org/all/2390fdc8-13fa-4456-ab67-44f0744db412@moroto.m=
-ountain/
+> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechani=
+sm will
+> return 4 symbols to live patch subsystem which current live patching
+> subsystem cannot handle it. With non-LTO kernel, only one symbol
+> is returned.
 >
-> I probably should have used a Fixes tag just for informational purposes.
+> In [1], we have a lengthy discussion, the suggestion is to separate two
+> cases:
+>   (1). new symbols with suffix which are generated regardless of whether
+>        LTO is enabled or not, and
+>   (2). new symbols with suffix generated only when LTO is enabled.
+>
+> The cleanup_symbol_name() should only remove suffixes for case (2).
+> Case (1) should not be changed so it can work uniformly with or without L=
+TO.
+>
+> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+> tracing should work the same way for non-LTO kernel.
+> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have t=
+he same
+> filtering pattern so both kernel and kallsyms tool have the same
+> expectation on the order of symbols.
+>
+>  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@=
+kernel.org/T/#u
+>
+> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions"=
+)
+> Reported-by: Song Liu <song@kernel.org>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
 
-I have a slight preference for retaining the existing error handling
-here, but am happy to have 2 fixes in hand rather than 0; thank you
-both for your time looking at this.
+Thanks for the patch and improving live patch with LTO.  Looking back
+at the internal report that resulted in
+commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+your version was what I originally had.  I did not leave a comment as
+to why I changed it when I sent it 2 years ago, and no longer recall
+the reason.
+
 
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  kernel/kallsyms.c  | 5 ++---
+>  scripts/kallsyms.c | 6 +++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
 >
-> regards,
-> dan carpenter
+> Changelogs:
+>   v1 -> v2:
+>     . add 'Reported-by: Song Liu <song@kernel.org>'
+>     . also fix in scripts/kallsyms.c.
+>
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b..4874508bb950 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+>          * LLVM appends various suffixes for local functions and variable=
+s that
+>          * must be promoted to global scope as part of LTO.  This can bre=
+ak
+>          * hooking of static functions with kprobes. '.' is not a valid
+> -        * character in an identifier in C. Suffixes observed:
+> +        * character in an identifier in C. Suffixes only in LLVM LTO obs=
+erved:
+>          * - foo.llvm.[0-9a-f]+
+> -        * - foo.[0-9a-f]+
+>          */
+> -       res =3D strchr(s, '.');
+> +       res =3D strstr(s, ".llvm.");
+>         if (res) {
+>                 *res =3D '\0';
+>                 return true;
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 0d2db41177b2..13af6d0ff845 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
+>          * ASCII[_]   =3D 5f
+>          * ASCII[a-z] =3D 61,7a
+>          *
+> -        * As above, replacing '.' with '\0' does not affect the main sor=
+ting,
+> -        * but it helps us with subsorting.
+> +        * As above, replacing the first '.' in ".llvm." with '\0' does n=
+ot
+> +        * affect the main sorting, but it helps us with subsorting.
+>          */
+> -       p =3D strchr(s, '.');
+> +       p =3D strstr(s, ".llvm.");
+>         if (p)
+>                 *p =3D '\0';
+>  }
+> --
+> 2.34.1
 >
 
 
