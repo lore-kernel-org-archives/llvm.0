@@ -1,192 +1,120 @@
-Received: from mail-pl1-f208.google.com (mail-pl1-f208.google.com [209.85.214.208])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D7B10977
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 21:47:01 +0000 (UTC)
-Received: by mail-pl1-f208.google.com with SMTP id d9443c01a7336-1b88dee40ecso31784595ad.3
-        for <llvm@lists.linux.dev>; Fri, 07 Jul 2023 14:47:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DB610977
+	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 21:50:35 +0000 (UTC)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6237faa8677so14198016d6.1
+        for <llvm@lists.linux.dev>; Fri, 07 Jul 2023 14:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688766634; x=1691358634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
+        b=l7nzQ6ic8JvejRrTXeSP9pxsZ4sZpYgEseqeeNmP9tOIRZNTCYJOGUj3u6v5xmSkKd
+         OsGDSBLhMCQCLTDROiZOQPSY4n3XvefXTb8Zu3G6/DKWn449TmE86ze0rC9zM0hq/t31
+         W184sHYkrvflPMo7snf9U29pvGHJZG3E9J66dE3tnh4VgWlH6fT1cWJBoqz2VLzpBBuY
+         r+lZmj1ies7BcP3uSA6UegEarirOuydiO6La9+kxtMfMMXAsUY03/e6ZKuY6Wgmmq22C
+         b8N5z2jOmAGYsC9KQjpfqsh1MiRObcU//UJbLJ0KeKi4ZI2Z1bbDwf1hDh9JlRpZ5He7
+         Y1Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766421; x=1691358421;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5l8sD761owscSi/Bc1OJgHj5NLATqZufjKdLX7iyFw=;
-        b=EU8brP5TOMFmqo5F6lUBWD7WIgSo0dULk9YZtlJuRtX2km9H1nOaaAuYCcs4P7/Fao
-         MD+vECM/eNhyjZ2yl5I30uAiVzw1e9I0U/ry+kD2/vXm6jwuH7FEOeWp2WHCeannJGp4
-         HoOHYoUdXO8C7NrDJzMlO1LQIW3ByeLe13hBD00q8rrnRL6fsaaDnXnlK2I6KazCPE/D
-         8/SH+DBHaji8yEs6yr2mHRvAn/7+GWFwK3VfE4aaCFF5ON2sJs4NajBDN6zAvBnrHAVN
-         T0dh4yce6HSCczslRgVy6y8bOEcYT4dAqe+gVsimpWDlk/4qvDMo1qXuybwDlWJPX0iI
-         eXdw==
-X-Gm-Message-State: ABy/qLYBf1OX+zAGitVuwWXe+eMjjhbnU2OuAK9ji41APQXjOYRspWrH
-	4wNgMzuXW/8od7SzOfDFxVOuUNa0GZOXlfvcLj3WWgD5WNij
-X-Google-Smtp-Source: APBJJlFHpMi5JJGTDn5KTaXhUUCHaWrHJzRRT4meeyTEiSNBofnC6BrKdR71zEvtrg60IVNSjQMoYBu/nLDWtS0fkyWFVK1Sq/1f
+        d=1e100.net; s=20221208; t=1688766634; x=1691358634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FoLevPobh7UXy5Nn5YH78W9QxOTU70GaTZt5uBUlM0A=;
+        b=MA2L+p51XUwaun01tcfwLjHPM9lSAey3cYKN0JjaDXgexBKH+64k8wq4LE4LJJE7uN
+         sGRNgKkMOSo+/nt95rPyXkZ01e4EuxgXHb3RdbP6cNe7vK9jy1YPNr9/1YLjPZejbar9
+         QWruiw0z59eqXVJCTsXRd3lTFtk7rkvfvjqpe06DzXON19n/dqsR7uAF4wvuULLMMpjR
+         3zFAafV4XlsXSimNhZnYNkhdsKdLkMpTEFKx3dOCpqwKLX98ZBEHhquM17zPRGwcbVBa
+         3s5gSy37sf3bj4tCOJFA9AAyEq9/m9cGUYQ2R9JjN/OvUjXfDNQS/FtUriYOSOqTvXJg
+         Z6Ug==
+X-Gm-Message-State: ABy/qLYLpCil8SBKhsv2ReobbbBXvfpoZM0pJtpj0ZcE7KW41fRaJZzA
+	XFgI8Rlj504L8zyf5PDsPgYk4c/i/7KWHdYilvzs6A==
+X-Google-Smtp-Source: APBJJlGlQcMZJ3Ushv3xcZlmwD9Pa978expjejTPgbABddwl3wCKInGfLZ2iqBhhPxZWR1b1uxBwbCLiukFcHrak5qI=
+X-Received: by 2002:a0c:e54d:0:b0:634:7c34:6c96 with SMTP id
+ n13-20020a0ce54d000000b006347c346c96mr5045432qvm.7.1688766633968; Fri, 07 Jul
+ 2023 14:50:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:da92:b0:1b8:184d:1379 with SMTP id
- j18-20020a170902da9200b001b8184d1379mr5930452plx.9.1688766421356; Fri, 07 Jul
- 2023 14:47:01 -0700 (PDT)
-Date: Fri, 07 Jul 2023 14:47:01 -0700
-In-Reply-To: <000000000000b5973405f9a22358@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a75ae805ffec923e@google.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: stack-out-of-bounds Read in ntfs_set_inode
-From: syzbot <syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
+References: <20230703113737.694995-1-arnd@kernel.org> <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
+In-Reply-To: <6b963674-fc5a-4abb-8678-a82d35a3f3fd@kadam.mountain>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Jul 2023 14:50:23 -0700
+Message-ID: <CAKwvOdmedTDChYYSgdC0LQGOdrzm1ua--kUcz-KGXi4TnxcvUg@mail.gmail.com>
+Subject: Re: [PATCH] sunrpc: avoid constant-out-of-range warning with clang
+To: Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@kernel.org>
+Cc: Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, 
+	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Neil Brown <neilb@suse.de>, Olga Kornievskaia <kolga@netapp.com>, 
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, Dan Carpenter <error27@gmail.com>, 
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has found a reproducer for the following issue on:
+On Mon, Jul 3, 2023 at 5:42=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro.=
+org> wrote:
+>
+> On Mon, Jul 03, 2023 at 01:37:22PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The overflow check in xdr_stream_decode_uint32_array() was added for
+> > 32-bit systems, but on 64-bit builds it causes a build warning when
+> > building with clang and W=3D1:
+> >
+> > In file included from init/do_mounts.c:22:
+> > include/linux/sunrpc/xdr.h:778:10: error: result of comparison of const=
+ant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int'=
+) is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+> >   778 |         if (len > SIZE_MAX / sizeof(*p))
+> >
+> > Shut up the warning with a type cast.
+> >
+> > Fixes: 23a9dbbe0faf1 ("NFSD: prevent integer overflow on 32 bit systems=
+")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  include/linux/sunrpc/xdr.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/sunrpc/xdr.h b/include/linux/sunrpc/xdr.h
+> > index f89ec4b5ea169..6736121ee6a03 100644
+> > --- a/include/linux/sunrpc/xdr.h
+> > +++ b/include/linux/sunrpc/xdr.h
+> > @@ -775,7 +775,7 @@ xdr_stream_decode_uint32_array(struct xdr_stream *x=
+dr,
+> >
+> >       if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+> >               return -EBADMSG;
+> > -     if (len > SIZE_MAX / sizeof(*p))
+> > +     if ((size_t)len > SIZE_MAX / sizeof(*p))
+> >               return -EBADMSG;
+> >       p =3D xdr_inline_decode(xdr, len * sizeof(*p));
+>
+> I sent a patch for this last week that takes a different approach.
+>
+> https://lore.kernel.org/all/2390fdc8-13fa-4456-ab67-44f0744db412@moroto.m=
+ountain/
+>
+> I probably should have used a Fixes tag just for informational purposes.
 
-HEAD commit:    5133c9e51de4 Merge tag 'drm-next-2023-07-07' of git://anon..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=168c1ed2a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9831e2c2660aae77
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbdd49fbb39696c71041
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1729cb02a80000
+I have a slight preference for retaining the existing error handling
+here, but am happy to have 2 fixes in hand rather than 0; thank you
+both for your time looking at this.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-5133c9e5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1be5268e0eae/vmlinux-5133c9e5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bd7819821e7b/bzImage-5133c9e5.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/4e33ac0ed058/mount_0.gz
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 4096
-ntfs3: loop0: Different NTFS sector size (1024) and media sector size (512).
-==================================================================
-BUG: KASAN: stack-out-of-bounds in ino_get fs/ntfs3/ntfs.h:193 [inline]
-BUG: KASAN: stack-out-of-bounds in ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:514
-Read of size 4 at addr ffffc9000bccfcc7 by task syz-executor.0/6246
-
-CPU: 0 PID: 6246 Comm: syz-executor.0 Not tainted 6.4.0-syzkaller-12274-g5133c9e51de4 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:364
- print_report mm/kasan/report.c:475 [inline]
- kasan_report+0x11d/0x130 mm/kasan/report.c:588
- ino_get fs/ntfs3/ntfs.h:193 [inline]
- ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:514
- inode_insert5+0x125/0x660 fs/inode.c:1231
- iget5_locked fs/inode.c:1289 [inline]
- iget5_locked+0x225/0x2c0 fs/inode.c:1278
- ntfs_iget5+0xd2/0x3670 fs/ntfs3/inode.c:523
- ntfs_fill_super+0x3196/0x3c20 fs/ntfs3/super.c:1272
- get_tree_bdev+0x43e/0x7d0 fs/super.c:1318
- vfs_get_tree+0x8d/0x350 fs/super.c:1519
- do_new_mount fs/namespace.c:3335 [inline]
- path_mount+0x136e/0x1e70 fs/namespace.c:3662
- do_mount fs/namespace.c:3675 [inline]
- __do_sys_mount fs/namespace.c:3884 [inline]
- __se_sys_mount fs/namespace.c:3861 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3861
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f251e48d8ba
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f251f242f88 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 000000000001f73b RCX: 00007f251e48d8ba
-RDX: 0000000020000000 RSI: 000000002001f740 RDI: 00007f251f242fe0
-RBP: 00007f251f243020 R08: 00007f251f243020 R09: 0000000001000000
-R10: 0000000001000000 R11: 0000000000000246 R12: 0000000020000000
-R13: 000000002001f740 R14: 00007f251f242fe0 R15: 0000000020000040
- </TASK>
-
-The buggy address belongs to stack of task syz-executor.0/6246
- and is located at offset 127 in frame:
- ntfs_fill_super+0x0/0x3c20 fs/ntfs3/super.c:474
-
-This frame has 5 objects:
- [48, 52) 'vcn'
- [64, 68) 'lcn'
- [80, 84) 'len'
- [96, 104) 'tt'
- [128, 136) 'ref'
-
-The buggy address belongs to the virtual mapping at
- [ffffc9000bcc8000, ffffc9000bcd1000) created by:
- kernel_clone+0xeb/0x890 kernel/fork.c:2911
-
-The buggy address belongs to the physical page:
-page:ffffea00009e2080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x27882
-memcg:ffff888020cd9a82
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888020cd9a82
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 6245, tgid 6245 (syz-executor.0), ts 379453839813, free_ts 308972643812
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1570
- prep_new_page mm/page_alloc.c:1577 [inline]
- get_page_from_freelist+0xfed/0x2d30 mm/page_alloc.c:3221
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4477
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
- vm_area_alloc_pages mm/vmalloc.c:3059 [inline]
- __vmalloc_area_node mm/vmalloc.c:3135 [inline]
- __vmalloc_node_range+0xb1c/0x14c0 mm/vmalloc.c:3316
- alloc_thread_stack_node kernel/fork.c:309 [inline]
- dup_task_struct kernel/fork.c:1112 [inline]
- copy_process+0x13bb/0x75c0 kernel/fork.c:2329
- kernel_clone+0xeb/0x890 kernel/fork.c:2911
- __do_sys_clone+0xba/0x100 kernel/fork.c:3054
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1161 [inline]
- free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2348
- free_unref_page+0x33/0x370 mm/page_alloc.c:2443
- slab_destroy mm/slab.c:1608 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1628
- cache_flusharray mm/slab.c:3341 [inline]
- ___cache_free+0x2c5/0x410 mm/slab.c:3404
- qlink_free mm/kasan/quarantine.c:166 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:185
- kasan_quarantine_reduce+0x195/0x220 mm/kasan/quarantine.c:292
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- slab_alloc_node mm/slab.c:3237 [inline]
- __kmem_cache_alloc_node+0x206/0x410 mm/slab.c:3521
- __do_kmalloc_node mm/slab_common.c:984 [inline]
- __kmalloc+0x4e/0x190 mm/slab_common.c:998
- kmalloc include/linux/slab.h:586 [inline]
- inotify_handle_inode_event+0x1c2/0x5f0 fs/notify/inotify/inotify_fsnotify.c:96
- inotify_ignored_and_remove_idr+0x28/0x70 fs/notify/inotify/inotify_user.c:527
- fsnotify_free_mark+0xe9/0x140 fs/notify/mark.c:490
- __do_sys_inotify_rm_watch fs/notify/inotify/inotify_user.c:817 [inline]
- __se_sys_inotify_rm_watch fs/notify/inotify/inotify_user.c:794 [inline]
- __x64_sys_inotify_rm_watch+0x11c/0x1a0 fs/notify/inotify/inotify_user.c:794
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffffc9000bccfb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000bccfc00: 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1 04
->ffffc9000bccfc80: f2 04 f2 04 f2 00 f2 f2 f2 00 f3 f3 f3 00 00 00
-                                           ^
- ffffc9000bccfd00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000bccfd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1
-==================================================================
+>
+> regards,
+> dan carpenter
+>
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+--=20
+Thanks,
+~Nick Desaulniers
