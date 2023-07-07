@@ -1,173 +1,102 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091BBD511
-	for <llvm@lists.linux.dev>; Fri,  7 Jul 2023 17:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1688750730;
-	bh=U4pVnVRpmpXfIqV7cJuo7sgBurUuFKflAnJ53taBTfU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=JkC77+orgeKep1j+yDMZZQGX6/Cp9HpVF8d+JFNTqXRiuysh+AIhvF2P0DPoOsAPu
-	 gxfP8/qL0vlGKuAF3ruEC8SjouEfUiB0EimaPdqnLhpipVgZbJcYDz4K/J2aOfGMvo
-	 Q3okW5ZGdCkUqvmWH3cRHg2y8rF96TggGN0upqh5cTVxGxI9D6ntldHEz+ffTK31LF
-	 k1xPzNU1+p5c5+aUpU/ZLajBJfG3c0bfWhzI9PGWAjbCjUygO0rHx7fcpvqBO4L3KQ
-	 V1LX89P5B1IMvjRmv/Mwx9swMu9PbPg5U3afQ3FHx4zZa7GG3n2r6rxurJjPQ3OzMq
-	 bX6Wnt4bcrYBw==
-Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4QyKzZ5jhKz1G7F;
-	Fri,  7 Jul 2023 13:25:30 -0400 (EDT)
-From: Olivier Dion <odion@efficios.com>
-To: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, rnk@google.com, Alan Stern
- <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will
- Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Boqun
- Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, David
- Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc
- Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-In-Reply-To: <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
-Organization: EfficiOS
-References: <87ttukdcow.fsf@laura>
- <357752c2-4fb0-708e-4b05-564e37a234be@huaweicloud.com>
-Date: Fri, 07 Jul 2023 13:25:30 -0400
-Message-ID: <87y1jrfxbp.fsf@laura>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09FB5381;
+	Fri,  7 Jul 2023 19:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688756953; x=1720292953;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x+mGZt5BT1p4zud23609GMRE+6pGDXAQRxq32moPm80=;
+  b=PZkglMmm6urc4lKoUcwf9lNdlV12hyut0JAsoVhpnymWIgOOs7VqrSKm
+   46flHAwo/lwD0JdTQgJMC7RgnwkBBxmQcw3mUes+hkelGygB5J46jAP83
+   GW8dUFFcpLuzEC7p2ZRdoArB/OrUjt30h2sXwOECL0Zefw9iAT1bcy23m
+   fnq4jMmK83B45dWgRQSrB6ZWSbOut4VQQaVuruQYAbOX08pZGd+bek1Ck
+   eJF268I66FIik9xmq2fqVEdc4uwgcQkdVZLWsskQMFY4bN4TE4Ijy1yen
+   tuFs9xNrdBH+R9O8nBk4D/mjqDdrKoStQvKjA65qCzTaUoHiztWv0yf/Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="366548553"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="366548553"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 12:09:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="864658381"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="864658381"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2023 12:09:08 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qHqpH-0002DK-0z;
+	Fri, 07 Jul 2023 19:09:07 +0000
+Date: Sat, 8 Jul 2023 03:08:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: [stable:linux-5.15.y 55/9999] arch/x86/kvm/hyperv.c:2185:5: error:
+ stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
+Message-ID: <202307080326.zDp7E3o0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 07 Jul 2023, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com> wr=
-ote:
-[...]
->> This is a request for comments on extending the atomic builtins API to
->> help avoiding redundant memory barriers.  Indeed, there are
->> discrepancies between the Linux kernel consistency memory model (LKMM)
->> and the C11/C++11 memory consistency model [0].  For example,
->> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
->> have implicit memory barriers before/after the operations [1-2], while
->> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
->> do not have any ordering guarantees of an atomic thread fence
->> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
->
->
-> The issues run quite a bit deeper than this. The two models have two
-> completely different perspectives that are quite much incompatible.
+Hi Vitaly,
 
-Agreed.  Our intent is not to close the gap completely, but to reduce
-the gap between the two models, by supporting the "full barrier
-before/after" semantic of LKMM in the C11/C++11 memory model.
+First bad commit (maybe != root cause):
 
-> I think all you can really do is bridge the gap at the level of the
-> generated assembly.  I.e., don't bridge the gap between LKMM and the
-> C11 MCM. Bridge the gap between the assembly code generated by C11
-> atomics and the one generated by LKMM. But I'm not sure that's really
-> the task here.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   d54cfc420586425d418a53871290cc4a59d33501
+commit: cb188e07105f2216f5efbefac95df4b6ce266906 [55/9999] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+config: i386-buildonly-randconfig-r006-20230708 (https://download.01.org/0day-ci/archive/20230708/202307080326.zDp7E3o0-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230708/202307080326.zDp7E3o0-lkp@intel.com/reproduce)
 
-We have considered analyzing the assembler output of different
-toolchain's versions to generate manually our own before/after fences.
-However, nothing prevents a toolchain from changing the emitted
-assembler in the future, which would make things fragile.  The only
-thing that is guaranteed to not change is the definitions in the
-standard (C11/C++11).  Anything else is fair game for optimizations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307080326.zDp7E3o0-lkp@intel.com/
 
->> [...] For example, to make Read-Modify-Write (RMW) operations match
->> the Linux kernel "full barrier before/after" semantics, the liburcu's
->> uatomic API has to emit both a SEQ_CST RMW operation and a subsequent
->> thread fence SEQ_CST, which leads to duplicated barriers in some cases.
->
-> Does it have to though? Can't you just do e.g. an release RMW
-> operation followed by an after_atomic=C2=A0 fence?  And for loads, a
-> SEQ_CST fence followed by an acquire load? Analogously (but: mirrored)
-> for stores.
+All errors (new ones prefixed by >>):
 
-That would not improve anything for RMW.  Consider the following example
-and its resulting assembler on x86-64 gcc 13.1 -O2:
+>> arch/x86/kvm/hyperv.c:2185:5: error: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Werror,-Wframe-larger-than]
+   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+       ^
+   1 error generated.
 
-	int exchange(int *x, int y)
-	{
-		int r =3D __atomic_exchange_n(x, y, __ATOMIC_RELEASE);
-		__atomic_thread_fence(__ATOMIC_SEQ_CST);
 
-		return r;
-	}
+vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
 
-        exchange:
-	       	movl    %esi, %eax
-	       	xchgl   (%rdi), %eax
-	       	lock orq $0, (%rsp) ;; Redundant with previous exchange
-       		ret
+4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
 
-also that would make the exchange weaker, in the sense of the C11/C++11
-memory model, by losing its acquire and its sequential consistency
-semantics.
+:::::: The code at line 2185 was first introduced by commit
+:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
 
-[...]
->>     // Always NOP.
->>    __atomic_thread_fence_{before,after}_rmw(int rmw_memorder,
->>                                             int fence_memorder)
->
->
-> I currently don't feel comfortable adding such extensions to LKMM (or a=20
-> compiler API for that matter).
+:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
-There's no plan to add such extensions to LKMM but only to extend the
-current atomic builtins API of toolchains.
-
-> You mentioned that the goal is to check some code written using LKMM
-> primitives with TSAN due to some formal requirements. What exactly do
-> these requirements entail? Do you need to check the code exactly as it
-> will be executed (modulo the TSAN instrumentation)? Is it an option to
-> map to normal builtins with suboptimal performance just for the
-> verification purpose, but then run the slightly more optimized
-> original code later?
-
-We aim to validate with TSAN the code that will run during production,
-minus TSAN itself.
-
-> Specifically for TSAN's ordering requirements, you may need to make
-> LKMM's RMWs into acq+rel with an extra mb, even if all that extra
-> ordering isn't necessary at the assembler level.
->
->
-> Also note that no matter what you do, due to the two different
-> perspectives, TSAN's hb relation may introduce false positive data
-> races w.r.t. LKMM.=C2=A0 For example, if the happens-before ordering is
-> guaranteed through pb starting with coe/fre.
-
-This is why we have implemented our primitives and changed our
-algorithms so that they use the acquire/release semantics of the
-C11/C++11 memory model.
-
-> Without thinking too hard, it seems to me no matter what fences and
-> barriers you introduce, TSAN will not see this kind of ordering and
-> consider the situation a data race.
-
-We have come to the same conclusion, mainly because TSAN does not
-support thread fence in its verifications.  This is why we have
-implemented an annotation layer that group relaxed memory accesses into
-a single acquire/release event.  This layer, makes TSAN aware of the
-happen-before relations of the RCU implementations -- and lock-free data
-structures -- in Userspace RCU.
-
-This came with a downside of introducing redundant fences on strongly
-ordered architectures because of the usage of atomic builtins of the
-C11/C++11 memory model which does not provide any means for expressing
-fully-ordered atomic operations without relying on explicit thread fences.
-
-[...]
-
-	Thanks,
-        Olivier
---=20
-Olivier Dion
-EfficiOS Inc.
-https://www.efficios.com
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
