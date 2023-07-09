@@ -1,131 +1,137 @@
-Received: from mail-pj1-f79.google.com (mail-pj1-f79.google.com [209.85.216.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FFA3FD4
-	for <llvm@lists.linux.dev>; Sun,  9 Jul 2023 12:32:51 +0000 (UTC)
-Received: by mail-pj1-f79.google.com with SMTP id 98e67ed59e1d1-26337f5d2daso6010611a91.0
-        for <llvm@lists.linux.dev>; Sun, 09 Jul 2023 05:32:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688905970; x=1691497970;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R6EniVOaw9gyk03or5BKg9EbqyWrmMeOPg9KKXf8+m8=;
-        b=JJav8VKH4rCu6meiiVprFIN3dTLOTsr7o4cD88Rf/+r5zmsaeGzotlGCJtBuKf8D2/
-         e+2JsI2VguyBWMeKdsx7s1ryoNBf44oqqTx5xn8VqEmH45zSW5L+Eg9QHKPs2rxIicMr
-         wDyC+Pha6WzOnb9wS0+aSGjzM94wlP0t7PYNl3Etdm1cUHvVBCSDe4R9gyTYgz+rM2m5
-         bmh0FCz4KhG2GbTikiIszB8yZv8VqRQTAyeb82ImpIwd644edABZSGFN9y24XeV0KEP/
-         ylXBFyl+D7E3Ebna5IaQ8bWuM1k6VsBXzKyozcv/5DDxl36sWeIGWSuTSRwKR59u3Upy
-         fOvg==
-X-Gm-Message-State: ABy/qLb0QBps3lZG9U2JzOKoRqK6HbB4Bdp/JUU811fhyer4zs6cs05o
-	wiEGSmrhzIXYuiipCmvmMk72086CBSJLIFLlBpUOfge1bnlr
-X-Google-Smtp-Source: APBJJlE8NgIH1meEwWoDFpQ4FcvLOM9oqrIwO1KMptPMiwh3AXaM5TRaOFE/yHli6GD5tPlyAj4XzHsTNoKhBMJy1ISwiVD5YJCl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9246FA9;
+	Sun,  9 Jul 2023 14:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688911251; x=1720447251;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=19LPOcJSxm+IcMqM+HHu7UrLieKNXHgOjRlfO1tAuuM=;
+  b=iiiPHjcSUr7hqUj0Z6J57IUlhCWhd8smhJ4HHPwYd8Ns0wBL1OemO9sA
+   CMDKhabEj9K+42CkM4XBqyf93NEMOnj0Fov8iNQerOXGh+gLojN2w6Z4J
+   dxq293Ne1elLMEDfYkEtnWdQGpZglJUUNkKVMVv8QKoNtZMZfBZZeTI82
+   Qq/C0Vj578UVrC/2G6hVffvCRblVb6BL1U+wXcBXKxvJIe8pQAI9cgBVn
+   /nVAabaL4tzwSFuI9lwjaLt04BvBbWYWxW9qp7/f7gcpqnGV2vHwYiWKJ
+   GJvJMd9+PoBT8bLnT7FaQELeGS8JRPz5k5vo1IXF9XuMYFXYRSUnjcWyB
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="364208471"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="364208471"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 07:00:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="1051074425"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="1051074425"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2023 07:00:48 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qIUxz-0003Ek-0s;
+	Sun, 09 Jul 2023 14:00:47 +0000
+Date: Sun, 9 Jul 2023 21:59:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-6.3.y 2593/2805]
+ arch/arm/mach-omap1/irq.c:221:11: error: call to undeclared function
+ 'irq_domain_add_legacy'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202307092156.25wnWoY2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:dc86:b0:262:d8e7:abff with SMTP id
- j6-20020a17090adc8600b00262d8e7abffmr9006179pjv.2.1688905970549; Sun, 09 Jul
- 2023 05:32:50 -0700 (PDT)
-Date: Sun, 09 Jul 2023 05:32:50 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f098a06000d10a5@google.com>
-Subject: [syzbot] [ntfs3?] UBSAN: array-index-out-of-bounds in truncate_inode_pages_final
-From: syzbot <syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+head:   c36188cdbe803adfeea94f8b4b1d2c5ebf1f0793
+commit: 337771c7d078a130c6bc1bfe4878d04f67758a91 [2593/2805] ARM: omap1: Exorcise the legacy GPIO header
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20230709/202307092156.25wnWoY2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230709/202307092156.25wnWoY2-lkp@intel.com/reproduce)
 
-syzbot found the following issue on:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307092156.25wnWoY2-lkp@intel.com/
 
-HEAD commit:    e40939bbfc68 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15866358a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c84f463eb74eab24
-dashboard link: https://syzkaller.appspot.com/bug?extid=e295147e14b474e4ad70
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c2da4a80000
+All errors (new ones prefixed by >>):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/257596b75aaf/disk-e40939bb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9c75b8d61081/vmlinux-e40939bb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8f0233129f4f/Image-e40939bb.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/5b0c90b3f3a1/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com
-
-ntfs3: loop0: Different NTFS sector size (1024) and media sector size (512).
-================================================================================
-UBSAN: array-index-out-of-bounds in ./include/linux/pagevec.h:126:2
-index 255 is out of range for type 'struct folio *[15]'
-CPU: 1 PID: 8246 Comm: syz-executor.0 Not tainted 6.4.0-rc7-syzkaller-ge40939bbfc68 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xfc/0x148 lib/ubsan.c:348
- folio_batch_add include/linux/pagevec.h:126 [inline]
- find_lock_entries+0x8fc/0xd84 mm/filemap.c:2127
- truncate_inode_pages_range+0x1b0/0xf74 mm/truncate.c:364
- truncate_inode_pages mm/truncate.c:449 [inline]
- truncate_inode_pages_final+0x90/0xc0 mm/truncate.c:484
- ntfs_evict_inode+0x20/0x48 fs/ntfs3/inode.c:1791
- evict+0x260/0x68c fs/inode.c:665
- iput_final fs/inode.c:1747 [inline]
- iput+0x734/0x818 fs/inode.c:1773
- ntfs_fill_super+0x327c/0x3990 fs/ntfs3/super.c:1267
- get_tree_bdev+0x360/0x54c fs/super.c:1303
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1455
- vfs_get_tree+0x90/0x274 fs/super.c:1510
- do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
- path_mount+0x590/0xe04 fs/namespace.c:3369
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
+>> arch/arm/mach-omap1/irq.c:221:11: error: call to undeclared function 'irq_domain_add_legacy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     221 |         domain = irq_domain_add_legacy(NULL, nr_irqs, irq_base, 0,
+         |                  ^
+>> arch/arm/mach-omap1/irq.c:222:13: error: use of undeclared identifier 'irq_domain_simple_ops'
+     222 |                                        &irq_domain_simple_ops, NULL);
+         |                                         ^
+>> arch/arm/mach-omap1/irq.c:250:23: error: call to undeclared function 'irq_find_mapping'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     250 |         d = irq_get_irq_data(irq_find_mapping(domain, omap_l2_irq));
+         |                              ^
+   3 errors generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/irq_domain_add_legacy +221 arch/arm/mach-omap1/irq.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  204  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  205  	for (i = 0; i < irq_bank_count; i++) {
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  206  		irq_banks[i].va = ioremap(irq_banks[i].base_reg, 0xff);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  207  		if (WARN_ON(!irq_banks[i].va))
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  208  			return;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  209  	}
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  210  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  211  	nr_irqs = irq_bank_count * 32;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  212  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  213  	irq_base = irq_alloc_descs(-1, 0, nr_irqs, 0);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  214  	if (irq_base < 0) {
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  215  		pr_warn("Couldn't allocate IRQ numbers\n");
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  216  		irq_base = 0;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  217  	}
+8825acd7cc8a13 arch/arm/mach-omap1/irq.c Arnd Bergmann  2022-09-29  218  	omap_l2_irq = irq_base;
+685e2d08c54b1a arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  219  	omap_l2_irq -= NR_IRQS_LEGACY;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  220  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20 @221  	domain = irq_domain_add_legacy(NULL, nr_irqs, irq_base, 0,
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20 @222  				       &irq_domain_simple_ops, NULL);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  223  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  224  	pr_info("Total of %lu interrupts in %i interrupt banks\n",
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  225  		nr_irqs, irq_bank_count);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  226  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  227  	/* Mask and clear all interrupts */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  228  	for (i = 0; i < irq_bank_count; i++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  229  		irq_bank_writel(~0x0, i, IRQ_MIR_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  230  		irq_bank_writel(0x0, i, IRQ_ITR_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  231  	}
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  232  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  233  	/* Clear any pending interrupts */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  234  	irq_bank_writel(0x03, 0, IRQ_CONTROL_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  235  	irq_bank_writel(0x03, 1, IRQ_CONTROL_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  236  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  237  	/* Install the interrupt handlers for each bank */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  238  	for (i = 0; i < irq_bank_count; i++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  239  		for (j = i * 32; j < (i + 1) * 32; j++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  240  			int irq_trigger;
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  241  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  242  			irq_trigger = irq_banks[i].trigger_map >> IRQ_BIT(j);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  243  			omap_irq_set_cfg(j, 0, 0, irq_trigger);
+e8d36d5dbb6a6e arch/arm/mach-omap1/irq.c Rob Herring    2015-07-27  244  			irq_clear_status_flags(j, IRQ_NOREQUEST);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  245  		}
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20  246  		omap_alloc_gc(irq_banks[i].va, irq_base + i * 32, 32);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  247  	}
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  248  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds 2005-04-16  249  	/* Unmask level 2 handler */
+b694331cfb2ec3 arch/arm/mach-omap1/irq.c Tony Lindgren  2015-05-20 @250  	d = irq_get_irq_data(irq_find_mapping(domain, omap_l2_irq));
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+:::::: The code at line 221 was first introduced by commit
+:::::: 55b44774438959a957e717ecbdd9f2874b07ab31 ARM: OMAP1: Switch to use generic irqchip in preparation for sparse IRQ
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+:::::: TO: Tony Lindgren <tony@atomide.com>
+:::::: CC: Tony Lindgren <tony@atomide.com>
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
