@@ -1,123 +1,131 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f79.google.com (mail-pj1-f79.google.com [209.85.216.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2F4EBE;
-	Sun,  9 Jul 2023 06:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688885745; x=1720421745;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h9+iCkpAocXKRTcbofuGK30lQ2gnUDJc4Kyw7MRzMQY=;
-  b=AUdWzXB/ZcRWc36XF7Ak/XpFFhWW7qg7ZoiqH5pDI2mmqdC3+4UOBagd
-   svr7QlZvs4D1O6tvBKSk94FcvEV/XnvRP2DkNmffA4ZefjjlwkJzFRyBi
-   4dcTUbuUpykV6mzeeoDikMPEENjMqks56H0X+EdGgy21GAdrKikIQykWl
-   GvMsM62AbhFvzp3xJnuosj2F1ipDBVy6dK0FGJ+JpC6dgqlAKyGY0nptc
-   FasyIrmBk2AzOetw0sYe16msqdIr52aC5mAsKA/jVnRv8j2juKBprlZMO
-   uTjzFAB6NYOvnY894RrvNdolSx473JARLSXX1GgzLn6ht7gy9La0idY3s
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10765"; a="427830783"
-X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
-   d="scan'208";a="427830783"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2023 23:55:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10765"; a="785784013"
-X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
-   d="scan'208";a="785784013"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Jul 2023 23:55:43 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qIOKc-000388-1V;
-	Sun, 09 Jul 2023 06:55:42 +0000
-Date: Sun, 9 Jul 2023 14:55:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame
- size (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait'
-Message-ID: <202307091420.gmc0Q2F3-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FFA3FD4
+	for <llvm@lists.linux.dev>; Sun,  9 Jul 2023 12:32:51 +0000 (UTC)
+Received: by mail-pj1-f79.google.com with SMTP id 98e67ed59e1d1-26337f5d2daso6010611a91.0
+        for <llvm@lists.linux.dev>; Sun, 09 Jul 2023 05:32:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688905970; x=1691497970;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R6EniVOaw9gyk03or5BKg9EbqyWrmMeOPg9KKXf8+m8=;
+        b=JJav8VKH4rCu6meiiVprFIN3dTLOTsr7o4cD88Rf/+r5zmsaeGzotlGCJtBuKf8D2/
+         e+2JsI2VguyBWMeKdsx7s1ryoNBf44oqqTx5xn8VqEmH45zSW5L+Eg9QHKPs2rxIicMr
+         wDyC+Pha6WzOnb9wS0+aSGjzM94wlP0t7PYNl3Etdm1cUHvVBCSDe4R9gyTYgz+rM2m5
+         bmh0FCz4KhG2GbTikiIszB8yZv8VqRQTAyeb82ImpIwd644edABZSGFN9y24XeV0KEP/
+         ylXBFyl+D7E3Ebna5IaQ8bWuM1k6VsBXzKyozcv/5DDxl36sWeIGWSuTSRwKR59u3Upy
+         fOvg==
+X-Gm-Message-State: ABy/qLb0QBps3lZG9U2JzOKoRqK6HbB4Bdp/JUU811fhyer4zs6cs05o
+	wiEGSmrhzIXYuiipCmvmMk72086CBSJLIFLlBpUOfge1bnlr
+X-Google-Smtp-Source: APBJJlE8NgIH1meEwWoDFpQ4FcvLOM9oqrIwO1KMptPMiwh3AXaM5TRaOFE/yHli6GD5tPlyAj4XzHsTNoKhBMJy1ISwiVD5YJCl
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a17:90a:dc86:b0:262:d8e7:abff with SMTP id
+ j6-20020a17090adc8600b00262d8e7abffmr9006179pjv.2.1688905970549; Sun, 09 Jul
+ 2023 05:32:50 -0700 (PDT)
+Date: Sun, 09 Jul 2023 05:32:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006f098a06000d10a5@google.com>
+Subject: [syzbot] [ntfs3?] UBSAN: array-index-out-of-bounds in truncate_inode_pages_final
+From: syzbot <syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mark,
+Hello,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+syzbot found the following issue on:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c7873e3364570ec89343ff4877e0f27a7b21a61
-commit: c9268ac615f9f6dded7801df5993374598934377 locking/atomic: scripts: add trivial raw_atomic*_<op>()
-date:   5 weeks ago
-config: arm-randconfig-r006-20230709 (https://download.01.org/0day-ci/archive/20230709/202307091420.gmc0Q2F3-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230709/202307091420.gmc0Q2F3-lkp@intel.com/reproduce)
+HEAD commit:    e40939bbfc68 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15866358a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c84f463eb74eab24
+dashboard link: https://syzkaller.appspot.com/bug?extid=e295147e14b474e4ad70
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101c2da4a80000
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307091420.gmc0Q2F3-lkp@intel.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/257596b75aaf/disk-e40939bb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9c75b8d61081/vmlinux-e40939bb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8f0233129f4f/Image-e40939bb.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/5b0c90b3f3a1/mount_0.gz
 
-All warnings (new ones prefixed by >>):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e295147e14b474e4ad70@syzkaller.appspotmail.com
 
->> drivers/char/ipmi/ipmi_msghandler.c:5194:13: warning: stack frame size (1032) exceeds limit (1024) in 'ipmi_panic_request_and_wait' [-Wframe-larger-than]
-    5194 | static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-         |             ^
-   1 warning generated.
+ntfs3: loop0: Different NTFS sector size (1024) and media sector size (512).
+================================================================================
+UBSAN: array-index-out-of-bounds in ./include/linux/pagevec.h:126:2
+index 255 is out of range for type 'struct folio *[15]'
+CPU: 1 PID: 8246 Comm: syz-executor.0 Not tainted 6.4.0-rc7-syzkaller-ge40939bbfc68 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call trace:
+ dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
+ show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_out_of_bounds+0xfc/0x148 lib/ubsan.c:348
+ folio_batch_add include/linux/pagevec.h:126 [inline]
+ find_lock_entries+0x8fc/0xd84 mm/filemap.c:2127
+ truncate_inode_pages_range+0x1b0/0xf74 mm/truncate.c:364
+ truncate_inode_pages mm/truncate.c:449 [inline]
+ truncate_inode_pages_final+0x90/0xc0 mm/truncate.c:484
+ ntfs_evict_inode+0x20/0x48 fs/ntfs3/inode.c:1791
+ evict+0x260/0x68c fs/inode.c:665
+ iput_final fs/inode.c:1747 [inline]
+ iput+0x734/0x818 fs/inode.c:1773
+ ntfs_fill_super+0x327c/0x3990 fs/ntfs3/super.c:1267
+ get_tree_bdev+0x360/0x54c fs/super.c:1303
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1455
+ vfs_get_tree+0x90/0x274 fs/super.c:1510
+ do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
+ path_mount+0x590/0xe04 fs/namespace.c:3369
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
+ el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+================================================================================
 
 
-vim +/ipmi_panic_request_and_wait +5194 drivers/char/ipmi/ipmi_msghandler.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-895dcfd1cab84d Corey Minyard  2012-03-28  5190  
-895dcfd1cab84d Corey Minyard  2012-03-28  5191  /*
-895dcfd1cab84d Corey Minyard  2012-03-28  5192   * Inside a panic, send a message and wait for a response.
-895dcfd1cab84d Corey Minyard  2012-03-28  5193   */
-a567b6230066e3 Corey Minyard  2018-04-05 @5194  static void ipmi_panic_request_and_wait(struct ipmi_smi *intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5195  					struct ipmi_addr *addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5196  					struct kernel_ipmi_msg *msg)
-895dcfd1cab84d Corey Minyard  2012-03-28  5197  {
-895dcfd1cab84d Corey Minyard  2012-03-28  5198  	struct ipmi_smi_msg  smi_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5199  	struct ipmi_recv_msg recv_msg;
-895dcfd1cab84d Corey Minyard  2012-03-28  5200  	int rv;
-895dcfd1cab84d Corey Minyard  2012-03-28  5201  
-895dcfd1cab84d Corey Minyard  2012-03-28  5202  	smi_msg.done = dummy_smi_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5203  	recv_msg.done = dummy_recv_done_handler;
-895dcfd1cab84d Corey Minyard  2012-03-28  5204  	atomic_add(2, &panic_done_count);
-895dcfd1cab84d Corey Minyard  2012-03-28  5205  	rv = i_ipmi_request(NULL,
-895dcfd1cab84d Corey Minyard  2012-03-28  5206  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5207  			    addr,
-895dcfd1cab84d Corey Minyard  2012-03-28  5208  			    0,
-895dcfd1cab84d Corey Minyard  2012-03-28  5209  			    msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5210  			    intf,
-895dcfd1cab84d Corey Minyard  2012-03-28  5211  			    &smi_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5212  			    &recv_msg,
-895dcfd1cab84d Corey Minyard  2012-03-28  5213  			    0,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5214  			    intf->addrinfo[0].address,
-5fdb1fb2abe647 Corey Minyard  2017-09-05  5215  			    intf->addrinfo[0].lun,
-895dcfd1cab84d Corey Minyard  2012-03-28  5216  			    0, 1); /* Don't retry, and don't wait. */
-895dcfd1cab84d Corey Minyard  2012-03-28  5217  	if (rv)
-895dcfd1cab84d Corey Minyard  2012-03-28  5218  		atomic_sub(2, &panic_done_count);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5219  	else if (intf->handlers->flush_messages)
-82802f968bd311 Hidehiro Kawai 2015-07-27  5220  		intf->handlers->flush_messages(intf->send_info);
-82802f968bd311 Hidehiro Kawai 2015-07-27  5221  
-895dcfd1cab84d Corey Minyard  2012-03-28  5222  	while (atomic_read(&panic_done_count) != 0)
-895dcfd1cab84d Corey Minyard  2012-03-28  5223  		ipmi_poll(intf);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5224  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  5225  
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-:::::: The code at line 5194 was first introduced by commit
-:::::: a567b6230066e3a2c964e2dc914e7f9a436806c4 ipmi: Change ipmi_smi_t to struct ipmi_smi *
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-:::::: TO: Corey Minyard <cminyard@mvista.com>
-:::::: CC: Corey Minyard <cminyard@mvista.com>
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
