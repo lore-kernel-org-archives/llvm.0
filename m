@@ -1,159 +1,100 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFD423CC
-	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 06:05:29 +0000 (UTC)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-992b2249d82so535548166b.1
-        for <llvm@lists.linux.dev>; Sun, 09 Jul 2023 23:05:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF2C53BE
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 07:05:06 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so42686815e9.3
+        for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 00:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688969128; x=1691561128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
-        b=VZPa7xtNdgB2TAHCpqnZpgTYHg5TAPiEGf5ws0Sz3CMZVM3Z0gXNkTttmrHBn2LAz8
-         dTg1/TKtwHNAgu5Vs9xKfyy4yKcVojt+4g1yCBD4+5Ius8IgrZvXKgnPgOf13fyKbZI+
-         yDy9qXQ0t6i6IaVXWCCVEQHo0fFEfnqU0BaoEsokcHkl5Lx5akcBrPgehA1pqrXoI0Hk
-         7L9xEr25Aw7MGz67Aenl1sHh65VJgJCKwAz5zUEkItpz7AsrwmfAi8Wx8C2YatGfcu9/
-         oBVpMGjbGhAJylf1uJzQT5G8CQwTWmxP6g0j7WMjmdFYs5KTXqFQrzsDO28yOLKnpGo4
-         XAag==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688972705; x=1691564705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mFvL3tlkpDhpLI9w7XrEtJqw/lbmRTQDmsFPeVlaTJE=;
+        b=B+OAWea8safjLliid5fb8P1XEOByAWmJtrdPeO8vVt0BsfB3sAQ/HEWF0pq51BZPP/
+         9u6eXAkqEVbhocmUjbg2FiO7/4ydZdcFxw2s8OQrvJmOxT7ymv/XvTaj8BCcYMrkJSpe
+         QPDT9DIoeFUUY6bTwyxFsdUzKFFiTcEOCfa+mrSxkonkUTXuBPf6Xn1fiZm8FyQTZPi6
+         l8VqvMGpytp9+RGRmBHRwUHr1wjESiWVsJvoWcG8fr0+Gt/ezkG3pD+6ZPE0GcnGRTFj
+         5f78Id5wtOSSXzbr8qM/drdbmelMDLqumNxOArrLO+/XVHuNqxzyEXY3sEfNRj3OMOrm
+         XMYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688969128; x=1691561128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
-        b=BTBNEj62eCtMIb3iN8QWGyvp3ZWAB+ceENTyrdZdqUQ6qn1hxTFcmFpHgLSe7EspVd
-         eGEMIZf9gM87JTpEknmz8ijNQiP3GmUHt61ErCeK4K4sssaWpfFOXnjc0E0nr8yAPtS9
-         roEI1l3SdOw/1jQvGFKMriH0+UY8eq9zdOroplTpeUrpDcQ528ZyVIzkrF4PsGkanOGo
-         K/XDQdDYBOf/eAXhilTI0LArYuSTHasWeBKpD6gGdBTW4UAQ2vfoGyNVVlYHhNhqUdlY
-         YxRu3ZEHSzpPdGuqm6qc746/JMIcMvfBQ8C74rUwrJmmKv3KHgbN3Ov8DMV09PGUb+z5
-         vJEw==
-X-Gm-Message-State: ABy/qLaCBrxXljODvZOGyYnSbBZXRCnlaIkhzXbqxqOunaD+Jj2XEggZ
-	KYBqq8UpUHfrL5nHOeoqKFFLkg==
-X-Google-Smtp-Source: APBJJlEAeqh7WntGsbBW64VEcC+MW9HxtmE6MYzXkcd/We3xh1O8zeXD5iFrXnlmwb8Jb+WPICf/cQ==
-X-Received: by 2002:a17:906:7a0f:b0:974:1c98:d2d9 with SMTP id d15-20020a1709067a0f00b009741c98d2d9mr12858788ejo.3.1688969127746;
-        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id r11-20020a17090638cb00b00992b510089asm5639601ejd.84.2023.07.09.23.05.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
-Message-ID: <6251cf1b-6428-81e5-50b2-d65cd514063a@linaro.org>
-Date: Mon, 10 Jul 2023 08:05:25 +0200
+        d=1e100.net; s=20221208; t=1688972705; x=1691564705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mFvL3tlkpDhpLI9w7XrEtJqw/lbmRTQDmsFPeVlaTJE=;
+        b=XyqVDqInAam6SEOOg/LWeWKOeErnfe/iCHuM2ErV+J2cFCazAQ7QX/ZSv5PpWg9oX0
+         hX1DhUw3vf/09/DcCX0qyX7JQ8yVkpkBiCKqyNAYyLfAuHEbKuRZbsajGxddazi3uhZt
+         ehngY6Mv4PnFdx9CX/RreQ0XHDgDOh3F3VbuuqT0FP9ogIfhXe2FWVkCgLosg/vOwPO2
+         HsVUeyUhviOaMrawOTWkCcUhHlrgGy+PbvOviw2FMrGE682oxMAv2GAKAWiLbhv9/Wt3
+         tcDcCgnK16yTCKqsbjlF/Or/3BlcDaRD4/FWa57U9iPEq2F3xJobp07aNlgjTWP6kRXu
+         SIaw==
+X-Gm-Message-State: ABy/qLbwFeQ3LT6cOtXouQwHTz7qqAx2gl5D7kSSd6WQkUvsGTsAZ7EI
+	HtCsJeKL9f5z7QTQwyJ31j5ZXsDP4X1Ru/hGBjAVZ2Wv3Y/bIolz
+X-Google-Smtp-Source: APBJJlE3NFpHmzslV9vKFkDNQrbvhe42+Doh1LqIf2mh+PVW47q644xaDCXNbv5LQWJCaCVpTz2Lne60UkJ44T2N8sA=
+X-Received: by 2002:adf:fe01:0:b0:314:23b:dc56 with SMTP id
+ n1-20020adffe01000000b00314023bdc56mr8033189wrr.71.1688972704715; Mon, 10 Jul
+ 2023 00:05:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver
-Content-Language: en-US
-To: yuji2.ishikawa@toshiba.co.jp, lkp@intel.com, hverkuil@xs4all.nl,
- sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
- robh+dt@kernel.org, krzk@kernel.org, conor+dt@kernel.org,
- nobuhiro1.iwamatsu@toshiba.co.jp
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230620031111.3776-3-yuji2.ishikawa@toshiba.co.jp>
- <202306202006.FUjZfd9O-lkp@intel.com>
- <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <202307100638.uoomUZol-lkp@intel.com>
+In-Reply-To: <202307100638.uoomUZol-lkp@intel.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Mon, 10 Jul 2023 09:04:52 +0200
+Message-ID: <CAHVXubg2BUeM72rG5xLZFRQQ+eGfS3An0zeY7ueiH4nwFOeGcA@mail.gmail.com>
+Subject: Re: ld.lld: error: section .bss load address range overlaps with .init.pi.text
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/07/2023 02:16, yuji2.ishikawa@toshiba.co.jp wrote:
->> -----Original Message-----
->> From: kernel test robot <lkp@intel.com>
->> Sent: Tuesday, June 20, 2023 9:58 PM
->> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
->> <yuji2.ishikawa@toshiba.co.jp>; Hans Verkuil <hverkuil@xs4all.nl>; Sakari
->> Ailus <sakari.ailus@iki.fi>; Laurent Pinchart
->> <laurent.pinchart@ideasonboard.com>; Mauro Carvalho Chehab
->> <mchehab@kernel.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
->> Kozlowski <krzk@kernel.org>; Conor Dooley <conor+dt@kernel.org>;
->> iwamatsu nobuhiro(岩松 信洋 ○ＤＩＴＣ□ＤＩＴ○ＯＳＴ)
->> <nobuhiro1.iwamatsu@toshiba.co.jp>
->> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev;
->> linux-media@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
->> Video Input Interface driver
->>
->> Hi Yuji,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on media-tree/master] [also build test ERROR on
->> linus/master sailus-media-tree/streams v6.4-rc7 next-20230620] [If your patch
->> is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:
->> https://github.com/intel-lab-lkp/linux/commits/Yuji-Ishikawa/dt-bindings-me
->> dia-platform-visconti-Add-Toshiba-Visconti-Video-Input-Interface-bindings/20
->> 230620-120839
->> base:   git://linuxtv.org/media_tree.git master
->> patch link:
->> https://lore.kernel.org/r/20230620031111.3776-3-yuji2.ishikawa%40toshiba.co.j
->> p
->> patch subject: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
->> Video Input Interface driver
->> config: x86_64-buildonly-randconfig-r001-20230620
->> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
->> kp@intel.com/config)
->> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git
->> 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
->> reproduce:
->> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
->> kp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of the
->> same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes:
->> | https://lore.kernel.org/oe-kbuild-all/202306202006.FUjZfd9O-lkp@intel.
->> | com/
->>
->> All errors (new ones prefixed by >>):
->>
->>    In file included from <built-in>:1:
->>    In file included from ./usr/include/linux/visconti_viif.h:12:
->>>> usr/include/linux/videodev2.h:2464:20: error: field has incomplete type
->> 'struct timespec'
->>            struct timespec                 timestamp;
->>                                            ^
->>    usr/include/linux/videodev2.h:2464:9: note: forward declaration of 'struct
->> timespec'
->>            struct timespec                 timestamp;
->>                   ^
->>    1 error generated.
->>
->> --
->> 0-DAY CI Kernel Test Service
->> https://github.com/intel/lkp-tests/wiki
-> 
-> I could not reproduce the error with the steps had been specified.
-> 
-> * archived config file didn't compile Visconti VIIF driver (at least, COMPILE_TEST is needed)
+On Mon, Jul 10, 2023 at 12:23=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+> commit: 3b90b09af5be42491a8a74a549318cfa265b3029 riscv: Fix orphan sectio=
+n warnings caused by kernel/pi
+> date:   9 weeks ago
+> config: riscv-randconfig-r022-20230710 (https://download.01.org/0day-ci/a=
+rchive/20230710/202307100638.uoomUZol-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230710/202307100638=
+.uoomUZol-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307100638.uoomUZol-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: section .bss load address range overlaps with .init.pi.=
+text
+>    >>> .bss range is [0xDD5000, 0x1EC438F]
+>    >>> .init.pi.text range is [0x1DBC350, 0x1DBF39B]
+> --
+> >> ld.lld: error: section .rodata load address range overlaps with .init.=
+pi.bss
+>    >>> .rodata range is [0x1DBF400, 0x2888177]
+>    >>> .init.pi.bss range is [0x1EC4390, 0x1EC478F]
+>
 
-That's not true. The config has enabled CONFIG_VIDEO_VISCONTI_VIIF, so
-your reproduction steps were not correct (e.g. wrong arch, compiler etc).
+XIP_KERNEL=3Dy so nothing to do here.
 
-> * the error message didn't appear even if I add some options to config file.
-> * Environment:
->   * OS: Ubuntu 22.04
->   * compiler: Ubuntu clang version 15.07
+Thanks,
 
-Different compilers can have have or not have warnings, but it does not
-allow to ignore this warning. You can analyze the code even without
-reproducing it, if the reproduction is a problem.
+Alex
 
-Best regards,
-Krzysztof
-
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
