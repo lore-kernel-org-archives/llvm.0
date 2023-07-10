@@ -1,71 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57A412B78
-	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 15:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88298C433C7;
-	Mon, 10 Jul 2023 15:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689004626;
-	bh=cjUuxk+1R+kE/sabu0x+hlim8jDG+lWBNIP3U+KRE90=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qHeHMfqfjS84xZahsak2u7jiavteo+asrstiqP0Augi1U2xA4JM2wADU3/C/Su7O7
-	 c27Oow1qgRHJbZBjdGd/1gW2i+RWs42ovixJD4beYM4oijG3q1JeQXOC9Q+7sMlHX3
-	 l3akdQ9KiPQkFCKzkw13qC4s4oPM8OhwhjWoNeE1zvz//QzpMytC9tYxT0Ixs9bo3u
-	 vAwJ6+CTJ/7TPTbzSoz2gPVwPYi6FLP+zTxz+dI9M28deShT0MlMyMnnzvO+pTHsX2
-	 MtezhKM7Q/8K5uCwH4OBfLW8kRofpX1Ng5l6+IYB7xxoxndPEhXQjiUsW2ezTGzeQS
-	 Ts0Wpe671LGxw==
-Date: Mon, 10 Jul 2023 08:57:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com, samitolvanen@google.com,
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	ndesaulniers@google.com
-Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
-Message-ID: <20230710155703.GA4021842@dev-arch.thelio-3990X>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BE13222
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 16:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+ s=s29768273; t=1689005529; x=1689610329; i=markus.elfring@web.de;
+ bh=t8MPBk7LXk5MEPPJCKliAN1DB2BVxvTnDmNz5Lt6d6Q=;
+ h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:In-Reply-To;
+ b=ERFgDDo+75+Oz7BUuDqfUhemnU8yReiEGUjYsqrwSPzvo3B7Au+K43kKLDu0WwPcU9d7YvT
+ s3biAej5jM+oNJ13fNi7r8XhD6tahl1MBj3H+gjoBlFG95gkF6V2QtvP3APasGSiy+itjUkM5
+ TxJgNqWwETWm27XmjhK/KT5zgUu+B9llrRJ5gHeM/OKBpkOEeWqPkRasP2n8I0lQTFIzOSZOy
+ QTjkpcCfjA5H3QUYRhF3aOuunypmKwCrnTXAt/Q9poDxoGDvzFjq/GP31R/h+iuc0O+zh8XhA
+ dERJcZTmh6TqIgpvvDnht8vNOiRyig85/es1W4mIgb+o+yre6Z3A==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.83]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MCXZf-1qAt1G1Kr5-009QUe; Mon, 10
+ Jul 2023 18:12:09 +0200
+Message-ID: <a8865b83-bce0-0fef-1f18-744fb063abd0@web.de>
+Date: Mon, 10 Jul 2023 18:12:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168899125356.80889.17967397360941194229.stgit@devnote2>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To: Linke Li <lilinke99@gmail.com>, linux-mm@kvack.org, llvm@lists.linux.dev,
+ kernel-janitors@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Linke Li <lilinke99@foxmail.com>,
+ Mike Kravetz <mike.kravetz@oracle.com>, Muchun Song <muchun.song@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
+ hugetlbfs_file_mmap()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ksl1SO7jj4HzuXTPfuBIL999XNIhotdwsxOQyAmXR1uPv6i5r2/
+ D3PlQvypRhuqjuPiFoGGLZDSmAYU7YwYPOocIBISdJV9pKvAAKEDDX6pmsjpUiZF8yqUQ8W
+ TcYFjkCIkJmZdtFDPla7XtDtpqqSrnOhTBK5X3c+IEbyadetiXEFCoyTEoiftPwel2GKy9j
+ jSQvXHO+efoHYzH+KFtog==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:KS09CIOE6hA=;D9m/agfoHR2cwGtQyLT5MQQbm1j
+ ruj3I+A7RErwGBVe/pKXZ5FBRvhiSYYR0o35NIWevrZHRSHzGOhPPs5Z2YYXm8P/YpTwFtVBb
+ oXUX4sU4z3zp9rtuewJ/VnVcON4Wgff2iIfOhXy7xk8j3DSp+EpcYjvdZwvfAc2SOVWElwjdr
+ mWb0/ucCEaLTc0TCEQzaFUzkcwt+TlhCc9EyPMyx94X8JZ40MVoXjf8CvxNuy9nPO02ATwnqS
+ yF26SyQQo+b1Bu0M7lNiYfADKzXD6T8BBZvW1XWzd4yUeuD0D92XDTtQoxqIPvZCog+wDJ6Tg
+ 2mmQfon+jip1+Nolz2PBavUz1rZ1nkFsGSAIRjSriUigyVyzDuoFxPYFpHiyVW+pYwIAfhpJW
+ ocsfUqKkLHGu8vZTNZEE8vzTayByO1Rn4WXa1F+esyWLCLKypsXMs0WVipPq9hQmHBAi1SGQ+
+ wfjNUk/B0dyqFB/cUI9i5sVSDtGGdKZ2IEsMAdupRz4W0C78zSXiWlo+WRpb1UcLWgP5HwSoB
+ rcKqz+O1Gevt6JYIj+elPq3OTzgoeGWrMELTnQlaLIbE34dA6+oN/ZfE1ObX1Vuyv2Cj77jBe
+ VIqWl8rewIC5b9omR163adGEQtvAKj2d/8KyHTZ2FmmkWE1u5it/My2JbScAgucQBYZVwarqs
+ Taiv4DvL2wk3TWJBRGOPcy53L9GTlhAsYBawhGF567bktitRzZ2rHoPv0vAqy/G+37LO7hR9b
+ exEdUjFPi0JLxB30odqqI+bQKFv7QDeMpt+axNU3nxk65ddyShbcux2P6t6zDSdLljYRhvGHs
+ 2VTqRpTbcpDTjbrTKGHaOhKCJGrqYuosL6zjvMERRZHmNmARkhFbX/miJM0DkQhjtB3zZvqS0
+ 6KFvfl8BeUdeR4BrKGxdG2XWYd2sqLLmGRHUSA0ASle3BIHsCBMP4VY+0HvgNZZKFPIuZSs3c
+ /tFMXMVpGSY0AEQzeJ7S/f6YeFo=
 
-On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
-> I just build tested, since I could not boot the kernel with CFI_CLANG=y.
-> Would anyone know something about this error?
-> 
-> [    0.141030] MMIO Stale Data: Unknown: No mitigations
-> [    0.153511] SMP alternatives: Using kCFI
-> [    0.164593] Freeing SMP alternatives memory: 36K
-> [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
-> [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
-> [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> [    0.166028] Call Trace:
-> [    0.166028]  <TASK>
-> [    0.166028]  dump_stack_lvl+0x6e/0xb0
-> [    0.166028]  panic+0x146/0x2f0
-> [    0.166028]  ? start_kernel+0x472/0x48b
-> [    0.166028]  __stack_chk_fail+0x14/0x20
-> [    0.166028]  start_kernel+0x472/0x48b
-> [    0.166028]  x86_64_start_reservations+0x24/0x30
-> [    0.166028]  x86_64_start_kernel+0xa6/0xbb
-> [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
-> [    0.166028]  </TASK>
-> [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
+=E2=80=A6
+> To address this potential issue, this patch introduces a new check
+> that effectively prevents integer overflow. This check ensures the
+=E2=80=A6
 
-This looks like https://github.com/ClangBuiltLinux/linux/issues/1815 to
-me. What version of LLVM are you using? This was fixed in 16.0.4. Commit
-514ca14ed544 ("start_kernel: Add __no_stack_protector function
-attribute") should resolve it on the Linux side, it looks like that is
-in 6.5-rc1. Not sure if we should backport it or just let people upgrade
-their toolchains on older releases.
+Please choose an imperative change suggestion.
 
-Cheers,
-Nathan
+See also:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.5-rc1#n94
+
+Regards,
+Markus
