@@ -1,231 +1,106 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094FB179;
-	Mon, 10 Jul 2023 04:38:10 +0000 (UTC)
-Received: from loongson.cn (unknown [10.20.42.43])
-	by gateway (Coremail) with SMTP id _____8Cx2eovi6tkt_ICAA--.3345S3;
-	Mon, 10 Jul 2023 12:38:07 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxniMUi6tkfb0mAA--.4543S3;
-	Mon, 10 Jul 2023 12:38:04 +0800 (CST)
-Message-ID: <e1b7d594-220e-7c17-09c8-ff8867382129@loongson.cn>
-Date: Mon, 10 Jul 2023 12:37:40 +0800
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823DE17C4;
+	Mon, 10 Jul 2023 04:41:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC09C43395;
+	Mon, 10 Jul 2023 04:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1688964064;
+	bh=mv//6hNwk9M6NPBEMlu0lBzYoJfCRXlFZFV1BMnomHs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hQ3xhU9RyNnpwHFmPtb1JEi3QSDyRc+Ly9ZHnskvF9AW1crjOxtyXBpBB1xRUrkm+
+	 HenjCvTqG+UIgFfclX24vhuAEUFeu6yICjXLff88N6L+mCavjsgzU/owu8tCizjpAn
+	 ewhmtMvqvswX+NzQhHx+kO39OTkwbH7caDD6KCupnl6zqs9QcT21mUfZNB89GRIHU4
+	 eRy+hK2lLwdTuBFN3pwXWHa/CE7e/RSkDIFwW+JrSuTMT3YTlVzM5qjwkBccdR2iiW
+	 9PiJIDgy7IP2STq2gpSGpHEefnaycIBtUZ5Gt4kYf3ub4E0Q+zv0iDw2LlYANSE62G
+	 oC0h4T1xqQmHw==
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so7900461a12.0;
+        Sun, 09 Jul 2023 21:41:04 -0700 (PDT)
+X-Gm-Message-State: ABy/qLaYlKJHN/OnxY7wuxNBv0A6dgouh9RL1SonoEwBDy3hq4ksEdGs
+	jdVre5ERYv9JE73Bk+jsxeHuZGIUvsfwEzCVQAE=
+X-Google-Smtp-Source: APBJJlE24fzgM5W0er2eZb1A+JkFH2SlI7nTJD6AILFEyjyQ2t6Gb3sEBHHiyn/fNNkYY0OvDUVpzlHRv4JgWAldyYg=
+X-Received: by 2002:a05:6402:4304:b0:51e:4a1e:5f7a with SMTP id
+ m4-20020a056402430400b0051e4a1e5f7amr8606822edc.4.1688964062079; Sun, 09 Jul
+ 2023 21:41:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [drm-misc:drm-misc-next 1/15]
- drivers/video/fbdev/hyperv_fb.c:1033:10: error: use of undeclared identifier
- 'screen_info'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, Deepak Rawat <drawat.floss@gmail.com>,
- Michael Kelley <mikelley@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- dri-devel@lists.freedesktop.org,
- Javier Martinez Canillas <javierm@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-References: <202307101042.rqehuauj-lkp@intel.com>
-From: suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <202307101042.rqehuauj-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:AQAAf8BxniMUi6tkfb0mAA--.4543S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoW3ZrWkZF1xKw45Jw1DtFW3CFX_yoW8Xr48Ao
-	WxC343ZF1rX3W8A395Za1Dt3WIq39FgFs8Kay3Xa1qq342qF93XFWrArW3AFsYqr1qqrnr
-	Za4UXF45JwsIgFZ7l-sFpf9Il3svdjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf
-	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
-	CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URa0PU
-	UUUU=
+References: <20230710015120.44818-1-jianghaoran@kylinos.cn>
+In-Reply-To: <20230710015120.44818-1-jianghaoran@kylinos.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 10 Jul 2023 12:40:50 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
+Message-ID: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
+Subject: Re: [PATCH] samples/bpf: Fix compilation failure for samples/bpf on
+ Loongarch Fedora
+To: Haoran Jiang <jianghaoran@kylinos.cn>
+Cc: linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, trix@redhat.com, 
+	ndesaulniers@google.com, nathan@kernel.org, jolsa@kernel.org, 
+	haoluo@google.com, sdf@google.com, kpsingh@kernel.org, 
+	john.fastabend@gmail.com, yhs@fb.com, song@kernel.org, martin.lau@linux.dev, 
+	andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org, kernel@xen0n.name, 
+	yangtiezhu@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Deepak and Michael
+Please use LoongArch instead of Loongarch in the title and commit message.
 
+Huacai
 
-Would you like to review this trivial patch ?
-
-Please help to push this to drm/hyperv, because kernel test robots are 
-crying.
-
-
-On 2023/7/10 10:57, kernel test robot wrote:
-> tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> head:   70d1ace56db6c79d39dbe9c0d5244452b67e2fde
-> commit: 8b0d13545b091729e0aa05ff9981e2d06c1e2ee5 [1/15] efi: Do not include <linux/screen_info.h> from EFI header
-> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230710/202307101042.rqehuauj-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230710/202307101042.rqehuauj-lkp@intel.com/reproduce)
+On Mon, Jul 10, 2023 at 10:08=E2=80=AFAM Haoran Jiang <jianghaoran@kylinos.=
+cn> wrote:
 >
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307101042.rqehuauj-lkp@intel.com/
+> When building the latest samples/bpf on Loongarch Fedora
 >
-> All errors (new ones prefixed by >>):
+>      make M=3Dsamples/bpf
 >
->>> drivers/video/fbdev/hyperv_fb.c:1033:10: error: use of undeclared identifier 'screen_info'
->      1033 |                 base = screen_info.lfb_base;
->           |                        ^
->     drivers/video/fbdev/hyperv_fb.c:1034:10: error: use of undeclared identifier 'screen_info'
->      1034 |                 size = screen_info.lfb_size;
->           |                        ^
->>> drivers/video/fbdev/hyperv_fb.c:1080:3: error: must use 'struct' tag to refer to type 'screen_info'
->      1080 |                 screen_info.lfb_size = 0;
->           |                 ^
->           |                 struct
->>> drivers/video/fbdev/hyperv_fb.c:1080:14: error: expected identifier or '('
->      1080 |                 screen_info.lfb_size = 0;
->           |                            ^
->     drivers/video/fbdev/hyperv_fb.c:1081:3: error: must use 'struct' tag to refer to type 'screen_info'
->      1081 |                 screen_info.lfb_base = 0;
->           |                 ^
->           |                 struct
->     drivers/video/fbdev/hyperv_fb.c:1081:14: error: expected identifier or '('
->      1081 |                 screen_info.lfb_base = 0;
->           |                            ^
->     drivers/video/fbdev/hyperv_fb.c:1082:3: error: must use 'struct' tag to refer to type 'screen_info'
->      1082 |                 screen_info.orig_video_isVGA = 0;
->           |                 ^
->           |                 struct
->     drivers/video/fbdev/hyperv_fb.c:1082:14: error: expected identifier or '('
->      1082 |                 screen_info.orig_video_isVGA = 0;
->           |                            ^
->     8 errors generated.
+> There are compilation errors as follows:
 >
+> In file included from ./linux/samples/bpf/sockex2_kern.c:2:
+> In file included from ./include/uapi/linux/in.h:25:
+> In file included from ./include/linux/socket.h:8:
+> In file included from ./include/linux/uio.h:9:
+> In file included from ./include/linux/thread_info.h:60:
+> In file included from ./arch/loongarch/include/asm/thread_info.h:15:
+> In file included from ./arch/loongarch/include/asm/processor.h:13:
+> In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
+> ./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin=
+.h' file not found
+>          ^~~~~~~~~~~~~~~
+> 1 error generated.
 >
-> vim +/screen_info +1033 drivers/video/fbdev/hyperv_fb.c
+> larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
+> and the header file location is specified at compile time.
 >
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   988
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   989
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   990  /* Get framebuffer memory from Hyper-V video pci space */
-> 3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05   991  static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   992  {
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   993  	struct hvfb_par *par = info->par;
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   994  	struct pci_dev *pdev  = NULL;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   995  	void __iomem *fb_virt;
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   996  	int gen2vm = efi_enabled(EFI_BOOT);
-> 81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19   997  	resource_size_t base, size;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   998  	phys_addr_t paddr;
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   999  	int ret;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1000
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1001  	if (!gen2vm) {
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1002  		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1003  			PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1004  		if (!pdev) {
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1005  			pr_err("Unable to find PCI Hyper-V video\n");
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1006  			return -ENODEV;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1007  		}
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1008
-> 81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1009  		base = pci_resource_start(pdev, 0);
-> 81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1010  		size = pci_resource_len(pdev, 0);
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1011
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1012  		/*
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1013  		 * For Gen 1 VM, we can directly use the contiguous memory
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1014  		 * from VM. If we succeed, deferred IO happens directly
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1015  		 * on this allocated framebuffer memory, avoiding extra
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1016  		 * memory copy.
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1017  		 */
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1018  		paddr = hvfb_get_phymem(hdev, screen_fb_size);
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1019  		if (paddr != (phys_addr_t) -1) {
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1020  			par->mmio_pp = paddr;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1021  			par->mmio_vp = par->dio_vp = __va(paddr);
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1022
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1023  			info->fix.smem_start = paddr;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1024  			info->fix.smem_len = screen_fb_size;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1025  			info->screen_base = par->mmio_vp;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1026  			info->screen_size = screen_fb_size;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1027
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1028  			par->need_docopy = false;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1029  			goto getmem_done;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1030  		}
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1031  		pr_info("Unable to allocate enough contiguous physical memory on Gen 1 VM. Using MMIO instead.\n");
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1032  	} else {
-> 81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19 @1033  		base = screen_info.lfb_base;
-> 81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1034  		size = screen_info.lfb_size;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1035  	}
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1036
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1037  	/*
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1038  	 * Cannot use the contiguous physical memory.
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1039  	 * Allocate mmio space for framebuffer.
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1040  	 */
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1041  	dio_fb_size =
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1042  		screen_width * screen_height * screen_depth / 8;
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1043
-> c4b4d7047f16a8 drivers/video/fbdev/hyperv_fb.c Saurabh Sengar    2022-04-27  1044  	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
-> 3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1045  				  screen_fb_size, 0x100000, true);
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1046  	if (ret != 0) {
-> 3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1047  		pr_err("Unable to allocate framebuffer memory\n");
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1048  		goto err1;
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1049  	}
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1050
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1051  	/*
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1052  	 * Map the VRAM cacheable for performance. This is also required for
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1053  	 * VM Connect to display properly for ARM64 Linux VM, as the host also
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1054  	 * maps the VRAM cacheable.
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1055  	 */
-> 5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1056  	fb_virt = ioremap_cache(par->mem->start, screen_fb_size);
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1057  	if (!fb_virt)
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1058  		goto err2;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1059
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1060  	/* Allocate memory for deferred IO */
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1061  	par->dio_vp = vzalloc(round_up(dio_fb_size, PAGE_SIZE));
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1062  	if (par->dio_vp == NULL)
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1063  		goto err3;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1064
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1065  	/* Physical address of FB device */
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1066  	par->mmio_pp = par->mem->start;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1067  	/* Virtual address of FB device */
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1068  	par->mmio_vp = (unsigned char *) fb_virt;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1069
-> 3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1070  	info->fix.smem_start = par->mem->start;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1071  	info->fix.smem_len = dio_fb_size;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1072  	info->screen_base = par->dio_vp;
-> d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1073  	info->screen_size = dio_fb_size;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1074
-> 3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1075  getmem_done:
-> 5fbcc6708fe32e drivers/video/fbdev/hyperv_fb.c Daniel Vetter     2023-04-06  1076  	aperture_remove_conflicting_devices(base, size, KBUILD_MODNAME);
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1077
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1078  	if (gen2vm) {
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1079  		/* framebuffer is reallocated, clear screen_info to avoid misuse from kexec */
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14 @1080  		screen_info.lfb_size = 0;
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1081  		screen_info.lfb_base = 0;
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1082  		screen_info.orig_video_isVGA = 0;
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1083  	} else {
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1084  		pci_dev_put(pdev);
-> 3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1085  	}
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1086
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1087  	return 0;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1088
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1089  err3:
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1090  	iounmap(fb_virt);
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1091  err2:
-> 696ca5e82c057a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2016-04-05  1092  	vmbus_free_mmio(par->mem->start, screen_fb_size);
-> 3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1093  	par->mem = NULL;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1094  err1:
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1095  	if (!gen2vm)
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1096  		pci_dev_put(pdev);
-> 9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1097
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1098  	return -ENOMEM;
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1099  }
-> 68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1100
+> Test on Loongarch Fedora:
+> https://github.com/fedora-remix-loongarch/releases-info
 >
-> :::::: The code at line 1033 was first introduced by commit
-> :::::: 81d2393485f0990cf6566b0c9e0697c199f68ae5 fbdev/hyperv-fb: Do not set struct fb_info.apertures
+> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+> ---
+>  samples/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> :::::: TO: Thomas Zimmermann <tzimmermann@suse.de>
-> :::::: CC: Thomas Zimmermann <tzimmermann@suse.de>
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 615f24ebc49c..b301796a3862 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
+>         @echo "  CLANG-bpf " $@
+>         $(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS=
+) \
+>                 -I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
+> -               -I$(LIBBPF_INCLUDE) \
+> +               -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+>                 -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-poi=
+nter-sign \
+>                 -D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-=
+types \
+>                 -Wno-gnu-variable-sized-type-not-at-end \
+> --
+> 2.27.0
 >
-
