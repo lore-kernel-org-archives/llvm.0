@@ -1,91 +1,296 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B189156D5;
-	Mon, 10 Jul 2023 21:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689024811; x=1720560811;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kb2rc3LY9QiBnaOXj6f06OeidL9rzaYUAi7KLEwieJc=;
-  b=mQ/FqykBmwpHbQdLpDebsf/uxygpuQdpYUSr4BxGIBC5Y06OYghhECpZ
-   38ObY/x3yy/90vsQGIpqwz+liBtMXCNbZXDEKD11SfpvRVxB9qpT/to13
-   qBvFsV+kNn57Qc3MFugBG4O7zVzgxmCZKhG6tL+O3AzyQHUNmjg353FtN
-   fBFh0+lrVHCQLR9M3s20wbKdFnuQo7wst1IA8411Z8OGLb7ME35NUe0CF
-   rQtHh9HN7d0tmT+SVY4UGO+ydjfUEIvINnFdPTKLJ+wAiBlHqQh1Ohvyn
-   EgnU1utCcwzoiPDh2zB4GwHNPLsXarnb4OR/z7bufZ15JBYwRX8yUGKfM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="367958144"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="367958144"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 14:33:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="671121006"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="671121006"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Jul 2023 14:33:29 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qIyVc-00041M-1S;
-	Mon, 10 Jul 2023 21:33:28 +0000
-Date: Tue, 11 Jul 2023 05:33:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [jaegeuk-f2fs:dev-test 5/6] fs/f2fs/super.c:1563:17: error: no
- member named 'blkz_seq' in 'struct f2fs_dev_info'
-Message-ID: <202307110542.NBAMyZxE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B16B156CD
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 22:21:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689027675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iklQqWIHZWh/R3L4ioJUSAOSSUBWnTV1upsrAugEF9A=;
+	b=MOUZAx0UU3oQVlwfbQ+S3Z5l6ByETit9Ks/Tgm055DFhgWQiBri+ZQkfsGu5t0s/BvbW9N
+	G7weCyFqcjTIF6AuhSFtK+LD879WcHonfsOK9Q7epgP0AWd7H4w2dlqjMAda7mNXdahUHO
+	Bf8txvPqIfwQLoata8ZLLLR5He4rrmc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-586-ufWpdtPaNBuZHpnjimN9bQ-1; Mon, 10 Jul 2023 18:21:14 -0400
+X-MC-Unique: ufWpdtPaNBuZHpnjimN9bQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5AFE3C0FC87
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 22:21:13 +0000 (UTC)
+Received: from [172.64.15.54] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B542B111E3E4;
+	Mon, 10 Jul 2023 22:21:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 64 of 346): Test report for master
+ (6.5.0-rc1, mainline.kernel.org-clang, 3f01e9fe)
+Date: Mon, 10 Jul 2023 22:21:13 -0000
+To: jiji@redhat.com, omosnace@redhat.com, yiche@redhat.com,
+ llvm@lists.linux.dev, yizhan@redhat.com, haliu@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <18911.123071018211400418@us-mta-586.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-head:   d73b38253cda925126fc85e32277fbe2f1b100bf
-commit: 2031cbae1532cadb0838ebc1fecbfd14698b5a0a [5/6] f2fs: don't reopen the main block device in f2fs_scan_devices
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230711/202307110542.NBAMyZxE-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110542.NBAMyZxE-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307110542.NBAMyZxE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/f2fs/super.c:1563:17: error: no member named 'blkz_seq' in 'struct f2fs_dev_info'
-           kvfree(FDEV(0).blkz_seq);
-                  ~~~~~~~ ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +1563 fs/f2fs/super.c
+Kernel information:
+    Commit message: Merge tag 'linux-watchdog-6.5-rc2' of git://www.linux-w=
+atchdog.org/linux-watchdog
 
-  1558	
-  1559	static void destroy_device_list(struct f2fs_sb_info *sbi)
-  1560	{
-  1561		int i;
-  1562	
-> 1563		kvfree(FDEV(0).blkz_seq);
-  1564		for (i = 1; i < sbi->s_ndevs; i++) {
-  1565			blkdev_put(FDEV(i).bdev, sbi->sb->s_type);
-  1566	#ifdef CONFIG_BLK_DEV_ZONED
-  1567			kvfree(FDEV(i).blkz_seq);
-  1568	#endif
-  1569		}
-  1570		kvfree(sbi->devs);
-  1571	}
-  1572	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/95332
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725351
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+         aarch64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725386
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+         ppc64le - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725582
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725266
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725313
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725323
+          x86_64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725471
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8725298
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
+directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/8590844
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
+f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
+:1559 (size 1)
+            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
+            Affected tests:
+                 aarch64 - xfstests - xfs
+                  x86_64 - xfstests - xfs
+        Issue: Storage - blktests - nvme-tcp: hit test timeout
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
