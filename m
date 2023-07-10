@@ -1,110 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F51623CC;
-	Mon, 10 Jul 2023 05:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDBFC433C8;
-	Mon, 10 Jul 2023 05:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688968491;
-	bh=5bo3Dd1S/+UX7zKX7SU1eVf31BEHvcpAG9FLa5nnBkc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hPn6f7tiRIl6O3bjLxUjlDrP1U+Q6T7MR6V5pMw0hfvhRAi66DsEgFcyqOoxNzFfM
-	 g/9jYTDvUt7NXkIyaZNjXRe+T5UCHmqAIAoWEFBLNSYMSdys8Jkro6KAGcqBkkDgcg
-	 wy/jO9Two/zAxxTTX2QA3OHQBvDyrUY+tFwVB4lw6X6zgzQ45+m4ya4qlz6MR6OQCl
-	 Uj8bWAwt8Z2vuiiLf8Fzat5byW1XQen+nY04iwqGj6XcqffdfSkq7cVBLQfWlKGTZw
-	 wmvbqPFEU3NcOosIW954LwhBYNqe1Xzoi7XFfruxfjJTTWaYBokrJKE+LfECOQ4AaZ
-	 IffHKgEbJ5IzQ==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso6167265e87.0;
-        Sun, 09 Jul 2023 22:54:51 -0700 (PDT)
-X-Gm-Message-State: ABy/qLYgfUo0rxfVi5Yz+8hdnrK1/6akiiI117S9eR6Z7Ziji4vyPWnq
-	kvFmjUTvUN4YBektZ7XITAYP0Rf0yN7yOXs1XiM=
-X-Google-Smtp-Source: APBJJlFAeRupkRBF6nv00OnjiXB1Q4Wb23ZbuARfTFW1WElFD40u6AjhzB2s7kDTNHYx/CIFbLiRYKNSdHdoJSZDha0=
-X-Received: by 2002:a05:6512:110e:b0:4fb:7665:9b0d with SMTP id
- l14-20020a056512110e00b004fb76659b0dmr10569131lfg.12.1688968489141; Sun, 09
- Jul 2023 22:54:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFD423CC
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 06:05:29 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-992b2249d82so535548166b.1
+        for <llvm@lists.linux.dev>; Sun, 09 Jul 2023 23:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688969128; x=1691561128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
+        b=VZPa7xtNdgB2TAHCpqnZpgTYHg5TAPiEGf5ws0Sz3CMZVM3Z0gXNkTttmrHBn2LAz8
+         dTg1/TKtwHNAgu5Vs9xKfyy4yKcVojt+4g1yCBD4+5Ius8IgrZvXKgnPgOf13fyKbZI+
+         yDy9qXQ0t6i6IaVXWCCVEQHo0fFEfnqU0BaoEsokcHkl5Lx5akcBrPgehA1pqrXoI0Hk
+         7L9xEr25Aw7MGz67Aenl1sHh65VJgJCKwAz5zUEkItpz7AsrwmfAi8Wx8C2YatGfcu9/
+         oBVpMGjbGhAJylf1uJzQT5G8CQwTWmxP6g0j7WMjmdFYs5KTXqFQrzsDO28yOLKnpGo4
+         XAag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688969128; x=1691561128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C/5sXBX6w+tx4fzz42BcVYvkT5fYXODw7taXVRoe5E4=;
+        b=BTBNEj62eCtMIb3iN8QWGyvp3ZWAB+ceENTyrdZdqUQ6qn1hxTFcmFpHgLSe7EspVd
+         eGEMIZf9gM87JTpEknmz8ijNQiP3GmUHt61ErCeK4K4sssaWpfFOXnjc0E0nr8yAPtS9
+         roEI1l3SdOw/1jQvGFKMriH0+UY8eq9zdOroplTpeUrpDcQ528ZyVIzkrF4PsGkanOGo
+         K/XDQdDYBOf/eAXhilTI0LArYuSTHasWeBKpD6gGdBTW4UAQ2vfoGyNVVlYHhNhqUdlY
+         YxRu3ZEHSzpPdGuqm6qc746/JMIcMvfBQ8C74rUwrJmmKv3KHgbN3Ov8DMV09PGUb+z5
+         vJEw==
+X-Gm-Message-State: ABy/qLaCBrxXljODvZOGyYnSbBZXRCnlaIkhzXbqxqOunaD+Jj2XEggZ
+	KYBqq8UpUHfrL5nHOeoqKFFLkg==
+X-Google-Smtp-Source: APBJJlEAeqh7WntGsbBW64VEcC+MW9HxtmE6MYzXkcd/We3xh1O8zeXD5iFrXnlmwb8Jb+WPICf/cQ==
+X-Received: by 2002:a17:906:7a0f:b0:974:1c98:d2d9 with SMTP id d15-20020a1709067a0f00b009741c98d2d9mr12858788ejo.3.1688969127746;
+        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id r11-20020a17090638cb00b00992b510089asm5639601ejd.84.2023.07.09.23.05.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jul 2023 23:05:27 -0700 (PDT)
+Message-ID: <6251cf1b-6428-81e5-50b2-d65cd514063a@linaro.org>
+Date: Mon, 10 Jul 2023 08:05:25 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAAhV-H6s3N=-brDz24PfrtEKNFjvnLjbDR2NpOVDF_fN7rA53A@mail.gmail.com>
- <20230710052750.259595-1-jianghaoran@kylinos.cn>
-In-Reply-To: <20230710052750.259595-1-jianghaoran@kylinos.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 10 Jul 2023 13:54:37 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
-Message-ID: <CAAhV-H7orsUHDZuwcTUeWYbizcWRG4k_BPy53W7PT_MQ_2SXgw@mail.gmail.com>
-Subject: Re: [PATCH v2] samples/bpf: Fix compilation failure for samples/bpf
- on LoongArch Fedora
-To: Haoran Jiang <jianghaoran@kylinos.cn>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kernel@xen0n.name, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, loongarch@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	sdf@google.com, song@kernel.org, trix@redhat.com, yangtiezhu@loongson.cn, 
-	yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+ Video Input Interface driver
+Content-Language: en-US
+To: yuji2.ishikawa@toshiba.co.jp, lkp@intel.com, hverkuil@xs4all.nl,
+ sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+ robh+dt@kernel.org, krzk@kernel.org, conor+dt@kernel.org,
+ nobuhiro1.iwamatsu@toshiba.co.jp
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230620031111.3776-3-yuji2.ishikawa@toshiba.co.jp>
+ <202306202006.FUjZfd9O-lkp@intel.com>
+ <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On 10/07/2023 02:16, yuji2.ishikawa@toshiba.co.jp wrote:
+>> -----Original Message-----
+>> From: kernel test robot <lkp@intel.com>
+>> Sent: Tuesday, June 20, 2023 9:58 PM
+>> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
+>> <yuji2.ishikawa@toshiba.co.jp>; Hans Verkuil <hverkuil@xs4all.nl>; Sakari
+>> Ailus <sakari.ailus@iki.fi>; Laurent Pinchart
+>> <laurent.pinchart@ideasonboard.com>; Mauro Carvalho Chehab
+>> <mchehab@kernel.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>> Kozlowski <krzk@kernel.org>; Conor Dooley <conor+dt@kernel.org>;
+>> iwamatsu nobuhiro(岩松 信洋 ○ＤＩＴＣ□ＤＩＴ○ＯＳＴ)
+>> <nobuhiro1.iwamatsu@toshiba.co.jp>
+>> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev;
+>> linux-media@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+>> Video Input Interface driver
+>>
+>> Hi Yuji,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on media-tree/master] [also build test ERROR on
+>> linus/master sailus-media-tree/streams v6.4-rc7 next-20230620] [If your patch
+>> is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:
+>> https://github.com/intel-lab-lkp/linux/commits/Yuji-Ishikawa/dt-bindings-me
+>> dia-platform-visconti-Add-Toshiba-Visconti-Video-Input-Interface-bindings/20
+>> 230620-120839
+>> base:   git://linuxtv.org/media_tree.git master
+>> patch link:
+>> https://lore.kernel.org/r/20230620031111.3776-3-yuji2.ishikawa%40toshiba.co.j
+>> p
+>> patch subject: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
+>> Video Input Interface driver
+>> config: x86_64-buildonly-randconfig-r001-20230620
+>> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
+>> kp@intel.com/config)
+>> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git
+>> 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+>> reproduce:
+>> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
+>> kp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of the
+>> same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes:
+>> | https://lore.kernel.org/oe-kbuild-all/202306202006.FUjZfd9O-lkp@intel.
+>> | com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>    In file included from <built-in>:1:
+>>    In file included from ./usr/include/linux/visconti_viif.h:12:
+>>>> usr/include/linux/videodev2.h:2464:20: error: field has incomplete type
+>> 'struct timespec'
+>>            struct timespec                 timestamp;
+>>                                            ^
+>>    usr/include/linux/videodev2.h:2464:9: note: forward declaration of 'struct
+>> timespec'
+>>            struct timespec                 timestamp;
+>>                   ^
+>>    1 error generated.
+>>
+>> --
+>> 0-DAY CI Kernel Test Service
+>> https://github.com/intel/lkp-tests/wiki
+> 
+> I could not reproduce the error with the steps had been specified.
+> 
+> * archived config file didn't compile Visconti VIIF driver (at least, COMPILE_TEST is needed)
 
-On Mon, Jul 10, 2023 at 1:34=E2=80=AFPM Haoran Jiang <jianghaoran@kylinos.c=
-n> wrote:
->
-> When building the latest samples/bpf on LoongArch Fedora
->
->      make M=3Dsamples/bpf
->
-> There are compilation errors as follows:
->
-> In file included from ./linux/samples/bpf/sockex2_kern.c:2:
-> In file included from ./include/uapi/linux/in.h:25:
-> In file included from ./include/linux/socket.h:8:
-> In file included from ./include/linux/uio.h:9:
-> In file included from ./include/linux/thread_info.h:60:
-> In file included from ./arch/loongarch/include/asm/thread_info.h:15:
-> In file included from ./arch/loongarch/include/asm/processor.h:13:
-> In file included from ./arch/loongarch/include/asm/cpu-info.h:11:
-> ./arch/loongarch/include/asm/loongarch.h:13:10: fatal error: 'larchintrin=
-.h' file not found
->          ^~~~~~~~~~~~~~~
-> 1 error generated.
->
-> larchintrin.h is included in /usr/lib64/clang/14.0.6/include,
-> and the header file location is specified at compile time.
->
-> Test on LoongArch Fedora:
-> https://github.com/fedora-remix-loongarch/releases-info
->
-> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
->
-> ---
-> v2:
-> use LoongArch instead of Loongarch in the title and commit message.
-> ---
->  samples/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 615f24ebc49c..b301796a3862 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -434,7 +434,7 @@ $(obj)/%.o: $(src)/%.c
->         @echo "  CLANG-bpf " $@
->         $(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS=
-) \
->                 -I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
-> -               -I$(LIBBPF_INCLUDE) \
-> +               -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
->                 -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-poi=
-nter-sign \
->                 -D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-=
-types \
->                 -Wno-gnu-variable-sized-type-not-at-end \
-> --
-> 2.27.0
->
->
+That's not true. The config has enabled CONFIG_VIDEO_VISCONTI_VIIF, so
+your reproduction steps were not correct (e.g. wrong arch, compiler etc).
+
+> * the error message didn't appear even if I add some options to config file.
+> * Environment:
+>   * OS: Ubuntu 22.04
+>   * compiler: Ubuntu clang version 15.07
+
+Different compilers can have have or not have warnings, but it does not
+allow to ignore this warning. You can analyze the code even without
+reproducing it, if the reproduction is a problem.
+
+Best regards,
+Krzysztof
+
