@@ -1,245 +1,222 @@
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1515.securemx.jp [210.130.202.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6209615A5;
-	Mon, 10 Jul 2023 01:05:22 +0000 (UTC)
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1515) id 36A0MMbL021544; Mon, 10 Jul 2023 09:22:22 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1802) id 36A0Ljdv4147239; Mon, 10 Jul 2023 09:21:45 +0900
-X-Iguazu-Qid: 2yAbM4uBQ6UkLREDuX
-X-Iguazu-QSIG: v=2; s=0; t=1688948504; q=2yAbM4uBQ6UkLREDuX; m=GkUfndbugaAASDU/Fmfiz8uMqCr3mWZuso651d92Guc=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-	by relay.securemx.jp (mx-mr1800) id 36A0LgDn4026213
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 10 Jul 2023 09:21:42 +0900
-X-SA-MID: 4138425
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NxMSud5ZC7nHwiMCPbtDJOIi5pNKoyiEt+hSBAnsuhGZc3ikrx6736gZ26q2a1uvpfhUbdEqmsMKEBdCVzOfCdOVoyAWIEZgSWzLOUMIOSfyKqdCtDDlbLTKpKiNGM8kD0+GUETFU313GBBAzBxXXtXfKswIjpTlPuf5aMs5LrP+D3gCb/VpAX9VygwjupkOaso4ivOA3YjW+8+LA/8apsMMvtMMmlo9TfA7lDI6NHFKZ5Fidz8jG/vuqJ+7L8ALvp4RfPnu4ZrfxCJczy1Cml2kpg9vMpYGJ6hyBfqzdBpWx0e4+SoptfDZ/xElpkUkqy1RdF3+sc7Lxn7BS2Ul1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l+7fZVn+qbzPbO74jVBLgNJA2Mh218XUCosm4g6kezs=;
- b=JC339P13us1R/QUSL47h9HFY2bO9Aank7YqFSy4udTY5ZOIbeQzYE4ZMp/0Yh28nBAYMFnv4YzsDNPAv/RonLuyRGpbjtevaXPjiUedZqL7U8obfi+gqj1fcdZ+jVN0TTpO+KRi791qNnwYSVHjn4t9a+NjYE7pcxdo2v/9olRsl20CZd5A51gD5DT9E7Zu4vRvHQehgPn7b4+99l8Ryenr8IhpIDLemyHtYZueeoYoYrSnQnmQWCBy71pfJ1zQhhpblVSHVnPD03zUMj8fc/8mz6MYgG1ef5JvUANpb/MQuwrJ/Owr1r9j82tDDtI9BbSNrXuFC+GxUHM8xFdQf+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
- header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
-From: <yuji2.ishikawa@toshiba.co.jp>
-To: <lkp@intel.com>, <hverkuil@xs4all.nl>, <sakari.ailus@iki.fi>,
-        <laurent.pinchart@ideasonboard.com>, <mchehab@kernel.org>,
-        <robh+dt@kernel.org>, <krzk@kernel.org>, <conor+dt@kernel.org>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver
-Thread-Topic: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver
-Thread-Index: AQHZoyT4WOl+YovnA0eMYN+ttqnJ/q+Tp1eAgB6ZWqA=
-Date: Mon, 10 Jul 2023 00:16:34 +0000
-X-TSB-HOP2: ON
-Message-ID: 
- <TYAPR01MB6201668A86ACD9794B2E3A5C9230A@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-References: <20230620031111.3776-3-yuji2.ishikawa@toshiba.co.jp>
- <202306202006.FUjZfd9O-lkp@intel.com>
-In-Reply-To: <202306202006.FUjZfd9O-lkp@intel.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYAPR01MB6201:EE_|TY3PR01MB12119:EE_
-x-ms-office365-filtering-correlation-id: 684cb3b4-ee85-4c75-dd62-08db80daeb69
-x-ld-processed: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f,ExtAddr,ExtFwd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- R4lmkbKaruL1FsOb6ISAHLhJeAovw43eVOZkTRNSTkodeVwiz2WywQQu16Xy8N6KQhJfaw2XdKSdMz7N+uVGBpApfJdB8/vxcN3EGGPfAg24Wk9CdfDc4GeQDZ1Ka7sSqY76xzWFdGtc3lhfLZarGtQIKmqOnI/F2G0pAbKCiGIFiZnNM4mEEF66L6EuuBux5rIhFBTepCTy4wjLsAT2dsTCBFbVpnTeuYkFpkT6MWNmxpaSOmxP47iyJ3T83zKC+87R6Gmd2ar2Hw9nhRCpCFb9gKwWsMHBtT86dq0Bi5lg1D4ey2pnVw35zEPFGvG7MTVqqpSJuN9nud1ZU4P1a94Ee549Q827rKouczQFJCE9vMfzR6J31ZSG55fVWaoDIsysTv++mynCgBr6g/IZUHN9JbkKu/sd7EZF7vTH6y/bNlf9X27/EkIXzmac+pdHKUVcdFc+ifA10cl32i8ECu0O2Yy4bp0O2mU6QkK5VLiytyz7JpswMhwp2bRlb5BsWB8f5wy2xI+laQIeEo43EoTvWt9y860+CzDJZtPDrtokCKclbNSnCiCBxXhuhe4nf/R1Nb7Ujio5Zct1Nsag0KUyqmOHAQ5THafk/nqribw=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6201.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(39860400002)(346002)(136003)(451199021)(186003)(26005)(6506007)(9686003)(53546011)(966005)(83380400001)(41300700001)(4326008)(6636002)(64756008)(66446008)(66476007)(316002)(2906002)(66556008)(52536014)(5660300002)(7416002)(8676002)(8936002)(66946007)(478600001)(7696005)(71200400001)(76116006)(110136005)(54906003)(55016003)(33656002)(122000001)(38070700005)(86362001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?iso-2022-jp?B?VENBK0VlUmJ0RCtNbGxaNGRkSG84TWk1TVZiVmthTks0RjJzU3l3elRZ?=
- =?iso-2022-jp?B?eVduQUpZcXpueGdSYXF3N2U0L09yV3hvRVZ4SkRZWWhjckM4a0NLU0dI?=
- =?iso-2022-jp?B?U05WRDVvQTViMHFlczhkSTA2cUFIOEZKTHdDYTBIYVo3WmNBRVFhUzNm?=
- =?iso-2022-jp?B?Uk5BekhXeUlaREorRXRTaFgvR2tDbjRqUWRMT2E0VWFpdEthczJ1Y0tC?=
- =?iso-2022-jp?B?Nk4vRU9MalJ1YlIwVENVcFNoY2NRcUVMd3NMbUszRE1OVWNCZEdYU0Jx?=
- =?iso-2022-jp?B?RFdMcFZFWFhyOWN3ZVBzNlhPdEJRUWoxZEROVGdiUy8rVDhjT3VLUXBW?=
- =?iso-2022-jp?B?bHQ3SjJzcWdSTlFNdjF3ckRPN2ZRNVJYRG5Sd0lkKy9lQWhBNEZvaEUw?=
- =?iso-2022-jp?B?c2Y5NlRGTGRJRlFQWDU2a2t2N2ZvbzloOEVoWEtWZ3Q1WE1maWVHTmxP?=
- =?iso-2022-jp?B?eGtlanN4MlpnM29QVzJnT1pGVEpjMFNlSnVpa2lrclVSdzEvd3pIbGNP?=
- =?iso-2022-jp?B?Q1I0My9pVEJ5V20vS3U2K2t3N2tqV2FSa3dQSm9nRE1idFo2YUJhcWZh?=
- =?iso-2022-jp?B?YkhkNjFJSHB2dTJaT2J2ekdUUHZtYmMxVHZ2WG9hOEcxSjN4THo4QmZO?=
- =?iso-2022-jp?B?dzF1dEVzN2hPU1R0YnpxSzk0LzlSazZNOFR1bXdmQ05uYWFoNFhlM3FM?=
- =?iso-2022-jp?B?VlJBNmc3QVhNZGVJcE1DVHVNRU83MVp6N3J0b2RFTzdQWFdmbUVqQlBo?=
- =?iso-2022-jp?B?UjZsZWdIMjA0SlZkK1JDaXhyenZpeUVQOFdneWhRMlZ5R21Fa1NMUUE5?=
- =?iso-2022-jp?B?cmxHSzVuQjBZL3BmOHVUaGJKaUtCaHpiQ1FFaDNiWFRBbjY3cU1vYnBS?=
- =?iso-2022-jp?B?QVVSOGVCNHcxclNQMDh3N3ZOVmx0bXVDeHFBeVF0eG1YSlV2cUNjS2RG?=
- =?iso-2022-jp?B?TWtrdDgvdmJQYVFsYS96b2puOHBLelUzTUZDVDFaNVNUR0VQMEJ6bVJZ?=
- =?iso-2022-jp?B?TFZoS01RRlprWjd3ZnlzYzYxeDVGYzRTdW0vSHVOVUx6ZURIaXBPRy95?=
- =?iso-2022-jp?B?ei9mcUo2WGNCbWp5VEUzQldnQ0dvT1FLQzAwa2JRVGNoVDhhL3VRTytZ?=
- =?iso-2022-jp?B?Ry9PY0dHYzBieXo1TGgrb0xJOE9PaUpDekV3Y2drR3BYb0pGbjNic0Ey?=
- =?iso-2022-jp?B?NjZlVmlUK21BSm5VM1V0TnovTFdzS0wyUkJpTEtOeHlxTWpZYkJsQ1lM?=
- =?iso-2022-jp?B?NWsyd0RDY01tQ1V0SGhXcldOUklEakthUFNOVkFXMDdGVWxGQklLYmdn?=
- =?iso-2022-jp?B?NzlVTm1aUFFPak1tQWhSQjV5c1loTVkzYk95b0QwKytvWUJ5ZndISmJo?=
- =?iso-2022-jp?B?akczRTlpQ3NpOE1KbU5kRVI0Ly8xa3pNWXpYeEVFSTVyRDVKT2tZcTBt?=
- =?iso-2022-jp?B?WTRqTm4rbTBjd3pzL2QzdDFNdE0xOEg5SWV0VlRHUU1YNmd3NSs4cHdp?=
- =?iso-2022-jp?B?c3M2NUpRSHJkTG10KzFiM2JXakFXQ05kT0FQc0E1ekJvUVdua01pQjhp?=
- =?iso-2022-jp?B?VDdtYk5qYW8xK3hFTDBtTVZIVEkyZWtQTEkwNlZNRklEMnRwVlZYNElH?=
- =?iso-2022-jp?B?VHJyT29TMS9tWXNVM2d3SUQ3WGlWczAxVXNqTERFem1QTVhkY1FlTEtC?=
- =?iso-2022-jp?B?Z25UYk14NkZzM1hrWGxXbHEyaDlEWGdpSHlBU0ZoLy9yN0ROLy9IdEdK?=
- =?iso-2022-jp?B?dEw0R1ZpUzc1QlBEcDNvanRNYUtMaDJYS3R5QXdib0pVT3lWWXAxbFZI?=
- =?iso-2022-jp?B?ejl2elN4enE0OVZhdE1tT1lWd1FrRTdyQVh1T1NOa28waDZCRWlwbjBt?=
- =?iso-2022-jp?B?S3FLQW5oSnhUOGtPNlMvL1lJeUViSEpneFk0K1lsczQ2ODR3cEJWSTNP?=
- =?iso-2022-jp?B?TVRWNDY5czRVYzRWUlphK0ZCMU5DZFRpZ3d6dVZvRldSRjllNW9PODJO?=
- =?iso-2022-jp?B?SnhyNy9xTjZHRTE1ODd5NHZIU0FmYlNUWVY1cVJGR2drdVd3ZEFXbjhH?=
- =?iso-2022-jp?B?TDFBU1EzZ00xL2RPeFdNY0JsSWp3VU5hSFpZdjdNQW43bXNxbUN4N2Fl?=
- =?iso-2022-jp?B?RkJoTWVZMkpEaitRdmpCK3NLdzdVWFBOZEZtSFl0eTJvUmFESkNNancy?=
- =?iso-2022-jp?B?RVRDNlFUdzhjTWtCaUR0bjY1eitKbGxjQTNaQm82NmVSR0ZvdHNKVkd2?=
- =?iso-2022-jp?B?Ly9EMTVkbnFwWUhiUWp3VFRJUnR4ZURrVEtpL2IwQlhVUmwwZXJsTGtU?=
- =?iso-2022-jp?B?dDNKRnl2K09ydVNUdWVNU2VwRkdHUmVtOFE9PQ==?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB117D2;
+	Mon, 10 Jul 2023 02:58:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688957890; x=1720493890;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dA/BLCat2d8axTAjUhfBYN3jkDNbdYnlv2J0A26Cdyk=;
+  b=HJoeGEQYRN0uW9EwMaC9xZBdlCthX941gWTrAAXhte1P91CdFB1wGLyv
+   jvjNVr+2Kbgs1tJEC1fwu1h64arnnT4OYRX3kwLG9qwFagl+SP4y7vbi8
+   GeL28v5DnrG0A5ZFNLcBoZVb/CRCYnoWkmXxflwEurJNKVL33TAfzaVjB
+   Yry19wBzydfbcwoquUIqotcuhoCB1Jj+tZ89SgoaGfGKRJWY5nFw/y1jJ
+   OQZdfvuH1LVjhYAEnqCHvvVc04cP25CAnZBhaIg/PP2g9F4+uMC59pPNS
+   ZXo6xDbjV0ahIvEu4SfKYAf/aiDrzx9AvLtQAXG/cApKpjhoYUBDlJm9q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="450604879"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="450604879"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2023 19:58:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10766"; a="670783331"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="670783331"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 Jul 2023 19:58:05 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qIh6C-0003VQ-38;
+	Mon, 10 Jul 2023 02:58:04 +0000
+Date: Mon, 10 Jul 2023 10:57:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sui Jingfeng <suijingfeng@loongson.cn>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [drm-misc:drm-misc-next 1/15]
+ drivers/video/fbdev/hyperv_fb.c:1033:10: error: use of undeclared identifier
+ 'screen_info'
+Message-ID: <202307101042.rqehuauj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?iso-2022-jp?B?Q0JSRUNQajJ4ZDFiV1Y0NFZkQ3A4Ukd3QUhQTXFLNUR0RjhqODR4dHVx?=
- =?iso-2022-jp?B?OWVjQW0ydzNhQVF4NGZncXJNVjFPWGx2OWtUdGNuWmpOaDl2RFI0blZ2?=
- =?iso-2022-jp?B?dFZIc082cnJSbFlXTWFPQjJPM3FSNlZjU3I0SmtnR3FKSFZOUEdwdlAr?=
- =?iso-2022-jp?B?dFlIdU5rdWhKVVhaRjhHalhTL1BZNFhZanY1L2ZCVUVSbUtlMlZQbjRs?=
- =?iso-2022-jp?B?QlZXUjZuVG1DZUdvZkNRMWw1QzZhd0lRNzJmK2FpRGc4WnhIMGlwUHlt?=
- =?iso-2022-jp?B?clJ0MkplMHRYMTVDMFdWQlFSYXdmbjhnWEhCenRoaXFBT0dEWVIyN0s0?=
- =?iso-2022-jp?B?Qm0wYWtZN3JPaTM4cXBCSmtrY3BkeE5FeXdiYUo0Z2xqRFpuTXZhL0dS?=
- =?iso-2022-jp?B?SHBMNmRRZG1hdFlRVmNIclpxbXVNcHRrejA2aVNndkxTWFUzTHl5cWxC?=
- =?iso-2022-jp?B?QUNVc0oxa2paRno5YXR2VlR6UU1lUW9VTU5iR01xcnN5VG53QzZRWjRH?=
- =?iso-2022-jp?B?VFlHM2NtUDRNUEN4WDNqenNJVU5wdUlqaTZIYzNKVGs0cFdPdk1ybk1r?=
- =?iso-2022-jp?B?aFBpVVBUa1dleFVMWjB2Yk9uTGhRdFEvWGlYOUVuUkt3Yk9rTnptWkhn?=
- =?iso-2022-jp?B?UE1qa0taZm1RVkc5NU1KU25lUkJ2WllRREpDZm5QcFN4dWNCMG1YWlpO?=
- =?iso-2022-jp?B?a1htdFdpUFB5UEZ3enh5NHZNNnFZai9lSW9JRytFeHI1dkZTYmJEZjBa?=
- =?iso-2022-jp?B?UEN2ZTl5TStsbGJPMS9WcSt0UWVlbTc0QjhaZm5CTXJtNG9heDVBRTgz?=
- =?iso-2022-jp?B?NDZnNGsyOHlFd0pQdE5jcTUrd3hhazN1T2N6R0EwQlRwdTVpUkphUHJ5?=
- =?iso-2022-jp?B?VDE3elYydnIzdjd2NVplazNJTWdRWnE3TnE1cCt3OFVTSkpDUXpiOUUr?=
- =?iso-2022-jp?B?SHNIbXpXMGVpSTM2czl4NUxaWUp3ZkkrNkNSdnlneTJQVjFhQW9ZdFNo?=
- =?iso-2022-jp?B?WkFjZi9GY295TjBMVmhWMHFnK2dMeFNmTUdDRXdlUUFMYlNTZ2liTkoy?=
- =?iso-2022-jp?B?cGdXbTA5aDRtc20zVGRUS2Z0RW83Z0dKdVpFbHU5KzMyUG90NE1PUXRq?=
- =?iso-2022-jp?B?ckhSb2wvYldqUkFnVWpFN2hOd0t1bm90YkhWR2dsOWh3bzNQL21KR2xw?=
- =?iso-2022-jp?B?TWxGSTNsaGdYck5oN0hoNUpBR2h4SWlpaUxkUFBFU3UzTjB4Y3NmRVhs?=
- =?iso-2022-jp?B?RU9jRHJxRGg5dWIwcnYycUg0aTlPSnUzOTNQOUZKbGVKRE5BYmVSUW1r?=
- =?iso-2022-jp?B?TjJKSnIxTEpCNUhNdUk5WklmRFJudmhUQUxBcnk4Z2FySitXYzVVVVRN?=
- =?iso-2022-jp?B?VEpUcjg5NkgxYW1CeEhROHUvSFpnT2VyNFBtUCt6dTM0UXJoZ05kUG42?=
- =?iso-2022-jp?B?RWVHczRMMXc4UVFuOUdRbnZuTWd0UEZUb1pHUi9LNnNiRDVVUjVzY0Nl?=
- =?iso-2022-jp?B?bGJ3aTlZRzB0UXZ3UFdXVmc9?=
-X-OriginatorOrg: toshiba.co.jp
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6201.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 684cb3b4-ee85-4c75-dd62-08db80daeb69
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2023 00:16:34.3419
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CRhQY+LqCBHNbGKLkqPML4pnUf8of6lw91jM1RXy8eQQHnNxABlmfs1FAv8/Kq/9ib8RAGDdziGTJVAhxKJephJ1lXObGqrhwfSAR6oq0Vc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB12119
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> -----Original Message-----
-> From: kernel test robot <lkp@intel.com>
-> Sent: Tuesday, June 20, 2023 9:58 PM
-> To: ishikawa yuji(=1B$B@P@n=1B(B =1B$BM*;J=1B(B =1B$B!{#R#D#C""#A#I#T#C!{=
-#E#A3+=1B(B)
-> <yuji2.ishikawa@toshiba.co.jp>; Hans Verkuil <hverkuil@xs4all.nl>; Sakari
-> Ailus <sakari.ailus@iki.fi>; Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com>; Mauro Carvalho Chehab
-> <mchehab@kernel.org>; Rob Herring <robh+dt@kernel.org>; Krzysztof
-> Kozlowski <krzk@kernel.org>; Conor Dooley <conor+dt@kernel.org>;
-> iwamatsu nobuhiro(=1B$B4d>>=1B(B =1B$B?.MN=1B(B =1B$B!{#D#I#T#C""#D#I#T!{=
-#O#S#T=1B(B)
-> <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev;
-> linux-media@vger.kernel.org; devicetree@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Viscon=
-ti
-> Video Input Interface driver
->=20
-> Hi Yuji,
->=20
-> kernel test robot noticed the following build errors:
->=20
-> [auto build test ERROR on media-tree/master] [also build test ERROR on
-> linus/master sailus-media-tree/streams v6.4-rc7 next-20230620] [If your p=
-atch
-> is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->=20
-> url:
-> https://github.com/intel-lab-lkp/linux/commits/Yuji-Ishikawa/dt-bindings-=
-me
-> dia-platform-visconti-Add-Toshiba-Visconti-Video-Input-Interface-bindings=
-/20
-> 230620-120839
-> base:   git://linuxtv.org/media_tree.git master
-> patch link:
-> https://lore.kernel.org/r/20230620031111.3776-3-yuji2.ishikawa%40toshiba.=
-co.j
-> p
-> patch subject: [PATCH v6 2/5] media: platform: visconti: Add Toshiba Visc=
-onti
-> Video Input Interface driver
-> config: x86_64-buildonly-randconfig-r001-20230620
-> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
-> kp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git
-> 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce:
-> (https://download.01.org/0day-ci/archive/20230620/202306202006.FUjZfd9O-l
-> kp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of the
-> same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes:
-> | https://lore.kernel.org/oe-kbuild-all/202306202006.FUjZfd9O-lkp@intel.
-> | com/
->=20
-> All errors (new ones prefixed by >>):
->=20
->    In file included from <built-in>:1:
->    In file included from ./usr/include/linux/visconti_viif.h:12:
-> >> usr/include/linux/videodev2.h:2464:20: error: field has incomplete typ=
-e
-> 'struct timespec'
->            struct timespec                 timestamp;
->                                            ^
->    usr/include/linux/videodev2.h:2464:9: note: forward declaration of 'st=
-ruct
-> timespec'
->            struct timespec                 timestamp;
->                   ^
->    1 error generated.
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   70d1ace56db6c79d39dbe9c0d5244452b67e2fde
+commit: 8b0d13545b091729e0aa05ff9981e2d06c1e2ee5 [1/15] efi: Do not include <linux/screen_info.h> from EFI header
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230710/202307101042.rqehuauj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230710/202307101042.rqehuauj-lkp@intel.com/reproduce)
 
-I could not reproduce the error with the steps had been specified.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307101042.rqehuauj-lkp@intel.com/
 
-* archived config file didn't compile Visconti VIIF driver (at least, COMPI=
-LE_TEST is needed)
-* the error message didn't appear even if I add some options to config file=
-.
-* Environment:
-  * OS: Ubuntu 22.04
-  * compiler: Ubuntu clang version 15.07
+All errors (new ones prefixed by >>):
 
-Regards,
-Yuji Ishikawa
+>> drivers/video/fbdev/hyperv_fb.c:1033:10: error: use of undeclared identifier 'screen_info'
+    1033 |                 base = screen_info.lfb_base;
+         |                        ^
+   drivers/video/fbdev/hyperv_fb.c:1034:10: error: use of undeclared identifier 'screen_info'
+    1034 |                 size = screen_info.lfb_size;
+         |                        ^
+>> drivers/video/fbdev/hyperv_fb.c:1080:3: error: must use 'struct' tag to refer to type 'screen_info'
+    1080 |                 screen_info.lfb_size = 0;
+         |                 ^
+         |                 struct 
+>> drivers/video/fbdev/hyperv_fb.c:1080:14: error: expected identifier or '('
+    1080 |                 screen_info.lfb_size = 0;
+         |                            ^
+   drivers/video/fbdev/hyperv_fb.c:1081:3: error: must use 'struct' tag to refer to type 'screen_info'
+    1081 |                 screen_info.lfb_base = 0;
+         |                 ^
+         |                 struct 
+   drivers/video/fbdev/hyperv_fb.c:1081:14: error: expected identifier or '('
+    1081 |                 screen_info.lfb_base = 0;
+         |                            ^
+   drivers/video/fbdev/hyperv_fb.c:1082:3: error: must use 'struct' tag to refer to type 'screen_info'
+    1082 |                 screen_info.orig_video_isVGA = 0;
+         |                 ^
+         |                 struct 
+   drivers/video/fbdev/hyperv_fb.c:1082:14: error: expected identifier or '('
+    1082 |                 screen_info.orig_video_isVGA = 0;
+         |                            ^
+   8 errors generated.
 
+
+vim +/screen_info +1033 drivers/video/fbdev/hyperv_fb.c
+
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   988  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   989  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   990  /* Get framebuffer memory from Hyper-V video pci space */
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05   991  static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   992  {
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   993  	struct hvfb_par *par = info->par;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   994  	struct pci_dev *pdev  = NULL;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29   995  	void __iomem *fb_virt;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   996  	int gen2vm = efi_enabled(EFI_BOOT);
+81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19   997  	resource_size_t base, size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09   998  	phys_addr_t paddr;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26   999  	int ret;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1000  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1001  	if (!gen2vm) {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1002  		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1003  			PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1004  		if (!pdev) {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1005  			pr_err("Unable to find PCI Hyper-V video\n");
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1006  			return -ENODEV;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1007  		}
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1008  
+81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1009  		base = pci_resource_start(pdev, 0);
+81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1010  		size = pci_resource_len(pdev, 0);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1011  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1012  		/*
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1013  		 * For Gen 1 VM, we can directly use the contiguous memory
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1014  		 * from VM. If we succeed, deferred IO happens directly
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1015  		 * on this allocated framebuffer memory, avoiding extra
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1016  		 * memory copy.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1017  		 */
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1018  		paddr = hvfb_get_phymem(hdev, screen_fb_size);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1019  		if (paddr != (phys_addr_t) -1) {
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1020  			par->mmio_pp = paddr;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1021  			par->mmio_vp = par->dio_vp = __va(paddr);
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1022  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1023  			info->fix.smem_start = paddr;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1024  			info->fix.smem_len = screen_fb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1025  			info->screen_base = par->mmio_vp;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1026  			info->screen_size = screen_fb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1027  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1028  			par->need_docopy = false;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1029  			goto getmem_done;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1030  		}
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1031  		pr_info("Unable to allocate enough contiguous physical memory on Gen 1 VM. Using MMIO instead.\n");
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1032  	} else {
+81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19 @1033  		base = screen_info.lfb_base;
+81d2393485f099 drivers/video/fbdev/hyperv_fb.c Thomas Zimmermann 2022-12-19  1034  		size = screen_info.lfb_size;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1035  	}
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1036  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1037  	/*
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1038  	 * Cannot use the contiguous physical memory.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1039  	 * Allocate mmio space for framebuffer.
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1040  	 */
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1041  	dio_fb_size =
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1042  		screen_width * screen_height * screen_depth / 8;
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1043  
+c4b4d7047f16a8 drivers/video/fbdev/hyperv_fb.c Saurabh Sengar    2022-04-27  1044  	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1045  				  screen_fb_size, 0x100000, true);
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1046  	if (ret != 0) {
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1047  		pr_err("Unable to allocate framebuffer memory\n");
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1048  		goto err1;
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1049  	}
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1050  
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1051  	/*
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1052  	 * Map the VRAM cacheable for performance. This is also required for
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1053  	 * VM Connect to display properly for ARM64 Linux VM, as the host also
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1054  	 * maps the VRAM cacheable.
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1055  	 */
+5f1251a48c17b5 drivers/video/fbdev/hyperv_fb.c Dexuan Cui        2020-11-17  1056  	fb_virt = ioremap_cache(par->mem->start, screen_fb_size);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1057  	if (!fb_virt)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1058  		goto err2;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1059  
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1060  	/* Allocate memory for deferred IO */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1061  	par->dio_vp = vzalloc(round_up(dio_fb_size, PAGE_SIZE));
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1062  	if (par->dio_vp == NULL)
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1063  		goto err3;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1064  
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1065  	/* Physical address of FB device */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1066  	par->mmio_pp = par->mem->start;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1067  	/* Virtual address of FB device */
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1068  	par->mmio_vp = (unsigned char *) fb_virt;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1069  
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1070  	info->fix.smem_start = par->mem->start;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1071  	info->fix.smem_len = dio_fb_size;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1072  	info->screen_base = par->dio_vp;
+d21987d709e807 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-09-18  1073  	info->screen_size = dio_fb_size;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1074  
+3a6fb6c4255c38 drivers/video/fbdev/hyperv_fb.c Wei Hu            2019-12-09  1075  getmem_done:
+5fbcc6708fe32e drivers/video/fbdev/hyperv_fb.c Daniel Vetter     2023-04-06  1076  	aperture_remove_conflicting_devices(base, size, KBUILD_MODNAME);
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1077  
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1078  	if (gen2vm) {
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1079  		/* framebuffer is reallocated, clear screen_info to avoid misuse from kexec */
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14 @1080  		screen_info.lfb_size = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1081  		screen_info.lfb_base = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1082  		screen_info.orig_video_isVGA = 0;
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1083  	} else {
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1084  		pci_dev_put(pdev);
+3cb73bc3fa2a3c drivers/video/fbdev/hyperv_fb.c Kairui Song       2020-10-14  1085  	}
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1086  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1087  	return 0;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1088  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1089  err3:
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1090  	iounmap(fb_virt);
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1091  err2:
+696ca5e82c057a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2016-04-05  1092  	vmbus_free_mmio(par->mem->start, screen_fb_size);
+3546448338e76a drivers/video/fbdev/hyperv_fb.c Jake Oshins       2015-08-05  1093  	par->mem = NULL;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1094  err1:
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1095  	if (!gen2vm)
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1096  		pci_dev_put(pdev);
+9069fd54960304 drivers/video/hyperv_fb.c       Gerd Hoffmann     2014-02-26  1097  
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1098  	return -ENOMEM;
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1099  }
+68a2d20b79b105 drivers/video/hyperv_fb.c       Haiyang Zhang     2013-04-29  1100  
+
+:::::: The code at line 1033 was first introduced by commit
+:::::: 81d2393485f0990cf6566b0c9e0697c199f68ae5 fbdev/hyperv-fb: Do not set struct fb_info.apertures
+
+:::::: TO: Thomas Zimmermann <tzimmermann@suse.de>
+:::::: CC: Thomas Zimmermann <tzimmermann@suse.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
