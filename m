@@ -1,133 +1,354 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E777EFC09
-	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 19:08:10 +0000 (UTC)
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-668711086f4so3097837b3a.1
-        for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 12:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1689016090; x=1691608090;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=voVX6LNoZ/J8bMuhFyaOWgRv6Zq5UVw3bcxlCreIau0=;
-        b=1tKrKVjLsZlhy8odFljy5A7wgwOCceiEXO0WXFWKcEbHGeOAOez2StDWYQKKXYaf0u
-         KxvJRa87HdcA5pB0okif7Z0b35z8cc2tLASh5d+miBIE6Bs9KUTlrUUm/kzyEOS8+Tw2
-         NETrfXnOhywt/LmYyBC7fKj+hbGw6hbAZA0MR/Lqbpdhr1EE77xQjHZdwp5lpyZmyN0f
-         5KtlxzprTcf99MCiVS+GKMHENseXkS5L+25K1U3M8luzAxoJFRGfhUGNiWxu9e94kPSL
-         MmJ14tdvNpj9MMRH58e0MXWxAcen7uRtBbWunqMeVRUHOUsBD5opsT7ROZtyvI8tD/e1
-         pFbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689016090; x=1691608090;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=voVX6LNoZ/J8bMuhFyaOWgRv6Zq5UVw3bcxlCreIau0=;
-        b=g6ptNsylu4vF3ttJFxwGGgP5wlAnZL4O/8fcOcZv5CfDypFFj9h4GwY+sVvo6uCN7+
-         McMQAlOBIqzbiBlQH2Yu8yycFyRkBRLg6ce44nYWvim1dj0fEtL8VCIHUeQpCe61rFhf
-         tohbB0x5ddzTiCD+Ifq3WAmmw1R2mHCvS+NnFgAyy0KGTuUOXzax1OIM5jhZkKGeIUpc
-         xmZNNOhpUcjfooFUR01VCGi90NPzQIz94eLjhIKty5HJWyhAx/2b4zSwSK8jtxU4dcSg
-         HX/sBVZ3OcvJ2IZcigW0j/4WMq9wfcx0ftgoQ6eTxYpUaGTWM6u/lk6MCYe+kw4Dxwei
-         DOHw==
-X-Gm-Message-State: ABy/qLY/EQrgwOjDJGewuhoGOvOgOCqLyNcQv9toDwJIBjHVC6XKphIR
-	xOn0I3qJRq0qpi/QHgpsASBVYA==
-X-Google-Smtp-Source: APBJJlE1fEH2sHOVo9utDEMzkiIiKOHtiey9zE83fpGfTKSsuED5sR/xEAs2EL4vldSYbhB1R9O4yw==
-X-Received: by 2002:a17:902:db10:b0:1b8:a936:1915 with SMTP id m16-20020a170902db1000b001b8a9361915mr20863454plx.22.1689016090010;
-        Mon, 10 Jul 2023 12:08:10 -0700 (PDT)
-Received: from localhost ([50.38.6.230])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b001ac95be5081sm219080plx.307.2023.07.10.12.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 12:08:09 -0700 (PDT)
-Date: Mon, 10 Jul 2023 12:08:09 -0700 (PDT)
-X-Google-Original-Date: Mon, 10 Jul 2023 12:07:23 PDT (-0700)
-Subject:     Re: [PATCH v2 0/6] riscv: KCFI support
-In-Reply-To: <20230710183544.999540-8-samitolvanen@google.com>
-CC: Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-  keescook@chromium.org, nathan@kernel.org, ndesaulniers@google.com,
-  Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-  linux-kernel@vger.kernel.org, samitolvanen@google.com
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: samitolvanen@google.com
-Message-ID: <mhng-2fe7822f-f869-4513-b8a6-7da21ce5ccd8@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FA813AF4
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 21:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689022874;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+2RJf5qIGlPSgRQxs2KEfvpNQp6T5/h/jpOjwW+NqSE=;
+	b=FM6mHVXUSaHhKyfn2HQYe6beCC7XStbZN6gvhKHqWPGI44EqoLf6OfVu8MZ8sThquR7XbF
+	orYWEHbM4lOsZ4xa8m1URy5uGZNLwI5HIPphELXkwwRTloQcBaVejtDiKoZrGW4uWZjwU5
+	cyLdgPDJf5+XzPbg0GptT04gbgfBVDo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-rZNXa7TXNEuC7IjtWwYNNA-1; Mon, 10 Jul 2023 17:01:13 -0400
+X-MC-Unique: rZNXa7TXNEuC7IjtWwYNNA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 252F7299E75C
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 21:01:13 +0000 (UTC)
+Received: from [172.64.15.54] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E95FF40C206F;
+	Mon, 10 Jul 2023 21:01:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 46 of 346): Test report for master
+ (6.4.0, mainline.kernel.org-clang, 3290badd)
+Date: Mon, 10 Jul 2023 21:01:12 -0000
+To: jiji@redhat.com, zlang@redhat.com, omosnace@redhat.com, yiche@redhat.com,
+ llvm@lists.linux.dev, haliu@redhat.com, yizhan@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <78879.123071017011302419@us-mta-231.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 10 Jul 2023 11:35:45 PDT (-0700), samitolvanen@google.com wrote:
-> This series adds KCFI support for RISC-V. KCFI is a fine-grained
-> forward-edge control-flow integrity scheme supported in Clang >=16,
-> which ensures indirect calls in instrumented code can only branch to
-> functions whose type matches the function pointer type, thus making
-> code reuse attacks more difficult.
->
-> Patch 1 implements a pt_regs based syscall wrapper to address
-> function pointer type mismatches in syscall handling. Patches 2 and 3
-> annotate indirectly called assembly functions with CFI types. Patch 4
-> implements error handling for indirect call checks. Patch 5 disables
-> CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
-> to be enabled for RISC-V.
->
-> Note that Clang 16 has a generic architecture-agnostic KCFI
-> implementation, which does work with the kernel, but doesn't produce
-> a stable code sequence for indirect call checks, which means
-> potential failures just trap and won't result in informative error
-> messages. Clang 17 includes a RISC-V specific back-end implementation
-> for KCFI, which emits a predictable code sequence for the checks and a
-> .kcfi_traps section with locations of the traps, which patch 5 uses to
-> produce more useful errors.
->
-> The type mismatch fixes and annotations in the first three patches
-> also become necessary in future if the kernel decides to support
-> fine-grained CFI implemented using the hardware landing pad
-> feature proposed in the in-progress Zicfisslp extension. Once the
-> specification is ratified and hardware support emerges, implementing
-> runtime patching support that replaces KCFI instrumentation with
-> Zicfisslp landing pads might also be feasible (similarly to KCFI to
-> FineIBT patching on x86_64), allowing distributions to ship a unified
-> kernel binary for all devices.
->
-> ---
->
-> Changes in v2:
->   - Rebased on 6.5-rc1.
->   - Sorted Kconfig entries alphabetically.
->
->
-> Sami Tolvanen (6):
->   riscv: Implement syscall wrappers
->   riscv: Add types to indirectly called assembly functions
->   riscv: Add ftrace_stub_graph
->   riscv: Add CFI error handling
->   riscv/purgatory: Disable CFI
->   riscv: Allow CONFIG_CFI_CLANG to be selected
->
->  arch/riscv/Kconfig                       |  3 +
->  arch/riscv/include/asm/cfi.h             | 22 ++++++
->  arch/riscv/include/asm/insn.h            | 10 +++
->  arch/riscv/include/asm/syscall.h         |  5 +-
->  arch/riscv/include/asm/syscall_wrapper.h | 87 ++++++++++++++++++++++++
->  arch/riscv/kernel/Makefile               |  2 +
->  arch/riscv/kernel/cfi.c                  | 77 +++++++++++++++++++++
->  arch/riscv/kernel/compat_syscall_table.c |  8 ++-
->  arch/riscv/kernel/mcount.S               |  9 ++-
->  arch/riscv/kernel/suspend_entry.S        |  5 +-
->  arch/riscv/kernel/sys_riscv.c            |  6 ++
->  arch/riscv/kernel/syscall_table.c        |  8 ++-
->  arch/riscv/kernel/traps.c                |  4 +-
->  arch/riscv/purgatory/Makefile            |  4 ++
->  14 files changed, 238 insertions(+), 12 deletions(-)
->  create mode 100644 arch/riscv/include/asm/cfi.h
->  create mode 100644 arch/riscv/include/asm/syscall_wrapper.h
->  create mode 100644 arch/riscv/kernel/cfi.c
->
->
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+Hi, we tested your kernel and here are the results:
 
-Thanks, this generally LGTM it was just a bit late for the last merge 
-window.  I'm still poking around to make sure there's no fallout in rc1, 
-this is in the queue (but there's some other stuff too).
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'ceph-for-6.5-rc1' of https://github.com/ceph=
+/ceph-client
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/95175
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703751
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+         aarch64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703786
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+         aarch64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703796
+         ppc64le - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703300
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+         ppc64le - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703309
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL Test
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703335
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703363
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703373
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703402
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703436
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+          x86_64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703446
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703703
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8703739
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
+directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/8590844
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
+f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
+:1559 (size 1)
+            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
+            Affected tests:
+                 aarch64 - xfstests - xfs
+                  x86_64 - xfstests - xfs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
