@@ -1,186 +1,151 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF01E1095B;
-	Mon, 10 Jul 2023 12:10:06 +0000 (UTC)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1qIpiI-0005DA-69; Mon, 10 Jul 2023 14:09:58 +0200
-Message-ID: <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
-Date: Mon, 10 Jul 2023 14:09:57 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1378B111BF
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 13:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1688994823;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/ImDQa0EWypkbyYilMZRBoCfhHc+qyTpXaLpUiDl7QI=;
+	b=aRtuFyJt46Tf6z4QtwSX7OrVKeV1EtVCgo9rdyyhW/dn4VxJABzN3xohHpF5ZcXaH3FxIL
+	7yaZ8cWbWeTKP94eyztjhavstACw3W9qo+McZvLZNLsrgSs++UhGtDL3I1HPwxkPRNYKrg
+	abBGhpKUX9mjH5CoRNEXYM5GjJYtg7M=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-128-fIzac7jKO9u0o52n685lhg-1; Mon, 10 Jul 2023 09:13:42 -0400
+X-MC-Unique: fIzac7jKO9u0o52n685lhg-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-763a397a3ceso572265985a.1
+        for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 06:13:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688994822; x=1691586822;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ImDQa0EWypkbyYilMZRBoCfhHc+qyTpXaLpUiDl7QI=;
+        b=CvrYTxuO/Sa2fyVdmd08vzlOMpejGVwwW4+BFNC4n+k4WPu6zjHG6cU9Irv2qFirLN
+         6U0LGzH9i8FJ8ApoMFb3LwA01s/3PbYrF4jlaJrzfB1XXUagmCmFQKxTtnZunHJV36no
+         IuNE7PB3uQ0hhsgTdjvBMSzpzz7uyT9GZl9zwEL9xBAMXzYdpnF25aJM6yk1oEKlnFke
+         Rt/DQu9Vp7x4sJ3NM2V5dk+4f5xtysAxw4KykSXx/185bUnLWfEuOHPCv1R9vaLHS/1B
+         yjAz2YVeuGWJ2Ag36dKv8WQ8JSS+VuYUb9q/1goju0KqlXMAcPzahsbF/QMGP7uspvDP
+         lMBA==
+X-Gm-Message-State: ABy/qLbvOsrcyc0MbUhhVWm8msUbj6rHLMpDJrmDc8YaOJyhPDu3vRRB
+	navy1wSYErShZWVlsDVy7ThQrIBfZuFQ1vqFiVmiTIAHOV7kDj+4D87sQZyP+n5txetJst74X5F
+	0rTQgtGDS66rDZA==
+X-Received: by 2002:a05:620a:17a9:b0:765:614a:aa0d with SMTP id ay41-20020a05620a17a900b00765614aaa0dmr13761723qkb.56.1688994822135;
+        Mon, 10 Jul 2023 06:13:42 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHZhgqKIZKXgV1RDSk/xsuo9lvs/S+f7G6Iii+FqbXBn5CqQSyBZROmmfgH6B6PkVW/dHZULg==
+X-Received: by 2002:a05:620a:17a9:b0:765:614a:aa0d with SMTP id ay41-20020a05620a17a900b00765614aaa0dmr13761705qkb.56.1688994821816;
+        Mon, 10 Jul 2023 06:13:41 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a128800b0076639dfca86sm4898224qki.17.2023.07.10.06.13.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 06:13:41 -0700 (PDT)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ kvm@vger.kernel.org
+Subject: Re: [stable:linux-5.15.y 55/9999] arch/x86/kvm/hyperv.c:2185:5:
+ error: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
+In-Reply-To: <202307080326.zDp7E3o0-lkp@intel.com>
+References: <202307080326.zDp7E3o0-lkp@intel.com>
+Date: Mon, 10 Jul 2023 15:13:38 +0200
+Message-ID: <87y1jn52pp.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US, de-DE
-To: Masahiro Yamada <masahiroy@kernel.org>,
- Shreeya Patel <shreeya.patel@collabora.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
- Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
- kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
- <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
- <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
- <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688991007;66d0c56a;
-X-HE-SMSGID: 1qIpiI-0005DA-69
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-for once, to make this easily accessible to everyone.
+kernel test robot <lkp@intel.com> writes:
 
-Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
-progress made to address this? Or is this maybe (accidentally?) fixed
-with 6.5-rc1?
+> Hi Vitaly,
+>
+> First bad commit (maybe != root cause):
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+> head:   d54cfc420586425d418a53871290cc4a59d33501
+> commit: cb188e07105f2216f5efbefac95df4b6ce266906 [55/9999] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+> config: i386-buildonly-randconfig-r006-20230708 (https://download.01.org/0day-ci/archive/20230708/202307080326.zDp7E3o0-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230708/202307080326.zDp7E3o0-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307080326.zDp7E3o0-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>>> arch/x86/kvm/hyperv.c:2185:5: error: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Werror,-Wframe-larger-than]
+>    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>        ^
+>    1 error generated.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+(sorry for delayed reply)
 
-#regzbot poke
+This used to be a warning (without CONFIG_KVM_WERROR I guess?) :-) E.g.
 
-On 20.06.23 06:19, Masahiro Yamada wrote:
-> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
-> <shreeya.patel@collabora.com> wrote:
->> On 24/05/23 02:57, Nick Desaulniers wrote:
->>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
->>> <shreeya.patel@collabora.com> wrote:
->>>> Hi Nick and Masahiro,
->>>>
->>>> On 23/05/23 01:22, Nick Desaulniers wrote:
->>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
->>>>>>>> It could be; if the link order was changed, it's possible that this
->>>>>>>> target may be hitting something along the lines of:
->>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
->>>>>>>> initialization order fiasco"
->>>>>>>>
->>>>>>>> I'm struggling to think of how this appears in C codebases, but I
->>>>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
->>>>>>>> think I was playing with converting Kbuild to use Ninja rather than
->>>>>>>> Make; the resulting kernel image wouldn't boot because I had modified
->>>>>>>> the order the object files were linked in.  If you were to randomly
->>>>>>>> shuffle the object files in the kernel, I recall some hazard that may
->>>>>>>> prevent boot.
->>>>>>> I thought that was specifically a C++ problem? But then again, the
->>>>>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
->>>>>>> significant in some instances [1]:
->>>>>> Yes, it matters, you can not change it.  If you do, systems will break.
->>>>>> It is the only way we have of properly ordering our init calls within
->>>>>> the same "level".
->>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
->>>>>
->>>>> (There's a joke in there similar to the use of regexes to solve a
->>>>> problem resulting in two new problems; initcalls have levels for
->>>>> ordering, but we still have (unexpressed) dependencies between calls
->>>>> of the same level; brittle!).
->>>>>
->>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->>>>>
->>>>> Ricardo,
->>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
->>>>> mentions that there's a kernel command line param `initcall_debug`.
->>>>> Perhaps that can be used to see if
->>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
->>>>> ordering, resulting in a config that cannot boot?
->>>>
->>>> Here are the links to Lava jobs ran with initcall_debug added to the
->>>> kernel command line.
->>>>
->>>> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
->>>> https://lava.collabora.dev/scheduler/job/10417706
->>>> <https://lava.collabora.dev/scheduler/job/10417706>
->>>>
->>>> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
->>>> https://lava.collabora.dev/scheduler/job/10418012
->>>> <https://lava.collabora.dev/scheduler/job/10418012>
->>> Thanks!
->>>
->>> Yeah, I can see a diff in the initcall ordering as a result of
->>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
->>>
->>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
->>>
->>> Not just different orderings, but some initcalls seem unique to the
->>> before vs. after, which is troubling. (example init_events and
->>> init_fs_sysctls respectively)
->>>
->>> That isn't conclusive evidence that changes to initcall ordering are
->>> to blame, but I suspect confirming that precisely to be very very time
->>> consuming.
->>>
->>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
->>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
->>> mainline.
->>
->> I'm not sure if you followed the conversation but we are still seeing
->> this regression with the latest kernel builds and would like to know if
->> you plan to revert 5750121ae738?
-> 
-> 
-> Reverting 5750121ae738 does not solve the issue
-> because the issue happens even before 5750121ae738.
-> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
-> fails to boot in the same way.
-> 
-> The revert would hide the issue on a particular build setup.
-> 
-> 
-> I submitted a patch to more pin-point the issue.
-> Let's see how it goes.
-> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
-> 
-> 
-> (BTW, the initcall order is unrelated)
-> 
-> 
-> 
-> 
-> 
->>
->>
->> Thanks,
->> Shreeya Patel
->>
->>>>
->>>> Thanks,
->>>> Shreeya Patel
->>>>
->>>
-> 
-> --
-> Best Regards
-> Masahiro Yamada
-> 
-> 
+https://lore.kernel.org/kvm/87zgg6sza8.fsf@redhat.com/#t
+
+where Nathan explained LLVM's behavior:
+
+https://lore.kernel.org/kvm/Yvp87jlVWg0e376v@dev-arch.thelio-3990X/
+
+This was 'fixed' upstream with
+
+commit 7d5e88d301f84a7b64602dbe3640f288223095ea
+Author: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date:   Tue Nov 1 15:53:56 2022 +0100
+
+    KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv' instead of on-stack 'sparse_banks'
+  
+and personally, I'm not against backporting it to 5.15.y but I seriously
+doubt it is worth the hassle (i386 KVM + llvm + CONFIG_KVM_WERROR is
+likely an impossible combo).
+
+Also, there seems to be another build problem with CONFIG_KVM_WERROR I
+met with clan-16 and the same config:
+
+../arch/x86/kvm/x86.c:2315:19: error: unused function 'gtod_is_based_on_tsc' [-Werror,-Wunused-function]
+static inline int gtod_is_based_on_tsc(int mode)
+
+TL;DR: Let's ignore this for 5.15, not worth fixing IMO. Cc: kvm@ to
+check if anyone thinks differently.
+
+>
+>
+> vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+>
+> 4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+> e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+> 4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+> b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+> 0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+>
+> :::::: The code at line 2185 was first introduced by commit
+> :::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+>
+> :::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+> :::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+-- 
+Vitaly
+
