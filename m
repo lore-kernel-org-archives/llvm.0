@@ -1,68 +1,137 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6A613AF9;
-	Mon, 10 Jul 2023 18:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=mMEtO0ILV0zzGA/7s8mJgCRE8FNYrT7PYWMvQHEnv3A=; b=jrZpOtnFa71MFjpKOAKB3+ZqQ7
-	sqHaKfuhlsWGbEsOyKZusSEQyFXpzuKL48olmOrjxwNB/sIHcbOPC6Hr+VkTGam4AD08gMW9ngCp2
-	ql7J8555tOaGsjsGzahhr7mv/bWAv0gbnPvts+0Uz0/M+JHgQQsQwoZfi4R5/i80cRunEvqeB7OLf
-	j9GozT3+nAQZv5T1NbMlyrgQu3+ZwAp7X6QVAZpK58jF5CS4gxVErOPhdvuButzJSdNJU05peIKdR
-	XaThj9QJrH2u3UTtEwx6Ny0KsQWHNOtaKxKVUa6eSTN2t+Lu2LlfhLMe5cjL1yuD4BMek44jKR447
-	fcUS7EQg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qIvaI-000qkk-1i;
-	Mon, 10 Jul 2023 18:26:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 52506300195;
-	Mon, 10 Jul 2023 20:26:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2A20E240EBDA6; Mon, 10 Jul 2023 20:26:05 +0200 (CEST)
-Date: Mon, 10 Jul 2023 20:26:05 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Wander Lairson Costa <wander@redhat.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [peterz-queue:sched/maybe 1/14] ERROR: modpost: vmlinux: local
- symbol '__put_task_struct_rcu_cb' was exported
-Message-ID: <20230710182605.GA3044890@hirez.programming.kicks-ass.net>
-References: <202307110147.tDoRemZ7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABA617C8
+	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 18:35:48 +0000 (UTC)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-55c1fd0f723so3594398a12.0
+        for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 11:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689014148; x=1691606148;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ii//NdDJV9WujsqukD3lwiIq5e/LyG2Fswag+05zH+E=;
+        b=cRgD+oRUns5YzG9+1bpiaTGIpy4DKL/Xz7bJ7gRd9oD3Xn4lyqRtw/KGJjiH510MA6
+         XYA0ZB6HRLE5cy7jDThnf/lxpm2EXODNGbqaAbL6N2igI2KXl0cOiRj7U/evNbfGna2K
+         HfzwAQizTxP1bXa+6SRrdzB8mvpoeP9CEQhZ21NmL3Ag+Slaua582VWcKupdcO7zVBf0
+         3ekYXBaPC6LyH8OID/IYa3j0DKmstgsoJ5ggVCFOEqoG3LW1b2AZF0q9ItrxjeqGDa7k
+         W2tg6ArEqP2N38xhU5sfVF6WGzPabfsrUm/dNMJIzHuUVJkB9Nk1fhln4NbzAJ43fllB
+         mmWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689014148; x=1691606148;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ii//NdDJV9WujsqukD3lwiIq5e/LyG2Fswag+05zH+E=;
+        b=lC6XcWBNWGRdVvr3Jgz8ZprQA5jTNGEwRKefGQw9J/Hn6UUl/7tsKCinLo1DDV8Aid
+         wQxB1Sr6CMzGFTuO0if13nDkepIPfwpHwDYHvuqXYgKhf54rTSIt2BGX303d4MbiMGQw
+         q7Sl1YO+ptc6la0AXmmILokICQB3goikNRjZybSi+LnRNQsFxWmS9yVmhbwvuPA4fj/R
+         oJdxSxZkvux8/2c3y7QDaO9Egjkzohgiz6WDdTrRnDrCn+t5GEjTSxml99eTbSUxmsob
+         qfW2j31q9mg3OLGBQ+FQTK9R8Fi8Vl2vUi0OXck7Ven094dLm+vGcl5mMOVl9FeW4lrH
+         4/Tg==
+X-Gm-Message-State: ABy/qLZQ996EB4aM3rYNYHMV21i8vIz/z9gkWm0bpDPJ+ajDmouBQhTJ
+	RRDK2wri/ztvwy+hza4cceRJ48bPXAav1OQ29Gk=
+X-Google-Smtp-Source: APBJJlGr9RJyCy/NTtd4U3G8YBzsr03Efxb2b0r6mb2spZfsYM39frOrlzfVt4txYLqSsSFhpgcb57zUbCLWzB6Duj0=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a63:7747:0:b0:55c:5c30:33aa with SMTP
+ id s68-20020a637747000000b0055c5c3033aamr174205pgc.9.1689014148087; Mon, 10
+ Jul 2023 11:35:48 -0700 (PDT)
+Date: Mon, 10 Jul 2023 18:35:45 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202307110147.tDoRemZ7-lkp@intel.com>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3192; i=samitolvanen@google.com;
+ h=from:subject; bh=7OU2bpD9UM9q2xXwG7ynEd3jeDD83obc/zqrCIV8X8k=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBkrE+AhS2yuHhEWb37FLulyBDG6hxPDOCPp4ma4
+ 1wBuy7vRHaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZKxPgAAKCRBMtfaEi7xW
+ 7roEC/4igkmPPv4O8DtGnr3voPUmeALLQLdA+F8M9Bn3HTFaVz4ioIvWtKmMezopiYJbIDUHGbt
+ SDhgD1cRQvrBs4Uusc/ekdt5I3RNrXi0z6DJy+BoH4v1bwxQAurRzapGETRjEeAZGXacIEm8iRj
+ 54IfAkdnmWdi11rza4Efd2TxMPQquQLui+dmgNiuK9E/7Vo2/j5KWn8MyGP8axxbZgVM2KpGWHd
+ EoHqu2niCWANM+elksiJly2S1XiaMQN5TpxUusyMQ01Bm9GtsZpSbF+RLl+P15RO7BuV+ToDSe9
+ +C052grMu1y/NaRQqJlPq3RnHTsjhT6yCR7PvqfV2Nz8gbFi/JwVWQG6+bkISVbVah15Fpr5s9f
+ 6tL8b0o4dsMBjjN1mqqpKOSNfrFbOvrYSt/TtzIZnAxO/nYTEPNrAxdLxLnmW0ormlBt2YFgOjV H7GkBVLFi8Hs3P0GfQIei8SHfcJ+DZAIc5Q+SAJuUMabYv7kWkgKAb0PyzLv00PgaoHUk=
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230710183544.999540-8-samitolvanen@google.com>
+Subject: [PATCH v2 0/6] riscv: KCFI support
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 11, 2023 at 01:48:23AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/maybe
-> head:   69ff1e365682e2d516364c010b51f8a95140cd94
-> commit: eb15cb094ddb0227c9dfe5eb836d1a4357f070fd [1/14] kernel/fork: beware of __put_task_struct calling context
-> config: riscv-randconfig-r042-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110147.tDoRemZ7-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110147.tDoRemZ7-lkp@intel.com/reproduce)
-> 
+This series adds KCFI support for RISC-V. KCFI is a fine-grained
+forward-edge control-flow integrity scheme supported in Clang >=16,
+which ensures indirect calls in instrumented code can only branch to
+functions whose type matches the function pointer type, thus making
+code reuse attacks more difficult.
 
-> >> ERROR: modpost: vmlinux: local symbol '__put_task_struct_rcu_cb' was exported
+Patch 1 implements a pt_regs based syscall wrapper to address
+function pointer type mismatches in syscall handling. Patches 2 and 3
+annotate indirectly called assembly functions with CFI types. Patch 4
+implements error handling for indirect call checks. Patch 5 disables
+CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
+to be enabled for RISC-V.
 
-The commit above introduces this function:
+Note that Clang 16 has a generic architecture-agnostic KCFI
+implementation, which does work with the kernel, but doesn't produce
+a stable code sequence for indirect call checks, which means
+potential failures just trap and won't result in informative error
+messages. Clang 17 includes a RISC-V specific back-end implementation
+for KCFI, which emits a predictable code sequence for the checks and a
+.kcfi_traps section with locations of the traps, which patch 5 uses to
+produce more useful errors.
 
-+void __put_task_struct_rcu_cb(struct rcu_head *rhp)
-+{
-+       struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-+
-+       __put_task_struct(task);
-+}
-+EXPORT_SYMBOL_GPL(__put_task_struct_rcu_cb);
+The type mismatch fixes and annotations in the first three patches
+also become necessary in future if the kernel decides to support
+fine-grained CFI implemented using the hardware landing pad
+feature proposed in the in-progress Zicfisslp extension. Once the
+specification is ratified and hardware support emerges, implementing
+runtime patching support that replaces KCFI instrumentation with
+Zicfisslp landing pads might also be feasible (similarly to KCFI to
+FineIBT patching on x86_64), allowing distributions to ship a unified
+kernel binary for all devices.
 
-How the heck does that become a local symbol?
+---
+
+Changes in v2:
+  - Rebased on 6.5-rc1.
+  - Sorted Kconfig entries alphabetically.
+
+
+Sami Tolvanen (6):
+  riscv: Implement syscall wrappers
+  riscv: Add types to indirectly called assembly functions
+  riscv: Add ftrace_stub_graph
+  riscv: Add CFI error handling
+  riscv/purgatory: Disable CFI
+  riscv: Allow CONFIG_CFI_CLANG to be selected
+
+ arch/riscv/Kconfig                       |  3 +
+ arch/riscv/include/asm/cfi.h             | 22 ++++++
+ arch/riscv/include/asm/insn.h            | 10 +++
+ arch/riscv/include/asm/syscall.h         |  5 +-
+ arch/riscv/include/asm/syscall_wrapper.h | 87 ++++++++++++++++++++++++
+ arch/riscv/kernel/Makefile               |  2 +
+ arch/riscv/kernel/cfi.c                  | 77 +++++++++++++++++++++
+ arch/riscv/kernel/compat_syscall_table.c |  8 ++-
+ arch/riscv/kernel/mcount.S               |  9 ++-
+ arch/riscv/kernel/suspend_entry.S        |  5 +-
+ arch/riscv/kernel/sys_riscv.c            |  6 ++
+ arch/riscv/kernel/syscall_table.c        |  8 ++-
+ arch/riscv/kernel/traps.c                |  4 +-
+ arch/riscv/purgatory/Makefile            |  4 ++
+ 14 files changed, 238 insertions(+), 12 deletions(-)
+ create mode 100644 arch/riscv/include/asm/cfi.h
+ create mode 100644 arch/riscv/include/asm/syscall_wrapper.h
+ create mode 100644 arch/riscv/kernel/cfi.c
+
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+-- 
+2.41.0.255.g8b1d071c50-goog
+
