@@ -1,41 +1,48 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15B71840;
-	Tue, 11 Jul 2023 06:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HXeqbEbVOU7Bdon0QjJdiA0tnB8X8pJSagSOGu9o28w=; b=B70phc5ZVMlwsDStkeOWpUYO2Y
-	lJTrEHwvs9Ss06ItND/O8D9CBQjRYBhxZQN6TGhKd+lhd5IrXFWICxljnZA5S5b3klB+zrpEkKQYr
-	I2JoWyT3sr7sZxD2oCloM2Q72pLqSGQM04e6agjUTHHeXOO2RiYdy2QvTnPpb4e7NoadIxQS8/Qz+
-	heK9V2DVcsz6XI6UYho4wKUINy6msN6GvUM+GcNgcaPbRJvuPBcTL8bDL8jmtbJ5EqBlSX8odBehC
-	qNrrnDWuvHsVlsDaZ0M53AJIsKdqn3YYxWYrXi0v9oB3wD7OOdvpHeJ55hglcornDOYHNJZBKtVuN
-	q8mDVqsw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1qJ7Cs-00FTrr-Lu; Tue, 11 Jul 2023 06:50:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DCA1B3002B1;
-	Tue, 11 Jul 2023 08:50:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 90AF9240EBDA8; Tue, 11 Jul 2023 08:50:40 +0200 (CEST)
-Date: Tue, 11 Jul 2023 08:50:40 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Wander Lairson Costa <wander@redhat.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-riscv@lists.infradead.org
-Subject: Re: [peterz-queue:sched/maybe 1/14] ERROR: modpost: vmlinux: local
- symbol '__put_task_struct_rcu_cb' was exported
-Message-ID: <20230711065040.GA3062772@hirez.programming.kicks-ass.net>
-References: <202307110147.tDoRemZ7-lkp@intel.com>
- <20230710182605.GA3044890@hirez.programming.kicks-ass.net>
- <20230710185657.GA1505918@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25246174C9;
+	Tue, 11 Jul 2023 07:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689061853; x=1720597853;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FdsteEPVoKhljkYScsI1bW/zn+WpJ+G1WJFTIr7P2+I=;
+  b=ISFbhfNgC6/tUGsrpXuxOqu36N15iMvxV37F0Q9oKXqfG9PKYNj48Chh
+   y/DtCryGOwX3AIEur2SEDAfryNxfIINsNwAG9q14C0g7SdSbF7/T7TOA5
+   TtTEiU1HE7hDtISIrQnrpaUdGnBHOeJ7YDpQstXgwDeixJqUbIF7LXMum
+   0mhXgD7ojRPPrv99if1gL6G3IL9tlyLC9mkej7pziU3w9T7BlKS3vPkYe
+   9wlPYb3cCqLd+LnuvBFhI03xoI8HGwCzRLMe5daal0wM6qZGK91ovxMQq
+   kUHWH4vx8jAkHpAvDItd5pe9ou1cqV8mSTyGyqGzcAbcI7DLFi1nO2vQt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="363419835"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="363419835"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 00:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="895088411"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="895088411"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 11 Jul 2023 00:50:48 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJ891-0004Sx-1N;
+	Tue, 11 Jul 2023 07:50:47 +0000
+Date: Tue, 11 Jul 2023 15:50:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vivek Pernamitta <quic_vpernami@quicinc.com>, mhi@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mrana@quicinc.com,
+	quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
+	Vivek Pernamitta <quic_vpernami@quicinc.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V1] net: mhi : Add support to enable ethernet interface
+Message-ID: <202307111559.xDdV7vHr-lkp@intel.com>
+References: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,42 +51,185 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230710185657.GA1505918@dev-arch.thelio-3990X>
+In-Reply-To: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
 
-On Mon, Jul 10, 2023 at 11:56:57AM -0700, Nathan Chancellor wrote:
-> On Mon, Jul 10, 2023 at 08:26:05PM +0200, Peter Zijlstra wrote:
-> > On Tue, Jul 11, 2023 at 01:48:23AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/maybe
-> > > head:   69ff1e365682e2d516364c010b51f8a95140cd94
-> > > commit: eb15cb094ddb0227c9dfe5eb836d1a4357f070fd [1/14] kernel/fork: beware of __put_task_struct calling context
-> > > config: riscv-randconfig-r042-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110147.tDoRemZ7-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110147.tDoRemZ7-lkp@intel.com/reproduce)
-> > > 
-> > 
-> > > >> ERROR: modpost: vmlinux: local symbol '__put_task_struct_rcu_cb' was exported
-> > 
-> > The commit above introduces this function:
-> > 
-> > +void __put_task_struct_rcu_cb(struct rcu_head *rhp)
-> > +{
-> > +       struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-> > +
-> > +       __put_task_struct(task);
-> > +}
-> > +EXPORT_SYMBOL_GPL(__put_task_struct_rcu_cb);
-> > 
-> > How the heck does that become a local symbol?
-> > 
-> 
-> Looking at the configuration:
-> 
-> CONFIG_32BIT=y
-> CONFIG_ARCH_RV32I=y
-> 
-> It is highly likely that something is broken with 32-bit RISC-V and
-> clang, as that is not something we have ever tested. I don't even think
-> 32-bit RISC-V is tested that much even with GCC, so I'm not sure if this
-> is even worth looking into.
+Hi Vivek,
 
-Fair enough; I'll put it on the ignore list. Thanks!
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.5-rc1 next-20230711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Pernamitta/net-mhi-Add-support-to-enable-ethernet-interface/20230630-174659
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/1688118281-13032-1-git-send-email-quic_vpernami%40quicinc.com
+patch subject: [PATCH V1] net: mhi : Add support to enable ethernet interface
+config: riscv-randconfig-r042-20230710 (https://download.01.org/0day-ci/archive/20230711/202307111559.xDdV7vHr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230711/202307111559.xDdV7vHr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307111559.xDdV7vHr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/mhi_net.c:7:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/net/mhi_net.c:327:19: error: passing 'const unsigned char *' to parameter of type 'u8 *' (aka 'unsigned char *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     327 |                 eth_random_addr(ndev->dev_addr);
+         |                                 ^~~~~~~~~~~~~~
+   include/linux/etherdevice.h:230:40: note: passing argument to parameter 'addr' here
+     230 | static inline void eth_random_addr(u8 *addr)
+         |                                        ^
+   13 warnings and 1 error generated.
+
+
+vim +327 drivers/net/mhi_net.c
+
+   320	
+   321	static int mhi_net_newlink(struct mhi_device *mhi_dev, struct net_device *ndev, bool eth_dev)
+   322	{
+   323		struct mhi_net_dev *mhi_netdev;
+   324		int err;
+   325	
+   326		if (eth_dev) {
+ > 327			eth_random_addr(ndev->dev_addr);
+   328			if (!is_valid_ether_addr(ndev->dev_addr))
+   329				return -EADDRNOTAVAIL;
+   330		}
+   331	
+   332		mhi_netdev = netdev_priv(ndev);
+   333	
+   334		dev_set_drvdata(&mhi_dev->dev, mhi_netdev);
+   335		mhi_netdev->ndev = ndev;
+   336		mhi_netdev->mdev = mhi_dev;
+   337		mhi_netdev->skbagg_head = NULL;
+   338		mhi_netdev->mru = mhi_dev->mhi_cntrl->mru;
+   339		mhi_netdev->ethernet_if = eth_dev;
+   340	
+   341		INIT_DELAYED_WORK(&mhi_netdev->rx_refill, mhi_net_rx_refill_work);
+   342		u64_stats_init(&mhi_netdev->stats.rx_syncp);
+   343		u64_stats_init(&mhi_netdev->stats.tx_syncp);
+   344	
+   345		/* Start MHI channels */
+   346		err = mhi_prepare_for_transfer(mhi_dev);
+   347		if (err)
+   348			return err;
+   349	
+   350		/* Number of transfer descriptors determines size of the queue */
+   351		mhi_netdev->rx_queue_sz = mhi_get_free_desc_count(mhi_dev, DMA_FROM_DEVICE);
+   352	
+   353		err = register_netdev(ndev);
+   354		if (err)
+   355			return err;
+   356	
+   357		return 0;
+   358	}
+   359	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
