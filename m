@@ -1,44 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A751EA7B;
-	Tue, 11 Jul 2023 21:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E038C1EA7B;
+	Tue, 11 Jul 2023 21:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689109586; x=1720645586;
+  t=1689109653; x=1720645653;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JqFAcjQXKEjwNrVSwBz4T1LNm1cfRpWhiMX5CWL8oEo=;
-  b=Duil6rkLj8yPOt3b/S0C+3mfwUNNCAjakGBmCA70mEJt4AJlsURxGFvW
-   ODreulXs4XN0WJ1Nzh2aW2zYpPuoaNArYZLxtlxsI72FzpGM58x0Ui4Is
-   IB7aF/7VNUvVV19N9cPUMFUa883noMLYqZNaVF1mRTooNvaQj6w21ZEaF
-   RKejQRLclgOfArDJjH7ok+dAxTg6Ql2vFobUu4Vju3ToRl8VIDwUTnUVG
-   yUrKdTh4XHctXJF/BxQq3BbcDxfV1XD/AAnHOHEoMljqzyvx0Y9e2oflo
-   eBKdTKl3tX9tx9NbRORFJ7CEK+dppATss1FBxMiRj7GWWrtz4BJexg60z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362203762"
+  bh=NS6ylPPDPqDG4pzjShZQj5Tc6X4ToP+oaHO0kIRiOc8=;
+  b=LIV8Yywf+66/d8fZM4stqLIOEleWJjwR3Sw09f+DUn644oaYFpWYIzXJ
+   Z9CwRu5mbVAb/Vlhlu22bHl3Gp8X2oeZHO3+xDRtjjpoa9ibbNbESjljv
+   t7ffV7FHtHf/bKBnzwIr5jqPBLw1sjKDP8THCOJ9T06l6GeUK1edt8mKe
+   ZF23Vv3DReP/rPuEyBNSY82zNNNa5xBVhz43Qu0cr0OTWoERpw5dtYPoK
+   g6AnMkFRoj7sY6LHChKGpLG+TjyAZLSEZzG7K2gxbhwnxwf1wvQzpOvrY
+   4iUbEGpgD/sHakPNITulxo/7eBB2cp/+2x7CB2sNwCqABaBTmbD0EJ1R1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="363600786"
 X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="362203762"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:06:23 -0700
+   d="scan'208";a="363600786"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:06:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865857272"
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="671580420"
 X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="865857272"
+   d="scan'208";a="671580420"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 14:06:21 -0700
+  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2023 14:06:21 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qJKYu-00057j-2j;
+	id 1qJKYu-00057h-23;
 	Tue, 11 Jul 2023 21:06:20 +0000
 Date: Wed, 12 Jul 2023 05:05:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [trace:trace/core 21/22] include/linux/ftrace.h:47:47: warning:
- declaration of 'struct fgraph_ret_regs' will not be visible outside of this
- function
-Message-ID: <202307120418.wmSazUy7-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: drivers/input/touchscreen/edt-ft5x06.c:156:35: error: variable has
+ incomplete type 'const struct regmap_config'
+Message-ID: <202307120543.B9WVQ1NL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,40 +47,130 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/core
-head:   46b77ea28faeed56f1d1b63f9049c40b9eb3cbf5
-commit: 55803539764e831c4e642de1c6634f8f645a10aa [21/22] tracing: arm64: Avoid missing-prototype warnings
-config: i386-randconfig-i012-20230710 (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/reproduce)
+Hi Geert,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3f01e9fed8454dcd89727016c3e5b2fbb8f8e50c
+commit: 70a640c0efa7667453c3911b13335304ce46ad8b regmap: REGMAP_KUNIT should not select REGMAP
+date:   9 weeks ago
+config: s390-randconfig-r034-20230711 (https://download.01.org/0day-ci/archive/20230712/202307120543.B9WVQ1NL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120543.B9WVQ1NL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307120418.wmSazUy7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307120543.B9WVQ1NL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/power/process.c:15:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:52:
->> include/linux/ftrace.h:47:47: warning: declaration of 'struct fgraph_ret_regs' will not be visible outside of this function [-Wvisibility]
-   unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
-                                                 ^
-   1 warning generated.
+   In file included from drivers/input/touchscreen/edt-ft5x06.c:25:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/input/touchscreen/edt-ft5x06.c:25:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/input/touchscreen/edt-ft5x06.c:25:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/input/touchscreen/edt-ft5x06.c:156:35: error: variable has incomplete type 'const struct regmap_config'
+     156 | static const struct regmap_config edt_ft5x06_i2c_regmap_config = {
+         |                                   ^
+   drivers/input/touchscreen/edt-ft5x06.c:156:21: note: forward declaration of 'struct regmap_config'
+     156 | static const struct regmap_config edt_ft5x06_i2c_regmap_config = {
+         |                     ^
+   drivers/input/touchscreen/edt-ft5x06.c:292:35: error: variable has incomplete type 'const struct regmap_config'
+     292 | static const struct regmap_config edt_M06_i2c_regmap_config = {
+         |                                   ^
+   drivers/input/touchscreen/edt-ft5x06.c:156:21: note: forward declaration of 'struct regmap_config'
+     156 | static const struct regmap_config edt_ft5x06_i2c_regmap_config = {
+         |                     ^
+>> drivers/input/touchscreen/edt-ft5x06.c:896:3: error: call to undeclared function 'regmap_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     896 |                 regmap_exit(tsdata->regmap);
+         |                 ^
+   drivers/input/touchscreen/edt-ft5x06.c:896:3: note: did you mean 'regmap_write'?
+   include/linux/regmap.h:1716:19: note: 'regmap_write' declared here
+    1716 | static inline int regmap_write(struct regmap *map, unsigned int reg,
+         |                   ^
+>> drivers/input/touchscreen/edt-ft5x06.c:897:20: error: call to undeclared function 'regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     897 |                 tsdata->regmap = regmap_init_i2c(client,
+         |                                  ^
+   drivers/input/touchscreen/edt-ft5x06.c:1154:19: error: call to undeclared function 'regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1154 |         tsdata->regmap = regmap_init_i2c(client, &edt_ft5x06_i2c_regmap_config);
+         |                          ^
+   drivers/input/touchscreen/edt-ft5x06.c:1360:2: error: call to undeclared function 'regmap_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1360 |         regmap_exit(tsdata->regmap);
+         |         ^
+   12 warnings and 6 errors generated.
 
 
-vim +47 include/linux/ftrace.h
+vim +156 drivers/input/touchscreen/edt-ft5x06.c
 
-    45	
-    46	#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-  > 47	unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
-    48	#else
-    49	unsigned long ftrace_return_to_handler(unsigned long frame_pointer);
-    50	#endif
-    51	
+b1d2a3ecb9cbf9 Franklin S Cooper Jr 2015-10-16  155  
+9dfd9708ffba1e Dario Binacchi       2023-04-02 @156  static const struct regmap_config edt_ft5x06_i2c_regmap_config = {
+9dfd9708ffba1e Dario Binacchi       2023-04-02  157  	.reg_bits = 8,
+9dfd9708ffba1e Dario Binacchi       2023-04-02  158  	.val_bits = 8,
+9dfd9708ffba1e Dario Binacchi       2023-04-02  159  };
+43c4d13e901a8f Simon Budig          2012-07-24  160  
+
+:::::: The code at line 156 was first introduced by commit
+:::::: 9dfd9708ffba1e7969af5e4ecda660151146de98 Input: edt-ft5x06 - convert to use regmap API
+
+:::::: TO: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
