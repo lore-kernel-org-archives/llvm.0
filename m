@@ -1,222 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8624A1EA8D;
-	Tue, 11 Jul 2023 21:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7A0C433C7;
-	Tue, 11 Jul 2023 21:24:59 +0000 (UTC)
-Date: Tue, 11 Jul 2023 17:24:56 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev
-Subject: Re: [trace:trace/core 21/22] include/linux/ftrace.h:47:47: warning:
- declaration of 'struct fgraph_ret_regs' will not be visible outside of this
- function
-Message-ID: <20230711172456.2b6b584e@gandalf.local.home>
-In-Reply-To: <202307120418.wmSazUy7-lkp@intel.com>
-References: <202307120418.wmSazUy7-lkp@intel.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE0D1DDEE;
+	Tue, 11 Jul 2023 22:20:56 +0000 (UTC)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51e590a8ab5so3591219a12.2;
+        Tue, 11 Jul 2023 15:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689114055; x=1691706055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ijAc3WnxPpnwtqHq2IpzbsH58VD57C5vE29sFFjhsnw=;
+        b=aAtUyZwFpJVEzYYVK1iByTFD1w1wFrsd1wYq3IYdJA8Pnyzt20Nefme6G0Uhv2dn3e
+         MHPdNQCXCGMsWiAWqYACxROPufVAJaD+8p5PJWDseq+xglBV+KI4Lt2ZP9WV/UvLOKc8
+         ah1AHOxiGU+mNj/e9K9Dl52aDhZicAM8EO26QXFELTy2h0edauQG1S9PC/0aZrYiHfdp
+         OV3Y+TPFzIPXXOOh++zh4UBsQZAnResZg7yRLd04Yc9Fk3NjIUqxnJf0qyVQBFeLeskj
+         YJUd5mw/bf+yQe/jQ02Zdg7VhoGkfCzNvDhx2rYjroUiqgvGzWX///dLgm+p+QrOEa9M
+         +D8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689114055; x=1691706055;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ijAc3WnxPpnwtqHq2IpzbsH58VD57C5vE29sFFjhsnw=;
+        b=Ob/HmJMPzeagUL5in4OdUFb8Om1BUNSwUXHAhhvGviRPw4UjZKKRBzxHGAgc0t1Sn4
+         r4C9XQ+Cx/V9+S1AOfRfuFxruWTAAq/PMHdLXS9f3HFrZewqbCtygTiiSlQLbTER7sXS
+         d8O1iOjTJCCfNQrizmpbim5YHvmkJYnN5oevvPuHqcpSVnDa2CJNftBncIDFrwBkncRo
+         7sG5Dj83fr1hwkHu2NXSo4691141oVZDJRj3Wxod67PVlv1YAhZw6F/S97ZgAwZbSK7k
+         lRGd0YsTh1L71bbROQrzc9iAjCIw35WgQ0pBgiOEEDPY/lQpb6c3Zo667rW0nrc0inpZ
+         QjxA==
+X-Gm-Message-State: ABy/qLb7nqTNxR4dHDxWBK7aeOvCnDvPutId94nNMtTFpmnDjehWrcZw
+	myt524c98trQnUm2eN3civmEMVwLxUQ0AhTEa0s=
+X-Google-Smtp-Source: APBJJlHqYjoII5Q+Ju9XdZE0L4QYpoiJk+A5Jb80U7l4xeEERNXqbvqIwUPtWfQE8uYlUiWk1dYvWtQocW2iejUeSMk=
+X-Received: by 2002:a05:6402:350:b0:51a:265a:8fca with SMTP id
+ r16-20020a056402035000b0051a265a8fcamr18555340edw.27.1689114054998; Tue, 11
+ Jul 2023 15:20:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <202307112158.3RFyuSZJ-lkp@intel.com>
+In-Reply-To: <202307112158.3RFyuSZJ-lkp@intel.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 11 Jul 2023 15:20:43 -0700
+Message-ID: <CAEf4BzaWmYcJTLc5837wA8T4KOWcQaxgh6LpYR53kT-8HoQDSQ@mail.gmail.com>
+Subject: Re: [linux-next:master 754/1391] /bin/bash: line 1: 50431
+ Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
+ --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
+ --btf_gen_optimized --btf_base vmlinux drivers/pcmcia/pcmcia_core.ko
+To: kernel test robot <lkp@intel.com>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 12 Jul 2023 05:05:45 +0800
-kernel test robot <lkp@intel.com> wrote:
-
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/core
-> head:   46b77ea28faeed56f1d1b63f9049c40b9eb3cbf5
-> commit: 55803539764e831c4e642de1c6634f8f645a10aa [21/22] tracing: arm64: Avoid missing-prototype warnings
-> config: i386-randconfig-i012-20230710 (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+On Tue, Jul 11, 2023 at 6:52=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it master
+> head:   8e4b7f2f3d6071665b1dfd70786229c8a5d6c256
+> commit: c628747cc8800cf6d33d09f7f42c8b6f91e64dc7 [754/1391] libbpf: only =
+reset sec_def handler when necessary
+> config: arm-randconfig-r032-20230710 (https://download.01.org/0day-ci/arc=
+hive/20230711/202307112158.3RFyuSZJ-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git =
+f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce: (https://download.01.org/0day-ci/archive/20230711/202307112158=
+.3RFyuSZJ-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307120418.wmSazUy7-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from kernel/power/process.c:15:
->    In file included from include/linux/syscalls.h:88:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:10:
->    In file included from include/linux/perf_event.h:52:
-> >> include/linux/ftrace.h:47:47: warning: declaration of 'struct fgraph_ret_regs' will not be visible outside of this function [-Wvisibility]  
->    unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
->                                                  ^
->    1 warning generated.
-> 
-> 
-> vim +47 include/linux/ftrace.h
-> 
->     45	
->     46	#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
->   > 47	unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);  
->     48	#else
->     49	unsigned long ftrace_return_to_handler(unsigned long frame_pointer);
->     50	#endif
->     51	
-> 
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307112158.3RFyuSZJ-lkp=
+@intel.com/
+>
+> Note: the linux-next/master HEAD 8e4b7f2f3d6071665b1dfd70786229c8a5d6c256=
+ builds fine.
+>       It may have been fixed somewhere.
+>
+> All errors (new ones prefixed by >>):
+>
+>    die__process_unit: DW_TAG_subrange_type (0x21) @ <0x14a5b> not handled=
+!
+>    die__process_unit: tag not supported 0x21 (subrange_type)!
+>    die__process_unit: DW_TAG_subrange_type (0x21) @ <0x1e457> not handled=
+!
+>    die__create_new_array: DW_TAG_union_type (0x17) @ <0x14a70> not handle=
+d!
+>    die__process_class: DW_TAG_compile_unit (0x11) @ <0x1e4bc> not handled=
+!
+>    die__process_class: tag not supported 0x11 (compile_unit)!
+> >> /bin/bash: line 1: 50431 Segmentation fault      LLVM_OBJCOPY=3D"llvm-=
+objcopy" pahole -J --btf_gen_floats -j --lang_exclude=3Drust --skip_encodin=
+g_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/pcm=
+cia/pcmcia_core.ko
+>
 
-My fixed up to Arnd's patch caused this. Here's a new version:
+Cc'ing Arnaldo and Eduard. I don't know if it's the same as [0], but
+just in case please take a look.
 
-From: Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] tracing: arm64: Avoid missing-prototype warnings
+  [0] https://lore.kernel.org/bpf/20230710200002.ca4okot5rrvewqvb@altlinux.=
+org/
 
-These are all tracing W=1 warnings in arm64 allmodconfig about missing
-prototypes:
-
-kernel/trace/trace_kprobe_selftest.c:7:5: error: no previous prototype for 'kprobe_trace_selftest_target' [-Werror=missing-pro
-totypes]
-kernel/trace/ftrace.c:329:5: error: no previous prototype for '__register_ftrace_function' [-Werror=missing-prototypes]
-kernel/trace/ftrace.c:372:5: error: no previous prototype for '__unregister_ftrace_function' [-Werror=missing-prototypes]
-kernel/trace/ftrace.c:4130:15: error: no previous prototype for 'arch_ftrace_match_adjust' [-Werror=missing-prototypes]
-kernel/trace/fgraph.c:243:15: error: no previous prototype for 'ftrace_return_to_handler' [-Werror=missing-prototypes]
-kernel/trace/fgraph.c:358:6: error: no previous prototype for 'ftrace_graph_sleep_time_control' [-Werror=missing-prototypes]
-arch/arm64/kernel/ftrace.c:460:6: error: no previous prototype for 'prepare_ftrace_return' [-Werror=missing-prototypes]
-arch/arm64/kernel/ptrace.c:2172:5: error: no previous prototype for 'syscall_trace_enter' [-Werror=missing-prototypes]
-arch/arm64/kernel/ptrace.c:2195:6: error: no previous prototype for 'syscall_trace_exit' [-Werror=missing-prototypes]
-
-Move the declarations to an appropriate header where they can be seen
-by the caller and callee, and make sure the headers are included where
-needed.
-
-Link: https://lore.kernel.org/linux-trace-kernel/20230517125215.930689-1-arnd@kernel.org
-
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Florent Revest <revest@chromium.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-[ Fixed ftrace_return_to_handler() to handle CONFIG_HAVE_FUNCTION_GRAPH_RETVAL case ]
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- arch/arm64/include/asm/ftrace.h      | 4 ++++
- arch/arm64/include/asm/syscall.h     | 3 +++
- arch/arm64/kernel/syscall.c          | 3 ---
- include/linux/ftrace.h               | 9 +++++++++
- kernel/trace/fgraph.c                | 1 +
- kernel/trace/ftrace_internal.h       | 5 +++--
- kernel/trace/trace_kprobe_selftest.c | 3 +++
- 7 files changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 21ac1c5c71d3..ab158196480c 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -211,6 +211,10 @@ static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs
- {
- 	return ret_regs->fp;
- }
-+
-+void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
-+			   unsigned long frame_pointer);
-+
- #endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER  */
- #endif
- 
-diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
-index 4cfe9b49709b..ab8e14b96f68 100644
---- a/arch/arm64/include/asm/syscall.h
-+++ b/arch/arm64/include/asm/syscall.h
-@@ -85,4 +85,7 @@ static inline int syscall_get_arch(struct task_struct *task)
- 	return AUDIT_ARCH_AARCH64;
- }
- 
-+int syscall_trace_enter(struct pt_regs *regs);
-+void syscall_trace_exit(struct pt_regs *regs);
-+
- #endif	/* __ASM_SYSCALL_H */
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index 5a668d7f3c1f..b1ae2f2eaf77 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -75,9 +75,6 @@ static inline bool has_syscall_work(unsigned long flags)
- 	return unlikely(flags & _TIF_SYSCALL_WORK);
- }
- 
--int syscall_trace_enter(struct pt_regs *regs);
--void syscall_trace_exit(struct pt_regs *regs);
--
- static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
- 			   const syscall_fn_t syscall_table[])
- {
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 8e59bd954153..ce156c7704ee 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -41,6 +41,15 @@ struct ftrace_ops;
- struct ftrace_regs;
- struct dyn_ftrace;
- 
-+char *arch_ftrace_match_adjust(char *str, const char *search);
-+
-+#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-+struct fgraph_ret_regs;
-+unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
-+#else
-+unsigned long ftrace_return_to_handler(unsigned long frame_pointer);
-+#endif
-+
- #ifdef CONFIG_FUNCTION_TRACER
- /*
-  * If the arch's mcount caller does not support all of ftrace's
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index cd2c35b1dd8f..c83c005e654e 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -15,6 +15,7 @@
- #include <trace/events/sched.h>
- 
- #include "ftrace_internal.h"
-+#include "trace.h"
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ASSIGN_OPS_HASH(opsname, val) \
-diff --git a/kernel/trace/ftrace_internal.h b/kernel/trace/ftrace_internal.h
-index 382775edf690..5012c04f92c0 100644
---- a/kernel/trace/ftrace_internal.h
-+++ b/kernel/trace/ftrace_internal.h
-@@ -2,6 +2,9 @@
- #ifndef _LINUX_KERNEL_FTRACE_INTERNAL_H
- #define  _LINUX_KERNEL_FTRACE_INTERNAL_H
- 
-+int __register_ftrace_function(struct ftrace_ops *ops);
-+int __unregister_ftrace_function(struct ftrace_ops *ops);
-+
- #ifdef CONFIG_FUNCTION_TRACER
- 
- extern struct mutex ftrace_lock;
-@@ -15,8 +18,6 @@ int ftrace_ops_test(struct ftrace_ops *ops, unsigned long ip, void *regs);
- 
- #else /* !CONFIG_DYNAMIC_FTRACE */
- 
--int __register_ftrace_function(struct ftrace_ops *ops);
--int __unregister_ftrace_function(struct ftrace_ops *ops);
- /* Keep as macros so we do not need to define the commands */
- # define ftrace_startup(ops, command)					\
- 	({								\
-diff --git a/kernel/trace/trace_kprobe_selftest.c b/kernel/trace/trace_kprobe_selftest.c
-index 16548ee4c8c6..3851cd1e6a62 100644
---- a/kernel/trace/trace_kprobe_selftest.c
-+++ b/kernel/trace/trace_kprobe_selftest.c
-@@ -1,4 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
-+
-+#include "trace_kprobe_selftest.h"
-+
- /*
-  * Function used during the kprobe self test. This function is in a separate
-  * compile unit so it can be compile with CC_FLAGS_FTRACE to ensure that it
--- 
-2.40.1
-
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
