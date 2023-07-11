@@ -1,229 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E328D1E50F;
-	Tue, 11 Jul 2023 17:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76AFC433CA;
-	Tue, 11 Jul 2023 17:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689096011;
-	bh=0x7thVqvoMJLS+jYevpe76UFSqxecS9xef82lMrGa00=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jpr/isp/keQPzKORZrnZW0bPMU7W6AgKLRgyA/rP0dBC6J40H4eTC4CnRKae25NEz
-	 V9BMwz1gjYE3E7hm61usKMdGg1rhsxRvy1NrfOFi9pNBuipooot8gWGjWnPHpgBKOn
-	 3+IHiZ32k+bQigDguA66VECb6YwYOiDgA+0+qK2gyvJrVVRZyv9vwq2WaGcDDFEe0W
-	 bQbTPJoMiyok5wkfLSMFyaXkWFcFnjFZ3UUjsuo24fQiTUZu83e5PlxT+YQUnduyDX
-	 k0AfsgHSdabFVi5If5WhV0mrFOT6F5tqRPOODryif56R1FXwZjagZ/oFNyBM2QZjGh
-	 R0XuXzlBNVs6w==
-Date: Tue, 11 Jul 2023 10:20:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Baoquan He <bhe@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Christoph Hellwig <hch@lst.de>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>
-Subject: Re: [akpm-mm:mm-unstable 86/125] drivers/irqchip/irq-al-fic.c:281:2:
- error: call to undeclared function 'iounmap'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <20230711172008.GA369569@dev-arch.thelio-3990X>
-References: <202307110516.V0qgum1Q-lkp@intel.com>
- <ZKymIF5NdqXP1ydb@MiWiFi-R3L-srv>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A0F17FE0
+	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 17:22:22 +0000 (UTC)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id 0EA415C007D;
+	Tue, 11 Jul 2023 13:22:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 11 Jul 2023 13:22:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1689096142; x=1689182542; bh=WVuQD8F16q+8KpkRXUZfCZXz1Vbx2RrVytD
+	1O4kCmYE=; b=Z9nqXzX77m6gQD3BPliH5EP/1qdo75FV8gW/EU/f13H7zNT7JQt
+	8PZC0CZLyIlDTCrBj/Smo0OqcndyK1K5JHlzClVY+s1Mplvu16IIMUE6rITaxtMV
+	8oJ3mevxtINrvAKzDZtBfNeebRLgkKXZH4gK1QaKyqxVeclkFAHA86cC+E7haWyf
+	UDLUjZx0zDEzgPlAjiHGn8Bk0a8sWLe8SmeAgngNQbjSIV0N56edv9V8lzpugg21
+	EMOuIDwxx2rSwNVQtiBHP6B4SOBRetiLS0Qwu4jK7+ggLy16q7BuzKycbWEnZjdd
+	M/+PcitRiR4Nb9jxg9tRbcupdu+1k2jWiDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1689096142; x=1689182542; bh=WVuQD8F16q+8KpkRXUZfCZXz1Vbx2RrVytD
+	1O4kCmYE=; b=jCe2kUA8fhmQT2/vhwHddfoBVjVRMZXXCVH35gCyMesgcvm3T4u
+	295KaMluRX/o4yOuK1rhOqcpZCPsohH+VJMgAXV1ISHl/BAZ2o83dmmKr76H53az
+	wKExqr6xxi3C1sXTn+6v7QoBmqTaruZwf+verZsvBs03ShG0CnlhYR7PZUbR9XXT
+	etxxz0ySlDmc6b7VrEiPV2I1vlzGxIi/e2sU2HctVSIsCl9d+49CoBA0ogijWAu8
+	yB0Nb8trWqr1vvJAafhQ/SeZsfLDk2+DDC1FZwmQeJzhxYFTPeJmCDoGgvpWbabJ
+	uWDTQnoFgaRiWWSXINj16+76u1wLEBQfLHg==
+X-ME-Sender: <xms:y4-tZPpEVFpxwk6dps3xmwBpPlKEtHdoeOXivrQAoKI4509t3cUtHg>
+    <xme:y4-tZJoWSNYc2yfQPtf0NtEFc1t3P7UydMvfizEOpktXJoAI-RBpy73dUFXTxNLuU
+    Q2GbFAYnadUHMO57Q>
+X-ME-Received: <xmr:y4-tZMNTWFrU_jXup6FkAOI9wterJxzWU5y6iMp0Tw4TA66lygeO4THXJwvd0RI_2VybHBmpIcZNVFfQoIz8JhEOKrSnwmMPhP8e>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
+    tddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpedtgfeuueeukeeikefgieeukeffleetkeekkeeggeffvedt
+    vdejueehueeuleefteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:y4-tZC5IhGm4l5cfzU-3zK9rCyuReZsZpGXIZ6836n1PbDDl_EFjTg>
+    <xmx:y4-tZO7T13BUjKnijF_OmGDSrJm1UsEaYBDMb_rHp3oSqnKPHJaX1g>
+    <xmx:y4-tZKismzi8TrVmXw2jUjgQvq37iNG_n8gvx9BejqR2GU7JxLU1dg>
+    <xmx:zo-tZMvPZYVb-B14YtJrcub1W-VeXz_BJF9tgIaq4eiidV6u-kv5Qg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Jul 2023 13:22:18 -0400 (EDT)
+Date: Tue, 11 Jul 2023 11:22:17 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Andrea Righi <andrea.righi@canonical.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf <bpf@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH] btf, scripts: rust: drop is_rust_module.sh
+Message-ID: <56yvbhhiij3t5tsvnjcrrpbpvnezi2bm2w5c5xkrvwgix2arq2@ku3curqk7b5u>
+References: <20230704052136.155445-1-andrea.righi@canonical.com>
+ <CANiq72k6um58AAydgkzhkmAdd8t1quzeGaPsR7-pS_ZXYf0-YQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZKymIF5NdqXP1ydb@MiWiFi-R3L-srv>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72k6um58AAydgkzhkmAdd8t1quzeGaPsR7-pS_ZXYf0-YQ@mail.gmail.com>
 
-Hi Baoquan,
+Hi Miguel, Andrea,
 
-On Tue, Jul 11, 2023 at 08:45:20AM +0800, Baoquan He wrote:
-> Hi,
+On Tue, Jul 11, 2023 at 04:39:27PM +0200, Miguel Ojeda wrote:
+> On Tue, Jul 4, 2023 at 7:21 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> >
+> > With commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> > we are now able to use pahole directly to identify Rust compilation
+> > units (CUs) and exclude them from generating BTF debugging information
+> > (when DEBUG_INFO_BTF is enabled).
+> >
+> > And if pahole doesn't support the --lang-exclude flag, we can't enable
+> > both RUST and DEBUG_INFO_BTF at the same time.
+> >
+> > So, in any case, the script is_rust_module.sh is just redundant and we
+> > can drop it.
+> >
+> > NOTE: we may also be able to drop the "Rust loadable module" mark
+> > inside Rust modules, but it seems safer to keep it for now to make sure
+> > we are not breaking any external tool that may potentially rely on it.
 > 
-> On 07/11/23 at 05:22am, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-> > head:   17712b3b36c898462c3d31d4b47bd069e87359c5
-> > commit: 7aeb1874c9d6e390a405529c7eec76d2486f65d8 [86/125] s390: mm: convert to GENERIC_IOREMAP
-> > config: s390-randconfig-r015-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307110516.V0qgum1Q-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    In file included from drivers/irqchip/irq-al-fic.c:7:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/s390/include/asm/io.h:78:
-> >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      547 |         val = __raw_readb(PCI_IOBASE + addr);
+> Just to recall the history of these changes:
 > 
-> Thanks for reporting. I am not gonna to fix it because Nathan told me
-> there had been a series specifically taking care of the PCI_IOBASE
-> warnings from Niklas. Quote Nathan's words here for reference:
+>   - The script got added in order to skip the BTF generation in the
+> `BTF [M]` step (under `DEBUG_INFO_BTF_MODULES`, which depends on
+> `DEBUG_INFO_BTF`).
 > 
+>   - A few months later, it was noticed that C modules couldn't be
+> loaded if Rust was enabled, due to the base BTF info in `vmlinux`.
+> That triggered the eventual addition of `--lang_exclude=` to `pahole`,
+> but meanwhile, we made `DEBUG_INFO_BTF` and `RUST` exclusive.
 > 
-> https://lore.kernel.org/all/20230612160237.GA199007@dev-arch.thelio-3990X/T/#u
-> ===
-> I believe that this series [1] by Niklas Schnelle should take care of
-> the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
-> need to worry about them when they show up in build reports.
+>   - Now, this patch removes the script because having a newer `pahole`
+> also correctly skips the Rust CUs in the `BTF [M]` steps (i.e. and not
+> just the `vmlinux` one), since we pass `--lang_exclude=` to both cases
+> (`link-vmlinux.sh` and `Makefile.modfinal`), if I understand correctly
+> (the script could, in principle, have been removed even before
+> `pahole` got the new feature, given the exclusivity of the options).
 > 
-> [1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
-> 
-> Cheers,
-> Nathan
-> ===
-> 
-> >          |                           ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-> >          |                                                         ~~~~~~~~~~ ^
-> >    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-> >       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-> >          |                                                           ^
-> >    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-> >      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> >          |                                                      ^
-> >    In file included from drivers/irqchip/irq-al-fic.c:7:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/s390/include/asm/io.h:78:
-> >    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-> >          |                                                         ~~~~~~~~~~ ^
-> >    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-> >       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-> >          |                                                           ^
-> >    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-> >      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-> >          |                                                      ^
-> >    In file included from drivers/irqchip/irq-al-fic.c:7:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/s390/include/asm/io.h:78:
-> >    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      584 |         __raw_writeb(value, PCI_IOBASE + addr);
-> >          |                             ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-> >          |                                                       ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-> >          |                                                       ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      692 |         readsb(PCI_IOBASE + addr, buffer, count);
-> >          |                ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      700 |         readsw(PCI_IOBASE + addr, buffer, count);
-> >          |                ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      708 |         readsl(PCI_IOBASE + addr, buffer, count);
-> >          |                ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      717 |         writesb(PCI_IOBASE + addr, buffer, count);
-> >          |                 ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      726 |         writesw(PCI_IOBASE + addr, buffer, count);
-> >          |                 ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >      735 |         writesl(PCI_IOBASE + addr, buffer, count);
-> >          |                 ~~~~~~~~~~ ^
-> > >> drivers/irqchip/irq-al-fic.c:281:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >      281 |         iounmap(base);
-> >          |         ^
-> >    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
-> >       29 | #define iounmap iounmap
-> >          |                 ^
-> >    drivers/irqchip/irq-al-fic.c:281:2: note: did you mean 'vunmap'?
-> >    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
-> >       29 | #define iounmap iounmap
-> >          |                 ^
-> >    include/linux/vmalloc.h:167:13: note: 'vunmap' declared here
-> >      167 | extern void vunmap(const void *addr);
-> >          |             ^
-> >    12 warnings and 1 error generated.
+> If this is all correct, then the patch looks good to me. I am Cc'ing
+> Arnaldo, Martin and the BPF list.
 
-It seems like this was the error that the robot thinks that your patch
-introduced, which seems like it might be legitimate? Is an
-asm-generic/io.h include missing somewhere or is there some prexisting
-issue that is exposed with your patch?
+I believe I authored the original script. This all sounds right to me.
 
-Cheers,
-Nathan
+Acked-by: Daniel Xu <dxu@dxuuu.xyz>
 
-> > vim +/iounmap +281 drivers/irqchip/irq-al-fic.c
-> > 
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  236  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  237  static int __init al_fic_init_dt(struct device_node *node,
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  238  				 struct device_node *parent)
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  239  {
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  240  	int ret;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  241  	void __iomem *base;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  242  	unsigned int parent_irq;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  243  	struct al_fic *fic;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  244  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  245  	if (!parent) {
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  246  		pr_err("%s: unsupported - device require a parent\n",
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  247  		       node->name);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  248  		return -EINVAL;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  249  	}
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  250  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  251  	base = of_iomap(node, 0);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  252  	if (!base) {
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  253  		pr_err("%s: fail to map memory\n", node->name);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  254  		return -ENOMEM;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  255  	}
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  256  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  257  	parent_irq = irq_of_parse_and_map(node, 0);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  258  	if (!parent_irq) {
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  259  		pr_err("%s: fail to map irq\n", node->name);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  260  		ret = -EINVAL;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  261  		goto err_unmap;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  262  	}
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  263  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  264  	fic = al_fic_wire_init(node,
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  265  			       base,
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  266  			       node->name,
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  267  			       parent_irq);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  268  	if (IS_ERR(fic)) {
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  269  		pr_err("%s: fail to initialize irqchip (%lu)\n",
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  270  		       node->name,
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  271  		       PTR_ERR(fic));
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  272  		ret = PTR_ERR(fic);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  273  		goto err_irq_dispose;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  274  	}
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  275  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  276  	return 0;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  277  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  278  err_irq_dispose:
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  279  	irq_dispose_mapping(parent_irq);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  280  err_unmap:
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10 @281  	iounmap(base);
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  282  
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  283  	return ret;
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  284  }
-> > 1eb77c3bcdb70f Talel Shenhar 2019-06-10  285  
-> > 
-> > :::::: The code at line 281 was first introduced by commit
-> > :::::: 1eb77c3bcdb70f2501f419b3da45b19acaf01072 irqchip/al-fic: Introduce Amazon's Annapurna Labs Fabric Interrupt Controller Driver
-> > 
-> > :::::: TO: Talel Shenhar <talel@amazon.com>
-> > :::::: CC: Marc Zyngier <marc.zyngier@arm.com>
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
-> > 
-> 
-> 
+Thanks,
+Daniel
