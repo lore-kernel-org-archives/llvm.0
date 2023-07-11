@@ -1,27 +1,52 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2435F18AF8;
-	Tue, 11 Jul 2023 11:16:21 +0000 (UTC)
-Received: from [10.231.127.5] (91-133-79-89.stat.cablelink.at [91.133.79.89])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: shreeya)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8960A660700D;
-	Tue, 11 Jul 2023 12:16:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1689074180;
-	bh=XXqx6jjzqVFPldsbdR5LC87NiCTrfy5oA1jjDLavIQE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ggY/vBPqfvEy5CTrXVgzmQ/UK1f9T8bC9cMAMRP1LSqSErFVdV/kK0GZ7S2CkK1UM
-	 +JYHmeTLRQ6Q0+kgV7vAoXhp2vYFmKAzEKHGd9SQuXIHKma52faWb9GHusNcOsgDh+
-	 Qegg6dFAUuKik9YxFSsBNFXA92r8HZYgRrrK1q2OW2RXLJ2O/2yynkhvrfzek6CaCe
-	 Ql5x1w2gt7z8eraccbT5ptKoKXezTyI9XfWFX2mnL6BYrWAM4V6jkHLd8VRoKwlnRm
-	 PlZ/aIL/e54fOIhCEPCCkUYyEGXiyFFBQdEuFk1mAmj+cfz9misy2L9eElNTAE9KOw
-	 qHoYHvZpVHAiQ==
-Message-ID: <2833d0db-f122-eccd-7393-1f0169dc0741@collabora.com>
-Date: Tue, 11 Jul 2023 16:46:14 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E1918AEE
+	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 11:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689076151;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ox1ybSLl45XwKkwvaJMisJ5/+NEAsrD7J+jcJG30/JQ=;
+	b=AQaBdNI6PnPj0Gb0TGw5XmSsQZ4M/ID3LOZVmDGa12hvKpyfgSIs51McaD71LQB05edois
+	Of8nzbn9QgP7pB8bXXJ6kv8QIJomxtatR4/o2YjoW0JMZ9uIkOWsPTFwfd+MFW1wW9ttzS
+	d0i9u8Kk4DRtM4Wi4pkTBeR2tZWtlzc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-48-tgzGnS-4MDCrc9o5ZWR5ig-1; Tue, 11 Jul 2023 07:49:09 -0400
+X-MC-Unique: tgzGnS-4MDCrc9o5ZWR5ig-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fbdf341934so41048425e9.3
+        for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 04:49:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689076148; x=1691668148;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ox1ybSLl45XwKkwvaJMisJ5/+NEAsrD7J+jcJG30/JQ=;
+        b=GQgcfCdap5Bw9784u3ngn0LaBxqleVrg1vImZMz4rPzzxRsudtFho7f8tOxQ5Px7bo
+         VGPEeCAcYDB7fb87W7YTxQqTLk8bTn3Wjb/oDakA5gePTwGx86Z/OsXfN+kQTnNwrPm5
+         iulhk6utbjQ8Hno6cUu3tiSAaJzYm4Jeg18xGV12i104xP7ofvuOaMii0YyoyOZiGTfk
+         x6l7qwU0AUfpO6M2a8bltH8+FqHmL4BIb8QbFOeNfCCytnEf/AyBJtFRn1VBSzoVb+m5
+         UFu5pZVk91dpSaR9mWSn/BfSE+4OTuihKlHBI0YtW9nLV5W8m2Y2nVlkGVLBx2YnQT4y
+         VKPw==
+X-Gm-Message-State: ABy/qLZhMOl0UYui3QEblrtTh9sSzeSPo1ptfJW7jNgBqv4c8aA+OncD
+	A78bIKUIwdPI5yPUVOmAbkhmG9cPPG6lm4XcAoQiNFjW/3+fC6iperJYF2xhZnSQfUTtB0IRUdY
+	wGePMz1Ek5M/sCw==
+X-Received: by 2002:adf:f9c9:0:b0:314:2132:a277 with SMTP id w9-20020adff9c9000000b003142132a277mr17501673wrr.9.1689076148758;
+        Tue, 11 Jul 2023 04:49:08 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFZd89iKuySO+cfoLjyf2v2YUsX/u5t8p1LFxTJwVXW3pD745O+xFed6Np91H3kYcR2bhyjDw==
+X-Received: by 2002:adf:f9c9:0:b0:314:2132:a277 with SMTP id w9-20020adff9c9000000b003142132a277mr17501654wrr.9.1689076148389;
+        Tue, 11 Jul 2023 04:49:08 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c745:4000:13ad:ed64:37e6:115d? (p200300cbc745400013aded6437e6115d.dip0.t-ipconnect.de. [2003:cb:c745:4000:13ad:ed64:37e6:115d])
+        by smtp.gmail.com with ESMTPSA id b7-20020a05600c11c700b003fc015ae1e1sm2386296wmi.3.2023.07.11.04.49.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 04:49:07 -0700 (PDT)
+Message-ID: <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
+Date: Tue, 11 Jul 2023 13:49:06 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,180 +54,45 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
+ hugetlbfs_file_mmap()
+To: Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, trix@redhat.com,
+ ndesaulniers@google.com, nathan@kernel.org, muchun.song@linux.dev,
+ mike.kravetz@oracle.com, Linke Li <lilinke99@gmail.com>
+References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+From: David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Language: en-US
-To: Linux regressions mailing list <regressions@lists.linux.dev>,
- Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Maksim Panchenko <maks@meta.com>,
- =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
- Michal Marek <michal.lkml@markovi.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
- kernelci@lists.linux.dev, Collabora Kernel ML <kernel@collabora.com>
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
- <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
- <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
- <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
- <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
- <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
- <CAK7LNAS8Y9syCiHMO2r75D6hgCSsDDvJ_=VMKpYqjondnbSZjw@mail.gmail.com>
- <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
-From: Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <267b73d6-8c4b-40d9-542d-1910dffc3238@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 10.07.23 10:32, Linke Li wrote:
+> From: Linke Li <lilinke99@gmail.com>
+> 
+> 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+> 	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
+> 	/* check for overflow */
+> 	if (len < vma_len)
+> 		return -EINVAL;
+> 
+> The existing code includes an integer overflow check, which indicates
+> that the variable len has the potential to overflow, leading to undefined
+>   behavior according to the C standard. However, both GCC and Clang
+> compilers may eliminate this overflow check based on the assumption
+> that there will be no undefined behavior. Although the Linux kernel
+> disables these optimizations by using the -fno-strict-overflow option,
+> there is still a risk if the compilers make mistakes in the future.
 
-On 10/07/23 17:39, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
->
-> Shreeya Patel, Masahiro Yamada: what's the status of this? Was any
-> progress made to address this? Or is this maybe (accidentally?) fixed
-> with 6.5-rc1?
+So we're adding code to handle eventual future compiler bugs? That 
+sounds wrong, but maybe I misunderstood the problem you are trying to solve?
 
-Hi Thorsten,
+-- 
+Cheers,
 
-I still see the regression happening so it doesn't seem to be fixed.
-https://linux.kernelci.org/test/case/id/64ac675a8aebf63753bb2a8c/
+David / dhildenb
 
-Masahiro had submitted a fix for this issue here.
-
-https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
-
-But I don't see any movement there. Masahiro, are you planning to send a 
-v2 for it?
-
-
-Thanks,
-Shreeya Patel
-
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
->
-> #regzbot poke
->
-> On 20.06.23 06:19, Masahiro Yamada wrote:
->> On Mon, Jun 12, 2023 at 7:10 PM Shreeya Patel
->> <shreeya.patel@collabora.com> wrote:
->>> On 24/05/23 02:57, Nick Desaulniers wrote:
->>>> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
->>>> <shreeya.patel@collabora.com> wrote:
->>>>> Hi Nick and Masahiro,
->>>>>
->>>>> On 23/05/23 01:22, Nick Desaulniers wrote:
->>>>>> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->>>>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
->>>>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
->>>>>>>>> It could be; if the link order was changed, it's possible that this
->>>>>>>>> target may be hitting something along the lines of:
->>>>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
->>>>>>>>> initialization order fiasco"
->>>>>>>>>
->>>>>>>>> I'm struggling to think of how this appears in C codebases, but I
->>>>>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
->>>>>>>>> think I was playing with converting Kbuild to use Ninja rather than
->>>>>>>>> Make; the resulting kernel image wouldn't boot because I had modified
->>>>>>>>> the order the object files were linked in.  If you were to randomly
->>>>>>>>> shuffle the object files in the kernel, I recall some hazard that may
->>>>>>>>> prevent boot.
->>>>>>>> I thought that was specifically a C++ problem? But then again, the
->>>>>>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
->>>>>>>> significant in some instances [1]:
->>>>>>> Yes, it matters, you can not change it.  If you do, systems will break.
->>>>>>> It is the only way we have of properly ordering our init calls within
->>>>>>> the same "level".
->>>>>> Ah, right it was the initcall ordering. Thanks for the reminder.
->>>>>>
->>>>>> (There's a joke in there similar to the use of regexes to solve a
->>>>>> problem resulting in two new problems; initcalls have levels for
->>>>>> ordering, but we still have (unexpressed) dependencies between calls
->>>>>> of the same level; brittle!).
->>>>>>
->>>>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
->>>>>>
->>>>>> Ricardo,
->>>>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
->>>>>> mentions that there's a kernel command line param `initcall_debug`.
->>>>>> Perhaps that can be used to see if
->>>>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
->>>>>> ordering, resulting in a config that cannot boot?
->>>>> Here are the links to Lava jobs ran with initcall_debug added to the
->>>>> kernel command line.
->>>>>
->>>>> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
->>>>> https://lava.collabora.dev/scheduler/job/10417706
->>>>> <https://lava.collabora.dev/scheduler/job/10417706>
->>>>>
->>>>> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
->>>>> https://lava.collabora.dev/scheduler/job/10418012
->>>>> <https://lava.collabora.dev/scheduler/job/10418012>
->>>> Thanks!
->>>>
->>>> Yeah, I can see a diff in the initcall ordering as a result of
->>>> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
->>>>
->>>> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
->>>>
->>>> Not just different orderings, but some initcalls seem unique to the
->>>> before vs. after, which is troubling. (example init_events and
->>>> init_fs_sysctls respectively)
->>>>
->>>> That isn't conclusive evidence that changes to initcall ordering are
->>>> to blame, but I suspect confirming that precisely to be very very time
->>>> consuming.
->>>>
->>>> Masahiro, what are your thoughts on reverting 5750121ae738? There are
->>>> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
->>>> mainline.
->>> I'm not sure if you followed the conversation but we are still seeing
->>> this regression with the latest kernel builds and would like to know if
->>> you plan to revert 5750121ae738?
->>
->> Reverting 5750121ae738 does not solve the issue
->> because the issue happens even before 5750121ae738.
->> multi_v7_defconfig + debug.config + CONFIG_MODULES=n
->> fails to boot in the same way.
->>
->> The revert would hide the issue on a particular build setup.
->>
->>
->> I submitted a patch to more pin-point the issue.
->> Let's see how it goes.
->> https://lore.kernel.org/lkml/ZJEni98knMMkU%2Fcl@buildd.core.avm.de/T/#t
->>
->>
->> (BTW, the initcall order is unrelated)
->>
->>
->>
->>
->>
->>>
->>> Thanks,
->>> Shreeya Patel
->>>
->>>>> Thanks,
->>>>> Shreeya Patel
->>>>>
->> --
->> Best Regards
->> Masahiro Yamada
->>
->>
