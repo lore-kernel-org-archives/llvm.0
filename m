@@ -1,33 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB90117FE0
-	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 19:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D90C433C8;
-	Tue, 11 Jul 2023 19:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1689105290;
-	bh=QD1kIvnVeFrYv8Gze2fLJLg0i/YqJFcXn0WrP/nZGg4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xup7mWiwCHAi8aT6fbGucKKPxIBbP3jLmitcW/5X7SFIUjt4qsDbEuuYt8nC30oQu
-	 ZemjvWFcLm/15nnd8pyYP5UqbEvcVj/BXnrt2Qx13pyqCCc9SLIOtPvDnVQkH5k3o5
-	 cCTVu9Aa/FhbGfk42ZRYw0MTt+5TVPJxCZY+AAFE=
-Date: Tue, 11 Jul 2023 21:54:46 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, ndesaulniers@google.com,
-	Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
-Message-ID: <2023071139-engorge-catchable-70fa@gregkh>
-References: <168899125356.80889.17967397360941194229.stgit@devnote2>
- <20230710155703.GA4021842@dev-arch.thelio-3990X>
- <20230711103303.287af608cc47dcf70d709070@kernel.org>
- <20230711183704.GA2758126@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A751EA7B;
+	Tue, 11 Jul 2023 21:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689109586; x=1720645586;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JqFAcjQXKEjwNrVSwBz4T1LNm1cfRpWhiMX5CWL8oEo=;
+  b=Duil6rkLj8yPOt3b/S0C+3mfwUNNCAjakGBmCA70mEJt4AJlsURxGFvW
+   ODreulXs4XN0WJ1Nzh2aW2zYpPuoaNArYZLxtlxsI72FzpGM58x0Ui4Is
+   IB7aF/7VNUvVV19N9cPUMFUa883noMLYqZNaVF1mRTooNvaQj6w21ZEaF
+   RKejQRLclgOfArDJjH7ok+dAxTg6Ql2vFobUu4Vju3ToRl8VIDwUTnUVG
+   yUrKdTh4XHctXJF/BxQq3BbcDxfV1XD/AAnHOHEoMljqzyvx0Y9e2oflo
+   eBKdTKl3tX9tx9NbRORFJ7CEK+dppATss1FBxMiRj7GWWrtz4BJexg60z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="362203762"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="362203762"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 14:06:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865857272"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="865857272"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 14:06:21 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJKYu-00057j-2j;
+	Tue, 11 Jul 2023 21:06:20 +0000
+Date: Wed, 12 Jul 2023 05:05:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [trace:trace/core 21/22] include/linux/ftrace.h:47:47: warning:
+ declaration of 'struct fgraph_ret_regs' will not be visible outside of this
+ function
+Message-ID: <202307120418.wmSazUy7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,79 +47,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230711183704.GA2758126@dev-arch.thelio-3990X>
 
-On Tue, Jul 11, 2023 at 11:37:04AM -0700, Nathan Chancellor wrote:
-> Masami, thanks for verifying!
-> 
-> Hi Greg and Sasha,
-> 
-> On Tue, Jul 11, 2023 at 10:33:03AM +0900, Masami Hiramatsu wrote:
-> > On Mon, 10 Jul 2023 08:57:03 -0700
-> > Nathan Chancellor <nathan@kernel.org> wrote:
-> > 
-> > > On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
-> > > > I just build tested, since I could not boot the kernel with CFI_CLANG=y.
-> > > > Would anyone know something about this error?
-> > > > 
-> > > > [    0.141030] MMIO Stale Data: Unknown: No mitigations
-> > > > [    0.153511] SMP alternatives: Using kCFI
-> > > > [    0.164593] Freeing SMP alternatives memory: 36K
-> > > > [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
-> > > > [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
-> > > > [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> > > > [    0.166028] Call Trace:
-> > > > [    0.166028]  <TASK>
-> > > > [    0.166028]  dump_stack_lvl+0x6e/0xb0
-> > > > [    0.166028]  panic+0x146/0x2f0
-> > > > [    0.166028]  ? start_kernel+0x472/0x48b
-> > > > [    0.166028]  __stack_chk_fail+0x14/0x20
-> > > > [    0.166028]  start_kernel+0x472/0x48b
-> > > > [    0.166028]  x86_64_start_reservations+0x24/0x30
-> > > > [    0.166028]  x86_64_start_kernel+0xa6/0xbb
-> > > > [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
-> > > > [    0.166028]  </TASK>
-> > > > [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
-> > > 
-> > > This looks like https://github.com/ClangBuiltLinux/linux/issues/1815 to
-> > > me. What version of LLVM are you using? This was fixed in 16.0.4. Commit
-> > > 514ca14ed544 ("start_kernel: Add __no_stack_protector function
-> > > attribute") should resolve it on the Linux side, it looks like that is
-> > > in 6.5-rc1. Not sure if we should backport it or just let people upgrade
-> > > their toolchains on older releases.
-> > 
-> > Thanks for the info. I confirmed that the commit fixed the boot issue.
-> > So I think it should be backported to the stable tree.
-> 
-> Would you please apply commit 514ca14ed544 ("start_kernel: Add
-> __no_stack_protector function attribute") to linux-6.4.y? The series
-> ending with commit 611d4c716db0 ("x86/hyperv: Mark hv_ghcb_terminate()
-> as noreturn") that shipped in 6.4 exposes an LLVM issue that affected
-> 16.0.0 and 16.0.1, which was resolved in 16.0.2. When using those
-> affected LLVM releases, the following crash at boot occurs:
-> 
->   [    0.181667] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x3cf/0x3d0
->   [    0.182621] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.3 #1
->   [    0.182621] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
->   [    0.182621] Call Trace:
->   [    0.182621]  <TASK>
->   [    0.182621]  dump_stack_lvl+0x6a/0xa0
->   [    0.182621]  panic+0x124/0x2f0
->   [    0.182621]  ? start_kernel+0x3cf/0x3d0
->   [    0.182621]  ? acpi_enable+0x64/0xc0
->   [    0.182621]  __stack_chk_fail+0x14/0x20
->   [    0.182621]  start_kernel+0x3cf/0x3d0
->   [    0.182621]  x86_64_start_reservations+0x24/0x30
->   [    0.182621]  x86_64_start_kernel+0xab/0xb0
->   [    0.182621]  secondary_startup_64_no_verify+0x107/0x10b
->   [    0.182621]  </TASK>
->   [    0.182621] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x3cf/0x3d0 ]---
-> 
-> 514ca14ed544 aims to avoid this on the Linux side. I have verified that
-> it applies to 6.4.3 cleanly and resolves the issue there, as has Masami.
-> 
-> If there are any issues or questions, please let me know.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/core
+head:   46b77ea28faeed56f1d1b63f9049c40b9eb3cbf5
+commit: 55803539764e831c4e642de1c6634f8f645a10aa [21/22] tracing: arm64: Avoid missing-prototype warnings
+config: i386-randconfig-i012-20230710 (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120418.wmSazUy7-lkp@intel.com/reproduce)
 
-Now queued up, thanks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307120418.wmSazUy7-lkp@intel.com/
 
-greg k-h
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/power/process.c:15:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:52:
+>> include/linux/ftrace.h:47:47: warning: declaration of 'struct fgraph_ret_regs' will not be visible outside of this function [-Wvisibility]
+   unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
+                                                 ^
+   1 warning generated.
+
+
+vim +47 include/linux/ftrace.h
+
+    45	
+    46	#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+  > 47	unsigned long ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs);
+    48	#else
+    49	unsigned long ftrace_return_to_handler(unsigned long frame_pointer);
+    50	#endif
+    51	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
