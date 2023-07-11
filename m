@@ -1,313 +1,926 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CDC17D3
-	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 02:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689042074;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ydB6KdzPOTHrTCFrvUcQdQ6p0vNGW4EbQvHBSiQlcxc=;
-	b=N0pNmD4W+R6ogdKQYUWG5lyePBYdTV9neZNwyFuURoRJTtSSOgvLKv/tvEbVqV64a6jZ4K
-	oal1NkJN/vfuzr2zyvqbxLe7TtluYVg0V1uscHPF0lYCFcUxjAUQC7YRGr29tzzvyz7b31
-	ZhxNT/YJLwgEm+iKB5wl5v/mcn3bHnY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-Ge0CMjcwP16pQWXCC_YAEg-1; Mon, 10 Jul 2023 22:21:13 -0400
-X-MC-Unique: Ge0CMjcwP16pQWXCC_YAEg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2251A3804505
-	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 02:21:13 +0000 (UTC)
-Received: from [172.64.15.54] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B7265111F3CB;
-	Tue, 11 Jul 2023 02:21:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 53 of 346): Test report for master
- (6.4.0, mainline.kernel.org-clang, 946c6b59)
-Date: Tue, 11 Jul 2023 02:21:12 -0000
-To: jiji@redhat.com, bgoncalv@redhat.com, yiche@redhat.com,
- omosnace@redhat.com, llvm@lists.linux.dev, haliu@redhat.com,
- yizhan@redhat.com, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E79F20FF
+	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 03:20:51 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso3979037a12.1
+        for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 20:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689045651; x=1691637651;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YI5RM3BqbKReIFT0loglCsFfqjZLlWNXKEFyUXc47ss=;
+        b=Omib7gv0CMRoCD38QmguWX9z+K+n3225fz9GSnbh34DGyKzaG2sx5b3S1ZBQfk+wwP
+         6cDr2xN65lUc5QuyCsBfyRHNr7daTrQBGxnGUoaOUICZViVP0FqVXYpUVJMDSLGR2Z/H
+         0tZddcmWIGBbfHlvyFanJ/gyyFXQEcCYkhh5Z4knER4ixzY0qxazM6KuqHaHjLc8+TZP
+         GuTUEjz2I9wj7lQtpmeqk58eoawFPiUds9OIzIF5xEd6IVpMqIzUDdd8n0s0hxvOQzx1
+         KsbOn0VFJmtQYbmuhQJVu5rlHY+7jxM8iLza7TW7jBTffwnrh30hH8LtoezKqCmF+ptg
+         rLpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689045651; x=1691637651;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YI5RM3BqbKReIFT0loglCsFfqjZLlWNXKEFyUXc47ss=;
+        b=OLdhhF2aAPT2Z/5dJsWysl70IhexaKoeISeFn0XuNd7Augj1rpEPBjPT663prICiB8
+         qBnHlaozNqNF5BEC/pBGvXucpRp2KShb9c2kj/hnQUwIWWut4Q2VdwB0fA3p0XQSvjmV
+         7O64XGwy0OLBTN3Dho+Gm6hAOrKEjPq494nn4+W23IslN5W5eT7l6KAfUNYQOZCNcHTg
+         hL4lKeUgffk4VFYFIFw+6KistPDFaVurvZOKuS6sYVxRpgmVPipJx95x2HmiExvrF1a8
+         i7LdUzCNU8rPzp+WnX1LpRjmNxy43Aw3rceTnB/59dKeFPozSlMia88hrxznYWKxPqsu
+         vE5w==
+X-Gm-Message-State: ABy/qLbd/PEJMUg0eUim9enW1kEAwxRyj8gfSs7CEk2ruXpmgRTbZHL/
+	CMrwvcP3LnFsTfr+CLC/KN6tja2xCZZbFBVQcy+mDA==
+X-Google-Smtp-Source: APBJJlE4T6BKZrst/PO8ktrJeAm67F4DyKA996S/U8Muo6kb5O2GtkFyJ5od3BmvO87Iv32CtbUDZA==
+X-Received: by 2002:a05:6a20:8414:b0:130:d8dd:f75e with SMTP id c20-20020a056a20841400b00130d8ddf75emr10340104pzd.27.1689045650561;
+        Mon, 10 Jul 2023 20:20:50 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id g8-20020aa78188000000b006783ee5df8asm495336pfi.189.2023.07.10.20.20.49
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 20:20:50 -0700 (PDT)
+Message-ID: <64acca92.a70a0220.fe886.1880@mx.google.com>
+Date: Mon, 10 Jul 2023 20:20:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <40286.123071022211300387@us-mta-327.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20230711
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+Subject: next/master build: 121 builds: 2 failed, 119 passed, 3 errors,
+ 42 warnings (next-20230711)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi, we tested your kernel and here are the results:
+next/master build: 121 builds: 2 failed, 119 passed, 3 errors, 42 warnings =
+(next-20230711)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230711/
 
+Tree: next
+Branch: master
+Git Describe: next-20230711
+Git Commit: 8e4b7f2f3d6071665b1dfd70786229c8a5d6c256
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-Kernel information:
-    Commit message: Merge tag 'mm-hotfixes-stable-2023-07-08-10-43' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+Build Failures Detected:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/95224
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711483
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-         aarch64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711518
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711528
-         ppc64le - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8730187
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8730196
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Test
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711566
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711594
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711604
-          x86_64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711427
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8711437
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8713497
-          x86_64 (debug) - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8713535
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+
+arm64:
+
+arm:
+    aspeed_g5_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-17): 2 warnings
+    davinci_all_defconfig (gcc-10): 1 warning
+    exynos_defconfig (gcc-10): 1 warning
+    imx_v4_v5_defconfig (gcc-10): 1 warning
+    imx_v6_v7_defconfig (gcc-10): 1 warning
+    ixp4xx_defconfig (gcc-10): 1 warning
+    milbeaut_m10v_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-17): 2 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
+ng
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
+    mxs_defconfig (gcc-10): 1 warning
+    qcom_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    sama5_defconfig (gcc-10): 1 warning
+    shmobile_defconfig (gcc-10): 1 warning
+    socfpga_defconfig (gcc-10): 1 warning
+    sunxi_defconfig (gcc-10): 1 warning
+    vexpress_defconfig (gcc-10): 1 warning
+    wpcm450_defconfig (gcc-10): 1 warning
+
+i386:
+
+mips:
+    bmips_stb_defconfig (gcc-10): 1 warning
+    ip27_defconfig (gcc-10): 1 warning
+    sb1250_swarm_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+
+x86_64:
+    allnoconfig (gcc-10): 3 warnings
+    x86_64_defconfig+debug (gcc-10): 3 warnings
+    x86_64_defconfig+kselftest (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 3 warnings
+
+Errors summary:
+
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage - blktests - nvme-tcp: hit test timeout
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
-f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
-:1559 (size 1)
-            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
 
+Warnings summary:
 
+    22   kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=
+=E2=80=99 defined but not used [-Wunused-function]
+    4    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    3    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    2    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x1deb: redunda=
+nt UACCESS disable
+    2    kernel/cgroup/cgroup.c:503:36: warning: unused function 'cgroup_tr=
+yget_css' [-Wunused-function]
+    2    1 warning generated.
+    1    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x19b9: redunda=
+nt UACCESS disable
+    1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
+ndant UACCESS disable
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Detailed per-defconfig build reports:
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
+ UACCESS disable
+    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: unused function 'cgroup_tryget_=
+css' [-Wunused-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: unused function 'cgroup_tryget_=
+css' [-Wunused-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/cgroup/cgroup.c:503:36: warning: =E2=80=98cgroup_tryget_css=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
+s, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x19b9: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
+nings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1deb: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1deb: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
