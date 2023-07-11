@@ -1,44 +1,33 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DFE171D9;
-	Tue, 11 Jul 2023 18:41:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689100877; x=1720636877;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xjUhzQAInIX4Aqdq4tzFQUsXFQREqpGiWxOfxMYUnWo=;
-  b=bN4s5ZtxFcZV7mfq9M6W6xIfk9MmqHa9+sfIIVoDuBekhM5Lb0IXzNLl
-   fQxwpkFbmZk61PbPNEu0TkkiKsGUH0vF7SeUCD0mHG4QULYu4SSjf+q4J
-   9D5ngmOcGYu+V4c7ApRqDVA16AP7rjULuLpJFbV1StJYuxj4mP4OF3sr7
-   eBf89uzt12z0I0+y3PQ8FpKUNbJTVl5SjuicAqMh2ZHdX+JSWdXNHZMA5
-   2etSA3vJm3nyii8og/nEn3uYkxruZPplcLTuJf0/339DR2xouqRJsj+Pf
-   m9wlHg7ksvOgKp61+XWYNo3Al1mqAcrThyKu+bUCpORVWQz57Lm5WudM6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367309034"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="367309034"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 11:41:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="721216371"
-X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
-   d="scan'208";a="721216371"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jul 2023 11:41:15 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qJIIU-00051t-1y;
-	Tue, 11 Jul 2023 18:41:14 +0000
-Date: Wed, 12 Jul 2023 02:40:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
-Subject: [jlayton:mgctime 50/118] fs/hostfs/hostfs_kern.c:520:29: error:
- passing 'const struct hostfs_timespec *' to parameter of incompatible type
- 'struct timespec64'
-Message-ID: <202307120234.X9sp40Wu-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB90117FE0
+	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 19:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D90C433C8;
+	Tue, 11 Jul 2023 19:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1689105290;
+	bh=QD1kIvnVeFrYv8Gze2fLJLg0i/YqJFcXn0WrP/nZGg4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xup7mWiwCHAi8aT6fbGucKKPxIBbP3jLmitcW/5X7SFIUjt4qsDbEuuYt8nC30oQu
+	 ZemjvWFcLm/15nnd8pyYP5UqbEvcVj/BXnrt2Qx13pyqCCc9SLIOtPvDnVQkH5k3o5
+	 cCTVu9Aa/FhbGfk42ZRYw0MTt+5TVPJxCZY+AAFE=
+Date: Tue, 11 Jul 2023 21:54:46 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, ndesaulniers@google.com,
+	Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] x86: kprobes: Fix CFI_CLANG related issues
+Message-ID: <2023071139-engorge-catchable-70fa@gregkh>
+References: <168899125356.80889.17967397360941194229.stgit@devnote2>
+ <20230710155703.GA4021842@dev-arch.thelio-3990X>
+ <20230711103303.287af608cc47dcf70d709070@kernel.org>
+ <20230711183704.GA2758126@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,118 +36,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230711183704.GA2758126@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgctime
-head:   61142a4e29e09f59b3b640f0f691e00af4c4a6f9
-commit: 2ceaa835b4f50d1b0c0fa678f352bb4f6f5f8062 [50/118] hostfs: convert to ctime accessor functions
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230712/202307120234.X9sp40Wu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120234.X9sp40Wu-lkp@intel.com/reproduce)
+On Tue, Jul 11, 2023 at 11:37:04AM -0700, Nathan Chancellor wrote:
+> Masami, thanks for verifying!
+> 
+> Hi Greg and Sasha,
+> 
+> On Tue, Jul 11, 2023 at 10:33:03AM +0900, Masami Hiramatsu wrote:
+> > On Mon, 10 Jul 2023 08:57:03 -0700
+> > Nathan Chancellor <nathan@kernel.org> wrote:
+> > 
+> > > On Mon, Jul 10, 2023 at 09:14:13PM +0900, Masami Hiramatsu (Google) wrote:
+> > > > I just build tested, since I could not boot the kernel with CFI_CLANG=y.
+> > > > Would anyone know something about this error?
+> > > > 
+> > > > [    0.141030] MMIO Stale Data: Unknown: No mitigations
+> > > > [    0.153511] SMP alternatives: Using kCFI
+> > > > [    0.164593] Freeing SMP alternatives memory: 36K
+> > > > [    0.165053] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b
+> > > > [    0.166028] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.2-00002-g12b1b2fca8ef #126
+> > > > [    0.166028] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > > > [    0.166028] Call Trace:
+> > > > [    0.166028]  <TASK>
+> > > > [    0.166028]  dump_stack_lvl+0x6e/0xb0
+> > > > [    0.166028]  panic+0x146/0x2f0
+> > > > [    0.166028]  ? start_kernel+0x472/0x48b
+> > > > [    0.166028]  __stack_chk_fail+0x14/0x20
+> > > > [    0.166028]  start_kernel+0x472/0x48b
+> > > > [    0.166028]  x86_64_start_reservations+0x24/0x30
+> > > > [    0.166028]  x86_64_start_kernel+0xa6/0xbb
+> > > > [    0.166028]  secondary_startup_64_no_verify+0x106/0x11b
+> > > > [    0.166028]  </TASK>
+> > > > [    0.166028] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x472/0x48b ]---
+> > > 
+> > > This looks like https://github.com/ClangBuiltLinux/linux/issues/1815 to
+> > > me. What version of LLVM are you using? This was fixed in 16.0.4. Commit
+> > > 514ca14ed544 ("start_kernel: Add __no_stack_protector function
+> > > attribute") should resolve it on the Linux side, it looks like that is
+> > > in 6.5-rc1. Not sure if we should backport it or just let people upgrade
+> > > their toolchains on older releases.
+> > 
+> > Thanks for the info. I confirmed that the commit fixed the boot issue.
+> > So I think it should be backported to the stable tree.
+> 
+> Would you please apply commit 514ca14ed544 ("start_kernel: Add
+> __no_stack_protector function attribute") to linux-6.4.y? The series
+> ending with commit 611d4c716db0 ("x86/hyperv: Mark hv_ghcb_terminate()
+> as noreturn") that shipped in 6.4 exposes an LLVM issue that affected
+> 16.0.0 and 16.0.1, which was resolved in 16.0.2. When using those
+> affected LLVM releases, the following crash at boot occurs:
+> 
+>   [    0.181667] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x3cf/0x3d0
+>   [    0.182621] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.3 #1
+>   [    0.182621] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
+>   [    0.182621] Call Trace:
+>   [    0.182621]  <TASK>
+>   [    0.182621]  dump_stack_lvl+0x6a/0xa0
+>   [    0.182621]  panic+0x124/0x2f0
+>   [    0.182621]  ? start_kernel+0x3cf/0x3d0
+>   [    0.182621]  ? acpi_enable+0x64/0xc0
+>   [    0.182621]  __stack_chk_fail+0x14/0x20
+>   [    0.182621]  start_kernel+0x3cf/0x3d0
+>   [    0.182621]  x86_64_start_reservations+0x24/0x30
+>   [    0.182621]  x86_64_start_kernel+0xab/0xb0
+>   [    0.182621]  secondary_startup_64_no_verify+0x107/0x10b
+>   [    0.182621]  </TASK>
+>   [    0.182621] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_kernel+0x3cf/0x3d0 ]---
+> 
+> 514ca14ed544 aims to avoid this on the Linux side. I have verified that
+> it applies to 6.4.3 cleanly and resolves the issue there, as has Masami.
+> 
+> If there are any issues or questions, please let me know.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307120234.X9sp40Wu-lkp@intel.com/
+Now queued up, thanks.
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> fs/hostfs/hostfs_kern.c:520:29: error: passing 'const struct hostfs_timespec *' to parameter of incompatible type 'struct timespec64'
-     520 |         inode_set_ctime_to_ts(ino, &st->ctime);
-         |                                    ^~~~~~~~~~
-   include/linux/fs.h:1499:31: note: passing argument to parameter 'ts' here
-    1499 |                                                       struct timespec64 ts)
-         |                                                                         ^
-   12 warnings and 1 error generated.
-
-
-vim +520 fs/hostfs/hostfs_kern.c
-
-   510	
-   511	static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
-   512	{
-   513		set_nlink(ino, st->nlink);
-   514		i_uid_write(ino, st->uid);
-   515		i_gid_write(ino, st->gid);
-   516		ino->i_atime =
-   517			(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
-   518		ino->i_mtime =
-   519			(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
- > 520		inode_set_ctime_to_ts(ino, &st->ctime);
-   521		ino->i_size = st->size;
-   522		ino->i_blocks = st->blocks;
-   523		return 0;
-   524	}
-   525	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
