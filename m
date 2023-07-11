@@ -1,127 +1,95 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A0F17FE0
-	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 17:22:22 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.nyi.internal (Postfix) with ESMTP id 0EA415C007D;
-	Tue, 11 Jul 2023 13:22:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 11 Jul 2023 13:22:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1689096142; x=1689182542; bh=WVuQD8F16q+8KpkRXUZfCZXz1Vbx2RrVytD
-	1O4kCmYE=; b=Z9nqXzX77m6gQD3BPliH5EP/1qdo75FV8gW/EU/f13H7zNT7JQt
-	8PZC0CZLyIlDTCrBj/Smo0OqcndyK1K5JHlzClVY+s1Mplvu16IIMUE6rITaxtMV
-	8oJ3mevxtINrvAKzDZtBfNeebRLgkKXZH4gK1QaKyqxVeclkFAHA86cC+E7haWyf
-	UDLUjZx0zDEzgPlAjiHGn8Bk0a8sWLe8SmeAgngNQbjSIV0N56edv9V8lzpugg21
-	EMOuIDwxx2rSwNVQtiBHP6B4SOBRetiLS0Qwu4jK7+ggLy16q7BuzKycbWEnZjdd
-	M/+PcitRiR4Nb9jxg9tRbcupdu+1k2jWiDA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1689096142; x=1689182542; bh=WVuQD8F16q+8KpkRXUZfCZXz1Vbx2RrVytD
-	1O4kCmYE=; b=jCe2kUA8fhmQT2/vhwHddfoBVjVRMZXXCVH35gCyMesgcvm3T4u
-	295KaMluRX/o4yOuK1rhOqcpZCPsohH+VJMgAXV1ISHl/BAZ2o83dmmKr76H53az
-	wKExqr6xxi3C1sXTn+6v7QoBmqTaruZwf+verZsvBs03ShG0CnlhYR7PZUbR9XXT
-	etxxz0ySlDmc6b7VrEiPV2I1vlzGxIi/e2sU2HctVSIsCl9d+49CoBA0ogijWAu8
-	yB0Nb8trWqr1vvJAafhQ/SeZsfLDk2+DDC1FZwmQeJzhxYFTPeJmCDoGgvpWbabJ
-	uWDTQnoFgaRiWWSXINj16+76u1wLEBQfLHg==
-X-ME-Sender: <xms:y4-tZPpEVFpxwk6dps3xmwBpPlKEtHdoeOXivrQAoKI4509t3cUtHg>
-    <xme:y4-tZJoWSNYc2yfQPtf0NtEFc1t3P7UydMvfizEOpktXJoAI-RBpy73dUFXTxNLuU
-    Q2GbFAYnadUHMO57Q>
-X-ME-Received: <xmr:y4-tZMNTWFrU_jXup6FkAOI9wterJxzWU5y6iMp0Tw4TA66lygeO4THXJwvd0RI_2VybHBmpIcZNVFfQoIz8JhEOKrSnwmMPhP8e>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrfedtgdduudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
-    tddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpedtgfeuueeukeeikefgieeukeffleetkeekkeeggeffvedt
-    vdejueehueeuleefteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:y4-tZC5IhGm4l5cfzU-3zK9rCyuReZsZpGXIZ6836n1PbDDl_EFjTg>
-    <xmx:y4-tZO7T13BUjKnijF_OmGDSrJm1UsEaYBDMb_rHp3oSqnKPHJaX1g>
-    <xmx:y4-tZKismzi8TrVmXw2jUjgQvq37iNG_n8gvx9BejqR2GU7JxLU1dg>
-    <xmx:zo-tZMvPZYVb-B14YtJrcub1W-VeXz_BJF9tgIaq4eiidV6u-kv5Qg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Jul 2023 13:22:18 -0400 (EDT)
-Date: Tue, 11 Jul 2023 11:22:17 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Andrea Righi <andrea.righi@canonical.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf <bpf@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH] btf, scripts: rust: drop is_rust_module.sh
-Message-ID: <56yvbhhiij3t5tsvnjcrrpbpvnezi2bm2w5c5xkrvwgix2arq2@ku3curqk7b5u>
-References: <20230704052136.155445-1-andrea.righi@canonical.com>
- <CANiq72k6um58AAydgkzhkmAdd8t1quzeGaPsR7-pS_ZXYf0-YQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1C91DDF8;
+	Tue, 11 Jul 2023 17:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689096506; x=1720632506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n/d0HxIZ3PqYXHvJfoHiZh9fSmQvLJlWQgHmgSMSGKo=;
+  b=dCaEVIhqmdRqqZ5Hs009C84osAYoyfXt+8qXJcDE8TAT4hQ7Q7+IFJsk
+   D4N5n7tAr64lMIIGQjsXiA20bBX5w3EwK7bJeNT1GXZ0oXBOqXkL9j5cS
+   iaaRtoQJFz3xhZOfbFvv3iCk/TXVKizbt3fUqphjjORGjKo2rWfbx16wP
+   26yF+/AOmyTfgvrB6VCGPAoUnpJp+Q11v9IUEdk5hN0O3rjWls/5CJuB8
+   tALC8dpRg4AQeUGHkPEevac4OhIKAIuCeMa6GxFWZkt0u0194PI2iIM07
+   Doa9FcVU/GBxxFGE0dVt4jVrSnzhrfL18zUkW0MgIV/dQNBNc585mErb0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="345001368"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="345001368"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 10:28:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865798170"
+X-IronPort-AV: E=Sophos;i="6.01,197,1684825200"; 
+   d="scan'208";a="865798170"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 10:28:12 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJH9n-0004yS-1o;
+	Tue, 11 Jul 2023 17:28:11 +0000
+Date: Wed, 12 Jul 2023 01:27:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fangrui Song <maskray@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <natechancellor@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [stable:linux-4.19.y 2317/9999] sound/soc/amd/acp-rt5645.c:180:36:
+ warning: unused variable 'cz_audio_acpi_match'
+Message-ID: <202307120145.xyjgOLe4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72k6um58AAydgkzhkmAdd8t1quzeGaPsR7-pS_ZXYf0-YQ@mail.gmail.com>
 
-Hi Miguel, Andrea,
+Hi Fangrui,
 
-On Tue, Jul 11, 2023 at 04:39:27PM +0200, Miguel Ojeda wrote:
-> On Tue, Jul 4, 2023 at 7:21 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > With commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-> > we are now able to use pahole directly to identify Rust compilation
-> > units (CUs) and exclude them from generating BTF debugging information
-> > (when DEBUG_INFO_BTF is enabled).
-> >
-> > And if pahole doesn't support the --lang-exclude flag, we can't enable
-> > both RUST and DEBUG_INFO_BTF at the same time.
-> >
-> > So, in any case, the script is_rust_module.sh is just redundant and we
-> > can drop it.
-> >
-> > NOTE: we may also be able to drop the "Rust loadable module" mark
-> > inside Rust modules, but it seems safer to keep it for now to make sure
-> > we are not breaking any external tool that may potentially rely on it.
-> 
-> Just to recall the history of these changes:
-> 
->   - The script got added in order to skip the BTF generation in the
-> `BTF [M]` step (under `DEBUG_INFO_BTF_MODULES`, which depends on
-> `DEBUG_INFO_BTF`).
-> 
->   - A few months later, it was noticed that C modules couldn't be
-> loaded if Rust was enabled, due to the base BTF info in `vmlinux`.
-> That triggered the eventual addition of `--lang_exclude=` to `pahole`,
-> but meanwhile, we made `DEBUG_INFO_BTF` and `RUST` exclusive.
-> 
->   - Now, this patch removes the script because having a newer `pahole`
-> also correctly skips the Rust CUs in the `BTF [M]` steps (i.e. and not
-> just the `vmlinux` one), since we pass `--lang_exclude=` to both cases
-> (`link-vmlinux.sh` and `Makefile.modfinal`), if I understand correctly
-> (the script could, in principle, have been removed even before
-> `pahole` got the new feature, given the exclusivity of the options).
-> 
-> If this is all correct, then the patch looks good to me. I am Cc'ing
-> Arnaldo, Martin and the BPF list.
+First bad commit (maybe != root cause):
 
-I believe I authored the original script. This all sounds right to me.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+head:   94bffc1044d871e2ec89b2621e9a384355832988
+commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [2317/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
+config: mips-randconfig-r034-20230710 (https://download.01.org/0day-ci/archive/20230712/202307120145.xyjgOLe4-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120145.xyjgOLe4-lkp@intel.com/reproduce)
 
-Acked-by: Daniel Xu <dxu@dxuuu.xyz>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307120145.xyjgOLe4-lkp@intel.com/
 
-Thanks,
-Daniel
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/amd/acp-rt5645.c:180:36: warning: unused variable 'cz_audio_acpi_match' [-Wunused-const-variable]
+   static const struct acpi_device_id cz_audio_acpi_match[] = {
+                                      ^
+   1 warning generated.
+
+
+vim +/cz_audio_acpi_match +180 sound/soc/amd/acp-rt5645.c
+
+566a1847fb37f1 Akshu Agrawal 2017-10-18  179  
+566a1847fb37f1 Akshu Agrawal 2017-10-18 @180  static const struct acpi_device_id cz_audio_acpi_match[] = {
+566a1847fb37f1 Akshu Agrawal 2017-10-18  181  	{ "AMDI1002", 0 },
+566a1847fb37f1 Akshu Agrawal 2017-10-18  182  	{},
+566a1847fb37f1 Akshu Agrawal 2017-10-18  183  };
+566a1847fb37f1 Akshu Agrawal 2017-10-18  184  MODULE_DEVICE_TABLE(acpi, cz_audio_acpi_match);
+566a1847fb37f1 Akshu Agrawal 2017-10-18  185  
+
+:::::: The code at line 180 was first introduced by commit
+:::::: 566a1847fb37f1b12d997f85623cbf8658c87394 ASoC: AMD: Add machine driver for cz rt5650
+
+:::::: TO: Akshu Agrawal <akshu.agrawal@amd.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
