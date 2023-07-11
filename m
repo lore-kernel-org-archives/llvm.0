@@ -1,241 +1,229 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540A2154B1
-	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 23:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9050381
+	for <llvm@lists.linux.dev>; Tue, 11 Jul 2023 00:45:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689030826;
+	s=mimecast20190719; t=1689036329;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RKtuoMSFO5e5RRgPMURgTOR79e2aiVmr2LKgAsQmovo=;
-	b=RfMLEYYkw1gXrky4zDYxQNTmMcwjtUWwX89iBo/90RhsWRrUYGoH+lDNpoK2twphHmtget
-	QTuUvHEhpN2NEDCeVO/SyIMTp8j4Eg7jjEFUVcmRXcmHB7+TsR4em9yzg7phHWUSE/IO/7
-	9Fq0vlMsoAls9mczJyDc8NY4oVAISrw=
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9aJL0u+yGM/uh4qwyoLZSKsmodsHf/CVnrxTEtn30/8=;
+	b=i4Z/FRIG2VPbnk4lFYBVTXT9lCbvW8AdPgREKBtRi/JDY4qMfmvvJmySXoHRpT3tHerdCI
+	N5QjjROrJ676rp+h2WsQqS30MyivpGGlj4+sb9qPLuaorZcbQ2ggRdcm5jRbRk1/mh1hZS
+	LHupmuu/oHqv4HmMf/bKLSxxuWEklGQ=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-VJgmk0UOOW-Wksf2lWU-SA-1; Mon, 10 Jul 2023 19:11:30 -0400
-X-MC-Unique: VJgmk0UOOW-Wksf2lWU-SA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-324-UQLr4YSOMRGtGcSogPAkAw-1; Mon, 10 Jul 2023 20:45:26 -0400
+X-MC-Unique: UQLr4YSOMRGtGcSogPAkAw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04F41380350D
-	for <llvm@lists.linux.dev>; Mon, 10 Jul 2023 23:11:16 +0000 (UTC)
-Received: from [172.64.15.54] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CBFB0F5CFA;
-	Mon, 10 Jul 2023 23:11:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 84 of 346): Test report for master
- (6.4.0, mainline.kernel.org-clang, 8fc3b8f0)
-Date: Mon, 10 Jul 2023 23:11:15 -0000
-To: jiji@redhat.com, zlang@redhat.com, omosnace@redhat.com, yiche@redhat.com,
- llvm@lists.linux.dev, haliu@redhat.com, yizhan@redhat.com, xzhou@redhat.com
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 685DF1C03D87;
+	Tue, 11 Jul 2023 00:45:25 +0000 (UTC)
+Received: from localhost (ovpn-12-93.pek2.redhat.com [10.72.12.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 31ACD40C6CD1;
+	Tue, 11 Jul 2023 00:45:23 +0000 (UTC)
+Date: Tue, 11 Jul 2023 08:45:20 +0800
+From: Baoquan He <bhe@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Christoph Hellwig <hch@lst.de>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>
+Subject: Re: [akpm-mm:mm-unstable 86/125] drivers/irqchip/irq-al-fic.c:281:2:
+ error: call to undeclared function 'iounmap'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <ZKymIF5NdqXP1ydb@MiWiFi-R3L-srv>
+References: <202307110516.V0qgum1Q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <11775.123071019113000295@us-mta-154.us.mimecast.lan>
+In-Reply-To: <202307110516.V0qgum1Q-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On 07/11/23 at 05:22am, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   17712b3b36c898462c3d31d4b47bd069e87359c5
+> commit: 7aeb1874c9d6e390a405529c7eec76d2486f65d8 [86/125] s390: mm: convert to GENERIC_IOREMAP
+> config: s390-randconfig-r015-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307110516.V0qgum1Q-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/irqchip/irq-al-fic.c:7:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:78:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val = __raw_readb(PCI_IOBASE + addr);
 
-
-Kernel information:
-    Commit message: Merge tag 'hardening-v6.5-rc1-fixes' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/kees/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/95220
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8709822
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8709832
-         ppc64le - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710216
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710225
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL Test
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710390
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710418
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710428
-          x86_64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710288
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710298
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710040
-          x86_64 (debug) - xfstests - xfs
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8710076
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
-f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
-:1559 (size 1)
-            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
-directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/8590844
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
+Thanks for reporting. I am not gonna to fix it because Nathan told me
+there had been a series specifically taking care of the PCI_IOBASE
+warnings from Niklas. Quote Nathan's words here for reference:
 
 
+https://lore.kernel.org/all/20230612160237.GA199007@dev-arch.thelio-3990X/T/#u
+===
+I believe that this series [1] by Niklas Schnelle should take care of
+the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
+need to worry about them when they show up in build reports.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+[1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Cheers,
+Nathan
+===
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+>      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>          |                                                      ^
+>    In file included from drivers/irqchip/irq-al-fic.c:7:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:78:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+>      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+>          |                                                      ^
+>    In file included from drivers/irqchip/irq-al-fic.c:7:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/s390/include/asm/io.h:78:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+> >> drivers/irqchip/irq-al-fic.c:281:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      281 |         iounmap(base);
+>          |         ^
+>    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
+>       29 | #define iounmap iounmap
+>          |                 ^
+>    drivers/irqchip/irq-al-fic.c:281:2: note: did you mean 'vunmap'?
+>    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
+>       29 | #define iounmap iounmap
+>          |                 ^
+>    include/linux/vmalloc.h:167:13: note: 'vunmap' declared here
+>      167 | extern void vunmap(const void *addr);
+>          |             ^
+>    12 warnings and 1 error generated.
+> 
+> 
+> vim +/iounmap +281 drivers/irqchip/irq-al-fic.c
+> 
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  236  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  237  static int __init al_fic_init_dt(struct device_node *node,
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  238  				 struct device_node *parent)
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  239  {
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  240  	int ret;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  241  	void __iomem *base;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  242  	unsigned int parent_irq;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  243  	struct al_fic *fic;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  244  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  245  	if (!parent) {
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  246  		pr_err("%s: unsupported - device require a parent\n",
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  247  		       node->name);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  248  		return -EINVAL;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  249  	}
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  250  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  251  	base = of_iomap(node, 0);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  252  	if (!base) {
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  253  		pr_err("%s: fail to map memory\n", node->name);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  254  		return -ENOMEM;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  255  	}
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  256  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  257  	parent_irq = irq_of_parse_and_map(node, 0);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  258  	if (!parent_irq) {
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  259  		pr_err("%s: fail to map irq\n", node->name);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  260  		ret = -EINVAL;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  261  		goto err_unmap;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  262  	}
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  263  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  264  	fic = al_fic_wire_init(node,
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  265  			       base,
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  266  			       node->name,
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  267  			       parent_irq);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  268  	if (IS_ERR(fic)) {
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  269  		pr_err("%s: fail to initialize irqchip (%lu)\n",
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  270  		       node->name,
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  271  		       PTR_ERR(fic));
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  272  		ret = PTR_ERR(fic);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  273  		goto err_irq_dispose;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  274  	}
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  275  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  276  	return 0;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  277  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  278  err_irq_dispose:
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  279  	irq_dispose_mapping(parent_irq);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  280  err_unmap:
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10 @281  	iounmap(base);
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  282  
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  283  	return ret;
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  284  }
+> 1eb77c3bcdb70f Talel Shenhar 2019-06-10  285  
+> 
+> :::::: The code at line 281 was first introduced by commit
+> :::::: 1eb77c3bcdb70f2501f419b3da45b19acaf01072 irqchip/al-fic: Introduce Amazon's Annapurna Labs Fabric Interrupt Controller Driver
+> 
+> :::::: TO: Talel Shenhar <talel@amazon.com>
+> :::::: CC: Marc Zyngier <marc.zyngier@arm.com>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
 
