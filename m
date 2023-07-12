@@ -1,144 +1,196 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29188375;
-	Wed, 12 Jul 2023 00:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689121290; x=1720657290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Yy/xcpKAZbuq50huFNHbzTYXcBdxnJVrZ/MeEHWjHyo=;
-  b=doeLG5MY9Q5PCcFPBSKC8spagiTvNboPyeLOVv8PZy+70+ZwTwVtSP//
-   br/DmrF5Arkq1bHu+MXN65qtUu8gvu/uuarcbao9vHNSI8lfl4eMXF51L
-   9zqS9DWNhne1vL95wSX+9WUtjPAP/4q0DhXc4V11FywKA4fXfs8h/uG5z
-   kYVDbOhbWmPF9X0Ag6afhACw8n0vLzx0+3Qjkm8uwFm5Jis+HGThOeETU
-   veh5gtMD9CC8cz3HF13MKBkasI3abYaNjL+A3wb+ViGJyCXnt0m/V5BvM
-   /BCw1OtoRQuX66hNIBN7WJpbAH2zS9dO7maIqxyZIWo0HA3xsdbrcKEGL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367387950"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="367387950"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 17:21:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="865910985"
-X-IronPort-AV: E=Sophos;i="6.01,198,1684825200"; 
-   d="scan'208";a="865910985"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2023 17:21:27 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qJNbj-0005DJ-0o;
-	Wed, 12 Jul 2023 00:21:27 +0000
-Date: Wed, 12 Jul 2023 08:21:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:dt/header-cleanups 22/94] drivers/clk/clk-lochnagar.c:249:10:
- error: call to undeclared function 'of_match_device'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202307120823.jDNsEois-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237B136E
+	for <llvm@lists.linux.dev>; Wed, 12 Jul 2023 00:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689121765;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HIS0Z/cU+AKJbdeUKT6iTrbHjC1cruwHqVN81WZRpYw=;
+	b=Ts294eZDv2mAkHRKLYjDjHLrCDLUMWf2yeXdGdfdYHC/K35vkZ7OH+oh/QsF/6Up+7K7f8
+	wV4pWrnFICYljFthDzrwgSQ3zsUf2OHf+Czt7sWLA7qA7VQ5hl0bNQebZXiHykjoATIeb/
+	LVpkwXKvdCZ2t1dRitWos1Hfnhux5f8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-U3d5Oq54M8GWmcsSI7J7yg-1; Tue, 11 Jul 2023 20:29:21 -0400
+X-MC-Unique: U3d5Oq54M8GWmcsSI7J7yg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B041858290;
+	Wed, 12 Jul 2023 00:29:21 +0000 (UTC)
+Received: from localhost (ovpn-12-61.pek2.redhat.com [10.72.12.61])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 32597492C13;
+	Wed, 12 Jul 2023 00:29:19 +0000 (UTC)
+Date: Wed, 12 Jul 2023 08:29:16 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Christoph Hellwig <hch@lst.de>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>
+Subject: Re: [akpm-mm:mm-unstable 86/125] drivers/irqchip/irq-al-fic.c:281:2:
+ error: call to undeclared function 'iounmap'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <ZK3z3FeSi9Nlbzjn@MiWiFi-R3L-srv>
+References: <202307110516.V0qgum1Q-lkp@intel.com>
+ <ZKymIF5NdqXP1ydb@MiWiFi-R3L-srv>
+ <20230711172008.GA369569@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20230711172008.GA369569@dev-arch.thelio-3990X>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/header-cleanups
-head:   a06a0a7290918c32601c858af488a504c5e39025
-commit: f048df4b58626a11855e74453a9d4015ce4b3fa3 [22/94] clk: Explicitly include correct DT includes
-config: i386-randconfig-i002-20230711 (https://download.01.org/0day-ci/archive/20230712/202307120823.jDNsEois-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120823.jDNsEois-lkp@intel.com/reproduce)
+On 07/11/23 at 10:20am, Nathan Chancellor wrote:
+> Hi Baoquan,
+> 
+> On Tue, Jul 11, 2023 at 08:45:20AM +0800, Baoquan He wrote:
+> > Hi,
+> > 
+> > On 07/11/23 at 05:22am, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> > > head:   17712b3b36c898462c3d31d4b47bd069e87359c5
+> > > commit: 7aeb1874c9d6e390a405529c7eec76d2486f65d8 [86/125] s390: mm: convert to GENERIC_IOREMAP
+> > > config: s390-randconfig-r015-20230710 (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/config)
+> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > reproduce: (https://download.01.org/0day-ci/archive/20230711/202307110516.V0qgum1Q-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202307110516.V0qgum1Q-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >    In file included from drivers/irqchip/irq-al-fic.c:7:
+> > >    In file included from include/linux/irq.h:20:
+> > >    In file included from include/linux/io.h:13:
+> > >    In file included from arch/s390/include/asm/io.h:78:
+> > >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      547 |         val = __raw_readb(PCI_IOBASE + addr);
+> > 
+> > Thanks for reporting. I am not gonna to fix it because Nathan told me
+> > there had been a series specifically taking care of the PCI_IOBASE
+> > warnings from Niklas. Quote Nathan's words here for reference:
+> > 
+> > 
+> > https://lore.kernel.org/all/20230612160237.GA199007@dev-arch.thelio-3990X/T/#u
+> > ===
+> > I believe that this series [1] by Niklas Schnelle should take care of
+> > the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
+> > need to worry about them when they show up in build reports.
+> > 
+> > [1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
+> > 
+> > Cheers,
+> > Nathan
+> > ===
+> > 
+> > >          |                           ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+> > >          |                                                         ~~~~~~~~~~ ^
+> > >    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+> > >       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+> > >          |                                                           ^
+> > >    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+> > >      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+> > >          |                                                      ^
+> > >    In file included from drivers/irqchip/irq-al-fic.c:7:
+> > >    In file included from include/linux/irq.h:20:
+> > >    In file included from include/linux/io.h:13:
+> > >    In file included from arch/s390/include/asm/io.h:78:
+> > >    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+> > >          |                                                         ~~~~~~~~~~ ^
+> > >    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+> > >       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+> > >          |                                                           ^
+> > >    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+> > >      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+> > >          |                                                      ^
+> > >    In file included from drivers/irqchip/irq-al-fic.c:7:
+> > >    In file included from include/linux/irq.h:20:
+> > >    In file included from include/linux/io.h:13:
+> > >    In file included from arch/s390/include/asm/io.h:78:
+> > >    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+> > >          |                             ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+> > >          |                                                       ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+> > >          |                                                       ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      692 |         readsb(PCI_IOBASE + addr, buffer, count);
+> > >          |                ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      700 |         readsw(PCI_IOBASE + addr, buffer, count);
+> > >          |                ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      708 |         readsl(PCI_IOBASE + addr, buffer, count);
+> > >          |                ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      717 |         writesb(PCI_IOBASE + addr, buffer, count);
+> > >          |                 ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      726 |         writesw(PCI_IOBASE + addr, buffer, count);
+> > >          |                 ~~~~~~~~~~ ^
+> > >    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+> > >      735 |         writesl(PCI_IOBASE + addr, buffer, count);
+> > >          |                 ~~~~~~~~~~ ^
+> > > >> drivers/irqchip/irq-al-fic.c:281:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> > >      281 |         iounmap(base);
+> > >          |         ^
+> > >    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
+> > >       29 | #define iounmap iounmap
+> > >          |                 ^
+> > >    drivers/irqchip/irq-al-fic.c:281:2: note: did you mean 'vunmap'?
+> > >    arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
+> > >       29 | #define iounmap iounmap
+> > >          |                 ^
+> > >    include/linux/vmalloc.h:167:13: note: 'vunmap' declared here
+> > >      167 | extern void vunmap(const void *addr);
+> > >          |             ^
+> > >    12 warnings and 1 error generated.
+> 
+> It seems like this was the error that the robot thinks that your patch
+> introduced, which seems like it might be legitimate? Is an
+> asm-generic/io.h include missing somewhere or is there some prexisting
+> issue that is exposed with your patch?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307120823.jDNsEois-lkp@intel.com/
+These errors have been there for long time.
 
-All errors (new ones prefixed by >>):
+In the current linus's tree, as long as CONFIG_PCI is disabled, these
+errors can be seen. I don't know why they are reported on my patches
+utill now.
 
->> drivers/clk/clk-lochnagar.c:249:10: error: call to undeclared function 'of_match_device'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           of_id = of_match_device(lochnagar_of_match, dev);
-                   ^
-   drivers/clk/clk-lochnagar.c:249:10: note: did you mean 'of_match_node'?
-   include/linux/of.h:371:35: note: 'of_match_node' declared here
-   extern const struct of_device_id *of_match_node(
-                                     ^
->> drivers/clk/clk-lochnagar.c:249:8: error: incompatible integer to pointer conversion assigning to 'const struct of_device_id *' from 'int' [-Wint-conversion]
-           of_id = of_match_device(lochnagar_of_match, dev);
-                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+You can see in arch/s390/pci/pci.c, ioremap_xx() and iounmap are all
+defined there. Only enabling CONFIG_PCI can build and link in pci.o.
+Otherwise, all those drivers calling ioremap(), devm_ioremap(), their
+variants or wrappers will fail building and trigger errors like this
+report. It's not related to my patch. LKP test robot may need provide
+a clean base to test posted patches to avoid confusion.
 
+arch/s390/pci/pci.c:
+==================
+obj-$(CONFIG_PCI)       += pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
+                           pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
+                           pci_bus.o pci_kvm_hook.o
+obj-$(CONFIG_PCI_IOV)   += pci_iov.o
 
-vim +/of_match_device +249 drivers/clk/clk-lochnagar.c
-
-055ca54777b72e Charles Keepax 2019-06-25  236  
-055ca54777b72e Charles Keepax 2019-06-25  237  static int lochnagar_clk_probe(struct platform_device *pdev)
-76c547830bd116 Charles Keepax 2019-03-19  238  {
-76c547830bd116 Charles Keepax 2019-03-19  239  	struct clk_init_data clk_init = {
-76c547830bd116 Charles Keepax 2019-03-19  240  		.ops = &lochnagar_clk_ops,
-76c547830bd116 Charles Keepax 2019-03-19  241  	};
-055ca54777b72e Charles Keepax 2019-06-25  242  	struct device *dev = &pdev->dev;
-055ca54777b72e Charles Keepax 2019-06-25  243  	struct lochnagar_clk_priv *priv;
-055ca54777b72e Charles Keepax 2019-06-25  244  	const struct of_device_id *of_id;
-76c547830bd116 Charles Keepax 2019-03-19  245  	struct lochnagar_clk *lclk;
-055ca54777b72e Charles Keepax 2019-06-25  246  	struct lochnagar_config *conf;
-76c547830bd116 Charles Keepax 2019-03-19  247  	int ret, i;
-76c547830bd116 Charles Keepax 2019-03-19  248  
-055ca54777b72e Charles Keepax 2019-06-25 @249  	of_id = of_match_device(lochnagar_of_match, dev);
-055ca54777b72e Charles Keepax 2019-06-25  250  	if (!of_id)
-055ca54777b72e Charles Keepax 2019-06-25  251  		return -EINVAL;
-055ca54777b72e Charles Keepax 2019-06-25  252  
-055ca54777b72e Charles Keepax 2019-06-25  253  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-055ca54777b72e Charles Keepax 2019-06-25  254  	if (!priv)
-055ca54777b72e Charles Keepax 2019-06-25  255  		return -ENOMEM;
-055ca54777b72e Charles Keepax 2019-06-25  256  
-055ca54777b72e Charles Keepax 2019-06-25  257  	priv->dev = dev;
-055ca54777b72e Charles Keepax 2019-06-25  258  	priv->regmap = dev_get_regmap(dev->parent, NULL);
-055ca54777b72e Charles Keepax 2019-06-25  259  	conf = (struct lochnagar_config *)of_id->data;
-055ca54777b72e Charles Keepax 2019-06-25  260  
-055ca54777b72e Charles Keepax 2019-06-25  261  	memcpy(priv->lclks, conf->clks, sizeof(priv->lclks));
-055ca54777b72e Charles Keepax 2019-06-25  262  
-055ca54777b72e Charles Keepax 2019-06-25  263  	clk_init.parent_data = conf->parents;
-055ca54777b72e Charles Keepax 2019-06-25  264  	clk_init.num_parents = conf->nparents;
-055ca54777b72e Charles Keepax 2019-06-25  265  
-76c547830bd116 Charles Keepax 2019-03-19  266  	for (i = 0; i < ARRAY_SIZE(priv->lclks); i++) {
-76c547830bd116 Charles Keepax 2019-03-19  267  		lclk = &priv->lclks[i];
-76c547830bd116 Charles Keepax 2019-03-19  268  
-76c547830bd116 Charles Keepax 2019-03-19  269  		if (!lclk->name)
-76c547830bd116 Charles Keepax 2019-03-19  270  			continue;
-76c547830bd116 Charles Keepax 2019-03-19  271  
-76c547830bd116 Charles Keepax 2019-03-19  272  		clk_init.name = lclk->name;
-76c547830bd116 Charles Keepax 2019-03-19  273  
-76c547830bd116 Charles Keepax 2019-03-19  274  		lclk->priv = priv;
-76c547830bd116 Charles Keepax 2019-03-19  275  		lclk->hw.init = &clk_init;
-76c547830bd116 Charles Keepax 2019-03-19  276  
-055ca54777b72e Charles Keepax 2019-06-25  277  		ret = devm_clk_hw_register(dev, &lclk->hw);
-76c547830bd116 Charles Keepax 2019-03-19  278  		if (ret) {
-055ca54777b72e Charles Keepax 2019-06-25  279  			dev_err(dev, "Failed to register %s: %d\n",
-76c547830bd116 Charles Keepax 2019-03-19  280  				lclk->name, ret);
-76c547830bd116 Charles Keepax 2019-03-19  281  			return ret;
-76c547830bd116 Charles Keepax 2019-03-19  282  		}
-76c547830bd116 Charles Keepax 2019-03-19  283  	}
-76c547830bd116 Charles Keepax 2019-03-19  284  
-055ca54777b72e Charles Keepax 2019-06-25  285  	ret = devm_of_clk_add_hw_provider(dev, lochnagar_of_clk_hw_get, priv);
-76c547830bd116 Charles Keepax 2019-03-19  286  	if (ret < 0)
-055ca54777b72e Charles Keepax 2019-06-25  287  		dev_err(dev, "Failed to register provider: %d\n", ret);
-76c547830bd116 Charles Keepax 2019-03-19  288  
-76c547830bd116 Charles Keepax 2019-03-19  289  	return ret;
-76c547830bd116 Charles Keepax 2019-03-19  290  }
-76c547830bd116 Charles Keepax 2019-03-19  291  
-
-:::::: The code at line 249 was first introduced by commit
-:::::: 055ca54777b72e4e3d1b1f4e76376b8428086c02 clk: lochnagar: Use new parent_data approach to register clock parents
-
-:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
-:::::: CC: Stephen Boyd <sboyd@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
