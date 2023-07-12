@@ -1,287 +1,404 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CFA21514
-	for <llvm@lists.linux.dev>; Wed, 12 Jul 2023 20:22:15 +0000 (UTC)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CCdNDm027054;
-	Wed, 12 Jul 2023 13:21:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=6DdH7KjGnNDvIIXTAjMQxa/v+Ou0C6JdNvSJxUmIQGw=;
- b=NiSoKKq9jrGtfdcRrpy8r9cS09wdpFdX8YO6QLcIJWMFYooq3ke1gDCmHZuOvY+w0Gme
- /m6avQIIYCNVjl/XlPl96P/uIe8CFwDuw3zCTgVYc20Ujymn25ym1NGj2rTKLlQqHUtR
- PQhlLeDtK/Y6hevYJHMecfVpE3i4AyaekYlV14gQ2+MktmF9plxB+8VNZGNh/pkTkXcl
- eI5/7EQhyz51OmEKJo1gDQhcsShyeOs7lN3W9CeFHRbt5IPqIDa8tszu1/MHwJEbso45
- lC8EB3PYKhbcCkPdfxWeZprxPkBvaBzh4SMS6MXEFx+QPLXmU0KjjnTBBMO0c5ssOTV+ sw== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rsfwkfwuc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jul 2023 13:21:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DEjgVORbImTdmAz2p6PYmZ0AXnK8yr3V3NFfpOO1DTphK00vX6eoDMa+tRAK+ZQAvys05wRiwotAahNGcb7DRXUpnyBMo4Ge265s8EsjHhtplJlOuxY5Jk1UXToLDE9sTV2K58ZikSg0B5gNZWs5DSJdgqLCP+BUC5POn5CD38FZOLQqrSEoSR+pbgGv4YPtEzWBeaNL6ex4wvZegIrVDQEIurDVQs17SQSJStndUn/mPsyctdzAiR6OWpzwX2WN5t6N7oDHHTm5CThTKWDt9bu3xVy0VsOC9CNcC/YjNNWSEQ0/925UrfyPDXN7WES5RJDi1mpzlhCPWt/2Y/IFiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6DdH7KjGnNDvIIXTAjMQxa/v+Ou0C6JdNvSJxUmIQGw=;
- b=hGOyCxkUMYghz6EsBgI0GCqNJ68adQGeKuNtKeEUTEvjEpgXxVxJ/qdgc2uwpEGeDCpLyN/jhSYdGnMHn9yWaAxHs07GlNjZYzWz5r1J3jp4S/KYxjviQQZ0mDgimeavwRtEaWDKJjOOE7DpgfO0m5Xsg8lY+KzLvju5fZ8oHV+UuHDMGlhybcDvf/0hqGshCc6enqArrAiKutSPGYzICKV9WKQBuoLKww/XwCOykAhE/BpD0IL2yH3RDKurvLFb7wmRyN2VKNRJE1TyZJNxKbnmdHeIXo+M4NkyYVLqsRSYBYJc1eizv0o6N+ut6pXCN37bEvKuthhqChG+8DgSJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ0PR15MB4341.namprd15.prod.outlook.com (2603:10b6:a03:380::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.20; Wed, 12 Jul
- 2023 20:21:56 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::1757:f075:376:8ff1]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::1757:f075:376:8ff1%4]) with mapi id 15.20.6565.034; Wed, 12 Jul 2023
- 20:21:56 +0000
-Message-ID: <41375c87-f367-3632-051f-64c8b283737c@meta.com>
-Date: Wed, 12 Jul 2023 13:21:52 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
- functions
-From: Yonghong Song <yhs@meta.com>
-To: Nick Desaulniers <ndesaulniers@google.com>, Yonghong Song <yhs@fb.com>,
-        Kees Cook <keescook@chromium.org>
-Cc: Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Fangrui Song <maskray@google.com>, kernel-team@fb.com,
-        Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
-        "KE . LI" <like1@oppo.com>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-References: <20230628181926.4102448-1-yhs@fb.com>
- <CAKwvOdm_Cp9dF1yseTXvOOtFMsOPzCBWhfszAt0k5SXXyFyjtw@mail.gmail.com>
- <233802b0-7404-1f79-39ae-385da567f657@meta.com>
-Content-Language: en-US
-In-Reply-To: <233802b0-7404-1f79-39ae-385da567f657@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: SJ0PR13CA0110.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::25) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ0PR15MB4341:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5edb8ecd-af66-47d3-8769-08db8315a34e
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	ZJ/y4HpbsfOWasJvks4mGiJXEdoqLvhAAOuqfMrNOmtLi1fOtkGJVoVYFvbdm+efkRaPnIE4/nueU31jq/tyMDhxfDGyvfDtsn8J+1wv7EkCtR6fy2D8+GQu061srgeXQeNxI7DbRnxqG76wNU8q/j8Yt3DJFLlHPxO3gXwSk4ogJ5e2ewkNqUBwFIipYksXB32oQNE+iptEVa1qI+uFU+HTEzUeZKzTMMOZabdHx/NVO8s1Sqg06jZwYxbJnroV2I87Wrq0zHg76Gvd+3QHkBtdSHngcrUoJ53OtI6sjfnrIlnic0cjYqx+xNntMMX+YxSsY+JYaXt11qtRPrSztchdK0oZ9ce28ip2jT6vBzti3cStcs9bn5UInLIf8Q4KtL2+1Y5gZmeSzzTdr+Lcpz7BbNDCSfzfng3PPjpVbfOiAFWUyCk/VXJjh7d6PGoGXwFE/az8IlkHm6ozpXM09ZUC/ey3EprevkD4+3nPhDl2RySu7ElWSjSvbRV/UUwuITP+CoELx8tZi18E2K5nf4SrVwaQaUjZJg7pqySfyD2ADVmAYkjRePAdKfcmd2ljubyucsjMF0pKtLUunTutVUP3q50jjXreueMLhtArTF2FfoJ7OzBs2CR6XYlA0yE0DfrKuNgcmBZ9ixhTamvUaA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(136003)(376002)(366004)(451199021)(7416002)(4326008)(66946007)(66556008)(66476007)(316002)(2906002)(41300700001)(478600001)(8676002)(8936002)(110136005)(31686004)(54906003)(5660300002)(6666004)(6486002)(6512007)(966005)(53546011)(6506007)(186003)(36756003)(83380400001)(38100700002)(2616005)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?MFIvcnc0a0F2Mml2RVFhSlYxZWdiTDN3RmYzR0ZLM3VISUc4WHRRT0g3TGJW?=
- =?utf-8?B?eWVlY1JkT08xbG1PbkdiMDJwNFlVWnJtM3NaWDdUTzBqU1dyNHFNNjhscWZC?=
- =?utf-8?B?RGp1SnpXZGNQRE5OeUY2cFQwclMyUXdoSGVBTGhiRDF2L0xQQWJEQkdid01y?=
- =?utf-8?B?MEs4V2d3OFRrZ21zTmdwcUR6SEhHcTZzdkpXUGRvdWw2MDJFZFlLbTk2a1pq?=
- =?utf-8?B?WHlEUGl5Q3krT1NGMTVRSlZjeURPZGp3Y2FDVUNQWCtmZW5MQi8vcXc2RENH?=
- =?utf-8?B?YU9GWjNLTDUyZXZWdTdDQVF5azcvTTlHOEdMRVpEM25XcGhPWnhKbVFXZkIw?=
- =?utf-8?B?OFNzMENLeUYrSXROTE5yOE9aZ2JxT3QwV0FpOFhWMzU3S1YzZlRDUnBtRUZi?=
- =?utf-8?B?cGVKMlBmOWdaeVdwZ01DNkhHdFVRM2FRbFEyaElOZ3hzSG5iUzJkUFc2WGlR?=
- =?utf-8?B?cGRyRWN1Y2d3THFiUTlkLys5NE5TNjlNNDhreGdJa29GL09rZHBCM2hWUkt4?=
- =?utf-8?B?WVRyTEhxem5sbHh5eXdKVUhlQVlVT0xpMTE3UFU0bVplbFgxQm1zYkRXQlUz?=
- =?utf-8?B?SnYzdGsvcG9tdmlyYy9xVzFxOE1NeXB3Q2Jmekt6YUFwV0k1RFFQWlhkTHdP?=
- =?utf-8?B?YXdVVEtOaklrSmlYTENoUGprTW5TUmRQMlZPazljaUdWbnNFSWJOY1dHSm9G?=
- =?utf-8?B?RGJTOTBGcHg3MDU0Rmp3bFptSmgwV3M1YjlCbUNVU2R0Yk82ajRpZ0thbWJs?=
- =?utf-8?B?R25kQkRYWXRmVWNVbVY4SGsyTVVFdHQ0eHl3MFVoRUZONU5XSk14RWs1Q0Ey?=
- =?utf-8?B?V25BN0lRNWluUW91YysvbzZFNDgvdGpVVjN5Qkp0cXUxWXc2dHZmOSthTUJI?=
- =?utf-8?B?RTRaWGxZTEs5MUhDMmhGYVJ6L2JxTkVUMzRGRlZQVmNTLy9PNE03ZzVLd2hJ?=
- =?utf-8?B?c1B4aWhCYjk1VFlBbjBuVVJzVlNqMGNrWnd0NHNrMGxrQXZQVEZlK0ora2t4?=
- =?utf-8?B?YlpEM1FTaGtUTWJqTUR4K3lEZktPdGMreVZ2T05jd0tyOUtjNDhuTlh3VW5j?=
- =?utf-8?B?VXdsYTlveS9kV29DTDFOeGYvZk9DNi9aNng0d0dzNEplcitHcERQTHI4Y1Bx?=
- =?utf-8?B?dS9qeVRtZUJtZ2VaWlBCeWxWbUpQMm4ya3I0Q0JmR0pOajY3VnNIRVZ0TGpa?=
- =?utf-8?B?YUJXamtzMUtCeUYyVXh2TFg1TWg0K0FrcytHY0tkdHRUa2NHQ25hWEFjNVRs?=
- =?utf-8?B?eUtVWnFuaGlEUFpPOTk1TEMvTUlER2hqampPdTRUM2M3OUloQS82Vzg1WjJi?=
- =?utf-8?B?aHY0SDdmeUdDSit5RE9KaFIyeGUrMkk2WFBTWk43cWJoOFRwUnpUckltR2ov?=
- =?utf-8?B?RW1kckpadFpJZTBRb3hza0NKZTlGSjNXa3NFQmZOaFBNRzRyU2tVc3dlcDRl?=
- =?utf-8?B?QW1aTkpnSWhlcFB1a25lV2hodW1xbzZtREJCdzRsNXQ4dll4Z2RvNEk3ME1P?=
- =?utf-8?B?K0QwcytSc3FYZi9DS2tweTZPdENHL1kycmcwNC9BWmlCTFJVR2s5ckFxVHZi?=
- =?utf-8?B?NlEyOG9TNDhTZjN5cFRxSGpPVkdVTWlZcmNDUmRwelBtY2lqYStSbzR3aXg3?=
- =?utf-8?B?REo4OER5WWMrdkpYU2MySzZ3dzI1SkoyaW8vRW1SQjRZZmhCQlBGbXZwdU9E?=
- =?utf-8?B?aXd1b2FvaVVLZnVmN0ZublBsY001MTRMVXNBaXZqQ014YVoxTHV6R2h0cDhp?=
- =?utf-8?B?d2t6MXY5S0phbW5qdVpGQkJIZ1dTU1kxRGlGdkZFcXJXeXVzRkdjZ2xPWVhF?=
- =?utf-8?B?K3VBanFmQWJOWXhkcFp6SThkUGtKOUlzeUV0VUpmMmo0eU93QlNJdFNFZ3Ir?=
- =?utf-8?B?Zk1MUVR6TXE4SHZsc3pjaFVVY216d0lRa1ZkcGxJRnpTL3o2SFNkckY1bG9r?=
- =?utf-8?B?aUlWenMza0JPc1UzTllsV1NYcGpieGNKVDVuQlRITFU3Y0NjZkFER2V2VzBr?=
- =?utf-8?B?T1JLeXVEY1M2QTFqcXJzdWREdWtUQXBoNG54d1BLMjE5VGVYbUM0NWNuUW15?=
- =?utf-8?B?SmtTNXhMNHRQTHVpbktFaW5JSTVLVGp0cVFyR1hwSXJhZTBBeUVmMDBjT1gw?=
- =?utf-8?B?NWx0MnJGRGVoV2YrdHdNY0NGc2htaUh5WFlFRG4wWCtuT2NQRExWNzdUSFZR?=
- =?utf-8?B?akE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5edb8ecd-af66-47d3-8769-08db8315a34e
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 20:21:56.2486
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mTUp7Jh4PbjBpKIl+f6zPwqRoXGtGOr3+Do6rt6CAHbfLmKm0ngtl9CkwbcwfV0W
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4341
-X-Proofpoint-GUID: X49DNP_Ytk07ixz8e1fnHLWQ25l_fRFM
-X-Proofpoint-ORIG-GUID: X49DNP_Ytk07ixz8e1fnHLWQ25l_fRFM
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961C4DDC8;
+	Wed, 12 Jul 2023 21:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689195610; x=1720731610;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZThj7MLqPowzwrJj6pzs7RmC7CycTcfjL00CIwEQpqc=;
+  b=ZlohZ+ODvbkrRo2ZePN8paU5wPQizsF27y2EMS4gDd7Af1fWLwagF749
+   KucNmun13Q6zzpeIagpdhPLqEk6QIk8eKMEB+LcT/ubOeO2mkCb7nCS3e
+   O0XFAiAMtEltsVwpn/4xdAVQkPtFxJ78YWB8xeJg8Pdsxlhf/xb7ZDHbc
+   D/jsp9XsRIVcIlj2QBbXuocQnCtUysJIyAUQx1QsEAnrqKGB91IFgjlFN
+   kF8P5Grljcvuku+LdEZdRFdFxBAlhZyol16Pe81G1n1ZjAWqxJd8VhJ/R
+   G/ylnnTNBnm4oIv7iZYD8iYu6rvpQ6toU8Z78uXeZXGyVS/AD+gtzFt3v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="365038246"
+X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
+   d="scan'208";a="365038246"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 14:00:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="845782629"
+X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
+   d="scan'208";a="845782629"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 12 Jul 2023 14:00:07 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJgwQ-0005z7-0m;
+	Wed, 12 Jul 2023 21:00:06 +0000
+Date: Thu, 13 Jul 2023 04:59:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ben Skeggs <bskeggs@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [skeggsb-nouveau:00.02-gsp-rm 78/83]
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:381:13: warning: variable
+ 'align' is uninitialized when used here
+Message-ID: <202307130438.aTVcvZsq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_15,2023-07-11_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 00.02-gsp-rm
+head:   3f6fc48703e02597683babc04c512ca13bb95e19
+commit: 2f331c626dfe7f0f631509e197d72be4d91a02e3 [78/83] WIPdrm/nouveau/gr/r535: initial support
+config: s390-randconfig-r044-20230712 (https://download.01.org/0day-ci/archive/20230713/202307130438.aTVcvZsq-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307130438.aTVcvZsq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307130438.aTVcvZsq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:22:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.h:27:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/priv.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/gr.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:22:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.h:27:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/priv.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/gr.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:22:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.h:27:
+   In file included from drivers/gpu/drm/nouveau/nvkm/engine/gr/priv.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/gr.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:381:13: warning: variable 'align' is uninitialized when used here [-Wuninitialized]
+     381 |                            size, align, (id < ARRAY_SIZE(map)) ? "*" : "");
+         |                                  ^~~~~
+   drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:90:67: note: expanded from macro 'nvkm_debug'
+      90 | #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
+         |                                                                   ^
+   drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:85:73: note: expanded from macro 'nvkm_printk'
+      85 | #define nvkm_printk(s,l,p,f,a...) nvkm_printk_((s), NV_DBG_##l, p, f, ##a)
+         |                                                                         ^
+   drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:84:71: note: expanded from macro 'nvkm_printk_'
+      84 | #define nvkm_printk_(s,l,p,f,a...) nvkm_printk__((s), (l), p, " "f, ##a)
+         |                                                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:78:66: note: expanded from macro 'nvkm_printk___'
+      78 |                         dev_##p((s)->device->dev, "%s(%s):"f, (s)->name, (u)->name, ##a);    \
+         |                                                                                       ^
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c:372:11: note: initialize the variable 'align' to silence this warning
+     372 |                 u8 align, page;
+         |                         ^
+         |                          = '\0'
+   13 warnings generated.
 
 
+vim +/align +381 drivers/gpu/drm/nouveau/nvkm/engine/gr/r535.c
 
-On 7/7/23 5:23 PM, Yonghong Song wrote:
-> 
-> 
-> On 7/7/23 3:27 PM, Nick Desaulniers wrote:
->> On Wed, Jun 28, 2023 at 11:19 AM Yonghong Song <yhs@fb.com> wrote:
->>>
->>> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static 
->>> functions")
->>> stripped all function/variable suffixes started with '.' regardless
->>> of whether those suffixes are generated at LTO mode or not. In fact,
->>> as far as I know, in LTO mode, when a static function/variable is
->>> promoted to the global scope, '.llvm.<...>' suffix is added.
->>>
->>> The existing mechanism breaks live patch for a LTO kernel even if
->>> no <symbol>.llvm.<...> symbols are involved. For example, for the 
->>> following
->>> kernel symbols:
->>>    $ grep bpf_verifier_vlog /proc/kallsyms
->>>    ffffffff81549f60 t bpf_verifier_vlog
->>>    ffffffff8268b430 d bpf_verifier_vlog._entry
->>>    ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
->>>    ffffffff82e12a1f d bpf_verifier_vlog.__already_done
->>> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
->>> '__already_done' are static variables used inside 'bpf_verifier_vlog',
->>> so llvm promotes them to file-level static with prefix 
->>> 'bpf_verifier_vlog.'.
->>> Note that the func-level to file-level static function promotion also
->>> happens without LTO.
->>>
->>> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current 
->>> mechanism will
->>> return 4 symbols to live patch subsystem which current live patching
->>> subsystem cannot handle it. With non-LTO kernel, only one symbol
->>> is returned.
->>>
->>> In [1], we have a lengthy discussion, the suggestion is to separate two
->>> cases:
->>>    (1). new symbols with suffix which are generated regardless of 
->>> whether
->>>         LTO is enabled or not, and
->>>    (2). new symbols with suffix generated only when LTO is enabled.
->>>
->>> The cleanup_symbol_name() should only remove suffixes for case (2).
->>> Case (1) should not be changed so it can work uniformly with or 
->>> without LTO.
->>>
->>> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
->>> tracing should work the same way for non-LTO kernel.
->>> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to 
->>> have the same
->>> filtering pattern so both kernel and kallsyms tool have the same
->>> expectation on the order of symbols.
->>>
->>>   [1] 
->>> https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
->>>
->>> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static 
->>> functions")
->>> Reported-by: Song Liu <song@kernel.org>
->>> Signed-off-by: Yonghong Song <yhs@fb.com>
->>
->> Thanks for the patch and improving live patch with LTO.  Looking back
->> at the internal report that resulted in
->> commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static 
->> functions")
->> your version was what I originally had.  I did not leave a comment as
->> to why I changed it when I sent it 2 years ago, and no longer recall
->> the reason.
->>
->>
->> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Nick, thanks for the review. I am not sure how this patch could
-> be merged into the mainline. I checked your patch
->     6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> and it looks like the patch was merged by Kees Cook.
-> 
-> I added Kees in the 'To' list. Kees, could you help merge
-> this patch if you are okay with the change?
+   241	
+   242	static int
+   243	r535_gr_oneinit(struct nvkm_gr *base)
+   244	{
+   245		NV2080_CTRL_INTERNAL_STATIC_GR_GET_CONTEXT_BUFFERS_INFO_PARAMS *info;
+   246		struct r535_gr *gr = container_of(base, typeof(*gr), base);
+   247		struct nvkm_subdev *subdev = &gr->base.engine.subdev;
+   248		struct nvkm_device *device = subdev->device;
+   249		struct nvkm_gsp *gsp = device->gsp;
+   250		struct nvkm_mmu *mmu = device->mmu;
+   251		struct {
+   252			struct nvkm_memory *inst;
+   253			struct nvkm_vmm *vmm;
+   254			struct nvkm_gsp_object chan;
+   255			struct nvkm_vma *vma[R515_GR_MAX_CTXBUFS];
+   256		} golden = {};
+   257		int ret;
+   258	
+   259		/* Allocate a channel to use for golden context init. */
+   260		ret = nvkm_memory_new(device, NVKM_MEM_TARGET_INST, 0x12000, 0, true, &golden.inst);
+   261		if (ret)
+   262			goto done;
+   263	
+   264		ret = nvkm_vmm_new(device, 0x1000, 0, NULL, 0, NULL, "grGoldenVmm", &golden.vmm);
+   265		if (ret)
+   266			goto done;
+   267	
+   268		ret = mmu->func->promote_vmm(golden.vmm);
+   269		if (ret)
+   270			goto done;
+   271	
+   272		{
+   273			NV_CHANNELGPFIFO_ALLOCATION_PARAMETERS *args;
+   274	
+   275			args = nvkm_gsp_rm_alloc_get(&golden.vmm->rm.device.object, 0xf1f00000,
+   276						     device->fifo->func->chan.user.oclass,
+   277						     sizeof(*args), &golden.chan);
+   278			if (IS_ERR(args)) {
+   279				ret = PTR_ERR(args);
+   280				goto done;
+   281			}
+   282	
+   283			args->gpFifoOffset = 0;
+   284			args->gpFifoEntries = 0x1000 / 8;
+   285			args->flags =
+   286				NVDEF(NVOS04, FLAGS, CHANNEL_TYPE, PHYSICAL) |
+   287				NVDEF(NVOS04, FLAGS, VPR, FALSE) |
+   288				NVDEF(NVOS04, FLAGS, CHANNEL_SKIP_MAP_REFCOUNTING, FALSE) |
+   289				NVVAL(NVOS04, FLAGS, GROUP_CHANNEL_RUNQUEUE, 0) |
+   290				NVDEF(NVOS04, FLAGS, PRIVILEGED_CHANNEL, TRUE) |
+   291				NVDEF(NVOS04, FLAGS, DELAY_CHANNEL_SCHEDULING, FALSE) |
+   292				NVDEF(NVOS04, FLAGS, CHANNEL_DENY_PHYSICAL_MODE_CE, FALSE) |
+   293				NVVAL(NVOS04, FLAGS, CHANNEL_USERD_INDEX_VALUE, 0) |
+   294				NVDEF(NVOS04, FLAGS, CHANNEL_USERD_INDEX_FIXED, FALSE) |
+   295				NVVAL(NVOS04, FLAGS, CHANNEL_USERD_INDEX_PAGE_VALUE, 0) |
+   296				NVDEF(NVOS04, FLAGS, CHANNEL_USERD_INDEX_PAGE_FIXED, TRUE) |
+   297				NVDEF(NVOS04, FLAGS, CHANNEL_DENY_AUTH_LEVEL_PRIV, FALSE) |
+   298				NVDEF(NVOS04, FLAGS, CHANNEL_SKIP_SCRUBBER, FALSE) |
+   299				NVDEF(NVOS04, FLAGS, CHANNEL_CLIENT_MAP_FIFO, FALSE) |
+   300				NVDEF(NVOS04, FLAGS, SET_EVICT_LAST_CE_PREFETCH_CHANNEL, FALSE) |
+   301				NVDEF(NVOS04, FLAGS, CHANNEL_VGPU_PLUGIN_CONTEXT, FALSE) |
+   302				NVDEF(NVOS04, FLAGS, CHANNEL_PBDMA_ACQUIRE_TIMEOUT, FALSE) |
+   303				NVDEF(NVOS04, FLAGS, GROUP_CHANNEL_THREAD, DEFAULT) |
+   304				NVDEF(NVOS04, FLAGS, MAP_CHANNEL, FALSE) |
+   305				NVDEF(NVOS04, FLAGS, SKIP_CTXBUFFER_ALLOC, FALSE);
+   306			args->hVASpace = golden.vmm->rm.object.handle;
+   307			args->engineType = 1;
+   308			args->instanceMem.base = nvkm_memory_addr(golden.inst);
+   309			args->instanceMem.size = 0x1000;
+   310			args->instanceMem.addressSpace = 2;
+   311			args->instanceMem.cacheAttrib = 1;
+   312			args->ramfcMem.base = nvkm_memory_addr(golden.inst);
+   313			args->ramfcMem.size = 0x200;
+   314			args->ramfcMem.addressSpace = 2;
+   315			args->ramfcMem.cacheAttrib = 1;
+   316			args->userdMem.base = nvkm_memory_addr(golden.inst) + 0x1000;
+   317			args->userdMem.size = 0x200;
+   318			args->userdMem.addressSpace = 2;
+   319			args->userdMem.cacheAttrib = 1;
+   320			args->mthdbufMem.base = nvkm_memory_addr(golden.inst) + 0x2000;
+   321			args->mthdbufMem.size = 0x5000;
+   322			args->mthdbufMem.addressSpace = 2;
+   323			args->mthdbufMem.cacheAttrib = 1;
+   324			args->internalFlags =
+   325				NVDEF(NV_KERNELCHANNEL, ALLOC_INTERNALFLAGS, PRIVILEGE, ADMIN) |
+   326				NVDEF(NV_KERNELCHANNEL, ALLOC_INTERNALFLAGS, ERROR_NOTIFIER_TYPE, NONE) |
+   327				NVDEF(NV_KERNELCHANNEL, ALLOC_INTERNALFLAGS, ECC_ERROR_NOTIFIER_TYPE, NONE);
+   328	
+   329			ret = nvkm_gsp_rm_alloc_wr(&golden.chan, args);
+   330			if (ret)
+   331				goto done;
+   332		}
+   333	
+   334		/* Fetch context buffer info from RM and allocate each of them here to use
+   335		 * during golden context init (or later as a global context buffer).
+   336		 *
+   337		 * Also build the information that'll be used to create channel contexts.
+   338		 */
+   339		info = nvkm_gsp_rm_ctrl_rd(&gsp->internal.device.subdevice,
+   340					   NV2080_CTRL_CMD_INTERNAL_STATIC_KGR_GET_CONTEXT_BUFFERS_INFO,
+   341					   sizeof(*info));
+   342		if (WARN_ON(IS_ERR(info))) {
+   343			ret = PTR_ERR(info);
+   344			goto done;
+   345		}
+   346	
+   347		for (int i = 0; i < ARRAY_SIZE(info->engineContextBuffersInfo[0].engine); i++) {
+   348			static const struct {
+   349				u32     id0; /* NV0080_CTRL_FIFO_GET_ENGINE_CONTEXT_PROPERTIES_ENGINE_ID */
+   350				u32     id1; /* NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID */
+   351				bool global;
+   352				bool   init;
+   353				bool     ro;
+   354			} map[] = {
+   355	#define _A(n,N,G,I,R) { .id0 = NV0080_CTRL_FIFO_GET_ENGINE_CONTEXT_PROPERTIES_ENGINE_ID_##n, \
+   356				.id1 = NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID_##N, \
+   357				.global = (G), .init = (I), .ro = (R) }
+   358	#define _B(N,G,I,R) _A(GRAPHICS_##N, N, (G), (I), (R))
+   359				/*                                       global   init     ro */
+   360				_A(           GRAPHICS,             MAIN, false,  true, false),
+   361				_B(                                PATCH, false,  true, false),
+   362				_A( GRAPHICS_BUNDLE_CB, BUFFER_BUNDLE_CB,  true, false, false),
+   363				_B(                             PAGEPOOL,  true, false, false),
+   364				_B(                         ATTRIBUTE_CB,  true, false, false),
+   365				_B(                        RTV_CB_GLOBAL,  true, false, false),
+   366				_B(                           FECS_EVENT,  true,  true, false),
+   367				_B(                      PRIV_ACCESS_MAP,  true,  true,  true),
+   368	#undef _B
+   369	#undef _A
+   370			};
+   371			u32 size = info->engineContextBuffersInfo[0].engine[i].size;
+   372			u8 align, page;
+   373			int id;
+   374	
+   375			for (id = 0; id < ARRAY_SIZE(map); id++) {
+   376				if (map[id].id0 == i)
+   377					break;
+   378			}
+   379	
+   380			nvkm_debug(subdev, "%02x: size:0x%08x align:0x%08x %s\n", i,
+ > 381				   size, align, (id < ARRAY_SIZE(map)) ? "*" : "");
+   382			if (id >= ARRAY_SIZE(map))
+   383				continue;
+   384	
+   385			if (map[id].id1 == NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID_MAIN)
+   386				size = ALIGN(size, 0x1000) + 64 * 0x1000; /* per-subctx headers */
+   387	
+   388			if      (size >= 1 << 21) page = 21;
+   389			else if (size >= 1 << 16) page = 16;
+   390			else			  page = 12;
+   391	
+   392			if (map[id].id1 == NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID_ATTRIBUTE_CB)
+   393				align = order_base_2(size);
+   394			else
+   395				align = page;
+   396	
+   397			if (WARN_ON(gr->ctxbuf_nr == ARRAY_SIZE(gr->ctxbuf)))
+   398				continue;
+   399	
+   400			gr->ctxbuf[gr->ctxbuf_nr].bufferId = map[id].id1;
+   401			gr->ctxbuf[gr->ctxbuf_nr].size     = size;
+   402			gr->ctxbuf[gr->ctxbuf_nr].page     = page;
+   403			gr->ctxbuf[gr->ctxbuf_nr].align    = align;
+   404			gr->ctxbuf[gr->ctxbuf_nr].global   = map[id].global;
+   405			gr->ctxbuf[gr->ctxbuf_nr].init     = map[id].init;
+   406			gr->ctxbuf[gr->ctxbuf_nr].ro       = map[id].ro;
+   407			gr->ctxbuf_nr++;
+   408	
+   409			if (map[id].id1 == NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID_PRIV_ACCESS_MAP) {
+   410				if (WARN_ON(gr->ctxbuf_nr == ARRAY_SIZE(gr->ctxbuf)))
+   411					continue;
+   412	
+   413				gr->ctxbuf[gr->ctxbuf_nr] = gr->ctxbuf[gr->ctxbuf_nr - 1];
+   414				gr->ctxbuf[gr->ctxbuf_nr].bufferId =
+   415					NV2080_CTRL_GPU_PROMOTE_CTX_BUFFER_ID_UNRESTRICTED_PRIV_ACCESS_MAP;
+   416				gr->ctxbuf_nr++;
+   417			}
+   418		}
+   419	
+   420		nvkm_gsp_rm_ctrl_done(&gsp->internal.device.subdevice, info);
+   421	
+   422		/* Promote golden context to RM. */
+   423		ret = r535_gr_promote_ctx(gr, true, golden.vmm, gr->ctxbuf_mem, golden.vma, &golden.chan);
+   424		if (ret)
+   425			goto done;
+   426	
+   427		/* Allocate 3D class on channel to trigger golden context init in RM. */
+   428		{
+   429			int i;
+   430	
+   431			for (i = 0; gr->base.func->sclass[i].ctor; i++) {
+   432				if ((gr->base.func->sclass[i].oclass & 0xff) == 0x97) {
+   433					struct nvkm_gsp_object threed;
+   434	
+   435					ret = nvkm_gsp_rm_alloc(&golden.chan, 0x97000000,
+   436								gr->base.func->sclass[i].oclass, 0,
+   437								&threed);
+   438					if (ret)
+   439						goto done;
+   440	
+   441					nvkm_gsp_rm_free(&threed);
+   442					break;
+   443				}
+   444			}
+   445	
+   446			if (WARN_ON(!gr->base.func->sclass[i].ctor)) {
+   447				ret = -EINVAL;
+   448				goto done;
+   449			}
+   450		}
+   451	
+   452	done:
+   453		nvkm_gsp_rm_free(&golden.chan);
+   454		for (int i = gr->ctxbuf_nr - 1; i >= 0; i--)
+   455			nvkm_vmm_put(golden.vmm, &golden.vma[i]);
+   456		nvkm_vmm_unref(&golden.vmm);
+   457		nvkm_memory_unref(&golden.inst);
+   458		return ret;
+   459	
 
-Looks like Kees might be on vacation. Nick, Petr, do you
-have any suggestions who could take this patch? Thanks!
-
-> 
-> Thanks!
-> 
-> Yonghong
-> 
->>
->>> ---
->>>   kernel/kallsyms.c  | 5 ++---
->>>   scripts/kallsyms.c | 6 +++---
->>>   2 files changed, 5 insertions(+), 6 deletions(-)
->>>
->>> Changelogs:
->>>    v1 -> v2:
->>>      . add 'Reported-by: Song Liu <song@kernel.org>'
->>>      . also fix in scripts/kallsyms.c.
->>>
->>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
->>> index 77747391f49b..4874508bb950 100644
->>> --- a/kernel/kallsyms.c
->>> +++ b/kernel/kallsyms.c
->>> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
->>>           * LLVM appends various suffixes for local functions and 
->>> variables that
->>>           * must be promoted to global scope as part of LTO.  This 
->>> can break
->>>           * hooking of static functions with kprobes. '.' is not a valid
->>> -        * character in an identifier in C. Suffixes observed:
->>> +        * character in an identifier in C. Suffixes only in LLVM LTO 
->>> observed:
->>>           * - foo.llvm.[0-9a-f]+
->>> -        * - foo.[0-9a-f]+
->>>           */
->>> -       res = strchr(s, '.');
->>> +       res = strstr(s, ".llvm.");
->>>          if (res) {
->>>                  *res = '\0';
->>>                  return true;
->>> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
->>> index 0d2db41177b2..13af6d0ff845 100644
->>> --- a/scripts/kallsyms.c
->>> +++ b/scripts/kallsyms.c
->>> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
->>>           * ASCII[_]   = 5f
->>>           * ASCII[a-z] = 61,7a
->>>           *
->>> -        * As above, replacing '.' with '\0' does not affect the main 
->>> sorting,
->>> -        * but it helps us with subsorting.
->>> +        * As above, replacing the first '.' in ".llvm." with '\0' 
->>> does not
->>> +        * affect the main sorting, but it helps us with subsorting.
->>>           */
->>> -       p = strchr(s, '.');
->>> +       p = strstr(s, ".llvm.");
->>>          if (p)
->>>                  *p = '\0';
->>>   }
->>> -- 
->>> 2.34.1
->>>
->>
->>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
