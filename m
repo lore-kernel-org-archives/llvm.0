@@ -1,127 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47DF2FB3
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 17:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7527AC433BA;
-	Thu, 13 Jul 2023 17:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689268745;
-	bh=wdJcuex8sDV2XaCaoqTXPhw5KK8TTTlAjvD3PXnYiu4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JWhXWsPKsI6Ors7YtLspO8kD6W3b/sBfz01gZsCD3oL6NDbKLGzWXw+USjmSgcR48
-	 xlU0eCJ0SVI3RZZ3j2ytZVsRP53VD/2GvuXBMo4Ec19mKMRwYW/TY1jTeR9YKSDBEV
-	 CTSf/Y1jslgVfaudz8gA5yP1TKewg+mZwkvnDxm5NuhflhdM/Gvmp+RmA/7CMuWLgs
-	 ezPZzFH3IgCZ+PxnBOMWN77SBry20xQn5Be9cx+Cml7tPT2edvF0GvZ3Ch3m1+TIym
-	 2ZTfPWVRWFIyOGH99CZAKMwtUKusiJTh52v/d19Rn5TKVx/dKZ2IVV0P3EIxahnLYV
-	 KEpOSikqHm6lQ==
-Date: Thu, 13 Jul 2023 10:19:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: jbaron@akamai.com, daniel.vetter@ffwll.ch, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-	intel-gvt-dev@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
-	ville.syrjala@linux.intel.com, seanpaul@chromium.org,
-	robdclark@gmail.com, gregkh@linuxfoundation.org,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-sparse@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 18/21] compiler.h: RFC - s/__LINE__/__COUNTER__/ in
- __UNIQUE_ID fallback
-Message-ID: <20230713171901.GA4036397@dev-arch.thelio-3990X>
-References: <20230713163626.31338-1-jim.cromie@gmail.com>
- <20230713163626.31338-19-jim.cromie@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6F71F173;
+	Thu, 13 Jul 2023 17:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689270727; x=1720806727;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tRe0aE1N0lJAh4AaTdt14R4GQtLw3cf8GCBbliAHt78=;
+  b=mu7YHB2z8+jlhVcJj+3jcA5l/NcELL9AydsdvIXRZc3G6wYWP0GlZSz4
+   TestF3kayhKyxwO2XacqV5GVDJfGftRY6BCG8TzFMlNFZESTSXcZ0iRdO
+   nDtrlhqbLHuBjZnyBTTWTy7ZdnmpQCc8SzGhVg/wKm7c7OlBp0mcjM5b4
+   SXeEkixqi/jJZQjNezzBrHfnkDW+67B4he+ddi2E10X/Ma2UZBK1u3V5U
+   whcWK8Ms4SDvaNx2GbRjtnBIMPuuJavuBa5lzF3p6PG0QnHARsgibUAiQ
+   MJbMPB7gMtpudYzKkN7+3aFImaXU4pYZOON9myzgHWVQ5GSR5/q+3e9yZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="451633604"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="451633604"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 10:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725388248"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="725388248"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2023 10:52:04 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qK0U0-0006oj-15;
+	Thu, 13 Jul 2023 17:52:04 +0000
+Date: Fri, 14 Jul 2023 01:52:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Subject: drivers/gpu/drm/drm_edid.c:6150:13: warning: stack frame size (1472)
+ exceeds limit (1024) in 'drm_parse_cea_ext'
+Message-ID: <202307140130.UtmhoTp8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230713163626.31338-19-jim.cromie@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Jim
+Hi Jani,
 
-On Thu, Jul 13, 2023 at 10:36:23AM -0600, Jim Cromie wrote:
-> We currently have 3 defns for __UNIQUE_ID(); gcc and clang are using
-> __COUNTER__ for real uniqueness, 3rd just uses __LINE__, which should
-> fail on this (and harder to avoid situations):
-> 
->   DECLARE_FOO(); DECLARE_FOO();
-> 
-> Its 2023, can we haz a no-fallback __UNIQUE_ID ?
+FYI, the error/warning still remains.
 
-Yeah, I fail to see how this fallback definition can actually be used
-after commit 95207db8166a ("Remove Intel compiler support"); even before
-that, it would be pretty unlikely since icc usage has not been visible
-for a long time. The kernel only officially supports clang or GCC now,
-so the definitions of __UNIQUE_ID() in include/linux/compiler-clang.h
-and include/linux/compiler-gcc.h should always be used because of the
-include in include/linux/compiler_types.h, right?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eb26cbb1a754ccde5d4d74527dad5ba051808fad
+commit: e1e7bc481d49c3e3ada11029ce0d9b85a0a539d7 drm/edid: convert to device specific logging
+date:   9 months ago
+config: riscv-randconfig-r003-20230713 (https://download.01.org/0day-ci/archive/20230714/202307140130.UtmhoTp8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230714/202307140130.UtmhoTp8-lkp@intel.com/reproduce)
 
-I think the correct clean up is to just hoist the definition of
-__UNIQUE_ID() out of the individual compiler headers into the common one
-here but...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307140130.UtmhoTp8-lkp@intel.com/
 
-> NOTE:
-> 
-> This also changes __UNIQUE_ID_ to _kaUID_.  Ive been getting
-> lkp-reports of collisions on names which should be unique; this
-> shouldnt happen on gcc & clang, but does on some older ones, on some
-> platforms, on some allyes & rand-configs.  Like this:
-> 
-> mips64-linux-ld:
-> drivers/gpu/drm/display/drm_dp_helper.o:(__dyndbg_class_users+0x0):
-> multiple definition of `__UNIQUE_ID_ddebug_class_user405';
-> drivers/gpu/drm/drm_gem_shmem_helper.o:(__dyndbg_class_users+0x0):
-> first defined here
+All warnings (new ones prefixed by >>):
 
-This problem cannot be addressed with this patch given the above
-information, no? Seems like that might mean that __COUNTER__ has issues
-in earlier compilers?
+>> drivers/gpu/drm/drm_edid.c:6150:13: warning: stack frame size (1472) exceeds limit (1024) in 'drm_parse_cea_ext' [-Wframe-larger-than]
+   static void drm_parse_cea_ext(struct drm_connector *connector,
+               ^
+   1 warning generated.
 
-Cheers,
-Nathan
 
-> Like above, the collision reports appear to always be 3-digit
-> counters, which look like line-numbers.  Changing to _kaUID_ in this
-> defn should make it more obvious (in *.i file) when a fallback has
-> happened.  To be clear, I havent seen it yet.  Nor have I seen the
-> multiple-defn problem above since adding this patch.
-> 
-> Lets see what lkp-robot says about this.
-> 
-> CC: Luc Van Oostenryck <luc.vanoostenryck@gmail.com> (maintainer:SPARSE CHECKER)
-> CC: Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUPPORT)
-> CC: Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUILD SUPPORT)
-> CC: Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
-> CC: linux-sparse@vger.kernel.org (open list:SPARSE CHECKER)
-> CC: linux-kernel@vger.kernel.org (open list)
-> CC: llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-> ---
->  include/linux/compiler.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> index d7779a18b24f..677d6c47cd9e 100644
-> --- a/include/linux/compiler.h
-> +++ b/include/linux/compiler.h
-> @@ -177,9 +177,9 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->  	__asm__ ("" : "=r" (var) : "0" (var))
->  #endif
->  
-> -/* Not-quite-unique ID. */
-> +/* JFTI: to fix Not-quite-unique ID */
->  #ifndef __UNIQUE_ID
-> -# define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __LINE__)
-> +# define __UNIQUE_ID(prefix) __PASTE(__PASTE(_kaUID_, prefix), __COUNTER__)
->  #endif
->  
->  /**
-> -- 
-> 2.41.0
-> 
+vim +/drm_parse_cea_ext +6150 drivers/gpu/drm/drm_edid.c
+
+2869f599c0d8c9 Philipp Zabel 2022-01-23  6149  
+1cea146a806ae1 Ville Syrjälä 2016-09-28 @6150  static void drm_parse_cea_ext(struct drm_connector *connector,
+e42192b4c345a8 Jani Nikula   2022-05-11  6151  			      const struct drm_edid *drm_edid)
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6152  {
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6153  	struct drm_display_info *info = &connector->display_info;
+8db73897698ccb Jani Nikula   2022-05-05  6154  	struct drm_edid_iter edid_iter;
+dfc0312596561a Jani Nikula   2022-05-03  6155  	const struct cea_db *db;
+dfc0312596561a Jani Nikula   2022-05-03  6156  	struct cea_db_iter iter;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6157  	const u8 *edid_ext;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6158  
+bbded689680f0f Jani Nikula   2022-05-09  6159  	drm_edid_iter_begin(drm_edid, &edid_iter);
+8db73897698ccb Jani Nikula   2022-05-05  6160  	drm_edid_iter_for_each(edid_ext, &edid_iter) {
+8db73897698ccb Jani Nikula   2022-05-05  6161  		if (edid_ext[0] != CEA_EXT)
+8db73897698ccb Jani Nikula   2022-05-05  6162  			continue;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6163  
+8db73897698ccb Jani Nikula   2022-05-05  6164  		if (!info->cea_rev)
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6165  			info->cea_rev = edid_ext[1];
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6166  
+8db73897698ccb Jani Nikula   2022-05-05  6167  		if (info->cea_rev != edid_ext[1])
+e1e7bc481d49c3 Jani Nikula   2022-10-24  6168  			drm_dbg_kms(connector->dev,
+e1e7bc481d49c3 Jani Nikula   2022-10-24  6169  				    "[CONNECTOR:%d:%s] CEA extension version mismatch %u != %u\n",
+e1e7bc481d49c3 Jani Nikula   2022-10-24  6170  				    connector->base.id, connector->name,
+8db73897698ccb Jani Nikula   2022-05-05  6171  				    info->cea_rev, edid_ext[1]);
+7344bad7fb6daa Jani Nikula   2022-03-23  6172  
+8db73897698ccb Jani Nikula   2022-05-05  6173  		/* The existence of a CTA extension should imply RGB support */
+8db73897698ccb Jani Nikula   2022-05-05  6174  		info->color_formats = DRM_COLOR_FORMAT_RGB444;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6175  		if (edid_ext[3] & EDID_CEA_YCRCB444)
+c03d0b52ff71d5 Maxime Ripard 2022-01-20  6176  			info->color_formats |= DRM_COLOR_FORMAT_YCBCR444;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6177  		if (edid_ext[3] & EDID_CEA_YCRCB422)
+c03d0b52ff71d5 Maxime Ripard 2022-01-20  6178  			info->color_formats |= DRM_COLOR_FORMAT_YCBCR422;
+7344bad7fb6daa Jani Nikula   2022-03-23  6179  	}
+8db73897698ccb Jani Nikula   2022-05-05  6180  	drm_edid_iter_end(&edid_iter);
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6181  
+5e87b2e5171621 Jani Nikula   2022-05-09  6182  	cea_db_iter_edid_begin(drm_edid, &iter);
+dfc0312596561a Jani Nikula   2022-05-03  6183  	cea_db_iter_for_each(db, &iter) {
+dfc0312596561a Jani Nikula   2022-05-03  6184  		/* FIXME: convert parsers to use struct cea_db */
+dfc0312596561a Jani Nikula   2022-05-03  6185  		const u8 *data = (const u8 *)db;
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6186  
+23ebf8b9eab915 Ville Syrjälä 2016-09-28  6187  		if (cea_db_is_hdmi_vsdb(db))
+dfc0312596561a Jani Nikula   2022-05-03  6188  			drm_parse_hdmi_vsdb_video(connector, data);
+be982415fc2e95 Jani Nikula   2022-05-09  6189  		else if (cea_db_is_hdmi_forum_vsdb(db) ||
+115fcf5899f7e0 Lee Shawn C   2022-05-03  6190  			 cea_db_is_hdmi_forum_scdb(db))
+dfc0312596561a Jani Nikula   2022-05-03  6191  			drm_parse_hdmi_forum_scds(connector, data);
+be982415fc2e95 Jani Nikula   2022-05-09  6192  		else if (cea_db_is_microsoft_vsdb(db))
+dfc0312596561a Jani Nikula   2022-05-03  6193  			drm_parse_microsoft_vsdb(connector, data);
+be982415fc2e95 Jani Nikula   2022-05-09  6194  		else if (cea_db_is_y420cmdb(db))
+dfc0312596561a Jani Nikula   2022-05-03  6195  			drm_parse_y420cmdb_bitmap(connector, data);
+be982415fc2e95 Jani Nikula   2022-05-09  6196  		else if (cea_db_is_vcdb(db))
+dfc0312596561a Jani Nikula   2022-05-03  6197  			drm_parse_vcdb(connector, data);
+be982415fc2e95 Jani Nikula   2022-05-09  6198  		else if (cea_db_is_hdmi_hdr_metadata_block(db))
+dfc0312596561a Jani Nikula   2022-05-03  6199  			drm_parse_hdr_metadata_block(connector, data);
+1cea146a806ae1 Ville Syrjälä 2016-09-28  6200  	}
+dfc0312596561a Jani Nikula   2022-05-03  6201  	cea_db_iter_end(&iter);
+d0c94692e0a360 Mario Kleiner 2014-03-27  6202  }
+d0c94692e0a360 Mario Kleiner 2014-03-27  6203  
+
+:::::: The code at line 6150 was first introduced by commit
+:::::: 1cea146a806ae1f34cb1b5e3206ff63a2bb90782 drm/edid: Reduce the number of times we parse the CEA extension block
+
+:::::: TO: Ville Syrjälä <ville.syrjala@linux.intel.com>
+:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
