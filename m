@@ -1,301 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23107101E8
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 11:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689247273;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=es83ptMHGTvw4grHo2wnAwQ1hofsOXJXtDu4SjrGWvw=;
-	b=e/Hlwbdi23WwLqqsMw4zIcGw8tMG6910Tvw9ZSEcKzNQzXLD4aIR9uzAjNh0tlMb/6eTep
-	FrFMrmiParV5breW6IqKcw2oD/UwdSScKHLwKBz2ORFFFSjGkAmbU72OE0B4DMTFg+0a+V
-	YuUqo0abAM8CHvyJ1wHv3V+N1KvO5Kg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-wxRbJCOuPI6MxY83L9b_ig-1; Thu, 13 Jul 2023 07:21:12 -0400
-X-MC-Unique: wxRbJCOuPI6MxY83L9b_ig-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88BCF185A78B
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 11:21:12 +0000 (UTC)
-Received: from [172.64.4.30] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 37936C52D9C;
-	Thu, 13 Jul 2023 11:21:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 53 of 328): Test report for master
- (6.5.0-rc1, mainline.kernel.org-clang, eb26cbb1)
-Date: Thu, 13 Jul 2023 11:21:12 -0000
-To: yizhan@redhat.com, yiyan@redhat.com, bhe@redhat.com, jiji@redhat.com,
- yiche@redhat.com, xiawu@redhat.com, llvm@lists.linux.dev, haliu@redhat.com,
- zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7D317754;
+	Thu, 13 Jul 2023 14:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689259845; x=1720795845;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=915bhMfyutTP9zinhbT8vja86UsdrYvNYhlqMI7fEXI=;
+  b=clUMm8ciwlreU8QOj3IG/KEt+ktIzTwqboKXdOz+QN7Al0+AgZsI7sLO
+   upH8ZhhqcS6e+zsVgb/B+h1DN7FL8p6ep5dFMY5uJPoM+IigEHFykjgP2
+   QYo5BMjJ1e2lR73qIIcHaxQYM2PLS0xAZhOnuBPAT4bV9DU52RncTzzUT
+   3ntNO2WUGrh/NcG8IVlh2Ld2dJkURP02jbezs5WVTk+KKEBdH6i4MtCCr
+   xu3o0g+FMb4jAVSRJ4e6QzIdN+ZorIgZD6p/WTyPRndIg/1+H+JlrmCAE
+   A2HYtNdRnPd8lNILiJvs5bYOvtCBNN6KvLunB+6oQx6EdkRRjG5xA6qlv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="368756848"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="368756848"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 07:16:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="812013577"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="812013577"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jul 2023 07:16:54 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJx7m-0006ej-0t;
+	Thu, 13 Jul 2023 14:16:54 +0000
+Date: Thu, 13 Jul 2023 22:16:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-audio-on-next
+ 38/42] sound/soc/codecs/lpass-tx-macro.c:847:24: warning: variable
+ 'dmic_clk_reg' is uninitialized when used here
+Message-ID: <202307132214.NYeD2XiY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <10311.123071307211200281@us-mta-408.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-audio-on-next
+head:   e3b5f5398ba6aa06d39089408493667a98fa0a60
+commit: 9e9e574223b5ed43d8d8c9ba0faa1546b6d20919 [38/42] ASoC: codecs: tx-macro: correct TX SMIC MUXn widgets on SM8350+
+config: i386-randconfig-i005-20230713 (https://download.01.org/0day-ci/archive/20230713/202307132214.NYeD2XiY-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307132214.NYeD2XiY-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307132214.NYeD2XiY-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'platform-drivers-x86-v6.5-2' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/95713
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750845
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-         aarch64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750874
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         ppc64le - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750697
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750732
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750754
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750953
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8750797
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
-directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://example.com/TBA
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
-ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
-f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
-:1559 (size 1)
-            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-                  x86_64 (debug) - xfstests - xfs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
+>> sound/soc/codecs/lpass-tx-macro.c:847:24: warning: variable 'dmic_clk_reg' is uninitialized when used here [-Wuninitialized]
+                                                       mic_sel_reg, dmic_clk_reg,
+                                                                    ^~~~~~~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:804:18: note: initialize the variable 'dmic_clk_reg' to silence this warning
+           u16 dmic_clk_reg;
+                           ^
+                            = 0
+   1 warning generated.
 
 
+vim +/dmic_clk_reg +847 sound/soc/codecs/lpass-tx-macro.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   795	
+   796	static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
+   797					 struct snd_ctl_elem_value *ucontrol)
+   798	{
+   799		struct snd_soc_dapm_widget *widget = snd_soc_dapm_kcontrol_widget(kcontrol);
+   800		struct snd_soc_component *component = snd_soc_dapm_to_component(widget->dapm);
+   801		struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+   802		unsigned int val;
+   803		u16 mic_sel_reg;
+   804		u16 dmic_clk_reg;
+   805		struct tx_macro *tx = snd_soc_component_get_drvdata(component);
+   806	
+   807		val = ucontrol->value.enumerated.item[0];
+   808		if (val >= e->items)
+   809			return -EINVAL;
+   810	
+   811		switch (e->reg) {
+   812		case CDC_TX_INP_MUX_ADC_MUX0_CFG0:
+   813			mic_sel_reg = CDC_TX0_TX_PATH_CFG0;
+   814			break;
+   815		case CDC_TX_INP_MUX_ADC_MUX1_CFG0:
+   816			mic_sel_reg = CDC_TX1_TX_PATH_CFG0;
+   817			break;
+   818		case CDC_TX_INP_MUX_ADC_MUX2_CFG0:
+   819			mic_sel_reg = CDC_TX2_TX_PATH_CFG0;
+   820			break;
+   821		case CDC_TX_INP_MUX_ADC_MUX3_CFG0:
+   822			mic_sel_reg = CDC_TX3_TX_PATH_CFG0;
+   823			break;
+   824		case CDC_TX_INP_MUX_ADC_MUX4_CFG0:
+   825			mic_sel_reg = CDC_TX4_TX_PATH_CFG0;
+   826			break;
+   827		case CDC_TX_INP_MUX_ADC_MUX5_CFG0:
+   828			mic_sel_reg = CDC_TX5_TX_PATH_CFG0;
+   829			break;
+   830		case CDC_TX_INP_MUX_ADC_MUX6_CFG0:
+   831			mic_sel_reg = CDC_TX6_TX_PATH_CFG0;
+   832			break;
+   833		case CDC_TX_INP_MUX_ADC_MUX7_CFG0:
+   834			mic_sel_reg = CDC_TX7_TX_PATH_CFG0;
+   835			break;
+   836		default:
+   837			dev_err(component->dev, "Error in configuration!!\n");
+   838			return -EINVAL;
+   839		}
+   840	
+   841		if (val != 0) {
+   842			if (widget->shift) /* MSM DMIC */
+   843				snd_soc_component_write_field(component, mic_sel_reg,
+   844							      CDC_TXn_ADC_DMIC_SEL_MASK, 1);
+   845			else if (tx->data->ver <= LPASS_VER_9_0_0)
+   846				tx_macro_update_smic_sel_v9(component, widget, tx,
+ > 847							    mic_sel_reg, dmic_clk_reg,
+   848							    val);
+   849			else
+   850				tx_macro_update_smic_sel_v9_2(component, widget, tx,
+   851							      mic_sel_reg, dmic_clk_reg,
+   852							      val);
+   853		}
+   854	
+   855		return snd_soc_dapm_put_enum_double(kcontrol, ucontrol);
+   856	}
+   857	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
