@@ -1,72 +1,171 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6512D63A0
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 07:57:13 +0000 (UTC)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so452364a12.1
-        for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 00:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689235031; x=1689839831;
-        h=cc:to:subject:message-id:date:from:sender:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZBeF8DimtieRIbeczjrQAO7Bmt6r/83M9FTzR+dYQus=;
-        b=j/nV/8M8qJDGiBFI8327yymczZxYK3EfM6/n5B+YZFgBAbsM/NkhigpTrpzmhftlim
-         sU9+IpUQhH+EozlQ8N+xthICiD87MdzfWGGhmOFrlFvVBLBZ9RyIXawww6pS6oMMOD/W
-         34dGfPC+7nNIb6RO65P3JlWDda6SSyv+raLu1gVioQGyGlxCj3oloUL1ds0vxrQgqfoW
-         ivlzJxRwt4BvvmFntFjoZL/7wSo0p91OqWuP3X+UtA63HEeE9BvbSLAjMh2X08w/PTcR
-         YHluygjJ7slsd5eqGK/SAm+AlFSvlynVotNqmbbccE7lLTZQU+JpYjYHBvO/E0k1Ezgh
-         0j/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689235031; x=1689839831;
-        h=cc:to:subject:message-id:date:from:sender:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZBeF8DimtieRIbeczjrQAO7Bmt6r/83M9FTzR+dYQus=;
-        b=gNqoBu2APLYhRg2TXaElHwfemBFevkkquYul31OSamH3d3BT4EKBjqpo4PtGqCoDX6
-         uS7jtK6SJ+vLSOEf5dxCW8osdm4B4VCPcJB3wkpNh3V+aGhLDZKTpXQOwQO9gMZjbvl9
-         A9kuKiMhA7xxCHQ9PBwwq87+Zsgks4hIp4FTovwDmmuiJx45Wne1Mj9Jh2uRwKqXGJRU
-         FZwKNJTcL1QW83rG1EWl0PoXD0+OvgAJiKqmSGSHKh0VdFqF8FhovkTH48x3EhwPW4Bu
-         5iPxAi4vxO9VtSweqrlnmq5RCtHFrC/vKkqPiA4lu6vRmWAmc/m9jJXmeM4nLEXKaaD+
-         zyew==
-X-Gm-Message-State: ABy/qLaKFeMq2zCJkauqBC8GsfM+CrvUAUdEsQNBrXVzoJ7qXlRD8eum
-	LhZyeZnd5NTEVMgbFCatA2DEcsY1fTqOnNl3XBM=
-X-Google-Smtp-Source: APBJJlHbM+0P718q61QkhmRg2sZBdOo9EtDJ8+TrS+eXLQDo5tAoYPNE/0mM/eZP5gei9DkV5833SS3E0v0Hx3rZF2E=
-X-Received: by 2002:aa7:c90f:0:b0:51e:f83:6de6 with SMTP id
- b15-20020aa7c90f000000b0051e0f836de6mr1240233edt.16.1689235031366; Thu, 13
- Jul 2023 00:57:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D07847B;
+	Thu, 13 Jul 2023 08:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689238130; x=1720774130;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N3CGWABMKysaB6zJWeS8pB0qgMTObx3+ZHhkd6+GAOY=;
+  b=iooNbcjiRYPdERl6/GT/Nn6a31Jcn70lCdJ9Hiy1iPM6eMe1USEGjP+e
+   kRLSAXCbFUHDqXRignYRaJDd0yxYCHtXGMcI3oun7rw1H7u+PHbw/BO4x
+   KQQ95aZbHuWhwjrwuAod1TcuHqlwOYcZIV1XvkiDWV0MmLJ+zliZRUvcK
+   CmOpfphVjBeLZrplDabkiKKwoxyRYUjc9CvVomjMnUzpWxNg2HmIHUyli
+   lEvwLDqguidub/Nz4CEfUL60iOr9FdaH5p0PbTLVz8iC6U+w9Yu1Rl72z
+   jRy7ip7Sc2rmoLHRc3dcNTY4CbOrcnua0RUTtezuAfghaIBDByZKDXaUp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="451494347"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="451494347"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 01:48:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="968531002"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="968531002"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jul 2023 01:48:47 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJs0E-0006Rb-14;
+	Thu, 13 Jul 2023 08:48:46 +0000
+Date: Thu, 13 Jul 2023 16:47:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: ld.lld: warning: stack frame size (2136) exceeds limit (2048) in
+ function 'hidinput_configure_usage'
+Message-ID: <202307131635.1isJZ30o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
- <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com> <20230712235813.GE6354@monkey>
-In-Reply-To: <20230712235813.GE6354@monkey>
-Sender: cl1ntlov3@gmail.com
-X-Google-Sender-Delegation: cl1ntlov3@gmail.com
-From: linke li <lilinke99@gmail.com>
-Date: Thu, 13 Jul 2023 15:57:00 +0800
-X-Google-Sender-Auth: AOlVQvJu9wTequs-Y5TVT_XTP9o
-Message-ID: <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
-To: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: David Hildenbrand <david@redhat.com>, Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, trix@redhat.com, 
-	ndesaulniers@google.com, nathan@kernel.org, muchun.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> However, if this is a real issue it would make more
-> sense to look for and change all such checks rather than one single occurrence.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eb26cbb1a754ccde5d4d74527dad5ba051808fad
+commit: f12b034afeb3a977bbb1c6584dedc0f3dc666f14 scripts/Makefile.clang: default to LLVM_IAS=1
+date:   1 year, 11 months ago
+config: x86_64-buildonly-randconfig-r002-20230713 (https://download.01.org/0day-ci/archive/20230713/202307131635.1isJZ30o-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131635.1isJZ30o-lkp@intel.com/reproduce)
 
-Hi, Mike. I have checked the example code you provided, and the
-difference between
-those codes and the patched code is that those checks are checks for
-unsigned integer
- overflow, which is well-defined. Only undefined behavior poses a
-security risk. So they
- don't need any modifications. I have only found one occurrence of
-signed number
-overflow so far.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307131635.1isJZ30o-lkp@intel.com/
 
-Thank you for your valuable feedback.
+All warnings (new ones prefixed by >>):
+
+>> ld.lld: warning: stack frame size (2136) exceeds limit (2048) in function 'hidinput_configure_usage'
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2dd: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2f6: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x33d: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x371: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3cb: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3d7: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3f8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x460: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x485: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x49e: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x4ab: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b7: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x4c4: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x8a7: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x9f9: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xb6a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xd78: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xe3a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1469: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x15a3: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x17fc: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1bbc: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1c93: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1ff5: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2537: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2543: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2820: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2846: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x29b4: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x29c1: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x29f4: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a1a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a53: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a94: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2aa8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2ac5: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2adf: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x2feb: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3209: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x322a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3a4f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3e5f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3e9c: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x3f70: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x45fc: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b07: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b4f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x528c: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5993: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x59d8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5a43: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5a8f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5aa8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5ac1: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5ada: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5b6f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5c35: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x5d64: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x61a2: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x61c8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x61ee: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x62ec: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x6305: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x6350: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x63e7: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x645f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x646b: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x6489: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x6524: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x66fd: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x68b9: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x68d2: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x76bf: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x76d8: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x7a1f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x8026: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x81c2: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x8381: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x88a6: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x8948: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x8dc0: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x9605: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x9847: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x993d: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xcc4f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xcced: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xced2: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xcef3: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xcf0c: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xcf25: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0xe954: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1241a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x12ddc: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1358f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x13698: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x136be: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x14dba: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1503f: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x1507a: redundant UACCESS disable
+   vmlinux.o: warning: objtool: .altinstr_replacement+0x151ab: redundant UACCESS disable
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
