@@ -1,46 +1,57 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562311DDE4;
-	Thu, 13 Jul 2023 14:57:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689260279; x=1720796279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q3zUjDeG6yji0bYc4z/vrq3M5idQemea6aUfWcM/iKA=;
-  b=m7/qcGXlIwtVt4gOrFCz0kAUOGoFzU7jf6CLwOSskEsuig8Rs36+bayI
-   tcKjR1uFNEN1P5L8vG2czAt1QntBy+1mR+7AEaSb7PGHJ9RFkjokkStM/
-   IhrqKPRQqnWXr4LgYdzwkEFWLwOQqc+fyvj0dWYwekJg2k+2+pFbBr7wT
-   IoFGUl0zEMP3qg13pgoNWXTplZ10VMpxMY8u0AbPkzfDH1fHi8l9VMcFp
-   AskctN81kOaGQJYWhTgR5zapRC3fwDKoBkX9ussU80XhuSCiDP2JZUwWc
-   bErwweSi8iiCO3R2zogT0W2+uVWbnjZjRanZWdyAUKs/9wShjThGxXz9S
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="367853790"
-X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="367853790"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 07:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="699282288"
-X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="699282288"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jul 2023 07:57:57 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qJxlU-0006hZ-1J;
-	Thu, 13 Jul 2023 14:57:56 +0000
-Date: Thu, 13 Jul 2023 22:57:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mukul Joshi <mukul.joshi@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>
-Subject: [linux-next:master 753/2369]
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c:834:5: error: stack frame size
- (1124) exceeds limit (1024) in 'amdgpu_amdkfd_unmap_hiq'
-Message-ID: <202307132214.zi4xL3jo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321881DDE4
+	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 15:10:16 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fc03aa6e04so7571975e9.2
+        for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 08:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689261014; x=1691853014;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kbh8/8YR2OYwgBsozxXjeHWBOMoncqGng7RkrjUyFwA=;
+        b=mn1AOQABIhLQtgpaF09UwJ9IIzomZ6nEQcprYyn2FRSn4Y90dqBbK6CJg8iWhXUY49
+         fpxZFnAS90xWFVmKfTfkCItAJHos9W59gwcdDVqhsPuTJXrekbubqjym0xZFetMFRRct
+         CZ5ySetSCy3vTd9EvK1enjtjdsraEoqAbP3FSY7h9XBHXHgHI7ta9ah5Xc5tvmkOBZZP
+         0Kk/jxK2PRHtNDyXojHbclN64FXzJ4gW4TWpXrCl/SWV3a879SatabcK5DjwX4NMCm1X
+         LZjpAE17IWkIeKlBS76Z10TVZ6zU51CKeL9ujqSpPxRTl+f3bs16L3CNDPcd+HxY1Tlb
+         jBhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689261014; x=1691853014;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kbh8/8YR2OYwgBsozxXjeHWBOMoncqGng7RkrjUyFwA=;
+        b=YYVXz1LReCcJvZKHiq7Aa1JNVSW2QhIwWXflWj3D6ji2I+ygOk9PICYCb/I86Evmur
+         oN3AmkCmN+k55C0w3h1EOydWfgnK2FcKjLfw9GNKqEWPPYnPxqy/fQznhlUNA5/7kWSD
+         j+xQIvuPifSFkQ7J4XbWPr4RHfS3148FPUrynNkbQaycffAq8AGKkPPTuUB9rw8hnihj
+         ByDtCa//tUSDVFj7ydmSsCK4Mx05xn2GUeY4cjFxpfvvKQymXgyTMlapttwGy9LlT2Fb
+         SuajTdUeE83hnsUix6aiV2E0M5s7YVMr77kHF1e4vkdN6huSdCY13EM3iWz5ArQTnO6Q
+         e6bA==
+X-Gm-Message-State: ABy/qLbn/aQCf5zpUzl7H3l+KDHpUwZ3ft6TE9REJhZYEorlAHHt/est
+	kcxfiNZryKuZBpn0E4CxfEgPLQ==
+X-Google-Smtp-Source: APBJJlGyuz/1zMyMkHxcVsDhm5iLo+cD8ocAAMhXeNuD+fErHxdiD+gYMz9JijcyDuyzeV/gMAbBeQ==
+X-Received: by 2002:a05:600c:acd:b0:3fc:b86:d3fa with SMTP id c13-20020a05600c0acd00b003fc0b86d3famr1679806wmr.1.1689261014235;
+        Thu, 13 Jul 2023 08:10:14 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1c740b000000b003fbe36a4ce6sm18534778wmc.10.2023.07.13.08.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jul 2023 08:10:12 -0700 (PDT)
+Date: Thu, 13 Jul 2023 18:10:08 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: linke li <lilinke99@gmail.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>,
+	David Hildenbrand <david@redhat.com>,
+	Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, trix@redhat.com,
+	ndesaulniers@google.com, nathan@kernel.org, muchun.song@linux.dev
+Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
+ hugetlbfs_file_mmap()
+Message-ID: <6c3191e1-23fd-4f9e-9b5e-321c51599897@moroto.mountain>
+References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+ <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
+ <20230712235813.GE6354@monkey>
+ <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,35 +60,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e3262265625831348cfb3128d35907ead75d8bf7
-commit: 9041b53a59d77039c69fa61be8575fa232cd3bcd [753/2369] drm/amdkfd: Use KIQ to unmap HIQ
-config: i386-buildonly-randconfig-r004-20230713 (https://download.01.org/0day-ci/archive/20230713/202307132214.zi4xL3jo-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230713/202307132214.zi4xL3jo-lkp@intel.com/reproduce)
+On Thu, Jul 13, 2023 at 03:57:00PM +0800, linke li wrote:
+> > However, if this is a real issue it would make more
+> > sense to look for and change all such checks rather than one single occurrence.
+> 
+> Hi, Mike. I have checked the example code you provided, and the
+> difference between
+> those codes and the patched code is that those checks are checks for
+> unsigned integer
+>  overflow, which is well-defined. Only undefined behavior poses a
+> security risk. So they
+>  don't need any modifications. I have only found one occurrence of
+> signed number
+> overflow so far.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307132214.zi4xL3jo-lkp@intel.com/
+I used to have a similar check to that but I eventually deleted it
+because I decided that the -fno-strict-overflow option works.  It didn't
+produce a lot of warnings.
 
-Note: the linux-next/master HEAD e3262265625831348cfb3128d35907ead75d8bf7 builds fine.
-      It may have been fixed somewhere.
+Historically we have done a bad job at open coding integer overflow
+checks.  Some that I wrote turned out to be incorrect.  And even when
+I write them correctly a couple times people have "fixed" them even
+harder without CCing me or asking me why I wrote them the way I did.
 
-All errors (new ones prefixed by >>):
+What about using the check_add_overflow() macro?
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c:834:5: error: stack frame size (1124) exceeds limit (1024) in 'amdgpu_amdkfd_unmap_hiq' [-Werror,-Wframe-larger-than]
-   int amdgpu_amdkfd_unmap_hiq(struct amdgpu_device *adev, u32 doorbell_off,
-       ^
-   1 error generated.
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 7b17ccfa039d..c512165736e0 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -155,9 +155,8 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+ 		return -EINVAL;
+ 
+ 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+-	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
+-	/* check for overflow */
+-	if (len < vma_len)
++	if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT,
++			       &len))
+ 		return -EINVAL;
+ 
+ 	inode_lock(inode);
 
-
-vim +/amdgpu_amdkfd_unmap_hiq +834 drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c
-
-   833	
- > 834	int amdgpu_amdkfd_unmap_hiq(struct amdgpu_device *adev, u32 doorbell_off,
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
