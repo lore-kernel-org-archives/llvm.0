@@ -1,85 +1,72 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B15680
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 07:56:09 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4fbf1f6c771so752224e87.1
-        for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 00:56:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6512D63A0
+	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 07:57:13 +0000 (UTC)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so452364a12.1
+        for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 00:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689234967; x=1689839767;
+        d=gmail.com; s=20221208; t=1689235031; x=1689839831;
         h=cc:to:subject:message-id:date:from:sender:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWc1kwBXlooW52GInseesObOXCmA4do/WYm4jVF0oTk=;
-        b=bK4trt4UL+dxunXDoQNJl8B3ONBnUGkfUVcPUnObBOSvbL98iRsHLOxU+2S3HfTmJ0
-         kl0uAZNnG2l7Qa6nlqhRBWsWNaLM+JW6lMrEbl9Bo1+5T5BEQ4G5Nqw8SVF0Sa71PGTK
-         sSn0JDdS2PWX8qQT8KzTwXKyTNJXJsw8xVOQcjAmI3NyhpkdcmUhJZLiRBhku5pqfVuC
-         l90r6lLvgOLSrYEQk9yHpjb8ZpBfbrIaCyCHS1O1wjKOu6sE6S1JCwMRaZE0EQMXB/q4
-         qlIqTiHx56NaD1dxmmia3d94FY5o9gRf3zGwAMxkehD5dDtlIHXXHao4t+6kW5TQBnmX
-         4SKg==
+        bh=ZBeF8DimtieRIbeczjrQAO7Bmt6r/83M9FTzR+dYQus=;
+        b=j/nV/8M8qJDGiBFI8327yymczZxYK3EfM6/n5B+YZFgBAbsM/NkhigpTrpzmhftlim
+         sU9+IpUQhH+EozlQ8N+xthICiD87MdzfWGGhmOFrlFvVBLBZ9RyIXawww6pS6oMMOD/W
+         34dGfPC+7nNIb6RO65P3JlWDda6SSyv+raLu1gVioQGyGlxCj3oloUL1ds0vxrQgqfoW
+         ivlzJxRwt4BvvmFntFjoZL/7wSo0p91OqWuP3X+UtA63HEeE9BvbSLAjMh2X08w/PTcR
+         YHluygjJ7slsd5eqGK/SAm+AlFSvlynVotNqmbbccE7lLTZQU+JpYjYHBvO/E0k1Ezgh
+         0j/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689234967; x=1689839767;
+        d=1e100.net; s=20221208; t=1689235031; x=1689839831;
         h=cc:to:subject:message-id:date:from:sender:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aWc1kwBXlooW52GInseesObOXCmA4do/WYm4jVF0oTk=;
-        b=FfXObAPuM+DcCVYRSNimwHU+V67KwsTkjvcxwNA/thyf7C8IQDiN3rFnsOVDTXTRMa
-         498bXlxT1prDvqoDKz4kc6ahmL1DVt5qxyknR6nKAtgU4dreZq5kJDe5M/N+LrEA+CU8
-         k3fK340GFLj4PvUtZdEEcOuee50SoPkhi+L2QEAp0aARhc+xaLbMn1msFJW+sRXcjc59
-         3buUxvd32niEbaCJWrZB72tG99gAVK7loa15H4TBRoJh7nf2t2Tgz8j9oYorwlcQR8ig
-         vWcAQu0PZDoo5CVIN7MtdndWZW7dAvFTPaTw7z22niOmvj52gYOltF+CpSvYB74yMX4F
-         rB6g==
-X-Gm-Message-State: ABy/qLbgZUtLv9IsTEYse28mG0lptFggd8vSLGc7k5rKwT8173sa0PxV
-	17g1QCtP6pj2BvFoPv9ijZh9upjFhfk7Qjem6KE=
-X-Google-Smtp-Source: APBJJlHIFwdXoq3fEeouuZHA3uRgotwmI8xtAA9OvUeQRBGjHbAdQIve77otqj4pB4KAcLWTqy9vCoLfVILX4h+g9FY=
-X-Received: by 2002:ac2:43c4:0:b0:4f8:5f32:b1da with SMTP id
- u4-20020ac243c4000000b004f85f32b1damr515861lfl.24.1689234966774; Thu, 13 Jul
- 2023 00:56:06 -0700 (PDT)
+        bh=ZBeF8DimtieRIbeczjrQAO7Bmt6r/83M9FTzR+dYQus=;
+        b=gNqoBu2APLYhRg2TXaElHwfemBFevkkquYul31OSamH3d3BT4EKBjqpo4PtGqCoDX6
+         uS7jtK6SJ+vLSOEf5dxCW8osdm4B4VCPcJB3wkpNh3V+aGhLDZKTpXQOwQO9gMZjbvl9
+         A9kuKiMhA7xxCHQ9PBwwq87+Zsgks4hIp4FTovwDmmuiJx45Wne1Mj9Jh2uRwKqXGJRU
+         FZwKNJTcL1QW83rG1EWl0PoXD0+OvgAJiKqmSGSHKh0VdFqF8FhovkTH48x3EhwPW4Bu
+         5iPxAi4vxO9VtSweqrlnmq5RCtHFrC/vKkqPiA4lu6vRmWAmc/m9jJXmeM4nLEXKaaD+
+         zyew==
+X-Gm-Message-State: ABy/qLaKFeMq2zCJkauqBC8GsfM+CrvUAUdEsQNBrXVzoJ7qXlRD8eum
+	LhZyeZnd5NTEVMgbFCatA2DEcsY1fTqOnNl3XBM=
+X-Google-Smtp-Source: APBJJlHbM+0P718q61QkhmRg2sZBdOo9EtDJ8+TrS+eXLQDo5tAoYPNE/0mM/eZP5gei9DkV5833SS3E0v0Hx3rZF2E=
+X-Received: by 2002:aa7:c90f:0:b0:51e:f83:6de6 with SMTP id
+ b15-20020aa7c90f000000b0051e0f836de6mr1240233edt.16.1689235031366; Thu, 13
+ Jul 2023 00:57:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com> <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
-In-Reply-To: <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
+References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+ <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com> <20230712235813.GE6354@monkey>
+In-Reply-To: <20230712235813.GE6354@monkey>
 Sender: cl1ntlov3@gmail.com
 X-Google-Sender-Delegation: cl1ntlov3@gmail.com
 From: linke li <lilinke99@gmail.com>
-Date: Thu, 13 Jul 2023 15:55:55 +0800
-X-Google-Sender-Auth: mLUbCrxKcTjFCSMauTl1sicDTA0
-Message-ID: <CAKdjhyBRcCFDiA923x0FLNYzs5vafENm96iAqV2XiDD_eTWBUQ@mail.gmail.com>
+Date: Thu, 13 Jul 2023 15:57:00 +0800
+X-Google-Sender-Auth: AOlVQvJu9wTequs-Y5TVT_XTP9o
+Message-ID: <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
 Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
-To: David Hildenbrand <david@redhat.com>
-Cc: Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, trix@redhat.com, ndesaulniers@google.com, 
-	nathan@kernel.org, muchun.song@linux.dev, mike.kravetz@oracle.com
+To: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: David Hildenbrand <david@redhat.com>, Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, trix@redhat.com, 
+	ndesaulniers@google.com, nathan@kernel.org, muchun.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-> So we're adding code to handle eventual future compiler bugs? That sounds
-> wrong, but maybe I misunderstood the problem you are trying to solve?
+> However, if this is a real issue it would make more
+> sense to look for and change all such checks rather than one single occurrence.
 
-Sorry for not making it clear. My focus is the presence of undefined
-behavior in kernel code.
-Compilers can generate any code for undefined behavior and compiler
-developers will not
-take this as compiler bugs. In my option,  kernel should not have
-undefined behavior.
+Hi, Mike. I have checked the example code you provided, and the
+difference between
+those codes and the patched code is that those checks are checks for
+unsigned integer
+ overflow, which is well-defined. Only undefined behavior poses a
+security risk. So they
+ don't need any modifications. I have only found one occurrence of
+signed number
+overflow so far.
 
-I double check this patch, this patch can not solve this issue well. I
-am considering a new
-patch below. The new patch do overflow check before the addition operation.
-```
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -155,10 +155,10 @@ static int hugetlbfs_file_mmap(struct file
-*file, struct vm_area_struct *vma)
-  return -EINVAL;
-
-  vma_len = (loff_t)(vma->vm_end - vma->vm_start);
-- len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
-  /* check for overflow */
-- if (len < vma_len)
-+ if (vma_len > LLONG_MAX - ((loff_t)vma->vm_pgoff << PAGE_SHIFT))
-  return -EINVAL;
-+ len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
-```
+Thank you for your valuable feedback.
