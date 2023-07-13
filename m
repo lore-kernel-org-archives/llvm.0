@@ -1,209 +1,322 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B739F9E5
-	for <llvm@lists.linux.dev>; Wed, 12 Jul 2023 23:58:51 +0000 (UTC)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CL9teO008422;
-	Wed, 12 Jul 2023 23:58:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=8MXTG2a2xI/2RhL3uYTs9O5tHvAN4el8pNv5lb6cmfM=;
- b=RlKHsjP65ltJ+K1/QZ/zPi+SP7I8KVJrOLtW3TjPSvXFhK7Fx3f0gITWmQHStJX4YeG3
- 9YPrOR/L3FM5scuwOuzv7r+Rm/qZnspW9g5QpLpldOzjpnyUVmDUFyF0uL5Iki+jmmjr
- Gp07HmB/omaKzh1GTa+U5LsGzVZpYpt2HcXkfbUQJuSqfIy5/+XBdYUYBQ0RGStcEx/Z
- A3z0oJfMmTnuHotYtxjCh/n3oa3owEdLggHgjxTXs8mUktME/IOPUUFfWHkJYL40NRzX
- +hZ+9gco0+aEWeGyVipB7AL86acpg49qa27EQdm8oiYXwpp846RFTsUGVPK+/Pu8kgiJ lA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpydu0d04-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Jul 2023 23:58:26 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36CMcwei004344;
-	Wed, 12 Jul 2023 23:58:25 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx8dqxhd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Jul 2023 23:58:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HcDhFKIicqGdHYHpV+lEDCf04k0Q99aV+ARX0I5wefOX0MA7NkPgFCLCL3IWccvR0nqpA+4c7AwYtQXKPFF8BDele9brUuw+IR/rFPSGtVBL9dfj+llOy8ygOD3gQMTzl3XkIsLydVKgRd8j+I9/dygSh2ZZ6dG4lUxRCrdezrXJVwIjXzVFmjt9GMIYftobVOzExqgK9bzXbssw9g/sPQFM/aRsxqY3bAjW7E1ZtL1KYqqyXz6C8pPfnadhHFFnwVWdLvB+nGvXC6bfCGAy3cOdSxhMHVkJAe6cLn06wOA6/wmwSwk5ssyRAu/S/qkgxCc3v+Hqge3g1nTOoUeN9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8MXTG2a2xI/2RhL3uYTs9O5tHvAN4el8pNv5lb6cmfM=;
- b=W0xthKaD+85xhdpgH1YJAZWA7IJwOShzTe4qzTa4BhhbfletCbiX/Umd2yhLzVNcYRLcLiwx6KrwWjcFKwbAA34jrPw4E9uvkbLn+bvJODU2YQrrHQelhb43VqslsEiVEa70GR6pW2IcvsJSUCLFSIyaXUNChEBsNZ8O3K+J28ATjjaMVU8jlMPQdUhJKNZsAi2hgVrhFphiQDgAMhz8f//BPAss6rUy3Dr78yrRj23FiTrVLk6/3qN+UHbK5eiMHptFQibapktUDJEGhpeEfivmh26lGB6xLbbC28iarq4yLRvTnQB6Q/9iMO9GFyw40kYciT3agVXSmvtZpYoZvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MXTG2a2xI/2RhL3uYTs9O5tHvAN4el8pNv5lb6cmfM=;
- b=znaOeVVB/TUY2oxZVkhGVSNCZr/DvAlBtMXvfe8iMDH1xvsuJ+jADYmhumXYmPEQ3lkrENhBjCJ4VHMcyJRdktpOfzLvveE1CCcJwWBxEfxPp0KR5yiv8Z2m/TL5Lf5FwtqCJQ2RYmxmbG29Rv4k0KgWK96UKzAUiNS9nClhqG0=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SJ2PR10MB7560.namprd10.prod.outlook.com (2603:10b6:a03:537::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Wed, 12 Jul
- 2023 23:58:16 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6588.017; Wed, 12 Jul 2023
- 23:58:16 +0000
-Date: Wed, 12 Jul 2023 16:58:13 -0700
-From: Mike Kravetz <mike.kravetz@oracle.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, trix@redhat.com, ndesaulniers@google.com,
-        nathan@kernel.org, muchun.song@linux.dev,
-        Linke Li <lilinke99@gmail.com>
-Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
- hugetlbfs_file_mmap()
-Message-ID: <20230712235813.GE6354@monkey>
-References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
- <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
-X-ClientProxiedBy: MW4PR03CA0036.namprd03.prod.outlook.com
- (2603:10b6:303:8e::11) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DCE7C;
+	Thu, 13 Jul 2023 01:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689211519; x=1720747519;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CNvnosYzDCc6sheIoCyRHCwT2RcAbNJulFMD0ACdl8A=;
+  b=fj7qxI0QiDgm+rubVA48EnB2iStojuWMh6B+iJkFCquhmqc6FxquYbgh
+   8ieBMJnBsnJ624vD9O96p6/roPx/vTyDOKqGtfSP2/cEItDcVLa/Bg4qm
+   LJ/Gmg0jKHl1FR9H2fs1bbtn85YSyhfky2Rs0XsOTSvv6n1GTtyGbrpnq
+   pEH3e6tDH/IU2/3Qno+NfYQhtEzBudqgr3WygvIk9blESwLX42OVgKCZ+
+   k7sZrZE3X1w/fQfrmQJUL4Wm0o7fh7Y/dY7wTWWtPW7is2o3PqMaWDVfv
+   FWGC704vh91IC4CVAnY8zA+WWtfDR+7gDuRvtTKVU74U9/Se/On+QjO+V
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="395853966"
+X-IronPort-AV: E=Sophos;i="6.01,201,1684825200"; 
+   d="scan'208";a="395853966"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 18:25:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="725105266"
+X-IronPort-AV: E=Sophos;i="6.01,201,1684825200"; 
+   d="scan'208";a="725105266"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Jul 2023 18:25:11 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJl4w-00065Z-14;
+	Thu, 13 Jul 2023 01:25:10 +0000
+Date: Thu, 13 Jul 2023 09:25:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-kernelci 101/101]
+ drivers/power/supply/twl4030_charger.c:1021:54: error: incomplete definition
+ of type 'struct device_node'
+Message-ID: <202307130922.gi7EleJ6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ2PR10MB7560:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d8f3293-b436-4a56-b2d9-08db8333dc29
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	7UW9z472S8uAIC848xGxOPlLGWYI21OJGwfDTygzyVSoxR2EuklSKdCkgawk7j/qX57+Jqih+NguVkZug/MKvYlC9iMcBmPTAUpAqv8RhqEfcIWJQS0Cx8AutT/YbBB4BtpXDXN0nI8Y/9OhItg6bYsuGz/h4ljm4w0Vq8f0t9x7uOA4YreLNUmKfkZJavCnRixacDQJdKwFZ5sJqYUigpcPE+4BELkMXKnv1GANIyhZKJAg9Vz7sadlkOx1IClOgntg2/h1D5Gab8JrWzPOczRcTPtmd90/RTInS+JtyEMyUBVLOub5WBvmivM/JTmRLI/jP5rGHS+A3IH9kPxBQnpHRajf0unRL3QIMZq6MXUnlz4KMvsVmu84rD+gSX6zhPU1iTeQ0tN0VTNdnSSC7pjtdvXFMUh/338g9MX7Jsl1Y5Ue7YlmHs5bK9BxCsBq4x8b9p68NrS46F3hzYHsiXFM8p3dLEIGqkuCGbn3vf56PCJcSr0lRe+/bHQ9M/GQYtTuvwUr5W1QBfQVYF3FNEpXsgMqspzRGKW0pIty69gWd04/PoMobFmhaTsDWObG
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199021)(54906003)(478600001)(316002)(6486002)(4326008)(6916009)(6666004)(9686003)(8936002)(53546011)(44832011)(1076003)(26005)(6506007)(8676002)(6512007)(186003)(2906002)(83380400001)(41300700001)(66946007)(66476007)(66556008)(38100700002)(5660300002)(7416002)(33716001)(86362001)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?0yThKnLX16E1A4FVZwH/axAeQdH9iEtnfXOAR3WZ7fy97qqLijYKdzt4wYtg?=
- =?us-ascii?Q?pZVyfwtmEnGC37/J9i99ljc7fMDEVwvFjLSRe5bo/zWQaeIh1MDeQJDltPPY?=
- =?us-ascii?Q?nqxNGOZ5rB7WKByH/qOpf68zJ2D+uX/O1xFXPhBv56V3kgPTy5jaI/t6qvkL?=
- =?us-ascii?Q?6gd0rLs33+4aaRX/ut4BSiyRK2OVyaqfFfHo52sfR/9M6DwSVxMkHebodD7H?=
- =?us-ascii?Q?xTj9Aaz62Q5GimvtHxI7LBsknn78lJBH6y4mDyjvhDBCQhlRrvALqnBkqv+r?=
- =?us-ascii?Q?70YX/YjHcKCx0XhBOWaapHmfyI6gq9P3b8F7Z03SxMqmLU405WE2y9ThGsfy?=
- =?us-ascii?Q?Vrtv1TAAP/i+mfjB+iIbQjYPyAUeQ9dhYxLvVS0oA0hh+6NziS1TKjfTyqRM?=
- =?us-ascii?Q?1VF9lnrf+JV1rDnj08Uo19ESPrHPNhKwHYo1AfRLqgMmy4Tmg0WlSE3ZpwX0?=
- =?us-ascii?Q?vJ8qqkNI5TC/aSBEwMC5YiJnxwSU/r49u51L3mW/B0ZA4lN62LvZUqEZmT1H?=
- =?us-ascii?Q?t6OKuPJz/hTaMttg7zadKzAqRSODW+7Pq4Y7xdFSmcLTOkTVqWkP5a7oYygU?=
- =?us-ascii?Q?K6+vwxXcVLIYrXcHrwIxaCeQO8kuOjtdCGzoSl/K1JlOjTLE6k4zv5gK12zI?=
- =?us-ascii?Q?ajZ8jyUNoaNOScWt8AFsQACskW1qUvqMbXATcAIp/ph9kgcywb6juycVhhVl?=
- =?us-ascii?Q?3wF7j0zkO5/Pog6FpfIYQ5sF4fIm/UJkr7i7vQYPVMs/MnYx7OAcHPwhWoEI?=
- =?us-ascii?Q?OVCnKgI265duCsdEbJz5tTyn3zpScg7qynN/sAyxpTU04LB68TJ812QUJ8Xi?=
- =?us-ascii?Q?mrAFW4uIcDHz7G95juWy/3v5aZSin+qE13G4xqE2bWCX8TxMp4gCDAOcon01?=
- =?us-ascii?Q?QLdRgPKEf/KsxTnzr9umbW6sxDJem72rcxrvnYP8iAL8Qv49SQTrWMyDx7wc?=
- =?us-ascii?Q?1tVZYn04NRB3ZmtpgVe1yHfsu1Zzf242mzysaWInZrd7vI/bm4G2Mn3Msbvp?=
- =?us-ascii?Q?jevfP39n1aYRg5rkS4uO+VPmbeC1El2HjLR4dgR8GMr7vu7S/bTuMGeHgXU6?=
- =?us-ascii?Q?O2I0LCOFVWftVN/y9tweXOJcYrFqwfn98HpHE5lQCl8yzMJby7ml4Ak6Ohuf?=
- =?us-ascii?Q?hMkNpBkw/Q9G5dR+f+6AgroPh3ws5EjuaLa4YiOZYeeYKcze7zeQnmYynJlN?=
- =?us-ascii?Q?zu7PQnxFNpeYkPDhUdfI60qBb89uHTJyEEhKuHlrlYKfRwlRfNDNYlYh7t5x?=
- =?us-ascii?Q?trZO6hR6bLlVObnG+k2B4elju/6gf8p9bx84n1TiE7hJLHwzAFaL8AeMWznj?=
- =?us-ascii?Q?3mj+xNJ2jrZi89f+OVJlq2qd5W+pwbMo4JFEP2u5RCfB+MDyU2HJeIfI7b9z?=
- =?us-ascii?Q?4NqmYNDrpXkSMrE6sZHWA0b9EfZG+giGLAN2fiPL7iboflPt/dlB0G9wdUua?=
- =?us-ascii?Q?ZOZiwuKZa1JGqf4QFQWaIp+3daA+JRtEDhOxII0wTCJZNNbBRSFQ3JDm1UOH?=
- =?us-ascii?Q?bDLNXP15hM4HWgU0Dyk7wnI1ia8iR4FzSGktvL3OlPfnLUQnLjJfkK9X2HTy?=
- =?us-ascii?Q?jxFIlkt86bUpcJhyTPxB5CNLJqa6mVAkL3aIApp0?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?us-ascii?Q?mDjDn2884XhHB8DfvTQ+Zxb9AyIwZSwigG0Y1oumCg33kpEFU6w1yY3fgNCM?=
- =?us-ascii?Q?ts+vuY/y6nt6D3zKga0IDWgxyvOoPXZ8lZjCnAZyLa0GG2exki4wUcQEVuzu?=
- =?us-ascii?Q?zJN16H9Kpi6AyA0asum3/rltJq/Aj52EtbMTjdIsHenkk0nU1lpsJ8On7JHQ?=
- =?us-ascii?Q?pzoW4S9M9af3EXakV0uqUfXxp2iQPkH6Y/gTkp2fzhS1Xh0Z+gGNmL359Ist?=
- =?us-ascii?Q?NfQEVJ/Tzt3ZUh3oLbraKQx9re4NjHTVZQAOITI7zzSA78dh68p6Ljya2xYp?=
- =?us-ascii?Q?Cj3zMCcKzZ5nNeheFZIAyDz7/E+zBlT32XXJD7v4w1/cW0UL+2/9SUC+br7A?=
- =?us-ascii?Q?pU9Ra4T3I/BKUTaVjqo57RN50CwIivMqbBDCfwKTYtagABsRRCinwdeOcOqP?=
- =?us-ascii?Q?e5+uTNoaixinv/n5fhfS3Is+ywOVTDXEqKwENVjkqfZjQsPFMZ77GeVENSST?=
- =?us-ascii?Q?+b133P5P4os4zusxHw2F+NA6SJa+xXBbG8+lCpYkJH/D+8cirGiFJxXRWg5w?=
- =?us-ascii?Q?u+7etLwuwqgUGPECh/ilLqRaSD9bijbti4MUSJaOVcy9VyKEdLNLi2CqxG62?=
- =?us-ascii?Q?HmeMb2JeBBtCkDHhoCGVtGWy9c9AfIRXzjdZHmzYA4KCT2si2okaUGf8AVy8?=
- =?us-ascii?Q?dZC4byAVhe5luXS3csyFLNHd7agFguLbphW3/gN0TrBo1nqIRkt4GhFQdIwP?=
- =?us-ascii?Q?771WgWVUrCeZ4F+XMjUosWXfwk5nlT/UePpCZ1EnnkgzTrP5azr4M2Egr3zr?=
- =?us-ascii?Q?C3tmDdwwksfnQTpZuHsO8R5chDQJdxcNYc2dpteBvowLSl8cLIY2r6noyemh?=
- =?us-ascii?Q?QtVcobUxmsXiC/mlqCtYozt5aFDe1PBDneMB7983efsIlyu6ae5QyYxYZBlN?=
- =?us-ascii?Q?mBGdQxuIyt2VhEmaTJGi+96ChaC6g/6JoLOkJjweG874PETJbgu3znAH/9gH?=
- =?us-ascii?Q?YHZfim00XDG0dujH8cybSaXNaVZ83uRwfpafjjdAMGoPeGXagCuD38rY9cal?=
- =?us-ascii?Q?1VzM?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d8f3293-b436-4a56-b2d9-08db8333dc29
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 23:58:16.5303
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 19AlK6QLabO/Vr44qK4WsVS7WjnpxMaF3QCzYJvSL+MMGhJMPeIpXa3YL/dggscqVt8T8e+nNHPC2dGsca0HAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7560
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_16,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307120213
-X-Proofpoint-GUID: ofUrr7Gf9HxVQZg861bXhS8lYIHmqmv3
-X-Proofpoint-ORIG-GUID: ofUrr7Gf9HxVQZg861bXhS8lYIHmqmv3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 07/11/23 13:49, David Hildenbrand wrote:
-> On 10.07.23 10:32, Linke Li wrote:
-> > From: Linke Li <lilinke99@gmail.com>
-> > 
-> > 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
-> > 	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
-> > 	/* check for overflow */
-> > 	if (len < vma_len)
-> > 		return -EINVAL;
-> > 
-> > The existing code includes an integer overflow check, which indicates
-> > that the variable len has the potential to overflow, leading to undefined
-> >   behavior according to the C standard. However, both GCC and Clang
-> > compilers may eliminate this overflow check based on the assumption
-> > that there will be no undefined behavior. Although the Linux kernel
-> > disables these optimizations by using the -fno-strict-overflow option,
-> > there is still a risk if the compilers make mistakes in the future.
-> 
-> So we're adding code to handle eventual future compiler bugs? That sounds
-> wrong, but maybe I misunderstood the problem you are trying to solve?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
+head:   ac7a2a5947cf0a60d9614031b509c5b65e99f87a
+commit: ac7a2a5947cf0a60d9614031b509c5b65e99f87a [101/101] WIP: Remove of.h include from headers
+config: hexagon-randconfig-r045-20230712 (https://download.01.org/0day-ci/archive/20230713/202307130922.gi7EleJ6-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307130922.gi7EleJ6-lkp@intel.com/reproduce)
 
-Like David, adding a fix for a potential future compiler bug sounds wrong.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307130922.gi7EleJ6-lkp@intel.com/
 
-I have no problem with restructuring code to make it more immune to
-potential issues.  However, it appears there are several places throughout
-the kernel that perform similar checks.  For example:
+All errors (new ones prefixed by >>):
 
-do_mmap()
+   In file included from drivers/power/supply/twl4030_charger.c:16:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/power/supply/twl4030_charger.c:16:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/power/supply/twl4030_charger.c:16:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   drivers/power/supply/twl4030_charger.c:242:16: warning: variable 'cur_reg' set but not used [-Wunused-but-set-variable]
+     242 |         unsigned reg, cur_reg;
+         |                       ^
+>> drivers/power/supply/twl4030_charger.c:1021:13: error: call to undeclared function 'of_get_compatible_child'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1021 |                 phynode = of_get_compatible_child(bci->dev->of_node->parent,
+         |                           ^
+>> drivers/power/supply/twl4030_charger.c:1021:54: error: incomplete definition of type 'struct device_node'
+    1021 |                 phynode = of_get_compatible_child(bci->dev->of_node->parent,
+         |                                                   ~~~~~~~~~~~~~~~~~^
+   include/linux/arch_topology.h:18:8: note: forward declaration of 'struct device_node'
+      18 | struct device_node;
+         |        ^
+>> drivers/power/supply/twl4030_charger.c:1027:4: error: call to undeclared function 'of_node_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1027 |                         of_node_put(phynode);
+         |                         ^
+>> drivers/power/supply/twl4030_charger.c:1140:21: error: call to undeclared function 'of_match_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1140 |                 .of_match_table = of_match_ptr(twl_bci_of_match),
+         |                                   ^
+>> drivers/power/supply/twl4030_charger.c:1140:21: error: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
+    1140 |                 .of_match_table = of_match_ptr(twl_bci_of_match),
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/power/supply/twl4030_charger.c:1140:21: error: initializer element is not a compile-time constant
+    1140 |                 .of_match_table = of_match_ptr(twl_bci_of_match),
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 warnings and 6 errors generated.
 
-	/* offset overflow? */
-	if ((pgoff + (len >> PAGE_SHIFT)) < pgoff)
-		return -EOVERFLOW;
 
-expand_upwards()
+vim +1021 drivers/power/supply/twl4030_charger.c
 
-	/* Enforce stack_guard_gap */
-	gap_addr = address + stack_guard_gap;
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12   973  
+7396f708b9f1d88 drivers/power/twl4030_charger.c        Pavel Machek         2015-07-30   974  static int twl4030_bci_probe(struct platform_device *pdev)
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   975  {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   976  	struct twl4030_bci *bci;
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31   977  	const struct twl4030_bci_platform_data *pdata = pdev->dev.platform_data;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   978  	int ret;
+28d48f04ead4143 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2011-06-03   979  	u32 reg;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   980  
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23   981  	bci = devm_kzalloc(&pdev->dev, sizeof(*bci), GFP_KERNEL);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   982  	if (bci == NULL)
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   983  		return -ENOMEM;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   984  
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31   985  	if (!pdata)
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31   986  		pdata = twl4030_bci_parse_dt(&pdev->dev);
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31   987  
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   988  	bci->ichg_eoc = 80100; /* Stop charging when current drops to here */
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   989  	bci->ichg_lo = 241000; /* Low threshold */
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   990  	bci->ichg_hi = 500000; /* High threshold */
+e4ae537e0482e99 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   991  	bci->ac_cur = 500000; /* 500mA */
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   992  	if (allow_usb)
+21ae40404f3ca66 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   993  		bci->usb_cur_target = 500000;  /* 500mA */
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   994  	else
+21ae40404f3ca66 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   995  		bci->usb_cur_target = 100000;  /* 100mA */
+22d4c33f7335ddf drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   996  	bci->usb_mode = CHARGE_AUTO;
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   997  	bci->ac_mode = CHARGE_AUTO;
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30   998  
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27   999  	bci->dev = &pdev->dev;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1000  	bci->irq_chg = platform_get_irq(pdev, 0);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1001  	bci->irq_bci = platform_get_irq(pdev, 1);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1002  
+61a7784efd3c89f drivers/power/twl4030_charger.c        Nishanth Menon       2014-05-28  1003  	platform_set_drvdata(pdev, bci);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1004  
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1005  	INIT_WORK(&bci->work, twl4030_bci_usb_work);
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1006  	INIT_DELAYED_WORK(&bci->current_worker, twl4030_current_worker);
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1007  
+5e6eb025b0d7ee7 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1008  	bci->channel_vac = devm_iio_channel_get(&pdev->dev, "vac");
+5e6eb025b0d7ee7 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1009  	if (IS_ERR(bci->channel_vac)) {
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1010  		ret = PTR_ERR(bci->channel_vac);
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1011  		if (ret == -EPROBE_DEFER)
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1012  			return ret;	/* iio not ready */
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1013  		dev_warn(&pdev->dev, "could not request vac iio channel (%d)",
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1014  			ret);
+5e6eb025b0d7ee7 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1015  		bci->channel_vac = NULL;
+5e6eb025b0d7ee7 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1016  	}
+5e6eb025b0d7ee7 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1017  
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1018  	if (bci->dev->of_node) {
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1019  		struct device_node *phynode;
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1020  
+9844fb2e3513112 drivers/power/supply/twl4030_charger.c Johan Hovold         2018-08-27 @1021  		phynode = of_get_compatible_child(bci->dev->of_node->parent,
+9844fb2e3513112 drivers/power/supply/twl4030_charger.c Johan Hovold         2018-08-27  1022  						  "ti,twl4030-usb");
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1023  		if (phynode) {
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1024  			bci->usb_nb.notifier_call = twl4030_bci_usb_ncb;
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1025  			bci->transceiver = devm_usb_get_phy_by_node(
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1026  				bci->dev, phynode, &bci->usb_nb);
+9844fb2e3513112 drivers/power/supply/twl4030_charger.c Johan Hovold         2018-08-27 @1027  			of_node_put(phynode);
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1028  			if (IS_ERR(bci->transceiver)) {
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1029  				ret = PTR_ERR(bci->transceiver);
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1030  				if (ret == -EPROBE_DEFER)
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1031  					return ret;	/* phy not ready */
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1032  				dev_warn(&pdev->dev, "could not request transceiver (%d)",
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1033  					ret);
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1034  				bci->transceiver = NULL;
+7bb5a650f3471e4 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1035  			}
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1036  		}
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1037  	}
+3950c95e2c39b99 drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-07-03  1038  
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1039  	bci->ac = devm_power_supply_register(&pdev->dev, &twl4030_bci_ac_desc,
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1040  					     NULL);
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1041  	if (IS_ERR(bci->ac)) {
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1042  		ret = PTR_ERR(bci->ac);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1043  		dev_err(&pdev->dev, "failed to register ac: %d\n", ret);
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1044  		return ret;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1045  	}
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1046  
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1047  	bci->usb = devm_power_supply_register(&pdev->dev, &twl4030_bci_usb_desc,
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1048  					      NULL);
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1049  	if (IS_ERR(bci->usb)) {
+297d716f6260cc9 drivers/power/twl4030_charger.c        Krzysztof Kozlowski  2015-03-12  1050  		ret = PTR_ERR(bci->usb);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1051  		dev_err(&pdev->dev, "failed to register usb: %d\n", ret);
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1052  		return ret;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1053  	}
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1054  
+1b7cac23419e139 drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1055  	ret = devm_request_threaded_irq(&pdev->dev, bci->irq_chg, NULL,
+a2778b0fe15d7ad drivers/power/twl4030_charger.c        Fengguang Wu         2012-08-23  1056  			twl4030_charger_interrupt, IRQF_ONESHOT, pdev->name,
+a2778b0fe15d7ad drivers/power/twl4030_charger.c        Fengguang Wu         2012-08-23  1057  			bci);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1058  	if (ret < 0) {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1059  		dev_err(&pdev->dev, "could not request irq %d, status %d\n",
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1060  			bci->irq_chg, ret);
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1061  		return ret;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1062  	}
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1063  
+1b7cac23419e139 drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1064  	ret = devm_request_threaded_irq(&pdev->dev, bci->irq_bci, NULL,
+a2778b0fe15d7ad drivers/power/twl4030_charger.c        Fengguang Wu         2012-08-23  1065  			twl4030_bci_interrupt, IRQF_ONESHOT, pdev->name, bci);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1066  	if (ret < 0) {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1067  		dev_err(&pdev->dev, "could not request irq %d, status %d\n",
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1068  			bci->irq_bci, ret);
+325b50aa5d1c7da drivers/power/twl4030_charger.c        NeilBrown            2015-03-23  1069  		return ret;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1070  	}
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1071  
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1072  	/* Enable interrupts now. */
+28d48f04ead4143 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2011-06-03  1073  	reg = ~(u32)(TWL4030_ICHGLOW | TWL4030_ICHGEOC | TWL4030_TBATOR2 |
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1074  		TWL4030_TBATOR1 | TWL4030_BATSTS);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1075  	ret = twl_i2c_write_u8(TWL4030_MODULE_INTERRUPTS, reg,
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1076  			       TWL4030_INTERRUPTS_BCIIMR1A);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1077  	if (ret < 0) {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1078  		dev_err(&pdev->dev, "failed to unmask interrupts: %d\n", ret);
+e8847c565421f1c drivers/power/supply/twl4030_charger.c H. Nikolaus Schaller 2017-06-14  1079  		return ret;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1080  	}
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1081  
+28d48f04ead4143 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2011-06-03  1082  	reg = ~(u32)(TWL4030_VBATOV | TWL4030_VBUSOV | TWL4030_ACCHGOV);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1083  	ret = twl_i2c_write_u8(TWL4030_MODULE_INTERRUPTS, reg,
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1084  			       TWL4030_INTERRUPTS_BCIIMR2A);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1085  	if (ret < 0)
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1086  		dev_warn(&pdev->dev, "failed to unmask interrupts: %d\n", ret);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1087  
+1098cb58aed8eb4 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1088  	twl4030_charger_update_current(bci);
+22d4c33f7335ddf drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1089  	if (device_create_file(&bci->usb->dev, &dev_attr_mode))
+22d4c33f7335ddf drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1090  		dev_warn(&pdev->dev, "could not create sysfs file\n");
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1091  	if (device_create_file(&bci->ac->dev, &dev_attr_mode))
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1092  		dev_warn(&pdev->dev, "could not create sysfs file\n");
+aca3c3546396b30 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1093  
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1094  	twl4030_charger_enable_ac(bci, true);
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1095  	if (!IS_ERR_OR_NULL(bci->transceiver))
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1096  		twl4030_bci_usb_ncb(&bci->usb_nb,
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1097  				    bci->transceiver->last_event,
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1098  				    NULL);
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1099  	else
+6e37ec8c77e3e65 drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1100  		twl4030_charger_enable_usb(bci, false);
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1101  	if (pdata)
+210d4bc8a3128e3 drivers/power/twl4030_charger.c        NeilBrown            2012-05-09  1102  		twl4030_charger_enable_backup(pdata->bb_uvolt,
+210d4bc8a3128e3 drivers/power/twl4030_charger.c        NeilBrown            2012-05-09  1103  					      pdata->bb_uamp);
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1104  	else
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1105  		twl4030_charger_enable_backup(0, 0);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1106  
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1107  	return 0;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1108  }
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1109  
+420b2d443b7ee2a drivers/power/supply/twl4030_charger.c Dmitry Torokhov      2017-03-01  1110  static int twl4030_bci_remove(struct platform_device *pdev)
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1111  {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1112  	struct twl4030_bci *bci = platform_get_drvdata(pdev);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1113  
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1114  	twl4030_charger_enable_ac(bci, false);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1115  	twl4030_charger_enable_usb(bci, false);
+210d4bc8a3128e3 drivers/power/twl4030_charger.c        NeilBrown            2012-05-09  1116  	twl4030_charger_enable_backup(0, 0);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1117  
+22d4c33f7335ddf drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1118  	device_remove_file(&bci->usb->dev, &dev_attr_mode);
+b04b908d8a2901c drivers/power/twl4030_charger.c        NeilBrown            2015-07-30  1119  	device_remove_file(&bci->ac->dev, &dev_attr_mode);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1120  	/* mask interrupts */
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1121  	twl_i2c_write_u8(TWL4030_MODULE_INTERRUPTS, 0xff,
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1122  			 TWL4030_INTERRUPTS_BCIIMR1A);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1123  	twl_i2c_write_u8(TWL4030_MODULE_INTERRUPTS, 0xff,
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1124  			 TWL4030_INTERRUPTS_BCIIMR2A);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1125  
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1126  	return 0;
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1127  }
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1128  
+9e2480d437f99aa drivers/power/supply/twl4030_charger.c Krzysztof Kozlowski  2023-03-11  1129  static const struct of_device_id twl_bci_of_match[] __maybe_unused = {
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1130  	{.compatible = "ti,twl4030-bci", },
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1131  	{ }
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1132  };
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1133  MODULE_DEVICE_TABLE(of, twl_bci_of_match);
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31  1134  
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1135  static struct platform_driver twl4030_bci_driver = {
+7396f708b9f1d88 drivers/power/twl4030_charger.c        Pavel Machek         2015-07-30  1136  	.probe = twl4030_bci_probe,
+420b2d443b7ee2a drivers/power/supply/twl4030_charger.c Dmitry Torokhov      2017-03-01  1137  	.remove	= twl4030_bci_remove,
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1138  	.driver	= {
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1139  		.name	= "twl4030_bci",
+ec0b380245d7b7d drivers/power/twl4030_charger.c        NeilBrown            2013-10-31 @1140  		.of_match_table = of_match_ptr(twl_bci_of_match),
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1141  	},
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1142  };
+7396f708b9f1d88 drivers/power/twl4030_charger.c        Pavel Machek         2015-07-30  1143  module_platform_driver(twl4030_bci_driver);
+2e727f1787e3110 drivers/power/twl4030_charger.c        Grazvydas Ignotas    2010-09-27  1144  
 
-	/* Guard against overflow */
-	if (gap_addr < address || gap_addr > TASK_SIZE)
-		gap_addr = TASK_SIZE;
+:::::: The code at line 1021 was first introduced by commit
+:::::: 9844fb2e351311210e6660a9a1c62d17424a6145 power: supply: twl4030-charger: fix OF sibling-node lookup
 
-do_madvise()
+:::::: TO: Johan Hovold <johan@kernel.org>
+:::::: CC: Rob Herring <robh@kernel.org>
 
-	end = start + len;
-	if (end < start)
-		return -EINVAL;
-
-I am not suggesting that these all be changed.  The question of a real
-issue still remains.  However, if this is a real issue it would make more
-sense to look for and change all such checks rather than one single occurrence.
 -- 
-Mike Kravetz
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
