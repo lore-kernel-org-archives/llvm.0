@@ -1,45 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A577100C7;
-	Thu, 13 Jul 2023 09:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D291A1078A;
+	Thu, 13 Jul 2023 09:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689241731; x=1720777731;
+  t=1689242332; x=1720778332;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=22hn2XMK8XWrANLbcoZvHqF8/62Ay7ODZWbbTUKsk94=;
-  b=hLXfN6285uGoXBqu5ie/osnJZOIa0ZCnAbbE4afwojDKZUE9cnQkoAXU
-   MCInWyeDV+YfP+UZsAK14Ixbwuw1cycsblID0jk1nKRf1eq4mrgjUj8YX
-   meqAfVheELC8tfzgLYy9VJKdVEQA9J3s+lKQYKaojVI3OXsq/hO1onUaF
-   ia7gSopnoK0tAuDl67KlaIbRQswLy3IB7pnL7Hp4KsuNXLR6JebvtI4I6
-   R43Jz5hqETz6c1smGE50UTbFt1E60Z5DxLFOjwuvZS2c/yUnyswJhYSCI
-   2S2irbD+uMqHg79H20VK2SEnclFL0dGp1DtRzZnIIWyFfveGnAYkxF4yz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="395944310"
+  bh=1zyhLKzHEbvZh0m0yw71FWPE9ATf7hBKeew4ZQU4FAI=;
+  b=maIcmA97IylmWrFl27U3uz8OEbJn8vlvBn7yybfv49faZvIbeoPuujep
+   TCeiGuXM6Lb/fGOY+vJd/qpBVTnki+b6Mq3N5Ot2mh5kCTqcH2ObmjI7B
+   zFM3HugbVf6S7C9fEEfSiEjlGYH92D1xOH7X86zFDJ2x3RqAXFhGeI8Ty
+   i3JpAaom9+alfGruIqSNV6uCYIY701NDs29QL2nuxKgIRx02fLrRoGsUt
+   ivHA9CQoyK0qP43Gp5vPYzHY94ZbJbKLZcJXdeCSuUHJy5Wa281KRD8fH
+   yLjXmY6UH3iRJrgEuIH9FDB2vbNcLs5GRpURN92z/l8yEcfNXVwxW2Cuv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="345457294"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="395944310"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 02:48:50 -0700
+   d="scan'208";a="345457294"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 02:58:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="866488258"
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="725242414"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="866488258"
+   d="scan'208";a="725242414"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Jul 2023 02:48:48 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2023 02:58:49 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qJswK-0006V7-0L;
-	Thu, 13 Jul 2023 09:48:48 +0000
-Date: Thu, 13 Jul 2023 17:48:36 +0800
+	id 1qJt61-0006Vv-0M;
+	Thu, 13 Jul 2023 09:58:49 +0000
+Date: Thu, 13 Jul 2023 17:58:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff LaBundy <jeff@labundy.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [linux-next:master 2212/2369]
- drivers/input/touchscreen/iqs7211.c:2464:12: warning: cast to smaller
- integer type 'enum iqs7211_dev_id' from 'const void *'
-Message-ID: <202307131717.LtwApG0z-lkp@intel.com>
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Subject: [mtd:nand/next 24/28] drivers/mtd/nand/raw/qcom_nandc.c:2957:24:
+ warning: variable 'naddrs' set but not used
+Message-ID: <202307131730.NOYbcjBr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,139 +48,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e3262265625831348cfb3128d35907ead75d8bf7
-commit: f2ba47e65f3b5642488802a60cb7dd068f425edc [2212/2369] Input: add support for Azoteq IQS7210A/7211A/E
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230713/202307131717.LtwApG0z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131717.LtwApG0z-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+head:   2b42d718c7d7f4269d45fb58b4f74d7b2bfb08bd
+commit: 5c6a9518447ebc72606b390ab5cb3eab9dc1d867 [24/28] mtd: rawnand: qcom: Implement exec_op()
+config: arm64-randconfig-r034-20230713 (https://download.01.org/0day-ci/archive/20230713/202307131730.NOYbcjBr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131730.NOYbcjBr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307131717.LtwApG0z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307131730.NOYbcjBr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/input/touchscreen/iqs7211.c:2464:12: warning: cast to smaller integer type 'enum iqs7211_dev_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-    2464 |                 dev_id = (enum iqs7211_dev_id)of_device_get_match_data(&client->dev);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mtd/nand/raw/qcom_nandc.c:2957:24: warning: variable 'naddrs' set but not used [-Wunused-but-set-variable]
+                   unsigned int offset, naddrs;
+                                        ^
    1 warning generated.
 
 
-vim +2464 drivers/input/touchscreen/iqs7211.c
+vim +/naddrs +2957 drivers/mtd/nand/raw/qcom_nandc.c
 
-  2444	
-  2445	static int iqs7211_probe(struct i2c_client *client)
-  2446	{
-  2447		struct iqs7211_private *iqs7211;
-  2448		enum iqs7211_reg_grp_id reg_grp;
-  2449		enum iqs7211_dev_id dev_id;
-  2450		unsigned long irq_flags;
-  2451		bool shared_irq;
-  2452		int error, irq;
-  2453	
-  2454		iqs7211 = devm_kzalloc(&client->dev, sizeof(*iqs7211), GFP_KERNEL);
-  2455		if (!iqs7211)
-  2456			return -ENOMEM;
-  2457	
-  2458		i2c_set_clientdata(client, iqs7211);
-  2459		iqs7211->client = client;
-  2460	
-  2461		INIT_LIST_HEAD(&iqs7211->reg_field_head);
-  2462	
-  2463		if (client->dev.of_node)
-> 2464			dev_id = (enum iqs7211_dev_id)of_device_get_match_data(&client->dev);
-  2465		else
-  2466			dev_id = i2c_match_id(iqs7211_id, client)->driver_data;
-  2467	
-  2468		shared_irq = iqs7211_devs[dev_id].num_ctx == IQS7211_MAX_CTX;
-  2469		iqs7211->dev_desc = &iqs7211_devs[dev_id];
-  2470	
-  2471		/*
-  2472		 * The RDY pin behaves as an interrupt, but must also be polled ahead
-  2473		 * of unsolicited I2C communication. As such, it is first opened as a
-  2474		 * GPIO and then passed to gpiod_to_irq() to register the interrupt.
-  2475		 *
-  2476		 * If an extra CTx pin is present, the RDY and MCLR pins are combined
-  2477		 * into a single bidirectional pin. In that case, the platform's GPIO
-  2478		 * must be configured as an open-drain output.
-  2479		 */
-  2480		iqs7211->irq_gpio = devm_gpiod_get(&client->dev, "irq",
-  2481						   shared_irq ? GPIOD_OUT_LOW
-  2482							      : GPIOD_IN);
-  2483		if (IS_ERR(iqs7211->irq_gpio)) {
-  2484			error = PTR_ERR(iqs7211->irq_gpio);
-  2485			dev_err(&client->dev, "Failed to request IRQ GPIO: %d\n",
-  2486				error);
-  2487			return error;
-  2488		}
-  2489	
-  2490		if (shared_irq) {
-  2491			iqs7211->reset_gpio = iqs7211->irq_gpio;
-  2492		} else {
-  2493			iqs7211->reset_gpio = devm_gpiod_get_optional(&client->dev,
-  2494								      "reset",
-  2495								      GPIOD_OUT_HIGH);
-  2496			if (IS_ERR(iqs7211->reset_gpio)) {
-  2497				error = PTR_ERR(iqs7211->reset_gpio);
-  2498				dev_err(&client->dev,
-  2499					"Failed to request reset GPIO: %d\n", error);
-  2500				return error;
-  2501			}
-  2502		}
-  2503	
-  2504		error = iqs7211_start_comms(iqs7211);
-  2505		if (error)
-  2506			return error;
-  2507	
-  2508		for (reg_grp = 0; reg_grp < IQS7211_NUM_REG_GRPS; reg_grp++) {
-  2509			const char *reg_grp_name = iqs7211_reg_grp_names[reg_grp];
-  2510			struct fwnode_handle *reg_grp_node;
-  2511	
-  2512			if (reg_grp_name)
-  2513				reg_grp_node = device_get_named_child_node(&client->dev,
-  2514									   reg_grp_name);
-  2515			else
-  2516				reg_grp_node = fwnode_handle_get(dev_fwnode(&client->dev));
-  2517	
-  2518			if (!reg_grp_node)
-  2519				continue;
-  2520	
-  2521			error = iqs7211_parse_reg_grp(iqs7211, reg_grp_node, reg_grp);
-  2522			fwnode_handle_put(reg_grp_node);
-  2523			if (error)
-  2524				return error;
-  2525		}
-  2526	
-  2527		error = iqs7211_register_kp(iqs7211);
-  2528		if (error)
-  2529			return error;
-  2530	
-  2531		error = iqs7211_register_tp(iqs7211);
-  2532		if (error)
-  2533			return error;
-  2534	
-  2535		error = iqs7211_init_device(iqs7211);
-  2536		if (error)
-  2537			return error;
-  2538	
-  2539		irq = gpiod_to_irq(iqs7211->irq_gpio);
-  2540		if (irq < 0)
-  2541			return irq;
-  2542	
-  2543		irq_flags = gpiod_is_active_low(iqs7211->irq_gpio) ? IRQF_TRIGGER_LOW
-  2544								   : IRQF_TRIGGER_HIGH;
-  2545		irq_flags |= IRQF_ONESHOT;
-  2546	
-  2547		error = devm_request_threaded_irq(&client->dev, irq, NULL, iqs7211_irq,
-  2548						  irq_flags, client->name, iqs7211);
-  2549		if (error)
-  2550			dev_err(&client->dev, "Failed to request IRQ: %d\n", error);
-  2551	
-  2552		return error;
-  2553	}
-  2554	
+  2943	
+  2944	/* NAND framework ->exec_op() hooks and related helpers */
+  2945	static void qcom_parse_instructions(struct nand_chip *chip,
+  2946					    const struct nand_subop *subop,
+  2947						struct qcom_op *q_op)
+  2948	{
+  2949		struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+  2950		const struct nand_op_instr *instr = NULL;
+  2951		unsigned int op_id;
+  2952		int i;
+  2953	
+  2954		memset(q_op, 0, sizeof(*q_op));
+  2955	
+  2956		for (op_id = 0; op_id < subop->ninstrs; op_id++) {
+> 2957			unsigned int offset, naddrs;
+  2958			const u8 *addrs;
+  2959	
+  2960			instr = &subop->instrs[op_id];
+  2961	
+  2962			switch (instr->type) {
+  2963			case NAND_OP_CMD_INSTR:
+  2964				q_op->cmd_reg = qcom_op_cmd_mapping(nandc, instr->ctx.cmd.opcode, q_op);
+  2965				q_op->rdy_delay_ns = instr->delay_ns;
+  2966				break;
+  2967	
+  2968			case NAND_OP_ADDR_INSTR:
+  2969				offset = nand_subop_get_addr_start_off(subop, op_id);
+  2970				naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
+  2971				addrs = &instr->ctx.addr.addrs[offset];
+  2972				for (i = 0; i < MAX_ADDRESS_CYCLE; i++) {
+  2973					if (i < 4)
+  2974						q_op->addr1_reg |= (u32)addrs[i] << i * 8;
+  2975					else
+  2976						q_op->addr2_reg |= addrs[i];
+  2977				}
+  2978				q_op->rdy_delay_ns = instr->delay_ns;
+  2979				break;
+  2980	
+  2981			case NAND_OP_DATA_IN_INSTR:
+  2982				q_op->data_instr = instr;
+  2983				q_op->data_instr_idx = op_id;
+  2984				q_op->rdy_delay_ns = instr->delay_ns;
+  2985				fallthrough;
+  2986			case NAND_OP_DATA_OUT_INSTR:
+  2987				q_op->rdy_delay_ns = instr->delay_ns;
+  2988				break;
+  2989	
+  2990			case NAND_OP_WAITRDY_INSTR:
+  2991				q_op->rdy_timeout_ms = instr->ctx.waitrdy.timeout_ms;
+  2992				q_op->rdy_delay_ns = instr->delay_ns;
+  2993				break;
+  2994			}
+  2995		}
+  2996	}
+  2997	
 
 -- 
 0-DAY CI Kernel Test Service
