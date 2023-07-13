@@ -1,57 +1,44 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321881DDE4
-	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 15:10:16 +0000 (UTC)
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fc03aa6e04so7571975e9.2
-        for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 08:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689261014; x=1691853014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kbh8/8YR2OYwgBsozxXjeHWBOMoncqGng7RkrjUyFwA=;
-        b=mn1AOQABIhLQtgpaF09UwJ9IIzomZ6nEQcprYyn2FRSn4Y90dqBbK6CJg8iWhXUY49
-         fpxZFnAS90xWFVmKfTfkCItAJHos9W59gwcdDVqhsPuTJXrekbubqjym0xZFetMFRRct
-         CZ5ySetSCy3vTd9EvK1enjtjdsraEoqAbP3FSY7h9XBHXHgHI7ta9ah5Xc5tvmkOBZZP
-         0Kk/jxK2PRHtNDyXojHbclN64FXzJ4gW4TWpXrCl/SWV3a879SatabcK5DjwX4NMCm1X
-         LZjpAE17IWkIeKlBS76Z10TVZ6zU51CKeL9ujqSpPxRTl+f3bs16L3CNDPcd+HxY1Tlb
-         jBhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689261014; x=1691853014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kbh8/8YR2OYwgBsozxXjeHWBOMoncqGng7RkrjUyFwA=;
-        b=YYVXz1LReCcJvZKHiq7Aa1JNVSW2QhIwWXflWj3D6ji2I+ygOk9PICYCb/I86Evmur
-         oN3AmkCmN+k55C0w3h1EOydWfgnK2FcKjLfw9GNKqEWPPYnPxqy/fQznhlUNA5/7kWSD
-         j+xQIvuPifSFkQ7J4XbWPr4RHfS3148FPUrynNkbQaycffAq8AGKkPPTuUB9rw8hnihj
-         ByDtCa//tUSDVFj7ydmSsCK4Mx05xn2GUeY4cjFxpfvvKQymXgyTMlapttwGy9LlT2Fb
-         SuajTdUeE83hnsUix6aiV2E0M5s7YVMr77kHF1e4vkdN6huSdCY13EM3iWz5ArQTnO6Q
-         e6bA==
-X-Gm-Message-State: ABy/qLbn/aQCf5zpUzl7H3l+KDHpUwZ3ft6TE9REJhZYEorlAHHt/est
-	kcxfiNZryKuZBpn0E4CxfEgPLQ==
-X-Google-Smtp-Source: APBJJlGyuz/1zMyMkHxcVsDhm5iLo+cD8ocAAMhXeNuD+fErHxdiD+gYMz9JijcyDuyzeV/gMAbBeQ==
-X-Received: by 2002:a05:600c:acd:b0:3fc:b86:d3fa with SMTP id c13-20020a05600c0acd00b003fc0b86d3famr1679806wmr.1.1689261014235;
-        Thu, 13 Jul 2023 08:10:14 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1c740b000000b003fbe36a4ce6sm18534778wmc.10.2023.07.13.08.10.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 08:10:12 -0700 (PDT)
-Date: Thu, 13 Jul 2023 18:10:08 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: linke li <lilinke99@gmail.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>,
-	David Hildenbrand <david@redhat.com>,
-	Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, trix@redhat.com,
-	ndesaulniers@google.com, nathan@kernel.org, muchun.song@linux.dev
-Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
- hugetlbfs_file_mmap()
-Message-ID: <6c3191e1-23fd-4f9e-9b5e-321c51599897@moroto.mountain>
-References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
- <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
- <20230712235813.GE6354@monkey>
- <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5478F1EA9B;
+	Thu, 13 Jul 2023 15:29:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689262142; x=1720798142;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aL3XVLCfiA9cw5MT4HYq/9sWq9N7qWBvyWh5Vs2xKUQ=;
+  b=ZJvtyiEEcfsxURKnNud/jURi+MHgAkyBSNeQwS/qGfmlNoYzF5FfGwrd
+   gmvY7YBxDYspTLl3a9EAH57zhmDmGGmN2CcP/Mzdcc23VnCpRnLDzNrvD
+   +dG8F+FDoTyEa91MQIlN/qZyXQz5dxyif2gZ5fL6q58mW6ANOVVZfjO1h
+   CM+2jgg495MT9l8KkgIWaptd84RnUVtDxrLqbrf93vtkxJmIGtB9t7T3b
+   fI4pL25YNMhO+W7XA6RpkbwLXRydKSKXhAxTrxrdBjVPZ45hEDgz6//8a
+   8Oyg7swomKU91/VZGBPt5G5ZA+0iOqe5IF6f7W4Uo3YRpdO6BqaAnnqqU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="364090614"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="364090614"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 08:29:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725335191"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="725335191"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2023 08:28:59 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qJyFX-0006iA-0x;
+	Thu, 13 Jul 2023 15:28:59 +0000
+Date: Thu, 13 Jul 2023 23:28:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [rmk-arm:ktext-current 1/19] kernel/scs.c:46:40: warning: comparison
+ of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *')
+ and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned
+ long *'))
+Message-ID: <202307132335.xdlOMkMP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,47 +47,429 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
 
-On Thu, Jul 13, 2023 at 03:57:00PM +0800, linke li wrote:
-> > However, if this is a real issue it would make more
-> > sense to look for and change all such checks rather than one single occurrence.
-> 
-> Hi, Mike. I have checked the example code you provided, and the
-> difference between
-> those codes and the patched code is that those checks are checks for
-> unsigned integer
->  overflow, which is well-defined. Only undefined behavior poses a
-> security risk. So they
->  don't need any modifications. I have only found one occurrence of
-> signed number
-> overflow so far.
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm ktext-current
+head:   1085162f4939fd1d436ba6ec27b54c707a2a7c47
+commit: b392b426ad1dad14b1f13a984fef3f8e082b58e6 [1/19] arm64: place kernel in its own L0 page table entry
+config: arm64-randconfig-r032-20230713 (https://download.01.org/0day-ci/archive/20230713/202307132335.xdlOMkMP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307132335.xdlOMkMP-lkp@intel.com/reproduce)
 
-I used to have a similar check to that but I eventually deleted it
-because I decided that the -fno-strict-overflow option works.  It didn't
-produce a lot of warnings.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307132335.xdlOMkMP-lkp@intel.com/
 
-Historically we have done a bad job at open coding integer overflow
-checks.  Some that I wrote turned out to be incorrect.  And even when
-I write them correctly a couple times people have "fixed" them even
-harder without CCing me or asking me why I wrote them the way I did.
+All warnings (new ones prefixed by >>):
 
-What about using the check_add_overflow() macro?
+>> kernel/scs.c:46:40: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           s = __vmalloc_node_range(SCS_SIZE, 1, VMALLOC_START, VMALLOC_END,
+                                                 ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> mm/percpu.c:3110:21: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           if (max_distance > VMALLOC_TOTAL * 3 / 4) {
+                              ^~~~~~~~~~~~~
+   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
+   #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+                                        ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   mm/percpu.c:3112:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                   max_distance, VMALLOC_TOTAL);
+                                                 ^~~~~~~~~~~~~
+   include/linux/printk.h:508:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                              ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+>> mm/vmalloc.c:82:17: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           return addr >= VMALLOC_START && addr < VMALLOC_END;
+                          ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   mm/vmalloc.c:647:14: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           if (addr >= MODULES_VADDR && addr < MODULES_END)
+                       ^~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
+   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   mm/vmalloc.c:647:38: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           if (addr >= MODULES_VADDR && addr < MODULES_END)
+                                               ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   mm/vmalloc.c:2000:10: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
+                   ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   mm/vmalloc.c:2040:6: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                           VMALLOC_START, VMALLOC_END,
+                                           ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+--
+>> mm/util.c:629:39: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+                                                ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> arch/arm64/mm/kasan_init.c:225:54: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           mod_shadow_start = (u64)kasan_mem_to_shadow((void *)MODULES_VADDR);
+                                                               ^~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
+   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/mm/kasan_init.c:248:15: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
+           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   arch/arm64/mm/kasan_init.c:248:32: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   arch/arm64/mm/kasan_init.c:248:2: error: call to __compiletime_assert_425 declared with 'error' attribute: BUILD_BUG_ON failed: VMALLOC_START != MODULES_END
+           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:397:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:92:1: note: expanded from here
+   __compiletime_assert_425
+   ^
+   3 warnings and 1 error generated.
+--
+>> arch/arm64/kernel/crash_core.c:24:57: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+                                                                  ^~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
+   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/kernel/crash_core.c:25:55: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+                                                                ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/kernel/crash_core.c:26:57: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+                                                                  ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+                                    ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+   #define MODULES_END             (KIMAGE_VADDR)
+                                    ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/kernel/crash_core.c:36:46: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           vmcoreinfo_append_str("KERNELOFFSET=%lx\n", kaslr_offset());
+                                                       ^~~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
+   #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
+                                                           ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+                                    max(MODULES_VSIZE, PGDIR_SIZE))
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   4 warnings generated.
+..
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 7b17ccfa039d..c512165736e0 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -155,9 +155,8 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
- 		return -EINVAL;
- 
- 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
--	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
--	/* check for overflow */
--	if (len < vma_len)
-+	if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT,
-+			       &len))
- 		return -EINVAL;
- 
- 	inode_lock(inode);
 
+vim +46 kernel/scs.c
+
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  30  
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  31  static void *__scs_alloc(int node)
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  32  {
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  33  	int i;
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  34  	void *s;
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  35  
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  36  	for (i = 0; i < NR_CACHED_SCS; i++) {
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  37  		s = this_cpu_xchg(scs_cache[i], NULL);
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  38  		if (s) {
+f6e39794f4b6da Andrey Konovalov 2022-03-24  39  			s = kasan_unpoison_vmalloc(s, SCS_SIZE,
+f6e39794f4b6da Andrey Konovalov 2022-03-24  40  						   KASAN_VMALLOC_PROT_NORMAL);
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  41  			memset(s, 0, SCS_SIZE);
+f6e39794f4b6da Andrey Konovalov 2022-03-24  42  			goto out;
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  43  		}
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  44  	}
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  45  
+f6e39794f4b6da Andrey Konovalov 2022-03-24 @46  	s = __vmalloc_node_range(SCS_SIZE, 1, VMALLOC_START, VMALLOC_END,
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  47  				    GFP_SCS, PAGE_KERNEL, 0, node,
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  48  				    __builtin_return_address(0));
+f6e39794f4b6da Andrey Konovalov 2022-03-24  49  
+f6e39794f4b6da Andrey Konovalov 2022-03-24  50  out:
+f6e39794f4b6da Andrey Konovalov 2022-03-24  51  	return kasan_reset_tag(s);
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  52  }
+a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  53  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: f6e39794f4b6da7ca9b77f2f9ad11fd6f0ac83e5 kasan, vmalloc: only tag normal vmalloc allocations
+
+:::::: TO: Andrey Konovalov <andreyknvl@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
