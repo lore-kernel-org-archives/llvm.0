@@ -1,43 +1,38 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCED182DF;
-	Thu, 13 Jul 2023 17:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689267784; x=1720803784;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Qs5RdyRBsop7RVJjBwpY/sgTYxI7pQqhIG7M016EMpQ=;
-  b=K/wqY2GdRuK1b4de7iv7ygWnrt1vNHHS/dZZkjO4fftfNEoRojf0OUxF
-   akNP2KPVBgHTCM84keArdOFhI0QfGE3G/H9ImwWr4JbLpd0ZIdejpo4x9
-   NHEl4fPWZFWI73Pa6yHDHU3zrOarGXzxrRr8hAPpW36jRFN5DyJyRlsPU
-   l/Pl2NPZWENzK9sXbpJCX8vQkA/Tvlk27iCNqsCFRyrKAVgeGY9LSKeuN
-   roF6qyZRpdA4/jVIH0Q7rrEWWoqFtdMnGRUmL7fLUWUg5gExPxTp2e+Mp
-   Uik3SpdcVl8JSdDZDbAyqHjQNTbDow/2dGiiXIjf5a6AMY/PZGdxaJ9bc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="451616835"
-X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="451616835"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 10:02:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="792116504"
-X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="792116504"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2023 10:02:03 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qJzhb-0006mU-0Y;
-	Thu, 13 Jul 2023 17:02:03 +0000
-Date: Fri, 14 Jul 2023 01:01:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [cilium:pr/new-api-tcx6 2/10] kernel/bpf/mprog.c:285:15: error: use
- of undeclared identifier 'dtuple'; did you mean 'tuple'?
-Message-ID: <202307140028.56nRJ5L1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47DF2FB3
+	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 17:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7527AC433BA;
+	Thu, 13 Jul 2023 17:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689268745;
+	bh=wdJcuex8sDV2XaCaoqTXPhw5KK8TTTlAjvD3PXnYiu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JWhXWsPKsI6Ors7YtLspO8kD6W3b/sBfz01gZsCD3oL6NDbKLGzWXw+USjmSgcR48
+	 xlU0eCJ0SVI3RZZ3j2ytZVsRP53VD/2GvuXBMo4Ec19mKMRwYW/TY1jTeR9YKSDBEV
+	 CTSf/Y1jslgVfaudz8gA5yP1TKewg+mZwkvnDxm5NuhflhdM/Gvmp+RmA/7CMuWLgs
+	 ezPZzFH3IgCZ+PxnBOMWN77SBry20xQn5Be9cx+Cml7tPT2edvF0GvZ3Ch3m1+TIym
+	 2ZTfPWVRWFIyOGH99CZAKMwtUKusiJTh52v/d19Rn5TKVx/dKZ2IVV0P3EIxahnLYV
+	 KEpOSikqHm6lQ==
+Date: Thu, 13 Jul 2023 10:19:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: jbaron@akamai.com, daniel.vetter@ffwll.ch, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+	intel-gvt-dev@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
+	ville.syrjala@linux.intel.com, seanpaul@chromium.org,
+	robdclark@gmail.com, gregkh@linuxfoundation.org,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-sparse@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 18/21] compiler.h: RFC - s/__LINE__/__COUNTER__/ in
+ __UNIQUE_ID fallback
+Message-ID: <20230713171901.GA4036397@dev-arch.thelio-3990X>
+References: <20230713163626.31338-1-jim.cromie@gmail.com>
+ <20230713163626.31338-19-jim.cromie@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,125 +41,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230713163626.31338-19-jim.cromie@gmail.com>
 
-tree:   https://github.com/cilium/linux.git pr/new-api-tcx6
-head:   aac84f1fa4da4148575d5fc7456a439edc67dda0
-commit: acf6b4cd3de8224fca4d205c76f48400cb4ca1f1 [2/10] bpf: Add generic attach/detach/query API for multi-progs
-config: mips-randconfig-r012-20230713 (https://download.01.org/0day-ci/archive/20230714/202307140028.56nRJ5L1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307140028.56nRJ5L1-lkp@intel.com/reproduce)
+Hi Jim
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307140028.56nRJ5L1-lkp@intel.com/
+On Thu, Jul 13, 2023 at 10:36:23AM -0600, Jim Cromie wrote:
+> We currently have 3 defns for __UNIQUE_ID(); gcc and clang are using
+> __COUNTER__ for real uniqueness, 3rd just uses __LINE__, which should
+> fail on this (and harder to avoid situations):
+> 
+>   DECLARE_FOO(); DECLARE_FOO();
+> 
+> Its 2023, can we haz a no-fallback __UNIQUE_ID ?
 
-All errors (new ones prefixed by >>):
+Yeah, I fail to see how this fallback definition can actually be used
+after commit 95207db8166a ("Remove Intel compiler support"); even before
+that, it would be pretty unlikely since icc usage has not been visible
+for a long time. The kernel only officially supports clang or GCC now,
+so the definitions of __UNIQUE_ID() in include/linux/compiler-clang.h
+and include/linux/compiler-gcc.h should always be used because of the
+include in include/linux/compiler_types.h, right?
 
->> kernel/bpf/mprog.c:285:15: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     285 |         WARN_ON_ONCE(dtuple->prog && dtuple->prog != prog);
-         |                      ^~~~~~
-         |                      tuple
-   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
-     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^
-   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
-     168 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   kernel/bpf/mprog.c:285:31: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     285 |         WARN_ON_ONCE(dtuple->prog && dtuple->prog != prog);
-         |                                      ^~~~~~
-         |                                      tuple
-   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
-     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^
-   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
-     168 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   kernel/bpf/mprog.c:286:15: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     286 |         WARN_ON_ONCE(dtuple->link && dtuple->link != link);
-         |                      ^~~~~~
-         |                      tuple
-   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
-     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^
-   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
-     168 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   kernel/bpf/mprog.c:286:31: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     286 |         WARN_ON_ONCE(dtuple->link && dtuple->link != link);
-         |                                      ^~~~~~
-         |                                      tuple
-   include/asm-generic/bug.h:181:41: note: expanded from macro 'WARN_ON_ONCE'
-     181 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^
-   include/asm-generic/bug.h:168:25: note: expanded from macro 'WARN_ON'
-     168 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   kernel/bpf/mprog.c:287:2: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     287 |         dtuple->prog = prog;
-         |         ^~~~~~
-         |         tuple
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   kernel/bpf/mprog.c:288:2: error: use of undeclared identifier 'dtuple'; did you mean 'tuple'?
-     288 |         dtuple->link = link;
-         |         ^~~~~~
-         |         tuple
-   kernel/bpf/mprog.c:262:25: note: 'tuple' declared here
-     262 |                            struct bpf_tuple *tuple, int idx)
-         |                                              ^
-   6 errors generated.
+I think the correct clean up is to just hoist the definition of
+__UNIQUE_ID() out of the individual compiler headers into the common one
+here but...
 
+> NOTE:
+> 
+> This also changes __UNIQUE_ID_ to _kaUID_.  Ive been getting
+> lkp-reports of collisions on names which should be unique; this
+> shouldnt happen on gcc & clang, but does on some older ones, on some
+> platforms, on some allyes & rand-configs.  Like this:
+> 
+> mips64-linux-ld:
+> drivers/gpu/drm/display/drm_dp_helper.o:(__dyndbg_class_users+0x0):
+> multiple definition of `__UNIQUE_ID_ddebug_class_user405';
+> drivers/gpu/drm/drm_gem_shmem_helper.o:(__dyndbg_class_users+0x0):
+> first defined here
 
-vim +285 kernel/bpf/mprog.c
+This problem cannot be addressed with this patch given the above
+information, no? Seems like that might mean that __COUNTER__ has issues
+in earlier compilers?
 
-   260	
-   261	static int bpf_mprog_fetch(struct bpf_mprog_entry *entry,
-   262				   struct bpf_tuple *tuple, int idx)
-   263	{
-   264		int total = bpf_mprog_total(entry);
-   265		struct bpf_mprog_cp *cp;
-   266		struct bpf_mprog_fp *fp;
-   267		struct bpf_prog *prog;
-   268		struct bpf_link *link;
-   269	
-   270		if (idx == -1)
-   271			idx = 0;
-   272		else if (idx == total)
-   273			idx = total - 1;
-   274		bpf_mprog_read(entry, idx, &fp, &cp);
-   275		prog = READ_ONCE(fp->prog);
-   276		link = cp->link;
-   277		/* If deletion request can either be without filled tuple in which
-   278		 * case it gets populated here based on idx, or with filled tuple
-   279		 * where the only thing we end up doing is the WARN_ON_ONCE() assert.
-   280		 * If we hit a BPF link at the given index, it must not be removed
-   281		 * from opts path.
-   282		 */
-   283		if (link && !tuple->link)
-   284			return -EBUSY;
- > 285		WARN_ON_ONCE(dtuple->prog && dtuple->prog != prog);
-   286		WARN_ON_ONCE(dtuple->link && dtuple->link != link);
-   287		dtuple->prog = prog;
-   288		dtuple->link = link;
-   289		return 0;
-   290	}
-   291	
+Cheers,
+Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Like above, the collision reports appear to always be 3-digit
+> counters, which look like line-numbers.  Changing to _kaUID_ in this
+> defn should make it more obvious (in *.i file) when a fallback has
+> happened.  To be clear, I havent seen it yet.  Nor have I seen the
+> multiple-defn problem above since adding this patch.
+> 
+> Lets see what lkp-robot says about this.
+> 
+> CC: Luc Van Oostenryck <luc.vanoostenryck@gmail.com> (maintainer:SPARSE CHECKER)
+> CC: Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUPPORT)
+> CC: Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUILD SUPPORT)
+> CC: Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
+> CC: linux-sparse@vger.kernel.org (open list:SPARSE CHECKER)
+> CC: linux-kernel@vger.kernel.org (open list)
+> CC: llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+>  include/linux/compiler.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index d7779a18b24f..677d6c47cd9e 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -177,9 +177,9 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  	__asm__ ("" : "=r" (var) : "0" (var))
+>  #endif
+>  
+> -/* Not-quite-unique ID. */
+> +/* JFTI: to fix Not-quite-unique ID */
+>  #ifndef __UNIQUE_ID
+> -# define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __LINE__)
+> +# define __UNIQUE_ID(prefix) __PASTE(__PASTE(_kaUID_, prefix), __COUNTER__)
+>  #endif
+>  
+>  /**
+> -- 
+> 2.41.0
+> 
