@@ -1,44 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5478F1EA9B;
-	Thu, 13 Jul 2023 15:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FC61ED43;
+	Thu, 13 Jul 2023 15:29:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689262142; x=1720798142;
+  t=1689262143; x=1720798143;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aL3XVLCfiA9cw5MT4HYq/9sWq9N7qWBvyWh5Vs2xKUQ=;
-  b=ZJvtyiEEcfsxURKnNud/jURi+MHgAkyBSNeQwS/qGfmlNoYzF5FfGwrd
-   gmvY7YBxDYspTLl3a9EAH57zhmDmGGmN2CcP/Mzdcc23VnCpRnLDzNrvD
-   +dG8F+FDoTyEa91MQIlN/qZyXQz5dxyif2gZ5fL6q58mW6ANOVVZfjO1h
-   CM+2jgg495MT9l8KkgIWaptd84RnUVtDxrLqbrf93vtkxJmIGtB9t7T3b
-   fI4pL25YNMhO+W7XA6RpkbwLXRydKSKXhAxTrxrdBjVPZ45hEDgz6//8a
-   8Oyg7swomKU91/VZGBPt5G5ZA+0iOqe5IF6f7W4Uo3YRpdO6BqaAnnqqU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="364090614"
+  bh=xux1JYmAbMREnLahnAwC5Ie7sNJtHyUdLX33J5c/Lxk=;
+  b=m7KdJwuy645xlOMpmEi8VCLZynQoUEEDKSjGTZiAbpNe/IcWGZfE1SfI
+   hPObC2ffd+ctUL27lOsADtgoPRQi6jf0OW7j3ShXkMUddgBbie4LkSYk4
+   Yunt9vx0i+Tzlruh5AKtMEtj3XomQ+gwfb5CAaocJLOFLrz7wzxMIHorO
+   N/VfZev9OjOPnMnJB/uvJK7flrrrPY8VaTpNd3/7Ijh9Wt0frBmFXI4Yo
+   6tmc6fqOw4HjDG/KZuGpl51gBySuPTQNHMZDWZbHS2NzlGlR5uMECDeWt
+   DKebCsA0gk8qWsrdMruT2osboPHIg1JtWOP9u94qzvvW1OJoSn1AdSnPL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="396026663"
 X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="364090614"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 08:29:01 -0700
+   d="scan'208";a="396026663"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 08:29:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725335191"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="757204899"
 X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
-   d="scan'208";a="725335191"
+   d="scan'208";a="757204899"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2023 08:28:59 -0700
+  by orsmga001.jf.intel.com with ESMTP; 13 Jul 2023 08:28:59 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qJyFX-0006iA-0x;
+	id 1qJyFX-0006i8-0t;
 	Thu, 13 Jul 2023 15:28:59 +0000
-Date: Thu, 13 Jul 2023 23:28:47 +0800
+Date: Thu, 13 Jul 2023 23:28:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [rmk-arm:ktext-current 1/19] kernel/scs.c:46:40: warning: comparison
- of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *')
- and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned
- long *'))
-Message-ID: <202307132335.xdlOMkMP-lkp@intel.com>
+To: Jan Kara <jack@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Subject: fs/ext4/inode.c:2715:12: warning: stack frame size (1392) exceeds
+ limit (1024) in 'ext4_do_writepages'
+Message-ID: <202307132338.YXtPr5BN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,427 +48,266 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm ktext-current
-head:   1085162f4939fd1d436ba6ec27b54c707a2a7c47
-commit: b392b426ad1dad14b1f13a984fef3f8e082b58e6 [1/19] arm64: place kernel in its own L0 page table entry
-config: arm64-randconfig-r032-20230713 (https://download.01.org/0day-ci/archive/20230713/202307132335.xdlOMkMP-lkp@intel.com/config)
+Hi Jan,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eb26cbb1a754ccde5d4d74527dad5ba051808fad
+commit: 15648d599cd1c15cc678039dcab65599276fe407 ext4: provide ext4_do_writepages()
+date:   7 months ago
+config: riscv-randconfig-r003-20230713 (https://download.01.org/0day-ci/archive/20230713/202307132338.YXtPr5BN-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230713/202307132335.xdlOMkMP-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307132338.YXtPr5BN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307132335.xdlOMkMP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307132338.YXtPr5BN-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/scs.c:46:40: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           s = __vmalloc_node_range(SCS_SIZE, 1, VMALLOC_START, VMALLOC_END,
-                                                 ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/ext4/inode.c:2715:12: warning: stack frame size (1392) exceeds limit (1024) in 'ext4_do_writepages' [-Wframe-larger-than]
+   static int ext4_do_writepages(struct mpage_da_data *mpd)
+              ^
    1 warning generated.
---
->> mm/percpu.c:3110:21: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (max_distance > VMALLOC_TOTAL * 3 / 4) {
-                              ^~~~~~~~~~~~~
-   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
-   #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
-                                        ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   mm/percpu.c:3112:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                   max_distance, VMALLOC_TOTAL);
-                                                 ^~~~~~~~~~~~~
-   include/linux/printk.h:508:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                              ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
---
->> mm/vmalloc.c:82:17: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           return addr >= VMALLOC_START && addr < VMALLOC_END;
-                          ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   mm/vmalloc.c:647:14: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (addr >= MODULES_VADDR && addr < MODULES_END)
-                       ^~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
-   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   mm/vmalloc.c:647:38: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           if (addr >= MODULES_VADDR && addr < MODULES_END)
-                                               ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   mm/vmalloc.c:2000:10: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
-                   ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   mm/vmalloc.c:2040:6: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                           VMALLOC_START, VMALLOC_END,
-                                           ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
---
->> mm/util.c:629:39: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-                                                ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
---
->> arch/arm64/mm/kasan_init.c:225:54: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           mod_shadow_start = (u64)kasan_mem_to_shadow((void *)MODULES_VADDR);
-                                                               ^~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
-   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/mm/kasan_init.c:248:15: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
-           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   arch/arm64/mm/kasan_init.c:248:32: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   arch/arm64/mm/kasan_init.c:248:2: error: call to __compiletime_assert_425 declared with 'error' attribute: BUILD_BUG_ON failed: VMALLOC_START != MODULES_END
-           BUILD_BUG_ON(VMALLOC_START != MODULES_END);
-           ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:397:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:92:1: note: expanded from here
-   __compiletime_assert_425
-   ^
-   3 warnings and 1 error generated.
---
->> arch/arm64/kernel/crash_core.c:24:57: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
-                                                                  ^~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
-   #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/kernel/crash_core.c:25:55: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
-                                                                ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/kernel/crash_core.c:26:57: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
-                                                                  ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-   #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-                                    ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-   #define MODULES_END             (KIMAGE_VADDR)
-                                    ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/kernel/crash_core.c:36:46: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((16 - 3) * (4 - (4 - 2)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           vmcoreinfo_append_str("KERNELOFFSET=%lx\n", kaslr_offset());
-                                                       ^~~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
-   #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
-                                                           ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-                                    max(MODULES_VSIZE, PGDIR_SIZE))
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   4 warnings generated.
-..
 
 
-vim +46 kernel/scs.c
+vim +/ext4_do_writepages +2715 fs/ext4/inode.c
 
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  30  
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  31  static void *__scs_alloc(int node)
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  32  {
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  33  	int i;
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  34  	void *s;
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  35  
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  36  	for (i = 0; i < NR_CACHED_SCS; i++) {
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  37  		s = this_cpu_xchg(scs_cache[i], NULL);
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  38  		if (s) {
-f6e39794f4b6da Andrey Konovalov 2022-03-24  39  			s = kasan_unpoison_vmalloc(s, SCS_SIZE,
-f6e39794f4b6da Andrey Konovalov 2022-03-24  40  						   KASAN_VMALLOC_PROT_NORMAL);
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  41  			memset(s, 0, SCS_SIZE);
-f6e39794f4b6da Andrey Konovalov 2022-03-24  42  			goto out;
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  43  		}
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  44  	}
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  45  
-f6e39794f4b6da Andrey Konovalov 2022-03-24 @46  	s = __vmalloc_node_range(SCS_SIZE, 1, VMALLOC_START, VMALLOC_END,
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  47  				    GFP_SCS, PAGE_KERNEL, 0, node,
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  48  				    __builtin_return_address(0));
-f6e39794f4b6da Andrey Konovalov 2022-03-24  49  
-f6e39794f4b6da Andrey Konovalov 2022-03-24  50  out:
-f6e39794f4b6da Andrey Konovalov 2022-03-24  51  	return kasan_reset_tag(s);
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  52  }
-a2abe7cbd8fe2d Sami Tolvanen    2020-11-30  53  
-
-:::::: The code at line 46 was first introduced by commit
-:::::: f6e39794f4b6da7ca9b77f2f9ad11fd6f0ac83e5 kasan, vmalloc: only tag normal vmalloc allocations
-
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+  2714	
+> 2715	static int ext4_do_writepages(struct mpage_da_data *mpd)
+  2716	{
+  2717		struct writeback_control *wbc = mpd->wbc;
+  2718		pgoff_t	writeback_index = 0;
+  2719		long nr_to_write = wbc->nr_to_write;
+  2720		int range_whole = 0;
+  2721		int cycled = 1;
+  2722		handle_t *handle = NULL;
+  2723		struct inode *inode = mpd->inode;
+  2724		struct address_space *mapping = inode->i_mapping;
+  2725		int needed_blocks, rsv_blocks = 0, ret = 0;
+  2726		struct ext4_sb_info *sbi = EXT4_SB(mapping->host->i_sb);
+  2727		struct blk_plug plug;
+  2728		bool give_up_on_write = false;
+  2729	
+  2730		if (unlikely(ext4_forced_shutdown(EXT4_SB(inode->i_sb))))
+  2731			return -EIO;
+  2732	
+  2733		percpu_down_read(&sbi->s_writepages_rwsem);
+  2734		trace_ext4_writepages(inode, wbc);
+  2735	
+  2736		/*
+  2737		 * No pages to write? This is mainly a kludge to avoid starting
+  2738		 * a transaction for special inodes like journal inode on last iput()
+  2739		 * because that could violate lock ordering on umount
+  2740		 */
+  2741		if (!mapping->nrpages || !mapping_tagged(mapping, PAGECACHE_TAG_DIRTY))
+  2742			goto out_writepages;
+  2743	
+  2744		if (ext4_should_journal_data(inode)) {
+  2745			ret = generic_writepages(mapping, wbc);
+  2746			goto out_writepages;
+  2747		}
+  2748	
+  2749		/*
+  2750		 * If the filesystem has aborted, it is read-only, so return
+  2751		 * right away instead of dumping stack traces later on that
+  2752		 * will obscure the real source of the problem.  We test
+  2753		 * EXT4_MF_FS_ABORTED instead of sb->s_flag's SB_RDONLY because
+  2754		 * the latter could be true if the filesystem is mounted
+  2755		 * read-only, and in that case, ext4_writepages should
+  2756		 * *never* be called, so if that ever happens, we would want
+  2757		 * the stack trace.
+  2758		 */
+  2759		if (unlikely(ext4_forced_shutdown(EXT4_SB(mapping->host->i_sb)) ||
+  2760			     ext4_test_mount_flag(inode->i_sb, EXT4_MF_FS_ABORTED))) {
+  2761			ret = -EROFS;
+  2762			goto out_writepages;
+  2763		}
+  2764	
+  2765		/*
+  2766		 * If we have inline data and arrive here, it means that
+  2767		 * we will soon create the block for the 1st page, so
+  2768		 * we'd better clear the inline data here.
+  2769		 */
+  2770		if (ext4_has_inline_data(inode)) {
+  2771			/* Just inode will be modified... */
+  2772			handle = ext4_journal_start(inode, EXT4_HT_INODE, 1);
+  2773			if (IS_ERR(handle)) {
+  2774				ret = PTR_ERR(handle);
+  2775				goto out_writepages;
+  2776			}
+  2777			BUG_ON(ext4_test_inode_state(inode,
+  2778					EXT4_STATE_MAY_INLINE_DATA));
+  2779			ext4_destroy_inline_data(handle, inode);
+  2780			ext4_journal_stop(handle);
+  2781		}
+  2782	
+  2783		if (ext4_should_dioread_nolock(inode)) {
+  2784			/*
+  2785			 * We may need to convert up to one extent per block in
+  2786			 * the page and we may dirty the inode.
+  2787			 */
+  2788			rsv_blocks = 1 + ext4_chunk_trans_blocks(inode,
+  2789							PAGE_SIZE >> inode->i_blkbits);
+  2790		}
+  2791	
+  2792		if (wbc->range_start == 0 && wbc->range_end == LLONG_MAX)
+  2793			range_whole = 1;
+  2794	
+  2795		if (wbc->range_cyclic) {
+  2796			writeback_index = mapping->writeback_index;
+  2797			if (writeback_index)
+  2798				cycled = 0;
+  2799			mpd->first_page = writeback_index;
+  2800			mpd->last_page = -1;
+  2801		} else {
+  2802			mpd->first_page = wbc->range_start >> PAGE_SHIFT;
+  2803			mpd->last_page = wbc->range_end >> PAGE_SHIFT;
+  2804		}
+  2805	
+  2806		ext4_io_submit_init(&mpd->io_submit, wbc);
+  2807	retry:
+  2808		if (wbc->sync_mode == WB_SYNC_ALL || wbc->tagged_writepages)
+  2809			tag_pages_for_writeback(mapping, mpd->first_page,
+  2810						mpd->last_page);
+  2811		blk_start_plug(&plug);
+  2812	
+  2813		/*
+  2814		 * First writeback pages that don't need mapping - we can avoid
+  2815		 * starting a transaction unnecessarily and also avoid being blocked
+  2816		 * in the block layer on device congestion while having transaction
+  2817		 * started.
+  2818		 */
+  2819		mpd->do_map = 0;
+  2820		mpd->scanned_until_end = 0;
+  2821		mpd->io_submit.io_end = ext4_init_io_end(inode, GFP_KERNEL);
+  2822		if (!mpd->io_submit.io_end) {
+  2823			ret = -ENOMEM;
+  2824			goto unplug;
+  2825		}
+  2826		ret = mpage_prepare_extent_to_map(mpd);
+  2827		/* Unlock pages we didn't use */
+  2828		mpage_release_unused_pages(mpd, false);
+  2829		/* Submit prepared bio */
+  2830		ext4_io_submit(&mpd->io_submit);
+  2831		ext4_put_io_end_defer(mpd->io_submit.io_end);
+  2832		mpd->io_submit.io_end = NULL;
+  2833		if (ret < 0)
+  2834			goto unplug;
+  2835	
+  2836		while (!mpd->scanned_until_end && wbc->nr_to_write > 0) {
+  2837			/* For each extent of pages we use new io_end */
+  2838			mpd->io_submit.io_end = ext4_init_io_end(inode, GFP_KERNEL);
+  2839			if (!mpd->io_submit.io_end) {
+  2840				ret = -ENOMEM;
+  2841				break;
+  2842			}
+  2843	
+  2844			WARN_ON_ONCE(!mpd->can_map);
+  2845			/*
+  2846			 * We have two constraints: We find one extent to map and we
+  2847			 * must always write out whole page (makes a difference when
+  2848			 * blocksize < pagesize) so that we don't block on IO when we
+  2849			 * try to write out the rest of the page. Journalled mode is
+  2850			 * not supported by delalloc.
+  2851			 */
+  2852			BUG_ON(ext4_should_journal_data(inode));
+  2853			needed_blocks = ext4_da_writepages_trans_blocks(inode);
+  2854	
+  2855			/* start a new transaction */
+  2856			handle = ext4_journal_start_with_reserve(inode,
+  2857					EXT4_HT_WRITE_PAGE, needed_blocks, rsv_blocks);
+  2858			if (IS_ERR(handle)) {
+  2859				ret = PTR_ERR(handle);
+  2860				ext4_msg(inode->i_sb, KERN_CRIT, "%s: jbd2_start: "
+  2861				       "%ld pages, ino %lu; err %d", __func__,
+  2862					wbc->nr_to_write, inode->i_ino, ret);
+  2863				/* Release allocated io_end */
+  2864				ext4_put_io_end(mpd->io_submit.io_end);
+  2865				mpd->io_submit.io_end = NULL;
+  2866				break;
+  2867			}
+  2868			mpd->do_map = 1;
+  2869	
+  2870			trace_ext4_da_write_pages(inode, mpd->first_page, wbc);
+  2871			ret = mpage_prepare_extent_to_map(mpd);
+  2872			if (!ret && mpd->map.m_len)
+  2873				ret = mpage_map_and_submit_extent(handle, mpd,
+  2874						&give_up_on_write);
+  2875			/*
+  2876			 * Caution: If the handle is synchronous,
+  2877			 * ext4_journal_stop() can wait for transaction commit
+  2878			 * to finish which may depend on writeback of pages to
+  2879			 * complete or on page lock to be released.  In that
+  2880			 * case, we have to wait until after we have
+  2881			 * submitted all the IO, released page locks we hold,
+  2882			 * and dropped io_end reference (for extent conversion
+  2883			 * to be able to complete) before stopping the handle.
+  2884			 */
+  2885			if (!ext4_handle_valid(handle) || handle->h_sync == 0) {
+  2886				ext4_journal_stop(handle);
+  2887				handle = NULL;
+  2888				mpd->do_map = 0;
+  2889			}
+  2890			/* Unlock pages we didn't use */
+  2891			mpage_release_unused_pages(mpd, give_up_on_write);
+  2892			/* Submit prepared bio */
+  2893			ext4_io_submit(&mpd->io_submit);
+  2894	
+  2895			/*
+  2896			 * Drop our io_end reference we got from init. We have
+  2897			 * to be careful and use deferred io_end finishing if
+  2898			 * we are still holding the transaction as we can
+  2899			 * release the last reference to io_end which may end
+  2900			 * up doing unwritten extent conversion.
+  2901			 */
+  2902			if (handle) {
+  2903				ext4_put_io_end_defer(mpd->io_submit.io_end);
+  2904				ext4_journal_stop(handle);
+  2905			} else
+  2906				ext4_put_io_end(mpd->io_submit.io_end);
+  2907			mpd->io_submit.io_end = NULL;
+  2908	
+  2909			if (ret == -ENOSPC && sbi->s_journal) {
+  2910				/*
+  2911				 * Commit the transaction which would
+  2912				 * free blocks released in the transaction
+  2913				 * and try again
+  2914				 */
+  2915				jbd2_journal_force_commit_nested(sbi->s_journal);
+  2916				ret = 0;
+  2917				continue;
+  2918			}
+  2919			/* Fatal error - ENOMEM, EIO... */
+  2920			if (ret)
+  2921				break;
+  2922		}
+  2923	unplug:
+  2924		blk_finish_plug(&plug);
+  2925		if (!ret && !cycled && wbc->nr_to_write > 0) {
+  2926			cycled = 1;
+  2927			mpd->last_page = writeback_index - 1;
+  2928			mpd->first_page = 0;
+  2929			goto retry;
+  2930		}
+  2931	
+  2932		/* Update index */
+  2933		if (wbc->range_cyclic || (range_whole && wbc->nr_to_write > 0))
+  2934			/*
+  2935			 * Set the writeback_index so that range_cyclic
+  2936			 * mode will write it back later
+  2937			 */
+  2938			mapping->writeback_index = mpd->first_page;
+  2939	
+  2940	out_writepages:
+  2941		trace_ext4_writepages_result(inode, wbc, ret,
+  2942					     nr_to_write - wbc->nr_to_write);
+  2943		percpu_up_read(&sbi->s_writepages_rwsem);
+  2944		return ret;
+  2945	}
+  2946	
 
 -- 
 0-DAY CI Kernel Test Service
