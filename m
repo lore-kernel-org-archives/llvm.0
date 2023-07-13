@@ -1,45 +1,45 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D07847B;
-	Thu, 13 Jul 2023 08:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A577100C7;
+	Thu, 13 Jul 2023 09:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689238130; x=1720774130;
+  t=1689241731; x=1720777731;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N3CGWABMKysaB6zJWeS8pB0qgMTObx3+ZHhkd6+GAOY=;
-  b=iooNbcjiRYPdERl6/GT/Nn6a31Jcn70lCdJ9Hiy1iPM6eMe1USEGjP+e
-   kRLSAXCbFUHDqXRignYRaJDd0yxYCHtXGMcI3oun7rw1H7u+PHbw/BO4x
-   KQQ95aZbHuWhwjrwuAod1TcuHqlwOYcZIV1XvkiDWV0MmLJ+zliZRUvcK
-   CmOpfphVjBeLZrplDabkiKKwoxyRYUjc9CvVomjMnUzpWxNg2HmIHUyli
-   lEvwLDqguidub/Nz4CEfUL60iOr9FdaH5p0PbTLVz8iC6U+w9Yu1Rl72z
-   jRy7ip7Sc2rmoLHRc3dcNTY4CbOrcnua0RUTtezuAfghaIBDByZKDXaUp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="451494347"
+  bh=22hn2XMK8XWrANLbcoZvHqF8/62Ay7ODZWbbTUKsk94=;
+  b=hLXfN6285uGoXBqu5ie/osnJZOIa0ZCnAbbE4afwojDKZUE9cnQkoAXU
+   MCInWyeDV+YfP+UZsAK14Ixbwuw1cycsblID0jk1nKRf1eq4mrgjUj8YX
+   meqAfVheELC8tfzgLYy9VJKdVEQA9J3s+lKQYKaojVI3OXsq/hO1onUaF
+   ia7gSopnoK0tAuDl67KlaIbRQswLy3IB7pnL7Hp4KsuNXLR6JebvtI4I6
+   R43Jz5hqETz6c1smGE50UTbFt1E60Z5DxLFOjwuvZS2c/yUnyswJhYSCI
+   2S2irbD+uMqHg79H20VK2SEnclFL0dGp1DtRzZnIIWyFfveGnAYkxF4yz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="395944310"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="451494347"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 01:48:49 -0700
+   d="scan'208";a="395944310"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 02:48:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="968531002"
+X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="866488258"
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968531002"
+   d="scan'208";a="866488258"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jul 2023 01:48:47 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jul 2023 02:48:48 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qJs0E-0006Rb-14;
-	Thu, 13 Jul 2023 08:48:46 +0000
-Date: Thu, 13 Jul 2023 16:47:53 +0800
+	id 1qJswK-0006V7-0L;
+	Thu, 13 Jul 2023 09:48:48 +0000
+Date: Thu, 13 Jul 2023 17:48:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
+To: Jeff LaBundy <jeff@labundy.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: ld.lld: warning: stack frame size (2136) exceeds limit (2048) in
- function 'hidinput_configure_usage'
-Message-ID: <202307131635.1isJZ30o-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [linux-next:master 2212/2369]
+ drivers/input/touchscreen/iqs7211.c:2464:12: warning: cast to smaller
+ integer type 'enum iqs7211_dev_id' from 'const void *'
+Message-ID: <202307131717.LtwApG0z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,122 +49,139 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eb26cbb1a754ccde5d4d74527dad5ba051808fad
-commit: f12b034afeb3a977bbb1c6584dedc0f3dc666f14 scripts/Makefile.clang: default to LLVM_IAS=1
-date:   1 year, 11 months ago
-config: x86_64-buildonly-randconfig-r002-20230713 (https://download.01.org/0day-ci/archive/20230713/202307131635.1isJZ30o-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131635.1isJZ30o-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e3262265625831348cfb3128d35907ead75d8bf7
+commit: f2ba47e65f3b5642488802a60cb7dd068f425edc [2212/2369] Input: add support for Azoteq IQS7210A/7211A/E
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230713/202307131717.LtwApG0z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131717.LtwApG0z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307131635.1isJZ30o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307131717.LtwApG0z-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> ld.lld: warning: stack frame size (2136) exceeds limit (2048) in function 'hidinput_configure_usage'
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2dd: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2f6: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x33d: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x371: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3cb: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3d7: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3f8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x460: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x485: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x49e: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x4ab: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b7: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x4c4: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x8a7: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x9f9: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xb6a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xd78: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xe3a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1469: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x15a3: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x17fc: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1bbc: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1c93: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1ff5: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2537: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2543: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2820: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2846: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x29b4: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x29c1: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x29f4: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a1a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a53: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2a94: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2aa8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2ac5: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2adf: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x2feb: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3209: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x322a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3a4f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3e5f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3e9c: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x3f70: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x45fc: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b07: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x4b4f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x528c: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5993: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x59d8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5a43: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5a8f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5aa8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5ac1: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5ada: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5b6f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5c35: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x5d64: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x61a2: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x61c8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x61ee: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x62ec: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x6305: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x6350: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x63e7: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x645f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x646b: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x6489: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x6524: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x66fd: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x68b9: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x68d2: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x76bf: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x76d8: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x7a1f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x8026: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x81c2: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x8381: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x88a6: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x8948: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x8dc0: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x9605: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x9847: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x993d: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xcc4f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xcced: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xced2: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xcef3: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xcf0c: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xcf25: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0xe954: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1241a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x12ddc: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1358f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x13698: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x136be: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x14dba: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1503f: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x1507a: redundant UACCESS disable
-   vmlinux.o: warning: objtool: .altinstr_replacement+0x151ab: redundant UACCESS disable
+>> drivers/input/touchscreen/iqs7211.c:2464:12: warning: cast to smaller integer type 'enum iqs7211_dev_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+    2464 |                 dev_id = (enum iqs7211_dev_id)of_device_get_match_data(&client->dev);
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +2464 drivers/input/touchscreen/iqs7211.c
+
+  2444	
+  2445	static int iqs7211_probe(struct i2c_client *client)
+  2446	{
+  2447		struct iqs7211_private *iqs7211;
+  2448		enum iqs7211_reg_grp_id reg_grp;
+  2449		enum iqs7211_dev_id dev_id;
+  2450		unsigned long irq_flags;
+  2451		bool shared_irq;
+  2452		int error, irq;
+  2453	
+  2454		iqs7211 = devm_kzalloc(&client->dev, sizeof(*iqs7211), GFP_KERNEL);
+  2455		if (!iqs7211)
+  2456			return -ENOMEM;
+  2457	
+  2458		i2c_set_clientdata(client, iqs7211);
+  2459		iqs7211->client = client;
+  2460	
+  2461		INIT_LIST_HEAD(&iqs7211->reg_field_head);
+  2462	
+  2463		if (client->dev.of_node)
+> 2464			dev_id = (enum iqs7211_dev_id)of_device_get_match_data(&client->dev);
+  2465		else
+  2466			dev_id = i2c_match_id(iqs7211_id, client)->driver_data;
+  2467	
+  2468		shared_irq = iqs7211_devs[dev_id].num_ctx == IQS7211_MAX_CTX;
+  2469		iqs7211->dev_desc = &iqs7211_devs[dev_id];
+  2470	
+  2471		/*
+  2472		 * The RDY pin behaves as an interrupt, but must also be polled ahead
+  2473		 * of unsolicited I2C communication. As such, it is first opened as a
+  2474		 * GPIO and then passed to gpiod_to_irq() to register the interrupt.
+  2475		 *
+  2476		 * If an extra CTx pin is present, the RDY and MCLR pins are combined
+  2477		 * into a single bidirectional pin. In that case, the platform's GPIO
+  2478		 * must be configured as an open-drain output.
+  2479		 */
+  2480		iqs7211->irq_gpio = devm_gpiod_get(&client->dev, "irq",
+  2481						   shared_irq ? GPIOD_OUT_LOW
+  2482							      : GPIOD_IN);
+  2483		if (IS_ERR(iqs7211->irq_gpio)) {
+  2484			error = PTR_ERR(iqs7211->irq_gpio);
+  2485			dev_err(&client->dev, "Failed to request IRQ GPIO: %d\n",
+  2486				error);
+  2487			return error;
+  2488		}
+  2489	
+  2490		if (shared_irq) {
+  2491			iqs7211->reset_gpio = iqs7211->irq_gpio;
+  2492		} else {
+  2493			iqs7211->reset_gpio = devm_gpiod_get_optional(&client->dev,
+  2494								      "reset",
+  2495								      GPIOD_OUT_HIGH);
+  2496			if (IS_ERR(iqs7211->reset_gpio)) {
+  2497				error = PTR_ERR(iqs7211->reset_gpio);
+  2498				dev_err(&client->dev,
+  2499					"Failed to request reset GPIO: %d\n", error);
+  2500				return error;
+  2501			}
+  2502		}
+  2503	
+  2504		error = iqs7211_start_comms(iqs7211);
+  2505		if (error)
+  2506			return error;
+  2507	
+  2508		for (reg_grp = 0; reg_grp < IQS7211_NUM_REG_GRPS; reg_grp++) {
+  2509			const char *reg_grp_name = iqs7211_reg_grp_names[reg_grp];
+  2510			struct fwnode_handle *reg_grp_node;
+  2511	
+  2512			if (reg_grp_name)
+  2513				reg_grp_node = device_get_named_child_node(&client->dev,
+  2514									   reg_grp_name);
+  2515			else
+  2516				reg_grp_node = fwnode_handle_get(dev_fwnode(&client->dev));
+  2517	
+  2518			if (!reg_grp_node)
+  2519				continue;
+  2520	
+  2521			error = iqs7211_parse_reg_grp(iqs7211, reg_grp_node, reg_grp);
+  2522			fwnode_handle_put(reg_grp_node);
+  2523			if (error)
+  2524				return error;
+  2525		}
+  2526	
+  2527		error = iqs7211_register_kp(iqs7211);
+  2528		if (error)
+  2529			return error;
+  2530	
+  2531		error = iqs7211_register_tp(iqs7211);
+  2532		if (error)
+  2533			return error;
+  2534	
+  2535		error = iqs7211_init_device(iqs7211);
+  2536		if (error)
+  2537			return error;
+  2538	
+  2539		irq = gpiod_to_irq(iqs7211->irq_gpio);
+  2540		if (irq < 0)
+  2541			return irq;
+  2542	
+  2543		irq_flags = gpiod_is_active_low(iqs7211->irq_gpio) ? IRQF_TRIGGER_LOW
+  2544								   : IRQF_TRIGGER_HIGH;
+  2545		irq_flags |= IRQF_ONESHOT;
+  2546	
+  2547		error = devm_request_threaded_irq(&client->dev, irq, NULL, iqs7211_irq,
+  2548						  irq_flags, client->name, iqs7211);
+  2549		if (error)
+  2550			dev_err(&client->dev, "Failed to request IRQ: %d\n", error);
+  2551	
+  2552		return error;
+  2553	}
+  2554	
 
 -- 
 0-DAY CI Kernel Test Service
