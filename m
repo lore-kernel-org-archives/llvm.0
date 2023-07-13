@@ -1,243 +1,173 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640895660;
-	Thu, 13 Jul 2023 05:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689225699; x=1720761699;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s5+cwRDzgLX/m6apqjebB+8ZK0aJisXslqY54bulOq8=;
-  b=csSgTo6ngOPprNE1lp8Ac/sRbsBNSZk/riw4JYz9rfakBJ6hiCTQXXEp
-   MpCBxUyBCIKY4tG2J4PJz9Y/sXD0oAOOk0XR+9D2KTqim1+UGaJTWtHxx
-   N2Lhl3YBn/fiw7Ci35xkSqmmCQ7hId+a+WgAmMXTrBWT7TMpPZM/CXM6h
-   XAddesNubIR9w6L8MjaWiVBJcfH4tS/trHLv2Nif6O0e4sFO4sofwpuN8
-   Lu51pEH+FFJ1IWAeVOpt0GWAdOVWb+T/zj0M8riNVQFk9lwpAbGpiQtvs
-   2xXJgeIjWYuGWaC8npWDEVRzI8uhus7LZHczBFxbwF6mkniKulbsm1eR2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="431241519"
-X-IronPort-AV: E=Sophos;i="6.01,201,1684825200"; 
-   d="scan'208";a="431241519"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 22:21:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="791896539"
-X-IronPort-AV: E=Sophos;i="6.01,201,1684825200"; 
-   d="scan'208";a="791896539"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jul 2023 22:21:36 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qJolj-0006FJ-2L;
-	Thu, 13 Jul 2023 05:21:35 +0000
-Date: Thu, 13 Jul 2023 13:21:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Skeggs <bskeggs@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [skeggsb-nouveau:00.02-gsp-rm 76/83]
- drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:303:1: warning: no previous
- prototype for function 'r535_fifo_runl_ctor'
-Message-ID: <202307131315.pkKRJ0wX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA875679
+	for <llvm@lists.linux.dev>; Thu, 13 Jul 2023 06:14:49 +0000 (UTC)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CMvZhM029573;
+	Wed, 12 Jul 2023 23:14:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=sWvV7enxEms3lnihEgDDPRSUES5Ft88bJqzJvyKHSBc=;
+ b=h2C01TFm6eSj0bxKRGvWCm0fY89tTfai5dumqiEgp4lWXnTZ1r2OwUBXk61tlffKnB+v
+ /B48JSIPabuNn3guAhUhLZ4PVjfXYyOJYCDxWQZbNlqs6bm5SqeErOnjNYwTv3zIvFV8
+ WEkuMBCdw+Xk1FkX0wpt3AQ/2+XnGP57VGjFZnDH/gFwJBZnvV9Lz70JfPjFT8gEvEe1
+ k3ZXpnscOezQSU0cyA3idBr1rgHxbZo41PLwazy+WvQ86dQ4OHUCUxwbptfheb08Ox3m
+ Mzr3bdT7onRxE8dRb3/qcHyPo1ojRn/jAu60ItwFjyxyqUvv3sSF4163SlYktdjt5Vzq eA== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rt1awc00u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jul 2023 23:14:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LKfgw/HZdoK+IYYGd1005jZ2NpXiPYSBpQmTRvQIBS6CVsGdw5esKB6roPHBLw4OYbDx6TNx0YsTbKjNPYh3C8U2kW2U2/ZNAsFxCqcRo8Do1jBT4ns6GWNFZI6DN6ctUM1E1UzgBypx6tJ75dzT1FtfTJ/awyd8DtGxnpQIx2lZblgjNU0aYZZMdBmA2mq8ScOxS6yF7/Cnsf8N0atpkOj1GlwQCBsSmav0CDVmmIspHyfbI+bfo4y6+j8qTSqFPsPnUjAgS66wdXlHg7fxQu/vKdCa6t7NXoyLmShR6KXflK3ZXApsv4mZOkrLY+Mv1CnzkfhgbxL/cl8lH8h0Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sWvV7enxEms3lnihEgDDPRSUES5Ft88bJqzJvyKHSBc=;
+ b=L6sGPlWVATrwGmmBA5/L3a9lrVUx0bOL1InQWY7MxmtHBZssMkDn//XewEM9RClvbfI0BgchxDnUYLewSusxVlf+0SrzNLnL79x3pv3UoMJIB5CqOyygJRI/fBcgCBFl/dv2bWURQEyTm5Lhfmw5QNZc3gKXfqoLHz3/Cx6NBrknuIpzY64+j1G1/ef/fGoEmgozNcdrNXcdqh5lGgA0LK2tKO/RlrdQ/YxqD6sA6wFQ5z8vR+1Pi5q/5ykBTXT+A2uDxWibDerJuETy1jcQsnGBJ44JuOT0hezS6DkLw4VTV+sc1xMHmLOLG/lqtk/TNWP7YnjW9Ij54UYrQOVbzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DS0PR15MB6208.namprd15.prod.outlook.com (2603:10b6:8:160::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.33; Thu, 13 Jul
+ 2023 06:14:25 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1757:f075:376:8ff1]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1757:f075:376:8ff1%4]) with mapi id 15.20.6565.034; Thu, 13 Jul 2023
+ 06:14:24 +0000
+Message-ID: <a743d8e1-0460-775c-2a21-54a891d6a973@meta.com>
+Date: Wed, 12 Jul 2023 23:14:20 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
+ functions
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, Yonghong Song <yhs@fb.com>
+Cc: Fangrui Song <maskray@google.com>, kernel-team@fb.com,
+        Leizhen <thunder.leizhen@huawei.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230628181926.4102448-1-yhs@fb.com>
+ <168920160691.3781136.7715367614867053724.b4-ty@chromium.org>
+From: Yonghong Song <yhs@meta.com>
+In-Reply-To: <168920160691.3781136.7715367614867053724.b4-ty@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ClientProxiedBy: SJ0PR05CA0017.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::22) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DS0PR15MB6208:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f9edb1b-74b9-45a3-c6e2-08db83686791
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	LGs7gv/KFAp5/WSKL7ddnn3UuHK0djjVSgZSQfsdYJ5Lgd9d4OwdWB/FO8NUPkKsGpFHWnO2bMJrrKcbdRf8mDkE+eQAtTJup4K7uxbh9XIsMA/Q+OQB00a6Uk7j6oMLbVBROQfkq9iDkWUey5k2jDhZ0jcH5XU1UxK43zCMl42CslQQKpSLdxezlZP7e6jwI1W2QTREpfmNAk8AwnCJSQ3MFVjLVknbj9cpkeHVuOQX3SzYSefyT3GJCpUsZlF3gofuMyRM4Pa5DAF8EBgF0rL8YI1vdJp5As9zgXV7awFp5OnGErZ7ewbhaIWzXRl0wabuAY7iUYvBwQnbDypDfEAM+SmfxFotucJkrcQExhnhlStLjd5O+27/ghinAVZa50cnRBuQXm968gO0/EkwJ8owgMXBBPY2NNlJU4sRZw9L7O6VRvOCe/lErMbwYH5Kb5AWuzAS5Mz01Ie3Vf5pXYNP7uVj2ktQghL0/Fq61NW8MiAKtEVjOvl0gCjR0n3cP8qClbNSHTJ2m7iVwPD0qcX9bGpp9+rEkbEU/CFCamOdjm79G7n6jDaDO6DuJn8OB8PoTurzLWQi6LMVmi4NOG5bODDba6/6MeKWcSS95E7a8avCR8Gs6XlGdwCK72uR0t02NDRXgkeKeinNG8a3eg==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(41300700001)(2616005)(8676002)(8936002)(4326008)(966005)(38100700002)(6506007)(53546011)(316002)(66556008)(66476007)(5660300002)(6512007)(478600001)(86362001)(6486002)(6666004)(66946007)(31696002)(110136005)(186003)(36756003)(2906002)(54906003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?NnNVczE2bS9IeDJua3RWaFIvZUFwUDZXeFlWeG1XNStLWFB6ZmNCRDA5elA5?=
+ =?utf-8?B?Y1o2cXMyVmNob0ZWS3BicVp5RGJXeHh0ZjY2UFRpY29mMm41MlV6QSs0Q0FW?=
+ =?utf-8?B?TjlDVnl5TWlYdW1jR1I5eU5QaUJ1R2FaUmJ2K3g1UkhmekVrNnk1RlpDQXJ6?=
+ =?utf-8?B?T3NncjNvYnJvV3QweE9yZ2lJc0V0YWpydDk0eUM1dUFMbFB4cHdJTmQ3aW9E?=
+ =?utf-8?B?ai9JL2NjeHBBamhjZW9EWUptK1l0REl5eHlWc25yVnlUV3l6dUUxMlZ0eFZE?=
+ =?utf-8?B?SVk4a2NWT1E4K1F4eVo4NmM0QXlQTHB3K2FRMWVZK1JsejZDSU9scXJ5TE5N?=
+ =?utf-8?B?UjI0RFVrU0ZLTnZxR3ZjNzlkcGtUWUNhWEsvNXBwYnM5QnhGNi9naEdtd0Fx?=
+ =?utf-8?B?cUJ6SU1VUWVtaldQRzNtNFhrYnFlOEhEMFBTK2tRelB1R2REeEJlbGxNck11?=
+ =?utf-8?B?TjlaQmpBTERCZU9nbC8xK0wzTi82RUZQUFFheDIrTlVpVHB4NzFwYjhsa0ll?=
+ =?utf-8?B?VEoxQ0xFOUVGVXd4ZHk2a1RvTWVyblN6V1ZIdUs2d0w2U0p2N29MUVFOSStq?=
+ =?utf-8?B?ZC83NXBVRm1janN3UGZaVU8wM1U4RDgwVklOem5xMFFvOWdDYU50bU53UnNw?=
+ =?utf-8?B?ODgvVU1jUHp3NEs4VFQwQ0FzbmZra09UZytpNmhHalptNGY4UnYxSE13RzRn?=
+ =?utf-8?B?NnZlUFYzdUtaQko1THg5Y3h4SlJvaG4vVDV1L2lYR3ZrNXNINDF1M0pkN2Rq?=
+ =?utf-8?B?WDlZSlRTRU4wcTZqaEo2ekNBcUFTRktmTnBwT0VvVFlQTmpuS04zZ1dzd0xq?=
+ =?utf-8?B?a0NhWURFY2cyOGZiRFIvdEt2dHgwVkdmU01LREZYUldEUzNoM3A3UTluSUp6?=
+ =?utf-8?B?WEtSUE1WMERkSktSNWg2WDhZTmZ3VXhMTEwxNnlCNXN0LzZGb1V0VGZSdWVS?=
+ =?utf-8?B?cVpkVHVhNjdqRzZnSGs1RVZJRUd6NDI1NUttSFJhTDcxQTc0eTkwdHpGZ2Rm?=
+ =?utf-8?B?L05pUnpYUlhXQ2VRcjNuTW5TR3NQOHh6OVVBWHE5QWgyckZ0ZkZPYW4vUUdY?=
+ =?utf-8?B?QTdpYnNZU3R2a0t6enQ2cWhWcnNzajJ6UExTTWxGNk1sWjUwR2JOcXRIb1Vp?=
+ =?utf-8?B?MllrYzlwWDUzSGxRY0VLa0w0UTNmVFlFbzc4ZEVMTi95QkdFQ2tNbEZnR1pY?=
+ =?utf-8?B?OW1LSXpPcjBoSHRzeHpOcFZkdlJuaW13Z1JkTFVOdGRFK2oxaUNiNXkyZWE2?=
+ =?utf-8?B?WkxqaDFEQklYWG9nUHNxVGZMeFp1K1ZVSXRMY0ZpbmNWYkh1eFZXZXFrN1lj?=
+ =?utf-8?B?R3d5YVZGRTNjUWdUalAyb1VLbmNPclZ5OHRWN2ZUdGRGTVptTlhuQ2dFUXdL?=
+ =?utf-8?B?dk5ad0RlWFlTVTdDWXYrVWlMc3plRldOUHJJSFFjN1cya1NaRjFLdU42Vis3?=
+ =?utf-8?B?WnhCZ1pZWWtzZllqWEcyQUlhQkxCbnNFSGJYRVhhYTBIYmI0Y0E4T2doK05x?=
+ =?utf-8?B?UTk3bHVmL2o2bTN3M3pDNk81bGJVcitqZXhRaHhtWFhtTkRicWNOaCt1Z0t0?=
+ =?utf-8?B?ZEpFR2t1SmQ3ZzJBUVNmMWJ3dysyYjl3OUR2QWJiQUxFenhvUW5Zem1aZkwz?=
+ =?utf-8?B?cDA0VDcrM0dSRWxiUWg1THhQVlRscFdFUEp6SXhyOXgvTEFRRncydE1ENzJk?=
+ =?utf-8?B?MlFBSkFMZnlJOE5YSC9uNWFaRFB1WXk0aEo4dlJiVFJkU01OQkY3T2h6aE5Y?=
+ =?utf-8?B?SjVVNUk5TzhOVUdzRm51RGpuUTBmMVMxV1EybE9wTjk2NlBidE0zdjhTWjh1?=
+ =?utf-8?B?TlhEOE1iVHhkc1FpUkFhOEhJUmpOSDI1YVNTYno5c3F3aDV6ckRhcFp0TThm?=
+ =?utf-8?B?amxwZkRBdFoweXo3SXU5MkhtWGN0eHBXbTFORkZnN05ma0d2UytTUHN4STlM?=
+ =?utf-8?B?OFdpZDFSYWlraGxuczM3ZVp3alFDS3NhZXdHY0p6eFdCTVBHRWRKc1hKcjFI?=
+ =?utf-8?B?RXl6N0VhS0J0NVFRRklhQzJKSzFpZDRlajR2NWh6R0E5S1ZkVFc2Uzd1QjBU?=
+ =?utf-8?B?Mm1vWFlkd2hkZkUzazNjdDVYSFFPVW83NVZwQk9VajJCTHBNaUZpWGo2STAw?=
+ =?utf-8?B?T0RHN3BjRi9qREZCTHFSUmNGdVYzQTZBdjVxVGpnbjdxZVhPcFBtU0RYUVpx?=
+ =?utf-8?B?N0E9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f9edb1b-74b9-45a3-c6e2-08db83686791
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2023 06:14:24.2272
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oY2UKxcpUA0S8pDwgr73RQVIaDmKEC50dkBYRtAYW14U+vaitLgAJEmb0UL2dAi+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB6208
+X-Proofpoint-GUID: A_QONaASzyEv4YKDO8OYWwy9HcnpYEET
+X-Proofpoint-ORIG-GUID: A_QONaASzyEv4YKDO8OYWwy9HcnpYEET
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 00.02-gsp-rm
-head:   25db92a3e5514b0563efc2877003c303512d589a
-commit: 185d15404b12db58c5b8e063950b5a11e181fe14 [76/83] WIPdrm/nouveau/fifo/r535: initial support
-config: s390-randconfig-r026-20230712 (https://download.01.org/0day-ci/archive/20230713/202307131315.pkKRJ0wX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230713/202307131315.pkKRJ0wX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307131315.pkKRJ0wX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:22:
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/priv.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/fifo.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:22:
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/priv.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/fifo.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:22:
-   In file included from drivers/gpu/drm/nouveau/nvkm/engine/fifo/priv.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/engine/fifo.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/engine.h:5:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:303:1: warning: no previous prototype for function 'r535_fifo_runl_ctor' [-Wmissing-prototypes]
-     303 | r535_fifo_runl_ctor(struct nvkm_fifo *fifo)
-         | ^
-   drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c:302:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     302 | int
-         | ^
-         | static 
-   13 warnings generated.
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-13_02,2023-07-11_01,2023-05-22_02
 
 
-vim +/r535_fifo_runl_ctor +303 drivers/gpu/drm/nouveau/nvkm/engine/fifo/r535.c
 
-   300	
-   301	
-   302	int
- > 303	r535_fifo_runl_ctor(struct nvkm_fifo *fifo)
-   304	{
-   305		struct nvkm_subdev *subdev = &fifo->engine.subdev;
-   306		struct nvkm_gsp *gsp = subdev->device->gsp;
-   307		struct nvkm_runl *runl;
-   308		struct nvkm_engn *engn;
-   309		int ret;
-   310		NV2080_CTRL_FIFO_GET_DEVICE_INFO_TABLE_PARAMS *ctrl;
-   311	
-   312		//XXX: chid<->userd + per-RL chid
-   313		if ((ret = nvkm_chid_new(&nvkm_chan_event, subdev, 2048, 0, 2048, &fifo->cgid)) ||
-   314		    (ret = nvkm_chid_new(&nvkm_chan_event, subdev, 2048, 0, 2048, &fifo->chid)))
-   315			return ret;
-   316	
-   317		ctrl = nvkm_gsp_rm_ctrl_rd(&gsp->internal.device.subdevice,
-   318					   NV2080_CTRL_CMD_FIFO_GET_DEVICE_INFO_TABLE, sizeof(*ctrl));
-   319		if (WARN_ON(IS_ERR(ctrl)))
-   320			return PTR_ERR(ctrl);
-   321	
-   322		for (int i = 0; i < ctrl->numEntries; i++) {
-   323			const u32 addr = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST_PRI_BASE];
-   324			const u32 id = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST];
-   325	
-   326			runl = nvkm_runl_get(fifo, id, addr);
-   327			if (!runl) {
-   328				runl = nvkm_runl_new(fifo, id, addr, 0 /*XXX: chid<->userd + per-RL chid*/);
-   329				if (WARN_ON(IS_ERR(runl)))
-   330					continue;
-   331			}
-   332		}
-   333	
-   334		for (int i = 0; i < ctrl->numEntries; i++) {
-   335			const u32 addr = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST_PRI_BASE];
-   336			const u32 rmid = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RM_ENGINE_TYPE];
-   337			const u32 id = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST];
-   338			enum nvkm_subdev_type type;
-   339			int inst, nv2080;
-   340	
-   341			runl = nvkm_runl_get(fifo, id, addr);
-   342			if (!runl)
-   343				continue;
-   344	
-   345			inst = r535_fifo_engn_type(rmid, &type);
-   346			if (inst < 0) {
-   347				nvkm_warn(subdev, "RM_ENGINE_TYPE 0x%x\n", rmid);
-   348				nvkm_runl_del(runl);
-   349				continue;
-   350			}
-   351	
-   352			nv2080 = r535_fifo_2080_type(type, inst);
-   353			if (nv2080 < 0) {
-   354				nvkm_runl_del(runl);
-   355				continue;
-   356			}
-   357	
-   358			switch (type) {
-   359			case NVKM_ENGINE_CE:
-   360			case NVKM_ENGINE_GR:
-   361				engn = nvkm_runl_add(runl, nv2080, &r535_engn, type, inst);
-   362				break;
-   363			case NVKM_ENGINE_SW:
-   364				continue;
-   365			default:
-   366				engn = NULL;
-   367				break;
-   368			}
-   369	
-   370			if (!engn) {
-   371				nvkm_runl_del(runl);
-   372				continue;
-   373			}
-   374		}
-   375	
-   376		nvkm_gsp_rm_ctrl_done(&gsp->internal.device.subdevice, ctrl);
-   377		return 0;
-   378	}
-   379	
+On 7/12/23 3:40 PM, Kees Cook wrote:
+> 
+> On Wed, 28 Jun 2023 11:19:26 -0700, Yonghong Song wrote:
+>> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+>> stripped all function/variable suffixes started with '.' regardless
+>> of whether those suffixes are generated at LTO mode or not. In fact,
+>> as far as I know, in LTO mode, when a static function/variable is
+>> promoted to the global scope, '.llvm.<...>' suffix is added.
+>>
+>> The existing mechanism breaks live patch for a LTO kernel even if
+>> no <symbol>.llvm.<...> symbols are involved. For example, for the following
+>> kernel symbols:
+>>    $ grep bpf_verifier_vlog /proc/kallsyms
+>>    ffffffff81549f60 t bpf_verifier_vlog
+>>    ffffffff8268b430 d bpf_verifier_vlog._entry
+>>    ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>>    ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+>> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+>> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+>> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+>> Note that the func-level to file-level static function promotion also
+>> happens without LTO.
+>>
+>> [...]
+> 
+> Applied, thanks!
+> 
+> [1/1] kallsyms: strip LTO-only suffixes from promoted global functions
+>        https://git.kernel.org/kees/c/8cc32a9bbf29
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks Kees!
+
+> 
+> Best regards,
