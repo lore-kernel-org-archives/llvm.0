@@ -1,72 +1,72 @@
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA43C11CA2
-	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 10:20:59 +0000 (UTC)
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-99388334de6so97198566b.0
-        for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 03:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689330058; x=1691922058;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ake/2lNPSYG4Kup6Znr90jxcuDjnCQa+kK9QxHmxIwE=;
-        b=FdFgSbE9EX08KPCV3DFRa0KauNWmUSSKQuD9KCfK4mOB1MOb00hUTblNSomfgkxhXE
-         lktUE68J2GJstAUj/3c+jsVLoFGKsyNmD+spCDoSEq9pliOoU/eTeGKuECVOQJrW96JW
-         0DVOb7zMv+7uYhP2k11Kxl4mudnbg+7chPKt8ON/beLgn35QBKRpxoMgV1d5B1uNfFG3
-         AgxMMV52IQLUcoM3lpUr88qrhOm889EDxsbpie2PXgMV/VEPfl+Rvtil+sLok6f8e1nb
-         hqEwDY8sB3TJuxoDWtQB6lvtOAXTfuQNn+0jvX40UPp1Eoy/88cODPzkhRG3lBSO3Q1c
-         ul/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689330058; x=1691922058;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ake/2lNPSYG4Kup6Znr90jxcuDjnCQa+kK9QxHmxIwE=;
-        b=S+7s7SDxMOKjtqNYwN99q/qXbLi+PtlLRX9Tc5qGKeCUfdlMop7h0ETo7Izr0jkAv2
-         1YSSkpuB60to+aFh0dNaStEyTJHsNt8mKk2n6wTA/z19JnG/BpEaYbusVD0G5LY74bJQ
-         Pwroyxu1oj9/xSraABFsxrs6aHF6q1YQK22pjBV90xWaond751hVClX0OViw8lLUFIyE
-         3IETsr7r4J545jaUOxi+XB0ryJDyFNF2haV+i6j17VA6EsW3JThywRmuTioMC3Ksc1FX
-         1YrX8sgksDBe2M8iXC9oeoNt5i7TDFZmWD25+yXuTffB0R+MPol+VX/K0nl6p1YhUnRf
-         mZgw==
-X-Gm-Message-State: ABy/qLajpEVnTT1Hmf3ZEhZ6YrYZp98z8htAD0+zDjXCRLMW65mUUyUj
-	Zl8QWC34R6TboEa6Rj/egOGQfZhJv0sLgtM=
-X-Google-Smtp-Source: APBJJlFUTjwiYHQXGcSMMNCtJzQc7XCp95jN1C2fnAoH9M2eakhZaTVLYzm8MTgye2tlwRUOsp8FX+gnfVMrb1M=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a17:906:8a62:b0:978:67a2:f503 with SMTP
- id hy2-20020a1709068a6200b0097867a2f503mr8783ejc.12.1689330057916; Fri, 14
- Jul 2023 03:20:57 -0700 (PDT)
-Date: Fri, 14 Jul 2023 10:15:01 +0000
-In-Reply-To: <20230714-classless_lockdep-v1-1-229b9671ce31@asahilina.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056426FC8;
+	Fri, 14 Jul 2023 11:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689332501; x=1720868501;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=X29VMDXXngBPtH6nrRm63JxpoYmKY8QxT78tbYKzgUg=;
+  b=ahomLMXcSx81et925qD0TLgPkEwq46+NBw/e48q2BWjVf3uvy5qwwmdQ
+   XGkELmoL/K606wn3fqk50wWgAbr3PqXThdqM8O5et9/6ASkGkDXrxlVPj
+   lwqhQ9G02dNEZSfcrXtMyNySqnTknfC65PKPONx0YhZTMRG2c+SRuB+1R
+   pITy7OPq7bkJzQCpwQslVjwrJ+a/l2sFpKTfrS2pafrXaPa4sSUgkTzLA
+   EtQC1+QJHVTvvQIvrrGuU67jjA2kahPnW1qVsKmTySA0h69OQgWsiazDV
+   XLa1PQ8hqhgZKYGMvutUecvEbSJtLJa3EyubsBwdyn7tGLct9g2C/KJaJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="368086381"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="368086381"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:01:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725674675"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="725674675"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Jul 2023 04:01:30 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qKGYE-0007O7-04;
+	Fri, 14 Jul 2023 11:01:30 +0000
+Date: Fri, 14 Jul 2023 19:00:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Asahi Lina <lina@asahilina.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/210-gpu 41/198] error[E0063]: missing field `evict`
+ in initializer of `drm_gem_object_funcs`
+Message-ID: <202307141856.rEbXoxiy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230714-classless_lockdep-v1-1-229b9671ce31@asahilina.net>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230714101501.2194205-1-aliceryhl@google.com>
-Subject: Re: [PATCH RFC 01/11] rust: types: Add Opaque::zeroed()
-From: Alice Ryhl <aliceryhl@google.com>
-To: lina@asahilina.net
-Cc: alex.gaynor@gmail.com, alyssa@rosenzweig.io, asahi@lists.linux.dev, 
-	benno.lossin@proton.me, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
-	daniel@ffwll.ch, gary@garyguo.net, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, marcan@marcan.st, 
-	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
-	nicolas@fjasle.eu, ojeda@kernel.org, rust-for-linux@vger.kernel.org, 
-	sven@svenpeter.dev, trix@redhat.com, wedsonaf@gmail.com, 
-	Alice Ryhl <aliceryhl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Asahi Lina <lina@asahilina.net> writes:
-> Opaque types are internally MaybeUninit, so it's safe to actually
-> zero-initialize them as long as we don't claim they are initialized.
-> This is useful for many FFI types that are expected to be zero-inited by
-> the user.
-> 
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+tree:   https://github.com/AsahiLinux/linux bits/210-gpu
+head:   c2bbe7fe79da5dff6da45eb1d4a5a582db740429
+commit: 4dc30fa2c7b1971ebaf41433565fbd95b9d9703d [41/198] rust: drm: gem: Add GEM object abstraction
+config: x86_64-randconfig-x002-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141856.rEbXoxiy-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141856.rEbXoxiy-lkp@intel.com/reproduce)
 
-LGTM. This is useful on its own.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307141856.rEbXoxiy-lkp@intel.com/
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+All errors (new ones prefixed by >>):
 
+>> error[E0063]: missing field `evict` in initializer of `drm_gem_object_funcs`
+   --> rust/kernel/drm/gem/mod.rs:203:58
+   |
+   203 |     const OBJECT_FUNCS: bindings::drm_gem_object_funcs = bindings::drm_gem_object_funcs {
+   |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `evict`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
