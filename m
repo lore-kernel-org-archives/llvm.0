@@ -1,298 +1,427 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBDF13702
-	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 11:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689334762;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g66tsBEFqHBe8S53liE7Jrwb5j1amHRWHYGWarKAvQw=;
-	b=MDjvpqJaATu8QMpKcqj5QFVKKzLvoI7cMM75OOX7wHV99r19OcXGhZ5ykKS+6JpBCwk74E
-	ZasdLGlfcTVi7ba9oM6ApJN893wb3M9Arpn/c02UhWmBJ+ve03y2AAGhg5dGXLuv816JRk
-	cydedsMA2+5FzOCEYiNSLzAiQCkqdOE=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-391-NzMdBgeyN0qOvQP9DUSnJw-1; Fri, 14 Jul 2023 07:39:20 -0400
-X-MC-Unique: NzMdBgeyN0qOvQP9DUSnJw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CAF23C244E5
-	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 11:39:20 +0000 (UTC)
-Received: from [172.64.4.30] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 483E8492B01;
-	Fri, 14 Jul 2023 11:39:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 28 of 328): Test report for master
- (6.5.0-rc1, mainline.kernel.org-clang, 4b810bf0)
-Date: Fri, 14 Jul 2023 11:39:20 -0000
-To: haliu@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com, jiji@redhat.com,
- yiche@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574B213702;
+	Fri, 14 Jul 2023 11:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689334894; x=1720870894;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OOKQcl9NKaw2zDoTPhmmc4UbUnFs7NL9PkYQFLBdVkA=;
+  b=kcdbxTxaKRQjwf3FYo4LxVm8/8HrKYHlIImb8n0OEVXNGrzgo/Bpwb7w
+   En4YKVVoJwBqPuKwO+aypuc9vYLc/up0fVB7oHmQCgBhcLBMXaMNMphkY
+   wf0ChW+W84YfFIGoLo0iO4dxPWxvL/fFh8vTnzpn4flnfLuWFO8eWZQrB
+   HR7N5GuuMeZgaoCTpKdp4zPtziwxid10L+hvpZfwfrGxJuEeSqz/lK3hj
+   F9bAi10aJo71+4iGYyc8g6rFx8gKH3TYGnJ2CebhxNCvN5W7kXWPn6h12
+   GXZxknvTATj7728AKrbIhWHn+7ngq/i24xIlpqoHPovCPgWW7zeeSZ3Lc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345768321"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="345768321"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:41:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725682132"
+X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
+   d="scan'208";a="725682132"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Jul 2023 04:41:31 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qKHAw-0007PJ-25;
+	Fri, 14 Jul 2023 11:41:30 +0000
+Date: Fri, 14 Jul 2023 19:41:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm:ktext-current 1/19] arch/arm64/kernel/kaslr.c:32:6: warning:
+ comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka
+ 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *'
+ (aka 'unsigned long *'))
+Message-ID: <202307141950.7xmwTuH7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <69267.123071407392000472@us-mta-391.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git ktext-current
+head:   49e3458967802a6981190b5a1fa9fd66dbf58f8c
+commit: 631e7c45f5d4cf043cd236a921c341e3dd9f1909 [1/19] arm64: place kernel in its own L0 page table entry
+config: arm64-randconfig-r025-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141950.7xmwTuH7-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141950.7xmwTuH7-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307141950.7xmwTuH7-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> lib/test_debug_virtual.c:27:15: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      27 |         va = (void *)VMALLOC_START;
+         |                      ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> kernel/kcov.c:190:8: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+     190 |         ip -= kaslr_offset();
+         |               ^~~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
+     203 | #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
+         |                                                         ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   kernel/kcov.c:630:29: warning: result of comparison of constant 1152921504606846975 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     630 |                 if (remote_arg->area_size > LONG_MAX / sizeof(unsigned long))
+         |                     ~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+>> kernel/fork.c:310:10: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+     310 |                                      VMALLOC_START, VMALLOC_END,
+         |                                      ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> arch/arm64/mm/ptdump.c:44:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      44 |         { MODULES_VADDR,                "Modules start" },
+         |           ^~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
+      49 | #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
+         |                                  ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> arch/arm64/mm/ptdump.c:44:4: error: statement expression not allowed at file scope
+   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
+      49 | #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+         |                 ^
+   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
+      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
+         |                                                  ^
+   arch/arm64/mm/ptdump.c:45:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      45 |         { MODULES_END,                  "Modules end" },
+         |           ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/mm/ptdump.c:45:4: error: statement expression not allowed at file scope
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+         |                 ^
+   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
+      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
+         |                                                  ^
+   arch/arm64/mm/ptdump.c:46:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      46 |         { VMALLOC_START,                "vmalloc() area" },
+         |           ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   arch/arm64/mm/ptdump.c:46:4: error: statement expression not allowed at file scope
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+         |                 ^
+   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
+      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
+         |                                                  ^
+   3 warnings and 3 errors generated.
+--
+>> arch/arm64/kernel/kaslr.c:32:6: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      32 |         if (kaslr_offset() < MIN_KIMG_ALIGN) {
+         |             ^~~~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
+     203 | #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
+         |                                                         ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+      74 | #define max(x, y)       __careful_cmp(x, y, >)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> drivers/md/dm-stats.c:91:25: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+      91 |         if (a > (VMALLOC_END - VMALLOC_START) / DM_STATS_VMALLOC_FACTOR)
+         |                                ^~~~~~~~~~~~~
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^~~~~~~~~~~~
+   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
+      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> drivers/md/dm-bufio.c:2842:22: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+    2842 |         if (mem > mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100))
+         |                   ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
+     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                                      ^
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                                   ^
+   include/linux/math.h:124:9: note: expanded from macro 'mult_frac'
+     124 |         typeof(x) x_ = (x);     \
+         |                ^
+>> drivers/md/dm-bufio.c:2842:22: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+    2842 |         if (mem > mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100))
+         |                   ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
+     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                                      ^
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                                   ^
+   include/linux/math.h:124:18: note: expanded from macro 'mult_frac'
+     124 |         typeof(x) x_ = (x);     \
+         |                         ^
+   drivers/md/dm-bufio.c:2843:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+    2843 |                 mem = mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100);
+         |                       ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
+     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                                      ^
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                                   ^
+   include/linux/math.h:124:9: note: expanded from macro 'mult_frac'
+     124 |         typeof(x) x_ = (x);     \
+         |                ^
+   drivers/md/dm-bufio.c:2843:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+    2843 |                 mem = mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100);
+         |                       ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
+     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                                      ^
+   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
+      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
+         |                                  ^
+   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
+      48 | #define MODULES_END             (KIMAGE_VADDR)
+         |                                  ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                  ^
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                                   ^
+   include/linux/math.h:124:18: note: expanded from macro 'mult_frac'
+     124 |         typeof(x) x_ = (x);     \
+         |                         ^
+   4 warnings generated.
+..
 
 
-Kernel information:
-    Commit message: Merge tag 'erofs-for-6.5-rc2-fixes' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/xiang/erofs
+vim +32 arch/arm64/kernel/kaslr.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/95885
+fc5a89f75d2aad Ard Biesheuvel 2022-06-24  17  
+6e13b6b923b35a Mark Rutland   2023-05-30  18  void __init kaslr_init(void)
+6e13b6b923b35a Mark Rutland   2023-05-30  19  {
+0ddc312b7c7304 Marc Zyngier   2023-06-09  20  	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val &
+0ddc312b7c7304 Marc Zyngier   2023-06-09  21  						 arm64_sw_feature_override.mask,
+0ddc312b7c7304 Marc Zyngier   2023-06-09  22  						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
+fc5a89f75d2aad Ard Biesheuvel 2022-06-24  23  		pr_info("KASLR disabled on command line\n");
+6e13b6b923b35a Mark Rutland   2023-05-30  24  		return;
+fc5a89f75d2aad Ard Biesheuvel 2022-06-24  25  	}
+fc5a89f75d2aad Ard Biesheuvel 2022-06-24  26  
+f80fb3a3d50843 Ard Biesheuvel 2016-01-26  27  	/*
+6e13b6b923b35a Mark Rutland   2023-05-30  28  	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
+6e13b6b923b35a Mark Rutland   2023-05-30  29  	 * placement of the image rather than from the seed, so a displacement
+6e13b6b923b35a Mark Rutland   2023-05-30  30  	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
+f80fb3a3d50843 Ard Biesheuvel 2016-01-26  31  	 */
+6e13b6b923b35a Mark Rutland   2023-05-30 @32  	if (kaslr_offset() < MIN_KIMG_ALIGN) {
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769550
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-         aarch64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769579
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         ppc64le - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769783
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769627
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769649
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769716
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 (debug) - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8769515
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+:::::: The code at line 32 was first introduced by commit
+:::::: 6e13b6b923b35a965d128a40ef0c5d9dd101e603 arm64: kaslr: split kaslr/module initialization
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
-ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
-directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+:::::: TO: Mark Rutland <mark.rutland@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
