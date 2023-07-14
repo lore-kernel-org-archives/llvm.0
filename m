@@ -1,321 +1,119 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2EE13725;
-	Fri, 14 Jul 2023 13:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689339883; x=1720875883;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YhaAGBgcVFiwVrGJbcHM+g3488vEuUjFaxsyzpwKSUM=;
-  b=FX/zGlh7eDFIikgaxxk3p6P2MOoFSNwzou3+UHEbo1POStm8AuD+re9z
-   VxAIueDywB3kD2KQoQACWhs+vrwXibyw1WyfqsDt7gADoODoUCq20bWgF
-   ARcTRPfisGNQNuhMYyo5SI1rsyzilrvzafg4G16jbopl2UahgV1Igapgq
-   GJES084OKYY3Yvq49YWmhsUzjmj6eCBHmSDbA35rkFe65QYjYMPRi3fn+
-   V8aTtqadP/cSro6I8D7tB2O1k6TwE2JbYKOkhhOsGeajj7xQWuqxSxuen
-   zWZ2zTCrdeIZrmZy6myN6p0+sDDfhTD1spou51raTCBpPh0VXxghTOyGe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="365507959"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="365507959"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 06:04:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="836036154"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="836036154"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jul 2023 06:04:35 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKITK-0007SH-2p;
-	Fri, 14 Jul 2023 13:04:34 +0000
-Date: Fri, 14 Jul 2023 21:04:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jirislaby:devel 56/94]
- drivers/accessibility/speakup/spk_ttyio.c:55:17: error: no member named
- 'write' in 'struct tty_operations'
-Message-ID: <202307142143.nUPtRpVW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9ED720E8
+	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 13:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689339940;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HdKUk0+bIZvG5Gq1KPvgkZeap0ijZ2nfecp9kkU7oO0=;
+	b=emKiJ3L6EP0A4LT0fW7gFhJrUnAMv3lsiOyL9I4YhSqlCGSfHtCjS+i5HzoVZ+8t0QA2mD
+	U9G0QX0lzAc7kBlNLDRhUjSrB6SaCYsBmRDuAxO0WL1gnyKnQcDfglJmehEP2O5zzUTet1
+	OcO+Gd7iksLfrsX38TtKmQ7hvJKF/jU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-414-KMMLr_YDMmODJUmZOyi81Q-1; Fri, 14 Jul 2023 09:05:39 -0400
+X-MC-Unique: KMMLr_YDMmODJUmZOyi81Q-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-977e6c94186so106244366b.1
+        for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 06:05:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689339938; x=1691931938;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdKUk0+bIZvG5Gq1KPvgkZeap0ijZ2nfecp9kkU7oO0=;
+        b=dcj4UffVicU5awc7KEVT8giaX7t0elKRnpsS9AxqKK1TLxHSNqQM/dcoCK1qF9IVwa
+         l8OWGpEG4evsHGfRtY1J2rknIs5gk+SEi/ipirU+q+r/vrjboXpoHIafhtPE8moRsch/
+         +FDxcb8ViDJnK7VWcIXGga36ldAWKd3WqfAv6cUOhzLU4ojdm/Iay9o7ff5I1krOpQfQ
+         4Pf7sT6678pRhbOW3VmuTs8se4+pVET5vUIP/zdrcBJpAo5y/8x7N2paekHiZZuZfsOn
+         CO9XYKC6M3n7d3Ucui8fbZxdS4bCfSCE3QzHiJLfSH49+kDhsE/21xiQ41QFO8rbBdpL
+         4qdg==
+X-Gm-Message-State: ABy/qLacMBtoC6jaE6L3fL3S/gQys0Ri4szQeo42kpXM9sHJUICAZkDu
+	X3En+5shiOTSgHK39X7pyzT92dd82FIwr0e7R88DRNoRs9irJ0DZM1jJuIobaYyLMJZ47EpnJao
+	ZhyzvOGdqiMg1nw==
+X-Received: by 2002:a17:906:113:b0:992:764b:90d5 with SMTP id 19-20020a170906011300b00992764b90d5mr3682343eje.71.1689339937899;
+        Fri, 14 Jul 2023 06:05:37 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlESgjYIl+0YMv3J0/RY8w1dem+XJCEQWU7PFW26OzVSojpvJn7zKcVcACL8nngiNY9fcRngjg==
+X-Received: by 2002:a17:906:113:b0:992:764b:90d5 with SMTP id 19-20020a170906011300b00992764b90d5mr3682333eje.71.1689339937614;
+        Fri, 14 Jul 2023 06:05:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id qo11-20020a170907212b00b00992b0745548sm5318999ejb.152.2023.07.14.06.05.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 06:05:36 -0700 (PDT)
+Message-ID: <f635e971-ddf5-b26d-7116-473829c4dc4a@redhat.com>
+Date: Fri, 14 Jul 2023 15:05:34 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [pdx86-platform-drivers-x86:platform-drivers-x86-simatic-ipc 3/7]
+ drivers/platform/x86/simatic-ipc-batt.c:152:5: warning: no previous prototype
+ for function 'simatic_ipc_batt_remove'
+To: kernel test robot <lkp@intel.com>,
+ Henning Schild <henning.schild@siemens.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <202307141920.qk4FY4D6-lkp@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202307141920.qk4FY4D6-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Jiri,
+Hi,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+On 7/14/23 14:01, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git platform-drivers-x86-simatic-ipc
+> head:   161c6512536100ae4919032ef6f1132621794e01
+> commit: ad90535e51415fb636054649b5894447a984496e [3/7] platform/x86: simatic-ipc: add CMOS battery monitoring
+> config: i386-randconfig-r021-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141920.qk4FY4D6-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141920.qk4FY4D6-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307141920.qk4FY4D6-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/platform/x86/simatic-ipc-batt.c:152:5: warning: no previous prototype for function 'simatic_ipc_batt_remove' [-Wmissing-prototypes]
+>    int simatic_ipc_batt_remove(struct platform_device *pdev, struct gpiod_lookup_table *table)
+>        ^
+>    drivers/platform/x86/simatic-ipc-batt.c:152:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int simatic_ipc_batt_remove(struct platform_device *pdev, struct gpiod_lookup_table *table)
+>    ^
+>    static 
+>>> drivers/platform/x86/simatic-ipc-batt.c:159:5: warning: no previous prototype for function 'simatic_ipc_batt_probe' [-Wmissing-prototypes]
+>    int simatic_ipc_batt_probe(struct platform_device *pdev, struct gpiod_lookup_table *table)
+>        ^
+>    drivers/platform/x86/simatic-ipc-batt.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int simatic_ipc_batt_probe(struct platform_device *pdev, struct gpiod_lookup_table *table)
+>    ^
+>    static 
+>    2 warnings generated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   071ae35d4018d22d6addf02ae7014b2004e781f0
-commit: e034e751e4b6fe5061c660558b90dc4a2a43305b [56/94] tty: propagate u8 data to tty_operations::write()
-config: hexagon-randconfig-r025-20230714 (https://download.01.org/0day-ci/archive/20230714/202307142143.nUPtRpVW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307142143.nUPtRpVW-lkp@intel.com/reproduce)
+This is caused by simatic-ipc-batt.c missing a #include "simatic-ipc-batt.h",
+luckily I have not yet created the tag for the pull-request for other
+subsystems.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307142143.nUPtRpVW-lkp@intel.com/
+So I'll squash in a fix, do a forced push and then do the tag + pull-req.
 
-All errors (new ones prefixed by >>):
+While fixing this I've also added "static" to all the struct gpiod_lookup_table
+variables in drivers/platform/x86/simatic-ipc-batt-*.c
 
-   In file included from drivers/accessibility/speakup/spk_ttyio.c:3:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/accessibility/speakup/spk_ttyio.c:3:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/accessibility/speakup/spk_ttyio.c:3:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/accessibility/speakup/spk_ttyio.c:55:17: error: no member named 'write' in 'struct tty_operations'
-      55 |         if (!tty->ops->write)
-         |              ~~~~~~~~  ^
-   drivers/accessibility/speakup/spk_ttyio.c:229:37: error: no member named 'write' in 'struct tty_operations'
-     229 |         if (!in_synth->alive || !tty->ops->write)
-         |                                  ~~~~~~~~  ^
-   drivers/accessibility/speakup/spk_ttyio.c:232:18: error: no member named 'write' in 'struct tty_operations'
-     232 |         ret = tty->ops->write(tty, &ch, 1);
-         |               ~~~~~~~~  ^
-   6 warnings and 3 errors generated.
---
-   In file included from drivers/misc/ti-st/st_core.c:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/misc/ti-st/st_core.c:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/misc/ti-st/st_core.c:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/misc/ti-st/st_core.c:82:19: error: no member named 'write' in 'struct tty_operations'
-      82 |         return tty->ops->write(tty, data, count);
-         |                ~~~~~~~~  ^
-   6 warnings and 1 error generated.
---
-   In file included from drivers/net/ppp/ppp_synctty.c:33:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/ppp/ppp_synctty.c:33:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/ppp/ppp_synctty.c:33:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/net/ppp/ppp_synctty.c:162:16: error: no member named 'write' in 'struct tty_operations'
-     162 |         if (tty->ops->write == NULL)
-         |             ~~~~~~~~  ^
-   drivers/net/ppp/ppp_synctty.c:600:21: error: no member named 'write' in 'struct tty_operations'
-     600 |                         sent = tty->ops->write(tty, ap->tpkt->data, ap->tpkt->len);
-         |                                ~~~~~~~~  ^
-   6 warnings and 2 errors generated.
---
-   In file included from drivers/net/can/slcan/slcan-core.c:48:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/can/slcan/slcan-core.c:48:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/can/slcan/slcan-core.c:48:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/net/can/slcan/slcan-core.c:537:25: error: no member named 'write' in 'struct tty_operations'
-     537 |         actual = sl->tty->ops->write(sl->tty, sl->xbuff, pos - sl->xbuff);
-         |                  ~~~~~~~~~~~~  ^
-   drivers/net/can/slcan/slcan-core.c:575:25: error: no member named 'write' in 'struct tty_operations'
-     575 |         actual = sl->tty->ops->write(sl->tty, sl->xhead, sl->xleft);
-         |                  ~~~~~~~~~~~~  ^
-   drivers/net/can/slcan/slcan-core.c:638:25: error: no member named 'write' in 'struct tty_operations'
-     638 |         actual = sl->tty->ops->write(sl->tty, sl->xbuff, n);
-         |                  ~~~~~~~~~~~~  ^
-   drivers/net/can/slcan/slcan-core.c:812:17: error: no member named 'write' in 'struct tty_operations'
-     812 |         if (!tty->ops->write)
-         |              ~~~~~~~~  ^
-   6 warnings and 4 errors generated.
+Regards,
+
+Hans
 
 
-vim +55 drivers/accessibility/speakup/spk_ttyio.c
-
-a5525dc0b8341c drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-06-25  46  
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  47  static int spk_ttyio_ldisc_open(struct tty_struct *tty)
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  48  {
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  49  	struct spk_ldisc_data *ldisc_data;
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  50  
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  51  	if (tty != speakup_tty)
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  52  		/* Somebody tried to use this line discipline outside speakup */
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  53  		return -ENODEV;
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  54  
-2b90bf28ac38b6 drivers/staging/speakup/spk_ttyio.c       Bhagyashri Dighole 2019-03-06 @55  	if (!tty->ops->write)
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  56  		return -EOPNOTSUPP;
-d4122754442799 drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-10  57  
-7cf9a79dbae127 drivers/staging/speakup/spk_ttyio.c       Sam Muhammed       2020-03-24  58  	ldisc_data = kmalloc(sizeof(*ldisc_data), GFP_KERNEL);
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  59  	if (!ldisc_data)
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  60  		return -ENOMEM;
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  61  
-d6a0de49337464 drivers/staging/speakup/spk_ttyio.c       Arnd Bergmann      2018-12-10  62  	init_completion(&ldisc_data->completion);
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  63  	ldisc_data->buf_free = true;
-f0992098cadb4c drivers/accessibility/speakup/spk_ttyio.c Samuel Thibault    2020-11-29  64  	tty->disc_data = ldisc_data;
-6b9ad1c742bf22 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  65  
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  66  	return 0;
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  67  }
-1ab92da32e3775 drivers/staging/speakup/spk_ttyio.c       Okash Khawaja      2017-05-15  68  
-
-:::::: The code at line 55 was first introduced by commit
-:::::: 2b90bf28ac38b697a3f48a6664a02b374aa18f99 staging: speakup: Comparison to NULL.
-
-:::::: TO: Bhagyashri Dighole <digholebhagyashri@gmail.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
