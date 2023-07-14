@@ -1,296 +1,186 @@
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC69D51F;
-	Fri, 14 Jul 2023 09:15:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: linasend@asahilina.net)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 108575BC98;
-	Fri, 14 Jul 2023 09:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-	s=default; t=1689326113;
-	bh=xFmFsNBqZRVhSlLGxOxfGwL4iDHemYFsL2oqYKGuVP4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=wK0ljBsFst8i0xkuxG7oq39DkGfVspC5HFRt2W633aBvgSzpi5qluTbuFVsPce9jh
-	 Mz2KmGoO56pQOvijBOMvAvifknWm2Ih/gfYXfMLVXmVpCWD89rpIgri0/ifWxcr4Z7
-	 SpRm+Kn6lAiSJ6vTsMixyc/5gju+Z0DGxC89fi2ItnTFRPCTDVbZRmLZvRXFloKrcF
-	 x53U4//VdgjZEhd5eidAQ/cBG3uv2Xu5W6FujgBOhBpLifHVZB20r6qcgry7uADMF6
-	 IQEsXiZSnf7CCF945+uZrOvtSyzFfBhb6ZQ4Y/0LZX/BCdmjCEsVnE0hC/lHiZ9kur
-	 9BYxeA68EVMlQ==
-From: Asahi Lina <lina@asahilina.net>
-Date: Fri, 14 Jul 2023 18:14:03 +0900
-Subject: [PATCH RFC 11/11] rust: sync: arc: Add lockdep integration
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39515F9FE;
+	Fri, 14 Jul 2023 09:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689328772; x=1720864772;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d9u5s6dLwBF3CnkQ/UhyEU3XT9drzjmIvlPxpsqDxiw=;
+  b=EQ/hv5JALgKYVe8t7WW52zlBy/e12GC4FJlGdeWj/JHZvEC5CIC8m+Mo
+   sPTFpoymRWg5H3esQCxKEGav31hnWolvxn1qFP2wDGQQiSf9jXFSfP5Z1
+   cisGGUQol80oj9enP3Y2UjXJTz+JgsgCnO0n1nAZ6ILDo7VVrRr44OdmA
+   vcPbrbwJuNJoc6gCLGWFrSs4IDaMwQpDvfm603jl8brkHKr8EhxUUZp2V
+   t9ZP0J+yQBph4F3vinD9IvJDkN/QLqy0/6ZzfQ84Nqxa417d/GYatcfmA
+   ZUQtFKRRk/ub6AOIMOOlygWUZ7JPr1JElo7aqPulmxTLGh+HaH5xxsBms
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="368076403"
+X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
+   d="scan'208";a="368076403"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 02:59:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="722340854"
+X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
+   d="scan'208";a="722340854"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 14 Jul 2023 02:59:29 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qKFaD-0007MZ-05;
+	Fri, 14 Jul 2023 09:59:29 +0000
+Date: Fri, 14 Jul 2023 17:58:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Foley <pefoley2@pefoley.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>
+Subject: arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for
+ function 'pcap_init_kern'
+Message-ID: <202307141738.RNd2vcKC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230714-classless_lockdep-v1-11-229b9671ce31@asahilina.net>
-References: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
-In-Reply-To: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Wedson Almeida Filho <wedsonaf@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
- Daniel Vetter <daniel@ffwll.ch>
-Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev, 
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
- Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689326040; l=9475;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=xFmFsNBqZRVhSlLGxOxfGwL4iDHemYFsL2oqYKGuVP4=;
- b=8TCIgQoDOtdlDTOQ1KYaZ8W1ZUNnhtcHdIS+D+qL5Te5R/4lrDe6FQbsX1YbKI9BxQYDYrMAb
- aKYIHM43XL5AVkNA2yxwidTkvKcj/2NQd8zidbM7/YKf3qfwueVPIE+
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Now that we have magic lock class support and a LockdepMap that can be
-hooked up into arbitrary Rust types, we can integrate lockdep support
-directly into the Rust Arc<T> type. This means we can catch potential
-Drop codepaths that could result in a locking error, even if those
-codepaths never actually execute due to the reference count being
-nonzero at that point.
+Hi Peter,
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- lib/Kconfig.debug       |  8 ++++++
- rust/kernel/init.rs     |  6 +++++
- rust/kernel/sync/arc.rs | 71 ++++++++++++++++++++++++++++++++++++++++++++++---
- 3 files changed, 82 insertions(+), 3 deletions(-)
+FYI, the error/warning still remains.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index fbc89baf7de6..ff4f06df88ee 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -3010,6 +3010,14 @@ config RUST_BUILD_ASSERT_ALLOW
- 
- 	  If unsure, say N.
- 
-+config RUST_EXTRA_LOCKDEP
-+	bool "Extra lockdep checking"
-+	depends on RUST && PROVE_LOCKING
-+	help
-+	  Enabled additional lockdep integration with certain Rust types.
-+
-+	  If unsure, say N.
-+
- endmenu # "Rust"
- 
- endmenu # Kernel hacking
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index f190bbd0bab1..b64a507f0a34 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -1208,6 +1208,7 @@ pub trait InPlaceInit<T>: Sized {
-     /// type.
-     ///
-     /// If `T: !Unpin` it will not be able to move afterwards.
-+    #[track_caller]
-     fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-     where
-         E: From<AllocError>;
-@@ -1216,6 +1217,7 @@ fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-     /// type.
-     ///
-     /// If `T: !Unpin` it will not be able to move afterwards.
-+    #[track_caller]
-     fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-     where
-         Error: From<E>,
-@@ -1228,11 +1230,13 @@ fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-     }
- 
-     /// Use the given initializer to in-place initialize a `T`.
-+    #[track_caller]
-     fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
-     where
-         E: From<AllocError>;
- 
-     /// Use the given initializer to in-place initialize a `T`.
-+    #[track_caller]
-     fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-     where
-         Error: From<E>,
-@@ -1277,6 +1281,7 @@ fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
- 
- impl<T> InPlaceInit<T> for UniqueArc<T> {
-     #[inline]
-+    #[track_caller]
-     fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-     where
-         E: From<AllocError>,
-@@ -1291,6 +1296,7 @@ fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-     }
- 
-     #[inline]
-+    #[track_caller]
-     fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
-     where
-         E: From<AllocError>,
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index a89843cacaad..3bb73b614fd1 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -34,6 +34,9 @@
- };
- use macros::pin_data;
- 
-+#[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+use crate::sync::lockdep::LockdepMap;
-+
- mod std_vendor;
- 
- /// A reference-counted pointer to an instance of `T`.
-@@ -127,6 +130,17 @@ pub struct Arc<T: ?Sized> {
-     _p: PhantomData<ArcInner<T>>,
- }
- 
-+#[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+#[pin_data]
-+#[repr(C)]
-+struct ArcInner<T: ?Sized> {
-+    refcount: Opaque<bindings::refcount_t>,
-+    lockdep_map: LockdepMap,
-+    data: T,
-+}
-+
-+// FIXME: pin_data does not work well with cfg attributes within the struct definition.
-+#[cfg(not(CONFIG_RUST_EXTRA_LOCKDEP))]
- #[pin_data]
- #[repr(C)]
- struct ArcInner<T: ?Sized> {
-@@ -159,11 +173,14 @@ unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
- 
- impl<T> Arc<T> {
-     /// Constructs a new reference counted instance of `T`.
-+    #[track_caller]
-     pub fn try_new(contents: T) -> Result<Self, AllocError> {
-         // INVARIANT: The refcount is initialised to a non-zero value.
-         let value = ArcInner {
-             // SAFETY: There are no safety requirements for this FFI call.
-             refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
-+            #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+            lockdep_map: LockdepMap::new(),
-             data: contents,
-         };
- 
-@@ -178,6 +195,7 @@ pub fn try_new(contents: T) -> Result<Self, AllocError> {
-     ///
-     /// If `T: !Unpin` it will not be able to move afterwards.
-     #[inline]
-+    #[track_caller]
-     pub fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Self>
-     where
-         Error: From<E>,
-@@ -189,6 +207,7 @@ pub fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Self>
-     ///
-     /// This is equivalent to [`Arc<T>::pin_init`], since an [`Arc`] is always pinned.
-     #[inline]
-+    #[track_caller]
-     pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-     where
-         Error: From<E>,
-@@ -292,15 +311,46 @@ fn drop(&mut self) {
-         // freed/invalid memory as long as it is never dereferenced.
-         let refcount = unsafe { self.ptr.as_ref() }.refcount.get();
- 
-+        // SAFETY: By the type invariant, there is necessarily a reference to the object.
-+        // We cannot hold the map lock across the reference decrement, as we might race
-+        // another thread. Therefore, we lock and immediately drop the guard here. This
-+        // only serves to inform lockdep of the dependency up the call stack.
-+        #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+        unsafe { self.ptr.as_ref() }.lockdep_map.lock();
-+
-         // INVARIANT: If the refcount reaches zero, there are no other instances of `Arc`, and
-         // this instance is being dropped, so the broken invariant is not observable.
-         // SAFETY: Also by the type invariant, we are allowed to decrement the refcount.
-         let is_zero = unsafe { bindings::refcount_dec_and_test(refcount) };
-+
-         if is_zero {
-             // The count reached zero, we must free the memory.
--            //
--            // SAFETY: The pointer was initialised from the result of `Box::leak`.
--            unsafe { Box::from_raw(self.ptr.as_ptr()) };
-+
-+            // SAFETY: If we get this far, we had the last reference to the object.
-+            // That means we are responsible for freeing it, so we can safely lock
-+            // the fake lock again. This wraps dropping the inner object, which
-+            // informs lockdep of the dependencies down the call stack.
-+            #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+            let guard = unsafe { self.ptr.as_ref() }.lockdep_map.lock();
-+
-+            // SAFETY: The pointer was initialised from the result of `Box::leak`,
-+            // and the value is valid.
-+            unsafe { core::ptr::drop_in_place(&mut self.ptr.as_mut().data) };
-+
-+            // We need to drop the lock guard before freeing the LockdepMap itself
-+            #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+            core::mem::drop(guard);
-+
-+            // SAFETY: The pointer was initialised from the result of `Box::leak`,
-+            // and the lockdep map is valid.
-+            #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+            unsafe {
-+                core::ptr::drop_in_place(&mut self.ptr.as_mut().lockdep_map)
-+            };
-+
-+            // SAFETY: The pointer was initialised from the result of `Box::leak`, and
-+            // a ManuallyDrop<T> is compatible. We already dropped the contents above.
-+            unsafe { Box::from_raw(self.ptr.as_ptr() as *mut ManuallyDrop<ArcInner<T>>) };
-         }
-     }
- }
-@@ -512,6 +562,7 @@ pub struct UniqueArc<T: ?Sized> {
- 
- impl<T> UniqueArc<T> {
-     /// Tries to allocate a new [`UniqueArc`] instance.
-+    #[track_caller]
-     pub fn try_new(value: T) -> Result<Self, AllocError> {
-         Ok(Self {
-             // INVARIANT: The newly-created object has a ref-count of 1.
-@@ -520,13 +571,27 @@ pub fn try_new(value: T) -> Result<Self, AllocError> {
-     }
- 
-     /// Tries to allocate a new [`UniqueArc`] instance whose contents are not initialised yet.
-+    #[track_caller]
-     pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocError> {
-         // INVARIANT: The refcount is initialised to a non-zero value.
-+        #[cfg(CONFIG_RUST_EXTRA_LOCKDEP)]
-+        let inner = {
-+            let map = LockdepMap::new();
-+            Box::try_init::<AllocError>(try_init!(ArcInner {
-+                // SAFETY: There are no safety requirements for this FFI call.
-+                refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
-+                lockdep_map: map,
-+                data <- init::uninit::<T, AllocError>(),
-+            }? AllocError))?
-+        };
-+        // FIXME: try_init!() does not work with cfg attributes.
-+        #[cfg(not(CONFIG_RUST_EXTRA_LOCKDEP))]
-         let inner = Box::try_init::<AllocError>(try_init!(ArcInner {
-             // SAFETY: There are no safety requirements for this FFI call.
-             refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
-             data <- init::uninit::<T, AllocError>(),
-         }? AllocError))?;
-+
-         Ok(UniqueArc {
-             // INVARIANT: The newly-created object has a ref-count of 1.
-             // SAFETY: The pointer from the `Box` is valid.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b810bf037e524b54669acbe4e0df54b15d87ea1
+commit: 2c4d3841a82b88ae8a7b518dc6206f84f68e705a um: Avoid pcap multiple definition errors
+date:   5 months ago
+config: um-randconfig-r002-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141738.RNd2vcKC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141738.RNd2vcKC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307141738.RNd2vcKC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/um/drivers/pcap_kern.c:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/pcap_kern.c:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/pcap_kern.c:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for function 'pcap_init_kern' [-Wmissing-prototypes]
+      18 | void pcap_init_kern(struct net_device *dev, void *data)
+         |      ^
+   arch/um/drivers/pcap_kern.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      18 | void pcap_init_kern(struct net_device *dev, void *data)
+         | ^
+         | static 
+   arch/um/drivers/pcap_kern.c:53:5: warning: no previous prototype for function 'pcap_setup' [-Wmissing-prototypes]
+      53 | int pcap_setup(char *str, char **mac_out, void *data)
+         |     ^
+   arch/um/drivers/pcap_kern.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      53 | int pcap_setup(char *str, char **mac_out, void *data)
+         | ^
+         | static 
+   14 warnings generated.
+
+
+vim +/pcap_init_kern +18 arch/um/drivers/pcap_kern.c
+
+    17	
+  > 18	void pcap_init_kern(struct net_device *dev, void *data)
+    19	{
+    20		struct uml_net_private *pri;
+    21		struct pcap_data *ppri;
+    22		struct pcap_init *init = data;
+    23	
+    24		pri = netdev_priv(dev);
+    25		ppri = (struct pcap_data *) pri->user;
+    26		ppri->host_if = init->host_if;
+    27		ppri->promisc = init->promisc;
+    28		ppri->optimize = init->optimize;
+    29		ppri->filter = init->filter;
+    30	
+    31		printk("pcap backend, host interface %s\n", ppri->host_if);
+    32	}
+    33	
 
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
