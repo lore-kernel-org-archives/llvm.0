@@ -1,186 +1,112 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39515F9FE;
-	Fri, 14 Jul 2023 09:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689328772; x=1720864772;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d9u5s6dLwBF3CnkQ/UhyEU3XT9drzjmIvlPxpsqDxiw=;
-  b=EQ/hv5JALgKYVe8t7WW52zlBy/e12GC4FJlGdeWj/JHZvEC5CIC8m+Mo
-   sPTFpoymRWg5H3esQCxKEGav31hnWolvxn1qFP2wDGQQiSf9jXFSfP5Z1
-   cisGGUQol80oj9enP3Y2UjXJTz+JgsgCnO0n1nAZ6ILDo7VVrRr44OdmA
-   vcPbrbwJuNJoc6gCLGWFrSs4IDaMwQpDvfm603jl8brkHKr8EhxUUZp2V
-   t9ZP0J+yQBph4F3vinD9IvJDkN/QLqy0/6ZzfQ84Nqxa417d/GYatcfmA
-   ZUQtFKRRk/ub6AOIMOOlygWUZ7JPr1JElo7aqPulmxTLGh+HaH5xxsBms
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="368076403"
-X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="368076403"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 02:59:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="722340854"
-X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="722340854"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jul 2023 02:59:29 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKFaD-0007MZ-05;
-	Fri, 14 Jul 2023 09:59:29 +0000
-Date: Fri, 14 Jul 2023 17:58:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Foley <pefoley2@pefoley.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>
-Subject: arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for
- function 'pcap_init_kern'
-Message-ID: <202307141738.RNd2vcKC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D4D111B4
+	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 10:13:40 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-cad564b45e1so1451812276.2
+        for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 03:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689329619; x=1691921619;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wxNp02bNCTAVyLPRZ82mLPkwbAN62CIGC9HHKgWokDk=;
+        b=2F4xNUdVveqN+R5EKr8RvDc7bTWM+gLKOemIBdfkq0xCOm+Cr4UcTnXi7Ex+Z93qzm
+         0Jr5cpq2w11H+0Cg6FN9ZTSvdb5obWOs5j0cgJ0bcrvXiE2RRrlmIoxST4HoWSBwgOK2
+         8JD3CugG730wX57wEfvKkXfRliM7CBRRje7zXW9Eh8XpC3vlQcb8g9lC3f7RU2/c+xih
+         zeerj13DLEEgAOKU8aDV2UeFmV+9cbL73eRaQL//xH4DpiXrl7+msaF7IidwNkSYAvxL
+         rZh7VEifal0tY7Lt6YJ1DvF9fWQNWkiFiAlRb1vLaDscgIZXzMzIrbT3QjcbJLDqu6o/
+         RHvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689329619; x=1691921619;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wxNp02bNCTAVyLPRZ82mLPkwbAN62CIGC9HHKgWokDk=;
+        b=RpV7RezgSqVELMsRAbGTieo6ZLXNPtkttp7JyygXhb0sovN16pNgXYLYBTMFfZeOaM
+         89lncbEQv71mcZbLHSjSRkytVQBwANhw6bJ1z1m1GALOzxdH+nGNy2eQsiLSgkPa7tpz
+         sFT7MNv8UPwRP/UA61v88l+jSUHuj07QmDSzQsUZr+K2r/b2cy6368eYN4YkQ9GNGGVz
+         1hhFi7qDquDv8teh1bNvKDAZd7tfoCkxERHlGJ7POjKYxAZxbg+bGZVAZ/+iztG5U6Y+
+         wDkJhAGvudhxX4jUv2f+fCZ71M+MWKa8TGjSTFdSBfzOZjsOkE9PGlfaTQApMJlNTn+C
+         rd4w==
+X-Gm-Message-State: ABy/qLZ1uyk/wl5SZO32tJ1sss4j0M/WsOQn4w7ACAw47rpKin0HgQio
+	5P+AOURrnqQ7N15ZQl51ZXzLZh7Qp2HOQl4=
+X-Google-Smtp-Source: APBJJlFQrE4sbqNmMgiT0tYYLjApKeHUUY+9Z7jWQry23roqS1du7n+Bvn1DHckLfj2QgRK2ut1rlpfSA3O9848=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a25:9cc8:0:b0:bac:5d2c:844b with SMTP id
+ z8-20020a259cc8000000b00bac5d2c844bmr22156ybo.8.1689329619648; Fri, 14 Jul
+ 2023 03:13:39 -0700 (PDT)
+Date: Fri, 14 Jul 2023 10:13:37 +0000
+In-Reply-To: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230714101337.2193665-1-aliceryhl@google.com>
+Subject: Re: [PATCH RFC 00/11] rust: Implicit lock class creation & Arc
+ Lockdep integration
+From: Alice Ryhl <aliceryhl@google.com>
+To: lina@asahilina.net
+Cc: alex.gaynor@gmail.com, alyssa@rosenzweig.io, asahi@lists.linux.dev, 
+	benno.lossin@proton.me, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
+	daniel@ffwll.ch, gary@garyguo.net, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, marcan@marcan.st, 
+	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
+	nicolas@fjasle.eu, ojeda@kernel.org, rust-for-linux@vger.kernel.org, 
+	sven@svenpeter.dev, trix@redhat.com, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Peter,
+Asahi Lina <lina@asahilina.net> writes:
+> Begone, lock classes!
+> 
+> As discussed in meetings/etc, we would really like to support implicit
+> lock class creation for Rust code. Right now, lock classes are created
+> using macros and passed around (similar to C). Unfortunately, Rust
+> macros don't look like Rust functions, which means adding lockdep to a
+> type is a breaking API change. This makes Rust mutex creation rather
+> ugly, with the new_mutex!() macro and friends.
+> 
+> Implicit lock classes have to be unique per instantiation code site.
+> Notably, with Rust generics and monomorphization, this is not the same
+> as unique per generated code instance. If this weren't the case, we
+> could use inline functions and asm!() magic to try to create lock
+> classes that have the right uniqueness semantics. But that doesn't work,
+> since it would create too many lock classes for the same actual lock
+> creation in the source code.
+> 
+> But Rust does have one trick we can use: it can track the caller
+> location (as file:line:column), across multiple functions. This works
+> using an implicit argument that gets passed around, which is exactly the
+> thing we do for lock classes. The tricky bit is that, while the value of
+> these Location objects has the semantics we want (unique value per
+> source code location), there is no guarantee that they are deduplicated
+> in memory.
+> 
+> So we use a hash table, and map Location values to lock classes. Et
+> voila, implicit lock class support!
+>
+> This lets us clean up the Mutex & co APIs and make them look a lot more
+> Rust-like, but it also means we can now throw Lockdep into more APIs
+> without breaking the API. And so we can pull a neat trick: adding
+> Lockdep support into Arc<T>. This catches cases where the Arc Drop
+> implementation could create a locking correctness violation only when
+> the reference count drops to 0 at that particular drop site, which is
+> otherwise not detectable unless that condition actually happens at
+> runtime. Since Drop is "magic" in Rust and Drop codepaths very difficult
+> to audit, this helps a lot.
+> 
+> For the initial RFC, this implements the new API only for Mutex. If this
+> looks good, I can extend it to CondVar & friends in the next version.
+> This series also folds in a few related minor dependencies / changes
+> (like the pin_init mutex stuff).
 
-FYI, the error/warning still remains.
+I'm not convinced that this is the right compromise. Moving lockdep
+class creation to runtime sounds unfortunate, especially since this
+makes them fallible due to memory allocations (I think?).
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b810bf037e524b54669acbe4e0df54b15d87ea1
-commit: 2c4d3841a82b88ae8a7b518dc6206f84f68e705a um: Avoid pcap multiple definition errors
-date:   5 months ago
-config: um-randconfig-r002-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141738.RNd2vcKC-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141738.RNd2vcKC-lkp@intel.com/reproduce)
+I would be inclined to keep using macros for this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307141738.RNd2vcKC-lkp@intel.com/
+Alice
 
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/um/drivers/pcap_kern.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/um/drivers/pcap_kern.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/um/drivers/pcap_kern.c:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for function 'pcap_init_kern' [-Wmissing-prototypes]
-      18 | void pcap_init_kern(struct net_device *dev, void *data)
-         |      ^
-   arch/um/drivers/pcap_kern.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      18 | void pcap_init_kern(struct net_device *dev, void *data)
-         | ^
-         | static 
-   arch/um/drivers/pcap_kern.c:53:5: warning: no previous prototype for function 'pcap_setup' [-Wmissing-prototypes]
-      53 | int pcap_setup(char *str, char **mac_out, void *data)
-         |     ^
-   arch/um/drivers/pcap_kern.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      53 | int pcap_setup(char *str, char **mac_out, void *data)
-         | ^
-         | static 
-   14 warnings generated.
-
-
-vim +/pcap_init_kern +18 arch/um/drivers/pcap_kern.c
-
-    17	
-  > 18	void pcap_init_kern(struct net_device *dev, void *data)
-    19	{
-    20		struct uml_net_private *pri;
-    21		struct pcap_data *ppri;
-    22		struct pcap_init *init = data;
-    23	
-    24		pri = netdev_priv(dev);
-    25		ppri = (struct pcap_data *) pri->user;
-    26		ppri->host_if = init->host_if;
-    27		ppri->promisc = init->promisc;
-    28		ppri->optimize = init->optimize;
-    29		ppri->filter = init->filter;
-    30	
-    31		printk("pcap backend, host interface %s\n", ppri->host_if);
-    32	}
-    33	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
