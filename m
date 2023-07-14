@@ -1,76 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0AF15AC0;
-	Fri, 14 Jul 2023 18:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95FD0C433C8;
-	Fri, 14 Jul 2023 18:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1689358101;
-	bh=cOah2wqbTG/or6RUsLhiInE63S3Obr/iI4/ZAF0QdsQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fSzjTQK8TrhHROz7kJJUSdVBaVzIdy6cmez8qT6Nk7+Og4FZm8exawmTUUKK/Pqri
-	 44CvkqGzxY9roVpcBzb1x9iULJW12iBXwDlZui+bwZBJPlt3nkDevK6zi5wAUrhBRl
-	 lO/+ZyN/a8G2yyW0V3AKAWCOsfYVEQcD0dhcn0x0=
-Date: Fri, 14 Jul 2023 11:08:19 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Baoquan He <bhe@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>, Niklas Schnelle <schnelle@linux.ibm.com>, Christoph
- Hellwig <hch@lst.de>, "Mike Rapoport (IBM)" <rppt@kernel.org>
-Subject: Re: [akpm-mm:mm-unstable 93/173] drivers/clk/clk-fixed-mmio.c:33:2:
- error: call to undeclared function 'iounmap'; ISO C99 and later do not
- support implicit function declarations
-Message-Id: <20230714110819.a7a06160032e0f4d350bf99e@linux-foundation.org>
-In-Reply-To: <ZLCP0s5aRLLOfVYt@MiWiFi-R3L-srv>
-References: <202307131033.JgvCSVz4-lkp@intel.com>
-	<20230713092618.9a25417dc886b4f61660fe17@linux-foundation.org>
-	<ZLCP0s5aRLLOfVYt@MiWiFi-R3L-srv>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6EE63AA;
+	Fri, 14 Jul 2023 20:37:37 +0000 (UTC)
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3a41fbfd359so1814481b6e.0;
+        Fri, 14 Jul 2023 13:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689367057; x=1691959057;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mY5r74EsToyg15WyPiWjX1ZroHWYpVw9giMGrKp5JHA=;
+        b=AJN5/qxg8i0gT7b4C7JV8YxHIbBH13eMOg2DhSZgcyeTwVmINt+uIR1UC7cffKvHa3
+         3/bfbVb6OaoeS+/kSx4ONT1rQ/JADd8D03xutMFZu50rbkjCAOBm3ChncdDakkAjvCFR
+         ZTMcUD0KglBQXRLgl0tkuw3bitTlQsJPYbqMNdxy5iNvBK2Lj1VgPfzPX4jgEu5V0fhN
+         TbV2oVtYFJfwHCp9DGcH6P7H8JzVT5Q4lnmDf7b6cnveNHDh+oOz/kVQ4T61RQyMn+WY
+         f7JBbUX7nXRprPIfE5Y1dCdU39NH5n5LQ18IzlSkyVG6yThBm+YX6MPtt9t+zXi3amdh
+         a0bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689367057; x=1691959057;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mY5r74EsToyg15WyPiWjX1ZroHWYpVw9giMGrKp5JHA=;
+        b=mDsJ3LOpDxQxL1ErwNu7jTTWvyoz0ge3UciNGf+7V+LoOWSHKVCTaruDHHnu2smT6Q
+         cJf/JXk0UHLcGb7I91vc1D9tgSV1VF8p/maFTWzTp+8ju9/Tcvsf5up6wgFuH9XqwvmT
+         +V03t0xwF9TjQKCJTS4EoAqtZwa9UFY8blElkLdYS+YBfFKLzHyIdl004eYGWsW1kxpW
+         fGnk7coW72hd924VjkHCUvMdhQb05GBNSXl075r9E6n3PLW00wIIguh5yudI7xaKvEKf
+         4sWxkung5ufr/lGg17g+Plyx3R4OwYTMOqqcoaynnv/cbT6sDyz43gtKLA8wrmb3tBc5
+         u6PQ==
+X-Gm-Message-State: ABy/qLbfZF000N+LU0qQm/5dD2frJtDaKtTr8ROyyZxYLzJJdpO4W1+I
+	VftAqmucJZl4s5eY142VX+I=
+X-Google-Smtp-Source: APBJJlFBrF1UdrLk9k1UzyB21a0BPI2S3IPzkt81x9e58ufSqkaA21DfyAMl9+w9uwHwKMk7wMrhDA==
+X-Received: by 2002:a05:6808:d47:b0:396:e3a:9f2f with SMTP id w7-20020a0568080d4700b003960e3a9f2fmr6910430oik.5.1689367056789;
+        Fri, 14 Jul 2023 13:37:36 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id bk12-20020a0568081a0c00b003a44b425c18sm293034oib.43.2023.07.14.13.37.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jul 2023 13:37:36 -0700 (PDT)
+Message-ID: <72aca706-c2ff-b363-717c-323ea24d3908@gmail.com>
+Date: Fri, 14 Jul 2023 11:28:37 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH RFC 04/11] rust: siphash: Add a simple siphash abstraction
+Content-Language: en-US
+To: Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
+ <20230714-classless_lockdep-v1-4-229b9671ce31@asahilina.net>
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230714-classless_lockdep-v1-4-229b9671ce31@asahilina.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 14 Jul 2023 07:59:14 +0800 Baoquan He <bhe@redhat.com> wrote:
+On 7/14/23 06:13, Asahi Lina wrote:
+> This simple wrapper allows Rust code to use the Hasher interface with
+> the kernel siphash implementation. No fancy features supported for now,
+> just basic bag-of-bytes hashing. No guarantee that hash outputs will
+> remain stable in the future either.
+> 
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
+> [...]
+> --- /dev/null
+> +++ b/rust/kernel/siphash.rs
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! A core::hash::Hasher wrapper for the kernel siphash implementation.
+> +//!
+> +//! This module allows Rust code to use the kernel's siphash implementation
+> +//! to hash Rust objects.
+> +
+> +use core::hash::Hasher;
+> +
+> +/// A Hasher implementation that uses the kernel siphash implementation.
+> +#[derive(Default)]
+> +pub struct SipHasher {
+> +    // SipHash state is 4xu64, but the Linux implementation
+> +    // doesn't expose incremental hashing so let's just chain
+> +    // individual SipHash calls for now, which return a u64
+> +    // hash.
 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > >    In file included from drivers/clk/clk-fixed-mmio.c:13:
-> > >    In file included from include/linux/io.h:13:
-> > >    In file included from arch/s390/include/asm/io.h:78:
-> > >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> > >      547 |         val = __raw_readb(PCI_IOBASE + addr);
-> > >          |                           ~~~~~~~~~~ ^
-> > 
-> > Thanks.  When I tried that config I got
-> 
-> These two kinds of errors have been reported many times.
-> 
-> This PCI_IOBASE warning will be fixed by Niklas's patch at below:
-> 
-> https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
-> 
-> 
-> Nathan told this when he reviewed by patch at this sub-thread:
-> https://lore.kernel.org/all/20230612160237.GA199007@dev-arch.thelio-3990X/T/#u
-> 
-> Quote his words here:
-> ===
-> I believe that this series [1] by Niklas Schnelle should take care of
-> the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
-> need to worry about them when they show up in build reports.
-> 
-> [1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
+Isn't this detail relevant to mention in the doc comment? At least to
+explain the difference between them.
 
-OK, I'll restore the series "mm: ioremap: Convert architectures to take
-GENERIC_IOREMAP way", v8.
-
-This kind of already-was-there warning causes quite some trouble. 
-Attempts to fix such fallout are appreciated.
-
+> +    state: u64,
+> +}
+> [...]
