@@ -1,427 +1,1072 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574B213702;
-	Fri, 14 Jul 2023 11:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689334894; x=1720870894;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OOKQcl9NKaw2zDoTPhmmc4UbUnFs7NL9PkYQFLBdVkA=;
-  b=kcdbxTxaKRQjwf3FYo4LxVm8/8HrKYHlIImb8n0OEVXNGrzgo/Bpwb7w
-   En4YKVVoJwBqPuKwO+aypuc9vYLc/up0fVB7oHmQCgBhcLBMXaMNMphkY
-   wf0ChW+W84YfFIGoLo0iO4dxPWxvL/fFh8vTnzpn4flnfLuWFO8eWZQrB
-   HR7N5GuuMeZgaoCTpKdp4zPtziwxid10L+hvpZfwfrGxJuEeSqz/lK3hj
-   F9bAi10aJo71+4iGYyc8g6rFx8gKH3TYGnJ2CebhxNCvN5W7kXWPn6h12
-   GXZxknvTATj7728AKrbIhWHn+7ngq/i24xIlpqoHPovCPgWW7zeeSZ3Lc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345768321"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="345768321"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 04:41:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="725682132"
-X-IronPort-AV: E=Sophos;i="6.01,205,1684825200"; 
-   d="scan'208";a="725682132"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Jul 2023 04:41:31 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKHAw-0007PJ-25;
-	Fri, 14 Jul 2023 11:41:30 +0000
-Date: Fri, 14 Jul 2023 19:41:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:ktext-current 1/19] arch/arm64/kernel/kaslr.c:32:6: warning:
- comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka
- 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *'
- (aka 'unsigned long *'))
-Message-ID: <202307141950.7xmwTuH7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5112713700
+	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 11:56:16 +0000 (UTC)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-66c729f5618so1751403b3a.1
+        for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 04:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689335775; x=1691927775;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=yhNsxK+WhSM9+HBQ56TpiWRTXGJgHamqPFdqR3CEqxE=;
+        b=3UDyPsNzyaOfQsDUJ3OpEzVJCIA+0cFYTW6DjgNE39fVUmJYMCwQBzdjnEpBMnSmir
+         bTsPelpiKIN4Xs2AMS9oryzD/Nnl1r3KZz7W9adyj6AJHxzurPdsyZN0MBbSwxRQ8ei/
+         1EEypqB6RiJmy8LTCRZ/dm+TDgEkxs6e/ToBWGddb67bVHdJFs56/gSJjcovy95bV69o
+         HKxWCGZcE1u22A5j0qRXEWVdkXAufn4NSjzQzmxQrf8fZxSnSe/hq/mABzPftSqgfFja
+         IM9L1G/H8q+zEJ0tfCALSeYO4g/XCshpYAOL2z8AGTg/z8KpxEP7v6Rp8utc8WZLSF/r
+         NjPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689335775; x=1691927775;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yhNsxK+WhSM9+HBQ56TpiWRTXGJgHamqPFdqR3CEqxE=;
+        b=ejXoLlCf+5NE67UOzIu8Y+6Yfw9dOMsDV/Q6kfU7LrwVbn5jsco6f2b91RLX3Ur9mW
+         WKv1Hzo9MODu6XL8zpwhpZQyuIF/Mu1qf/XeWKJjh4mShOuGggJiNYRtZptkUsOZJ0jV
+         0tA5a71997zVBlaMVExbEQelG3qPV5zWPqrbar9rP25gbR6HdhjAvxHH8kQJgKli1g6Q
+         sq/5a0tX4JzA/yV/9CHRk+MInRUF5Bbjpnp2GuPq7PCuSjjbiFMjiJLQRFgye7QgOCK8
+         h5fhAvDbXr9Z2GCKWMjzx+LMZZMdJhfp+TpSK8HoHGqY/YjRYuckNL4pw0G052XM4Jnn
+         Dx5Q==
+X-Gm-Message-State: ABy/qLbe2gVbmHahbPmqZueVKRReA56lL1M+RKJyBm4x42FWslk1zZ6/
+	H59TdP+h8W3kYG6s53lwzTIKxj2T+WG13przEOc70Q==
+X-Google-Smtp-Source: APBJJlE1zdPS7s/thrs6YE0UuNNRBOGOT1yxVJQY82653fc/fCqj0SkhAP+XRfinBPC02FKeA6qPZw==
+X-Received: by 2002:a05:6a20:6a0f:b0:12e:626a:7455 with SMTP id p15-20020a056a206a0f00b0012e626a7455mr5607000pzk.58.1689335774035;
+        Fri, 14 Jul 2023 04:56:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id t21-20020a62ea15000000b00666b012baedsm7004933pfh.158.2023.07.14.04.56.12
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jul 2023 04:56:12 -0700 (PDT)
+Message-ID: <64b137dc.620a0220.56d6e.eb7d@mx.google.com>
+Date: Fri, 14 Jul 2023 04:56:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20230714
+X-Kernelci-Report-Type: build
+Subject: next/master build: 178 builds: 3 failed, 175 passed, 3 errors,
+ 14 warnings (next-20230714)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git ktext-current
-head:   49e3458967802a6981190b5a1fa9fd66dbf58f8c
-commit: 631e7c45f5d4cf043cd236a921c341e3dd9f1909 [1/19] arm64: place kernel in its own L0 page table entry
-config: arm64-randconfig-r025-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141950.7xmwTuH7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141950.7xmwTuH7-lkp@intel.com/reproduce)
+next/master build: 178 builds: 3 failed, 175 passed, 3 errors, 14 warnings =
+(next-20230714)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307141950.7xmwTuH7-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230714/
 
-All error/warnings (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230714
+Git Commit: 7c2878be573282a9961c359b806ccf70afe1a6b6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
->> lib/test_debug_virtual.c:27:15: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      27 |         va = (void *)VMALLOC_START;
-         |                      ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
---
->> kernel/kcov.c:190:8: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-     190 |         ip -= kaslr_offset();
-         |               ^~~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
-     203 | #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
-         |                                                         ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   kernel/kcov.c:630:29: warning: result of comparison of constant 1152921504606846975 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-     630 |                 if (remote_arg->area_size > LONG_MAX / sizeof(unsigned long))
-         |                     ~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
->> kernel/fork.c:310:10: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-     310 |                                      VMALLOC_START, VMALLOC_END,
-         |                                      ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
---
->> arch/arm64/mm/ptdump.c:44:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      44 |         { MODULES_VADDR,                "Modules start" },
-         |           ^~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
-      49 | #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
-         |                                  ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> arch/arm64/mm/ptdump.c:44:4: error: statement expression not allowed at file scope
-   arch/arm64/include/asm/memory.h:49:25: note: expanded from macro 'MODULES_VADDR'
-      49 | #define MODULES_VADDR           (MODULES_END - MODULES_VSIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^
-   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
-      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-         |                 ^
-   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
-      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
-         |                                                  ^
-   arch/arm64/mm/ptdump.c:45:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      45 |         { MODULES_END,                  "Modules end" },
-         |           ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/mm/ptdump.c:45:4: error: statement expression not allowed at file scope
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^
-   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
-      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-         |                 ^
-   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
-      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
-         |                                                  ^
-   arch/arm64/mm/ptdump.c:46:4: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      46 |         { VMALLOC_START,                "vmalloc() area" },
-         |           ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   arch/arm64/mm/ptdump.c:46:4: error: statement expression not allowed at file scope
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^
-   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
-      38 |                 __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-         |                 ^
-   include/linux/minmax.h:30:50: note: expanded from macro '__cmp_once'
-      30 | #define __cmp_once(x, y, unique_x, unique_y, op) ({     \
-         |                                                  ^
-   3 warnings and 3 errors generated.
---
->> arch/arm64/kernel/kaslr.c:32:6: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      32 |         if (kaslr_offset() < MIN_KIMG_ALIGN) {
-         |             ^~~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:203:56: note: expanded from macro 'kaslr_offset'
-     203 | #define kaslr_offset()  ((unsigned long)(kimage_vaddr - KIMAGE_VADDR))
-         |                                                         ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-      74 | #define max(x, y)       __careful_cmp(x, y, >)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
---
->> drivers/md/dm-stats.c:91:25: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-      91 |         if (a > (VMALLOC_END - VMALLOC_START) / DM_STATS_VMALLOC_FACTOR)
-         |                                ^~~~~~~~~~~~~
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:47:6: note: expanded from macro 'KIMAGE_VADDR'
-      47 |                                  max(MODULES_VSIZE, PGDIR_SIZE))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-         |                               ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                    ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
---
->> drivers/md/dm-bufio.c:2842:22: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-    2842 |         if (mem > mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100))
-         |                   ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
-     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
-         |                                      ^
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                                   ^
-   include/linux/math.h:124:9: note: expanded from macro 'mult_frac'
-     124 |         typeof(x) x_ = (x);     \
-         |                ^
->> drivers/md/dm-bufio.c:2842:22: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-    2842 |         if (mem > mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100))
-         |                   ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
-     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
-         |                                      ^
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                                   ^
-   include/linux/math.h:124:18: note: expanded from macro 'mult_frac'
-     124 |         typeof(x) x_ = (x);     \
-         |                         ^
-   drivers/md/dm-bufio.c:2843:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-    2843 |                 mem = mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100);
-         |                       ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
-     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
-         |                                      ^
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                                   ^
-   include/linux/math.h:124:9: note: expanded from macro 'mult_frac'
-     124 |         typeof(x) x_ = (x);     \
-         |                ^
-   drivers/md/dm-bufio.c:2843:19: warning: comparison of distinct pointer types ('typeof ((2147483648U)) *' (aka 'unsigned int *') and 'typeof (((1UL) << ((14 - 3) * (4 - (4 - 3)) + 3))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-    2843 |                 mem = mult_frac(VMALLOC_TOTAL, DM_BUFIO_VMALLOC_PERCENT, 100);
-         |                       ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmalloc.h:284:38: note: expanded from macro 'VMALLOC_TOTAL'
-     284 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
-         |                                      ^
-   arch/arm64/include/asm/pgtable.h:24:25: note: expanded from macro 'VMALLOC_START'
-      24 | #define VMALLOC_START           (MODULES_END + PGDIR_SIZE)
-         |                                  ^
-   arch/arm64/include/asm/memory.h:48:23: note: expanded from macro 'MODULES_END'
-      48 | #define MODULES_END             (KIMAGE_VADDR)
-         |                                  ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-         |                  ^
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-         |                                   ^
-   include/linux/math.h:124:18: note: expanded from macro 'mult_frac'
-     124 |         typeof(x) x_ = (x);     \
-         |                         ^
-   4 warnings generated.
-..
+Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-vim +32 arch/arm64/kernel/kaslr.c
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-fc5a89f75d2aad Ard Biesheuvel 2022-06-24  17  
-6e13b6b923b35a Mark Rutland   2023-05-30  18  void __init kaslr_init(void)
-6e13b6b923b35a Mark Rutland   2023-05-30  19  {
-0ddc312b7c7304 Marc Zyngier   2023-06-09  20  	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val &
-0ddc312b7c7304 Marc Zyngier   2023-06-09  21  						 arm64_sw_feature_override.mask,
-0ddc312b7c7304 Marc Zyngier   2023-06-09  22  						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
-fc5a89f75d2aad Ard Biesheuvel 2022-06-24  23  		pr_info("KASLR disabled on command line\n");
-6e13b6b923b35a Mark Rutland   2023-05-30  24  		return;
-fc5a89f75d2aad Ard Biesheuvel 2022-06-24  25  	}
-fc5a89f75d2aad Ard Biesheuvel 2022-06-24  26  
-f80fb3a3d50843 Ard Biesheuvel 2016-01-26  27  	/*
-6e13b6b923b35a Mark Rutland   2023-05-30  28  	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
-6e13b6b923b35a Mark Rutland   2023-05-30  29  	 * placement of the image rather than from the seed, so a displacement
-6e13b6b923b35a Mark Rutland   2023-05-30  30  	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
-f80fb3a3d50843 Ard Biesheuvel 2016-01-26  31  	 */
-6e13b6b923b35a Mark Rutland   2023-05-30 @32  	if (kaslr_offset() < MIN_KIMG_ALIGN) {
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-:::::: The code at line 32 was first introduced by commit
-:::::: 6e13b6b923b35a965d128a40ef0c5d9dd101e603 arm64: kaslr: split kaslr/module initialization
+Errors and Warnings Detected:
 
-:::::: TO: Mark Rutland <mark.rutland@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+arm64:
+
+arm:
+    h3600_defconfig (gcc-10): 1 warning
+    omap2plus_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+
+Errors summary:
+
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    drivers/mtd/nand/onenand/onenand_omap2.c:470:18: warning: =E2=80=
+=98c=E2=80=99 is used uninitialized in this function [-Wuninitialized]
+    1    drivers/mfd/ipaq-micro.c:81:6: warning: unused variable =E2=80=98i=
+=E2=80=99 [-Wunused-variable]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/mfd/ipaq-micro.c:81:6: warning: unused variable =E2=80=98i=E2=
+=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    drivers/mtd/nand/onenand/onenand_omap2.c:470:18: warning: =E2=80=98c=E2=
+=80=99 is used uninitialized in this function [-Wuninitialized]
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
