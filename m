@@ -1,43 +1,45 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05341C3A;
-	Fri, 14 Jul 2023 03:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A5B3FEF;
+	Fri, 14 Jul 2023 05:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689306509; x=1720842509;
+  t=1689311426; x=1720847426;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qud0wDzdzTShg/hLUn0gIUhHJLKjlH4u8Mu721IwsbE=;
-  b=JhZTyrl3sikecLQXFbOm6OeRL7Uqv491dLx6IHReaX5QzAkflsgR9KXQ
-   fPXh+UEUjB+PQzwG5+IXnjzSJxyVtDNqF5QmCjNbVYQJp/4Au9CCxORIl
-   2iA843tZdhlmmKyn46n3DqApRxm4Sd4rqzM06hqWkor960QdcTesU43Na
-   iu4KhJCnTZdwyx5zfqejGY+rNJpnPCMZFwyxGw3ye2LYDvQYDh7VZJZQc
-   bMNRC8w8dSSIW9zK7BHLagUmCwtMcjo6JXvNtK3HV9ck4nqAscEn9kkWt
-   x/TfWrqNUS5WDimqx0oBUYWpV7tVeqyZbz/frfIkp/k7JTvV22uXsgbkQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="451746311"
+  bh=0zK5ix1Ghqg4w6MZ/8ERPdW2RzRUWEBFvWPTcyKTRmw=;
+  b=AR8DbZCgjRbJwPEyNs5ajMFWIffI8Q3PVakBl89VLklJF6W7WyW88S9Z
+   nxyA46dvq3c56Aukq7wigXLwYgEDHe3CnkcEtS6jflv3mP8qh+aCL+Kzb
+   GGJSCPN6z9ghICYm6Zs763m1nHoDiJSZeDZgLdlTzOYseECTm/fQIU6AD
+   cd1+dFyUq3zmDEVax/+622I9DsT/YJD0iMuk6KtTSQmdkhlnrXOTDxTEj
+   Iiog7fbhcMjZvBeBmqftqvkd3M8PhinDRlRDabyBy+yOWveG1umiSCSvn
+   qElY2jOkXrSSppg7NAnVQzUV6yZnJEF9zpwBe5GsrG1+GRe1HnWQp9D5W
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="362857341"
 X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="451746311"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 20:48:22 -0700
+   d="scan'208";a="362857341"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 22:10:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="792302595"
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="757443722"
 X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="792302595"
+   d="scan'208";a="757443722"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2023 20:48:21 -0700
+  by orsmga001.jf.intel.com with ESMTP; 13 Jul 2023 22:10:22 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qK9n2-00079O-2R;
-	Fri, 14 Jul 2023 03:48:20 +0000
-Date: Fri, 14 Jul 2023 11:48:04 +0800
+	id 1qKB4Q-0007CH-0f;
+	Fri, 14 Jul 2023 05:10:22 +0000
+Date: Fri, 14 Jul 2023 13:10:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:x86/topology 25/57]
- arch/x86/kernel/apic/apic_common.c:47:6: warning: no previous prototype for
- function 'default_init_apic_ldr'
-Message-ID: <202307141101.WNeAwKRr-lkp@intel.com>
+To: Carlos Maiolino <cem@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>
+Subject: [akpm-mm:mm-unstable 161/178] mm/shmem_quota.c:286:5: warning: no
+ previous prototype for function 'shmem_mark_dquot_dirty'
+Message-ID: <202307141341.R961dyMt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,38 +49,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topology
-head:   39d1f9d6ad3d4b9bf9c298db5685f22d8fe6e2c0
-commit: e7719cffb7321ace1a049e51ea5c27e0e9744c47 [25/57] x86/apic: Nuke empty init_apic_ldr() callbacks
-config: i386-randconfig-i003-20230713 (https://download.01.org/0day-ci/archive/20230714/202307141101.WNeAwKRr-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141101.WNeAwKRr-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   6936d35dc558257b576113c74b586074dd942e9a
+commit: 1eadb10f211346c9baf6daff1be3890f072ffd82 [161/178] shmem: prepare shmem quota infrastructure
+config: s390-randconfig-r012-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141341.R961dyMt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141341.R961dyMt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307141101.WNeAwKRr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307141341.R961dyMt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/apic/apic_common.c:47:6: warning: no previous prototype for function 'default_init_apic_ldr' [-Wmissing-prototypes]
-   void default_init_apic_ldr(void)
-        ^
-   arch/x86/kernel/apic/apic_common.c:47:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void default_init_apic_ldr(void)
-   ^
-   static 
-   1 warning generated.
+>> mm/shmem_quota.c:286:5: warning: no previous prototype for function 'shmem_mark_dquot_dirty' [-Wmissing-prototypes]
+     286 | int shmem_mark_dquot_dirty(struct dquot *dquot)
+         |     ^
+   mm/shmem_quota.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     286 | int shmem_mark_dquot_dirty(struct dquot *dquot)
+         | ^
+         | static 
+>> mm/shmem_quota.c:291:5: warning: no previous prototype for function 'shmem_dquot_write_info' [-Wmissing-prototypes]
+     291 | int shmem_dquot_write_info(struct super_block *sb, int type)
+         |     ^
+   mm/shmem_quota.c:291:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     291 | int shmem_dquot_write_info(struct super_block *sb, int type)
+         | ^
+         | static 
+   2 warnings generated.
 
 
-vim +/default_init_apic_ldr +47 arch/x86/kernel/apic/apic_common.c
+vim +/shmem_mark_dquot_dirty +286 mm/shmem_quota.c
 
-    42	
-    43	/*
-    44	 * Set up the logical destination ID when the APIC operates in logical
-    45	 * destination mode.
-    46	 */
-  > 47	void default_init_apic_ldr(void)
+   285	
+ > 286	int shmem_mark_dquot_dirty(struct dquot *dquot)
+   287	{
+   288		return 0;
+   289	}
+   290	
+ > 291	int shmem_dquot_write_info(struct super_block *sb, int type)
+   292	{
+   293		return 0;
+   294	}
+   295	
 
 -- 
 0-DAY CI Kernel Test Service
