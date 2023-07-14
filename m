@@ -1,71 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1226A14264
-	for <llvm@lists.linux.dev>; Fri, 14 Jul 2023 15:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D23C433C8;
-	Fri, 14 Jul 2023 15:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689348423;
-	bh=PohzP/6CVU4qNJVwu6BvOLEqRA2FFMRHS3Zp9exoByM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OhA04VnYAHHzDnAUPRYio1BpG+t//WZ4aMT8Qd3OiH5CSCVekX2n3WtS7C9uiVpEm
-	 Jew0J4wPPuGepXSSRePuXzOTJ7XkYuNtG/WbgXQyopAeD1tn176mXAi6MwdsiIrl+r
-	 saiqL3DsS2MzU8iyojy5d3YoKE68eUcfLXdictmno4CYzLMePdSpswZcZQNZBXTAYq
-	 6UXzGxny7gtAIoejg7H58nGBGsqV8fjLSVeSAoA4qI1/GQG7mP9AM+/c0m+rwsFwph
-	 suUkpxHL//2GFW845r0r/lRZ1BJrJq2knHCVlRollJkJRAnX6rY+3Tm6HurG1nATOb
-	 EX0bHw0RciyQg==
-Date: Fri, 14 Jul 2023 08:27:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Yangtao Li <frank.li@vivo.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 12/18] mtd: nand: omap: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <20230714152701.GA1300718@dev-arch.thelio-3990X>
-References: <20230707040622.78174-12-frank.li@vivo.com>
- <20230713075751.486075-1-miquel.raynal@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4BED521;
+	Fri, 14 Jul 2023 15:57:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F4BC433C7;
+	Fri, 14 Jul 2023 15:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1689350247;
+	bh=lwc2mqtMamKbQhuz7C+HFzR/YjxrhWRQte11nnNxhgg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KLbopqqHwf7VLeiIZrQB/ZCljR0ODPzFrSOjaQtfHAumIDfVbBsWu7HipSsaCmdvM
+	 KjA+Tp9Eiwro5yj8zQmkWFnuT28AplKPWV+Pjy+UixKC0PaoPNccd8ljmePwqjXrYA
+	 cIlvyQKUsh2n/HCABEEKP2cd3t0u2OJ39vovfJG8=
+Date: Fri, 14 Jul 2023 08:57:26 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Carlos Maiolino <cem@kernel.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>, Lukas Czerner <lczerner@redhat.com>, Jan Kara
+ <jack@suse.cz>
+Subject: Re: [akpm-mm:mm-unstable 161/178] mm/shmem_quota.c:286:5: warning:
+ no previous prototype for function 'shmem_mark_dquot_dirty'
+Message-Id: <20230714085726.4b015152cd5b5182250b2a66@linux-foundation.org>
+In-Reply-To: <202307141341.R961dyMt-lkp@intel.com>
+References: <202307141341.R961dyMt-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230713075751.486075-1-miquel.raynal@bootlin.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 13, 2023 at 09:57:51AM +0200, Miquel Raynal wrote:
-> On Fri, 2023-07-07 at 04:06:16 UTC, Yangtao Li wrote:
-> > Convert platform_get_resource(), devm_ioremap_resource() to a single
-> > call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> > what this function does.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> 
-> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+On Fri, 14 Jul 2023 13:10:19 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Please apply the updated version at [1], the current version is
-obviously not correct, as clang points out in next-20230714:
+> >> mm/shmem_quota.c:286:5: warning: no previous prototype for function 'shmem_mark_dquot_dirty' [-Wmissing-prototypes]
+>      286 | int shmem_mark_dquot_dirty(struct dquot *dquot)
+>          |     ^
+>    mm/shmem_quota.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>      286 | int shmem_mark_dquot_dirty(struct dquot *dquot)
+>          | ^
+>          | static 
+> >> mm/shmem_quota.c:291:5: warning: no previous prototype for function 'shmem_dquot_write_info' [-Wmissing-prototypes]
+>      291 | int shmem_dquot_write_info(struct super_block *sb, int type)
+>          |     ^
+>    mm/shmem_quota.c:291:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>      291 | int shmem_dquot_write_info(struct super_block *sb, int type)
 
-  drivers/mtd/nand/onenand/onenand_omap2.c:470:2: warning: variable 'c' is uninitialized when used here [-Wuninitialized]
-    470 |         c->onenand.base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-        |         ^
-  drivers/mtd/nand/onenand/onenand_omap2.c:465:25: note: initialize the variable 'c' to silence this warning
-    465 |         struct omap2_onenand *c;
-        |                                ^
-        |                                 = NULL
-  1 warning generated.
+Thanks.
 
-KernelCI also reported this at [2]. I apologize if this has already been
-reported or fixed locally, I did not see your branch updated.
+--- a/mm/shmem_quota.c~shmem-prepare-shmem-quota-infrastructure-fix
++++ a/mm/shmem_quota.c
+@@ -283,12 +283,12 @@ out_dqlock:
+ 	return 0;
+ }
+ 
+-int shmem_mark_dquot_dirty(struct dquot *dquot)
++static int shmem_mark_dquot_dirty(struct dquot *dquot)
+ {
+ 	return 0;
+ }
+ 
+-int shmem_dquot_write_info(struct super_block *sb, int type)
++static int shmem_dquot_write_info(struct super_block *sb, int type)
+ {
+ 	return 0;
+ }
+_
 
-[1]: https://lore.kernel.org/20230713104422.29222-1-frank.li@vivo.com/
-[2]: https://lore.kernel.org/64b137dc.170a0220.b8a13.feee@mx.google.com/
-
-Cheers,
-Nathan
