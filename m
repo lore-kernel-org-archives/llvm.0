@@ -1,74 +1,144 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE367D507;
-	Fri, 14 Jul 2023 09:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689325653; x=1720861653;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+IHg6cgBZRevG4BwODkWCovtb113ZE9XIynivYxkZRo=;
-  b=Pcs3mnqg29BIm7u1Xt6qh9mu+3uRxrrHwVxLfM7PybXBWt6nqJ8/2xHw
-   oC0IHJKCJzJsHKMvePJJAlBXtmUNQ5V5LZELVuinxf81QSitJcmnCGORP
-   HM4r+J1odCddNYaXWhghKj+sM3rQQkS4RRTA1EGgAWUx5g10ZYfTEOIYA
-   /3F1EpMkwZWd622pMw03TQWFaXMam/I28A3fiBcaQODHkyxH2Q8n0RM1j
-   tBeztmyzbRVn9UYtLRHc5mRIflD/IktRsXa+ahZYuU92m7GEYRcydfbuG
-   g0zzKGFDBmXoaVmmMbOADWIbCtEgPCdhnLvrlMH+DH3sF8kyBw2Iy5iDd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="364303473"
-X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="364303473"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2023 02:07:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="846392359"
-X-IronPort-AV: E=Sophos;i="6.01,204,1684825200"; 
-   d="scan'208";a="846392359"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Jul 2023 02:07:31 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKEls-0007LX-1F;
-	Fri, 14 Jul 2023 09:07:28 +0000
-Date: Fri, 14 Jul 2023 17:07:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/210-gpu 39/198] error[E0560]: struct `drm_driver`
- has no field named `dumb_destroy`
-Message-ID: <202307141735.QUjvrfhF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D0DD51F;
+	Fri, 14 Jul 2023 09:14:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: linasend@asahilina.net)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 2DD105BC3A;
+	Fri, 14 Jul 2023 09:14:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+	s=default; t=1689326046;
+	bh=NNlQg01GoROuwHT7V4Ok4QbA2Wacecl8a9cR39wPQX4=;
+	h=From:Subject:Date:To:Cc;
+	b=DWOuvqjnL+WVRlQCchmZp/1Q5QSmwk1TXPN8elD+Lr+TEOyfN68h44fdUmUcdHUN2
+	 7A4F4XNCMes02IwEzHvDFlsJpVL0C1B4V1z1Ue0okL8UxvAiq4YGiBco3taDmSFjt/
+	 jS1+M7N5xtG4lbjc5aUXgomR7zvuNjImD/mfiMO2d2SBUVIwbYtnjKb3nbQzJMX+ol
+	 vHAaNDJRwALfpj1vg6IIcWkXw5ZDFpjpkKMYGKkPHoYaEQR6LoFiC9FK29dna86ls9
+	 2qOlhTZmdmXLAN5YMfQKDpOaFiZjQ2tR+HS58wyprIbaP33CVyONvqagYL1nunBGyZ
+	 /QtxTuAPRiOWQ==
+From: Asahi Lina <lina@asahilina.net>
+Subject: [PATCH RFC 00/11] rust: Implicit lock class creation & Arc Lockdep
+ integration
+Date: Fri, 14 Jul 2023 18:13:52 +0900
+Message-Id: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANARsWQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDc0MT3eScxOLinNTi4vic/OTslNQC3TTDFFNLc6O0JJOkRCWgvoKi1LT
+ MCrCZ0UpBbs5KsbW1AJoiJw1oAAAA
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Wedson Almeida Filho <wedsonaf@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev, 
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689326040; l=3990;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=NNlQg01GoROuwHT7V4Ok4QbA2Wacecl8a9cR39wPQX4=;
+ b=/iyr7ancBEF0XHvo1tC+PR5V7K/FO06oJ0Cy/w4WDvBHh+I0Op8T6d5uYejSOZ+TUqNdVn/Ns
+ klBa8CShSlIAxB40VpRMh8VI93PqdHiAsoOvp8NK/p+ZA/7SUcFENqu
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 
-tree:   https://github.com/AsahiLinux/linux bits/210-gpu
-head:   c2bbe7fe79da5dff6da45eb1d4a5a582db740429
-commit: 8c78d70751e2059f0132b4af485128d8314f0ed8 [39/198] rust: drm: Add Device and Driver abstractions
-config: x86_64-randconfig-x002-20230714 (https://download.01.org/0day-ci/archive/20230714/202307141735.QUjvrfhF-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230714/202307141735.QUjvrfhF-lkp@intel.com/reproduce)
+Begone, lock classes!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307141735.QUjvrfhF-lkp@intel.com/
+As discussed in meetings/etc, we would really like to support implicit
+lock class creation for Rust code. Right now, lock classes are created
+using macros and passed around (similar to C). Unfortunately, Rust
+macros don't look like Rust functions, which means adding lockdep to a
+type is a breaking API change. This makes Rust mutex creation rather
+ugly, with the new_mutex!() macro and friends.
 
-All errors (new ones prefixed by >>):
+Implicit lock classes have to be unique per instantiation code site.
+Notably, with Rust generics and monomorphization, this is not the same
+as unique per generated code instance. If this weren't the case, we
+could use inline functions and asm!() magic to try to create lock
+classes that have the right uniqueness semantics. But that doesn't work,
+since it would create too many lock classes for the same actual lock
+creation in the source code.
 
->> error[E0560]: struct `drm_driver` has no field named `dumb_destroy`
-   --> rust/kernel/drm/drv.rs:232:9
-   |
-   232 |         dumb_destroy: T::Object::ALLOC_OPS.dumb_destroy,
-   |         ^^^^^^^^^^^^ `drm_driver` does not have this field
-   |
-   = note: available fields are: `load`, `open`, `postclose`, `lastclose`, `unload` ... and 22 others
+But Rust does have one trick we can use: it can track the caller
+location (as file:line:column), across multiple functions. This works
+using an implicit argument that gets passed around, which is exactly the
+thing we do for lock classes. The tricky bit is that, while the value of
+these Location objects has the semantics we want (unique value per
+source code location), there is no guarantee that they are deduplicated
+in memory.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So we use a hash table, and map Location values to lock classes. Et
+voila, implicit lock class support!
+
+This lets us clean up the Mutex & co APIs and make them look a lot more
+Rust-like, but it also means we can now throw Lockdep into more APIs
+without breaking the API. And so we can pull a neat trick: adding
+Lockdep support into Arc<T>. This catches cases where the Arc Drop
+implementation could create a locking correctness violation only when
+the reference count drops to 0 at that particular drop site, which is
+otherwise not detectable unless that condition actually happens at
+runtime. Since Drop is "magic" in Rust and Drop codepaths very difficult
+to audit, this helps a lot.
+
+For the initial RFC, this implements the new API only for Mutex. If this
+looks good, I can extend it to CondVar & friends in the next version.
+This series also folds in a few related minor dependencies / changes
+(like the pin_init mutex stuff).
+
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+Asahi Lina (11):
+      rust: types: Add Opaque::zeroed()
+      rust: lock: Add Lock::pin_init()
+      rust: Use absolute paths to build Rust objects
+      rust: siphash: Add a simple siphash abstraction
+      rust: sync: Add dummy LockClassKey implementation for !CONFIG_LOCKDEP
+      rust: sync: Replace static LockClassKey refs with a pointer wrapper
+      rust: sync: Implement dynamic lockdep class creation
+      rust: sync: Classless Lock::new() and pin_init()
+      rust: init: Update documentation for new mutex init style
+      rust: sync: Add LockdepMap abstraction
+      rust: sync: arc: Add lockdep integration
+ lib/Kconfig.debug                 |   8 ++
+ rust/Makefile                     |   2 +-
+ rust/bindings/bindings_helper.h   |   2 +
+ rust/helpers.c                    |  24 ++++
+ rust/kernel/init.rs               |  22 ++--
+ rust/kernel/lib.rs                |   1 +
+ rust/kernel/siphash.rs            |  39 +++++++
+ rust/kernel/sync.rs               |  33 ++----
+ rust/kernel/sync/arc.rs           |  71 +++++++++++-
+ rust/kernel/sync/condvar.rs       |   2 +-
+ rust/kernel/sync/lock.rs          |  68 ++++++++++-
+ rust/kernel/sync/lock/mutex.rs    |  15 ++-
+ rust/kernel/sync/lock/spinlock.rs |   2 +-
+ rust/kernel/sync/lockdep.rs       | 229 ++++++++++++++++++++++++++++++++++++++
+ rust/kernel/sync/no_lockdep.rs    |  38 +++++++
+ rust/kernel/types.rs              |   7 +-
+ scripts/Makefile.build            |   8 +-
+ 17 files changed, 525 insertions(+), 46 deletions(-)
+---
+base-commit: 7eb28ae62e16abc207c90064ad2b824c19566fe2
+change-id: 20230714-classless_lockdep-f1d5972fb4ba
+
+Thank you,
+~~ Lina
+
