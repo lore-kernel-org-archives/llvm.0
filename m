@@ -1,197 +1,296 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D9415C5;
-	Sat, 15 Jul 2023 10:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689418380; x=1720954380;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cAxdqF1VdrnIPVpnp6UTNHqsFqyxd0k38gQPCZE1bt0=;
-  b=n/Iglg6t9WzE7UedUNzy0kQKGkA08CPnN2I7eiKmn6dKvubup8znvyVs
-   cpeVQJfqGtmYYFPecL2CpvKTlbp48sIXvHsU1xZCfTE1PLj/YmM2qt0cG
-   rrMk80+q0GjFxBzVN8tynFSCX3MKI7x1aSja8XenaWAXoX0tmOa0g7XDU
-   9jshVqRY/9vb8MJNDZ8YlpoeJohdEUpqg9umirR8mFDW4+0UbzE47cs3+
-   SlLjca3Vg+08GEZStQglg527IrW6uekWwvAJXkh45blfcCm3IaC/iGx3l
-   yBlKNnlUZRQo3wX9TGnJ+/ZM9sTGZ4BKcZx9/YEh5fXfiYPMS7R3rKsRO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="368292569"
-X-IronPort-AV: E=Sophos;i="6.01,208,1684825200"; 
-   d="scan'208";a="368292569"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 03:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10771"; a="896683787"
-X-IronPort-AV: E=Sophos;i="6.01,208,1684825200"; 
-   d="scan'208";a="896683787"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2023 03:52:58 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKctV-000889-14;
-	Sat, 15 Jul 2023 10:52:57 +0000
-Date: Sat, 15 Jul 2023 18:52:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hu Haowen <src.res.211@gmail.com>
-Subject: [srcres258-doc:next 1/1] mm/memory-failure.c:1845:17: error: call to
- undeclared function 'raw_hwp_list_head'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202307151813.cxpmtr1x-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742C61C32
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 12:01:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689422496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bkCFiuG7+X1R7G1zMBRWCo58y6gUqo2D9NJPhu9CzSc=;
+	b=DJmE3MLsoEbB0EpdZ8U/dQ3BdGHKtIptjKka+mfMNEIbKsPe6CsDxzFJ/3MatbmOErxx39
+	fYbKg3194JBTtp1Wsq1sktGG6Xg48wxEJh1tzZqHWkPpeVE+VQpRfRC/nMiu7qlnTmQVMm
+	D6rK/3d+ZvZTm7P0lP2hlAihHqiEPD8=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-UJRvHGQTO0COWq90HXJaJA-1; Sat, 15 Jul 2023 08:01:34 -0400
+X-MC-Unique: UJRvHGQTO0COWq90HXJaJA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE1E52A59549
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 12:01:34 +0000 (UTC)
+Received: from [172.64.4.30] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7B7821454143;
+	Sat, 15 Jul 2023 12:01:34 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 53 of 328): Test report for master
+ (6.5.0-rc1, mainline.kernel.org-clang, be522ac7)
+Date: Sat, 15 Jul 2023 12:01:34 -0000
+To: haliu@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com, jiji@redhat.com,
+ yiche@redhat.com, zlang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <09788.123071508013500184@us-mta-470.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/srcres258/linux-doc next
-head:   402c80656f93d63ae5b6d2bdd940f13abf809879
-commit: 402c80656f93d63ae5b6d2bdd940f13abf809879 [1/1] Merge commit 'f0412619534a7315acfcbfdf1fa7aa7e8a93f69c' into next
-config: x86_64-randconfig-x013-20230715 (https://download.01.org/0day-ci/archive/20230715/202307151813.cxpmtr1x-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230715/202307151813.cxpmtr1x-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307151813.cxpmtr1x-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> mm/memory-failure.c:1845:17: error: call to undeclared function 'raw_hwp_list_head'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_hwp_head = raw_hwp_list_head(folio);
-                          ^
->> mm/memory-failure.c:1845:15: error: incompatible integer to pointer conversion assigning to 'struct llist_head *' from 'int' [-Wint-conversion]
-           raw_hwp_head = raw_hwp_list_head(folio);
-                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/memory-failure.c:1878:17: error: call to undeclared function 'raw_hwp_list_head'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_hwp_head = raw_hwp_list_head(folio);
-                          ^
-   mm/memory-failure.c:1878:15: error: incompatible integer to pointer conversion assigning to 'struct llist_head *' from 'int' [-Wint-conversion]
-           raw_hwp_head = raw_hwp_list_head(folio);
-                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/memory-failure.c:1896:23: error: call to undeclared function 'raw_hwp_list_head'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           head = llist_del_all(raw_hwp_list_head(folio));
-                                ^
->> mm/memory-failure.c:1896:23: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct llist_head *' [-Wint-conversion]
-           head = llist_del_all(raw_hwp_list_head(folio));
-                                ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/llist.h:237:67: note: passing argument to parameter 'head' here
-   static inline struct llist_node *llist_del_all(struct llist_head *head)
-                                                                     ^
-   mm/memory-failure.c:1924:9: error: call to undeclared function 'raw_hwp_list_head'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           head = raw_hwp_list_head(folio);
-                  ^
-   mm/memory-failure.c:1924:7: error: incompatible integer to pointer conversion assigning to 'struct llist_head *' from 'int' [-Wint-conversion]
-           head = raw_hwp_list_head(folio);
-                ^ ~~~~~~~~~~~~~~~~~~~~~~~~
-   8 errors generated.
---
->> mm/hugetlb.c:7236:6: warning: no previous prototype for function 'is_raw_hwp_subpage' [-Wmissing-prototypes]
-   bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-        ^
-   mm/hugetlb.c:7236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-   ^
-   static 
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/raw_hwp_list_head +1845 mm/memory-failure.c
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1828  
-e833a46a28d799 Jiaqi Yan       2023-07-07  1829  bool __is_raw_hwp_subpage(struct folio *folio, struct page *subpage)
-e833a46a28d799 Jiaqi Yan       2023-07-07  1830  {
-e833a46a28d799 Jiaqi Yan       2023-07-07  1831  	struct llist_head *raw_hwp_head;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1832  	struct raw_hwp_page *p, *tmp;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1833  	bool ret = false;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1834  
-e833a46a28d799 Jiaqi Yan       2023-07-07  1835  	if (!folio_test_hwpoison(folio))
-e833a46a28d799 Jiaqi Yan       2023-07-07  1836  		return false;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1837  
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1838  	/*
-e833a46a28d799 Jiaqi Yan       2023-07-07  1839  	 * When RawHwpUnreliable is set, kernel lost track of which subpages
-e833a46a28d799 Jiaqi Yan       2023-07-07  1840  	 * are HWPOISON. So return as if ALL subpages are HWPOISONed.
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1841  	 */
-e833a46a28d799 Jiaqi Yan       2023-07-07  1842  	if (folio_test_hugetlb_raw_hwp_unreliable(folio))
-e833a46a28d799 Jiaqi Yan       2023-07-07  1843  		return true;
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1844  
-e833a46a28d799 Jiaqi Yan       2023-07-07 @1845  	raw_hwp_head = raw_hwp_list_head(folio);
-e833a46a28d799 Jiaqi Yan       2023-07-07  1846  	llist_for_each_entry_safe(p, tmp, raw_hwp_head->first, node) {
-e833a46a28d799 Jiaqi Yan       2023-07-07  1847  		if (subpage == p->page) {
-e833a46a28d799 Jiaqi Yan       2023-07-07  1848  			ret = true;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1849  			break;
-e833a46a28d799 Jiaqi Yan       2023-07-07  1850  		}
-e833a46a28d799 Jiaqi Yan       2023-07-07  1851  	}
-e833a46a28d799 Jiaqi Yan       2023-07-07  1852  
-e833a46a28d799 Jiaqi Yan       2023-07-07  1853  	return ret;
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1854  }
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1855  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1856  bool is_raw_hwpoison_page_in_hugepage(struct page *page)
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1857  {
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1858  	struct llist_head *raw_hwp_head;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1859  	struct raw_hwp_page *p;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1860  	struct folio *folio = page_folio(page);
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1861  	bool ret = false;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1862  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1863  	if (!folio_test_hwpoison(folio))
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1864  		return false;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1865  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1866  	if (!folio_test_hugetlb(folio))
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1867  		return PageHWPoison(page);
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1868  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1869  	/*
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1870  	 * When RawHwpUnreliable is set, kernel lost track of which subpages
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1871  	 * are HWPOISON. So return as if ALL subpages are HWPOISONed.
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1872  	 */
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1873  	if (folio_test_hugetlb_raw_hwp_unreliable(folio))
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1874  		return true;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1875  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1876  	mutex_lock(&mf_mutex);
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1877  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1878  	raw_hwp_head = raw_hwp_list_head(folio);
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1879  	llist_for_each_entry(p, raw_hwp_head->first, node) {
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1880  		if (page == p->page) {
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1881  			ret = true;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1882  			break;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1883  		}
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1884  	}
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1885  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1886  	mutex_unlock(&mf_mutex);
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1887  
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1888  	return ret;
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1889  }
-14bdaafea3f2ec Jiaqi Yan       2023-07-13  1890  
-0858b5eb3aab2d Sidhartha Kumar 2023-01-12  1891  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1892  {
-4352a5a7830080 Jiaqi Yan       2023-07-07  1893  	struct llist_node *t, *tnode, *head;
-ac5fcde0a96a18 Naoya Horiguchi 2022-07-14  1894  	unsigned long count = 0;
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1895  
-4352a5a7830080 Jiaqi Yan       2023-07-07 @1896  	head = llist_del_all(raw_hwp_list_head(folio));
-4352a5a7830080 Jiaqi Yan       2023-07-07  1897  	llist_for_each_safe(tnode, t, head) {
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1898  		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1899  
-ac5fcde0a96a18 Naoya Horiguchi 2022-07-14  1900  		if (move_flag)
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1901  			SetPageHWPoison(p->page);
-5033091de814ab Naoya Horiguchi 2022-10-24  1902  		else
-5033091de814ab Naoya Horiguchi 2022-10-24  1903  			num_poisoned_pages_sub(page_to_pfn(p->page), 1);
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1904  		kfree(p);
-ac5fcde0a96a18 Naoya Horiguchi 2022-07-14  1905  		count++;
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1906  	}
-ac5fcde0a96a18 Naoya Horiguchi 2022-07-14  1907  	return count;
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1908  }
-161df60e9e8965 Naoya Horiguchi 2022-07-14  1909  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96078
 
-:::::: The code at line 1845 was first introduced by commit
-:::::: e833a46a28d799bf3c4816d79487ee5f8b6fef51 mm/hwpoison: check if a subpage of a hugetlb folio is raw HWPOISON
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788199
+         ppc64le - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788374
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788247
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788269
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788086
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788114
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8788315
 
-:::::: TO: Jiaqi Yan <jiaqiyan@google.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
+directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
+ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
+f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
+:1559 (size 1)
+            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
+            Affected tests:
+                 aarch64 - xfstests - xfs
+                  x86_64 - xfstests - xfs
+                  x86_64 (debug) - xfstests - xfs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1188
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: hit test timeout
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
+ dump memory(/proc/vmcore). No such file or directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
