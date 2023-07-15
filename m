@@ -1,236 +1,301 @@
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2126.outbound.protection.outlook.com [40.107.10.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5745115B8;
-	Sat, 15 Jul 2023 14:52:34 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dNvS4zEtyG8zaXI23VmKjTUTl86kuWKrLs1UmHuJn3wfMzOi5CHtTgctmCvLVBdmp1QxVd7ZKAKJwrfHRZaGUf1lerEOTGE8f4Vg1c7AsqQ1l+/2nrZapgKxIeFbL7XtY0IfzKN/f0yXDmZNz9534Lg0U8KNhTA+KWi+fahmY+8M9nxFv50/Ub9wQ9SPziDb4cF7KkuKY3k86nZ0NaMKNtM0gMBgkwLfLLLS0tNpRdoCWtln3ccBCIoh4PI/raZdTbGiIqw1Fl2J88HjKJkdxLZY5Kkw888F1rD4DI3YJF/MzdsjCBhClZeeRRgDNTptIHqkqCzr2H2le31l07HVAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WPWATc+9D19MzC4IbUaWB1fhVmvN6k2Zas2FyV/Sn2M=;
- b=oWMM4nSwITZUfpgpOYtLAPBWjo1cB36aVtvlOLwjr6OOxJq8CZn3vptA3Z30VjFPDxhXjeh/k5UhcyYvT487Uij5OBktHOxo3Ok5F+b7ttJUJAXODAf6swJQOuIHo50gs6CYDnMW0/Uv5IPC1++QA7ZL7/oX2MAdyCudBllnjR/Ievf1VWRENTwv4iqeFlxjZLa0l8v9bovkLm974ezSVlpJrdVHKLRqpxs+cO8arF8ikwMyzwrIddjNZa1rnfeKtEmEKCvbzpb42fQAEhZXlctrjGod8Htl3rB+kfu9Bje25z6skDW3aa+THyizLmxwRX1B88xic7CyHPel9ZK5uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WPWATc+9D19MzC4IbUaWB1fhVmvN6k2Zas2FyV/Sn2M=;
- b=xM+fLaH0dFxbNUR/crDrJvauZKOYkCoMteIMpLmYrHtA0WreXUfkFaIz9N1Ib7cEiiNSvyKCT7WFZ6jw4W3fNUjA5bH584KiAac5WAXc4wkfnZ3UlqoKKB/z1UfBPX6GblFS7YlErATVAnstv+KPDiLhx7alNGy1hU3MCCdS0lM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB7180.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1f6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Sat, 15 Jul
- 2023 14:52:31 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::25e2:a08b:cd9c:c3c9]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::25e2:a08b:cd9c:c3c9%3]) with mapi id 15.20.6588.028; Sat, 15 Jul 2023
- 14:52:31 +0000
-Date: Sat, 15 Jul 2023 15:52:29 +0100
-From: Gary Guo <gary@garyguo.net>
-To: Asahi Lina <lina@asahilina.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Masahiro
- Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
- Tom Rix <trix@redhat.com>, Daniel Vetter <daniel@ffwll.ch>, Hector Martin
- <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig
- <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH RFC 04/11] rust: siphash: Add a simple siphash
- abstraction
-Message-ID: <20230715155229.6cb338dd.gary@garyguo.net>
-In-Reply-To: <20230714-classless_lockdep-v1-4-229b9671ce31@asahilina.net>
-References: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
-	<20230714-classless_lockdep-v1-4-229b9671ce31@asahilina.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0079.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:138::12) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2A115C5
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 15:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689434441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2wKlJ4Fz6JcbkEY/AR3spGLfm8yzUX2IXge9XRFFSSk=;
+	b=ILzOXXMtpRecsvZekj2FGkChJDyhZFdqiubE5NjRPEukEopLzB65AwB324Y+i+KJWwJ7Z5
+	RcMY3E4S1v74PcZW9Tll2yHaPlK4/txL+J73F4PSuIEPDZGYH1KvMpWOK0gAYwHhR6tFOm
+	z2rQrkGN09F3XpPzn+fLxCuT8ZY8OHo=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-6zzhorEvMAuNW_aL-E43Ww-1; Sat, 15 Jul 2023 11:20:40 -0400
+X-MC-Unique: 6zzhorEvMAuNW_aL-E43Ww-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCB891C0513F
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 15:20:39 +0000 (UTC)
+Received: from [172.64.4.30] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9620310E61;
+	Sat, 15 Jul 2023 15:20:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 49 of 328): Test report for master
+ (6.5.0-rc1, mainline.kernel.org-clang, bde7f150)
+Date: Sat, 15 Jul 2023 15:20:18 -0000
+To: haliu@redhat.com, bgoncalv@redhat.com, xiawu@redhat.com, xzhou@redhat.com,
+ llvm@lists.linux.dev, yizhan@redhat.com, jiji@redhat.com, yiche@redhat.com,
+ bhe@redhat.com, zlang@redhat.com, yiyan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB7180:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac078316-7ac2-438f-111b-08db85431ddf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	rf+NcnqU/xtsXZmbLd6sBiHUNuoMVcSMIZ3jd88obzdn50noNQMA49mjrvhpAo5Q5FbAkKxbuI7HxGJi9sPsuNK9fyMqdCHFAOEVPwdzKwvaYAUdH733C423LUTf7dgCzp2ZN0sV6zlhod2dziLxyTLiOUbKKfTtTUQkWi5NZzJRRNj+Sja02FpSjWQuXqrFX7T4yGthR3mQtB18lNC0ea4ZDKbD+ZZJkHF3xPCDhRpzTUt5og2QeEBPHi4l4H7fUYQjGt6TexeljbeOxyvZELlAkedEgZ4BoV6xW78K9Z9q9pr5BvrvMmwSDc7eg5BOMUhxva3Iyog7ERt3Yb7hZUwSsWtLUJeO+dOxttR9eijBFVyndxVMrMidKY7pg1nT5bflTxOCVa4TJGcVTIke5OujuRkM7V3Xh+c/GUa702bAN7YNG58fY2wNRI2Z36O5tdRxzlUwFx3d6ZmjQYXVwqNsRD+jCKVCO6qeuM2G28hCOWio9Pd/jIVkrcuPwCl38+7WPH/eWirnVv+SuKQE/Nj6sR2aH2VibXL5XbagJQMaXGAlfG1UoUFSCo4nE7Qv
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(39830400003)(346002)(376002)(366004)(136003)(451199021)(54906003)(38100700002)(6486002)(478600001)(41300700001)(8676002)(5660300002)(8936002)(66946007)(66556008)(66476007)(6916009)(4326008)(316002)(2616005)(186003)(83380400001)(6512007)(6506007)(1076003)(26005)(86362001)(36756003)(7416002)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YSCalzzJpv1RyWdfFhyFcaTtzEm2L3AvLHW8RIhJhs95j9DnQst9CO1kw7/k?=
- =?us-ascii?Q?ZNbzZ0CwX2dCsRInWLc0JAXgxZK3+3Fb49b/I+69M+hhFDMx5ARiBt2WDyDy?=
- =?us-ascii?Q?/NAbCviG0OG0pFwAOeU0gtNSj63VIXiQo7p/li/QEMPTE31kOm+73U2KUn7O?=
- =?us-ascii?Q?1ikIftc2WxHWcOtKfnM46Kl05+xFVhPRF6FFReB+Q/3z8DfswITMH0GkiYPs?=
- =?us-ascii?Q?+FaGAGJ8VDJhqzXs1MF6THI39sf6HwSQfePsITXDT/1Va0gjll2luscUo+H1?=
- =?us-ascii?Q?HSaiZIOhv53LSaxF6Om11MDhxio+GU4pzl/9W8/Twr0rHGXEAEJ3zkL9eRe3?=
- =?us-ascii?Q?I9Rq6///bYT6hfKnLvgR+yjBTk0ye/yvRZz8lzBxeyeCVR++jWzgfDEfeMMe?=
- =?us-ascii?Q?rCaj5tlf8hLzYucokawM77i1RZAcGnz6dIkArolXNVN4ztq9OGGGoUGljXtK?=
- =?us-ascii?Q?0b9lCOiprz0VvThxanR/5zGB7v5MuP4qpsG7ASNlZrwhuTJMEVGmcz2l8efO?=
- =?us-ascii?Q?Cj1VUz8pIDg692cydkM2F6od1mcEeB9oEKof2CzowwWP1mZsubRmSdrbrhzl?=
- =?us-ascii?Q?KgP5oReZafec1PD6evP8VgtYQKFLaPrHmonwHJGit6KSqgll8I7nCH45cVch?=
- =?us-ascii?Q?5ch0ZdLEipPVm4X/ZgXtUB0PeBB40NShPQpoV4d0scewWaScWerRIm2nHNfZ?=
- =?us-ascii?Q?JvJM9j/tpjNyRX05+o7KjmMzLq6FKSzQTghD+DSf5Q2ypK2F9lKLKB5SumXx?=
- =?us-ascii?Q?ajzukKLXaZFJz53TmvrUMsup2ZnNgPpF5DWRQrnxeBRw5uEr9yPpXtv8qfMR?=
- =?us-ascii?Q?MA+VRMUiFoyNKE8MhTkKusQo8K36ppgAjQgLK4DKfs43ICHvETeNNNADJTo8?=
- =?us-ascii?Q?URC23f0fwPXIvH3ftGOr1McaV8jfnnYaV2ArV23p/AJbEQ/CFblewK+6xyAY?=
- =?us-ascii?Q?r2u3f+2g1171GIEvfg2RrxPQK1F62uqCZG97kqz5qjeJc3YeFq7j7Bob3rFB?=
- =?us-ascii?Q?TY/y25apZKvJJsVy1exp/kKVeOq7q4iOULLOOAV1ayVHUwbYk7BQH8/7ccHB?=
- =?us-ascii?Q?Hx/mAOruQG+ZMOOi8bOdRYzSnqVFqV8otCPNH9JwvIWHZvbBesDSFlt9dxFm?=
- =?us-ascii?Q?keCZC53mfQqFqlDP7kmWiGVY3ISlu16R1Ze/IYApRIqd4DV9zXK/l3kJGOrA?=
- =?us-ascii?Q?qIgm1f7U0IWAfsBR8Rfq2yj3Wy3pPeJErLNYkasfRlndvxO7zYAT5wOfKk6a?=
- =?us-ascii?Q?y5OtEvfSpvP3QiCEUX6qOlmZM0q0foYRC+10CoEceK2hRTi1iVqo0IISO/Gl?=
- =?us-ascii?Q?GyLXA0/PgXRXg7t3uElYKycvYuEcNJVS2xzSXwIulY1icR3Q1XmmUW8PaCf4?=
- =?us-ascii?Q?YF1F6NJH/tPiaMk9tGS1TmNfCBTBfAy0EQqbFSPUa5MnMWgSsxLzeBTg/hMF?=
- =?us-ascii?Q?9TDgI2oF7OziVwjZhq4D1NHNOfKVNg3mvNzv4Ws8LvkRVvFZHMYz1Ke9VoCT?=
- =?us-ascii?Q?oHWczmzw9kLkRErHX+7T2RSStrwCn5FL9zOpVa1D8xtUrKJbyexFdB0h2vPp?=
- =?us-ascii?Q?Yghyrjqji8dV1W0caQAG3aJx9IwntL70h11qAc+T?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac078316-7ac2-438f-111b-08db85431ddf
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2023 14:52:31.4935
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qEYOyXIpBFpdZzeU4yclYKLyCq+6/lj9Rx6I0/MyRkGe8lxxjHzweyCNtbPi7eD4FAN2M9mak6CK8UFxkx5e9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB7180
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <65603.123071511204000262@us-mta-517.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 14 Jul 2023 18:13:56 +0900
-Asahi Lina <lina@asahilina.net> wrote:
+Hi, we tested your kernel and here are the results:
 
-> This simple wrapper allows Rust code to use the Hasher interface with
-> the kernel siphash implementation. No fancy features supported for now,
-> just basic bag-of-bytes hashing. No guarantee that hash outputs will
-> remain stable in the future either.
-> 
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
->  rust/bindings/bindings_helper.h |  1 +
->  rust/helpers.c                  |  8 ++++++++
->  rust/kernel/lib.rs              |  1 +
->  rust/kernel/siphash.rs          | 39 +++++++++++++++++++++++++++++++++++++++
->  4 files changed, 49 insertions(+)
-> 
-> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-> index 3e601ce2548d..52f32e423b04 100644
-> --- a/rust/bindings/bindings_helper.h
-> +++ b/rust/bindings/bindings_helper.h
-> @@ -10,6 +10,7 @@
->  #include <linux/slab.h>
->  #include <linux/refcount.h>
->  #include <linux/wait.h>
-> +#include <linux/siphash.h>
->  #include <linux/sched.h>
->  
->  /* `bindgen` gets confused at certain things. */
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index bb594da56137..1ed71315d1eb 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -24,6 +24,7 @@
->  #include <linux/errname.h>
->  #include <linux/refcount.h>
->  #include <linux/mutex.h>
-> +#include <linux/siphash.h>
->  #include <linux/spinlock.h>
->  #include <linux/sched/signal.h>
->  #include <linux/wait.h>
-> @@ -135,6 +136,13 @@ void rust_helper_put_task_struct(struct task_struct *t)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
->  
-> +u64 rust_helper_siphash(const void *data, size_t len,
-> +			const siphash_key_t *key)
-> +{
-> +	return siphash(data, len, key);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_siphash);
-> +
->  /*
->   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
->   * as the Rust `usize` type, so we can use it in contexts where Rust
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 85b261209977..8fb39078b85c 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -36,6 +36,7 @@
->  pub mod ioctl;
->  pub mod prelude;
->  pub mod print;
-> +pub mod siphash;
->  mod static_assert;
->  #[doc(hidden)]
->  pub mod std_vendor;
-> diff --git a/rust/kernel/siphash.rs b/rust/kernel/siphash.rs
-> new file mode 100644
-> index 000000000000..e13a17cd5a93
-> --- /dev/null
-> +++ b/rust/kernel/siphash.rs
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! A core::hash::Hasher wrapper for the kernel siphash implementation.
-> +//!
-> +//! This module allows Rust code to use the kernel's siphash implementation
-> +//! to hash Rust objects.
-> +
-> +use core::hash::Hasher;
-> +
-> +/// A Hasher implementation that uses the kernel siphash implementation.
-> +#[derive(Default)]
-> +pub struct SipHasher {
-> +    // SipHash state is 4xu64, but the Linux implementation
-> +    // doesn't expose incremental hashing so let's just chain
-> +    // individual SipHash calls for now, which return a u64
-> +    // hash.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-This is actually quite a big difference, which makes me think that this
-hasher probably shouldn't be called `SipHasher`.
 
-Actually, do we need a strong hash? Given that lock dep is only for
-debugging purposes, I think we can use fnv, or even just fx hash?
-They're all simple enough to be implemented in a couple of lines in
-Rust and wouldn't need to call into FFI.
+Kernel information:
+    Commit message: Merge tag 'pm-6.5-rc2' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/rafael/linux-pm
 
-> +    state: u64,
-> +}
-> +
-> +impl SipHasher {
-> +    /// Create a new SipHasher with zeroed state.
-> +    pub fn new() -> Self {
-> +        SipHasher { state: 0 }
-> +    }
-> +}
-> +
-> +impl Hasher for SipHasher {
-> +    fn finish(&self) -> u64 {
-> +        self.state
-> +    }
-> +
-> +    fn write(&mut self, bytes: &[u8]) {
-> +        let key = bindings::siphash_key_t {
-> +            key: [self.state, 0],
-> +        };
-> +
-> +        self.state = unsafe { bindings::siphash(bytes.as_ptr() as *const _, bytes.len(), &key) };
-> +    }
-> +}
-> 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96029
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784685
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+         ppc64le - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784942
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+         ppc64le - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784963
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
+         ppc64le - kdump - file-load
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784964
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784818
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784840
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784725
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784764
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784874
+          x86_64 (debug) - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784883
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8784919
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
+directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: hit test timeout
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
+f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
+:1559 (size 1)
+            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
+            Affected tests:
+                 aarch64 - xfstests - xfs
+                  x86_64 - xfstests - xfs
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
+ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
