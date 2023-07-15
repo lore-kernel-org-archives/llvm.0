@@ -1,34 +1,34 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742C61C32
-	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 12:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1F415CD
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 13:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689422496;
+	s=mimecast20190719; t=1689427276;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=bkCFiuG7+X1R7G1zMBRWCo58y6gUqo2D9NJPhu9CzSc=;
-	b=DJmE3MLsoEbB0EpdZ8U/dQ3BdGHKtIptjKka+mfMNEIbKsPe6CsDxzFJ/3MatbmOErxx39
-	fYbKg3194JBTtp1Wsq1sktGG6Xg48wxEJh1tzZqHWkPpeVE+VQpRfRC/nMiu7qlnTmQVMm
-	D6rK/3d+ZvZTm7P0lP2hlAihHqiEPD8=
+	bh=G13XAtIkHTNxjISRZx7c+Fh4upgkxmYrKqofazbZhzc=;
+	b=ZooOpCOibaXp/grtL+ltFnsfXu78WUiIH7mv1mEwI9+k7c+Wjn2d+1gTMouAPsdzwXd8sY
+	2j8q61THWhbmE62ORm79UVAZ+MThE3PrAbBK3ibK6BqvYhU0Y173/rXIXIHHMxouNfQP5X
+	7eChBULwrTBuznMjwXtekt7ylcxbxHw=
 Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-UJRvHGQTO0COWq90HXJaJA-1; Sat, 15 Jul 2023 08:01:34 -0400
-X-MC-Unique: UJRvHGQTO0COWq90HXJaJA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-600-2bT_XpyxNeGaRJZms9bz7g-1; Sat, 15 Jul 2023 09:21:14 -0400
+X-MC-Unique: 2bT_XpyxNeGaRJZms9bz7g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE1E52A59549
-	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 12:01:34 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA8B42A59552
+	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 13:21:14 +0000 (UTC)
 Received: from [172.64.4.30] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7B7821454143;
-	Sat, 15 Jul 2023 12:01:34 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6B4331121333;
+	Sat, 15 Jul 2023 13:21:14 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 53 of 328): Test report for master
- (6.5.0-rc1, mainline.kernel.org-clang, be522ac7)
-Date: Sat, 15 Jul 2023 12:01:34 -0000
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 45 of 328): Test report for master
+ (6.5.0-rc1, mainline.kernel.org-clang, b6e6cc1f)
+Date: Sat, 15 Jul 2023 13:21:14 -0000
 To: haliu@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com, jiji@redhat.com,
  yiche@redhat.com, zlang@redhat.com
 Precedence: bulk
@@ -37,8 +37,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <09788.123071508013500184@us-mta-470.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <55830.123071509211400826@us-mta-600.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,26 +53,84 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+    Commit message: Merge tag 'x86_urgent_for_6.5_rc2' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/tip/tip
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/96078
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96080
 
 One or more kernel tests failed:
     Unrecognized or new issues:
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8789587
+                   Subtests skipped: 7 out of 36
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/030
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
          aarch64 - Networking cki netfilter test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788199
+8789616
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL iptables-Plain-NAT-test
+                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
          ppc64le - Networking cki netfilter test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788374
+8789658
                    Non-passing subtests:
                        =E2=9D=8C FAIL iptables-Plain-NAT-test
                        =E2=9D=8C FAIL ip6tables-Plain-NAT-test
            s390x - Storage - blktests - nvme-tcp
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788247
+8789527
                    Subtests skipped: 7 out of 36
                    Non-passing subtests:
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
@@ -127,13 +185,13 @@ tcp/tests/nvme/047
 tcp/tests/nvme/048
            s390x - Networking cki netfilter test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788269
+8789549
                    Non-passing subtests:
                        =E2=9D=8C FAIL iptables-Plain-NAT-test
                        =E2=9D=8C FAIL ip6tables-Plain-NAT-test
           x86_64 - Storage - blktests - nvme-tcp
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788086
+8789445
                    Subtests skipped: 7 out of 36
                    Non-passing subtests:
                        =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
@@ -188,13 +246,13 @@ tcp/tests/nvme/047
 tcp/tests/nvme/048
           x86_64 - Networking cki netfilter test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788114
+8789473
                    Non-passing subtests:
                        =E2=9D=8C FAIL iptables-Plain-NAT-test
                        =E2=9D=8C FAIL ip6tables-Plain-NAT-test
           x86_64 (debug) - POSIX pjd-fstest suites
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8788315
+8789719
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -228,39 +286,46 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-        Issue: Storage - blktests - nvme-tcp: hit test timeout
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7523235
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
         Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
 aes_crypt on s390x
             URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
 /lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
             Affected tests:
                    s390x - Libkcapi AF_ALG test
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
         Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
 mapper/myvg-thinvolume1
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1353
             Affected tests:
                  ppc64le - Storage - lvm thinp sanity
+        Issue: xfstests generic/173 failing on ark-eln aarch64
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
         Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
  dump memory(/proc/vmcore). No such file or directory
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
