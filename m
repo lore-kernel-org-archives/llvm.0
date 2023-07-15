@@ -1,361 +1,149 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1F415CD
-	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 13:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689427276;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G13XAtIkHTNxjISRZx7c+Fh4upgkxmYrKqofazbZhzc=;
-	b=ZooOpCOibaXp/grtL+ltFnsfXu78WUiIH7mv1mEwI9+k7c+Wjn2d+1gTMouAPsdzwXd8sY
-	2j8q61THWhbmE62ORm79UVAZ+MThE3PrAbBK3ibK6BqvYhU0Y173/rXIXIHHMxouNfQP5X
-	7eChBULwrTBuznMjwXtekt7ylcxbxHw=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-2bT_XpyxNeGaRJZms9bz7g-1; Sat, 15 Jul 2023 09:21:14 -0400
-X-MC-Unique: 2bT_XpyxNeGaRJZms9bz7g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA8B42A59552
-	for <llvm@lists.linux.dev>; Sat, 15 Jul 2023 13:21:14 +0000 (UTC)
-Received: from [172.64.4.30] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6B4331121333;
-	Sat, 15 Jul 2023 13:21:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 45 of 328): Test report for master
- (6.5.0-rc1, mainline.kernel.org-clang, b6e6cc1f)
-Date: Sat, 15 Jul 2023 13:21:14 -0000
-To: haliu@redhat.com, llvm@lists.linux.dev, yizhan@redhat.com, jiji@redhat.com,
- yiche@redhat.com, zlang@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B8E15CD;
+	Sat, 15 Jul 2023 13:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689429422; x=1720965422;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CyWF7sJQI2YKGi5MoGb0iT7r2P9exMmOYB0hxnhZkQw=;
+  b=HLNSVNT2IhBoKc9j7njOV38T/l938bMD/MdA1RZc+xfEgv+Urhu47Xvg
+   m2zZ1ICUXK9YBwLzs7JjfeRD8BeHZmoJUlFSHPz1xja58vIlB+2MWhasb
+   9mDbcWKe7sGh6l7xbLd7FiZ8Kkux04+hlwPSrVGbVRV3Uz9a8JrVWFyUw
+   R5sJYGwDXngS2pJZcfZrLJw2G0/qX/IzWU/s+S+8Kt659veNoSf3XBwkT
+   S67ytAEN5QYIBwZ+cDsRghwr3nJ43ymn5ZlrDGFz/4IjcKgeDXAvdQmUK
+   8GGbJiqGJ5vX1iTDjtyovz1FTZahvCI6Oy/y2P5D6fSvi6nXUi2q/MFB/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="363123311"
+X-IronPort-AV: E=Sophos;i="6.01,208,1684825200"; 
+   d="scan'208";a="363123311"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 06:57:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="846780904"
+X-IronPort-AV: E=Sophos;i="6.01,208,1684825200"; 
+   d="scan'208";a="846780904"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jul 2023 06:56:59 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qKfla-0008BX-2Y;
+	Sat, 15 Jul 2023 13:56:58 +0000
+Date: Sat, 15 Jul 2023 21:56:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [broonie-ci:arm64-gcs 37/46] arch/arm64/mm/gcs.c:137:5: warning: no
+ previous prototype for function 'arch_set_shadow_stack_status'
+Message-ID: <202307152153.qVglN5AE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <55830.123071509211400826@us-mta-600.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Mark,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git arm64-gcs
+head:   b74369f3118f3aa07e067adae1f42db39f143397
+commit: d21b0b3e80f82892db3e57c60aebdd4c53519e3c [37/46] arm64: Add Kconfig for Guarded Control Stack (GCS)
+config: arm64-randconfig-r006-20230715 (https://download.01.org/0day-ci/archive/20230715/202307152153.qVglN5AE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230715/202307152153.qVglN5AE-lkp@intel.com/reproduce)
 
-Kernel information:
-    Commit message: Merge tag 'x86_urgent_for_6.5_rc2' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/tip/tip
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307152153.qVglN5AE-lkp@intel.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/96080
+All warnings (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789587
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-         aarch64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789616
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-         ppc64le - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789658
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789527
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-           s390x - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789549
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789445
-                   Subtests skipped: 7 out of 36
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/003
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/004
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/005
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/008
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/009
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/019
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/020
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/021
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/022
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/023
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/024
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/025
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/026
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/027
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/028
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/030
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/040
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/048
-          x86_64 - Networking cki netfilter test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789473
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL iptables-Plain-NAT-test
-                       =E2=9D=8C FAIL ip6tables-Plain-NAT-test
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8789719
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage blktests - blk: /sys/block/n1/uuid: No such file or =
-directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2065886
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
-ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
-f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
-:1559 (size 1)
-            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-                  x86_64 (debug) - xfstests - xfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: xfstests generic/173 failing on ark-eln aarch64
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> arch/arm64/mm/gcs.c:137:5: warning: no previous prototype for function 'arch_set_shadow_stack_status' [-Wmissing-prototypes]
+   int arch_set_shadow_stack_status(struct task_struct *task, unsigned long arg)
+       ^
+   arch/arm64/mm/gcs.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int arch_set_shadow_stack_status(struct task_struct *task, unsigned long arg)
+   ^
+   static 
+>> arch/arm64/mm/gcs.c:189:5: warning: no previous prototype for function 'arch_get_shadow_stack_status' [-Wmissing-prototypes]
+   int arch_get_shadow_stack_status(struct task_struct *task,
+       ^
+   arch/arm64/mm/gcs.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int arch_get_shadow_stack_status(struct task_struct *task,
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/arch_set_shadow_stack_status +137 arch/arm64/mm/gcs.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+688ff8cacd9951 Mark Brown 2023-04-05  136  
+688ff8cacd9951 Mark Brown 2023-04-05 @137  int arch_set_shadow_stack_status(struct task_struct *task, unsigned long arg)
+688ff8cacd9951 Mark Brown 2023-04-05  138  {
+688ff8cacd9951 Mark Brown 2023-04-05  139  	unsigned long gcs, size;
+688ff8cacd9951 Mark Brown 2023-04-05  140  
+688ff8cacd9951 Mark Brown 2023-04-05  141  	if (!system_supports_gcs())
+688ff8cacd9951 Mark Brown 2023-04-05  142  		return -EINVAL;
+688ff8cacd9951 Mark Brown 2023-04-05  143  
+688ff8cacd9951 Mark Brown 2023-04-05  144  	if (is_compat_thread(task_thread_info(task)))
+688ff8cacd9951 Mark Brown 2023-04-05  145  		return -EINVAL;
+688ff8cacd9951 Mark Brown 2023-04-05  146  
+688ff8cacd9951 Mark Brown 2023-04-05  147  	/* Reject unknown flags */
+688ff8cacd9951 Mark Brown 2023-04-05  148  	if (arg & ~PR_SHADOW_STACK_SUPPORTED_STATUS_MASK)
+688ff8cacd9951 Mark Brown 2023-04-05  149  		return -EINVAL;
+688ff8cacd9951 Mark Brown 2023-04-05  150  
+688ff8cacd9951 Mark Brown 2023-04-05  151  	/* If the task has been locked block any attempted changes */
+688ff8cacd9951 Mark Brown 2023-04-05  152  	if (task->thread.gcs_el0_mode & PR_SHADOW_STACK_LOCK)
+688ff8cacd9951 Mark Brown 2023-04-05  153  		return -EBUSY;
+688ff8cacd9951 Mark Brown 2023-04-05  154  
+688ff8cacd9951 Mark Brown 2023-04-05  155  	/* Drop flags other than lock if disabling */
+688ff8cacd9951 Mark Brown 2023-04-05  156  	if (!(arg & PR_SHADOW_STACK_ENABLE))
+688ff8cacd9951 Mark Brown 2023-04-05  157  		arg &= ~PR_SHADOW_STACK_LOCK;
+688ff8cacd9951 Mark Brown 2023-04-05  158  
+688ff8cacd9951 Mark Brown 2023-04-05  159  	/* If we are enabling GCS then make sure we have a stack */
+688ff8cacd9951 Mark Brown 2023-04-05  160  	if (arg & PR_SHADOW_STACK_ENABLE) {
+688ff8cacd9951 Mark Brown 2023-04-05  161  		if (!task_gcs_el0_enabled(task)) {
+688ff8cacd9951 Mark Brown 2023-04-05  162  			/* Do not allow GCS to be reenabled */
+688ff8cacd9951 Mark Brown 2023-04-05  163  			if (task->thread.gcs_base)
+688ff8cacd9951 Mark Brown 2023-04-05  164  				return -EINVAL;
+688ff8cacd9951 Mark Brown 2023-04-05  165  
+688ff8cacd9951 Mark Brown 2023-04-05  166  			size = gcs_size(0);
+688ff8cacd9951 Mark Brown 2023-04-05  167  			gcs = alloc_gcs(task->thread.gcspr_el0, size,
+688ff8cacd9951 Mark Brown 2023-04-05  168  					0, 0);
+688ff8cacd9951 Mark Brown 2023-04-05  169  			if (!gcs)
+688ff8cacd9951 Mark Brown 2023-04-05  170  				return -ENOMEM;
+688ff8cacd9951 Mark Brown 2023-04-05  171  
+688ff8cacd9951 Mark Brown 2023-04-05  172  			task->thread.gcspr_el0 = gcs + size - sizeof(u64);
+688ff8cacd9951 Mark Brown 2023-04-05  173  			task->thread.gcs_base = gcs;
+688ff8cacd9951 Mark Brown 2023-04-05  174  			task->thread.gcs_size = size;
+688ff8cacd9951 Mark Brown 2023-04-05  175  			if (task == current)
+688ff8cacd9951 Mark Brown 2023-04-05  176  				write_sysreg_s(task->thread.gcspr_el0,
+688ff8cacd9951 Mark Brown 2023-04-05  177  					       SYS_GCSPR_EL0);
+688ff8cacd9951 Mark Brown 2023-04-05  178  
+688ff8cacd9951 Mark Brown 2023-04-05  179  		}
+688ff8cacd9951 Mark Brown 2023-04-05  180  	}
+688ff8cacd9951 Mark Brown 2023-04-05  181  
+688ff8cacd9951 Mark Brown 2023-04-05  182  	task->thread.gcs_el0_mode = arg;
+688ff8cacd9951 Mark Brown 2023-04-05  183  	if (task == current)
+688ff8cacd9951 Mark Brown 2023-04-05  184  		gcs_set_el0_mode(task);
+688ff8cacd9951 Mark Brown 2023-04-05  185  
+688ff8cacd9951 Mark Brown 2023-04-05  186  	return 0;
+688ff8cacd9951 Mark Brown 2023-04-05  187  }
+688ff8cacd9951 Mark Brown 2023-04-05  188  
+688ff8cacd9951 Mark Brown 2023-04-05 @189  int arch_get_shadow_stack_status(struct task_struct *task,
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 137 was first introduced by commit
+:::::: 688ff8cacd99518f46a420dbb4a02de6e671e5ae arm64/gcs: Implement shadow stack prctl() interface
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Mark Brown <broonie@kernel.org>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
