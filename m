@@ -1,43 +1,44 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E690F139C;
-	Sun, 16 Jul 2023 04:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305331C37;
+	Sun, 16 Jul 2023 04:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689482836; x=1721018836;
+  t=1689482839; x=1721018839;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uudQobKX2qD9wGpxYslTz23AYiVfW6ysv85OVooJk2A=;
-  b=PzL0AUM/C8GxEOUeEz/6tUvdiB5hxRmtOmWh7nWTwCV0qBjBa0UUyyBB
-   /2yCQsz5ZkTZWA+QnFFPVYMowvZE3Hbe02/RgC4FjSZ37+5pmNpe/Mh1+
-   Ti8K1iSrxkb9JnAGpwin9i2s4GwX4CSEiSIHeP21fL7f/vverX0sMjzt0
-   DLr3JQlFTUQYZPpfoW2cJbG20T1qX9XtIEG9cYMtrw59Y+3br77kvJrRB
-   b5uTvB3gu7PsV53N9DevZc+hWDlyv5QhDy6QNuk2kgOKOa8v1Wn16C/eM
-   uh/yoaIhnmloWKKkfUilFgFXBaBmOWKjEEphYAMB2dd3GFBlW3iw3I2tE
+  bh=N/aNl5xqovnGMpV4fJwRl/afwBeuo9WX3pgXK0UBpCY=;
+  b=KHCwITuzAfxa2lbFQ6EghLdQckBa0fxBYBasFLdYR7G2Vyv6c78jhkUo
+   wU5o4qTO7jISI1TioqZ1k84ItNfIg5Tfx90NNHPSZ0fGMxWD3Q0ZBZiVy
+   Vu82B/mXi9MxCsXB7Yaw3ZTWQFnSCDgs5+4F2wx3quHg7Un89oSLQxYiD
+   Dgyt7sV0O8RHx/vLYKSc5z+S+IxGFDxoLf3BQGwqzyTJRADNwFAoA13AO
+   fO7yMmBU6z56CP5pxiDp21j1Ypz7Bp/Fy3u2YLsIDkLcImVrKMQU3fO3l
+   YD+/BE4Izck74D4uKnznaovZw9PlhgXC2JmipCDOIS7E/UQ3YGlg058az
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="429487359"
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="429487360"
 X-IronPort-AV: E=Sophos;i="6.01,209,1684825200"; 
-   d="scan'208";a="429487359"
+   d="scan'208";a="429487360"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 21:47:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="716784218"
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="716784219"
 X-IronPort-AV: E=Sophos;i="6.01,209,1684825200"; 
-   d="scan'208";a="716784218"
+   d="scan'208";a="716784219"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 15 Jul 2023 21:47:14 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qKtf8-0008aH-0L;
+	id 1qKtf8-0008aP-0U;
 	Sun, 16 Jul 2023 04:47:14 +0000
-Date: Sun, 16 Jul 2023 12:46:29 +0800
+Date: Sun, 16 Jul 2023 12:46:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
+To: Qais Yousef <qais.yousef@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:dvfs-headroom 2/3] kernel/sched/core.c:7444:10: error:
- call to undeclared function 'apply_dvfs_headroom'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202307161240.pE6xFO5i-lkp@intel.com>
+Subject: [qais-yousef:sched-setscheduler-hide 6/6]
+ kernel/rcu/tree_nocb.h:1514:4: error: call to undeclared function
+ 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202307161208.r6MoWyol-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,146 +48,197 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/qais-yousef/linux dvfs-headroom
-head:   6f38251e9113f09e2935accd9bc3a246b5a02992
-commit: 5d6a3f139ecaddd7c31548036b8163002d9efb98 [2/3] sched: cpufreq: Fix apply_dvfs_headroom() escaping uclamp_max
-config: i386-randconfig-i012-20230716 (https://download.01.org/0day-ci/archive/20230716/202307161240.pE6xFO5i-lkp@intel.com/config)
+tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
+head:   40f87f6acda90270ee3eb284cbd13a8751ac4e61
+commit: 40f87f6acda90270ee3eb284cbd13a8751ac4e61 [6/6] sched: Make sched_set{scheduler, attr}() static
+config: hexagon-randconfig-r036-20230716 (https://download.01.org/0day-ci/archive/20230716/202307161208.r6MoWyol-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230716/202307161240.pE6xFO5i-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230716/202307161208.r6MoWyol-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307161240.pE6xFO5i-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307161208.r6MoWyol-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/core.c:7444:10: error: call to undeclared function 'apply_dvfs_headroom'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   util = apply_dvfs_headroom(util);
-                          ^
-   kernel/sched/core.c:7482:36: error: call to undeclared function 'apply_dvfs_headroom'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           util += type ==  FREQUENCY_UTIL ? apply_dvfs_headroom(irq) : irq;
-                                             ^
-   2 errors generated.
+   In file included from kernel/rcu/tree.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/rcu/tree.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/rcu/tree.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   In file included from kernel/rcu/tree.c:5016:
+>> kernel/rcu/tree_nocb.h:1514:4: error: call to undeclared function 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+                           ^
+   kernel/rcu/tree_nocb.h:1525:3: error: call to undeclared function 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+                   ^
+   6 warnings and 2 errors generated.
+--
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/rcu/rcutorture.c:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/rcu/rcutorture.c:2409:3: error: call to undeclared function 'sched_setscheduler_nocheck'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+                   ^
+   6 warnings and 1 error generated.
 
 
-vim +/apply_dvfs_headroom +7444 kernel/sched/core.c
+vim +/sched_setscheduler_nocheck +1514 kernel/rcu/tree_nocb.h
 
-  7385	
-  7386	#ifdef CONFIG_SMP
-  7387	/*
-  7388	 * This function computes an effective utilization for the given CPU, to be
-  7389	 * used for frequency selection given the linear relation: f = u * f_max.
-  7390	 *
-  7391	 * The scheduler tracks the following metrics:
-  7392	 *
-  7393	 *   cpu_util_{cfs,rt,dl,irq}()
-  7394	 *   cpu_bw_dl()
-  7395	 *
-  7396	 * Where the cfs,rt and dl util numbers are tracked with the same metric and
-  7397	 * synchronized windows and are thus directly comparable.
-  7398	 *
-  7399	 * The cfs,rt,dl utilization are the running times measured with rq->clock_task
-  7400	 * which excludes things like IRQ and steal-time. These latter are then accrued
-  7401	 * in the irq utilization.
-  7402	 *
-  7403	 * The DL bandwidth number otoh is not a measured metric but a value computed
-  7404	 * based on the task model parameters and gives the minimal utilization
-  7405	 * required to meet deadlines.
-  7406	 */
-  7407	unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-  7408					 enum cpu_util_type type,
-  7409					 struct task_struct *p)
-  7410	{
-  7411		unsigned long dl_util, util, irq, max;
-  7412		struct rq *rq = cpu_rq(cpu);
-  7413	
-  7414		max = arch_scale_cpu_capacity(cpu);
-  7415	
-  7416		if (!uclamp_is_used() &&
-  7417		    type == FREQUENCY_UTIL && rt_rq_is_runnable(&rq->rt)) {
-  7418			return max;
-  7419		}
-  7420	
-  7421		/*
-  7422		 * Early check to see if IRQ/steal time saturates the CPU, can be
-  7423		 * because of inaccuracies in how we track these -- see
-  7424		 * update_irq_load_avg().
-  7425		 */
-  7426		irq = cpu_util_irq(rq);
-  7427		if (unlikely(irq >= max))
-  7428			return max;
-  7429	
-  7430		/*
-  7431		 * Because the time spend on RT/DL tasks is visible as 'lost' time to
-  7432		 * CFS tasks and we use the same metric to track the effective
-  7433		 * utilization (PELT windows are synchronized) we can directly add them
-  7434		 * to obtain the CPU's actual utilization.
-  7435		 *
-  7436		 * CFS and RT utilization can be boosted or capped, depending on
-  7437		 * utilization clamp constraints requested by currently RUNNABLE
-  7438		 * tasks.
-  7439		 * When there are no CFS RUNNABLE tasks, clamps are released and
-  7440		 * frequency will be gracefully reduced with the utilization decay.
-  7441		 */
-  7442		util = util_cfs + cpu_util_rt(rq);
-  7443		if (type == FREQUENCY_UTIL) {
-> 7444			util = apply_dvfs_headroom(util);
-  7445			util = uclamp_rq_util_with(rq, util, p);
-  7446		}
-  7447	
-  7448		dl_util = cpu_util_dl(rq);
-  7449	
-  7450		/*
-  7451		 * For frequency selection we do not make cpu_util_dl() a permanent part
-  7452		 * of this sum because we want to use cpu_bw_dl() later on, but we need
-  7453		 * to check if the CFS+RT+DL sum is saturated (ie. no idle time) such
-  7454		 * that we select f_max when there is no idle time.
-  7455		 *
-  7456		 * NOTE: numerical errors or stop class might cause us to not quite hit
-  7457		 * saturation when we should -- something for later.
-  7458		 */
-  7459		if (util + dl_util >= max)
-  7460			return max;
-  7461	
-  7462		/*
-  7463		 * OTOH, for energy computation we need the estimated running time, so
-  7464		 * include util_dl and ignore dl_bw.
-  7465		 */
-  7466		if (type == ENERGY_UTIL)
-  7467			util += dl_util;
-  7468	
-  7469		/*
-  7470		 * There is still idle time; further improve the number by using the
-  7471		 * irq metric. Because IRQ/steal time is hidden from the task clock we
-  7472		 * need to scale the task numbers:
-  7473		 *
-  7474		 *              max - irq
-  7475		 *   U' = irq + --------- * U
-  7476		 *                 max
-  7477		 *
-  7478		 * We only need to apply dvfs headroom to irq part since the util part
-  7479		 * already had it applied.
-  7480		 */
-  7481		util = scale_irq_capacity(util, irq, max);
-  7482		util += type ==  FREQUENCY_UTIL ? apply_dvfs_headroom(irq) : irq;
-  7483	
-  7484		/*
-  7485		 * Bandwidth required by DEADLINE must always be granted while, for
-  7486		 * FAIR and RT, we use blocked utilization of IDLE CPUs as a mechanism
-  7487		 * to gracefully reduce the frequency when no tasks show up for longer
-  7488		 * periods of time.
-  7489		 *
-  7490		 * Ideally we would like to set bw_dl as min/guaranteed freq and util +
-  7491		 * bw_dl as requested freq. However, cpufreq is not yet ready for such
-  7492		 * an interface. So, we only do the latter for now.
-  7493		 */
-  7494		if (type == FREQUENCY_UTIL)
-  7495			util += apply_dvfs_headroom(cpu_bw_dl(rq));
-  7496	
-  7497		return min(max, util);
-  7498	}
-  7499	
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1481  
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1482  /*
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1483   * If the specified CPU is a no-CBs CPU that does not already have its
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1484   * rcuo CB kthread, spawn it.  Additionally, if the rcuo GP kthread
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1485   * for this CPU's group has not yet been created, spawn it as well.
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1486   */
+10d4703154a72f Frederic Weisbecker     2021-11-23  1487  static void rcu_spawn_cpu_nocb_kthread(int cpu)
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1488  {
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1489  	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1490  	struct rcu_data *rdp_gp;
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1491  	struct task_struct *t;
+54577e23fa0791 Alison Chaiken          2022-01-11  1492  	struct sched_param sp;
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1493  
+8d2aaa9b7c290e Frederic Weisbecker     2022-02-14  1494  	if (!rcu_scheduler_fully_active || !rcu_state.nocb_is_setup)
+10d4703154a72f Frederic Weisbecker     2021-11-23  1495  		return;
+10d4703154a72f Frederic Weisbecker     2021-11-23  1496  
+2cf4528d6dd6f5 Frederic Weisbecker     2021-11-23  1497  	/* If there already is an rcuo kthread, then nothing to do. */
+2cf4528d6dd6f5 Frederic Weisbecker     2021-11-23  1498  	if (rdp->nocb_cb_kthread)
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1499  		return;
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1500  
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1501  	/* If we didn't spawn the GP kthread first, reorganize! */
+54577e23fa0791 Alison Chaiken          2022-01-11  1502  	sp.sched_priority = kthread_prio;
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1503  	rdp_gp = rdp->nocb_gp_rdp;
+02e3024175274e Neeraj Upadhyay         2021-12-11  1504  	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1505  	if (!rdp_gp->nocb_gp_kthread) {
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1506  		t = kthread_run(rcu_nocb_gp_kthread, rdp_gp,
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1507  				"rcuog/%d", rdp_gp->cpu);
+02e3024175274e Neeraj Upadhyay         2021-12-11  1508  		if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo GP kthread, OOM is now expected behavior\n", __func__)) {
+02e3024175274e Neeraj Upadhyay         2021-12-11  1509  			mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+3a5761dc025da4 Zqiang                  2022-04-19  1510  			goto end;
+02e3024175274e Neeraj Upadhyay         2021-12-11  1511  		}
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1512  		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+54577e23fa0791 Alison Chaiken          2022-01-11  1513  		if (kthread_prio)
+54577e23fa0791 Alison Chaiken          2022-01-11 @1514  			sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1515  	}
+02e3024175274e Neeraj Upadhyay         2021-12-11  1516  	mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1517  
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1518  	/* Spawn the kthread for this CPU. */
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1519  	t = kthread_run(rcu_nocb_cb_kthread, rdp,
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1520  			"rcuo%c/%d", rcu_state.abbr, cpu);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1521  	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+3a5761dc025da4 Zqiang                  2022-04-19  1522  		goto end;
+c8b16a65267e35 Alison Chaiken          2022-01-11  1523  
+8f489b4da5278f Uladzislau Rezki (Sony  2022-05-11  1524) 	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST) && kthread_prio)
+c8b16a65267e35 Alison Chaiken          2022-01-11  1525  		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+8f489b4da5278f Uladzislau Rezki (Sony  2022-05-11  1526) 
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1527  	WRITE_ONCE(rdp->nocb_cb_kthread, t);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1528  	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
+3a5761dc025da4 Zqiang                  2022-04-19  1529  	return;
+3a5761dc025da4 Zqiang                  2022-04-19  1530  end:
+3a5761dc025da4 Zqiang                  2022-04-19  1531  	mutex_lock(&rcu_state.barrier_mutex);
+3a5761dc025da4 Zqiang                  2022-04-19  1532  	if (rcu_rdp_is_offloaded(rdp)) {
+3a5761dc025da4 Zqiang                  2022-04-19  1533  		rcu_nocb_rdp_deoffload(rdp);
+3a5761dc025da4 Zqiang                  2022-04-19  1534  		cpumask_clear_cpu(cpu, rcu_nocb_mask);
+3a5761dc025da4 Zqiang                  2022-04-19  1535  	}
+3a5761dc025da4 Zqiang                  2022-04-19  1536  	mutex_unlock(&rcu_state.barrier_mutex);
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1537  }
+dfcb27540213e8 Frederic Weisbecker     2021-05-19  1538  
+
+:::::: The code at line 1514 was first introduced by commit
+:::::: 54577e23fa0791599db1a3d86fc8e7a205d3da75 rcu: Make priority of grace-period thread consistent
+
+:::::: TO: Alison Chaiken <achaiken@aurora.tech>
+:::::: CC: Paul E. McKenney <paulmck@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
