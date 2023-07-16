@@ -1,142 +1,56 @@
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6CBEA4;
-	Sun, 16 Jul 2023 07:54:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: lina@asahilina.net)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 4F02E5BC88;
-	Sun, 16 Jul 2023 07:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-	s=default; t=1689494044;
-	bh=0f4ynGEdL9ZA2xjUzHGruHP+HC3rtDv/fjZJ0E0YZwc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=oSVVqwPuLC7aFBOpK2mNa3aj//hnquewRU6xmfhwj3349CJ5Z7er6Kcite7q6exYS
-	 3yXjqGWR2iVgesbTkSb/bnYyUyUT1rG5Q+VlHANTE6BKb+GtvJ8fVKnNPFwA4WOGv+
-	 GHTY+fVDo/LJzx575o+eQjUcz19hGyKCle7UeuIutPUtOK1bPf0AWD96NoMNGr0/jc
-	 XJP+R9/mUn8fTt9tFx/33RMT3gIik1Y+JsGMuS40nUDg/mhJBY5qnHLGYhqnSQjB/O
-	 qT7NoIrQiaP3gSXqo27wvdu3hGfFKoD1w/imNCmU1CilUubIP9F4sRgUbXeby72nPb
-	 hoQme5cmzFssQ==
-Message-ID: <3de23cc5-ceef-555d-8a16-854f179705bc@asahilina.net>
-Date: Sun, 16 Jul 2023 16:53:57 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F07848C
+	for <llvm@lists.linux.dev>; Sun, 16 Jul 2023 15:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53800C433C7;
+	Sun, 16 Jul 2023 15:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1689519763;
+	bh=551OXyr2rqcyU5MBzPSxaOa63D2qp1Y/FSwgipWiEEo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DZsFyY4y9NGTwGx5VWG8rmeeJaJVNsupEkOIabBVquVs/TBstbicDwcqXyX6iC7f1
+	 Ep1MIPMTL805N7EHToEkpnRkWm8QErm9TQSonuMIgwwq+wdQN6+qowNvmKCCrLwpfK
+	 JhPiumJPC+Ronsh4eDxX1fpkf4w2jiR8MPZN03OY=
+Date: Sun, 16 Jul 2023 17:02:23 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Apply clang '--target=' KBUILD_CPPFLAGS shuffle to linux-6.4.y
+ and linux-6.3.y
+Message-ID: <2023071606-relative-facsimile-f994@gregkh>
+References: <20230703150339.GA1975402@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC 03/11] rust: Use absolute paths to build Rust objects
-Content-Language: en-US
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
- Daniel Vetter <daniel@ffwll.ch>, Hector Martin <marcan@marcan.st>,
- Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- asahi@lists.linux.dev, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230714-classless_lockdep-v1-0-229b9671ce31@asahilina.net>
- <20230714-classless_lockdep-v1-3-229b9671ce31@asahilina.net>
- <20230715153509.64a7ac38.gary@garyguo.net>
-From: Asahi Lina <lina@asahilina.net>
-In-Reply-To: <20230715153509.64a7ac38.gary@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703150339.GA1975402@dev-arch.thelio-3990X>
 
-On 15/07/2023 23.35, Gary Guo wrote:
-> On Fri, 14 Jul 2023 18:13:55 +0900
-> Asahi Lina <lina@asahilina.net> wrote:
+On Mon, Jul 03, 2023 at 08:03:39AM -0700, Nathan Chancellor wrote:
+> Hi Greg and Sasha,
 > 
->> We want to use caller_location to uniquely identify callsites, to
->> automatically create lockdep classes without macros. The location
->> filename in local code uses the relative path passed to the compiler,
->> but if that code is generic and instantiated from another crate, the
->> path becomes absolute.
->>
->> To make this work and keep the paths consistent, always pass an absolute
->> path to the compiler. Then the Location path is always identical
->> regardless of how the code is being compiled.
+> Please consider applying the following patches to 6.4 and 6.3, they
+> should apply cleanly.
 > 
-> I wonder if this can have some reproducible build implications. We
-> probably also need to use remap-path-prefix?
-
-We already end up with absolute paths in objects anyway, just not 
-consistently. If it were consistently relative paths that would be fine 
-too, but it looks like Rust likes to internally absolute-ize some paths, 
-that's why I wrote this patch to make it always like that.
-
-TIL about remap-path-prefix, that looks very useful! I'll give it a try.
-
+> 08f6554ff90e ("mips: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation")
+> a7e5eb53bf9b ("powerpc/vdso: Include CLANG_FLAGS explicitly in ldflags-y")
+> cff6e7f50bd3 ("kbuild: Add CLANG_FLAGS to as-instr")
+> 43fc0a99906e ("kbuild: Add KBUILD_CPPFLAGS to as-option invocation")
+> feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
 > 
->>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
->>   rust/Makefile          | 2 +-
->>   scripts/Makefile.build | 8 ++++----
->>   2 files changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/rust/Makefile b/rust/Makefile
->> index 7c9d9f11aec5..552f023099c8 100644
->> --- a/rust/Makefile
->> +++ b/rust/Makefile
->> @@ -369,7 +369,7 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
->>   		--emit=dep-info=$(depfile) --emit=obj=$@ \
->>   		--emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
->>   		--crate-type rlib -L$(objtree)/$(obj) \
->> -		--crate-name $(patsubst %.o,%,$(notdir $@)) $< \
->> +		--crate-name $(patsubst %.o,%,$(notdir $@)) $(abspath $<) \
->>   	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
->>   
->>   rust-analyzer:
->> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
->> index 6413342a03f4..c925b90ebd80 100644
->> --- a/scripts/Makefile.build
->> +++ b/scripts/Makefile.build
->> @@ -283,27 +283,27 @@ rust_common_cmd = \
->>   # would not match each other.
->>   
->>   quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
->> -      cmd_rustc_o_rs = $(rust_common_cmd) --emit=obj=$@ $<
->> +      cmd_rustc_o_rs = $(rust_common_cmd) --emit=obj=$@ $(abspath $<)
->>   
->>   $(obj)/%.o: $(src)/%.rs FORCE
->>   	$(call if_changed_dep,rustc_o_rs)
->>   
->>   quiet_cmd_rustc_rsi_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
->>         cmd_rustc_rsi_rs = \
->> -	$(rust_common_cmd) -Zunpretty=expanded $< >$@; \
->> +	$(rust_common_cmd) -Zunpretty=expanded $(abspath $<) >$@; \
->>   	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@
->>   
->>   $(obj)/%.rsi: $(src)/%.rs FORCE
->>   	$(call if_changed_dep,rustc_rsi_rs)
->>   
->>   quiet_cmd_rustc_s_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
->> -      cmd_rustc_s_rs = $(rust_common_cmd) --emit=asm=$@ $<
->> +      cmd_rustc_s_rs = $(rust_common_cmd) --emit=asm=$@ $(abspath $<)
->>   
->>   $(obj)/%.s: $(src)/%.rs FORCE
->>   	$(call if_changed_dep,rustc_s_rs)
->>   
->>   quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
->> -      cmd_rustc_ll_rs = $(rust_common_cmd) --emit=llvm-ir=$@ $<
->> +      cmd_rustc_ll_rs = $(rust_common_cmd) --emit=llvm-ir=$@ $(abspath $<)
->>   
->>   $(obj)/%.ll: $(src)/%.rs FORCE
->>   	$(call if_changed_dep,rustc_ll_rs)
->>
-> 
-> 
+> They resolve and help avoid build breakage with tip of tree clang, which
+> has become a little stricter in the flags that it will accept for a
+> particular target, which requires '--target=' to be passed along to all
+> invocations of $(CC). Our continuous integration does not currently show
+> any breakage with 6.1 and earlier; should these patches be needed there,
+> I will send them at a later time.
 
-~~ Lina
+6.3.y is now end-of-life, but I've queued these up for 6.4.y, thanks.
 
+greg k-h
