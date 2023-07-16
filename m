@@ -1,109 +1,165 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77024187D;
-	Sun, 16 Jul 2023 06:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689488540; x=1721024540;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jtHMY3j5vyg7aYLkc+Tx4QbMdu8lnrI8tkPS5uSPSI8=;
-  b=DoeppzyoMLh4qDs3eBF9nSTMypc5eHvezG4YY3qa+jHdKvsXA7vFDs8b
-   yihSUDMYG5KvZ47u0GjMaapOU2oaTpJSb625/8IahTjVimC4bH7FAY79y
-   vV59YwqO7HSEbjSm3qGb5QLrhv2c1GSLVZxzFS9qcZUQqa2eLiZ0whtf8
-   XyxOowQpa/wJLfYL/PDmbBUvdS1BzWZhBWOPyy/VAtCJvADfH0XjkE04F
-   MFKyaWT+K4uL9voVbHiBKIrKmL6dPI3zvqksyuuK4KIPtk4qrBRUYmz3y
-   YETPuqntkyxq5Mjlyz01e1gyio5TgPg7EtLZ1S9LMV6IV085M1kFd80Q/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="429490795"
-X-IronPort-AV: E=Sophos;i="6.01,210,1684825200"; 
-   d="scan'208";a="429490795"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 23:22:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="836505062"
-X-IronPort-AV: E=Sophos;i="6.01,210,1684825200"; 
-   d="scan'208";a="836505062"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Jul 2023 23:22:17 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qKv97-0008fD-0H;
-	Sun, 16 Jul 2023 06:22:17 +0000
-Date: Sun, 16 Jul 2023 14:21:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qais.yousef@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:sched-setscheduler-hide 2/6]
- kernel/rcu/rcutorture.c:3174:9: error: call to undeclared function
- 'rcu_get_gp_kthreads_prio'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202307161419.xPpN86Fv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77DCEA4;
+	Sun, 16 Jul 2023 06:56:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: lina@asahilina.net)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 4B9AC425B3;
+	Sun, 16 Jul 2023 06:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+	s=default; t=1689490594;
+	bh=DAQHK2auXlvC8BLvWoW2JEMp1pYz/l6r5bgdld5jeNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=0XSaNH1/2vL0Qgpwa8gVYBTnKj3hX+BcCmIk0gbO+D1brbV64kSJF1bfUDvV2abDG
+	 1clhpnM+uvHbsdFiFiWHSvAgUIVxEtbB4yCouBhqfPsCose1wt2Fua00dGUVnk/l7d
+	 ARY6C0u6X5YcbP61BOzICh6f1TaeXiuTdM03+VBvP3vdsQIRB/gROIYTQQaRlmCih+
+	 WWBlSH3IMRaWqhD/QZPkPfDMOzBeAe93Sp2j/vGZssQF61XBgRltfbKJWstCVj7NYC
+	 ngMhd8iL+Xt1PgHnOxiz1JYkxrO886HAEjOcNMqrtsu/JJgAQG9PI34pqq0BgihJSa
+	 abVk60B6wEeaA==
+Message-ID: <4259c52a-b3f1-e063-209b-a0daa526234f@asahilina.net>
+Date: Sun, 16 Jul 2023 15:56:27 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC 00/11] rust: Implicit lock class creation & Arc
+ Lockdep integration
+Content-Language: en-US
+To: Boqun Feng <boqun.feng@gmail.com>, Alice Ryhl <aliceryhl@google.com>
+Cc: alex.gaynor@gmail.com, alyssa@rosenzweig.io, asahi@lists.linux.dev,
+ benno.lossin@proton.me, bjorn3_gh@protonmail.com, daniel@ffwll.ch,
+ gary@garyguo.net, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, marcan@marcan.st,
+ masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ nicolas@fjasle.eu, ojeda@kernel.org, rust-for-linux@vger.kernel.org,
+ sven@svenpeter.dev, trix@redhat.com, wedsonaf@gmail.com
+References: <f974e5a4-1211-5ad7-4864-f3e210499e5e@asahilina.net>
+ <20230714135926.382695-1-aliceryhl@google.com>
+ <ZLFn4RPiK3ig9I5M@Boquns-Mac-mini.home>
+From: Asahi Lina <lina@asahilina.net>
+In-Reply-To: <ZLFn4RPiK3ig9I5M@Boquns-Mac-mini.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/qais-yousef/linux sched-setscheduler-hide
-head:   40f87f6acda90270ee3eb284cbd13a8751ac4e61
-commit: d8106d64bbf0e8d98e636ddda1524fae375c8cf5 [2/6] rcu: Use a new sched_set_rcu_fifo() to set gp kthread prio
-config: x86_64-randconfig-r024-20230716 (https://download.01.org/0day-ci/archive/20230716/202307161419.xPpN86Fv-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230716/202307161419.xPpN86Fv-lkp@intel.com/reproduce)
+On 15/07/2023 00.21, Boqun Feng wrote:
+> On Fri, Jul 14, 2023 at 01:59:26PM +0000, Alice Ryhl wrote:
+>> Asahi Lina <lina@asahilina.net> writes:
+>>> On 14/07/2023 19.13, Alice Ryhl wrote:
+>>>> Asahi Lina <lina@asahilina.net> writes:
+>>>>> Begone, lock classes!
+>>>>>
+>>>>> As discussed in meetings/etc, we would really like to support implicit
+>>>>> lock class creation for Rust code. Right now, lock classes are created
+> 
+> Thanks for looking into this! Could you also copy locking maintainers in
+> the next version?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307161419.xPpN86Fv-lkp@intel.com/
+Sure! Sorry, I totally forgot that I needed to do that manually since b4 
+doesn't know about rust->C relations...
 
-All errors (new ones prefixed by >>):
+> 
+>>>>> using macros and passed around (similar to C). Unfortunately, Rust
+>>>>> macros don't look like Rust functions, which means adding lockdep to a
+>>>>> type is a breaking API change. This makes Rust mutex creation rather
+>>>>> ugly, with the new_mutex!() macro and friends.
+>>>>>
+>>>>> Implicit lock classes have to be unique per instantiation code site.
+>>>>> Notably, with Rust generics and monomorphization, this is not the same
+>>>>> as unique per generated code instance. If this weren't the case, we
+>>>>> could use inline functions and asm!() magic to try to create lock
+>>>>> classes that have the right uniqueness semantics. But that doesn't work,
+>>>>> since it would create too many lock classes for the same actual lock
+>>>>> creation in the source code.
+>>>>>
+>>>>> But Rust does have one trick we can use: it can track the caller
+>>>>> location (as file:line:column), across multiple functions. This works
+>>>>> using an implicit argument that gets passed around, which is exactly the
+>>>>> thing we do for lock classes. The tricky bit is that, while the value of
+>>>>> these Location objects has the semantics we want (unique value per
+>>>>> source code location), there is no guarantee that they are deduplicated
+>>>>> in memory.
+>>>>>
+>>>>> So we use a hash table, and map Location values to lock classes. Et
+>>>>> voila, implicit lock class support!
+>>>>>
+>>>>> This lets us clean up the Mutex & co APIs and make them look a lot more
+>>>>> Rust-like, but it also means we can now throw Lockdep into more APIs
+>>>>> without breaking the API. And so we can pull a neat trick: adding
+>>>>> Lockdep support into Arc<T>. This catches cases where the Arc Drop
+>>>>> implementation could create a locking correctness violation only when
+>>>>> the reference count drops to 0 at that particular drop site, which is
+>>>>> otherwise not detectable unless that condition actually happens at
+>>>>> runtime. Since Drop is "magic" in Rust and Drop codepaths very difficult
+>>>>> to audit, this helps a lot.
+>>>>>
+>>>>> For the initial RFC, this implements the new API only for Mutex. If this
+>>>>> looks good, I can extend it to CondVar & friends in the next version.
+>>>>> This series also folds in a few related minor dependencies / changes
+>>>>> (like the pin_init mutex stuff).
+>>>>
+>>>> I'm not convinced that this is the right compromise. Moving lockdep
+>>>> class creation to runtime sounds unfortunate, especially since this
+>>>> makes them fallible due to memory allocations (I think?).
+>>>>
+>>>> I would be inclined to keep using macros for this.
+>>>
+>>> Most people were very enthusiastic about this change in the meetings...
+>>> it wasn't even my own idea ^^
+>>
+>> I don't think I was in that meeting. Anyway,
+>>   
+>>> I don't think the fallibility is an issue. Lockdep is a debugging tool,
+>>> and it doesn't have to handle all possible circumstances perfectly. If
+>>> you are debugging normal lock issues you probably shouldn't be running
+>>> out of RAM, and if you are debugging OOM situations the lock keys would
+>>> normally have been created long before you reach an OOM situation, since
+>>> they would be created the first time a relevant lock class is used. More
+>>> objects of the same class don't cause any more allocations. And the code
+>>> has a fallback for the OOM case, where it just uses the Location object
+>>> as a static lock class. That's not ideal and degrades the quality of the
+>>> lockdep results, but it shouldn't completely break anything.
+>>
+>> If you have a fallback when the allocation fails, that helps ...
+>>
+>> You say that Location objects are not necessarily unique per file
+>> location. In practice, how often are they not unique? Always just using
+>> the Location object as a static lock class seems like it would
+>> significantly simplify this proposal.
 
->> kernel/rcu/rcutorture.c:3174:9: error: call to undeclared function 'rcu_get_gp_kthreads_prio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           prio = rcu_get_gp_kthreads_prio();
-                  ^
-   1 error generated.
+If a generic type is instantiated from different crates (e.g. kernel 
+crate and a driver), it creates separate Location objects. But we also 
+have a bigger problem: this breaks module unload, since that leaves lock 
+classes dangling. Though that is yet another discussion to have (Rust's 
+lifetime semantics kind of break down when you can unload modules!).
 
+>>
+> 
+> Agreed. For example, `caller_lock_class_inner` has a Mutex critical
+> section in it (for the hash table synchronization), that makes it
+> impossible to be called in preemption disabled contexts, which limits
+> the usage.
 
-vim +/rcu_get_gp_kthreads_prio +3174 kernel/rcu/rcutorture.c
+Maybe we can just make it a spinlock? The critical section is very short 
+for lock classes that already exist (just iterating over the hash 
+bucket, which will almost always be length 1), so it's probably more 
+efficient to do that than use a mutex anyway. Lockdep itself uses a 
+single global spinlock for a bunch of stuff too.
 
-fae4b54f28f034 kernel/rcutorture.c     Paul E. McKenney        2012-02-20  3163  
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3164) static bool rcu_torture_can_boost(void)
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3165) {
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3166) 	static int boost_warn_once;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3167) 	int prio;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3168) 
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3169) 	if (!(test_boost == 1 && cur_ops->can_boost) && test_boost != 2)
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3170) 		return false;
-ea6d962e80b619 kernel/rcu/rcutorture.c Paul E. McKenney        2021-03-30  3171  	if (!cur_ops->start_gp_poll || !cur_ops->poll_gp_state)
-5e59fba573e64c kernel/rcu/rcutorture.c Paul E. McKenney        2021-01-15  3172  		return false;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3173) 
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19 @3174) 	prio = rcu_get_gp_kthreads_prio();
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3175) 	if (!prio)
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3176) 		return false;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3177) 
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3178) 	if (prio < 2) {
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3179) 		if (boost_warn_once == 1)
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3180) 			return false;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3181) 
-bf5b64355a3ce4 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3182) 		pr_alert("%s: WARN: RCU kthread priority too low to test boosting.  Skipping RCU boost test. Try passing rcutree.kthread_prio > 1 on the kernel command line.\n", KBUILD_MODNAME);
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3183) 		boost_warn_once = 1;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3184) 		return false;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3185) 	}
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3186) 
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3187) 	return true;
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3188) }
-4babd855fd6137 kernel/rcu/rcutorture.c Joel Fernandes (Google  2018-06-19  3189) 
+For the new class case it does do an allocation, but I think code 
+probably shouldn't be creating locks and things like that with 
+preemption disabled / in atomic context? That just seems like a recipe 
+for trouble... though this ties into the whole execution context story 
+for Rust, which we don't have a terribly good answer for yet, so I think 
+it shouldn't block this approach. The macro style lock creation 
+primitives still exist for code that really needs the static behavior.
 
-:::::: The code at line 3174 was first introduced by commit
-:::::: 4babd855fd6137f9792117eb73b096c221a49d3c rcutorture: Add support to detect if boost kthread prio is too low
+~~ Lina
 
-:::::: TO: Joel Fernandes (Google) <joel@joelfernandes.org>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
