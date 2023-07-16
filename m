@@ -1,43 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576538F48;
-	Sat, 15 Jul 2023 22:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800D015A0;
+	Sun, 16 Jul 2023 02:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689460209; x=1720996209;
+  t=1689473892; x=1721009892;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C/EH5U/kfl6Mmjc5dy/l5b0ih4yl8BiLqxp0g7zOp6k=;
-  b=mCr26rg1NZ59ZVEIQTrea0xtx5c535v9qDzHoH7CgkxbGhSVGfTrodtE
-   zfEg0VRYz49TsLyyHlkNivY+Vj7C/DigfbJ/6v9vVgbZ9C2M1aecdys9I
-   D3/kjiMEcJ5JC4LYcW8DJJnYq+ZMygkXp/PTVhXtjz9Pl4xinX6z4GkeB
-   GW3tnxPWPLTj3G/1Gtmnsu8afhhlF8jxKch0UrQK+lfoeNTV6Cu6r+EOe
-   YoIb0EBp7Nhz9KDfuKgZJWkCsRbItfslNf3KrFQAJEPTwboCUjcjjVapY
-   eYRPunqwO2PXd0J8f1F8UhzZvzt4oqRrbUCR+uJvtNQb6pKUtwyYYQtbU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="369255685"
+  bh=B+PY1O5F6v54SLV5iUYu0OD4O8Nj/CxvzbbgBzF1v1s=;
+  b=Zyd5HTlBM89NBp5130fH/v4JF9Srf6zUGh9SUq6d5f3A4tHIsk+rTfNv
+   srzSz1px0inm4ad2o+6anHPBF5R8p2YR/U4mCH7206HI2tnl9QIgJBSWR
+   2vRm914MgB0CqX2//1rhccVb8Q/Q1k7gXJB5/vR7DgzVCPxn8BAoXqhu1
+   D+ed587Vyx6icciXVv9437XH5pHulQxbwdUHbcgTknZ6yQwGGa3MAqon3
+   Y9e73d8xZ0cnzX5JzJVf1sc1WLuptWsbbIRwOUDcZL9HmMsjP6Hnek1b8
+   6mXbffnIqYbPvIl1i3QMFMFCNZyDFlfHMDgbr2HNLeblsGmJn5HiZ00Yz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="364593859"
 X-IronPort-AV: E=Sophos;i="6.01,209,1684825200"; 
-   d="scan'208";a="369255685"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 15:30:08 -0700
+   d="scan'208";a="364593859"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2023 19:18:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="792771417"
+X-IronPort-AV: E=McAfee;i="6600,9927,10772"; a="726109061"
 X-IronPort-AV: E=Sophos;i="6.01,209,1684825200"; 
-   d="scan'208";a="792771417"
+   d="scan'208";a="726109061"
 Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jul 2023 15:30:07 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 15 Jul 2023 19:18:10 -0700
 Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qKnmA-0008ON-1t;
-	Sat, 15 Jul 2023 22:30:06 +0000
-Date: Sun, 16 Jul 2023 06:29:51 +0800
+	id 1qKrKr-0008Tf-1S;
+	Sun, 16 Jul 2023 02:18:09 +0000
+Date: Sun, 16 Jul 2023 10:17:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:x86/topology 35/38]
- arch/x86/kernel/apic/x2apic_uv_x.c:832:21: error: use of undeclared
- identifier 'x2apic_send_IPI_self'
-Message-ID: <202307160639.9JnuMbpb-lkp@intel.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 347/365]
+ include/linux/hugetlb.h:475:9: warning: declaration of 'struct hstate' will
+ not be visible outside of this function
+Message-ID: <202307161039.kZDWe8Vb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,64 +48,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topology
-head:   59df0262d2da163a8281c806688cc62e4d919908
-commit: 5d748a4117e8c1f79e30d6c823589ebe5d1cf7a5 [35/38] x86/apic/x2apic: Share all common IPI functions
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230716/202307160639.9JnuMbpb-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230716/202307160639.9JnuMbpb-lkp@intel.com/reproduce)
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   da8c3aa0cbb638a0dff13401bc17f817272110e6
+commit: 9e8a1c802ea25a508f001252830b3e5a5cf907d1 [347/365] mm: hugetlb: Move and expose hugetlbfs_zero_partial_page
+config: hexagon-randconfig-r045-20230716 (https://download.01.org/0day-ci/archive/20230716/202307161039.kZDWe8Vb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230716/202307161039.kZDWe8Vb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307160639.9JnuMbpb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307161039.kZDWe8Vb-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/apic/x2apic_uv_x.c:832:21: error: use of undeclared identifier 'x2apic_send_IPI_self'
-           .send_IPI_self                  = x2apic_send_IPI_self,
-                                             ^
-   1 error generated.
+   In file included from mm/damon/vaddr.c:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/damon/vaddr.c:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/damon/vaddr.c:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from mm/damon/vaddr.c:12:
+>> include/linux/hugetlb.h:475:9: warning: declaration of 'struct hstate' will not be visible outside of this function [-Wvisibility]
+     475 |         struct hstate *h, struct address_space *mapping, loff_t start, loff_t end) {}
+         |                ^
+   7 warnings generated.
 
 
-vim +/x2apic_send_IPI_self +832 arch/x86/kernel/apic/x2apic_uv_x.c
+vim +475 include/linux/hugetlb.h
 
-   807	
-   808		.name				= "UV large system",
-   809		.probe				= uv_probe,
-   810		.acpi_madt_oem_check		= uv_acpi_madt_oem_check,
-   811	
-   812		.delivery_mode			= APIC_DELIVERY_MODE_FIXED,
-   813		.dest_mode_logical		= false,
-   814	
-   815		.disable_esr			= 0,
-   816	
-   817		.check_apicid_used		= NULL,
-   818		.ioapic_phys_id_map		= NULL,
-   819		.cpu_present_to_apicid		= default_cpu_present_to_apicid,
-   820		.phys_pkg_id			= uv_phys_pkg_id,
-   821	
-   822		.get_apic_id			= x2apic_get_apic_id,
-   823		.set_apic_id			= set_apic_id,
-   824	
-   825		.calc_dest_apicid		= apic_default_calc_apicid,
-   826	
-   827		.send_IPI			= uv_send_IPI_one,
-   828		.send_IPI_mask			= uv_send_IPI_mask,
-   829		.send_IPI_mask_allbutself	= uv_send_IPI_mask_allbutself,
-   830		.send_IPI_allbutself		= uv_send_IPI_allbutself,
-   831		.send_IPI_all			= uv_send_IPI_all,
- > 832		.send_IPI_self			= x2apic_send_IPI_self,
-   833	
-   834		.wakeup_secondary_cpu		= uv_wakeup_secondary,
-   835	
-   836		.read				= native_apic_msr_read,
-   837		.write				= native_apic_msr_write,
-   838		.eoi_write			= native_apic_msr_eoi_write,
-   839		.icr_read			= native_x2apic_icr_read,
-   840		.icr_write			= native_x2apic_icr_write,
-   841	};
-   842	
+   473	
+   474	static inline void hugetlb_zero_partial_page(
+ > 475		struct hstate *h, struct address_space *mapping, loff_t start, loff_t end) {}
+   476	
 
 -- 
 0-DAY CI Kernel Test Service
