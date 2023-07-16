@@ -1,91 +1,203 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7B8748C
-	for <llvm@lists.linux.dev>; Sun, 16 Jul 2023 19:25:54 +0000 (UTC)
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-48165cd918dso973034e0c.0
-        for <llvm@lists.linux.dev>; Sun, 16 Jul 2023 12:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689535553; x=1692127553;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SSAuqt+s4WpqnMkPR0UJ8Xay9OvKHBk6xAfxVDPkGGQ=;
-        b=GCfnrMXYxp6tDgtZAagG8EKzfgEUkVMqLXnYtg5sUR5EMzDvuVV7JWq8MfFipjIqwp
-         rQWsJLvKS3lRUTIoET8y9ScSg8YJkueRQBIMPFKiK5Ht8RCUrUCsCLc30sRywisgwuYa
-         nLb0CvZurNsuecbNXH5SJbeg2xgpy3fZtgWFcqmbw0/QSt6XTJrrtiNePq+1g15mwoq3
-         WKeQ2nYtg8zriWqSdiThh58oCfl9O7kfNJ9WM0qNKbHZOhFWomvLC5fXwqNHmGT/3QDv
-         wuUdHkzD/emtDWaae5ODNqd9uqDeVuBXwmdmZwhAIZK+jJ5OMfLVLDFs9WzLS02quVZp
-         LSSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689535553; x=1692127553;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SSAuqt+s4WpqnMkPR0UJ8Xay9OvKHBk6xAfxVDPkGGQ=;
-        b=gEv8/rzwmDCkBiXA1pvxVM2WP4PV69thC6vfe7JoQV0KpdpXKHbSkpYDtHv7VjVhiK
-         frYgw11zn65vhIzw1ujUIbIgjNvy9a5sp1khbWg9Fp+ZMvYhPlWa4WjD2P9WQW9hV2zt
-         4IjmXylW0YNTJ9qNPy68Bu1cLNCPhP1aRx1vxoy4BebOTiGdfDuBRjxWmDT59vDX2J5w
-         s/gJigFMmOZMNsWZqpmXyCxxv/i/zMuiOLq6N4A3new7gn0QM+Se91qMjV+nYLlomveG
-         SuehanCfIMnyzgW2OWHiUq23yhIxc/HyDhhQsVJQTXM+BNqDUp5xjOKBHf8IWw9eqXSt
-         BPDg==
-X-Gm-Message-State: ABy/qLbtqjKDP2or+axKEnnk3rGS+GiRG65A9/g0OkE4l4t7E1kjvXx7
-	k3/wfanoo2o/eTht6YsgIx0+meYGU3TZBqabPGo1HA==
-X-Google-Smtp-Source: APBJJlHvGNUdX+Ovjs7gI07fwd/iRKlv+A+q7ObU+aBtLpCouxGSumprEh+gumIKhAED0yGvDqX1C9BaAGBFEGGRinY=
-X-Received: by 2002:a1f:db86:0:b0:481:90c6:d059 with SMTP id
- s128-20020a1fdb86000000b0048190c6d059mr855078vkg.2.1689535553336; Sun, 16 Jul
- 2023 12:25:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C188F71;
+	Sun, 16 Jul 2023 19:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689537572; x=1721073572;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E8FXXez/AxaxRnKEEIW+GEaYPuOSHsuNDKE7ecCS+lw=;
+  b=WluGMyjganc4McXMPfZP0QGVUZXx0XRnU3F4MFSQP3V6SIWvxuu6wVLb
+   mb2IfAvGTMQlm2SrU3r0VsSgdbLPanLAPErb3+5JFJtB2fICmKaBqLOxo
+   puoWDlyGLUrLEBDdZUXUHss+z5y96Sv+9/4DVEVOmyWFJ/jaRlPR1ddy5
+   IaaAtJDChOmCfR+gJ+A5NRRPvnW8nDx0aWpl6RKJq1iFqouQQRCf+CFP9
+   7xX8nEx5en9oMe6zUTWCO7PRufIf+JrdypPUV2R6n77ltJro7f5q1A1WX
+   UZnAjuHE5QJ6wPyEXPxskbyg+OGqxQ++2aWJ9Bahq97/aO5cNQGtYOfgp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10773"; a="396611953"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="396611953"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2023 12:59:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10773"; a="758192881"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="758192881"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Jul 2023 12:59:30 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qL7tx-0008yq-0Q;
+	Sun, 16 Jul 2023 19:59:29 +0000
+Date: Mon, 17 Jul 2023 03:59:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Namjae Jeon <linkinjeon@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steve French <stfrench@microsoft.com>
+Subject: [samba-ksmbd:ksmbd-for-next-next 2/2] fs/smb/server/vfs.c:113:41:
+ error: use of undeclared identifier 'KSMBD_SHARE_FLAG_CROSSMNT'
+Message-ID: <202307170312.GpAReBVJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 17 Jul 2023 00:55:42 +0530
-Message-ID: <CA+G9fYs5n6aobE04YZy3Qy1ZMhAvH6-uQRqidgFmSoei91iW8g@mail.gmail.com>
-Subject: stable-rc 6.1: x86: clang build failed - block/blk-cgroup.c:1237:6:
- error: variable 'ret' is used uninitialized whenever 'if' condition is true
-To: linux-stable <stable@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Linux stable-rc 6.1 build failed x86 and i386 with clang.
+tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
+head:   ad297d25edb98d80a162f7ab8280ffbc025e8ebf
+commit: ad297d25edb98d80a162f7ab8280ffbc025e8ebf [2/2] ksmbd: check if a mount point is crossed during path lookup
+config: hexagon-randconfig-r041-20230717 (https://download.01.org/0day-ci/archive/20230717/202307170312.GpAReBVJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230717/202307170312.GpAReBVJ-lkp@intel.com/reproduce)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307170312.GpAReBVJ-lkp@intel.com/
 
-Build log:
------------
-block/blk-cgroup.c:1237:6: error: variable 'ret' is used uninitialized
-whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (init_blkcg_llists(blkcg))
-            ^~~~~~~~~~~~~~~~~~~~~~~~
-block/blk-cgroup.c:1287:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
-block/blk-cgroup.c:1237:2: note: remove the 'if' if its condition is
-always false
-        if (init_blkcg_llists(blkcg))
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-block/blk-cgroup.c:1222:33: note: initialize the variable 'ret' to
-silence this warning
-        struct cgroup_subsys_state *ret;
-                                       ^
-                                        = NULL
-1 error generated.
+All errors (new ones prefixed by >>):
 
-Links,
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y-sanity/build/v6.1.38-599-g5071846d06ef/testrun/18327562/suite/build/test/clang-lkftconfig/history/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2SfFoWj9NmKWHRijR0hcoXGjLhr/
+   In file included from fs/smb/server/vfs.c:11:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/smb/server/vfs.c:11:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/smb/server/vfs.c:11:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/smb/server/vfs.c:113:41: error: use of undeclared identifier 'KSMBD_SHARE_FLAG_CROSSMNT'
+     113 |         if (test_share_config_flag(share_conf, KSMBD_SHARE_FLAG_CROSSMNT)) {
+         |                                                ^
+   6 warnings and 1 error generated.
 
- tuxmake \
- --runtime podman --target-arch x86_64 \
- --toolchain clang-16 \
- --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2SfFoWj9NmKWHRijR0hcoXGjLhr/config
-\
- LLVM=1 LLVM_IAS=1
 
---
-Linaro LKFT
-https://lkft.linaro.org
+vim +/KSMBD_SHARE_FLAG_CROSSMNT +113 fs/smb/server/vfs.c
+
+    63	
+    64	static int ksmbd_vfs_path_lookup_locked(struct ksmbd_share_config *share_conf,
+    65						char *pathname, unsigned int flags,
+    66						struct path *parent_path,
+    67						struct path *path)
+    68	{
+    69		struct qstr last;
+    70		struct filename *filename;
+    71		struct path *root_share_path = &share_conf->vfs_path;
+    72		int err, type;
+    73		struct dentry *d;
+    74	
+    75		if (pathname[0] == '\0') {
+    76			pathname = share_conf->path;
+    77			root_share_path = NULL;
+    78		} else {
+    79			flags |= LOOKUP_BENEATH;
+    80		}
+    81	
+    82		filename = getname_kernel(pathname);
+    83		if (IS_ERR(filename))
+    84			return PTR_ERR(filename);
+    85	
+    86		err = vfs_path_parent_lookup(filename, flags,
+    87					     parent_path, &last, &type,
+    88					     root_share_path);
+    89		if (err) {
+    90			putname(filename);
+    91			return err;
+    92		}
+    93	
+    94		if (unlikely(type != LAST_NORM)) {
+    95			path_put(parent_path);
+    96			putname(filename);
+    97			return -ENOENT;
+    98		}
+    99	
+   100		inode_lock_nested(parent_path->dentry->d_inode, I_MUTEX_PARENT);
+   101		d = lookup_one_qstr_excl(&last, parent_path->dentry, 0);
+   102		if (IS_ERR(d))
+   103			goto err_out;
+   104	
+   105		if (d_is_negative(d)) {
+   106			dput(d);
+   107			goto err_out;
+   108		}
+   109	
+   110		path->dentry = d;
+   111		path->mnt = mntget(parent_path->mnt);
+   112	
+ > 113		if (test_share_config_flag(share_conf, KSMBD_SHARE_FLAG_CROSSMNT)) {
+   114			err = follow_down(path, 0);
+   115			if (err < 0) {
+   116				path_put(path);
+   117				goto err_out;
+   118			}
+   119		}
+   120	
+   121		putname(filename);
+   122		return 0;
+   123	
+   124	err_out:
+   125		inode_unlock(d_inode(parent_path->dentry));
+   126		path_put(parent_path);
+   127		putname(filename);
+   128		return -ENOENT;
+   129	}
+   130	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
