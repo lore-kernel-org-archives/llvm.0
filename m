@@ -1,86 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE686AD28
-	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 13:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1806C433C8;
-	Mon, 17 Jul 2023 13:24:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689600268;
-	bh=buEyDtOD+tAaVWRktB28z7fW6D13J5yAHEKQhMLZQu4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L61XKSSxsznWwcDppB67UBRbXxw5UM0mEsoBltz2n5auT1pzJoo8sPFXI80yNg8eQ
-	 w0UlFS0z4UQNQNSUlF3vFWKacZp8xkn30u2kOlQ/xnGN1hf6z7Y8hvURby/TGNnhwP
-	 XP5sgBvpBukoqJoJphBnmewpOnhOW4zY8mlOT27EfRvVHOVXT8esXI4fiu/ky/67hY
-	 LJvAUReEu1iMKiggSpZxoWsTmkbHecl63tQBNF9QOyVfHOCIg5njyJSrzvX203jmOz
-	 2gxwXoFfwfGxaKx6wcZlDnE8q9rqQ4cPkB0HAg1qpr4+wcqejc0vTOtJ2tmOoBp5KF
-	 wyHeyFIieC5tg==
-Date: Mon, 17 Jul 2023 06:24:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: linux-stable <stable@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	lkft-triage@lists.linaro.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: stable-rc 6.1: x86: clang build failed -
- block/blk-cgroup.c:1237:6: error: variable 'ret' is used uninitialized
- whenever 'if' condition is true
-Message-ID: <20230717132426.GA2561862@dev-arch.thelio-3990X>
-References: <CA+G9fYs5n6aobE04YZy3Qy1ZMhAvH6-uQRqidgFmSoei91iW8g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E07F253AD
+	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 14:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689605582; x=1721141582;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PaYQUrnIAw10UGRh51Er0CiQIbO+1qEOK90eqGzlL3M=;
+  b=ktI/SBeSGFeViZ21yY4vkJ1kAny1rLi50XAeE5FPZ9vhc3IQXNmo4xWL
+   VWvHGSuNbns2VWNoParX1QHMV+PjTcOFy7+Nano3GOCKHJmx38NX78Vzr
+   5yrjxvCqX1Me5dNXLOGyvnNyXnNx2iLTa3Pt9dduFGS+evA/HLAZj57UF
+   7ngtF4jo1jX1k0l3NYZBENUmdXHsmNT0pjOKmsDfd0Rg5wLY4Yc4kfRxm
+   Fp59pyYH5UWmp/hbglycrIeVeGJLgUwFN+xF+VeEy3lgHTlhbLIoS/UTS
+   6U/H7Y63aWjMFDVgYk4GC5lHdiQUdM4Passq61Ftb2joVkMWQr77cwRcz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432120114"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="432120114"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 07:53:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="788686219"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="788686219"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.9.23]) ([10.213.9.23])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 07:52:55 -0700
+Message-ID: <0cae35ea-7635-383d-cae5-2051abbc6d64@intel.com>
+Date: Mon, 17 Jul 2023 16:52:51 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs5n6aobE04YZy3Qy1ZMhAvH6-uQRqidgFmSoei91iW8g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH] drm/i915/tv: avoid possible division by zero
+To: Su Hui <suhui@nfschina.com>, jani.nikula@linux.intel.com,
+ joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+ tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
+Cc: ville.syrjala@linux.intel.com, mripard@kernel.org,
+ ankit.k.nautiyal@intel.com, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+References: <20230717062209.124106-1-suhui@nfschina.com>
+Content-Language: en-US
+From: Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230717062209.124106-1-suhui@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 17, 2023 at 12:55:42AM +0530, Naresh Kamboju wrote:
-> Linux stable-rc 6.1 build failed x86 and i386 with clang.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build log:
-> -----------
-> block/blk-cgroup.c:1237:6: error: variable 'ret' is used uninitialized
-> whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (init_blkcg_llists(blkcg))
->             ^~~~~~~~~~~~~~~~~~~~~~~~
-> block/blk-cgroup.c:1287:9: note: uninitialized use occurs here
->         return ret;
->                ^~~
-> block/blk-cgroup.c:1237:2: note: remove the 'if' if its condition is
-> always false
->         if (init_blkcg_llists(blkcg))
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> block/blk-cgroup.c:1222:33: note: initialize the variable 'ret' to
-> silence this warning
->         struct cgroup_subsys_state *ret;
->                                        ^
->                                         = NULL
-> 1 error generated.
-> 
-> Links,
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y-sanity/build/v6.1.38-599-g5071846d06ef/testrun/18327562/suite/build/test/clang-lkftconfig/history/
->  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2SfFoWj9NmKWHRijR0hcoXGjLhr/
-> 
->  tuxmake \
->  --runtime podman --target-arch x86_64 \
->  --toolchain clang-16 \
->  --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2SfFoWj9NmKWHRijR0hcoXGjLhr/config
-> \
->  LLVM=1 LLVM_IAS=1
-> 
 
-It looks like 6.1 needs commit b5a9adcbd5dc ("blk-cgroup: Return -ENOMEM
-directly in blkcg_css_alloc() error path") if it wants to take commit
-3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()").
 
-Cheers,
-Nathan
+On 17.07.2023 08:22, Su Hui wrote:
+> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
+> line 991, column 22 Division by zero.
+> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
+> then division by zero will happen.
+>
+> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>   drivers/gpu/drm/i915/display/intel_tv.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
+> index 36b479b46b60..82b54af51f23 100644
+> --- a/drivers/gpu/drm/i915/display/intel_tv.c
+> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
+> @@ -988,7 +988,8 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
+>   		      const struct tv_mode *tv_mode,
+>   		      int clock)
+>   {
+> -	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
+> +	mode->clock = clock / (tv_mode->oversample != 1 ?
+> +			tv_mode->oversample >> !tv_mode->progressive : 1);
+
+Seems too smart to me, why not just:
+mode->clock = clock / tv_mode->oversample;
+if (!tv_mode->progressive)
+     mode->clock <<= 1;
+Or trying being smart:
+mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
+
+Btw in both cases there is assumption tv_mode->oversample != 0, I guess 
+it is true.
+
+Regards
+Andrzej
+
+>   
+>   	/*
+>   	 * tv_mode horizontal timings:
+
