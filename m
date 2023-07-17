@@ -1,33 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720EFC2F6;
-	Mon, 17 Jul 2023 20:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478B5C433C8;
-	Mon, 17 Jul 2023 20:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AEA253AC
+	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 20:45:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1D1C433C8;
+	Mon, 17 Jul 2023 20:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689625867;
-	bh=speJUgxSauJb1B97mFzBthgQeNkIXMJQ46d1kG1IBpc=;
+	s=k20201202; t=1689626756;
+	bh=UsXsfjVL9REDWcNWMHiUI6cTNSdXjR9CSQ/6ZyhFjy8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m5yuNuQ1k00JkD9oSP99xNX3im7OVU9ke1O/ZJxzB5liJ3nS6KJ2q72BNShSb8I7N
-	 xppmSyS3mUTrvFrkFzJ6J5Yw3LZXsB9RD6iUirXgxE3ablVVioaCTngcISqjmlozVU
-	 gM5C0SHbQBOzZ3Ij/zMvrL9c8QRxdOFSMi+Qp5Zckvnne5ZjBFWrgeyni0U8xyxxok
-	 fU7tH/sJXbgeCL7j5rOm0FP8u9kTsuCKd92YiIpBjzWUk2xb01vmp7Ypw8dMNf1LN0
-	 dNIGJJxYGwf1mnzOR0t44YMDNIxi2jaFUurlzb8nT6xsXEEMOkm/MQ+LdvDLIWoA+L
-	 X4btRRdqJSTvQ==
-Date: Mon, 17 Jul 2023 13:31:05 -0700
+	b=il+XQKSjT3nn4U1R4HkC5syT0/BiDp0SRWQ8Vg1tWBr2j9+/O7ByTu5Fa3FkVrJxe
+	 vHfFFIPcpDVFs8K7DwSnWsJ2kYat2EvVhL7Hiv64bBEqW0bt7jHnYEB5wmIw+Ss0VO
+	 OeSrRmS3DcneJnpUQ5uksTdCiAmOtFTj//8yRCBwSlpj4yDwbKcZLmrKJ407P1DHYj
+	 QpI/31QeBYsaLe2MXCynGBQK8hTI1L6IRMnBKqYuV3Xn42aojQlZYnCkTjiz375ZRc
+	 ByfsEeW9YEIgwOTubLu5amXdeOmHpTROJeiRlsbtpLgTLdUEyeo+bLBN2az0aLAOnZ
+	 1KVGNZrL6BbGw==
+Date: Mon, 17 Jul 2023 13:45:54 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Alexander Lobakin <alexandr.lobakin@intel.com>,
-	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Tom Rix <trix@redhat.com>, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] lib/bitmap: waive const_eval test as it breaks the build
-Message-ID: <20230717203105.GA2212488@dev-arch.thelio-3990X>
-References: <20230717195813.29059-1-yury.norov@gmail.com>
+To: Jakob Koschel <jkl820.git@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] arch: enable HAS_LTO_CLANG with KASAN and KCOV
+Message-ID: <20230717204554.GB2212488@dev-arch.thelio-3990X>
+References: <20230717-enable-kasan-lto1-v1-1-471e706a5c4e@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,128 +31,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230717195813.29059-1-yury.norov@gmail.com>
+In-Reply-To: <20230717-enable-kasan-lto1-v1-1-471e706a5c4e@gmail.com>
 
-Hi Yury,
+Hi Jakob,
 
-On Mon, Jul 17, 2023 at 12:58:13PM -0700, Yury Norov wrote:
-> When building with clang, and when KASAN and GCOV_PROFILE_ALL are both
-> enabled, the test fails to build [1]:
+On Mon, Jul 17, 2023 at 10:09:27PM +0200, Jakob Koschel wrote:
+> Both KASAN and KCOV had issues with LTO_CLANG if DEBUG_INFO is enabled.
+> With LTO inlinable function calls are required to have debug info if
+> they are inlined into a function that has debug info.
 > 
-> >> lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
->            BUILD_BUG_ON(!__builtin_constant_p(res));
->            ^
->    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
->            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
->            ^
->    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ^
->    include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ^
->    include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ^
->    include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
->                            prefix ## suffix();                             \
->                            ^
->    <scratch space>:185:1: note: expanded from here
->    __compiletime_assert_239
+> Starting with LLVM 17 this will be fixed ([1],[2]) and enabling LTO with
+> KASAN/KCOV and DEBUG_INFO doesn't cause linker errors anymore.
 > 
-> Originally it was attributed to s390, which now looks seemingly wrong. The
-> issue is also not related to bitmap code itself, but it breaks build for
-> a given configuration. So, disabling the test unless the compiler will
-> get fixed.
-> 
-> [1] https://github.com/ClangBuiltLinux/linux/issues/1874
-> 
-> Fixes: dc34d5036692 ("lib: test_bitmap: add compile-time optimization/evaluations assertions")
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  lib/test_bitmap.c | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-> index 187f5b2db4cf..a791fdb7a8c9 100644
-> --- a/lib/test_bitmap.c
-> +++ b/lib/test_bitmap.c
-> @@ -1163,6 +1163,9 @@ static void __init test_bitmap_print_buf(void)
->  
->  static void __init test_bitmap_const_eval(void)
->  {
-> +#if defined(CONFIG_CC_IS_CLANG) && defined(CONFIG_KASAN) && defined(CONFIG_GCOV_PROFILE_ALL)
-> +#warning "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled"
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> Link: https://github.com/llvm/llvm-project/commit/913f7e93dac67ecff47bade862ba42f27cb68ca9
+> Link: https://github.com/llvm/llvm-project/commit/4a8b1249306ff11f229320abdeadf0c215a00400
 
-Making this a '#warning' will basically just replace the current error
-with a different one in the face of CONFIG_WERROR, which seems pointless
-to me:
+Thanks for seeing this to completion, especially with the LLVM fixes in
+tow! One small nit below, other than that:
 
-  lib/test_bitmap.c:1167:2: error: "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled" [-Werror,-W#warnings]
-   1167 | #warning "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled"
-        |  ^
-  1 error generated.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Could we just opt out of GCOV for test_bitmap.c if KASAN is enabled with
-clang? That does not seem too bad of a workaround. I highly doubt there
-are many people who are interested in debugging test_bitmap.c with KASAN
-while profiling it with GCOV when building with clang, since they would
-have hit this already and reported it already; as far as I can tell,
-only the Intel robot has reported this with a randconfig.
+Normally, I would not say that comment alone is worth a v2 but I think
+in this case, I will say it is because neither Nick nor I pick up
+patches directly, so this will need to be picked up by either Kees Cook
+(who has generally handled clang LTO patches because he ferried in the
+initial LTO series to mainline) or Andrew Morton.
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 42d307ade225..c6f60ae42769 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -83,6 +83,10 @@ obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
- obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_SCANF) += test_scanf.o
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
-+# https://github.com/ClangBuiltLinux/linux/issues/1874
-+ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
-+GCOV_PROFILE_test_bitmap.o := n
-+endif
- obj-$(CONFIG_TEST_UUID) += test_uuid.o
- obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
- obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
+Would you mind addressing my comment and sending a v2 to them directly
+(they can figure out who will take it) with us on CC in case we need to
+poke them? Their addresses should be in MAINTAINERS.
 
 Cheers,
 Nathan
 
-> +#else
->  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
->  	unsigned long initvar = BIT(2);
->  	unsigned long bitopvar = 0;
-> @@ -1177,20 +1180,9 @@ static void __init test_bitmap_const_eval(void)
->  	 * in runtime.
->  	 */
->  
-> -	/*
-> -	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
-> -	 * Clang on s390 optimizes bitops at compile-time as intended, but at
-> -	 * the same time stops treating @bitmap and @bitopvar as compile-time
-> -	 * constants after regular test_bit() is executed, thus triggering the
-> -	 * build bugs below. So, call const_test_bit() there directly until
-> -	 * the compiler is fixed.
-> -	 */
-> +	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
->  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> -#if defined(__s390__) && defined(__clang__)
-> -	if (!const_test_bit(7, bitmap))
-> -#else
->  	if (!test_bit(7, bitmap))
-> -#endif
->  		bitmap_set(bitmap, 5, 2);
->  
->  	/* Equals to `unsigned long bitopvar = BIT(20)` */
-> @@ -1220,6 +1212,7 @@ static void __init test_bitmap_const_eval(void)
->  	/* ~BIT(25) */
->  	BUILD_BUG_ON(!__builtin_constant_p(~var));
->  	BUILD_BUG_ON(~var != ~BIT(25));
-> +#endif
->  }
->  
->  static void __init selftest(void)
+> ---
+>  arch/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index aff2746c8af2..61263ff92271 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -745,7 +745,8 @@ config HAS_LTO_CLANG
+>  	depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
+>  	depends on ARCH_SUPPORTS_LTO_CLANG
+>  	depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT
+> -	depends on !KASAN || KASAN_HW_TAGS
+
+Consider linking back to either your fixes in LLVM or
+https://github.com/ClangBuiltLinux/linux/issues/1721 so that we have a
+paper trail of why these version checks are here :)
+
+> +	depends on (!KASAN || KASAN_HW_TAGS || CLANG_VERSION >= 170000) || !DEBUG_INFO
+> +	depends on (!KCOV || CLANG_VERSION >= 170000) || !DEBUG_INFO
+>  	depends on !GCOV_KERNEL
+>  	help
+>  	  The compiler and Kconfig options support building with Clang's
+> 
+> ---
+> base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+> change-id: 20230717-enable-kasan-lto1-656754c76241
+> 
+> Best regards,
 > -- 
-> 2.39.2
+> Jakob Koschel <jkl820.git@gmail.com>
 > 
