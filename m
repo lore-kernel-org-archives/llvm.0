@@ -1,177 +1,177 @@
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2060.outbound.protection.outlook.com [40.107.22.60])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f78.google.com (mail-oa1-f78.google.com [209.85.160.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317849448;
-	Mon, 17 Jul 2023 07:38:54 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q4rZ/Y2NeZPONSYUfzHcrQIax53Ey82kODrxEifAVr9gBAIWl4Ty7swmz2H8FWVoXxbfs9WF+4EPYFZHGOsQeqU7KzE6sKiSBPKKNm9ZOz5vUZyk87lsL8m8EUcqBgHOpeMoH9GRiuO2BGUKPpD2iVVDTaCylbCWOCtvXje0Gq+xJK962+jaL23aO2qLt4gjUzGTK8Mz1q0s4hPdfz1ipOgqUt/rpDtAc91Pp9stA6O32NVQeGva1X9NspMFeCq2y7KA1NI/tzV1RZuFfjBd0QFkzGNFWsgu2nOlUGiEtFhtoUorUpCdCw5H3FiWSnwWPe6tFc9OgdNspFAVOD7vcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GLRPWsWGVnK46HRi1QsFOtsezDJw5eGm/rhbxv1wr7o=;
- b=R/iBlrcRzY9esjxioO7D7p7svf1oE4zL3+WBqZcyeTmWdaehL0JkLNSc2fWhe7AQl5ApitR4BOPgsT3FcCRzKic2iEQXFgnTibl1byvR4O+VY/ZA6w6pgtY8FY453H5T9qL6D7gGgYjXcHXP9L8qiiuM8mtm82lhraaUgJWUxGq5kM22YOOrAGnvMwYs/ReFOaVkVlE9quruk66oA86A+D6yzmP/+ztIZNq1aaYfdQPx62KjcgTkn3UtW3FA71ZAF2ifIs3IBdEOpoCLwbKYTWD+ijB6DunAkIl9GAY2D1Wk/GEyZ+Dw9uaRFBpW+TJdLjTm+rA3ZmAEX1xgFwCCOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GLRPWsWGVnK46HRi1QsFOtsezDJw5eGm/rhbxv1wr7o=;
- b=IyM34zizGWt3BP91ojIlS/4XQXc3Gz2j2G/c3oLHX1tX9A/v6etNaNcWi6bDSz11XbPtJdMnDWO4au9vE/FIFHoeMnt6rwamAqUQE0r5NTZKs2FgmPy6QUWW2tru2Dvdf35O9g1n1RY2y3LpGAggX//72KzrpSyO1gFoFoIVCI9Izj/3sOwHlUdHopOxffBSbn8cT5zygbwI/uHgQGoPypBm1giHjlbAGbU6NyOIvRHQcH4eMTs8BTVTIq4COfgza+8ducwZASESqS8mYQdYTmE4D6qna5tI0QlMA7jJTKA4jLoyqFwCStWU2i1AFfFLQ80ChauOBBMJ+Z35s0lmHg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by PAVPR10MB7355.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:31e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.38; Mon, 17 Jul
- 2023 07:38:52 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29%6]) with mapi id 15.20.6588.031; Mon, 17 Jul 2023
- 07:38:52 +0000
-Date: Mon, 17 Jul 2023 09:38:42 +0200
-From: Henning Schild <henning.schild@siemens.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>
-Subject: Re: [pdx86-platform-drivers-x86:platform-drivers-x86-simatic-ipc
- 3/7] drivers/platform/x86/simatic-ipc-batt.c:152:5: warning: no previous
- prototype for function 'simatic_ipc_batt_remove'
-Message-ID: <20230717093842.7aee1934@md1za8fc.ad001.siemens.net>
-In-Reply-To: <f635e971-ddf5-b26d-7116-473829c4dc4a@redhat.com>
-References: <202307141920.qk4FY4D6-lkp@intel.com>
-	<f635e971-ddf5-b26d-7116-473829c4dc4a@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0333.namprd03.prod.outlook.com
- (2603:10b6:610:11a::7) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4B5A93B
+	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 09:40:57 +0000 (UTC)
+Received: by mail-oa1-f78.google.com with SMTP id 586e51a60fabf-1b74252a6c7so5896360fac.1
+        for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 02:40:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689586857; x=1692178857;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kttQmn0dCMzZYamjOcfSUDdkP6auWy1EciSKLJvr7c0=;
+        b=djlbojsjBCkflu2RNR1IqzOgdaX6PV80y1DySba5CdyJhzm74GCOPFB03bK4C837m6
+         0nez3IFfncSm5WC5Tosr+rIuUpwCVBAAd5MEQy1eQ6z2nYaZZsaBNfDQffUKjZLtrxjc
+         xhh0MmSZF4VHcP/9BiY0Sb0B9ZL5EidqQoPz2W3zC3sfYgiFt9YSq/0CJPMKmMPk/Rc9
+         XB3Wwi5n8ky2M/HYK3VzRQ7zG1pMSoQW368vimu28dAM7lSILSVMtf3w9zEjCMF2QcC9
+         LuuC/WEtMN6rdgjG2qW/TJzLNVZsLawGNqTW/r1nRvUDSmSsPjwLEnhkRHT8AFKOIluf
+         qrcg==
+X-Gm-Message-State: ABy/qLbgh3046H4cGlTkLpEe/ToEJd4u5MUGJPBI36fAPehaGzj9i8EY
+	iVABEyBmemg0eBxiNWEr1HgCDcjKD4/AA44lZU7UUe9E0B9Q
+X-Google-Smtp-Source: APBJJlGfknKsGBEab8tJk51M6WW018qwq7nlE3o6sm9CnyNVkuA8WdBm6l3xv9melqtC+eiuw+PMeAF/+LsxTg0qfD3cvXkhHlA4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|PAVPR10MB7355:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d2db459-35a3-44f5-1df9-08db8698de19
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	B798S5VJwO90OdzWi3BXyMcl49Sl6PWQiHrSxUwuRgo46COl+VZmP+yZ8brO/AKflAWTDf/UStQ26rGI6naQFW2OPhHCMoZTV2rF64r/EIi1Eh9SaS8tYljJnSV5Qba/8Uktwj1VLS9uKv2K4cn7s+Tw1D7xCaeDASv41gTODJ0EZRI/LX5tzgjDRCDYdtC6iEIb1LxFIe8HeG3n0uBvxjEhU3YvJv9TJRNjpfvrzcxNhLJ/LMeNG6zLjWfKr9zVjaku2Z2IuZqyxPf2POiNljP+BpRo5KUfyAn1YUwWbamTLlrSKeP0KHxD/cLBPcJA6OMq8Xaqk0wfZQmEbzRDHvgkZkZIrZNFHm+pZcFgHdudGZUAgF4RfXvH5KmTY/jnZP5dJagGa4hutc8mm86clDvSD4ZMedx1k0y8JbGeneJ/6lYo6y1/F3YwUazpsCx7UqhErggIh62TXxizWUKmXgWCsrOksQhnxcU5AZeCKZ7uQweig+kKSOA9/fnIJF0b4kMtMaaMCy1ydILvDFeqHQ572OQsUtqefWexNEN0HE4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(136003)(39860400002)(346002)(451199021)(2906002)(478600001)(38100700002)(5660300002)(54906003)(6512007)(9686003)(966005)(83380400001)(53546011)(186003)(82960400001)(86362001)(6506007)(1076003)(8936002)(44832011)(6666004)(41300700001)(6486002)(8676002)(316002)(66946007)(66556008)(6916009)(66476007)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?j60oeml8/+a3BTbnydajQUExWwp0BxzVgB4Y6qsf6hMVtEyurXC2KfOYF3UG?=
- =?us-ascii?Q?l0+WUouw9LPvqWInjCHI/QP+kpx8JCe+aN+UlQvlxTdh64Oe/GwUskCaEgw6?=
- =?us-ascii?Q?ZQNePV2nAdszS0KTKIu3UBou2bk/SuOpBzbnM7iCEJqiygN/YVd7TPus4Lge?=
- =?us-ascii?Q?FDSKKUIw4H4fU/XqUYWX7R6PsygsM9+2IjNNHpfyHZD4nqags6zVGwnS0mYK?=
- =?us-ascii?Q?57WZkUu0fjv0i3mSd+dTEqEmtB9QwkEFVwKf5ijI7LYllQq1ndQ6mufl7JKT?=
- =?us-ascii?Q?wuPEBcCz1DP0x3jWwhr280foB3mVybsG4wgsdE+LR7jnrRHE/xDFRsPoLd7x?=
- =?us-ascii?Q?Xa6F+7OG8LniiEVDHttm6Hk406lhiTOdiXwznj7Wx4RpSDaaDHo2pQAXDnoH?=
- =?us-ascii?Q?btWlxhOBxYFEkHHUm+oOzvBoFryRGY+QAFKanizBkNmUcQtzKVIY3tejBfju?=
- =?us-ascii?Q?n98XQbmWfnD0GIMBpntrL4dZdKLYxMzG1c9FTTGOzp3cWok5Cok3mw02HKWR?=
- =?us-ascii?Q?p/kPx2Bkk1R/Krueorcvm3+of5zsTxQITZQ7kSMT0HZGerUZlbwSoSu+t4YG?=
- =?us-ascii?Q?kg38X2fXBgdnUcvV502xVEzB4EgzxmzpN83XxONhQZ3TxXPAz96btYIei5PL?=
- =?us-ascii?Q?P0+wwvxSwbIlTzgaGgTl+/vuVyXfT1Nfj9K5mF6XgWWCiq7iQ4uvsMG+0MfW?=
- =?us-ascii?Q?YtrWgKavmuwnITVsoV/HkZ4qaRW1KDpbaQGZhU6dIWzupQ63hUEaw+MdJsq2?=
- =?us-ascii?Q?UpPWH7tJlbT2rCr1ajLL3rk1efwodH6Najl3x2PxSMNt3fJmeoE6u6N3q4+I?=
- =?us-ascii?Q?GpVYahAUolo+b+zY1aYg3ma79S08w8TE118fddecHqnmXeDbMMe8fAl3lGh8?=
- =?us-ascii?Q?htuHBeoZiZPBH/IS2KPoyljPpY8pFtWrO1ukHKuUL6zrj3SPtIMhCG/ms8Eg?=
- =?us-ascii?Q?i7WmIgj2tqrnPKJyWopFzJuOiPFtEskdj7xe1M/XamNGOvmejGUrE0KXEW0D?=
- =?us-ascii?Q?cNALMo42pRz7/7ovi7/1+f2BWwOigk8lKm5jb0ITFZhEKoJ+x0LaP1z2d5gw?=
- =?us-ascii?Q?SzkdzJxBeUc51agse977JkEHgusIZ1P93DaeE3jKSyTKQgtEYWGfALzWf+Me?=
- =?us-ascii?Q?IkgODvP/UQC+3Zl+2tgTztn6PfN4Vf5bLBqvtMC0nquoJzzjVu1C9KKk3ztC?=
- =?us-ascii?Q?m1C9U9/ZHDHU3uQqimn+SNhqwCXq3K5OeHI5PMRydcfv86rhDHGwC9+QlVs+?=
- =?us-ascii?Q?ElasFLDWWltGVv/UEMGxR9Okx6NYx9kJVJ2Sq30//+SPbdo/JiM0e2N8igX5?=
- =?us-ascii?Q?hNvu5PwNA7q4AdocvFArOPuK6QOFQoy38jAIFWxjZ9OWFhSG6RzpTp8JUWBH?=
- =?us-ascii?Q?+NWd88yognqQL0W9qjNecqtOFPi0RKigp9cQUNv4NYwkX8ApMDXjZk9aDgoY?=
- =?us-ascii?Q?eC9k9rCILjKZi6zV7FNluT/DEqnm/WFJZtqH7omtqRH286eJqxDyYOKyvL6L?=
- =?us-ascii?Q?OKO+J4Zs3yKpZ8N3iw/Csl6+G6GD/iF/08zPcmw9rGUHmKjhn9SHJ6TTAUCS?=
- =?us-ascii?Q?/Y4xpHsvavHpweHiGCkiwiAjaXiK6ujeYoVL7vhBtL7anhPFvtyF/JpAHqsw?=
- =?us-ascii?Q?2aKBeB0ZAuGO17vuVe16tY5kqPHMauXUNbQxKM4Xl5CSGk7H5WfLSiC26CGf?=
- =?us-ascii?Q?IHmtLw=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d2db459-35a3-44f5-1df9-08db8698de19
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2023 07:38:52.3819
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +dwOhRwauDABJWmNQSLGJYIlyQn7WUZfWPV4Z9lUAk0H99pfTq6kwve6HhqRel44vrw73wXOcLYK7v3HcZNGYFkNFibXpyEEBZhDBkQqXow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7355
+X-Received: by 2002:a05:6870:772f:b0:1b0:60ff:b750 with SMTP id
+ dw47-20020a056870772f00b001b060ffb750mr10350933oab.3.1689586856738; Mon, 17
+ Jul 2023 02:40:56 -0700 (PDT)
+Date: Mon, 17 Jul 2023 02:40:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000069c5b30600ab98f3@google.com>
+Subject: [syzbot] [ntfs3?] kernel BUG in __blockdev_direct_IO
+From: syzbot <syzbot+c73388acf8b6a00343a4@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Am Fri, 14 Jul 2023 15:05:34 +0200
-schrieb Hans de Goede <hdegoede@redhat.com>:
+Hello,
 
-> Hi,
-> 
-> On 7/14/23 14:01, kernel test robot wrote:
-> > tree:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-> > platform-drivers-x86-simatic-ipc head:
-> > 161c6512536100ae4919032ef6f1132621794e01 commit:
-> > ad90535e51415fb636054649b5894447a984496e [3/7] platform/x86:
-> > simatic-ipc: add CMOS battery monitoring config:
-> > i386-randconfig-r021-20230714
-> > (https://download.01.org/0day-ci/archive/20230714/202307141920.qk4FY4D6-lkp@intel.com/config)
-> > compiler: clang version 15.0.7
-> > (https://github.com/llvm/llvm-project.git
-> > 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a) reproduce:
-> > (https://download.01.org/0day-ci/archive/20230714/202307141920.qk4FY4D6-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a
-> > new version of the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes:
-> > https://lore.kernel.org/oe-kbuild-all/202307141920.qk4FY4D6-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> >   
-> >>> drivers/platform/x86/simatic-ipc-batt.c:152:5: warning: no
-> >>> previous prototype for function 'simatic_ipc_batt_remove'
-> >>> [-Wmissing-prototypes]  
-> >    int simatic_ipc_batt_remove(struct platform_device *pdev, struct
-> > gpiod_lookup_table *table) ^
-> >    drivers/platform/x86/simatic-ipc-batt.c:152:1: note: declare
-> > 'static' if the function is not intended to be used outside of this
-> > translation unit int simatic_ipc_batt_remove(struct platform_device
-> > *pdev, struct gpiod_lookup_table *table) ^ static   
-> >>> drivers/platform/x86/simatic-ipc-batt.c:159:5: warning: no
-> >>> previous prototype for function 'simatic_ipc_batt_probe'
-> >>> [-Wmissing-prototypes]  
-> >    int simatic_ipc_batt_probe(struct platform_device *pdev, struct
-> > gpiod_lookup_table *table) ^
-> >    drivers/platform/x86/simatic-ipc-batt.c:159:1: note: declare
-> > 'static' if the function is not intended to be used outside of this
-> > translation unit int simatic_ipc_batt_probe(struct platform_device
-> > *pdev, struct gpiod_lookup_table *table) ^ static 
-> >    2 warnings generated.  
-> 
-> This is caused by simatic-ipc-batt.c missing a #include
-> "simatic-ipc-batt.h", luckily I have not yet created the tag for the
-> pull-request for other subsystems.
-> 
-> So I'll squash in a fix, do a forced push and then do the tag +
-> pull-req.
-> 
-> While fixing this I've also added "static" to all the struct
-> gpiod_lookup_table variables in
-> drivers/platform/x86/simatic-ipc-batt-*.c
+syzbot found the following issue on:
 
-Thanks!
+HEAD commit:    eb26cbb1a754 Merge tag 'platform-drivers-x86-v6.5-2' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b3886ca80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87ef4ae61b35aae1
+dashboard link: https://syzkaller.appspot.com/bug?extid=c73388acf8b6a00343a4
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: i386
 
-Henning
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> Regards,
-> 
-> Hans
-> 
-> 
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-eb26cbb1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/64d2eea7ee5e/vmlinux-eb26cbb1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2dbe6b1755b5/bzImage-eb26cbb1.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c73388acf8b6a00343a4@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/direct-io.c:1025!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 3 PID: 18918 Comm: syz-executor.2 Not tainted 6.5.0-rc1-syzkaller-00033-geb26cbb1a754 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:do_direct_IO fs/direct-io.c:1025 [inline]
+RIP: 0010:__blockdev_direct_IO+0x2dc3/0x3cf0 fs/direct-io.c:1248
+Code: f3 ed 8a ff 41 83 ff 1f 0f 87 2b bb 21 08 e8 74 f2 8a ff b8 01 00 00 00 44 89 f9 d3 e0 8d 68 ff e9 26 d7 ff ff e8 5d f2 8a ff <0f> 0b e8 56 f2 8a ff 8b 9c 24 a8 01 00 00 31 ff 89 de e8 b6 ed 8a
+RSP: 0018:ffffc900291cf1c0 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000000 RCX: ffffc9000656a000
+RDX: 0000000000040000 RSI: ffffffff81fac443 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000000009401a R12: 0000000000000000
+R13: ffffea0001705040 R14: 0000000000000009 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000f7f8fb40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000056d1e04c CR3: 000000004efc7000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ blockdev_direct_IO include/linux/fs.h:2830 [inline]
+ ntfs_direct_IO+0x271/0x470 fs/ntfs3/inode.c:788
+ generic_file_direct_write+0x132/0x360 mm/filemap.c:3848
+ __generic_file_write_iter+0x11d/0x240 mm/filemap.c:4004
+ ntfs_file_write_iter+0xd20/0x1bf0 fs/ntfs3/file.c:1081
+ call_write_iter include/linux/fs.h:1871 [inline]
+ do_iter_readv_writev+0x208/0x3b0 fs/read_write.c:735
+ do_iter_write+0x17f/0x830 fs/read_write.c:860
+ vfs_iter_write+0x7a/0xb0 fs/read_write.c:901
+ iter_file_splice_write+0x666/0xba0 fs/splice.c:739
+ do_splice_from fs/splice.c:934 [inline]
+ direct_splice_actor+0x118/0x180 fs/splice.c:1143
+ splice_direct_to_actor+0x347/0xa30 fs/splice.c:1089
+ do_splice_direct+0x1af/0x280 fs/splice.c:1195
+ do_sendfile+0xb70/0x1370 fs/read_write.c:1254
+ __do_compat_sys_sendfile fs/read_write.c:1343 [inline]
+ __se_compat_sys_sendfile fs/read_write.c:1326 [inline]
+ __ia32_compat_sys_sendfile+0x1da/0x220 fs/read_write.c:1326
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x61/0xe0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7f94579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f7f8f5ac EFLAGS: 00000292 ORIG_RAX: 00000000000000bb
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 0000000000000005
+RDX: 0000000000000000 RSI: 000000007fffffff RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:do_direct_IO fs/direct-io.c:1025 [inline]
+RIP: 0010:__blockdev_direct_IO+0x2dc3/0x3cf0 fs/direct-io.c:1248
+Code: f3 ed 8a ff 41 83 ff 1f 0f 87 2b bb 21 08 e8 74 f2 8a ff b8 01 00 00 00 44 89 f9 d3 e0 8d 68 ff e9 26 d7 ff ff e8 5d f2 8a ff <0f> 0b e8 56 f2 8a ff 8b 9c 24 a8 01 00 00 31 ff 89 de e8 b6 ed 8a
+RSP: 0018:ffffc900291cf1c0 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000000 RCX: ffffc9000656a000
+RDX: 0000000000040000 RSI: ffffffff81fac443 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000000009401a R12: 0000000000000000
+R13: ffffea0001705040 R14: 0000000000000009 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000f7f8fb40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000056d1e04c CR3: 000000004efc7000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0:	10 06                	adc    %al,(%rsi)
+   2:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+   6:	10 07                	adc    %al,(%rdi)
+   8:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+   c:	10 08                	adc    %cl,(%rax)
+   e:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1e:	00 51 52             	add    %dl,0x52(%rcx)
+  21:	55                   	push   %rbp
+  22:	89 e5                	mov    %esp,%ebp
+  24:	0f 34                	sysenter
+  26:	cd 80                	int    $0x80
+* 28:	5d                   	pop    %rbp <-- trapping instruction
+  29:	5a                   	pop    %rdx
+  2a:	59                   	pop    %rcx
+  2b:	c3                   	ret
+  2c:	90                   	nop
+  2d:	90                   	nop
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  37:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
