@@ -1,100 +1,89 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E07F253AD
-	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 14:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689605582; x=1721141582;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PaYQUrnIAw10UGRh51Er0CiQIbO+1qEOK90eqGzlL3M=;
-  b=ktI/SBeSGFeViZ21yY4vkJ1kAny1rLi50XAeE5FPZ9vhc3IQXNmo4xWL
-   VWvHGSuNbns2VWNoParX1QHMV+PjTcOFy7+Nano3GOCKHJmx38NX78Vzr
-   5yrjxvCqX1Me5dNXLOGyvnNyXnNx2iLTa3Pt9dduFGS+evA/HLAZj57UF
-   7ngtF4jo1jX1k0l3NYZBENUmdXHsmNT0pjOKmsDfd0Rg5wLY4Yc4kfRxm
-   Fp59pyYH5UWmp/hbglycrIeVeGJLgUwFN+xF+VeEy3lgHTlhbLIoS/UTS
-   6U/H7Y63aWjMFDVgYk4GC5lHdiQUdM4Passq61Ftb2joVkMWQr77cwRcz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432120114"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="432120114"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 07:53:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="788686219"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="788686219"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.9.23]) ([10.213.9.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 07:52:55 -0700
-Message-ID: <0cae35ea-7635-383d-cae5-2051abbc6d64@intel.com>
-Date: Mon, 17 Jul 2023 16:52:51 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B7A15BF
+	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 16:36:01 +0000 (UTC)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3a37909a64eso2924374b6e.1
+        for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 09:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689611761; x=1692203761;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RA/iWGM5jVgrQTgVAP1T1MYlEj/+DU3uJ2eHPJePb2Y=;
+        b=NzeOCLYrZJ1CPIeDNJPnTwQul1uiwgBoWc5uHedLi3ZzTY+tKjXEdHRxmPfdYGw4Yt
+         rpu00HY7+EsiFSloYywPdV1Py/E2Yrsz0+6tP+gOmvRBmtXba/UEcInUfJDHUUt2OAV4
+         Zmxd+cx0bLNrEXyhV2D5z9nP5B0ny0sKKTSVuB5yE0QBcarnNSYBeqUY1BY1v3wNNj2z
+         tQ9XSklQHVI+OyBBrR+D3vYhfiU0sGJwlyHI3ynnqyIwyGuPxG7EtpYc6YTKB4eMOEmt
+         kY6A9nJisyR8QWOJdvwq1r8taOhb3TG90AGVxUPYQ0ZEhtrr1kspvML2xxvKPQAyHIrp
+         W8Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689611761; x=1692203761;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RA/iWGM5jVgrQTgVAP1T1MYlEj/+DU3uJ2eHPJePb2Y=;
+        b=QYv+v+bizQipEpT3sL3ucG06mEkW7UvwBNTiRnBOf9Md430LhNezqQTtdAmFvh8Ad1
+         Uf1bgaaBDd9+teEqyAo+DbAEWzizpWzV4syKN+GRVhm4oOuak4I6EsxmPlYB8SabFIDy
+         IV75gwo/IrYXFElkImlxaQiJkpWTwXNX/TDNUMJzlsWHR7omRUz3FbKGqW2e4tuM1/2L
+         6gzoZnKcpa0ZBbVSE2vKurF2ShOtd9sd++4RgEeTPFHSjTg2XVxfiQz0yZZIUh2aRQ9z
+         /DT1RicMINrnJ9e9vvhlA9fm7c8b46mXm1KwyZEBiPie6gzMW5/QOtT1WKELR6XNvOG2
+         U+KQ==
+X-Gm-Message-State: ABy/qLZuKPXf4sTJO1dOUxKC0W6FaUNPdN4rl+OEX4ccB+Ps8f4scE3x
+	sD38VTRj2FKQsUT/AkykplXyIkgLJHj2RyOK6GLSKg==
+X-Google-Smtp-Source: APBJJlFXgoM5JYiyURfjrpy48hpLApao0t2u3cPzHUDUmrorV/Pnf5w8IT0o72AR8WmiICLf0mld20wdlPtVBx8J+T8=
+X-Received: by 2002:a05:6808:1513:b0:3a1:b6de:ed54 with SMTP id
+ u19-20020a056808151300b003a1b6deed54mr14212741oiw.32.1689611760823; Mon, 17
+ Jul 2023 09:36:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH] drm/i915/tv: avoid possible division by zero
-To: Su Hui <suhui@nfschina.com>, jani.nikula@linux.intel.com,
- joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
- tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
-Cc: ville.syrjala@linux.intel.com, mripard@kernel.org,
- ankit.k.nautiyal@intel.com, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-References: <20230717062209.124106-1-suhui@nfschina.com>
-Content-Language: en-US
-From: Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20230717062209.124106-1-suhui@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <202307171254.yFcH97ej-lkp@intel.com> <ZLUSG8bNnSqT0LO+@smile.fi.intel.com>
+In-Reply-To: <ZLUSG8bNnSqT0LO+@smile.fi.intel.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 17 Jul 2023 09:35:49 -0700
+Message-ID: <CAKwvOdnUjAXg4VRbCBKUOZDCKs-=5aA2-ef1tFRj-P=-1bBjaQ@mail.gmail.com>
+Subject: Re: lib/test_bitmap.c:920:2: error: call to __compiletime_assert_348
+ declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 17.07.2023 08:22, Su Hui wrote:
-> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
-> line 991, column 22 Division by zero.
-> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
-> then division by zero will happen.
+On Mon, Jul 17, 2023 at 3:04=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->   drivers/gpu/drm/i915/display/intel_tv.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> On Mon, Jul 17, 2023 at 12:42:57PM +0800, kernel test robot wrote:
+> > Hi Alexander,
+> >
+> > FYI, the error/warning still remains.
 >
-> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
-> index 36b479b46b60..82b54af51f23 100644
-> --- a/drivers/gpu/drm/i915/display/intel_tv.c
-> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
-> @@ -988,7 +988,8 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
->   		      const struct tv_mode *tv_mode,
->   		      int clock)
->   {
-> -	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
-> +	mode->clock = clock / (tv_mode->oversample != 1 ?
-> +			tv_mode->oversample >> !tv_mode->progressive : 1);
+> Alexander, either you can escalate this or just propose something to disc=
+uss.
 
-Seems too smart to me, why not just:
-mode->clock = clock / tv_mode->oversample;
-if (!tv_mode->progressive)
-     mode->clock <<= 1;
-Or trying being smart:
-mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
+https://github.com/ClangBuiltLinux/linux/issues/1874
+Sorry, a few more fires have popped up in the meantime.  Regardless of
+changes to the compiler, we still support many versions of clang for
+the kernel, so we'd need some workaround in the tests regardless.  I
+saw there was already one for s390 + clang, but from this report we
+will need another. Feel free to use that link above in comments in the
+tests; we will clean those up once I have a better grasp on what's
+going on with the compiler here.
 
-Btw in both cases there is assumption tv_mode->oversample != 0, I guess 
-it is true.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>
 
-Regards
-Andrzej
 
->   
->   	/*
->   	 * tv_mode horizontal timings:
-
+--=20
+Thanks,
+~Nick Desaulniers
