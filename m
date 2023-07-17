@@ -1,104 +1,163 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49990C149
-	for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 20:09:32 +0000 (UTC)
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b74310566cso76048951fa.2
-        for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 13:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689624570; x=1692216570;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fsEmnlMQPV7Fd5Yb95V67Si+MXxbwtnWXXY+l8DoZjo=;
-        b=oU8+D8GDnhaYzrA3Gni30BP/qU8SrINxACQ2xyNa2rCPhDarYG6/fs0siRXa7Yt3PV
-         iCyVbNVcrozP4u8EFEcAg+09B0olC7CHYG934H1hwyjUeRNrLwkmp8/OuY9FNy9NAbp1
-         FMXEZN+i9gLzShxOnTsCe6kVn/umg1f018FckZswUEtS0O4nw4aQPCktqgRHzLAA744W
-         LwcfjeglrvrD3vm1OrdNttY3W+mTlyGYYRzBYxG+PQjZKjOUr6Cc3OZT4Vd0Bb3/8dCz
-         NGhT0KCo3KGAJWzvKf1CNnZ+EX50bR+FUUrklTjSDd2c1tYa3Dw+CRg1MOM7UtbKaylZ
-         rFXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689624570; x=1692216570;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fsEmnlMQPV7Fd5Yb95V67Si+MXxbwtnWXXY+l8DoZjo=;
-        b=ZQ0PY7DAY47s++AEh0luVo9dXNX4jSRWVk2pigTCRAPqKdQDF/Ugmo4HFA9Wt/dkW5
-         6+clY9gP95CHRb8q3PgiVjaxRq4mF1xkxXBpAeH3GDnV2EmsEJdcOdj9VUri09+Y++2c
-         AKMteUIbXGTs46i0pJSQ/YSLmOSngxORKZaYTB4St/AJIqXKWEyb5BaeGTCUBgo3qmqb
-         IB25d3aURv9hbNn80Hb0dkabSLpAGCEQXGU1kc7XPJTGdugPZzeS/Zik33Jvdd8L/c00
-         yVnLMC6sybmKhqmhg64gmtO8rN6nWE9O/8PasDWNKbj3mEPN6b4CK2wCZTtCEUW0ZTYx
-         OUVg==
-X-Gm-Message-State: ABy/qLaGsbne4NfmP/zW1F4Oqyvojf/2u3om7AWhNtCXsFDzuf2whMl5
-	s62SQsyZrudbIv8PMWwPCIA=
-X-Google-Smtp-Source: APBJJlG4Iajle0ADfReJ6a6LzBxYlP+ylGGcYu7WnAvf/t4pEnz9ZPb9/BH2HQh4Y1B+3pu7dT3axw==
-X-Received: by 2002:a2e:3815:0:b0:2b5:1b80:264b with SMTP id f21-20020a2e3815000000b002b51b80264bmr9195833lja.12.1689624569720;
-        Mon, 17 Jul 2023 13:09:29 -0700 (PDT)
-Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id k13-20020a17090627cd00b00997bd42d210sm84505ejc.205.2023.07.17.13.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 13:09:29 -0700 (PDT)
-From: Jakob Koschel <jkl820.git@gmail.com>
-Date: Mon, 17 Jul 2023 22:09:27 +0200
-Subject: [PATCH] arch: enable HAS_LTO_CLANG with KASAN and KCOV
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720EFC2F6;
+	Mon, 17 Jul 2023 20:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478B5C433C8;
+	Mon, 17 Jul 2023 20:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689625867;
+	bh=speJUgxSauJb1B97mFzBthgQeNkIXMJQ46d1kG1IBpc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m5yuNuQ1k00JkD9oSP99xNX3im7OVU9ke1O/ZJxzB5liJ3nS6KJ2q72BNShSb8I7N
+	 xppmSyS3mUTrvFrkFzJ6J5Yw3LZXsB9RD6iUirXgxE3ablVVioaCTngcISqjmlozVU
+	 gM5C0SHbQBOzZ3Ij/zMvrL9c8QRxdOFSMi+Qp5Zckvnne5ZjBFWrgeyni0U8xyxxok
+	 fU7tH/sJXbgeCL7j5rOm0FP8u9kTsuCKd92YiIpBjzWUk2xb01vmp7Ypw8dMNf1LN0
+	 dNIGJJxYGwf1mnzOR0t44YMDNIxi2jaFUurlzb8nT6xsXEEMOkm/MQ+LdvDLIWoA+L
+	 X4btRRdqJSTvQ==
+Date: Mon, 17 Jul 2023 13:31:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Alexander Lobakin <alexandr.lobakin@intel.com>,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Tom Rix <trix@redhat.com>, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] lib/bitmap: waive const_eval test as it breaks the build
+Message-ID: <20230717203105.GA2212488@dev-arch.thelio-3990X>
+References: <20230717195813.29059-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230717-enable-kasan-lto1-v1-1-471e706a5c4e@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPaftWQC/x2N0QqDMAwAf0XyvIDttIX9ythDWrMZ5upIRAbiv
- 1v3eBzHbWCswga3ZgPlVUzmUsFdGsgjlRejDJXBt/7aRheRC6WJ8U1GBadldhj6EPsux+A7B7V
- LZIxJqeTxLD9kC+spvspP+f1n98e+H8rPhil8AAAA
-To: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Jakob Koschel <jkl820.git@gmail.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689624569; l=1432;
- i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
- bh=YFPsm2kVtfSehCpbATGIVArV8bDH64E2Vvok0+5hopA=;
- b=f2qpVn5s2uyo2Brz2l2WY4ke7LkrHMJbyfhfiM/vAB+BSOVaVwuPJ0E5UsQdQLmCVh1SYToKlh2c
- KC/RmFLDBl0SrGQFOjU8UpzkDGc9D1JNpy4hRr+hcAPu7GBADIRq
-X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
- pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230717195813.29059-1-yury.norov@gmail.com>
 
-Both KASAN and KCOV had issues with LTO_CLANG if DEBUG_INFO is enabled.
-With LTO inlinable function calls are required to have debug info if
-they are inlined into a function that has debug info.
+Hi Yury,
 
-Starting with LLVM 17 this will be fixed ([1],[2]) and enabling LTO with
-KASAN/KCOV and DEBUG_INFO doesn't cause linker errors anymore.
+On Mon, Jul 17, 2023 at 12:58:13PM -0700, Yury Norov wrote:
+> When building with clang, and when KASAN and GCOV_PROFILE_ALL are both
+> enabled, the test fails to build [1]:
+> 
+> >> lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+>            BUILD_BUG_ON(!__builtin_constant_p(res));
+>            ^
+>    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+>            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+>            ^
+>    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                        ^
+>    include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+>            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>            ^
+>    include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+>            __compiletime_assert(condition, msg, prefix, suffix)
+>            ^
+>    include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+>                            prefix ## suffix();                             \
+>                            ^
+>    <scratch space>:185:1: note: expanded from here
+>    __compiletime_assert_239
+> 
+> Originally it was attributed to s390, which now looks seemingly wrong. The
+> issue is also not related to bitmap code itself, but it breaks build for
+> a given configuration. So, disabling the test unless the compiler will
+> get fixed.
+> 
+> [1] https://github.com/ClangBuiltLinux/linux/issues/1874
+> 
+> Fixes: dc34d5036692 ("lib: test_bitmap: add compile-time optimization/evaluations assertions")
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  lib/test_bitmap.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> index 187f5b2db4cf..a791fdb7a8c9 100644
+> --- a/lib/test_bitmap.c
+> +++ b/lib/test_bitmap.c
+> @@ -1163,6 +1163,9 @@ static void __init test_bitmap_print_buf(void)
+>  
+>  static void __init test_bitmap_const_eval(void)
+>  {
+> +#if defined(CONFIG_CC_IS_CLANG) && defined(CONFIG_KASAN) && defined(CONFIG_GCOV_PROFILE_ALL)
+> +#warning "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled"
 
-Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
-Link: https://github.com/llvm/llvm-project/commit/913f7e93dac67ecff47bade862ba42f27cb68ca9
-Link: https://github.com/llvm/llvm-project/commit/4a8b1249306ff11f229320abdeadf0c215a00400
----
- arch/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Making this a '#warning' will basically just replace the current error
+with a different one in the face of CONFIG_WERROR, which seems pointless
+to me:
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index aff2746c8af2..61263ff92271 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -745,7 +745,8 @@ config HAS_LTO_CLANG
- 	depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
- 	depends on ARCH_SUPPORTS_LTO_CLANG
- 	depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT
--	depends on !KASAN || KASAN_HW_TAGS
-+	depends on (!KASAN || KASAN_HW_TAGS || CLANG_VERSION >= 170000) || !DEBUG_INFO
-+	depends on (!KCOV || CLANG_VERSION >= 170000) || !DEBUG_INFO
- 	depends on !GCOV_KERNEL
- 	help
- 	  The compiler and Kconfig options support building with Clang's
+  lib/test_bitmap.c:1167:2: error: "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled" [-Werror,-W#warnings]
+   1167 | #warning "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled"
+        |  ^
+  1 error generated.
 
----
-base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
-change-id: 20230717-enable-kasan-lto1-656754c76241
+Could we just opt out of GCOV for test_bitmap.c if KASAN is enabled with
+clang? That does not seem too bad of a workaround. I highly doubt there
+are many people who are interested in debugging test_bitmap.c with KASAN
+while profiling it with GCOV when building with clang, since they would
+have hit this already and reported it already; as far as I can tell,
+only the Intel robot has reported this with a randconfig.
 
-Best regards,
--- 
-Jakob Koschel <jkl820.git@gmail.com>
+diff --git a/lib/Makefile b/lib/Makefile
+index 42d307ade225..c6f60ae42769 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -83,6 +83,10 @@ obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
+ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+ obj-$(CONFIG_TEST_SCANF) += test_scanf.o
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
++# https://github.com/ClangBuiltLinux/linux/issues/1874
++ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
++GCOV_PROFILE_test_bitmap.o := n
++endif
+ obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
 
+Cheers,
+Nathan
+
+> +#else
+>  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+>  	unsigned long initvar = BIT(2);
+>  	unsigned long bitopvar = 0;
+> @@ -1177,20 +1180,9 @@ static void __init test_bitmap_const_eval(void)
+>  	 * in runtime.
+>  	 */
+>  
+> -	/*
+> -	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
+> -	 * Clang on s390 optimizes bitops at compile-time as intended, but at
+> -	 * the same time stops treating @bitmap and @bitopvar as compile-time
+> -	 * constants after regular test_bit() is executed, thus triggering the
+> -	 * build bugs below. So, call const_test_bit() there directly until
+> -	 * the compiler is fixed.
+> -	 */
+> +	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+>  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+> -#if defined(__s390__) && defined(__clang__)
+> -	if (!const_test_bit(7, bitmap))
+> -#else
+>  	if (!test_bit(7, bitmap))
+> -#endif
+>  		bitmap_set(bitmap, 5, 2);
+>  
+>  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+> @@ -1220,6 +1212,7 @@ static void __init test_bitmap_const_eval(void)
+>  	/* ~BIT(25) */
+>  	BUILD_BUG_ON(!__builtin_constant_p(~var));
+>  	BUILD_BUG_ON(~var != ~BIT(25));
+> +#endif
+>  }
+>  
+>  static void __init selftest(void)
+> -- 
+> 2.39.2
+> 
