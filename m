@@ -1,146 +1,147 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E569253CE;
-	Mon, 17 Jul 2023 19:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689623469; x=1721159469;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U+1gNRrQsV4FsavVYDPD1buS5A3s5xetFgabg2L8BlU=;
-  b=Cidp5hcqW0fVfxSAqr0HBFjj9PHt/6zw4qiyBadh1fjroIlvgJhIT2p8
-   J86JXIpxOi9V6ZBl97//xateX726bkoI4bBK1e3GhGfQL7T411b/rCoZS
-   poPKKMNx7fWoKgXPiJfNOlcwIF9fhh2xzKBVv+nPAE1/mDyrPlBaEUS9a
-   dNffpPL6iCeQoCpS6S92ilkCB6YIh0ZXRPfqAL57mbYppYt1YIYZ34tvS
-   u43jvqL0oVaK+ozLp9C9b7zQsKmL9OrZ2VbfyvIX0KH56m/gcNL+XkJT9
-   sEI8bDUZwosZSHYdmQQLnfc0DbD0KQypNvOUumqfw+Ml3qpYojw67dBxM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="432198587"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="432198587"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 12:51:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="758543106"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="758543106"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2023 12:51:07 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qLUFO-0009rg-2k;
-	Mon, 17 Jul 2023 19:51:06 +0000
-Date: Tue, 18 Jul 2023 03:50:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:x86/topology 51/58] arch/x86/kernel/setup.c:1021:2:
- error: call to undeclared function 'apic_setup_apic_calls'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202307180325.YEDq4PZ2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79682C2CE;
+	Mon, 17 Jul 2023 19:58:44 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6686a05bc66so3567622b3a.1;
+        Mon, 17 Jul 2023 12:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689623924; x=1692215924;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rR/WXoMTQWpIUYil39t/+gnlISlq3LT4l8C56BzZmtA=;
+        b=C9A5FyWyJdLMLcgM2nbvMhNVoYyvZsdYr3itLtwGmaidb2E+4aBz/cmsAH33eoyHHm
+         HCpvp/J4RfFDFCtWouqvg1amXx83YA2jxeygypGCjGqAdDJQoWSg1o0iteaJhXtvF84u
+         8LSOvuq1XeK7ByQO2HqaeNflruX/YGmWqgRAd6Gxng5vyPTZVK/6WcGmOBvWakftPVmg
+         1EmdFzrKJuMdpztu4WZICYFzgPU4rq0+fV1Tp+0lHEr5oTCL7ZWi3Wh3rQHGAE0Dpy4k
+         1SmEf1H363eCXej7FKrpIGgv+y7x4oAgCmP0iiEd2Jce5WIQI2xfFeG9amR6qCc9lUC1
+         R2Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689623924; x=1692215924;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rR/WXoMTQWpIUYil39t/+gnlISlq3LT4l8C56BzZmtA=;
+        b=U50dj3TwkieSlNYe7wh2X1bE3iYLDkUOrP2vosGQSZD7nnclCrFdGELW1fxGP/FOuw
+         sJicM1a8qCP4VOc8Y1y0RU7l6oNsYltwqyFRqWyJxucfrRKW8xMZGDvSkXzYvF7/1Gph
+         OBhO6Xq+c3C8fME5vYH5zgAHifnD32qaj2J7jctpuX8zCW5qoPTZZSkkrvGdAzFyZSIZ
+         cneMMZ/HJqx9j2wv9gAvNKbYFdhPylBgnUH1h0M1FdTsaLGNdNyh9C76VmvEFs5SjKbo
+         /yZCb144a4ximrzXekprl1PNnKibYj+RCzXHagEDJVPNvYO2xAYcPhznxDC1Q7r1+TL6
+         MFqw==
+X-Gm-Message-State: ABy/qLZFSehPzVBzQzsiwrjdncrvNAFB5Xje5xclOnoBmB9ZuZRhEKkc
+	YdblHgPg9GJMGlqQtMn7Ou4=
+X-Google-Smtp-Source: APBJJlFMy4/IrDNwje1azicy2QD5va5DF5szxQAAc7YOt0kfRukNidF+lJUKk5yNJi+cT6gcfNjVRQ==
+X-Received: by 2002:a05:6a20:3c8c:b0:133:cf5c:4d2e with SMTP id b12-20020a056a203c8c00b00133cf5c4d2emr621393pzj.20.1689623923509;
+        Mon, 17 Jul 2023 12:58:43 -0700 (PDT)
+Received: from localhost ([216.228.127.128])
+        by smtp.gmail.com with ESMTPSA id e21-20020a170902d39500b001ac2be26340sm246556pld.222.2023.07.17.12.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 12:58:43 -0700 (PDT)
+From: Yury Norov <yury.norov@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Alexander Lobakin <alexandr.lobakin@intel.com>,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	oe-kbuild-all@lists.linux.dev
+Subject: [PATCH] lib/bitmap: waive const_eval test as it breaks the build
+Date: Mon, 17 Jul 2023 12:58:13 -0700
+Message-Id: <20230717195813.29059-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topology
-head:   b4958e7260e30a731e3f64c031bbfa88fe79e7ec
-commit: 9c546fe04c7cabeb22ef8ebaf7dfcbac75de0524 [51/58] x86/apic: Provide apic_update_callback()
-config: i386-buildonly-randconfig-r004-20230717 (https://download.01.org/0day-ci/archive/20230718/202307180325.YEDq4PZ2-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230718/202307180325.YEDq4PZ2-lkp@intel.com/reproduce)
+When building with clang, and when KASAN and GCOV_PROFILE_ALL are both
+enabled, the test fails to build [1]:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307180325.YEDq4PZ2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kernel/setup.c:1021:2: error: call to undeclared function 'apic_setup_apic_calls'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           apic_setup_apic_calls();
+>> lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+           BUILD_BUG_ON(!__builtin_constant_p(res));
            ^
-   1 error generated.
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:185:1: note: expanded from here
+   __compiletime_assert_239
 
+Originally it was attributed to s390, which now looks seemingly wrong. The
+issue is also not related to bitmap code itself, but it breaks build for
+a given configuration. So, disabling the test unless the compiler will
+get fixed.
 
-vim +/apic_setup_apic_calls +1021 arch/x86/kernel/setup.c
+[1] https://github.com/ClangBuiltLinux/linux/issues/1874
 
-  1018	
-  1019		x86_report_nx();
-  1020	
-> 1021		apic_setup_apic_calls();
-  1022	
-  1023		if (acpi_mps_check()) {
-  1024	#ifdef CONFIG_X86_LOCAL_APIC
-  1025			apic_is_disabled = true;
-  1026	#endif
-  1027			setup_clear_cpu_cap(X86_FEATURE_APIC);
-  1028		}
-  1029	
-  1030		e820__reserve_setup_data();
-  1031		e820__finish_early_params();
-  1032	
-  1033		if (efi_enabled(EFI_BOOT))
-  1034			efi_init();
-  1035	
-  1036		reserve_ibft_region();
-  1037		dmi_setup();
-  1038	
-  1039		/*
-  1040		 * VMware detection requires dmi to be available, so this
-  1041		 * needs to be done after dmi_setup(), for the boot CPU.
-  1042		 * For some guest types (Xen PV, SEV-SNP, TDX) it is required to be
-  1043		 * called before cache_bp_init() for setting up MTRR state.
-  1044		 */
-  1045		init_hypervisor_platform();
-  1046	
-  1047		tsc_early_init();
-  1048		x86_init.resources.probe_roms();
-  1049	
-  1050		/* after parse_early_param, so could debug it */
-  1051		insert_resource(&iomem_resource, &code_resource);
-  1052		insert_resource(&iomem_resource, &rodata_resource);
-  1053		insert_resource(&iomem_resource, &data_resource);
-  1054		insert_resource(&iomem_resource, &bss_resource);
-  1055	
-  1056		e820_add_kernel_range();
-  1057		trim_bios_range();
-  1058	#ifdef CONFIG_X86_32
-  1059		if (ppro_with_ram_bug()) {
-  1060			e820__range_update(0x70000000ULL, 0x40000ULL, E820_TYPE_RAM,
-  1061					  E820_TYPE_RESERVED);
-  1062			e820__update_table(e820_table);
-  1063			printk(KERN_INFO "fixed physical RAM map:\n");
-  1064			e820__print_table("bad_ppro");
-  1065		}
-  1066	#else
-  1067		early_gart_iommu_check();
-  1068	#endif
-  1069	
-  1070		/*
-  1071		 * partially used pages are not usable - thus
-  1072		 * we are rounding upwards:
-  1073		 */
-  1074		max_pfn = e820__end_of_ram_pfn();
-  1075	
-  1076		/* update e820 for memory not covered by WB MTRRs */
-  1077		cache_bp_init();
-  1078		if (mtrr_trim_uncached_memory(max_pfn))
-  1079			max_pfn = e820__end_of_ram_pfn();
-  1080	
-  1081		max_possible_pfn = max_pfn;
-  1082	
-  1083		/*
-  1084		 * Define random base addresses for memory sections after max_pfn is
-  1085		 * defined and before each memory section base is used.
-  1086		 */
-  1087		kernel_randomize_memory();
-  1088	
+Fixes: dc34d5036692 ("lib: test_bitmap: add compile-time optimization/evaluations assertions")
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ lib/test_bitmap.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 187f5b2db4cf..a791fdb7a8c9 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -1163,6 +1163,9 @@ static void __init test_bitmap_print_buf(void)
+ 
+ static void __init test_bitmap_const_eval(void)
+ {
++#if defined(CONFIG_CC_IS_CLANG) && defined(CONFIG_KASAN) && defined(CONFIG_GCOV_PROFILE_ALL)
++#warning "FIXME: Clang breaks compile time evaluations when KASAN and GCOV are enabled"
++#else
+ 	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+ 	unsigned long initvar = BIT(2);
+ 	unsigned long bitopvar = 0;
+@@ -1177,20 +1180,9 @@ static void __init test_bitmap_const_eval(void)
+ 	 * in runtime.
+ 	 */
+ 
+-	/*
+-	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
+-	 * Clang on s390 optimizes bitops at compile-time as intended, but at
+-	 * the same time stops treating @bitmap and @bitopvar as compile-time
+-	 * constants after regular test_bit() is executed, thus triggering the
+-	 * build bugs below. So, call const_test_bit() there directly until
+-	 * the compiler is fixed.
+-	 */
++	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+ 	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+-#if defined(__s390__) && defined(__clang__)
+-	if (!const_test_bit(7, bitmap))
+-#else
+ 	if (!test_bit(7, bitmap))
+-#endif
+ 		bitmap_set(bitmap, 5, 2);
+ 
+ 	/* Equals to `unsigned long bitopvar = BIT(20)` */
+@@ -1220,6 +1212,7 @@ static void __init test_bitmap_const_eval(void)
+ 	/* ~BIT(25) */
+ 	BUILD_BUG_ON(!__builtin_constant_p(~var));
+ 	BUILD_BUG_ON(~var != ~BIT(25));
++#endif
+ }
+ 
+ static void __init selftest(void)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
