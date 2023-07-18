@@ -1,123 +1,123 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB5A17AAA
-	for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 22:45:02 +0000 (UTC)
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-76731802203so575159885a.3
-        for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 15:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689720301; x=1692312301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ovgopksrcBDDM5q7wb3QImYeaqgjH+ws4yyLYfsMj1A=;
-        b=tWO9NBwqDPSUi5OtEkdsiPLvuQRsr4CBjfybKGktzr1NeDTDrkpixDVWTtw1j3O7IU
-         A09XlqcwkQjn1h2ktQdMuwZYwXQ8yo7D7btq1Y/AGOvRP9InzW9CJYkrlNwSpHGi97tF
-         wJulhRaZ1A26/IgI0EdSh/C9XAYtnq/weMSNqvVMy73ZjW1JcdynBeV7QHEv/xA2H4T1
-         HdC+a5wigliyyDueeIdLHEzHgj7gqwT2033xwwb/w3iafpl2Q1ZTmdA4BZ8fYeHa5rQY
-         mbLkNjai4ywP3qAQRFJgvmoKzCRgbI+w40qX6BADV3grkI22uoHsZGJNn4poYmoLDQoF
-         6DOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689720301; x=1692312301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ovgopksrcBDDM5q7wb3QImYeaqgjH+ws4yyLYfsMj1A=;
-        b=FUd5HIFJl4NGPCz0Sc4OrSJ+YdLTIwFx9qygWeSwZ9raAPOF+PfNzsb0CgG2vlOepV
-         XyFRGa70IBVqxlizeb2zDA92li+nVOAXQQeNOZ/X3AKsX/Px2GaD6L8jHApN4AQ+jEui
-         uq7awHyI7VN5ZVqfVB+nZMWwYowqEIdubr0IwLn7JNoEEuVKRJTTenXdY3Z4VjWm0OWb
-         qrxe3IcEfrzWqa5hRydS2TTyKKmjlW9iXm4SKQUqdZXpkl/SBxEsb9cCMh3mnLUx3t5B
-         OOV9xwDoL4pYj+21XnzwJiP2n/JqLp5+U2SViPaohlqA9+69h13d8RrR8qRiToH07AiH
-         67lw==
-X-Gm-Message-State: ABy/qLYxiKUImeA1UMr6/ircRpj7OC5nRJG+YYDn92pqSKpwX2ZR5d/z
-	RMS8PVKLLupUH4KUQqeAF9ME1HsgdFN6d0UAB2EyCw==
-X-Google-Smtp-Source: APBJJlHF6DVEgKMyfr14pLA4GVoX3CZmbt83NMHTNj8W8ZeAyqS/bTVyj4a1bheclQLu4wVQc9gGBZyUAiY5ib10pRA=
-X-Received: by 2002:a0c:d802:0:b0:635:fa7b:6c22 with SMTP id
- h2-20020a0cd802000000b00635fa7b6c22mr15249575qvj.55.1689720300936; Tue, 18
- Jul 2023 15:45:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2C5168A5;
+	Tue, 18 Jul 2023 22:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689720994; x=1721256994;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9WATWyxBP0Ga9/qY83mxhXujm/6DGmrnQqsOSnQtbas=;
+  b=Ohg/buu8X08w5Q734wIsf3ouMF0LvJrBAE0mwKbOODv4H8QnPXMsH0hT
+   GxqH74gpBltbKIR9OQ+xyX5cyQ/9w/FlQurDA2Ro7isypQIxt1Rnb5OrC
+   4rXALJ7eyHVNcRF2XQNnI4jkc3Nw+lwSy4sFJPVgZYFbQ2kYmY6VfMXje
+   sVGuPGkazQMQTIRSLTzZBw4TM5aBSHZulbTbnykeKtYIedq6tTLYjjNA7
+   ALrF7lNO8SLnF0T15J7dQltj4jgvfFhJT9E5kLNosY/wRo1/soc/3AcWZ
+   +rIANhHItpPior57Jo8QuPUtcviHuaAvM/9YjtsUlVbh4OCiPkZFDTGrl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452706212"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="452706212"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 15:56:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="847852575"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="847852575"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2023 15:56:31 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLtcM-0003wH-0c;
+	Tue, 18 Jul 2023 22:56:30 +0000
+Date: Wed, 19 Jul 2023 06:55:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mingzhe Zou <mingzhe.zou@easystack.cn>, colyli@suse.de,
+	linux-bcache@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bcache@lists.ewheeler.net, zoumingzhe@qq.com
+Subject: Re: [PATCH 1/3] bcache: the gc_sectors_used size matches the bucket
+ size
+Message-ID: <202307190650.U1M6Vswr-lkp@intel.com>
+References: <20230717124143.171-1-mingzhe.zou@easystack.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230717-enable-kasan-lto1-v3-1-650e1efc19d1@gmail.com>
-In-Reply-To: <20230717-enable-kasan-lto1-v3-1-650e1efc19d1@gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 18 Jul 2023 15:44:49 -0700
-Message-ID: <CAKwvOd=6Pr2TP+xrqm9DkZGNjB7YPY+sB7gqgu=KZ96Dtq3KDA@mail.gmail.com>
-Subject: Re: [PATCH v3] arch: enable HAS_LTO_CLANG with KASAN and KCOV
-To: Jakob Koschel <jkl820.git@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230717124143.171-1-mingzhe.zou@easystack.cn>
 
-On Tue, Jul 18, 2023 at 3:29=E2=80=AFPM Jakob Koschel <jkl820.git@gmail.com=
-> wrote:
->
-> Both KASAN and KCOV had issues with LTO_CLANG if DEBUG_INFO is enabled.
-> With LTO inlinable function calls are required to have debug info if
-> they are inlined into a function that has debug info.
->
-> Starting with LLVM 17 this will be fixed ([1],[2]) and enabling LTO with
-> KASAN/KCOV and DEBUG_INFO doesn't cause linker errors anymore.
->
-> Link: https://github.com/llvm/llvm-project/commit/913f7e93dac67ecff47bade=
-862ba42f27cb68ca9
-> Link: https://github.com/llvm/llvm-project/commit/4a8b1249306ff11f229320a=
-bdeadf0c215a00400
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+Hi Mingzhe,
 
-Thanks!
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc2 next-20230718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-AKPM, do you mind please picking this up for us?
+url:    https://github.com/intel-lab-lkp/linux/commits/Mingzhe-Zou/bcache-Separate-bch_moving_gc-from-bch_btree_gc/20230718-195022
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230717124143.171-1-mingzhe.zou%40easystack.cn
+patch subject: [PATCH 1/3] bcache: the gc_sectors_used size matches the bucket size
+config: i386-randconfig-r024-20230718 (https://download.01.org/0day-ci/archive/20230719/202307190650.U1M6Vswr-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307190650.U1M6Vswr-lkp@intel.com/reproduce)
 
-> ---
-> Changes in v3:
-> - Fixed the comment linking to the Github issue
-> - Link to v2: https://lore.kernel.org/r/20230717-enable-kasan-lto1-v2-1-d=
-47bf182f5c6@gmail.com
->
-> Changes in v2:
-> - Added correct To:/Cc:
-> - Added comment about required LLVM 17 version dependency
-> - Link to v1: https://lore.kernel.org/r/20230717-enable-kasan-lto1-v1-1-4=
-71e706a5c4e@gmail.com
-> ---
->  arch/Kconfig | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index aff2746c8af2..847b52495656 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -745,7 +745,9 @@ config HAS_LTO_CLANG
->         depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
->         depends on ARCH_SUPPORTS_LTO_CLANG
->         depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT
-> -       depends on !KASAN || KASAN_HW_TAGS
-> +       # https://github.com/ClangBuiltLinux/linux/issues/1721
-> +       depends on (!KASAN || KASAN_HW_TAGS || CLANG_VERSION >=3D 170000)=
- || !DEBUG_INFO
-> +       depends on (!KCOV || CLANG_VERSION >=3D 170000) || !DEBUG_INFO
->         depends on !GCOV_KERNEL
->         help
->           The compiler and Kconfig options support building with Clang's
->
-> ---
-> base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
-> change-id: 20230717-enable-kasan-lto1-656754c76241
->
-> Best regards,
-> --
-> Jakob Koschel <jkl820.git@gmail.com>
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307190650.U1M6Vswr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/md/bcache/trace.c:9:
+   In file included from include/trace/events/bcache.h:505:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:419:
+>> include/trace/events/bcache.h:441:22: error: call to undeclared function 'GC_SECTORS_USED'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   __entry->sectors        = GC_SECTORS_USED(&ca->buckets[bucket]);
+                                             ^
+   In file included from drivers/md/bcache/trace.c:9:
+   In file included from include/trace/events/bcache.h:505:
+   In file included from include/trace/define_trace.h:103:
+   In file included from include/trace/perf.h:75:
+>> include/trace/events/bcache.h:441:22: error: call to undeclared function 'GC_SECTORS_USED'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   __entry->sectors        = GC_SECTORS_USED(&ca->buckets[bucket]);
+                                             ^
+   2 errors generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/GC_SECTORS_USED +441 include/trace/events/bcache.h
+
+cafe563591446c Kent Overstreet 2013-03-23  427  
+7159b1ad3dded9 Kent Overstreet 2014-02-12  428  TRACE_EVENT(bcache_invalidate,
+7159b1ad3dded9 Kent Overstreet 2014-02-12  429  	TP_PROTO(struct cache *ca, size_t bucket),
+7159b1ad3dded9 Kent Overstreet 2014-02-12  430  	TP_ARGS(ca, bucket),
+cafe563591446c Kent Overstreet 2013-03-23  431  
+cafe563591446c Kent Overstreet 2013-03-23  432  	TP_STRUCT__entry(
+7159b1ad3dded9 Kent Overstreet 2014-02-12  433  		__field(unsigned,	sectors			)
+7159b1ad3dded9 Kent Overstreet 2014-02-12  434  		__field(dev_t,		dev			)
+7159b1ad3dded9 Kent Overstreet 2014-02-12  435  		__field(__u64,		offset			)
+cafe563591446c Kent Overstreet 2013-03-23  436  	),
+cafe563591446c Kent Overstreet 2013-03-23  437  
+cafe563591446c Kent Overstreet 2013-03-23  438  	TP_fast_assign(
+7159b1ad3dded9 Kent Overstreet 2014-02-12  439  		__entry->dev		= ca->bdev->bd_dev;
+7159b1ad3dded9 Kent Overstreet 2014-02-12  440  		__entry->offset		= bucket << ca->set->bucket_bits;
+7159b1ad3dded9 Kent Overstreet 2014-02-12 @441  		__entry->sectors	= GC_SECTORS_USED(&ca->buckets[bucket]);
+cafe563591446c Kent Overstreet 2013-03-23  442  	),
+cafe563591446c Kent Overstreet 2013-03-23  443  
+7159b1ad3dded9 Kent Overstreet 2014-02-12  444  	TP_printk("invalidated %u sectors at %d,%d sector=%llu",
+7159b1ad3dded9 Kent Overstreet 2014-02-12  445  		  __entry->sectors, MAJOR(__entry->dev),
+7159b1ad3dded9 Kent Overstreet 2014-02-12  446  		  MINOR(__entry->dev), __entry->offset)
+7159b1ad3dded9 Kent Overstreet 2014-02-12  447  );
+7159b1ad3dded9 Kent Overstreet 2014-02-12  448  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
