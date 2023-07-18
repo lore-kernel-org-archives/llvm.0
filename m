@@ -1,102 +1,215 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017E15A9
-	for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 05:40:04 +0000 (UTC)
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so48660655e9.0
-        for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 22:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689658802; x=1692250802;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ya/1SVocqBXDn23113d+R4cUZi+/kBBEHle0gpe+T/o=;
-        b=yAiQg4/G4RZgC98nQfxJHmKg1a07ypHkoXSBOBhHi1hQ4suNxn7ew76iCJ45pHI1A7
-         w/+G2qEoTK7/GFWcwVSCi00Ns6k4G91AkX8NyBz0sElNy5kvRJ3Zy8PGGTBqAFrTNctm
-         V0w74PGnD5+NCu5Lx9mviu8j0u18uwOm0EJ6nBenp1W6UODxunP89A9MPnulhHAU34Jq
-         aay2smoz0ZSOgSCGP9/56o/qDvj3f/8U3cxzsG1NwQ/loDMc9pQXbT3qIlPPpSk7bJP8
-         kYY9L28x3s3tgAWhEaqmedGoiuZKrYgnCJYswjcXnCu6/Iz4n3OWFVUb3E0DVBZWcz6g
-         c7Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689658802; x=1692250802;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ya/1SVocqBXDn23113d+R4cUZi+/kBBEHle0gpe+T/o=;
-        b=Vktru6UNpT4anF/+5ag8EQVI8QDlwDLsyqkwlPnyIaPE8XLqTsin/X+kQatsjR2NMd
-         4cEbNrnwIXrbjj9wDHXXG3S5A6NtPByEmSxEaSmRsL7XRjc9l6jH0Crs3VT3YC5rtn2v
-         B8cI/VU0JqrpC/J6FAjZLeFgmX0vrzJVsTIl0LVXwQRqbrnfcFZnNN/FWGFfX2IXt4E1
-         06L1skvAl9ezcsM8qlGk2HJq3NWWLxz3kC+fzfyfshruq0M6KRA4BUj2O87pm8nMepkH
-         BIK5we59ZrG5wGBN8PNjT3YTb9/cw0++/ufPmPlnsTEyiJxlmBRXafxC57u78abuPWGo
-         mizA==
-X-Gm-Message-State: ABy/qLbSsPjxyqCwBhEUGwuyWBjYoMH58S+86pv3+lxGjZrrZNAoQKj3
-	e1+iTDuM2pBD7kjpbKrh0zPFEQ==
-X-Google-Smtp-Source: APBJJlFBbKZc1gO7M8n+dJxiTS+4YHzjapaWo98VW7MNkFMR1mz0AnzM9LtEYi+Sck8117UetH7LZw==
-X-Received: by 2002:a05:600c:a388:b0:3f8:f382:8e1f with SMTP id hn8-20020a05600ca38800b003f8f3828e1fmr1001451wmb.24.1689658802067;
-        Mon, 17 Jul 2023 22:40:02 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c234300b003fc0062f0f8sm1253235wmq.9.2023.07.17.22.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 22:39:59 -0700 (PDT)
-Date: Tue, 18 Jul 2023 08:39:56 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Su Hui <suhui@nfschina.com>, jani.nikula@linux.intel.com,
-	joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-	tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-	ville.syrjala@linux.intel.com, mripard@kernel.org,
-	ankit.k.nautiyal@intel.com, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/tv: avoid possible division by zero
-Message-ID: <d763816b-07c9-4346-8f7c-f95e86cba488@kadam.mountain>
-References: <20230717062209.124106-1-suhui@nfschina.com>
- <0cae35ea-7635-383d-cae5-2051abbc6d64@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7DC15A9;
+	Tue, 18 Jul 2023 06:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689660497; x=1721196497;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tyAPpcjqtrtYCeyYQ6r1WEacBk7luri7yztjPn5vve4=;
+  b=fnfwNMmjNYFXL2v1O8On3DSpL1XSm7XPK2QtZDi3GfgXwpknEh7bolA2
+   SN4ZiUfvTd3Jrj7KK+fAxJUULIQOFwX5HTHPalOh3JWc1YNMeef3OQ0lQ
+   YKE6sI76WlUs76nEkRBETKiHdnDEPoGVJsIi7FMMuAnBWCk4d+HrYwXkz
+   YUI7AH2BHVObMbTchciktWuusvMMeuSTuBm142pfxB/MZq6BSr0hDYaJ0
+   MZlve/CSGdj3/vShpwZoJcIp9D/izhWwsZeIiP2x3GIYbiGvuT8lIvq3e
+   hCPrXVCan3mv55HahrGRNz3a8zu4FxxgYIPWgxUnhBV4/82AghsbrTS6A
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="350987191"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="350987191"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 23:08:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="723470671"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="723470671"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 17 Jul 2023 23:08:15 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLdsc-0000Gz-1c;
+	Tue, 18 Jul 2023 06:08:14 +0000
+Date: Tue, 18 Jul 2023 14:07:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Okan Sahin <okan.sahin@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 2748/3113]
+ drivers/regulator/max77857-regulator.c:312:16: error: initializer element is
+ not a compile-time constant
+Message-ID: <202307181450.sfbuvMf5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0cae35ea-7635-383d-cae5-2051abbc6d64@intel.com>
 
-On Mon, Jul 17, 2023 at 04:52:51PM +0200, Andrzej Hajda wrote:
-> 
-> 
-> On 17.07.2023 08:22, Su Hui wrote:
-> > Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
-> > line 991, column 22 Division by zero.
-> > Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
-> > then division by zero will happen.
-> > 
-> > Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
-> > Signed-off-by: Su Hui <suhui@nfschina.com>
-> > ---
-> >   drivers/gpu/drm/i915/display/intel_tv.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
-> > index 36b479b46b60..82b54af51f23 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_tv.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_tv.c
-> > @@ -988,7 +988,8 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
-> >   		      const struct tv_mode *tv_mode,
-> >   		      int clock)
-> >   {
-> > -	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
-> > +	mode->clock = clock / (tv_mode->oversample != 1 ?
-> > +			tv_mode->oversample >> !tv_mode->progressive : 1);
-> 
-> Seems too smart to me, why not just:
-> mode->clock = clock / tv_mode->oversample;
-> if (!tv_mode->progressive)
->     mode->clock <<= 1;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   aeba456828b4e47d99ec8ffb01412fbed0f94806
+commit: af71cccadecedad3484c2208e2c4fc8eff927d4a [2748/3113] regulator: max77857: Add ADI MAX77857/59/MAX77831 Regulator Support
+config: riscv-randconfig-r016-20230718 (https://download.01.org/0day-ci/archive/20230718/202307181450.sfbuvMf5-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230718/202307181450.sfbuvMf5-lkp@intel.com/reproduce)
 
-This is nice.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307181450.sfbuvMf5-lkp@intel.com/
 
-regards,
-dan carpenter
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/regulator/max77857-regulator.c:56:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
+      56 |         enum max77857_id id = (enum max77857_id)dev_get_drvdata(dev);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/regulator/max77857-regulator.c:94:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
+      94 |         enum max77857_id id = (enum max77857_id)rdev_get_drvdata(rdev);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/regulator/max77857-regulator.c:128:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
+     128 |         enum max77857_id id = (enum max77857_id)rdev_get_drvdata(rdev);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/regulator/max77857-regulator.c:209:5: warning: no previous prototype for function 'max77859_get_voltage_sel' [-Wmissing-prototypes]
+     209 | int max77859_get_voltage_sel(struct regulator_dev *rdev)
+         |     ^
+   drivers/regulator/max77857-regulator.c:209:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     209 | int max77859_get_voltage_sel(struct regulator_dev *rdev)
+         | ^
+         | static 
+>> drivers/regulator/max77857-regulator.c:221:5: warning: no previous prototype for function 'max77859_set_current_limit' [-Wmissing-prototypes]
+     221 | int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
+         |     ^
+   drivers/regulator/max77857-regulator.c:221:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     221 | int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
+         | ^
+         | static 
+>> drivers/regulator/max77857-regulator.c:235:5: warning: no previous prototype for function 'max77859_get_current_limit' [-Wmissing-prototypes]
+     235 | int max77859_get_current_limit(struct regulator_dev *rdev)
+         |     ^
+   drivers/regulator/max77857-regulator.c:235:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     235 | int max77859_get_current_limit(struct regulator_dev *rdev)
+         | ^
+         | static 
+>> drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
+     312 |         .ramp_delay = max77857_ramp_table[0][0],
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
+
+
+vim +312 drivers/regulator/max77857-regulator.c
+
+   208	
+ > 209	int max77859_get_voltage_sel(struct regulator_dev *rdev)
+   210	{
+   211		__be16 reg;
+   212		int ret;
+   213	
+   214		ret = regmap_bulk_read(rdev->regmap, MAX77859_REG_CONT3, &reg, 2);
+   215		if (ret)
+   216			return ret;
+   217	
+   218		return FIELD_GET(MAX77859_VOLTAGE_SEL_MASK, __be16_to_cpu(reg));
+   219	}
+   220	
+ > 221	int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
+   222	{
+   223		u32 selector;
+   224	
+   225		if (max_uA < MAX77859_CURRENT_MIN)
+   226			return -EINVAL;
+   227	
+   228		selector = 0x12 + (max_uA - MAX77859_CURRENT_MIN) / MAX77859_CURRENT_STEP;
+   229	
+   230		selector = clamp_val(selector, 0x00, 0x7F);
+   231	
+   232		return regmap_write(rdev->regmap, MAX77859_REG_CONT5, selector);
+   233	}
+   234	
+ > 235	int max77859_get_current_limit(struct regulator_dev *rdev)
+   236	{
+   237		u32 selector;
+   238		int ret;
+   239	
+   240		ret = regmap_read(rdev->regmap, MAX77859_REG_CONT5, &selector);
+   241		if (ret)
+   242			return ret;
+   243	
+   244		if (selector <= 0x12)
+   245			return MAX77859_CURRENT_MIN;
+   246	
+   247		if (selector >= 0x64)
+   248			return MAX77859_CURRENT_MAX;
+   249	
+   250		return MAX77859_CURRENT_MIN + (selector - 0x12) * MAX77859_CURRENT_STEP;
+   251	}
+   252	
+   253	static const struct regulator_ops max77859_regulator_ops = {
+   254		.list_voltage = regulator_list_voltage_linear_range,
+   255		.set_voltage_sel = max77859_set_voltage_sel,
+   256		.get_voltage_sel = max77859_get_voltage_sel,
+   257		.set_ramp_delay = regulator_set_ramp_delay_regmap,
+   258		.get_status = max77857_get_status,
+   259		.set_mode = max77857_set_mode,
+   260		.get_mode = max77857_get_mode,
+   261		.get_error_flags = max77857_get_error_flags,
+   262	};
+   263	
+   264	static const struct regulator_ops max77859a_regulator_ops = {
+   265		.list_voltage = regulator_list_voltage_linear_range,
+   266		.set_voltage_sel = max77859_set_voltage_sel,
+   267		.get_voltage_sel = max77859_get_voltage_sel,
+   268		.set_current_limit = max77859_set_current_limit,
+   269		.get_current_limit = max77859_get_current_limit,
+   270		.set_ramp_delay = regulator_set_ramp_delay_regmap,
+   271		.get_status = max77857_get_status,
+   272		.set_mode = max77857_set_mode,
+   273		.get_mode = max77857_get_mode,
+   274		.get_error_flags = max77857_get_error_flags,
+   275	};
+   276	
+   277	static const struct regulator_ops max77857_regulator_ops = {
+   278		.list_voltage = regulator_list_voltage_linear_range,
+   279		.set_voltage_sel = regulator_set_voltage_sel_regmap,
+   280		.get_voltage_sel = regulator_get_voltage_sel_regmap,
+   281		.set_ramp_delay = regulator_set_ramp_delay_regmap,
+   282		.get_status = max77857_get_status,
+   283		.set_mode = max77857_set_mode,
+   284		.get_mode = max77857_get_mode,
+   285		.get_error_flags = max77857_get_error_flags,
+   286	};
+   287	
+   288	static struct linear_range max77857_lin_ranges[] = {
+   289		REGULATOR_LINEAR_RANGE(4485000, 0x3D, 0xCC, 73500)
+   290	};
+   291	
+   292	static const unsigned int max77857_switch_freq[] = {
+   293		1200000, 1500000, 1800000, 2100000
+   294	};
+   295	
+   296	static const unsigned int max77857_ramp_table[2][4] = {
+   297		{ 1333, 667, 333, 227 }, /* when switch freq is 1.8MHz or 2.1MHz */
+   298		{ 1166, 667, 333, 167 }, /* when switch freq is 1.2MHz or 1.5MHz */
+   299	};
+   300	
+   301	static struct regulator_desc max77857_regulator_desc = {
+   302		.ops = &max77857_regulator_ops,
+   303		.name = "max77857",
+   304		.linear_ranges = max77857_lin_ranges,
+   305		.n_linear_ranges = ARRAY_SIZE(max77857_lin_ranges),
+   306		.vsel_mask = 0xFF,
+   307		.vsel_reg = MAX77857_REG_CONT2,
+   308		.ramp_delay_table = max77857_ramp_table[0],
+   309		.n_ramp_values = ARRAY_SIZE(max77857_ramp_table[0]),
+   310		.ramp_reg = MAX77857_REG_CONT3,
+   311		.ramp_mask = GENMASK(1, 0),
+ > 312		.ramp_delay = max77857_ramp_table[0][0],
+   313		.owner = THIS_MODULE,
+   314	};
+   315	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
