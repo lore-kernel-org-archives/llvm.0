@@ -1,259 +1,222 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01273C8FA;
-	Tue, 18 Jul 2023 13:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95229C2D5;
+	Tue, 18 Jul 2023 14:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689687953; x=1721223953;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=8ZoeT+/X4QN31vJ/YQBx3PnErL1NLnTHKhlFU+8PGV4=;
-  b=Bcd7dKvR6KWI4Bt42COWDcQvViNAZJVLwNc5sE2sh5slrmezyd3/A/iq
-   Y5lD70CspCnRfv7b6P8M3WeYA6D2M2lPjjm7B7v9w/5tV66TJMhoJaot4
-   kbyT+cGo6hWCsBi9emQwGc9A4BIiaXV2hayn4yIkDAvibbKVpqYdBHL1j
-   vJ0PeQFxWx1IDNNCoMOk9Tcq/YJJ1nZNLDEpP9fQxHmfoipY7EcdiIdt2
-   uln3izMjenujyP9RM8yLpwNEj3u+bdRlBKbOeyXUUHDoWpmNPCOPjh3sF
-   AaNcoaiBV3S2dQVlCMwkPXA870oBxljBnOTMiza0A86opFX4NYnATi4Fz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345801673"
+  t=1689690388; x=1721226388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z8jTa5AftVwjf24Wnb/QfpwVzE14cz3NHaUKq4754Xs=;
+  b=Q03LgkLOYBygQsiaSo5OsUIXikh45oTDUQgm30GAkKipEvODG4guY0ka
+   KywBnhV5y+yMW8OzqfW6QnDYMlnLnggWuH6lNpRQ7uBiPMZlZhHelJ/DA
+   Z0ie19TiD94IZvh1w9a1iccbv5vAfNfaq2Z/dlwFWkAfm+MbC8yNb30dF
+   dFJkj4E9uB6DoByD/gKOEntA0NRVuSt4879pzFc6lYZlBqpkcb1dcknhE
+   IU+WDiVw0aqk+sAntxayZ6+lhvgLfn89k/EOKA0sV3KEYsJ2nkJ5sjPog
+   DWTGNqOIwCLOk+2F3cX8dTQr0WZaWuCveR+aLDaRkdyzbcwDUuRRHhhT2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="366262056"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="345801673"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 06:45:47 -0700
+   d="scan'208";a="366262056"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 07:26:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="847707313"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="726953591"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="847707313"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2023 06:45:46 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 18 Jul 2023 06:45:46 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 18 Jul 2023 06:45:45 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 18 Jul 2023 06:45:45 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 18 Jul 2023 06:45:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RfAouk1hXvzw/UJbn0AtkzLudH7YVt+xRByB2aW4bvNz2mgMGTu5mPwRPTzWh4M1kKIgnN8+NYSgW70k1+hHY64zjICnpiUnrWmljMrI20d3ZkGLvF/e/RCgbzgtCKjUbva4TV7ezzINTUYTq5mpdP9RN3TflnC1vh1wLU6QNXFLoaXfylbTUmSaiahp8nzbZ3LwySLgpGIr/CMkvdQHAKeou0cLIVEgGExqTIjSgMu1P+8vk+RXPjhPXMaOMhp/qBKsyOFbdmZIr4WwPNiG5m1ygM2SGYkf2bh5mpWm3hilI/EblkXa7lhXgQSE52hLyYEU2v7v4IXNysRMLbFeqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JjxXcI37+trlcgnb1jezPkBwcqK6zkpk7rkYtwDCiA4=;
- b=cKwDD1xn1WFfk4g05HtzORNdy/NXZqFYEbUfyotRcr3NM6m4fGlD4QeWDetisSXdCC01UkjsAyYQAwVvXWnseGgM7Mxg3VG80WGb97JOdF4xuQrUX4g9NCbfOWY8GbuwBIZDut+pFZzznuRtyIlmTONXkI57A/KohjXrXjdsRpPXru1C4TU092JaOAJ9IHxTcgRerfF05yfPIOkohJJIvbVK7bMx5F1kj9RX5WcEi2K3bxH3y9lAf04r2+He4h2HQlKufeIdv48WMy6gKAsoyLzYz15kDKr1VGfK2Atz+JRd8Txs0YsiJvTjQGIW5SDy2jXoU0/bYkzes3IUBaAa8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by PH8PR11MB6976.namprd11.prod.outlook.com (2603:10b6:510:223::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Tue, 18 Jul
- 2023 13:45:42 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::44ff:6a5:9aa4:124a]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::44ff:6a5:9aa4:124a%7]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 13:45:42 +0000
-Message-ID: <0bd7caa5-8f04-8787-1e72-93ecb71b8197@intel.com>
-Date: Tue, 18 Jul 2023 15:44:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] lib/bitmap: workaround const_eval test build failure
-Content-Language: en-US
-To: Yury Norov <yury.norov@gmail.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Alexander Lobakin
-	<alexandr.lobakin@intel.com>, Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Nathan Chancellor
-	<nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	<oe-kbuild-all@lists.linux.dev>, kernel test robot <lkp@intel.com>,
-	<llvm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20230717220435.57640-1-yury.norov@gmail.com>
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230717220435.57640-1-yury.norov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BE1P281CA0182.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:8d::15) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+   d="scan'208";a="726953591"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Jul 2023 07:26:24 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLlee-0000eB-1G;
+	Tue, 18 Jul 2023 14:26:23 +0000
+Date: Tue, 18 Jul 2023 22:25:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Steve French <stfrench@microsoft.com>, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <lsahlber@redhat.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] smb: client: Rework memcpy() to avoid compilation
+ error
+Message-ID: <202307182203.py4XAFoE-lkp@intel.com>
+References: <20230717100003.11824-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH8PR11MB6976:EE_
-X-MS-Office365-Filtering-Correlation-Id: acc4cae0-6387-4fc4-e14d-08db87954789
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O6dbzUJh/sLVEkmOV6crNlGMwFoX+GJLo3rCbOk9D3su5UtyWL5rCyCL0lUBnon/OGjr60hE5spIsGw8VSOrigFfssZjcDkP3G+1koQXUhrZCzlBj711PpbkDEIWm7SMyDR/NcGrZBlNDZQ1GpGeOrqjhdmPvbOiTxOIKDaEJueYbU3amZhx7FOc/nLoRaRcs+4/ORADKtYJstj7D2MX31VCZTGfeCJX6gMy/c/VhJk6cYu92CJKMkxZ8G1lHLRoYLq0aAYMF/f97Us75ZpSlImX7InJvU6aYxLxGzK2kzqqB0eXh9nHuciohWV6jbjDLQ8rZbV0gfkRvuLwYU7Yge7njtx+Fq9c1h6ZFsF0XW6hNHV88QzdeK5KBCSSjtqIBQ3737Hai5RRbtWSr0t+FoH1uWc36N8V6IM6WkY6yB5x24Pk08qDhotdp4qFPBdLWNVGVxYavT4OavcORCXcCjtsgcCQFeS3qB5HE+UefUkoJlJ8vbInkoQhacvohg/2De3+qyHa86S2JCQsW6mdJfFXI7mJLp6/VtfqfqR1sQawzJXdCyHH5QoDXjreuOhn7P1q+gM0az8BE5fwzcT7DUBuT6viPannXNfhw+1iDyw4bBJ3EK12XRbG4s84GQN8mIdoE9933+xHHP3ZTQ1SPjvIzgkNCA0K9Vlt7Le4HmfpDd7RuvrRRMOXNmvKrtkH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199021)(966005)(41300700001)(316002)(83380400001)(186003)(31686004)(6512007)(2616005)(26005)(6506007)(6486002)(478600001)(82960400001)(54906003)(6666004)(66946007)(6916009)(4326008)(38100700002)(66556008)(66476007)(7416002)(86362001)(31696002)(5660300002)(8676002)(36756003)(8936002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eG9GSUJ3VWNBR2F4NllnWFpwSFpLUWR2c3hJNkY5U1RaT3pMc3hwZ3hjRlJ4?=
- =?utf-8?B?alhWd29sR2toaTk1aHZzNlJsK0VEZS95QjU5aGtnS1VORTJSS2JZSGpYVVFR?=
- =?utf-8?B?dEVRbjdVYjg0Z3hENXB2OTNBUVprUHY5SmtURDQvQjZLNHNFblNQZTNtdHpm?=
- =?utf-8?B?Qk5kTXZyazk3RmcwNjE5U2NlaitTNGNjaWNodWxCcDBUL29LMHJsWVpkMnJV?=
- =?utf-8?B?em44cU1YclBxZTVhNXBJbXlqbTlKTE9VTVZlNEdmUVJhVkpQa1ZwWUxrVzZ3?=
- =?utf-8?B?S0dzdGd6L3RXTkVrbDVCQ3FhZG56ajlwaEpPQWtaZ0hpVlBjY3BMTFlaTGFq?=
- =?utf-8?B?dEVvalZYSzZFRFdGVmNNNmVCbVA2UXlWV08vWDVlMWhheVBUQkdYVU9tclVn?=
- =?utf-8?B?cnlhOEV0RlRLNG1lV1ArbHdNL1B5bkREZXRWSlRnQ0xaR2oyZEJFOTRIZU1K?=
- =?utf-8?B?S2JiY2E2WGUvVHF1K0RUc2NzcXZ5SE5paksvMjlpRmRtWkZxMk00TFZwZFBj?=
- =?utf-8?B?YWFlNE5IanBLY0N3Qnp1cmhlcHl3MWRLZkJNTUlRdTMvdzdiVWtRLytEWFNZ?=
- =?utf-8?B?bm45Z0lFY1N4ejROZUhCQmUwV0NBRUlqUG03SnltWXI4Qk51SWFwelp2c3Rn?=
- =?utf-8?B?RkhucU9SRlZKQmd1ZHczUE9NRmp2ZkhHcmxXamJiWU9nNC9JQVNPUzZiSDNJ?=
- =?utf-8?B?QTduaXcyYklWYlZhN1VyK09kcGdwVFpWalJ5SFRYMlFrZlhiOUJSN09YQjlR?=
- =?utf-8?B?ZEZtQ2w3eEdONGw1T1R1L21QeGgxS0ZLOWpnM0FlM3VSNXlUclZtMnhid3Vy?=
- =?utf-8?B?WU05TTZYdXFTcDNrNWF0Tkp0dG0wOEhZaldXeGZBTC9EcVMvYjVZcktqWlhK?=
- =?utf-8?B?MHRBUExwa0tmVHhMdkptSU9VQW9XQ2tPMndRQ2ZDcWh1UTVscjBnTkdqZG9m?=
- =?utf-8?B?Y2RYc01lUUp5ZU1RYStVdUovVnh0KzlmQTNxbFhpbFFZNzFCWFlqMUVBN0Nw?=
- =?utf-8?B?VGJSWXltTlhuTittZW1OMkw2VnVmaG90Mnc4UU1ITjFpWHFsWVJhdGI0Q3Zl?=
- =?utf-8?B?L1lnaGRXNTVJZlFveG5rNWJaQmNOUFFpMDVFenVkS2pVUFdWZWFXNk5wN0Fk?=
- =?utf-8?B?Tis4eGJZSHV1Y1ZRSytOUFFKTnFaSEtTTTNTenFGVjREWUxWelFZb0U5dGoz?=
- =?utf-8?B?a3NZRzRwcjdEdERnUkxzZnNpUkkwa3JUbGVwaHR6dXZjd3VqR3hlc2drV0dN?=
- =?utf-8?B?Vy9MUUtVT0wxTS9UMW1FMG54NWxKaDZCUnNiZ0pCMTU3MEpocHdrZVpFTHRD?=
- =?utf-8?B?eWI2bUpBVzlXaXlZcGJPRWxyUVEvWklrcDdaclV6TFcrZDVPWTlLMWdta1VP?=
- =?utf-8?B?cXY0SkhKZ0o2WFRsRFo1STYwQjFNa2E5TFlLTEl3R0llS0FwcCtzQ1Avd1Nv?=
- =?utf-8?B?ZUowa0RFZ0psK3ExNWpNejkxOEMxa2dHaGZhekpNVHMwWDcvbEI1S0IzRlow?=
- =?utf-8?B?TEZ2RWp5SE9UY083aU5WaHY5UVNLRzFkWFdQN3RNMmswaWhtSXQyd3hPZkp3?=
- =?utf-8?B?eThhQ0VZK051TUp1cHE1aGpWeUE3dG1pM01QQ2RuR0lkYi9KZkYxTHNqWVFF?=
- =?utf-8?B?OUhpR0NFNTBLRzF6NVk2bzRUdy80K0duRW1wUWZmR1A4V1FTcEJaZXVoalNO?=
- =?utf-8?B?RHhBd3ozay95YjRvQTFaVDEzV1hFOWJSd1JyYkFJeE1CYmVTUkl6T3o3U1BV?=
- =?utf-8?B?NDU1NGc0TlNSWmRnTzgrNDFVVjZGa0NkSVFUSW1FY2tvd0lqSGtTNEVHMEFs?=
- =?utf-8?B?T09yTVVrKzU2Z284ZzdBS2xHcmVzVXNqWUNzdVA1eXVoUXcyV24xWExGNXBQ?=
- =?utf-8?B?Q2lSY3hhTUYzK2xkaVp0djg2UzdTbUw5S3V2TlYyQm1lSW1pVWtiMkY3bHNS?=
- =?utf-8?B?dDRsb0xRR1R6MlVnVEV4MWxNMm50a3FQbkhUSXp6UjB4dzNCQjZnc2ZMNzJW?=
- =?utf-8?B?aFcrcHppbDlBNzloSUNBWkZzR09XNk1CYzZUci9yUE1zejFUaXR1aXoxVnZO?=
- =?utf-8?B?d0VrZDhxY0VsbXdpS2FHVkRWdHR0ZTZvK2xFWFNqTGQwR00xQXhmeXNyZ29E?=
- =?utf-8?B?aVFBZUY3cnZzTUF0amd3V0lPcWhXbWNxQjhRaWtteDFkelpYTXVoU2NjN01x?=
- =?utf-8?B?c1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: acc4cae0-6387-4fc4-e14d-08db87954789
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 13:45:42.5547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XCYkiA83T3rpukOF0LWcUGHg1zRwv92y5KVaSjumE/AHjBnAPU9CL/KygVT+ywryOU539tItYgjnA2nm5P2oVE3Buhky7Gu3Qt/unqTnWJQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6976
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230717100003.11824-1-andriy.shevchenko@linux.intel.com>
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Mon, 17 Jul 2023 15:04:35 -0700
+Hi Andy,
 
-> When building with Clang, and when KASAN and GCOV_PROFILE_ALL are both
-> enabled, the test fails to build [1]:
-> 
->>> lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
->            BUILD_BUG_ON(!__builtin_constant_p(res));
->            ^
->    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
->            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
->            ^
->    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ^
->    include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ^
->    include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ^
->    include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
->                            prefix ## suffix();                             \
->                            ^
->    <scratch space>:185:1: note: expanded from here
->    __compiletime_assert_239
-> 
-> Originally it was attributed to s390, which now looks seemingly wrong. The
-> issue is not related to bitmap code itself, but it breaks build for a given
-> configuration.
-> 
-> Disabling the const_eval test under that config may potentially hide other
-> bugs. Instead, workaround it by disabling GCOV for the test_bitmap unless
-> the compiler will get fixed.
-> 
-> [1] https://github.com/ClangBuiltLinux/linux/issues/1874
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202307171254.yFcH97ej-lkp@intel.com/
-> Fixes: dc34d5036692 ("lib: test_bitmap: add compile-time optimization/evaluations assertions")
-> Co-developed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  lib/Makefile      | 6 ++++++
->  lib/test_bitmap.c | 8 ++++----
->  2 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 42d307ade225..1ffae65bb7ee 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -82,7 +82,13 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
->  obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
->  obj-$(CONFIG_TEST_PRINTF) += test_printf.o
->  obj-$(CONFIG_TEST_SCANF) += test_scanf.o
-> +
->  obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
-> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
-> +# FIXME: Clang breaks test_bitmap_const_eval when KASAN and GCOV are enabled
-> +GCOV_PROFILE_test_bitmap.o := n
-> +endif
+kernel test robot noticed the following build errors:
 
-Oh, quite elegant!
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on linus/master v6.5-rc2 next-20230718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +
->  obj-$(CONFIG_TEST_UUID) += test_uuid.o
->  obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
->  obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
-> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-> index 187f5b2db4cf..4a678de9c350 100644
-> --- a/lib/test_bitmap.c
-> +++ b/lib/test_bitmap.c
-> @@ -1161,6 +1161,10 @@ static void __init test_bitmap_print_buf(void)
->  	}
->  }
->  
-> +/*
-> + * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
-> + * To workaround it, GCOV is force-disabled in Makefile for this configuration.
-> + */
->  static void __init test_bitmap_const_eval(void)
->  {
->  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-> @@ -1186,11 +1190,7 @@ static void __init test_bitmap_const_eval(void)
->  	 * the compiler is fixed.
->  	 */
->  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> -#if defined(__s390__) && defined(__clang__)
-> -	if (!const_test_bit(7, bitmap))
-> -#else
->  	if (!test_bit(7, bitmap))
-> -#endif
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/smb-client-Rework-memcpy-to-avoid-compilation-error/20230718-195935
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+patch link:    https://lore.kernel.org/r/20230717100003.11824-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] smb: client: Rework memcpy() to avoid compilation error
+config: i386-randconfig-r013-20230718 (https://download.01.org/0day-ci/archive/20230718/202307182203.py4XAFoE-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230718/202307182203.py4XAFoE-lkp@intel.com/reproduce)
 
-...and even allows to remove that ugly piece.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307182203.py4XAFoE-lkp@intel.com/
 
->  		bitmap_set(bitmap, 5, 2);
->  
->  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+All errors (new ones prefixed by >>):
 
-I like this version the most.
+>> fs/smb/client/cifssmb.c:1252:8: error: no member named 'FileAttributes' in 'FILE_ALL_INFO'; did you mean 'Attributes'?
+                   buf->FileAttributes = rsp->FileAttributes;
+                        ^~~~~~~~~~~~~~
+                        Attributes
+   fs/smb/client/cifspdu.h:2271:9: note: 'Attributes' declared here
+           __le32 Attributes;
+                  ^
+   1 error generated.
 
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-Thanks,
-Olek
+vim +1252 fs/smb/client/cifssmb.c
+
+  1140	
+  1141	int
+  1142	CIFS_open(const unsigned int xid, struct cifs_open_parms *oparms, int *oplock,
+  1143		  FILE_ALL_INFO *buf)
+  1144	{
+  1145		int rc;
+  1146		OPEN_REQ *req = NULL;
+  1147		OPEN_RSP *rsp = NULL;
+  1148		int bytes_returned;
+  1149		int name_len;
+  1150		__u16 count;
+  1151		struct cifs_sb_info *cifs_sb = oparms->cifs_sb;
+  1152		struct cifs_tcon *tcon = oparms->tcon;
+  1153		int remap = cifs_remap(cifs_sb);
+  1154		const struct nls_table *nls = cifs_sb->local_nls;
+  1155		int create_options = oparms->create_options;
+  1156		int desired_access = oparms->desired_access;
+  1157		int disposition = oparms->disposition;
+  1158		const char *path = oparms->path;
+  1159	
+  1160	openRetry:
+  1161		rc = smb_init(SMB_COM_NT_CREATE_ANDX, 24, tcon, (void **)&req,
+  1162			      (void **)&rsp);
+  1163		if (rc)
+  1164			return rc;
+  1165	
+  1166		/* no commands go after this */
+  1167		req->AndXCommand = 0xFF;
+  1168	
+  1169		if (req->hdr.Flags2 & SMBFLG2_UNICODE) {
+  1170			/* account for one byte pad to word boundary */
+  1171			count = 1;
+  1172			name_len = cifsConvertToUTF16((__le16 *)(req->fileName + 1),
+  1173						      path, PATH_MAX, nls, remap);
+  1174			/* trailing null */
+  1175			name_len++;
+  1176			name_len *= 2;
+  1177			req->NameLength = cpu_to_le16(name_len);
+  1178		} else {
+  1179			/* BB improve check for buffer overruns BB */
+  1180			/* no pad */
+  1181			count = 0;
+  1182			name_len = copy_path_name(req->fileName, path);
+  1183			req->NameLength = cpu_to_le16(name_len);
+  1184		}
+  1185	
+  1186		if (*oplock & REQ_OPLOCK)
+  1187			req->OpenFlags = cpu_to_le32(REQ_OPLOCK);
+  1188		else if (*oplock & REQ_BATCHOPLOCK)
+  1189			req->OpenFlags = cpu_to_le32(REQ_BATCHOPLOCK);
+  1190	
+  1191		req->DesiredAccess = cpu_to_le32(desired_access);
+  1192		req->AllocationSize = 0;
+  1193	
+  1194		/*
+  1195		 * Set file as system file if special file such as fifo and server
+  1196		 * expecting SFU style and no Unix extensions.
+  1197		 */
+  1198		if (create_options & CREATE_OPTION_SPECIAL)
+  1199			req->FileAttributes = cpu_to_le32(ATTR_SYSTEM);
+  1200		else
+  1201			req->FileAttributes = cpu_to_le32(ATTR_NORMAL);
+  1202	
+  1203		/*
+  1204		 * XP does not handle ATTR_POSIX_SEMANTICS but it helps speed up case
+  1205		 * sensitive checks for other servers such as Samba.
+  1206		 */
+  1207		if (tcon->ses->capabilities & CAP_UNIX)
+  1208			req->FileAttributes |= cpu_to_le32(ATTR_POSIX_SEMANTICS);
+  1209	
+  1210		if (create_options & CREATE_OPTION_READONLY)
+  1211			req->FileAttributes |= cpu_to_le32(ATTR_READONLY);
+  1212	
+  1213		req->ShareAccess = cpu_to_le32(FILE_SHARE_ALL);
+  1214		req->CreateDisposition = cpu_to_le32(disposition);
+  1215		req->CreateOptions = cpu_to_le32(create_options & CREATE_OPTIONS_MASK);
+  1216	
+  1217		/* BB Expirement with various impersonation levels and verify */
+  1218		req->ImpersonationLevel = cpu_to_le32(SECURITY_IMPERSONATION);
+  1219		req->SecurityFlags = SECURITY_CONTEXT_TRACKING|SECURITY_EFFECTIVE_ONLY;
+  1220	
+  1221		count += name_len;
+  1222		inc_rfc1001_len(req, count);
+  1223	
+  1224		req->ByteCount = cpu_to_le16(count);
+  1225		rc = SendReceive(xid, tcon->ses, (struct smb_hdr *)req,
+  1226				 (struct smb_hdr *)rsp, &bytes_returned, 0);
+  1227		cifs_stats_inc(&tcon->stats.cifs_stats.num_opens);
+  1228		if (rc) {
+  1229			cifs_dbg(FYI, "Error in Open = %d\n", rc);
+  1230			cifs_buf_release(req);
+  1231			if (rc == -EAGAIN)
+  1232				goto openRetry;
+  1233			return rc;
+  1234		}
+  1235	
+  1236		/* 1 byte no need to le_to_cpu */
+  1237		*oplock = rsp->OplockLevel;
+  1238		/* cifs fid stays in le */
+  1239		oparms->fid->netfid = rsp->Fid;
+  1240		oparms->fid->access = desired_access;
+  1241	
+  1242		/* Let caller know file was created so we can set the mode. */
+  1243		/* Do we care about the CreateAction in any other cases? */
+  1244		if (cpu_to_le32(FILE_CREATE) == rsp->CreateAction)
+  1245			*oplock |= CIFS_CREATE_ACTION;
+  1246	
+  1247		if (buf) {
+  1248			buf->CreationTime = rsp->CreationTime;
+  1249			buf->LastAccessTime = rsp->LastAccessTime;
+  1250			buf->LastWriteTime = rsp->LastWriteTime;
+  1251			buf->ChangeTime = rsp->ChangeTime;
+> 1252			buf->FileAttributes = rsp->FileAttributes;
+  1253			/* the file_info buf is endian converted by caller */
+  1254			buf->AllocationSize = rsp->AllocationSize;
+  1255			buf->EndOfFile = rsp->EndOfFile;
+  1256			buf->NumberOfLinks = cpu_to_le32(1);
+  1257			buf->DeletePending = 0;
+  1258		}
+  1259	
+  1260		cifs_buf_release(req);
+  1261		return rc;
+  1262	}
+  1263	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
