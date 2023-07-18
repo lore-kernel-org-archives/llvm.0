@@ -1,42 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5B417AAD;
-	Tue, 18 Jul 2023 23:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A90917AAD;
+	Tue, 18 Jul 2023 23:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689722869; x=1721258869;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bt4A1sXUMSnOXpxuBtknmnEHvOyHwq7p1AILGWEl5AU=;
-  b=lg8llFjfH7v3tP+90q9O4u1bcuST1TCsfHuBdm9lTwVuITS1KR7MjQJJ
-   hxoyRH1QGX/t4UJ5Ihw2DSwIbEHf6nMR3daFzQp0Qaaz1s2klYPq8sJQh
-   mHsFLThVd6f5SUKISP9lGI+8z0KSLwSnO4aWM2IKB7a8GmjPEWiMvPG4Q
-   5nqH8wyMtD9+fD1YZt1qHcBgg99JZfj3L2CGGr/C0Fpo8AdE0XhEHCdWr
-   4WrxBoMDpOOTVKHqV3no05tgYayJtpaVDpT4HBE2wG/Ugbes4+AN4IdGN
-   bugVONkNdXo3dTUkYeukkKpXV5UQ3TqxhnvcHkCXm/mODv5YbZsF1vDmA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="356281634"
+  t=1689723471; x=1721259471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gfD9LnJlqlDtlL18yGiNMFIUXGZhYQhj+ptfPiLVvKo=;
+  b=NdoTiCM8okG/dPI+sGQs8EA2TIkqK8OZFN8G3YUZOGWQE5Za9dgKviej
+   AjWSldrOQdgIth53b3Lxh9sjJPao+9L5mSQp8EzLZvfXYPhWMVn5DX4Hv
+   LTamgR+aj8tIZI/xtVshfPwU1gKhrvUlVhfBLBOSb4NUKLqYUtwsBOlXt
+   HtYWgRkTKfACWakkGArElaGlcU3KIc2fpDK3IoF5krefGruQM2XItVJpz
+   yxt5BVz8dkGozoVQYDUgBbyC9En5oOWEXURuFr8Fbpe4JYC4TMRpHQZ8q
+   mhloyfQK+RyG3IbqxmZJDg9X3wBcBSjnB2ZkfuA0zFH4Q2MWcplu4oCtD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="368980942"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="356281634"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 16:27:49 -0700
+   d="scan'208";a="368980942"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 16:37:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="897717333"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="897717333"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="867262720"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Jul 2023 16:27:48 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 18 Jul 2023 16:37:49 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qLu6d-0003x7-1i;
-	Tue, 18 Jul 2023 23:27:47 +0000
-Date: Wed, 19 Jul 2023 07:26:46 +0800
+	id 1qLuGJ-0003xR-2I;
+	Tue, 18 Jul 2023 23:37:47 +0000
+Date: Wed, 19 Jul 2023 07:36:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/010-soc 7/12] drivers/soc/apple/rtkit.c:639:25:
- error: no member named 'mbox_chan' in 'struct apple_rtkit'
-Message-ID: <202307190748.NieHgp8R-lkp@intel.com>
+To: Mingzhe Zou <mingzhe.zou@easystack.cn>, colyli@suse.de,
+	linux-bcache@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bcache@lists.ewheeler.net, zoumingzhe@qq.com
+Subject: Re: [PATCH 2/3] bcache: Separate bch_moving_gc() from bch_btree_gc()
+Message-ID: <202307190705.ByiMYJwf-lkp@intel.com>
+References: <20230717124143.171-2-mingzhe.zou@easystack.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,68 +47,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230717124143.171-2-mingzhe.zou@easystack.cn>
 
-tree:   https://github.com/AsahiLinux/linux bits/010-soc
-head:   4e398443bc8954189feef7690a142d4cdfa2ec8c
-commit: 33e58c87bbd34917ba153a3f8357f19cf4c15d08 [7/12] mailbox: apple: Delete driver
-config: arm64-randconfig-r026-20230718 (https://download.01.org/0day-ci/archive/20230719/202307190748.NieHgp8R-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307190748.NieHgp8R-lkp@intel.com/reproduce)
+Hi Mingzhe,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc2 next-20230718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mingzhe-Zou/bcache-Separate-bch_moving_gc-from-bch_btree_gc/20230718-195022
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230717124143.171-2-mingzhe.zou%40easystack.cn
+patch subject: [PATCH 2/3] bcache: Separate bch_moving_gc() from bch_btree_gc()
+config: i386-randconfig-r024-20230718 (https://download.01.org/0day-ci/archive/20230719/202307190705.ByiMYJwf-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307190705.ByiMYJwf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307190748.NieHgp8R-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307190705.ByiMYJwf-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/apple/rtkit.c:639:25: error: no member named 'mbox_chan' in 'struct apple_rtkit'
-     639 |                 ret = mbox_flush(rtk->mbox_chan, timeout);
-         |                                  ~~~  ^
+>> drivers/md/bcache/movinggc.c:236:6: error: no member named 'sb' in 'struct cache_set'
+                   c->sb.set_uuid, sectors_to_move, ca->heap.used);
+                   ~  ^
+   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                           ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
    1 error generated.
 
 
-vim +639 drivers/soc/apple/rtkit.c
+vim +236 drivers/md/bcache/movinggc.c
 
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  626  
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  627  int apple_rtkit_send_message_wait(struct apple_rtkit *rtk, u8 ep, u64 message,
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  628  				  unsigned long timeout, bool atomic)
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  629  {
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  630  	DECLARE_COMPLETION_ONSTACK(completion);
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  631  	int ret;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  632  	long t;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  633  
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  634  	ret = apple_rtkit_send_message(rtk, ep, message, &completion, atomic);
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  635  	if (ret < 0)
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  636  		return ret;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  637  
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  638  	if (atomic) {
-9bd1d9a0d8bb1a Sven Peter 2022-05-01 @639  		ret = mbox_flush(rtk->mbox_chan, timeout);
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  640  		if (ret < 0)
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  641  			return ret;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  642  
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  643  		if (try_wait_for_completion(&completion))
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  644  			return 0;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  645  
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  646  		return -ETIME;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  647  	} else {
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  648  		t = wait_for_completion_interruptible_timeout(
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  649  			&completion, msecs_to_jiffies(timeout));
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  650  		if (t < 0)
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  651  			return t;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  652  		else if (t == 0)
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  653  			return -ETIME;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  654  		return 0;
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  655  	}
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  656  }
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  657  EXPORT_SYMBOL_GPL(apple_rtkit_send_message_wait);
-9bd1d9a0d8bb1a Sven Peter 2022-05-01  658  
-
-:::::: The code at line 639 was first introduced by commit
-:::::: 9bd1d9a0d8bb1a549831fd98fcc3105960f7068b soc: apple: Add RTKit IPC library
-
-:::::: TO: Sven Peter <sven@svenpeter.dev>
-:::::: CC: Sven Peter <sven@svenpeter.dev>
+   196	
+   197	void bch_moving_gc(struct cache_set *c)
+   198	{
+   199		struct cache *ca = c->cache;
+   200		struct bucket *b;
+   201		unsigned long sectors_to_move, reserve_sectors;
+   202	
+   203		c->cache->only_moving_gc = 0;
+   204	
+   205		if (!c->copy_gc_enabled)
+   206			return;
+   207	
+   208		mutex_lock(&c->bucket_lock);
+   209	
+   210		sectors_to_move = 0;
+   211		reserve_sectors = ca->sb.bucket_size *
+   212				     fifo_used(&ca->free[RESERVE_MOVINGGC]);
+   213	
+   214		ca->heap.used = 0;
+   215	
+   216		for_each_bucket(b, ca) {
+   217			if (GC_MOVE(b) || GC_MARK(b) == GC_MARK_METADATA ||
+   218			    !b->gc_sectors_used ||
+   219			    b->gc_sectors_used == ca->sb.bucket_size ||
+   220			    atomic_read(&b->pin))
+   221				continue;
+   222	
+   223			if (!heap_full(&ca->heap)) {
+   224				sectors_to_move += b->gc_sectors_used;
+   225				heap_add(&ca->heap, b, bucket_cmp);
+   226			} else if (bucket_cmp(b, heap_peek(&ca->heap))) {
+   227				sectors_to_move -= bucket_heap_top(ca);
+   228				sectors_to_move += b->gc_sectors_used;
+   229	
+   230				ca->heap.data[0] = b;
+   231				heap_sift(&ca->heap, 0, bucket_cmp);
+   232			}
+   233		}
+   234	 
+   235		pr_info("moving gc: on set %pU, %lu sectors from %zu buckets",
+ > 236			c->sb.set_uuid, sectors_to_move, ca->heap.used);
+   237	
+   238		while (sectors_to_move > reserve_sectors) {
+   239			heap_pop(&ca->heap, b, bucket_cmp);
+   240			sectors_to_move -= b->gc_sectors_used;
+   241		}
+   242	
+   243		while (heap_pop(&ca->heap, b, bucket_cmp))
+   244			SET_GC_MOVE(b, 1);
+   245	
+   246		mutex_unlock(&c->bucket_lock);
+   247	
+   248		c->moving_gc_keys.last_scanned = ZERO_KEY;
+   249	
+   250		read_moving(c);
+   251	}
+   252	
 
 -- 
 0-DAY CI Kernel Test Service
