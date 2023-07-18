@@ -1,658 +1,1075 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DBC19C;
-	Tue, 18 Jul 2023 00:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689639483; x=1721175483;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ktqirxn6rc74+fO3biCfQ7w0Np88xUdfhOhjPE6bcvo=;
-  b=no16W+wuZJ8s+FErFHWDKHWel3bGOna5ech4ybDmghRcf62Wv3SRIMqn
-   lwzBuukv47lfOaEoFrWaM5rkHLd2FotEsJbwT6FdANYxgMucn+/1CCv4d
-   9U0K2+lThlf0ENBYOXfOfUVCZ0qh2n11rm2yjM80NvYpo4ET2b/D7Fmge
-   e5uA73QbXt9anQq28EpbGqtRzHd88ZtnRW6l+8rIdJQVLZKMxf7uwGf91
-   bl1gyaDYXtU1Mx3FDVPeTSVYEIm8zVDdkC/Wyd3eUgy4/tQDHR+I8bTxJ
-   eKkjhb1um9Jb1mUMpi19uLBScishBdSsNvcGi4M4RpcOp2a3qbg/ysiy2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="363534981"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="363534981"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 17:17:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726734067"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="726734067"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Jul 2023 17:17:13 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qLYOu-000A0q-2t;
-	Tue, 18 Jul 2023 00:17:12 +0000
-Date: Tue, 18 Jul 2023 08:17:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-nonmm-unstable 35/36]
- arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier
- '___res'
-Message-ID: <202307180822.ixtEtD76-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FFE19C
+	for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 00:29:01 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1b8bbcfd89aso28940785ad.1
+        for <llvm@lists.linux.dev>; Mon, 17 Jul 2023 17:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689640140; x=1692232140;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OZmmQ7l2UEpeoEhlsQzxTBhIUqtuUGEIy1VvzKe0Hzk=;
+        b=esIu3jSNmN7Ger4nzfWBMJ2ns/CRfKYvqa2ed1CUCTpNlH4FsuSycUtOgcn0D0HpDF
+         vpy5qnToMHsGpq6Vtjg4LApJWoH+DkBMTIJBQM6SfUzmwi8COU7qm5Am6p7mN2FgfYNs
+         5YGpYPg54NtKlie899vtBaXXuFxB7drAp7oT9/yY0D0bH9uZ3EIRiePOX+ElVrGOhuGJ
+         tfBR6iT0gPSRfa2xrefllbbtn9r7/USvqbMc7FzajixuPGWl7+qKtBazvdwgfawAb2eQ
+         rY4t+1hhpuL7LReLWuUZAd67zy8PlebdQwWbwuCZGa+UdLDM5Mwi4dzYOPhv152afOAp
+         3m2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689640140; x=1692232140;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OZmmQ7l2UEpeoEhlsQzxTBhIUqtuUGEIy1VvzKe0Hzk=;
+        b=Y2tbsveVhIXtg+YOMe13/tGTkXK0PHIFZf9r3aYKCnqeMdkbY+DdqueArzGA/PCTGe
+         cxbuHWtZZ0vs0sG0uwzhYKTeuzbynFRkiJAloQckG0fZM9mN6Tfv1VYVQpNjKYFwQ2V5
+         0qEkGdH6cTvlMg+0RAdmSUaxqEunaHfspURPaGzxeKHP7F4iCE8reUmw1VtGBnaDltEC
+         AXepaHn4R+uqj9yTaGarSUMNIcPw6hjQLsYTTEeAsrw7fneMQtsPTt62fnHecaUktpUM
+         Fuvqk1queQFkmKVuuF/LnXyuDYXmu7/2E9RoFmEfqhqu+aSANOThAcO9/0FIh7bULmXa
+         hsNw==
+X-Gm-Message-State: ABy/qLZc2O6ZO61DnQTGpfXFVltPauO9AfpP9Ja9V9HypmWUgbZOjWLX
+	D2RCfsDqwREL/w8AbMGC3YxP9TAIsFb1QBhoMGfx/Q==
+X-Google-Smtp-Source: APBJJlEgG6vP9qoUghHI6WoC0tWsFKqai4JsqwmBCXvymYfjZ33QuJxOh3cipl7H1c7d4JxrEwCRBw==
+X-Received: by 2002:a17:902:f688:b0:1b8:987f:3eaa with SMTP id l8-20020a170902f68800b001b8987f3eaamr13591598plg.58.1689640139312;
+        Mon, 17 Jul 2023 17:28:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id a16-20020a1709027d9000b001b8c3c7b102sm452715plm.127.2023.07.17.17.28.58
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 17:28:58 -0700 (PDT)
+Message-ID: <64b5dcca.170a0220.b5332.1d45@mx.google.com>
+Date: Mon, 17 Jul 2023 17:28:58 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20230717
+X-Kernelci-Report-Type: build
+Subject: next/master build: 181 builds: 3 failed, 178 passed, 3 errors,
+ 13 warnings (next-20230717)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   643039cbab79355ceb1ce9a91e2a7483a44bec05
-commit: fceebffabbb6a664115469aac95d243048b09d22 [35/36] arm64: smccc: replace custom COUNT_ARGS() & CONCATENATE() implementations
-config: arm64-randconfig-r036-20230717 (https://download.01.org/0day-ci/archive/20230718/202307180822.ixtEtD76-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230718/202307180822.ixtEtD76-lkp@intel.com/reproduce)
+next/master build: 181 builds: 3 failed, 178 passed, 3 errors, 13 warnings =
+(next-20230717)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307180822.ixtEtD76-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230717/
 
-All errors (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230717
+Git Commit: 2205be537aeb1ca2ace998e2fefaa2be04e393e4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '__declare_arg_2'
-     102 |         arm_smccc_1_1_invoke(ARM_SMCCC_HV_PV_TIME_ST, &res);
-         |         ^
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:146:1: note: expanded from here
-     146 | __declare_arg_2
-         | ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '__declare_arg_2'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:154:1: note: expanded from here
-     154 | __declare_arg_2
-         | ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '__declare_arg_2'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:535:3: note: expanded from macro '__fail_smccc_1_1'
-     535 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:162:1: note: expanded from here
-     162 | __declare_arg_2
-         | ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:537:10: note: expanded from macro '__fail_smccc_1_1'
-     537 |                      : CONCATENATE(__constraint_read_,                  \
-         |                        ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:540:7: note: expanded from macro '__fail_smccc_1_1'
-     540 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/paravirt.c:102:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:541:4: note: expanded from macro '__fail_smccc_1_1'
-     541 |                         ___res->a0 = SMCCC_RET_NOT_SUPPORTED;           \
-         |                         ^
->> arch/arm64/kernel/paravirt.c:144:2: error: use of undeclared identifier '__declare_arg_3'
-     144 |         arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
-         |         ^
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:178:1: note: expanded from here
-     178 | __declare_arg_3
-         | ^
-   arch/arm64/kernel/paravirt.c:144:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
-   arch/arm64/kernel/paravirt.c:144:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
-   arch/arm64/kernel/paravirt.c:144:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
-   arch/arm64/kernel/paravirt.c:144:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
---
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '__declare_arg_3'
-     186 |         arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
-         |         ^
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:164:1: note: expanded from here
-     164 | __declare_arg_3
-         | ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:563:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     563 |                         arm_smccc_1_1_hvc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:526:32: note: expanded from macro 'arm_smccc_1_1_hvc'
-     526 | #define arm_smccc_1_1_hvc(...)  __arm_smccc_1_1(SMCCC_HVC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '__declare_arg_3'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:172:1: note: expanded from here
-     172 | __declare_arg_3
-         | ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:566:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     566 |                         arm_smccc_1_1_smc(__VA_ARGS__);                 \
-         |                         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '__declare_arg_3'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:535:3: note: expanded from macro '__fail_smccc_1_1'
-     535 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:180:1: note: expanded from here
-     180 | __declare_arg_3
-         | ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:537:10: note: expanded from macro '__fail_smccc_1_1'
-     537 |                      : CONCATENATE(__constraint_read_,                  \
-         |                        ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:540:7: note: expanded from macro '__fail_smccc_1_1'
-     540 |                 if (___res)                                             \
-         |                     ^
->> arch/arm64/kernel/proton-pack.c:186:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:569:4: note: expanded from macro 'arm_smccc_1_1_invoke'
-     569 |                         __fail_smccc_1_1(__VA_ARGS__);                  \
-         |                         ^
-   include/linux/arm-smccc.h:541:4: note: expanded from macro '__fail_smccc_1_1'
-     541 |                         ___res->a0 = SMCCC_RET_NOT_SUPPORTED;           \
-         |                         ^
->> arch/arm64/kernel/proton-pack.c:239:2: error: use of undeclared identifier '__declare_arg_2'
-     239 |         arm_smccc_1_1_smc(ARM_SMCCC_ARCH_WORKAROUND_1, NULL);
-         |         ^
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:485:3: note: expanded from macro '__arm_smccc_1_1'
-     485 |                 CONCATENATE(__declare_arg_, COUNT_ARGS(__VA_ARGS__));   \
-         |                 ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:194:1: note: expanded from here
-     194 | __declare_arg_2
-         | ^
-   arch/arm64/kernel/proton-pack.c:239:2: error: use of undeclared identifier 'arg0'
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:489:11: note: expanded from macro '__arm_smccc_1_1'
-     489 |                              : CONCATENATE(__constraint_read_,          \
-         |                                ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/arm-smccc.h:419:29: note: expanded from macro '__constraint_read_2'
-     419 | #define __constraint_read_2     __constraint_read_1, "r" (arg2)
-         |                                 ^
-   include/linux/arm-smccc.h:418:29: note: expanded from macro '__constraint_read_1'
-     418 | #define __constraint_read_1     __constraint_read_0, "r" (arg1)
-         |                                 ^
-   include/linux/arm-smccc.h:417:34: note: expanded from macro '__constraint_read_0'
-     417 | #define __constraint_read_0     "r" (arg0)
-         |                                      ^
-   arch/arm64/kernel/proton-pack.c:239:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:492:7: note: expanded from macro '__arm_smccc_1_1'
-     492 |                 if (___res)                                             \
-         |                     ^
-   arch/arm64/kernel/proton-pack.c:239:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:23: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                                            ^
-   arch/arm64/kernel/proton-pack.c:239:2: error: use of undeclared identifier '___res'
-   include/linux/arm-smccc.h:510:32: note: expanded from macro 'arm_smccc_1_1_smc'
-     510 | #define arm_smccc_1_1_smc(...)  __arm_smccc_1_1(SMCCC_SMC_INST, __VA_ARGS__)
-         |                                 ^
-   include/linux/arm-smccc.h:493:5: note: expanded from macro '__arm_smccc_1_1'
-     493 |                         *___res = (typeof(*___res)){r0, r1, r2, r3};    \
-         |                          ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-..
+Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-vim +/___res +102 arch/arm64/kernel/paravirt.c
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-e0685fa228fdaf Steven Price            2019-10-21   93  
-75df529bec9110 Andrew Jones            2020-09-16   94  static int stolen_time_cpu_online(unsigned int cpu)
-e0685fa228fdaf Steven Price            2019-10-21   95  {
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13   96  	struct pvclock_vcpu_stolen_time *kaddr = NULL;
-e0685fa228fdaf Steven Price            2019-10-21   97  	struct pv_time_stolen_time_region *reg;
-e0685fa228fdaf Steven Price            2019-10-21   98  	struct arm_smccc_res res;
-e0685fa228fdaf Steven Price            2019-10-21   99  
-e0685fa228fdaf Steven Price            2019-10-21  100  	reg = this_cpu_ptr(&stolen_time_region);
-e0685fa228fdaf Steven Price            2019-10-21  101  
-e0685fa228fdaf Steven Price            2019-10-21 @102  	arm_smccc_1_1_invoke(ARM_SMCCC_HV_PV_TIME_ST, &res);
-e0685fa228fdaf Steven Price            2019-10-21  103  
-e0685fa228fdaf Steven Price            2019-10-21  104  	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
-e0685fa228fdaf Steven Price            2019-10-21  105  		return -EINVAL;
-e0685fa228fdaf Steven Price            2019-10-21  106  
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13  107  	kaddr = memremap(res.a0,
-e0685fa228fdaf Steven Price            2019-10-21  108  			      sizeof(struct pvclock_vcpu_stolen_time),
-e0685fa228fdaf Steven Price            2019-10-21  109  			      MEMREMAP_WB);
-e0685fa228fdaf Steven Price            2019-10-21  110  
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13  111  	rcu_assign_pointer(reg->kaddr, kaddr);
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13  112  
-e0685fa228fdaf Steven Price            2019-10-21  113  	if (!reg->kaddr) {
-e0685fa228fdaf Steven Price            2019-10-21  114  		pr_warn("Failed to map stolen time data structure\n");
-e0685fa228fdaf Steven Price            2019-10-21  115  		return -ENOMEM;
-e0685fa228fdaf Steven Price            2019-10-21  116  	}
-e0685fa228fdaf Steven Price            2019-10-21  117  
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13  118  	if (le32_to_cpu(kaddr->revision) != 0 ||
-19bef63f951e47 Prakruthi Deepak Heragu 2022-05-13  119  	    le32_to_cpu(kaddr->attributes) != 0) {
-e0685fa228fdaf Steven Price            2019-10-21  120  		pr_warn_once("Unexpected revision or attributes in stolen time data\n");
-e0685fa228fdaf Steven Price            2019-10-21  121  		return -ENXIO;
-e0685fa228fdaf Steven Price            2019-10-21  122  	}
-e0685fa228fdaf Steven Price            2019-10-21  123  
-e0685fa228fdaf Steven Price            2019-10-21  124  	return 0;
-e0685fa228fdaf Steven Price            2019-10-21  125  }
-e0685fa228fdaf Steven Price            2019-10-21  126  
-75df529bec9110 Andrew Jones            2020-09-16  127  static int __init pv_time_init_stolen_time(void)
-e0685fa228fdaf Steven Price            2019-10-21  128  {
-e0685fa228fdaf Steven Price            2019-10-21  129  	int ret;
-e0685fa228fdaf Steven Price            2019-10-21  130  
-75df529bec9110 Andrew Jones            2020-09-16  131  	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-75df529bec9110 Andrew Jones            2020-09-16  132  				"hypervisor/arm/pvtime:online",
-75df529bec9110 Andrew Jones            2020-09-16  133  				stolen_time_cpu_online,
-75df529bec9110 Andrew Jones            2020-09-16  134  				stolen_time_cpu_down_prepare);
-e0685fa228fdaf Steven Price            2019-10-21  135  	if (ret < 0)
-e0685fa228fdaf Steven Price            2019-10-21  136  		return ret;
-e0685fa228fdaf Steven Price            2019-10-21  137  	return 0;
-e0685fa228fdaf Steven Price            2019-10-21  138  }
-e0685fa228fdaf Steven Price            2019-10-21  139  
-75df529bec9110 Andrew Jones            2020-09-16  140  static bool __init has_pv_steal_clock(void)
-e0685fa228fdaf Steven Price            2019-10-21  141  {
-e0685fa228fdaf Steven Price            2019-10-21  142  	struct arm_smccc_res res;
-e0685fa228fdaf Steven Price            2019-10-21  143  
-e0685fa228fdaf Steven Price            2019-10-21 @144  	arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
-e0685fa228fdaf Steven Price            2019-10-21  145  			     ARM_SMCCC_HV_PV_TIME_FEATURES, &res);
-e0685fa228fdaf Steven Price            2019-10-21  146  
-e0685fa228fdaf Steven Price            2019-10-21  147  	if (res.a0 != SMCCC_RET_SUCCESS)
-e0685fa228fdaf Steven Price            2019-10-21  148  		return false;
-e0685fa228fdaf Steven Price            2019-10-21  149  
-e0685fa228fdaf Steven Price            2019-10-21  150  	arm_smccc_1_1_invoke(ARM_SMCCC_HV_PV_TIME_FEATURES,
-e0685fa228fdaf Steven Price            2019-10-21  151  			     ARM_SMCCC_HV_PV_TIME_ST, &res);
-e0685fa228fdaf Steven Price            2019-10-21  152  
-e0685fa228fdaf Steven Price            2019-10-21  153  	return (res.a0 == SMCCC_RET_SUCCESS);
-e0685fa228fdaf Steven Price            2019-10-21  154  }
-e0685fa228fdaf Steven Price            2019-10-21  155  
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-:::::: The code at line 102 was first introduced by commit
-:::::: e0685fa228fdaf386f82ac0d64b2d6f3e0ddd588 arm64: Retrieve stolen time as paravirtualized guest
+Errors and Warnings Detected:
 
-:::::: TO: Steven Price <steven.price@arm.com>
-:::::: CC: Marc Zyngier <maz@kernel.org>
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+arm64:
+
+arm:
+    h3600_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+
+Errors summary:
+
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    drivers/mfd/ipaq-micro.c:81:6: warning: unused variable =E2=80=98i=
+=E2=80=99 [-Wunused-variable]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/mfd/ipaq-micro.c:81:6: warning: unused variable =E2=80=98i=E2=
+=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
