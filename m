@@ -1,85 +1,90 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0308CC8FA;
-	Tue, 18 Jul 2023 13:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01273C8FA;
+	Tue, 18 Jul 2023 13:45:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689687749; x=1721223749;
+  t=1689687953; x=1721223953;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=2xEGNXmaQRSpuwEeS0uApCbvnGWEIrdnetWBMkh5BXU=;
-  b=NpoU8qzGV5Wn4f1zTe9P9TzWUv+FGVaQmv/07sEA7P1Hh+D/8iIrHO/T
-   uhpc1sm82Dymla/ciOTAx6/RebSrAQwVA3Um6QhyvylkfAWCoNPqSpZb2
-   H8PI5R/d0kNVivFmq7fywyh0DSpddHPBfjKpBoP3w4Mh8VU8DhgWsCnvj
-   CaFClqvCP2etn1iPcQJXuyJxLMO04KESnkbiZRaOBVfjwo+gG5PcJpJbq
-   3ilbyqZJR2IBdAnhLVFps/n+Pylg0rf/NV1A4xMrXcVY9nG0Woru82y4q
-   Upvoyn/aMJeHEr32/J8CEGHpsBbAxF05TuBs+emEI+ZE0bg0dKafGkzUr
+  bh=8ZoeT+/X4QN31vJ/YQBx3PnErL1NLnTHKhlFU+8PGV4=;
+  b=Bcd7dKvR6KWI4Bt42COWDcQvViNAZJVLwNc5sE2sh5slrmezyd3/A/iq
+   Y5lD70CspCnRfv7b6P8M3WeYA6D2M2lPjjm7B7v9w/5tV66TJMhoJaot4
+   kbyT+cGo6hWCsBi9emQwGc9A4BIiaXV2hayn4yIkDAvibbKVpqYdBHL1j
+   vJ0PeQFxWx1IDNNCoMOk9Tcq/YJJ1nZNLDEpP9fQxHmfoipY7EcdiIdt2
+   uln3izMjenujyP9RM8yLpwNEj3u+bdRlBKbOeyXUUHDoWpmNPCOPjh3sF
+   AaNcoaiBV3S2dQVlCMwkPXA870oBxljBnOTMiza0A86opFX4NYnATi4Fz
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345800886"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345801673"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="345800886"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 06:42:24 -0700
+   d="scan'208";a="345801673"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 06:45:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="897588065"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="847707313"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="897588065"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga005.jf.intel.com with ESMTP; 18 Jul 2023 06:42:23 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="847707313"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2023 06:45:46 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 18 Jul 2023 06:42:23 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.27; Tue, 18 Jul 2023 06:45:46 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 18 Jul 2023 06:42:23 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.27; Tue, 18 Jul 2023 06:45:45 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Tue, 18 Jul 2023 06:45:45 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 18 Jul 2023 06:42:23 -0700
+ 15.1.2507.27; Tue, 18 Jul 2023 06:45:45 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OddO7pRIaFUbkqb3Mu6Yuik4kB/NjQ7K8jpAnzzpVuAwBgZiAFsjUQB8mRtKETnzfPuyGFl4WIgwM0mQwpisWIy2DwTDPqsUqmVxrp+PV4iqZGenM7egG0NYsY2wtwU2p7SsG214H4LUGmchFTcloQVVtohz/b2VRBWtLFe1c13QpQTdFuX9k6jnSy2tJ9aBD/haLnPMTy6euoyRjBCls4VaITaoy/N7PjJyMaV4yAv8cZs1D558mc0S01gY5geI8VeQp2GkNjA9Dq7ZADkHDIFlimOJ/4xZWq2sKlI0uIbAoEy1RyvEdXCDX/SURmaGeB2O9flwi2p8Kx2fsVzWag==
+ b=RfAouk1hXvzw/UJbn0AtkzLudH7YVt+xRByB2aW4bvNz2mgMGTu5mPwRPTzWh4M1kKIgnN8+NYSgW70k1+hHY64zjICnpiUnrWmljMrI20d3ZkGLvF/e/RCgbzgtCKjUbva4TV7ezzINTUYTq5mpdP9RN3TflnC1vh1wLU6QNXFLoaXfylbTUmSaiahp8nzbZ3LwySLgpGIr/CMkvdQHAKeou0cLIVEgGExqTIjSgMu1P+8vk+RXPjhPXMaOMhp/qBKsyOFbdmZIr4WwPNiG5m1ygM2SGYkf2bh5mpWm3hilI/EblkXa7lhXgQSE52hLyYEU2v7v4IXNysRMLbFeqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nTA3QHMMEgEm5HObgiLLNXZHrJOgddDKsvJOGRUUTxc=;
- b=YrldWSA+u2KLZfVEbcZeraHDvyLmqj6onFv94a9noLdTkaIW/FqLCBzcJkDmPa3ULQHRJ2aKCmkS9WYfn9cbjgEnTfAi0v88c41ealF57n337jrF7ppBbt/YffStb+QE+smGGaxTDZcCwkCr5+kfkKP3edtehurcSXUhSIweOrUrbvqc8CGq7hoM2Fa6Ao5awZOM4fBDiqn+4AjiOzCgm8lFVH3btpN81CTgoY5WkXNBPPB0RcK3mW2hYGsV+yo1wgKgE9RC1Fte+YJm6BQ2ZsXIcL8qpN9Q0eRdwf6jUXheCme3kIRMR7TXKuXFtxxUK2hIcT4kwbgFC4egUsSniQ==
+ bh=JjxXcI37+trlcgnb1jezPkBwcqK6zkpk7rkYtwDCiA4=;
+ b=cKwDD1xn1WFfk4g05HtzORNdy/NXZqFYEbUfyotRcr3NM6m4fGlD4QeWDetisSXdCC01UkjsAyYQAwVvXWnseGgM7Mxg3VG80WGb97JOdF4xuQrUX4g9NCbfOWY8GbuwBIZDut+pFZzznuRtyIlmTONXkI57A/KohjXrXjdsRpPXru1C4TU092JaOAJ9IHxTcgRerfF05yfPIOkohJJIvbVK7bMx5F1kj9RX5WcEi2K3bxH3y9lAf04r2+He4h2HQlKufeIdv48WMy6gKAsoyLzYz15kDKr1VGfK2Atz+JRd8Txs0YsiJvTjQGIW5SDy2jXoU0/bYkzes3IUBaAa8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by CO1PR11MB5105.namprd11.prod.outlook.com (2603:10b6:303:9f::7) with
+ by PH8PR11MB6976.namprd11.prod.outlook.com (2603:10b6:510:223::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.32; Tue, 18 Jul
- 2023 13:42:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Tue, 18 Jul
+ 2023 13:45:42 +0000
 Received: from DM6PR11MB3625.namprd11.prod.outlook.com
  ([fe80::44ff:6a5:9aa4:124a]) by DM6PR11MB3625.namprd11.prod.outlook.com
  ([fe80::44ff:6a5:9aa4:124a%7]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 13:42:21 +0000
-Message-ID: <e05d8e00-d8cb-8c3c-fefd-3b50acb9ef31@intel.com>
-Date: Tue, 18 Jul 2023 15:40:35 +0200
+ 13:45:42 +0000
+Message-ID: <0bd7caa5-8f04-8787-1e72-93ecb71b8197@intel.com>
+Date: Tue, 18 Jul 2023 15:44:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: lib/test_bitmap.c:920:2: error: call to __compiletime_assert_348
- declared with 'error' attribute: BUILD_BUG_ON failed:
- !__builtin_constant_p(res)
+Subject: Re: [PATCH v2] lib/bitmap: workaround const_eval test build failure
 Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Alexander Lobakin <alexandr.lobakin@intel.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, Yury Norov
-	<yury.norov@gmail.com>, kernel test robot <lkp@intel.com>
-References: <202307171254.yFcH97ej-lkp@intel.com>
- <ZLUSG8bNnSqT0LO+@smile.fi.intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+CC: Nick Desaulniers <ndesaulniers@google.com>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>, Alexander Lobakin
+	<alexandr.lobakin@intel.com>, Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Nathan Chancellor
+	<nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	<oe-kbuild-all@lists.linux.dev>, kernel test robot <lkp@intel.com>,
+	<llvm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+References: <20230717220435.57640-1-yury.norov@gmail.com>
 From: Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <ZLUSG8bNnSqT0LO+@smile.fi.intel.com>
+In-Reply-To: <20230717220435.57640-1-yury.norov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: RO2PR80CA0034.lamprd80.prod.outlook.com
- (2603:10d6:10:2b::9) To DM6PR11MB3625.namprd11.prod.outlook.com
+X-ClientProxiedBy: BE1P281CA0182.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:8d::15) To DM6PR11MB3625.namprd11.prod.outlook.com
  (2603:10b6:5:13a::21)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -88,83 +93,167 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|CO1PR11MB5105:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d653e8b-fa53-4fe1-8734-08db8794cf89
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH8PR11MB6976:EE_
+X-MS-Office365-Filtering-Correlation-Id: acc4cae0-6387-4fc4-e14d-08db87954789
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uTit5P3lk3XxMor6YEkyfQjgvmTKp8I8qsDG26Rt1NBiqFmewfwP9bhg90EDEeJBLCvg/zRU1+qW+F2pqKjwq4SedrvGMKO0NQoQEOtsiRa4n12ybx6E52IOtDZxSrCQNGqGd40bzNgH2ecYW96ydpe79+jVyMIj8UVPD1dTH0z8GX0ps/NOgAHLUptfa+f/faa4+sS+XdsvtMlwIEW27Gp3Ao9zaz0okcv7SYwksyrV60HyMIOtAUX/gAmiPEf25QIuB8FaidxfEKdrR3hkHc+U8YbfEEyFN2Qm57Y3nebMyqAy8BwEMvlbb+z2goky+uL6NMpwIG1eAJIgk9P7w6lEG/RYaLhC17HJuYVhsoRiuRanqtQFTBDxW12nxhHJudjc1hvHTn/YwL9H7vtH0n4B0Qn6yKeRXsGsIsU42XGNGsyJ+xdpPZFhSeaaPyzALb8M6nyXzXUlsPlNoAUBYJUwEYcT/78MmZAUAup0+oAr58El4Xpjrgl3P0ieiCSRYMaIjPKJgLNkzySiBr3cKLC8ZVch0nM7pq4928W0ultH73eM7fYgo0LizcFP3aQ3YfJJfmx8QE+9ub4uHDynw4Qk4w81q4LFhEtCtryS8o8CxPXIHnun5ImgqxyG7CQW6eGvZLtBim3RTVCVJ79wTA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(41300700001)(8676002)(66476007)(66946007)(6916009)(2906002)(8936002)(4744005)(66556008)(6486002)(6666004)(54906003)(86362001)(31686004)(4326008)(316002)(36756003)(5660300002)(2616005)(6512007)(38100700002)(83380400001)(186003)(26005)(82960400001)(6506007)(31696002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: O6dbzUJh/sLVEkmOV6crNlGMwFoX+GJLo3rCbOk9D3su5UtyWL5rCyCL0lUBnon/OGjr60hE5spIsGw8VSOrigFfssZjcDkP3G+1koQXUhrZCzlBj711PpbkDEIWm7SMyDR/NcGrZBlNDZQ1GpGeOrqjhdmPvbOiTxOIKDaEJueYbU3amZhx7FOc/nLoRaRcs+4/ORADKtYJstj7D2MX31VCZTGfeCJX6gMy/c/VhJk6cYu92CJKMkxZ8G1lHLRoYLq0aAYMF/f97Us75ZpSlImX7InJvU6aYxLxGzK2kzqqB0eXh9nHuciohWV6jbjDLQ8rZbV0gfkRvuLwYU7Yge7njtx+Fq9c1h6ZFsF0XW6hNHV88QzdeK5KBCSSjtqIBQ3737Hai5RRbtWSr0t+FoH1uWc36N8V6IM6WkY6yB5x24Pk08qDhotdp4qFPBdLWNVGVxYavT4OavcORCXcCjtsgcCQFeS3qB5HE+UefUkoJlJ8vbInkoQhacvohg/2De3+qyHa86S2JCQsW6mdJfFXI7mJLp6/VtfqfqR1sQawzJXdCyHH5QoDXjreuOhn7P1q+gM0az8BE5fwzcT7DUBuT6viPannXNfhw+1iDyw4bBJ3EK12XRbG4s84GQN8mIdoE9933+xHHP3ZTQ1SPjvIzgkNCA0K9Vlt7Le4HmfpDd7RuvrRRMOXNmvKrtkH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199021)(966005)(41300700001)(316002)(83380400001)(186003)(31686004)(6512007)(2616005)(26005)(6506007)(6486002)(478600001)(82960400001)(54906003)(6666004)(66946007)(6916009)(4326008)(38100700002)(66556008)(66476007)(7416002)(86362001)(31696002)(5660300002)(8676002)(36756003)(8936002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aE5RcUxNR1ArSnFycitubmFwQW84aUcyOU5RN1hxb0MrVEVmQzUxSE9IR0VS?=
- =?utf-8?B?N01HbmNGRU1tc2J4bFA4aU1NSVRuOGdRMjNPeFFneWtJVlJwZWVUZHg1OTZl?=
- =?utf-8?B?Y296OHAxUlF6NVRrcWluYWpKSUQ0VEMvVEE1NnRScGxyWTU2bDFXdEJscHJT?=
- =?utf-8?B?aloycEUvSXZDbjUwdWJUQU83cHFRb094dThJcExTYTgrNGN2WDg2cTFaMnRC?=
- =?utf-8?B?MzRVQmlRNEJhMUM1WDhTQm8raGM2Y2ZYd0dzcmlWYUlObEN2dGxxWG1jNEhL?=
- =?utf-8?B?VjFCeHZTNFQ0QmJKWjIzL3RvczBFTm50YnZwMjhLSG9rNkJteUxMaE9DMXk0?=
- =?utf-8?B?Q0Z1UEUyOGR0TExvQSt6aXJlQVc5Q0drcStNQTFWRFpZYXlPanNzdS85RmFw?=
- =?utf-8?B?OE9GSUR6cUlrZnpmOVlveG9xOVYvQXNIRlhueDlMWHF1QVIxdmRuWGViY3JH?=
- =?utf-8?B?aWpmUnkwVDQrSTF3c0ZBbzNVQTJqdVRoeWFYWXQySk96U2xjOGczUHZ4alUw?=
- =?utf-8?B?MnE5TExiNWx5TkwvUEZPRW9DUzl2MDB0NHdXNUpXMWx1UjJWQmRLcC9rR0hQ?=
- =?utf-8?B?Z1JOVnFNcTVWdWttcEhmVUlIZTdSNEdhY3c1Wk11N1lzS0l6bkFvbkw2UHZM?=
- =?utf-8?B?ZGhZNTRaTXNpWEdSL2dqQzZlZDc5VFRSLzNFVE5rR0FPQlRDb1VKYVJwVUJh?=
- =?utf-8?B?RmNFNjVLYzRmdXVZTUhjbGpHditWL2JLRFNJZEpwNDczVkpwOGloSGF5a2tZ?=
- =?utf-8?B?VmFrSWpSQnlOMGJQMVRSd3RvRWxSTHdEWSthUHg0M1RzSitkNXFUYWJNL29S?=
- =?utf-8?B?Z2RJWXRFbnRuRUpCSEV2Q1ZWbGFMZTdyZnlYMFlZRlcxM2htRGk1czFxeUJt?=
- =?utf-8?B?UXhtOUxrRXExRnlDeXlkU3V5MHJ5T2wxZmZKaHVRRVVVU2xUOVE1VnNleFpK?=
- =?utf-8?B?RDRObVQ2VFNJUm1TUW9NZUIveWhsZHBSY2d1L2JJcC9HUEYwRjZZR3NWL1hr?=
- =?utf-8?B?M3ZiRWpYTU0vd050VEF1MG0yYWlpS3hTeXJEVG5GSFhNOHA5STNhb3BaWEQ3?=
- =?utf-8?B?NFFqUVF5cFZickkrNElsTURYYWU4U3Q5UUhObGpObVkxeE5naGlDc3djMDVY?=
- =?utf-8?B?dnZsaS9yVUIvWlpOdkFZeksrU3dEL0hCOTlpNnVRaDFQOXRkalJuVGJVMmhW?=
- =?utf-8?B?QU0xdDlBUkJaMHRpUjVzWDNFTk1UM1BqdHlWODlFUWpMSFZUQVZ3V2tvY3Nn?=
- =?utf-8?B?S1ZUVU9zRlVGV0FJczZBVlkwdWlDL1JVUWdPZUE4T3VoUjZaNkxmS2Q4cVpl?=
- =?utf-8?B?dnN4Q1BVL2tWUlJsenYzQWl2azR4NE1KV2lkakRkOHlRdVFXN1lZWWg3SkU4?=
- =?utf-8?B?dDJSSXVuM2tmWFdkQVhGTEJMdldodHpxU1pCenBKeVhFL29Pd056dmNZaUs2?=
- =?utf-8?B?SHJzcGZISzlwZGgyRzB2OTIvQVVCVUhuNUlqYmVRdTFRT05rWGhzVGFRSG56?=
- =?utf-8?B?SGJKbXhoNFVodHhJK01yeWVYb25vdWxadUxHTnkzWm85ZXBHSEhwRUltSlRT?=
- =?utf-8?B?L3EweUpnMFowV05YeGJYOTladWkrR3d6ZFFRRnFSTDRMVlBpMW9OVXQrN1NL?=
- =?utf-8?B?N2hvMGJRNkpZZW9wVldOdjRSdmt1R0s2ZXRoZ3VqSHM5Z3J1YWZiVHdBOUhG?=
- =?utf-8?B?QktHaENRVGJwaDZxUVBoZC83b1JaNjZaY3ZuTFJQZkdwRG5yc1pOTFhUa3Jh?=
- =?utf-8?B?WFhMNWh4MkZsRUxGR0NaZXpHQkVLb2drbjlrb05oME1JRkM0NUJja201a2Jq?=
- =?utf-8?B?NStHYktJdkVKbzg3VmxWL0tscmFVVWFKYkt1TWMvSEtBek9HT2VhNWV6VWRp?=
- =?utf-8?B?R2I1U3dyeS9VbGVBQURGRkFjc2YrQk4weG1OM1NuV05kbVRqZjAxN1NrNDFE?=
- =?utf-8?B?NXVmNFFjazQ4ZUgwQlpPRU9lSnpNT2pwdTMyY2lyNWlVR1FZYytqS20zaHYr?=
- =?utf-8?B?RTF3WkRXY2QrOFBydTI5TTBQTllYTzNoUTBXUk9Ed1BIWjlVK1ZDQXdvc09P?=
- =?utf-8?B?aDNDWnZoN0ZOWjdFblR4SWlOWHB6ZHRaczFMbmttWHZsYXlGclRHMWtTN3dG?=
- =?utf-8?B?bTFnY2hsOTFXUFhVTytSdU9kdGRRYlpyVWIrdktma3VuRGlDdzJYWk10SU03?=
- =?utf-8?B?R2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d653e8b-fa53-4fe1-8734-08db8794cf89
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eG9GSUJ3VWNBR2F4NllnWFpwSFpLUWR2c3hJNkY5U1RaT3pMc3hwZ3hjRlJ4?=
+ =?utf-8?B?alhWd29sR2toaTk1aHZzNlJsK0VEZS95QjU5aGtnS1VORTJSS2JZSGpYVVFR?=
+ =?utf-8?B?dEVRbjdVYjg0Z3hENXB2OTNBUVprUHY5SmtURDQvQjZLNHNFblNQZTNtdHpm?=
+ =?utf-8?B?Qk5kTXZyazk3RmcwNjE5U2NlaitTNGNjaWNodWxCcDBUL29LMHJsWVpkMnJV?=
+ =?utf-8?B?em44cU1YclBxZTVhNXBJbXlqbTlKTE9VTVZlNEdmUVJhVkpQa1ZwWUxrVzZ3?=
+ =?utf-8?B?S0dzdGd6L3RXTkVrbDVCQ3FhZG56ajlwaEpPQWtaZ0hpVlBjY3BMTFlaTGFq?=
+ =?utf-8?B?dEVvalZYSzZFRFdGVmNNNmVCbVA2UXlWV08vWDVlMWhheVBUQkdYVU9tclVn?=
+ =?utf-8?B?cnlhOEV0RlRLNG1lV1ArbHdNL1B5bkREZXRWSlRnQ0xaR2oyZEJFOTRIZU1K?=
+ =?utf-8?B?S2JiY2E2WGUvVHF1K0RUc2NzcXZ5SE5paksvMjlpRmRtWkZxMk00TFZwZFBj?=
+ =?utf-8?B?YWFlNE5IanBLY0N3Qnp1cmhlcHl3MWRLZkJNTUlRdTMvdzdiVWtRLytEWFNZ?=
+ =?utf-8?B?bm45Z0lFY1N4ejROZUhCQmUwV0NBRUlqUG03SnltWXI4Qk51SWFwelp2c3Rn?=
+ =?utf-8?B?RkhucU9SRlZKQmd1ZHczUE9NRmp2ZkhHcmxXamJiWU9nNC9JQVNPUzZiSDNJ?=
+ =?utf-8?B?QTduaXcyYklWYlZhN1VyK09kcGdwVFpWalJ5SFRYMlFrZlhiOUJSN09YQjlR?=
+ =?utf-8?B?ZEZtQ2w3eEdONGw1T1R1L21QeGgxS0ZLOWpnM0FlM3VSNXlUclZtMnhid3Vy?=
+ =?utf-8?B?WU05TTZYdXFTcDNrNWF0Tkp0dG0wOEhZaldXeGZBTC9EcVMvYjVZcktqWlhK?=
+ =?utf-8?B?MHRBUExwa0tmVHhMdkptSU9VQW9XQ2tPMndRQ2ZDcWh1UTVscjBnTkdqZG9m?=
+ =?utf-8?B?Y2RYc01lUUp5ZU1RYStVdUovVnh0KzlmQTNxbFhpbFFZNzFCWFlqMUVBN0Nw?=
+ =?utf-8?B?VGJSWXltTlhuTittZW1OMkw2VnVmaG90Mnc4UU1ITjFpWHFsWVJhdGI0Q3Zl?=
+ =?utf-8?B?L1lnaGRXNTVJZlFveG5rNWJaQmNOUFFpMDVFenVkS2pVUFdWZWFXNk5wN0Fk?=
+ =?utf-8?B?Tis4eGJZSHV1Y1ZRSytOUFFKTnFaSEtTTTNTenFGVjREWUxWelFZb0U5dGoz?=
+ =?utf-8?B?a3NZRzRwcjdEdERnUkxzZnNpUkkwa3JUbGVwaHR6dXZjd3VqR3hlc2drV0dN?=
+ =?utf-8?B?Vy9MUUtVT0wxTS9UMW1FMG54NWxKaDZCUnNiZ0pCMTU3MEpocHdrZVpFTHRD?=
+ =?utf-8?B?eWI2bUpBVzlXaXlZcGJPRWxyUVEvWklrcDdaclV6TFcrZDVPWTlLMWdta1VP?=
+ =?utf-8?B?cXY0SkhKZ0o2WFRsRFo1STYwQjFNa2E5TFlLTEl3R0llS0FwcCtzQ1Avd1Nv?=
+ =?utf-8?B?ZUowa0RFZ0psK3ExNWpNejkxOEMxa2dHaGZhekpNVHMwWDcvbEI1S0IzRlow?=
+ =?utf-8?B?TEZ2RWp5SE9UY083aU5WaHY5UVNLRzFkWFdQN3RNMmswaWhtSXQyd3hPZkp3?=
+ =?utf-8?B?eThhQ0VZK051TUp1cHE1aGpWeUE3dG1pM01QQ2RuR0lkYi9KZkYxTHNqWVFF?=
+ =?utf-8?B?OUhpR0NFNTBLRzF6NVk2bzRUdy80K0duRW1wUWZmR1A4V1FTcEJaZXVoalNO?=
+ =?utf-8?B?RHhBd3ozay95YjRvQTFaVDEzV1hFOWJSd1JyYkFJeE1CYmVTUkl6T3o3U1BV?=
+ =?utf-8?B?NDU1NGc0TlNSWmRnTzgrNDFVVjZGa0NkSVFUSW1FY2tvd0lqSGtTNEVHMEFs?=
+ =?utf-8?B?T09yTVVrKzU2Z284ZzdBS2xHcmVzVXNqWUNzdVA1eXVoUXcyV24xWExGNXBQ?=
+ =?utf-8?B?Q2lSY3hhTUYzK2xkaVp0djg2UzdTbUw5S3V2TlYyQm1lSW1pVWtiMkY3bHNS?=
+ =?utf-8?B?dDRsb0xRR1R6MlVnVEV4MWxNMm50a3FQbkhUSXp6UjB4dzNCQjZnc2ZMNzJW?=
+ =?utf-8?B?aFcrcHppbDlBNzloSUNBWkZzR09XNk1CYzZUci9yUE1zejFUaXR1aXoxVnZO?=
+ =?utf-8?B?d0VrZDhxY0VsbXdpS2FHVkRWdHR0ZTZvK2xFWFNqTGQwR00xQXhmeXNyZ29E?=
+ =?utf-8?B?aVFBZUY3cnZzTUF0amd3V0lPcWhXbWNxQjhRaWtteDFkelpYTXVoU2NjN01x?=
+ =?utf-8?B?c1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: acc4cae0-6387-4fc4-e14d-08db87954789
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 13:42:21.2547
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 13:45:42.5547
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iJH+i01SXeDClBHeLXuZ7DuW7i3wDXx/CqKqBjG1lSGbayNQ9Nj65lIbmRQcMRMXiKcWRCEKLLM7CiASAIgsm9iQrosCE3EofBUJDZ8Nhgc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5105
+X-MS-Exchange-CrossTenant-UserPrincipalName: XCYkiA83T3rpukOF0LWcUGHg1zRwv92y5KVaSjumE/AHjBnAPU9CL/KygVT+ywryOU539tItYgjnA2nm5P2oVE3Buhky7Gu3Qt/unqTnWJQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6976
 X-OriginatorOrg: intel.com
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 17 Jul 2023 13:04:11 +0300
+From: Yury Norov <yury.norov@gmail.com>
+Date: Mon, 17 Jul 2023 15:04:35 -0700
 
-> On Mon, Jul 17, 2023 at 12:42:57PM +0800, kernel test robot wrote:
->> Hi Alexander,
-
-Hi,
-
->>
->> FYI, the error/warning still remains.
+> When building with Clang, and when KASAN and GCOV_PROFILE_ALL are both
+> enabled, the test fails to build [1]:
 > 
-> Alexander, either you can escalate this or just propose something to discuss.
+>>> lib/test_bitmap.c:920:2: error: call to '__compiletime_assert_239' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+>            BUILD_BUG_ON(!__builtin_constant_p(res));
+>            ^
+>    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+>            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+>            ^
+>    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                        ^
+>    include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+>            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>            ^
+>    include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+>            __compiletime_assert(condition, msg, prefix, suffix)
+>            ^
+>    include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+>                            prefix ## suffix();                             \
+>                            ^
+>    <scratch space>:185:1: note: expanded from here
+>    __compiletime_assert_239
 > 
+> Originally it was attributed to s390, which now looks seemingly wrong. The
+> issue is not related to bitmap code itself, but it breaks build for a given
+> configuration.
+> 
+> Disabling the const_eval test under that config may potentially hide other
+> bugs. Instead, workaround it by disabling GCOV for the test_bitmap unless
+> the compiler will get fixed.
+> 
+> [1] https://github.com/ClangBuiltLinux/linux/issues/1874
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202307171254.yFcH97ej-lkp@intel.com/
+> Fixes: dc34d5036692 ("lib: test_bitmap: add compile-time optimization/evaluations assertions")
+> Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  lib/Makefile      | 6 ++++++
+>  lib/test_bitmap.c | 8 ++++----
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 42d307ade225..1ffae65bb7ee 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -82,7 +82,13 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+>  obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
+>  obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+>  obj-$(CONFIG_TEST_SCANF) += test_scanf.o
+> +
+>  obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
+> +# FIXME: Clang breaks test_bitmap_const_eval when KASAN and GCOV are enabled
+> +GCOV_PROFILE_test_bitmap.o := n
+> +endif
 
-Sorry, I had some days off.
-I've been waiting for more info from the Clang devs to understand
-whether and how I should fix this.
-I see that Yury submitted fix (two actually) already, so I'll go review
-it now.
+Oh, quite elegant!
+
+> +
+>  obj-$(CONFIG_TEST_UUID) += test_uuid.o
+>  obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+>  obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
+> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> index 187f5b2db4cf..4a678de9c350 100644
+> --- a/lib/test_bitmap.c
+> +++ b/lib/test_bitmap.c
+> @@ -1161,6 +1161,10 @@ static void __init test_bitmap_print_buf(void)
+>  	}
+>  }
+>  
+> +/*
+> + * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
+> + * To workaround it, GCOV is force-disabled in Makefile for this configuration.
+> + */
+>  static void __init test_bitmap_const_eval(void)
+>  {
+>  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+> @@ -1186,11 +1190,7 @@ static void __init test_bitmap_const_eval(void)
+>  	 * the compiler is fixed.
+>  	 */
+>  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+> -#if defined(__s390__) && defined(__clang__)
+> -	if (!const_test_bit(7, bitmap))
+> -#else
+>  	if (!test_bit(7, bitmap))
+> -#endif
+
+...and even allows to remove that ugly piece.
+
+>  		bitmap_set(bitmap, 5, 2);
+>  
+>  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+
+I like this version the most.
+
+Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 
 Thanks,
 Olek
