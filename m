@@ -1,225 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CA023D9
-	for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 08:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689670040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QWJEDqz/K47DCY7+PsL5ETw0UGeTlE8XcxsSbLhdR7Y=;
-	b=ZmkAfK/XLAkzbQHwUWstqxfEp8v9V9xYBCY7fQoEDzdo0CfCY4Q4IH8aufBj0XYQ3b7Hm0
-	UyXyhQau5q8hvvxT+KCbPWP68gCITHPr/yQjNgi+GejhIp9GtzqfsnudGlRB3R39tu2ZlV
-	c5vFyIuHWUpyncXEJQlSd5FwcuFWR1k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-363-i7g2D4vKNsKx1HOtfg0Kpg-1; Tue, 18 Jul 2023 04:47:18 -0400
-X-MC-Unique: i7g2D4vKNsKx1HOtfg0Kpg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 25693185A795;
-	Tue, 18 Jul 2023 08:47:18 +0000 (UTC)
-Received: from localhost (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id D793E4CD0F8;
-	Tue, 18 Jul 2023 08:47:16 +0000 (UTC)
-Date: Tue, 18 Jul 2023 16:47:13 +0800
-From: "bhe@redhat.com" <bhe@redhat.com>
-To: "Liu, Yujie" <yujie.liu@intel.com>
-Cc: lkp <lkp@intel.com>, "hch@lst.de" <hch@lst.de>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"rppt@kernel.org" <rppt@kernel.org>,
-	"schnelle@linux.ibm.com" <schnelle@linux.ibm.com>
-Subject: Re: [akpm-mm:mm-unstable 93/173] drivers/clk/clk-fixed-mmio.c:33:2:
- error: call to undeclared function 'iounmap'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <ZLZRkSu94nPrOyBa@MiWiFi-R3L-srv>
-References: <202307131033.JgvCSVz4-lkp@intel.com>
- <20230713092618.9a25417dc886b4f61660fe17@linux-foundation.org>
- <ZLCP0s5aRLLOfVYt@MiWiFi-R3L-srv>
- <1a8bdfb49897cd9808f5a1180df0b629d3b9d12c.camel@intel.com>
- <ZLXXh8QUiu0d2GfI@MiWiFi-R3L-srv>
- <36bdd39bfdcf7825d8dbfc7d3c7bb73849d238ca.camel@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4917BE55;
+	Tue, 18 Jul 2023 09:01:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689670916; x=1721206916;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Uq6GN6BN7TVPL0AjBQW94YkIsGZnqdNeMlO9FBeC1XM=;
+  b=FyMetHuRykkr2fYY9O+KzU9oJjj7Q+dMniOvpPq6ZC+M6rQE3Sa2u+rM
+   0/0t2IZRb+/5BYqcjgJuiP7evcdwReiAuT6L4ccUVS2j/pw5aVOJOYVQ0
+   3t4XV00mjt/3FffiQtGrpqm9OjlYpYOkDR1Pk8N8aAsvWhdr8ms2cb3Kk
+   xA1Nzb9UaXFGLtPi4fz/Wo5v4vLdswyfr5BoYZCkHvgL/nqG+F36QFs90
+   43t+IW7txs7yrKw3imEePg5CKdRUYuRMVqDuGRi12wGi3QLt+0DNFP4c1
+   NoHu0Cxz6ir9t4pWm4CFQ4vv+oY4+wAiSIIO9Mxssb/7QeP2yBpllqv5E
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="452529378"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="452529378"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 02:01:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="726864701"
+X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
+   d="scan'208";a="726864701"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Jul 2023 02:01:53 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLgab-0000PM-2a;
+	Tue, 18 Jul 2023 09:01:49 +0000
+Date: Tue, 18 Jul 2023 17:01:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/apic 58/58] ERROR: modpost:
+ "__SCK__apic_call_send_IPI_mask" [arch/x86/kernel/cpu/mce/mce-inject.ko]
+ undefined!
+Message-ID: <202307181736.fcECs08j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <36bdd39bfdcf7825d8dbfc7d3c7bb73849d238ca.camel@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-On 07/18/23 at 06:19am, Liu, Yujie wrote:
-> On Tue, 2023-07-18 at 08:06 +0800, bhe@redhat.com wrote:
-> > On 07/17/23 at 07:05am, Liu, Yujie wrote:
-> > > Hi Baoquan,
-> > > 
-> > > On Fri, 2023-07-14 at 07:59 +0800, Baoquan He wrote:
-> > > > > 
-> > > > > In file included from ./include/linux/io.h:13,
-> > > > >                  from drivers/clk/clk-fixed-mmio.c:13:
-> > > > > drivers/clk/clk-fixed-mmio.c: In function 'fixed_mmio_clk_setup':
-> > > > > ./arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-> > > > >    29 | #define iounmap iounmap
-> > > > >       |                 ^~~~~~~
-> > > > > drivers/clk/clk-fixed-mmio.c:33:9: note: in expansion of macro 'iounmap'
-> > > > >    33 |         iounmap(base);
-> > > > >       |         ^~~~~~~
-> > > > 
-> > > > These iorempa/iounmap not defined or declared are not related to my
-> > > > patches. S390 could set CONFIG_PCI=n, however its ioremap/iounmap code
-> > > > are all defined in arch/s390/pci/pci.c. Means its ioremap/iounmap code
-> > > > depends on CONFIG_PCI enabling. So those drivers invoking iomem
-> > > > functions, (e.g ioremap(), devm_ioremap(), etc) all will be failed to
-> > > > build if CONFIG_PCI=n on s390.
-> > > > 
-> > > > All these errors have been fixed in my another patchset.
-> > > > 
-> > > > https://lore.kernel.org/all/20230707135852.24292-1-bhe@redhat.com/T/#u
-> > > 
-> > > Sorry for the duplicate reports and late reply.
-> > > 
-> > > We searched the log of kernel test robot and got the following clues
-> > > for this case:
-> > > 
-> > > This is a randconfig build test, so the kconfig happened to set
-> > > CONFIG_PCI=n and CONFIG_COMMON_CLK_FIXED_MMIO=y, and it is good to
-> > > build the clk-fixed-mmio driver in such case before, but it raises a
-> > > build error after applying your patches, so the bot thought that a new
-> > > build error was introduced and sent reports to you.
-> > > 
-> > > == without the patches (v6.5-rc1 as example) ==
-> > > 
-> > > $ git checkout v6.5-rc1
-> > > HEAD is now at 06c2afb862f9 Linux 6.5-rc1
-> > > 
-> > > $ grep -e CONFIG_PCI -e CONFIG_COMMON_CLK_FIXED_MMIO .config
-> > > # CONFIG_PCI is not set
-> > > CONFIG_COMMON_CLK_FIXED_MMIO=y
-> > > 
-> > > $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross LLVM_IAS=1 W=1 ARCH=s390 drivers/clk/clk-fixed-mmio.o
-> > > ...
-> > > 
-> > > $ file drivers/clk/clk-fixed-mmio.o
-> > > drivers/clk/clk-fixed-mmio.o: ELF 64-bit MSB relocatable, IBM S/390, version 1 (SYSV), not stripped
-> > > 
-> > > == with the patches ==
-> > > 
-> > > $ git checkout b0f683e34a5b
-> > > HEAD is now at b0f683e34a5b s390: mm: convert to GENERIC_IOREMAP
-> > > 
-> > > $ grep -e CONFIG_PCI -e CONFIG_COMMON_CLK_FIXED_MMIO .config
-> > > # CONFIG_PCI is not set
-> > > CONFIG_COMMON_CLK_FIXED_MMIO=y
-> > > 
-> > > $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ./make.cross LLVM_IAS=1 W=1 ARCH=s390 drivers/clk/clk-fixed-mmio.o
-> > > ...
-> > > drivers/clk/clk-fixed-mmio.c:33:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> > >    33 |         iounmap(base);
-> > >       |         ^
-> > > ./arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
-> > >    29 | #define iounmap iounmap
-> > >       |                 ^
-> > > drivers/clk/clk-fixed-mmio.c:33:2: note: did you mean 'vunmap'?
-> > > ./arch/s390/include/asm/io.h:29:17: note: expanded from macro 'iounmap'
-> > >    29 | #define iounmap iounmap
-> > >       |                 ^
-> > > ./include/linux/vmalloc.h:167:13: note: 'vunmap' declared here
-> > >   167 | extern void vunmap(const void *addr);
-> > >       |             ^
-> > > 12 warnings and 1 error generated.
-> > > make[4]: *** [scripts/Makefile.build:243: drivers/clk/clk-fixed-mmio.o] Error 1
-> > > make[3]: *** [scripts/Makefile.build:477: drivers/clk] Error 2
-> > > make[3]: Target 'drivers/clk/clk-fixed-mmio.o' not remade because of errors.
-> > > make[2]: *** [scripts/Makefile.build:477: drivers] Error 2
-> > > make[2]: Target 'drivers/clk/clk-fixed-mmio.o' not remade because of errors.
-> > > make[1]: *** [/home/yujie/linux/Makefile:2020: .] Error 2
-> > > make[1]: Target 'drivers/clk/clk-fixed-mmio.o' not remade because of errors.
-> > > make: *** [Makefile:234: __sub-make] Error 2
-> > > make: Target 'drivers/clk/clk-fixed-mmio.o' not remade because of errors.
-> > > 
-> > > 
-> > > After applying the patchset at
-> > > https://lore.kernel.org/all/20230707135852.24292-1-bhe@redhat.com,
-> > > above situation cannot happen anymore because CONFIG_PCI and
-> > > CONFIG_COMMON_CLK_FIXED_MMIO can only be both enabled or both disabled,
-> > > so the issue has been resolved.
-> > 
-> > No, your process may need be improved.
-> > 
-> > On linus's master branch, you can pass compiling on
-> > drivers/clk/clk-fixed-mmio.o, but you absolutely will fail during linking
-> > stage. As I have explained, ioremap()/iounmap()/ioremap_xx() are all
-> > defined in arch/s390/pci/pci.c. Setting CONFIG_PCI=n will make you not
-> > be able to find the implementation of ioremap()/iounmap(). Don't you
-> > finish the whole building process of kernel image and modules?
-> 
-> Sorry I didn't make it very clear in the last mail. We also got the
-> failure in link stage when testing on mainline. After applying your
-> patch, it became an error in compile stage and won't reach link stage
-> anymore. In other words, your patch helped to expose an existing issue
-> earlier from linking to compiling. Our bot cannot handle such case very
-> well for now since the compiling error and linking error are very
-> different. Of course this should be a false positive report and your
-> patch should not be blamed for exposing an existing issue. Sorry for
-> any misleading or disturbing. We will consider some optimizations for
-> similar cases.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/apic
+head:   39d609eca4106a155551eccee3f462792bf57e27
+commit: 39d609eca4106a155551eccee3f462792bf57e27 [58/58] x86/apic: Turn on static calls
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230718/202307181736.fcECs08j-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230718/202307181736.fcECs08j-lkp@intel.com/reproduce)
 
-I see. Seems there's still room for LKP to differentiate the compiling
-issue from the linking issue.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307181736.fcECs08j-lkp@intel.com/
 
-Thanks for these details and your great effort.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-> 
-> 
-> > Please see below building log, the linking is failed. I got a new s390x
-> > machine, and git clone linus's tree and build with randconfig from this
-> > lkp report. 
-> > 
-> > When I made below patch and tested, I also only git clone linus's latest
-> > kernel tree. I didn't apply any patch. The current lkp report and your
-> > checking could be misleading.
-> > 
-> > [PATCH 0/8] Make several Kconfig options depend on HAS_IOMEM
-> > https://lore.kernel.org/all/20230707135852.24292-1-bhe@redhat.com,
-> > 
-> > =====
-> >   AR      drivers/iio/built-in.a
-> >   AR      drivers/built-in.a
-> >   AR      built-in.a
-> >   AR      vmlinux.a
-> >   LD      vmlinux.o
-> >   OBJCOPY modules.builtin.modinfo
-> >   GEN     modules.builtin
-> >   MODPOST vmlinux.symvers
-> >   UPD     include/generated/utsversion.h
-> >   CC      init/version-timestamp.o
-> >   LD      .tmp_vmlinux.kallsyms1
-> > ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-> > clk-fixed-mmio.c:(.text+0x44): undefined reference to `of_iomap'
-> > ld: clk-fixed-mmio.c:(.text+0x9c): undefined reference to `iounmap'
-> > ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-> > cistpl.c:(.text+0x52a): undefined reference to `ioremap'
-> > ld: cistpl.c:(.text+0x602): undefined reference to `iounmap'
-> > ld: cistpl.c:(.text+0x650): undefined reference to `iounmap'
-> > ld: cistpl.c:(.text+0x668): undefined reference to `ioremap'
-> > ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-> > cistpl.c:(.text+0x85c): undefined reference to `iounmap'
-> > make[2]: *** [scripts/Makefile.vmlinux:36: vmlinux] Error 1
-> > make[1]: *** [/root/linux/Makefile:1238: vmlinux] Error 2
-> > make: *** [Makefile:234: __sub-make] Error 2
-> > 
-> > 
-> 
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_pmem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_btt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_e820.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dca/dca.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/p8022.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/psnap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/stp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/garp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/mrp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_htb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_hfsc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_red.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_gred.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_ingress.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_sfq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_tbf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_teql.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_prio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_multiq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_netem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_drr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_plug.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_mqprio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_mqprio_lib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_choke.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_qfq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_u32.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_route.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_fw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_basic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_cmp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_nbyte.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_meta.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netlink/netlink_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nfnetlink_osf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_netlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_broadcast.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_tables.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nft_fib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nft_chain_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nft_fwd_netdev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_rr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wrr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wlc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_fo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_ovf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblcr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_dh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_nq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_ftp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_pe_sip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_defrag_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_reject_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/inet_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tcp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/raw_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/unix/unix_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_defrag_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_reject_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/packet/af_packet_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/auth_rpcgss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/rpcsec_gss_krb5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/8021q/8021q.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtables.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_broute.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_filter.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/bridge.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sctp/sctp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/vmw_vsock/vsock_diag.o
+>> ERROR: modpost: "__SCK__apic_call_send_IPI_mask" [arch/x86/kernel/cpu/mce/mce-inject.ko] undefined!
+>> ERROR: modpost: "__SCK__apic_call_send_IPI_mask" [arch/x86/kvm/kvm-intel.ko] undefined!
+>> ERROR: modpost: "__SCK__apic_call_send_IPI_self" [arch/x86/kvm/kvm-intel.ko] undefined!
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
