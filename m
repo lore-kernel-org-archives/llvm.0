@@ -1,215 +1,292 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7DC15A9;
-	Tue, 18 Jul 2023 06:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DAA15A9;
+	Tue, 18 Jul 2023 06:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689660497; x=1721196497;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tyAPpcjqtrtYCeyYQ6r1WEacBk7luri7yztjPn5vve4=;
-  b=fnfwNMmjNYFXL2v1O8On3DSpL1XSm7XPK2QtZDi3GfgXwpknEh7bolA2
-   SN4ZiUfvTd3Jrj7KK+fAxJUULIQOFwX5HTHPalOh3JWc1YNMeef3OQ0lQ
-   YKE6sI76WlUs76nEkRBETKiHdnDEPoGVJsIi7FMMuAnBWCk4d+HrYwXkz
-   YUI7AH2BHVObMbTchciktWuusvMMeuSTuBm142pfxB/MZq6BSr0hDYaJ0
-   MZlve/CSGdj3/vShpwZoJcIp9D/izhWwsZeIiP2x3GIYbiGvuT8lIvq3e
-   hCPrXVCan3mv55HahrGRNz3a8zu4FxxgYIPWgxUnhBV4/82AghsbrTS6A
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="350987191"
+  t=1689661192; x=1721197192;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=KvK8E+sIz+ytCAd2bBXQSyLc/eS2VOFWDHhc4KtGOXI=;
+  b=KNmwqqyVhwvtX08dL1veQsmbgHwZxgCyiHa+DBjQdbtQ1/50xErw4Kym
+   M3CdaPNvxznl918vys8srltKB9ORtkNBL/ZziREe5vEWgrfD0o3cKWrTw
+   F7nhCPwpAJi6WDvaj4ZUNzefxBzGdXFZ2qTMKt/iGwjZwCh2ONslNL8fs
+   kRhgruWPZhKp2/+QFqbR1h4FlTIjdFgr+bZWfOPo7ysFZQOyn8dUnppAb
+   AG+8Ee+8yLehMO7B8ncN1NLHNUU9LQynS42VQHJXTVyzu0Ly7UPk2QMlv
+   fuHz6zaWwyofgfK9Rl0m+Of7WRu9f95GdLuvoeOFBzTXfYHo7+SD+hhKK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="368764818"
 X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
-   d="scan'208";a="350987191"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 23:08:16 -0700
+   d="scan'208";a="368764818"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 23:19:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="723470671"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="837150486"
 X-IronPort-AV: E=Sophos;i="6.01,213,1684825200"; 
-   d="scan'208";a="723470671"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 17 Jul 2023 23:08:15 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qLdsc-0000Gz-1c;
-	Tue, 18 Jul 2023 06:08:14 +0000
-Date: Tue, 18 Jul 2023 14:07:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Okan Sahin <okan.sahin@analog.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 2748/3113]
- drivers/regulator/max77857-regulator.c:312:16: error: initializer element is
- not a compile-time constant
-Message-ID: <202307181450.sfbuvMf5-lkp@intel.com>
+   d="scan'208";a="837150486"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Jul 2023 23:19:50 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 17 Jul 2023 23:19:49 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 17 Jul 2023 23:19:49 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 17 Jul 2023 23:19:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hkIx3BpVO0t/NRRftATU2w8uqamzMPsbEGGVwzYbg5x9DOG5OD8xRGObx2WPn4oXVntef1dny03Z0PDLp9w+btuloMEB0bHqUBw0KfDBk490irCzmDn0ahSni1aclari2JDg0qE95931jnVQT2UsrspvVQFXsotREoMRzB5z9ucgaRFqFWAOCgey/Sk7ORasB/XDVncczYDNvEBsP+KjUpCXwbtPhUG2LHh9/qE00Q61xbozwJqwI02+5+YhPU/c4Ji+Iw1H8VLItnhTnu5SL5jwOgJl8N3IU7FIVaAx9sezifTTBxEDuO3Kxr4vUcX+UwD+g+03ifiIlcAAhSXvng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KvK8E+sIz+ytCAd2bBXQSyLc/eS2VOFWDHhc4KtGOXI=;
+ b=FPAVQ0ewNlPH+lCNNAfl5HaRXF/tGomsLMLKSPICNHv8Djm75RGsHW66L1aExVLO4cXQreirnURIirYb6WGh/sOcfyf0UwlZBPptpeeLofaOnrFXJTRJsNOMndKEkHXHIY9od/bNHieAZRsOlgocPkFUw2EH+7DKS2hWSIuNv0CPI+uVE9No+W5ETj93dbLIEh4X/azCfWP08lrk5MHNScDxw8H5gdu39HL38HqcET6bkJDOg03uA80T0UI36wW37flZmeKnFiuOK/mxhsZTr5oMZnGikWSgdOdpr/zkj7tag8UcWAOL4mvKcvcpoJqvyGT3w6lA26JWYet2itPQQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by DS7PR11MB7952.namprd11.prod.outlook.com (2603:10b6:8:eb::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.31; Tue, 18 Jul 2023 06:19:14 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::c407:a2ef:2fde:f6d1]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::c407:a2ef:2fde:f6d1%4]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
+ 06:19:14 +0000
+From: "Liu, Yujie" <yujie.liu@intel.com>
+To: "bhe@redhat.com" <bhe@redhat.com>
+CC: lkp <lkp@intel.com>, "hch@lst.de" <hch@lst.de>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "linux-mm@kvack.org"
+	<linux-mm@kvack.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"rppt@kernel.org" <rppt@kernel.org>, "schnelle@linux.ibm.com"
+	<schnelle@linux.ibm.com>
+Subject: Re: [akpm-mm:mm-unstable 93/173] drivers/clk/clk-fixed-mmio.c:33:2:
+ error: call to undeclared function 'iounmap'; ISO C99 and later do not
+ support implicit function declarations
+Thread-Topic: [akpm-mm:mm-unstable 93/173] drivers/clk/clk-fixed-mmio.c:33:2:
+ error: call to undeclared function 'iounmap'; ISO C99 and later do not
+ support implicit function declarations
+Thread-Index: AQHZtTX100Drzc6jEkWXe7V0+S4Lda+34xQAgAB+jQCABS0TAIABHkmAgABnAAA=
+Date: Tue, 18 Jul 2023 06:19:14 +0000
+Message-ID: <36bdd39bfdcf7825d8dbfc7d3c7bb73849d238ca.camel@intel.com>
+References: <202307131033.JgvCSVz4-lkp@intel.com>
+	 <20230713092618.9a25417dc886b4f61660fe17@linux-foundation.org>
+	 <ZLCP0s5aRLLOfVYt@MiWiFi-R3L-srv>
+	 <1a8bdfb49897cd9808f5a1180df0b629d3b9d12c.camel@intel.com>
+	 <ZLXXh8QUiu0d2GfI@MiWiFi-R3L-srv>
+In-Reply-To: <ZLXXh8QUiu0d2GfI@MiWiFi-R3L-srv>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR11MB6392:EE_|DS7PR11MB7952:EE_
+x-ms-office365-filtering-correlation-id: 67447b33-77c8-4517-0e41-08db8756e8b0
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9cGvNUvC7Pujx1S6bX2XiCeENsosPYPpbFwFvpCMfmJGQGj/cznuIgYBiyeC2VMwdnEKBImy/g3UPlrDsrC9GVKSxhaX3RdDWcZG1XcJTkIbu5nNkAkjaQ+zx67Rh9Yl2tasM0bNRPSJk8qqtDeAldYuglwk3Fd3jprAEuUnGXD7WcxuBZXHBZPnRhlbL4vVGVZ4TzK/1JQ9mTcKf4dmpEufVYMmLBU66zu4lOKTwH0Wq29qvLWWxaBrwIk4T/95SIsNxyex43VNE00AR09Bco49P9+FpENKDJDGM/DKS17gXtcq2rtJ0DiYO6UCUA2hRtNyURQUneTatfk9fd6nI/t5mWj17vR/kBg5G+U9YfDMqZQUc5Ym4YMdnT+eaWbRjPUcf6iLbvBoyjAXrOFEEeuD6x7KVBO6nmIf8RvaS1rROau+BAoZnkwOZQ5RMDFUZcKVSatVnC8vT34clnDg4BnlQ2LHe9d+oQ0m+iw1fdnHJt+MDgE1o4c4ZqpfDIEvpTQ8jKUwEDkN+q+4jCPV2UVnTi8HdtCtzPpX48QZLnT8BNWDh7fWQMn/R5gyC2Ter6gd197XUF1ju6x5OnsV1sbYtFrDsuMjHrJADmjbAGKaW311tmwyDnOs+f1wSfPTcFMU9ziWcJ7fEQ5qXNecSg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199021)(86362001)(2906002)(36756003)(38070700005)(6512007)(966005)(2616005)(186003)(83380400001)(26005)(6506007)(38100700002)(82960400001)(6486002)(54906003)(122000001)(71200400001)(66446008)(316002)(64756008)(5660300002)(6916009)(76116006)(478600001)(66946007)(66556008)(66476007)(91956017)(4326008)(41300700001)(8936002)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YUFyWitRRnVkdFIyTFdTenM5RkMxTEZmcmd0M0pKL3ZPOGw3LzlyQUF1UnBz?=
+ =?utf-8?B?ejhsRENtQjRxbVN3RG9PNG1YWVNNQThNWkwvb3ovWXBHOE02MkZpQ3pCc0Qz?=
+ =?utf-8?B?UzkzM1lPajFoQTdMRVBOV1N2MnpsaE5EbDV5QlhvSitoWFBjQVpPSzcvSXNT?=
+ =?utf-8?B?dmFRTTd1aUIwTk1ydXJMbXMveFcvd1k1Mmo1b3o1TEEvOUZobk93QUhVWk9y?=
+ =?utf-8?B?QjJHY1NjYm4wZW1rVDZoMUpIbUttVDN4akJWK2I1OER5Z2JxTitQZHBycEx6?=
+ =?utf-8?B?ZmtsNWp4WFF4OEx2S0hhcm1IaXovallJaWg0RzY2N09IT1d0ZjM0aHl4MFBC?=
+ =?utf-8?B?SDhjZDBRVHZDS09ybVhQQS9CYmM3MVQ2M0tXYXBYSXpuZ1U5Vm5SNUhYSkUw?=
+ =?utf-8?B?a0h0cFdtR2MwMGp1aUpBZk04bkFMU0lPMHF1b1loajROTVZwQ2ZKblgxRDNz?=
+ =?utf-8?B?emtmYzRiK0gycENicGJjTHpoUDQzR20rb2kyYkFNWW5ZeS85TnhMdWtQbWR3?=
+ =?utf-8?B?NTg5VktnVG9KMHZmY2pNNUlibE8zcWY2c3VWOC9jd1NPOWJFdXFSSDBYbkhY?=
+ =?utf-8?B?T3lGTXF4WHVHUzk0aEhKaUNES21PVUhDNkNWWFVwMWU4WGpSZDFUQUptTDFp?=
+ =?utf-8?B?NjJhMTY3eXhsSTZ1a3BZZmpTQjliVnR1dHhkMTJleGFwVzhBdEJ2RHNZL3Zw?=
+ =?utf-8?B?UVhmWXhmdUVtRGNXRVJKbzFFTTVKbVRaV2hKYmxJdlRzK2RRZXBaNlY4SGht?=
+ =?utf-8?B?aW0xRWFRQUN0dFYxV2NHMEVpeFRmejJ3dXQ2MVdCdXp5aFM4czJlNHRyZXhH?=
+ =?utf-8?B?Y1hVblhhb3QxbFNJL1M3czFUOUVYVHFtZjRMS09JcTkzU2JBL3ZpMlZsWno1?=
+ =?utf-8?B?OTJlRmxvTVJhQitGUGZFQ2UxUXI5SHg3VUZvV0ZjcGRETEowSTdvQzU3VjQv?=
+ =?utf-8?B?SmJQRlVucGhCaDhlOHdxbm5HMVF4WmRzd1lFQjhLSmptczltZFVwaHltOXp2?=
+ =?utf-8?B?VFA5am9WS0l6MU50bDV0YmlhUHorVjZvMkRyejFtdFkxeWZpdjY2NWYwZjdo?=
+ =?utf-8?B?WmJOQXNjQWI0NFM3ZWt1ZU1oN0VDTzhoYUMya3RTMXQ1d1BMdm50OW93aHZK?=
+ =?utf-8?B?a1lxRDIva09kT1V5Uk14TjJwbmM5aDZVVjA4d3RNQ3NqTjRHS2t4aS8vaita?=
+ =?utf-8?B?cnQzMnordWpmNjVxWEVtWC83SUpQdUVDS3B1QjVXRWpaNVBzdUh6eWxldld3?=
+ =?utf-8?B?WktlU3hYQWprdjcwdkZlMGxBUEpscTQ1U0szeXVKSUNWZ2I5c1pOeUwrb0ZY?=
+ =?utf-8?B?WndnQ0lZS1lrK0ludkJiSTVWWWdBbGg1cHlIdnAwWkJTeW9XTUh6VVBNZ0RG?=
+ =?utf-8?B?QVVKc3piQUs5UHFOc0RJamhxSGs4TGxWdmJTN2ovZGI2QlRxZ00rWEttWGs2?=
+ =?utf-8?B?NEpaZEViWHJuUkRoWXVFdzM4WEdFeXIycGdYNS9pUjVQTzJ1K2p4VlQ2UzZo?=
+ =?utf-8?B?WHQ5c1Ivb0t2Zml1OTVWdEdwVG1GOVprcjV4TDRGdDVYN0haMVEraHVXZC85?=
+ =?utf-8?B?djhneSt5WENPMEdtdUtpdWZoOEdUeDNTMzJ1MjlRcjUxdFJvaWNNeGZuNDl1?=
+ =?utf-8?B?SlhEaHFWVks1UXJ1ck9WRG1hc3BVZUFsQ3k0QUZaQndWRElaSlVwRHdTenVZ?=
+ =?utf-8?B?TGNWYU1QR25MalFKb0dLSWJwMGlxV3FBYTNJZGFFSTVvdUpjWktXM3ppSTFm?=
+ =?utf-8?B?enVXMjdIVDdQNUN3WTdKNGh3NFRtaXBURXRzZ1FMT3Z0OHhxb0FSbVhvazV3?=
+ =?utf-8?B?T2lYemlrVEkyWGtwdEw5QTBObXhyMk9zVXR3UHJoSHJVQjBaT0U2SjIwNW94?=
+ =?utf-8?B?L3lkYjV5dkVoTDdOcldEVWZZNWF5QnJqU1FBSkdLbExkc2o5b2FtSVMwaHlD?=
+ =?utf-8?B?QkxXKzdoR2V0UVVxaWJBOTZiNkRMeUhOOGlYSEpBdS9rTm04UzV5ZDdlSDBs?=
+ =?utf-8?B?clRHYUFSdVRNM21kZFJVSkE0dVZQVExMTi9uaWdCWTU2dlRGUEpzakkwQ0tr?=
+ =?utf-8?B?OEVmUDc3ZjhQczVNdk1PRlFlVTZEMnZld3Q5bmlCQU8vamJBUDNJTk9wYWdr?=
+ =?utf-8?B?QXJ6SGVCdXoyRkJDVk0zdW82b1ZkNm1MS0J0TFZHd29hcU1qMHhaTkJiQ0lZ?=
+ =?utf-8?B?b0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C420D2554DDBCE419984CD416451E749@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67447b33-77c8-4517-0e41-08db8756e8b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2023 06:19:14.3745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IMRtwhUXrJ5efZ/ThLf5YlDroPwEE0h2bf8Gh4sOipqnn9Z4i1Rl8UAJkWXLnsIZnyEpA3BHv9fVqMXNJ65ujg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7952
+X-OriginatorOrg: intel.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   aeba456828b4e47d99ec8ffb01412fbed0f94806
-commit: af71cccadecedad3484c2208e2c4fc8eff927d4a [2748/3113] regulator: max77857: Add ADI MAX77857/59/MAX77831 Regulator Support
-config: riscv-randconfig-r016-20230718 (https://download.01.org/0day-ci/archive/20230718/202307181450.sfbuvMf5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230718/202307181450.sfbuvMf5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307181450.sfbuvMf5-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/regulator/max77857-regulator.c:56:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
-      56 |         enum max77857_id id = (enum max77857_id)dev_get_drvdata(dev);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/regulator/max77857-regulator.c:94:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
-      94 |         enum max77857_id id = (enum max77857_id)rdev_get_drvdata(rdev);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/regulator/max77857-regulator.c:128:24: warning: cast to smaller integer type 'enum max77857_id' from 'void *' [-Wvoid-pointer-to-enum-cast]
-     128 |         enum max77857_id id = (enum max77857_id)rdev_get_drvdata(rdev);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/regulator/max77857-regulator.c:209:5: warning: no previous prototype for function 'max77859_get_voltage_sel' [-Wmissing-prototypes]
-     209 | int max77859_get_voltage_sel(struct regulator_dev *rdev)
-         |     ^
-   drivers/regulator/max77857-regulator.c:209:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     209 | int max77859_get_voltage_sel(struct regulator_dev *rdev)
-         | ^
-         | static 
->> drivers/regulator/max77857-regulator.c:221:5: warning: no previous prototype for function 'max77859_set_current_limit' [-Wmissing-prototypes]
-     221 | int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
-         |     ^
-   drivers/regulator/max77857-regulator.c:221:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     221 | int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
-         | ^
-         | static 
->> drivers/regulator/max77857-regulator.c:235:5: warning: no previous prototype for function 'max77859_get_current_limit' [-Wmissing-prototypes]
-     235 | int max77859_get_current_limit(struct regulator_dev *rdev)
-         |     ^
-   drivers/regulator/max77857-regulator.c:235:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     235 | int max77859_get_current_limit(struct regulator_dev *rdev)
-         | ^
-         | static 
->> drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
-     312 |         .ramp_delay = max77857_ramp_table[0][0],
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
-
-
-vim +312 drivers/regulator/max77857-regulator.c
-
-   208	
- > 209	int max77859_get_voltage_sel(struct regulator_dev *rdev)
-   210	{
-   211		__be16 reg;
-   212		int ret;
-   213	
-   214		ret = regmap_bulk_read(rdev->regmap, MAX77859_REG_CONT3, &reg, 2);
-   215		if (ret)
-   216			return ret;
-   217	
-   218		return FIELD_GET(MAX77859_VOLTAGE_SEL_MASK, __be16_to_cpu(reg));
-   219	}
-   220	
- > 221	int max77859_set_current_limit(struct regulator_dev *rdev, int min_uA, int max_uA)
-   222	{
-   223		u32 selector;
-   224	
-   225		if (max_uA < MAX77859_CURRENT_MIN)
-   226			return -EINVAL;
-   227	
-   228		selector = 0x12 + (max_uA - MAX77859_CURRENT_MIN) / MAX77859_CURRENT_STEP;
-   229	
-   230		selector = clamp_val(selector, 0x00, 0x7F);
-   231	
-   232		return regmap_write(rdev->regmap, MAX77859_REG_CONT5, selector);
-   233	}
-   234	
- > 235	int max77859_get_current_limit(struct regulator_dev *rdev)
-   236	{
-   237		u32 selector;
-   238		int ret;
-   239	
-   240		ret = regmap_read(rdev->regmap, MAX77859_REG_CONT5, &selector);
-   241		if (ret)
-   242			return ret;
-   243	
-   244		if (selector <= 0x12)
-   245			return MAX77859_CURRENT_MIN;
-   246	
-   247		if (selector >= 0x64)
-   248			return MAX77859_CURRENT_MAX;
-   249	
-   250		return MAX77859_CURRENT_MIN + (selector - 0x12) * MAX77859_CURRENT_STEP;
-   251	}
-   252	
-   253	static const struct regulator_ops max77859_regulator_ops = {
-   254		.list_voltage = regulator_list_voltage_linear_range,
-   255		.set_voltage_sel = max77859_set_voltage_sel,
-   256		.get_voltage_sel = max77859_get_voltage_sel,
-   257		.set_ramp_delay = regulator_set_ramp_delay_regmap,
-   258		.get_status = max77857_get_status,
-   259		.set_mode = max77857_set_mode,
-   260		.get_mode = max77857_get_mode,
-   261		.get_error_flags = max77857_get_error_flags,
-   262	};
-   263	
-   264	static const struct regulator_ops max77859a_regulator_ops = {
-   265		.list_voltage = regulator_list_voltage_linear_range,
-   266		.set_voltage_sel = max77859_set_voltage_sel,
-   267		.get_voltage_sel = max77859_get_voltage_sel,
-   268		.set_current_limit = max77859_set_current_limit,
-   269		.get_current_limit = max77859_get_current_limit,
-   270		.set_ramp_delay = regulator_set_ramp_delay_regmap,
-   271		.get_status = max77857_get_status,
-   272		.set_mode = max77857_set_mode,
-   273		.get_mode = max77857_get_mode,
-   274		.get_error_flags = max77857_get_error_flags,
-   275	};
-   276	
-   277	static const struct regulator_ops max77857_regulator_ops = {
-   278		.list_voltage = regulator_list_voltage_linear_range,
-   279		.set_voltage_sel = regulator_set_voltage_sel_regmap,
-   280		.get_voltage_sel = regulator_get_voltage_sel_regmap,
-   281		.set_ramp_delay = regulator_set_ramp_delay_regmap,
-   282		.get_status = max77857_get_status,
-   283		.set_mode = max77857_set_mode,
-   284		.get_mode = max77857_get_mode,
-   285		.get_error_flags = max77857_get_error_flags,
-   286	};
-   287	
-   288	static struct linear_range max77857_lin_ranges[] = {
-   289		REGULATOR_LINEAR_RANGE(4485000, 0x3D, 0xCC, 73500)
-   290	};
-   291	
-   292	static const unsigned int max77857_switch_freq[] = {
-   293		1200000, 1500000, 1800000, 2100000
-   294	};
-   295	
-   296	static const unsigned int max77857_ramp_table[2][4] = {
-   297		{ 1333, 667, 333, 227 }, /* when switch freq is 1.8MHz or 2.1MHz */
-   298		{ 1166, 667, 333, 167 }, /* when switch freq is 1.2MHz or 1.5MHz */
-   299	};
-   300	
-   301	static struct regulator_desc max77857_regulator_desc = {
-   302		.ops = &max77857_regulator_ops,
-   303		.name = "max77857",
-   304		.linear_ranges = max77857_lin_ranges,
-   305		.n_linear_ranges = ARRAY_SIZE(max77857_lin_ranges),
-   306		.vsel_mask = 0xFF,
-   307		.vsel_reg = MAX77857_REG_CONT2,
-   308		.ramp_delay_table = max77857_ramp_table[0],
-   309		.n_ramp_values = ARRAY_SIZE(max77857_ramp_table[0]),
-   310		.ramp_reg = MAX77857_REG_CONT3,
-   311		.ramp_mask = GENMASK(1, 0),
- > 312		.ramp_delay = max77857_ramp_table[0][0],
-   313		.owner = THIS_MODULE,
-   314	};
-   315	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+T24gVHVlLCAyMDIzLTA3LTE4IGF0IDA4OjA2ICswODAwLCBiaGVAcmVkaGF0LmNvbSB3cm90ZToN
+Cj4gT24gMDcvMTcvMjMgYXQgMDc6MDVhbSwgTGl1LCBZdWppZSB3cm90ZToNCj4gPiBIaSBCYW9x
+dWFuLA0KPiA+IA0KPiA+IE9uIEZyaSwgMjAyMy0wNy0xNCBhdCAwNzo1OSArMDgwMCwgQmFvcXVh
+biBIZSB3cm90ZToNCj4gPiA+ID4gDQo+ID4gPiA+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSAuL2lu
+Y2x1ZGUvbGludXgvaW8uaDoxMywNCj4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgZnJvbSBkcml2ZXJzL2Nsay9jbGstZml4ZWQtbW1pby5jOjEzOg0KPiA+ID4gPiBkcml2
+ZXJzL2Nsay9jbGstZml4ZWQtbW1pby5jOiBJbiBmdW5jdGlvbiAnZml4ZWRfbW1pb19jbGtfc2V0
+dXAnOg0KPiA+ID4gPiAuL2FyY2gvczM5MC9pbmNsdWRlL2FzbS9pby5oOjI5OjE3OiBlcnJvcjog
+aW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24gJ2lvdW5tYXAnOyBkaWQgeW91IG1lYW4g
+J3Z1bm1hcCc/IFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQ0KPiA+ID4g
+PiDCoMKgIDI5IHwgI2RlZmluZSBpb3VubWFwIGlvdW5tYXANCj4gPiA+ID4gwqDCoMKgwqDCoCB8
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXn5+fn5+fg0KPiA+ID4gPiBkcml2ZXJz
+L2Nsay9jbGstZml4ZWQtbW1pby5jOjMzOjk6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAn
+aW91bm1hcCcNCj4gPiA+ID4gwqDCoCAzMyB8wqDCoMKgwqDCoMKgwqDCoCBpb3VubWFwKGJhc2Up
+Ow0KPiA+ID4gPiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgIF5+fn5+fn4NCj4gPiA+IA0K
+PiA+ID4gVGhlc2UgaW9yZW1wYS9pb3VubWFwIG5vdCBkZWZpbmVkIG9yIGRlY2xhcmVkIGFyZSBu
+b3QgcmVsYXRlZCB0byBteQ0KPiA+ID4gcGF0Y2hlcy4gUzM5MCBjb3VsZCBzZXQgQ09ORklHX1BD
+ST1uLCBob3dldmVyIGl0cyBpb3JlbWFwL2lvdW5tYXAgY29kZQ0KPiA+ID4gYXJlIGFsbCBkZWZp
+bmVkIGluIGFyY2gvczM5MC9wY2kvcGNpLmMuIE1lYW5zIGl0cyBpb3JlbWFwL2lvdW5tYXAgY29k
+ZQ0KPiA+ID4gZGVwZW5kcyBvbiBDT05GSUdfUENJIGVuYWJsaW5nLiBTbyB0aG9zZSBkcml2ZXJz
+IGludm9raW5nIGlvbWVtDQo+ID4gPiBmdW5jdGlvbnMsIChlLmcgaW9yZW1hcCgpLCBkZXZtX2lv
+cmVtYXAoKSwgZXRjKSBhbGwgd2lsbCBiZSBmYWlsZWQgdG8NCj4gPiA+IGJ1aWxkIGlmIENPTkZJ
+R19QQ0k9biBvbiBzMzkwLg0KPiA+ID4gDQo+ID4gPiBBbGwgdGhlc2UgZXJyb3JzIGhhdmUgYmVl
+biBmaXhlZCBpbiBteSBhbm90aGVyIHBhdGNoc2V0Lg0KPiA+ID4gDQo+ID4gPiBodHRwczovL2xv
+cmUua2VybmVsLm9yZy9hbGwvMjAyMzA3MDcxMzU4NTIuMjQyOTItMS1iaGVAcmVkaGF0LmNvbS9U
+LyN1DQo+ID4gDQo+ID4gU29ycnkgZm9yIHRoZSBkdXBsaWNhdGUgcmVwb3J0cyBhbmQgbGF0ZSBy
+ZXBseS4NCj4gPiANCj4gPiBXZSBzZWFyY2hlZCB0aGUgbG9nIG9mIGtlcm5lbCB0ZXN0IHJvYm90
+IGFuZCBnb3QgdGhlIGZvbGxvd2luZyBjbHVlcw0KPiA+IGZvciB0aGlzIGNhc2U6DQo+ID4gDQo+
+ID4gVGhpcyBpcyBhIHJhbmRjb25maWcgYnVpbGQgdGVzdCwgc28gdGhlIGtjb25maWcgaGFwcGVu
+ZWQgdG8gc2V0DQo+ID4gQ09ORklHX1BDST1uIGFuZCBDT05GSUdfQ09NTU9OX0NMS19GSVhFRF9N
+TUlPPXksIGFuZCBpdCBpcyBnb29kIHRvDQo+ID4gYnVpbGQgdGhlIGNsay1maXhlZC1tbWlvIGRy
+aXZlciBpbiBzdWNoIGNhc2UgYmVmb3JlLCBidXQgaXQgcmFpc2VzIGENCj4gPiBidWlsZCBlcnJv
+ciBhZnRlciBhcHBseWluZyB5b3VyIHBhdGNoZXMsIHNvIHRoZSBib3QgdGhvdWdodCB0aGF0IGEg
+bmV3DQo+ID4gYnVpbGQgZXJyb3Igd2FzIGludHJvZHVjZWQgYW5kIHNlbnQgcmVwb3J0cyB0byB5
+b3UuDQo+ID4gDQo+ID4gPT0gd2l0aG91dCB0aGUgcGF0Y2hlcyAodjYuNS1yYzEgYXMgZXhhbXBs
+ZSkgPT0NCj4gPiANCj4gPiAkIGdpdCBjaGVja291dCB2Ni41LXJjMQ0KPiA+IEhFQUQgaXMgbm93
+IGF0IDA2YzJhZmI4NjJmOSBMaW51eCA2LjUtcmMxDQo+ID4gDQo+ID4gJCBncmVwIC1lIENPTkZJ
+R19QQ0kgLWUgQ09ORklHX0NPTU1PTl9DTEtfRklYRURfTU1JTyAuY29uZmlnDQo+ID4gIyBDT05G
+SUdfUENJIGlzIG5vdCBzZXQNCj4gPiBDT05GSUdfQ09NTU9OX0NMS19GSVhFRF9NTUlPPXkNCj4g
+PiANCj4gPiAkIENPTVBJTEVSX0lOU1RBTExfUEFUSD0kSE9NRS8wZGF5IENPTVBJTEVSPWNsYW5n
+IG1ha2UuY3Jvc3MgTExWTV9JQVM9MSBXPTEgQVJDSD1zMzkwIGRyaXZlcnMvY2xrL2Nsay1maXhl
+ZC1tbWlvLm8NCj4gPiAuLi4NCj4gPiANCj4gPiAkIGZpbGUgZHJpdmVycy9jbGsvY2xrLWZpeGVk
+LW1taW8ubw0KPiA+IGRyaXZlcnMvY2xrL2Nsay1maXhlZC1tbWlvLm86IEVMRiA2NC1iaXQgTVNC
+IHJlbG9jYXRhYmxlLCBJQk0gUy8zOTAsIHZlcnNpb24gMSAoU1lTViksIG5vdCBzdHJpcHBlZA0K
+PiA+IA0KPiA+ID09IHdpdGggdGhlIHBhdGNoZXMgPT0NCj4gPiANCj4gPiAkIGdpdCBjaGVja291
+dCBiMGY2ODNlMzRhNWINCj4gPiBIRUFEIGlzIG5vdyBhdCBiMGY2ODNlMzRhNWIgczM5MDogbW06
+IGNvbnZlcnQgdG8gR0VORVJJQ19JT1JFTUFQDQo+ID4gDQo+ID4gJCBncmVwIC1lIENPTkZJR19Q
+Q0kgLWUgQ09ORklHX0NPTU1PTl9DTEtfRklYRURfTU1JTyAuY29uZmlnDQo+ID4gIyBDT05GSUdf
+UENJIGlzIG5vdCBzZXQNCj4gPiBDT05GSUdfQ09NTU9OX0NMS19GSVhFRF9NTUlPPXkNCj4gPiAN
+Cj4gPiAkIENPTVBJTEVSX0lOU1RBTExfUEFUSD0kSE9NRS8wZGF5IENPTVBJTEVSPWNsYW5nIC4v
+bWFrZS5jcm9zcyBMTFZNX0lBUz0xIFc9MSBBUkNIPXMzOTAgZHJpdmVycy9jbGsvY2xrLWZpeGVk
+LW1taW8ubw0KPiA+IC4uLg0KPiA+IGRyaXZlcnMvY2xrL2Nsay1maXhlZC1tbWlvLmM6MzM6Mjog
+ZXJyb3I6IGNhbGwgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbiAnaW91bm1hcCc7IElTTyBDOTkgYW5k
+IGxhdGVyIGRvIG5vdCBzdXBwb3J0IGltcGxpY2l0IGZ1bmN0aW9uIGRlY2xhcmF0aW9ucyBbLVdp
+bXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0NCj4gPiDCoMKgIDMzIHzCoMKgwqDCoMKgwqDC
+oMKgIGlvdW5tYXAoYmFzZSk7DQo+ID4gwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoCBeDQo+
+ID4gLi9hcmNoL3MzOTAvaW5jbHVkZS9hc20vaW8uaDoyOToxNzogbm90ZTogZXhwYW5kZWQgZnJv
+bSBtYWNybyAnaW91bm1hcCcNCj4gPiDCoMKgIDI5IHwgI2RlZmluZSBpb3VubWFwIGlvdW5tYXAN
+Cj4gPiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBeDQo+ID4g
+ZHJpdmVycy9jbGsvY2xrLWZpeGVkLW1taW8uYzozMzoyOiBub3RlOiBkaWQgeW91IG1lYW4gJ3Z1
+bm1hcCc/DQo+ID4gLi9hcmNoL3MzOTAvaW5jbHVkZS9hc20vaW8uaDoyOToxNzogbm90ZTogZXhw
+YW5kZWQgZnJvbSBtYWNybyAnaW91bm1hcCcNCj4gPiDCoMKgIDI5IHwgI2RlZmluZSBpb3VubWFw
+IGlvdW5tYXANCj4gPiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBeDQo+ID4gLi9pbmNsdWRlL2xpbnV4L3ZtYWxsb2MuaDoxNjc6MTM6IG5vdGU6ICd2dW5tYXAn
+IGRlY2xhcmVkIGhlcmUNCj4gPiDCoCAxNjcgfCBleHRlcm4gdm9pZCB2dW5tYXAoY29uc3Qgdm9p
+ZCAqYWRkcik7DQo+ID4gwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF4NCj4g
+PiAxMiB3YXJuaW5ncyBhbmQgMSBlcnJvciBnZW5lcmF0ZWQuDQo+ID4gbWFrZVs0XTogKioqIFtz
+Y3JpcHRzL01ha2VmaWxlLmJ1aWxkOjI0MzogZHJpdmVycy9jbGsvY2xrLWZpeGVkLW1taW8ub10g
+RXJyb3IgMQ0KPiA+IG1ha2VbM106ICoqKiBbc2NyaXB0cy9NYWtlZmlsZS5idWlsZDo0Nzc6IGRy
+aXZlcnMvY2xrXSBFcnJvciAyDQo+ID4gbWFrZVszXTogVGFyZ2V0ICdkcml2ZXJzL2Nsay9jbGst
+Zml4ZWQtbW1pby5vJyBub3QgcmVtYWRlIGJlY2F1c2Ugb2YgZXJyb3JzLg0KPiA+IG1ha2VbMl06
+ICoqKiBbc2NyaXB0cy9NYWtlZmlsZS5idWlsZDo0Nzc6IGRyaXZlcnNdIEVycm9yIDINCj4gPiBt
+YWtlWzJdOiBUYXJnZXQgJ2RyaXZlcnMvY2xrL2Nsay1maXhlZC1tbWlvLm8nIG5vdCByZW1hZGUg
+YmVjYXVzZSBvZiBlcnJvcnMuDQo+ID4gbWFrZVsxXTogKioqIFsvaG9tZS95dWppZS9saW51eC9N
+YWtlZmlsZToyMDIwOiAuXSBFcnJvciAyDQo+ID4gbWFrZVsxXTogVGFyZ2V0ICdkcml2ZXJzL2Ns
+ay9jbGstZml4ZWQtbW1pby5vJyBub3QgcmVtYWRlIGJlY2F1c2Ugb2YgZXJyb3JzLg0KPiA+IG1h
+a2U6ICoqKiBbTWFrZWZpbGU6MjM0OiBfX3N1Yi1tYWtlXSBFcnJvciAyDQo+ID4gbWFrZTogVGFy
+Z2V0ICdkcml2ZXJzL2Nsay9jbGstZml4ZWQtbW1pby5vJyBub3QgcmVtYWRlIGJlY2F1c2Ugb2Yg
+ZXJyb3JzLg0KPiA+IA0KPiA+IA0KPiA+IEFmdGVyIGFwcGx5aW5nIHRoZSBwYXRjaHNldCBhdA0K
+PiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDcwNzEzNTg1Mi4yNDI5Mi0xLWJo
+ZUByZWRoYXQuY29tLA0KPiA+IGFib3ZlIHNpdHVhdGlvbiBjYW5ub3QgaGFwcGVuIGFueW1vcmUg
+YmVjYXVzZSBDT05GSUdfUENJIGFuZA0KPiA+IENPTkZJR19DT01NT05fQ0xLX0ZJWEVEX01NSU8g
+Y2FuIG9ubHkgYmUgYm90aCBlbmFibGVkIG9yIGJvdGggZGlzYWJsZWQsDQo+ID4gc28gdGhlIGlz
+c3VlIGhhcyBiZWVuIHJlc29sdmVkLg0KPiANCj4gTm8sIHlvdXIgcHJvY2VzcyBtYXkgbmVlZCBi
+ZSBpbXByb3ZlZC4NCj4gDQo+IE9uIGxpbnVzJ3MgbWFzdGVyIGJyYW5jaCwgeW91IGNhbiBwYXNz
+IGNvbXBpbGluZyBvbg0KPiBkcml2ZXJzL2Nsay9jbGstZml4ZWQtbW1pby5vLCBidXQgeW91IGFi
+c29sdXRlbHkgd2lsbCBmYWlsIGR1cmluZyBsaW5raW5nDQo+IHN0YWdlLiBBcyBJIGhhdmUgZXhw
+bGFpbmVkLCBpb3JlbWFwKCkvaW91bm1hcCgpL2lvcmVtYXBfeHgoKSBhcmUgYWxsDQo+IGRlZmlu
+ZWQgaW4gYXJjaC9zMzkwL3BjaS9wY2kuYy4gU2V0dGluZyBDT05GSUdfUENJPW4gd2lsbCBtYWtl
+IHlvdSBub3QNCj4gYmUgYWJsZSB0byBmaW5kIHRoZSBpbXBsZW1lbnRhdGlvbiBvZiBpb3JlbWFw
+KCkvaW91bm1hcCgpLiBEb24ndCB5b3UNCj4gZmluaXNoIHRoZSB3aG9sZSBidWlsZGluZyBwcm9j
+ZXNzIG9mIGtlcm5lbCBpbWFnZSBhbmQgbW9kdWxlcz8NCg0KU29ycnkgSSBkaWRuJ3QgbWFrZSBp
+dCB2ZXJ5IGNsZWFyIGluIHRoZSBsYXN0IG1haWwuIFdlIGFsc28gZ290IHRoZQ0KZmFpbHVyZSBp
+biBsaW5rIHN0YWdlIHdoZW4gdGVzdGluZyBvbiBtYWlubGluZS4gQWZ0ZXIgYXBwbHlpbmcgeW91
+cg0KcGF0Y2gsIGl0IGJlY2FtZSBhbiBlcnJvciBpbiBjb21waWxlIHN0YWdlIGFuZCB3b24ndCBy
+ZWFjaCBsaW5rIHN0YWdlDQphbnltb3JlLiBJbiBvdGhlciB3b3JkcywgeW91ciBwYXRjaCBoZWxw
+ZWQgdG8gZXhwb3NlIGFuIGV4aXN0aW5nIGlzc3VlDQplYXJsaWVyIGZyb20gbGlua2luZyB0byBj
+b21waWxpbmcuIE91ciBib3QgY2Fubm90IGhhbmRsZSBzdWNoIGNhc2UgdmVyeQ0Kd2VsbCBmb3Ig
+bm93IHNpbmNlIHRoZSBjb21waWxpbmcgZXJyb3IgYW5kIGxpbmtpbmcgZXJyb3IgYXJlIHZlcnkN
+CmRpZmZlcmVudC4gT2YgY291cnNlIHRoaXMgc2hvdWxkIGJlIGEgZmFsc2UgcG9zaXRpdmUgcmVw
+b3J0IGFuZCB5b3VyDQpwYXRjaCBzaG91bGQgbm90IGJlIGJsYW1lZCBmb3IgZXhwb3NpbmcgYW4g
+ZXhpc3RpbmcgaXNzdWUuIFNvcnJ5IGZvcg0KYW55IG1pc2xlYWRpbmcgb3IgZGlzdHVyYmluZy4g
+V2Ugd2lsbCBjb25zaWRlciBzb21lIG9wdGltaXphdGlvbnMgZm9yDQpzaW1pbGFyIGNhc2VzLg0K
+DQpUaGFua3MsDQpZdWppZQ0KDQo+IFBsZWFzZSBzZWUgYmVsb3cgYnVpbGRpbmcgbG9nLCB0aGUg
+bGlua2luZyBpcyBmYWlsZWQuIEkgZ290IGEgbmV3IHMzOTB4DQo+IG1hY2hpbmUsIGFuZCBnaXQg
+Y2xvbmUgbGludXMncyB0cmVlIGFuZCBidWlsZCB3aXRoIHJhbmRjb25maWcgZnJvbSB0aGlzDQo+
+IGxrcCByZXBvcnQuIA0KPiANCj4gV2hlbiBJIG1hZGUgYmVsb3cgcGF0Y2ggYW5kIHRlc3RlZCwg
+SSBhbHNvIG9ubHkgZ2l0IGNsb25lIGxpbnVzJ3MgbGF0ZXN0DQo+IGtlcm5lbCB0cmVlLiBJIGRp
+ZG4ndCBhcHBseSBhbnkgcGF0Y2guIFRoZSBjdXJyZW50IGxrcCByZXBvcnQgYW5kIHlvdXINCj4g
+Y2hlY2tpbmcgY291bGQgYmUgbWlzbGVhZGluZy4NCj4gDQo+IFtQQVRDSCAwLzhdIE1ha2Ugc2V2
+ZXJhbCBLY29uZmlnIG9wdGlvbnMgZGVwZW5kIG9uIEhBU19JT01FTQ0KPiBodHRwczovL2xvcmUu
+a2VybmVsLm9yZy9hbGwvMjAyMzA3MDcxMzU4NTIuMjQyOTItMS1iaGVAcmVkaGF0LmNvbSwNCj4g
+DQo+ID09PT09DQo+IMKgIEFSwqDCoMKgwqDCoCBkcml2ZXJzL2lpby9idWlsdC1pbi5hDQo+IMKg
+IEFSwqDCoMKgwqDCoCBkcml2ZXJzL2J1aWx0LWluLmENCj4gwqAgQVLCoMKgwqDCoMKgIGJ1aWx0
+LWluLmENCj4gwqAgQVLCoMKgwqDCoMKgIHZtbGludXguYQ0KPiDCoCBMRMKgwqDCoMKgwqAgdm1s
+aW51eC5vDQo+IMKgIE9CSkNPUFkgbW9kdWxlcy5idWlsdGluLm1vZGluZm8NCj4gwqAgR0VOwqDC
+oMKgwqAgbW9kdWxlcy5idWlsdGluDQo+IMKgIE1PRFBPU1Qgdm1saW51eC5zeW12ZXJzDQo+IMKg
+IFVQRMKgwqDCoMKgIGluY2x1ZGUvZ2VuZXJhdGVkL3V0c3ZlcnNpb24uaA0KPiDCoCBDQ8KgwqDC
+oMKgwqAgaW5pdC92ZXJzaW9uLXRpbWVzdGFtcC5vDQo+IMKgIExEwqDCoMKgwqDCoCAudG1wX3Zt
+bGludXgua2FsbHN5bXMxDQo+IGxkOiBkcml2ZXJzL2Nsay9jbGstZml4ZWQtbW1pby5vOiBpbiBm
+dW5jdGlvbiBgZml4ZWRfbW1pb19jbGtfc2V0dXAnOg0KPiBjbGstZml4ZWQtbW1pby5jOigudGV4
+dCsweDQ0KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgb2ZfaW9tYXAnDQo+IGxkOiBjbGstZml4
+ZWQtbW1pby5jOigudGV4dCsweDljKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgaW91bm1hcCcN
+Cj4gbGQ6IGRyaXZlcnMvcGNtY2lhL2Npc3RwbC5vOiBpbiBmdW5jdGlvbiBgc2V0X2Npc19tYXAn
+Og0KPiBjaXN0cGwuYzooLnRleHQrMHg1MmEpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBpb3Jl
+bWFwJw0KPiBsZDogY2lzdHBsLmM6KC50ZXh0KzB4NjAyKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0
+byBgaW91bm1hcCcNCj4gbGQ6IGNpc3RwbC5jOigudGV4dCsweDY1MCk6IHVuZGVmaW5lZCByZWZl
+cmVuY2UgdG8gYGlvdW5tYXAnDQo+IGxkOiBjaXN0cGwuYzooLnRleHQrMHg2NjgpOiB1bmRlZmlu
+ZWQgcmVmZXJlbmNlIHRvIGBpb3JlbWFwJw0KPiBsZDogZHJpdmVycy9wY21jaWEvY2lzdHBsLm86
+IGluIGZ1bmN0aW9uIGByZWxlYXNlX2Npc19tZW0nOg0KPiBjaXN0cGwuYzooLnRleHQrMHg4NWMp
+OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBpb3VubWFwJw0KPiBtYWtlWzJdOiAqKiogW3Njcmlw
+dHMvTWFrZWZpbGUudm1saW51eDozNjogdm1saW51eF0gRXJyb3IgMQ0KPiBtYWtlWzFdOiAqKiog
+Wy9yb290L2xpbnV4L01ha2VmaWxlOjEyMzg6IHZtbGludXhdIEVycm9yIDINCj4gbWFrZTogKioq
+IFtNYWtlZmlsZToyMzQ6IF9fc3ViLW1ha2VdIEVycm9yIDINCj4gDQo+IA0KDQo=
