@@ -1,77 +1,121 @@
-Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6247E2;
-	Tue, 18 Jul 2023 10:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-	s=201702; t=1689675996;
-	bh=nRbBE6dIpgDUilr8ZuaHONMIcYRzKhmkbNXaA/Q0QN8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fR4m2XPaVoa+PXxOZYWdLtasFHCZ24EzCs7Mi488iSBjO/twIoZa1LhQmEjRKPoNQ
-	 RJ30/0KgWvEWlppNSYgZaO+dPCx/GLHesL+Sal1guFh7Pm2qQswSmTaIAFS5zjFTG7
-	 NmtmGz0Fod6S8pPxivPw9pV+Fuf11ZE9BRF8pFuVBtEZRZVpLlXVL9edPtuxXte8gC
-	 QOSer+fvpm61J9FTzk2eH8djOWaUWezvvTcTR//7O1JuOZRiDe7Kb6DQoTXXd0ndPU
-	 vaRT/JEEtUp/RD6+j90xBIFprEwA9eK+rwAUWH7aSXgOo8DtWKZ9pARg3ITuJ8Eo/A
-	 OlwtGcAGz57qg==
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.rothwell.id.au (Postfix) with ESMTPSA id 4R4w975h8pzyNw;
-	Tue, 18 Jul 2023 20:26:35 +1000 (AEST)
-Date: Tue, 18 Jul 2023 20:26:33 +1000
-From: Stephen Rothwell <sfr@rothwell.id.au>
-To: kernel test robot <lkp@intel.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Hu Haowen <src.res.211@gmail.com>
-Subject: Re: [srcres258-doc:next 1/1] mm/memory-failure.c:1891:6: error:
- redefinition of 'is_raw_hwpoison_page_in_hugepage'
-Message-ID: <20230718202633.7578c89e@pine.rothwell.emu.id.au>
-In-Reply-To: <202307181715.0dwDb1O9-lkp@intel.com>
-References: <202307181715.0dwDb1O9-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B301FD8
+	for <llvm@lists.linux.dev>; Tue, 18 Jul 2023 11:28:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689679729; x=1721215729;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eG9i8FoJlSyTJM2sgpvziVRwaPmDaVtbaL3UEyeheKw=;
+  b=e19dbwZv+EPy5/QVk7l2OM+OugGEdf17yR54Q4N7pVX+S2Fts2fXkmeh
+   +qdb/WnCENniETqVe1EK3QtewJDcP/uGiRaZ1SDVClHFpX5RkdW7bIWvk
+   sF0yQKV0kE32ED6mtBnpMIFho8eQLKBRd2RZIR9F0xrzoXZOI4WWnfPkN
+   LozWjQCRr5/c88Ywef0eExV56w9Klay/XDTSs612B0Cgcieqh5Ek4oHr5
+   f4GOg4dOPFlBrUe1grqKwVLaCOJDMRaxcsTDVDrzcm6Ob9JttKTkaGSt6
+   OEuf0p1t/ehzvbvlKeYc3L7MsddZoLgiuVjUV95utvQSEtSQXfHOOrG3i
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="368821000"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="368821000"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 04:28:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="813719404"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="813719404"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.19.167]) ([10.213.19.167])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 04:28:42 -0700
+Message-ID: <3c7dfc18-539f-2b0c-0c77-48b89ef96560@intel.com>
+Date: Tue, 18 Jul 2023 13:28:38 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OsN=gRtltWiRkWk5KPRaBED";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH] drm/i915/tv: avoid possible division by zero
+Content-Language: en-US
+To: Su Hui <suhui@nfschina.com>, Dan Carpenter <dan.carpenter@linaro.org>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+ rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, airlied@gmail.com,
+ daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, ville.syrjala@linux.intel.com, mripard@kernel.org,
+ ankit.k.nautiyal@intel.com, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+References: <8e3e945b-9cae-71e9-fc68-dc1c64e5ea86@nfschina.com>
+From: Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <8e3e945b-9cae-71e9-fc68-dc1c64e5ea86@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---Sig_/OsN=gRtltWiRkWk5KPRaBED
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
 
-On Tue, 18 Jul 2023 17:42:05 +0800 kernel test robot <lkp@intel.com> wrote:
+On 18.07.2023 12:10, Su Hui wrote:
+> On 2023/7/18 13:39, Dan Carpenter wrote:
+>> On Mon, Jul 17, 2023 at 04:52:51PM +0200, Andrzej Hajda wrote:
+>>>
+>>> On 17.07.2023 08:22, Su Hui wrote:
+>>>> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
+>>>> line 991, column 22 Division by zero.
+>>>> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
+>>>> then division by zero will happen.
+>>>>
+>>>> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
+>>>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>>>> ---
+>>>>    drivers/gpu/drm/i915/display/intel_tv.c | 3 ++-
+>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c 
+>>>> b/drivers/gpu/drm/i915/display/intel_tv.c
+>>>> index 36b479b46b60..82b54af51f23 100644
+>>>> --- a/drivers/gpu/drm/i915/display/intel_tv.c
+>>>> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
+>>>> @@ -988,7 +988,8 @@ intel_tv_mode_to_mode(struct drm_display_mode 
+>>>> *mode,
+>>>>                  const struct tv_mode *tv_mode,
+>>>>                  int clock)
+>>>>    {
+>>>> -    mode->clock = clock / (tv_mode->oversample >> 
+>>>> !tv_mode->progressive);
+>>>> +    mode->clock = clock / (tv_mode->oversample != 1 ?
+>>>> +            tv_mode->oversample >> !tv_mode->progressive : 1);
+>>> Seems too smart to me, why not just:
+>>> mode->clock = clock / tv_mode->oversample;
+>>> if (!tv_mode->progressive)
+>>>      mode->clock <<= 1;
+>> This is nice.
 >
-> tree:   https://github.com/srcres258/linux-doc next
+> mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
+>
+> But I think this one is much better,  it has less code and run faster.
+> Should I resend v3 to add some explanation or follow Dan's advice?
 
-This is not the linux-next tree.  It is a tree that merges linux-next
-every now and then which is *not* how to work with linux-next and will
-create lots of merge conflicts which may, or may not, be resolved
-correctly.  Please do *not* report any problems with this tree to me.
+Speed gain here is irrelevant here, and disputable.
 
---=20
-Cheers,
-Stephen Rothwell
+One thing which could be problematic is that we could loose the least 
+significant bit in mode->clock,
+in case non-progressive, but I am not sure if it really matters, as 
+mode->clock is not precise value anyway.
+Alternatively we could 1st shift, then divide, but in this case overflow 
+can occur, at least in theory - I suspect there are no such big clocks 
+(in kHz).
 
---Sig_/OsN=gRtltWiRkWk5KPRaBED
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Finally I would agree with Dan, readability is better with conditional.
 
------BEGIN PGP SIGNATURE-----
+Regards
+Andrzej
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS2aNkACgkQAVBC80lX
-0GzbQAf9EqXD7oIxTiG3Hwzg0iEw5FWLNuzPkLZ2j6ZdhBkLR7sLI5NdIjCQCx74
-KZTzRlxoUr3VWfPM3MC16EesD+EwbpEmqd1MZsBat7+RQTK/gI40/BdcjULJ6gda
-0NKAKmK3IgupZjI7tVYbDvOIrJtzrpDGhe3gooQM9le1r9wRn3zm2UCdqjCXzn0R
-wQW9VlsGlJwtLNBSofg5YtrycVMIcCa0jMCRbGL0dgMqB9bxjh0iySXPOZIQ+MQB
-ZTzeTheF0oyf0WI3N/VwSrEgJrpYA+9BCYvxfgt100UxATdFVUa9yibPjBjhgHzU
-RNmNup8uycQ/cvvjMZbBZbCfwrZRfA==
-=Vjju
------END PGP SIGNATURE-----
+>
+> Su Hui
+>
+>> regards,
+>> dan carpenter
 
---Sig_/OsN=gRtltWiRkWk5KPRaBED--
