@@ -1,122 +1,105 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47EF17C4;
-	Wed, 19 Jul 2023 02:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689735483; x=1721271483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UTS8tic412yj99yRyRdk89J0/bqjF94lmcgbbzGc4a0=;
-  b=aziO6SDcgt8ZUs1CNz887OmGq7eTnHIqnMRPN4/WB0G8Hy8pC9Lxxc5/
-   UxJwxANuyNr8a6Pqvagp4R7NWgmFgQk+4HTuDMkhzK2Ab48utMEd/zRYI
-   byvxfex0QKU1z0Dy09st90Wo8Mko3aNGgJ0PXKRQg9EG3F0S4ilwmo6wm
-   +W4yzcgnX7zHkN0r1JcGycCUDY3YvsTJ4xkW/dwOw5/O95N6NqVrOzKJ8
-   qqkMMHFkNDf5NmzbR7vVm1XN5/c7vM6JhubpRq88gZEY/ZX5ifCEGMcWV
-   CkeETl9pQ9tryipyOUeWUqBGD76/0pkgJAmcZ4iteNLTA+jI9ubmNXbYC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345948695"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="345948695"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:58:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="723843232"
-X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="723843232"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jul 2023 19:58:00 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qLxO3-00045p-2A;
-	Wed, 19 Jul 2023 02:57:59 +0000
-Date: Wed, 19 Jul 2023 10:57:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wang Ming <machel@vivo.com>, Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] reset: hisilicon: Use dev_err_probe instead of dev_err
-Message-ID: <202307191040.jWQyBc5s-lkp@intel.com>
-References: <20230718030511.16065-1-machel@vivo.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07A73C22
+	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 03:19:41 +0000 (UTC)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36J38KpG020013;
+	Wed, 19 Jul 2023 03:19:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=CQGIimrET/1xx2hXhHhhDvmrIIiQnqNhn/lvaz/EXhE=;
+ b=MAQQgNrA7MJdFq/0oT2kwWtWcvNFH9dkldxTYO6MsEhNigRa2CDyezOlpVyg8xKFBuYw
+ 1o9XAfC7PzVsl49CqLkbEPzxN2TQwGRhoKlyf6V+fkMVlONpaSWGJpkRm2e8GKQ1qApK
+ vi5pHGMC5u+h7mU9xAOVm4wFOx198f+EXmHs7yB+OvUvsmU5ErX1yEjM5COkAUi91diV
+ HxA3KcAXFIKp2DzghANHCzj4PGbl9NpbvE5DXP1eNwG85CmgRdEwvJpSZvjSLvIfnIgS
+ A/vwXtiz4EKbmLuqzYvjR+CxWl3TXq3NBYWLh34zsmRKqoRuujj3AXSuDmXyt9ZVeDNO Tg== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rx79b0hkw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Jul 2023 03:19:34 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36INmJ69029057;
+	Wed, 19 Jul 2023 03:19:33 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3rv6smfpw6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Jul 2023 03:19:33 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36J3JVqs46400142
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Jul 2023 03:19:31 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6AC5B2004B;
+	Wed, 19 Jul 2023 03:19:31 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DFC8720040;
+	Wed, 19 Jul 2023 03:19:30 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 19 Jul 2023 03:19:30 +0000 (GMT)
+Received: from bgray-lenovo-p15.ibmuc.com (unknown [9.43.200.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 4352E60151;
+	Wed, 19 Jul 2023 13:19:25 +1000 (AEST)
+From: Benjamin Gray <bgray@linux.ibm.com>
+To: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Cc: Benjamin Gray <bgray@linux.ibm.com>
+Subject: [PATCH] gen_compile_commands: add assembly files to compilation database
+Date: Wed, 19 Jul 2023 13:19:12 +1000
+Message-ID: <20230719031912.224843-1-bgray@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230718030511.16065-1-machel@vivo.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: q6Q9-BPTZa3FzIjGlEs_D4dQOV0WDcAx
+X-Proofpoint-ORIG-GUID: q6Q9-BPTZa3FzIjGlEs_D4dQOV0WDcAx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-18_19,2023-07-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=699 adultscore=0
+ clxscore=1011 spamscore=0 impostorscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307190027
 
-Hi Wang,
+Like C source files, tooling can find it useful to have the assembly
+source file compilation recorded.
 
-kernel test robot noticed the following build errors:
+The .S extension appears to used across all architectures.
 
-[auto build test ERROR on pza/reset/next]
-[also build test ERROR on linus/master v6.5-rc2 next-20230718]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wang-Ming/reset-hisilicon-Use-dev_err_probe-instead-of-dev_err/20230718-203055
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-patch link:    https://lore.kernel.org/r/20230718030511.16065-1-machel%40vivo.com
-patch subject: [PATCH v1] reset: hisilicon: Use dev_err_probe instead of dev_err
-config: arm-randconfig-r003-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191040.jWQyBc5s-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191040.jWQyBc5s-lkp@intel.com/reproduce)
+---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307191040.jWQyBc5s-lkp@intel.com/
+For example, I'm prototyping adding ASM support to clangd. It can use
+this information to determine the architecture, macros definitions,
+include paths, etc. on a per-file basis. I can capture this during
+compilation with tools like bear, but given this script exists and the
+change is trivial it seems like a good idea to adjust this script too.
+---
+ scripts/clang-tools/gen_compile_commands.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/reset/hisilicon/reset-hi3660.c:93:60: error: too few arguments to function call, expected at least 3, have 2
-      93 |                 dev_err_probe(dev, "failed to get hisilicon,rst-syscon\n");
-         |                 ~~~~~~~~~~~~~                                            ^
-   include/linux/device.h:1091:20: note: 'dev_err_probe' declared here
-    1091 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                    ^
-   1 error generated.
-
-
-vim +93 drivers/reset/hisilicon/reset-hi3660.c
-
-    75	
-    76	static int hi3660_reset_probe(struct platform_device *pdev)
-    77	{
-    78		struct hi3660_reset_controller *rc;
-    79		struct device_node *np = pdev->dev.of_node;
-    80		struct device *dev = &pdev->dev;
-    81	
-    82		rc = devm_kzalloc(dev, sizeof(*rc), GFP_KERNEL);
-    83		if (!rc)
-    84			return -ENOMEM;
-    85	
-    86		rc->map = syscon_regmap_lookup_by_phandle(np, "hisilicon,rst-syscon");
-    87		if (rc->map == ERR_PTR(-ENODEV)) {
-    88			/* fall back to the deprecated compatible */
-    89			rc->map = syscon_regmap_lookup_by_phandle(np,
-    90								  "hisi,rst-syscon");
-    91		}
-    92		if (IS_ERR(rc->map)) {
-  > 93			dev_err_probe(dev, "failed to get hisilicon,rst-syscon\n");
-    94			return PTR_ERR(rc->map);
-    95		}
-    96	
-    97		rc->rst.ops = &hi3660_reset_ops,
-    98		rc->rst.of_node = np;
-    99		rc->rst.of_reset_n_cells = 2;
-   100		rc->rst.of_xlate = hi3660_reset_xlate;
-   101	
-   102		return reset_controller_register(&rc->rst);
-   103	}
-   104	
-
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index 15ba56527acd..a84cc5737c2c 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -19,7 +19,7 @@ _DEFAULT_OUTPUT = 'compile_commands.json'
+ _DEFAULT_LOG_LEVEL = 'WARNING'
+ 
+ _FILENAME_PATTERN = r'^\..*\.cmd$'
+-_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.c) *(;|$)'
++_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.[cS]) *(;|$)'
+ _VALID_LOG_LEVELS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+ # The tools/ directory adopts a different build system, and produces .cmd
+ # files in a different format. Do not support it.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
