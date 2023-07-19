@@ -1,106 +1,126 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0FA1FB5E
-	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 18:06:20 +0000 (UTC)
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-63719ad32e7so42843766d6.1
-        for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 11:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689789980; x=1692381980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/q8C9QUl9c024VdDM4U2qSt+ZkIzjIMLrLNe0pZ5n4E=;
-        b=MsuBgeLACJ6N4ubJggHSBIiXd8DlImplahregFFg+jh127qgD0yy8SfKvOk1bUxxEj
-         zcSL9hXvJi96OHneAydcCrrnR/KCI79XRl276s0e5ibNfu22dT4ZNEiNetgFXmVlQrsi
-         rBhkDfObbVnCCIQfLZMiT/79TIzd+zcui4F1r0wmDsLdAVtUP3e4rSbbg1e9hWkK36oR
-         YFuStHwRtybupndHDXS6I38G8Zj00A0+0Wpc/P2ery4DhX7ucNyoQ+IfMLyC2PkLsZf6
-         dH/Rbqsn6nJGlyvl7LoQOHVN9rkOHeXMu6tDBElGRIu8AXDSH0a5R7pnrsLTQJwLPFDl
-         rWhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689789980; x=1692381980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/q8C9QUl9c024VdDM4U2qSt+ZkIzjIMLrLNe0pZ5n4E=;
-        b=FnbBIr3QqV8E8qTRERvtl2+Rlx1/FLWciV5FmIGsSp91FqBXlAs3lrnG4yI8+iO+uC
-         JgTV72esjzfZlp0kMSJhd1ZAb+KYvVcFpOCoGnKp2k2D+6m2IZ+Nz1tAsmIKLok5CEy4
-         vpiE/fqejiYykF/Pr4YXirT8kgpKES47bO3TRFR4a361VtxRweJtWPMUk2H3tHjHoHqt
-         jMLj8tZQ6z1vanKw5it8kuDRgAOW04EabUGYr1OvvgvtGyUDgy/8gCtS0tx+8Ux9hgTr
-         bnoX2tdENjIVRSDVDFKjOd3jpK7nirBcxn3Nyj5Hdq3e1gPyTAtt4e0sG2AjRe3p2quZ
-         Ggsw==
-X-Gm-Message-State: ABy/qLZSDvYpI/KhPxmcJ+VY9LEr2+Dp91Jt+B1nlb9Yqng1adtKdkhZ
-	ZxU8JapYXYPkqku1c/z06j9KVpxcjMUDsZqIzkye5G+f/Td066ItltFJTQ==
-X-Google-Smtp-Source: APBJJlE7nViBT6f/zxrl/dr31wzjer7QTF6XLcz5nEXCf2nO6NMvpOyXtT1bDTC/ewipu9B3dteZLC0N2tvvBlNaK/Q=
-X-Received: by 2002:a0c:e3d4:0:b0:631:fa2e:249f with SMTP id
- e20-20020a0ce3d4000000b00631fa2e249fmr16560164qvl.61.1689789979787; Wed, 19
- Jul 2023 11:06:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888D57F2;
+	Wed, 19 Jul 2023 20:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689799133; x=1721335133;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nYhEumh+BOPNV4pdCZmUII4nm7HLFNrdnhATOnxCVzM=;
+  b=GyUwWyrVtAxGmFfiLAPBWZB2UHVItqzzqHVVMj0M7Ns9oF85F0witiby
+   s9WsO8vDv2Z9MIvMLvqZ/K9jVSKfZR2fN0mS5atN/scQeKeE6L/qTVDD+
+   Ln6fE5GCZxJNDkmqx3T06dtgSX0+oM+WraOebrv9f2++1HeYK2qXwfT+H
+   QPmnnpq1qFMPDgN0UWz29cQBHZrIveuyzZS9wlE4AgIbf+5hNkQ52vCB8
+   8TqWGr55hwmaES7OvQTlPYKvTvDF8Dmd9l0n+t09RzTSu/P3eTN81VINY
+   YgBgmkGmTQH/uqP46owq+4AE7y54PY1AMmULPqM2CCfrXyOvRVR+t1Q8n
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="346869116"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="346869116"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 13:38:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="898038161"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="898038161"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 19 Jul 2023 13:38:50 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMDw3-0005SX-29;
+	Wed, 19 Jul 2023 20:38:19 +0000
+Date: Thu, 20 Jul 2023 04:37:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Maxime Ripard <mripard@kernel.org>,
+	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+	Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+Subject: Re: [PATCH 1/2] drm/mipi-dbi: Lock SPI bus before setting D/C GPIO
+Message-ID: <202307200456.jGqv0OSC-lkp@intel.com>
+References: <20230719095343.88359-2-otto.pflueger@abscue.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230719031912.224843-1-bgray@linux.ibm.com>
-In-Reply-To: <20230719031912.224843-1-bgray@linux.ibm.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Jul 2023 11:06:09 -0700
-Message-ID: <CAKwvOd=fjtmoonc8CoJwuvogYCCPHu9s_sMRB5P+B4whaCovEg@mail.gmail.com>
-Subject: Re: [PATCH] gen_compile_commands: add assembly files to compilation database
-To: Benjamin Gray <bgray@linux.ibm.com>
-Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230719095343.88359-2-otto.pflueger@abscue.de>
 
-On Tue, Jul 18, 2023 at 8:19=E2=80=AFPM Benjamin Gray <bgray@linux.ibm.com>=
- wrote:
->
-> Like C source files, tooling can find it useful to have the assembly
-> source file compilation recorded.
->
-> The .S extension appears to used across all architectures.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
->
-> ---
->
-> For example, I'm prototyping adding ASM support to clangd. It can use
-> this information to determine the architecture, macros definitions,
-> include paths, etc. on a per-file basis. I can capture this during
-> compilation with tools like bear, but given this script exists and the
-> change is trivial it seems like a good idea to adjust this script too.
+Hi Otto,
 
-Sounds cool, thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-Feel free to subscribe us to the clangd patches; we might have
-bandwidth to help review, or can at least follow along on progress.
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.5-rc2 next-20230719]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 15ba56527acd..a84cc5737c2c 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -19,7 +19,7 @@ _DEFAULT_OUTPUT =3D 'compile_commands.json'
->  _DEFAULT_LOG_LEVEL =3D 'WARNING'
->
->  _FILENAME_PATTERN =3D r'^\..*\.cmd$'
-> -_LINE_PATTERN =3D r'^savedcmd_[^ ]*\.o :=3D (.* )([^ ]*\.c) *(;|$)'
-> +_LINE_PATTERN =3D r'^savedcmd_[^ ]*\.o :=3D (.* )([^ ]*\.[cS]) *(;|$)'
->  _VALID_LOG_LEVELS =3D ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
->  # The tools/ directory adopts a different build system, and produces .cm=
-d
->  # files in a different format. Do not support it.
-> --
-> 2.41.0
->
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Otto-Pfl-ger/drm-mipi-dbi-Lock-SPI-bus-before-setting-D-C-GPIO/20230719-180941
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230719095343.88359-2-otto.pflueger%40abscue.de
+patch subject: [PATCH 1/2] drm/mipi-dbi: Lock SPI bus before setting D/C GPIO
+config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230720/202307200456.jGqv0OSC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230720/202307200456.jGqv0OSC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307200456.jGqv0OSC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tiny/ili9225.c:321:54: error: too few arguments to function call, expected 6, have 5
+     321 |         ret = mipi_dbi_spi_transfer(spi, speed_hz, 8, cmd, 1);
+         |               ~~~~~~~~~~~~~~~~~~~~~                         ^
+   include/drm/drm_mipi_dbi.h:187:5: note: 'mipi_dbi_spi_transfer' declared here
+     187 | int mipi_dbi_spi_transfer(struct spi_device *spi, u32 speed_hz,
+         |     ^
+   drivers/gpu/drm/tiny/ili9225.c:331:59: error: too few arguments to function call, expected 6, have 5
+     331 |         return mipi_dbi_spi_transfer(spi, speed_hz, bpw, par, num);
+         |                ~~~~~~~~~~~~~~~~~~~~~                             ^
+   include/drm/drm_mipi_dbi.h:187:5: note: 'mipi_dbi_spi_transfer' declared here
+     187 | int mipi_dbi_spi_transfer(struct spi_device *spi, u32 speed_hz,
+         |     ^
+   2 errors generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +321 drivers/gpu/drm/tiny/ili9225.c
+
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  310  
+36b5057216236a drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-22  311  static int ili9225_dbi_command(struct mipi_dbi *dbi, u8 *cmd, u8 *par,
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  312  			       size_t num)
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  313  {
+36b5057216236a drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-22  314  	struct spi_device *spi = dbi->spi;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  315  	unsigned int bpw = 8;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  316  	u32 speed_hz;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  317  	int ret;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  318  
+36b5057216236a drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-22  319  	gpiod_set_value_cansleep(dbi->dc, 0);
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  320  	speed_hz = mipi_dbi_spi_cmd_max_speed(spi, 1);
+d23d4d4dac0119 drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-19 @321  	ret = mipi_dbi_spi_transfer(spi, speed_hz, 8, cmd, 1);
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  322  	if (ret || !num)
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  323  		return ret;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  324  
+36b5057216236a drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-22  325  	if (*cmd == ILI9225_WRITE_DATA_TO_GRAM && !dbi->swap_bytes)
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  326  		bpw = 16;
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  327  
+36b5057216236a drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-22  328  	gpiod_set_value_cansleep(dbi->dc, 1);
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  329  	speed_hz = mipi_dbi_spi_cmd_max_speed(spi, num);
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  330  
+d23d4d4dac0119 drivers/gpu/drm/tinydrm/ili9225.c Noralf Trønnes 2019-07-19  331  	return mipi_dbi_spi_transfer(spi, speed_hz, bpw, par, num);
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  332  }
+b57e8b7661e046 drivers/gpu/drm/tinydrm/ili9225.c David Lechner  2017-11-19  333  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
