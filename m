@@ -1,105 +1,153 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 95F0017D0
-	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 02:13:00 +0000 (UTC)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CD47B60484988;
-	Wed, 19 Jul 2023 10:12:47 +0800 (CST)
-Message-ID: <40db9ac5-84b7-dc98-786c-2e651404534b@nfschina.com>
-Date: Wed, 19 Jul 2023 10:12:47 +0800
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3763417D1;
+	Wed, 19 Jul 2023 02:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689734131; x=1721270131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MDteXjRKx7NmerjEa3yZjR1TrOfJzj9AzQhufP0RH3c=;
+  b=cQSP1M3xA2NRBIveWsTWMLO92yAlevv5lTHuJsbQsa5FupCfhpz/fX0b
+   sZ2THWlSaYoBD9QvIJOWriCMbsvD/DpS0ktHt0nNPJLU6M+Oi0iua4grm
+   IaXQGvbVtFaGXlp8EYaqbAiweVk/vbE4ai2w+azE5H6jfBMttwYCYPtWp
+   t0cQUSo5GNBknLFe9hqkkHNaWO+33mYzLYx9B3UXEjVjg4d6XwUSGhOmg
+   f0oxNR46HAXfO5203k0fKNKa8f0ipcguIbfe6hu1fsGliQpQ9BvRvfeq1
+   AiFEBNG3ZA+DCYZAzZYVQ1Y6TNGlF3uZZ+bQtHvI8mIrXvbeaYByZUBRb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452734652"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="452734652"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:35:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="717831095"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="717831095"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 18 Jul 2023 19:35:26 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLx2C-00044R-31;
+	Wed, 19 Jul 2023 02:35:24 +0000
+Date: Wed, 19 Jul 2023 10:35:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hao Xu <hao.xu@linux.dev>, io-uring@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+	Dave Chinner <david@fromorbit.com>, linux-fsdevel@vger.kernel.org,
+	Wanpeng Li <wanpengli@tencent.com>
+Subject: Re: [PATCH 4/5] xfs: add NOWAIT semantics for readdir
+Message-ID: <202307191021.L6wiZiE6-lkp@intel.com>
+References: <20230718132112.461218-5-hao.xu@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/i915/tv: avoid possible division by zero
-Content-Language: en-US
-To: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
- rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, airlied@gmail.com,
- daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
- trix@redhat.com, ville.syrjala@linux.intel.com, mripard@kernel.org,
- ankit.k.nautiyal@intel.com, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
- Dan Carpenter <dan.carpenter@linaro.org>
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-In-Reply-To: <3c7dfc18-539f-2b0c-0c77-48b89ef96560@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718132112.461218-5-hao.xu@linux.dev>
 
-On 2023/7/18 19:28, Andrzej Hajda wrote:
-> On 18.07.2023 12:10, Su Hui wrote:
->> On 2023/7/18 13:39, Dan Carpenter wrote:
->>> On Mon, Jul 17, 2023 at 04:52:51PM +0200, Andrzej Hajda wrote:
->>>> On 17.07.2023 08:22, Su Hui wrote:
->>>>> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
->>>>> line 991, column 22 Division by zero.
->>>>> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
->>>>> then division by zero will happen.
->>>>>
->>>>> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
->>>>> Signed-off-by: Su Hui <suhui@nfschina.com>
->>>>> ---
->>>>>    drivers/gpu/drm/i915/display/intel_tv.c | 3 ++-
->>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c 
->>>>> b/drivers/gpu/drm/i915/display/intel_tv.c
->>>>> index 36b479b46b60..82b54af51f23 100644
->>>>> --- a/drivers/gpu/drm/i915/display/intel_tv.c
->>>>> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
->>>>> @@ -988,7 +988,8 @@ intel_tv_mode_to_mode(struct drm_display_mode 
->>>>> *mode,
->>>>>                  const struct tv_mode *tv_mode,
->>>>>                  int clock)
->>>>>    {
->>>>> -    mode->clock = clock / (tv_mode->oversample >> 
->>>>> !tv_mode->progressive);
->>>>> +    mode->clock = clock / (tv_mode->oversample != 1 ?
->>>>> +            tv_mode->oversample >> !tv_mode->progressive : 1);
->>>> Seems too smart to me, why not just:
->>>> mode->clock = clock / tv_mode->oversample;
->>>> if (!tv_mode->progressive)
->>>>      mode->clock <<= 1;
->>> This is nice.
->>
->> mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
->>
->> But I think this one is much better,  it has less code and run faster.
->> Should I resend v3 to add some explanation or follow Dan's advice?
->
-> Speed gain here is irrelevant here, and disputable.
->
-> One thing which could be problematic is that we could loose the least 
-> significant bit in mode->clock,
-> in case non-progressive, but I am not sure if it really matters, as 
-> mode->clock is not precise value anyway.
-> Alternatively we could 1st shift, then divide, but in this case 
-> overflow can occur, at least in theory - I suspect there are no such 
-> big clocks (in kHz).
->
-> Finally I would agree with Dan, readability is better with conditional.
->
-How about this one?
+Hi Hao,
 
--       mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
-+       mode->clock = clock;
-+       if (tv_mode->oversample >> !tv_mode->progressive)
-+               mode->clock /= tv_mode->oversample >> 1;
+kernel test robot noticed the following build warnings:
 
-Prevent loss of accuracy and also make it more readable.
-If it's OK, I will send v3 patch.
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on linus/master v6.5-rc2 next-20230718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-By the way, do we need to print some error messages or do some things  when
-"tv_mode->oversample << !tv_mode->progressive" is zero? I'm not sure about
-this.
+url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/fs-split-off-vfs_getdents-function-of-getdents64-syscall/20230718-212529
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20230718132112.461218-5-hao.xu%40linux.dev
+patch subject: [PATCH 4/5] xfs: add NOWAIT semantics for readdir
+config: x86_64-randconfig-r012-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191021.L6wiZiE6-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191021.L6wiZiE6-lkp@intel.com/reproduce)
 
-Su Hui
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191021.L6wiZiE6-lkp@intel.com/
 
-> Regards
-> Andrzej
+All warnings (new ones prefixed by >>):
+
+>> fs/xfs/libxfs/xfs_da_btree.c:2646:8: warning: variable 'buf_flags' set but not used [-Wunused-but-set-variable]
+           int                     buf_flags = 0;
+                                   ^
+   1 warning generated.
+
+
+vim +/buf_flags +2646 fs/xfs/libxfs/xfs_da_btree.c
+
+  2627	
+  2628	/*
+  2629	 * Get a buffer for the dir/attr block, fill in the contents.
+  2630	 */
+  2631	int
+  2632	xfs_da_read_buf(
+  2633		struct xfs_trans	*tp,
+  2634		struct xfs_inode	*dp,
+  2635		xfs_dablk_t		bno,
+  2636		unsigned int		flags,
+  2637		struct xfs_buf		**bpp,
+  2638		int			whichfork,
+  2639		const struct xfs_buf_ops *ops)
+  2640	{
+  2641		struct xfs_mount	*mp = dp->i_mount;
+  2642		struct xfs_buf		*bp;
+  2643		struct xfs_buf_map	map, *mapp = &map;
+  2644		int			nmap = 1;
+  2645		int			error;
+> 2646		int			buf_flags = 0;
+  2647	
+  2648		*bpp = NULL;
+  2649		error = xfs_dabuf_map(dp, bno, flags, whichfork, &mapp, &nmap);
+  2650		if (error || !nmap)
+  2651			goto out_free;
+  2652	
+  2653		/*
+  2654		 * NOWAIT semantics mean we don't wait on the buffer lock nor do we
+  2655		 * issue IO for this buffer if it is not already in memory. Caller will
+  2656		 * retry. This will return -EAGAIN if the buffer is in memory and cannot
+  2657		 * be locked, and no buffer and no error if it isn't in memory.  We
+  2658		 * translate both of those into a return state of -EAGAIN and *bpp =
+  2659		 * NULL.
+  2660		 */
+  2661		if (flags & XFS_DABUF_NOWAIT)
+  2662			buf_flags |= XBF_TRYLOCK | XBF_INCORE;
+  2663		error = xfs_trans_read_buf_map(mp, tp, mp->m_ddev_targp, mapp, nmap, 0,
+  2664				&bp, ops);
+  2665		if (error)
+  2666			goto out_free;
+  2667		if (!bp) {
+  2668			ASSERT(flags & XFS_DABUF_NOWAIT);
+  2669			error = -EAGAIN;
+  2670			goto out_free;
+  2671		}
+  2672	
+  2673		if (whichfork == XFS_ATTR_FORK)
+  2674			xfs_buf_set_ref(bp, XFS_ATTR_BTREE_REF);
+  2675		else
+  2676			xfs_buf_set_ref(bp, XFS_DIR_BTREE_REF);
+  2677		*bpp = bp;
+  2678	out_free:
+  2679		if (mapp != &map)
+  2680			kmem_free(mapp);
+  2681	
+  2682		return error;
+  2683	}
+  2684	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
