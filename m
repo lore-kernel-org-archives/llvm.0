@@ -1,109 +1,201 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CD3C2EF
-	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 08:21:09 +0000 (UTC)
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3fbf1b82d9cso61012195e9.2
-        for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 01:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689754867; x=1692346867;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=siK4OSk/ePA2geNjaLPDhLD4PkEcMUYKPlRGf5Gu9SM=;
-        b=BKVgWb2uTivagtIl+FbELcI5E/MTncxi8pqlBhFtF/9csNkVmuoMb0rnZ5OEj2Suv7
-         fmeS7yn4+/aJv+tbiejfkqG82O4mHod1S1A+DXRggkS+b/vBev0xe007qJQJDf84kjI5
-         yWelJpVqdYm1ci/HKnRD50nWmWg1Wopxc/1c/GMW4jK5w8mms7vz753YKjassWGcLgzy
-         a4zmZUBQasd7Or/b+ZFoncsWuYdyY2mGqV36rkI4FjZygXmR+QcD0oOUebX7t4FXVJ9z
-         98IoYu9UvIz/3OY21LYrOK0cxC7eoXo/lo7Uloia1cx/XhqhCjMoaAUc1Sw3OxGkO9zz
-         Zdag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689754867; x=1692346867;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=siK4OSk/ePA2geNjaLPDhLD4PkEcMUYKPlRGf5Gu9SM=;
-        b=DaVN3sFJxcpxOvwpFnv5oxOcdl5v5OdWj+sCGj3+pw1Ljeg7mobzsIiKj9PWQHvdsm
-         If/Uyu0+koJLTDZciLss7AzZ22Auhvy3p/PRhPJ8PhjetoN5Th2ankfUaCINRmvrTUW7
-         lMNChq9qxiIw+ZjNQy/1qD70UoKVZhLEvk2B47eM+eaAAIAF1ZxLuB7r3PjBidZG98ln
-         0Ljkx1WjA9Rt/7qLBKRilFc9SXeS7n2B9f9XaTEU5EupuKXkfiaMm+lVm2SXe9p8MCUW
-         2qHeDFrC+7TZ38IDx8Fe34pG8YVRJLnmhJTUEcwRn1IyoX0LGE034EEGGzv0qCr/04Y/
-         x6Xw==
-X-Gm-Message-State: ABy/qLYV4HJB8sxtzwyaXbRE8vdHaegzmsVhxD5B4/YrUr4x+fjhLwbZ
-	IpUvIZ+K2IBiWquomn6Brom0naMROkHVcifjiCY=
-X-Google-Smtp-Source: APBJJlEMYzsVW7aXyNVPWHwTQFSclAxIY+S7U96tWP5PKGFiKi68A1ED1/ehLtPDMuN0aGAqqr00Tl7Ee1vgyAtcKSM=
-X-Received: by 2002:a05:600c:224b:b0:3fa:d160:fc6d with SMTP id
- a11-20020a05600c224b00b003fad160fc6dmr1302292wmm.30.1689754867235; Wed, 19
- Jul 2023 01:21:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2224EBE40;
+	Wed, 19 Jul 2023 08:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689755937; x=1721291937;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PljkCzmv70CLHzZ+TcZ8NNSW3ZmnJ6TXU3n4UIAcHZc=;
+  b=TegChny1QuG0H/UCrogIHWjduGhhLwFJ9Teq67KisA3JPrX2kw2nCC+6
+   tgiN+e9hzGzoPU9tSX4zoxq/JSjU+YDiaOI0+S0U32RTD79KSF5owDCeC
+   JdZGbyq9jWdrxzCZkcdKcInmeOLU7ga3VGVoHOAAvf7U4HztcqntcxCu0
+   xc58tdzvXYM7/TZGJ4LAhyyAOrFK4ELwznRHMgnLWNRY+VpaWuYXNbXZR
+   yTKAAOLKQYoFJP/4UipJ9FcpIaDh3iVT0yA95Hc5e4/Gprahc8dn/EqDs
+   K65YoyUSz9BeiibyMp92qUS2uuD355PHS2A8R/9dJy/Q5o8E99LrU6SQD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345999010"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="345999010"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 01:38:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="793929728"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="793929728"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jul 2023 01:38:54 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qM2hg-0004LL-20;
+	Wed, 19 Jul 2023 08:38:46 +0000
+Date: Wed, 19 Jul 2023 16:37:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alistair Popple <apopple@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 3179/3438]
+ arch/arm64/include/asm/tlbflush.h:268:46: error: use of undeclared
+ identifier 'vma'
+Message-ID: <202307191649.ycQFKdJ9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <20230325081117.93245-1-ashimida.1990@gmail.com> <202306211451.CB0A34563@keescook>
-In-Reply-To: <202306211451.CB0A34563@keescook>
-From: Dan Li <ashimida.1990@gmail.com>
-Date: Wed, 19 Jul 2023 16:20:55 +0800
-Message-ID: <CAE+Z0PFtqKf9EM+u8V87TPo87jbGXz20VQvx0JvDHTdT8Xp+Pw@mail.gmail.com>
-Subject: Re: [RFC/RFT,V2 0/3] Add compiler support for Kernel Control Flow Integrity
-To: Kees Cook <keescook@chromium.org>
-Cc: Qing Zhao <qing.zhao@oracle.com>, gcc-patches@gcc.gnu.org, 
-	Richard Sandiford <richard.sandiford@arm.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, 
-	Marco Elver <elver@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Song Liu <song@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Juergen Gross <jgross@suse.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, Yuntao Wang <ytcoode@gmail.com>, 
-	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Kees,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   352ce39a8bbaec0405793682be59fae120fc6b05
+commit: 8c2be11e06f44391db3fc426528d8f17aa570992 [3179/3438] mmu_notifiers: call arch_invalidate_secondary_tlbs() when invalidating TLBs
+config: arm64-randconfig-r021-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191649.ycQFKdJ9-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191649.ycQFKdJ9-lkp@intel.com/reproduce)
 
-Sincerely sorry, I just saw this email.
-Embarrassingly, due to another job change, my plan was postponed again :(.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191649.ycQFKdJ9-lkp@intel.com/
 
-I may not be able to attend this year's GCC meeting. Is there any other
-way to let this get some traction in GCC? I really hope someone can help
-with this topic.
+Note: the linux-next/master HEAD 352ce39a8bbaec0405793682be59fae120fc6b05 builds fine.
+      It may have been fixed somewhere.
 
-BTW, I'm still looking at this and plan to finish it by the end of this
-year, but it's taking too long and there's a lot of uncertainty, so
-please just consider this only as a backup option.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Dan.
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:179:
+   In file included from include/linux/kasan.h:33:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm64/include/asm/pgtable.h:15:
+>> arch/arm64/include/asm/tlbflush.h:268:46: error: use of undeclared identifier 'vma'
+     268 |         mmu_notifier_arch_invalidate_secondary_tlbs(vma->vm_mm, uaddr & PAGE_MASK,
+         |                                                     ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     100 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
 
-On Thu, 22 Jun 2023 at 05:54, Kees Cook <keescook@chromium.org> wrote:
->
-> On Sat, Mar 25, 2023 at 01:11:14AM -0700, Dan Li wrote:
-> > This series of patches is mainly used to support the control flow
-> > integrity protection of the linux kernel [1], which is similar to
-> > -fsanitize=kcfi in clang 16.0 [2,3].
-> >
-> > Any suggestion please let me know :).
->
-> Hi Dan,
->
-> It's been a couple months, and I didn't see any other feedback on this
-> proposal. I was curious what the status of this work is. Are you able to
-> attend GNU Cauldron[1] this year? I'd love to see this get some traction
-> in GCC.
->
-> Thanks!
->
-> -Kees
->
-> [1] https://gcc.gnu.org/wiki/cauldron2023
->
-> --
-> Kees Cook
+
+vim +/vma +268 arch/arm64/include/asm/tlbflush.h
+
+   258	
+   259	static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+   260						   unsigned long uaddr)
+   261	{
+   262		unsigned long addr;
+   263	
+   264		dsb(ishst);
+   265		addr = __TLBI_VADDR(uaddr, ASID(mm));
+   266		__tlbi(vale1is, addr);
+   267		__tlbi_user(vale1is, addr);
+ > 268		mmu_notifier_arch_invalidate_secondary_tlbs(vma->vm_mm, uaddr & PAGE_MASK,
+   269							(uaddr & PAGE_MASK) + PAGE_SIZE);
+   270	}
+   271	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
