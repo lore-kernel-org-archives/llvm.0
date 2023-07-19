@@ -1,138 +1,211 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3368622F03;
-	Wed, 19 Jul 2023 23:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689808432; x=1721344432;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EEC54lNlZTABNqycZeRjQsyi7DpEys803HMO3Jtvbd8=;
-  b=KOHVdxqBu/aGe9N8xn6JZD69iQcr83mfPZYXIsTJkTx84LygqQi+mvwE
-   g2FMVUttyGu6ztEA/WcLdBJdm/zlCiArL7HBlp+7tNI5D9rZWyJtrCxmq
-   RU8EPzZoqMABlhUZaGWcn9plrTNO0bZUOBJazqM+u1ysKVcs4RhrTvQZy
-   GXnspR4qGndPVGg13ndge9uoDXRuA60aDLMcCb9A2a26hIUE+otiITRHM
-   JMUpZhU5s5teHovcn4jYvkeVYEQKHh1jwnHB0ncR5jHM+wiGBt00aZDWx
-   M9kSvmOWnZd29cnWrwjLfpmU72+iGiVV9CRJFhf+ghT9/OAz4OPDrlotM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="346181888"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="346181888"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 16:13:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="848222309"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="848222309"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jul 2023 16:13:49 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qMGMc-0005Zl-0e;
-	Wed, 19 Jul 2023 23:13:46 +0000
-Date: Thu, 20 Jul 2023 07:13:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: drivers/net/veth.c:848:12: warning: stack frame size (2096) exceeds
- limit (2048) in 'veth_xdp_rcv'
-Message-ID: <202307200753.sG6BpxE4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C7F1BB27
+	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 23:23:09 +0000 (UTC)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JFOM7Q005141;
+	Wed, 19 Jul 2023 23:22:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=awn4Rh2lYHrHnMrr3x1mZ7HX7Uf6p+YqXQr2WTnbVrs=;
+ b=UxrEWACdvMC9EmjhHUEFpkGibnX9NS+YzX7oP3cc7odgtSNX+nKpl5NCWRGRD6EiVbge
+ qURbpyfmwmV9nUnekSr2VlGRCz4IZytpI9V/UDtSEHBcgABUvXNRr9EsRYR4Ekc+DVFP
+ HNKkAb5Ud4Yz9QPlJrJnSlYgd55Bw8s0JJ/WqMUxqSXz1Jr7ibH+uoHU2DqnzFCktshR
+ 9kGQPQ1YW6yEtHT6pMyoifdngpNjDGU15xM9IXh7HfPO2Nnfei1waG+MDOIHYU1m/8Z4
+ DykFKTMuUE4kXk7b9DMGhHq38h1f3fx9mJkFbD/uE8plKhfR87eeRiqAxseOej7Gl1rP kg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3run8a8mse-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Jul 2023 23:22:53 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36JM6v9p007779;
+	Wed, 19 Jul 2023 23:22:53 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ruhw7f122-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Jul 2023 23:22:53 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C0Q69/qW5GuBwPTg+eWzcH5+f6lu7QG8Nqo3AhQVZpZymvQgrPP+ro+P3Q/z6CbqdLhpFksZFrkTqngmvAoN83nhtvncjY4uz/Qxq6gjIy7a8dLontpyc/jPVALD63de72UnTvbW40rkPXjLbhSIoKzZJQxRUg0HuVzU2nID+VQhk8GFKr5zcPVyFjjGyWklv0jYRx9HYnjFfRSLNefaevCfZK/qicpHVZji47Nke92XVMsz2ELD4IGn1zKt4yz/0ew3+kR0PuPi/vTz6wBlpqOYPZfYWk6mvYQURfexyxe9+ys4j7yT76mrNJCh1dxb9SxG3l9ul3uILQ8I/H+aQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=awn4Rh2lYHrHnMrr3x1mZ7HX7Uf6p+YqXQr2WTnbVrs=;
+ b=VHzjN5JPlrd26WXeL3vXESjjMoP3saqHPD281RbZlzQFN9BPs738+AclilhkJYgYNM2DGFIoUodIImUwDY9Xl0fX/K8OD8NN4KX53cYl6A9GywIYn13mGqKPacZKCiXB3Lmrd5QxCrckepk1T/NA1D62xlNv3+KeYDdKMoCdzDrzJTPM3kOAk0PW+0cPGjTYPeHak1pmhzj5HTao2V76G/3RP8yLURZfycqD6PaIV/l3TL/4Vgb3fDWuweA+8xdjtTiFavjx0fR0fqMgvrV5AbCdAjwc6RdtcGa0S3BXsdYduiIZOEv/3GuqY6+GLhDieMc7qWoRUrfJN0U048qZuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=awn4Rh2lYHrHnMrr3x1mZ7HX7Uf6p+YqXQr2WTnbVrs=;
+ b=SPf+i2gTxHVXydQcGlPLTI2XLVylRquJ8ldaElDqCqrEAtRgWKEohKm6YvHKBFGH2T/Eq2oQ6zVe5i9/QYc8fRRhiZjbsgZZE+0gplGjF86Wqtv6nXOVHueqBzrOZ9IFOe9fJY8aTQaeV24cDVztEwVAKipij5wDRVrCVvhlv2g=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by LV3PR10MB7796.namprd10.prod.outlook.com (2603:10b6:408:1ae::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.24; Wed, 19 Jul
+ 2023 23:22:51 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6588.017; Wed, 19 Jul 2023
+ 23:22:51 +0000
+Date: Wed, 19 Jul 2023 16:22:48 -0700
+From: Mike Kravetz <mike.kravetz@oracle.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>, Linke Li <lilinke99@foxmail.com>
+Cc: linke li <lilinke99@gmail.com>, David Hildenbrand <david@redhat.com>,
+        linux-mm@kvack.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        trix@redhat.com, ndesaulniers@google.com, nathan@kernel.org,
+        muchun.song@linux.dev
+Subject: Re: [PATCH] hugetlbfs: Fix integer overflow check in
+ hugetlbfs_file_mmap()
+Message-ID: <20230719232248.GC3240@monkey>
+References: <tencent_8D245D1A87D17619EA8475E8F005A151000A@qq.com>
+ <65f4c60a-9534-56dc-099f-ee7a96e0ccaf@redhat.com>
+ <20230712235813.GE6354@monkey>
+ <CAKdjhyD4RVHFVLrcfcuEnvwrjjxAk_GL=kjcm1iw3WTrmmFb9Q@mail.gmail.com>
+ <6c3191e1-23fd-4f9e-9b5e-321c51599897@moroto.mountain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c3191e1-23fd-4f9e-9b5e-321c51599897@moroto.mountain>
+X-ClientProxiedBy: MW4PR03CA0202.namprd03.prod.outlook.com
+ (2603:10b6:303:b8::27) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|LV3PR10MB7796:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73f60ddb-80fe-4f81-42e8-08db88af1232
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	akTsGZVOI7Iypb/b73P1SbU2gS1XAihUqjC9drSZP38zqVlC4EZDUtfeBJ0IxgYMOH341+XUbWEPrZDRBN38JRpwcFbzAO9VcNYcl3/6xZhXLU2iZzIOLTSMKfxpQ/rXdfglki4xfGiwwxrGRuM9pcoBqo8kpsTtwzH2mZWCH1vk/tmK0j32wFZUKxc9H9EjXPFJPDFe+bBUKsGiGzskHFX/mjsC0eTyOhe0l99fmRjWpTvy7qAlmSmGwsxly06qGvM+UmEkkriprXmdCNRLhTgLOICrBV6IlLB6MPRP5kLwwg1XbU/lfUXAn2DO0cWMYsOl3EihjZVVHWaRrZZG1HsJq3GrYg8/R7v4UCCqiyqsiHZwGBkV0YMPR3Flb3zwroaaJIE/ifcV4+PP7T3OCHHqFwpE/RVPkU1sX/I4lHxIICpdHwhPjOvhLPvHYDm4VTTzwhhAia4NuTrixfMkW+A8J8QwXIzklV2gJaX3QJlEKQH4BZP31Z2xLwNt33Vp8Jv1nqSfyzNwAVvlcanKV7KNnzzKXGeH72osUx2mI0u5zdadX0uRPExfjeRz78TP
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199021)(66946007)(6512007)(44832011)(9686003)(66556008)(6666004)(6486002)(66476007)(33716001)(2906002)(53546011)(8676002)(7416002)(316002)(8936002)(4326008)(5660300002)(6506007)(38100700002)(186003)(1076003)(26005)(41300700001)(86362001)(478600001)(83380400001)(54906003)(33656002)(110136005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?ocy+OFFRPskhVOGknld8E/2wsk7nCY2OBquG4fqhnmJhe4TwWZ7LLXhqeBmh?=
+ =?us-ascii?Q?VHlCkHlMD9iJtO93b2RLPpBwMmEHWdZKC6IxaE74oSlcl1c520p8fPEgJMWx?=
+ =?us-ascii?Q?2AizG80pm+G6zk+HokzUHhSYE/00Yam+O/1o0aO2b3+Iao968OaW2DFUclCO?=
+ =?us-ascii?Q?cTOpjIUKuHTld7vD46GjibbR4X4cDEmebDSNSoQraf+p62qj+YZyJJkX14id?=
+ =?us-ascii?Q?/zMcci6v6/tDXBBmZebTwTh7n36RqhdXkt97Y3b3TbVCnBB3KyioxNAq31x+?=
+ =?us-ascii?Q?iNJqqkI7zOej5Fon8rEoE5jrRptv8w2mI2bxHBqKO7bxPSO8oSrd46Vv0lhu?=
+ =?us-ascii?Q?a7kMxVls9r5oKi8di/7S76RaoQxObRsZygti9IhL/gkPFYuqC404aBDFw9oi?=
+ =?us-ascii?Q?nEcqoWGudUrwYhOZUYtbBRqk5sMOogeZKiQpt4Dgix70FbnJzZh6dmoJDw8Z?=
+ =?us-ascii?Q?TCJ2Xj7igUk2RNMm49mxlX9uXqQhSZ3lwBCX9Wpffe129lZdBXX2tt8sW0GC?=
+ =?us-ascii?Q?uV2o06bq/AKl+LmcxcTGAc31qC40TzYPhLd0WPq/TtgMYcNn7znnHvy3xF2U?=
+ =?us-ascii?Q?/rjsnlk7XTSBi5i7j+Z29xIO5G1UrnpPeqFfn5sJHPLCSj1HQRUjwufvAI8e?=
+ =?us-ascii?Q?b5e6PjDXWUQsn79QuxE++DRyQBMpAsvP9VegJHVIdQkDEVRvyFPYEq0RQvC2?=
+ =?us-ascii?Q?qk3Bx9JJZv7zutscAj6iQpyd69OK5uKuOHNawe63pU1Qe7eTQdEqz/eh7egS?=
+ =?us-ascii?Q?x4t6u1sWQfPIfb6q9oxq9BoEKyy/xUQLTJfpvvPVPFPFEI3xWH0j+6pxy5EY?=
+ =?us-ascii?Q?CVZv+C37hIkWU7QZrpNLfSj0FgyNcVmH4uvIuDW58B1nyVlt7dZhOTGbuGkQ?=
+ =?us-ascii?Q?nFcIQWAmc/i8IY5ojI6qXnnFz7pqnsyZtf6vCchYZCKTcqbt1BBq23wlpLWY?=
+ =?us-ascii?Q?K1yL1QTzCYSAhRahWkH1Ur8DcrbnRp++41MJhs42lrfiFSY00F+XrAPpF5IB?=
+ =?us-ascii?Q?+/4EEUdcgt3OMs/wcugUVN5Ng2YkaTkULcmQxaKN4BIycaUm5xOQd09kXJsT?=
+ =?us-ascii?Q?tUdzGDbR920gZjf9mbxJfSF7YlkSWX5P7SQtPRgIMnvXNAsQoAiVp3SIdz0o?=
+ =?us-ascii?Q?fEIEoN6FnI6euupwkOpu/hkc5iYuUgU7eYQjRK6ngACEefzDxAU0zY+vzFb0?=
+ =?us-ascii?Q?xeLf4rhDBuJgvUEjnh/ayWts+6zf419WRnf0S5EfB3+WO5pRTTm2SjpMIw42?=
+ =?us-ascii?Q?yScYaOsPw4WUuX1fB89kz9elUjbgzTN5hKkLq+81kCzTehgLmVp8mXbqzgWW?=
+ =?us-ascii?Q?fxPtJlrzikch5xd2kxmVUvuhghPL/geExBW0t99Ix7ZQvd63OmpYHCgutgrM?=
+ =?us-ascii?Q?1c7w3PyA838R7S7w3BsHaWXRbf/WbDcLmcZpq0xN437mqT+BMbwF/QjqREa/?=
+ =?us-ascii?Q?VaGHijfBiaA4HmaAKuckUuVU3ONB8DSPbo4m2AuKCdZ+Z1HsAx2yuauTraF0?=
+ =?us-ascii?Q?y9vBvPIDY3fbdC54s+UJSgSr597H76sbTpkuJZ80I3W1kXFihNJQSD00Fxy/?=
+ =?us-ascii?Q?7hMp0dho9HpT8kP25ZbspMkZfMBKuNjRM83OH7Pj?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?us-ascii?Q?H06Ce8GCHXCS/rkOyL2AtYxW/YuGGQPqRAJHERkXGZPXbHrC6XQWGBq3+3Tv?=
+ =?us-ascii?Q?sT4QipLt90Vx/nOrGmggep6aOz8KYv8ALNx0uC+aJ0VhF1A5d/6+ITqfr5Rr?=
+ =?us-ascii?Q?7mnYJAsvd3PTi3GQvl+m/UEFc3VnvNQCHzoM9iIdZWE0Hitjkrj/cnSddLTj?=
+ =?us-ascii?Q?1qOnQWby5idvD2BYbsVjbidRFUhCs/r4aDapVF8RlhUR1mrkvGE3JxSx1HvY?=
+ =?us-ascii?Q?iwEO1Bi7X+QffqgfaW0R9Vv+Gb1JlC0sJPafMgyCNSz7WxPuLPYBALuS0H8m?=
+ =?us-ascii?Q?UohU+UDfT9h2YRaHUyUOmecHdxq69qJjFeCjaqFp79nMwA7zVyqEZ02VM7Cs?=
+ =?us-ascii?Q?toEpbjXeyGjiSW53wFUFhHABTsvJal5ogDptflUlHfWcetPv4je718ODwPoY?=
+ =?us-ascii?Q?7fCd5femkWOuUyg7IreRhsZ+JfVd7ncuzsOpgNHq8lM8oTGtHp4EOVJm2Jft?=
+ =?us-ascii?Q?hAMFiOCDrZ1FCLM565Vy2ov0Auoz7pf/PD5G9SIy3/15qcKP3cyFsE/Yj0Uc?=
+ =?us-ascii?Q?kNRGCfcNtTdjGUbZmk5WMIZXo1DcbpdHvjjVW5cLAu6RQm+EIjQpE/KMV8TP?=
+ =?us-ascii?Q?HZg/eQs0GdYOPnl6k/7QFUVdJGR3Ump0U786z8A4VrNFyEWY3aKuU15hEnkR?=
+ =?us-ascii?Q?buK63FmYyg+7DxjEdh0JX1wlWsmvqeEUVEMDFn1zp4efVgzwbSclfiBmHNsq?=
+ =?us-ascii?Q?9HCoCCOrN89gT5RQxJS9F3vzmY/jqF9/CZXJk3wLD9Mag4gK2V+BmTf6jAKz?=
+ =?us-ascii?Q?/8U2Hit0tEbFPLWNOnlWAR2VL970CUOUndg1eFKMy6cO7nhKIv+U9EgSs7J2?=
+ =?us-ascii?Q?Vk0p/BH4swE9wfNEUUCHIu3KXeG5x14UUle3NRvzV2buGO125NjhvREkZIzH?=
+ =?us-ascii?Q?dvaGpB4aHGVCsRLN+0PvFj+sESfW+LxByGgZXeeHRssr16fdyxDkMonA3TGm?=
+ =?us-ascii?Q?He5Aj+439MkIw1R6otH96Xs5GjakmgYIQ8PsaDr8kGj7XxTaGqXONJFxWyUh?=
+ =?us-ascii?Q?NI4bRp9Nh3Yfp2bHBgHzG2Guq72yDLE2ql8/rRLVIqIbqks=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73f60ddb-80fe-4f81-42e8-08db88af1232
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2023 23:22:51.2338
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8MxmWVtMmK1Ie/PoeJPFvRK8Tui3MGOszWuIOA0hC1S7pUvLc03TZLfuojhxjnDtcWtuS9bvUaQbnOP7zy3+TA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR10MB7796
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-19_16,2023-07-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307190210
+X-Proofpoint-ORIG-GUID: 7zN0MhwAlzlSdnBKWnGx2ThZYdpRldF8
+X-Proofpoint-GUID: 7zN0MhwAlzlSdnBKWnGx2ThZYdpRldF8
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
-commit: 03f61041c17914355dde7261be9ccdc821ddd454 skbuff: Switch structure bounds to struct_group()
-date:   1 year, 8 months ago
-config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230720/202307200753.sG6BpxE4-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230720/202307200753.sG6BpxE4-lkp@intel.com/reproduce)
+On 07/13/23 18:10, Dan Carpenter wrote:
+> On Thu, Jul 13, 2023 at 03:57:00PM +0800, linke li wrote:
+> > > However, if this is a real issue it would make more
+> > > sense to look for and change all such checks rather than one single occurrence.
+> > 
+> > Hi, Mike. I have checked the example code you provided, and the
+> > difference between
+> > those codes and the patched code is that those checks are checks for
+> > unsigned integer
+> >  overflow, which is well-defined. Only undefined behavior poses a
+> > security risk. So they
+> >  don't need any modifications. I have only found one occurrence of
+> > signed number
+> > overflow so far.
+> 
+> I used to have a similar check to that but I eventually deleted it
+> because I decided that the -fno-strict-overflow option works.  It didn't
+> produce a lot of warnings.
+> 
+> Historically we have done a bad job at open coding integer overflow
+> checks.  Some that I wrote turned out to be incorrect.  And even when
+> I write them correctly a couple times people have "fixed" them even
+> harder without CCing me or asking me why I wrote them the way I did.
+> 
+> What about using the check_add_overflow() macro?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307200753.sG6BpxE4-lkp@intel.com/
+I like the macro.  It seems to have plenty of users.
 
-All warnings (new ones prefixed by >>):
+Linke Li, what do you think?  If you like, please send another path
+using the macro as suggested by Dan.
 
->> drivers/net/veth.c:848:12: warning: stack frame size (2096) exceeds limit (2048) in 'veth_xdp_rcv' [-Wframe-larger-than]
-     848 | static int veth_xdp_rcv(struct veth_rq *rq, int budget,
-         |            ^
-   1 warning generated.
-
-
-vim +/veth_xdp_rcv +848 drivers/net/veth.c
-
-948d4f214fde43 Toshiaki Makita  2018-08-03  847  
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19 @848  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  849  			struct veth_xdp_tx_bq *bq,
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  850  			struct veth_stats *stats)
-948d4f214fde43 Toshiaki Makita  2018-08-03  851  {
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  852  	int i, done = 0, n_xdpf = 0;
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  853  	void *xdpf[VETH_XDP_BATCH];
-948d4f214fde43 Toshiaki Makita  2018-08-03  854  
-948d4f214fde43 Toshiaki Makita  2018-08-03  855  	for (i = 0; i < budget; i++) {
-638264dc90227c Toshiaki Makita  2018-08-03  856  		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
-948d4f214fde43 Toshiaki Makita  2018-08-03  857  
-9fc8d518d9d590 Toshiaki Makita  2018-08-03  858  		if (!ptr)
-948d4f214fde43 Toshiaki Makita  2018-08-03  859  			break;
-948d4f214fde43 Toshiaki Makita  2018-08-03  860  
-d1396004dd8686 Toshiaki Makita  2018-08-03  861  		if (veth_is_xdp_frame(ptr)) {
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  862  			/* ndo_xdp_xmit */
-4195e54aaf1c8d Toshiaki Makita  2018-10-11  863  			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
-4195e54aaf1c8d Toshiaki Makita  2018-10-11  864  
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  865  			stats->xdp_bytes += frame->len;
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  866  			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  867  			if (frame) {
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  868  				/* XDP_PASS */
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  869  				xdpf[n_xdpf++] = frame;
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  870  				if (n_xdpf == VETH_XDP_BATCH) {
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  871  					veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf,
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  872  							      bq, stats);
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  873  					n_xdpf = 0;
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  874  				}
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  875  			}
-d1396004dd8686 Toshiaki Makita  2018-08-03  876  		} else {
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  877  			/* ndo_start_xmit */
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  878  			struct sk_buff *skb = ptr;
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  879  
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  880  			stats->xdp_bytes += skb->len;
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  881  			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
-948d4f214fde43 Toshiaki Makita  2018-08-03  882  			if (skb)
-638264dc90227c Toshiaki Makita  2018-08-03  883  				napi_gro_receive(&rq->xdp_napi, skb);
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  884  		}
-948d4f214fde43 Toshiaki Makita  2018-08-03  885  		done++;
-948d4f214fde43 Toshiaki Makita  2018-08-03  886  	}
-948d4f214fde43 Toshiaki Makita  2018-08-03  887  
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  888  	if (n_xdpf)
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  889  		veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf, bq, stats);
-65e6dcf73398dd Lorenzo Bianconi 2021-01-29  890  
-4195e54aaf1c8d Toshiaki Makita  2018-10-11  891  	u64_stats_update_begin(&rq->stats.syncp);
-9152cff0dd3df6 Lorenzo Bianconi 2020-03-19  892  	rq->stats.vs.xdp_redirect += stats->xdp_redirect;
-1c5b82e55f1529 Lorenzo Bianconi 2020-03-19  893  	rq->stats.vs.xdp_bytes += stats->xdp_bytes;
-66fe4a078879d1 Lorenzo Bianconi 2020-03-19  894  	rq->stats.vs.xdp_drops += stats->xdp_drops;
-66fe4a078879d1 Lorenzo Bianconi 2020-03-19  895  	rq->stats.vs.rx_drops += stats->rx_drops;
-65780c5627a26d Lorenzo Bianconi 2020-03-19  896  	rq->stats.vs.xdp_packets += done;
-4195e54aaf1c8d Toshiaki Makita  2018-10-11  897  	u64_stats_update_end(&rq->stats.syncp);
-4195e54aaf1c8d Toshiaki Makita  2018-10-11  898  
-948d4f214fde43 Toshiaki Makita  2018-08-03  899  	return done;
-948d4f214fde43 Toshiaki Makita  2018-08-03  900  }
-948d4f214fde43 Toshiaki Makita  2018-08-03  901  
-
-:::::: The code at line 848 was first introduced by commit
-:::::: 1c5b82e55f152988778bebeea52fae7f6cea9a60 veth: introduce more specialized counters in veth_stats
-
-:::::: TO: Lorenzo Bianconi <lorenzo@kernel.org>
-:::::: CC: David S. Miller <davem@davemloft.net>
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index 7b17ccfa039d..c512165736e0 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -155,9 +155,8 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+>  		return -EINVAL;
+>  
+>  	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+> -	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
+> -	/* check for overflow */
+> -	if (len < vma_len)
+> +	if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT,
+> +			       &len))
+>  		return -EINVAL;
+>  
+>  	inode_lock(inode);
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mike Kravetz
