@@ -1,43 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068BC3D86;
-	Wed, 19 Jul 2023 05:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268931FDF;
+	Wed, 19 Jul 2023 05:27:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689743105; x=1721279105;
+  t=1689744435; x=1721280435;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZNWgIyDImzSfAN73E8djkiK2n+65c6wPWeT0GzE81aY=;
-  b=JzehtxVt/Vck1RHn8ppfR4hQYaNZuuOcA2tCJwlCXOo8CzO0q6BELdxa
-   MuqioGOci/tI+m6Neuok6heof5lVts63dD2hgeUadkrprGMXOovlrtJ5U
-   +kN83+J0cf1t1NTuq+9+AFrMDnh6Y4HZGlW64QW+Uns+u9aywFUajAjvC
-   OVk/y2p8FqPcd2JpK0n0oEXVKyCI+Mu8cUSyUsAWY5cnUqelmI1yA88G+
-   8+gIRLL9DAESNlQqV1wd0vwtD4SHHjyiTE2fHLauE21uxPtmk2w9LL/Kn
-   gZfKO44SOfRBQh4SrCWoliQP2lQ6f9ZFYzejFLlFQ7jEdrS/xHtOP55Fo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="346676113"
+  bh=7pz0sK01DdvU4zYtuiJq/8cqIVIbdTHg1wuHBtXAa2o=;
+  b=fnsIg3LGRwfhg6Lv7aiwHTa1o23fYsl0LY2lhDs0EfKAx1DNyPDsqw4S
+   DvTWteq7pHxE290njjpmqtpM4Ya3gFuWc4eyukUgva4h8S6XBGHh99dsl
+   PN4DFpp0Cbvgbea3lEqH7mZa1/PMn48MfHJIMBjfwvEatnbaq0lLKsScC
+   IGbm8KQd1tEFKRoz4vubAYMsmV5QfsKkY2sEZYGcoCG4NvmUgM8A9Pnhg
+   k1KZfbMgYRX7PLCKKKiQLH0mibnMx1qUaquL6+hDNLyl/ob9RXTXSG4yY
+   zuFLwwN/VTu0AcjQLJv9hVtDPO89c9LlZ2ozI3hB16E8N57nFuKj+fDXG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452751649"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="346676113"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 22:05:04 -0700
+   d="scan'208";a="452751649"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 22:27:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="789282119"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="717865627"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="789282119"
+   d="scan'208";a="717865627"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Jul 2023 22:05:02 -0700
+  by orsmga007.jf.intel.com with ESMTP; 18 Jul 2023 22:27:12 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qLzN0-0004AP-0M;
-	Wed, 19 Jul 2023 05:05:02 +0000
-Date: Wed, 19 Jul 2023 13:04:33 +0800
+	id 1qLziP-0004BF-00;
+	Wed, 19 Jul 2023 05:27:10 +0000
+Date: Wed, 19 Jul 2023 13:26:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:remove-margins 2/2] kernel/sched/fair.c:165:15: error:
- type specifier missing, defaults to 'int'; ISO C99 and later do not support
- implicit int
-Message-ID: <202307191211.oFljVu7F-lkp@intel.com>
+To: Tomer Tayar <ttayar@habana.ai>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-accel 21/24]
+ drivers/accel/habanalabs/common/device.c:587:5: warning: no previous
+ prototype for function '__hl_mmap'
+Message-ID: <202307191311.X6nwQDrf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,52 +48,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/qais-yousef/linux remove-margins
-head:   f49a0141f6fa8e9f6dd3b8cacae3531f90c74343
-commit: f49a0141f6fa8e9f6dd3b8cacae3531f90c74343 [2/2] sched/fair: Remove magic margin in fits_capacity()
-config: powerpc-randconfig-r026-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191211.oFljVu7F-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191211.oFljVu7F-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-accel
+head:   66064465171cd205e35f2c0c1f23eaff0eea3d56
+commit: cc9c2ec0e61883b26effbe0b8cf40d5180999d21 [21/24] accel/habanalabs: register compute device as an accel device
+config: x86_64-randconfig-x006-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191311.X6nwQDrf-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191311.X6nwQDrf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307191211.oFljVu7F-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191311.X6nwQDrf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/sched/fair.c:165:15: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     165 | static inline fits_capacity(unsigned long util, unsigned long capacity)
-         | ~~~~~~~~~~~~~ ^
-         | int
->> kernel/sched/fair.c:167:9: error: call to undeclared function 'approximate_util_avg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     167 |         return approximate_util_avg(util, TICK_NSEC) < capacity;
-         |                ^
-   2 errors generated.
+>> drivers/accel/habanalabs/common/device.c:587:5: warning: no previous prototype for function '__hl_mmap' [-Wmissing-prototypes]
+   int __hl_mmap(struct hl_fpriv *hpriv, struct vm_area_struct *vma)
+       ^
+   drivers/accel/habanalabs/common/device.c:587:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __hl_mmap(struct hl_fpriv *hpriv, struct vm_area_struct *vma)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/int +165 kernel/sched/fair.c
+vim +/__hl_mmap +587 drivers/accel/habanalabs/common/device.c
 
-   150	
-   151	/*
-   152	 * The util will fit the capacity if it has enough headroom to grow within the
-   153	 * next tick - which is when any load balancing activity happens to do the
-   154	 * correction.
-   155	 *
-   156	 * If util stays within the capacity before tick has elapsed, then it should be
-   157	 * fine. If not, then a correction action must happen shortly after it starts
-   158	 * running, hence we treat it as !fit.
-   159	 *
-   160	 * TODO: TICK is not actually accurate enough. balance_interval is the correct
-   161	 * one to use as the next load balance doesn't not happen religiously at tick.
-   162	 * Accessing balance_interval might be tricky and will require some refactoring
-   163	 * first.
-   164	 */
- > 165	static inline fits_capacity(unsigned long util, unsigned long capacity)
-   166	{
- > 167		return approximate_util_avg(util, TICK_NSEC) < capacity;
-   168	}
-   169	
+   586	
+ > 587	int __hl_mmap(struct hl_fpriv *hpriv, struct vm_area_struct *vma)
+   588	{
+   589		struct hl_device *hdev = hpriv->hdev;
+   590		unsigned long vm_pgoff;
+   591	
+   592		if (!hdev) {
+   593			pr_err_ratelimited("Trying to mmap after device was removed! Please close FD\n");
+   594			return -ENODEV;
+   595		}
+   596	
+   597		vm_pgoff = vma->vm_pgoff;
+   598	
+   599		switch (vm_pgoff & HL_MMAP_TYPE_MASK) {
+   600		case HL_MMAP_TYPE_BLOCK:
+   601			vma->vm_pgoff = HL_MMAP_OFFSET_VALUE_GET(vm_pgoff);
+   602			return hl_hw_block_mmap(hpriv, vma);
+   603	
+   604		case HL_MMAP_TYPE_CB:
+   605		case HL_MMAP_TYPE_TS_BUFF:
+   606			return hl_mem_mgr_mmap(&hpriv->mem_mgr, vma, NULL);
+   607		}
+   608		return -EINVAL;
+   609	}
+   610	
 
 -- 
 0-DAY CI Kernel Test Service
