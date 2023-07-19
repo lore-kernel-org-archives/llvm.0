@@ -1,234 +1,426 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AECE17C4;
-	Wed, 19 Jul 2023 02:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0EE17D1;
+	Wed, 19 Jul 2023 02:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689734854; x=1721270854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uTOXx6T5gFSVhyNiIBQkFOeNoav0OF5AR4miIzgspRQ=;
-  b=TFZZWmvAJAq7oO5jAZ/l8/rS9fVzHlo34ObQ5Xxh0ne35dVqOhf70594
-   dfqA4/CIxk0S6Ayb8hr/OsiFx0tqsZwxVDjtinuD8Aq6CETLEHygy1YB3
-   WOtBdTWyrPaFbBJQDdcycr4hGC7Q2ybZ+bcfD1ojchcbeqSwzCNOdDBEG
-   nv4Nic2qka8uQr3fYgPh72VpE9E+WN+FZYqUCsxiyAqTVnp5qqVSf+g/p
-   o5uFH2JGFACADHLTJD0wgVANU0+9tEFnzDrSuZkMNyIbOqdwkyyGTtwhM
-   TpkdYXXWzVYlddLV/PS5HrWELHAcd6XpvbDRLhJDLWkcXRyd/HhEKwGC2
+  t=1689734853; x=1721270853;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9r48n9dvMuyhp3ilAFRYXip4U0G99S3EWxnewwlAWaA=;
+  b=QXhMrjisNweXtVUK+oaNwO2APdYcdprwXF/KzngJiIeaLsPHkYQkVzL9
+   4ercFRBm5qmu3zBdV0RTvu6Hid6+GIxuxlOWqQzdnDKfRMtrJsA01v+x7
+   DqV4EtZq7bSHy4lEspzJibnWhgNCpyOKA2nzYUvRBsDL389LG4J2QNirV
+   goL0kkmhJiPPKC08i4xgBGoWBk2Ci5LYavIJKftbR201/AwSvxskOFHCE
+   1srxQmhhgFC1kiquNcFflgNKtQsgXRtfG3YeAzGaGpy3jrMCerqxNYplz
+   5MNfyD4s2nZizKspU8hkiAjhGmeBQP+q6NVPNAziHBcplcu+EzDItC3VJ
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="356305664"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="366400737"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="356305664"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:47:33 -0700
+   d="scan'208";a="366400737"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:47:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="723841008"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="847907103"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="723841008"
+   d="scan'208";a="847907103"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jul 2023 19:47:26 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2023 19:47:26 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qLxDp-00045P-1N;
+	id 1qLxDp-00045H-1A;
 	Wed, 19 Jul 2023 02:47:25 +0000
 Date: Wed, 19 Jul 2023 10:46:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-	Avri Altman <avri.altman@wdc.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Bart Van Assche <bvanassche@acm.org>, Bean Huo <beanhuo@micron.com>,
-	ChanWoo Lee <cw9316.lee@samsung.com>,
-	Daejun Park <daejun7.park@samsung.com>,
-	Keoseong Park <keosung.park@samsung.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	Lu Hongfei <luhongfei@vivo.com>, Daniil Lunev <dlunev@chromium.org>,
-	Jinyoung Choi <j-young.choi@samsung.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Asutosh Das <quic_asutoshd@quicinc.com>,
-	Can Guo <quic_cang@quicinc.com>,
-	Peter Wang <peter.wang@mediatek.com>,
-	Stanley Chu <stanley.chu@mediatek.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Arthur Simchaev <arthur.simchaev@wdc.com>,
-	Jens Axboe <axboe@kernel.dk>, Markus Fuchs <mklntf@gmail.com>,
-	Po-Wen Kao <powen.kao@mediatek.com>,
-	Eric Biggers <ebiggers@google.com>
-Subject: Re: [PATCH] scsi: ufs: Remove HPB support
-Message-ID: <202307191053.lTuPwUD6-lkp@intel.com>
-References: <20230717193827.2001174-1-bvanassche@acm.org>
+	linux-media@vger.kernel.org
+Subject: [sailus-media-tree:async-multi 37/43]
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c:1511:47: error: too many
+ arguments to function call, expected single argument 'notifier', have 2
+ arguments
+Message-ID: <202307191046.kAlYPKXg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230717193827.2001174-1-bvanassche@acm.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Bart,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on next-20230718]
-[cannot apply to jejb-scsi/for-next linus/master v6.5-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/scsi-ufs-Remove-HPB-support/20230718-195403
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230717193827.2001174-1-bvanassche%40acm.org
-patch subject: [PATCH] scsi: ufs: Remove HPB support
-config: hexagon-randconfig-r045-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191053.lTuPwUD6-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191053.lTuPwUD6-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git async-multi
+head:   fc1105d215634df27a5ff95ce8505d999e40d8b6
+commit: 9604ccba9f23532d101b6fe34f95fa47b232317e [37/43] media: v4l: async: Set v4l2_device and subdev in async notifier init
+config: i386-randconfig-i011-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191046.kAlYPKXg-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191046.kAlYPKXg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307191053.lTuPwUD6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191046.kAlYPKXg-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/ufs/core/ufshcd.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/ufs/core/ufshcd.c:8092:5: warning: variable 'b_ufs_feature_sup' set but not used [-Wunused-but-set-variable]
-    8092 |         u8 b_ufs_feature_sup;
-         |            ^
-   7 warnings generated.
+>> drivers/staging/media/atomisp/pci/atomisp_v4l2.c:1511:47: error: too many arguments to function call, expected single argument 'notifier', have 2 arguments
+           err = v4l2_async_nf_register(&isp->v4l2_dev, &isp->notifier);
+                 ~~~~~~~~~~~~~~~~~~~~~~                 ^~~~~~~~~~~~~~
+   include/media/v4l2-async.h:281:5: note: 'v4l2_async_nf_register' declared here
+   int v4l2_async_nf_register(struct v4l2_async_notifier *notifier);
+       ^
+   1 error generated.
+--
+>> drivers/staging/media/atomisp/pci/atomisp_csi2_bridge.c:828:35: error: too few arguments to function call, expected 2, have 1
+           v4l2_async_nf_init(&isp->notifier);
+           ~~~~~~~~~~~~~~~~~~               ^
+   include/media/v4l2-async.h:159:6: note: 'v4l2_async_nf_init' declared here
+   void v4l2_async_nf_init(struct v4l2_async_notifier *notifier,
+        ^
+   1 error generated.
 
 
-vim +/b_ufs_feature_sup +8092 drivers/ufs/core/ufshcd.c
+vim +/notifier +1511 drivers/staging/media/atomisp/pci/atomisp_v4l2.c
 
-c28c00ba4f0609 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8087  
-097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8088  static int ufs_get_device_desc(struct ufs_hba *hba)
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8089  {
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8090  	int err;
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8091  	u8 model_index;
-f02bc9754a6887 drivers/scsi/ufs/ufshcd.c Daejun Park     2021-07-12 @8092  	u8 b_ufs_feature_sup;
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8093  	u8 *desc_buf;
-097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8094  	struct ufs_dev_info *dev_info = &hba->dev_info;
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8095  
-f2a89b071b26b7 drivers/ufs/core/ufshcd.c Arthur Simchaev 2022-12-11  8096  	desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_KERNEL);
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8097  	if (!desc_buf) {
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8098  		err = -ENOMEM;
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8099  		goto out;
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8100  	}
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8101  
-c4607a09450d67 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-06-03  8102  	err = ufshcd_read_desc_param(hba, QUERY_DESC_IDN_DEVICE, 0, 0, desc_buf,
-f2a89b071b26b7 drivers/ufs/core/ufshcd.c Arthur Simchaev 2022-12-11  8103  				     QUERY_DESC_MAX_SIZE);
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8104  	if (err) {
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8105  		dev_err(hba->dev, "%s: Failed reading Device Desc. err = %d\n",
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8106  			__func__, err);
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8107  		goto out;
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8108  	}
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8109  
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8110  	/*
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8111  	 * getting vendor (manufacturerID) and Bank Index in big endian
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8112  	 * format
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8113  	 */
-097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8114  	dev_info->wmanufacturerid = desc_buf[DEVICE_DESC_PARAM_MANF_ID] << 8 |
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8115  				     desc_buf[DEVICE_DESC_PARAM_MANF_ID + 1];
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8116  
-09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8117  	/* getting Specification Version in big endian format */
-09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8118  	dev_info->wspecversion = desc_buf[DEVICE_DESC_PARAM_SPEC_VER] << 8 |
-09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8119  				      desc_buf[DEVICE_DESC_PARAM_SPEC_VER + 1];
-7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8120  	dev_info->bqueuedepth = desc_buf[DEVICE_DESC_PARAM_Q_DPTH];
-f02bc9754a6887 drivers/scsi/ufs/ufshcd.c Daejun Park     2021-07-12  8121  	b_ufs_feature_sup = desc_buf[DEVICE_DESC_PARAM_UFS_FEAT];
-09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8122  
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8123  	model_index = desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
-3d17b9b5ab1155 drivers/scsi/ufs/ufshcd.c Asutosh Das     2020-04-22  8124  
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8125  	err = ufshcd_read_string_desc(hba, model_index,
-097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8126  				      &dev_info->model, SD_ASCII_STD);
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8127  	if (err < 0) {
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8128  		dev_err(hba->dev, "%s: Failed reading Product Name. err = %d\n",
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8129  			__func__, err);
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8130  		goto out;
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8131  	}
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8132  
-b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8133  	hba->luns_avail = desc_buf[DEVICE_DESC_PARAM_NUM_LU] +
-b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8134  		desc_buf[DEVICE_DESC_PARAM_NUM_WLU];
-b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8135  
-817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8136  	ufs_fixup_device_setup(hba);
-817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8137  
-817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8138  	ufshcd_wb_probe(hba, desc_buf);
-817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8139  
-e88e2d32200a17 drivers/scsi/ufs/ufshcd.c Avri Altman     2021-09-15  8140  	ufshcd_temp_notif_probe(hba, desc_buf);
-e88e2d32200a17 drivers/scsi/ufs/ufshcd.c Avri Altman     2021-09-15  8141  
-6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8142  	if (hba->ext_iid_sup)
-6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8143  		ufshcd_ext_iid_probe(hba, desc_buf);
-6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8144  
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8145  	/*
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8146  	 * ufshcd_read_string_desc returns size of the string
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8147  	 * reset the error value
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8148  	 */
-4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8149  	err = 0;
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8150  
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8151  out:
-bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8152  	kfree(desc_buf);
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8153  	return err;
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8154  }
-c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8155  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1235  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1236  static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1237  {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1238  	const struct atomisp_platform_data *pdata;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1239  	struct atomisp_device *isp;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1240  	unsigned int start;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1241  	int err, val;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1242  	u32 irq;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1243  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1244  	if (!is_valid_device(pdev, id))
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1245  		return -ENODEV;
+ca133c395f2f6c drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1246  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1247  	/* Pointer to struct device. */
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1248  	atomisp_dev = &pdev->dev;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1249  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1250  	pdata = atomisp_get_platform_data();
+bdfe0beb95eebc drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1251  	if (!pdata)
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1252  		dev_warn(&pdev->dev, "no platform data available\n");
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1253  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1254  	err = pcim_enable_device(pdev);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1255  	if (err) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1256  		dev_err(&pdev->dev, "Failed to enable CI ISP device (%d)\n", err);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1257  		return err;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1258  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1259  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1260  	start = pci_resource_start(pdev, ATOM_ISP_PCI_BAR);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1261  	dev_dbg(&pdev->dev, "start: 0x%x\n", start);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1262  
+64288aa9e41990 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Moses Christopher Bollavarapu 2022-02-06  1263  	err = pcim_iomap_regions(pdev, BIT(ATOM_ISP_PCI_BAR), pci_name(pdev));
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1264  	if (err) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1265  		dev_err(&pdev->dev, "Failed to I/O memory remapping (%d)\n", err);
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1266  		goto ioremap_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1267  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1268  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1269  	isp = devm_kzalloc(&pdev->dev, sizeof(*isp), GFP_KERNEL);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1270  	if (!isp) {
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1271  		err = -ENOMEM;
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1272  		goto atomisp_dev_alloc_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1273  	}
+1cfc8593f42085 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1274  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1275  	isp->dev = &pdev->dev;
+71aecd5d63eea4 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1276  	isp->base = pcim_iomap_table(pdev)[ATOM_ISP_PCI_BAR];
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1277  	isp->saved_regs.ispmmadr = start;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1278  
+71aecd5d63eea4 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1279  	dev_dbg(&pdev->dev, "atomisp mmio base: %p\n", isp->base);
+71aecd5d63eea4 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1280  
+f10fc1790d5ecd drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-09-02  1281  	mutex_init(&isp->mutex);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1282  	spin_lock_init(&isp->lock);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1283  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1284  	/* This is not a true PCI device on SoC, so the delay is not needed. */
+3789af9a13e556 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Krzysztof Wilczyński          2020-07-30  1285  	pdev->d3hot_delay = 0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1286  
+71aecd5d63eea4 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1287  	pci_set_drvdata(pdev, isp);
+71aecd5d63eea4 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1288  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1289  	switch (id->device & ATOMISP_PCI_DEVICE_SOC_MASK) {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1290  	case ATOMISP_PCI_DEVICE_SOC_MRFLD:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1291  		isp->media_dev.hw_revision =
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1292  		    (ATOMISP_HW_REVISION_ISP2400
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1293  		     << ATOMISP_HW_REVISION_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1294  		    ATOMISP_HW_STEPPING_B0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1295  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1296  		switch (id->device) {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1297  		case ATOMISP_PCI_DEVICE_SOC_MRFLD_1179:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1298  			isp->dfs = &dfs_config_merr_1179;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1299  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1300  		case ATOMISP_PCI_DEVICE_SOC_MRFLD_117A:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1301  			isp->dfs = &dfs_config_merr_117a;
+268ff5bf6b2b4b drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-20  1302  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1303  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1304  		default:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1305  			isp->dfs = &dfs_config_merr;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1306  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1307  		}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1308  		isp->hpll_freq = HPLL_FREQ_1600MHZ;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1309  		break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1310  	case ATOMISP_PCI_DEVICE_SOC_BYT:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1311  		isp->media_dev.hw_revision =
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1312  		    (ATOMISP_HW_REVISION_ISP2400
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1313  		     << ATOMISP_HW_REVISION_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1314  		    ATOMISP_HW_STEPPING_B0;
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1315  
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1316  		/*
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1317  		 * Note: some Intel-based tablets with Android use a different
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1318  		 * DFS table. Based on the comments at the Yocto Aero meta
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1319  		 * version of this driver (at the ssid.h header), they're
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1320  		 * identified via a "spid" var:
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1321  		 *
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1322  		 *	androidboot.spid=vend:cust:manu:plat:prod:hard
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1323  		 *
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1324  		 * As we don't have this upstream, nor we know enough details
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1325  		 * to use a DMI or PCI match table, the old code was just
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1326  		 * removed, but let's keep a note here as a reminder that,
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1327  		 * for certain devices, we may need to limit the max DFS
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1328  		 * frequency to be below certain values, adjusting the
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1329  		 * resolution accordingly.
+c371af686972ee drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1330  		 */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1331  		isp->dfs = &dfs_config_byt;
+17c3827b4c5744 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1332  
+17c3827b4c5744 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1333  		/*
+17c3827b4c5744 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1334  		 * HPLL frequency is known to be device-specific, but we don't
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1335  		 * have specs yet for exactly how it varies.  Default to
+17c3827b4c5744 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1336  		 * BYT-CR but let provisioning set it via EFI variable
+17c3827b4c5744 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-06-01  1337  		 */
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1338  		isp->hpll_freq = gmin_get_var_int(&pdev->dev, false, "HpllFreq", HPLL_FREQ_2000MHZ);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1339  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1340  		/*
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1341  		 * for BYT/CHT we are put isp into D3cold to avoid pci registers access
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1342  		 * in power off. Set d3cold_delay to 0 since default 100ms is not
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1343  		 * necessary.
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1344  		 */
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1345  		pdev->d3cold_delay = 0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1346  		break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1347  	case ATOMISP_PCI_DEVICE_SOC_ANN:
+4a62b5cca5f048 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2021-11-05  1348  		isp->media_dev.hw_revision = (	 ATOMISP_HW_REVISION_ISP2401
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1349  						 << ATOMISP_HW_REVISION_SHIFT);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1350  		isp->media_dev.hw_revision |= pdev->revision < 2 ?
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1351  					      ATOMISP_HW_STEPPING_A0 : ATOMISP_HW_STEPPING_B0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1352  		isp->dfs = &dfs_config_merr;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1353  		isp->hpll_freq = HPLL_FREQ_1600MHZ;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1354  		break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1355  	case ATOMISP_PCI_DEVICE_SOC_CHT:
+4a62b5cca5f048 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2021-11-05  1356  		isp->media_dev.hw_revision = (	 ATOMISP_HW_REVISION_ISP2401
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1357  						 << ATOMISP_HW_REVISION_SHIFT);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1358  		isp->media_dev.hw_revision |= pdev->revision < 2 ?
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1359  					      ATOMISP_HW_STEPPING_A0 : ATOMISP_HW_STEPPING_B0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1360  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1361  		isp->dfs = &dfs_config_cht;
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1362  		pdev->d3cold_delay = 0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1363  
+5f55dd54994a59 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1364  		iosf_mbi_read(BT_MBI_UNIT_CCK, MBI_REG_READ, CCK_FUSE_REG_0, &val);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1365  		switch (val & CCK_FUSE_HPLL_FREQ_MASK) {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1366  		case 0x00:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1367  			isp->hpll_freq = HPLL_FREQ_800MHZ;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1368  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1369  		case 0x01:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1370  			isp->hpll_freq = HPLL_FREQ_1600MHZ;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1371  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1372  		case 0x02:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1373  			isp->hpll_freq = HPLL_FREQ_2000MHZ;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1374  			break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1375  		default:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1376  			isp->hpll_freq = HPLL_FREQ_1600MHZ;
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1377  			dev_warn(&pdev->dev, "read HPLL from cck failed. Default to 1600 MHz.\n");
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1378  		}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1379  		break;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1380  	default:
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1381  		dev_err(&pdev->dev, "un-supported IUNIT device\n");
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1382  		err = -ENODEV;
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1383  		goto atomisp_dev_alloc_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1384  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1385  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1386  	dev_info(&pdev->dev, "ISP HPLL frequency base = %d MHz\n", isp->hpll_freq);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1387  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1388  	isp->max_isr_latency = ATOMISP_MAX_ISR_LATENCY;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1389  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1390  	/* Load isp firmware from user space */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1391  	isp->firmware = atomisp_load_firmware(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1392  	if (!isp->firmware) {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1393  		err = -ENOENT;
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1394  		dev_dbg(&pdev->dev, "Firmware load failed\n");
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1395  		goto load_fw_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1396  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1397  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1398  	err = sh_css_check_firmware_version(isp->dev, isp->firmware->data);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1399  	if (err) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1400  		dev_dbg(&pdev->dev, "Firmware version check failed\n");
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1401  		goto fw_validation_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1402  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1403  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1404  	pci_set_master(pdev);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1405  
+02900a49a43b7f drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Suraj Upadhyay                2020-07-19  1406  	err = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
+02900a49a43b7f drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Suraj Upadhyay                2020-07-19  1407  	if (err < 0) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1408  		dev_err(&pdev->dev, "Failed to enable msi (%d)\n", err);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1409  		goto enable_msi_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1410  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1411  
+1cfc8593f42085 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1412  	atomisp_msi_irq_init(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1413  
+ac378c94c7c6b2 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-01  1414  	cpu_latency_qos_add_request(&isp->pm_qos, PM_QOS_DEFAULT_VALUE);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1415  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1416  	/*
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1417  	 * for MRFLD, Software/firmware needs to write a 1 to bit 0 of
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1418  	 * the register at CSI_RECEIVER_SELECTION_REG to enable SH CSI
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1419  	 * backend write 0 will enable Arasan CSI backend, which has
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1420  	 * bugs(like sighting:4567697 and 4567699) and will be removed
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1421  	 * in B0
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1422  	 */
+1a16d54539785d drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-28  1423  	atomisp_css2_hw_store_32(MRFLD_CSI_RECEIVER_SELECTION_REG, 1);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1424  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1425  	if ((id->device & ATOMISP_PCI_DEVICE_SOC_MASK) ==
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1426  	    ATOMISP_PCI_DEVICE_SOC_MRFLD) {
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1427  		u32 csi_afe_trim;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1428  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1429  		/*
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1430  		 * Workaround for imbalance data eye issue which is observed
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1431  		 * on TNG B0.
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1432  		 */
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1433  		pci_read_config_dword(pdev, MRFLD_PCI_CSI_AFE_TRIM_CONTROL, &csi_afe_trim);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1434  		csi_afe_trim &= ~((MRFLD_PCI_CSI_HSRXCLKTRIM_MASK <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1435  				   MRFLD_PCI_CSI1_HSRXCLKTRIM_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1436  				  (MRFLD_PCI_CSI_HSRXCLKTRIM_MASK <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1437  				   MRFLD_PCI_CSI2_HSRXCLKTRIM_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1438  				  (MRFLD_PCI_CSI_HSRXCLKTRIM_MASK <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1439  				   MRFLD_PCI_CSI3_HSRXCLKTRIM_SHIFT));
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1440  		csi_afe_trim |= (MRFLD_PCI_CSI1_HSRXCLKTRIM <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1441  				 MRFLD_PCI_CSI1_HSRXCLKTRIM_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1442  				(MRFLD_PCI_CSI2_HSRXCLKTRIM <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1443  				 MRFLD_PCI_CSI2_HSRXCLKTRIM_SHIFT) |
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1444  				(MRFLD_PCI_CSI3_HSRXCLKTRIM <<
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1445  				 MRFLD_PCI_CSI3_HSRXCLKTRIM_SHIFT);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1446  		pci_write_config_dword(pdev, MRFLD_PCI_CSI_AFE_TRIM_CONTROL, csi_afe_trim);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1447  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1448  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1449  	err = atomisp_initialize_modules(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1450  	if (err < 0) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1451  		dev_err(&pdev->dev, "atomisp_initialize_modules (%d)\n", err);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1452  		goto initialize_modules_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1453  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1454  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1455  	err = atomisp_register_entities(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1456  	if (err < 0) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1457  		dev_err(&pdev->dev, "atomisp_register_entities failed (%d)\n", err);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1458  		goto register_entities_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1459  	}
+93d3fb35aa10a8 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-09-03  1460  
+93d3fb35aa10a8 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-09-03  1461  	INIT_WORK(&isp->assert_recovery_work, atomisp_assert_recovery_work);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1462  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1463  	/* save the iunit context only once after all the values are init'ed. */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1464  	atomisp_save_iunit_reg(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1465  
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1466  	/*
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1467  	 * The atomisp does not use standard PCI power-management through the
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1468  	 * PCI config space. Instead this driver directly tells the P-Unit to
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1469  	 * disable the ISP over the IOSF. The standard PCI subsystem pm_ops will
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1470  	 * try to access the config space before (resume) / after (suspend) this
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1471  	 * driver has turned the ISP on / off, resulting in the following errors:
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1472  	 *
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1473  	 * "Unable to change power state from D0 to D3hot, device inaccessible"
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1474  	 * "Unable to change power state from D3cold to D0, device inaccessible"
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1475  	 *
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1476  	 * To avoid these errors override the pm_domain so that all the PCI
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1477  	 * subsys suspend / resume handling is skipped.
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1478  	 */
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1479  	isp->pm_domain.ops.runtime_suspend = atomisp_power_off;
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1480  	isp->pm_domain.ops.runtime_resume = atomisp_power_on;
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1481  	isp->pm_domain.ops.suspend = atomisp_suspend;
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1482  	isp->pm_domain.ops.resume = atomisp_resume;
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1483  
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1484  	dev_pm_domain_set(&pdev->dev, &isp->pm_domain);
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1485  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1486  	pm_runtime_put_noidle(&pdev->dev);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1487  	pm_runtime_allow(&pdev->dev);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1488  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1489  	/* Init ISP memory management */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1490  	hmm_init();
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1491  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1492  	err = devm_request_threaded_irq(&pdev->dev, pdev->irq,
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1493  					atomisp_isr, atomisp_isr_thread,
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1494  					IRQF_SHARED, "isp_irq", isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1495  	if (err) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1496  		dev_err(&pdev->dev, "Failed to request irq (%d)\n", err);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1497  		goto request_irq_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1498  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1499  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1500  	/* Load firmware into ISP memory */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1501  	err = atomisp_css_load_firmware(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1502  	if (err) {
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1503  		dev_err(&pdev->dev, "Failed to init css.\n");
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1504  		goto css_init_fail;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1505  	}
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1506  	/* Clear FW image from memory */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1507  	release_firmware(isp->firmware);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1508  	isp->firmware = NULL;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1509  	isp->css_env.isp_css_fw.data = NULL;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1510  
+8d28ec7e9145ef drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2023-05-25 @1511  	err = v4l2_async_nf_register(&isp->v4l2_dev, &isp->notifier);
+8d28ec7e9145ef drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2023-05-25  1512  	if (err) {
+8d28ec7e9145ef drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2023-05-25  1513  		dev_err(isp->dev, "failed to register async notifier : %d\n", err);
+eb81065b9322d6 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-08-29  1514  		goto css_init_fail;
+8d28ec7e9145ef drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2023-05-25  1515  	}
+eb81065b9322d6 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-08-29  1516  
+0697fd92e7f1fc drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1517  	atomisp_drvfs_init(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1518  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1519  	return 0;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1520  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1521  css_init_fail:
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1522  	devm_free_irq(&pdev->dev, pdev->irq, isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1523  request_irq_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1524  	hmm_cleanup();
+672fe1cf145ab9 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Dinghao Liu                   2021-04-08  1525  	pm_runtime_get_noresume(&pdev->dev);
+553a64b7e7cef7 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-26  1526  	dev_pm_domain_set(&pdev->dev, NULL);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1527  	atomisp_unregister_entities(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1528  register_entities_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1529  	atomisp_uninitialize_modules(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1530  initialize_modules_fail:
+8d564cd28cfcbe drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1531  	cpu_latency_qos_remove_request(&isp->pm_qos);
+1cfc8593f42085 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1532  	atomisp_msi_irq_uninit(isp);
+02900a49a43b7f drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Suraj Upadhyay                2020-07-19  1533  	pci_free_irq_vectors(pdev);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1534  enable_msi_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1535  fw_validation_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1536  	release_firmware(isp->firmware);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1537  load_fw_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1538  	/*
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1539  	 * Switch off ISP, as keeping it powered on would prevent
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1540  	 * reaching S0ix states.
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1541  	 *
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1542  	 * The following lines have been copied from atomisp suspend path
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1543  	 */
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1544  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1545  	pci_read_config_dword(pdev, PCI_INTERRUPT_CTRL, &irq);
+64288aa9e41990 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Moses Christopher Bollavarapu 2022-02-06  1546  	irq &= BIT(INTR_IIR);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1547  	pci_write_config_dword(pdev, PCI_INTERRUPT_CTRL, irq);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1548  
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1549  	pci_read_config_dword(pdev, PCI_INTERRUPT_CTRL, &irq);
+64288aa9e41990 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Moses Christopher Bollavarapu 2022-02-06  1550  	irq &= ~BIT(INTR_IER);
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1551  	pci_write_config_dword(pdev, PCI_INTERRUPT_CTRL, irq);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1552  
+1cfc8593f42085 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1553  	atomisp_msi_irq_uninit(isp);
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1554  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1555  	/* Address later when we worry about the ...field chips */
+10f2b0a3a12e36 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Hans de Goede                 2022-11-11  1556  	if (IS_ENABLED(CONFIG_PM) && atomisp_mrfld_power(isp, false))
+89027fea0d0414 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Andy Shevchenko               2020-06-26  1557  		dev_err(&pdev->dev, "Failed to switch off ISP\n");
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1558  
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1559  atomisp_dev_alloc_fail:
+64288aa9e41990 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Moses Christopher Bollavarapu 2022-02-06  1560  	pcim_iounmap_regions(pdev, BIT(ATOM_ISP_PCI_BAR));
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1561  
+25bccb98ae05c0 drivers/staging/media/atomisp/pci/atomisp_v4l2.c          Mauro Carvalho Chehab         2020-05-08  1562  ioremap_fail:
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1563  	return err;
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1564  }
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/atomisp_v4l2.c Mauro Carvalho Chehab         2020-04-19  1565  
+
+:::::: The code at line 1511 was first introduced by commit
+:::::: 8d28ec7e9145ef6308ab3438d73308ec6ea14360 media: atomisp: Add support for v4l2-async sensor registration
+
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
