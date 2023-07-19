@@ -1,51 +1,64 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3763417D1;
-	Wed, 19 Jul 2023 02:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AECE17C4;
+	Wed, 19 Jul 2023 02:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689734131; x=1721270131;
+  t=1689734854; x=1721270854;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MDteXjRKx7NmerjEa3yZjR1TrOfJzj9AzQhufP0RH3c=;
-  b=cQSP1M3xA2NRBIveWsTWMLO92yAlevv5lTHuJsbQsa5FupCfhpz/fX0b
-   sZ2THWlSaYoBD9QvIJOWriCMbsvD/DpS0ktHt0nNPJLU6M+Oi0iua4grm
-   IaXQGvbVtFaGXlp8EYaqbAiweVk/vbE4ai2w+azE5H6jfBMttwYCYPtWp
-   t0cQUSo5GNBknLFe9hqkkHNaWO+33mYzLYx9B3UXEjVjg4d6XwUSGhOmg
-   f0oxNR46HAXfO5203k0fKNKa8f0ipcguIbfe6hu1fsGliQpQ9BvRvfeq1
-   AiFEBNG3ZA+DCYZAzZYVQ1Y6TNGlF3uZZ+bQtHvI8mIrXvbeaYByZUBRb
+  bh=uTOXx6T5gFSVhyNiIBQkFOeNoav0OF5AR4miIzgspRQ=;
+  b=TFZZWmvAJAq7oO5jAZ/l8/rS9fVzHlo34ObQ5Xxh0ne35dVqOhf70594
+   dfqA4/CIxk0S6Ayb8hr/OsiFx0tqsZwxVDjtinuD8Aq6CETLEHygy1YB3
+   WOtBdTWyrPaFbBJQDdcycr4hGC7Q2ybZ+bcfD1ojchcbeqSwzCNOdDBEG
+   nv4Nic2qka8uQr3fYgPh72VpE9E+WN+FZYqUCsxiyAqTVnp5qqVSf+g/p
+   o5uFH2JGFACADHLTJD0wgVANU0+9tEFnzDrSuZkMNyIbOqdwkyyGTtwhM
+   TpkdYXXWzVYlddLV/PS5HrWELHAcd6XpvbDRLhJDLWkcXRyd/HhEKwGC2
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="452734652"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="356305664"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="452734652"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:35:30 -0700
+   d="scan'208";a="356305664"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:47:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="717831095"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="723841008"
 X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
-   d="scan'208";a="717831095"
+   d="scan'208";a="723841008"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jul 2023 19:35:26 -0700
+  by orsmga002.jf.intel.com with ESMTP; 18 Jul 2023 19:47:26 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qLx2C-00044R-31;
-	Wed, 19 Jul 2023 02:35:24 +0000
-Date: Wed, 19 Jul 2023 10:35:07 +0800
+	id 1qLxDp-00045P-1N;
+	Wed, 19 Jul 2023 02:47:25 +0000
+Date: Wed, 19 Jul 2023 10:46:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hao Xu <hao.xu@linux.dev>, io-uring@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>
+To: Bart Van Assche <bvanassche@acm.org>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-	Dave Chinner <david@fromorbit.com>, linux-fsdevel@vger.kernel.org,
-	Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: [PATCH 4/5] xfs: add NOWAIT semantics for readdir
-Message-ID: <202307191021.L6wiZiE6-lkp@intel.com>
-References: <20230718132112.461218-5-hao.xu@linux.dev>
+	Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+	Avri Altman <avri.altman@wdc.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Bart Van Assche <bvanassche@acm.org>, Bean Huo <beanhuo@micron.com>,
+	ChanWoo Lee <cw9316.lee@samsung.com>,
+	Daejun Park <daejun7.park@samsung.com>,
+	Keoseong Park <keosung.park@samsung.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	Lu Hongfei <luhongfei@vivo.com>, Daniil Lunev <dlunev@chromium.org>,
+	Jinyoung Choi <j-young.choi@samsung.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Asutosh Das <quic_asutoshd@quicinc.com>,
+	Can Guo <quic_cang@quicinc.com>,
+	Peter Wang <peter.wang@mediatek.com>,
+	Stanley Chu <stanley.chu@mediatek.com>,
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+	Arthur Simchaev <arthur.simchaev@wdc.com>,
+	Jens Axboe <axboe@kernel.dk>, Markus Fuchs <mklntf@gmail.com>,
+	Po-Wen Kao <powen.kao@mediatek.com>,
+	Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH] scsi: ufs: Remove HPB support
+Message-ID: <202307191053.lTuPwUD6-lkp@intel.com>
+References: <20230717193827.2001174-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,99 +67,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718132112.461218-5-hao.xu@linux.dev>
+In-Reply-To: <20230717193827.2001174-1-bvanassche@acm.org>
 
-Hi Hao,
+Hi Bart,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on linus/master v6.5-rc2 next-20230718]
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on next-20230718]
+[cannot apply to jejb-scsi/for-next linus/master v6.5-rc2]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/fs-split-off-vfs_getdents-function-of-getdents64-syscall/20230718-212529
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-patch link:    https://lore.kernel.org/r/20230718132112.461218-5-hao.xu%40linux.dev
-patch subject: [PATCH 4/5] xfs: add NOWAIT semantics for readdir
-config: x86_64-randconfig-r012-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191021.L6wiZiE6-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191021.L6wiZiE6-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/scsi-ufs-Remove-HPB-support/20230718-195403
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230717193827.2001174-1-bvanassche%40acm.org
+patch subject: [PATCH] scsi: ufs: Remove HPB support
+config: hexagon-randconfig-r045-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191053.lTuPwUD6-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191053.lTuPwUD6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307191021.L6wiZiE6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191053.lTuPwUD6-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/xfs/libxfs/xfs_da_btree.c:2646:8: warning: variable 'buf_flags' set but not used [-Wunused-but-set-variable]
-           int                     buf_flags = 0;
-                                   ^
-   1 warning generated.
+   In file included from drivers/ufs/core/ufshcd.c:18:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/ufs/core/ufshcd.c:18:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/ufs/core/ufshcd.c:18:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/ufs/core/ufshcd.c:8092:5: warning: variable 'b_ufs_feature_sup' set but not used [-Wunused-but-set-variable]
+    8092 |         u8 b_ufs_feature_sup;
+         |            ^
+   7 warnings generated.
 
 
-vim +/buf_flags +2646 fs/xfs/libxfs/xfs_da_btree.c
+vim +/b_ufs_feature_sup +8092 drivers/ufs/core/ufshcd.c
 
-  2627	
-  2628	/*
-  2629	 * Get a buffer for the dir/attr block, fill in the contents.
-  2630	 */
-  2631	int
-  2632	xfs_da_read_buf(
-  2633		struct xfs_trans	*tp,
-  2634		struct xfs_inode	*dp,
-  2635		xfs_dablk_t		bno,
-  2636		unsigned int		flags,
-  2637		struct xfs_buf		**bpp,
-  2638		int			whichfork,
-  2639		const struct xfs_buf_ops *ops)
-  2640	{
-  2641		struct xfs_mount	*mp = dp->i_mount;
-  2642		struct xfs_buf		*bp;
-  2643		struct xfs_buf_map	map, *mapp = &map;
-  2644		int			nmap = 1;
-  2645		int			error;
-> 2646		int			buf_flags = 0;
-  2647	
-  2648		*bpp = NULL;
-  2649		error = xfs_dabuf_map(dp, bno, flags, whichfork, &mapp, &nmap);
-  2650		if (error || !nmap)
-  2651			goto out_free;
-  2652	
-  2653		/*
-  2654		 * NOWAIT semantics mean we don't wait on the buffer lock nor do we
-  2655		 * issue IO for this buffer if it is not already in memory. Caller will
-  2656		 * retry. This will return -EAGAIN if the buffer is in memory and cannot
-  2657		 * be locked, and no buffer and no error if it isn't in memory.  We
-  2658		 * translate both of those into a return state of -EAGAIN and *bpp =
-  2659		 * NULL.
-  2660		 */
-  2661		if (flags & XFS_DABUF_NOWAIT)
-  2662			buf_flags |= XBF_TRYLOCK | XBF_INCORE;
-  2663		error = xfs_trans_read_buf_map(mp, tp, mp->m_ddev_targp, mapp, nmap, 0,
-  2664				&bp, ops);
-  2665		if (error)
-  2666			goto out_free;
-  2667		if (!bp) {
-  2668			ASSERT(flags & XFS_DABUF_NOWAIT);
-  2669			error = -EAGAIN;
-  2670			goto out_free;
-  2671		}
-  2672	
-  2673		if (whichfork == XFS_ATTR_FORK)
-  2674			xfs_buf_set_ref(bp, XFS_ATTR_BTREE_REF);
-  2675		else
-  2676			xfs_buf_set_ref(bp, XFS_DIR_BTREE_REF);
-  2677		*bpp = bp;
-  2678	out_free:
-  2679		if (mapp != &map)
-  2680			kmem_free(mapp);
-  2681	
-  2682		return error;
-  2683	}
-  2684	
+c28c00ba4f0609 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8087  
+097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8088  static int ufs_get_device_desc(struct ufs_hba *hba)
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8089  {
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8090  	int err;
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8091  	u8 model_index;
+f02bc9754a6887 drivers/scsi/ufs/ufshcd.c Daejun Park     2021-07-12 @8092  	u8 b_ufs_feature_sup;
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8093  	u8 *desc_buf;
+097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8094  	struct ufs_dev_info *dev_info = &hba->dev_info;
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8095  
+f2a89b071b26b7 drivers/ufs/core/ufshcd.c Arthur Simchaev 2022-12-11  8096  	desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_KERNEL);
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8097  	if (!desc_buf) {
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8098  		err = -ENOMEM;
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8099  		goto out;
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8100  	}
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8101  
+c4607a09450d67 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-06-03  8102  	err = ufshcd_read_desc_param(hba, QUERY_DESC_IDN_DEVICE, 0, 0, desc_buf,
+f2a89b071b26b7 drivers/ufs/core/ufshcd.c Arthur Simchaev 2022-12-11  8103  				     QUERY_DESC_MAX_SIZE);
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8104  	if (err) {
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8105  		dev_err(hba->dev, "%s: Failed reading Device Desc. err = %d\n",
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8106  			__func__, err);
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8107  		goto out;
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8108  	}
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8109  
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8110  	/*
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8111  	 * getting vendor (manufacturerID) and Bank Index in big endian
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8112  	 * format
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8113  	 */
+097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8114  	dev_info->wmanufacturerid = desc_buf[DEVICE_DESC_PARAM_MANF_ID] << 8 |
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8115  				     desc_buf[DEVICE_DESC_PARAM_MANF_ID + 1];
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8116  
+09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8117  	/* getting Specification Version in big endian format */
+09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8118  	dev_info->wspecversion = desc_buf[DEVICE_DESC_PARAM_SPEC_VER] << 8 |
+09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8119  				      desc_buf[DEVICE_DESC_PARAM_SPEC_VER + 1];
+7224c806876e46 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8120  	dev_info->bqueuedepth = desc_buf[DEVICE_DESC_PARAM_Q_DPTH];
+f02bc9754a6887 drivers/scsi/ufs/ufshcd.c Daejun Park     2021-07-12  8121  	b_ufs_feature_sup = desc_buf[DEVICE_DESC_PARAM_UFS_FEAT];
+09f17791e640dc drivers/scsi/ufs/ufshcd.c Can Guo         2020-02-10  8122  
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8123  	model_index = desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
+3d17b9b5ab1155 drivers/scsi/ufs/ufshcd.c Asutosh Das     2020-04-22  8124  
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8125  	err = ufshcd_read_string_desc(hba, model_index,
+097500666ec991 drivers/scsi/ufs/ufshcd.c Bean Huo        2020-01-20  8126  				      &dev_info->model, SD_ASCII_STD);
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8127  	if (err < 0) {
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8128  		dev_err(hba->dev, "%s: Failed reading Product Name. err = %d\n",
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8129  			__func__, err);
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8130  		goto out;
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8131  	}
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8132  
+b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8133  	hba->luns_avail = desc_buf[DEVICE_DESC_PARAM_NUM_LU] +
+b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8134  		desc_buf[DEVICE_DESC_PARAM_NUM_WLU];
+b294ff3e34490f drivers/scsi/ufs/ufshcd.c Asutosh Das     2021-04-23  8135  
+817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8136  	ufs_fixup_device_setup(hba);
+817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8137  
+817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8138  	ufshcd_wb_probe(hba, desc_buf);
+817d7e140283f4 drivers/scsi/ufs/ufshcd.c Stanley Chu     2020-05-08  8139  
+e88e2d32200a17 drivers/scsi/ufs/ufshcd.c Avri Altman     2021-09-15  8140  	ufshcd_temp_notif_probe(hba, desc_buf);
+e88e2d32200a17 drivers/scsi/ufs/ufshcd.c Avri Altman     2021-09-15  8141  
+6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8142  	if (hba->ext_iid_sup)
+6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8143  		ufshcd_ext_iid_probe(hba, desc_buf);
+6e1d850acff947 drivers/ufs/core/ufshcd.c Asutosh Das     2023-01-13  8144  
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8145  	/*
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8146  	 * ufshcd_read_string_desc returns size of the string
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8147  	 * reset the error value
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8148  	 */
+4b828fe156a662 drivers/scsi/ufs/ufshcd.c Tomas Winkler   2019-07-30  8149  	err = 0;
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8150  
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8151  out:
+bbe21d7a979245 drivers/scsi/ufs/ufshcd.c Kees Cook       2018-05-02  8152  	kfree(desc_buf);
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8153  	return err;
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8154  }
+c58ab7aab71e2c drivers/scsi/ufs/ufshcd.c Yaniv Gardi     2016-03-10  8155  
 
 -- 
 0-DAY CI Kernel Test Service
