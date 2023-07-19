@@ -1,105 +1,99 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07A73C22
-	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 03:19:41 +0000 (UTC)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36J38KpG020013;
-	Wed, 19 Jul 2023 03:19:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=CQGIimrET/1xx2hXhHhhDvmrIIiQnqNhn/lvaz/EXhE=;
- b=MAQQgNrA7MJdFq/0oT2kwWtWcvNFH9dkldxTYO6MsEhNigRa2CDyezOlpVyg8xKFBuYw
- 1o9XAfC7PzVsl49CqLkbEPzxN2TQwGRhoKlyf6V+fkMVlONpaSWGJpkRm2e8GKQ1qApK
- vi5pHGMC5u+h7mU9xAOVm4wFOx198f+EXmHs7yB+OvUvsmU5ErX1yEjM5COkAUi91diV
- HxA3KcAXFIKp2DzghANHCzj4PGbl9NpbvE5DXP1eNwG85CmgRdEwvJpSZvjSLvIfnIgS
- A/vwXtiz4EKbmLuqzYvjR+CxWl3TXq3NBYWLh34zsmRKqoRuujj3AXSuDmXyt9ZVeDNO Tg== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rx79b0hkw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jul 2023 03:19:34 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36INmJ69029057;
-	Wed, 19 Jul 2023 03:19:33 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3rv6smfpw6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jul 2023 03:19:33 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36J3JVqs46400142
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Jul 2023 03:19:31 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6AC5B2004B;
-	Wed, 19 Jul 2023 03:19:31 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DFC8720040;
-	Wed, 19 Jul 2023 03:19:30 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 19 Jul 2023 03:19:30 +0000 (GMT)
-Received: from bgray-lenovo-p15.ibmuc.com (unknown [9.43.200.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 4352E60151;
-	Wed, 19 Jul 2023 13:19:25 +1000 (AEST)
-From: Benjamin Gray <bgray@linux.ibm.com>
-To: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Cc: Benjamin Gray <bgray@linux.ibm.com>
-Subject: [PATCH] gen_compile_commands: add assembly files to compilation database
-Date: Wed, 19 Jul 2023 13:19:12 +1000
-Message-ID: <20230719031912.224843-1-bgray@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068BC3D86;
+	Wed, 19 Jul 2023 05:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689743105; x=1721279105;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZNWgIyDImzSfAN73E8djkiK2n+65c6wPWeT0GzE81aY=;
+  b=JzehtxVt/Vck1RHn8ppfR4hQYaNZuuOcA2tCJwlCXOo8CzO0q6BELdxa
+   MuqioGOci/tI+m6Neuok6heof5lVts63dD2hgeUadkrprGMXOovlrtJ5U
+   +kN83+J0cf1t1NTuq+9+AFrMDnh6Y4HZGlW64QW+Uns+u9aywFUajAjvC
+   OVk/y2p8FqPcd2JpK0n0oEXVKyCI+Mu8cUSyUsAWY5cnUqelmI1yA88G+
+   8+gIRLL9DAESNlQqV1wd0vwtD4SHHjyiTE2fHLauE21uxPtmk2w9LL/Kn
+   gZfKO44SOfRBQh4SrCWoliQP2lQ6f9ZFYzejFLlFQ7jEdrS/xHtOP55Fo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="346676113"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="346676113"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 22:05:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="789282119"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="789282119"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jul 2023 22:05:02 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qLzN0-0004AP-0M;
+	Wed, 19 Jul 2023 05:05:02 +0000
+Date: Wed, 19 Jul 2023 13:04:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [qais-yousef:remove-margins 2/2] kernel/sched/fair.c:165:15: error:
+ type specifier missing, defaults to 'int'; ISO C99 and later do not support
+ implicit int
+Message-ID: <202307191211.oFljVu7F-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: q6Q9-BPTZa3FzIjGlEs_D4dQOV0WDcAx
-X-Proofpoint-ORIG-GUID: q6Q9-BPTZa3FzIjGlEs_D4dQOV0WDcAx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-18_19,2023-07-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=699 adultscore=0
- clxscore=1011 spamscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307190027
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Like C source files, tooling can find it useful to have the assembly
-source file compilation recorded.
+tree:   https://github.com/qais-yousef/linux remove-margins
+head:   f49a0141f6fa8e9f6dd3b8cacae3531f90c74343
+commit: f49a0141f6fa8e9f6dd3b8cacae3531f90c74343 [2/2] sched/fair: Remove magic margin in fits_capacity()
+config: powerpc-randconfig-r026-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191211.oFljVu7F-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191211.oFljVu7F-lkp@intel.com/reproduce)
 
-The .S extension appears to used across all architectures.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191211.oFljVu7F-lkp@intel.com/
 
-Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+All errors (new ones prefixed by >>):
 
----
+>> kernel/sched/fair.c:165:15: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     165 | static inline fits_capacity(unsigned long util, unsigned long capacity)
+         | ~~~~~~~~~~~~~ ^
+         | int
+>> kernel/sched/fair.c:167:9: error: call to undeclared function 'approximate_util_avg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     167 |         return approximate_util_avg(util, TICK_NSEC) < capacity;
+         |                ^
+   2 errors generated.
 
-For example, I'm prototyping adding ASM support to clangd. It can use
-this information to determine the architecture, macros definitions,
-include paths, etc. on a per-file basis. I can capture this during
-compilation with tools like bear, but given this script exists and the
-change is trivial it seems like a good idea to adjust this script too.
----
- scripts/clang-tools/gen_compile_commands.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 15ba56527acd..a84cc5737c2c 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -19,7 +19,7 @@ _DEFAULT_OUTPUT = 'compile_commands.json'
- _DEFAULT_LOG_LEVEL = 'WARNING'
- 
- _FILENAME_PATTERN = r'^\..*\.cmd$'
--_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.c) *(;|$)'
-+_LINE_PATTERN = r'^savedcmd_[^ ]*\.o := (.* )([^ ]*\.[cS]) *(;|$)'
- _VALID_LOG_LEVELS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
- # The tools/ directory adopts a different build system, and produces .cmd
- # files in a different format. Do not support it.
+vim +/int +165 kernel/sched/fair.c
+
+   150	
+   151	/*
+   152	 * The util will fit the capacity if it has enough headroom to grow within the
+   153	 * next tick - which is when any load balancing activity happens to do the
+   154	 * correction.
+   155	 *
+   156	 * If util stays within the capacity before tick has elapsed, then it should be
+   157	 * fine. If not, then a correction action must happen shortly after it starts
+   158	 * running, hence we treat it as !fit.
+   159	 *
+   160	 * TODO: TICK is not actually accurate enough. balance_interval is the correct
+   161	 * one to use as the next load balance doesn't not happen religiously at tick.
+   162	 * Accessing balance_interval might be tricky and will require some refactoring
+   163	 * first.
+   164	 */
+ > 165	static inline fits_capacity(unsigned long util, unsigned long capacity)
+   166	{
+ > 167		return approximate_util_avg(util, TICK_NSEC) < capacity;
+   168	}
+   169	
+
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
