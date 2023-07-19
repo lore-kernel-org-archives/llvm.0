@@ -1,233 +1,109 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590DB3D8B;
-	Wed, 19 Jul 2023 07:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689750071; x=1721286071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b18vK8nkvvWK30Is/f9qiIIs5rPzl+cfPCvrd2745w0=;
-  b=YRikQ9OqIQkaiyyc5Q4m0Zu4f08ogobQMZtXp185iGYb+Uj0mYB8jzAU
-   aAxdJPjT/xBb/WqTFpBgCQu9DKOanUMcAQrcBifSXv2Ce79W/ynIBtYBh
-   cbdbLNexd2fn9Q6srJ3Ng2fyzYYqIUc063jF9Qsdq95JF3KxIWjURlsS0
-   yx7ySdYnqPy+k5kP/KsJPjH2EK5sMR3Kr9DogCaFv9obhtDuUAK9dRLgK
-   7XrlHT12NaHRzx6gM877GMRFxwrCa9aUTTho1D6qmPgwmSn2R+pmuf+ag
-   5bKH3ljpHaqglob/FwZqBumpDB2BmxWAYK18jWGQ6tkyoPhQFp4RRnwR2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="432572276"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="432572276"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 00:01:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="717878642"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="717878642"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jul 2023 00:01:09 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qM1BM-0004Eb-0c;
-	Wed, 19 Jul 2023 07:01:08 +0000
-Date: Wed, 19 Jul 2023 15:00:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mingzhe Zou <mingzhe.zou@easystack.cn>, colyli@suse.de,
-	linux-bcache@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bcache@lists.ewheeler.net, zoumingzhe@qq.com
-Subject: Re: [PATCH v2 1/3] bcache: the gc_sectors_used size matches the
- bucket size
-Message-ID: <202307191421.MARPn86g-lkp@intel.com>
-References: <20230719024709.287-1-mingzhe.zou@easystack.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CD3C2EF
+	for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 08:21:09 +0000 (UTC)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3fbf1b82d9cso61012195e9.2
+        for <llvm@lists.linux.dev>; Wed, 19 Jul 2023 01:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689754867; x=1692346867;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=siK4OSk/ePA2geNjaLPDhLD4PkEcMUYKPlRGf5Gu9SM=;
+        b=BKVgWb2uTivagtIl+FbELcI5E/MTncxi8pqlBhFtF/9csNkVmuoMb0rnZ5OEj2Suv7
+         fmeS7yn4+/aJv+tbiejfkqG82O4mHod1S1A+DXRggkS+b/vBev0xe007qJQJDf84kjI5
+         yWelJpVqdYm1ci/HKnRD50nWmWg1Wopxc/1c/GMW4jK5w8mms7vz753YKjassWGcLgzy
+         a4zmZUBQasd7Or/b+ZFoncsWuYdyY2mGqV36rkI4FjZygXmR+QcD0oOUebX7t4FXVJ9z
+         98IoYu9UvIz/3OY21LYrOK0cxC7eoXo/lo7Uloia1cx/XhqhCjMoaAUc1Sw3OxGkO9zz
+         Zdag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689754867; x=1692346867;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=siK4OSk/ePA2geNjaLPDhLD4PkEcMUYKPlRGf5Gu9SM=;
+        b=DaVN3sFJxcpxOvwpFnv5oxOcdl5v5OdWj+sCGj3+pw1Ljeg7mobzsIiKj9PWQHvdsm
+         If/Uyu0+koJLTDZciLss7AzZ22Auhvy3p/PRhPJ8PhjetoN5Th2ankfUaCINRmvrTUW7
+         lMNChq9qxiIw+ZjNQy/1qD70UoKVZhLEvk2B47eM+eaAAIAF1ZxLuB7r3PjBidZG98ln
+         0Ljkx1WjA9Rt/7qLBKRilFc9SXeS7n2B9f9XaTEU5EupuKXkfiaMm+lVm2SXe9p8MCUW
+         2qHeDFrC+7TZ38IDx8Fe34pG8YVRJLnmhJTUEcwRn1IyoX0LGE034EEGGzv0qCr/04Y/
+         x6Xw==
+X-Gm-Message-State: ABy/qLYV4HJB8sxtzwyaXbRE8vdHaegzmsVhxD5B4/YrUr4x+fjhLwbZ
+	IpUvIZ+K2IBiWquomn6Brom0naMROkHVcifjiCY=
+X-Google-Smtp-Source: APBJJlEMYzsVW7aXyNVPWHwTQFSclAxIY+S7U96tWP5PKGFiKi68A1ED1/ehLtPDMuN0aGAqqr00Tl7Ee1vgyAtcKSM=
+X-Received: by 2002:a05:600c:224b:b0:3fa:d160:fc6d with SMTP id
+ a11-20020a05600c224b00b003fad160fc6dmr1302292wmm.30.1689754867235; Wed, 19
+ Jul 2023 01:21:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230719024709.287-1-mingzhe.zou@easystack.cn>
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+ <20230325081117.93245-1-ashimida.1990@gmail.com> <202306211451.CB0A34563@keescook>
+In-Reply-To: <202306211451.CB0A34563@keescook>
+From: Dan Li <ashimida.1990@gmail.com>
+Date: Wed, 19 Jul 2023 16:20:55 +0800
+Message-ID: <CAE+Z0PFtqKf9EM+u8V87TPo87jbGXz20VQvx0JvDHTdT8Xp+Pw@mail.gmail.com>
+Subject: Re: [RFC/RFT,V2 0/3] Add compiler support for Kernel Control Flow Integrity
+To: Kees Cook <keescook@chromium.org>
+Cc: Qing Zhao <qing.zhao@oracle.com>, gcc-patches@gcc.gnu.org, 
+	Richard Sandiford <richard.sandiford@arm.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, 
+	Marco Elver <elver@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Song Liu <song@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Juergen Gross <jgross@suse.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
+	Kalesh Singh <kaleshsingh@google.com>, Yuntao Wang <ytcoode@gmail.com>, 
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mingzhe,
+Hi Kees,
 
-kernel test robot noticed the following build errors:
+Sincerely sorry, I just saw this email.
+Embarrassingly, due to another job change, my plan was postponed again :(.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.5-rc2 next-20230719]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I may not be able to attend this year's GCC meeting. Is there any other
+way to let this get some traction in GCC? I really hope someone can help
+with this topic.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mingzhe-Zou/bcache-Separate-bch_moving_gc-from-bch_btree_gc/20230719-105019
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230719024709.287-1-mingzhe.zou%40easystack.cn
-patch subject: [PATCH v2 1/3] bcache: the gc_sectors_used size matches the bucket size
-config: hexagon-randconfig-r025-20230718 (https://download.01.org/0day-ci/archive/20230719/202307191421.MARPn86g-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191421.MARPn86g-lkp@intel.com/reproduce)
+BTW, I'm still looking at this and plan to finish it by the end of this
+year, but it's taking too long and there's a lot of uncertainty, so
+please just consider this only as a backup option.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307191421.MARPn86g-lkp@intel.com/
+Thanks,
+Dan.
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/md/bcache/trace.c:2:
-   In file included from drivers/md/bcache/bcache.h:181:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/md/bcache/trace.c:2:
-   In file included from drivers/md/bcache/bcache.h:181:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/md/bcache/trace.c:2:
-   In file included from drivers/md/bcache/bcache.h:181:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/md/bcache/trace.c:9:
-   In file included from include/trace/events/bcache.h:505:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
->> include/trace/events/bcache.h:441:22: error: call to undeclared function 'GC_SECTORS_USED'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     441 |                 __entry->sectors        = GC_SECTORS_USED(&ca->buckets[bucket]);
-         |                                           ^
-   6 warnings and 1 error generated.
-
-
-vim +/GC_SECTORS_USED +441 include/trace/events/bcache.h
-
-cafe563591446cf Kent Overstreet 2013-03-23  427  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  428  TRACE_EVENT(bcache_invalidate,
-7159b1ad3dded9d Kent Overstreet 2014-02-12  429  	TP_PROTO(struct cache *ca, size_t bucket),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  430  	TP_ARGS(ca, bucket),
-cafe563591446cf Kent Overstreet 2013-03-23  431  
-cafe563591446cf Kent Overstreet 2013-03-23  432  	TP_STRUCT__entry(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  433  		__field(unsigned,	sectors			)
-7159b1ad3dded9d Kent Overstreet 2014-02-12  434  		__field(dev_t,		dev			)
-7159b1ad3dded9d Kent Overstreet 2014-02-12  435  		__field(__u64,		offset			)
-cafe563591446cf Kent Overstreet 2013-03-23  436  	),
-cafe563591446cf Kent Overstreet 2013-03-23  437  
-cafe563591446cf Kent Overstreet 2013-03-23  438  	TP_fast_assign(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  439  		__entry->dev		= ca->bdev->bd_dev;
-7159b1ad3dded9d Kent Overstreet 2014-02-12  440  		__entry->offset		= bucket << ca->set->bucket_bits;
-7159b1ad3dded9d Kent Overstreet 2014-02-12 @441  		__entry->sectors	= GC_SECTORS_USED(&ca->buckets[bucket]);
-cafe563591446cf Kent Overstreet 2013-03-23  442  	),
-cafe563591446cf Kent Overstreet 2013-03-23  443  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  444  	TP_printk("invalidated %u sectors at %d,%d sector=%llu",
-7159b1ad3dded9d Kent Overstreet 2014-02-12  445  		  __entry->sectors, MAJOR(__entry->dev),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  446  		  MINOR(__entry->dev), __entry->offset)
-7159b1ad3dded9d Kent Overstreet 2014-02-12  447  );
-7159b1ad3dded9d Kent Overstreet 2014-02-12  448  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  449  TRACE_EVENT(bcache_alloc,
-7159b1ad3dded9d Kent Overstreet 2014-02-12  450  	TP_PROTO(struct cache *ca, size_t bucket),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  451  	TP_ARGS(ca, bucket),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  452  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  453  	TP_STRUCT__entry(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  454  		__field(dev_t,		dev			)
-7159b1ad3dded9d Kent Overstreet 2014-02-12  455  		__field(__u64,		offset			)
-7159b1ad3dded9d Kent Overstreet 2014-02-12  456  	),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  457  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  458  	TP_fast_assign(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  459  		__entry->dev		= ca->bdev->bd_dev;
-7159b1ad3dded9d Kent Overstreet 2014-02-12  460  		__entry->offset		= bucket << ca->set->bucket_bits;
-7159b1ad3dded9d Kent Overstreet 2014-02-12  461  	),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  462  
-7159b1ad3dded9d Kent Overstreet 2014-02-12  463  	TP_printk("allocated %d,%d sector=%llu", MAJOR(__entry->dev),
-7159b1ad3dded9d Kent Overstreet 2014-02-12  464  		  MINOR(__entry->dev), __entry->offset)
-cafe563591446cf Kent Overstreet 2013-03-23  465  );
-cafe563591446cf Kent Overstreet 2013-03-23  466  
-c37511b863f36c1 Kent Overstreet 2013-04-26  467  TRACE_EVENT(bcache_alloc_fail,
-78365411b344df3 Kent Overstreet 2013-12-17  468  	TP_PROTO(struct cache *ca, unsigned reserve),
-78365411b344df3 Kent Overstreet 2013-12-17  469  	TP_ARGS(ca, reserve),
-cafe563591446cf Kent Overstreet 2013-03-23  470  
-c37511b863f36c1 Kent Overstreet 2013-04-26  471  	TP_STRUCT__entry(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  472  		__field(dev_t,		dev			)
-c37511b863f36c1 Kent Overstreet 2013-04-26  473  		__field(unsigned,	free			)
-c37511b863f36c1 Kent Overstreet 2013-04-26  474  		__field(unsigned,	free_inc		)
-c37511b863f36c1 Kent Overstreet 2013-04-26  475  		__field(unsigned,	blocked			)
-c37511b863f36c1 Kent Overstreet 2013-04-26  476  	),
-cafe563591446cf Kent Overstreet 2013-03-23  477  
-c37511b863f36c1 Kent Overstreet 2013-04-26  478  	TP_fast_assign(
-7159b1ad3dded9d Kent Overstreet 2014-02-12  479  		__entry->dev		= ca->bdev->bd_dev;
-78365411b344df3 Kent Overstreet 2013-12-17  480  		__entry->free		= fifo_used(&ca->free[reserve]);
-c37511b863f36c1 Kent Overstreet 2013-04-26  481  		__entry->free_inc	= fifo_used(&ca->free_inc);
-c37511b863f36c1 Kent Overstreet 2013-04-26  482  		__entry->blocked	= atomic_read(&ca->set->prio_blocked);
-c37511b863f36c1 Kent Overstreet 2013-04-26  483  	),
-cafe563591446cf Kent Overstreet 2013-03-23  484  
-2531d9ee61fa08a Kent Overstreet 2014-03-17  485  	TP_printk("alloc fail %d,%d free %u free_inc %u blocked %u",
-7159b1ad3dded9d Kent Overstreet 2014-02-12  486  		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->free,
-2531d9ee61fa08a Kent Overstreet 2014-03-17  487  		  __entry->free_inc, __entry->blocked)
-cafe563591446cf Kent Overstreet 2013-03-23  488  );
-cafe563591446cf Kent Overstreet 2013-03-23  489  
-c37511b863f36c1 Kent Overstreet 2013-04-26  490  /* Background writeback */
-cafe563591446cf Kent Overstreet 2013-03-23  491  
-c37511b863f36c1 Kent Overstreet 2013-04-26  492  DEFINE_EVENT(bkey, bcache_writeback,
-c37511b863f36c1 Kent Overstreet 2013-04-26  493  	TP_PROTO(struct bkey *k),
-c37511b863f36c1 Kent Overstreet 2013-04-26  494  	TP_ARGS(k)
-c37511b863f36c1 Kent Overstreet 2013-04-26  495  );
-cafe563591446cf Kent Overstreet 2013-03-23  496  
-c37511b863f36c1 Kent Overstreet 2013-04-26  497  DEFINE_EVENT(bkey, bcache_writeback_collision,
-c37511b863f36c1 Kent Overstreet 2013-04-26  498  	TP_PROTO(struct bkey *k),
-c37511b863f36c1 Kent Overstreet 2013-04-26  499  	TP_ARGS(k)
-cafe563591446cf Kent Overstreet 2013-03-23  500  );
-cafe563591446cf Kent Overstreet 2013-03-23  501  
-cafe563591446cf Kent Overstreet 2013-03-23  502  #endif /* _TRACE_BCACHE_H */
-cafe563591446cf Kent Overstreet 2013-03-23  503  
-cafe563591446cf Kent Overstreet 2013-03-23  504  /* This part must be outside protection */
-cafe563591446cf Kent Overstreet 2013-03-23 @505  #include <trace/define_trace.h>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, 22 Jun 2023 at 05:54, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sat, Mar 25, 2023 at 01:11:14AM -0700, Dan Li wrote:
+> > This series of patches is mainly used to support the control flow
+> > integrity protection of the linux kernel [1], which is similar to
+> > -fsanitize=kcfi in clang 16.0 [2,3].
+> >
+> > Any suggestion please let me know :).
+>
+> Hi Dan,
+>
+> It's been a couple months, and I didn't see any other feedback on this
+> proposal. I was curious what the status of this work is. Are you able to
+> attend GNU Cauldron[1] this year? I'd love to see this get some traction
+> in GCC.
+>
+> Thanks!
+>
+> -Kees
+>
+> [1] https://gcc.gnu.org/wiki/cauldron2023
+>
+> --
+> Kees Cook
