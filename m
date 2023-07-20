@@ -1,149 +1,209 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B3619BA6;
-	Thu, 20 Jul 2023 18:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689876481; x=1721412481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7dMx1vxlj/xh0eN5dm79YGMH5t91q+NabCzXn9iJnnM=;
-  b=aRdKn2nLOjgdxfoQCFiSrh61PKkWCzO+rixnxRKrk/QLtyFVIeEDJP1I
-   OkfAIhmbidC4DbjUtNQqADhTxb2mJsq0A4xIlZomyfQBIovyQxKVMYFfO
-   cd1naHHA2QLLnQ6k2cehbIMS+KtsXHahTUIZav8dlEqJNCJhoBtyHzFOe
-   3PPe7coVm4u+hPnXKmvfi2fxyG0h6iUM9SfPi7lizlSnhbxCYaDhGgU/Z
-   ULAohsEyZoNh0stHrQ5ai7oihymRyeoGPIsvOxXriBEx6Zud/HGWKFq+c
-   8N9en6yuOjygbm/qp8Ghjv/KsUpgnEumT7zK7o62OuD2cc2bwgoYQRUls
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="370419710"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="370419710"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 11:06:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="848532395"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="848532395"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2023 11:06:21 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qMY2f-0006Ll-0K;
-	Thu, 20 Jul 2023 18:06:21 +0000
-Date: Fri, 21 Jul 2023 02:06:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Emma Anholt <emma@anholt.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Maxime Ripard <mripard@kernel.org>, David Gow <davidgow@google.com>,
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 06/11] drm/tests: helpers: Create a helper to allocate
- an atomic state
-Message-ID: <202307210124.Ur3UNuxZ-lkp@intel.com>
-References: <20230720-kms-kunit-actions-rework-v2-6-175017bd56ab@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBBB19BA6;
+	Thu, 20 Jul 2023 18:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A10EC433C7;
+	Thu, 20 Jul 2023 18:18:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689877126;
+	bh=N5iuzLiR2inuqXCbXxxRw58nL6xQOkmtyCGEdH0E3GU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=M0VYpdMPF5I5bTjDxwQs1VPZkeDFyGh8ShigVt/HHjOI4YPwJ5nFHguSqSdDm+JQe
+	 rK2hbHF9Bsmkx3QxKsXw0N/BAqeHWsqA/4rbgGqLgMgj75Itqxf2pxuTgtzz4X+aR0
+	 17vCmz8NXJh947VOlR/fwnrLdjy0V6GFP2PoGTJ82aVuGR4+67wPgOHA0/lfraiyya
+	 laObpytWz3cn95JJjvge/l2tjnWDxWhgDmPoP1VGobOrqo6FDEGpOe+0EekG21P2zH
+	 iJM1JUeRK3bsVXSdSJeb7UDIU7gwSwtf25XLFyrLPYF7JEY2s7eNmqNVwl3vWtcWPX
+	 f5YWcGAoj/jGg==
+Date: Thu, 20 Jul 2023 19:18:38 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Andy Shevchenko" <andy.shevchenko@gmail.com>, "kernel test robot"
+ <lkp@intel.com>, "Kim Seer Paller" <kimseer.paller@analog.com>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, "Jonathan Cameron"
+ <Jonathan.Cameron@huawei.com>, linux-iio@vger.kernel.org
+Subject: Re: [jic23-iio:testing 6/10] drivers/iio/adc/max14001.c:135:13:
+ warning: result of comparison of constant 18446744073709551615 with
+ expression of type 'typeof (_Generic((mask), char: (unsigned char)0,
+ unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned
+ short: (un...
+Message-ID: <20230720191838.73473d2c@jic23-huawei>
+In-Reply-To: <769e6521-a86d-4380-b27c-2ff29b795802@app.fastmail.com>
+References: <202306211545.7b6CdqsL-lkp@intel.com>
+	<CAHp75VcNj-P_WCvx2Pf9sj_ir2oKf2AZ-mdTP=KHSuPY7WcjeA@mail.gmail.com>
+	<769e6521-a86d-4380-b27c-2ff29b795802@app.fastmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720-kms-kunit-actions-rework-v2-6-175017bd56ab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxime,
+On Thu, 20 Jul 2023 11:29:55 +0200
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-kernel test robot noticed the following build warnings:
+> On Wed, Jun 21, 2023, at 10:25, Andy Shevchenko wrote:
+> > On Wed, Jun 21, 2023 at 10:19=E2=80=AFAM kernel test robot <lkp@intel.c=
+om> wrote: =20
+> >>
+> >> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git =
+testing
+> >> head:   25e201cc6ff270abc062e13ff912292097cb2827
+> >> commit: d3e93b67f934a477c5851d575a2278f07c6242fb [6/10] iio: adc: max1=
+4001: New driver
+> >> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/2=
+0230621/202306211545.7b6CdqsL-lkp@intel.com/config)
+> >> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.g=
+it 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> >> reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211=
+545.7b6CdqsL-lkp@intel.com/reproduce)
+> >>
+> >> If you fix the issue in a separate patch/commit (i.e. not just a new v=
+ersion of
+> >> the same patch/commit), kindly add following tags
+> >> | Reported-by: kernel test robot <lkp@intel.com>
+> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202306211545.7b6CdqsL-=
+lkp@intel.com/
+> >>
+> >> All warnings (new ones prefixed by >>): =20
+> >
+> > Okay, you even haven't compiled your code :-(
+> > This should probably use one of the functions from bitfield.h.
+> > Like u32_encode_bits(). =20
+>=20
+> I see the warning is now in linux-next. I see it only shows up with
+> clang and not gcc, but it would be nice to address it.
 
-[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
+Sorry, I managed to forget this one was still outstanding and picked up the=
+ driver.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
-base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
-patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-6-175017bd56ab%40kernel.org
-patch subject: [PATCH v2 06/11] drm/tests: helpers: Create a helper to allocate an atomic state
-config: arm64-randconfig-r022-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210124.Ur3UNuxZ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210124.Ur3UNuxZ-lkp@intel.com/reproduce)
+>=20
+> > =20
+> >> >> drivers/iio/adc/max14001.c:135:13: warning: result of comparison of=
+ constant 18446744073709551615 with expression of type 'typeof (_Generic((m=
+ask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char:=
+ (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned shor=
+t)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (u=
+nsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long =
+long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned=
+ int') is always false [-Wtautological-constant-out-of-range-compare] =20
+> >>            reg_data =3D FIELD_PREP(mask, val);
+> >>                       ^~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PR=
+EP'
+> >>                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ")=
+;    \
+> >>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIE=
+LD_CHECK'
+> >>                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >=
+     \
+> >>                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^=
+~~~~~~
+> >>    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_B=
+UG_ON_MSG'
+> >>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >>                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> >>    include/linux/compiler_types.h:397:22: note: expanded from macro 'c=
+ompiletime_assert'
+> >>            _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+> >>            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> >>    include/linux/compiler_types.h:385:23: note: expanded from macro '_=
+compiletime_assert'
+> >>            __compiletime_assert(condition, msg, prefix, suffix)
+> >>            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/compiler_types.h:377:9: note: expanded from macro '__=
+compiletime_assert'
+> >>                    if (!(condition))                                  =
+     \
+> >>                          ^~~~~~~~~
+> >>    1 warning generated. =20
+>=20
+> It looks like the problem is the use of FIELD_PREP() with a variable
+> 'val' instead of a constant. I tried marking the function __always_inline
+> so the compiler can see the actual value ('1') that gets passed in
+> as a constant, but that did not change anything.
+>=20
+>=20
+> It also looks suspicious that the value first gets read from the=20
+> register and then replaced with the FIELD_PREP() output, while the
+> original value gets discarded. Is this intentional?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307210124.Ur3UNuxZ-lkp@intel.com/
+There are a lot of other fields in that register, so unlikely this was the =
+intent.
+A number of them default to non 0 as well.
 
-All warnings (new ones prefixed by >>):
+>=20
+>         ret =3D max14001_read(st, reg_addr, &reg_data);
+>         if (ret)
+>                 return ret;
+>         reg_data =3D FIELD_PREP(mask, val);
+>         ret =3D max14001_write(st, reg_addr, reg_data);
+>=20
+>=20
+> I have managed to shut up the warning by rearranging the code like:
+>=20
+> diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
+> index 18ace09601985..f2ce8f8947982 100644
+> --- a/drivers/iio/adc/max14001.c
+> +++ b/drivers/iio/adc/max14001.c
+> @@ -117,11 +117,9 @@ static int max14001_write_verification_reg(struct ma=
+x14001_state *st,
+> =20
+>  static int max14001_reg_update(struct max14001_state *st,
+>                                 unsigned int reg_addr,
+> -                               unsigned int mask,
+> -                               unsigned int val)
+> +                               unsigned int reg_data)
+>  {
+>         int ret;
+> -       unsigned int reg_data;
+> =20
+>         /* Enable SPI Registers Write */
+>         ret =3D max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
+> @@ -132,8 +130,6 @@ static int max14001_reg_update(struct max14001_state =
+*st,
+>         if (ret)
+>                 return ret;
+> =20
+> -       reg_data =3D FIELD_PREP(mask, val);
+> -
+>         ret =3D max14001_write(st, reg_addr, reg_data);
+>         if (ret)
+>                 return ret;
+> @@ -299,7 +295,7 @@ static int max14001_probe(struct spi_device *spi)
+> =20
+>                 /* select external voltage reference source for the ADC */
+>                 ret =3D max14001_reg_update(st, MAX14001_CFG,
+> -                                         MAX14001_CFG_EXRF, 1);
+> +                                         FIELD_PREP(MAX14001_CFG_EXRF, 1=
+));
+> =20
+>                 if (ret < 0)
+>                         return ret;
 
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:54:6: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      54 |                                         (kunit_action_t *)platform_driver_unregister,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:62:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      62 |                                         (kunit_action_t *)platform_device_put,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:70:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      70 |                                         (kunit_action_t *)platform_device_del,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:90:9: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      90 |                              (kunit_action_t *)platform_device_unregister,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_kunit_helpers.c:94:9: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      94 |                              (kunit_action_t *)platform_driver_unregister,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:192:6: warning: cast from 'void (*)(struct drm_atomic_state *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-     192 |                                         (kunit_action_t *)drm_atomic_state_put,
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
+I'd prefer to just drop this reg_update function entirely.  Put the call in=
+line
+so that we can use FIELD_PREP() directly rather than (after fixing the prob=
+ably bug)
+passing in both the value and the mask.
 
+>=20
+> but it looks like there is still a bug in max14001_reg_update(),
+> so I'd prefer Kim Seer Paller to revisit this issue and submit
+> a properly tested patch.
 
-vim +192 drivers/gpu/drm/tests/drm_kunit_helpers.c
+Absolutely agree.   If it's outstanding in few weeks though we can go
+with an educated 'guess' for the fix but I'd really rather not if Kim
+can post a fix in the meantime.
 
-   164	
-   165	/**
-   166	 * drm_kunit_helper_atomic_state_alloc - Allocates an atomic state
-   167	 * @test: The test context object
-   168	 * @drm: The device to alloc the state for
-   169	 * @ctx: Locking context for that atomic update
-   170	 *
-   171	 * Allocates a empty atomic state.
-   172	 *
-   173	 * The state is tied to the kunit test context, so we must not call
-   174	 * drm_atomic_state_put() on it, it will be done so automatically.
-   175	 *
-   176	 * Returns:
-   177	 * An ERR_PTR on error, a pointer to the newly allocated state otherwise
-   178	 */
-   179	struct drm_atomic_state *
-   180	drm_kunit_helper_atomic_state_alloc(struct kunit *test,
-   181					    struct drm_device *drm,
-   182					    struct drm_modeset_acquire_ctx *ctx)
-   183	{
-   184		struct drm_atomic_state *state;
-   185		int ret;
-   186	
-   187		state = drm_atomic_state_alloc(drm);
-   188		if (!state)
-   189			return ERR_PTR(-ENOMEM);
-   190	
-   191		ret = kunit_add_action_or_reset(test,
- > 192						(kunit_action_t *)drm_atomic_state_put,
-   193						state);
-   194		if (ret)
-   195			return ERR_PTR(ret);
-   196	
-   197		state->acquire_ctx = ctx;
-   198	
-   199		return state;
-   200	}
-   201	EXPORT_SYMBOL_GPL(drm_kunit_helper_atomic_state_alloc);
-   202	
+Jonathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+>        Arnd
+
