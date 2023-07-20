@@ -1,45 +1,48 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40764631;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFE1649;
 	Thu, 20 Jul 2023 01:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1689816490; x=1721352490;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=dS8zSys+I8foEjEJBKgN0Zwufp1FjomI7SC8JYJszT0=;
-  b=WQHBVvPr3epRUZt9GlxGJsd8x/eaaYUNYCcnMEtHaIbbNMjrlCcHO8Cy
-   +UM9fUOOJyCt/t321KWPS59H97hRf7x2v2Oc9owIM+yfuq+fvhJ7veW77
-   K+QK5l+uc6ph8RiGeXymCOd7937WbO57zG/V5iacSVF9kMGx7kD7ZPenB
-   1cHKdv1J63VaIF8PB48XpnjVbJhqZVJlm3BUL8QxtEO6DzH8n/WPsvHuZ
-   a8CzDeXbDPnuhGJP3T4LYKVNhIqVUfW4rj6G/3Yn67LWAn395oV2y40RC
-   mdNdZUoREki9zyNC0l3bFY/yb7WoqT05FCBLoQwKYkpvY7FoXcNblscmW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="365490968"
+  bh=dXOFo9Gd0dzUlCQd5Ntigd3GSgKuKJu19R/bLJw8JSc=;
+  b=iJwL2dPWKg6eqkQDehH9t07WLdt2AvscOLrwAo8ylaRHHuqNd/jyVqJa
+   bQaqzjxiqAahIER9hgXcFJBzEcGiZtJP7ZrJzIcKQ/drcHEfsy+Nf563X
+   W8tThfZLWFypfR33lfKihfVGpsFXH140KlxWNIpQEM+VxHpC2Dw8EfOXs
+   Bvf7V6bD1nJSJ/g6D+bcubinqRgRKRd1UBBHNkm+HeYsd+CweggTjYM3V
+   UspUOv1x9MXmTg0QY41T35uw5z/5KUAZqOO2dtdCh8aRtjMImdiLkwWWV
+   I0n/HPj6CDYvTGyu+6CITLO2t2+uUAmC/xh3FbYPpJ2f90MmzmWsrk5WC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="365490972"
 X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="365490968"
+   d="scan'208";a="365490972"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 18:28:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="794246809"
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="794246806"
 X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="794246809"
+   d="scan'208";a="794246806"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
   by fmsmga004.fm.intel.com with ESMTP; 19 Jul 2023 18:28:04 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qMISZ-0005eX-1Q;
+	id 1qMISZ-0005eZ-1b;
 	Thu, 20 Jul 2023 01:28:03 +0000
-Date: Thu, 20 Jul 2023 09:27:47 +0800
+Date: Thu, 20 Jul 2023 09:27:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brett Creeley <brett.creeley@intel.com>
+To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: drivers/net/ethernet/intel/ice/ice_txrx.c:1110:5: warning: stack
- frame size (2112) exceeds limit (2048) in 'ice_clean_rx_irq'
-Message-ID: <202307200940.zVMY6MIK-lkp@intel.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [stable:linux-5.15.y 36/9999]
+ drivers/gpu/drm/nouveau/dispnv50/disp.c:2692:1: warning: stack frame size
+ (2160) exceeds limit (2048) in 'nv50_display_create'
+Message-ID: <202307200934.h7ry641C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,221 +53,232 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
-commit: 0d54d8f7a16de0fc53d6ac15361c518af422570e ice: Add hot path support for 802.1Q and 802.1ad VLAN offloads
-date:   1 year, 5 months ago
-config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230720/202307200940.zVMY6MIK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   d54cfc420586425d418a53871290cc4a59d33501
+commit: 33db9912ff7c491f839c89a08e98f755aa09598f [36/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230720/202307200934.h7ry641C-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230720/202307200940.zVMY6MIK-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230720/202307200934.h7ry641C-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307200940.zVMY6MIK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307200934.h7ry641C-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/ice/ice_txrx.c:1110:5: warning: stack frame size (2112) exceeds limit (2048) in 'ice_clean_rx_irq' [-Wframe-larger-than]
-    1110 | int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
-         |     ^
-   1 warning generated.
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:1390:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+    1390 |         int ret;
+         |             ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:1414:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+    1414 |         int ret;
+         |             ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2692:1: warning: no previous prototype for function 'nv50_display_create' [-Wmissing-prototypes]
+    2692 | nv50_display_create(struct drm_device *dev)
+         | ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2691:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2691 | int
+         | ^
+         | static 
+>> drivers/gpu/drm/nouveau/dispnv50/disp.c:2692:1: warning: stack frame size (2160) exceeds limit (2048) in 'nv50_display_create' [-Wframe-larger-than]
+    2692 | nv50_display_create(struct drm_device *dev)
+         | ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2066:1: warning: stack frame size (2304) exceeds limit (2048) in 'nv50_disp_atomic_commit_core' [-Wframe-larger-than]
+    2066 | nv50_disp_atomic_commit_core(struct drm_atomic_state *state, u32 *interlock)
+         | ^
+   5 warnings generated.
 
 
-vim +/ice_clean_rx_irq +1110 drivers/net/ethernet/intel/ice/ice_txrx.c
+vim +/nv50_display_create +2692 drivers/gpu/drm/nouveau/dispnv50/disp.c
 
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1097  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1098  /**
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1099   * ice_clean_rx_irq - Clean completed descriptors from Rx ring - bounce buf
-d337f2afb7aceb Anirudh Venkataramanan 2018-10-26  1100   * @rx_ring: Rx descriptor ring to transact packets on
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1101   * @budget: Total limit on number of packets to process
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1102   *
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1103   * This function provides a "bounce buffer" approach to Rx interrupt
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1104   * processing. The advantage to this is that on systems that have
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1105   * expensive overhead for IOMMU access this provides a means of avoiding
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1106   * it by maintaining the mapping of the page to the system.
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1107   *
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1108   * Returns amount of work completed
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1109   */
-e72bba21355dbb Maciej Fijalkowski     2021-08-19 @1110  int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1111  {
-43b5169d8355cc Lorenzo Bianconi       2020-12-22  1112  	unsigned int total_rx_bytes = 0, total_rx_pkts = 0, frame_sz = 0;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1113  	u16 cleaned_count = ICE_DESC_UNUSED(rx_ring);
-f1b1f409bf7903 Maciej Fijalkowski     2021-01-18  1114  	unsigned int offset = rx_ring->rx_offset;
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1115  	struct ice_tx_ring *xdp_ring = NULL;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1116  	unsigned int xdp_res, xdp_xmit = 0;
-29b82f2a09d590 Maciej Fijalkowski     2021-01-18  1117  	struct sk_buff *skb = rx_ring->skb;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1118  	struct bpf_prog *xdp_prog = NULL;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1119  	struct xdp_buff xdp;
-cb7db35641c9a5 Brett Creeley          2019-06-26  1120  	bool failure;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1121  
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1122  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1123  #if (PAGE_SIZE < 8192)
-43b5169d8355cc Lorenzo Bianconi       2020-12-22  1124  	frame_sz = ice_rx_frame_truesize(rx_ring, 0);
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1125  #endif
-43b5169d8355cc Lorenzo Bianconi       2020-12-22  1126  	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1127  
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1128  	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1129  	if (xdp_prog)
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1130  		xdp_ring = rx_ring->xdp_ring;
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1131  
-f9867df6d96593 Anirudh Venkataramanan 2019-02-19  1132  	/* start the loop to process Rx packets bounded by 'budget' */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1133  	while (likely(total_rx_pkts < (unsigned int)budget)) {
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1134  		union ice_32b_rx_flex_desc *rx_desc;
-6c869cb7a8f02b Maciej Fijalkowski     2019-02-13  1135  		struct ice_rx_buf *rx_buf;
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  1136  		unsigned char *hard_start;
-6c869cb7a8f02b Maciej Fijalkowski     2019-02-13  1137  		unsigned int size;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1138  		u16 stat_err_bits;
-1beb7830d3b285 Björn Töpel            2020-08-25  1139  		int rx_buf_pgcnt;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1140  		u16 vlan_tag = 0;
-dda90cb90a5ced Jesse Brandeburg       2021-02-23  1141  		u16 rx_ptype;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1142  
-f9867df6d96593 Anirudh Venkataramanan 2019-02-19  1143  		/* get the Rx desc from Rx ring based on 'next_to_clean' */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1144  		rx_desc = ICE_RX_DESC(rx_ring, rx_ring->next_to_clean);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1145  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1146  		/* status_error_len will always be zero for unused descriptors
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1147  		 * because it's cleared in cleanup, and overlaps with hdr_addr
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1148  		 * which is always zero because packet split isn't used, if the
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1149  		 * hardware wrote DD then it will be non-zero
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1150  		 */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1151  		stat_err_bits = BIT(ICE_RX_FLEX_DESC_STATUS0_DD_S);
-0d54d8f7a16de0 Brett Creeley          2021-12-02  1152  		if (!ice_test_staterr(rx_desc->wb.status_error0, stat_err_bits))
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1153  			break;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1154  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1155  		/* This memory barrier is needed to keep us from reading
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1156  		 * any other fields out of the rx_desc until we know the
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1157  		 * DD bit is set.
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1158  		 */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1159  		dma_rmb();
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1160  
-3089cf6d3caa1e Jesse Brandeburg       2021-06-08  1161  		ice_trace(clean_rx_irq, rx_ring, rx_desc);
-148beb61203125 Henry Tieman           2020-05-11  1162  		if (rx_desc->wb.rxdid == FDIR_DESC_RXDID || !rx_ring->netdev) {
-d6218317e2eff8 Qi Zhang               2021-03-09  1163  			struct ice_vsi *ctrl_vsi = rx_ring->vsi;
-d6218317e2eff8 Qi Zhang               2021-03-09  1164  
-d6218317e2eff8 Qi Zhang               2021-03-09  1165  			if (rx_desc->wb.rxdid == FDIR_DESC_RXDID &&
-d6218317e2eff8 Qi Zhang               2021-03-09  1166  			    ctrl_vsi->vf_id != ICE_INVAL_VFID)
-d6218317e2eff8 Qi Zhang               2021-03-09  1167  				ice_vc_fdir_irq_handler(ctrl_vsi, rx_desc);
-1beb7830d3b285 Björn Töpel            2020-08-25  1168  			ice_put_rx_buf(rx_ring, NULL, 0);
-148beb61203125 Henry Tieman           2020-05-11  1169  			cleaned_count++;
-148beb61203125 Henry Tieman           2020-05-11  1170  			continue;
-148beb61203125 Henry Tieman           2020-05-11  1171  		}
-148beb61203125 Henry Tieman           2020-05-11  1172  
-6c869cb7a8f02b Maciej Fijalkowski     2019-02-13  1173  		size = le16_to_cpu(rx_desc->wb.pkt_len) &
-6c869cb7a8f02b Maciej Fijalkowski     2019-02-13  1174  			ICE_RX_FLX_DESC_PKT_LEN_M;
-6c869cb7a8f02b Maciej Fijalkowski     2019-02-13  1175  
-ac6f733a7bd5e2 Mitch Williams         2019-07-25  1176  		/* retrieve a buffer from the ring */
-29b82f2a09d590 Maciej Fijalkowski     2021-01-18  1177  		rx_buf = ice_get_rx_buf(rx_ring, size, &rx_buf_pgcnt);
-ac6f733a7bd5e2 Mitch Williams         2019-07-25  1178  
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1179  		if (!size) {
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1180  			xdp.data = NULL;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1181  			xdp.data_end = NULL;
-aaf27254fdf905 Maciej Fijalkowski     2019-10-24  1182  			xdp.data_hard_start = NULL;
-aaf27254fdf905 Maciej Fijalkowski     2019-10-24  1183  			xdp.data_meta = NULL;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1184  			goto construct_skb;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1185  		}
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1186  
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  1187  		hard_start = page_address(rx_buf->page) + rx_buf->page_offset -
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  1188  			     offset;
-be9df4aff65f18 Lorenzo Bianconi       2020-12-22  1189  		xdp_prepare_buff(&xdp, hard_start, offset, size, true);
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1190  #if (PAGE_SIZE > 4096)
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1191  		/* At larger PAGE_SIZE, frame_sz depend on len size */
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1192  		xdp.frame_sz = ice_rx_frame_truesize(rx_ring, size);
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1193  #endif
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1194  
-49589b23d5a92d Toke Høiland-Jørgensen 2021-06-24  1195  		if (!xdp_prog)
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1196  			goto construct_skb;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1197  
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1198  		xdp_res = ice_run_xdp(rx_ring, &xdp, xdp_prog, xdp_ring);
-59bb0808055758 Maciej Fijalkowski     2019-10-24  1199  		if (!xdp_res)
-59bb0808055758 Maciej Fijalkowski     2019-10-24  1200  			goto construct_skb;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1201  		if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR)) {
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1202  			xdp_xmit |= xdp_res;
-d4ecdbf7aa2fa4 Jesper Dangaard Brouer 2020-05-14  1203  			ice_rx_buf_adjust_pg_offset(rx_buf, xdp.frame_sz);
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1204  		} else {
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1205  			rx_buf->pagecnt_bias++;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1206  		}
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1207  		total_rx_bytes += size;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1208  		total_rx_pkts++;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1209  
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1210  		cleaned_count++;
-1beb7830d3b285 Björn Töpel            2020-08-25  1211  		ice_put_rx_buf(rx_ring, rx_buf, rx_buf_pgcnt);
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1212  		continue;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1213  construct_skb:
-1f45ebe0d8fbe6 Mitch Williams         2019-12-12  1214  		if (skb) {
-7237f5b0dba443 Maciej Fijalkowski     2019-10-24  1215  			ice_add_rx_frag(rx_ring, rx_buf, skb, size);
-1f45ebe0d8fbe6 Mitch Williams         2019-12-12  1216  		} else if (likely(xdp.data)) {
-1f45ebe0d8fbe6 Mitch Williams         2019-12-12  1217  			if (ice_ring_uses_build_skb(rx_ring))
-aaf27254fdf905 Maciej Fijalkowski     2019-10-24  1218  				skb = ice_build_skb(rx_ring, rx_buf, &xdp);
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1219  			else
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1220  				skb = ice_construct_skb(rx_ring, rx_buf, &xdp);
-1f45ebe0d8fbe6 Mitch Williams         2019-12-12  1221  		}
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1222  		/* exit if we failed to retrieve a buffer */
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1223  		if (!skb) {
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1224  			rx_ring->rx_stats.alloc_buf_failed++;
-ac6f733a7bd5e2 Mitch Williams         2019-07-25  1225  			if (rx_buf)
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1226  				rx_buf->pagecnt_bias++;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1227  			break;
-712edbbb67d404 Maciej Fijalkowski     2019-02-13  1228  		}
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1229  
-1beb7830d3b285 Björn Töpel            2020-08-25  1230  		ice_put_rx_buf(rx_ring, rx_buf, rx_buf_pgcnt);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1231  		cleaned_count++;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1232  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1233  		/* skip if it is NOP desc */
-29b82f2a09d590 Maciej Fijalkowski     2021-01-18  1234  		if (ice_is_non_eop(rx_ring, rx_desc))
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1235  			continue;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1236  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1237  		stat_err_bits = BIT(ICE_RX_FLEX_DESC_STATUS0_RXE_S);
-0d54d8f7a16de0 Brett Creeley          2021-12-02  1238  		if (unlikely(ice_test_staterr(rx_desc->wb.status_error0,
-0d54d8f7a16de0 Brett Creeley          2021-12-02  1239  					      stat_err_bits))) {
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1240  			dev_kfree_skb_any(skb);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1241  			continue;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1242  		}
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1243  
-0d54d8f7a16de0 Brett Creeley          2021-12-02  1244  		vlan_tag = ice_get_vlan_tag_from_rx_desc(rx_desc);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1245  
-133f4883f90668 Krzysztof Kazimierczak 2019-10-09  1246  		/* pad the skb if needed, to make a valid ethernet frame */
-133f4883f90668 Krzysztof Kazimierczak 2019-10-09  1247  		if (eth_skb_pad(skb)) {
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1248  			skb = NULL;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1249  			continue;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1250  		}
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1251  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1252  		/* probably a little skewed due to removing CRC */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1253  		total_rx_bytes += skb->len;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1254  
-d76a60ba7afb89 Anirudh Venkataramanan 2018-03-20  1255  		/* populate checksum, VLAN, and protocol */
-6503b659302893 Jesse Brandeburg       2019-08-08  1256  		rx_ptype = le16_to_cpu(rx_desc->wb.ptype_flex_flags0) &
-6503b659302893 Jesse Brandeburg       2019-08-08  1257  			ICE_RX_FLEX_DESC_PTYPE_M;
-6503b659302893 Jesse Brandeburg       2019-08-08  1258  
-d76a60ba7afb89 Anirudh Venkataramanan 2018-03-20  1259  		ice_process_skb_fields(rx_ring, rx_desc, skb, rx_ptype);
-d76a60ba7afb89 Anirudh Venkataramanan 2018-03-20  1260  
-3089cf6d3caa1e Jesse Brandeburg       2021-06-08  1261  		ice_trace(clean_rx_irq_indicate, rx_ring, rx_desc, skb);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1262  		/* send completed skb up the stack */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1263  		ice_receive_skb(rx_ring, skb, vlan_tag);
-29b82f2a09d590 Maciej Fijalkowski     2021-01-18  1264  		skb = NULL;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1265  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1266  		/* update budget accounting */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1267  		total_rx_pkts++;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1268  	}
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1269  
-cb7db35641c9a5 Brett Creeley          2019-06-26  1270  	/* return up to cleaned_count buffers to hardware */
-cb7db35641c9a5 Brett Creeley          2019-06-26  1271  	failure = ice_alloc_rx_bufs(rx_ring, cleaned_count);
-cb7db35641c9a5 Brett Creeley          2019-06-26  1272  
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1273  	if (xdp_prog)
-eb087cd828648d Maciej Fijalkowski     2021-08-19  1274  		ice_finalize_xdp_rx(xdp_ring, xdp_xmit);
-29b82f2a09d590 Maciej Fijalkowski     2021-01-18  1275  	rx_ring->skb = skb;
-efc2214b6047b6 Maciej Fijalkowski     2019-11-04  1276  
-2d4238f5569722 Krzysztof Kazimierczak 2019-11-04  1277  	ice_update_rx_ring_stats(rx_ring, total_rx_pkts, total_rx_bytes);
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1278  
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1279  	/* guarantee a trip back through this routine if there was a failure */
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1280  	return failure ? budget : (int)total_rx_pkts;
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1281  }
-2b245cb29421ab Anirudh Venkataramanan 2018-03-20  1282  
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2690  
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2691  int
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21 @2692  nv50_display_create(struct drm_device *dev)
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2693  {
+1167c6bc51880c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2016-05-18  2694  	struct nvif_device *device = &nouveau_drm(dev)->client.device;
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-31  2695  	struct nouveau_drm *drm = nouveau_drm(dev);
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-31  2696  	struct dcb_table *dcb = &drm->vbios.dcb;
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2697  	struct drm_connector *connector, *tmp;
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21  2698  	struct nv50_disp *disp;
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-11  2699  	struct dcb_output *dcbe;
+7c5f6a87b2337c drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-03-04  2700  	int crtcs, ret, i;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2701  	bool has_mst = nv50_has_mst(drm);
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2702  
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2703  	disp = kzalloc(sizeof(*disp), GFP_KERNEL);
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2704  	if (!disp)
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2705  		return -ENOMEM;
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-31  2706  
+839ca903f12ef8 drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2016-11-04  2707  	mutex_init(&disp->mutex);
+839ca903f12ef8 drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2016-11-04  2708  
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-31  2709  	nouveau_display(dev)->priv = disp;
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21  2710  	nouveau_display(dev)->dtor = nv50_display_destroy;
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21  2711  	nouveau_display(dev)->init = nv50_display_init;
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21  2712  	nouveau_display(dev)->fini = nv50_display_fini;
+0ad72863ea426d drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2014-08-10  2713  	disp->disp = &nouveau_display(dev)->disp;
+839ca903f12ef8 drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2016-11-04  2714  	dev->mode_config.funcs = &nv50_disp_func;
+0e94043ee1d98d drivers/gpu/drm/nouveau/dispnv50/disp.c Gerd Hoffmann         2018-09-05  2715  	dev->mode_config.quirk_addfb_prefer_xbgr_30bpp = true;
+7a962f2b7276cc drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2019-06-11  2716  	dev->mode_config.normalize_zpos = true;
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2717  
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2718  	/* small shared memory area we use for notifiers and semaphores */
+81b615798e9459 drivers/gpu/drm/nouveau/dispnv50/disp.c Christian König       2020-09-08  2719  	ret = nouveau_bo_new(&drm->client, 4096, 0x1000,
+81b615798e9459 drivers/gpu/drm/nouveau/dispnv50/disp.c Christian König       2020-09-08  2720  			     NOUVEAU_GEM_DOMAIN_VRAM,
+bb6178b04f5ef6 drivers/gpu/drm/nouveau/nv50_display.c  Maarten Lankhorst     2014-01-09  2721  			     0, 0x0000, NULL, NULL, &disp->sync);
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2722  	if (!ret) {
+81b615798e9459 drivers/gpu/drm/nouveau/dispnv50/disp.c Christian König       2020-09-08  2723  		ret = nouveau_bo_pin(disp->sync, NOUVEAU_GEM_DOMAIN_VRAM, true);
+04c8c21085e130 drivers/gpu/drm/nouveau/nv50_display.c  Marcin Slusarz        2012-11-25  2724  		if (!ret) {
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2725  			ret = nouveau_bo_map(disp->sync);
+04c8c21085e130 drivers/gpu/drm/nouveau/nv50_display.c  Marcin Slusarz        2012-11-25  2726  			if (ret)
+04c8c21085e130 drivers/gpu/drm/nouveau/nv50_display.c  Marcin Slusarz        2012-11-25  2727  				nouveau_bo_unpin(disp->sync);
+04c8c21085e130 drivers/gpu/drm/nouveau/nv50_display.c  Marcin Slusarz        2012-11-25  2728  		}
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2729  		if (ret)
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2730  			nouveau_bo_ref(NULL, &disp->sync);
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2731  	}
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2732  
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2733  	if (ret)
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2734  		goto out;
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2735  
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2736  	/* allocate master evo channel */
+9ca6f1ebba1024 drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2018-05-08  2737  	ret = nv50_core_new(drm, &disp->core);
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2738  	if (ret)
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2739  		goto out;
+b5a794b0f1fdf1 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-10-16  2740  
+fa1232ea845155 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2741  	disp->core->func->init(disp->core);
+4a2cb4181b077c drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2742  	if (disp->core->func->caps_init) {
+4a2cb4181b077c drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2743  		ret = disp->core->func->caps_init(drm, disp);
+4a2cb4181b077c drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2744  		if (ret)
+4a2cb4181b077c drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2745  			goto out;
+4a2cb4181b077c drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2746  	}
+fa1232ea845155 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2020-05-11  2747  
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2748  	/* Assign the correct format modifiers */
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2749  	if (disp->disp->object.oclass >= TU102_DISP)
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2750  		nouveau_display(dev)->format_modifiers = wndwc57e_modifiers;
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2751  	else
+0508831470fb5b drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2020-07-24  2752  	if (drm->client.device.info.family >= NV_DEVICE_INFO_V0_FERMI)
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2753  		nouveau_display(dev)->format_modifiers = disp90xx_modifiers;
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2754  	else
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2755  		nouveau_display(dev)->format_modifiers = disp50xx_modifiers;
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2756  
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2757  	/* FIXME: 256x256 cursors are supported on Kepler, however unlike Maxwell and later
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2758  	 * generations Kepler requires that we use small pages (4K) for cursor scanout surfaces. The
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2759  	 * proper fix for this is to teach nouveau to migrate fbs being used for the cursor plane to
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2760  	 * small page allocations in prepare_fb(). When this is implemented, we should also force
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2761  	 * large pages (128K) for ovly fbs in order to fix Kepler ovlys.
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2762  	 * But until then, just limit cursors to 128x128 - which is small enough to avoid ever using
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2763  	 * large pages.
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2764  	 */
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2765  	if (disp->disp->object.oclass >= GM107_DISP) {
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2766  		dev->mode_config.cursor_width = 256;
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2767  		dev->mode_config.cursor_height = 256;
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2768  	} else if (disp->disp->object.oclass >= GK104_DISP) {
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2769  		dev->mode_config.cursor_width = 128;
+d3999c1f7bbbc1 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-03-04  2770  		dev->mode_config.cursor_height = 128;
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2771  	} else {
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2772  		dev->mode_config.cursor_width = 64;
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2773  		dev->mode_config.cursor_height = 64;
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2774  	}
+d3b2f0f7921c75 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2021-01-18  2775  
+438d99e3b17520 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2776  	/* create crtc objects to represent the hw heads */
+facaed62b4cba3 drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2018-05-08  2777  	if (disp->disp->object.oclass >= GV100_DISP)
+facaed62b4cba3 drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2018-05-08  2778  		crtcs = nvif_rd32(&device->object, 0x610060) & 0xff;
+facaed62b4cba3 drivers/gpu/drm/nouveau/dispnv50/disp.c Ben Skeggs            2018-05-08  2779  	else
+0d4a2c5767dc61 drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2018-05-08  2780  	if (disp->disp->object.oclass >= GF110_DISP)
+eba5e56db65b7a drivers/gpu/drm/nouveau/nv50_display.c  Ilia Mirkin           2017-07-03  2781  		crtcs = nvif_rd32(&device->object, 0x612004) & 0xf;
+63718a0730c666 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-11-16  2782  	else
+eba5e56db65b7a drivers/gpu/drm/nouveau/nv50_display.c  Ilia Mirkin           2017-07-03  2783  		crtcs = 0x3;
+63718a0730c666 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-11-16  2784  
+eba5e56db65b7a drivers/gpu/drm/nouveau/nv50_display.c  Ilia Mirkin           2017-07-03  2785  	for (i = 0; i < fls(crtcs); i++) {
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2786  		struct nv50_head *head;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2787  
+eba5e56db65b7a drivers/gpu/drm/nouveau/nv50_display.c  Ilia Mirkin           2017-07-03  2788  		if (!(crtcs & (1 << i)))
+eba5e56db65b7a drivers/gpu/drm/nouveau/nv50_display.c  Ilia Mirkin           2017-07-03  2789  			continue;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2790  
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2791  		head = nv50_head_create(dev, i);
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2792  		if (IS_ERR(head)) {
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2793  			ret = PTR_ERR(head);
+438d99e3b17520 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2794  			goto out;
+438d99e3b17520 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2795  		}
+438d99e3b17520 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2796  
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2797  		if (has_mst) {
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2798  			head->msto = nv50_msto_new(dev, head, i);
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2799  			if (IS_ERR(head->msto)) {
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2800  				ret = PTR_ERR(head->msto);
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2801  				head->msto = NULL;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2802  				goto out;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2803  			}
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2804  
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2805  			/*
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2806  			 * FIXME: This is a hack to workaround the following
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2807  			 * issues:
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2808  			 *
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2809  			 * https://gitlab.gnome.org/GNOME/mutter/issues/759
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2810  			 * https://gitlab.freedesktop.org/xorg/xserver/merge_requests/277
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2811  			 *
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2812  			 * Once these issues are closed, this should be
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2813  			 * removed
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2814  			 */
+481404957a14f9 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2815  			head->msto->encoder.possible_crtcs = crtcs;
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2816  		}
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2817  	}
+5ff0cb1ce25363 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2019-09-13  2818  
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2819  	/* create encoder/connector objects based on VBIOS DCB table */
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2820  	for (i = 0, dcbe = &dcb->entry[0]; i < dcb->entries; i++, dcbe++) {
+3c7fc252b3fab0 drivers/gpu/drm/nouveau/dispnv50/disp.c Lyude Paul            2018-07-12  2821  		connector = nouveau_connector_create(dev, dcbe);
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2822  		if (IS_ERR(connector))
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2823  			continue;
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2824  
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2825  		if (dcbe->location == DCB_LOC_ON_CHIP) {
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2826  			switch (dcbe->type) {
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-11  2827  			case DCB_OUTPUT_TMDS:
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-11  2828  			case DCB_OUTPUT_LVDS:
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-11  2829  			case DCB_OUTPUT_DP:
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2830  				ret = nv50_sor_create(connector, dcbe);
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2831  				break;
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-11  2832  			case DCB_OUTPUT_ANALOG:
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2833  				ret = nv50_dac_create(connector, dcbe);
+8eaa9669f8dc7f drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-06  2834  				break;
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2835  			default:
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2836  				ret = -ENODEV;
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2837  				break;
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2838  			}
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2839  		} else {
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2840  			ret = nv50_pior_create(connector, dcbe);
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2841  		}
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2842  
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2843  		if (ret) {
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2844  			NV_WARN(drm, "failed to create encoder %d/%d/%d: %d\n",
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2845  				     dcbe->location, dcbe->type,
+eb6313add6dddf drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-02-11  2846  				     ffs(dcbe->or) - 1, ret);
+94f54f5336aac6 drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2013-03-05  2847  			ret = 0;
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2848  		}
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2849  	}
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2850  
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2851  	/* cull any connectors we created that don't have an encoder */
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2852  	list_for_each_entry_safe(connector, tmp, &dev->mode_config.connector_list, head) {
+62afb4ad425af2 drivers/gpu/drm/nouveau/dispnv50/disp.c José Roberto de Souza 2019-09-13  2853  		if (connector->possible_encoders)
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2854  			continue;
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2855  
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2012-07-31  2856  		NV_WARN(drm, "%s has no encoders, removing\n",
+8c6c361ac6490e drivers/gpu/drm/nouveau/nv50_display.c  Jani Nikula           2014-06-03  2857  			connector->name);
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2858  		connector->funcs->destroy(connector);
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2859  	}
+83fc083cbbe014 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-05  2860  
+2ae4c5f6ff7310 drivers/gpu/drm/nouveau/dispnv50/disp.c Mario Kleiner         2018-07-16  2861  	/* Disable vblank irqs aggressively for power-saving, safe on nv50+ */
+2ae4c5f6ff7310 drivers/gpu/drm/nouveau/dispnv50/disp.c Mario Kleiner         2018-07-16  2862  	dev->vblank_disable_immediate = true;
+2ae4c5f6ff7310 drivers/gpu/drm/nouveau/dispnv50/disp.c Mario Kleiner         2018-07-16  2863  
+742db30c4ee6cd drivers/gpu/drm/nouveau/dispnv50/disp.c Takashi Iwai          2020-01-13  2864  	nv50_audio_component_init(drm);
+742db30c4ee6cd drivers/gpu/drm/nouveau/dispnv50/disp.c Takashi Iwai          2020-01-13  2865  
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2866  out:
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2867  	if (ret)
+e225f446a0808c drivers/gpu/drm/nouveau/nv50_display.c  Ben Skeggs            2012-11-21  2868  		nv50_display_destroy(dev);
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2869  	return ret;
+26f6d88b327060 drivers/gpu/drm/nouveau/nvd0_display.c  Ben Skeggs            2011-07-04  2870  }
+c586f30bf74cb5 drivers/gpu/drm/nouveau/dispnv50/disp.c James Jones           2020-02-10  2871  
 
-:::::: The code at line 1110 was first introduced by commit
-:::::: e72bba21355dbb67512a0d666fec9f4b56dbfc2f ice: split ice_ring onto Tx/Rx separate structs
+:::::: The code at line 2692 was first introduced by commit
+:::::: e225f446a0808ce38b124df489d0568c05c3057a drm/nouveau: rename nvd0_display to nv50_display to reflect reality since merge
 
-:::::: TO: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
+:::::: TO: Ben Skeggs <bskeggs@redhat.com>
+:::::: CC: Ben Skeggs <bskeggs@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
