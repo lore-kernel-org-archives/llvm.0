@@ -1,154 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73671DDE9
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 23:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689895275;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=so8qhKEZr/q5fMGYU+9OOpU64crO4t+szVoOKiL9YqI=;
-	b=eS9SQn3PRr0dlr4LPCRcv8JjxZA1EDI2hcNZb3rnHqV9HKcOIF8+Ma9WhOBhE34CBcd3/p
-	hoH/4/3ROZ0JvFa+C/+Di2Ua9b8bMESOJksUl5lFUWyBntTSSMv3CAHQt9S7GwNIrxZOoP
-	CZJMWxfbVdQSbKuTQ9vysGL3s/2lJq8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-CYINu4fMOm63_ynKKIzN8A-1; Thu, 20 Jul 2023 19:21:14 -0400
-X-MC-Unique: CYINu4fMOm63_ynKKIzN8A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE61F85A58A
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 23:21:13 +0000 (UTC)
-Received: from [172.64.4.102] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9E95A1121314;
-	Thu, 20 Jul 2023 23:21:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 46 of 328): Test report for master
- (6.5.0-rc2, mainline.kernel.org-clang, 46670259)
-Date: Thu, 20 Jul 2023 23:21:13 -0000
-To: llvm@lists.linux.dev, zlang@redhat.com, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC31E501;
+	Thu, 20 Jul 2023 23:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689896246; x=1721432246;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z2itLRjqr3PQgC+FNJyKgpaYg8xYUggoWHdV0xSSs0k=;
+  b=goSWDdVjrC6QHW2MkPNoFwo7pGUdPBOy3Jz4eedoVx/hdF5qTmyZO3DQ
+   2Z9eIofXws71rTQAOacWWUAtmI5D5GuOrK9U3auFdevkLs1bw/0DUXf1s
+   ieKFuIyFQQEqCMNdkuDbh8m68xuHi13s8UfiSX9jtUBhXs4JEO5jp+HSI
+   iQ9WNSZotp57gTmao2VZWkrIlHygscEBetTYGBm9bGuYr9nJI7OGVCiza
+   +adlFU7/U+2I39479jgWIFe5RuCO8jJuaQAoVanT6clmwCiv0gvQekkSz
+   TsHSn4VFXGIZYCrcqVtd+3GzUZdwrNzbxrCBWrCRIjBOTrOXyYUlkbu4+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="430687205"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="430687205"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 16:37:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="971223643"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="971223643"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jul 2023 16:37:12 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMdCp-0006dG-20;
+	Thu, 20 Jul 2023 23:37:11 +0000
+Date: Fri, 21 Jul 2023 07:36:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mike.kravetz@oracle.com, muchun.song@linux.dev, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linux-kernel@vger.kernel.org, dan.carpenter@linaro.org,
+	Linke Li <lilinke99@gmail.com>
+Subject: Re: [PATCH v3] hugetlbfs: Fix integer overflow check in
+ hugetlbfs_file_mmap()
+Message-ID: <202307210737.HUPwpBdW-lkp@intel.com>
+References: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <22191.123072019211400581@us-mta-615.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Linke,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.5-rc2 next-20230720]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'for-6.5-rc2-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Linke-Li/hugetlbfs-Fix-integer-overflow-check-in-hugetlbfs_file_mmap/20230720-225128
+base:   linus/master
+patch link:    https://lore.kernel.org/r/tencent_C2D6865561F23A8141BB145149ACC682B408%40qq.com
+patch subject: [PATCH v3] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
+config: s390-randconfig-r024-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210737.HUPwpBdW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210737.HUPwpBdW-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/96673
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210737.HUPwpBdW-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8839072
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
-          x86_64 (debug) - POSIX pjd-fstest suites
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8839185
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
-ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] memcpy: detected field-spanning write (size 24) o=
-f single field "(char *)name_loc->nameval" at fs/xfs/libxfs/xfs_attr_leaf.c=
-:1559 (size 1)
-            URL: https://bugzilla.kernel.org/show_bug.cgi?id=3D217522
-            Affected tests:
-                 aarch64 - xfstests - xfs
-                  x86_64 - xfstests - xfs
-                  x86_64 (debug) - xfstests - xfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> fs/hugetlbfs/inode.c:157:25: warning: variable 'vma_len' is uninitialized when used here [-Wuninitialized]
+     157 |         if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
+         |                                ^~~~~~~
+   include/linux/overflow.h:67:47: note: expanded from macro 'check_add_overflow'
+      67 |         __must_check_overflow(__builtin_add_overflow(a, b, d))
+         |                                                      ^
+   fs/hugetlbfs/inode.c:123:21: note: initialize the variable 'vma_len' to silence this warning
+     123 |         loff_t len, vma_len;
+         |                            ^
+         |                             = 0
+   1 warning generated.
 
 
+vim +/vma_len +157 fs/hugetlbfs/inode.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   108	
+   109	/*
+   110	 * Mask used when checking the page offset value passed in via system
+   111	 * calls.  This value will be converted to a loff_t which is signed.
+   112	 * Therefore, we want to check the upper PAGE_SHIFT + 1 bits of the
+   113	 * value.  The extra bit (- 1 in the shift value) is to take the sign
+   114	 * bit into account.
+   115	 */
+   116	#define PGOFF_LOFFT_MAX \
+   117		(((1UL << (PAGE_SHIFT + 1)) - 1) <<  (BITS_PER_LONG - (PAGE_SHIFT + 1)))
+   118	
+   119	static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+   120	{
+   121		struct inode *inode = file_inode(file);
+   122		struct hugetlbfs_inode_info *info = HUGETLBFS_I(inode);
+   123		loff_t len, vma_len;
+   124		int ret;
+   125		struct hstate *h = hstate_file(file);
+   126	
+   127		/*
+   128		 * vma address alignment (but not the pgoff alignment) has
+   129		 * already been checked by prepare_hugepage_range.  If you add
+   130		 * any error returns here, do so after setting VM_HUGETLB, so
+   131		 * is_vm_hugetlb_page tests below unmap_region go the right
+   132		 * way when do_mmap unwinds (may be important on powerpc
+   133		 * and ia64).
+   134		 */
+   135		vm_flags_set(vma, VM_HUGETLB | VM_DONTEXPAND);
+   136		vma->vm_ops = &hugetlb_vm_ops;
+   137	
+   138		ret = seal_check_future_write(info->seals, vma);
+   139		if (ret)
+   140			return ret;
+   141	
+   142		/*
+   143		 * page based offset in vm_pgoff could be sufficiently large to
+   144		 * overflow a loff_t when converted to byte offset.  This can
+   145		 * only happen on architectures where sizeof(loff_t) ==
+   146		 * sizeof(unsigned long).  So, only check in those instances.
+   147		 */
+   148		if (sizeof(unsigned long) == sizeof(loff_t)) {
+   149			if (vma->vm_pgoff & PGOFF_LOFFT_MAX)
+   150				return -EINVAL;
+   151		}
+   152	
+   153		/* must be huge page aligned */
+   154		if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
+   155			return -EINVAL;
+   156	
+ > 157		if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
+   158			return -EINVAL;
+   159	
+   160		inode_lock(inode);
+   161		file_accessed(file);
+   162	
+   163		ret = -ENOMEM;
+   164		if (!hugetlb_reserve_pages(inode,
+   165					vma->vm_pgoff >> huge_page_order(h),
+   166					len >> huge_page_shift(h), vma,
+   167					vma->vm_flags))
+   168			goto out;
+   169	
+   170		ret = 0;
+   171		if (vma->vm_flags & VM_WRITE && inode->i_size < len)
+   172			i_size_write(inode, len);
+   173	out:
+   174		inode_unlock(inode);
+   175	
+   176		return ret;
+   177	}
+   178	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
