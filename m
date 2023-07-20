@@ -1,51 +1,54 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A525F2FA20;
-	Thu, 20 Jul 2023 16:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECEA2FA43;
+	Thu, 20 Jul 2023 17:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689872066; x=1721408066;
+  t=1689873335; x=1721409335;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jsTm2UaW1yv/guIOUhcU4FeneLP0J9xCcYSp75A3fpc=;
-  b=GS1YICRgg4xY5E/dbmvHGHhv9BVSjUizoc/XMZAjl+tpmTftkKZyL7/0
-   zSsJciPqAAQTlfi2p/FZTGCYhvGsRUP1a/gp9yiDqBSL+C3xK2euv+67C
-   flY1Nw8Mb/i69t+71su4qxrfFwxsnUzuXos/Bro4+oeRi9ZRG2rX1sy4M
-   idTmdrCoDwF8e9c2yBs6ir3iN28/5f0iXpFb++8fl/Gz3ZhP/POVGjwbh
-   yxYU2tCwmCh3rEzL8WLaymPhkIzFuosNvVEYPe0zqmp2y6anyj+nYmDSL
-   31Z47TcQYs3NaMrJDm3WR/iljVD+g/mxhJ7mtca9AahXYdb9L8amoiPpg
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="430596140"
+  bh=ajwiDjEM37bJTrbE3/73m8Y1Bz0d/plYeHBMuGcnQlQ=;
+  b=Gnmy1jXO8Ho/FOjOADHgMEvg7YRhVsHlKvPYpNneDFdxyxvx/WpCkgk/
+   tCN+wTeCoc8lWpXB3+VBwbRYbKzD7821DmwLwr5u5GJc1E1RKd1ko4wA6
+   y3NHHKl6bNWTgH07/OXgjQs2p9qcvHSDKg7kDz6asd/AMe10+DjDOX8dm
+   Nvmi09TscLRGfOzb5aogoYVMYUP+rzzllaObWCJUbg/PjSRx2XdhowYHt
+   P0SPpxh/ddtfdETq8kwUlNd2bKsGxWtBXSTiAjIRwW4ReEV8h4ypCqrRG
+   z+ub5+gR81HFZe9Do0hV1WfQA3EsPYrEq5hP4i5OgZTmgdu5x5dlZLkzs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="346401621"
 X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="430596140"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 09:54:25 -0700
+   d="scan'208";a="346401621"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 10:15:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="759638874"
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="727776415"
 X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="759638874"
+   d="scan'208";a="727776415"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 20 Jul 2023 09:54:14 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jul 2023 10:15:29 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qMWus-0006IH-0C;
-	Thu, 20 Jul 2023 16:54:14 +0000
-Date: Fri, 21 Jul 2023 00:54:01 +0800
+	id 1qMXFM-0006JP-16;
+	Thu, 20 Jul 2023 17:15:25 +0000
+Date: Fri, 21 Jul 2023 01:14:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
-	thara.gopinath@gmail.com, rafael@kernel.org,
-	daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Emma Anholt <emma@anholt.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_varada@quicinc.com
-Subject: Re: [PATCH v4 1/5] thermal/drivers/tsens: Add TSENS enable and
- calibration support for V2
-Message-ID: <202307210014.qNnx99K8-lkp@intel.com>
-References: <20230719104041.126718-2-quic_ipkumar@quicinc.com>
+	linux-kselftest@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Maxime Ripard <mripard@kernel.org>, David Gow <davidgow@google.com>,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actions
+Message-ID: <202307210148.7gWzLOtn-lkp@intel.com>
+References: <20230720-kms-kunit-actions-rework-v2-1-175017bd56ab@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,101 +57,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230719104041.126718-2-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230720-kms-kunit-actions-rework-v2-1-175017bd56ab@kernel.org>
 
-Hi Praveenkumar,
+Hi Maxime,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on robh/for-next linus/master v6.5-rc2 next-20230720]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveenkumar-I/thermal-drivers-tsens-Add-TSENS-enable-and-calibration-support-for-V2/20230719-184436
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230719104041.126718-2-quic_ipkumar%40quicinc.com
-patch subject: [PATCH v4 1/5] thermal/drivers/tsens: Add TSENS enable and calibration support for V2
-config: arm-randconfig-r001-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210014.qNnx99K8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210014.qNnx99K8-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
+base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
+patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-1-175017bd56ab%40kernel.org
+patch subject: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actions
+config: arm64-randconfig-r022-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210148.7gWzLOtn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210148.7gWzLOtn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307210014.qNnx99K8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210148.7gWzLOtn-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/thermal/qcom/tsens-v2.c:153:9: error: implicit declaration of function 'FIELD_PREP' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   val = FIELD_PREP(CONVERSION_SHIFT_MASK, V2_SHIFT_DEFAULT) |
-                         ^
-   1 error generated.
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:53:6: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      53 |                                         (kunit_action_t *)platform_driver_unregister,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:61:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      61 |                                         (kunit_action_t *)platform_device_put,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:69:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      69 |                                         (kunit_action_t *)platform_device_del,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:89:9: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      89 |                              (kunit_action_t *)platform_device_unregister,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:93:9: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      93 |                              (kunit_action_t *)platform_driver_unregister,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SM_GCC_8450
-   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=y] && (ARM64 || COMPILE_TEST [=n])
-   Selected by [y]:
-   - SM_VIDEOCC_8450 [=y] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=y]
-   WARNING: unmet direct dependencies detected for SM_GCC_8550
-   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=y] && (ARM64 || COMPILE_TEST [=n])
-   Selected by [y]:
-   - SM_GPUCC_8550 [=y] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=y]
 
+vim +53 drivers/gpu/drm/tests/drm_kunit_helpers.c
 
-vim +/FIELD_PREP +153 drivers/thermal/qcom/tsens-v2.c
-
-   129	
-   130	static int tsens_v2_calibrate_sensor(struct device *dev, struct tsens_sensor *sensor,
-   131					     struct regmap *map,  u32 mode, u32 base0, u32 base1)
-   132	{
-   133		u32 slope, czero, val;
-   134		char name[8];
-   135		int ret;
-   136	
-   137		/* Read offset value */
-   138		ret = snprintf(name, sizeof(name), "s%d", sensor->hw_id);
-   139		if (ret < 0)
-   140			return ret;
-   141	
-   142		ret = nvmem_cell_read_variable_le_u32(dev, name, &sensor->offset);
-   143		if (ret)
-   144			return ret;
-   145	
-   146		/* Based on calib mode, program SHIFT, SLOPE and CZERO */
-   147		switch (mode) {
-   148		case TWO_PT_CALIB:
-   149			slope = (TWO_PT_SHIFTED_GAIN / (base1 - base0));
-   150	
-   151			czero = (base0 + sensor->offset - ((base1 - base0) / 3));
-   152	
- > 153			val = FIELD_PREP(CONVERSION_SHIFT_MASK, V2_SHIFT_DEFAULT) |
-   154			      FIELD_PREP(CONVERSION_SLOPE_MASK, slope) |
-   155			      FIELD_PREP(CONVERSION_CZERO_MASK, czero);
-   156	
-   157			fallthrough;
-   158		case ONE_PT_CALIB2:
-   159			czero = base0 + sensor->offset - ONE_PT_CZERO_CONST;
-   160	
-   161			val = FIELD_PREP(CONVERSION_SHIFT_MASK, V2_SHIFT_DEFAULT) |
-   162			      FIELD_PREP(CONVERSION_SLOPE_MASK, ONE_PT_SLOPE) |
-   163			      FIELD_PREP(CONVERSION_CZERO_MASK, czero);
-   164	
-   165			break;
-   166		default:
-   167			dev_dbg(dev, "calibrationless mode\n");
-   168	
-   169			val = FIELD_PREP(CONVERSION_SHIFT_MASK, V2_SHIFT_DEFAULT) |
-   170			      FIELD_PREP(CONVERSION_SLOPE_MASK, V2_SLOPE_DEFAULT) |
-   171			      FIELD_PREP(CONVERSION_CZERO_MASK, V2_CZERO_DEFAULT);
-   172		}
-   173	
-   174		regmap_write(map, SENSOR_CONVERSION(sensor->hw_id), val);
-   175	
-   176		return 0;
-   177	}
-   178	
+    28	
+    29	/**
+    30	 * drm_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
+    31	 * @test: The test context object
+    32	 *
+    33	 * This allocates a fake struct &device to create a mock for a KUnit
+    34	 * test. The device will also be bound to a fake driver. It will thus be
+    35	 * able to leverage the usual infrastructure and most notably the
+    36	 * device-managed resources just like a "real" device.
+    37	 *
+    38	 * Resources will be cleaned up automatically, but the removal can be
+    39	 * forced using @drm_kunit_helper_free_device.
+    40	 *
+    41	 * Returns:
+    42	 * A pointer to the new device, or an ERR_PTR() otherwise.
+    43	 */
+    44	struct device *drm_kunit_helper_alloc_device(struct kunit *test)
+    45	{
+    46		struct platform_device *pdev;
+    47		int ret;
+    48	
+    49		ret = platform_driver_register(&fake_platform_driver);
+    50		KUNIT_ASSERT_EQ(test, ret, 0);
+    51	
+    52		ret = kunit_add_action_or_reset(test,
+  > 53						(kunit_action_t *)platform_driver_unregister,
+    54						&fake_platform_driver);
+    55		KUNIT_ASSERT_EQ(test, ret, 0);
+    56	
+    57		pdev = platform_device_alloc(KUNIT_DEVICE_NAME, PLATFORM_DEVID_NONE);
+    58		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+    59	
+    60		ret = kunit_add_action_or_reset(test,
+  > 61						(kunit_action_t *)platform_device_put,
+    62						pdev);
+    63		KUNIT_ASSERT_EQ(test, ret, 0);
+    64	
+    65		ret = platform_device_add(pdev);
+    66		KUNIT_ASSERT_EQ(test, ret, 0);
+    67	
+    68		ret = kunit_add_action_or_reset(test,
+    69						(kunit_action_t *)platform_device_del,
+    70						pdev);
+    71		KUNIT_ASSERT_EQ(test, ret, 0);
+    72	
+    73		return &pdev->dev;
+    74	}
+    75	EXPORT_SYMBOL_GPL(drm_kunit_helper_alloc_device);
+    76	
 
 -- 
 0-DAY CI Kernel Test Service
