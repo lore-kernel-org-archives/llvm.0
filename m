@@ -1,107 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA5018AF6;
-	Thu, 20 Jul 2023 15:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54165C433C7;
-	Thu, 20 Jul 2023 15:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1689866199;
-	bh=cVe5IVCXrI2dTRFYJoEnl0cnQpuSELuvSLGYYEvbTf4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UKcPq9XCIwquJcL3mnGYr3evcDeveAHebalY3TcoJFLG8nvrsD8jh2Wlm9u1eGA7L
-	 UmAkmsfQPf55yk8+oH6CFiL52EN+h760zhead+InEDJRosFzUvX7/kBYtzcXiowwFp
-	 wMRJamotYNIceen6wFkHvKV1Z/FOXdJr2EcBZ+dmAceP2NXZgu/AfbOaRVaIxb2Tmg
-	 kaCqFfkcOvDaihJ1211vVCLMhqh+QVvsPRKSzKq+oTHUlFpjvG7TgZUoITqkJFNjit
-	 z/XTixs6VEeqTliLic5ED2ORon889x1b7MvtbmZ+GuvN/9e5xTdFEunHMW+fCDAx/1
-	 eyC3SCSoy3Qkg==
-Date: Thu, 20 Jul 2023 08:16:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com, emma@anholt.net, mwen@igalia.com,
-	ndesaulniers@google.com, justinstitt@google.com, trix@redhat.com,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 2/2] drm/i915: Avoid -Wconstant-logical-operand in
- nsecs_to_jiffies_timeout()
-Message-ID: <20230720151636.GA511202@dev-arch.thelio-3990X>
-References: <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-0-36ed8fc8faea@kernel.org>
- <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-2-36ed8fc8faea@kernel.org>
- <1a2aeca6-12f7-6316-c6e2-8474fd17255e@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E5818C02
+	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 15:18:00 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so94705e9.0
+        for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 08:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689866279; x=1690471079;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJ0NbXFA9avjbEQfqJk/EA+XEw1aR3Ivofcz45w0LCA=;
+        b=4zsWWvMQRf761GwK0wlm8TqRImyAgBmtAtAiwi/z6R4ikcmlrCgZeNryjNAsaY6aBw
+         2xPyQvkr8OVjDsAeSX0KbunAkAiDMK9gY0BP7VU9Kj907wT5RhuNe+d0CzQL9Vn61TMs
+         BRnYLDdR5ER4vQe8luRVGrvaF+FnjyOJdqIPE0EbxqCBCWz9LpIfd+EMC5sK2Nepmn/f
+         IIX9JWOG4xBkPdkWSk1XhYF/rkeVzXfSE5QTakqIKeQswJXucB8+v891O+2Na6jiOG6Z
+         Dy0vhEgm3Sb74sQmVsDJU+qxHPacRi0QJElpxSpLpmcxMZnJz8xk7rlaoMZG/W1xm88P
+         aL3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689866279; x=1690471079;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eJ0NbXFA9avjbEQfqJk/EA+XEw1aR3Ivofcz45w0LCA=;
+        b=lrmTOjTBDUWuW8IvqD71j3hKtr5F0Rqa3W4czzpDX1cius5rkG/l8Zw+DoZ6oc44+/
+         wSF04HwlF6UTJVVlHk92Rty1MtWEW5OScxmPc+HKfdCLwFZel4yKxzQjQSlVs7DMgFJH
+         xCoQX7mES6DH8vW05gnkK3z4P/VOEfnmfr10t4+nKPVPxPcciJjWB+yk/MwfZyYluvAu
+         gL6fQO6WZMah9ULzjXdVOsBpHt6t52cQ91rwXhz+e4TA9yiQ2nixA6QWiKIviNKTWdoV
+         d3ExkitGSDNajT93NMjkc1gXuRUydkVTfrSDcwgAUTAti0TKx2Xe800FlhjJC5bsrdNG
+         NsMA==
+X-Gm-Message-State: ABy/qLYJz1MYalMNxDDc++4uVIozi9MkX2gGVgBFvOCSLcdXPJxG8MRD
+	7Sfw6w3mxQfvRW6887351hb05lHBhDqPTPzhS9HWuA==
+X-Google-Smtp-Source: APBJJlGWkMQZnMrS3KhKyX7lmKsFZcAyablJRMBmdfqLiT6WAZCJllQjO8G+cBO4WMYeMLZ1B8KzEuZd7hXfb8Lza4s=
+X-Received: by 2002:a05:600c:4745:b0:3fd:e15:41e3 with SMTP id
+ w5-20020a05600c474500b003fd0e1541e3mr120394wmo.2.1689866279099; Thu, 20 Jul
+ 2023 08:17:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a2aeca6-12f7-6316-c6e2-8474fd17255e@linux.intel.com>
+References: <0000000000006a74dd05e9931449@google.com> <000000000000073a4a05ed620676@google.com>
+ <Y3Jb1Wcs/mQlZP32@mit.edu> <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com> <Y3KAfyQOf6GvEo/x@mit.edu>
+In-Reply-To: <Y3KAfyQOf6GvEo/x@mit.edu>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Thu, 20 Jul 2023 17:17:46 +0200
+Message-ID: <CACT4Y+Z83JvP9ifU7Bv8=KO8oZVYEoYA2K+Jwk7Vusoij1M8_w@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
+To: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Waiman Long <longman@redhat.com>, 
+	syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>, 
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 20, 2023 at 09:43:05AM +0100, Tvrtko Ursulin wrote:
-> 
-> On 18/07/2023 22:44, Nathan Chancellor wrote:
-> > A proposed update to clang's -Wconstant-logical-operand to warn when the
-> > left hand side is a constant shows the following instance in
-> > nsecs_to_jiffies_timeout() when NSEC_PER_SEC is not a multiple of HZ,
-> > such as CONFIG_HZ=300:
-> > 
-> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-> >      189 |         if (NSEC_PER_SEC % HZ &&
-> >          |             ~~~~~~~~~~~~~~~~~ ^
-> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: note: use '&' for a bitwise operation
-> >      189 |         if (NSEC_PER_SEC % HZ &&
-> >          |                               ^~
-> >          |                               &
-> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: note: remove constant to silence this warning
-> >    1 warning generated.
-> > 
-> > Turn this into an explicit comparison against zero to make the
-> > expression a boolean to make it clear this should be a logical check,
-> > not a bitwise one.
-> 
-> So -Wconstant-logical-operand only triggers when it is a
-> constant but not zero constant? Why does that make sense is not
-> a kludge to avoid too much noise?
+On Mon, 14 Nov 2022 at 18:53, Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> On Mon, Nov 14, 2022 at 11:21:33AM -0500, Waiman Long wrote:
+> >
+> > lockdep_set_subclass() should be translated into a call to
+> > lockdep_init_map_type():
+> >
+> > #define lockdep_set_subclass(lock, sub)                                 \
+> >         lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key,
+> > sub,\
+> > (lock)->dep_map.wait_type_inner,          \
+> > (lock)->dep_map.wait_type_outer,          \
+> >                               (lock)->dep_map.lock_type)
+> >
+> > All memory access should be within the bound of the given "&ei->i_data_sem".
+> > Also lockdep_init_map_type() is not in the stack trace. So it is not a
+> > problem within this lockdep_init_map_type() function. So is it possible that
+> > the given inode pointer is invalid?
+>
+> Well, the inode pointer would be coming from iget().  And since this
+> is coming from ext4 mount operation, we would be getting a fresh inode
+> that should be freshly allocated.  So the possibilities which comes to
+> mind is some kind of use-after-free (probbly in f2fs) that was
+> smashing the inode itself, such that ei->i_data_sem was pointing off
+> into la-la-land, or in the inode cache's internal data srtuctures.
+>
+> The reason why I would assume it would be in f2fs is I *assume*
+> syzkaller would have pruned down the test case enough to remove the
+> messing around with mounting the invalid f2fs file system.  But the
+> other mystery here is why didn't KASAN report the use-after-free (if
+> that it is what it was) in the thousands of f2fs mount and
+> unmount operations before it finally triggered?
+>
+> Anyway, I plan to ignore this Syzkaller unless report Syzkaller (or
+> someone else) can come up with a more minimal/reliable reproducer.  (I
+> mean, we could open a bug, but with kind of reproducer, it would get
+> prioritized P3 or P4 and ignored for years until it finally got closed
+> in a buganizer bankruptcy, so I figured I would just skip a few steps.  :-)
 
-Yes, the warning purposefully does not trigger when the constant is a 1
-or 0 (as those are usually indicative of an intentional logical
-operation):
 
-https://github.com/llvm/llvm-project/blob/dfdfd306cfaf54fbc43e2d5eb36489dac3eb9976/clang/lib/Sema/SemaExpr.cpp#L13917-L13919
+Let's set the subsystem then, so it's in the f2fs bucket rather than in ext4:
 
-In this case, it is 100, so I kind of understand why this might be
-ambiguous to the compiler.
-
-> Personally, it all feels a bit over the top as a warning,
-> since code in both cases should optimise away. And we may end
-
-I do not necessarily disagree, as you can see from the differential
-review that I linked in the message, but I also understand it is a fine
-line to tread when writing compiler warnings between wanting to catch
-as many potential problems as possible and having too much noise for
-developers to sift through. I think this is erring on the side of
-caution.
-
-> up papering over it if it becomes a default.
-
-diagtool tree tells me this warning is already on by default.
-
-> Then again this patch IMO does make the code more readable, so
-
-I think so too.
-
-> I am happy to take this one via our tree. Or either give ack to
-> bring it in via drm-misc-next:
-> 
-> Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> 
-> Let me know which route works best.
-
-Thanks for the feedback! Either route is fine with me but if the v3d
-patch is going to go in via drm-misc-next, it seems like it would not be
-too much trouble to push this one with it.
-
-Cheers,
-Nathan
+#syz set subsystems: f2fs
