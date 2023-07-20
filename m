@@ -1,116 +1,140 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB31B2FA47
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 19:03:22 +0000 (UTC)
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-635d9e0aa6dso8329536d6.1
-        for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 12:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689879801; x=1690484601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e4r0G41HIiGcQMHB4pEZiHr5BAGtm82arbVI+LgNPL4=;
-        b=RaiDUPvR+vvyd1OyTp20JMJCSJvrT0S6zGhWxDNzZMzS0AGy8SJBsyyhckBfm5nRE/
-         K959Kw6uN6SafOVgbBVZ+Oid0aF4pL3At4mcK4EYDh2N0ahdN4oxnvkMxXbT00+CocPB
-         /HjuM6QjdsPfWVRr2V+eaIs7pkDvmDgkgh7d/Ym1sn6HWGhCcBKB0DjUUSFo9YDCmmj1
-         +oTy23pA1nrzKlp5cOpJCHtIu479n28nKBoerhiWnRrAbNKK2lvX/4i92s6Aqo54Ahca
-         Dq/TtIbjm5Z2285umaAaxnlGBq18gt9npli7BW0C7g60kmtT/Dk9l9hoWtaFFjKxcuUL
-         fgvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689879801; x=1690484601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e4r0G41HIiGcQMHB4pEZiHr5BAGtm82arbVI+LgNPL4=;
-        b=ilsSh3tO5DZQM/OLadKX69wKg84kmj4+mJ1ao0KEO3GwPmY6us33mdVwUViJDhCjnv
-         tb9M2SxpFpnqAu+ZLN3cGHqNlGJKQUnIDOk2xJmlflc5eQE7HPPDHzFBbSAxwhMhQCMh
-         0HlE508QhCFBPG4DUsEwdugg635STc6DZ3lohk/5uIpmDHZZm0yCY1Us07wbMiaRoITW
-         DDgPcyU8lAISZ8L4LDfnsV97iRwXC404YbqhiHwahx496YJ1Bqus783oA1MkZkfPsKy1
-         Tiyr/UoZhpML115cI66hTwH403bJ+44v+FNd+EUUhZGVX8YuRHiMybw4OOGJRHlNy6nU
-         GJ3Q==
-X-Gm-Message-State: ABy/qLZRgpCHR1ouePxsPyr7W0jcGXEPwmKGVJjkt067TNwJZkr0oOfx
-	Gm+a0nTM+UtFouieW6/UcMwHl2vn7wCQYHigebXmCQ==
-X-Google-Smtp-Source: APBJJlHkLrHgRt203UkLUnU1mzzoW8tKVTFkDinsOgPBv+ELiQhdC9JCY+rvznAKn+8iCDefYEeSZshxr+gK8Y2fwW8=
-X-Received: by 2002:a0c:e306:0:b0:635:e528:5213 with SMTP id
- s6-20020a0ce306000000b00635e5285213mr3710654qvl.23.1689879801348; Thu, 20 Jul
- 2023 12:03:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B95F1BE60;
+	Thu, 20 Jul 2023 19:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689880180; x=1721416180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Wfb2inEMSDHDJojVV6mLPU3xJG55Y/mqso7z8ONCk4=;
+  b=g47cNl2PaTWTuXWL/kKANm6MbyFDDO8ICiOVdFUhyuWHMX4KEN3fnCVB
+   yyaphBW6s316wxkt6SynsJ4Q0YVAVCARN1BRogmjl0fva+fcktR/vbZ1h
+   y6EEOR6IVKCSSliK4ZOfq7fv/jy2wAK73c+VBjkm+zinoCsGWq+hgXvmN
+   k7lVBWDRFXGBPpH/9b+JykNiqQknRfcGXV739JX6bwrLgrKvzcX0JxSpd
+   uR4XjCI8Smyjeu68p47XgYpnHQbRIhYvjCHd6kMLNVbCUaNniHdhM4tqA
+   yFMf97nXLLvUrzR7m5Lm1xowjj2hkBbrhtscMEaUGOatmRcxNwI9QzvxR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="366875440"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="366875440"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 12:09:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="718543445"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="718543445"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jul 2023 12:09:14 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMZ1V-0006Pp-2O;
+	Thu, 20 Jul 2023 19:09:13 +0000
+Date: Fri, 21 Jul 2023 03:08:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	Sourabh Jain <sourabhjain@linux.ibm.com>,
+	Sachin Sant <sachinp@linux.ibm.com>,
+	Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH] kdump fix
+Message-ID: <202307210220.4FoNS76V-lkp@intel.com>
+References: <2ogfzwjumrd44kxv7njfpot6fhtkzpqu77qv3bspfixdmsxcwc@umt35y2hmslm>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
-In-Reply-To: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 20 Jul 2023 12:03:10 -0700
-Message-ID: <CAKwvOdmMUMpPOWoUZYQ1Mr=FmdVQYQ6XrDzPsEmuV=bSqDFvow@mail.gmail.com>
-Subject: Re: [PATCH v3] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
-To: Linke Li <lilinke99@foxmail.com>
-Cc: linux-mm@kvack.org, mike.kravetz@oracle.com, muchun.song@linux.dev, 
-	nathan@kernel.org, trix@redhat.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, dan.carpenter@linaro.org, 
-	Linke Li <lilinke99@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ogfzwjumrd44kxv7njfpot6fhtkzpqu77qv3bspfixdmsxcwc@umt35y2hmslm>
 
-On Thu, Jul 20, 2023 at 7:50=E2=80=AFAM Linke Li <lilinke99@foxmail.com> wr=
-ote:
->
-> From: Linke Li <lilinke99@gmail.com>
->
-> ```
->         vma_len =3D (loff_t)(vma->vm_end - vma->vm_start);
->         len =3D vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
->         /* check for overflow */
->         if (len < vma_len)
->                 return -EINVAL;
-> ```
->
-> There is a signed integer overflow in the code, which is undefined
-> behavior according to the C stacnard. Although this works, it's
+Hi Mahesh,
 
-typo: s/stacnard/standard/
+kernel test robot noticed the following build errors:
 
-I think the commit message should explicitly mention that the Linux
-kernel is built with -fno-strict-overflow, but IMO that kind of makes
-this patch moot.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc2 next-20230720]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> still a bit ugly and static checkers will complain.
->
-> Using macro "check_add_overflow" to do the overflow check can
-> effectively detect integer overflow and avoid any undefined behavior.
->
-> Signed-off-by: Linke Li <lilinke99@gmail.com>
-> ---
-> v3: fix checkpatch warning and better description.
->  fs/hugetlbfs/inode.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> index 7b17ccfa039d..326a8c0af5f6 100644
-> --- a/fs/hugetlbfs/inode.c
-> +++ b/fs/hugetlbfs/inode.c
-> @@ -154,10 +154,7 @@ static int hugetlbfs_file_mmap(struct file *file, st=
-ruct vm_area_struct *vma)
->         if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
->                 return -EINVAL;
->
-> -       vma_len =3D (loff_t)(vma->vm_end - vma->vm_start);
-> -       len =3D vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
-> -       /* check for overflow */
-> -       if (len < vma_len)
-> +       if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHI=
-FT, &len))
->                 return -EINVAL;
->
->         inode_lock(inode);
-> --
-> 2.25.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Mahesh-J-Salgaonkar/kdump-fix/20230720-021115
+base:   linus/master
+patch link:    https://lore.kernel.org/r/2ogfzwjumrd44kxv7njfpot6fhtkzpqu77qv3bspfixdmsxcwc%40umt35y2hmslm
+patch subject: [PATCH] kdump fix
+config: x86_64-randconfig-r021-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210220.4FoNS76V-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210220.4FoNS76V-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210220.4FoNS76V-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/kexec_file.c:1282:18: error: use of undeclared identifier 'ELF_CORE_EFLAGS'
+           ehdr->e_flags = ELF_CORE_EFLAGS;
+                           ^
+   1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/ELF_CORE_EFLAGS +1282 kernel/kexec_file.c
+
+  1236	
+  1237	int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+  1238				  void **addr, unsigned long *sz)
+  1239	{
+  1240		Elf64_Ehdr *ehdr;
+  1241		Elf64_Phdr *phdr;
+  1242		unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
+  1243		unsigned char *buf;
+  1244		unsigned int cpu, i;
+  1245		unsigned long long notes_addr;
+  1246		unsigned long mstart, mend;
+  1247	
+  1248		/* extra phdr for vmcoreinfo ELF note */
+  1249		nr_phdr = nr_cpus + 1;
+  1250		nr_phdr += mem->nr_ranges;
+  1251	
+  1252		/*
+  1253		 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
+  1254		 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
+  1255		 * I think this is required by tools like gdb. So same physical
+  1256		 * memory will be mapped in two ELF headers. One will contain kernel
+  1257		 * text virtual addresses and other will have __va(physical) addresses.
+  1258		 */
+  1259	
+  1260		nr_phdr++;
+  1261		elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
+  1262		elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+  1263	
+  1264		buf = vzalloc(elf_sz);
+  1265		if (!buf)
+  1266			return -ENOMEM;
+  1267	
+  1268		ehdr = (Elf64_Ehdr *)buf;
+  1269		phdr = (Elf64_Phdr *)(ehdr + 1);
+  1270		memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+  1271		ehdr->e_ident[EI_CLASS] = ELFCLASS64;
+  1272		ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
+  1273		ehdr->e_ident[EI_VERSION] = EV_CURRENT;
+  1274		ehdr->e_ident[EI_OSABI] = ELF_OSABI;
+  1275		memset(ehdr->e_ident + EI_PAD, 0, EI_NIDENT - EI_PAD);
+  1276		ehdr->e_type = ET_CORE;
+  1277		ehdr->e_machine = ELF_ARCH;
+  1278		ehdr->e_version = EV_CURRENT;
+  1279		ehdr->e_phoff = sizeof(Elf64_Ehdr);
+  1280		ehdr->e_ehsize = sizeof(Elf64_Ehdr);
+  1281		ehdr->e_phentsize = sizeof(Elf64_Phdr);
+> 1282		ehdr->e_flags = ELF_CORE_EFLAGS;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
