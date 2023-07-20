@@ -1,40 +1,34 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3CB171A9;
-	Thu, 20 Jul 2023 14:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689863317; x=1721399317;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=IjHk/bZnC7XkI6uaubavgD/rCBnDvBM9nDDALejCgy8=;
-  b=kPNkC+SiKC/7no9DKNDetp1FRr8hz+OW9xpyh1oQsGNuRFu/W75Sl70v
-   gZQFBmav+J1TXWIBvamnAQV2gPxA927iQTqaECHNxcJOt+G9X6c0u3cRV
-   K3L2T6kqq5pWyQcaKZyjB6tDphDo1zBEZADp0/6xARXWvRBIjy/ebcr4Z
-   sndCS0tagJJ2/hNLX4XFsMwheV+7hF/MNJ1xqHGWsgzvMK/ch/eOjfodN
-   TpMp3Pwh9oh/WwPqZi9+c4DJUJhnkr6V5EGABw+BGL0foOUkTmR4S13Qm
-   usfEZR0c4UjAY1r25IxR82t4+CELZwgRvRpfMXO+6IKyEnO0Ag1JQoa2M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="397632889"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="397632889"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:28:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="898300505"
-X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
-   d="scan'208";a="898300505"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jul 2023 07:28:31 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qMUdZ-00069d-0q;
-	Thu, 20 Jul 2023 14:28:22 +0000
-Date: Thu, 20 Jul 2023 22:27:13 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: error: unknown target CPU 'r5000'
-Message-ID: <202307202251.6Bm85qFP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA5018AF6;
+	Thu, 20 Jul 2023 15:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54165C433C7;
+	Thu, 20 Jul 2023 15:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689866199;
+	bh=cVe5IVCXrI2dTRFYJoEnl0cnQpuSELuvSLGYYEvbTf4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UKcPq9XCIwquJcL3mnGYr3evcDeveAHebalY3TcoJFLG8nvrsD8jh2Wlm9u1eGA7L
+	 UmAkmsfQPf55yk8+oH6CFiL52EN+h760zhead+InEDJRosFzUvX7/kBYtzcXiowwFp
+	 wMRJamotYNIceen6wFkHvKV1Z/FOXdJr2EcBZ+dmAceP2NXZgu/AfbOaRVaIxb2Tmg
+	 kaCqFfkcOvDaihJ1211vVCLMhqh+QVvsPRKSzKq+oTHUlFpjvG7TgZUoITqkJFNjit
+	 z/XTixs6VEeqTliLic5ED2ORon889x1b7MvtbmZ+GuvN/9e5xTdFEunHMW+fCDAx/1
+	 eyC3SCSoy3Qkg==
+Date: Thu, 20 Jul 2023 08:16:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, emma@anholt.net, mwen@igalia.com,
+	ndesaulniers@google.com, justinstitt@google.com, trix@redhat.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 2/2] drm/i915: Avoid -Wconstant-logical-operand in
+ nsecs_to_jiffies_timeout()
+Message-ID: <20230720151636.GA511202@dev-arch.thelio-3990X>
+References: <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-0-36ed8fc8faea@kernel.org>
+ <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-2-36ed8fc8faea@kernel.org>
+ <1a2aeca6-12f7-6316-c6e2-8474fd17255e@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,44 +37,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1a2aeca6-12f7-6316-c6e2-8474fd17255e@linux.intel.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Paul Cercueil <paul@crapouillou.net>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Thu, Jul 20, 2023 at 09:43:05AM +0100, Tvrtko Ursulin wrote:
+> 
+> On 18/07/2023 22:44, Nathan Chancellor wrote:
+> > A proposed update to clang's -Wconstant-logical-operand to warn when the
+> > left hand side is a constant shows the following instance in
+> > nsecs_to_jiffies_timeout() when NSEC_PER_SEC is not a multiple of HZ,
+> > such as CONFIG_HZ=300:
+> > 
+> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+> >      189 |         if (NSEC_PER_SEC % HZ &&
+> >          |             ~~~~~~~~~~~~~~~~~ ^
+> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: note: use '&' for a bitwise operation
+> >      189 |         if (NSEC_PER_SEC % HZ &&
+> >          |                               ^~
+> >          |                               &
+> >    drivers/gpu/drm/i915/gem/i915_gem_wait.c:189:24: note: remove constant to silence this warning
+> >    1 warning generated.
+> > 
+> > Turn this into an explicit comparison against zero to make the
+> > expression a boolean to make it clear this should be a logical check,
+> > not a bitwise one.
+> 
+> So -Wconstant-logical-operand only triggers when it is a
+> constant but not zero constant? Why does that make sense is not
+> a kludge to avoid too much noise?
 
-Hi Paul,
+Yes, the warning purposefully does not trigger when the constant is a 1
+or 0 (as those are usually indicative of an intentional logical
+operation):
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+https://github.com/llvm/llvm-project/blob/dfdfd306cfaf54fbc43e2d5eb36489dac3eb9976/clang/lib/Sema/SemaExpr.cpp#L13917-L13919
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   2 years, 10 months ago
-config: mips-randconfig-r006-20230720 (https://download.01.org/0day-ci/archive/20230720/202307202251.6Bm85qFP-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230720/202307202251.6Bm85qFP-lkp@intel.com/reproduce)
+In this case, it is 100, so I kind of understand why this might be
+ambiguous to the compiler.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307202251.6Bm85qFP-lkp@intel.com/
+> Personally, it all feels a bit over the top as a warning,
+> since code in both cases should optimise away. And we may end
 
-All errors (new ones prefixed by >>):
+I do not necessarily disagree, as you can see from the differential
+review that I linked in the message, but I also understand it is a fine
+line to tread when writing compiler warnings between wanting to catch
+as many potential problems as possible and having too much noise for
+developers to sift through. I think this is erring on the side of
+caution.
 
->> error: unknown target CPU 'r5000'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
->> error: unknown target CPU 'r5000'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1 shuffle=952842252
->> error: unknown target CPU 'r5000'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:283: scripts/mod/empty.o] Error 1 shuffle=952842252
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1202: prepare0] Error 2 shuffle=952842252
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:185: __sub-make] Error 2 shuffle=952842252
-   make: Target 'prepare' not remade because of errors.
+> up papering over it if it becomes a default.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diagtool tree tells me this warning is already on by default.
+
+> Then again this patch IMO does make the code more readable, so
+
+I think so too.
+
+> I am happy to take this one via our tree. Or either give ack to
+> bring it in via drm-misc-next:
+> 
+> Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+> 
+> Let me know which route works best.
+
+Thanks for the feedback! Either route is fine with me but if the v3d
+patch is going to go in via drm-misc-next, it seems like it would not be
+too much trouble to push this one with it.
+
+Cheers,
+Nathan
