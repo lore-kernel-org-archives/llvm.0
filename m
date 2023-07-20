@@ -1,103 +1,97 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E5818C02
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 15:18:00 +0000 (UTC)
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3fc075d9994so94705e9.0
-        for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 08:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689866279; x=1690471079;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eJ0NbXFA9avjbEQfqJk/EA+XEw1aR3Ivofcz45w0LCA=;
-        b=4zsWWvMQRf761GwK0wlm8TqRImyAgBmtAtAiwi/z6R4ikcmlrCgZeNryjNAsaY6aBw
-         2xPyQvkr8OVjDsAeSX0KbunAkAiDMK9gY0BP7VU9Kj907wT5RhuNe+d0CzQL9Vn61TMs
-         BRnYLDdR5ER4vQe8luRVGrvaF+FnjyOJdqIPE0EbxqCBCWz9LpIfd+EMC5sK2Nepmn/f
-         IIX9JWOG4xBkPdkWSk1XhYF/rkeVzXfSE5QTakqIKeQswJXucB8+v891O+2Na6jiOG6Z
-         Dy0vhEgm3Sb74sQmVsDJU+qxHPacRi0QJElpxSpLpmcxMZnJz8xk7rlaoMZG/W1xm88P
-         aL3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689866279; x=1690471079;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eJ0NbXFA9avjbEQfqJk/EA+XEw1aR3Ivofcz45w0LCA=;
-        b=lrmTOjTBDUWuW8IvqD71j3hKtr5F0Rqa3W4czzpDX1cius5rkG/l8Zw+DoZ6oc44+/
-         wSF04HwlF6UTJVVlHk92Rty1MtWEW5OScxmPc+HKfdCLwFZel4yKxzQjQSlVs7DMgFJH
-         xCoQX7mES6DH8vW05gnkK3z4P/VOEfnmfr10t4+nKPVPxPcciJjWB+yk/MwfZyYluvAu
-         gL6fQO6WZMah9ULzjXdVOsBpHt6t52cQ91rwXhz+e4TA9yiQ2nixA6QWiKIviNKTWdoV
-         d3ExkitGSDNajT93NMjkc1gXuRUydkVTfrSDcwgAUTAti0TKx2Xe800FlhjJC5bsrdNG
-         NsMA==
-X-Gm-Message-State: ABy/qLYJz1MYalMNxDDc++4uVIozi9MkX2gGVgBFvOCSLcdXPJxG8MRD
-	7Sfw6w3mxQfvRW6887351hb05lHBhDqPTPzhS9HWuA==
-X-Google-Smtp-Source: APBJJlGWkMQZnMrS3KhKyX7lmKsFZcAyablJRMBmdfqLiT6WAZCJllQjO8G+cBO4WMYeMLZ1B8KzEuZd7hXfb8Lza4s=
-X-Received: by 2002:a05:600c:4745:b0:3fd:e15:41e3 with SMTP id
- w5-20020a05600c474500b003fd0e1541e3mr120394wmo.2.1689866279099; Thu, 20 Jul
- 2023 08:17:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4DD18B03
+	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 15:27:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1689866824;
+	bh=Qcz15XReY65YdihFG7Jmx5oPpTHAUuD8Yllv8YH9M0o=;
+	h=From:To:Cc:Subject:Date;
+	b=mMrOu+nY9lIn0u+mh/bxfqV12qjqGvcWicHWRDsjBfkAxnhUOWyeezlXg0ai99t4M
+	 kJ4rN0/wB2mgMOvaEhb7qUGBWvx8MhTmFmPDP2MqadpZ2kPPCzld0qGnxZApHc/6cz
+	 pMPlvtOyeWlTXBa4B81RQJ9EfnBaM241xULS2LYs=
+Received: from linkpc.nju.edu.cn ([58.213.8.104])
+	by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+	id C771E6C3; Thu, 20 Jul 2023 22:49:55 +0800
+X-QQ-mid: xmsmtpt1689864595t13z8h5u9
+Message-ID: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
+X-QQ-XMAILINFO: OZZSS56D9fAjSUXlQpXDAbkBcZjcNvgtboI9mD4CSVX2bJs8NHANQ2x1u1ELe7
+	 WK13yV3eDNEGCOyR8j4mAsv9yzxVXJckkYuIPJ08gaDljfv6hWZiKCqPWDDqvatuKB923+558zAW
+	 ebp2b5JUpQsOcbruVi9yPywy+RbH6kbZQX+Z3Xta8hfSCl0C3vd1Xsz+DJIVulP2UlHZ8QbCeITy
+	 e/1JQoE7KwRIZngya5mTfliq8Lha98Yokh22td0b4fVt9Sivf6z3xfxCQbutmPAJ+KiXimLkgQxz
+	 R5huVexGTmCKz4kSIs1L5cuOxiYfJlpalwaw8dyL7kpfkMG5SgUXdTKec69dEwXG39TJyhsPtzjf
+	 co4X2hocYHOm7/Wyls27VgiWWp78e/lVIoccb12Q9+xR/PkhwaqXc0G6N06Cs28eNmIJmwTLtXhG
+	 +d5usc+fisGdhWnu/c0lcIRolkrzVYMAJCZN6RDrXnxpPlqRw7hyfNt2ftWSY3S/K1Yn1sAUyZV0
+	 r2P33px2RvOpEmoX3PZOd61W/AxFHNUk046MtIBt+1VwxrcnyFJhJ4FXWCY4+4eoC0dv1snN+ZCc
+	 g5XQB21HXxGaSCnAifYrMjDyY0sKzci/v0qZRgOGRFhbciI7T4KT+cufSysDg4gnLe49M3ybeN2v
+	 3LCvYmgjCDarE1mNDl4+kh3QPYfrVGJxi5xn2fYfe4CSaHOQg2y8W40t4mTVD+Qae9FC25gYysyQ
+	 FUfw2xnIHpdrHqjdjbfEAfnY0M38tHiU1LJ/HSsqDOT0W5dHAoevnbqUDqkCN/gIp3T94ckZ87wc
+	 whDh2UQM9hUmHNViQUtqMrej+SXeUqOAnidi8kYkX8lJNgxRl1q4UgckBo/wUEkxgoU173THyEa6
+	 dCY/CjCVB0l72tXVQhEhxGNfJHwwRwo3SRR1vKjEn38tloekLkxKflBhfjymJEZA82KyB8qDbVyb
+	 5Styfq46VPidF5EUBC8WJh14BmtZlx+HUHB6DGdRVY90HUnEjnhv6KIM+W9js3rj0HyIKQBKs=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Linke Li <lilinke99@foxmail.com>
+To: linux-mm@kvack.org
+Cc: mike.kravetz@oracle.com,
+	muchun.song@linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	dan.carpenter@linaro.org,
+	Linke Li <lilinke99@gmail.com>
+Subject: [PATCH v3] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
+Date: Thu, 20 Jul 2023 22:49:52 +0800
+X-OQ-MSGID: <20230720144952.127328-1-lilinke99@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0000000000006a74dd05e9931449@google.com> <000000000000073a4a05ed620676@google.com>
- <Y3Jb1Wcs/mQlZP32@mit.edu> <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com> <Y3KAfyQOf6GvEo/x@mit.edu>
-In-Reply-To: <Y3KAfyQOf6GvEo/x@mit.edu>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Thu, 20 Jul 2023 17:17:46 +0200
-Message-ID: <CACT4Y+Z83JvP9ifU7Bv8=KO8oZVYEoYA2K+Jwk7Vusoij1M8_w@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Waiman Long <longman@redhat.com>, 
-	syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, 14 Nov 2022 at 18:53, Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Mon, Nov 14, 2022 at 11:21:33AM -0500, Waiman Long wrote:
-> >
-> > lockdep_set_subclass() should be translated into a call to
-> > lockdep_init_map_type():
-> >
-> > #define lockdep_set_subclass(lock, sub)                                 \
-> >         lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key,
-> > sub,\
-> > (lock)->dep_map.wait_type_inner,          \
-> > (lock)->dep_map.wait_type_outer,          \
-> >                               (lock)->dep_map.lock_type)
-> >
-> > All memory access should be within the bound of the given "&ei->i_data_sem".
-> > Also lockdep_init_map_type() is not in the stack trace. So it is not a
-> > problem within this lockdep_init_map_type() function. So is it possible that
-> > the given inode pointer is invalid?
->
-> Well, the inode pointer would be coming from iget().  And since this
-> is coming from ext4 mount operation, we would be getting a fresh inode
-> that should be freshly allocated.  So the possibilities which comes to
-> mind is some kind of use-after-free (probbly in f2fs) that was
-> smashing the inode itself, such that ei->i_data_sem was pointing off
-> into la-la-land, or in the inode cache's internal data srtuctures.
->
-> The reason why I would assume it would be in f2fs is I *assume*
-> syzkaller would have pruned down the test case enough to remove the
-> messing around with mounting the invalid f2fs file system.  But the
-> other mystery here is why didn't KASAN report the use-after-free (if
-> that it is what it was) in the thousands of f2fs mount and
-> unmount operations before it finally triggered?
->
-> Anyway, I plan to ignore this Syzkaller unless report Syzkaller (or
-> someone else) can come up with a more minimal/reliable reproducer.  (I
-> mean, we could open a bug, but with kind of reproducer, it would get
-> prioritized P3 or P4 and ignored for years until it finally got closed
-> in a buganizer bankruptcy, so I figured I would just skip a few steps.  :-)
+From: Linke Li <lilinke99@gmail.com>
 
+```
+	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
+	/* check for overflow */
+	if (len < vma_len)
+		return -EINVAL;
+```
 
-Let's set the subsystem then, so it's in the f2fs bucket rather than in ext4:
+There is a signed integer overflow in the code, which is undefined
+behavior according to the C stacnard. Although this works, it's
+still a bit ugly and static checkers will complain.
 
-#syz set subsystems: f2fs
+Using macro "check_add_overflow" to do the overflow check can
+effectively detect integer overflow and avoid any undefined behavior.
+
+Signed-off-by: Linke Li <lilinke99@gmail.com>
+---
+v3: fix checkpatch warning and better description.
+ fs/hugetlbfs/inode.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 7b17ccfa039d..326a8c0af5f6 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -154,10 +154,7 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+ 	if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
+ 		return -EINVAL;
+ 
+-	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+-	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
+-	/* check for overflow */
+-	if (len < vma_len)
++	if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
+ 		return -EINVAL;
+ 
+ 	inode_lock(inode);
+-- 
+2.25.1
+
