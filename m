@@ -1,53 +1,40 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73D4182C0
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 14:13:40 +0000 (UTC)
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b734aea34aso12540021fa.0
-        for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 07:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689862418; x=1690467218;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERQ0Qu3T6Bz3k+ywQiOUif0b4ZsQ7lChxmwFwBw8hTs=;
-        b=HSBJvB5Cd67p4JvLMey/aDWMBCFn6p1aofMqSm7puXk2Ghe97RK1IUwyT6UeEcagmt
-         B8vCUMxGdt03qsSm2JDLEOeYj6H9FosR8gPhmQ6SoMRYcvbEpSs+O/vOG8h0AQkFlAaz
-         R4cDr1oN0ubZLBRmJWWgGUlzR4z932clQBBY3uJ9ywJIW8WCU0korUD/d1k0Ml8dzzTc
-         r6q4hd4x/meKCqpCDr6JrjKIo+NozsTwnXXaI14miR1xwv9klqL99XDDcY70E6oqsbO4
-         pIv5z8jI58a6jpZkME/nitDks7wnthn9AsUerus6IeW2wwvLxVbuqUqDxOhnpkAU4JZw
-         IrIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689862418; x=1690467218;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ERQ0Qu3T6Bz3k+ywQiOUif0b4ZsQ7lChxmwFwBw8hTs=;
-        b=bpIZiQpl98b8h58uGoYZrfx4TBJZSciFQJWTS7voNFwwdAuFb06MCdPHlbj9NTUNHu
-         YWP6HEs/gCQDZ2rBsYtsq23jA2eSCYdwVQtZKFRFnVRgdbHCastg8U2x2HswSWmAp8UQ
-         ZcYpHixiY7nQXZeHItINcnhcBrkfHOyCXMoDzkgI0PEhReEVw1O0uDq/FWVBoDmStbPu
-         47g/BxgtxUrAOQ0J7+gvN4Dx8XdG52JVNKGfIM3Q9O+bFVFe2iLbjZwplquExY1tcRde
-         tRZGYqyHhcxMQ9BRZpUkdYWlHWWnnazOL5GgFRjjJ98r8vb7mJ3GOAvkZCfzVvRk6RuM
-         oizQ==
-X-Gm-Message-State: ABy/qLbclhIzTL93VBkDhvn/tPIZNlukgrOjnwWXAHgkfS/ZFWX0TKo+
-	A7xVeoxjUWu8y2Ld35dnJt39dA==
-X-Google-Smtp-Source: APBJJlHBphGKstGk7EBxhAe0LG1t1rqwF3LxHgC2TQIHknyOF/bOOSmH41DtrjQ6hKYblqDd4QJoEw==
-X-Received: by 2002:a2e:9695:0:b0:2b6:dc55:c3c7 with SMTP id q21-20020a2e9695000000b002b6dc55c3c7mr2066251lji.20.1689862418392;
-        Thu, 20 Jul 2023 07:13:38 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n15-20020a1c720f000000b003fc0505be19sm1270545wmc.37.2023.07.20.07.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 07:13:35 -0700 (PDT)
-Date: Thu, 20 Jul 2023 17:13:33 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Linke Li <lilinke99@foxmail.com>
-Cc: linux-mm@kvack.org, mike.kravetz@oracle.com, muchun.song@linux.dev,
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Linke Li <lilinke99@gmail.com>
-Subject: Re: [PATCH v2] hugetlbfs: Fix integer overflow check in
- hugetlbfs_file_mmap()
-Message-ID: <5630f9d8-660f-46ec-8e44-91b00e301bb2@kadam.mountain>
-References: <tencent_710619B2865DE8AC059D51A027D919CBD00A@qq.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3CB171A9;
+	Thu, 20 Jul 2023 14:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689863317; x=1721399317;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=IjHk/bZnC7XkI6uaubavgD/rCBnDvBM9nDDALejCgy8=;
+  b=kPNkC+SiKC/7no9DKNDetp1FRr8hz+OW9xpyh1oQsGNuRFu/W75Sl70v
+   gZQFBmav+J1TXWIBvamnAQV2gPxA927iQTqaECHNxcJOt+G9X6c0u3cRV
+   K3L2T6kqq5pWyQcaKZyjB6tDphDo1zBEZADp0/6xARXWvRBIjy/ebcr4Z
+   sndCS0tagJJ2/hNLX4XFsMwheV+7hF/MNJ1xqHGWsgzvMK/ch/eOjfodN
+   TpMp3Pwh9oh/WwPqZi9+c4DJUJhnkr6V5EGABw+BGL0foOUkTmR4S13Qm
+   usfEZR0c4UjAY1r25IxR82t4+CELZwgRvRpfMXO+6IKyEnO0Ag1JQoa2M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="397632889"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="397632889"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:28:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="898300505"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="898300505"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 20 Jul 2023 07:28:31 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMUdZ-00069d-0q;
+	Thu, 20 Jul 2023 14:28:22 +0000
+Date: Thu, 20 Jul 2023 22:27:13 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: error: unknown target CPU 'r5000'
+Message-ID: <202307202251.6Bm85qFP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,42 +43,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_710619B2865DE8AC059D51A027D919CBD00A@qq.com>
 
-On Thu, Jul 20, 2023 at 09:49:39PM +0800, Linke Li wrote:
-> From: Linke Li <lilinke99@gmail.com>
-> 
-> ```
-> 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
-> 	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
-> 	/* check for overflow */
-> 	if (len < vma_len)
-> 		return -EINVAL;
-> ```
-> 
-> There is a signed integer overflow in the code, which is undefined
-> behavior according to the C stacnard. Although kernel disables some
-> optimizations by using the "-fno-strict-overflow" option, there is
-> still a risk.
+CC: linux-kernel@vger.kernel.org
+TO: Paul Cercueil <paul@crapouillou.net>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-It's not a risk.  Better to say, "although this works, it's still a bit
-ugly and static checkers will complain".
+Hi Paul,
 
-I wouldn't have commented on the commit message except that this patch
-checkpatch warning so you're going to have to redo it anyway.  Run
-scripts/checkpatch.pl on your patches before sending them.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-WARNING: please, no spaces at the start of a line
-#49: FILE: fs/hugetlbfs/inode.c:158:
-+    if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))$
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   2 years, 10 months ago
+config: mips-randconfig-r006-20230720 (https://download.01.org/0day-ci/archive/20230720/202307202251.6Bm85qFP-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230720/202307202251.6Bm85qFP-lkp@intel.com/reproduce)
 
-WARNING: suspect code indent for conditional statements (4, 16)
-#49: FILE: fs/hugetlbfs/inode.c:158:
-+    if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
-                return -EINVAL;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307202251.6Bm85qFP-lkp@intel.com/
 
-total: 0 errors, 2 warnings, 10 lines checked
+All errors (new ones prefixed by >>):
 
-regards,
-dan carpenter
+>> error: unknown target CPU 'r5000'
+   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+>> error: unknown target CPU 'r5000'
+   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1 shuffle=952842252
+>> error: unknown target CPU 'r5000'
+   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+   make[2]: *** [scripts/Makefile.build:283: scripts/mod/empty.o] Error 1 shuffle=952842252
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1202: prepare0] Error 2 shuffle=952842252
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:185: __sub-make] Error 2 shuffle=952842252
+   make: Target 'prepare' not remade because of errors.
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
