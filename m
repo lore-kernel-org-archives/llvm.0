@@ -1,35 +1,35 @@
-Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4DD18B03
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 15:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F3F18B03
+	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 15:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1689866824;
-	bh=Qcz15XReY65YdihFG7Jmx5oPpTHAUuD8Yllv8YH9M0o=;
+	s=s201512; t=1689868737;
+	bh=pXW60cWQc6IVLFxjVvj7YpZW/1awm7nI8f7WBZ++PB0=;
 	h=From:To:Cc:Subject:Date;
-	b=mMrOu+nY9lIn0u+mh/bxfqV12qjqGvcWicHWRDsjBfkAxnhUOWyeezlXg0ai99t4M
-	 kJ4rN0/wB2mgMOvaEhb7qUGBWvx8MhTmFmPDP2MqadpZ2kPPCzld0qGnxZApHc/6cz
-	 pMPlvtOyeWlTXBa4B81RQJ9EfnBaM241xULS2LYs=
+	b=i26o7GVBJwmMJ+Y2UgHrVL0dYLp8vOOAu+VIoJyazowe5NCzFiv5SgpQKAfB6KPaI
+	 5hOcOgxpaqcVBY3feF11UcllT8uwOJzEW0I2oXuI1mZ5gkkwYdCvjVs4df4BHlYZo9
+	 tLuUBL4/mH3Fx7wRHTW/1eCqUrIwyBAQgoTm47ec=
 Received: from linkpc.nju.edu.cn ([58.213.8.104])
 	by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-	id C771E6C3; Thu, 20 Jul 2023 22:49:55 +0800
-X-QQ-mid: xmsmtpt1689864595t13z8h5u9
-Message-ID: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
-X-QQ-XMAILINFO: OZZSS56D9fAjSUXlQpXDAbkBcZjcNvgtboI9mD4CSVX2bJs8NHANQ2x1u1ELe7
-	 WK13yV3eDNEGCOyR8j4mAsv9yzxVXJckkYuIPJ08gaDljfv6hWZiKCqPWDDqvatuKB923+558zAW
-	 ebp2b5JUpQsOcbruVi9yPywy+RbH6kbZQX+Z3Xta8hfSCl0C3vd1Xsz+DJIVulP2UlHZ8QbCeITy
-	 e/1JQoE7KwRIZngya5mTfliq8Lha98Yokh22td0b4fVt9Sivf6z3xfxCQbutmPAJ+KiXimLkgQxz
-	 R5huVexGTmCKz4kSIs1L5cuOxiYfJlpalwaw8dyL7kpfkMG5SgUXdTKec69dEwXG39TJyhsPtzjf
-	 co4X2hocYHOm7/Wyls27VgiWWp78e/lVIoccb12Q9+xR/PkhwaqXc0G6N06Cs28eNmIJmwTLtXhG
-	 +d5usc+fisGdhWnu/c0lcIRolkrzVYMAJCZN6RDrXnxpPlqRw7hyfNt2ftWSY3S/K1Yn1sAUyZV0
-	 r2P33px2RvOpEmoX3PZOd61W/AxFHNUk046MtIBt+1VwxrcnyFJhJ4FXWCY4+4eoC0dv1snN+ZCc
-	 g5XQB21HXxGaSCnAifYrMjDyY0sKzci/v0qZRgOGRFhbciI7T4KT+cufSysDg4gnLe49M3ybeN2v
-	 3LCvYmgjCDarE1mNDl4+kh3QPYfrVGJxi5xn2fYfe4CSaHOQg2y8W40t4mTVD+Qae9FC25gYysyQ
-	 FUfw2xnIHpdrHqjdjbfEAfnY0M38tHiU1LJ/HSsqDOT0W5dHAoevnbqUDqkCN/gIp3T94ckZ87wc
-	 whDh2UQM9hUmHNViQUtqMrej+SXeUqOAnidi8kYkX8lJNgxRl1q4UgckBo/wUEkxgoU173THyEa6
-	 dCY/CjCVB0l72tXVQhEhxGNfJHwwRwo3SRR1vKjEn38tloekLkxKflBhfjymJEZA82KyB8qDbVyb
-	 5Styfq46VPidF5EUBC8WJh14BmtZlx+HUHB6DGdRVY90HUnEjnhv6KIM+W9js3rj0HyIKQBKs=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+	id C68A9691; Thu, 20 Jul 2023 21:49:40 +0800
+X-QQ-mid: xmsmtpt1689860980tn9rzsk4s
+Message-ID: <tencent_710619B2865DE8AC059D51A027D919CBD00A@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9MiK9Mh21RRx51oFb4x9WBhNn4UDTn639pc4tGVsSTqKNyRa4Xg
+	 Q1QUnzgAW8GPIrMPjjUnEe85hK160jUTPb9nABOIEBtJlWLgTXCc/uXRqv1+odsLuOiU26CKKIDL
+	 8JPGv2g1U3n5cZGESqlvHOzHxNsvfeCQmglFwDeaNLCOpnHiAx1AUhagSwsx52l4+hqTxbMLXQP7
+	 DSnENmPGvdKp+TCg0BpuxajnNrX79wcQlEDZctavG68QP+XZcZI8x7q4jHOImM26qsO5uLThgYS8
+	 PkphtqL5jGTUm9b9ck5ONzAQk0KgWeR5dZIVU3WDrgUnjetA2gahOCYBatd0QSt0942X8bKvVb3Y
+	 Y2jr/SctdX8utM+y85pSWJVvlAYmigaEsk6wKZVJ32WwfSK9qporgqi6owFrbnwICKI6OW0yyxJz
+	 DWBKfafR0KcGC5KZNlwyom+0lzPt57gaj+BnAWUBIrOxxWkzazmkD4wJdZram93HpiHx51+ohkZS
+	 wpdFfD7QJBvLA4sKsGgVXa7Q2TofJFNPKlGTCfUkEBtO1NUtT/D8tT6DRJG/rOXqMP9vf8nFwYyG
+	 /a8pzBubKaFlHfLfEY7eD/6478UY1cjGSr5poT9g4ys3KsCMQs0OJaeIzD1JevoUacClx9BJOQnp
+	 78XD6o4sf/ZRS9aB9Jdbe9UdVWbim+maRjo9KQScq7PtD1wT8Ub6J+HHIxWtoztUEtJSSRjQiYfS
+	 gBuyTCGL9AA3xZPdgJBzpiLTGEwviQY0xTe7IdAQoiJijdm5NWGlZl5gS57uIx1T1pNddlta2Tp2
+	 +9u/S8oYkmxxMWNOS98vmfEg1l6IS7UDHyMxv+UsKiEXO7Fo87xrEVBXFA4nQyJnK+hYMaQBwcjT
+	 bfhzfJ9WJnqnBN0fEjgywojTlrLwfWl/Oe82aXLwhER0asFz7ysGilw0mJTIbxvEK7gEUBLjfz2u
+	 EW26SrvrCflB/+eOvJg2RNnhsA58aeSQcpIBpsra7o2c1jsOOuqSRdhGSpCPGw
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
 From: Linke Li <lilinke99@foxmail.com>
 To: linux-mm@kvack.org
 Cc: mike.kravetz@oracle.com,
@@ -41,9 +41,9 @@ Cc: mike.kravetz@oracle.com,
 	llvm@lists.linux.dev,
 	dan.carpenter@linaro.org,
 	Linke Li <lilinke99@gmail.com>
-Subject: [PATCH v3] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
-Date: Thu, 20 Jul 2023 22:49:52 +0800
-X-OQ-MSGID: <20230720144952.127328-1-lilinke99@foxmail.com>
+Subject: [PATCH v2] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
+Date: Thu, 20 Jul 2023 21:49:39 +0800
+X-OQ-MSGID: <20230720134939.121783-1-lilinke99@foxmail.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -64,31 +64,30 @@ From: Linke Li <lilinke99@gmail.com>
 ```
 
 There is a signed integer overflow in the code, which is undefined
-behavior according to the C stacnard. Although this works, it's
-still a bit ugly and static checkers will complain.
+behavior according to the C stacnard. Although kernel disables some
+optimizations by using the "-fno-strict-overflow" option, there is
+still a risk.
 
 Using macro "check_add_overflow" to do the overflow check can
 effectively detect integer overflow and avoid any undefined behavior.
 
 Signed-off-by: Linke Li <lilinke99@gmail.com>
 ---
-v3: fix checkpatch warning and better description.
- fs/hugetlbfs/inode.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ fs/hugetlbfs/inode.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 7b17ccfa039d..326a8c0af5f6 100644
+index 7b17ccfa039d..60f3010b0f71 100644
 --- a/fs/hugetlbfs/inode.c
 +++ b/fs/hugetlbfs/inode.c
-@@ -154,10 +154,7 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
- 	if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
+@@ -155,9 +155,7 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
  		return -EINVAL;
  
--	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
+ 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
 -	len = vma_len + ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
 -	/* check for overflow */
 -	if (len < vma_len)
-+	if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
++    if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
  		return -EINVAL;
  
  	inode_lock(inode);
