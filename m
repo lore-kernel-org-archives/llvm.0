@@ -1,124 +1,93 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C58719BD8
-	for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 19:21:45 +0000 (UTC)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-345db6c12b4so5944795ab.0
-        for <llvm@lists.linux.dev>; Thu, 20 Jul 2023 12:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689880904; x=1690485704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2FZ6SubRIeZ4k0ML1ha4iOHMnlI2c5uKQpXEuDc5R/0=;
-        b=A6SkHKCBcEZmDKQnyiNHkX1gL/BwiwSpSj3GTHbNNeZcqEc8ndS1Q3v7BSE8XPV10i
-         ZmtBYGPk/drb+NB9U66L1zbgHWNPPaTQPQgZ26Ep/cBYAixKQckkP3zA9cL7u9zSIn7V
-         IJibuObOY34z01S0N3p/Z2xVvv43KhdhVzXl/C5aGmJvxvwnEUB3S5ehIhoxsSkC+k8K
-         lhuZnWGHavjNrxUJ3dCaobjEG3tAsnGOCTDd5coUVzoTCnYuLe3XYAD36e0CMCpoW6o6
-         VOWUOQMBZubjrZmesYyeOPDI1gUDuKopru18nKMK09Tltcszudq8Hti49Bjjh0IcnCbB
-         FJDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689880904; x=1690485704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2FZ6SubRIeZ4k0ML1ha4iOHMnlI2c5uKQpXEuDc5R/0=;
-        b=h5C6jNjG+7dPjtHuTuIKOzUJ1OQnSsNMo8zkwCx7Slem0YGK4Nj1ZgeVkuyHA08tJF
-         zelyzjuCPRBenMgOon/d9288Y9sLoSPnuduvJBiKHWYm91blTcwPRs9b+Am8omZYyrMs
-         aA5zuu2kg8CvAc+ha63RxJA6yRtn9PFeAKoTtNnSb3jeLVNU8QHqo6v9opdPWYEw/ZV6
-         HbZLmTFbQImy9A4R87yaDI2sGP5ILnZM98D43lYMhFPYBbpvBKTbMpUYWf+HKsRiKg2W
-         gCiAJs341i74jjMuniPS1q3M6xx5Upy+qcnKrxttPoV4ppePSIHMjKm3ldri8/F3aixr
-         Fk+Q==
-X-Gm-Message-State: ABy/qLaQTHzOm9MidOgjnj/uS7+O3SAGUscFoMoq8FKVLubAvVF9EKt6
-	bnNEg0lqj5NN7IGklinQQ02WOuonKdErX4HfdWyklw==
-X-Google-Smtp-Source: APBJJlGxEtg0om++OPbPp6XITjhWUGx5iJ2sJL4w7NeCt+/U0OI2O5WFKshSFtO9z9SGejOHXLmG0i0Shy9Ny97+9S0=
-X-Received: by 2002:a05:6e02:12c7:b0:348:7d73:20a8 with SMTP id
- i7-20020a056e0212c700b003487d7320a8mr11306545ilm.1.1689880904399; Thu, 20 Jul
- 2023 12:21:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23191BE83;
+	Thu, 20 Jul 2023 20:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689885026; x=1721421026;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vfGuscGEOBWYJUQLL9IYExuvoGe957aALRw/Yk6UOXc=;
+  b=CnSHdBFtxq3n5fS8+GbvsvfSLt305uv936TpQY3+7HYJhNe/ShAEFmxL
+   fMyRK+fpnoCq1/8O9vn3RlyjBl0fn7GfQnoXQzjs1oyaIfK5gAL1zEp11
+   T8m1eXIRRhh1FMzwjcFUtYp7hoyWU/EKK9McADJG3yriTuNAeT0fjZfPy
+   UNKrYd9jEfTT5QJ5c2nK6OF2sJivyGHTP3QK/+0WOWOr6DrgVY7WEZSql
+   kbtuOfVlfJxgs7kGUJ56qtmh5fEU1iMnkG4Ig/f5CUr0r7CUUtn/D0LQl
+   GV54XZuLCHKcKn0tN7LjXLoMCZxTzu3ExIn5Eje+mHxQKaq5R/OMyNwBX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="356841627"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="356841627"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 13:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="789958419"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="789958419"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Jul 2023 13:30:24 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMaI3-0006Tt-3C;
+	Thu, 20 Jul 2023 20:30:23 +0000
+Date: Fri, 21 Jul 2023 04:30:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/missed_stats_3 1/7] kernel/bpf/trampoline.c:824:14:
+ error: use of undeclared identifier 'BPF_PROG_NO_START_TIME'
+Message-ID: <202307210424.2vkHfKo4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202307120814.vWPY6URk-lkp@intel.com>
-In-Reply-To: <202307120814.vWPY6URk-lkp@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 20 Jul 2023 21:21:33 +0200
-Message-ID: <CACRpkdbYPAiOa4QU+PUxVjcOtkBT2O7fogh51VvSEbFPutH7ng@mail.gmail.com>
-Subject: Re: drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused
- variable '_groups'
-To: kernel test robot <lkp@intel.com>, Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
-	Bjorn Andersson <andersson@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Nitheesh Sekar <quic_nsekar@quicinc.com>, 
-	Varadarajan Narayanan <quic_varada@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Srirachan, Bjorn,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/missed_stats_3
+head:   d40e4165c066c7a131012bf1d87f27517c79e3f1
+commit: 3d25b22ba2534fedca5325362b88adab8ac6c651 [1/7] bpf: Move update_prog_stats to syscall object
+config: arm-randconfig-r033-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210424.2vkHfKo4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210424.2vkHfKo4-lkp@intel.com/reproduce)
 
-is this warning valid or something I should ignore?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210424.2vkHfKo4-lkp@intel.com/
 
-Yours,
-Linus Walleij
+All errors (new ones prefixed by >>):
 
-On Wed, Jul 12, 2023 at 2:32=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Sricharan,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   3f01e9fed8454dcd89727016c3e5b2fbb8f8e50c
-> commit: 725d1c8916583f9c09e5f05e5a55dd47fdca61c1 pinctrl: qcom: Add IPQ50=
-18 pinctrl driver
-> date:   5 weeks ago
-> config: arm64-randconfig-r015-20230712 (https://download.01.org/0day-ci/a=
-rchive/20230712/202307120814.vWPY6URk-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git =
-ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce: (https://download.01.org/0day-ci/archive/20230712/202307120814=
-.vWPY6URk-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307120814.vWPY6URk-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused variabl=
-e '_groups' [-Wunused-const-variable]
->    static const char * const _groups[] =3D {
->                              ^
->    1 warning generated.
->
->
-> vim +/_groups +244 drivers/pinctrl/qcom/pinctrl-ipq5018.c
->
->    243
->  > 244  static const char * const _groups[] =3D {
->    245          "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gp=
-io6", "gpio7",
->    246          "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13",=
- "gpio14",
->    247          "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20=
-", "gpio21",
->    248          "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27=
-", "gpio28",
->    249          "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34=
-", "gpio35",
->    250          "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41=
-", "gpio42",
->    251          "gpio43", "gpio44", "gpio45", "gpio46",
->    252  };
->    253
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+>> kernel/bpf/trampoline.c:824:14: error: use of undeclared identifier 'BPF_PROG_NO_START_TIME'
+     824 |         u64 start = BPF_PROG_NO_START_TIME;
+         |                     ^
+   kernel/bpf/trampoline.c:829:12: error: use of undeclared identifier 'BPF_PROG_NO_START_TIME'
+     829 |                         start = BPF_PROG_NO_START_TIME;
+         |                                 ^
+   kernel/bpf/trampoline.c:886:9: error: use of undeclared identifier 'BPF_PROG_NO_START_TIME'
+     886 |         return BPF_PROG_NO_START_TIME;
+         |                ^
+   3 errors generated.
+
+
+vim +/BPF_PROG_NO_START_TIME +824 kernel/bpf/trampoline.c
+
+   821	
+   822	static __always_inline u64 notrace bpf_prog_start_time(void)
+   823	{
+ > 824		u64 start = BPF_PROG_NO_START_TIME;
+   825	
+   826		if (static_branch_unlikely(&bpf_stats_enabled_key)) {
+   827			start = sched_clock();
+   828			if (unlikely(!start))
+   829				start = BPF_PROG_NO_START_TIME;
+   830		}
+   831		return start;
+   832	}
+   833	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
