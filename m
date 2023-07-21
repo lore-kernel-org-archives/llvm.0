@@ -1,160 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE15127F3F
-	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 15:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689954680;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tZl7Q8/de1Iyje6vic5Qq3Hvp19YjAygoQnFGwBYMoU=;
-	b=eyVYOqce7LyUuo0QGvG5GSZQgodE83AaPsCs1Wa1bRpncEHabnUCqTzEe8Y5oAIt8tCQHk
-	pnRN6QCLM4oRoDy5wZC9xzaLEzr3ZL1PoVlEG3OH618Y4djs+o+9CVPbXounzZrHyG6JfB
-	1oGUVsSqjXDZRPMdclxVPQ4JAjPEskk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-ortdM7ccOwOJwu78GoDOTA-1; Fri, 21 Jul 2023 11:51:19 -0400
-X-MC-Unique: ortdM7ccOwOJwu78GoDOTA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC5E5800C7F
-	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 15:51:18 +0000 (UTC)
-Received: from [172.64.4.102] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B622AC585A0;
-	Fri, 21 Jul 2023 15:51:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 22 of 328): Test report for master
- (6.5.0-rc2, mainline.kernel.org-clang, f7e3a1ba)
-Date: Fri, 21 Jul 2023 15:51:18 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925621ED25;
+	Fri, 21 Jul 2023 15:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689954831; x=1721490831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZyXtUS7bskPkQepR8jD+E0svb+G4NCuyFbBEPrx/Ac0=;
+  b=XY3Z1ON9BE4jgi5VFURvuw5jn39mJI8Z9yyUtET44a9IUW7yN6hiyrKX
+   cr3mdTJm4tHOmGlM03K0rToo9A0v5Jw6iKFY71IRJT2md1t1qbRZXYXPg
+   DfVmnNzTwcVpyLFVOIE0HV5Mem2hHVg82CywpL+O/FTc1nOViOtVHsHy3
+   Ee3Mh9/PNiM2WtZj7e6otMq30G4Fgc0bD0/17nksgZFGMX5BTSfYHj0F2
+   SLWPKiFBDBhOqAMgICWiIdHXq8YAfdJfYfXchgupF6on5PsYX6Ynj4+Ep
+   2PzpBVb1jWUtScSvuwMw1pTe9VjAzEuO8diGA0WXjEDOsXZ8EaMr3fhuj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="364515606"
+X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
+   d="scan'208";a="364515606"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 08:53:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="728147720"
+X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
+   d="scan'208";a="728147720"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jul 2023 08:53:39 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMsRZ-0007Px-2Z;
+	Fri, 21 Jul 2023 15:53:29 +0000
+Date: Fri, 21 Jul 2023 23:52:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Herve Codina <herve.codina@bootlin.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v1 1/1] minmax: Fix header inclusions
+Message-ID: <202307212350.YQFKs9v6-lkp@intel.com>
+References: <20230721133932.12679-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <79572.123072111511900511@us-mta-90.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230721133932.12679-1-andriy.shevchenko@linux.intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Andy,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on linus/master]
+[also build test ERROR on crng-random/master v6.5-rc2 next-20230721]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-07-21' of git://anongit.freed=
-esktop.org/drm/drm
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/minmax-Fix-header-inclusions/20230721-214152
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230721133932.12679-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] minmax: Fix header inclusions
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230721/202307212350.YQFKs9v6-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307212350.YQFKs9v6-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/96733
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307212350.YQFKs9v6-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8845597
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8845640
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
-P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
-cpu)
-            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
-ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+   In file included from arch/um/os-Linux/sigio.c:6:
+   In file included from include/linux/minmax.h:5:
+   In file included from include/linux/build_bug.h:5:
+>> include/linux/compiler.h:246:10: fatal error: 'asm/rwonce.h' file not found
+     246 | #include <asm/rwonce.h>
+         |          ^~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +246 include/linux/compiler.h
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+a9a3ed1eff3601 Borislav Petkov 2020-04-22  245  
+e506ea451254ab Will Deacon     2019-10-15 @246  #include <asm/rwonce.h>
+e506ea451254ab Will Deacon     2019-10-15  247  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
