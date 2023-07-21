@@ -1,113 +1,150 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E18D18C2D;
-	Fri, 21 Jul 2023 10:13:03 +0000 (UTC)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36L7cgk2022418;
-	Fri, 21 Jul 2023 10:12:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=CX8kp45L2DeL3x3Sj62BxM5jyllf8z4QmQnkk3xmJYE=;
- b=mFK8P9pZDFH5NGVkr2lWS72gRobWovJVV4k1WMIRg2negCRLZcbWS/dMANIYfjFm95ce
- ReehF24wODvOY8j0p17N2Rtb3/DoIV5mKE92rLgNnDDNA6xfF72Be1Xkxqt31US4c0lY
- Ws7Sx5LQuI/RIDMPuCgZ1cuE3AuWKNuQhbIGXrV0MMp/lSUVj1AMl5n8UiUZw+agTfi0
- N7VZ1Sox38WeLBamhIm4l/a6uw4lZRnhbDMNLk8TjvIkI03f9erj7Sg852zUvNUn5LeP
- A6tgc+lh4bA313hJ7lx2ECReaDGJrUTWUWNeNJzzUkk8GQr+p23ZC0OuwPdRrbMW0Yt6 1Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rxxxvbahw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jul 2023 10:12:56 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36LACtwa025346
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jul 2023 10:12:55 GMT
-Received: from srichara-linux.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 21 Jul 2023 03:12:51 -0700
-From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linus.walleij@linaro.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
-Subject: [PATCH] pinctrl: qcom: Remove the unused _groups variable build warning
-Date: Fri, 21 Jul 2023 15:42:41 +0530
-Message-ID: <1689934361-32642-1-git-send-email-quic_srichara@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2A3168CA
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 11:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689939022;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hgIsCVjDNADgdqA2Z4k09RTenC69i+GTU4FmtAjZvms=;
+	b=TasxlLMwyW8jRUJaPgx7U1MIx53jtxCee3rOWsOFIHBEoPDok/BkfBs5dCcHSltyZBDjXN
+	+3zAYAwrQow2Oy1BaPvF4Op6CzLqKrnKyQq7GVF7M3uLLZfco5+DBmuleVG56bPI/Z0GP0
+	csh/oBBRewfLPHfFUg1H9Bgarqz5fg0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-lEFR8BG4OZ2ol5_IabSYNw-1; Fri, 21 Jul 2023 07:30:21 -0400
+X-MC-Unique: lEFR8BG4OZ2ol5_IabSYNw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E74AD185A791
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 11:30:20 +0000 (UTC)
+Received: from [172.64.4.102] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CFAA52166B25;
+	Fri, 21 Jul 2023 11:30:20 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 12 of 328): Test report for master
+ (6.5.0-rc2, mainline.kernel.org-clang, 57f1f9dd)
+Date: Fri, 21 Jul 2023 11:30:20 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: dlolM2-h74gM_y1BSRZ-Tu4ZDz2F9l0S
-X-Proofpoint-ORIG-GUID: dlolM2-h74gM_y1BSRZ-Tu4ZDz2F9l0S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-21_06,2023-07-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- phishscore=0 malwarescore=0 mlxlogscore=779 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 mlxscore=0 impostorscore=0 clxscore=1015 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2307210091
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <30416.123072107302100214@us-mta-414.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-When building with clang toolchain and arm64-randconfig-r015-20230712
-kernel test robot reports the below warning.
+Hi, we tested your kernel and here are the results:
 
- drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused variable '_groups' [-Wunused-const-variable]
-   static const char * const _groups[] = {
-                             ^
-   1 warning generated.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-     static const char * const _groups[] = {
-             "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
-             "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
-             "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
-             "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28",
-             "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio35",
-             "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio42",
-             "gpio43", "gpio44", "gpio45", "gpio46",
-   };
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Fixing it by removing the variable.
+Kernel information:
+    Commit message: Merge tag 'net-6.5-rc3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202307120814.vWPY6URk-lkp@intel.com/
-Fixes: 725d1c891658 ("pinctrl: qcom: Add IPQ5018 pinctrl driver")
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
----
- drivers/pinctrl/qcom/pinctrl-ipq5018.c | 10 ----------
- 1 file changed, 10 deletions(-)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96715
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-ipq5018.c b/drivers/pinctrl/qcom/pinctrl-ipq5018.c
-index ed58f75..e2951f8 100644
---- a/drivers/pinctrl/qcom/pinctrl-ipq5018.c
-+++ b/drivers/pinctrl/qcom/pinctrl-ipq5018.c
-@@ -241,16 +241,6 @@ static const char * const atest_char_groups[] = {
- 	"gpio0", "gpio1", "gpio2", "gpio3", "gpio37",
- };
- 
--static const char * const _groups[] = {
--	"gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
--	"gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
--	"gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
--	"gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28",
--	"gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio35",
--	"gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio42",
--	"gpio43", "gpio44", "gpio45", "gpio46",
--};
--
- static const char * const wci_txd_groups[] = {
- 	"gpio0", "gpio1", "gpio2", "gpio3",
- 	"gpio42", "gpio43", "gpio44", "gpio45",
--- 
-2.7.4
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
+ dump memory(/proc/vmcore). No such file or directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
+ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
