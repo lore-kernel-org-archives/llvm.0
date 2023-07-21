@@ -1,78 +1,200 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D97E565
-	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 23:38:43 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-d023f558cbaso2306752276.0
-        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 16:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689982722; x=1690587522;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oI2k+n70r09++ymnvAIa7Gl6vaz4ByDtPCwimW7Q90=;
-        b=7d2WPgTOR161B95SSw69r7f+ijCvihtTNkLyDXwhknhcNvG4wFvEktHMAq7jt4OHEm
-         a3e/VqagtHMG34iCPhuDyLhcuLMUwQ+ifw2gjSQjnhogyjHu/FI+nODzi2OoomWJhu2A
-         9jsM16yblubZxqV5CF/Eis8Njtr+hy0EjuT8w7svSYzu6q8wePkRu0h9rMQf26EwIin6
-         1Te2vN0ulcLxjqFjlngUBmIFjM2PkO9fZTXmDZtnkmCBsgdN2fMEsSy/UGtd5VVDVTAK
-         m49iaey4dLHD8rUeVTsLKM4flB0RDLAiEdM9DfKUUReLU7MXwIlMoBmaxf8XkCAebF5P
-         xL2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689982722; x=1690587522;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oI2k+n70r09++ymnvAIa7Gl6vaz4ByDtPCwimW7Q90=;
-        b=NnOFBRitEiIrDvWy31ZCGetNZCNkZWhGDDA09lw1HmvjMBLsnJTEP3ph9arCIgZOmG
-         wl2MeZiDBb4NIGuPZMkln+9eNlj26sialJ0m3kJKx+qeklw6g9UKXe0lmrMBhYedGGzu
-         qfxnU5CBi4SUw/tdvhq4lGLbK3my41+zgsnhzUs2b0oAdEyOB1q8imZGOws+ADd+El1D
-         55NVXKjrvz+hJCufkg7OctMOTH6szFsSDeUAig7H9XdEMUMnTYNSIYCBshFm+9We+b2c
-         UGXPY7dzbPYsu61AYGRvJSYfrFVLhJOycVlVbUzXJ2PaWgbyV4QEgVbTUmgw4LpGzGxb
-         XSFQ==
-X-Gm-Message-State: ABy/qLYCctfdwbDtxC/msTlBMOKUnNTQ6et+DFajHXKTlsKHrYiN85JU
-	YlQ9FEYznvO3bRGsJhr57LV0K4VtMpc=
-X-Google-Smtp-Source: APBJJlFDs5FHNs5v+9qnY6bXeicf3eDutpz6ueu60Qhp8gCv6VpW/IJ7YNk3G+Pic8BM3apO9vN7wvtGcoA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c9c3:0:b0:d00:f564:509b with SMTP id
- z186-20020a25c9c3000000b00d00f564509bmr36019ybf.1.1689982722574; Fri, 21 Jul
- 2023 16:38:42 -0700 (PDT)
-Date: Fri, 21 Jul 2023 16:38:41 -0700
-In-Reply-To: <202307211945.TSPcyOhh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CBCDF6D;
+	Fri, 21 Jul 2023 23:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689983165; x=1721519165;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DshBWCdp1DuGEi6SnZZL0MjZFlUodWYOJsqGH/FLDaQ=;
+  b=fy15CHje3VCtdgQmZVl2ebOXbVCJRh0KADSb7c79m2gmQBShBvz9RD0s
+   aqLVLGWxQVxt6BLbtYlncQBkvkmW/Beo6lZeIj2rtDaGnY/iqxvHe6IkU
+   HoDh4kKuAgeCo/mytjMVdsbzKZu1AF/OTkR3M4xP0CDBBLbmc2qAi2yYY
+   bwBA1/9zwIRBTMlskeTC5LyNKWoyrEB5aNsjhvSmtovrctchxojsxh9ft
+   BBSvzfu78gHsCpg3LToolSiO+SPJ8aptx9RqxloBpBeMrlZPhcThWHVSF
+   vVAtQDn1tHbAGVq9u1hnN7qoBamv3fdtQCWbYY1WwYh/Ad9vMyXWrRcYW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="352030667"
+X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
+   d="scan'208";a="352030667"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 16:46:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="815179724"
+X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
+   d="scan'208";a="815179724"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jul 2023 16:46:02 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMzov-0007lp-2o;
+	Fri, 21 Jul 2023 23:46:01 +0000
+Date: Sat, 22 Jul 2023 07:45:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: kernel/sched/fair.c:9458:20: warning: stack frame size (1184)
+ exceeds limit (1024) in 'update_sd_lb_stats'
+Message-ID: <202307220719.ftYLcX0c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <202307211945.TSPcyOhh-lkp@intel.com>
-Message-ID: <ZLsXAdjFuKLpd3ig@google.com>
-Subject: Re: arch/powerpc/kvm/e500mc.c:95:15: error: invalid instruction
-From: Sean Christopherson <seanjc@google.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jul 21, 2023, kernel test robot wrote:
-> Hi Sean,
-> 
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f7e3a1bafdea735050dfde00523cf505dc7fd309
-> commit: e83ca8cfa286c9fc78b585b0e66df7f542bcbcf2 KVM: PPC: booke: Mark three local functions "static"
-> date:   4 months ago
-> config: powerpc-randconfig-r001-20230721 (https://download.01.org/0day-ci/archive/20230721/202307211945.TSPcyOhh-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230721/202307211945.TSPcyOhh-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307211945.TSPcyOhh-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/powerpc/kvm/e500mc.c:95:15: error: invalid instruction
->       95 |         asm volatile("tlbilxlpid");
+Hi Vincent,
 
-I assume this is a binutils bug?  I ran into a similar problem on PPC a while
-back where I couldn't cross-compile even relatively basic PPC code.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d192f5382581d972c4ae1b4d72e0b59b34cadeb9
+commit: c82a69629c53eda5233f13fc11c3c01585ef48a2 sched/fair: fix case with reduced capacity CPU
+date:   1 year ago
+config: riscv-randconfig-r022-20230722 (https://download.01.org/0day-ci/archive/20230722/202307220719.ftYLcX0c-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230722/202307220719.ftYLcX0c-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307220719.ftYLcX0c-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/sched/fair.c:519:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
+   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+                      ^
+   kernel/sched/fair.c:540:19: warning: unused function 'tg_is_idle' [-Wunused-function]
+   static inline int tg_is_idle(struct task_group *tg)
+                     ^
+   kernel/sched/fair.c:5587:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
+   static inline bool cfs_bandwidth_used(void)
+                      ^
+   kernel/sched/fair.c:5595:20: warning: unused function 'sync_throttle' [-Wunused-function]
+   static inline void sync_throttle(struct task_group *tg, int cpu) {}
+                      ^
+   kernel/sched/fair.c:5620:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
+   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+                                       ^
+   kernel/sched/fair.c:5624:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
+   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+                      ^
+>> kernel/sched/fair.c:9458:20: warning: stack frame size (1184) exceeds limit (1024) in 'update_sd_lb_stats' [-Wframe-larger-than]
+   static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sds)
+                      ^
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   7 warnings and 20 errors generated.
+
+
+vim +/update_sd_lb_stats +9458 kernel/sched/fair.c
+
+70fb5ccf2ebb09 kernel/sched/fair.c Chen Yu           2022-06-13  9451  
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9452  /**
+461819ac8ee950 kernel/sched_fair.c Hui Kang          2011-10-11  9453   * update_sd_lb_stats - Update sched_domain's statistics for load balancing.
+cd96891d48a945 kernel/sched/fair.c Randy Dunlap      2012-06-08  9454   * @env: The load balancing environment.
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9455   * @sds: variable to hold the statistics for this sched_domain.
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9456   */
+0b0695f2b34a4a kernel/sched/fair.c Vincent Guittot   2019-10-18  9457  
+0ec8aa00f2b4dc kernel/sched/fair.c Peter Zijlstra    2013-10-07 @9458  static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sds)
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9459  {
+bd939f45da24e2 kernel/sched/fair.c Peter Zijlstra    2012-05-02  9460  	struct sched_domain *child = env->sd->child;
+bd939f45da24e2 kernel/sched/fair.c Peter Zijlstra    2012-05-02  9461  	struct sched_group *sg = env->sd->groups;
+05b40e05773481 kernel/sched/fair.c Srikar Dronamraju 2017-03-22  9462  	struct sg_lb_stats *local = &sds->local_stat;
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9463  	struct sg_lb_stats tmp_sgs;
+70fb5ccf2ebb09 kernel/sched/fair.c Chen Yu           2022-06-13  9464  	unsigned long sum_util = 0;
+630246a06ae2a7 kernel/sched/fair.c Quentin Perret    2018-12-03  9465  	int sg_status = 0;
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9466  
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9467  	do {
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9468  		struct sg_lb_stats *sgs = &tmp_sgs;
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9469  		int local_group;
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9470  
+ae4df9d6c93510 kernel/sched/fair.c Peter Zijlstra    2017-05-01  9471  		local_group = cpumask_test_cpu(env->dst_cpu, sched_group_span(sg));
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9472  		if (local_group) {
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9473  			sds->local = sg;
+05b40e05773481 kernel/sched/fair.c Srikar Dronamraju 2017-03-22  9474  			sgs = local;
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9475  
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9476  			if (env->idle != CPU_NEWLY_IDLE ||
+63b2ca30bdb3db kernel/sched/fair.c Nicolas Pitre     2014-05-26  9477  			    time_after_eq(jiffies, sg->sgc->next_update))
+63b2ca30bdb3db kernel/sched/fair.c Nicolas Pitre     2014-05-26  9478  				update_group_capacity(env->sd, env->dst_cpu);
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9479  		}
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9480  
+c0d14b57fe0c11 kernel/sched/fair.c Ricardo Neri      2021-09-10  9481  		update_sg_lb_stats(env, sds, sg, sgs, &sg_status);
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9482  
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9483  		if (local_group)
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9484  			goto next_group;
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9485  
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9486  
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9487  		if (update_sd_pick_busiest(env, sds, sg, sgs)) {
+532cb4c401e225 kernel/sched_fair.c Michael Neuling   2010-06-08  9488  			sds->busiest = sg;
+56cf515b4b1567 kernel/sched/fair.c Joonsoo Kim       2013-08-06  9489  			sds->busiest_stat = *sgs;
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9490  		}
+1e3c88bdeb1260 kernel/sched_fair.c Peter Zijlstra    2009-12-17  9491  
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9492  next_group:
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9493  		/* Now, start updating sd_lb_stats */
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9494  		sds->total_load += sgs->group_load;
+63b2ca30bdb3db kernel/sched/fair.c Nicolas Pitre     2014-05-26  9495  		sds->total_capacity += sgs->group_capacity;
+b72ff13ce6021b kernel/sched/fair.c Peter Zijlstra    2013-08-28  9496  
+70fb5ccf2ebb09 kernel/sched/fair.c Chen Yu           2022-06-13  9497  		sum_util += sgs->group_util;
+532cb4c401e225 kernel/sched_fair.c Michael Neuling   2010-06-08  9498  		sg = sg->next;
+bd939f45da24e2 kernel/sched/fair.c Peter Zijlstra    2012-05-02  9499  	} while (sg != env->sd->groups);
+0ec8aa00f2b4dc kernel/sched/fair.c Peter Zijlstra    2013-10-07  9500  
+0b0695f2b34a4a kernel/sched/fair.c Vincent Guittot   2019-10-18  9501  	/* Tag domain that child domain prefers tasks go to siblings first */
+0b0695f2b34a4a kernel/sched/fair.c Vincent Guittot   2019-10-18  9502  	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
+0b0695f2b34a4a kernel/sched/fair.c Vincent Guittot   2019-10-18  9503  
+f643ea2207010d kernel/sched/fair.c Vincent Guittot   2018-02-13  9504  
+0ec8aa00f2b4dc kernel/sched/fair.c Peter Zijlstra    2013-10-07  9505  	if (env->sd->flags & SD_NUMA)
+0ec8aa00f2b4dc kernel/sched/fair.c Peter Zijlstra    2013-10-07  9506  		env->fbq_type = fbq_classify_group(&sds->busiest_stat);
+4486edd12b5ac8 kernel/sched/fair.c Tim Chen          2014-06-23  9507  
+4486edd12b5ac8 kernel/sched/fair.c Tim Chen          2014-06-23  9508  	if (!env->sd->parent) {
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9509  		struct root_domain *rd = env->dst_rq->rd;
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9510  
+4486edd12b5ac8 kernel/sched/fair.c Tim Chen          2014-06-23  9511  		/* update overload indicator if we are at root domain */
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9512  		WRITE_ONCE(rd->overload, sg_status & SG_OVERLOAD);
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9513  
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9514  		/* Update over-utilization (tipping point, U >= 0) indicator */
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9515  		WRITE_ONCE(rd->overutilized, sg_status & SG_OVERUTILIZED);
+f9f240f96efc5b kernel/sched/fair.c Qais Yousef       2019-06-04  9516  		trace_sched_overutilized_tp(rd, sg_status & SG_OVERUTILIZED);
+2802bf3cd936fe kernel/sched/fair.c Morten Rasmussen  2018-12-03  9517  	} else if (sg_status & SG_OVERUTILIZED) {
+f9f240f96efc5b kernel/sched/fair.c Qais Yousef       2019-06-04  9518  		struct root_domain *rd = env->dst_rq->rd;
+f9f240f96efc5b kernel/sched/fair.c Qais Yousef       2019-06-04  9519  
+f9f240f96efc5b kernel/sched/fair.c Qais Yousef       2019-06-04  9520  		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
+f9f240f96efc5b kernel/sched/fair.c Qais Yousef       2019-06-04  9521  		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
+4486edd12b5ac8 kernel/sched/fair.c Tim Chen          2014-06-23  9522  	}
+70fb5ccf2ebb09 kernel/sched/fair.c Chen Yu           2022-06-13  9523  
+70fb5ccf2ebb09 kernel/sched/fair.c Chen Yu           2022-06-13  9524  	update_idle_cpu_scan(env, sum_util);
+532cb4c401e225 kernel/sched_fair.c Michael Neuling   2010-06-08  9525  }
+532cb4c401e225 kernel/sched_fair.c Michael Neuling   2010-06-08  9526  
+
+:::::: The code at line 9458 was first introduced by commit
+:::::: 0ec8aa00f2b4dc457836ef4e2662b02483e94fb7 sched/numa: Avoid migrating tasks that are placed on their preferred node
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
