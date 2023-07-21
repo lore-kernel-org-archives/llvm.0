@@ -1,133 +1,113 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391DB14F7A
-	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 09:33:55 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-668730696a4so1163316b3a.1
-        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 02:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689932035; x=1690536835;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=S06AqqBQY/XLaTfW98+CLvTaCgLNSccXV/8O8vUmFHQ=;
-        b=Gl2t+UnboIuezCJMjDzvyRV/2zBcBBg+M4e4LB+GUmVIqnpYdYqI2Z+xlaQHf0qYoa
-         UR6SXid8Vwxas8MZRBhGLNBTsdLBR+pVW4lRAdKZOXgLhoTOSUo38J9csJ8b/GRl4CPj
-         pwpEZeiOAZFSNoQJ4if9kO198HNGro2iC4lluF+0tkM1tAGo8u3xIVhCqFt65IPTwOVn
-         7p4ecmmnqLTks10jqf7KF6E9vd1MCgmFtuqwJUrifrWSA+lY0NODd7Cm5b1TMRf///LG
-         02llI5u/mCJ8SePW6cFZeDFXCw58iinXlYnMHi8tnvMpS/kn+NUxC2+pQPEa0hszucCL
-         3fnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689932035; x=1690536835;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S06AqqBQY/XLaTfW98+CLvTaCgLNSccXV/8O8vUmFHQ=;
-        b=UzEJROAPHHnbWzHC9yQjWMsdXhSR9BO71amQVryZYnkiBsZ1yeSFtbWk/LzmnNWQx5
-         rZyoLXhB13/FyGOyys0S81i1W9ixmtkEuJ+O31Y9trv2QHhNvtbCjX8AA6hdvagnZpP6
-         WYksvHDv1o1sK24z6i5x6IvvtNozkAtrNEftDT14Yty/GdX6/ahr6chge4jK/zTMmxEg
-         FzSTVFvrmFjztdb3O9VK6T4D+oZKpZtSJPrjZNB4ES4IhFnzbjHJTTDmy/inRNAQxMJi
-         IAMaDd/9j3wQkaGzeZqim/Vb/+lfrDzHygdus1aZEE5EdyWajON0ZhebUl6kMjnb2sT+
-         tlZQ==
-X-Gm-Message-State: ABy/qLaS/d/R1ykBPud28cmwpup6iNI+6cvBWf+b0x2Ebn264cNmoCL+
-	kV2BYno8HpTyM/U4fyhY1gsM+Cv1W1lp2HyQLM3r2A==
-X-Google-Smtp-Source: APBJJlGhSg0viF/5+u9c1KfZSw1Aa28WHges2GPkIrJqJvJB8GO6cs/igNBy0PQk8znqoQPqOkpvZA==
-X-Received: by 2002:a05:6a20:2d9d:b0:12d:3069:69e1 with SMTP id bf29-20020a056a202d9d00b0012d306969e1mr898912pzb.60.1689932034952;
-        Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id iw10-20020a170903044a00b001b531e8a000sm2985183plb.157.2023.07.21.02.33.53
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
-Message-ID: <64ba5102.170a0220.f779d.573a@mx.google.com>
-Date: Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E18D18C2D;
+	Fri, 21 Jul 2023 10:13:03 +0000 (UTC)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36L7cgk2022418;
+	Fri, 21 Jul 2023 10:12:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=CX8kp45L2DeL3x3Sj62BxM5jyllf8z4QmQnkk3xmJYE=;
+ b=mFK8P9pZDFH5NGVkr2lWS72gRobWovJVV4k1WMIRg2negCRLZcbWS/dMANIYfjFm95ce
+ ReehF24wODvOY8j0p17N2Rtb3/DoIV5mKE92rLgNnDDNA6xfF72Be1Xkxqt31US4c0lY
+ Ws7Sx5LQuI/RIDMPuCgZ1cuE3AuWKNuQhbIGXrV0MMp/lSUVj1AMl5n8UiUZw+agTfi0
+ N7VZ1Sox38WeLBamhIm4l/a6uw4lZRnhbDMNLk8TjvIkI03f9erj7Sg852zUvNUn5LeP
+ A6tgc+lh4bA313hJ7lx2ECReaDGJrUTWUWNeNJzzUkk8GQr+p23ZC0OuwPdRrbMW0Yt6 1Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rxxxvbahw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jul 2023 10:12:56 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36LACtwa025346
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jul 2023 10:12:55 GMT
+Received: from srichara-linux.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 21 Jul 2023 03:12:51 -0700
+From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linus.walleij@linaro.org>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
+Subject: [PATCH] pinctrl: qcom: Remove the unused _groups variable build warning
+Date: Fri, 21 Jul 2023 15:42:41 +0530
+Message-ID: <1689934361-32642-1-git-send-email-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20230721
-X-Kernelci-Report-Type: build
-Subject: next/master build: 6 builds: 0 failed, 6 passed,
- 1 warning (next-20230721)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dlolM2-h74gM_y1BSRZ-Tu4ZDz2F9l0S
+X-Proofpoint-ORIG-GUID: dlolM2-h74gM_y1BSRZ-Tu4ZDz2F9l0S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-21_06,2023-07-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=779 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 clxscore=1015 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307210091
 
-next/master build: 6 builds: 0 failed, 6 passed, 1 warning (next-20230721)
+When building with clang toolchain and arm64-randconfig-r015-20230712
+kernel test robot reports the below warning.
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230721/
+ drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused variable '_groups' [-Wunused-const-variable]
+   static const char * const _groups[] = {
+                             ^
+   1 warning generated.
 
-Tree: next
-Branch: master
-Git Describe: next-20230721
-Git Commit: ae867bc97b713121b2a7f5fcac68378a0774739b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 4 unique architectures
+     static const char * const _groups[] = {
+             "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
+             "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
+             "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
+             "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28",
+             "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio35",
+             "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio42",
+             "gpio43", "gpio44", "gpio45", "gpio46",
+   };
 
-Warnings Detected:
+Fixing it by removing the variable.
 
-arm64:
-
-arm:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-
-x86_64:
-
-
-Warnings summary:
-
-    1    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307120814.vWPY6URk-lkp@intel.com/
+Fixes: 725d1c891658 ("pinctrl: qcom: Add IPQ5018 pinctrl driver")
+Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/pinctrl/qcom/pinctrl-ipq5018.c | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/drivers/pinctrl/qcom/pinctrl-ipq5018.c b/drivers/pinctrl/qcom/pinctrl-ipq5018.c
+index ed58f75..e2951f8 100644
+--- a/drivers/pinctrl/qcom/pinctrl-ipq5018.c
++++ b/drivers/pinctrl/qcom/pinctrl-ipq5018.c
+@@ -241,16 +241,6 @@ static const char * const atest_char_groups[] = {
+ 	"gpio0", "gpio1", "gpio2", "gpio3", "gpio37",
+ };
+ 
+-static const char * const _groups[] = {
+-	"gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
+-	"gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
+-	"gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
+-	"gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28",
+-	"gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio35",
+-	"gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio42",
+-	"gpio43", "gpio44", "gpio45", "gpio46",
+-};
+-
+ static const char * const wci_txd_groups[] = {
+ 	"gpio0", "gpio1", "gpio2", "gpio3",
+ 	"gpio42", "gpio43", "gpio44", "gpio45",
+-- 
+2.7.4
+
