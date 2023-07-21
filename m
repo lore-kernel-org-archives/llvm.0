@@ -1,80 +1,133 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D349D1ED47;
-	Fri, 21 Jul 2023 16:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689955314; x=1721491314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K9rkpTqbHpDBqeauTBa56f+QOF+7Knd4P5lfvCLE4XU=;
-  b=B4ek82cbQEdkuAQkyiUnKy12HpcZWhfqb3vFT4ayr7wh8r0l020sZYER
-   mgbWYL9bx/wpsWVb9B2/u6ORFE98oMsR/M+uMg+x5R59Epo0N8KFjhmpJ
-   BkiYFsE+5Rwlre8Br4LPR5dyyAdXtGS+/0vhaHJaslEHhVAwxnxk20WnA
-   sZbHl6Sg4uqtkMnDON5PAiPaNB0/MPtIu28xgu54V7FSR1wUgIoUlS6Dd
-   BeY6mbyNC2Dtjizc1LHQZx5X616yUCl8p5HiDqG3v9DlwV+hWrtK/7mgY
-   3CqgIQNmixABu1X8JN5YntD+1S4xiJ5FBaZjUAozabXw+7fQM6bnxhet5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="365947539"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="365947539"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 09:01:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="754507156"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="754507156"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2023 09:01:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1qMsZU-00BWpT-0C;
-	Fri, 21 Jul 2023 19:01:36 +0300
-Date: Fri, 21 Jul 2023 19:01:35 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Herve Codina <herve.codina@bootlin.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v1 1/1] minmax: Fix header inclusions
-Message-ID: <ZLqr39JOLQ3QhRbQ@smile.fi.intel.com>
-References: <20230721133932.12679-1-andriy.shevchenko@linux.intel.com>
- <202307212350.YQFKs9v6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906FE27F00
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 17:46:58 +0000 (UTC)
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-444c42f608aso881201137.1
+        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 10:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689961617; x=1690566417;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K3iE2bAwWgeCJ+z5V0WOIFlzbI5xYOdhtW9D3laGhsM=;
+        b=iixWGnZiYEfXnoL+u0dFQQKocn4uaP4Osx9uXJ1Vz9iWe+Ec4qOIsNUTA6xzrMyBfJ
+         HXcXmg1YoQtQu+xXKt7W5jsf+ooOdIl6SHzg2D6ITu2Zm5l0NwfQhmY5KLmEjhBWDQXu
+         x/OCgzPPznINuQICCFHvydxYs0Y633cuZfyOjsXn1DUjiYwmBby9MLbHXzHPkR6+1Gw+
+         E/23WvFKEdLzo7BdZTaUqzRbafhWnqrSLRf1mPR7zQb9m4I9Fp3nmGfboR3IiDeKo5Ey
+         0Sqj72RJSwvI8gYu59B8BfBL9Kd7x0Zrr1q3gtfiHWs0BOObeY7xdcmrqvdtOrkb+M0h
+         GAbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689961617; x=1690566417;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K3iE2bAwWgeCJ+z5V0WOIFlzbI5xYOdhtW9D3laGhsM=;
+        b=lCzBLUy/rXmFqmwwv9N9auZIFUnR1/Dw/zqLiglHnYX6ehxmLGzpLakdarcjNigkVz
+         LoTBWqot6Jp5FALLZIofNMe2jhOJRmZaOnpl1xwIhnR6EwxHTKfZiDEwQb6zIde3idLI
+         uGxRKCPBkfOiG1jNVEy62dPammAL62uqIbnfFC4OPyeELZM/Qvo6i3uGxRRE/4Cvu3gl
+         PfSG6SpRmQcQ5SZ+vpjJOFmcUuB+77bBzQOKNZPapyypqYjThI10wBKtTVoh1JChAsuV
+         6o1QvYhexVBQFNdM9A+1CJRzFeUh3wCInAsOrJCen1mylzAIhdXeo7Trt7Kt2EWUltBi
+         iUmg==
+X-Gm-Message-State: ABy/qLaHBgLF1uJhOos9kzJ6soGsv35QfxOhWqWKQa81hAm2i6VeM9T0
+	gQ/bqeGE7AkprMXoxSYPL2DxTZhimsi+9/eFjHk6d8deCJD1Lw1grps=
+X-Google-Smtp-Source: APBJJlFdaAB3Yyns7cvTNLplrvAfU9+7jv8Sq1gJ2F6Ui6pc1BWcvZiMadJ5dLipoMm6Py1UTjt2oMyaLOyPp2XuEAg=
+X-Received: by 2002:a67:fb58:0:b0:443:5bec:a2fd with SMTP id
+ e24-20020a67fb58000000b004435beca2fdmr609390vsr.18.1689961616945; Fri, 21 Jul
+ 2023 10:46:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202307212350.YQFKs9v6-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <e04d1d5b-518b-bebd-aa7a-70b87bc4e867@kernel.org> <e185087d-8df2-2457-0c93-4b638fdee05c@collabora.com>
+In-Reply-To: <e185087d-8df2-2457-0c93-4b638fdee05c@collabora.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 21 Jul 2023 10:46:45 -0700
+Message-ID: <CAKwvOdk6jUhwtrks5SYh59eD3o+Z4uxwJgeyOZHLTG6p_vzqqg@mail.gmail.com>
+Subject: Fwd: [ANNOUNCE/CFP] Kernel Testing & Dependability Micro-conference
+ at LPC 2023
+To: clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 21, 2023 at 11:52:46PM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> kernel test robot noticed the following build errors:
+Note the "Using Clang for better testing coverage" suggestion below.
 
-Oh my...
-UM without this header or even a stub?!
-
-Hmm... Which one else? Let's wait a few days to see.
-
->    In file included from arch/um/os-Linux/sigio.c:6:
->    In file included from include/linux/minmax.h:5:
->    In file included from include/linux/build_bug.h:5:
-> >> include/linux/compiler.h:246:10: fatal error: 'asm/rwonce.h' file not found
->      246 | #include <asm/rwonce.h>
->          |          ^~~~~~~~~~~~~~
-
--- 
-With Best Regards,
-Andy Shevchenko
+---------- Forwarded message ---------
+From: Guillaume Tucker <guillaume.tucker@collabora.com>
+Date: Fri, Jul 21, 2023 at 10:16=E2=80=AFAM
+Subject: Re: [ANNOUNCE/CFP] Kernel Testing & Dependability
+Micro-conference at LPC 2023
+To: shuah <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+<linux-kernel@vger.kernel.org>, kernelci@lists.linux.dev
+<kernelci@lists.linux.dev>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
 
 
++kernelci
+
+On 19/07/2023 23:34, shuah wrote:
+> Hello,
+>
+> I am reaching out to announce that we are once again planning to
+> gather to discuss testing and dependability related topics at the
+> Kernel Testing & Dependability Micro-conference at LPC 2023.
+>
+> We invite you to submit proposals for discussion:
+> - https://lpc.events/event/17/abstracts/1430/
+>
+> The Linux Plumbers 2023 Kernel Testing & Dependability track focuses on
+> advancing the current state of testing of the Linux Kernel and its relate=
+d
+> infrastructure. The main purpose is to improve software quality and
+> dependability for applications that require predictability and trust.
+>
+> We aim to create connections between folks working on similar projects,
+> and help individual projects make progress.
+>
+> This track is intended to promote collaboration between all the communiti=
+es
+> and people interested in the Kernel testing & dependability. This will he=
+lp
+> move the conversation forward from where we left off at the LPC 2022 Kern=
+el
+> Testing & Dependability MC.
+>
+> We ask that any topic discussions focus on issues/problems they are facin=
+g
+> and possible alternatives to resolving them. The Micro-conference is open=
+ to
+> all topics related to testing on Linux, not necessarily in the kernel spa=
+ce.
+>
+> Suggested topics:
+>
+> - KernelCI: Topics on improvements and enhancements for test coverage
+> - Growing KCIDB, integrating more sources (https://kernelci.org/docs/kcid=
+b/)
+> - Sanitizers
+> - Using Clang for better testing coverage
+> - How to spread KUnit throughout the kernel?
+> - Building and testing in-kernel Rust code.
+> - Explore ways to improve testing framework and tests in the kernel
+>   with a specific goal to increase traceability and code coverage.
+> - Explore how do SBOMs figure into dependability?
+>
+> Proposals can be submitted here, by August 20th:
+> - https://lpc.events/event/17/abstracts/
+>
+> Please reach out to MC leads:
+>      Shuah Khan (shuah@kernel.org)
+>      Sasha Levin <sashal@kernel.org>
+>      Guillaume Tucker <guillaume.tucker@collabora.com>
+>
+> thank you,
+> -- Shuah
+
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
