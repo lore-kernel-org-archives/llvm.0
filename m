@@ -1,138 +1,168 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A55B23BCC
-	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 20:27:17 +0000 (UTC)
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-55b85b94bb0so1307920eaf.0
-        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 13:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689971237; x=1690576037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7xPDzzCzi/QN7xILesfa0mVBVsGJvBpLORXGzKhvY7c=;
-        b=4XmoJAYz55NB/L3U+DEUVJ9ui979+6Vz0rqBHHDkliqQXOMi6F+/ITB9aD9iN37wqO
-         BgdGLtJssmT2r2CCaMdB6vTrlXmgl7CEI5eFL8Iy5qkECyULhvyVXE0OLtlJLWTWLWVe
-         ujy4f/mAiGRut+DHYbvmdkcQlKKfluhe809jNINb8G6MffFgabAZ4L8IZbqwDIs/Dzml
-         mrPigKZ7ueMy+J2wvjE1cevFAOpAnDkQ13SDfoATpvTQsVGhjDoy67xsuJDQ95pHpt0i
-         9bZdbaLpFIDoRxE4Uk1HMABabIBI7CYqt4kN1YtFNOWaLkAec3SHAFyTZ54eD0gzUJSK
-         atNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689971237; x=1690576037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7xPDzzCzi/QN7xILesfa0mVBVsGJvBpLORXGzKhvY7c=;
-        b=YCf+DmIGdJCHTJlys72SzYAxF1+Z8Kpdddn7d/OEDfOxGWDdhNdNbuAG9tBHXKG9DR
-         p0jdpFI/040/AJ5WiJfcWgzCK0HRXFfPECSyR8V23Q2e6Idz+DG32DeDOeYHYQ5+3HQn
-         N8/blpEDBF/iFLpawT6I2rshBkOwAxmJwsAP05ZiNjYUV9ch4iMqeWuCqr0a7PcTpPBw
-         MH95KzOPr2OglHe+PAm3fVeiNQ1Gd775M2aOTsVTgTK0TN49i3O5QgaEjUxF3pSznVQq
-         dJI9gtwKWBgGwz2WIMbUUbCVfYXELoU+TNAzjongFKFwr9n57W6S4nez7kN+yMBq+0cr
-         X5Eg==
-X-Gm-Message-State: ABy/qLY4+iS3YfNwI4yq+JpLvSBPolPCb+n5nB1h+dZdaUxmWja2Pysm
-	hGJvHfSijCJmGD+m2EwDjTXxokFzNxrX40hFC2GDWw==
-X-Google-Smtp-Source: APBJJlFV1pSwvieqS1OgnGFs6EJa3OMX3Q/AZhNSCm23Jd0179q/7NNdnOaSTeQWwXZbKc15/fFyeSnhcfBgqT1xvfc=
-X-Received: by 2002:a05:6870:ac2b:b0:1ba:c3a2:fb66 with SMTP id
- kw43-20020a056870ac2b00b001bac3a2fb66mr3041987oab.5.1689971236868; Fri, 21
- Jul 2023 13:27:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E36100A1;
+	Fri, 21 Jul 2023 21:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689975254; x=1721511254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AejFBraB/yupNnoLODKplwxX7IK0ZxGoLJe5z3VP1tM=;
+  b=jlWp9MQ3g9VLodmRGgE++o2q6/j16f6yOG6ftAPbgENEzQQMJP/mzreE
+   IM16gCWE1NaUJvGMy4QFVmTPNgfZ1bQ4JkYTsQRt/AHUjPWw89R3zSWyo
+   RC8WGagW8ufKCBUxgIsvzy+WNZuiOJFaXK4r5N8po50BzAe2OSRdE0GYT
+   /0uYF2Jovaf30RTwJ0SszwSbz+YLBuu74vBDs8kajTZfAAD0HJ3FI9ljj
+   ddac3inug+fqdDijXdeSlqi61RvuoArXAjkELb9/5aZqJCHHik0riH0wU
+   vC88bVNlJHO/Ldbzh3jIevtM8jWa4TBE5yebB/inG8oOMB15KTJ1pPYiF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="364584390"
+X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
+   d="scan'208";a="364584390"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 14:33:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="790314176"
+X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
+   d="scan'208";a="790314176"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jul 2023 14:33:53 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMxl2-0007g5-1u;
+	Fri, 21 Jul 2023 21:33:52 +0000
+Date: Sat, 22 Jul 2023 05:32:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Ard Biesheuvel <ardb@kernel.org>,
+	Kees Cook <keescook@chromium.org>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH v5 3/5] arm64: libstub: Move KASLR handling functions to
+ kaslr.c
+Message-ID: <202307220545.aNYBwGqt-lkp@intel.com>
+References: <20230721074850.310644-4-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1689934361-32642-1-git-send-email-quic_srichara@quicinc.com>
-In-Reply-To: <1689934361-32642-1-git-send-email-quic_srichara@quicinc.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 21 Jul 2023 13:27:05 -0700
-Message-ID: <CAKwvOdmYC6WuapBkD+s6wYCBaUdiJxiLXwayoubTF0WCpdBoMg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: Remove the unused _groups variable build warning
-To: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
-	linus.walleij@linaro.org, quic_varada@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230721074850.310644-4-alexghiti@rivosinc.com>
 
-On Fri, Jul 21, 2023 at 3:13=E2=80=AFAM Sricharan Ramabadhran
-<quic_srichara@quicinc.com> wrote:
->
-> When building with clang toolchain and arm64-randconfig-r015-20230712
-> kernel test robot reports the below warning.
->
->  drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused variable =
-'_groups' [-Wunused-const-variable]
->    static const char * const _groups[] =3D {
->                              ^
->    1 warning generated.
->
->      static const char * const _groups[] =3D {
->              "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6=
-", "gpio7",
->              "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "g=
-pio14",
->              "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", =
-"gpio21",
->              "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", =
-"gpio28",
->              "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", =
-"gpio35",
->              "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", =
-"gpio42",
->              "gpio43", "gpio44", "gpio45", "gpio46",
->    };
->
-> Fixing it by removing the variable.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202307120814.vWPY6URk-lkp@i=
-ntel.com/
-> Fixes: 725d1c891658 ("pinctrl: qcom: Add IPQ5018 pinctrl driver")
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Hi Alexandre,
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build warnings:
 
-> ---
->  drivers/pinctrl/qcom/pinctrl-ipq5018.c | 10 ----------
->  1 file changed, 10 deletions(-)
->
-> diff --git a/drivers/pinctrl/qcom/pinctrl-ipq5018.c b/drivers/pinctrl/qco=
-m/pinctrl-ipq5018.c
-> index ed58f75..e2951f8 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-ipq5018.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-ipq5018.c
-> @@ -241,16 +241,6 @@ static const char * const atest_char_groups[] =3D {
->         "gpio0", "gpio1", "gpio2", "gpio3", "gpio37",
->  };
->
-> -static const char * const _groups[] =3D {
-> -       "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "g=
-pio7",
-> -       "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14=
-",
-> -       "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio=
-21",
-> -       "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio=
-28",
-> -       "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio=
-35",
-> -       "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio=
-42",
-> -       "gpio43", "gpio44", "gpio45", "gpio46",
-> -};
-> -
->  static const char * const wci_txd_groups[] =3D {
->         "gpio0", "gpio1", "gpio2", "gpio3",
->         "gpio42", "gpio43", "gpio44", "gpio45",
-> --
-> 2.7.4
->
->
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.5-rc2 next-20230721]
+[cannot apply to efi/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Introduce-virtual-kernel-mapping-KASLR/20230721-155554
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230721074850.310644-4-alexghiti%40rivosinc.com
+patch subject: [PATCH v5 3/5] arm64: libstub: Move KASLR handling functions to kaslr.c
+config: i386-randconfig-i002-20230721 (https://download.01.org/0day-ci/archive/20230722/202307220545.aNYBwGqt-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230722/202307220545.aNYBwGqt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307220545.aNYBwGqt-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/efi/libstub/kaslr.c:113:23: warning: call to undeclared function 'efi_get_kimg_min_align'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           u64 min_kimg_align = efi_get_kimg_min_align();
+                                ^
+>> drivers/firmware/efi/libstub/kaslr.c:155:2: warning: call to undeclared function 'efi_icache_sync'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           efi_icache_sync(*image_addr, *image_addr + kernel_codesize);
+           ^
+   2 warnings generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/efi_get_kimg_min_align +113 drivers/firmware/efi/libstub/kaslr.c
+
+    87	
+    88	/**
+    89	 * efi_kaslr_relocate_kernel() - Relocate the kernel (random if KASLR enabled)
+    90	 * @image_addr: Pointer to the current kernel location
+    91	 * @reserve_addr:	Pointer to the relocated kernel location
+    92	 * @reserve_size:	Size of the relocated kernel
+    93	 * @kernel_size:	Size of the text + data
+    94	 * @kernel_codesize:	Size of the text
+    95	 * @kernel_memsize:	Size of the text + data + bss
+    96	 * @phys_seed:		Random seed used for the relocation
+    97	 *
+    98	 * If KASLR is not enabled, this function relocates the kernel to a fixed
+    99	 * address (or leave it as its current location). If KASLR is enabled, the
+   100	 * kernel physical location is randomized using the seed in parameter.
+   101	 *
+   102	 * Return:	status code, EFI_SUCCESS if relocation is successful
+   103	 */
+   104	efi_status_t efi_kaslr_relocate_kernel(unsigned long *image_addr,
+   105					       unsigned long *reserve_addr,
+   106					       unsigned long *reserve_size,
+   107					       unsigned long kernel_size,
+   108					       unsigned long kernel_codesize,
+   109					       unsigned long kernel_memsize,
+   110					       u32 phys_seed)
+   111	{
+   112		efi_status_t status;
+ > 113		u64 min_kimg_align = efi_get_kimg_min_align();
+   114	
+   115		if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && phys_seed != 0) {
+   116			/*
+   117			 * If KASLR is enabled, and we have some randomness available,
+   118			 * locate the kernel at a randomized offset in physical memory.
+   119			 */
+   120			status = efi_random_alloc(*reserve_size, min_kimg_align,
+   121						  reserve_addr, phys_seed,
+   122						  EFI_LOADER_CODE);
+   123			if (status != EFI_SUCCESS)
+   124				efi_warn("efi_random_alloc() failed: 0x%lx\n", status);
+   125		} else {
+   126			status = EFI_OUT_OF_RESOURCES;
+   127		}
+   128	
+   129		if (status != EFI_SUCCESS) {
+   130			if (!check_image_region(*image_addr, kernel_memsize)) {
+   131				efi_err("FIRMWARE BUG: Image BSS overlaps adjacent EFI memory region\n");
+   132			} else if (IS_ALIGNED(*image_addr, min_kimg_align) &&
+   133				   (u64)_end < EFI_ALLOC_LIMIT) {
+   134				/*
+   135				 * Just execute from wherever we were loaded by the
+   136				 * UEFI PE/COFF loader if the placement is suitable.
+   137				 */
+   138				*reserve_size = 0;
+   139				return EFI_SUCCESS;
+   140			}
+   141	
+   142			status = efi_allocate_pages_aligned(*reserve_size, reserve_addr,
+   143							    ULONG_MAX, min_kimg_align,
+   144							    EFI_LOADER_CODE);
+   145	
+   146			if (status != EFI_SUCCESS) {
+   147				efi_err("Failed to relocate kernel\n");
+   148				*reserve_size = 0;
+   149				return status;
+   150			}
+   151		}
+   152	
+   153		memcpy((void *)*reserve_addr, (void *)*image_addr, kernel_size);
+   154		*image_addr = *reserve_addr;
+ > 155		efi_icache_sync(*image_addr, *image_addr + kernel_codesize);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
