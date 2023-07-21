@@ -1,165 +1,149 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423287F;
-	Fri, 21 Jul 2023 02:31:07 +0000 (UTC)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R6YS44vNHz18LQp;
-	Fri, 21 Jul 2023 10:30:12 +0800 (CST)
-Received: from [10.174.179.160] (10.174.179.160) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 21 Jul 2023 10:30:57 +0800
-Message-ID: <fc955d9b-c9f0-47b5-063a-b82c52550fe9@huawei.com>
-Date: Fri, 21 Jul 2023 10:30:57 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FAB27F
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 04:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689912087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0NS+zQ+I5h5t546lnP2QlmmXXuyfCav39Rb2RDVRP5s=;
+	b=IaK1bmZpajP4G3ymGyCnpjsXMdKo1ZHVlPO/mf0T9DrOfEnfGdKJ94Ias9nOVpd67wyX34
+	dDd+mWIujwyJXg5ld6R65Dw1t2csDJJvqyhwIXoSK4HtriW9Kkqf/1Sy5IkN8OKvvjtjER
+	sMYqvbKINS05xzIm8Pd9NqOsT01pm38=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-ziZYtyEOPpeGhnasT8Je6g-1; Fri, 21 Jul 2023 00:01:18 -0400
+X-MC-Unique: ziZYtyEOPpeGhnasT8Je6g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 65418936D32
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 04:01:18 +0000 (UTC)
+Received: from [172.64.4.102] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5502F40C206F;
+	Fri, 21 Jul 2023 04:01:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 17 of 328): Test report for master
+ (6.5.0-rc2, mainline.kernel.org-clang, e599e16c)
+Date: Fri, 21 Jul 2023 04:01:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to
- take in a folio
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <willy@infradead.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<hch@infradead.org>, <sidhartha.kumar@oracle.com>,
-	<akpm@linux-foundation.org>, <wangkefeng.wang@huawei.com>,
-	<sunnanyong@huawei.com>
-References: <20230720130147.4071649-10-zhangpeng362@huawei.com>
- <202307210951.NCdscoSS-lkp@intel.com>
-From: "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <202307210951.NCdscoSS-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <91639.123072100011800713@us-mta-64.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/7/21 9:31, kernel test robot wrote:
+Hi, we tested your kernel and here are the results:
 
-> Hi Peng,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on axboe-block/for-next linus/master v6.5-rc2 next-20230720]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/mm-page_io-remove-unneeded-ClearPageUptodate/20230720-210515
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230720130147.4071649-10-zhangpeng362%40huawei.com
-> patch subject: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to take in a folio
-> config: um-randconfig-r003-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307210951.NCdscoSS-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     In file included from mm/page_io.c:15:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       547 |         val = __raw_readb(PCI_IOBASE + addr);
->           |                           ~~~~~~~~~~ ^
->     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->           |                                                         ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->        37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->           |                                                   ^
->     In file included from mm/page_io.c:15:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->           |                                                         ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->        35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->           |                                                   ^
->     In file included from mm/page_io.c:15:
->     In file included from include/linux/kernel_stat.h:9:
->     In file included from include/linux/interrupt.h:11:
->     In file included from include/linux/hardirq.h:11:
->     In file included from arch/um/include/asm/hardirq.h:5:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/um/include/asm/io.h:24:
->     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       584 |         __raw_writeb(value, PCI_IOBASE + addr);
->           |                             ~~~~~~~~~~ ^
->     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->           |                                                       ~~~~~~~~~~ ^
->     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->           |                                                       ~~~~~~~~~~ ^
->     include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       692 |         readsb(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       700 |         readsw(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       708 |         readsl(PCI_IOBASE + addr, buffer, count);
->           |                ~~~~~~~~~~ ^
->     include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       717 |         writesb(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       726 |         writesw(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->       735 |         writesl(PCI_IOBASE + addr, buffer, count);
->           |                 ~~~~~~~~~~ ^
->>> mm/page_io.c:211:18: error: use of undeclared identifier 'THP_SWPOUT'; did you mean 'PSWPOUT'?
->       211 |                 count_vm_event(THP_SWPOUT);
->           |                                ^~~~~~~~~~
->           |                                PSWPOUT
->     include/linux/vm_event_item.h:32:47: note: 'PSWPOUT' declared here
->        32 | enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
->           |                                               ^
->     12 warnings and 1 error generated.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I will fix it in the next version. Thanks.
+Tested-by: CKI Project <cki-project@redhat.com>
 
->
-> vim +211 mm/page_io.c
->
-> 2f772e6cadf8ad Seth Jennings 2013-04-29  207
-> c40c44eb86eb74 ZhangPeng     2023-07-20  208  static inline void count_swpout_vm_event(struct folio *folio)
-> 225311a46411c3 Huang Ying    2017-09-06  209  {
-> c40c44eb86eb74 ZhangPeng     2023-07-20  210  	if (unlikely(folio_test_pmd_mappable(folio)))
-> 225311a46411c3 Huang Ying    2017-09-06 @211  		count_vm_event(THP_SWPOUT);
-> c40c44eb86eb74 ZhangPeng     2023-07-20  212  	count_vm_events(PSWPOUT, folio_nr_pages(folio));
-> 225311a46411c3 Huang Ying    2017-09-06  213  }
-> 225311a46411c3 Huang Ying    2017-09-06  214
->
--- 
-Best Regards,
-Peng
+Kernel information:
+    Commit message: Merge tag 'iomap-6.5-fixes-1' of git://git.kernel.org/p=
+ub/scm/fs/xfs/xfs-linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96688
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] unchecked MSR access error: RDMSR from 0xe2 at rI=
+P: 0xffffffff87090227 (native_read_msr+0x7/0x40) (intel_idle_init_cstates_i=
+cpu)
+            URL: https://lore.kernel.org/all/CA+QYu4qSBdhEgFURu+ouAf2d_JNPb=
+ZgCSUaxCLoGzMqDQOLWsQ@mail.gmail.com/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
+ dump memory(/proc/vmcore). No such file or directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/173 failing on ark-eln aarch64
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
