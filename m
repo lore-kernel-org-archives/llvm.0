@@ -1,173 +1,165 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24775363;
-	Fri, 21 Jul 2023 01:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689903076; x=1721439076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2i87Axe7ryGk0Ppj3iuCoUCZZYUpnVamf47/JbhCPqo=;
-  b=DqDQyppjfiFC8MbxVdp8HKr9frlDbpGHiwkU9QO30Yp6ujAWFtUgnQBT
-   cgU894YXBJ+9cR+Xy40clBb05pweEtQLzV3RWFG3SXw736aZtlQ80USGD
-   VKc1065/NodycuDjM5detIFsZuIfQMrsobaJ8PsPVSXNJzOL8YBZ7hXTa
-   N2xExc4GOmmdn/YBeE+/szK7tEatzkyyP/fjPJ9EdeoP8g0gpLk4600gl
-   8RGQRzIGKD8IyigkElDLHHo6iBNMTDUeh3hhA2cQ8mLAWc/1y0oQaJTJs
-   sns17eWp8x1vTZL1qFtk/UssgnPUoU6MUZdL0qCqr5egPGenzHpHjSR6i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="347212676"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="347212676"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 18:31:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="724666402"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="724666402"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 20 Jul 2023 18:31:11 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qMez6-0006iG-1t;
-	Fri, 21 Jul 2023 01:31:08 +0000
-Date: Fri, 21 Jul 2023 09:31:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peng Zhang <zhangpeng362@huawei.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, willy@infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hch@infradead.org,
-	sidhartha.kumar@oracle.com, akpm@linux-foundation.org,
-	wangkefeng.wang@huawei.com, sunnanyong@huawei.com,
-	ZhangPeng <zhangpeng362@huawei.com>
-Subject: Re: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to
- take in a folio
-Message-ID: <202307210951.NCdscoSS-lkp@intel.com>
-References: <20230720130147.4071649-10-zhangpeng362@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423287F;
+	Fri, 21 Jul 2023 02:31:07 +0000 (UTC)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R6YS44vNHz18LQp;
+	Fri, 21 Jul 2023 10:30:12 +0800 (CST)
+Received: from [10.174.179.160] (10.174.179.160) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 21 Jul 2023 10:30:57 +0800
+Message-ID: <fc955d9b-c9f0-47b5-063a-b82c52550fe9@huawei.com>
+Date: Fri, 21 Jul 2023 10:30:57 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720130147.4071649-10-zhangpeng362@huawei.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to
+ take in a folio
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>, <willy@infradead.org>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<hch@infradead.org>, <sidhartha.kumar@oracle.com>,
+	<akpm@linux-foundation.org>, <wangkefeng.wang@huawei.com>,
+	<sunnanyong@huawei.com>
+References: <20230720130147.4071649-10-zhangpeng362@huawei.com>
+ <202307210951.NCdscoSS-lkp@intel.com>
+From: "zhangpeng (AS)" <zhangpeng362@huawei.com>
+In-Reply-To: <202307210951.NCdscoSS-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.160]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
 
-Hi Peng,
+On 2023/7/21 9:31, kernel test robot wrote:
 
-kernel test robot noticed the following build errors:
+> Hi Peng,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on akpm-mm/mm-everything]
+> [also build test ERROR on axboe-block/for-next linus/master v6.5-rc2 next-20230720]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/mm-page_io-remove-unneeded-ClearPageUptodate/20230720-210515
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230720130147.4071649-10-zhangpeng362%40huawei.com
+> patch subject: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to take in a folio
+> config: um-randconfig-r003-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307210951.NCdscoSS-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     In file included from mm/page_io.c:15:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       547 |         val = __raw_readb(PCI_IOBASE + addr);
+>           |                           ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>           |                                                         ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>        37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>           |                                                   ^
+>     In file included from mm/page_io.c:15:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>           |                                                         ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>        35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>           |                                                   ^
+>     In file included from mm/page_io.c:15:
+>     In file included from include/linux/kernel_stat.h:9:
+>     In file included from include/linux/interrupt.h:11:
+>     In file included from include/linux/hardirq.h:11:
+>     In file included from arch/um/include/asm/hardirq.h:5:
+>     In file included from include/asm-generic/hardirq.h:17:
+>     In file included from include/linux/irq.h:20:
+>     In file included from include/linux/io.h:13:
+>     In file included from arch/um/include/asm/io.h:24:
+>     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>           |                             ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>           |                                                       ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>           |                                                       ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>           |                ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>       735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>           |                 ~~~~~~~~~~ ^
+>>> mm/page_io.c:211:18: error: use of undeclared identifier 'THP_SWPOUT'; did you mean 'PSWPOUT'?
+>       211 |                 count_vm_event(THP_SWPOUT);
+>           |                                ^~~~~~~~~~
+>           |                                PSWPOUT
+>     include/linux/vm_event_item.h:32:47: note: 'PSWPOUT' declared here
+>        32 | enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+>           |                                               ^
+>     12 warnings and 1 error generated.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on axboe-block/for-next linus/master v6.5-rc2 next-20230720]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I will fix it in the next version. Thanks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/mm-page_io-remove-unneeded-ClearPageUptodate/20230720-210515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230720130147.4071649-10-zhangpeng362%40huawei.com
-patch subject: [PATCH v3 09/10] mm/page_io: convert count_swpout_vm_event() to take in a folio
-config: um-randconfig-r003-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210951.NCdscoSS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307210951.NCdscoSS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/page_io.c:15:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/page_io.c:15:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/page_io.c:15:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/page_io.c:211:18: error: use of undeclared identifier 'THP_SWPOUT'; did you mean 'PSWPOUT'?
-     211 |                 count_vm_event(THP_SWPOUT);
-         |                                ^~~~~~~~~~
-         |                                PSWPOUT
-   include/linux/vm_event_item.h:32:47: note: 'PSWPOUT' declared here
-      32 | enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
-         |                                               ^
-   12 warnings and 1 error generated.
-
-
-vim +211 mm/page_io.c
-
-2f772e6cadf8ad Seth Jennings 2013-04-29  207  
-c40c44eb86eb74 ZhangPeng     2023-07-20  208  static inline void count_swpout_vm_event(struct folio *folio)
-225311a46411c3 Huang Ying    2017-09-06  209  {
-c40c44eb86eb74 ZhangPeng     2023-07-20  210  	if (unlikely(folio_test_pmd_mappable(folio)))
-225311a46411c3 Huang Ying    2017-09-06 @211  		count_vm_event(THP_SWPOUT);
-c40c44eb86eb74 ZhangPeng     2023-07-20  212  	count_vm_events(PSWPOUT, folio_nr_pages(folio));
-225311a46411c3 Huang Ying    2017-09-06  213  }
-225311a46411c3 Huang Ying    2017-09-06  214  
-
+>
+> vim +211 mm/page_io.c
+>
+> 2f772e6cadf8ad Seth Jennings 2013-04-29  207
+> c40c44eb86eb74 ZhangPeng     2023-07-20  208  static inline void count_swpout_vm_event(struct folio *folio)
+> 225311a46411c3 Huang Ying    2017-09-06  209  {
+> c40c44eb86eb74 ZhangPeng     2023-07-20  210  	if (unlikely(folio_test_pmd_mappable(folio)))
+> 225311a46411c3 Huang Ying    2017-09-06 @211  		count_vm_event(THP_SWPOUT);
+> c40c44eb86eb74 ZhangPeng     2023-07-20  212  	count_vm_events(PSWPOUT, folio_nr_pages(folio));
+> 225311a46411c3 Huang Ying    2017-09-06  213  }
+> 225311a46411c3 Huang Ying    2017-09-06  214
+>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best Regards,
+Peng
+
