@@ -1,73 +1,118 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D368327F00;
-	Fri, 21 Jul 2023 18:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689962839; x=1721498839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qPkjEnLyyo1zjcfe5ik3baUNOb9UtXmslVsWPY4/zKg=;
-  b=Z2oCKEVJQl6Uk2emfhIjsRhI7bPTzdfDcmS+07FhypVcbCQhvpKIIn0p
-   X4mGHq8UWAh94Ln2BuhRFliy4gDydhnzr8ORRupuJZUKCKUEhY6+aFd8B
-   2z5DdX/UMdHYxGSPm8ftk/ZMrqQMs1OBMaM7bXwDpfe4J1IvLcOtOxOhQ
-   fuCayW/sYGdbHK3jbW8zxikB1Y3MzCNAaN8f7h5LIjgzpe7jYfjQjF98e
-   xd64TEubZ3Q0zyXm7YRlWZQ+IQMG1TSQy+/rVNAqvezharT3Tn6nR80sO
-   cxK0gflo0yjFTdixeouHFNNsi7ShLUGnPMKiGgbXiRLuhJaK8liL/ERcH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="357078802"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="357078802"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 11:07:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="848902555"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="848902555"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2023 11:07:16 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qMuX5-0007W3-34;
-	Fri, 21 Jul 2023 18:07:15 +0000
-Date: Sat, 22 Jul 2023 02:06:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Kees Cook <keescook@chromium.org>
-Subject: [tip:x86/shstk 36/42] Cannot find symbol for section 10:
- .text.arch_proc_pid_thread_features.
-Message-ID: <202307220111.5MVJk5cq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E3E33DA
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 18:36:29 +0000 (UTC)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-765a1690003so202155985a.0
+        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 11:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689964588; x=1690569388;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHZrBLyt0tLPGB2RONofsO5b0sKazW7IdioBPKpibr4=;
+        b=ytwwLc0h9YOdggPJlKlzbjecI9Apaj257sz7uh6CdFxqjlBYy6kFl3hoL19aMz1ixE
+         bjQCKRyBT4MK/9YEtKbbYUrYrvhupezSMAn0l1U3eRtox0mHBMH5FC8NqjeF+v2RvVIz
+         XSCXQQ2nkYX/WQIclOKo4E3JtA1scC4P8b1Y3c9E2DvbQBuOj2caQPcSv8lBr+mgTPrm
+         cqIRAzctEgT2qC3ljrYOWWTx6vjlJExJdmAEamcjfrA6+yHHgaZ9KyAmTu6SHAaPNHqo
+         SDB00c+8qxHmt0qIx9ZozvrPG/G06aPFhe8GZIa8IJNEGYPj6rgTg8hbfFi6gyUxZHWo
+         Nt1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689964588; x=1690569388;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DHZrBLyt0tLPGB2RONofsO5b0sKazW7IdioBPKpibr4=;
+        b=LWij6UGHofiKzllgT6abFq6ehXxpm4hHIHrtmbqvNXVsBXgxtTWiTE4dHLmcZcDi0a
+         iVVeL7GLgVgKtZT3lL3Det7qwz9aDxRpkNNsOUxPxS8MzH/QkzTPmcoHzX4vMCWVN1Lp
+         3EjGWG8iM6gpdA4oKlFAUJunfda5DJmBQvqhzUylRaIVdoo69C59VWB4dkMD26Vk2TiT
+         RqUK7wTKVUSQlPiJTtck+p16TFaf7aGHlpol3T68iOCChOwxIDITVMN3KLHt0SEqrlVh
+         cDdbO8o8r8WsOYsgWwLukjd/nLm02B2jfzb0YVJ8YNLaRx8pWkqR950JFhyx7oAp/afk
+         AkDQ==
+X-Gm-Message-State: ABy/qLYBVxcYrJbvU2AZAZFU3ueuKr6RcoDz324+YU/5/bfnZKbQGDEr
+	Ur8LmmQwhcIqMxpa7ecra2u5ceCbEdu4WEo+ct1E2g==
+X-Google-Smtp-Source: APBJJlGh9fwuP4Vof6eGVvzXhgYaNFm3V3zmaLa3+SuKLBH80ZShDvbTVFMZ3OBxViOUWTYv8r04Cf1dx8bNV5mmmaM=
+X-Received: by 2002:ad4:404f:0:b0:636:b0b5:3198 with SMTP id
+ r15-20020ad4404f000000b00636b0b53198mr797212qvp.50.1689964588331; Fri, 21 Jul
+ 2023 11:36:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-0-36ed8fc8faea@kernel.org>
+ <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-1-36ed8fc8faea@kernel.org>
+In-Reply-To: <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-1-36ed8fc8faea@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 21 Jul 2023 11:36:17 -0700
+Message-ID: <CAKwvOdkdjnNwBXKyp2ssq6iF9DMqJeWYyPOfTEFtLUoFhb79jg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/v3d: Avoid -Wconstant-logical-operand in nsecs_to_jiffies_timeout()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com, 
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, emma@anholt.net, 
+	mwen@igalia.com, justinstitt@google.com, trix@redhat.com, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/shstk
-head:   c19a153cc0b172c8e1869d6dee52f6aadd73d3c4
-commit: d21da223567ebdcd7c3ba53e77eddcf95082d218 [36/42] x86: Expose thread features in /proc/$PID/status
-config: mips-randconfig-r002-20230720 (https://download.01.org/0day-ci/archive/20230722/202307220111.5MVJk5cq-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307220111.5MVJk5cq-lkp@intel.com/reproduce)
+On Tue, Jul 18, 2023 at 2:44=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> A proposed update to clang's -Wconstant-logical-operand to warn when the
+> left hand side is a constant shows the following instance in
+> nsecs_to_jiffies_timeout() when NSEC_PER_SEC is not a multiple of HZ,
+> such as CONFIG_HZ=3D300:
+>
+>   In file included from drivers/gpu/drm/v3d/v3d_debugfs.c:12:
+>   drivers/gpu/drm/v3d/v3d_drv.h:343:24: warning: use of logical '&&' with=
+ constant operand [-Wconstant-logical-operand]
+>     343 |         if (NSEC_PER_SEC % HZ &&
+>         |             ~~~~~~~~~~~~~~~~~ ^
+>   drivers/gpu/drm/v3d/v3d_drv.h:343:24: note: use '&' for a bitwise opera=
+tion
+>     343 |         if (NSEC_PER_SEC % HZ &&
+>         |                               ^~
+>         |                               &
+>   drivers/gpu/drm/v3d/v3d_drv.h:343:24: note: remove constant to silence =
+this warning
+>   1 warning generated.
+>
+> Turn this into an explicit comparison against zero to make the
+> expression a boolean to make it clear this should be a logical check,
+> not a bitwise one.
+>
+> Link: https://reviews.llvm.org/D142609
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307220111.5MVJk5cq-lkp@intel.com/
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All errors (new ones prefixed by >>):
+> ---
+>  drivers/gpu/drm/v3d/v3d_drv.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/v3d/v3d_drv.h b/drivers/gpu/drm/v3d/v3d_drv.=
+h
+> index b74b1351bfc8..7f664a4b2a75 100644
+> --- a/drivers/gpu/drm/v3d/v3d_drv.h
+> +++ b/drivers/gpu/drm/v3d/v3d_drv.h
+> @@ -340,7 +340,7 @@ struct v3d_submit_ext {
+>  static inline unsigned long nsecs_to_jiffies_timeout(const u64 n)
+>  {
+>         /* nsecs_to_jiffies64() does not guard against overflow */
+> -       if (NSEC_PER_SEC % HZ &&
+> +       if ((NSEC_PER_SEC % HZ) !=3D 0 &&
+>             div_u64(n, NSEC_PER_SEC) >=3D MAX_JIFFY_OFFSET / HZ)
+>                 return MAX_JIFFY_OFFSET;
+>
+>
+> --
+> 2.41.0
+>
 
->> Cannot find symbol for section 10: .text.arch_proc_pid_thread_features.
-   fs/proc/array.o: failed
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
