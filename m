@@ -1,92 +1,133 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD8FECD;
-	Fri, 21 Jul 2023 08:38:45 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 74BCE5C015A;
-	Fri, 21 Jul 2023 04:38:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Jul 2023 04:38:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1689928723; x=1690015123; bh=9x
-	bAbWLOgyrqFZxhBvP3PsKKyJSMYggcHNnXEaR30rs=; b=Cx7KEx2qISeRAL6nJ0
-	WmoTheQoFT4V0vpCfO0LnITx51wVeDwORR7HL7qhtt4x/zQ+/FnEYpNCMLgIcvi0
-	wPOfPe11htgTKnJOmJWc2nGhk3Ohdm29Dl0CxemNUS2lFihsxSuWTw86771Q8hST
-	4uzUdd1vPmJW4DZGAFa4DkXI+7wg4M5ElG0eydmr0ewtL69pD4/PRf5abC9b+yQK
-	XpS0cdFwCmF1eMT/qoQq6hgKn0lRsyXV7xlMqGf2Xjs8zeP2UWcjCi8bAH2+gfl/
-	l6M0Bz0TwetF1JcciqjADWntLmmD3ZE8sc2euRxaQ7Bl493jmIzw+e71uNxIakgF
-	TwgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1689928723; x=1690015123; bh=9xbAbWLOgyrqF
-	ZxhBvP3PsKKyJSMYggcHNnXEaR30rs=; b=pcMdRE7jZH3mU/l9PqDO3ncOnnSTe
-	LSJC80doOPeSpCvXNvOSlvBx+afo7NVoOTwr1ROCu31cnU2ubx4u4ZKR1Qlqxy8f
-	maDmgM2KBxYfiY+F+iWN+HunoxPuUkTugx8XLvrdWtUi8BHmQgjymOBD/TXwT7g0
-	KWmNDlxkuhuyUYWN3aWCe1H2bs12BubMHltubb98KIL4PFX5s1CRyc+rfEc5Ai03
-	+QfjoS1rxasgQKaxSFSGVf1xQHui5Gm8aKhtqLpsE+86Z3LAh0CAsT2F96xh/s14
-	VWlHbuhQLRcjSrba8U7CMqFtHBWn2EaT2eA46X/QebfigZ7RUXsk1uBCQ==
-X-ME-Sender: <xms:EkS6ZMgienXk8JjEfpgFlvY5X9pkSc9AbG43tU2kur0_UuAw2M_jnA>
-    <xme:EkS6ZFCbloiQE3vOnLZuhn1hfV6lyrJnlP7LgCwXr24xOv8pM6QcyW5gUOSSDdtTL
-    z8xDU5D2Y7JLPxYLOs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrhedvgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:EkS6ZEFZyvz2M_zmqOjwIIZtuzZWJXtTRgMZAhZoOi5b2TpkpDc9LQ>
-    <xmx:EkS6ZNTSJ1kvuNceVcqk_YWWdZWJBtYJeIR_O5aazJTtlOQDQXLgOg>
-    <xmx:EkS6ZJwAEy3EHVhfD9GGhaPy63AcO8hLQy5Ex8Mv4pbfVmCnnrvSKQ>
-    <xmx:E0S6ZB9G6fJ4Qf5Ii-X-43JluDJPbcFXMxZFbvRUkha_Cc9Xr7g2jQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 8BB29B60089; Fri, 21 Jul 2023 04:38:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391DB14F7A
+	for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 09:33:55 +0000 (UTC)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-668730696a4so1163316b3a.1
+        for <llvm@lists.linux.dev>; Fri, 21 Jul 2023 02:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689932035; x=1690536835;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=S06AqqBQY/XLaTfW98+CLvTaCgLNSccXV/8O8vUmFHQ=;
+        b=Gl2t+UnboIuezCJMjDzvyRV/2zBcBBg+M4e4LB+GUmVIqnpYdYqI2Z+xlaQHf0qYoa
+         UR6SXid8Vwxas8MZRBhGLNBTsdLBR+pVW4lRAdKZOXgLhoTOSUo38J9csJ8b/GRl4CPj
+         pwpEZeiOAZFSNoQJ4if9kO198HNGro2iC4lluF+0tkM1tAGo8u3xIVhCqFt65IPTwOVn
+         7p4ecmmnqLTks10jqf7KF6E9vd1MCgmFtuqwJUrifrWSA+lY0NODd7Cm5b1TMRf///LG
+         02llI5u/mCJ8SePW6cFZeDFXCw58iinXlYnMHi8tnvMpS/kn+NUxC2+pQPEa0hszucCL
+         3fnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689932035; x=1690536835;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S06AqqBQY/XLaTfW98+CLvTaCgLNSccXV/8O8vUmFHQ=;
+        b=UzEJROAPHHnbWzHC9yQjWMsdXhSR9BO71amQVryZYnkiBsZ1yeSFtbWk/LzmnNWQx5
+         rZyoLXhB13/FyGOyys0S81i1W9ixmtkEuJ+O31Y9trv2QHhNvtbCjX8AA6hdvagnZpP6
+         WYksvHDv1o1sK24z6i5x6IvvtNozkAtrNEftDT14Yty/GdX6/ahr6chge4jK/zTMmxEg
+         FzSTVFvrmFjztdb3O9VK6T4D+oZKpZtSJPrjZNB4ES4IhFnzbjHJTTDmy/inRNAQxMJi
+         IAMaDd/9j3wQkaGzeZqim/Vb/+lfrDzHygdus1aZEE5EdyWajON0ZhebUl6kMjnb2sT+
+         tlZQ==
+X-Gm-Message-State: ABy/qLaS/d/R1ykBPud28cmwpup6iNI+6cvBWf+b0x2Ebn264cNmoCL+
+	kV2BYno8HpTyM/U4fyhY1gsM+Cv1W1lp2HyQLM3r2A==
+X-Google-Smtp-Source: APBJJlGhSg0viF/5+u9c1KfZSw1Aa28WHges2GPkIrJqJvJB8GO6cs/igNBy0PQk8znqoQPqOkpvZA==
+X-Received: by 2002:a05:6a20:2d9d:b0:12d:3069:69e1 with SMTP id bf29-20020a056a202d9d00b0012d306969e1mr898912pzb.60.1689932034952;
+        Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id iw10-20020a170903044a00b001b531e8a000sm2985183plb.157.2023.07.21.02.33.53
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
+Message-ID: <64ba5102.170a0220.f779d.573a@mx.google.com>
+Date: Fri, 21 Jul 2023 02:33:54 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <5107c48f-7d91-498c-9cc0-7609b361878d@app.fastmail.com>
-In-Reply-To: <20230621130552.00001574@Huawei.com>
-References: <202306211545.7b6CdqsL-lkp@intel.com>
- <CAHp75VcNj-P_WCvx2Pf9sj_ir2oKf2AZ-mdTP=KHSuPY7WcjeA@mail.gmail.com>
- <010ac7c3707f4eb0aef285b5e823f8e3@analog.com>
- <20230621130552.00001574@Huawei.com>
-Date: Fri, 21 Jul 2023 10:38:22 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jonathan Cameron" <Jonathan.Cameron@Huawei.com>,
- "Kim Seer Paller" <KimSeer.Paller@analog.com>
-Cc: "Andy Shevchenko" <andy.shevchenko@gmail.com>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
- "kernel test robot" <lkp@intel.com>
-Subject: Re: [jic23-iio:testing 6/10] drivers/iio/adc/max14001.c:135:13: warning:
- result of comparison of constant 18446744073709551615 with expression of type
- 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned
- char)0, signed char: (unsi...
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20230721
+X-Kernelci-Report-Type: build
+Subject: next/master build: 6 builds: 0 failed, 6 passed,
+ 1 warning (next-20230721)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Wed, Jun 21, 2023, at 14:05, Jonathan Cameron wrote:
+next/master build: 6 builds: 0 failed, 6 passed, 1 warning (next-20230721)
 
-> It's only called from one place, I'd just put the code inline so that the
-> constant nature of that variable is explicit.  Or pass in the FIELD_PREP()
-> value rather than computing it in the function.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230721/
 
-As far as I understand it, clang warnings are intentionally generated
-without taking constant-folding across inline functions into account,
-in order to be completely reproducible regardless of optimization level,
-while gcc generates most warnings after inlining and constant folding
-in order to better analyze what actually happens.
+Tree: next
+Branch: master
+Git Describe: next-20230721
+Git Commit: ae867bc97b713121b2a7f5fcac68378a0774739b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 4 unique architectures
 
-     Arnd
+Warnings Detected:
+
+arm64:
+
+arm:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+
+x86_64:
+
+
+Warnings summary:
+
+    1    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
