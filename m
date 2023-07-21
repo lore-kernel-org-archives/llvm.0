@@ -1,48 +1,52 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC31E501;
-	Thu, 20 Jul 2023 23:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108CF363;
+	Fri, 21 Jul 2023 00:40:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689896246; x=1721432246;
+  t=1689900018; x=1721436018;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Z2itLRjqr3PQgC+FNJyKgpaYg8xYUggoWHdV0xSSs0k=;
-  b=goSWDdVjrC6QHW2MkPNoFwo7pGUdPBOy3Jz4eedoVx/hdF5qTmyZO3DQ
-   2Z9eIofXws71rTQAOacWWUAtmI5D5GuOrK9U3auFdevkLs1bw/0DUXf1s
-   ieKFuIyFQQEqCMNdkuDbh8m68xuHi13s8UfiSX9jtUBhXs4JEO5jp+HSI
-   iQ9WNSZotp57gTmao2VZWkrIlHygscEBetTYGBm9bGuYr9nJI7OGVCiza
-   +adlFU7/U+2I39479jgWIFe5RuCO8jJuaQAoVanT6clmwCiv0gvQekkSz
-   TsHSn4VFXGIZYCrcqVtd+3GzUZdwrNzbxrCBWrCRIjBOTrOXyYUlkbu4+
+  bh=CI0o0+Z4qXXHWD154B+rJnNKHysZxCwTxv7+kXT0cow=;
+  b=RUZ3i03EpBCU4a1hRH5WLCKjhuqj1X25P0lQqRTJZyEFKcv5Ase2SWND
+   XH3DffYyvDImgf4ZcHFTg5GcxMZlIvgW2pEGAR18baJNbUCAT5SvkZDmG
+   bY7SaEd9zwl3IQvDja03mbM+SdKejgg+kFOQMtZyWDGpKmO3/Rt5tU/+n
+   NErzW1PfmxVUf6XyTDIm1i4ZywvLWSpzGZvde+GZq/OrB+k3h0UmV1WRD
+   1Nmp22n3UuLhblY1ZHKFIN+eKVUkv+d83nnreqswwbkfauUiKZbCQMLas
+   hWB4OqV86PLhba7GofGxLM5q6/HrJB7UHg85uKQYc7KkecV9oC6Mxzq2K
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="430687205"
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="433126712"
 X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="430687205"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 16:37:24 -0700
+   d="scan'208";a="433126712"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 17:40:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="971223643"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="971223643"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="868048756"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Jul 2023 16:37:12 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2023 17:40:16 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qMdCp-0006dG-20;
-	Thu, 20 Jul 2023 23:37:11 +0000
-Date: Fri, 21 Jul 2023 07:36:54 +0800
+	id 1qMeBq-0006gL-2i;
+	Fri, 21 Jul 2023 00:40:14 +0000
+Date: Fri, 21 Jul 2023 08:38:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linke Li <lilinke99@foxmail.com>, linux-mm@kvack.org
+To: Viresh Kumar <viresh.kumar@linaro.org>, Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mike.kravetz@oracle.com, muchun.song@linux.dev, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-kernel@vger.kernel.org, dan.carpenter@linaro.org,
-	Linke Li <lilinke99@gmail.com>
-Subject: Re: [PATCH v3] hugetlbfs: Fix integer overflow check in
- hugetlbfs_file_mmap()
-Message-ID: <202307210737.HUPwpBdW-lkp@intel.com>
-References: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	stratos-dev@op-lists.linaro.org,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] xen: privcmd: Add support for irqfd
+Message-ID: <202307210852.ukq5f98v-lkp@intel.com>
+References: <a25d5f01fe9b4624aa12cab77abd001044ea02d5.1689845210.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,119 +55,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_C2D6865561F23A8141BB145149ACC682B408@qq.com>
+In-Reply-To: <a25d5f01fe9b4624aa12cab77abd001044ea02d5.1689845210.git.viresh.kumar@linaro.org>
 
-Hi Linke,
+Hi Viresh,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.5-rc2 next-20230720]
+[auto build test ERROR on xen-tip/linux-next]
+[also build test ERROR on linus/master v6.5-rc2 next-20230720]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Linke-Li/hugetlbfs-Fix-integer-overflow-check-in-hugetlbfs_file_mmap/20230720-225128
-base:   linus/master
-patch link:    https://lore.kernel.org/r/tencent_C2D6865561F23A8141BB145149ACC682B408%40qq.com
-patch subject: [PATCH v3] hugetlbfs: Fix integer overflow check in hugetlbfs_file_mmap()
-config: s390-randconfig-r024-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210737.HUPwpBdW-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/xen-privcmd-Add-support-for-irqfd/20230720-173905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
+patch link:    https://lore.kernel.org/r/a25d5f01fe9b4624aa12cab77abd001044ea02d5.1689845210.git.viresh.kumar%40linaro.org
+patch subject: [PATCH V2 2/2] xen: privcmd: Add support for irqfd
+config: arm64-randconfig-r026-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210852.ukq5f98v-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210737.HUPwpBdW-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210852.ukq5f98v-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307210737.HUPwpBdW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210852.ukq5f98v-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/hugetlbfs/inode.c:157:25: warning: variable 'vma_len' is uninitialized when used here [-Wuninitialized]
-     157 |         if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
-         |                                ^~~~~~~
-   include/linux/overflow.h:67:47: note: expanded from macro 'check_add_overflow'
-      67 |         __must_check_overflow(__builtin_add_overflow(a, b, d))
-         |                                                      ^
-   fs/hugetlbfs/inode.c:123:21: note: initialize the variable 'vma_len' to silence this warning
-     123 |         loff_t len, vma_len;
-         |                            ^
-         |                             = 0
-   1 warning generated.
+>> drivers/xen/privcmd.c:961:12: error: call to undeclared function 'eventfd_ctx_fileget'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     961 |         eventfd = eventfd_ctx_fileget(f.file);
+         |                   ^
+   drivers/xen/privcmd.c:961:12: note: did you mean 'eventfd_ctx_fdget'?
+   include/linux/eventfd.h:56:35: note: 'eventfd_ctx_fdget' declared here
+      56 | static inline struct eventfd_ctx *eventfd_ctx_fdget(int fd)
+         |                                   ^
+>> drivers/xen/privcmd.c:961:10: error: incompatible integer to pointer conversion assigning to 'struct eventfd_ctx *' from 'int' [-Wint-conversion]
+     961 |         eventfd = eventfd_ctx_fileget(f.file);
+         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/vma_len +157 fs/hugetlbfs/inode.c
+vim +/eventfd_ctx_fileget +961 drivers/xen/privcmd.c
 
-   108	
-   109	/*
-   110	 * Mask used when checking the page offset value passed in via system
-   111	 * calls.  This value will be converted to a loff_t which is signed.
-   112	 * Therefore, we want to check the upper PAGE_SHIFT + 1 bits of the
-   113	 * value.  The extra bit (- 1 in the shift value) is to take the sign
-   114	 * bit into account.
-   115	 */
-   116	#define PGOFF_LOFFT_MAX \
-   117		(((1UL << (PAGE_SHIFT + 1)) - 1) <<  (BITS_PER_LONG - (PAGE_SHIFT + 1)))
-   118	
-   119	static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
-   120	{
-   121		struct inode *inode = file_inode(file);
-   122		struct hugetlbfs_inode_info *info = HUGETLBFS_I(inode);
-   123		loff_t len, vma_len;
-   124		int ret;
-   125		struct hstate *h = hstate_file(file);
-   126	
-   127		/*
-   128		 * vma address alignment (but not the pgoff alignment) has
-   129		 * already been checked by prepare_hugepage_range.  If you add
-   130		 * any error returns here, do so after setting VM_HUGETLB, so
-   131		 * is_vm_hugetlb_page tests below unmap_region go the right
-   132		 * way when do_mmap unwinds (may be important on powerpc
-   133		 * and ia64).
-   134		 */
-   135		vm_flags_set(vma, VM_HUGETLB | VM_DONTEXPAND);
-   136		vma->vm_ops = &hugetlb_vm_ops;
-   137	
-   138		ret = seal_check_future_write(info->seals, vma);
-   139		if (ret)
-   140			return ret;
-   141	
-   142		/*
-   143		 * page based offset in vm_pgoff could be sufficiently large to
-   144		 * overflow a loff_t when converted to byte offset.  This can
-   145		 * only happen on architectures where sizeof(loff_t) ==
-   146		 * sizeof(unsigned long).  So, only check in those instances.
-   147		 */
-   148		if (sizeof(unsigned long) == sizeof(loff_t)) {
-   149			if (vma->vm_pgoff & PGOFF_LOFFT_MAX)
-   150				return -EINVAL;
-   151		}
-   152	
-   153		/* must be huge page aligned */
-   154		if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
-   155			return -EINVAL;
-   156	
- > 157		if (check_add_overflow(vma_len, (loff_t)vma->vm_pgoff << PAGE_SHIFT, &len))
-   158			return -EINVAL;
-   159	
-   160		inode_lock(inode);
-   161		file_accessed(file);
-   162	
-   163		ret = -ENOMEM;
-   164		if (!hugetlb_reserve_pages(inode,
-   165					vma->vm_pgoff >> huge_page_order(h),
-   166					len >> huge_page_shift(h), vma,
-   167					vma->vm_flags))
-   168			goto out;
-   169	
-   170		ret = 0;
-   171		if (vma->vm_flags & VM_WRITE && inode->i_size < len)
-   172			i_size_write(inode, len);
-   173	out:
-   174		inode_unlock(inode);
-   175	
-   176		return ret;
-   177	}
-   178	
+   936	
+   937	static int privcmd_irqfd_assign(struct privcmd_irqfd *irqfd)
+   938	{
+   939		struct privcmd_kernel_irqfd *kirqfd, *tmp;
+   940		struct eventfd_ctx *eventfd;
+   941		__poll_t events;
+   942		struct fd f;
+   943		int ret;
+   944	
+   945		kirqfd = kzalloc(sizeof(*kirqfd), GFP_KERNEL);
+   946		if (!kirqfd)
+   947			return -ENOMEM;
+   948	
+   949		kirqfd->irq = irqfd->irq;
+   950		kirqfd->dom = irqfd->dom;
+   951		kirqfd->level = irqfd->level;
+   952		INIT_LIST_HEAD(&kirqfd->list);
+   953		INIT_WORK(&kirqfd->shutdown, irqfd_shutdown);
+   954	
+   955		f = fdget(irqfd->fd);
+   956		if (!f.file) {
+   957			ret = -EBADF;
+   958			goto error_kfree;
+   959		}
+   960	
+ > 961		eventfd = eventfd_ctx_fileget(f.file);
+   962		if (IS_ERR(eventfd)) {
+   963			ret = PTR_ERR(eventfd);
+   964			goto error_fd_put;
+   965		}
+   966	
+   967		kirqfd->eventfd = eventfd;
+   968	
+   969		/*
+   970		 * Install our own custom wake-up handling so we are notified via a
+   971		 * callback whenever someone signals the underlying eventfd.
+   972		 */
+   973		init_waitqueue_func_entry(&kirqfd->wait, irqfd_wakeup);
+   974		init_poll_funcptr(&kirqfd->pt, irqfd_poll_func);
+   975	
+   976		mutex_lock(&irqfds_lock);
+   977	
+   978		list_for_each_entry(tmp, &irqfds_list, list) {
+   979			if (kirqfd->eventfd == tmp->eventfd) {
+   980				ret = -EBUSY;
+   981				mutex_unlock(&irqfds_lock);
+   982				goto error_eventfd;
+   983			}
+   984		}
+   985	
+   986		list_add_tail(&kirqfd->list, &irqfds_list);
+   987		mutex_unlock(&irqfds_lock);
+   988	
+   989		/*
+   990		 * Check if there was an event already pending on the eventfd before we
+   991		 * registered, and trigger it as if we didn't miss it.
+   992		 */
+   993		events = vfs_poll(f.file, &kirqfd->pt);
+   994		if (events & EPOLLIN)
+   995			irqfd_inject(kirqfd);
+   996	
+   997		/*
+   998		 * Do not drop the file until the kirqfd is fully initialized, otherwise
+   999		 * we might race against the EPOLLHUP.
+  1000		 */
+  1001		fdput(f);
+  1002		return 0;
+  1003	
+  1004	error_eventfd:
+  1005		eventfd_ctx_put(eventfd);
+  1006	
+  1007	error_fd_put:
+  1008		fdput(f);
+  1009	
+  1010	error_kfree:
+  1011		kfree(kirqfd);
+  1012		return ret;
+  1013	}
+  1014	
 
 -- 
 0-DAY CI Kernel Test Service
