@@ -1,85 +1,91 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8ABF7F;
-	Fri, 21 Jul 2023 04:06:40 +0000 (UTC)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36L45e4o024913;
-	Fri, 21 Jul 2023 04:06:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wtVClhU3klFGG6u/OlX4qZpOcqjROVfGqC4YbZEwYdc=;
- b=KLFjRdKFkbhGbII58ntoOSyX/ZDW40rhCXsYsBKlwZJqo4MVcKqpkfkRjZEZoH5b8SR4
- y+0v7aSclh5vCnMP/0ztKmQwadDzKz6mmHdFT5bH9il6qiNVv62qEjW/s6U+9GsaMfGz
- fUCU1z9kH6e6ZvPiPKccJvIu8c/N/ugOOekJAeMB7Uh5Y6FZltox3lsZXYABq0ZbyKYH
- RWuZ3wy1LFy2coyZJyr+DBLkUNKcSkOf5ILEDbuOsZjDGu4XXTuXrqcOuAjoEJXbZ7bY
- n5f256Bf7tjUNMqLi8Mn9G0Dcr7rWKdwiWqrxlDzqeXLM2F+omsHp34yO7pPx3y1Mzcq +w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rxsxeb5r3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jul 2023 04:06:29 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36L46SCq001495
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jul 2023 04:06:28 GMT
-Received: from [10.216.41.167] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 20 Jul
- 2023 21:06:25 -0700
-Message-ID: <e1c6b11e-b550-b25a-a02f-0ef8be1eb080@quicinc.com>
-Date: Fri, 21 Jul 2023 09:36:21 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22A2802;
+	Fri, 21 Jul 2023 04:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689913923; x=1721449923;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6GVU4NtSBfHGIA+db9VVes1wkK8Q3Ya1oLA7sHzSrXM=;
+  b=F5pji8Vu6vJcyPzDR/Fed80so5doKRh0OoKwDyJDzYgNitbprKUN91Fm
+   h3SXNCGLSOa3CJPuYdeEPpRPkin/40Y6Z898ON3Qp4b96od+JXHAuO0ii
+   XsP0woe6BBoED+2WoGpG6/hC8XSKUalRcN/hyHe6UrOOD4+XPOgYUzEcB
+   DU5ji/wrf1TyFQgJibbLD9NH5QtzAzhVZXn+QPuTfvg3Va/wPV0Tw1oy6
+   ZqeRa/0mFFKoDhfnL/ZuT2EviAjnchQ0h+S+y4pOB4WlxjdvTzIZi3yG5
+   LHBgPr5Awi6PRIXLOcvHhwN4pTgtShfx+A4nx5/ZP5cOWBIe6laiTjQSX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="370533072"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="370533072"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 21:32:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="674910112"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="674910112"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 20 Jul 2023 21:31:59 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qMho1-0006sZ-2n;
+	Fri, 21 Jul 2023 04:31:55 +0000
+Date: Fri, 21 Jul 2023 12:31:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rae Moar <rmoar@google.com>, shuah@kernel.org, davidgow@google.com,
+	dlatypov@google.com, brendan.higgins@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, keescook@chromium.org,
+	linux-hardening@vger.kernel.org, jstultz@google.com,
+	tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Subject: Re: [PATCH v1 2/9] kunit: Add speed attribute
+Message-ID: <202307211202.hZ3gtW5S-lkp@intel.com>
+References: <20230719222338.259684-3-rmoar@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused
- variable '_groups'
-Content-Language: en-US
-To: Linus Walleij <linus.walleij@linaro.org>,
-        kernel test robot
-	<lkp@intel.com>,
-        Bjorn Andersson <andersson@kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>,
-        Nitheesh Sekar <quic_nsekar@quicinc.com>,
-        Varadarajan Narayanan <quic_varada@quicinc.com>
-References: <202307120814.vWPY6URk-lkp@intel.com>
- <CACRpkdbYPAiOa4QU+PUxVjcOtkBT2O7fogh51VvSEbFPutH7ng@mail.gmail.com>
-From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <CACRpkdbYPAiOa4QU+PUxVjcOtkBT2O7fogh51VvSEbFPutH7ng@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: A69ThUj3qWw7VaMAhHRwct6IMjSa-p_Z
-X-Proofpoint-GUID: A69ThUj3qWw7VaMAhHRwct6IMjSa-p_Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-21_01,2023-07-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=636 clxscore=1011
- adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0 phishscore=0
- malwarescore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2307210037
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230719222338.259684-3-rmoar@google.com>
 
-Hi Linus,
+Hi Rae,
 
-On 7/21/2023 12:51 AM, Linus Walleij wrote:
-> Hi Srirachan, Bjorn,
-> 
-> is this warning valid or something I should ignore?
-> 
+kernel test robot noticed the following build errors:
 
-   oops, will fix this and send a separate patch.
-   Did not see this with the default defconfig build though.
+[auto build test ERROR on 64bd4641310c41a1ecf07c13c67bc0ed61045dfd]
 
-Regards,
-  Sricharan
+url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-Add-test-attributes-API-structure/20230720-062623
+base:   64bd4641310c41a1ecf07c13c67bc0ed61045dfd
+patch link:    https://lore.kernel.org/r/20230719222338.259684-3-rmoar%40google.com
+patch subject: [PATCH v1 2/9] kunit: Add speed attribute
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230721/202307211202.hZ3gtW5S-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307211202.hZ3gtW5S-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307211202.hZ3gtW5S-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> lib/kunit/attributes.c:89:47: error: initializer element is not a compile-time constant
+   static struct kunit_attr kunit_attr_list[] = {speed_attr};
+                                                 ^~~~~~~~~~
+   1 error generated.
+
+
+vim +89 lib/kunit/attributes.c
+
+    88	
+  > 89	static struct kunit_attr kunit_attr_list[] = {speed_attr};
+    90	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
