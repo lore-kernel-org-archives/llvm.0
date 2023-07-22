@@ -1,43 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627A611C9D;
-	Sat, 22 Jul 2023 09:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC6111C9A;
+	Sat, 22 Jul 2023 09:46:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690017262; x=1721553262;
+  t=1690019165; x=1721555165;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hj6cC6dJ4jnH2yWwR8JNgdbMCVAWXaApzz1QuQw6Viw=;
-  b=apiok+pdsL/LzlAfqYtTG0iqGRSoluJKjNRe31Y1LONXYrnQY2DyBDR6
-   lohyiQojj09sNBlN5AYoQf5w29lK/sGPwmlHCSrmKQENK6ofJvxuXVv4X
-   +OrzBxq8c0ix8h/laRInb3Nte96VLEetVX8PM+8ne4t4bC++QpRHmhflQ
-   gJQggQR7m45V9KysQ5H4WaCqC+YI+gQnpv2m1EE8GEikAZjgkRsZF3BgZ
-   qHPRbGcCkQ37pJlu1u554e5zowZeEFtcAo0CwKi3M1vOIvuQBSaY5o/NG
-   u+/VMEeMSfDNKgvuUf3Aj9+abx3ZM/2mNMwZuTdaXKSCoM/sMmY53GGWL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="369846587"
+  bh=/G+YLx0+4C3YYzrehY+BxUMLRFy4uSGSxx9eWc+7bM8=;
+  b=Yfhj7cm/VefkySTTIiFP4WDvpmkSbRxBVPpP9Jxl6tH1EFFlFkcAMruy
+   QDTnmRHfirfVWKUwcbOX9s8dDR844BG+KMGVPl8bsbw0f89XyWimSU+kv
+   spH1vNDtjoNHCrdzCjBTIoqbqZ2nOcdnVE9Kx9/+R6g/sThE1VO4R+Dcr
+   j6CF1cltuzKSgAD6Z3bk5f13yAoi59i7kuWdc9uNP6Xev0Eo0dJ9rctAS
+   Ht+L6hj+toqDiKuJ11hUOhnHYJfc+j3+j3+K2G0D5euo9yflTFNmCloKL
+   5uIyWipD6/xinVhHuvWOcxxCGI7fV8K0kV71Tp+pj1U6HlrHl0VXXhA/v
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="347468572"
 X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="369846587"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 02:14:21 -0700
+   d="scan'208";a="347468572"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 02:46:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="815284723"
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="760219465"
 X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="815284723"
+   d="scan'208";a="760219465"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jul 2023 02:14:20 -0700
+  by orsmga001.jf.intel.com with ESMTP; 22 Jul 2023 02:46:00 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qN8gt-0008CX-20;
-	Sat, 22 Jul 2023 09:14:19 +0000
-Date: Sat, 22 Jul 2023 17:14:12 +0800
+	id 1qN9BX-0008EE-1R;
+	Sat, 22 Jul 2023 09:45:59 +0000
+Date: Sat, 22 Jul 2023 17:45:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guo Ren <guoren@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [csky-linux:sg2042-master-qspinlock-64ilp32_v3 5/42]
- arch/riscv/kernel/setup.c:285:13: warning: no previous prototype for
- function 'combo_spin_lock_init'
-Message-ID: <202307221749.i3zgUarh-lkp@intel.com>
+Subject: [csky-linux:sg2042-master-qspinlock-64ilp32_v3 16/42]
+ arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202307221725.bXxd5JSG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,51 +49,79 @@ Content-Disposition: inline
 
 tree:   https://github.com/c-sky/csky-linux sg2042-master-qspinlock-64ilp32_v3
 head:   7f9f76d36814ed6fcbca4c27a5d2ec3724c46add
-commit: f1f72f77c9e8cc273bfb44cb928f5787abe50cd8 [5/42] riscv: Add combo spinlock support
-config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230722/202307221749.i3zgUarh-lkp@intel.com/config)
+commit: bf3d65e88214791eb913d50e7e876c590dc4ce09 [16/42] riscv: u64ilp32: Enable user space runtime switch
+config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230722/202307221725.bXxd5JSG-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221749.i3zgUarh-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221725.bXxd5JSG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307221749.i3zgUarh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307221725.bXxd5JSG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/riscv/kernel/setup.c:285:13: warning: no previous prototype for function 'combo_spin_lock_init' [-Wmissing-prototypes]
-     285 | void __init combo_spin_lock_init(void)
-         |             ^
-   arch/riscv/kernel/setup.c:285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     285 | void __init combo_spin_lock_init(void)
-         | ^
-         | static 
-   1 warning generated.
+>> arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^
+   arch/riscv/kernel/vdso.c:322:9: note: uninitialized use occurs here
+     322 |         return ret;
+         |                ^~~
+   arch/riscv/kernel/vdso.c:309:2: note: remove the 'if' if its condition is always true
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     310 |                 ret = __setup_additional_pages(mm, bprm, uses_interp,
+         | ~~~~~~~~~~~~~~~~
+>> arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/vdso.c:322:9: note: uninitialized use occurs here
+     322 |         return ret;
+         |                ^~~
+   arch/riscv/kernel/vdso.c:309:6: note: remove the '&&' if its condition is always true
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^
+   arch/riscv/kernel/vdso.c:303:9: note: initialize the variable 'ret' to silence this warning
+     303 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/combo_spin_lock_init +285 arch/riscv/kernel/setup.c
+vim +309 arch/riscv/kernel/vdso.c
 
-   270	
-   271	void __init combo_spin_lock_init(void)
-   272	{
-   273		asm_volatile_goto(ALTERNATIVE(
-   274			"j %l[l_dis]",
-   275			"nop",
-   276			THEAD_VENDOR_ID,
-   277			ERRATA_THEAD_QSPINLOCK,
-   278			CONFIG_ERRATA_THEAD_QSPINLOCK)
-   279			: : : : l_dis);
-   280		return;
-   281	l_dis:
-   282		static_branch_disable(&qspinlock_key);
-   283	}
-   284	#else
- > 285	void __init combo_spin_lock_init(void)
-   286	{
-   287		return;
-   288	}
-   289	#endif
-   290	
+76d2a0493a17d4c Palmer Dabbelt 2017-07-10  297  
+3092eb45637573c Guo Ren        2022-04-05  298  #ifdef CONFIG_COMPAT
+3092eb45637573c Guo Ren        2022-04-05  299  int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+3092eb45637573c Guo Ren        2022-04-05  300  				       int uses_interp)
+3092eb45637573c Guo Ren        2022-04-05  301  {
+3092eb45637573c Guo Ren        2022-04-05  302  	struct mm_struct *mm = current->mm;
+3092eb45637573c Guo Ren        2022-04-05  303  	int ret;
+3092eb45637573c Guo Ren        2022-04-05  304  
+3092eb45637573c Guo Ren        2022-04-05  305  	if (mmap_write_lock_killable(mm))
+3092eb45637573c Guo Ren        2022-04-05  306  		return -EINTR;
+3092eb45637573c Guo Ren        2022-04-05  307  
+4613fb010928a1e Guo Ren        2023-05-31  308  #ifdef CONFIG_VDSO32
+4613fb010928a1e Guo Ren        2023-05-31 @309  	if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+4613fb010928a1e Guo Ren        2023-05-31  310  		ret = __setup_additional_pages(mm, bprm, uses_interp,
+4613fb010928a1e Guo Ren        2023-05-31  311  							&vdso32_info);
+4613fb010928a1e Guo Ren        2023-05-31  312  #endif
+4613fb010928a1e Guo Ren        2023-05-31  313  
+
+:::::: The code at line 309 was first introduced by commit
+:::::: 4613fb010928a1edfaef78e3ea7175807fdb3bb5 riscv: u64ilp32: Adjust vDSO kernel flow for 64ilp32 abi
+
+:::::: TO: Guo Ren <guoren@linux.alibaba.com>
+:::::: CC: Guo Ren <guoren@linux.alibaba.com>
 
 -- 
 0-DAY CI Kernel Test Service
