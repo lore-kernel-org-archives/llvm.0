@@ -1,160 +1,145 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7BB566D;
-	Sat, 22 Jul 2023 02:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689994333; x=1721530333;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=exp7EvxJKUlx3SqBW/sHUJW3z+jiHOVg16APC+Lbyjc=;
-  b=Hox5p9MkTJJ7IqunmDuWamlCxiJDIlESI9GSxJvX2gN3K9EHMv8n6ICk
-   bAuH0CWkuAHphTUvu/TNrF+0q8sJt0GPw/hAFa6S6iTseAeb3rMzYx1rq
-   WBf9L6XIZSZtgiQjGHyf5ohnOmMWQbJHWnAxum4Qjhbp65cla6KJlSbED
-   IqlIdaWTXx4roJlf6gwXEDw98T8npjKvEjJGIB8CK/Cj+ys/PPT0ZFdCB
-   a67EiUEeq/nkzBYz4FjWRuFTc27QAyHxuXIzJVUDfONSEMB6w//w/I3uH
-   GQxLAvU2Jt0u+wRq+bFlhxkclmbrucJaCwmc+5yygLjnSu+OdWTySP0JA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="367186381"
-X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="367186381"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 19:52:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="754694903"
-X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="754694903"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2023 19:52:10 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qN2j4-0007tf-0a;
-	Sat, 22 Jul 2023 02:52:10 +0000
-Date: Sat, 22 Jul 2023 10:51:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yonghong Song <yhs@fb.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Subject: tools/lib/bpf/relo_core.c:1172:5: warning: stack frame size (1040)
- exceeds limit (1024) in 'bpf_core_calc_relo_insn'
-Message-ID: <202307221012.UciyuMNh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05348821
+	for <llvm@lists.linux.dev>; Sat, 22 Jul 2023 03:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1689996025;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jufgXduvs/VcqsSolfrAQCnU1+CdDxeeM3E6An8/N1Q=;
+	b=M7z9T9w/gaclxptp3RXsiEcQRqpfnSPdrkQsaJZez/T7snMU7nRfm3DjIJHdyXHcxyAQCm
+	+0mAPmjrS5Q0D1p4LktB6+jxxHa9J6i5n452HwDqL8D+En+hng5rthT+wUnICd3DCGwijm
+	37RO3gI0H/+n3UIBvNeOhP4shl80chA=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-76-6jnK77Z5O22JjSJjjgsRPA-1; Fri, 21 Jul 2023 23:20:23 -0400
+X-MC-Unique: 6jnK77Z5O22JjSJjjgsRPA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D43783804530
+	for <llvm@lists.linux.dev>; Sat, 22 Jul 2023 03:20:22 +0000 (UTC)
+Received: from [172.64.4.102] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BBDE340D2839;
+	Sat, 22 Jul 2023 03:20:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 8 of 328): Test report for master
+ (6.5.0-rc2, mainline.kernel.org-clang, d192f538)
+Date: Sat, 22 Jul 2023 03:20:22 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <40791.123072123202300269@us-mta-76.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yonghong,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d192f5382581d972c4ae1b4d72e0b59b34cadeb9
-commit: 776281652ddcd98bb292335ea3634da341c849b4 libbpf: Permit 64bit relocation value
-date:   1 year, 1 month ago
-config: riscv-randconfig-r022-20230722 (https://download.01.org/0day-ci/archive/20230722/202307221012.UciyuMNh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221012.UciyuMNh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307221012.UciyuMNh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> tools/lib/bpf/relo_core.c:1172:5: warning: stack frame size (1040) exceeds limit (1024) in 'bpf_core_calc_relo_insn' [-Wframe-larger-than]
-   int bpf_core_calc_relo_insn(const char *prog_name,
-       ^
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/bpf_core_calc_relo_insn +1172 tools/lib/bpf/relo_core.c
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
 
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1121  
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1122  /*
-adb8fa195efdfa Mauricio Vásquez   2022-02-15  1123   * Calculate CO-RE relocation target result.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1124   *
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1125   * The outline and important points of the algorithm:
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1126   * 1. For given local type, find corresponding candidate target types.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1127   *    Candidate type is a type with the same "essential" name, ignoring
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1128   *    everything after last triple underscore (___). E.g., `sample`,
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1129   *    `sample___flavor_one`, `sample___flavor_another_one`, are all candidates
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1130   *    for each other. Names with triple underscore are referred to as
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1131   *    "flavors" and are useful, among other things, to allow to
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1132   *    specify/support incompatible variations of the same kernel struct, which
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1133   *    might differ between different kernel versions and/or build
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1134   *    configurations.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1135   *
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1136   *    N.B. Struct "flavors" could be generated by bpftool's BTF-to-C
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1137   *    converter, when deduplicated BTF of a kernel still contains more than
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1138   *    one different types with the same name. In that case, ___2, ___3, etc
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1139   *    are appended starting from second name conflict. But start flavors are
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1140   *    also useful to be defined "locally", in BPF program, to extract same
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1141   *    data from incompatible changes between different kernel
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1142   *    versions/configurations. For instance, to handle field renames between
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1143   *    kernel versions, one can use two flavors of the struct name with the
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1144   *    same common name and use conditional relocations to extract that field,
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1145   *    depending on target kernel version.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1146   * 2. For each candidate type, try to match local specification to this
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1147   *    candidate target type. Matching involves finding corresponding
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1148   *    high-level spec accessors, meaning that all named fields should match,
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1149   *    as well as all array accesses should be within the actual bounds. Also,
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1150   *    types should be compatible (see bpf_core_fields_are_compat for details).
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1151   * 3. It is supported and expected that there might be multiple flavors
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1152   *    matching the spec. As long as all the specs resolve to the same set of
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1153   *    offsets across all candidates, there is no error. If there is any
-9bbdfad8a5192c Daniel Müller      2022-06-01  1154   *    ambiguity, CO-RE relocation will fail. This is necessary to accommodate
-9bbdfad8a5192c Daniel Müller      2022-06-01  1155   *    imperfection of BTF deduplication, which can cause slight duplication of
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1156   *    the same BTF type, if some directly or indirectly referenced (by
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1157   *    pointer) type gets resolved to different actual types in different
-9bbdfad8a5192c Daniel Müller      2022-06-01  1158   *    object files. If such a situation occurs, deduplicated BTF will end up
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1159   *    with two (or more) structurally identical types, which differ only in
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1160   *    types they refer to through pointer. This should be OK in most cases and
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1161   *    is not an error.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1162   * 4. Candidate types search is performed by linearly scanning through all
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1163   *    types in target BTF. It is anticipated that this is overall more
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1164   *    efficient memory-wise and not significantly worse (if not better)
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1165   *    CPU-wise compared to prebuilding a map from all local type names to
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1166   *    a list of candidate type names. It's also sped up by caching resolved
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1167   *    list of matching candidates per each local "root" type ID, that has at
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1168   *    least one bpf_core_relo associated with it. This list is shared
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1169   *    between multiple relocations for the same type ID and is updated as some
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1170   *    of the candidates are pruned due to structural incompatibility.
-b0588390dbcedc Alexei Starovoitov 2021-07-20  1171   */
-adb8fa195efdfa Mauricio Vásquez   2022-02-15 @1172  int bpf_core_calc_relo_insn(const char *prog_name,
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96856
 
-:::::: The code at line 1172 was first introduced by commit
-:::::: adb8fa195efdfaac5852aaac24810b456ce43b04 libbpf: Split bpf_core_apply_relo()
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8853119
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8852844
 
-:::::: TO: Mauricio Vásquez <mauricio@kinvolk.io>
-:::::: CC: Andrii Nakryiko <andrii@kernel.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
+ dump memory(/proc/vmcore). No such file or directory
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
