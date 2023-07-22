@@ -1,48 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76863EAD5;
-	Sat, 22 Jul 2023 02:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2716D6107;
+	Sat, 22 Jul 2023 02:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689993084; x=1721529084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rmZYm534mz67y/kh+IAlfXuKVDu6Z0GGNVGIAI3/ezg=;
-  b=ZXKF2hP/h3ksWLHNKJLA2O7k0K9k7qp1eWS7DJfDxkphcw4KEKD9nib7
-   2SzvMUnDQd+/FCtnDvbfubGgxiEBvX5SaiyeftNcNFZBGXEkskvad1+FO
-   CHXN01yLFx0jyDIkGsuVVWKCKNpFhlMnf9U8cfG/ePeC6+lO7AgceCOqp
-   A27zZuPw8I8Isi/TXMeQZDQQf3sjTnw6dtrDwJl9zLH3ToSUXuGLTckHQ
-   N1CYCZJXfI6beMY2lWeEIfF+SULNlIKwcVGtuTJeQGF6W1PSWK+oVxpz+
-   zF8uqpphRiH/+EClPNlN82tqM4eVSZ4jQeqGVXtjnkLyP9kNPGE93lXN+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="370758574"
+  t=1689993686; x=1721529686;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nv48A78zBdFWJq1P/v2lZgZN/ORp1fu6gHegfxa3/2w=;
+  b=JpnuQVonnBbhIrr70eIxMP7I1igSHfrS4icaDSLj3yq6wFUi7jWjumn5
+   2Ew8fWAGhU1hNSsSVaAIYYuicMlFcogPOWSjrO+jo/boPBc0tP6vFAEBu
+   +2d5K856alruok07KGhy2+Xg9NBvDR3nWdrZNsYQ3nNUnEBD9jrUnP+hS
+   +t4MmXaNRZprXGPZP8NLIovIQtHhE/qS+iEQYKoJu7t9wORnIFjs/NER/
+   U9MJdLD4RVk60/StWWu8ygQSEYx/dVfkJmpIvPWKdc6jCGcNRxMoNhrQb
+   1FFIoX2Ce/vypPwMIYUAZeCaE8JQBJz2Wzlmxb1HXCcmCG+/temM9sOmu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="367185692"
 X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="370758574"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 19:31:23 -0700
+   d="scan'208";a="367185692"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 19:41:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="849019437"
+X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="971633084"
 X-IronPort-AV: E=Sophos;i="6.01,223,1684825200"; 
-   d="scan'208";a="849019437"
+   d="scan'208";a="971633084"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2023 19:31:19 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jul 2023 19:41:23 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qN2Ot-0007sX-0A;
-	Sat, 22 Jul 2023 02:31:19 +0000
-Date: Sat, 22 Jul 2023 10:30:31 +0800
+	id 1qN2Ya-0007t7-0v;
+	Sat, 22 Jul 2023 02:41:21 +0000
+Date: Sat, 22 Jul 2023 10:40:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rae Moar <rmoar@google.com>, shuah@kernel.org, davidgow@google.com,
-	dlatypov@google.com, brendan.higgins@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, keescook@chromium.org,
-	linux-hardening@vger.kernel.org, jstultz@google.com,
-	tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH v1 4/9] kunit: Add ability to filter attributes
-Message-ID: <202307221053.0LbbjwLI-lkp@intel.com>
-References: <20230719222338.259684-5-rmoar@google.com>
+To: Ben Skeggs <bskeggs@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [skeggsb-nouveau:00.02-gsp-rm 75/83]
+ drivers/gpu/drm/nouveau/nvif/outp.c:385:1: warning: stack frame size (2104)
+ exceeds limit (1024) in 'nvif_outp_edid_get'
+Message-ID: <202307221033.lAQnwC1C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,90 +46,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230719222338.259684-5-rmoar@google.com>
 
-Hi Rae,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 64bd4641310c41a1ecf07c13c67bc0ed61045dfd]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-Add-test-attributes-API-structure/20230720-062623
-base:   64bd4641310c41a1ecf07c13c67bc0ed61045dfd
-patch link:    https://lore.kernel.org/r/20230719222338.259684-5-rmoar%40google.com
-patch subject: [PATCH v1 4/9] kunit: Add ability to filter attributes
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230722/202307221053.0LbbjwLI-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221053.0LbbjwLI-lkp@intel.com/reproduce)
+tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 00.02-gsp-rm
+head:   19545cf2c6adc9e9dc95a3edb138d6734142a8ca
+commit: 3f3aa58c4bba8b04d7d4d0ceafd52d2cbd19f5fb [75/83] WIPdrm/nouveau/disp/r535: initial support
+config: arm-randconfig-r011-20230721 (https://download.01.org/0day-ci/archive/20230722/202307221033.lAQnwC1C-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230722/202307221033.lAQnwC1C-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307221053.0LbbjwLI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307221033.lAQnwC1C-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> lib/kunit/attributes.c:109:14: warning: variable 'input_val' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           for (i = 0; input[i]; i++) {
-                       ^~~~~~~~
-   lib/kunit/attributes.c:116:7: note: uninitialized use occurs here
-           if (!input_val) {
-                ^~~~~~~~~
-   lib/kunit/attributes.c:109:14: note: remove the condition if it is always true
-           for (i = 0; input[i]; i++) {
-                       ^~~~~~~~
-   lib/kunit/attributes.c:107:23: note: initialize the variable 'input_val' to silence this warning
-           const char *input_val;
-                                ^
-                                 = NULL
-   lib/kunit/attributes.c:215:47: error: initializer element is not a compile-time constant
-   static struct kunit_attr kunit_attr_list[] = {speed_attr, module_attr};
-                                                 ^~~~~~~~~~
-   1 warning and 1 error generated.
+>> drivers/gpu/drm/nouveau/nvif/outp.c:385:1: warning: stack frame size (2104) exceeds limit (1024) in 'nvif_outp_edid_get' [-Wframe-larger-than]
+     385 | nvif_outp_edid_get(struct nvif_outp *outp, u8 **pedid)
+         | ^
+   1 warning generated.
 
 
-vim +109 lib/kunit/attributes.c
+vim +/nvif_outp_edid_get +385 drivers/gpu/drm/nouveau/nvif/outp.c
 
-    96	
-    97	/*
-    98	 * Returns whether the inputted enum value "attr" matches the filter given
-    99	 * by the input string. Note: the str_list includes the corresponding string
-   100	 * list to the enum values.
-   101	 */
-   102	static int attr_enum_filter(void *attr, const char *input, int *err,
-   103			const char * const str_list[], int max)
-   104	{
-   105		int i, j, input_int;
-   106		long test_val = (long)attr;
-   107		const char *input_val;
-   108	
- > 109		for (i = 0; input[i]; i++) {
-   110			if (!strchr(op_list, input[i])) {
-   111				input_val = input + i;
-   112				break;
-   113			}
-   114		}
-   115	
-   116		if (!input_val) {
-   117			*err = -EINVAL;
-   118			pr_err("kunit executor: filter value not found: %s\n", input);
-   119			return false;
-   120		}
-   121	
-   122		for (j = 0; j <= max; j++) {
-   123			if (!strcmp(input_val, str_list[j]))
-   124				input_int = j;
-   125		}
-   126	
-   127		if (!input_int) {
-   128			*err = -EINVAL;
-   129			pr_err("kunit executor: invalid filter input: %s\n", input);
-   130			return false;
-   131		}
-   132	
-   133		return int_filter(test_val, input, input_int, err);
-   134	}
-   135	
+   383	
+   384	int
+ > 385	nvif_outp_edid_get(struct nvif_outp *outp, u8 **pedid)
+   386	{
+   387		struct nvif_outp_edid_get_v0 args;
+   388		int ret;
+   389	
+   390		args.version = 0;
+   391	
+   392		ret = nvif_mthd(&outp->object, NVIF_OUTP_V0_EDID_GET, &args, sizeof(args));
+   393		NVIF_ERRON(ret, &outp->object, "[EDID_GET] size:%d", args.size);
+   394		if (ret)
+   395			return ret;
+   396	
+   397		*pedid = kmalloc(args.size, GFP_KERNEL);
+   398		if (WARN_ON(!*pedid))
+   399			return -ENOMEM;
+   400	
+   401		memcpy(*pedid, args.data, args.size);
+   402		return args.size;
+   403	}
+   404	
 
 -- 
 0-DAY CI Kernel Test Service
