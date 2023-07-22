@@ -1,130 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3FE658
-	for <llvm@lists.linux.dev>; Sat, 22 Jul 2023 22:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B3BC433C7;
-	Sat, 22 Jul 2023 22:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690063599;
-	bh=tyf/hjLCqwPYZjmfSZ9szqE/H4NkKJfOiEi8d0WNkjw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cnew+AFer7HBfltIjGe5dOWt9R9E0nD2r85cxs7RNOmsG3pxvqao5fFC+PdIY5orz
-	 12UbrKmri1iZX/D8/vHi3AjrKPlRYJQxzUfUh8Nt28YLwBLyx1KZrf4iXD68FG+j9k
-	 clhMh508R51YzREaYde6mvwTsqDdFfpVTtCFUmKbrtYzdjVesmMeDkDbZErNd3pIfw
-	 bqwUV/LPA1RdLhffmrBxuyYzFwp5tjZyR/Q39ygiabKzRrkBfqGTpVlAqLXp3Gd2hp
-	 JsAUXblDkXPBu2ga/dkkwwYw1m4iB4x8xzZoUaCJ1YBdnuxDjRZDlYH0+2nWg+FP1E
-	 co5yK1XaHMbPQ==
-Date: Sat, 22 Jul 2023 15:06:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc: alexdeucher@gmail.com, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/6] drm: execution context for GEM buffers v7
-Message-ID: <20230722220637.GA138486@dev-arch.thelio-3990X>
-References: <20230711133122.3710-1-christian.koenig@amd.com>
- <20230711133122.3710-2-christian.koenig@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D01658;
+	Sat, 22 Jul 2023 22:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690063770; x=1721599770;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IbbooA24BW3DRb8EsvFDa0DpiGBuTapv6jp4b++QZ/E=;
+  b=MzIMOtxnExJFYc1KQMfvU/270Cck8XVuSXn8hlkyEwSLj/cW9iEq+1ob
+   SJ/puXNFMqtikSSreJWrXjNQBKh0IAkEN5mkuCx43tJs533p3n1n14Ime
+   tiIYd5SKrCOD4rFMTq883et4ke+JdYI8uhVRhPcQjtFdELVEhmtCyddjK
+   h4+hZF2Ca07cdirsyoqYRYjBXASgfu79rjxGg2l9a1x+ydNdtJuagwFaU
+   Dd8BEgBVQ3PVxvFKU8ZSXp/0SaImo2UqgTXljoIFQsPFMdK3qC8asaqWX
+   0mxWwEJHj88JsB1VXP+FfHWurp4v+2hJ3WtIEJc/iCBudqEhuw39l505q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="346832660"
+X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
+   d="scan'208";a="346832660"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 15:09:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="702426943"
+X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
+   d="scan'208";a="702426943"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 22 Jul 2023 15:09:27 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qNKn0-0008e5-1j;
+	Sat, 22 Jul 2023 22:09:26 +0000
+Date: Sun, 23 Jul 2023 06:09:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/apic 52/58] arch/x86/kernel/kvm.c:828:3: error: call
+ to undeclared function 'apic_update_callback'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202307230549.ceKGSBc8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230711133122.3710-2-christian.koenig@amd.com>
 
-Hi Christian,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/apic
+head:   11f85db0679f4f37798c648f3028126b6f7c6163
+commit: 55cbab9af9e540fbbac9e7235315d03e8b654713 [52/58] x86/apic: Replace acpi_wake_cpu_handler_update() and apic_set_eoi_cb()
+config: i386-randconfig-i016-20230720 (https://download.01.org/0day-ci/archive/20230723/202307230549.ceKGSBc8-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230723/202307230549.ceKGSBc8-lkp@intel.com/reproduce)
 
-On Tue, Jul 11, 2023 at 03:31:17PM +0200, Christian König wrote:
-> This adds the infrastructure for an execution context for GEM buffers
-> which is similar to the existing TTMs execbuf util and intended to replace
-> it in the long term.
-> 
-> The basic functionality is that we abstracts the necessary loop to lock
-> many different GEM buffers with automated deadlock and duplicate handling.
-> 
-> v2: drop xarray and use dynamic resized array instead, the locking
->     overhead is unnecessary and measurable.
-> v3: drop duplicate tracking, radeon is really the only one needing that.
-> v4: fixes issues pointed out by Danilo, some typos in comments and a
->     helper for lock arrays of GEM objects.
-> v5: some suggestions by Boris Brezillon, especially just use one retry
->     macro, drop loop in prepare_array, use flags instead of bool
-> v6: minor changes suggested by Thomas, Boris and Danilo
-> v7: minor typos pointed out by checkpatch.pl fixed
-> 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-> Reviewed-by: Danilo Krummrich <dakr@redhat.com>
-> Tested-by: Danilo Krummrich <dakr@redhat.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307230549.ceKGSBc8-lkp@intel.com/
 
-<snip>
+All errors (new ones prefixed by >>):
 
-> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-> new file mode 100644
-> index 000000000000..73205afec162
-> --- /dev/null
-> +++ b/include/drm/drm_exec.h
+   arch/x86/kernel/kvm.c:346:2: error: call to undeclared function 'apic_native_eoi'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           apic_native_eoi();
+           ^
+   arch/x86/kernel/kvm.c:346:2: note: did you mean 'apic_set_eoi'?
+   arch/x86/include/asm/apic.h:429:20: note: 'apic_set_eoi' declared here
+   static inline void apic_set_eoi(void (*eoi)(void)) {}
+                      ^
+>> arch/x86/kernel/kvm.c:828:3: error: call to undeclared function 'apic_update_callback'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   apic_update_callback(eoi, kvm_guest_apic_eoi_write);
+                   ^
+>> arch/x86/kernel/kvm.c:828:24: error: use of undeclared identifier 'eoi'; did you mean 'efi'?
+                   apic_update_callback(eoi, kvm_guest_apic_eoi_write);
+                                        ^~~
+                                        efi
+   include/linux/efi.h:671:3: note: 'efi' declared here
+   } efi;
+     ^
+   3 errors generated.
 
-<snip>
 
-> + * Since labels can't be defined local to the loops body we use a jump pointer
-> + * to make sure that the retry is only used from within the loops body.
-> + */
-> +#define drm_exec_until_all_locked(exec)				\
-> +	for (void *__drm_exec_retry_ptr; ({			\
-> +		__label__ __drm_exec_retry;			\
-> +__drm_exec_retry:						\
-> +		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
-> +		(void)__drm_exec_retry_ptr;			\
-> +		drm_exec_cleanup(exec);				\
-> +	});)
-> +
-> +/**
-> + * drm_exec_retry_on_contention - restart the loop to grap all locks
-> + * @exec: drm_exec object
-> + *
-> + * Control flow helper to continue when a contention was detected and we need to
-> + * clean up and re-start the loop to prepare all GEM objects.
-> + */
-> +#define drm_exec_retry_on_contention(exec)			\
-> +	do {							\
-> +		if (unlikely(drm_exec_is_contended(exec)))	\
-> +			goto *__drm_exec_retry_ptr;		\
-> +	} while (0)
+vim +/apic_update_callback +828 arch/x86/kernel/kvm.c
 
-This construct of using a label as a value and goto to jump into a GNU
-C statement expression is explicitly documented in GCC's manual [1] as
-undefined behavior:
+   809	
+   810	static void __init kvm_guest_init(void)
+   811	{
+   812		int i;
+   813	
+   814		paravirt_ops_setup();
+   815		register_reboot_notifier(&kvm_pv_reboot_nb);
+   816		for (i = 0; i < KVM_TASK_SLEEP_HASHSIZE; i++)
+   817			raw_spin_lock_init(&async_pf_sleepers[i].lock);
+   818	
+   819		if (kvm_para_has_feature(KVM_FEATURE_STEAL_TIME)) {
+   820			has_steal_clock = 1;
+   821			static_call_update(pv_steal_clock, kvm_steal_clock);
+   822	
+   823			pv_ops.lock.vcpu_is_preempted =
+   824				PV_CALLEE_SAVE(__kvm_vcpu_is_preempted);
+   825		}
+   826	
+   827		if (kvm_para_has_feature(KVM_FEATURE_PV_EOI))
+ > 828			apic_update_callback(eoi, kvm_guest_apic_eoi_write);
+   829	
+   830		if (kvm_para_has_feature(KVM_FEATURE_ASYNC_PF_INT) && kvmapf) {
+   831			static_branch_enable(&kvm_async_pf_enabled);
+   832			alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_kvm_asyncpf_interrupt);
+   833		}
+   834	
 
-"Jumping into a statement expression with a computed goto (see Labels as
-Values [2]) has undefined behavior. "
-
-A recent change in clang [3] to prohibit this altogether points this out, so
-builds using clang-17 and newer will break with this change applied:
-
-  drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this indirect goto statement to one of its possible targets
-     41 |                 drm_exec_retry_on_contention(&exec);
-        |                 ^
-  include/drm/drm_exec.h:96:4: note: expanded from macro 'drm_exec_retry_on_contention'
-     96 |                         goto *__drm_exec_retry_ptr;             \
-        |                         ^
-  drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of indirect goto statement
-     39 |         drm_exec_until_all_locked(&exec) {
-        |         ^
-  include/drm/drm_exec.h:79:33: note: expanded from macro 'drm_exec_until_all_locked'
-     79 |                 __label__ __drm_exec_retry;                     \
-        |                                                                 ^
-  drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a statement expression
-
-It seems like if this construct works, it is by chance, although I am
-not sure if there is another solution.
-
-[1]: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-[2]: https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
-[3]: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
