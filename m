@@ -1,171 +1,130 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A7D366;
-	Sat, 22 Jul 2023 19:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690052675; x=1721588675;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bP+UitKN229AN51gKImuwdNn3icHZq8w/3kVycQfRjE=;
-  b=k+kiXCrF49/agpYHevMPNFp0YQ/0XZZoV++VcuLtajQDz1DvJ61OOo4P
-   /74jNec6o9AjPEoFNogWHTav8XyZbBeSEbBe8YENqt4JFTAGQrNgp/cjd
-   R3/dCKF5bbSk8s4/Ufoa5XXJz/SMADYAEjsODkaps2pScZTtTUWT3c1LK
-   eJhPW8qXR3KiC6wjshrUf3yE8wJeXT/b+fZK3R288kqlGOeSBcpUzwPOe
-   9zcu3gf4hHw3UhgCtCQ1udPYtGvT0jTm0xmrBwIUi75y3YXnSiOYF/YaP
-   wjfE/Nlt7nWjGrXlNJviOSCRyS5DuezhRAMVMIdUoiiCq1U/r0eY3vHWN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="453594640"
-X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="453594640"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 12:04:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="719204627"
-X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="719204627"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 22 Jul 2023 12:04:31 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qNHu2-0008Wv-26;
-	Sat, 22 Jul 2023 19:04:30 +0000
-Date: Sun, 23 Jul 2023 03:03:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, shawnguo@kernel.org,
-	s.hauer@pengutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	aisheng.dong@nxp.com, alexander.stein@ew.tq-group.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 6/8] firmware: imx: scu-irq: export imx_scu_irq_get_status
-Message-ID: <202307230229.0Bg9pzav-lkp@intel.com>
-References: <20230722123119.1966998-7-peng.fan@oss.nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3FE658
+	for <llvm@lists.linux.dev>; Sat, 22 Jul 2023 22:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B3BC433C7;
+	Sat, 22 Jul 2023 22:06:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690063599;
+	bh=tyf/hjLCqwPYZjmfSZ9szqE/H4NkKJfOiEi8d0WNkjw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cnew+AFer7HBfltIjGe5dOWt9R9E0nD2r85cxs7RNOmsG3pxvqao5fFC+PdIY5orz
+	 12UbrKmri1iZX/D8/vHi3AjrKPlRYJQxzUfUh8Nt28YLwBLyx1KZrf4iXD68FG+j9k
+	 clhMh508R51YzREaYde6mvwTsqDdFfpVTtCFUmKbrtYzdjVesmMeDkDbZErNd3pIfw
+	 bqwUV/LPA1RdLhffmrBxuyYzFwp5tjZyR/Q39ygiabKzRrkBfqGTpVlAqLXp3Gd2hp
+	 JsAUXblDkXPBu2ga/dkkwwYw1m4iB4x8xzZoUaCJ1YBdnuxDjRZDlYH0+2nWg+FP1E
+	 co5yK1XaHMbPQ==
+Date: Sat, 22 Jul 2023 15:06:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc: alexdeucher@gmail.com, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/6] drm: execution context for GEM buffers v7
+Message-ID: <20230722220637.GA138486@dev-arch.thelio-3990X>
+References: <20230711133122.3710-1-christian.koenig@amd.com>
+ <20230711133122.3710-2-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230722123119.1966998-7-peng.fan@oss.nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230711133122.3710-2-christian.koenig@amd.com>
 
-Hi Peng,
+Hi Christian,
 
-kernel test robot noticed the following build errors:
+On Tue, Jul 11, 2023 at 03:31:17PM +0200, Christian König wrote:
+> This adds the infrastructure for an execution context for GEM buffers
+> which is similar to the existing TTMs execbuf util and intended to replace
+> it in the long term.
+> 
+> The basic functionality is that we abstracts the necessary loop to lock
+> many different GEM buffers with automated deadlock and duplicate handling.
+> 
+> v2: drop xarray and use dynamic resized array instead, the locking
+>     overhead is unnecessary and measurable.
+> v3: drop duplicate tracking, radeon is really the only one needing that.
+> v4: fixes issues pointed out by Danilo, some typos in comments and a
+>     helper for lock arrays of GEM objects.
+> v5: some suggestions by Boris Brezillon, especially just use one retry
+>     macro, drop loop in prepare_array, use flags instead of bool
+> v6: minor changes suggested by Thomas, Boris and Danilo
+> v7: minor typos pointed out by checkpatch.pl fixed
+> 
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+> Reviewed-by: Danilo Krummrich <dakr@redhat.com>
+> Tested-by: Danilo Krummrich <dakr@redhat.com>
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on linus/master v6.5-rc2 next-20230721]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+<snip>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/firmware-imx-scu-change-init-level-to-subsys_initcall_sync/20230722-203129
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230722123119.1966998-7-peng.fan%40oss.nxp.com
-patch subject: [PATCH 6/8] firmware: imx: scu-irq: export imx_scu_irq_get_status
-config: s390-randconfig-r044-20230722 (https://download.01.org/0day-ci/archive/20230723/202307230229.0Bg9pzav-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230723/202307230229.0Bg9pzav-lkp@intel.com/reproduce)
+> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> new file mode 100644
+> index 000000000000..73205afec162
+> --- /dev/null
+> +++ b/include/drm/drm_exec.h
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307230229.0Bg9pzav-lkp@intel.com/
+<snip>
 
-All errors (new ones prefixed by >>):
+> + * Since labels can't be defined local to the loops body we use a jump pointer
+> + * to make sure that the retry is only used from within the loops body.
+> + */
+> +#define drm_exec_until_all_locked(exec)				\
+> +	for (void *__drm_exec_retry_ptr; ({			\
+> +		__label__ __drm_exec_retry;			\
+> +__drm_exec_retry:						\
+> +		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
+> +		(void)__drm_exec_retry_ptr;			\
+> +		drm_exec_cleanup(exec);				\
+> +	});)
+> +
+> +/**
+> + * drm_exec_retry_on_contention - restart the loop to grap all locks
+> + * @exec: drm_exec object
+> + *
+> + * Control flow helper to continue when a contention was detected and we need to
+> + * clean up and re-start the loop to prepare all GEM objects.
+> + */
+> +#define drm_exec_retry_on_contention(exec)			\
+> +	do {							\
+> +		if (unlikely(drm_exec_is_contended(exec)))	\
+> +			goto *__drm_exec_retry_ptr;		\
+> +	} while (0)
 
-   In file included from drivers/net/can/flexcan/flexcan-core.c:15:
-   In file included from include/linux/can/dev.h:18:
-   In file included from include/linux/can/bittiming.h:9:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/can/flexcan/flexcan-core.c:15:
-   In file included from include/linux/can/dev.h:18:
-   In file included from include/linux/can/bittiming.h:9:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/can/flexcan/flexcan-core.c:15:
-   In file included from include/linux/can/dev.h:18:
-   In file included from include/linux/can/bittiming.h:9:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/net/can/flexcan/flexcan-core.c:19:
->> include/linux/firmware/imx/sci.h:53:1: error: expected identifier or '('
-      53 | {
-         | ^
-   12 warnings and 1 error generated.
+This construct of using a label as a value and goto to jump into a GNU
+C statement expression is explicitly documented in GCC's manual [1] as
+undefined behavior:
 
+"Jumping into a statement expression with a computed goto (see Labels as
+Values [2]) has undefined behavior. "
 
-vim +53 include/linux/firmware/imx/sci.h
+A recent change in clang [3] to prohibit this altogether points this out, so
+builds using clang-17 and newer will break with this change applied:
 
-    51	
-    52	int imx_scu_irq_get_status(u8 group, u32 *irq_status);
-  > 53	{
+  drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this indirect goto statement to one of its possible targets
+     41 |                 drm_exec_retry_on_contention(&exec);
+        |                 ^
+  include/drm/drm_exec.h:96:4: note: expanded from macro 'drm_exec_retry_on_contention'
+     96 |                         goto *__drm_exec_retry_ptr;             \
+        |                         ^
+  drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of indirect goto statement
+     39 |         drm_exec_until_all_locked(&exec) {
+        |         ^
+  include/drm/drm_exec.h:79:33: note: expanded from macro 'drm_exec_until_all_locked'
+     79 |                 __label__ __drm_exec_retry;                     \
+        |                                                                 ^
+  drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a statement expression
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It seems like if this construct works, it is by chance, although I am
+not sure if there is another solution.
+
+[1]: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+[2]: https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
+[3]: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
+
+Cheers,
+Nathan
