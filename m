@@ -1,51 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CC51D2E3;
-	Sat, 22 Jul 2023 15:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CC02908;
+	Sat, 22 Jul 2023 16:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690038560; x=1721574560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tP0c6UT1JUEzDEMg01H9+yYjfoMtWTAGuC2DlrbRxOU=;
-  b=AtFcxLwS/heBgoOeGwccjwN3iKY2e3vZVP2YtLEqTEBXWnSO8rCuLYxR
-   HteToGY6BcwxtgYiwYfOWijFHNnH+HE+yUxwiHiF64APBYfSDSYqeExQ/
-   HlkS6djSjWtslTVekLsqlfpOELyiB15JR/FKUeqqxtBUISJ01TMC+NqC6
-   c04+rH3G2Afu/J/a2Q3wvZzIFmf5pl6v09CUEK9rX2mo29777Jyrpw+wO
-   41Lhyz0xFfMY6Xe6WVpaC2Tme47I5L3uzPq5Vgnehvhupdd7e4auroPir
-   aK+8kUlKSdAw/HHn3Aodd1L06R12fDAJ4rQk5VAqBSxEMEZ0+i57Ya28U
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="357195983"
+  t=1690041713; x=1721577713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YfGvbN0i7aatojzv6WqrqSLEMGR2xut6etBWbuv2aHM=;
+  b=ZmccOKjJGxxgQc3IlTwiKRvN/YdPUpgJrEH8Vw35x0SujLJ4/HgblX/u
+   FCy9G/OIYc6oK6e410piI1lPPymhEPi0cx5wgYCrLskzO9LmXzuXQionZ
+   elMfNa6CwhiOuQzh/1iYBh/iZuhpFaNqvfWfKNFvqcs0VMylL8wtZRolA
+   uYkq5TQHgr1bldKfzKRpUNknkWIBSUTMIih1t945Gww1Oi5IWI9s9l75y
+   sXc41jqgofQ6w+LYqLs2sudskTycvPx5ySCrcN9KQymcnw2x8rGw+zIV1
+   2Ht50IlxIEfNDHooj2zHmaJQYw0jNfufmsS8SQzKh9lIEBrBqCrcGB+ii
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="369876631"
 X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="357195983"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 08:09:19 -0700
+   d="scan'208";a="369876631"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 09:01:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="795301223"
+X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="971776685"
 X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="795301223"
+   d="scan'208";a="971776685"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jul 2023 08:09:18 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 22 Jul 2023 09:01:51 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qNEE8-0008Om-33;
-	Sat, 22 Jul 2023 15:09:13 +0000
-Date: Sat, 22 Jul 2023 23:07:18 +0800
+	id 1qNF2l-0008Ql-1Y;
+	Sat, 22 Jul 2023 16:01:32 +0000
+Date: Sat, 22 Jul 2023 23:59:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Paul Cercueil <paul@crapouillou.net>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Conghui Chen <conghui.chen@intel.com>,
-	virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 21/22] i2c: virtio: Remove #ifdef guards for PM
- related functions
-Message-ID: <202307222246.K1GYOGCB-lkp@intel.com>
-References: <20230722115310.27681-5-paul@crapouillou.net>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/apic 49/58] arch/x86/kernel/kvm.c:346:2: error: call
+ to undeclared function 'apic_native_eoi'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202307222339.Kvu4frnJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,59 +46,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230722115310.27681-5-paul@crapouillou.net>
 
-Hi Paul,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on brgl/gpio/for-next krzk/for-next linus/master v6.5-rc2 next-20230721]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/i2c-au1550-Remove-ifdef-guards-for-PM-related-functions/20230722-200209
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20230722115310.27681-5-paul%40crapouillou.net
-patch subject: [PATCH v2 21/22] i2c: virtio: Remove #ifdef guards for PM related functions
-config: i386-randconfig-r015-20230722 (https://download.01.org/0day-ci/archive/20230722/202307222246.K1GYOGCB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/apic
+head:   11f85db0679f4f37798c648f3028126b6f7c6163
+commit: 8eaa7b40314e88ec2a0fa15d3b6b2fd99edee9d1 [49/58] x86/apic: Wrap apic->native_eoi() into a helper
+config: i386-randconfig-i016-20230720 (https://download.01.org/0day-ci/archive/20230722/202307222339.Kvu4frnJ-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230722/202307222246.K1GYOGCB-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230722/202307222339.Kvu4frnJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307222246.K1GYOGCB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307222339.Kvu4frnJ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-virtio.c:270:3: error: field designator 'freeze' does not refer to any field in type 'struct virtio_driver'
-           .freeze                 = pm_sleep_ptr(virtio_i2c_freeze),
-            ^
->> drivers/i2c/busses/i2c-virtio.c:271:3: error: field designator 'restore' does not refer to any field in type 'struct virtio_driver'
-           .restore                = pm_sleep_ptr(virtio_i2c_restore),
-            ^
+>> arch/x86/kernel/kvm.c:346:2: error: call to undeclared function 'apic_native_eoi'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           apic_native_eoi();
+           ^
+   arch/x86/kernel/kvm.c:346:2: note: did you mean 'apic_set_eoi'?
+   arch/x86/include/asm/apic.h:404:20: note: 'apic_set_eoi' declared here
+   static inline void apic_set_eoi(void (*eoi)(void)) {}
+                      ^
+   arch/x86/kernel/kvm.c:828:3: error: call to undeclared function 'apic_set_eoi_cb'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   apic_set_eoi_cb(kvm_guest_apic_eoi_write);
+                   ^
+   arch/x86/kernel/kvm.c:828:3: note: did you mean 'apic_set_eoi'?
+   arch/x86/include/asm/apic.h:404:20: note: 'apic_set_eoi' declared here
+   static inline void apic_set_eoi(void (*eoi)(void)) {}
+                      ^
    2 errors generated.
 
 
-vim +270 drivers/i2c/busses/i2c-virtio.c
+vim +/apic_native_eoi +346 arch/x86/kernel/kvm.c
 
-   260	
-   261	static struct virtio_driver virtio_i2c_driver = {
-   262		.feature_table		= features,
-   263		.feature_table_size	= ARRAY_SIZE(features),
-   264		.id_table		= id_table,
-   265		.probe			= virtio_i2c_probe,
-   266		.remove			= virtio_i2c_remove,
-   267		.driver			= {
-   268			.name	= "i2c_virtio",
-   269		},
- > 270		.freeze			= pm_sleep_ptr(virtio_i2c_freeze),
- > 271		.restore		= pm_sleep_ptr(virtio_i2c_restore),
-   272	};
-   273	module_virtio_driver(virtio_i2c_driver);
-   274	
+   334	
+   335	static notrace void kvm_guest_apic_eoi_write(void)
+   336	{
+   337		/**
+   338		 * This relies on __test_and_clear_bit to modify the memory
+   339		 * in a way that is atomic with respect to the local CPU.
+   340		 * The hypervisor only accesses this memory from the local CPU so
+   341		 * there's no need for lock or memory barriers.
+   342		 * An optimization barrier is implied in apic write.
+   343		 */
+   344		if (__test_and_clear_bit(KVM_PV_EOI_BIT, this_cpu_ptr(&kvm_apic_eoi)))
+   345			return;
+ > 346		apic_native_eoi();
+   347	}
+   348	
 
 -- 
 0-DAY CI Kernel Test Service
