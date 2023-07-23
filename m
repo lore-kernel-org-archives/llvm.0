@@ -1,43 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19321879;
-	Sun, 23 Jul 2023 16:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303CD4C8C;
+	Sun, 23 Jul 2023 21:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690128442; x=1721664442;
+  t=1690148221; x=1721684221;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v5G05P/S5W2A6FKEOwylZgddwqxLSmwh88KbpiyypYU=;
-  b=CfRo8M+e77vFnCDNEmaD8tXR3wSn3ZY0iQWjjNdNMzNM79eLQRWR2Mik
-   0Gxf2oNMasks/lqaeoLvnAN3BbsjetgeFnOvfnV2e8gbBGEIvm6Q3QvlA
-   Vfz5IQGcTGyad4fT8rWD98AZ0vENTvzjsczHzkT18o6ga+4Rm/L0CP+pf
-   w8ZFDFy+bzMqJdeRTrc3dkt5hCCGpe5uiGlWGFNphvLpOvX5iQxTzRi0z
-   zkIpZc2kcEF4lz1mNZB1L+By655MyifOXvu3Frht1o3jR97v2CKHB1Ckw
-   SiQiF6aZQv/hzsS7V4DzKNCiUGJIfSMIkpHn5ra+o+acZ01jN2V83Mrq/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="364748186"
+  bh=TR3uyfnF4yV2RdKk5YywHX4AP2c9HCPomrVu3zUMu40=;
+  b=SfotqUSdibD0x6Gg9xaJipwJjyFIGvPaz+Ak10xMyVLAGxGwP5pX7EHG
+   WdZTLBecuB4Zh1ST1AX8goCUYzWcM+n+iMwbeW/pmrks8cA3r4EM1ahS9
+   moICys9FiAeQ6hjuOD+rsLnOhLjz8rVaxco03M46dKSBfUwyJB2Tct6T2
+   qbVqbUC4DV2r3SEJ8qF73whCSEK504nUeJEal/0ehTAjSA5Mj0TIXdtmy
+   fBOvgQrvYsL2ZBjYeKwBpOD6wa/0FqOWdljisLaY9lwxLxPM9DNTo85QJ
+   mWIuSNlWwfbeoGNkR8Q8L2qIukY3J7juU+VmhbOCIs7/1kIjoyNHOehM4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="369983357"
 X-IronPort-AV: E=Sophos;i="6.01,227,1684825200"; 
-   d="scan'208";a="364748186"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2023 09:07:22 -0700
+   d="scan'208";a="369983357"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2023 14:37:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815560610"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="1056192802"
 X-IronPort-AV: E=Sophos;i="6.01,227,1684825200"; 
-   d="scan'208";a="815560610"
+   d="scan'208";a="1056192802"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2023 09:07:20 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2023 14:36:58 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qNbc7-00096b-2w;
-	Sun, 23 Jul 2023 16:07:19 +0000
-Date: Mon, 24 Jul 2023 00:07:09 +0800
+	id 1qNgl7-0009Hb-2o;
+	Sun, 23 Jul 2023 21:36:57 +0000
+Date: Mon, 24 Jul 2023 05:36:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:x86/topology 77/87]
- arch/x86/include/asm/topology.h:192:71: error: expected ';' after return
- statement
-Message-ID: <202307240033.a9TbbmRh-lkp@intel.com>
+To: Johannes Berg <johannes.berg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: net/mac80211/util.c:1029:1: warning: stack frame size (2544) exceeds
+ limit (2048) in '_ieee802_11_parse_elems_full'
+Message-ID: <202307240553.vW7TtnHW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,153 +47,428 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topology
-head:   509d85a7567c105935a9080b84883f135451d3b0
-commit: 97f82a5edca7bd876a8715ac3f1533e7ffabd7ad [77/87] x86/cpu/amd: Provide a separate acessor for Node ID
-config: x86_64-buildonly-randconfig-r001-20230723 (https://download.01.org/0day-ci/archive/20230724/202307240033.a9TbbmRh-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230724/202307240033.a9TbbmRh-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   269f4a4b85a1b61e94bf935b30c56a938e92f585
+commit: fd17bf041b40e3dac705c4313854becbe07b7557 wifi: mac80211: refactor elements parsing with parameter struct
+date:   1 year ago
+config: riscv-randconfig-r042-20230724 (https://download.01.org/0day-ci/archive/20230724/202307240553.vW7TtnHW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230724/202307240553.vW7TtnHW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307240033.a9TbbmRh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307240553.vW7TtnHW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:8:
-   In file included from include/linux/topology.h:36:
->> arch/x86/include/asm/topology.h:192:71: error: expected ';' after return statement
-   static inline unsigned int topology_amd_nodes_per_pkg(void) { return 0 };
-                                                                         ^
-                                                                         ;
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
+>> net/mac80211/util.c:1029:1: warning: stack frame size (2544) exceeds limit (2048) in '_ieee802_11_parse_elems_full' [-Wframe-larger-than]
+    1029 | _ieee802_11_parse_elems_full(struct ieee80211_elems_parse_params *params,
+         | ^
+   1 warning generated.
 
 
-vim +192 arch/x86/include/asm/topology.h
+vim +/_ieee802_11_parse_elems_full +1029 net/mac80211/util.c
 
-   172	
-   173	/**
-   174	 * topology_is_primary_thread - Check whether CPU is the primary SMT thread
-   175	 * @cpu:	CPU to check
-   176	 */
-   177	static inline bool topology_is_primary_thread(unsigned int cpu)
-   178	{
-   179		return cpumask_test_cpu(cpu, cpu_primary_thread_mask);
-   180	}
-   181	#else /* CONFIG_SMP */
-   182	#define topology_max_packages()			(1)
-   183	static inline int
-   184	topology_update_package_map(unsigned int apicid, unsigned int cpu) { return 0; }
-   185	static inline int
-   186	topology_update_die_map(unsigned int dieid, unsigned int cpu) { return 0; }
-   187	static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
-   188	static inline int topology_max_die_per_package(void) { return 1; }
-   189	static inline int topology_max_smt_threads(void) { return 1; }
-   190	static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
-   191	static inline bool topology_smt_supported(void) { return false; }
- > 192	static inline unsigned int topology_amd_nodes_per_pkg(void) { return 0 };
-   193	#endif /* !CONFIG_SMP */
-   194	
+  1027	
+  1028	static u32
+> 1029	_ieee802_11_parse_elems_full(struct ieee80211_elems_parse_params *params,
+  1030				     struct ieee802_11_elems *elems,
+  1031				     const struct element *check_inherit)
+  1032	{
+  1033		const struct element *elem;
+  1034		bool calc_crc = params->filter != 0;
+  1035		DECLARE_BITMAP(seen_elems, 256);
+  1036		u32 crc = params->crc;
+  1037		const u8 *ie;
+  1038	
+  1039		bitmap_zero(seen_elems, 256);
+  1040	
+  1041		for_each_element(elem, params->start, params->len) {
+  1042			bool elem_parse_failed;
+  1043			u8 id = elem->id;
+  1044			u8 elen = elem->datalen;
+  1045			const u8 *pos = elem->data;
+  1046	
+  1047			if (check_inherit &&
+  1048			    !cfg80211_is_element_inherited(elem,
+  1049							   check_inherit))
+  1050				continue;
+  1051	
+  1052			switch (id) {
+  1053			case WLAN_EID_SSID:
+  1054			case WLAN_EID_SUPP_RATES:
+  1055			case WLAN_EID_FH_PARAMS:
+  1056			case WLAN_EID_DS_PARAMS:
+  1057			case WLAN_EID_CF_PARAMS:
+  1058			case WLAN_EID_TIM:
+  1059			case WLAN_EID_IBSS_PARAMS:
+  1060			case WLAN_EID_CHALLENGE:
+  1061			case WLAN_EID_RSN:
+  1062			case WLAN_EID_ERP_INFO:
+  1063			case WLAN_EID_EXT_SUPP_RATES:
+  1064			case WLAN_EID_HT_CAPABILITY:
+  1065			case WLAN_EID_HT_OPERATION:
+  1066			case WLAN_EID_VHT_CAPABILITY:
+  1067			case WLAN_EID_VHT_OPERATION:
+  1068			case WLAN_EID_MESH_ID:
+  1069			case WLAN_EID_MESH_CONFIG:
+  1070			case WLAN_EID_PEER_MGMT:
+  1071			case WLAN_EID_PREQ:
+  1072			case WLAN_EID_PREP:
+  1073			case WLAN_EID_PERR:
+  1074			case WLAN_EID_RANN:
+  1075			case WLAN_EID_CHANNEL_SWITCH:
+  1076			case WLAN_EID_EXT_CHANSWITCH_ANN:
+  1077			case WLAN_EID_COUNTRY:
+  1078			case WLAN_EID_PWR_CONSTRAINT:
+  1079			case WLAN_EID_TIMEOUT_INTERVAL:
+  1080			case WLAN_EID_SECONDARY_CHANNEL_OFFSET:
+  1081			case WLAN_EID_WIDE_BW_CHANNEL_SWITCH:
+  1082			case WLAN_EID_CHAN_SWITCH_PARAM:
+  1083			case WLAN_EID_EXT_CAPABILITY:
+  1084			case WLAN_EID_CHAN_SWITCH_TIMING:
+  1085			case WLAN_EID_LINK_ID:
+  1086			case WLAN_EID_BSS_MAX_IDLE_PERIOD:
+  1087			case WLAN_EID_RSNX:
+  1088			case WLAN_EID_S1G_BCN_COMPAT:
+  1089			case WLAN_EID_S1G_CAPABILITIES:
+  1090			case WLAN_EID_S1G_OPERATION:
+  1091			case WLAN_EID_AID_RESPONSE:
+  1092			case WLAN_EID_S1G_SHORT_BCN_INTERVAL:
+  1093			/*
+  1094			 * not listing WLAN_EID_CHANNEL_SWITCH_WRAPPER -- it seems possible
+  1095			 * that if the content gets bigger it might be needed more than once
+  1096			 */
+  1097				if (test_bit(id, seen_elems)) {
+  1098					elems->parse_error = true;
+  1099					continue;
+  1100				}
+  1101				break;
+  1102			}
+  1103	
+  1104			if (calc_crc && id < 64 && (params->filter & (1ULL << id)))
+  1105				crc = crc32_be(crc, pos - 2, elen + 2);
+  1106	
+  1107			elem_parse_failed = false;
+  1108	
+  1109			switch (id) {
+  1110			case WLAN_EID_LINK_ID:
+  1111				if (elen + 2 < sizeof(struct ieee80211_tdls_lnkie)) {
+  1112					elem_parse_failed = true;
+  1113					break;
+  1114				}
+  1115				elems->lnk_id = (void *)(pos - 2);
+  1116				break;
+  1117			case WLAN_EID_CHAN_SWITCH_TIMING:
+  1118				if (elen < sizeof(struct ieee80211_ch_switch_timing)) {
+  1119					elem_parse_failed = true;
+  1120					break;
+  1121				}
+  1122				elems->ch_sw_timing = (void *)pos;
+  1123				break;
+  1124			case WLAN_EID_EXT_CAPABILITY:
+  1125				elems->ext_capab = pos;
+  1126				elems->ext_capab_len = elen;
+  1127				break;
+  1128			case WLAN_EID_SSID:
+  1129				elems->ssid = pos;
+  1130				elems->ssid_len = elen;
+  1131				break;
+  1132			case WLAN_EID_SUPP_RATES:
+  1133				elems->supp_rates = pos;
+  1134				elems->supp_rates_len = elen;
+  1135				break;
+  1136			case WLAN_EID_DS_PARAMS:
+  1137				if (elen >= 1)
+  1138					elems->ds_params = pos;
+  1139				else
+  1140					elem_parse_failed = true;
+  1141				break;
+  1142			case WLAN_EID_TIM:
+  1143				if (elen >= sizeof(struct ieee80211_tim_ie)) {
+  1144					elems->tim = (void *)pos;
+  1145					elems->tim_len = elen;
+  1146				} else
+  1147					elem_parse_failed = true;
+  1148				break;
+  1149			case WLAN_EID_VENDOR_SPECIFIC:
+  1150				if (elen >= 4 && pos[0] == 0x00 && pos[1] == 0x50 &&
+  1151				    pos[2] == 0xf2) {
+  1152					/* Microsoft OUI (00:50:F2) */
+  1153	
+  1154					if (calc_crc)
+  1155						crc = crc32_be(crc, pos - 2, elen + 2);
+  1156	
+  1157					if (elen >= 5 && pos[3] == 2) {
+  1158						/* OUI Type 2 - WMM IE */
+  1159						if (pos[4] == 0) {
+  1160							elems->wmm_info = pos;
+  1161							elems->wmm_info_len = elen;
+  1162						} else if (pos[4] == 1) {
+  1163							elems->wmm_param = pos;
+  1164							elems->wmm_param_len = elen;
+  1165						}
+  1166					}
+  1167				}
+  1168				break;
+  1169			case WLAN_EID_RSN:
+  1170				elems->rsn = pos;
+  1171				elems->rsn_len = elen;
+  1172				break;
+  1173			case WLAN_EID_ERP_INFO:
+  1174				if (elen >= 1)
+  1175					elems->erp_info = pos;
+  1176				else
+  1177					elem_parse_failed = true;
+  1178				break;
+  1179			case WLAN_EID_EXT_SUPP_RATES:
+  1180				elems->ext_supp_rates = pos;
+  1181				elems->ext_supp_rates_len = elen;
+  1182				break;
+  1183			case WLAN_EID_HT_CAPABILITY:
+  1184				if (elen >= sizeof(struct ieee80211_ht_cap))
+  1185					elems->ht_cap_elem = (void *)pos;
+  1186				else
+  1187					elem_parse_failed = true;
+  1188				break;
+  1189			case WLAN_EID_HT_OPERATION:
+  1190				if (elen >= sizeof(struct ieee80211_ht_operation))
+  1191					elems->ht_operation = (void *)pos;
+  1192				else
+  1193					elem_parse_failed = true;
+  1194				break;
+  1195			case WLAN_EID_VHT_CAPABILITY:
+  1196				if (elen >= sizeof(struct ieee80211_vht_cap))
+  1197					elems->vht_cap_elem = (void *)pos;
+  1198				else
+  1199					elem_parse_failed = true;
+  1200				break;
+  1201			case WLAN_EID_VHT_OPERATION:
+  1202				if (elen >= sizeof(struct ieee80211_vht_operation)) {
+  1203					elems->vht_operation = (void *)pos;
+  1204					if (calc_crc)
+  1205						crc = crc32_be(crc, pos - 2, elen + 2);
+  1206					break;
+  1207				}
+  1208				elem_parse_failed = true;
+  1209				break;
+  1210			case WLAN_EID_OPMODE_NOTIF:
+  1211				if (elen > 0) {
+  1212					elems->opmode_notif = pos;
+  1213					if (calc_crc)
+  1214						crc = crc32_be(crc, pos - 2, elen + 2);
+  1215					break;
+  1216				}
+  1217				elem_parse_failed = true;
+  1218				break;
+  1219			case WLAN_EID_MESH_ID:
+  1220				elems->mesh_id = pos;
+  1221				elems->mesh_id_len = elen;
+  1222				break;
+  1223			case WLAN_EID_MESH_CONFIG:
+  1224				if (elen >= sizeof(struct ieee80211_meshconf_ie))
+  1225					elems->mesh_config = (void *)pos;
+  1226				else
+  1227					elem_parse_failed = true;
+  1228				break;
+  1229			case WLAN_EID_PEER_MGMT:
+  1230				elems->peering = pos;
+  1231				elems->peering_len = elen;
+  1232				break;
+  1233			case WLAN_EID_MESH_AWAKE_WINDOW:
+  1234				if (elen >= 2)
+  1235					elems->awake_window = (void *)pos;
+  1236				break;
+  1237			case WLAN_EID_PREQ:
+  1238				elems->preq = pos;
+  1239				elems->preq_len = elen;
+  1240				break;
+  1241			case WLAN_EID_PREP:
+  1242				elems->prep = pos;
+  1243				elems->prep_len = elen;
+  1244				break;
+  1245			case WLAN_EID_PERR:
+  1246				elems->perr = pos;
+  1247				elems->perr_len = elen;
+  1248				break;
+  1249			case WLAN_EID_RANN:
+  1250				if (elen >= sizeof(struct ieee80211_rann_ie))
+  1251					elems->rann = (void *)pos;
+  1252				else
+  1253					elem_parse_failed = true;
+  1254				break;
+  1255			case WLAN_EID_CHANNEL_SWITCH:
+  1256				if (elen != sizeof(struct ieee80211_channel_sw_ie)) {
+  1257					elem_parse_failed = true;
+  1258					break;
+  1259				}
+  1260				elems->ch_switch_ie = (void *)pos;
+  1261				break;
+  1262			case WLAN_EID_EXT_CHANSWITCH_ANN:
+  1263				if (elen != sizeof(struct ieee80211_ext_chansw_ie)) {
+  1264					elem_parse_failed = true;
+  1265					break;
+  1266				}
+  1267				elems->ext_chansw_ie = (void *)pos;
+  1268				break;
+  1269			case WLAN_EID_SECONDARY_CHANNEL_OFFSET:
+  1270				if (elen != sizeof(struct ieee80211_sec_chan_offs_ie)) {
+  1271					elem_parse_failed = true;
+  1272					break;
+  1273				}
+  1274				elems->sec_chan_offs = (void *)pos;
+  1275				break;
+  1276			case WLAN_EID_CHAN_SWITCH_PARAM:
+  1277				if (elen <
+  1278				    sizeof(*elems->mesh_chansw_params_ie)) {
+  1279					elem_parse_failed = true;
+  1280					break;
+  1281				}
+  1282				elems->mesh_chansw_params_ie = (void *)pos;
+  1283				break;
+  1284			case WLAN_EID_WIDE_BW_CHANNEL_SWITCH:
+  1285				if (!params->action ||
+  1286				    elen < sizeof(*elems->wide_bw_chansw_ie)) {
+  1287					elem_parse_failed = true;
+  1288					break;
+  1289				}
+  1290				elems->wide_bw_chansw_ie = (void *)pos;
+  1291				break;
+  1292			case WLAN_EID_CHANNEL_SWITCH_WRAPPER:
+  1293				if (params->action) {
+  1294					elem_parse_failed = true;
+  1295					break;
+  1296				}
+  1297				/*
+  1298				 * This is a bit tricky, but as we only care about
+  1299				 * the wide bandwidth channel switch element, so
+  1300				 * just parse it out manually.
+  1301				 */
+  1302				ie = cfg80211_find_ie(WLAN_EID_WIDE_BW_CHANNEL_SWITCH,
+  1303						      pos, elen);
+  1304				if (ie) {
+  1305					if (ie[1] >= sizeof(*elems->wide_bw_chansw_ie))
+  1306						elems->wide_bw_chansw_ie =
+  1307							(void *)(ie + 2);
+  1308					else
+  1309						elem_parse_failed = true;
+  1310				}
+  1311				break;
+  1312			case WLAN_EID_COUNTRY:
+  1313				elems->country_elem = pos;
+  1314				elems->country_elem_len = elen;
+  1315				break;
+  1316			case WLAN_EID_PWR_CONSTRAINT:
+  1317				if (elen != 1) {
+  1318					elem_parse_failed = true;
+  1319					break;
+  1320				}
+  1321				elems->pwr_constr_elem = pos;
+  1322				break;
+  1323			case WLAN_EID_CISCO_VENDOR_SPECIFIC:
+  1324				/* Lots of different options exist, but we only care
+  1325				 * about the Dynamic Transmit Power Control element.
+  1326				 * First check for the Cisco OUI, then for the DTPC
+  1327				 * tag (0x00).
+  1328				 */
+  1329				if (elen < 4) {
+  1330					elem_parse_failed = true;
+  1331					break;
+  1332				}
+  1333	
+  1334				if (pos[0] != 0x00 || pos[1] != 0x40 ||
+  1335				    pos[2] != 0x96 || pos[3] != 0x00)
+  1336					break;
+  1337	
+  1338				if (elen != 6) {
+  1339					elem_parse_failed = true;
+  1340					break;
+  1341				}
+  1342	
+  1343				if (calc_crc)
+  1344					crc = crc32_be(crc, pos - 2, elen + 2);
+  1345	
+  1346				elems->cisco_dtpc_elem = pos;
+  1347				break;
+  1348			case WLAN_EID_ADDBA_EXT:
+  1349				if (elen < sizeof(struct ieee80211_addba_ext_ie)) {
+  1350					elem_parse_failed = true;
+  1351					break;
+  1352				}
+  1353				elems->addba_ext_ie = (void *)pos;
+  1354				break;
+  1355			case WLAN_EID_TIMEOUT_INTERVAL:
+  1356				if (elen >= sizeof(struct ieee80211_timeout_interval_ie))
+  1357					elems->timeout_int = (void *)pos;
+  1358				else
+  1359					elem_parse_failed = true;
+  1360				break;
+  1361			case WLAN_EID_BSS_MAX_IDLE_PERIOD:
+  1362				if (elen >= sizeof(*elems->max_idle_period_ie))
+  1363					elems->max_idle_period_ie = (void *)pos;
+  1364				break;
+  1365			case WLAN_EID_RSNX:
+  1366				elems->rsnx = pos;
+  1367				elems->rsnx_len = elen;
+  1368				break;
+  1369			case WLAN_EID_TX_POWER_ENVELOPE:
+  1370				if (elen < 1 ||
+  1371				    elen > sizeof(struct ieee80211_tx_pwr_env))
+  1372					break;
+  1373	
+  1374				if (elems->tx_pwr_env_num >= ARRAY_SIZE(elems->tx_pwr_env))
+  1375					break;
+  1376	
+  1377				elems->tx_pwr_env[elems->tx_pwr_env_num] = (void *)pos;
+  1378				elems->tx_pwr_env_len[elems->tx_pwr_env_num] = elen;
+  1379				elems->tx_pwr_env_num++;
+  1380				break;
+  1381			case WLAN_EID_EXTENSION:
+  1382				ieee80211_parse_extension_element(calc_crc ?
+  1383									&crc : NULL,
+  1384								  elem, elems);
+  1385				break;
+  1386			case WLAN_EID_S1G_CAPABILITIES:
+  1387				if (elen >= sizeof(*elems->s1g_capab))
+  1388					elems->s1g_capab = (void *)pos;
+  1389				else
+  1390					elem_parse_failed = true;
+  1391				break;
+  1392			case WLAN_EID_S1G_OPERATION:
+  1393				if (elen == sizeof(*elems->s1g_oper))
+  1394					elems->s1g_oper = (void *)pos;
+  1395				else
+  1396					elem_parse_failed = true;
+  1397				break;
+  1398			case WLAN_EID_S1G_BCN_COMPAT:
+  1399				if (elen == sizeof(*elems->s1g_bcn_compat))
+  1400					elems->s1g_bcn_compat = (void *)pos;
+  1401				else
+  1402					elem_parse_failed = true;
+  1403				break;
+  1404			case WLAN_EID_AID_RESPONSE:
+  1405				if (elen == sizeof(struct ieee80211_aid_response_ie))
+  1406					elems->aid_resp = (void *)pos;
+  1407				else
+  1408					elem_parse_failed = true;
+  1409				break;
+  1410			default:
+  1411				break;
+  1412			}
+  1413	
+  1414			if (elem_parse_failed)
+  1415				elems->parse_error = true;
+  1416			else
+  1417				__set_bit(id, seen_elems);
+  1418		}
+  1419	
+  1420		if (!for_each_element_completed(elem, params->start, params->len))
+  1421			elems->parse_error = true;
+  1422	
+  1423		return crc;
+  1424	}
+  1425	
 
 -- 
 0-DAY CI Kernel Test Service
