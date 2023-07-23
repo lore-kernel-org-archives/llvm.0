@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE9D373
-	for <llvm@lists.linux.dev>; Sun, 23 Jul 2023 06:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6D9138F
+	for <llvm@lists.linux.dev>; Sun, 23 Jul 2023 12:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690095079;
+	s=mimecast20190719; t=1690115423;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=qYHXmmzDk+VJ9PXWNFTqZrTnOb//Hf/z1utYhNzF+p8=;
-	b=S3UDRCyHYZ9KWN8NUb6JnRR/hJH+xHSHCO6Ca0sd9ldXT4oUc1ET7XVpnRx07VNnUE84Q6
-	+gvklglpnmQfojgl9KdW5rKu1XUO41C2IpVwJEjWet8OnCiBJuhCJbfhz891c0lYVAfhed
-	gQGVdUSQJR5Ck4s+Oxt+1p3SMGswPlo=
+	bh=+7TsOIFTc4tTszbqps6DFBk61Vr2KoVZNiFf++EZytg=;
+	b=W7U3HhKtLkx9rxvWxXBWDvW+EuAv+UZpv4H+3xJBEy25RyecqFzVBNtxGB5wYRjCqPPY8+
+	wp/nJi+4VpFzAEgbWW/R4As+EattaTut7fRfg3frn/jxdKLAep6NxZCbfMetcU0PyjAvUI
+	/PShUOwQe/byHjeB8LvkQWzstkgLGlo=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-ysrT5xoCP8CMZt8Sgxqisw-1; Sun, 23 Jul 2023 02:51:17 -0400
-X-MC-Unique: ysrT5xoCP8CMZt8Sgxqisw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-648-X9vQYwTFPO2qN9_0RAfFWQ-1; Sun, 23 Jul 2023 08:30:21 -0400
+X-MC-Unique: X9vQYwTFPO2qN9_0RAfFWQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9CDE3101A528
-	for <llvm@lists.linux.dev>; Sun, 23 Jul 2023 06:51:17 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64E5185A58A
+	for <llvm@lists.linux.dev>; Sun, 23 Jul 2023 12:30:21 +0000 (UTC)
 Received: from [172.64.4.102] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 884791121314;
-	Sun, 23 Jul 2023 06:51:17 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 45CDE492C13;
+	Sun, 23 Jul 2023 12:30:21 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 328): Test report for master
- (6.5.0-rc2, mainline.kernel.org-clang, 295e1388)
-Date: Sun, 23 Jul 2023 06:51:17 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 19 of 328): Test report for master
+ (6.5.0-rc2, mainline.kernel.org-clang, c2782531)
+Date: Sun, 23 Jul 2023 12:30:21 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <92860.123072302511700139@us-mta-29.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <37772.123072308302100303@us-mta-648.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,42 +52,38 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 's390-6.5-3' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/s390/linux
+    Commit message: Merge tag 'powerpc-6.5-4' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/powerpc/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/96971
+    https://datawarehouse.cki-project.org/kcidb/checkouts/96974
 
 One or more kernel tests failed:
     Unrecognized or new issues:
-           s390x - Storage - blktests - nvme-tcp
+          x86_64 (debug) - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8864989
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/047
+8866220
 
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: selinux-policy: serge-testsuite: sctp/test 79/120 # Failed t=
+est at sctp/test line 808
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1250
+            Affected tests:
+                  x86_64 - selinux-policy: serge-testsuite
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
 mapper/myvg-thinvolume1
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1353
             Affected tests:
                  ppc64le - Storage - lvm thinp sanity
-        Issue: Kdump saving vmcore failed: open_dump_memory: Can't open the=
- dump memory(/proc/vmcore). No such file or directory
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2222526
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
