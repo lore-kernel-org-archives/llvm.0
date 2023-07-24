@@ -1,44 +1,46 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC36F9E1;
-	Mon, 24 Jul 2023 17:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11518F4F9
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 17:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690220055; x=1721756055;
+  t=1690220136; x=1721756136;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4a5ZXFUaM6toh97BoMkChv5GdlzM4u4g8uVpDMiiNb0=;
-  b=nATRzRdVEdlWB4/2S/zFHU733v1NFpyw542Drcuxj3jF6BH4vh8b7flu
-   OaBwW1xC12WQ9TzAUAo4na2Md/JD5nRlP2O1F7kBfQHm5c5QGlB/G3En3
-   8BHrY+7b3HV2SilPH02YlCQe6nOocAko+FHqRw2T+4PE9S5qYBeSODfhh
-   3WMfQ5CKyD1wTZe9n3HqgNoKI+cGpDncDyOd16uHJT9mJr++jukE5+OEX
-   4zgmyEYKdBZvUcq6WeQRYeOU32YeZ08QdSC0NXmNZMwEEgRqzNe/pu++u
-   fqWei/8ZdmuhvfwFKZY99AEpJiO0Ea5w5HPgeB1YF2AqK5j29qHy4pyjo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="398415580"
+  bh=kwYTilEARt1N1V34eJr55Ya9rMistbgI1FoRnG+ZV2g=;
+  b=fISFQokiIRjHyVG3+HAisX4Sn2BGOnAB6Vbu+sH+FfmwQ9RQjwpdJSgT
+   fVRpeShfhKE/Ukd3hTUPHdEdW86L1OsrT5en0PtoxnyHkyGM/5sOt4wHt
+   DWG6a1gs9S/iHxua8nA4sRO9Z+VpczhvD3eFw8lQ9e5WG84Di6KPy5zzy
+   t5QViXAlHSROy3/lrse2M5ButOGH2QfiIgWAhafujzT5oEMnXhzu93ohI
+   4m6qUxXgNEkvi9YTMM2joDDttCOdfx/DaGdFH4+JGu3jhqW9/SthcL1IS
+   dQuXe5bO3iEIC09EZq7O9Pwy/I4z9jK0OsxdSZvnBP8Yw69yS/T8ls1xT
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="371107574"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="398415580"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:34:12 -0700
+   d="scan'208";a="371107574"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:35:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="755385765"
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="791042033"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="755385765"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2023 10:34:10 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qNzRi-0009uq-0K;
-	Mon, 24 Jul 2023 17:34:10 +0000
-Date: Tue, 25 Jul 2023 01:33:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Usama Arif <usama.arif@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 2/4] mm/memblock: Add hugepage_size member to struct
- memblock_region
-Message-ID: <202307250139.EDNyQbWQ-lkp@intel.com>
-References: <20230724134644.1299963-3-usama.arif@bytedance.com>
+   d="scan'208";a="791042033"
+Received: from gionescu-mobl2.ger.corp.intel.com (HELO intel.com) ([10.252.34.175])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:35:31 -0700
+Date: Mon, 24 Jul 2023 19:35:27 +0200
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: Su Hui <suhui@nfschina.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com, andrzej.hajda@intel.com,
+	intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, mripard@kernel.org
+Subject: Re: [Intel-gfx] [PATCH v2] drm/i915/tv: avoid possible division by
+ zero
+Message-ID: <ZL62X3/CnsJcWWU4@ashyti-mobl2.lan>
+References: <20230718013216.495830-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,109 +49,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230724134644.1299963-3-usama.arif@bytedance.com>
+In-Reply-To: <20230718013216.495830-1-suhui@nfschina.com>
 
-Hi Usama,
+On Tue, Jul 18, 2023 at 09:32:17AM +0800, Su Hui wrote:
+> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
+> line 991, column 22 Division by zero.
+> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
+> then division by zero will happen.
+> 
+> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  drivers/gpu/drm/i915/display/intel_tv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
+> index 36b479b46b60..f59553f7c132 100644
+> --- a/drivers/gpu/drm/i915/display/intel_tv.c
+> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
+> @@ -988,7 +988,7 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
+>  		      const struct tv_mode *tv_mode,
+>  		      int clock)
+>  {
+> -	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
+> +	mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+but this does not provide the same value. Try with:
 
-[auto build test WARNING on akpm-mm/mm-everything]
+	8 / (2 >> 1)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/mm-hugetlb-Skip-prep-of-tail-pages-when-HVO-is-enabled/20230724-214832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230724134644.1299963-3-usama.arif%40bytedance.com
-patch subject: [RFC 2/4] mm/memblock: Add hugepage_size member to struct memblock_region
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230725/202307250139.EDNyQbWQ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230725/202307250139.EDNyQbWQ-lkp@intel.com/reproduce)
+and
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307250139.EDNyQbWQ-lkp@intel.com/
+	8 / 2 << 1
 
-All warnings (new ones prefixed by >>):
+They are definitely different.
 
-   In file included from mm/memblock.c:18:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/memblock.c:18:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/memblock.c:18:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/memblock.c:869:21: warning: no previous prototype for function 'memblock_reserve_huge' [-Wmissing-prototypes]
-     869 | int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
-         |                     ^
-   mm/memblock.c:869:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     869 | int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
-         | ^
-         | static 
-   13 warnings generated.
+The real check could be:
 
+	if (!(tv_mode->oversample >> 1))
+		return ...
 
-vim +/memblock_reserve_huge +869 mm/memblock.c
+But first I would check if that's actually possible.
 
-   868	
- > 869	int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
-   870						   phys_addr_t hugepage_size)
-   871	{
-   872		phys_addr_t end = base + size - 1;
-   873	
-   874		memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
-   875			     &base, &end, (void *)_RET_IP_);
-   876	
-   877		return memblock_add_range(&memblock.reserved, base, size, MAX_NUMNODES, 0, hugepage_size);
-   878	}
-   879	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Andi
