@@ -1,232 +1,128 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF28E5226
-	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 22:39:05 +0000 (UTC)
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-40631c5b9e9so44481cf.1
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 15:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690238344; x=1690843144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xsKPUm+1/LIf2j3Uq5jozTbzzKVgJESjN7eUR+dDD/k=;
-        b=yJMRYaoAZhUdlRTw7g+iaENPtanJYDgjb2Q4KRo5v6zLEXy60Oamn/SjKDLyzapnjL
-         L0mHQjE9BgYWKqlN0UNzsJzgSIFe2xLnYp23ysIKJtnDL6FRboPWDM+yBT1jbj+NMGfJ
-         H6efdSzq8WiAV6kDK4B7xeUOQkbPaUPaH9ioBIgtty1sCEUedmL3e6Zvcqb6FpkLi5jn
-         Atl8vB7orogmEGs+qPIge3rU1CrlxBBHE5+F0Qd0reihB4P63WFNJTKvTZVzENOgPFub
-         /KmbaUV4tLKf4OTbZUtudqnnmbznxe+q+ZGGDKW09vAFRGnM2uPeUkI8FAqoJ9/vnPHR
-         Nw4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690238344; x=1690843144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xsKPUm+1/LIf2j3Uq5jozTbzzKVgJESjN7eUR+dDD/k=;
-        b=bEQHr4VtCydAmkop2S5PDP9huRuJWf9qG+rleOGXFuvzHzVnEK7TdiTYoC0wldy/GH
-         Zk6T8d70m9q8Iy8tqsJ4ANYUcoPfQd0MAs6U2jAUdK4ae1h6DkL9DmEBhWBt53rz989J
-         Y/vGsMnaTlgGIEBQM6UU9B9QnQXCypdHLKlfvD58ha73HXtKm3cP13wW2qD0rt9/NXU9
-         z1iuQOXyuW1T5+60FAnlvpPQ1016E5ZShOWMtgb1goNx8f+Ox6mwKhK2Qfkpdsa0REuf
-         u+dhMgZtKSwvt0At+LP4NNgymNcOr7QG7U4irjVCYb94DcsKiZj7Db3w+qUhjzm1bBfP
-         ej1Q==
-X-Gm-Message-State: ABy/qLaOP8k3khcdwd2/jKOjBrcdunS4L7k19wPnxq+ZI6nqVz9TE9lc
-	2nUq+G8B0jlIEuShYkZnNYmhWOZqKd38qjDbxmZFvQ==
-X-Google-Smtp-Source: APBJJlEBCyIZaRp1g8OODo2/QuQTOParD2vwo3FVPZKBfli16+JHlTnaH1Gv4YbMaar27mBl5a6x5eZ/NpLYL0t3b1c=
-X-Received: by 2002:a05:622a:1350:b0:403:ac9c:ac2f with SMTP id
- w16-20020a05622a135000b00403ac9cac2fmr6794qtk.17.1690238344295; Mon, 24 Jul
- 2023 15:39:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643CB125D6;
+	Mon, 24 Jul 2023 23:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690241666; x=1721777666;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lrk4sW9f//3CiUWwWf1RLHLuEPo9aqOtPKf2FTXXCYs=;
+  b=g/bdTLeUSQmi8viD1agZ+6CrDTAyGcjdPbOs8FjWvbpgxZbaWv69tGHB
+   e90uW6Xv0gWkn2NmFNhHKy2kTW/mH2VYqZHeeWC6ihY3onrj15XeBSOeX
+   yAP1dedNMJP5pjLAdj5yKjTBb0LQ2t6JdNk6O7v0LDf/lKXac6Mq+nVm7
+   Jmbx2j4mHW9pz3mpwhYdqrZbmaDXRcXO7vGpYLJsyz+gpuKIWikSguftB
+   BqLSupet74sKdXYdq6NS7OJyvhx3c+xecS4o25UJwZb5tXi/rXJ+P8ceH
+   NlMzZgrlKv1guJJoMjQFka1ps8dUmi2tQh7qKdnF1QGuY39q/umOWIjgU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="370243634"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="370243634"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 16:34:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="729101194"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="729101194"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jul 2023 16:34:22 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qO54I-000A6e-12;
+	Mon, 24 Jul 2023 23:34:22 +0000
+Date: Tue, 25 Jul 2023 07:33:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Ren <guoren@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [csky-linux:sg2042-master-qspinlock-64ilp32_v3 16/42]
+ arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202307250718.R40DjDII-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230724201247.748146-1-irogers@google.com> <CAKwvOd=12eSPyc5ZRgm8NPMJYjj13QOxcnHtv_Y7Ws-zffyUrA@mail.gmail.com>
- <CAP-5=fVh5atUjf4sLBYi4CwxYdWJfub_0anXKTdVuJrZkC4-tQ@mail.gmail.com> <CAKwvOd=eZ+m4hJ23S=v-BW0BxuWk=YCW=xRLcD00iTKWBiHjVQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=eZ+m4hJ23S=v-BW0BxuWk=YCW=xRLcD00iTKWBiHjVQ@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 24 Jul 2023 15:38:52 -0700
-Message-ID: <CAP-5=fWSQA6f5V4ntLZC+DsypSJnYXRSkLX0gy232P=yAaukNw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Perf tool LTO support
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
-	Zhengjun Xing <zhengjun.xing@linux.intel.com>, James Clark <james.clark@arm.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, maskray@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 24, 2023 at 3:27=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Jul 24, 2023 at 2:48=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > On Mon, Jul 24, 2023 at 2:15=E2=80=AFPM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > On Mon, Jul 24, 2023 at 1:12=E2=80=AFPM Ian Rogers <irogers@google.co=
-m> wrote:
-> > > >
-> > > > Add a build flag, LTO=3D1, so that perf is built with the -flto
-> > > > flag. Address some build errors this configuration throws up.
-> > >
-> > > Hi Ian,
-> > > Thanks for the performance numbers. Any sense of what the build time
-> > > numbers might look like for building perf with LTO?
-> > >
-> > > Does `-flto=3Dthin` in clang's case make a meaningful difference of
-> > > `-flto`? I'd recommend that over "full LTO" `-flto` when the
-> > > performance difference of the result isn't too meaningful.  ThinLTO
-> > > should be faster to build, but I don't know that I've ever built perf=
-,
-> > > so IDK what to expect.
-> >
-> > Hi Nick,
-> >
-> > I'm not sure how much the perf build will benefit from LTO to say
-> > whether thin is good enough or not. Things like "perf record" are
-> > designed to spend the majority of their time blocking on a poll system
-> > call. We have benchmarks at least :-)
-> >
-> > I grabbed some clang build times in an unscientific way on my loaded la=
-ptop:
-> >
-> > no LTO
-> > real    0m48.846s
-> > user    3m11.452s
-> > sys     0m29.598s
-> >
-> > -flto=3Dthin
-> > real    0m55.910s
-> > user    4m2.342s
-> > sys     0m30.120s
-> >
-> > real    0m50.330s
-> > user    3m36.986s
-> > sys     0m28.519s
-> >
-> > -flto
-> > real    1m12.002s
-> > user    3m27.676s
-> > sys     0m30.305s
-> >
-> > real    1m5.187s
-> > user    3m19.348s
-> > sys     0m29.031s
-> >
-> > So perhaps thin LTO increases total build time by 10%, whilst full LTO
-> > increases it by 50%.
-> >
-> > Gathering some clang performance numbers:
-> >
-> > no LTO
-> > $ perf bench internals synthesize
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 178.694 usec (+- 0.171 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 3.436 usec
-> >  Average data synthesis took: 194.545 usec (+- 0.088 usec)
-> >  Average num. events: 277.000 (+- 0.000)
-> >  Average time per event 0.702 usec
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 175.381 usec (+- 0.105 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 3.373 usec
-> >  Average data synthesis took: 188.980 usec (+- 0.071 usec)
-> >  Average num. events: 278.000 (+- 0.000)
-> >  Average time per event 0.680 usec
-> >
-> > -flto=3Dthin
-> > $ perf bench internals synthesize
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 183.122 usec (+- 0.082 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 3.522 usec
-> >  Average data synthesis took: 196.468 usec (+- 0.102 usec)
-> >  Average num. events: 277.000 (+- 0.000)
-> >  Average time per event 0.709 usec
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 177.684 usec (+- 0.094 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 3.417 usec
-> >  Average data synthesis took: 190.079 usec (+- 0.077 usec)
-> >  Average num. events: 275.000 (+- 0.000)
-> >  Average time per event 0.691 usec
-> >
-> > -flto
-> > $ perf bench internals synthesize
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 112.599 usec (+- 0.040 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 2.165 usec
-> >  Average data synthesis took: 119.012 usec (+- 0.070 usec)
-> >  Average num. events: 278.000 (+- 0.000)
-> >  Average time per event 0.428 usec
-> > # Running 'internals/synthesize' benchmark:
-> > Computing performance of single threaded perf event synthesis by
-> > synthesizing events on the perf process itself:
-> >  Average synthesis took: 107.606 usec (+- 0.147 usec)
-> >  Average num. events: 52.000 (+- 0.000)
-> >  Average time per event 2.069 usec
-> >  Average data synthesis took: 114.633 usec (+- 0.159 usec)
-> >  Average num. events: 279.000 (+- 0.000)
-> >  Average time per event 0.411 usec
-> >
-> > The performance win from thin LTO doesn't look to be there. Full LTO
-> > appears to be reducing event synthesis time down to 60% of what it
-> > was. The clang numbers are looking better than the GCC ones. I think
-> > from this it makes sense to use -flto.
->
-> Without any context, I'm not really sure what numbers are good vs. bad
-> ("is larger better?").  More so I was curious if thinLTO perhaps got
-> most of the win without significant performance regressions. If not,
-> oh well, and if the slower full LTO has numbers that make sense to
-> other reviewers, well then *Chuck Norris thumbs up*.  Thanks for the
-> stats.
+tree:   https://github.com/c-sky/csky-linux sg2042-master-qspinlock-64ilp32_v3
+head:   afe9d1bbe54feff432a2c25572304c06de598ec0
+commit: 1727f1271e2e6d73c7cc2737a4f22e872789d9ad [16/42] riscv: u64ilp32: Enable user space runtime switch
+config: riscv-randconfig-r011-20230724 (https://download.01.org/0day-ci/archive/20230725/202307250718.R40DjDII-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307250718.R40DjDII-lkp@intel.com/reproduce)
 
-I can at least explain the stats. When perf starts it has to
-"synthesize" the state-of-the machine, it generates fake events to
-describe the mmaps in each process by reading /proc. This is done most
-typically so a virtual address can be turned into a filename and line
-number. Generally this is done for the text part of a binary but it
-may also be done for the data. Large systems may take a long time to
-synthesize all the state for, hence the benchmark.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307250718.R40DjDII-lkp@intel.com/
 
-The result I normally look at above is the "Average time per event",
-so without LTO or with thin LTO each event is taking approx. 180
-microseconds to create. With full LTO the time taken per event is 110
-microseconds, which could be a noticeable start-up time win.
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Ian
+>> arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^
+   arch/riscv/kernel/vdso.c:322:9: note: uninitialized use occurs here
+     322 |         return ret;
+         |                ^~~
+   arch/riscv/kernel/vdso.c:309:2: note: remove the 'if' if its condition is always true
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     310 |                 ret = __setup_additional_pages(mm, bprm, uses_interp,
+         | ~~~~~~~~~~~~~~~~
+>> arch/riscv/kernel/vdso.c:309:6: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/vdso.c:322:9: note: uninitialized use occurs here
+     322 |         return ret;
+         |                ^~~
+   arch/riscv/kernel/vdso.c:309:6: note: remove the '&&' if its condition is always true
+     309 |         if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:141:2: note: expanded from macro 'test_thread_flag'
+     141 |         test_ti_thread_flag(current_thread_info(), flag)
+         |         ^
+   arch/riscv/kernel/vdso.c:303:9: note: initialize the variable 'ret' to silence this warning
+     303 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
-> >
-> > Thanks,
-> > Ian
-> >
-> > > --
-> > > Thanks,
-> > > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+
+vim +309 arch/riscv/kernel/vdso.c
+
+76d2a0493a17d4 Palmer Dabbelt 2017-07-10  297  
+3092eb45637573 Guo Ren        2022-04-05  298  #ifdef CONFIG_COMPAT
+3092eb45637573 Guo Ren        2022-04-05  299  int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+3092eb45637573 Guo Ren        2022-04-05  300  				       int uses_interp)
+3092eb45637573 Guo Ren        2022-04-05  301  {
+3092eb45637573 Guo Ren        2022-04-05  302  	struct mm_struct *mm = current->mm;
+3092eb45637573 Guo Ren        2022-04-05  303  	int ret;
+3092eb45637573 Guo Ren        2022-04-05  304  
+3092eb45637573 Guo Ren        2022-04-05  305  	if (mmap_write_lock_killable(mm))
+3092eb45637573 Guo Ren        2022-04-05  306  		return -EINTR;
+3092eb45637573 Guo Ren        2022-04-05  307  
+fea3d07fbad0af Guo Ren        2023-05-31  308  #ifdef CONFIG_VDSO32
+fea3d07fbad0af Guo Ren        2023-05-31 @309  	if (test_thread_flag(TIF_32BIT) && !test_thread_flag(TIF_64ILP32))
+fea3d07fbad0af Guo Ren        2023-05-31  310  		ret = __setup_additional_pages(mm, bprm, uses_interp,
+fea3d07fbad0af Guo Ren        2023-05-31  311  							&vdso32_info);
+fea3d07fbad0af Guo Ren        2023-05-31  312  #endif
+fea3d07fbad0af Guo Ren        2023-05-31  313  
+
+:::::: The code at line 309 was first introduced by commit
+:::::: fea3d07fbad0afbaa64bac1e849bdc298d4c06fb riscv: u64ilp32: Adjust vDSO kernel flow for 64ilp32 abi
+
+:::::: TO: Guo Ren <guoren@linux.alibaba.com>
+:::::: CC: Guo Ren <guoren@linux.alibaba.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
