@@ -1,194 +1,215 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ADB1094E
-	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 21:48:21 +0000 (UTC)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-40550136e54so103421cf.0
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 14:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690235300; x=1690840100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ifTUtuK5V5MYNm+bAiFRs1Giaz2am8su6EuD15e6Ok=;
-        b=mMZUcwQNUodC/QF5Mwrwq4C5u18fp9psSC6UogZD89mO6pyZOOc7ho04Q2E7SqS/OO
-         KjReVXCVmSn2vYocui6Dtk4Wm2DAnDXrk8g0wR7nnx5vBHWQgxtz001U5hQtWel4/muw
-         tJ/yTdZDfKDBnHxwWLUnnv+FKDwZjAzFmIuo9B3bixEIYeBVKYlo7W2ujZubpiUjaYtJ
-         CGYyn+1RC5RpPS84stQZYGW+dwJU0QtCn3Xl4TPiHwk2elm0ePhqvQZftkpbbr1xHBQX
-         qtSRIrFmxyxhd/KpGzD7UKPMZKbbEA6SXOeFEQHkqse7OTDV0tI5Rvw4Oxu9u9hKLwmY
-         yG0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690235300; x=1690840100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ifTUtuK5V5MYNm+bAiFRs1Giaz2am8su6EuD15e6Ok=;
-        b=aEFU/dYjLDqGFAJIUhYe57tfMQjnFubHFKIZp6T/5860t2hk/I1cpESak00YnaCIIk
-         mVLByaUp7uVRSqN6OahhmYrqU6T6L/g4ry3qbbXXDXzQfdFDzRdVtT5iudwaHShxq5zX
-         T8Jkx0Mkxor2A63giggX2FR2tK+JryYvihnORteDa8P5VXtJAX6L8NrRRpD0lnO6j3Al
-         tNHzJnzb/W8z9ZEgwamWUHmNSLArsRUqa42hugqNDprPNuaNrXcILabq0lu1tPJi2ZlR
-         rMXgGKzDGti1CJaIoa6MneujT3qelKkEqY0y7qVM0ae8/ouU2cW8I/JOzyTswv3tUlnl
-         Fc7A==
-X-Gm-Message-State: ABy/qLbJclkL/F656Q319H1NYeJHzW8K9IFu8+7MmUd1+yVqLZOSQhWo
-	ki40rVu7FacBit38OkN2lLZBAUxdKvKDZHELtG6FCw==
-X-Google-Smtp-Source: APBJJlHsYrWvniCrUgIhS1T7zRs3emxCP5nrN9ov/190OzoLUgKYnCs1z1pROaIHbr8oEMK6D6d+72oPtVgeoIS0i+k=
-X-Received: by 2002:ac8:5c89:0:b0:403:59cb:66c4 with SMTP id
- r9-20020ac85c89000000b0040359cb66c4mr561657qta.23.1690235299904; Mon, 24 Jul
- 2023 14:48:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6148A11C9C;
+	Mon, 24 Jul 2023 22:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690236120; x=1721772120;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SJlj8GnFLnio14S0CRO9n8WnZoBWKVSR9zwwsRhQPJw=;
+  b=mf4EkIYC65GpY1gaXPKzUUb1ol82RNGztle8Ye/LAJJS0mubLpk3Qbtw
+   HaPsL9t7e/bwEZPJ1E5Xu3E6N5sqfqlH1GW5Qvh6xJip2ynGIRIcptxsD
+   emvyQM6lZmHDHaRsZCHkFR0msSMgXvdjAykltzocPTui/aaXllAQUdp4+
+   MOR6RQV6yc1UA0+D4SpjLDs4dus+jrhwI+q96wnMnesJ8XcF9tvM8aJ4t
+   m1IkLsbvPpmxQ4gE/yKov2Vf5t7upsNGhE2bPcZF+tmxL21csNc58N/Yz
+   4x0xG0N3nft28sRCmV+ejvS4CXVDybDr1JDyMxlgoP8S2pL7Ys9MI+ZUS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="431358373"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="431358373"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 15:01:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="675984365"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="675984365"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 24 Jul 2023 15:01:57 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qO3cr-000A3s-05;
+	Mon, 24 Jul 2023 22:01:57 +0000
+Date: Tue, 25 Jul 2023 06:01:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/media/dvb-frontends/cxd2841er.c:3376:12: warning: stack
+ frame size (9592) exceeds limit (8192) in 'cxd2841er_set_frontend_tc'
+Message-ID: <202307250554.zGR0JlFR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230724201247.748146-1-irogers@google.com> <CAKwvOd=12eSPyc5ZRgm8NPMJYjj13QOxcnHtv_Y7Ws-zffyUrA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=12eSPyc5ZRgm8NPMJYjj13QOxcnHtv_Y7Ws-zffyUrA@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 24 Jul 2023 14:48:08 -0700
-Message-ID: <CAP-5=fVh5atUjf4sLBYi4CwxYdWJfub_0anXKTdVuJrZkC4-tQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Perf tool LTO support
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
-	Zhengjun Xing <zhengjun.xing@linux.intel.com>, James Clark <james.clark@arm.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, maskray@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 24, 2023 at 2:15=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Jul 24, 2023 at 1:12=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > Add a build flag, LTO=3D1, so that perf is built with the -flto
-> > flag. Address some build errors this configuration throws up.
->
-> Hi Ian,
-> Thanks for the performance numbers. Any sense of what the build time
-> numbers might look like for building perf with LTO?
->
-> Does `-flto=3Dthin` in clang's case make a meaningful difference of
-> `-flto`? I'd recommend that over "full LTO" `-flto` when the
-> performance difference of the result isn't too meaningful.  ThinLTO
-> should be faster to build, but I don't know that I've ever built perf,
-> so IDK what to expect.
+Hi Kees,
 
-Hi Nick,
+FYI, the error/warning still remains.
 
-I'm not sure how much the perf build will benefit from LTO to say
-whether thin is good enough or not. Things like "perf record" are
-designed to spend the majority of their time blocking on a poll system
-call. We have benchmarks at least :-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   20ea1e7d13c1b544fe67c4a8dc3943bb1ab33e6f
+commit: fa35198f39571bbdae53c5b321020021eaad6bd2 fortify: Explicitly check bounds are compile-time constants
+date:   10 months ago
+config: x86_64-randconfig-x015-20230725 (https://download.01.org/0day-ci/archive/20230725/202307250554.zGR0JlFR-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307250554.zGR0JlFR-lkp@intel.com/reproduce)
 
-I grabbed some clang build times in an unscientific way on my loaded laptop=
-:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307250554.zGR0JlFR-lkp@intel.com/
 
-no LTO
-real    0m48.846s
-user    3m11.452s
-sys     0m29.598s
+All warnings (new ones prefixed by >>):
 
--flto=3Dthin
-real    0m55.910s
-user    4m2.342s
-sys     0m30.120s
+>> drivers/media/dvb-frontends/cxd2841er.c:3376:12: warning: stack frame size (9592) exceeds limit (8192) in 'cxd2841er_set_frontend_tc' [-Wframe-larger-than]
+   static int cxd2841er_set_frontend_tc(struct dvb_frontend *fe)
+              ^
+   1 warning generated.
 
-real    0m50.330s
-user    3m36.986s
-sys     0m28.519s
 
--flto
-real    1m12.002s
-user    3m27.676s
-sys     0m30.305s
+vim +/cxd2841er_set_frontend_tc +3376 drivers/media/dvb-frontends/cxd2841er.c
 
-real    1m5.187s
-user    3m19.348s
-sys     0m29.031s
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3375  
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28 @3376  static int cxd2841er_set_frontend_tc(struct dvb_frontend *fe)
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3377  {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3378  	int ret = 0, timeout;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3379  	enum fe_status status;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3380  	struct cxd2841er_priv *priv = fe->demodulator_priv;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3381  	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3382  
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3383  	dev_dbg(&priv->i2c->dev, "%s() delivery_system=%d bandwidth_hz=%d\n",
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3384  		 __func__, p->delivery_system, p->bandwidth_hz);
+763f857e40f3711 Daniel Scheller 2017-04-09  3385  
+763f857e40f3711 Daniel Scheller 2017-04-09  3386  	if (priv->flags & CXD2841ER_EARLY_TUNE)
+763f857e40f3711 Daniel Scheller 2017-04-09  3387  		cxd2841er_tuner_set(fe);
+763f857e40f3711 Daniel Scheller 2017-04-09  3388  
+bd2355b8efc684e Daniel Scheller 2017-07-11  3389  	/* deconfigure/put demod to sleep on delsys switch if active */
+bd2355b8efc684e Daniel Scheller 2017-07-11  3390  	if (priv->state == STATE_ACTIVE_TC &&
+bd2355b8efc684e Daniel Scheller 2017-07-11  3391  	    priv->system != p->delivery_system) {
+bd2355b8efc684e Daniel Scheller 2017-07-11  3392  		dev_dbg(&priv->i2c->dev, "%s(): old_delsys=%d, new_delsys=%d -> sleep\n",
+bd2355b8efc684e Daniel Scheller 2017-07-11  3393  			 __func__, priv->system, p->delivery_system);
+bd2355b8efc684e Daniel Scheller 2017-07-11  3394  		cxd2841er_sleep_tc(fe);
+bd2355b8efc684e Daniel Scheller 2017-07-11  3395  	}
+bd2355b8efc684e Daniel Scheller 2017-07-11  3396  
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3397  	if (p->delivery_system == SYS_DVBT) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3398  		priv->system = SYS_DVBT;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3399  		switch (priv->state) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3400  		case STATE_SLEEP_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3401  			ret = cxd2841er_sleep_tc_to_active_t(
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3402  				priv, p->bandwidth_hz);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3403  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3404  		case STATE_ACTIVE_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3405  			ret = cxd2841er_retune_active(priv, p);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3406  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3407  		default:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3408  			dev_dbg(&priv->i2c->dev, "%s(): invalid state %d\n",
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3409  				__func__, priv->state);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3410  			ret = -EINVAL;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3411  		}
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3412  	} else if (p->delivery_system == SYS_DVBT2) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3413  		priv->system = SYS_DVBT2;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3414  		cxd2841er_dvbt2_set_plp_config(priv,
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3415  			(int)(p->stream_id > 255), p->stream_id);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3416  		cxd2841er_dvbt2_set_profile(priv, DVBT2_PROFILE_BASE);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3417  		switch (priv->state) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3418  		case STATE_SLEEP_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3419  			ret = cxd2841er_sleep_tc_to_active_t2(priv,
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3420  				p->bandwidth_hz);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3421  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3422  		case STATE_ACTIVE_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3423  			ret = cxd2841er_retune_active(priv, p);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3424  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3425  		default:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3426  			dev_dbg(&priv->i2c->dev, "%s(): invalid state %d\n",
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3427  				__func__, priv->state);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3428  			ret = -EINVAL;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3429  		}
+83808c23e51a61f Abylay Ospan    2016-03-22  3430  	} else if (p->delivery_system == SYS_ISDBT) {
+83808c23e51a61f Abylay Ospan    2016-03-22  3431  		priv->system = SYS_ISDBT;
+83808c23e51a61f Abylay Ospan    2016-03-22  3432  		switch (priv->state) {
+83808c23e51a61f Abylay Ospan    2016-03-22  3433  		case STATE_SLEEP_TC:
+83808c23e51a61f Abylay Ospan    2016-03-22  3434  			ret = cxd2841er_sleep_tc_to_active_i(
+83808c23e51a61f Abylay Ospan    2016-03-22  3435  					priv, p->bandwidth_hz);
+83808c23e51a61f Abylay Ospan    2016-03-22  3436  			break;
+83808c23e51a61f Abylay Ospan    2016-03-22  3437  		case STATE_ACTIVE_TC:
+83808c23e51a61f Abylay Ospan    2016-03-22  3438  			ret = cxd2841er_retune_active(priv, p);
+83808c23e51a61f Abylay Ospan    2016-03-22  3439  			break;
+83808c23e51a61f Abylay Ospan    2016-03-22  3440  		default:
+83808c23e51a61f Abylay Ospan    2016-03-22  3441  			dev_dbg(&priv->i2c->dev, "%s(): invalid state %d\n",
+83808c23e51a61f Abylay Ospan    2016-03-22  3442  					__func__, priv->state);
+83808c23e51a61f Abylay Ospan    2016-03-22  3443  			ret = -EINVAL;
+83808c23e51a61f Abylay Ospan    2016-03-22  3444  		}
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3445  	} else if (p->delivery_system == SYS_DVBC_ANNEX_A ||
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3446  			p->delivery_system == SYS_DVBC_ANNEX_C) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3447  		priv->system = SYS_DVBC_ANNEX_A;
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3448  		/* correct bandwidth */
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3449  		if (p->bandwidth_hz != 6000000 &&
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3450  				p->bandwidth_hz != 7000000 &&
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3451  				p->bandwidth_hz != 8000000) {
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3452  			p->bandwidth_hz = 8000000;
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3453  			dev_dbg(&priv->i2c->dev, "%s(): forcing bandwidth to %d\n",
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3454  					__func__, p->bandwidth_hz);
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3455  		}
+3f3b48a0c6caba3 Abylay Ospan    2016-05-14  3456  
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3457  		switch (priv->state) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3458  		case STATE_SLEEP_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3459  			ret = cxd2841er_sleep_tc_to_active_c(
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3460  				priv, p->bandwidth_hz);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3461  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3462  		case STATE_ACTIVE_TC:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3463  			ret = cxd2841er_retune_active(priv, p);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3464  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3465  		default:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3466  			dev_dbg(&priv->i2c->dev, "%s(): invalid state %d\n",
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3467  				__func__, priv->state);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3468  			ret = -EINVAL;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3469  		}
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3470  	} else {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3471  		dev_dbg(&priv->i2c->dev,
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3472  			"%s(): invalid delivery system %d\n",
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3473  			__func__, p->delivery_system);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3474  		ret = -EINVAL;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3475  	}
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3476  	if (ret)
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3477  		goto done;
+c7518d13f70e62e Daniel Scheller 2017-04-09  3478  
+763f857e40f3711 Daniel Scheller 2017-04-09  3479  	if (!(priv->flags & CXD2841ER_EARLY_TUNE))
+c7518d13f70e62e Daniel Scheller 2017-04-09  3480  		cxd2841er_tuner_set(fe);
+c7518d13f70e62e Daniel Scheller 2017-04-09  3481  
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3482  	cxd2841er_tune_done(priv);
+e3943aa6d8023bb Daniel Scheller 2017-04-09  3483  
+e3943aa6d8023bb Daniel Scheller 2017-04-09  3484  	if (priv->flags & CXD2841ER_NO_WAIT_LOCK)
+e3943aa6d8023bb Daniel Scheller 2017-04-09  3485  		goto done;
+e3943aa6d8023bb Daniel Scheller 2017-04-09  3486  
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3487  	timeout = 2500;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3488  	while (timeout > 0) {
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3489  		ret = cxd2841er_read_status_tc(fe, &status);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3490  		if (ret)
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3491  			goto done;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3492  		if (status & FE_HAS_LOCK)
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3493  			break;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3494  		msleep(20);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3495  		timeout -= 20;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3496  	}
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3497  	if (timeout < 0)
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3498  		dev_dbg(&priv->i2c->dev,
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3499  			"%s(): LOCK wait timeout\n", __func__);
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3500  done:
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3501  	return ret;
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3502  }
+a6dc60ff1209df2 Kozlov Sergey   2015-07-28  3503  
 
-So perhaps thin LTO increases total build time by 10%, whilst full LTO
-increases it by 50%.
+:::::: The code at line 3376 was first introduced by commit
+:::::: a6dc60ff1209df29ee4668024e93d31f31421932 [media] cxd2841er: Sony CXD2841ER DVB-S/S2/T/T2/C demodulator driver
 
-Gathering some clang performance numbers:
+:::::: TO: Kozlov Sergey <serjk@netup.ru>
+:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
 
-no LTO
-$ perf bench internals synthesize
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 178.694 usec (+- 0.171 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 3.436 usec
- Average data synthesis took: 194.545 usec (+- 0.088 usec)
- Average num. events: 277.000 (+- 0.000)
- Average time per event 0.702 usec
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 175.381 usec (+- 0.105 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 3.373 usec
- Average data synthesis took: 188.980 usec (+- 0.071 usec)
- Average num. events: 278.000 (+- 0.000)
- Average time per event 0.680 usec
-
--flto=3Dthin
-$ perf bench internals synthesize
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 183.122 usec (+- 0.082 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 3.522 usec
- Average data synthesis took: 196.468 usec (+- 0.102 usec)
- Average num. events: 277.000 (+- 0.000)
- Average time per event 0.709 usec
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 177.684 usec (+- 0.094 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 3.417 usec
- Average data synthesis took: 190.079 usec (+- 0.077 usec)
- Average num. events: 275.000 (+- 0.000)
- Average time per event 0.691 usec
-
--flto
-$ perf bench internals synthesize
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 112.599 usec (+- 0.040 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 2.165 usec
- Average data synthesis took: 119.012 usec (+- 0.070 usec)
- Average num. events: 278.000 (+- 0.000)
- Average time per event 0.428 usec
-# Running 'internals/synthesize' benchmark:
-Computing performance of single threaded perf event synthesis by
-synthesizing events on the perf process itself:
- Average synthesis took: 107.606 usec (+- 0.147 usec)
- Average num. events: 52.000 (+- 0.000)
- Average time per event 2.069 usec
- Average data synthesis took: 114.633 usec (+- 0.159 usec)
- Average num. events: 279.000 (+- 0.000)
- Average time per event 0.411 usec
-
-The performance win from thin LTO doesn't look to be there. Full LTO
-appears to be reducing event synthesis time down to 60% of what it
-was. The clang numbers are looking better than the GCC ones. I think
-from this it makes sense to use -flto.
-
-Thanks,
-Ian
-
-> --
-> Thanks,
-> ~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
