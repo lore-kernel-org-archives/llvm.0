@@ -1,169 +1,99 @@
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26B61FC4
-	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 17:07:50 +0000 (UTC)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-63ce8bea776so12648906d6.0
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 10:07:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF9B1FC4
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 17:15:23 +0000 (UTC)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-63cf6b21035so12339316d6.1
+        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 10:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690218469; x=1690823269;
+        d=google.com; s=20221208; t=1690218922; x=1690823722;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Uw0GesN0rmWRh+DmayFGFLT8xsf2nFXUBbffJzXUQmc=;
-        b=yQqvvunZWdFiy+w7MNNZ//ZiYJUe/JYwsEPAMOAuzMnVsxc9q25s8iviP7QtPQyBK/
-         CeY75Zkf+57SpSYN5dlJoTkcwinzxriV2eicBdfYG1pBOxEsyZ6+et846Ua9dfCKbgc3
-         MUCAgWoYRdeh6M15XiJgKYwJCa9/aMUoUb4vR2mADsXonxCqoAtveV6kJJMSHUR5W751
-         fWJRf2kJV/KsglYpW34OYBh32tiHrHC7ab6Mk/X8hxqMRMAwNCVCVzim6mQ4dN+kRYq2
-         tRSc6pEdkoS6RJdPkhR2MlRa7EmEb/Jb18zswzvEcCAEEdbN8+8w1toIylcd2h37h1c3
-         fOmA==
+        bh=WZbFk+J10UfrSL79sLzSpmwWLT2vd0Fn58aGqpzLT8o=;
+        b=1YX+L3Xe0aw2sI4aL9zKBZpgaUsr2Ctra2kvfpc4vm/95W5cBbAqlRMy/pafQG3Xzl
+         qZ0M46rf5pk8owvuPj2Dw9lavv0H6EUwUEzlaBeHzUSiAalhQ7xHxuBfxhc7Uv3UvSbt
+         lWlCz5UixM8IChuz9leknxceOxLi8L+DYFM3/ev+Myw11xmMaZAi086GwgmHK2qMCn4W
+         +8q6jWsQ+anYbABIjhNkOGC7s/Lm3+ACQKF54VA8b0bprRpUUF9HoLSmy09pucbBLtkZ
+         eU6bIGOfY4C3rzFQOsuNU58ZEFv5NiEXEjP08H+L+QKnYVkmIkxC36hkO8yX6msWa3yV
+         gc8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690218469; x=1690823269;
+        d=1e100.net; s=20221208; t=1690218922; x=1690823722;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uw0GesN0rmWRh+DmayFGFLT8xsf2nFXUBbffJzXUQmc=;
-        b=he0qNZvFktbrNriP+Ofd1Mpl1OlSwU9f6W8oHSnoSV5rC1XVV4EKnlI0/ucl5Xs97C
-         KPWOvKEl7IkhHUBJfrEWEjNro02LfrthcIuJzZc0mfNoP8KEA6vjwUjWpAwvxZb1/hM1
-         y+dGYejWcr8rZx06VP+T0nvED7fVJW0x4jNeK6KTr1z6aqIWqplxf2n0OiAtaTFubOoC
-         /V/n/4RFUYINFm7tb6C0n+JXHS2kh4sPne14oLHB+kwKqIBNrXLL+ABYFzChvbr8Hxy0
-         VY20PpiwsBn94UHrTULD3i6Ny9oxSjwDe+qVyp9g3jWLiwjSRPHbxM2v6KUjO3BqJrWW
-         GCCg==
-X-Gm-Message-State: ABy/qLZk+XxklXVsWwj4Lvne6ibAYKfBlhnZZe6YzFQh62QAv6P7sJyP
-	Aieo4wQYZB5k+r9OuIg0TlwChTvJOqYPCxDDAbt1fg==
-X-Google-Smtp-Source: APBJJlHzvogcOM4+QS3uHKnCCLcH5s74N9Df9/sVTwJHHZCKxvEdbXGa4EZDOxDcwhZC+MQm3x4ydCXgpVMQTl/RTMM=
-X-Received: by 2002:a05:6214:88d:b0:635:3892:a2b0 with SMTP id
- cz13-20020a056214088d00b006353892a2b0mr361506qvb.15.1690218469268; Mon, 24
- Jul 2023 10:07:49 -0700 (PDT)
+        bh=WZbFk+J10UfrSL79sLzSpmwWLT2vd0Fn58aGqpzLT8o=;
+        b=Bqc1iPY0Fe7ThlIgQdznYRkVzWmt8n1w9Mgvze9IQKW9B2UzmR1EgNbi4M0mUrj8RU
+         +CEfbIqL5EIkNL6VdF7E78UZyRA9xnvCLQIyRkiT7XSs5XMpbwrPxJDYh2eUmkR06GoW
+         nwLL661kc1aoPAkLk7AoOeAcnD0Y46J+YrLoLDm8q7BWf4H851L6SanNsln3Z0CDrjZr
+         bxOCmzdv8mwF64yrARh4xO7BDn/JUIMnsP3aCIiziCL29r+AbN258SJiG6epPKVbO3ts
+         vXIuvP5Sjs17iHBd3OaNCB+fj+NXTm12OSLkilHPhexSy+sfJooOP2t515cG+xR1JGzi
+         rrkQ==
+X-Gm-Message-State: ABy/qLbUWb/WYDrl67muOFNimwIA4iezejVsLnwGD3cPXYBHf1goeLS8
+	SJxshteUjJHSd6XC/3fDn7Xx/v7MvjJX+2hSc0v75A==
+X-Google-Smtp-Source: APBJJlGuQHP0+90mVT4qcBd9dPz8oFWvD/tzPplwF+p3o6wvZcQTX7zpY+HRYiSDThs0KxIrd2j2Bgyzc1UAIzMCNek=
+X-Received: by 2002:a0c:8dc9:0:b0:63c:f8af:5aa9 with SMTP id
+ u9-20020a0c8dc9000000b0063cf8af5aa9mr384655qvb.26.1690218922055; Mon, 24 Jul
+ 2023 10:15:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202307201141.PYWS6ird-lkp@intel.com> <840cdf34-f38e-ab37-623f-9744c3436350@grimberg.me>
-In-Reply-To: <840cdf34-f38e-ab37-623f-9744c3436350@grimberg.me>
+References: <202307211945.TSPcyOhh-lkp@intel.com> <ZLsXAdjFuKLpd3ig@google.com>
+In-Reply-To: <ZLsXAdjFuKLpd3ig@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 24 Jul 2023 10:07:38 -0700
-Message-ID: <CAKwvOdnfHeEZcKYJh_VPoMfB5oDa3aAU0CYVt-6TNc3a6Jtc6w@mail.gmail.com>
-Subject: Re: drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256)
- exceeds limit (2048) in 'nvme_tcp_recv_skb'
-To: Sagi Grimberg <sagi@grimberg.me>
-Cc: kernel test robot <lkp@intel.com>, Varun Prakash <varun@chelsio.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Christoph Hellwig <hch@lst.de>
+Date: Mon, 24 Jul 2023 10:15:11 -0700
+Message-ID: <CAKwvOdm3mg5kHTNYx6ROaY8G0wf6o_OXiPGwkYs9sU+5qqa=WQ@mail.gmail.com>
+Subject: Re: arch/powerpc/kvm/e500mc.c:95:15: error: invalid instruction
+To: Sean Christopherson <seanjc@google.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 24, 2023 at 12:46=E2=80=AFAM Sagi Grimberg <sagi@grimberg.me> w=
-rote:
+On Fri, Jul 21, 2023 at 4:38=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
->
->
-> On 7/20/23 06:10, kernel test robot wrote:
+> On Fri, Jul 21, 2023, kernel test robot wrote:
+> > Hi Sean,
+> >
+> > FYI, the error/warning was bisected to this commit, please ignore it if=
+ it's irrelevant.
+> >
 > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
 git master
-> > head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
-> > commit: c2700d2886a87f83f31e0a301de1d2350b52c79b nvme-tcp: send H2CData=
- PDUs based on MAXH2CDATA
-> > date:   1 year, 5 months ago
-> > config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci=
-/archive/20230720/202307201141.PYWS6ird-lkp@intel.com/config)
-
-^ it's from a randconfig...the sanitizers tend to blow up stack usage.
-
+> > head:   f7e3a1bafdea735050dfde00523cf505dc7fd309
+> > commit: e83ca8cfa286c9fc78b585b0e66df7f542bcbcf2 KVM: PPC: booke: Mark =
+three local functions "static"
+> > date:   4 months ago
+> > config: powerpc-randconfig-r001-20230721 (https://download.01.org/0day-=
+ci/archive/20230721/202307211945.TSPcyOhh-lkp@intel.com/config)
 > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
 t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230720/2023072011=
-41.PYWS6ird-lkp@intel.com/reproduce)
+> > reproduce: (https://download.01.org/0day-ci/archive/20230721/2023072119=
+45.TSPcyOhh-lkp@intel.com/reproduce)
 > >
 > > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
 rsion of
 > > the same patch/commit), kindly add following tags
 > > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307201141.PYWS6ird-l=
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307211945.TSPcyOhh-l=
 kp@intel.com/
 > >
-> > All warnings (new ones prefixed by >>):
+> > All errors (new ones prefixed by >>):
 > >
-> >>> drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256) exce=
-eds limit (2048) in 'nvme_tcp_recv_skb' [-Wframe-larger-than]
-> >       835 | static int nvme_tcp_recv_skb(read_descriptor_t *desc, struc=
-t sk_buff *skb,
-> >           |            ^
-> >     1 warning generated.
-> >
-> >
-> > vim +/nvme_tcp_recv_skb +835 drivers/nvme/host/tcp.c
-> >
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  834
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03 @835  static int nvme_tcp_recv_=
-skb(read_descriptor_t *desc, struct sk_buff *skb,
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  836                           =
-    unsigned int offset, size_t len)
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  837  {
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  838          struct nvme_tcp_q=
-ueue *queue =3D desc->arg.data;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  839          size_t consumed =
-=3D len;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  840          int result;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  841
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  842          while (len) {
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  843                  switch (n=
-vme_tcp_recv_state(queue)) {
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  844                  case NVME=
-_TCP_RECV_PDU:
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  845                          r=
-esult =3D nvme_tcp_recv_pdu(queue, skb, &offset, &len);
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  846                          b=
-reak;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  847                  case NVME=
-_TCP_RECV_DATA:
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  848                          r=
-esult =3D nvme_tcp_recv_data(queue, skb, &offset, &len);
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  849                          b=
-reak;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  850                  case NVME=
-_TCP_RECV_DDGST:
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  851                          r=
-esult =3D nvme_tcp_recv_ddgst(queue, skb, &offset, &len);
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  852                          b=
-reak;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  853                  default:
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  854                          r=
-esult =3D -EFAULT;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  855                  }
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  856                  if (resul=
-t) {
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  857                          d=
-ev_err(queue->ctrl->ctrl.device,
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  858                           =
-       "receive failed:  %d\n", result);
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  859                          q=
-ueue->rd_enabled =3D false;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  860                          n=
-vme_tcp_error_recovery(&queue->ctrl->ctrl);
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  861                          r=
-eturn result;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  862                  }
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  863          }
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  864
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  865          return consumed;
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  866  }
-> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  867
-> >
-> > :::::: The code at line 835 was first introduced by commit
-> > :::::: 3f2304f8c6d6ed97849057bd16fee99e434ca796 nvme-tcp: add NVMe over=
- TCP host driver
-> >
-> > :::::: TO: Sagi Grimberg <sagi@lightbitslabs.com>
-> > :::::: CC: Christoph Hellwig <hch@lst.de>
-> >
+> > >> arch/powerpc/kvm/e500mc.c:95:15: error: invalid instruction
+> >       95 |         asm volatile("tlbilxlpid");
 >
-> I don't understand how the stack frame size is that big. Looks like a
-> wrong complaint?
+> I assume this is a binutils bug?  I ran into a similar problem on PPC a w=
+hile
+> back where I couldn't cross-compile even relatively basic PPC code.
 >
 
+No, I think that LLVM is perhaps missing support for this instruction
+Filed https://github.com/ClangBuiltLinux/linux/issues/1891 to track this.
 
 --=20
 Thanks,
