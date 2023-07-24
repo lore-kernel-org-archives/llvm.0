@@ -1,120 +1,188 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B5F185B;
-	Mon, 24 Jul 2023 07:46:39 +0000 (UTC)
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-3fa86b08efcso8091915e9.1;
-        Mon, 24 Jul 2023 00:46:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690184797; x=1690789597;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VXQxRuD8J7RHydWYdts0LDcLZy5e3i/QIlpY808Udx4=;
-        b=e1ln4qjW+db2XZu+RYtvHneZOMBlgf1RXmamoBvW0yzFUSB4fReYuTJXwyDBQoLo+n
-         HOH5Wqp59PRL37R9Y8j59xWdXa20hCY/8I8dpmMljpzxHgH4B0NUWaB93WW7qcUPj4D2
-         VVBNvcijnbSyUIGZxU6aLySiqjw8B8SXDoRZ2MLEKF+4ch7kV3j4U6j2URQCXsPVVwYt
-         eMyZHqtuc0lHw12QhbIvVpLVYRgaCAZPieaZxBv78y4pqVfzbz5kJB405H8iSbk1l34o
-         aGgRBHmo+ur3Uz/ElH7B8yEWiCKg2c14Cbl3sfE+SHAMndifQwIhpTDnwxVfgt6a/LM7
-         8+dA==
-X-Gm-Message-State: ABy/qLbTgea2yB0w9UY7WHM3YL5zr1u+5aVSOdHPb3fobBvv2w/f2MLv
-	KVKmghlQrcPLgf44VU3f6Xk=
-X-Google-Smtp-Source: APBJJlHVjb6OjzXn+nznEqYiOlBN2rZAzojWF+Z29xx7p/sURSAURyBJG7EsZwds0jMPqwjYVJQQ1w==
-X-Received: by 2002:a05:600c:3b05:b0:3f9:88d:9518 with SMTP id m5-20020a05600c3b0500b003f9088d9518mr7657174wms.0.1690184797014;
-        Mon, 24 Jul 2023 00:46:37 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id k22-20020a7bc316000000b003fd2d33ea53sm5361223wmj.14.2023.07.24.00.46.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 00:46:36 -0700 (PDT)
-Message-ID: <840cdf34-f38e-ab37-623f-9744c3436350@grimberg.me>
-Date: Mon, 24 Jul 2023 10:46:34 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347AB184F;
+	Mon, 24 Jul 2023 07:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690185463; x=1721721463;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TgcaBNEYIGLRW6+34tr9A98bCq8zLZnStV1oc/gJftg=;
+  b=NbZ2XGVcYUoeaENsjD1SLZnxKvWky4Y3Vf3GgpxMDvXak4KcntMBf9Hf
+   hleBL3WLNbm8/lsIUV1Dij2XMQAqTabVfWU8y2y/Yex3toxwHZHP1Qg7a
+   Tio5nak86JiwvEIfixzQlwT49uW92JgsxaWyprV4EN3JEtofvi+xdJzZj
+   1W91xNgWo7i3NpTYFJ3VwLVlSSZ9Zh3oTHMEHybI2q0k4MaHCLhonWBCY
+   I9BNsghT9og9PXabEsJLhZpSqoXPSypDslgN5tYi2SPDnpWMFUMlCrtf/
+   fAPN3Z/i3fiB8xS4JBhRAtYBouaGAMwxIS/j8VWCXjYu7amK/pPaXbftU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="366268060"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="366268060"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 00:57:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="795675614"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="795675614"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Jul 2023 00:57:41 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qNqRo-0009a4-17;
+	Mon, 24 Jul 2023 07:57:40 +0000
+Date: Mon, 24 Jul 2023 15:57:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naohiro Aota <naohiro.aota@wdc.com>, linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naohiro Aota <naohiro.aota@wdc.com>
+Subject: Re: [PATCH 5/8] btrfs: zoned: activate metadata block group on write
+ time
+Message-ID: <202307241541.8w52nEnt-lkp@intel.com>
+References: <2f8e30f966cfd9e06b0745a691bd1a5566aab780.1690171333.git.naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256)
- exceeds limit (2048) in 'nvme_tcp_recv_skb'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Varun Prakash <varun@chelsio.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-References: <202307201141.PYWS6ird-lkp@intel.com>
-From: Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <202307201141.PYWS6ird-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f8e30f966cfd9e06b0745a691bd1a5566aab780.1690171333.git.naohiro.aota@wdc.com>
+
+Hi Naohiro,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master v6.5-rc3 next-20230724]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-zoned-introduce-block_group-context-for-submit_eb_page/20230724-122053
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/2f8e30f966cfd9e06b0745a691bd1a5566aab780.1690171333.git.naohiro.aota%40wdc.com
+patch subject: [PATCH 5/8] btrfs: zoned: activate metadata block group on write time
+config: arm-randconfig-r002-20230724 (https://download.01.org/0day-ci/archive/20230724/202307241541.8w52nEnt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230724/202307241541.8w52nEnt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307241541.8w52nEnt-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   fs/btrfs/extent_io.c:214:16: warning: variable 'pages_processed' set but not used [-Wunused-but-set-variable]
+     214 |         unsigned long pages_processed = 0;
+         |                       ^
+>> fs/btrfs/extent_io.c:1827:60: error: too many arguments to function call, expected 3, have 4
+    1827 |         if (!btrfs_check_meta_write_pointer(eb->fs_info, wbc, eb, bg_context)) {
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                       ^~~~~~~~~~
+   fs/btrfs/zoned.h:191:20: note: 'btrfs_check_meta_write_pointer' declared here
+     191 | static inline bool btrfs_check_meta_write_pointer(struct btrfs_fs_info *fs_info,
+         |                    ^
+   1 warning and 1 error generated.
 
 
+vim +1827 fs/btrfs/extent_io.c
 
-On 7/20/23 06:10, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
-> commit: c2700d2886a87f83f31e0a301de1d2350b52c79b nvme-tcp: send H2CData PDUs based on MAXH2CDATA
-> date:   1 year, 5 months ago
-> config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci/archive/20230720/202307201141.PYWS6ird-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230720/202307201141.PYWS6ird-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307201141.PYWS6ird-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256) exceeds limit (2048) in 'nvme_tcp_recv_skb' [-Wframe-larger-than]
->       835 | static int nvme_tcp_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
->           |            ^
->     1 warning generated.
-> 
-> 
-> vim +/nvme_tcp_recv_skb +835 drivers/nvme/host/tcp.c
-> 
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  834
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03 @835  static int nvme_tcp_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  836  			     unsigned int offset, size_t len)
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  837  {
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  838  	struct nvme_tcp_queue *queue = desc->arg.data;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  839  	size_t consumed = len;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  840  	int result;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  841
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  842  	while (len) {
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  843  		switch (nvme_tcp_recv_state(queue)) {
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  844  		case NVME_TCP_RECV_PDU:
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  845  			result = nvme_tcp_recv_pdu(queue, skb, &offset, &len);
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  846  			break;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  847  		case NVME_TCP_RECV_DATA:
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  848  			result = nvme_tcp_recv_data(queue, skb, &offset, &len);
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  849  			break;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  850  		case NVME_TCP_RECV_DDGST:
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  851  			result = nvme_tcp_recv_ddgst(queue, skb, &offset, &len);
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  852  			break;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  853  		default:
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  854  			result = -EFAULT;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  855  		}
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  856  		if (result) {
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  857  			dev_err(queue->ctrl->ctrl.device,
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  858  				"receive failed:  %d\n", result);
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  859  			queue->rd_enabled = false;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  860  			nvme_tcp_error_recovery(&queue->ctrl->ctrl);
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  861  			return result;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  862  		}
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  863  	}
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  864
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  865  	return consumed;
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  866  }
-> 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  867
-> 
-> :::::: The code at line 835 was first introduced by commit
-> :::::: 3f2304f8c6d6ed97849057bd16fee99e434ca796 nvme-tcp: add NVMe over TCP host driver
-> 
-> :::::: TO: Sagi Grimberg <sagi@lightbitslabs.com>
-> :::::: CC: Christoph Hellwig <hch@lst.de>
-> 
+  1766	
+  1767	/*
+  1768	 * Submit all page(s) of one extent buffer.
+  1769	 *
+  1770	 * @page:	the page of one extent buffer
+  1771	 * @eb_context:	to determine if we need to submit this page, if current page
+  1772	 *		belongs to this eb, we don't need to submit
+  1773	 *
+  1774	 * The caller should pass each page in their bytenr order, and here we use
+  1775	 * @eb_context to determine if we have submitted pages of one extent buffer.
+  1776	 *
+  1777	 * If we have, we just skip until we hit a new page that doesn't belong to
+  1778	 * current @eb_context.
+  1779	 *
+  1780	 * If not, we submit all the page(s) of the extent buffer.
+  1781	 *
+  1782	 * Return >0 if we have submitted the extent buffer successfully.
+  1783	 * Return 0 if we don't need to submit the page, as it's already submitted by
+  1784	 * previous call.
+  1785	 * Return <0 for fatal error.
+  1786	 */
+  1787	static int submit_eb_page(struct page *page, struct writeback_control *wbc,
+  1788				  struct extent_buffer **eb_context,
+  1789				  struct btrfs_block_group **bg_context)
+  1790	{
+  1791		struct address_space *mapping = page->mapping;
+  1792		struct extent_buffer *eb;
+  1793		int ret;
+  1794	
+  1795		if (!PagePrivate(page))
+  1796			return 0;
+  1797	
+  1798		if (btrfs_sb(page->mapping->host->i_sb)->nodesize < PAGE_SIZE)
+  1799			return submit_eb_subpage(page, wbc);
+  1800	
+  1801		spin_lock(&mapping->private_lock);
+  1802		if (!PagePrivate(page)) {
+  1803			spin_unlock(&mapping->private_lock);
+  1804			return 0;
+  1805		}
+  1806	
+  1807		eb = (struct extent_buffer *)page->private;
+  1808	
+  1809		/*
+  1810		 * Shouldn't happen and normally this would be a BUG_ON but no point
+  1811		 * crashing the machine for something we can survive anyway.
+  1812		 */
+  1813		if (WARN_ON(!eb)) {
+  1814			spin_unlock(&mapping->private_lock);
+  1815			return 0;
+  1816		}
+  1817	
+  1818		if (eb == *eb_context) {
+  1819			spin_unlock(&mapping->private_lock);
+  1820			return 0;
+  1821		}
+  1822		ret = atomic_inc_not_zero(&eb->refs);
+  1823		spin_unlock(&mapping->private_lock);
+  1824		if (!ret)
+  1825			return 0;
+  1826	
+> 1827		if (!btrfs_check_meta_write_pointer(eb->fs_info, wbc, eb, bg_context)) {
+  1828			/*
+  1829			 * If for_sync, this hole will be filled with
+  1830			 * trasnsaction commit.
+  1831			 */
+  1832			if (wbc->sync_mode == WB_SYNC_ALL && !wbc->for_sync)
+  1833				ret = -EAGAIN;
+  1834			else
+  1835				ret = 0;
+  1836			free_extent_buffer(eb);
+  1837			return ret;
+  1838		}
+  1839	
+  1840		*eb_context = eb;
+  1841	
+  1842		if (!lock_extent_buffer_for_io(eb, wbc)) {
+  1843			free_extent_buffer(eb);
+  1844			return 0;
+  1845		}
+  1846		if (*bg_context) {
+  1847			/* Implies write in zoned mode. */
+  1848			struct btrfs_block_group *bg = *bg_context;
+  1849	
+  1850			/* Mark the last eb in the block group. */
+  1851			btrfs_schedule_zone_finish_bg(bg, eb);
+  1852			bg->meta_write_pointer += eb->len;
+  1853		}
+  1854		write_one_eb(eb, wbc);
+  1855		free_extent_buffer(eb);
+  1856		return 1;
+  1857	}
+  1858	
 
-I don't understand how the stack frame size is that big. Looks like a
-wrong complaint?
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
