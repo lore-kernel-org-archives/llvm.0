@@ -1,107 +1,155 @@
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DE71FC4
-	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 17:19:13 +0000 (UTC)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-63cf40716ffso16043606d6.2
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 10:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690219153; x=1690823953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tHqlkjiN6F7mZHmC296PE6xQOoItN+fVKPLF3TUGTVI=;
-        b=HFHY127KcwxOhKq5Bri1cro15FAkNa5SlM1FnQX3pl0u+VO3Bn11Vc+BLFKQsIh0qd
-         4+3053sdoGd0VLrcSU+KtN0OCxZTjUqtSMCssDwasWUzfIoYX5+POQkWDxZt89M0kz96
-         zIlQG61pCNSEKCeryktg+GDMoz9NSSszsiF2CptitKlAcDo+RlBOaSbyxGsETMFf0wLt
-         qgzd9wtLBkB57uRY44bxZIabgouPeMWmBnOKge2XEc0potLBZTB7tXvdiO1T2+e+GZLy
-         wBX1Mr3RKUi1mWgq8JyelZglpRXG7M2gtWKKlZ3o9x/qjhS4NRFAyo7niZCQalU1EwRC
-         ch3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690219153; x=1690823953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tHqlkjiN6F7mZHmC296PE6xQOoItN+fVKPLF3TUGTVI=;
-        b=MC3xgGOadN0qwehPR9K/FJFyOShudIM18hVTMgXpi8P9SiA7u1bOb+w/xOIDl0U/Zf
-         j+21Fq+eR0V35cXrPedsahqC0xXTK6O87ABTsoG4liFIkid2sD/EAk3mYO0H11R7EoGt
-         ymu4LjHhRZMN0ARhhKSwfa02JOG+ZXM8YH8V2OXFdSEA+D7pK2N7w6gNsjMP28zHB7sZ
-         rp8mzBIytMrQ93E9mXxBwj2PmmTIFrXOSTevHmoQeacu0QtFn9pnDCkOnkVyXnTivVZh
-         htcHRrf16EQK5Yw+4OJ1NtB9dd0qJu7FOFkI/aTuGXoIR8VsszFS9i+0I86E6nv9cRz9
-         pnbg==
-X-Gm-Message-State: ABy/qLY7ayDcesej/GiW7OdUsSpLmPq5/PVvYQC6ozdHLsPi52zI8xTF
-	oCqfADQQjAjJgNXKgNKh1igrEWFBhnm6B1+sPNedTg==
-X-Google-Smtp-Source: APBJJlG0PzmZgMeYmmyxh6fQCtTCaFVli27ad8SwdfVceQNoqUOHJJbJZFe9iMSAnB6bk7i+ctom86Y91hMRQVsqDOs=
-X-Received: by 2002:a0c:fe0d:0:b0:63c:a22e:ddaf with SMTP id
- x13-20020a0cfe0d000000b0063ca22eddafmr461068qvr.16.1690219152868; Mon, 24 Jul
- 2023 10:19:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC36F9E1;
+	Mon, 24 Jul 2023 17:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690220055; x=1721756055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4a5ZXFUaM6toh97BoMkChv5GdlzM4u4g8uVpDMiiNb0=;
+  b=nATRzRdVEdlWB4/2S/zFHU733v1NFpyw542Drcuxj3jF6BH4vh8b7flu
+   OaBwW1xC12WQ9TzAUAo4na2Md/JD5nRlP2O1F7kBfQHm5c5QGlB/G3En3
+   8BHrY+7b3HV2SilPH02YlCQe6nOocAko+FHqRw2T+4PE9S5qYBeSODfhh
+   3WMfQ5CKyD1wTZe9n3HqgNoKI+cGpDncDyOd16uHJT9mJr++jukE5+OEX
+   4zgmyEYKdBZvUcq6WeQRYeOU32YeZ08QdSC0NXmNZMwEEgRqzNe/pu++u
+   fqWei/8ZdmuhvfwFKZY99AEpJiO0Ea5w5HPgeB1YF2AqK5j29qHy4pyjo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="398415580"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="398415580"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 10:34:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="755385765"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="755385765"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2023 10:34:10 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qNzRi-0009uq-0K;
+	Mon, 24 Jul 2023 17:34:10 +0000
+Date: Tue, 25 Jul 2023 01:33:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Usama Arif <usama.arif@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 2/4] mm/memblock: Add hugepage_size member to struct
+ memblock_region
+Message-ID: <202307250139.EDNyQbWQ-lkp@intel.com>
+References: <20230724134644.1299963-3-usama.arif@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230724054538.163319-1-suhui@nfschina.com>
-In-Reply-To: <20230724054538.163319-1-suhui@nfschina.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 24 Jul 2023 10:19:02 -0700
-Message-ID: <CAKwvOdk-fdJr9TcgUnOhCiU0LvD2Qe_c+6YOe-c1k0Ukm+negA@mail.gmail.com>
-Subject: Re: [PATCH] ext4: mballoc: avoid garbage value from err
-To: Su Hui <suhui@nfschina.com>
-Cc: tytso@mit.edu, adilger.kernel@dilger.ca, nathan@kernel.org, 
-	trix@redhat.com, linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230724134644.1299963-3-usama.arif@bytedance.com>
 
-On Sun, Jul 23, 2023 at 10:46=E2=80=AFPM Su Hui <suhui@nfschina.com> wrote:
->
-> clang warning: fs/ext4/mballoc.c, line 4178, column 6
-> Branch condition evaluates to a garbage value.
+Hi Usama,
 
-Specifically this is clang's static analysis; not the compiler itself.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
->
-> err is uninitialized and will be judged when it enters the
-> loop first time and the condition "!ext4_sb_block_valid()"
-> is true. Although this can't make problems now, it's better
-> to correct it.
->
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+[auto build test WARNING on akpm-mm/mm-everything]
 
-Hi Su,
-Thanks for the patch!  I see what the warning is getting at;
+url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/mm-hugetlb-Skip-prep-of-tail-pages-when-HVO-is-enabled/20230724-214832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230724134644.1299963-3-usama.arif%40bytedance.com
+patch subject: [RFC 2/4] mm/memblock: Add hugepage_size member to struct memblock_region
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230725/202307250139.EDNyQbWQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307250139.EDNyQbWQ-lkp@intel.com/reproduce)
 
-If `len <=3D 0` then `err` is never initialized, then is used at line
-4178 (that is UB).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307250139.EDNyQbWQ-lkp@intel.com/
 
-Would you mind sending a v2 with the commit message updated to reflect
-the above points?  I'd be happy to sign-off on that.
+All warnings (new ones prefixed by >>):
 
-> ---
->  fs/ext4/mballoc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 21b903fe546e..769000c970b0 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4084,7 +4084,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_f=
-sblk_t block,
->         struct ext4_sb_info *sbi =3D EXT4_SB(sb);
->         ext4_group_t group;
->         ext4_grpblk_t blkoff;
-> -       int i, err;
-> +       int i, err =3D 0;
->         int already;
->         unsigned int clen, clen_changed, thisgrp_len;
->
-> --
-> 2.30.2
->
->
+   In file included from mm/memblock.c:18:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/um/include/asm/dma.h:5:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/memblock.c:18:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/um/include/asm/dma.h:5:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/memblock.c:18:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/um/include/asm/dma.h:5:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> mm/memblock.c:869:21: warning: no previous prototype for function 'memblock_reserve_huge' [-Wmissing-prototypes]
+     869 | int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
+         |                     ^
+   mm/memblock.c:869:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     869 | int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
+         | ^
+         | static 
+   13 warnings generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/memblock_reserve_huge +869 mm/memblock.c
+
+   868	
+ > 869	int __init_memblock memblock_reserve_huge(phys_addr_t base, phys_addr_t size,
+   870						   phys_addr_t hugepage_size)
+   871	{
+   872		phys_addr_t end = base + size - 1;
+   873	
+   874		memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+   875			     &base, &end, (void *)_RET_IP_);
+   876	
+   877		return memblock_add_range(&memblock.reserved, base, size, MAX_NUMNODES, 0, hugepage_size);
+   878	}
+   879	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
