@@ -1,40 +1,40 @@
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE6A10788
-	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 19:47:35 +0000 (UTC)
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3a3a8d12040so9969327b6e.3
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 12:47:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B1A9470
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 19:56:34 +0000 (UTC)
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1b44332e279so8840393fac.0
+        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 12:56:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690228054; x=1690832854;
+        d=1e100.net; s=20221208; t=1690228593; x=1690833393;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpU/pq4NcXq5eoCMak+87h/qMFbXrT3YYZv+5M6Z810=;
-        b=UWjGJ2BNieqr1QF1acS+vhwBfsPy/5ifLK5M9rdLbIDKtAdRuvR1ypJS5AgWwJGsoW
-         DQO+W2c7BkaESHnaFn2g5Z1Ksv6pIeicd3utb5K0FGJg39asCjfjioe4WoP23UvBUTP5
-         ri2ZY3IOqatKYrFCHjFdiQHpLdcydvqXWEZs9lDC6EOPvtMy/MM61Xb9Z8lbuyFHVl4d
-         bXAasGvWaP6CQ2i1CbJanywfMT9+jVYb/Ymu8FoC8CQzNukJ7Wy1Xp8anrK6lWJS6eO/
-         i+yXmiat8rGhe3QirZLxavXsDr/c6QKWJhWNHreVfl4pV+ky6uqdbepdtlf2U4PrsJfR
-         0tEA==
-X-Gm-Message-State: ABy/qLZmMb4VtWyeqyBaKt90+QcXtlLExAtIO/EFOAmUYnwi1gTJ4op1
-	2arDLGEqorvYpvOiyRB5lj6mBCtWh2H25WvsuzuiiCX2ChoX
-X-Google-Smtp-Source: APBJJlFhOkXgA1GDXy6ZXZyeXWFwikYSsd/PZ9QEgWnWucvf96IBK7XT0JXjTa9x+AGx3ADzu3aYiG7whxxn3I6COqeIsSFrzEVO
+        bh=g0HbIfON9h7OtlOqGplVgAJ/Ron1dfOFrue7VmqDYzg=;
+        b=St3aQpWYvwNVakzx7Kj3ssdei9cKmQDBvUkjpLPw59fuB2heBf9p1LAfCFTvuzBFNx
+         rfOj1krHGP+N2nXU4d866AMfSoCExgxF2qpnZy9B0v7wecn9NSjsNSRBq6XMtqgV8peE
+         1zvF6YUqRissXPhU4FLgM3x1g0uj3sU89oefxW6bmA095zF5ATkd/Zlit4z5DtBaDZWl
+         6I++sDs2U3lBzxZiDQSpV+p8p3VmP/zL0DYXDT0/jzGMsBgSh6kubC+xWvSQKxbA5A7Q
+         DX0+uGZ01FgwhMUmv8wVBTZMltMNB3yLmk3N6Ob4IyfbfqyR29NJyQOCh+VNULWMtncS
+         W1Qg==
+X-Gm-Message-State: ABy/qLYxoWDMP6QVGVAF5MstES5hEfFygGmCb3CNh3WQRUb6n9ZV8OkJ
+	urlPe7ugmSejN390H5ZNEFrRudF2BJT+hnR2SrXmeOMOipJJ
+X-Google-Smtp-Source: APBJJlGy8FHZDVrssAfEDgGHScfjKPZjYZWznrOxt65Wocsqqyr5rTphmuoPNIEOMBE7bKR1W0V4AWAMQMX5N468FTXqgMvgSHHN
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1211:b0:38d:ca0a:8e18 with SMTP id
- a17-20020a056808121100b0038dca0a8e18mr20908707oil.2.1690228054801; Mon, 24
- Jul 2023 12:47:34 -0700 (PDT)
-Date: Mon, 24 Jul 2023 12:47:34 -0700
-In-Reply-To: <ZL7UedKQUDAUThHM@bombadil.infradead.org>
+X-Received: by 2002:a05:6870:955e:b0:1bb:51ab:a7bc with SMTP id
+ v30-20020a056870955e00b001bb51aba7bcmr7056676oal.1.1690228593534; Mon, 24 Jul
+ 2023 12:56:33 -0700 (PDT)
+Date: Mon, 24 Jul 2023 12:56:33 -0700
+In-Reply-To: <ZL7Una9vhJpX+dkb@bombadil.infradead.org>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cbc360060140e291@google.com>
-Subject: Re: [syzbot] [modules?] WARNING in init_module_from_file
-From: syzbot <syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com>
+Message-ID: <000000000000e82d5806014102a7@google.com>
+Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
+From: syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
 To: bpf@vger.kernel.org, chris@chrisdown.name, linux-kernel@vger.kernel.org, 
 	linux-modules@vger.kernel.org, llvm@lists.linux.dev, mcgrof@kernel.org, 
 	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
@@ -54,8 +54,7 @@ Tested on:
 
 commit:         [unknown 
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 910e230d5f1bb72c54532e94fbb1705095c7bab6
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c2bdc9d24e4a7abe741
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3705186451a87fd93b8
 compiler:       
-userspace arch: arm64
 
 Note: no patches were applied.
