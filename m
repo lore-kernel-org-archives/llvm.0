@@ -1,105 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0D7568D;
-	Mon, 24 Jul 2023 11:19:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A99C433C8;
-	Mon, 24 Jul 2023 11:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690197547;
-	bh=eGy6WqfVIqQPgGPKAvW81QoB/ySKTHMD8LagMZuvVeI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RHzmUKfDX0RqsMSw4+UXlmUaQUik1fGzIrw7OkY5/eBelHFVDPIJKS3wvfgBRJ/mq
-	 QUQxVXV3n2Snr5fqcXXOlRXANyayo/dGFKRCr7EuCKcblCl5oXkQ3i3mqbPmZtezG1
-	 qLh0yJpb0ZlWzdqqg/XquKFpEZpSZ9AuCwh21WFVzXnATY8IdML8xKmLiYznPvPfV7
-	 IrXY/lCZh2sD7GKaQ7H8mPifPkKqGAG8Cglnrv1CjFqm1oYBI+S3rISRfjieX9bmLb
-	 eDUFNwfGr+c39A6DuVrrkxTFJq0T6HcJe64O8jhWH3w2txiYdpHE91I1yHbmQvdT4m
-	 QGyuv0lIt5lQw==
-Date: Mon, 24 Jul 2023 13:19:04 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Emma Anholt <emma@anholt.net>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	=?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actions
-Message-ID: <v2uvmcc2buyc3enmnholj4jgfw2viywmnv4jxwzx2xlcuwuyxu@sdaxiwnkdrmo>
-References: <20230720-kms-kunit-actions-rework-v2-1-175017bd56ab@kernel.org>
- <202307210148.7gWzLOtn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B29A847B
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 11:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690198223;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DZ33ejL7VqW/fkLY5zO/bleYMMYq3M4txtIIyiKywu8=;
+	b=IG3Q83MJgOowxnERc7dBFz2qCnlQ7+1WRj7sPhbh7YkXxqkCJjOGuqqHNef0l5ebvXipA5
+	MnPMbWgpGhVZ20gb1EIhYSILd5K15b6gtzByGaG4ND6pDozjXrRJg+5EW9KqMOuhm+zFnn
+	nG4qGviUa9mAuavlkOBFcuuAscEdlyM=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-z_ukG2YnNLOjWr7j_vTqjw-1; Mon, 24 Jul 2023 07:30:22 -0400
+X-MC-Unique: z_ukG2YnNLOjWr7j_vTqjw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43A8F3801BF5
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 11:30:22 +0000 (UTC)
+Received: from [172.64.1.75] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2D22CF782D;
+	Mon, 24 Jul 2023 11:30:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 14 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 6eaae198)
+Date: Mon, 24 Jul 2023 11:30:21 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ysvrjn47vocn3ezn"
-Content-Disposition: inline
-In-Reply-To: <202307210148.7gWzLOtn-lkp@intel.com>
-
-
---ysvrjn47vocn3ezn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <99838.123072407302200963@us-mta-639.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi David, Brendan,
+Hi, we tested your kernel and here are the results:
 
-On Fri, Jul 21, 2023 at 01:14:41AM +0800, kernel test robot wrote:
-> Hi Maxime,
->=20
-> kernel test robot noticed the following build warnings:
->=20
-> [auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
->=20
-> url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-=
-tests-helpers-Switch-to-kunit-actions/20230720-191901
-> base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
-> patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rewor=
-k-v2-1-175017bd56ab%40kernel.org
-> patch subject: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actio=
-ns
-> config: arm64-randconfig-r022-20230720 (https://download.01.org/0day-ci/a=
-rchive/20230721/202307210148.7gWzLOtn-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
-4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210148=
-=2E7gWzLOtn-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307210148.7gWzLOtn-lkp=
-@intel.com/
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> drivers/gpu/drm/tests/drm_kunit_helpers.c:53:6: warning: cast from 'vo=
-id (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void=
- *)') converts to incompatible function type [-Wcast-function-type-strict]
->       53 |                                         (kunit_action_t *)plat=
-form_driver_unregister,
->          |                                         ^~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I missed that warning before, and I don't think we can address that
-easily. Should we give up on kunit_action_t entirely?
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Maxime
+Kernel information:
+    Commit message: Linux 6.5-rc3
 
---ysvrjn47vocn3ezn
-Content-Type: application/pgp-signature; name="signature.asc"
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97000
 
------BEGIN PGP SIGNATURE-----
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
+3': Input/output error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1436
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZL5eKAAKCRDj7w1vZxhR
-xbDXAQCzzG3lszYEUk6OTrkeopYKRMhD5DWQkj4bxS7jDlfp+wEAliilztZzak6w
-syeBeoK9ukIhtHWM2yFxJNj+irZJtw4=
-=0xh1
------END PGP SIGNATURE-----
 
---ysvrjn47vocn3ezn--
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
