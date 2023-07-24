@@ -1,198 +1,170 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57638DDD1;
-	Mon, 24 Jul 2023 15:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690213337; x=1721749337;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mqn4bDVneT2yfURezIC5Jd9fQPUEX5jKgvlzjg7BeGw=;
-  b=eJMS4WahU3NmUjFlFnpMZDRTm9EOLLbutzOH6JXGbBNOYehJSAXlINHv
-   MUvs9BOBxFm4sxYAucSslac1zfcsZdyADKEhT6udzNZHgJUsT3kYbGcey
-   V5TdmattxE0kvoMJ8SqIRN4MJJ9QWOaZlA+sIap6vlnJQcBJFgvxbyXhm
-   F1paekL9APWHNHmyZeNtNIvphtBYwnOUCCWfSoZieAaLH7ZFRRSy1NtC3
-   VrVYxXRIZQCpUuWT4gNdPFkjD1IBkfY6msJmHpJ12F8hiFPZI9tYEMXlc
-   Hgb4X3BQPJh9kv/Y1EUT07Mo36NNVt710jRXMpFXbocq0XZolhmp3PsAv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="347751176"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="347751176"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 08:42:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="1056461737"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="1056461737"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jul 2023 08:42:13 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qNxhM-0009pK-2K;
-	Mon, 24 Jul 2023 15:42:12 +0000
-Date: Mon, 24 Jul 2023 23:41:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
- 'ipmmu_of_ids'
-Message-ID: <202307242342.Qqpnmi9E-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26B61FC4
+	for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 17:07:50 +0000 (UTC)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-63ce8bea776so12648906d6.0
+        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 10:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690218469; x=1690823269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uw0GesN0rmWRh+DmayFGFLT8xsf2nFXUBbffJzXUQmc=;
+        b=yQqvvunZWdFiy+w7MNNZ//ZiYJUe/JYwsEPAMOAuzMnVsxc9q25s8iviP7QtPQyBK/
+         CeY75Zkf+57SpSYN5dlJoTkcwinzxriV2eicBdfYG1pBOxEsyZ6+et846Ua9dfCKbgc3
+         MUCAgWoYRdeh6M15XiJgKYwJCa9/aMUoUb4vR2mADsXonxCqoAtveV6kJJMSHUR5W751
+         fWJRf2kJV/KsglYpW34OYBh32tiHrHC7ab6Mk/X8hxqMRMAwNCVCVzim6mQ4dN+kRYq2
+         tRSc6pEdkoS6RJdPkhR2MlRa7EmEb/Jb18zswzvEcCAEEdbN8+8w1toIylcd2h37h1c3
+         fOmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690218469; x=1690823269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uw0GesN0rmWRh+DmayFGFLT8xsf2nFXUBbffJzXUQmc=;
+        b=he0qNZvFktbrNriP+Ofd1Mpl1OlSwU9f6W8oHSnoSV5rC1XVV4EKnlI0/ucl5Xs97C
+         KPWOvKEl7IkhHUBJfrEWEjNro02LfrthcIuJzZc0mfNoP8KEA6vjwUjWpAwvxZb1/hM1
+         y+dGYejWcr8rZx06VP+T0nvED7fVJW0x4jNeK6KTr1z6aqIWqplxf2n0OiAtaTFubOoC
+         /V/n/4RFUYINFm7tb6C0n+JXHS2kh4sPne14oLHB+kwKqIBNrXLL+ABYFzChvbr8Hxy0
+         VY20PpiwsBn94UHrTULD3i6Ny9oxSjwDe+qVyp9g3jWLiwjSRPHbxM2v6KUjO3BqJrWW
+         GCCg==
+X-Gm-Message-State: ABy/qLZk+XxklXVsWwj4Lvne6ibAYKfBlhnZZe6YzFQh62QAv6P7sJyP
+	Aieo4wQYZB5k+r9OuIg0TlwChTvJOqYPCxDDAbt1fg==
+X-Google-Smtp-Source: APBJJlHzvogcOM4+QS3uHKnCCLcH5s74N9Df9/sVTwJHHZCKxvEdbXGa4EZDOxDcwhZC+MQm3x4ydCXgpVMQTl/RTMM=
+X-Received: by 2002:a05:6214:88d:b0:635:3892:a2b0 with SMTP id
+ cz13-20020a056214088d00b006353892a2b0mr361506qvb.15.1690218469268; Mon, 24
+ Jul 2023 10:07:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202307201141.PYWS6ird-lkp@intel.com> <840cdf34-f38e-ab37-623f-9744c3436350@grimberg.me>
+In-Reply-To: <840cdf34-f38e-ab37-623f-9744c3436350@grimberg.me>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 24 Jul 2023 10:07:38 -0700
+Message-ID: <CAKwvOdnfHeEZcKYJh_VPoMfB5oDa3aAU0CYVt-6TNc3a6Jtc6w@mail.gmail.com>
+Subject: Re: drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256)
+ exceeds limit (2048) in 'nvme_tcp_recv_skb'
+To: Sagi Grimberg <sagi@grimberg.me>
+Cc: kernel test robot <lkp@intel.com>, Varun Prakash <varun@chelsio.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Robin,
+On Mon, Jul 24, 2023 at 12:46=E2=80=AFAM Sagi Grimberg <sagi@grimberg.me> w=
+rote:
+>
+>
+>
+> On 7/20/23 06:10, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+> > head:   bfa3037d828050896ae52f6467b6ca2489ae6fb1
+> > commit: c2700d2886a87f83f31e0a301de1d2350b52c79b nvme-tcp: send H2CData=
+ PDUs based on MAXH2CDATA
+> > date:   1 year, 5 months ago
+> > config: riscv-randconfig-r042-20230720 (https://download.01.org/0day-ci=
+/archive/20230720/202307201141.PYWS6ird-lkp@intel.com/config)
 
-FYI, the error/warning still remains.
+^ it's from a randconfig...the sanitizers tend to blow up stack usage.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6eaae198076080886b9e7d57f4ae06fa782f90ef
-commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
-date:   11 months ago
-config: s390-randconfig-r014-20230724 (https://download.01.org/0day-ci/archive/20230724/202307242342.Qqpnmi9E-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230724/202307242342.Qqpnmi9E-lkp@intel.com/reproduce)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
+t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce: (https://download.01.org/0day-ci/archive/20230720/2023072011=
+41.PYWS6ird-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307201141.PYWS6ird-l=
+kp@intel.com/
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >>> drivers/nvme/host/tcp.c:835:12: warning: stack frame size (2256) exce=
+eds limit (2048) in 'nvme_tcp_recv_skb' [-Wframe-larger-than]
+> >       835 | static int nvme_tcp_recv_skb(read_descriptor_t *desc, struc=
+t sk_buff *skb,
+> >           |            ^
+> >     1 warning generated.
+> >
+> >
+> > vim +/nvme_tcp_recv_skb +835 drivers/nvme/host/tcp.c
+> >
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  834
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03 @835  static int nvme_tcp_recv_=
+skb(read_descriptor_t *desc, struct sk_buff *skb,
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  836                           =
+    unsigned int offset, size_t len)
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  837  {
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  838          struct nvme_tcp_q=
+ueue *queue =3D desc->arg.data;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  839          size_t consumed =
+=3D len;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  840          int result;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  841
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  842          while (len) {
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  843                  switch (n=
+vme_tcp_recv_state(queue)) {
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  844                  case NVME=
+_TCP_RECV_PDU:
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  845                          r=
+esult =3D nvme_tcp_recv_pdu(queue, skb, &offset, &len);
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  846                          b=
+reak;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  847                  case NVME=
+_TCP_RECV_DATA:
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  848                          r=
+esult =3D nvme_tcp_recv_data(queue, skb, &offset, &len);
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  849                          b=
+reak;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  850                  case NVME=
+_TCP_RECV_DDGST:
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  851                          r=
+esult =3D nvme_tcp_recv_ddgst(queue, skb, &offset, &len);
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  852                          b=
+reak;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  853                  default:
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  854                          r=
+esult =3D -EFAULT;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  855                  }
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  856                  if (resul=
+t) {
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  857                          d=
+ev_err(queue->ctrl->ctrl.device,
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  858                           =
+       "receive failed:  %d\n", result);
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  859                          q=
+ueue->rd_enabled =3D false;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  860                          n=
+vme_tcp_error_recovery(&queue->ctrl->ctrl);
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  861                          r=
+eturn result;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  862                  }
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  863          }
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  864
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  865          return consumed;
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  866  }
+> > 3f2304f8c6d6ed Sagi Grimberg 2018-12-03  867
+> >
+> > :::::: The code at line 835 was first introduced by commit
+> > :::::: 3f2304f8c6d6ed97849057bd16fee99e434ca796 nvme-tcp: add NVMe over=
+ TCP host driver
+> >
+> > :::::: TO: Sagi Grimberg <sagi@lightbitslabs.com>
+> > :::::: CC: Christoph Hellwig <hch@lst.de>
+> >
+>
+> I don't understand how the stack frame size is that big. Looks like a
+> wrong complaint?
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307242342.Qqpnmi9E-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
-     946 | static const struct of_device_id ipmmu_of_ids[] = {
-         |                                  ^
-   13 warnings generated.
-
-
-vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
-
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
-33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
-33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
-33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
-33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
-60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
-60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
-60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
-757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
-757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
-757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
-b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
-b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
-b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
-58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
-58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
-0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
-0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
-0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
-0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
-98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
-98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
-98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
-3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
-b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
-b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
-b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
-3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
-9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
-33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
-33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
-33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
-33f3ac9b511612 Magnus Damm             2017-10-16  995  };
-33f3ac9b511612 Magnus Damm             2017-10-16  996  
-
-:::::: The code at line 946 was first introduced by commit
-:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
-
-:::::: TO: Magnus Damm <damm+renesas@opensource.se>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
