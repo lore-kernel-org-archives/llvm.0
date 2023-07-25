@@ -1,97 +1,422 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B621F173;
-	Tue, 25 Jul 2023 15:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A70EC433C8;
-	Tue, 25 Jul 2023 15:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690299484;
-	bh=bDFdxCN1eadFZ+WEQ9cgpt1sE/nSfwzieXCH199zY6I=;
-	h=From:Date:Subject:To:Cc:From;
-	b=IvFwAQqbuEMRiV2OOwf9mHEaokGwpwNCCMqzzQQVigPyS5F5+8540rbqHI4xBCly6
-	 cdY+4LjXO1AS7SsnLHlEoaSPURRsBBbXyfGJtp4U7dkey43vBt+60VXW3chpB1cf6B
-	 JNwfYvFtyoJlwmc3W8Q58Hwig2B1u4MTTSM/dkLuV5VWUQpHfs578Jc6O066dI5gVT
-	 J7djlfyQ17GTnFsND7rpWOnxybiZ3cIMZoJ+94/HqIx9sXL6sDgepQeyvwnXxtmxSi
-	 CT7lgkrLUjqdBFIHnaw65YumvfL2ltYpv6rSDzm9kLxTrFp1xqYLTR9N4m5Wl1QEs5
-	 n7ZsyjVwHRb9A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 25 Jul 2023 08:37:56 -0700
-Subject: [PATCH] Input: mcs-touchkey - Fix uninitialized use of error in
- mcs_touchkey_probe()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7E823BF4;
+	Tue, 25 Jul 2023 16:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690300810; x=1721836810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hwVaMZpylyqjbSlLNuQIT5HhTs+112ayYUlHlUKyMag=;
+  b=buHTT1KjCsVUT7o5wwHIgvfjHMHz/amybOlUd/3tb9FvE//av3U4k0kq
+   GOk78iT0ZqIfhfyx+oQJOJ87ILmzB8ZYaOQ97ya8zxbVnfUUP1y11ihya
+   +irwvHrROlkkAylDFTfPJA8HnI4h10PvzavVTng/FDMjEBxLncFJS+H7z
+   WMZkAn7V2dALB6h8/iacN9wpsE1jwBT5dlSYI42RoyW+KUuLLPZpI9XvG
+   HDSOLyfHzVNnQcZ0W2dWmoaiT20AP6xJkchzD4AIOEBrL3EZt7exKiUFL
+   M8BLg5oT9p/AqR3A+BQhmde7RTOWSV+nEj6Vacg9bUpO3VnSuh3Isp9Bv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="367797248"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="367797248"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 08:59:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="676276296"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="676276296"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jul 2023 08:59:40 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOKRU-00006x-2R;
+	Tue, 25 Jul 2023 15:59:24 +0000
+Date: Tue, 25 Jul 2023 23:58:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Laight <David.Laight@aculab.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+	'Andrew Morton' <akpm@linux-foundation.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH next 2/5] minmax: Allow min()/max()/clamp() if the
+ arguments have the same signedness.
+Message-ID: <202307252359.Is4T2MXC-lkp@intel.com>
+References: <454f967d452548a9acfa7c0a0872507e@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230725-mcs_touchkey-fix-wuninitialized-v1-1-615db39af51c@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFPsv2QC/x2NXQqDMBAGryL73AVNW0q8ipSyxI1+VKMk2j/x7
- g0+DgwzGyWN0ER1sVHUFxKmkKE6FeR6CZ0y2sxkSnMub+bKo0uPZVpd/9Qve3z4vQYELJABP23
- 54r1aMWJFLOXKHDVbx6G57/sfRpj52nEAAAA=
-To: dmitry.torokhov@gmail.com
-Cc: ndesaulniers@google.com, trix@redhat.com, frank.li@vivo.com, 
- linux-input@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2324; i=nathan@kernel.org;
- h=from:subject:message-id; bh=bDFdxCN1eadFZ+WEQ9cgpt1sE/nSfwzieXCH199zY6I=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCn738SE+K/TjTLdfS323fwPvezxSzY1/fkVojtvTs2KK
- Z9WTYzM6ShlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATWejP8Fd+6fRwNgNn6xZl
- ZmeBJ29/xWTeW9o1pfXl28PBHzI8t75kZOg3eLP59t15Bybkivez/GhaoHqaIfRbZP2nBz/C9L0
- uX+IEAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <454f967d452548a9acfa7c0a0872507e@AcuMS.aculab.com>
 
-Clang warns (or errors with CONFIG_WERROR=y):
+Hi David,
 
-  drivers/input/keyboard/mcs_touchkey.c:149:49: error: variable 'error' is uninitialized when used here [-Werror,-Wuninitialized]
-    149 |                 dev_err(&client->dev, "i2c read error[%d]\n", error);
-        |                                                               ^~~~~
-  include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-    144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-        |                                                                        ^~~~~~~~~~~
-  include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-    110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-        |                                     ^~~~~~~~~~~
-  drivers/input/keyboard/mcs_touchkey.c:110:11: note: initialize the variable 'error' to silence this warning
-    110 |         int error;
-        |                  ^
-        |                   = 0
-  1 error generated.
+kernel test robot noticed the following build errors:
 
-A refactoring updated the error handling in this block but did not
-update the dev_err() call to use fw_ver instead of error. Do so now to
-fix the warning and avoid printing uninitialized memory.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.5-rc3 next-20230725]
+[cannot apply to next-20230725 hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1893
-Fixes: e175eae16c1b ("Input: mcs-touchkey - convert to use devm_* api")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/input/keyboard/mcs_touchkey.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/minmax-Add-min_unsigned-a-b-and-max_unsigned-a-b/20230725-180332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/454f967d452548a9acfa7c0a0872507e%40AcuMS.aculab.com
+patch subject: [PATCH next 2/5] minmax: Allow min()/max()/clamp() if the arguments have the same signedness.
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230725/202307252359.Is4T2MXC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307252359.Is4T2MXC-lkp@intel.com/reproduce)
 
-diff --git a/drivers/input/keyboard/mcs_touchkey.c b/drivers/input/keyboard/mcs_touchkey.c
-index f25e2b20e271..2410f676c7f9 100644
---- a/drivers/input/keyboard/mcs_touchkey.c
-+++ b/drivers/input/keyboard/mcs_touchkey.c
-@@ -146,7 +146,7 @@ static int mcs_touchkey_probe(struct i2c_client *client)
- 
- 	fw_ver = i2c_smbus_read_byte_data(client, fw_reg);
- 	if (fw_ver < 0) {
--		dev_err(&client->dev, "i2c read error[%d]\n", error);
-+		dev_err(&client->dev, "i2c read error[%d]\n", fw_ver);
- 		return fw_ver;
- 	}
- 	dev_info(&client->dev, "Firmware version: %d\n", fw_ver);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307252359.Is4T2MXC-lkp@intel.com/
 
----
-base-commit: 447c09544275663e1082f796b26c7959915c922a
-change-id: 20230725-mcs_touchkey-fix-wuninitialized-4ffe9a2a9aa9
+All errors (new ones prefixed by >>):
 
-Best regards,
+   In file included from init/calibrate.c:8:
+>> include/linux/jiffies.h:427:28: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     427 |         return jiffies_to_clock_t(max(0L, delta));
+         |                                   ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from init/calibrate.c:8:
+   include/linux/jiffies.h:432:26: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     432 |         return jiffies_to_msecs(max(0L, delta));
+         |                                 ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   2 errors generated.
+--
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:7:
+   In file included from include/linux/ktime.h:25:
+>> include/linux/jiffies.h:427:28: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     427 |         return jiffies_to_clock_t(max(0L, delta));
+         |                                   ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:7:
+   In file included from include/linux/ktime.h:25:
+   include/linux/jiffies.h:432:26: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     432 |         return jiffies_to_msecs(max(0L, delta));
+         |                                 ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     100 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from fs/signalfd.c:22:
+   In file included from include/linux/poll.h:10:
+--
+   In file included from kernel/irq/spurious.c:8:
+>> include/linux/jiffies.h:427:28: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     427 |         return jiffies_to_clock_t(max(0L, delta));
+         |                                   ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from kernel/irq/spurious.c:8:
+   include/linux/jiffies.h:432:26: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     432 |         return jiffies_to_msecs(max(0L, delta));
+         |                                 ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from kernel/irq/spurious.c:9:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/irq/spurious.c:9:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/irq/spurious.c:9:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   12 warnings and 2 errors generated.
+--
+   In file included from kernel/time/alarmtimer.c:16:
+   In file included from include/linux/hrtimer.h:15:
+   In file included from include/linux/hrtimer_defs.h:5:
+   In file included from include/linux/ktime.h:25:
+>> include/linux/jiffies.h:427:28: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     427 |         return jiffies_to_clock_t(max(0L, delta));
+         |                                   ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from kernel/time/alarmtimer.c:16:
+   In file included from include/linux/hrtimer.h:15:
+   In file included from include/linux/hrtimer_defs.h:5:
+   In file included from include/linux/ktime.h:25:
+   include/linux/jiffies.h:432:26: error: call to undeclared function 'static_assert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     432 |         return jiffies_to_msecs(max(0L, delta));
+         |                                 ^
+   include/linux/minmax.h:69:19: note: expanded from macro 'max'
+      69 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:36:3: note: expanded from macro '__careful_cmp'
+      36 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y)))
+         |                 ^
+   include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once'
+      29 |                 static_assert(__types_ok(x, y),         \
+         |                 ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/time/alarmtimer.c:18:
+   In file included from include/linux/rtc.h:38:
+   In file included from include/linux/seq_file.h:12:
+   In file included from include/linux/fs.h:33:
+
+
+vim +/static_assert +427 include/linux/jiffies.h
+
+ae60d6a0e3a919 Nicholas Mc Guire 2015-05-28  420  
+9ca308506062fc Baolin Wang       2015-07-29  421  extern unsigned long timespec64_to_jiffies(const struct timespec64 *value);
+9ca308506062fc Baolin Wang       2015-07-29  422  extern void jiffies_to_timespec64(const unsigned long jiffies,
+9ca308506062fc Baolin Wang       2015-07-29  423  				  struct timespec64 *value);
+cbbc719fccdb8c hank              2011-09-20  424  extern clock_t jiffies_to_clock_t(unsigned long x);
+a399a8053164ec Eric Dumazet      2012-08-08  425  static inline clock_t jiffies_delta_to_clock_t(long delta)
+a399a8053164ec Eric Dumazet      2012-08-08  426  {
+a399a8053164ec Eric Dumazet      2012-08-08 @427  	return jiffies_to_clock_t(max(0L, delta));
+a399a8053164ec Eric Dumazet      2012-08-08  428  }
+a399a8053164ec Eric Dumazet      2012-08-08  429  
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
