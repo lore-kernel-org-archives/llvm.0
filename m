@@ -1,172 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6619B1D2FD
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 18:57:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAA9C433C7;
-	Tue, 25 Jul 2023 18:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690311478;
-	bh=39UKxzaDXD2jZ3Vh4zHzwCJb2yUJA+Yg/Gepz3BAO8g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uct9iT1jFft9F3b9nNzPj2phwHRO1F+WXwack0bwcMiwvVz3JBqzk3BLxHIs+GpU/
-	 FDjLyyseH7BD66J1wRvwqFWvZtHTrwsVK9lT+zHMDuHnUuZiXmBS2KmEc86EVezaOR
-	 YVF4d+RscuIhbMROeNdr5e2wD/UhXSv+vTAz5lS96nyajNJhd23WPC32HXqQGGF2xJ
-	 M9wmvXl4W43GAxKvYQksXtDdFGhcpaIts0+Pz3sqckgJYsvdeWJP5Y2ndFAK+KUBwK
-	 Whgi6vc7/3j55VHx8PwjVzGPqoIizYHunLP2j+rThXpZFa6m0qkV414hygS6fXU9Al
-	 73/eUMmVy0kmg==
-Date: Tue, 25 Jul 2023 19:57:54 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Bin Meng <bmeng@tinylab.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and
- binutils
-Message-ID: <20230725-skating-agent-b092f2257ca1@spud>
-References: <20230725170405.251011-1-xingmingzheng@iscas.ac.cn>
- <20230725172344.GA1445373@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6258F1D2FD;
+	Tue, 25 Jul 2023 19:16:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690312578; x=1721848578;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ian9jaZ0nxGz+KOw6iIdQHpp9S1+cRBkOOZV0S2W5jc=;
+  b=E11zMFIfVALJwOl5Qb8gicGl6Cn1PkmsIwEpRrhZYLB4kiXU6d+I3p2U
+   eQMIqRfQ56QKNsNGUxGhd5Mmcqlsw5+jIw3eDEVWskejDi4JxcNdI+/6+
+   uk54724N5ynPfGsPdLTCiCowSHO32YAhzTp84sVglUgDLurBM3h4Ik0D9
+   Cosv9GIyXYWB8y0gUTqxSOdftkcOFSIHj6zK6WC8joQSM5IibGghWiZRx
+   GJrZAQg/QqfKustYfpRaFx3bPpL8SPQC0hKDMPKDZI59QKxHCDe74vHq6
+   uPGy0OaZozfv1YC0Qkp+R2m2JRlPQhyLJ2Ad95MbzTxQIyZxkvgl5KtG5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="371432538"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="371432538"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 12:16:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="761330320"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="761330320"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 25 Jul 2023 12:16:13 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qONW0-0000HX-0y;
+	Tue, 25 Jul 2023 19:16:12 +0000
+Date: Wed, 26 Jul 2023 03:15:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:ffa_notify 15/16]
+ drivers/firmware/arm_ffa/test_driver.c:28:6: warning: no previous prototype
+ for function 'test_ffa_notif_cb'
+Message-ID: <202307260318.Rzeu5Stp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iHjWJzHCnP6UBqZt"
-Content-Disposition: inline
-In-Reply-To: <20230725172344.GA1445373@dev-arch.thelio-3990X>
-
-
---iHjWJzHCnP6UBqZt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 25, 2023 at 10:23:44AM -0700, Nathan Chancellor wrote:
-> Hi Mingzheng,
->=20
-> Thanks for the patch!
->=20
-> On Wed, Jul 26, 2023 at 01:04:05AM +0800, Mingzheng Xing wrote:
-> > When compiling the kernel with the toolchain composed of GCC >=3D 12.1.=
-0 and
-> > binutils < 2.38, default ISA spec used when building binutils and GCC, =
-the
-> > following build failure will appear because the
-> > CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI is not turned on.
-> > (i.e, gcc-12.1.0 and binutils-2.36, or gcc-12.3.0 and binutils-2.37, use
-> > default ISA spec.)
-> >=20
-> >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler me=
-ssages:
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: un=
-recognized opcode `csrr a5,0xc01'
->=20
-> The gift that keeps on giving :/
->=20
-> > Binutils has updated the default ISA spec version, and the community has
-> > responded well to this[1][2][3], but it appears that this is not over y=
-et.
-> >=20
-> > We also need to consider the situation of binutils < 2.38 but
-> > GCC >=3D 12.1.0, since the combination between different versions of GC=
-C and
-> > binutils is not unique, which is to some extent flexible. GCC release
-> > 12.1.0 updated the default ISA spec version in GCC commit[4].
->=20
-> I suspect this combination is not too common because binutils 2.38 came
-> out before GCC 12.1.0 but as you note, it is obviously possible. What
-> toolchain has this combination in the wild, which would be helpful for
-> documentation purposes?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git ffa_notify
+head:   50176e212a1e52a7fc37c2ea8f7e0d5937c62955
+commit: 8fb5efdabdb94f98ab0fa1e1c5d34bb158953a03 [15/16] firmware: arm_ffa: Add test driver
+config: arm64-randconfig-r032-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260318.Rzeu5Stp-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260318.Rzeu5Stp-lkp@intel.com/reproduce)
 
-Yeah, that'd be great to know, at least the other niche stuff that we
-are working around had a clear use-case (testing LLVM in debian containers)
-whereas there's no clear user for this.
-That's doubly interesting, as this patch seems to break things for binutils
-< 2.35, and if we have to make a trade-off between those too, then it'd
-be good to be able to weigh up the options.
-Do we perhaps need the misa-spec workaround instead for this case?
-Haven't tested that though, trying to dig myself out of email backlog.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307260318.Rzeu5Stp-lkp@intel.com/
 
-> > For more information, please refer to:
-> >=20
-> > commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
-> > commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang=
- and binutils")
-> >=20
-> > [1]: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4
-> > [2]: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.=
-org
-> > [3]: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
-> > [4]: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a6257=
-9d4a7a4a76bab51b5b52fec2cd
+All warnings (new ones prefixed by >>):
 
-btw, please make these regular Link: tags (with a [N] at EOL) and drop
-the space between them and the sign off. Also, this probably needs to be
-CC: stable@vger.kernel.org too.
-
-Cheers,
-Conor.
-
-> >=20
-> > Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-> > ---
-> >  arch/riscv/Kconfig | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 4c07b9189c86..b49cea30f6cc 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -570,11 +570,15 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
-> >  config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-> >  	def_bool y
-> >  	# https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Daed=
-44286efa8ae8717a77d94b51ac3614e2ca6dc
-> > -	depends on AS_IS_GNU && AS_VERSION >=3D 23800
-> > +	# https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a62579=
-d4a7a4a76bab51b5b52fec2cd
-> > +	depends on CC_IS_GCC && GCC_VERSION >=3D 120100 || \
-> > +		   AS_IS_GNU && AS_VERSION >=3D 23800
->=20
-> GCC_VERSION will be 0 for clang, so you don't need the CC_IS_GCC check.
-> With that change, this should be able to stay on one line:
->=20
->     depends on GCC_VERSION >=3D 120100 || (AS_IS_GNU && AS_VERSION >=3D 2=
-3800)
->=20
-> >  	help
-> >  	  Newer binutils versions default to ISA spec version 20191213 which
-> >  	  moves some instructions from the I extension to the Zicsr and Zifen=
-cei
-> >  	  extensions.
-> > +	  Similarly, GCC release 12.1.0 has changed the default ISA spec vers=
-ion to
-> > +	  20191213, so the above situation requires this option to be enabled.
-> > =20
-> >  config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
-> >  	def_bool y
-> > --=20
-> > 2.34.1
-> >=20
+>> drivers/firmware/arm_ffa/test_driver.c:28:6: warning: no previous prototype for function 'test_ffa_notif_cb' [-Wmissing-prototypes]
+      28 | void test_ffa_notif_cb(u16 partition_id, int notification_id, void *data)
+         |      ^
+   drivers/firmware/arm_ffa/test_driver.c:28:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      28 | void test_ffa_notif_cb(u16 partition_id, int notification_id, void *data)
+         | ^
+         | static 
+   1 warning generated.
 
 
---iHjWJzHCnP6UBqZt
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/test_ffa_notif_cb +28 drivers/firmware/arm_ffa/test_driver.c
 
------BEGIN PGP SIGNATURE-----
+    26	
+    27	
+  > 28	void test_ffa_notif_cb(u16 partition_id, int notification_id, void *data)
+    29	{
+    30		pr_info("%x %x %p\n", partition_id, notification_id, data);
+    31	}
+    32	
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMAbMgAKCRB4tDGHoIJi
-0rnFAQCCSRzsuugFSJC1+Pyk0F+O91cfGUp6aHSYnTOU3Z3qTQD+N/IguWiZU0eC
-JRcPr+8T4gGPM8G89HqQPI+lU0RmDg4=
-=p9T3
------END PGP SIGNATURE-----
-
---iHjWJzHCnP6UBqZt--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
