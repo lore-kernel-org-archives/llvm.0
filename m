@@ -1,140 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2646A3D7C
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 07:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690268452;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=68HK1SZ2RzWoQcgjGBrRJ4kIv5RVqSQltWAsK7yLeHw=;
-	b=MhHxrop/RtEK0uJG75UAnsCLQRWGnk/Rxd4trZe05+kFOS3aq58l7K7dw4YaPStFLUKPUi
-	/dbT8yZ6h7IZJTuhjqsOtWoixKJESjPNAC5uDd9rheYbsLmgtN2m6y8BZ7ZZfh/gUYU7qu
-	kHOcOkn0YmJR4Tp78A4RWcuMAQk53GY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-Kms7qcGVN9iFx7D7ZSVsFg-1; Tue, 25 Jul 2023 03:00:51 -0400
-X-MC-Unique: Kms7qcGVN9iFx7D7ZSVsFg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C18580269A
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 07:00:51 +0000 (UTC)
-Received: from [172.64.1.75] (unknown [10.30.32.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C280C10E5E;
-	Tue, 25 Jul 2023 07:00:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 328): Test report for master
- (6.5.0-rc3, mainline.kernel.org-clang, 0b5547c5)
-Date: Tue, 25 Jul 2023 07:00:27 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468FB13AD5;
+	Tue, 25 Jul 2023 08:04:09 +0000 (UTC)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1bb954414e8so343995fac.0;
+        Tue, 25 Jul 2023 01:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690272248; x=1690877048;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oQ04m2mgXyxdxnuWbV0zRomtSyCFjCa11c8E/6QMRLA=;
+        b=Glp75s3Qru9qtU/75zTwGijITmJdiNviTxxVSuUeFpc+43Ng4UxWFGSy+ib2h22X6R
+         9ELZ7yZnJR8lShxo3JGhqoies4mVNRrQfi4qht8WlTA6PJldwk4ahJ7oZf+jap3TjGYt
+         eIpFDab5F/8AYrQmU7XJdneJoyzXWx0OmDAdcPrM+pxsEXIJzyRrmgE83wMo3PhysTsy
+         YdACaJ2+5rSdI0D4lFgdFFrd148At9k9Yr6RjbwOFzkh04CCdo6lhTqr6QVr0egHJcBF
+         wr6HpQuA2oxxCJzc2k/S2KiBIqAW7aJtR0TeEksG3ftg7GlI2cWp1ECJ2CqpL61nObPI
+         uG1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690272248; x=1690877048;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oQ04m2mgXyxdxnuWbV0zRomtSyCFjCa11c8E/6QMRLA=;
+        b=aCh09jbmbjmx/7IhZ82jObpaIQcDGrnIZdifDw/FOdjH0vReo8moKpMgaDK7J1Owwh
+         pzpvIzlY5FIHP3d13GGoRGofVXfQ89ZU5TPiFcKezL+9GdxbiZNBtzqT7kPcNxFF1PPM
+         /aaF00SpYad2CGONF92CW/OYrnsUIfDtu9bxG5MRXk3QAQ29v9qVqc2Nrlwhi1sWVOB6
+         0po8Npa1mENrtoXnAE59yXQCdrumpg7H9RfuX1KHcMCM7LVgIA5cSxjayUQGaWqovsxC
+         IwjMDhQ9mrSzdZi19XVXwngvmKA6ZR9AEdnq/zOyewWXlSh+e1o0vmHlpLgnALGoMxHS
+         9EEw==
+X-Gm-Message-State: ABy/qLboEGAthNQMCcMYKF6XeUUL59J7jdJMcXX6IPXhLqstCmIL5Vea
+	haTPfxd2zJ2kyDb7j913bzyOFIa5dVFdsAalyA4=
+X-Google-Smtp-Source: APBJJlEE32iRJIl1HaETRlOMGBsoQJRQDz1yuBtZ3gl0fAODhR06dO0WeJzLKEkgbjEXwu0nkMJ66KlhtNzz4iQ/flY=
+X-Received: by 2002:a05:6870:9a05:b0:1ba:1998:1d23 with SMTP id
+ fo5-20020a0568709a0500b001ba19981d23mr13834004oab.35.1690272247963; Tue, 25
+ Jul 2023 01:04:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <03173.123072503005100143@us-mta-199.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <202307242310.CdOnd2py-lkp@intel.com>
+In-Reply-To: <202307242310.CdOnd2py-lkp@intel.com>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Tue, 25 Jul 2023 10:03:56 +0200
+Message-ID: <CAMhs-H8Zz_8w7Lcq5f=mEiucjwx+TAfBbVZ12PE1a47ioxTu2A@mail.gmail.com>
+Subject: Re: drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable 'mtmips_of_match'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Hi!
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+On Mon, Jul 24, 2023 at 5:21=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   6eaae198076080886b9e7d57f4ae06fa782f90ef
+> commit: 6f3b15586eef736831abe6a14f2a6906bc0dc074 clk: ralink: add clock a=
+nd reset driver for MTMIPS SoCs
+> date:   5 weeks ago
+> config: x86_64-buildonly-randconfig-r003-20230723 (https://download.01.or=
+g/0day-ci/archive/20230724/202307242310.CdOnd2py-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
+8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230724/202307242310=
+.CdOnd2py-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307242310.CdOnd2py-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    drivers/clk/ralink/clk-mtmips.c:309:9: warning: variable 'ret' is unin=
+itialized when used here [-Wuninitialized]
+>            return ret;
+>                   ^~~
+>    drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable '=
+ret' to silence this warning
+>            int ret, i;
+>                   ^
+>                    =3D 0
+>    drivers/clk/ralink/clk-mtmips.c:359:9: warning: variable 'ret' is unin=
+itialized when used here [-Wuninitialized]
+>            return ret;
+>                   ^~~
+>    drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable '=
+ret' to silence this warning
+>            int ret, i;
+>                   ^
+>                    =3D 0
 
-Tested-by: CKI Project <cki-project@redhat.com>
+This two errors were already fixed in:
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+6e68dae946e3: ("clk: ralink: mtmips: Fix uninitialized use of ret in
+mtmips_register_{fixed,factor}_clocks()")
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97090
+> >> drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable 'mtmi=
+ps_of_match' [-Wunused-const-variable]
+>    static const struct of_device_id mtmips_of_match[] =3D {
+>                                     ^
+>    3 warnings generated.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+This one is because CONFIG_OF is disabled so 'of_match_node()' turns
+into a dummy macro. What would be the correct approach here?
+Add select OF in Kconfig for this driver or silence the warning
+declaring 'mtmips_of_match' with __maybe_unused?
 
+Thanks in advance for clarification.
 
+Best regards,
+    Sergio Paracuellos
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>
+>
+> vim +/mtmips_of_match +821 drivers/clk/ralink/clk-mtmips.c
+>
+>    820
+>  > 821  static const struct of_device_id mtmips_of_match[] =3D {
+>    822          {
+>    823                  .compatible =3D "ralink,rt2880-sysc",
+>    824                  .data =3D &rt2880_clk_data,
+>    825          },
+>    826          {
+>    827                  .compatible =3D "ralink,rt3050-sysc",
+>    828                  .data =3D &rt305x_clk_data,
+>    829          },
+>    830          {
+>    831                  .compatible =3D "ralink,rt3052-sysc",
+>    832                  .data =3D &rt305x_clk_data,
+>    833          },
+>    834          {
+>    835                  .compatible =3D "ralink,rt3352-sysc",
+>    836                  .data =3D &rt3352_clk_data,
+>    837          },
+>    838          {
+>    839                  .compatible =3D "ralink,rt3883-sysc",
+>    840                  .data =3D &rt3883_clk_data,
+>    841          },
+>    842          {
+>    843                  .compatible =3D "ralink,rt5350-sysc",
+>    844                  .data =3D &rt5350_clk_data,
+>    845          },
+>    846          {
+>    847                  .compatible =3D "ralink,mt7620-sysc",
+>    848                  .data =3D &mt7620_clk_data,
+>    849          },
+>    850          {
+>    851                  .compatible =3D "ralink,mt7628-sysc",
+>    852                  .data =3D &mt76x8_clk_data,
+>    853          },
+>    854          {
+>    855                  .compatible =3D "ralink,mt7688-sysc",
+>    856                  .data =3D &mt76x8_clk_data,
+>    857          },
+>    858          {}
+>    859  };
+>    860
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
