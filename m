@@ -1,99 +1,105 @@
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA041F193
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 13:27:22 +0000 (UTC)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-794cddcab71so1619865241.1
-        for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 06:27:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126E81F194
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 14:40:36 +0000 (UTC)
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-48147a5f0c0so1777590e0c.3
+        for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 07:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690291642; x=1690896442;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ioiyZipNYQNpGagkyruO8NE61Cv2rplOTlMfdFh0CCk=;
-        b=B5oIVzIvrI6yphVwz5iUuGiAcqTLBSfjfUDCebR/4w70SIZ7ZTGIAwsK7PdDEu/K4I
-         sG7Oky5B/CK8YxQo/cHvcAKjsvUDPBt68n95wjBJbrTqsIG1anTLiwZlrRG8tn1dNVKj
-         grfnmg2ie+/ajWinc2ZsNwooO7Q4osaM7B8Isqdt3Qwt4pZMrISx6T+eHlUi5DslIwyv
-         R3U94lhpAuLtKRLKdwhYL35BO5nYJE7jCr6WaqUV5Nu4/wQkkJm6N8okt9ZxC72cNQrT
-         6Wru4RTC7UcBhHOR1U0BH5FZDn4ZtAljd6me15mMSp1KY/TYrx/K7IvUCGkmlTggEIef
-         spVA==
+        d=linaro.org; s=google; t=1690296035; x=1690900835;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6jl5+LreKnh1yykcifdBl1Q5Q7VSb/IZl7szWKJ4qmg=;
+        b=Mj6Q7S1oyu3AZqRp93gZmaewJj5yosETUiPOwu6KNnAU+nygtqcGHXHS1UU+geok/s
+         YzBpQH6kzLq5IkR6AfJT0/eMZ1TCjFgvX2L/rH6CsYW7p6ni8+18gn7hYAbu02W6twzB
+         PK8Q7AQvCBjxO6t5+P7GsdfZHHMzx0qPZKRXKh/lOoYeRIWdXHRNcPBNBm/Seixu5fam
+         2bCnldqL1PEiWNAZ5GkXmiXRqaGWVdWLHTJ8C8fc0gj0eJuAA9snKlL1e7sdA3pjf80m
+         oxZ0549lzTrUUA9AJCjFqFrjqTYYG/kSX3j2oD4m8n17OC5B0ihqwoQ1HvWiql6DPFuv
+         47JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690291642; x=1690896442;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ioiyZipNYQNpGagkyruO8NE61Cv2rplOTlMfdFh0CCk=;
-        b=dUg+bb7i5h6PjVxoe063QjTF+/joNrBruevqRvqnuT10P8rI44ZwEnGdMvHqAll35h
-         On781jh2rJv8gDctgTNPv+YbEQTt3CQYZLK/+OlfBSPvjcLVPN4N+00tlYQN0EdUeQ0F
-         Mfpc9nPXoLQnmq9eI14racM5Uei30e2DCddGtBwE0JZ2p7rBbceuVkCoqtqmAuLbV2Ci
-         q67P3NMqZmj4UxHimDsivaWPXzBuSh4NCZQmGOw/RfRZVwHQ2RwPnAgOaMmFzctw7yaY
-         JfY0HqwTbOy5F9Y7AK1Zsioz4If9sXrBALXuOSpzATvumAdsnFRe4V37VtRwhGDh4tEa
-         d6yg==
-X-Gm-Message-State: ABy/qLZorz80ix9HzgJdBS2Bc3+qStS/RYPvEBc1yWSKBXkjoYK0RQxU
-	3mldstLp4NZvAAa52BJ3wl9bPz8zkoRBwPC0BFDDyA==
-X-Google-Smtp-Source: APBJJlFNvn3s+3oAm8bOTez+axljqCb0cdR/HKWhBcUfLXHM467GPio5fZcYZwWXG5SRV0YkJpZLQMlUHpBTLGG1gt4=
-X-Received: by 2002:a05:6102:3d7:b0:443:5ce7:e62d with SMTP id
- n23-20020a05610203d700b004435ce7e62dmr4261554vsq.21.1690291641801; Tue, 25
- Jul 2023 06:27:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690296035; x=1690900835;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6jl5+LreKnh1yykcifdBl1Q5Q7VSb/IZl7szWKJ4qmg=;
+        b=USYHKpP4xpSuGFcgzRfGGFx5iIMueR0tXDa6uWW4VkG2i8IIa+8fAY4AdLS2LWWaRc
+         eEkE4fIfRkW+xH+OjjGYG3wgBz/7PzT8GtlzrZ5uM+hYensYhvrApadhthjJ4+6fXygX
+         GuO/nfgb7wX1vgBYwZdHX7eRrHw2Tp1q7TYZCaaZyv65guHC6Ec3X6AVoekI9x1cgK/N
+         tH8kCjdekqoDA39I7x9RWYMHSRfEkopVyk+hPNJK/F9nt5zx2Tvm1UQy85H+c5LZQ5cA
+         kJUxTqnJ+OK4SQsOKGR9OBYjmO15yOMg9ca5TJY0ReJufqE7GAAE96qkSiMXVxardRM0
+         3Qzg==
+X-Gm-Message-State: ABy/qLYFcHxduKL+24eTEqQsqRkI2U0LGtVytBxSJGBFqKynY9XiSZcr
+	m7cgVSxN9LqYzK0z+g8Fu9lMNra+K4ATcxU2QNk00w==
+X-Google-Smtp-Source: APBJJlFV7dvTCeRGn11UfmRwNmuLCKBZhzcl8QTcjtuYmrQjASgxv35b4LwwCFqfZmlNl6OUiU2x+8GQyQCnUVlFY2o=
+X-Received: by 2002:a1f:4191:0:b0:471:b18a:f9e5 with SMTP id
+ o139-20020a1f4191000000b00471b18af9e5mr4357499vka.4.1690296035612; Tue, 25
+ Jul 2023 07:40:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+References: <20230725104553.588743331@linuxfoundation.org>
+In-Reply-To: <20230725104553.588743331@linuxfoundation.org>
 From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 25 Jul 2023 18:57:10 +0530
-Message-ID: <CA+G9fYvV-71XqpCr_jhdDfEtN701fBdG3q+=bafaZiGwUXy_aA@mail.gmail.com>
-Subject: selftests: mm: mremap_dontunmap.c:53:6: error: use of undeclared
- identifier 'MREMAP_DONTUNMAP'
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	linux-mm <linux-mm@kvack.org>, clang-built-linux <llvm@lists.linux.dev>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, David Hildenbrand <david@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Stefan Roesch <shr@devkernel.io>, 
-	Andrew Morton <akpm@linux-foundation.org>, Anders Roxell <anders.roxell@linaro.org>
+Date: Tue, 25 Jul 2023 20:10:24 +0530
+Message-ID: <CA+G9fYs217H+k5pNx_uobpHmg0vM4qRk9UT_OKspxn5d-NoNqA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/509] 5.10.188-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	linux-ext4 <linux-ext4@vger.kernel.org>, "Theodore Ts'o" <tytso@mit.edu>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, 
+	Chao Yu <chao@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-selftests:mm: mremap_dontunmap build failed with clang-16 due to below
-warnings / errors on Linux next-20230725 ( or older kernels ).
+On Tue, 25 Jul 2023 at 16:42, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.188 release.
+> There are 509 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 27 Jul 2023 10:44:26 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.188-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Following commit caused build failures on all the architectures,
+
+> Chao Yu <chao@kernel.org>
+>     ext4: fix to check return value of freeze_bdev() in ext4_shutdown()
+
+ext4: fix to check return value of freeze_bdev() in ext4_shutdown()
+commit c4d13222afd8a64bf11bc7ec68645496ee8b54b9 upstream
+
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=x86_64 SRCARCH=x86
+CROSS_COMPILE=x86_64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
+clang' LLVM=1 LLVM_IAS=1
+/builds/linux/fs/ext4/ioctl.c:634:7: error: incompatible pointer to
+integer conversion assigning to 'int' from 'struct super_block *'
+[-Wint-conversion]
+                ret = freeze_bdev(sb->s_bdev);
+                    ^ ~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [/builds/linux/scripts/Makefile.build:286: fs/ext4/ioctl.o] Error 1
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-clang --target=aarch64-linux-gnu -fintegrated-as
--Werror=unknown-warning-option -Werror=ignored-optimization-argument
--Werror=option-ignored -Werror=unused-command-line-argument
---target=aarch64-linux-gnu -fintegrated-as -Wall -I
-tools/testing/selftests/../../..  -isystem
-/home/tuxbuild/.cache/tuxmake/builds/1/build/usr/include
-mremap_dontunmap.c vm_util.c -lrt -lpthread -o
-/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/mm/mremap_dontunmap
-mremap_dontunmap.c:53:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
-                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, 0);
-                   ^
-mremap_dontunmap.c:108:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
-                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
-                   ^
-mremap_dontunmap.c:149:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
-                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
-                   ^
-mremap_dontunmap.c:200:21: error: use of undeclared identifier
-'MREMAP_DONTUNMAP'
-                   MREMAP_FIXED | MREMAP_DONTUNMAP | MREMAP_MAYMOVE,
-                                  ^
-mremap_dontunmap.c:252:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
-                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE, NULL);
-                   ^
-mremap_dontunmap.c:310:6: error: use of undeclared identifier 'MREMAP_DONTUNMAP'
-                   MREMAP_DONTUNMAP | MREMAP_MAYMOVE | MREMAP_FIXED,
-dest_mapping);
-                   ^
-6 errors generated.
-make[4]: Leaving directory 'tools/testing/selftests/mm'
-
-
-Links:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/
-
-steps to reproduce:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/tuxmake_reproducer.sh
 
 --
 Linaro LKFT
