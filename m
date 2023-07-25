@@ -1,109 +1,152 @@
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F6E3C23
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 17:12:16 +0000 (UTC)
-Received: from xmz-huawei.. (unknown [114.249.159.178])
-	by APP-05 (Coremail) with SMTP id zQCowADnbuuXAMBkSR2gDg--.49620S2;
-	Wed, 26 Jul 2023 01:04:24 +0800 (CST)
-From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>
-Cc: Bin Meng <bmeng@tinylab.org>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Subject: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and binutils
-Date: Wed, 26 Jul 2023 01:04:05 +0800
-Message-Id: <20230725170405.251011-1-xingmingzheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B7425154;
+	Tue, 25 Jul 2023 17:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690305765; x=1721841765;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gRhQcc96PP4oy5wmUOE3gF8648ImIX2lw3urPyzqToI=;
+  b=EssoiNYtgg8oSDJkA/5ZmHdOGUr4sH6OzNJ5in0LjPq8U/yKGcbxIK8Y
+   I3ORGZTkKrY34A3F1s60cDxPMog378hotf0ZlVFihjsJrD0RwTJfvvO7D
+   IGBbkRgcuDyZw5o/N1M3u754rZjo8NIsV785wFKwzO+fEUkScPeoJMtaN
+   wflNTSx45b8lFSIcDPo6QdjqLthe2JG8od9IhtyINFOVPTeOmKCIFUBpX
+   NGInFgP1R8v2SeKSnvTcKLLHgiX5rGcmp4tpg+u4YW/hE8EEeTJ2tk3em
+   SsRWvMo4d+ThsrQ2b7gIKFeQN5xiiSGPCFuJx4IEK3dR9mmYHsApqBmRe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="431602611"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="431602611"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 10:22:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="729458896"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="729458896"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Jul 2023 10:22:42 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOLk9-0000BG-0H;
+	Tue, 25 Jul 2023 17:22:41 +0000
+Date: Wed, 26 Jul 2023 01:21:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:ffa_notify 9/16]
+ drivers/firmware/arm_ffa/driver.c:692:36: warning: variable 'total_ids' set
+ but not used
+Message-ID: <202307260156.NcqZ6DHJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowADnbuuXAMBkSR2gDg--.49620S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr1DWw4UWFy3tr1UXryftFb_yoW5Xw1Dpa
-	9xAFn5Crs5X3yxC34rA34UWr1YvrZ5K3yagr17Gw15urs3Za4kKrWvvw4IqFyDAFZ7Kw4U
-	Zr1fuasYgwn8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-	DUUUUU=
-X-Originating-IP: [114.249.159.178]
-X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiBwIDCmS-00lwhgAAs7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When compiling the kernel with the toolchain composed of GCC >= 12.1.0 and
-binutils < 2.38, default ISA spec used when building binutils and GCC, the
-following build failure will appear because the
-CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI is not turned on.
-(i.e, gcc-12.1.0 and binutils-2.36, or gcc-12.3.0 and binutils-2.37, use
-default ISA spec.)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git ffa_notify
+head:   50176e212a1e52a7fc37c2ea8f7e0d5937c62955
+commit: 155aaa7b3f3d4875ce6c6b154f95868f8a483686 [9/16] firmware: arm_ffa: Implement the NOTIFICATION_INFO_GET interface
+config: arm64-randconfig-r032-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260156.NcqZ6DHJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260156.NcqZ6DHJ-lkp@intel.com/reproduce)
 
-  CC      arch/riscv/kernel/vdso/vgettimeofday.o
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307260156.NcqZ6DHJ-lkp@intel.com/
 
-Binutils has updated the default ISA spec version, and the community has
-responded well to this[1][2][3], but it appears that this is not over yet.
+All warnings (new ones prefixed by >>):
 
-We also need to consider the situation of binutils < 2.38 but
-GCC >= 12.1.0, since the combination between different versions of GCC and
-binutils is not unique, which is to some extent flexible. GCC release
-12.1.0 updated the default ISA spec version in GCC commit[4].
+>> drivers/firmware/arm_ffa/driver.c:692:36: warning: variable 'total_ids' set but not used [-Wunused-but-set-variable]
+     692 |         u8 count_of_lists, ids_processed, total_ids = 0;
+         |                                           ^
+   drivers/firmware/arm_ffa/driver.c:614:12: warning: unused function 'ffa_notification_bind' [-Wunused-function]
+     614 | static int ffa_notification_bind(u16 dst_id, u64 notif_bitmap, u32 flags)
+         |            ^
+   drivers/firmware/arm_ffa/driver.c:619:12: warning: unused function 'ffa_notification_unbind' [-Wunused-function]
+     619 | static int ffa_notification_unbind(u16 dst_id, u64 notif_bitmap)
+         |            ^
+   drivers/firmware/arm_ffa/driver.c:625:5: warning: unused function 'ffa_notification_set' [-Wunused-function]
+     625 | int ffa_notification_set(u16 src_id, u16 dst_id, u32 flags, u64 notif_bitmap)
+         |     ^
+   drivers/firmware/arm_ffa/driver.c:651:12: warning: unused function 'ffa_notification_get' [-Wunused-function]
+     651 | static int ffa_notification_get(u32 flags, struct ffa_notif_bitmaps *notif)
+         |            ^
+   drivers/firmware/arm_ffa/driver.c:687:13: warning: unused function 'ffa_notification_info_get64' [-Wunused-function]
+     687 | static void ffa_notification_info_get64(void)
+         |             ^
+   6 warnings generated.
 
-For more information, please refer to:
 
-commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
-commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang and binutils")
+vim +/total_ids +692 drivers/firmware/arm_ffa/driver.c
 
-[1]: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4
-[2]: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.org
-[3]: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
-[4]: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
+   686	
+   687	static void ffa_notification_info_get64(void)
+   688	{
+   689		ffa_value_t ret;
+   690		u64 id_list, ids_count[MAX_IDS_64];
+   691		u32 idx, list;
+ > 692		u8 count_of_lists, ids_processed, total_ids = 0;
+   693	
+   694		do {
+   695			invoke_ffa_fn((ffa_value_t){
+   696				  .a0 = FFA_FN_NATIVE(NOTIFICATION_INFO_GET),
+   697				  }, &ret);
+   698	
+   699			if (ret.a0 != FFA_FN_NATIVE(SUCCESS)) {
+   700				if (ret.a2 == FFA_RET_NO_DATA)
+   701					pr_debug("No data available for Notification Info Get\n");
+   702	
+   703				pr_err("Notification Info Get Failed: 0x%lx(0x%lx)", ret.a0, ret.a2);
+   704				return;
+   705			}
+   706	
+   707			ids_processed = 0;
+   708			count_of_lists = FIELD_GET(NOTIFICATION_INFO_GET_ID_COUNT, ret.a2);
+   709			id_list = FIELD_GET(ID_LIST_MASK_64, ret.a2);
+   710	
+   711			for (idx= 0; idx < count_of_lists; idx++) {
+   712				ids_count[idx] = (id_list & 0x3) + 1;
+   713				total_ids += ids_count[idx];
+   714				id_list = id_list >> 2;
+   715			}
+   716	
+   717			/* Process IDs */
+   718			/* For each notification make our call back */
+   719			for (list = 0; list < count_of_lists; list++) {
+   720				u16 *packed_id_list = (u16 *)&ret.a3, vcpu_id, partition_id;
+   721	
+   722				if (ids_processed >= MAX_IDS_64 - 1)
+   723					break;
+   724	
+   725				partition_id = packed_id_list[++ids_processed];
+   726	
+   727				/* Global Notification, no vcpu IDs to process. */
+   728				if (!ids_count[list]) {
+   729					pr_debug("Calling global schedule receiver callback for 0x%x\n", partition_id);
+   730					__do_sched_recv_cb(partition_id, 0, false);
+   731				} else {
+   732					/* Per vCPU Notification, process X IDs based on length of list specified. */
+   733					/* Use IDs count (count from 0) as vcpu count. */
+   734					for (idx = 0; idx < ids_count[list]; idx++) {
+   735						if (ids_processed >= MAX_IDS_64 - 1)
+   736							break;
+   737						/* The next ID to unpack is a vcpu ID, retrieve and increment count. */
+   738						vcpu_id = packed_id_list[++ids_processed];
+   739						pr_debug("Calling schedule receiver callback for 0x%x for vcpu: %d\n",
+   740							partition_id, vcpu_id);
+   741						__do_sched_recv_cb(partition_id, vcpu_id, true);
+   742					}
+   743				}
+   744			}
+   745		} while(ret.a2 & NOTIFICATION_INFO_GET_MORE_PENDING);
+   746	}
+   747	
 
-Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
----
- arch/riscv/Kconfig | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 4c07b9189c86..b49cea30f6cc 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -570,11 +570,15 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
- config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
- 	def_bool y
- 	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
--	depends on AS_IS_GNU && AS_VERSION >= 23800
-+	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
-+	depends on CC_IS_GCC && GCC_VERSION >= 120100 || \
-+		   AS_IS_GNU && AS_VERSION >= 23800
- 	help
- 	  Newer binutils versions default to ISA spec version 20191213 which
- 	  moves some instructions from the I extension to the Zicsr and Zifencei
- 	  extensions.
-+	  Similarly, GCC release 12.1.0 has changed the default ISA spec version to
-+	  20191213, so the above situation requires this option to be enabled.
- 
- config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
- 	def_bool y
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
