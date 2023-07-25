@@ -1,95 +1,140 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB1A110F
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 05:52:03 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-314313f127fso4003770f8f.1
-        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 22:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690264322; x=1690869122;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/FtUwT9/spcMkR7VjrY/3W+93GEBxPQH5C64yCjsUNY=;
-        b=hZhK8yqyPCU6gQ47eSs3rvl/+mzA8qnllaGcH0qKGak8vQIK2xkNdZmYGn4F662v4D
-         DbkyxVQc76oGbjgTQUiiQJdA29vCjEWiQUVjxDGW6oxP6vbkf/CRQiNBgfjQ5hIOhbCu
-         wC5Q+ui5DEBjrkSWJqoWFUDAMyBK6hLZnhrMbrIO3Y+idyH+TusqM1yZEq8qOCth/bvE
-         0VbphYsweZ4co+3DpVFJE0YSHZC/0IcOG0p0Apo7EWLghuutJ9BB+SmnIVZp7gQUMZPE
-         FCoZUVRuVq36NxMECr2LXfusmjiOjPG0l5xVQTULJuDN/lmCvlsZh6E+x73Y1x522Emk
-         IhOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690264322; x=1690869122;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FtUwT9/spcMkR7VjrY/3W+93GEBxPQH5C64yCjsUNY=;
-        b=R9QnmpzoC/7FZ7iFk9R4uteB5+9N9j6NYUNOlLYaioeScDAUDA1Xs6He/MMfTX+Wgs
-         3uknjxMb+u0CKnWeqMd2g4LIQhNNNYzM/yXdPMX5DOvKfUJgvwybwBNvgxA/OeSBMtBY
-         nQQGbogUmlfSKLDPtDF18kULskgWRU32Ui4aBHFFRr4EjPAfp55VwSa5UZ7RvIdAmX11
-         kdh3CcrzK9ZPULxgrbp/jropkiZDVcvKH+CFP+xMTuHTTJnygZhaRjSRgS71mHTgfrV2
-         rjt6oeuXhVAhDrCLF/2sEV6xtN9gdU9fkdLOjtnvwEg7MPvxQtgsWbvP6rRslZMwrcuj
-         oZdA==
-X-Gm-Message-State: ABy/qLaZFN0kc+EyeJCi5h0kfCieG7oESAP7N6ACRB2urK47H1g6HPS3
-	rjXRGtYOOU+vWIYdJS1gYKEVuQ==
-X-Google-Smtp-Source: APBJJlElsz/2zyU+FYNXdSTi2LIazd6Gy3hVBg2ghcAgs41QegFsOHKPfiW0sQ3QKl5hURjAv9x3ow==
-X-Received: by 2002:a5d:5189:0:b0:317:636b:fcb1 with SMTP id k9-20020a5d5189000000b00317636bfcb1mr2648527wrv.27.1690264321883;
-        Mon, 24 Jul 2023 22:52:01 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x13-20020a5d60cd000000b0030ada01ca78sm15055816wrt.10.2023.07.24.22.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 22:52:01 -0700 (PDT)
-Date: Tue, 25 Jul 2023 07:33:37 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Su Hui <suhui@nfschina.com>, tytso@mit.edu, adilger.kernel@dilger.ca,
-	nathan@kernel.org, trix@redhat.com, linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] ext4: mballoc: avoid garbage value from err
-Message-ID: <54fff30b-4662-48c7-8b87-2e8f74d2086b@kadam.mountain>
-References: <20230724054538.163319-1-suhui@nfschina.com>
- <CAKwvOdk-fdJr9TcgUnOhCiU0LvD2Qe_c+6YOe-c1k0Ukm+negA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2646A3D7C
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 07:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690268452;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=68HK1SZ2RzWoQcgjGBrRJ4kIv5RVqSQltWAsK7yLeHw=;
+	b=MhHxrop/RtEK0uJG75UAnsCLQRWGnk/Rxd4trZe05+kFOS3aq58l7K7dw4YaPStFLUKPUi
+	/dbT8yZ6h7IZJTuhjqsOtWoixKJESjPNAC5uDd9rheYbsLmgtN2m6y8BZ7ZZfh/gUYU7qu
+	kHOcOkn0YmJR4Tp78A4RWcuMAQk53GY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-Kms7qcGVN9iFx7D7ZSVsFg-1; Tue, 25 Jul 2023 03:00:51 -0400
+X-MC-Unique: Kms7qcGVN9iFx7D7ZSVsFg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C18580269A
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 07:00:51 +0000 (UTC)
+Received: from [172.64.1.75] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C280C10E5E;
+	Tue, 25 Jul 2023 07:00:27 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 11 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 0b5547c5)
+Date: Tue, 25 Jul 2023 07:00:27 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdk-fdJr9TcgUnOhCiU0LvD2Qe_c+6YOe-c1k0Ukm+negA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <03173.123072503005100143@us-mta-199.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 24, 2023 at 10:19:02AM -0700, Nick Desaulniers wrote:
-> On Sun, Jul 23, 2023 at 10:46 PM Su Hui <suhui@nfschina.com> wrote:
-> >
-> > clang warning: fs/ext4/mballoc.c, line 4178, column 6
-> > Branch condition evaluates to a garbage value.
-> 
-> Specifically this is clang's static analysis; not the compiler itself.
-> 
-> >
-> > err is uninitialized and will be judged when it enters the
-> > loop first time and the condition "!ext4_sb_block_valid()"
-> > is true. Although this can't make problems now, it's better
-> > to correct it.
-> >
-> > Signed-off-by: Su Hui <suhui@nfschina.com>
-> 
-> Hi Su,
-> Thanks for the patch!  I see what the warning is getting at;
-> 
-> If `len <= 0` then `err` is never initialized, then is used at line
-> 4178 (that is UB).
-> 
-> Would you mind sending a v2 with the commit message updated to reflect
-> the above points?  I'd be happy to sign-off on that.
+Hi, we tested your kernel and here are the results:
 
-The commit message talks about !ext4_sb_block_valid() on the first
-iteration through the loop and not that len <= 0.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-But either way, brelse(NULL) is a no-op.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-regards,
-dan carpenter
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97090
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
