@@ -1,89 +1,109 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6613C23;
-	Tue, 25 Jul 2023 16:54:38 +0000 (UTC)
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso3311422b3a.3;
-        Tue, 25 Jul 2023 09:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690304078; x=1690908878;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8UuEkDJW730mNtROAXjbaQr214jAPvsqozqw3XotTgk=;
-        b=QC9cRbmKk12UP1Rm2hCntC5ZqLpEe+PJFe7ItKJb0mXd/yGSzmDLYbzM6o9dtNwmj2
-         7x/JTTKbylWsjekJxMEI7xz4F9sSZ5dwSOk5IYm/SMwSn3cDVg7QtbNo0jADygtWSdlC
-         pnKrMkgL5EMSuVcY/Xf52d9YnH/kCOI+Mf27z433oJ7ZfafIev1QRMXZPS9YIj6BIZnr
-         LBSpTZrKMa0yRIw9t3UJ66Pq1WXGX92LAi6+gxsLV5/JPGpekD5iZLu0W2jLMzDWItVm
-         dtMsrXpkOd2NJnqOCU1seazn3lczzKAGVTowUd7CIJ11k/rGC4FB/ZPb0HyC5gjZ93R9
-         +hkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690304078; x=1690908878;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8UuEkDJW730mNtROAXjbaQr214jAPvsqozqw3XotTgk=;
-        b=M4sJRJhKSym0sG59hBIWfZ7xLP//WrH6SbvIV7J4I8yYubuRb0+EYBxn77hHtPyjsL
-         +3sn7BHWn8WL33pQVaRBu5YOkO0k8lttqIwk53WkOHDctC39o4Ga44c5otM7VxNnDuf5
-         PHYgms+q98E7u3dZpqGE9/H/IR2bQCimeNoVi9/78etE4h7oR5KLm7b/aVCbcb41UAzC
-         bDqZWOGOj+8ZfM5Oy1txJLYnzHkah22ZAS/xkkCDi/HvIVf/EJixT9l6bT1NTMnVVAha
-         tMQR39PiZEP/KfAmJ6HyU5b1o9e2swfP9LEb5x6IPYBobyaWRjGrFJv2bpufhoDHe7ZZ
-         jnpQ==
-X-Gm-Message-State: ABy/qLYloyLvO0ZcZQPkbpYALfaqgkKvxvX3Ol6d1C3jNxzrAeV1q1cf
-	/vUiRtOs0TU/Lo6FtuXdDxM=
-X-Google-Smtp-Source: APBJJlEsM5uOpRgfOeSskRtjwNdhQd49G6XxsgoE/raWfRa8Cb8yblk5KkgTkru8+yrIvwGWQEhLLA==
-X-Received: by 2002:a05:6a20:258a:b0:135:62b8:2a35 with SMTP id k10-20020a056a20258a00b0013562b82a35mr11708687pzd.32.1690304077724;
-        Tue, 25 Jul 2023 09:54:37 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9d8f:da31:e274:eeb5])
-        by smtp.gmail.com with ESMTPSA id g8-20020aa78188000000b00682a908949bsm10100429pfi.92.2023.07.25.09.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 09:54:37 -0700 (PDT)
-Date: Tue, 25 Jul 2023 09:54:34 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, trix@redhat.com, frank.li@vivo.com,
-	linux-input@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] Input: mcs-touchkey - Fix uninitialized use of error in
- mcs_touchkey_probe()
-Message-ID: <ZL/+SuXswTMjXDUv@google.com>
-References: <20230725-mcs_touchkey-fix-wuninitialized-v1-1-615db39af51c@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F6E3C23
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 17:12:16 +0000 (UTC)
+Received: from xmz-huawei.. (unknown [114.249.159.178])
+	by APP-05 (Coremail) with SMTP id zQCowADnbuuXAMBkSR2gDg--.49620S2;
+	Wed, 26 Jul 2023 01:04:24 +0800 (CST)
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+To: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Bin Meng <bmeng@tinylab.org>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+Subject: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and binutils
+Date: Wed, 26 Jul 2023 01:04:05 +0800
+Message-Id: <20230725170405.251011-1-xingmingzheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230725-mcs_touchkey-fix-wuninitialized-v1-1-615db39af51c@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowADnbuuXAMBkSR2gDg--.49620S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr1DWw4UWFy3tr1UXryftFb_yoW5Xw1Dpa
+	9xAFn5Crs5X3yxC34rA34UWr1YvrZ5K3yagr17Gw15urs3Za4kKrWvvw4IqFyDAFZ7Kw4U
+	Zr1fuasYgwn8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+	DUUUUU=
+X-Originating-IP: [114.249.159.178]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiBwIDCmS-00lwhgAAs7
 
-On Tue, Jul 25, 2023 at 08:37:56AM -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y):
-> 
->   drivers/input/keyboard/mcs_touchkey.c:149:49: error: variable 'error' is uninitialized when used here [-Werror,-Wuninitialized]
->     149 |                 dev_err(&client->dev, "i2c read error[%d]\n", error);
->         |                                                               ^~~~~
->   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
->     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
->         |                                                                        ^~~~~~~~~~~
->   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
->     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->         |                                     ^~~~~~~~~~~
->   drivers/input/keyboard/mcs_touchkey.c:110:11: note: initialize the variable 'error' to silence this warning
->     110 |         int error;
->         |                  ^
->         |                   = 0
->   1 error generated.
-> 
-> A refactoring updated the error handling in this block but did not
-> update the dev_err() call to use fw_ver instead of error. Do so now to
-> fix the warning and avoid printing uninitialized memory.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1893
-> Fixes: e175eae16c1b ("Input: mcs-touchkey - convert to use devm_* api")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+When compiling the kernel with the toolchain composed of GCC >= 12.1.0 and
+binutils < 2.38, default ISA spec used when building binutils and GCC, the
+following build failure will appear because the
+CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI is not turned on.
+(i.e, gcc-12.1.0 and binutils-2.36, or gcc-12.3.0 and binutils-2.37, use
+default ISA spec.)
 
-Applied, thank you.
+  CC      arch/riscv/kernel/vdso/vgettimeofday.o
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
 
+Binutils has updated the default ISA spec version, and the community has
+responded well to this[1][2][3], but it appears that this is not over yet.
+
+We also need to consider the situation of binutils < 2.38 but
+GCC >= 12.1.0, since the combination between different versions of GCC and
+binutils is not unique, which is to some extent flexible. GCC release
+12.1.0 updated the default ISA spec version in GCC commit[4].
+
+For more information, please refer to:
+
+commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
+commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang and binutils")
+
+[1]: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4
+[2]: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.org
+[3]: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
+[4]: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
+
+Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+---
+ arch/riscv/Kconfig | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 4c07b9189c86..b49cea30f6cc 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -570,11 +570,15 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+ config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+ 	def_bool y
+ 	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+-	depends on AS_IS_GNU && AS_VERSION >= 23800
++	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
++	depends on CC_IS_GCC && GCC_VERSION >= 120100 || \
++		   AS_IS_GNU && AS_VERSION >= 23800
+ 	help
+ 	  Newer binutils versions default to ISA spec version 20191213 which
+ 	  moves some instructions from the I extension to the Zicsr and Zifencei
+ 	  extensions.
++	  Similarly, GCC release 12.1.0 has changed the default ISA spec version to
++	  20191213, so the above situation requires this option to be enabled.
+ 
+ config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+ 	def_bool y
 -- 
-Dmitry
+2.34.1
+
