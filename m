@@ -1,63 +1,101 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 67ADC110B
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 04:34:16 +0000 (UTC)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id DCCA66032EB7E;
-	Tue, 25 Jul 2023 12:34:04 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: tytso@mit.edu,
-	adilger.kernel@dilger.ca,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com
-Cc: linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org,
-	Su Hui <suhui@nfschina.com>
-Subject: [PATCH v2] ext4: mballoc: avoid garbage value from err
-Date: Tue, 25 Jul 2023 12:33:11 +0800
-Message-Id: <20230725043310.1227621-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F92110F
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 05:51:54 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso51329305e9.0
+        for <llvm@lists.linux.dev>; Mon, 24 Jul 2023 22:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690264313; x=1690869113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDa0fqzt30Ptcdn+Rp2moDt3uwTqaLbOBTSNBvQHsow=;
+        b=Fm732xFUENH32uKlXGBO66pTUcan0hi8UvbXIOsmsajrmKgF65+VKuAsgwl0h2rEvm
+         8bVGJCXxJ7Lo3CDTY397Y4mxix0VJtW/pkEXHkkLKO800NxhaPqfFFKex6vpdJLCOa4w
+         CmI8aGs1OSFpz1ZKdyfS0I94dx6bSwxKd8BBKpUZIt+arN+GsWHCduZZv9YOaAYpEwDJ
+         Kpqga4FAeLkxMrOnhuZRX4J7HcS3KeKVchXAMmblYLn9CvHnXCAxAdBbWFocNGUcqeMO
+         Tu3SmXJtzR2hdcpIZzcJs/EIeI/+pl0EtvFzM5PA5rL69dp57n8daVKEcMuVDnfOpImi
+         zo/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690264313; x=1690869113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LDa0fqzt30Ptcdn+Rp2moDt3uwTqaLbOBTSNBvQHsow=;
+        b=IfTdifpkQ1LBJKBglac8dvAUid5K5/LfyBSoVkjS+1rrHbcaWcw67Xo0ln2xVnEtAZ
+         yKZ1oHVqKdlcPu9fq06WShHOkZ6OuHCNStIxGaZzINc5H2jNs70QqToRGufWKO++aNCC
+         ENfZSCPypUKbBm3gswZrPj+M5VCcpSn1JHqbWooiL4Hk4zmOQtxdCkX2zIgZVOd+fxLd
+         r02teMQLNaY5V+FWRZPdFzrHFx9NE3T81b8WoJTZnmb1mQmzKWQdg39fmkM9wpzLEr5F
+         87x5nk2fm8BoUd67nDHd2Yv/1+ScU/bZps1L7Lsdwlxht7pqQUCjk2TOKBwTXToIHPOV
+         trEw==
+X-Gm-Message-State: ABy/qLZftoyFOLRjAXQqMXB8nFUb0KrIaLF8EAftv+aWtJnRT+n3JbJg
+	TZyOBe0xP/h3VftoB5Vv2nDalg==
+X-Google-Smtp-Source: APBJJlFxsS3y+cMdX48jiFbTMmksWQoLUG07CWaL93WGXpO5sZmPQJoOQhas8KWkVrn1RtL/72a08g==
+X-Received: by 2002:a05:600c:152:b0:3fb:e200:b2b3 with SMTP id w18-20020a05600c015200b003fbe200b2b3mr9548144wmm.37.1690264313064;
+        Mon, 24 Jul 2023 22:51:53 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id w9-20020adfd4c9000000b0031423a8f4f7sm15243623wrk.56.2023.07.24.22.51.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jul 2023 22:51:52 -0700 (PDT)
+Date: Tue, 25 Jul 2023 08:51:50 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>, jani.nikula@linux.intel.com,
+	joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+	tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
+	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+	andrzej.hajda@intel.com, intel-gfx@lists.freedesktop.org,
+	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	mripard@kernel.org
+Subject: Re: [Intel-gfx] [PATCH v2] drm/i915/tv: avoid possible division by
+ zero
+Message-ID: <5d096bcf-c394-4dad-b307-3d7e33ab6e6f@kadam.mountain>
+References: <ZL62X3/CnsJcWWU4@ashyti-mobl2.lan>
+ <352f7c10-3592-4a18-abdc-ab554a992d10@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <352f7c10-3592-4a18-abdc-ab554a992d10@nfschina.com>
 
-clang's static analysis warning: fs/ext4/mballoc.c
-line 4178, column 6, Branch condition evaluates to a garbage value.
+The reason why the first five attempts had bugs is because we are
+trying to write it in the most complicated way possible, shifting by
+logical not what?
 
-err is uninitialized and will be judged when 'len <= 0' or
-it first enters the loop while the condition "!ext4_sb_block_valid()"
-is true. Although this can't make problems now, it's better to
-correct it.
+regards,
+dan carpenter
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
-v2:
- - modify commit message
-
- fs/ext4/mballoc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 21b903fe546e..769000c970b0 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -4084,7 +4084,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	ext4_group_t group;
- 	ext4_grpblk_t blkoff;
--	int i, err;
-+	int i, err = 0;
- 	int already;
- 	unsigned int clen, clen_changed, thisgrp_len;
+diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
+index 36b479b46b60..6997b6cb1df2 100644
+--- a/drivers/gpu/drm/i915/display/intel_tv.c
++++ b/drivers/gpu/drm/i915/display/intel_tv.c
+@@ -988,7 +988,13 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
+ 		      const struct tv_mode *tv_mode,
+ 		      int clock)
+ {
+-	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
++	int div = tv_mode->oversample;
++
++	if (!tv_mode->progressive)
++		div >>= 1;
++	if (div == 0)
++		div = 1;
++	mode->clock = clock / div;
  
--- 
-2.30.2
+ 	/*
+ 	 * tv_mode horizontal timings:
+@@ -1135,6 +1141,8 @@ intel_tv_get_config(struct intel_encoder *encoder,
+ 		break;
+ 	default:
+ 		tv_mode.oversample = 1;
++		WARN_ON_ONCE(!tv_mode.progressive);
++		tv_mode.progressive = true;
+ 		break;
+ 	}
+ 
 
