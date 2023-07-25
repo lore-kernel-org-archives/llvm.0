@@ -1,102 +1,94 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A772516D;
-	Tue, 25 Jul 2023 19:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690315098; x=1721851098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2P3XGUMV1NtRncQpKb7KyFd8Aka7g+NPhuuBjng82a0=;
-  b=RmfEVRjN6x7SFyFniA/npBOb8WzkfHpDhQmx1QnAwo3aYLO50xmkKQ0C
-   TK4DuEgQ4PgbbjBcPKzdDlsbfctk8p+s5uAGd+EsmT1DeyqYwo/8lldvg
-   8WaKu6PKWme7a1WaQDUwwaSQSnrVeJGzYOXukF7tKPjZT727sKE5bKKlD
-   tK4eq0RunzR2s8rEwg0iD1DRrrDfjumIKW/XddpKqqmsF/cuGEf2Pgx9z
-   00puwp1iCEYS04rnDEt005hwdh0yHQEq481W9oJvfN+8ze1KcJAKpSzf6
-   2U077R0yCH+qWuFNv9HL7DmgdvLVI1yTpwPap2vfyPaxk9PQpNlATSmXJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="348105886"
-X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="348105886"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 12:58:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="726211034"
-X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="726211034"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 25 Jul 2023 12:58:15 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOOAg-0000Ip-2F;
-	Tue, 25 Jul 2023 19:58:14 +0000
-Date: Wed, 26 Jul 2023 03:57:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: arch/x86/kernel/paravirt.c:337:4: warning: cast from 'void
- (*)(struct mmu_gather *, struct page *)' to 'void (*)(struct mmu_gather *,
- void *)' converts to incompatible function type
-Message-ID: <202307260332.pJntWR6o-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223C225931;
+	Tue, 25 Jul 2023 20:04:40 +0000 (UTC)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by bee.tesarici.cz (Postfix) with ESMTPSA id 987A7170D81;
+	Tue, 25 Jul 2023 22:04:31 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+	t=1690315471; bh=v6vWD2JWeY3h5eKwB7YTy6cdcr65Rp6VaKVLa8L8fZI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dL1Hx7qxHsXNIE2e6RX3MKuHhRQrhoIa3VT9kXLYwDhCdP2cGAmLymK7i8dQqgFrA
+	 6p5GIKy1TRvaTtjRRzyMPrIJC8q3/3G3eU2mkRcUGUM4yHLPoPR+Zrii83mZvgX9Gk
+	 Tcp9/dGDqOhD248XE6iSwINqfHA1zSNW91OnNrqfXqquvz7f/KlRe0ig6K19oxN4hS
+	 ZpQ5QBqveIcBWX2+Urhu7Bl2UyHTbNMNOeO6YK8VO2PhxT325/gebmdIeUdamTnpoe
+	 jDJ1QLWVPDWqw5pT4a/8GY5eg7/FCeFDF8IxfBwBnJ8TjTB1TgQt8y0JiW6ySspSWg
+	 8bQrwATt/+lxQ==
+Date: Tue, 25 Jul 2023 22:04:30 +0200
+From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To: kernel test robot <lkp@intel.com>
+Cc: Petr Tesarik <petrtesarik@huaweicloud.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Conor Dooley <conor.dooley@microchip.com>, Li
+ Huafei <lihuafei1@huawei.com>, Liao Chang <liaochang1@huawei.com>, Masahiro
+ Yamada <masahiroy@kernel.org>, Alyssa Ross <hi@alyssa.is>, Nick Desaulniers
+ <ndesaulniers@google.com>, Ricardo Ribalda <ribalda@chromium.org>, Kees
+ Cook <keescook@chromium.org>, Heiko Stuebner <heiko@sntech.de>, Li Zhengyu
+ <lizhengyu3@huawei.com>, "open list:RISC-V ARCHITECTURE"
+ <linux-riscv@lists.infradead.org>, open list
+ <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Roberto Sassu
+ <roberto.sassu@huaweicloud.com>
+Subject: Re: [PATCH v1 3/3] riscv/purgatory: do not link with string.o
+Message-ID: <20230725220430.22de806b@meshulam.tesarici.cz>
+In-Reply-To: <202307260325.E3Uh9dYf-lkp@intel.com>
+References: <a083f38c7c3acd6ac9542228e36947be30b58188.1690274483.git.petr.tesarik.ext@huawei.com>
+	<202307260325.E3Uh9dYf-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   af2e19389c2c1d8a299e04c5105b180ef0c5b5b5
-commit: 552a23a0e5d0a84cecd4687043d8030673981d30 Makefile: Enable -Wcast-function-type
-date:   1 year, 8 months ago
-config: x86_64-randconfig-r003-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260332.pJntWR6o-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260332.pJntWR6o-lkp@intel.com/reproduce)
+On Wed, 26 Jul 2023 03:36:39 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307260332.pJntWR6o-lkp@intel.com/
+> Hi Petr,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on kees/for-next/pstore]
+> [also build test ERROR on kees/for-next/kspp linus/master v6.5-rc3 next-20230725]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Tesarik/riscv-kexec-handle-R_RISCV_CALL_PLT-relocation-type/20230725-165116
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+> patch link:    https://lore.kernel.org/r/a083f38c7c3acd6ac9542228e36947be30b58188.1690274483.git.petr.tesarik.ext%40huawei.com
+> patch subject: [PATCH v1 3/3] riscv/purgatory: do not link with string.o
+> config: riscv-randconfig-r001-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260325.E3Uh9dYf-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260325.E3Uh9dYf-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202307260325.E3Uh9dYf-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: memcmp  
+>    >>> referenced by ctype.c
+>    >>>               arch/riscv/purgatory/purgatory.ro:(purgatory)  
 
-All warnings (new ones prefixed by >>):
+Ah, I see... In my build, it was inlined by gcc (GCC-13), but I cannot
+rely on that. Too bad...
 
-   arch/x86/kernel/paravirt.c:107:13: warning: no previous prototype for function 'native_pv_lock_init' [-Wmissing-prototypes]
-   void __init native_pv_lock_init(void)
-               ^
-   arch/x86/kernel/paravirt.c:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init native_pv_lock_init(void)
-   ^
-   static 
->> arch/x86/kernel/paravirt.c:337:4: warning: cast from 'void (*)(struct mmu_gather *, struct page *)' to 'void (*)(struct mmu_gather *, void *)' converts to incompatible function type [-Wcast-function-type-strict]
-                           (void (*)(struct mmu_gather *, void *))tlb_remove_page,
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+OTOH I don't think it's worth implementing full support for GOT,
+especially for functions that are not needed. I would rather either
+write a RISC-V implementation of memcmp(), or split memcmp() from
+lib/string.c.
 
+Stay tuned for v2.
 
-vim +337 arch/x86/kernel/paravirt.c
-
-5c83511bdb9832 Juergen Gross   2018-08-28  330  
-5c83511bdb9832 Juergen Gross   2018-08-28  331  	/* Mmu ops. */
-2faf153bb7346b Thomas Gleixner 2020-04-21  332  	.mmu.flush_tlb_user	= native_flush_tlb_local,
-5c83511bdb9832 Juergen Gross   2018-08-28  333  	.mmu.flush_tlb_kernel	= native_flush_tlb_global,
-5c83511bdb9832 Juergen Gross   2018-08-28  334  	.mmu.flush_tlb_one_user	= native_flush_tlb_one_user,
-4ce94eabac16b1 Nadav Amit      2021-02-20  335  	.mmu.flush_tlb_multi	= native_flush_tlb_multi,
-5c83511bdb9832 Juergen Gross   2018-08-28  336  	.mmu.tlb_remove_table	=
-5c83511bdb9832 Juergen Gross   2018-08-28 @337  			(void (*)(struct mmu_gather *, void *))tlb_remove_page,
-5c83511bdb9832 Juergen Gross   2018-08-28  338  
-fdc0269e8958a1 Juergen Gross   2018-08-28  339  	.mmu.exit_mmap		= paravirt_nop,
-064ce6c550a063 Brijesh Singh   2021-08-24  340  	.mmu.notify_page_enc_status_changed	= paravirt_nop,
-fdc0269e8958a1 Juergen Gross   2018-08-28  341  
-
-:::::: The code at line 337 was first introduced by commit
-:::::: 5c83511bdb9832c86be20fb86b783356e2f58062 x86/paravirt: Use a single ops structure
-
-:::::: TO: Juergen Gross <jgross@suse.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Petr T
