@@ -1,11 +1,11 @@
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id DCA4A46A8
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 04:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 8935B6FCC
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 04:21:49 +0000 (UTC)
 Received: from [172.30.11.106] (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 2F9D46031EAE1;
-	Tue, 25 Jul 2023 12:06:51 +0800 (CST)
-Message-ID: <352f7c10-3592-4a18-abdc-ab554a992d10@nfschina.com>
-Date: Tue, 25 Jul 2023 12:06:50 +0800
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id AAE436032EB66;
+	Tue, 25 Jul 2023 12:21:39 +0800 (CST)
+Message-ID: <d6ffea4c-52e5-b13d-ae28-a3751995364c@nfschina.com>
+Date: Tue, 25 Jul 2023 12:21:39 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -14,77 +14,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915/tv: avoid possible division by
- zero
+Subject: Re: [PATCH] ext4: mballoc: avoid garbage value from err
 Content-Language: en-US
-To: Andi Shyti <andi.shyti@linux.intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
- rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com, airlied@gmail.com,
- daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
- trix@redhat.com, andrzej.hajda@intel.com, intel-gfx@lists.freedesktop.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- mripard@kernel.org
+To: Theodore Ts'o <tytso@mit.edu>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: adilger.kernel@dilger.ca, nathan@kernel.org, trix@redhat.com,
+ linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: Su Hui <suhui@nfschina.com>
-In-Reply-To: <ZL62X3/CnsJcWWU4@ashyti-mobl2.lan>
+In-Reply-To: <20230724205721.GA2504240@mit.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 2023/7/25 01:35, Andi Shyti wrote:
-> On Tue, Jul 18, 2023 at 09:32:17AM +0800, Su Hui wrote:
->> Clang warning: drivers/gpu/drm/i915/display/intel_tv.c:
->> line 991, column 22 Division by zero.
->> Assuming tv_mode->oversample=1 and (!tv_mode->progressive)=1,
->> then division by zero will happen.
+
+On 2023/7/25 04:57, Theodore Ts'o wrote:
+> On Mon, Jul 24, 2023 at 10:19:02AM -0700, Nick Desaulniers wrote:
+>>> err is uninitialized and will be judged when it enters the
+>>> loop first time and the condition "!ext4_sb_block_valid()"
+>>> is true. Although this can't make problems now, it's better
+>>> to correct it.
+>>>
+>>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> Hi Su,
+>> Thanks for the patch!  I see what the warning is getting at;
 >>
->> Fixes: 1bba5543e4fe ("drm/i915: Fix TV encoder clock computation")
->> Signed-off-by: Su Hui <suhui@nfschina.com>
->> ---
->>   drivers/gpu/drm/i915/display/intel_tv.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> If `len <= 0` then `err` is never initialized, then is used at line
+>> 4178 (that is UB).
 >>
->> diff --git a/drivers/gpu/drm/i915/display/intel_tv.c b/drivers/gpu/drm/i915/display/intel_tv.c
->> index 36b479b46b60..f59553f7c132 100644
->> --- a/drivers/gpu/drm/i915/display/intel_tv.c
->> +++ b/drivers/gpu/drm/i915/display/intel_tv.c
->> @@ -988,7 +988,7 @@ intel_tv_mode_to_mode(struct drm_display_mode *mode,
->>   		      const struct tv_mode *tv_mode,
->>   		      int clock)
->>   {
->> -	mode->clock = clock / (tv_mode->oversample >> !tv_mode->progressive);
->> +	mode->clock = clock / tv_mode->oversample << !tv_mode->progressive;
-> but this does not provide the same value. Try with:
->
-> 	8 / (2 >> 1)
->
-> and
->
-> 	8 / 2 << 1
->
-> They are definitely different.
->
-> The real check could be:
->
-> 	if (!(tv_mode->oversample >> 1))
-> 		return ...
->
-> But first I would check if that's actually possible.
-
-Oh, I have a v3 patch, like this:
-
--       mode->clock = clock / (tv_mode->oversample >> 
-!tv_mode->progressive);
-+       mode->clock = clock;
-+       if (tv_mode->oversample >> !tv_mode->progressive)
-+               mode->clock /= tv_mode->oversample >> 1;
-
-But I'm not sure does it need to print some error messages or do some 
-things  when
-"tv_mode->oversample << !tv_mode->progressive" is zero?
-If all right , I will send this v3 patch.
+>> Would you mind sending a v2 with the commit message updated to reflect
+>> the above points?  I'd be happy to sign-off on that.
+> Fortunately, as near as I can tell, ext4_mb_mark_bb() should never be
+> called with len <= 0.  It might be possible to trick ext4 via a
+> corrupted file system --- I'd have to take a closer look at that, but
+> fortunately, in the case where len <= 0, bitmap_bh will be NULL, so
+> regardless of whether err is 0, or some garbage non-zero value,
+> brelse(NULL) is a no-op.
+> So while it's good to avoid the clang warning, but the fact that it
+> might be possible for err to be a "garbage value" shouldn't be causing
+> any problem.
+Maybe it can make the code more robust and clearer. I will send v2 patch 
+soon.
+Thanks for your reply!
 
 Su Hui
 
-> Andi
+>
+> Cheers,
+>
+> 						- Ted
