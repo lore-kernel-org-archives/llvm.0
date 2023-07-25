@@ -1,143 +1,191 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8BE26B6D;
-	Tue, 25 Jul 2023 22:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690322494; x=1721858494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7dcdBb1/l78pg8+v1QmtAHi7qI73pAZdEwi0vo4frl0=;
-  b=i5udl0hLr6hEp0Gg0jZvTNHklyRZegRyZePCIQZlQzXSMsr1IsCx2qNd
-   AJ7S0ZSvsGy7Ugfg0X1rIyTgweBGPzgmgNrba1YJkRvX29R3gbsLA7KaO
-   S9EFsTRdOap93aX4Rb/aTtijzCAxmc80Vlv3/Hq9Hs0yaVl7tQIgewz4Q
-   6aR2xorKpEFx5ghtnVtpRdW+wIDqU9ggdBxxm4EQ+uufRRW4xAo9FTq8r
-   etokJtuKoBMiWva9n0B82H3rfAcKsHY+L1ZNqz+OkY9lJyG+Gb4/Wb4pm
-   tkYgKdIGkj4dof2zdZjoPUKO9f3BV5sJoMQwXdXTV4oE3WwkP5LqsSyw3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="366734266"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="366734266"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 15:01:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="761370839"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="761370839"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jul 2023 15:01:28 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOQ5v-0000Nf-0M;
-	Tue, 25 Jul 2023 22:01:27 +0000
-Date: Wed, 26 Jul 2023 06:00:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tao Zhang <quic_taozha@quicinc.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Konrad Dybcio <konradybcio@gmail.com>,
-	Mike Leach <mike.leach@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tao Zhang <quic_taozha@quicinc.com>,
-	Jinlong Mao <quic_jinlmao@quicinc.com>,
-	Leo Yan <leo.yan@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Tingwei Zhang <quic_tingweiz@quicinc.com>,
-	Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Hao Zhang <quic_hazha@quicinc.com>, linux-arm-msm@vger.kernel.org,
-	andersson@kernel.org
-Subject: Re: [PATCH v7 09/13] coresight-tpdm: Add nodes for dsb edge control
-Message-ID: <202307260533.MTqa5ObG-lkp@intel.com>
-References: <1690269353-10829-10-git-send-email-quic_taozha@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB89626B6D
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 22:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 518FBC433CC;
+	Tue, 25 Jul 2023 22:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690323451;
+	bh=9duJYsP4IefPgz7np3nvBZh3XlabkCsEBI1FzTJIOqA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a6rCLQWHSI8YJO2nCtunWOXccQckpKC92s95fp1QXPLzlQA634hst0MGGUUa7VDA0
+	 pKgzF80ym3NMjqj2i7Hibmooh6hD1v/ZnS7WIpcdf1RMzRQhJUfs7sz/xdvcF3cSXI
+	 fl1PhOrxRfEcZDun54fqHLmjP3VwKsAMW2+ghei/Ziezs4eYf+tsMmIm86V4jyRH+E
+	 wXx+6TXj111N23PbWJZc38APh/K3g1APBo03/Nu8mK0rOsUGLpZdmspTPbhiTG4I4X
+	 KNlzdCZWC/HGWpbJ/e7P4MXVS0iEM474TWIvYMdaVToeZYs6JrWC35K7yMtnwiXzn6
+	 HnC6qw6sR+d1g==
+Date: Tue, 25 Jul 2023 23:17:26 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Mingzheng Xing <xingmingzheng@iscas.ac.cn>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Bin Meng <bmeng@tinylab.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Message-ID: <20230725-name-aggregate-5de303072c9d@spud>
+References: <20230725170405.251011-1-xingmingzheng@iscas.ac.cn>
+ <20230725172344.GA1445373@dev-arch.thelio-3990X>
+ <20230725-skating-agent-b092f2257ca1@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="wbqao3EI+HlRxhpT"
+Content-Disposition: inline
+In-Reply-To: <20230725-skating-agent-b092f2257ca1@spud>
+
+
+--wbqao3EI+HlRxhpT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1690269353-10829-10-git-send-email-quic_taozha@quicinc.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tao,
+On Tue, Jul 25, 2023 at 07:57:54PM +0100, Conor Dooley wrote:
+> On Tue, Jul 25, 2023 at 10:23:44AM -0700, Nathan Chancellor wrote:
+> > On Wed, Jul 26, 2023 at 01:04:05AM +0800, Mingzheng Xing wrote:
+> > > When compiling the kernel with the toolchain composed of GCC >=3D 12.=
+1.0 and
+> > > binutils < 2.38, default ISA spec used when building binutils and GCC=
+, the
+> > > following build failure will appear because the
+> > > CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI is not turned on.
+> > > (i.e, gcc-12.1.0 and binutils-2.36, or gcc-12.3.0 and binutils-2.37, =
+use
+> > > default ISA spec.)
+> > >=20
+> > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler =
+messages:
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> >=20
+> > The gift that keeps on giving :/
+> >=20
+> > > Binutils has updated the default ISA spec version, and the community =
+has
+> > > responded well to this[1][2][3], but it appears that this is not over=
+ yet.
 
-kernel test robot noticed the following build warnings:
+Also, I just noticed this comment. I disagree with the wording "well",
+and more like "with weeping and gnashing of teeth" ;) This stuff is a
+huge pain in the ass, and mixing toolchains between LLVM & GNU stuff (or
+using an older binutils with a newer GCC) really makes it a lot worse.
+Thanks for submitting a fix for this so that Nathan or I didn't have to!
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.5-rc3 next-20230725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > >=20
+> > > We also need to consider the situation of binutils < 2.38 but
+> > > GCC >=3D 12.1.0, since the combination between different versions of =
+GCC and
+> > > binutils is not unique, which is to some extent flexible. GCC release
+> > > 12.1.0 updated the default ISA spec version in GCC commit[4].
+> >=20
+> > I suspect this combination is not too common because binutils 2.38 came
+> > out before GCC 12.1.0 but as you note, it is obviously possible. What
+> > toolchain has this combination in the wild, which would be helpful for
+> > documentation purposes?
+>=20
+> Yeah, that'd be great to know, at least the other niche stuff that we
+> are working around had a clear use-case (testing LLVM in debian container=
+s)
+> whereas there's no clear user for this.
+> That's doubly interesting, as this patch seems to break things for binuti=
+ls
+> < 2.35, and if we have to make a trade-off between those too, then it'd
+> be good to be able to weigh up the options.
+> Do we perhaps need the misa-spec workaround instead for this case?
+> Haven't tested that though, trying to dig myself out of email backlog.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tao-Zhang/coresight-tpdm-Remove-the-unnecessary-lock/20230725-152235
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/1690269353-10829-10-git-send-email-quic_taozha%40quicinc.com
-patch subject: [PATCH v7 09/13] coresight-tpdm: Add nodes for dsb edge control
-config: arm-randconfig-r013-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260533.MTqa5ObG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260533.MTqa5ObG-lkp@intel.com/reproduce)
+I don't think the misa-spec stuff is what we need actually. Instead, the
+workaround/fix that this patch implements just needs to be constrained to
+versions of GAS greater than 2.35.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307260533.MTqa5ObG-lkp@intel.com/
+Thanks,
+Conor.
 
-All warnings (new ones prefixed by >>):
+>=20
+> > > For more information, please refer to:
+> > >=20
+> > > commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
+> > > commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between cla=
+ng and binutils")
+> > >=20
+> > > [1]: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHC=
+Yf4
+> > > [2]: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kerne=
+l.org
+> > > [3]: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.=
+org
+> > > [4]: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a62=
+579d4a7a4a76bab51b5b52fec2cd
+>=20
+> btw, please make these regular Link: tags (with a [N] at EOL) and drop
+> the space between them and the sign off. Also, this probably needs to be
+> CC: stable@vger.kernel.org too.
 
-   drivers/hwtracing/coresight/coresight-tpdm.c:383:21: warning: variable 'mask' set but not used [-Wunused-but-set-variable]
-     383 |         unsigned long val, mask, edge_ctrl;
-         |                            ^
->> drivers/hwtracing/coresight/coresight-tpdm.c:451:3: warning: misleading indentation; statement is not part of the previous 'else' [-Wmisleading-indentation]
-     451 |                 drvdata->dsb->edge_ctrl_mask[reg] = set;
-         |                 ^
-   drivers/hwtracing/coresight/coresight-tpdm.c:449:2: note: previous statement is here
-     449 |         else
-         |         ^
-   2 warnings generated.
+> > >=20
+> > > Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+> > > ---
+> > >  arch/riscv/Kconfig | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index 4c07b9189c86..b49cea30f6cc 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -570,11 +570,15 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+> > >  config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+> > >  	def_bool y
+> > >  	# https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Da=
+ed44286efa8ae8717a77d94b51ac3614e2ca6dc
+> > > -	depends on AS_IS_GNU && AS_VERSION >=3D 23800
+> > > +	# https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a625=
+79d4a7a4a76bab51b5b52fec2cd
+> > > +	depends on CC_IS_GCC && GCC_VERSION >=3D 120100 || \
+> > > +		   AS_IS_GNU && AS_VERSION >=3D 23800
+> >=20
+> > GCC_VERSION will be 0 for clang, so you don't need the CC_IS_GCC check.
+> > With that change, this should be able to stay on one line:
+> >=20
+> >     depends on GCC_VERSION >=3D 120100 || (AS_IS_GNU && AS_VERSION >=3D=
+ 23800)
+> >=20
+> > >  	help
+> > >  	  Newer binutils versions default to ISA spec version 20191213 which
+> > >  	  moves some instructions from the I extension to the Zicsr and Zif=
+encei
+> > >  	  extensions.
+> > > +	  Similarly, GCC release 12.1.0 has changed the default ISA spec ve=
+rsion to
+> > > +	  20191213, so the above situation requires this option to be enabl=
+ed.
+> > > =20
+> > >  config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+> > >  	def_bool y
+> > > --=20
+> > > 2.34.1
+> > >=20
+>=20
 
 
-vim +/else +451 drivers/hwtracing/coresight/coresight-tpdm.c
 
-   426	
-   427	static ssize_t dsb_edge_ctrl_mask_store(struct device *dev,
-   428						     struct device_attribute *attr,
-   429						     const char *buf,
-   430						     size_t size)
-   431	{
-   432		struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-   433		unsigned long val;
-   434		u32 set;
-   435		int reg;
-   436	
-   437		if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
-   438			return -EINVAL;
-   439	
-   440		spin_lock(&drvdata->spinlock);
-   441		/*
-   442		 * There is 1 bit per DSB Edge Control Mark line.
-   443		 * Thus we have 32 lines in a 32bit word.
-   444		 */
-   445		reg = EDCMR_TO_WORD_IDX(drvdata->dsb->edge_ctrl_idx);
-   446		set = drvdata->dsb->edge_ctrl_mask[reg];
-   447		if (val)
-   448			set |= BIT(EDCMR_TO_WORD_SHIFT(drvdata->dsb->edge_ctrl_idx));
-   449		else
-   450			set &= ~BIT(EDCMR_TO_WORD_SHIFT(drvdata->dsb->edge_ctrl_idx));
- > 451			drvdata->dsb->edge_ctrl_mask[reg] = set;
-   452		spin_unlock(&drvdata->spinlock);
-   453	
-   454		return size;
-   455	}
-   456	static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
-   457	
+--wbqao3EI+HlRxhpT
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMBJ9gAKCRB4tDGHoIJi
+0qeNAP4mSuiAlr4Pcp2s+H+szGA0GA9tA9eZ/dRHP4a++kKhUgEA8Qao1BY7Wrz7
+eFheXgfMBbWuisdUrk9Fs9paJOWyPgI=
+=4CKF
+-----END PGP SIGNATURE-----
+
+--wbqao3EI+HlRxhpT--
