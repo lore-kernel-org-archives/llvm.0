@@ -1,132 +1,100 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EC8377
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 02:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690252824;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7axOcOa+FNFfVya9UUvo2PzY0XMDEwTBDerxK00DED4=;
-	b=Iz6NqbA32pc3a3n3VY9RbXxCELsTz9HpMYgs7AuxkkTvsj1LWdgaqKTXdUpp4ZZjJs8rvX
-	/hprQNtqNPA95QU5TCy43CMJndgnA5aJ/HAGV7J4z+6v+L06unsOI62By/aGKY4mejExnD
-	gFrDuBLer46xesH80LmCz1KHiqQrKV0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-194-TJejmHWrMjeUfbJ63GnjpQ-1; Mon, 24 Jul 2023 22:40:22 -0400
-X-MC-Unique: TJejmHWrMjeUfbJ63GnjpQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB65D803470
-	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 02:40:22 +0000 (UTC)
-Received: from [172.64.1.75] (unknown [10.30.32.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 934BA1121315;
-	Tue, 25 Jul 2023 02:40:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 17 of 328): Test report for master
- (6.5.0-rc3, mainline.kernel.org-clang, 20ea1e7d)
-Date: Tue, 25 Jul 2023 02:40:22 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93961EA1;
+	Tue, 25 Jul 2023 02:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690252922; x=1721788922;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5cQaZ4sUJFJaVpTbKvhhPLrYE4v8ekS1HElqu21+t54=;
+  b=f6Eg9pX9rteGlT779/7gTyz69VSLT1mpHxpDxfXxsI0IfjVsnTFAJjoG
+   BFvZXb0MEEaKYQcXk9NVIczRJ122OXszk13quX5LvTAJThD1X2M/rCURR
+   SxsP7i+0+k6pHjiJWEuBWjJCw/TeEC4lPxFIJz0DjkGlKM1zQmb5X8PgQ
+   S7bUM9hgxWdBE9nxybWxtWvD3WnkeKbwDOqEcPoaYeAXg4E3mzQbkD76W
+   WldEJQjnEq2//h2iPbYXGdDbG96ZOyd6+dE7O2Vox0r3nKtogGwOT73Db
+   jwe/zLTkIQWwrlCvFjw9avwiN3/sxV+u9J5SgrJ01HYS9OzekFqt1f3x8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="352499573"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="352499573"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 19:41:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="761045193"
+X-IronPort-AV: E=Sophos;i="6.01,229,1684825200"; 
+   d="scan'208";a="761045193"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 24 Jul 2023 19:41:56 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qO7zn-000AEa-28;
+	Tue, 25 Jul 2023 02:41:55 +0000
+Date: Tue, 25 Jul 2023 10:41:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ulfh-pm:genpd_create_dir 9/18]
+ drivers/genpd/renesas/rmobile-sysc.c:193:22: warning: cast to smaller
+ integer type 'enum pd_types' from 'const void *'
+Message-ID: <202307251015.dZ7jmRPA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <25655.123072422402200115@us-mta-194.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git genpd_create_dir
+head:   b43f11e5b453a9c48159d7121c88d79d81901276
+commit: 86341a84495cb4201948053fecb71f6bda2baaa6 [9/18] soc: renesas: Move power-domain drivers to the genpd dir
+config: x86_64-buildonly-randconfig-r001-20230723 (https://download.01.org/0day-ci/archive/20230725/202307251015.dZ7jmRPA-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251015.dZ7jmRPA-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307251015.dZ7jmRPA-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: file: always lock position for FMODE_ATOMIC_POS
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97070
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8876814
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+>> drivers/genpd/renesas/rmobile-sysc.c:193:22: warning: cast to smaller integer type 'enum pd_types' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   add_special_pd(np, (enum pd_types)id->data);
+                                      ^~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +193 drivers/genpd/renesas/rmobile-sysc.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  177  
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  178  static void __init get_special_pds(void)
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  179  {
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  180  	struct device_node *np;
+1632ff162f305f3 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  181  	const struct of_device_id *id;
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  182  
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  183  	/* PM domains containing CPUs */
+5af5d40c4015813 arch/arm/mach-shmobile/pm-rmobile.c Rob Herring        2018-08-27  184  	for_each_of_cpu_node(np)
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  185  		add_special_pd(np, PD_CPU);
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  186  
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  187  	/* PM domain containing console */
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  188  	if (of_stdout)
+60e264356230014 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  189  		add_special_pd(of_stdout, PD_CONSOLE);
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  190  
+1632ff162f305f3 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  191  	/* PM domains containing other special devices */
+1632ff162f305f3 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14  192  	for_each_matching_node_and_match(np, special_ids, &id)
+1632ff162f305f3 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2015-01-14 @193  		add_special_pd(np, (enum pd_types)id->data);
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  194  }
+2173fc7cb681c38 arch/arm/mach-shmobile/pm-rmobile.c Geert Uytterhoeven 2014-12-03  195  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 193 was first introduced by commit
+:::::: 1632ff162f305f38667632c465e4bfaab8ef87a2 ARM: shmobile: R-Mobile: Special-case PM domains with memory-controllers
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Geert Uytterhoeven <geert+renesas@glider.be>
+:::::: CC: Simon Horman <horms+renesas@verge.net.au>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
