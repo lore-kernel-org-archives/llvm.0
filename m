@@ -1,186 +1,157 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C3E14A91;
-	Tue, 25 Jul 2023 10:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690279361; x=1721815361;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nRox8bHxS/39eurF4RvG/G/NsD5J1/KSWjHQMAHx2Iw=;
-  b=nHb7jBz909sxy8pXPkzuNu3luTtkCH7XEmwY0TXwqWsyAB0675ZLeJbi
-   yl+8kdwo7LBVrnyveT0kMSa6UV9aSLW1aK9S/2PVfDkB9Asm98E6ZCmNY
-   +4wuMa1c1HLFFWtaC5IrnxPY0xcRvo+55m4k4+8wWQuVQO03wAQ8/HTdu
-   Ls2EOtbHc/L4Bu16sxsJHlaiWj9gzlCO8ynohL8IpeHX+NhHs1BAm04Xd
-   jkRMWHV9vSQaEjVqT6JA0eztCu7mXJ31cJMhn/ZQiSEgYv3yYidyiLuXL
-   dWsiHSmaeKKLgpgG005d9YRHFXjIv3o94Y/lplY/hArtyQyf9PvpIDGgY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="366558549"
-X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="366558549"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 03:02:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="972607892"
-X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="972607892"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Jul 2023 03:02:30 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOEs9-000AWl-2Z;
-	Tue, 25 Jul 2023 10:02:29 +0000
-Date: Tue, 25 Jul 2023 18:01:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fenglin Wu <quic_fenglinw@quicinc.com>, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	robh+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-input@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-	quic_fenglinw@quicinc.com, quic_kamalw@quicinc.com,
-	jestar@qti.qualcomm.com
-Subject: Re: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new
- SPMI vibrator
-Message-ID: <202307251741.PMtlVAgD-lkp@intel.com>
-References: <20230725054138.129497-2-quic_fenglinw@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9413A14AA1
+	for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 13:05:50 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-c5cf26e9669so4715108276.0
+        for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 06:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690290349; x=1690895149;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5tJzMlchMGvZ+T9JwV3tPym5EeZdFxlI9guvrrUmmhk=;
+        b=jCFQ6Y4bYcEDzy/p6qgLw90rtdZ3Hh30FW2hjrlxQUImuaJ3Y26BClVajbvGVC5aEu
+         em4SfOLA8oRLm9cAhXGV13PZnVwZB/Xzk9vBfyG6BiKsLPemx0S5PGa9jEqhJ5lLEpKZ
+         Bgkqc0rAYTVXrwV+KOFqM7TqNWZMoT+hkq5y2eChtoxpwGFnwF0h74dfVzzfrM74Alvx
+         zNqS+aVvR2eJsv85h8Y1S6sJWlYDfkyONrzU7R2OHOTaFrdp62n5a8gO5h27PuDDm8x6
+         BXytROdQsd1QkhdtMEkePC2HhqZmmrWm+VALKrIRGZpg8iyHWxKMVyRuskWl6jU4geS4
+         gaKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690290349; x=1690895149;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5tJzMlchMGvZ+T9JwV3tPym5EeZdFxlI9guvrrUmmhk=;
+        b=g1Iz/FCVZJ+6c4WH6U8HF74RVUi5V0i/znV85nmIvkRon8r+I0ma6wyt3TGp+0GCFR
+         4LIX0uDfKwFXbB0zInSFtLECzV9s4ZIk5OyRciS4XvY7SIxyA24EDsGSxv/+3Ws7z/Bq
+         v76n5Jr0cAMHuu8Xz70RR4reT41MzNcVU5w8aeKCNn03rkji35/oSSmRWhpx3YQl/ELb
+         PQAKi1jpJhekT/+Z8fhAYdbPyyicCxi2sUcG1xBpW020rhpe2aVLfzM7aPKyEf/Q/XNE
+         cfJJOScBuDut1xzFqe2o//Sgf0MF4cXjBRXha/JvRspq7VvGXXbfGCHgaX2lZW9BVSlz
+         aY2Q==
+X-Gm-Message-State: ABy/qLZHcoE1bo23Ka9X/gh0hO5KTg79He6u00sJsFDDl9K+heD2neUd
+	ecEFHMhwOmkzStBrV/DBvJpBwluulxe1olunzGZvFQ==
+X-Google-Smtp-Source: APBJJlHP4Y3P++g+2unMwlOMB60A5WtMws0pr+cPcYoFFKwMaorlYfI3QPWuUf7oTXPSwxNZn3JVr03TK2rithbw4j8=
+X-Received: by 2002:a25:7489:0:b0:d10:493:f6e7 with SMTP id
+ p131-20020a257489000000b00d100493f6e7mr5172136ybc.24.1690290349182; Tue, 25
+ Jul 2023 06:05:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230725054138.129497-2-quic_fenglinw@quicinc.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 25 Jul 2023 18:35:34 +0530
+Message-ID: <CA+G9fYt=6ysz636XcQ=-KJp7vJcMZ=NjbQBrn77v7vnTcfP2cA@mail.gmail.com>
+Subject: selftests: connector: proc_filter.c:48:20: error: invalid application
+ of 'sizeof' to an incomplete type 'struct proc_input'
+To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Netdev <netdev@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Cc: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>, Shuah Khan <shuah@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, "David S. Miller" <davem@davemloft.net>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Fenglin,
+selftests: connector: proc_filter build failed with clang-16 due to below
+warnings / errors on Linux next-20230725.
 
-kernel test robot noticed the following build warnings:
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on dtor-input/for-linus linus/master v6.5-rc3 next-20230725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+clang --target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-Werror=option-ignored -Werror=unused-command-line-argument
+--target=aarch64-linux-gnu -fintegrated-as -Wall     proc_filter.c  -o
+/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/connector/proc_filter
+proc_filter.c:42:12: error: invalid application of 'sizeof' to an
+incomplete type 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^~~~~~~~~~~~~~~
+proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                         ^     ~~~~~~~~~~~~~~~~~~~
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:48:20: error: invalid application of 'sizeof' to an
+incomplete type 'struct proc_input'
+                hdr->nlmsg_len = NL_MESSAGE_SIZE;
+                                 ^~~~~~~~~~~~~~~
+proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                         ^     ~~~~~~~~~~~~~~~~~~~
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:64:14: error: invalid application of 'sizeof' to an
+incomplete type 'struct proc_input'
+                msg->len = sizeof(struct proc_input);
+                           ^     ~~~~~~~~~~~~~~~~~~~
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:65:35: error: incomplete definition of type 'struct proc_input'
+                ((struct proc_input *)msg->data)->mcast_op =
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:66:31: error: incomplete definition of type 'struct proc_input'
+                        ((struct proc_input *)pinp)->mcast_op;
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:67:35: error: incomplete definition of type 'struct proc_input'
+                ((struct proc_input *)msg->data)->event_type =
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:68:31: error: incomplete definition of type 'struct proc_input'
+                        ((struct proc_input *)pinp)->event_type;
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+        char buff[NL_MESSAGE_SIZE];
+                  ^
+proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+                         sizeof(struct proc_input))
+                                       ^
+proc_filter.c:245:20: error: variable has incomplete type 'struct proc_input'
+        struct proc_input input;
+                          ^
+proc_filter.c:245:9: note: forward declaration of 'struct proc_input'
+        struct proc_input input;
+               ^
+proc_filter.c:264:22: error: use of undeclared identifier
+'PROC_EVENT_NONZERO_EXIT'
+                input.event_type = PROC_EVENT_NONZERO_EXIT;
+                                   ^
+9 errors generated.
+make[4]: Leaving directory '/builds/linux/tools/testing/selftests/connector'
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fenglin-Wu/input-pm8xxx-vib-refactor-to-easily-support-new-SPMI-vibrator/20230725-134504
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-patch link:    https://lore.kernel.org/r/20230725054138.129497-2-quic_fenglinw%40quicinc.com
-patch subject: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new SPMI vibrator
-config: x86_64-buildonly-randconfig-r002-20230725 (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307251741.PMtlVAgD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/misc/pm8xxx-vibrator.c:190:17: warning: cast to smaller integer type 'enum pm8xxx_vib_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           vib->hw_type = (enum pm8xxx_vib_type)of_device_get_match_data(dev);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
 
 
-vim +190 drivers/input/misc/pm8xxx-vibrator.c
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/
 
-   163	
-   164	static int pm8xxx_vib_probe(struct platform_device *pdev)
-   165	{
-   166		struct pm8xxx_vib *vib;
-   167		struct input_dev *input_dev;
-   168		struct device *dev = &pdev->dev;
-   169		struct regmap *regmap;
-   170		struct reg_field *regs;
-   171		int error, i;
-   172		unsigned int val;
-   173		u32 reg_base;
-   174	
-   175		vib = devm_kzalloc(dev, sizeof(*vib), GFP_KERNEL);
-   176		if (!vib)
-   177			return -ENOMEM;
-   178	
-   179		regmap = dev_get_regmap(dev->parent, NULL);
-   180		if (!regmap)
-   181			return -ENODEV;
-   182	
-   183		input_dev = devm_input_allocate_device(dev);
-   184		if (!input_dev)
-   185			return -ENOMEM;
-   186	
-   187		INIT_WORK(&vib->work, pm8xxx_work_handler);
-   188		vib->vib_input_dev = input_dev;
-   189	
- > 190		vib->hw_type = (enum pm8xxx_vib_type)of_device_get_match_data(dev);
-   191	
-   192		regs = ssbi_vib_regs;
-   193		if (vib->hw_type != SSBI_VIB) {
-   194			error = fwnode_property_read_u32(dev->fwnode, "reg", &reg_base);
-   195			if (error < 0) {
-   196				dev_err(dev, "Failed to read reg address, rc=%d\n", error);
-   197				return error;
-   198			}
-   199	
-   200			if (vib->hw_type == SPMI_VIB_GEN1)
-   201				regs = spmi_vib_gen1_regs;
-   202	
-   203			for (i = 0; i < VIB_MAX_REG; i++)
-   204				if (regs[i].reg != 0)
-   205					regs[i].reg += reg_base;
-   206		}
-   207	
-   208		error = devm_regmap_field_bulk_alloc(dev, regmap, vib->r_fields, regs, VIB_MAX_REG);
-   209		if (error < 0)
-   210		{
-   211			dev_err(dev, "Failed to allocate regmap failed, rc=%d\n", error);
-   212			return error;
-   213		}
-   214	
-   215		error = regmap_field_read(vib->r_fields[VIB_DRV_REG], &val);
-   216		if (error < 0)
-   217			return error;
-   218	
-   219		/* operate in manual mode */
-   220		if (vib->hw_type == SSBI_VIB) {
-   221			val &= SSBI_VIB_DRV_EN_MANUAL_MASK;
-   222			error = regmap_field_write(vib->r_fields[VIB_DRV_REG], val);
-   223			if (error < 0)
-   224				return error;
-   225		}
-   226	
-   227		vib->reg_vib_drv = val;
-   228	
-   229		input_dev->name = "pm8xxx_vib_ffmemless";
-   230		input_dev->id.version = 1;
-   231		input_dev->close = pm8xxx_vib_close;
-   232		input_set_drvdata(input_dev, vib);
-   233		input_set_capability(vib->vib_input_dev, EV_FF, FF_RUMBLE);
-   234	
-   235		error = input_ff_create_memless(input_dev, NULL,
-   236						pm8xxx_vib_play_effect);
-   237		if (error) {
-   238			dev_err(dev, "couldn't register vibrator as FF device\n");
-   239			return error;
-   240		}
-   241	
-   242		error = input_register_device(input_dev);
-   243		if (error) {
-   244			dev_err(dev, "couldn't register input device\n");
-   245			return error;
-   246		}
-   247	
-   248		platform_set_drvdata(pdev, vib);
-   249		return 0;
-   250	}
-   251	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+steps to reproduce:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2T3676HpK243gMBLYJCp4OXDmWl/tuxmake_reproducer.sh
+--
+Linaro LKFT
+https://lkft.linaro.org
