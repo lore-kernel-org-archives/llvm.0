@@ -1,43 +1,53 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D088E14A90;
-	Tue, 25 Jul 2023 09:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C3E14A91;
+	Tue, 25 Jul 2023 10:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690277488; x=1721813488;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n4BVih0WUjhXSxOlPRfT3FqmaONVjW7XKUxetdqRxxU=;
-  b=FTUm418XTjiWwSa1CyanRBoLcrciKAwJmXP3DIyjNxCO7YaaObm4T3DW
-   ZKOrCJ+USRXRbuLbsxrphjgZOtbYJzvuZ/SID2zGYW8jULz9yY4v8hbT0
-   L8DA+/XkpW/J5Q5uNTSPKpw/Yl1ReJQS3/5Mt1juinjXNi1/TCPXSXpw3
-   02KpQabKtkw5U/pQ5eS69OAGz10eE0uam330sq0SiT1pbNhHHrWlELKKI
-   b/ONONtte7vHg1zFJ8Xg2eZgiz3Z5Sz+Y0Fs8U8a48bwzArBJeA4JgHI0
-   eASjh1hm44DViwBUwPFkmVA6285/lZ5m5XyDxT5uOcJda2g1nrmt4WypR
+  t=1690279361; x=1721815361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nRox8bHxS/39eurF4RvG/G/NsD5J1/KSWjHQMAHx2Iw=;
+  b=nHb7jBz909sxy8pXPkzuNu3luTtkCH7XEmwY0TXwqWsyAB0675ZLeJbi
+   yl+8kdwo7LBVrnyveT0kMSa6UV9aSLW1aK9S/2PVfDkB9Asm98E6ZCmNY
+   +4wuMa1c1HLFFWtaC5IrnxPY0xcRvo+55m4k4+8wWQuVQO03wAQ8/HTdu
+   Ls2EOtbHc/L4Bu16sxsJHlaiWj9gzlCO8ynohL8IpeHX+NhHs1BAm04Xd
+   jkRMWHV9vSQaEjVqT6JA0eztCu7mXJ31cJMhn/ZQiSEgYv3yYidyiLuXL
+   dWsiHSmaeKKLgpgG005d9YRHFXjIv3o94Y/lplY/hArtyQyf9PvpIDGgY
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="367694527"
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="366558549"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="367694527"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 02:31:24 -0700
+   d="scan'208";a="366558549"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 03:02:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="761155178"
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="972607892"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="761155178"
+   d="scan'208";a="972607892"
 Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jul 2023 02:31:21 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 25 Jul 2023 03:02:30 -0700
 Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qOEO1-000AVU-00;
-	Tue, 25 Jul 2023 09:31:21 +0000
-Date: Tue, 25 Jul 2023 17:31:07 +0800
+	id 1qOEs9-000AWl-2Z;
+	Tue, 25 Jul 2023 10:02:29 +0000
+Date: Tue, 25 Jul 2023 18:01:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:uprobe_get_func_ip_1 1/3]
- kernel/trace/bpf_trace.c:1064:49: error: no member named 'utask' in 'struct
- task_struct'
-Message-ID: <202307251758.cN4AgBYF-lkp@intel.com>
+To: Fenglin Wu <quic_fenglinw@quicinc.com>, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	robh+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+	quic_fenglinw@quicinc.com, quic_kamalw@quicinc.com,
+	jestar@qti.qualcomm.com
+Subject: Re: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new
+ SPMI vibrator
+Message-ID: <202307251741.PMtlVAgD-lkp@intel.com>
+References: <20230725054138.129497-2-quic_fenglinw@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,138 +56,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230725054138.129497-2-quic_fenglinw@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_get_func_ip_1
-head:   0f00edcf26c98bcfeb900601b3cf1a933c6e07ef
-commit: e0de0f496891911209ee30374b41c48c7e186e33 [1/3] bpf: Add support for bpf_get_func_ip helper for uprobes
-config: riscv-randconfig-r015-20230724 (https://download.01.org/0day-ci/archive/20230725/202307251758.cN4AgBYF-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251758.cN4AgBYF-lkp@intel.com/reproduce)
+Hi Fenglin,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on dtor-input/for-linus linus/master v6.5-rc3 next-20230725]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Fenglin-Wu/input-pm8xxx-vib-refactor-to-easily-support-new-SPMI-vibrator/20230725-134504
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20230725054138.129497-2-quic_fenglinw%40quicinc.com
+patch subject: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new SPMI vibrator
+config: x86_64-buildonly-randconfig-r002-20230725 (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307251758.cN4AgBYF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307251741.PMtlVAgD-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     751 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from kernel/trace/bpf_trace.c:8:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     759 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from kernel/trace/bpf_trace.c:8:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     768 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/trace/bpf_trace.c:8:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     777 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/trace/bpf_trace.c:8:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     786 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from kernel/trace/bpf_trace.c:8:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> kernel/trace/bpf_trace.c:1064:49: error: no member named 'utask' in 'struct task_struct'
-    1064 |         udd = (struct uprobe_dispatch_data *) current->utask->vaddr;
-         |                                               ~~~~~~~  ^
-   13 warnings and 1 error generated.
+>> drivers/input/misc/pm8xxx-vibrator.c:190:17: warning: cast to smaller integer type 'enum pm8xxx_vib_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           vib->hw_type = (enum pm8xxx_vib_type)of_device_get_match_data(dev);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1064 kernel/trace/bpf_trace.c
+vim +190 drivers/input/misc/pm8xxx-vibrator.c
 
-  1059	
-  1060	static unsigned long bpf_get_func_ip_uprobe(struct pt_regs *regs)
-  1061	{
-  1062		struct uprobe_dispatch_data *udd;
-  1063	
-> 1064		udd = (struct uprobe_dispatch_data *) current->utask->vaddr;
-  1065		return udd->bp_addr;
-  1066	}
-  1067	
+   163	
+   164	static int pm8xxx_vib_probe(struct platform_device *pdev)
+   165	{
+   166		struct pm8xxx_vib *vib;
+   167		struct input_dev *input_dev;
+   168		struct device *dev = &pdev->dev;
+   169		struct regmap *regmap;
+   170		struct reg_field *regs;
+   171		int error, i;
+   172		unsigned int val;
+   173		u32 reg_base;
+   174	
+   175		vib = devm_kzalloc(dev, sizeof(*vib), GFP_KERNEL);
+   176		if (!vib)
+   177			return -ENOMEM;
+   178	
+   179		regmap = dev_get_regmap(dev->parent, NULL);
+   180		if (!regmap)
+   181			return -ENODEV;
+   182	
+   183		input_dev = devm_input_allocate_device(dev);
+   184		if (!input_dev)
+   185			return -ENOMEM;
+   186	
+   187		INIT_WORK(&vib->work, pm8xxx_work_handler);
+   188		vib->vib_input_dev = input_dev;
+   189	
+ > 190		vib->hw_type = (enum pm8xxx_vib_type)of_device_get_match_data(dev);
+   191	
+   192		regs = ssbi_vib_regs;
+   193		if (vib->hw_type != SSBI_VIB) {
+   194			error = fwnode_property_read_u32(dev->fwnode, "reg", &reg_base);
+   195			if (error < 0) {
+   196				dev_err(dev, "Failed to read reg address, rc=%d\n", error);
+   197				return error;
+   198			}
+   199	
+   200			if (vib->hw_type == SPMI_VIB_GEN1)
+   201				regs = spmi_vib_gen1_regs;
+   202	
+   203			for (i = 0; i < VIB_MAX_REG; i++)
+   204				if (regs[i].reg != 0)
+   205					regs[i].reg += reg_base;
+   206		}
+   207	
+   208		error = devm_regmap_field_bulk_alloc(dev, regmap, vib->r_fields, regs, VIB_MAX_REG);
+   209		if (error < 0)
+   210		{
+   211			dev_err(dev, "Failed to allocate regmap failed, rc=%d\n", error);
+   212			return error;
+   213		}
+   214	
+   215		error = regmap_field_read(vib->r_fields[VIB_DRV_REG], &val);
+   216		if (error < 0)
+   217			return error;
+   218	
+   219		/* operate in manual mode */
+   220		if (vib->hw_type == SSBI_VIB) {
+   221			val &= SSBI_VIB_DRV_EN_MANUAL_MASK;
+   222			error = regmap_field_write(vib->r_fields[VIB_DRV_REG], val);
+   223			if (error < 0)
+   224				return error;
+   225		}
+   226	
+   227		vib->reg_vib_drv = val;
+   228	
+   229		input_dev->name = "pm8xxx_vib_ffmemless";
+   230		input_dev->id.version = 1;
+   231		input_dev->close = pm8xxx_vib_close;
+   232		input_set_drvdata(input_dev, vib);
+   233		input_set_capability(vib->vib_input_dev, EV_FF, FF_RUMBLE);
+   234	
+   235		error = input_ff_create_memless(input_dev, NULL,
+   236						pm8xxx_vib_play_effect);
+   237		if (error) {
+   238			dev_err(dev, "couldn't register vibrator as FF device\n");
+   239			return error;
+   240		}
+   241	
+   242		error = input_register_device(input_dev);
+   243		if (error) {
+   244			dev_err(dev, "couldn't register input device\n");
+   245			return error;
+   246		}
+   247	
+   248		platform_set_drvdata(pdev, vib);
+   249		return 0;
+   250	}
+   251	
 
 -- 
 0-DAY CI Kernel Test Service
