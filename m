@@ -1,51 +1,50 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3FE26B64;
-	Tue, 25 Jul 2023 18:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C1C1D2FD;
+	Tue, 25 Jul 2023 18:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690310008; x=1721846008;
+  t=1690311356; x=1721847356;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lHu070qdOlmao2HpMQK4UwMR3TBVpbXHGDo70GsXpic=;
-  b=YOVcqmJ9gBk2rpBA5YxTcFhQeN/jyHqwTFntv2zGAN1jMFP0HZc66fl6
-   PMp9WsIm2D+ladsN71AhCYoV66kmeuX+Hy7++gd7b702CagYSkyudI5Fk
-   xQouWJDaw+4wVn10tL06ZMDAB59G/s9OEI6Pp8D81F3qSuYth98XSXCys
-   Iwk90wUbnn2Qm29yOYBBxf9Pd8XRBN6sqSVs5fGiQjjGSrkehjzUMzZbQ
-   Hsn8U/q5Px3LkBJNERZ0Fc9WInpHuzTvodqoRR3N3mHhetbpe9IayxRI/
-   PBxL7/pZaJlhmlJlmDyn4HCAFiUrPYq8ug9k5UyMpfkAHjTQ/uPZJp45B
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="352716712"
+  bh=ZVyS4i+R5tCisp4JnaVX/EGHRJPoy0lk8ITVH6T/ixc=;
+  b=TJZ6OkPEpoH0nzPvXxGeAqns9AwhExUMe5QjTf40nHVfGPy3v4H/6MQn
+   0PDa1x07LdfmoggYwVpiAhWxe54ZpWpRd/HT4wl4BuPSqwO6oUM/TNfO7
+   RYK9r/IJogBjCvmCUuyQhZ6jF5lY1vju0PFqJDYxpNmBN053Ovp2pRX0P
+   maP1BOmcvOfZNcG0wgK/WoHK/aLUYiRKUmqojwZ10LrT/918z29iNOrKN
+   dVq3o44t9BMo0U2rpoKpOC9FqLvVWPM1rn8F+zUmHfnoHZ4LZj3Rd+PTr
+   Wh2so5ekA20/dtmWulLAvrZCON7j3dIAJ/z6b7DUYHghyO7lamXMwl2ur
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="434075299"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="352716712"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 11:33:27 -0700
+   d="scan'208";a="434075299"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 11:55:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="900055988"
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="816357216"
 X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
-   d="scan'208";a="900055988"
+   d="scan'208";a="816357216"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jul 2023 11:33:24 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jul 2023 11:55:53 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qOMqZ-0000Dr-2y;
-	Tue, 25 Jul 2023 18:33:23 +0000
-Date: Wed, 26 Jul 2023 02:33:03 +0800
+	id 1qONCK-0000FZ-2I;
+	Tue, 25 Jul 2023 18:55:52 +0000
+Date: Wed, 26 Jul 2023 02:54:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Laight <David.Laight@aculab.com>,
-	"'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-	'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
-	'Andrew Morton' <akpm@linux-foundation.org>,
-	"'Matthew Wilcox (Oracle)'" <willy@infradead.org>,
-	'Christoph Hellwig' <hch@infradead.org>,
-	"'Jason A. Donenfeld'" <Jason@zx2c4.com>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, krzysztof.kozlowski+dt@linaro.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH next resend 2/5] minmax: Allow min()/max()/clamp() if the
- arguments have the same signedness.
-Message-ID: <202307260256.nzImScXA-lkp@intel.com>
-References: <a09512c8526b46759669d0b879144563@AcuMS.aculab.com>
+	linux-hwmon@vger.kernel.org,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <Naresh.Solanki@9elements.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (pmbus/tda38640) Add workaround for bug in
+ SVID mode
+Message-ID: <202307260241.BetLbnxd-lkp@intel.com>
+References: <20230725114030.1860571-3-Naresh.Solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,91 +53,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a09512c8526b46759669d0b879144563@AcuMS.aculab.com>
+In-Reply-To: <20230725114030.1860571-3-Naresh.Solanki@9elements.com>
 
-Hi David,
+Hi Naresh,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master]
-[cannot apply to next-20230725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 55612007f16b5d7b1fb83a7b0f5bb686829db7c7]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/minmax-Allow-min-max-clamp-if-the-arguments-have-the-same-signedness/20230725-204940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/a09512c8526b46759669d0b879144563%40AcuMS.aculab.com
-patch subject: [PATCH next resend 2/5] minmax: Allow min()/max()/clamp() if the arguments have the same signedness.
-config: mips-randconfig-r016-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260256.nzImScXA-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260256.nzImScXA-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-pmbus-Add-ON_OFF_CONFIG-register-bits/20230725-194318
+base:   55612007f16b5d7b1fb83a7b0f5bb686829db7c7
+patch link:    https://lore.kernel.org/r/20230725114030.1860571-3-Naresh.Solanki%409elements.com
+patch subject: [PATCH 3/3] hwmon: (pmbus/tda38640) Add workaround for bug in SVID mode
+config: x86_64-randconfig-x014-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260241.BetLbnxd-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260241.BetLbnxd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307260256.nzImScXA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307260241.BetLbnxd-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/irqchip/irq-mips-cpu.c:288:1: error: call to undeclared function '__typecheck'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     288 | IRQCHIP_DECLARE(cpu_intc, "mti,cpu-interrupt-controller", mips_cpu_irq_of_init);
-         | ^
-   include/linux/irqchip.h:37:38: note: expanded from macro 'IRQCHIP_DECLARE'
-      37 |         OF_DECLARE_2(irqchip, name, compat, typecheck_irq_init_cb(fn))
-         |                                             ^
-   include/linux/irqchip.h:24:3: note: expanded from macro 'typecheck_irq_init_cb'
-      24 |         (__typecheck(typecheck_irq_init_cb, &fn) ? fn : fn)
-         |          ^
->> drivers/irqchip/irq-mips-cpu.c:288:1: error: initializer element is not a compile-time constant
-     288 | IRQCHIP_DECLARE(cpu_intc, "mti,cpu-interrupt-controller", mips_cpu_irq_of_init);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irqchip.h:37:2: note: expanded from macro 'IRQCHIP_DECLARE'
-      37 |         OF_DECLARE_2(irqchip, name, compat, typecheck_irq_init_cb(fn))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/of.h:1493:3: note: expanded from macro 'OF_DECLARE_2'
-    1493 |                 _OF_DECLARE(table, name, compat, fn, of_init_fn_2)
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/of.h:1481:2: note: expanded from macro '_OF_DECLARE'
-    1481 |         _OF_DECLARE_STUB(table, name, compat, fn, fn_type)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/of.h:1470:16: note: expanded from macro '_OF_DECLARE_STUB'
-    1470 |                      .data = (fn == (fn_type)NULL) ? fn : fn }
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
->> drivers/irqchip/irq-mchp-eic.c:275:1: error: call to undeclared function '__typecheck'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     275 | IRQCHIP_MATCH("microchip,sama7g5-eic", mchp_eic_init)
-         | ^
-   include/linux/irqchip.h:45:17: note: expanded from macro 'IRQCHIP_MATCH'
-      45 |                                     .data = typecheck_irq_init_cb(fn), },
-         |                                             ^
-   include/linux/irqchip.h:24:3: note: expanded from macro 'typecheck_irq_init_cb'
-      24 |         (__typecheck(typecheck_irq_init_cb, &fn) ? fn : fn)
-         |          ^
->> drivers/irqchip/irq-mchp-eic.c:275:1: error: initializer element is not a compile-time constant
-     275 | IRQCHIP_MATCH("microchip,sama7g5-eic", mchp_eic_init)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irqchip.h:45:17: note: expanded from macro 'IRQCHIP_MATCH'
-      45 |                                     .data = typecheck_irq_init_cb(fn), },
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irqchip.h:24:2: note: expanded from macro 'typecheck_irq_init_cb'
-      24 |         (__typecheck(typecheck_irq_init_cb, &fn) ? fn : fn)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/hwmon/pmbus/tda38640.c:118:7: error: use of undeclared identifier 'CONFIG_SENSORS_TDA38640_REGULATOR'
+           if (!CONFIG_SENSORS_TDA38640_REGULATOR || !np ||
+                ^
+   1 error generated.
 
 
-vim +/__typecheck +288 drivers/irqchip/irq-mips-cpu.c
+vim +/CONFIG_SENSORS_TDA38640_REGULATOR +118 drivers/hwmon/pmbus/tda38640.c
 
-0916b46962cbcac arch/mips/kernel/irq_cpu.c     Gabor Juhos       2013-01-31  281  
-afe8dc254711b72 arch/mips/kernel/irq_cpu.c     Andrew Bresticker 2014-09-18  282  int __init mips_cpu_irq_of_init(struct device_node *of_node,
-0f84c305351c993 arch/mips/kernel/irq_cpu.c     Andrew Bresticker 2014-09-18  283  				struct device_node *parent)
-0f84c305351c993 arch/mips/kernel/irq_cpu.c     Andrew Bresticker 2014-09-18  284  {
-0f84c305351c993 arch/mips/kernel/irq_cpu.c     Andrew Bresticker 2014-09-18  285  	__mips_cpu_irq_init(of_node);
-0916b46962cbcac arch/mips/kernel/irq_cpu.c     Gabor Juhos       2013-01-31  286  	return 0;
-0916b46962cbcac arch/mips/kernel/irq_cpu.c     Gabor Juhos       2013-01-31  287  }
-892b8cf06d8a1e7 drivers/irqchip/irq-mips-cpu.c Paul Burton       2015-05-24 @288  IRQCHIP_DECLARE(cpu_intc, "mti,cpu-interrupt-controller", mips_cpu_irq_of_init);
+   106	
+   107	static int tda38640_probe(struct i2c_client *client)
+   108	{
+   109		struct device *dev = &client->dev;
+   110		struct device_node *np = dev_of_node(dev);
+   111		struct tda38640_data *data;
+   112	
+   113		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   114		if (!data)
+   115			return -ENOMEM;
+   116		memcpy(&data->info, &tda38640_info, sizeof(tda38640_info));
+   117	
+ > 118		if (!CONFIG_SENSORS_TDA38640_REGULATOR || !np ||
+   119		    of_property_read_u32(np, "infineon,en-pin-fixed-level", &data->en_pin_lvl))
+   120			return pmbus_do_probe(client, &data->info);
+   121	
+   122		/*
+   123		 * Apply ON_OFF_CONFIG workaround as enabling the regulator using the
+   124		 * OPERATION register doesn't work in SVID mode.
+   125		 */
+   126		data->info.read_byte_data = tda38640_read_byte_data;
+   127		data->info.write_byte_data = tda38640_write_byte_data;
+   128		/*
+   129		 * One should configure PMBUS_ON_OFF_CONFIG here, but
+   130		 * PB_ON_OFF_CONFIG_POWERUP_CONTROL, PB_ON_OFF_CONFIG_EN_PIN_REQ and
+   131		 * PB_ON_OFF_CONFIG_EN_PIN_REQ are ignored by the device.
+   132		 * Only PB_ON_OFF_CONFIG_POLARITY_HIGH has an effect.
+   133		 */
+   134	
+   135		return pmbus_do_probe(client, &data->info);
+   136	}
+   137	
 
 -- 
 0-DAY CI Kernel Test Service
