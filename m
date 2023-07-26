@@ -1,77 +1,129 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C0015A4
-	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 04:58:48 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3110ab7110aso5843527f8f.3
-        for <llvm@lists.linux.dev>; Tue, 25 Jul 2023 21:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690347527; x=1690952327;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8VSCNiqtjM63gyIxgjIBJEUZn4+F4fATzLK2EYdkNIY=;
-        b=KAne/S+rw2HDnpOYoq0XxAAGGDmFqVEL+4b4QaJcz22Motczt/sEQi9P3+LqtencG5
-         gffk18N2un8Un3gVDBbLDRJCSvj/U8kQRXbeQ3sQi+huU3lOUDhkEacR32UfE0BX4PXh
-         R5/AZ6BiObX/u6qK7p5VAxfARPx+dYhRpdGh8YMNmi7dfD3cWvKAT9kHjYSnEJ5f8VY9
-         O4DK8ND7BY98sdM+l45wVaQtDojEafUaGFQgGsLdy7qT7doz5fcB77x8RhaQWCvIVbYf
-         16flgyVtRYvWqtls+t8zRp/16OIRitE9lb7iBK7d3/SPlHxDXZmPwzdX6fReubLyHpoC
-         4YXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690347527; x=1690952327;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8VSCNiqtjM63gyIxgjIBJEUZn4+F4fATzLK2EYdkNIY=;
-        b=DTYxJErDZeD/YEvKYujojx9u33oIMHxaWfloIfXvm/SxPS7DvYYl6fluQ9SJCEprdo
-         ZZBG8V/+BZ9FQ43irIfANGzyh3aMAcR6b8AfISzkQBw0+ULsGp78Vi9PRK/MwH5CsaYa
-         7ZQzv6GmoSa6ng/mZS5unKPw3krPOAPSmrAw+saXWZkqvkCxeVFmixW+34T8MTeiDsCC
-         DV9jBV21Jw1rSaxcMDBGf1A6ykYaI4YGOcLedDkJeTl8oKmYeeHPQ2n5ysf1qFh8Q2pL
-         xXQO4PbZrmC4bLhf91OIRzM2P2E9374pRzf2+77CmCXm69Jc+AvACGUtA1ShFBm0U6EE
-         f30Q==
-X-Gm-Message-State: ABy/qLZUU6UkzMVRAICrIXCqYnqxZNCTOl1dXH5375Li4CoA3ljv4Lr3
-	jK2gf/hkvZWJIzkgxgT8RAJGbA==
-X-Google-Smtp-Source: APBJJlGmyTCKXK1KhdP6dWBqtNLQ81LaRl/lodbuRe1N53MLle/JLuh+e2iJ/WFJxYTYet9lHw3Lew==
-X-Received: by 2002:adf:e3c5:0:b0:317:5d1c:9719 with SMTP id k5-20020adfe3c5000000b003175d1c9719mr515001wrm.9.1690347527148;
-        Tue, 25 Jul 2023 21:58:47 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d6e0a000000b003141e9e2f81sm18453128wrz.4.2023.07.25.21.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 21:58:46 -0700 (PDT)
-Date: Wed, 26 Jul 2023 07:58:44 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: Andi Shyti <andi.shyti@linux.intel.com>, jani.nikula@linux.intel.com,
-	joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-	tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-	andrzej.hajda@intel.com, intel-gfx@lists.freedesktop.org,
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	mripard@kernel.org
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915/tv: avoid possible division by
- zero
-Message-ID: <a4350cec-4ed6-40bc-b68b-3a3a89aa08ac@kadam.mountain>
-References: <5d096bcf-c394-4dad-b307-3d7e33ab6e6f@kadam.mountain>
- <630b9f2e-00e8-5b54-ad1c-3e4d404454a1@nfschina.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1401363
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 07:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690356680;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W5KHaC1i6RqBRBUeiNVbsRcfptHdgkDo0B5fb8vji9k=;
+	b=GgtIGn+6XYxKUTRDzhamWOffgA7Si/GuFEVyMVqR5ax/Z5rh3tuIW8T7Mf/nlxBlNpai8e
+	8XdPD91JKKp1nrJVEvQV3o/jNmWUNb2M10Y0fjw+BM87VSTcC42YsRBHxuRWzjgX0BcfFj
+	kPxbsCSK+g2LYyyZvygDBzDpLjIZGk8=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-110-8l-hz2xHNu-3cd4oZ-PAUQ-1; Wed, 26 Jul 2023 03:31:19 -0400
+X-MC-Unique: 8l-hz2xHNu-3cd4oZ-PAUQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD43438008C0
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 07:31:18 +0000 (UTC)
+Received: from [172.64.1.75] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B2AA94094DC0;
+	Wed, 26 Jul 2023 07:31:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 0b4a9fdc)
+Date: Wed, 26 Jul 2023 07:31:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <630b9f2e-00e8-5b54-ad1c-3e4d404454a1@nfschina.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <33426.123072603311900319@us-mta-110.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 26, 2023 at 09:21:50AM +0800, Su Hui wrote:
-> On 2023/7/25 13:51, Dan Carpenter wrote:
-> > The reason why the first five attempts had bugs is because we are
-> > trying to write it in the most complicated way possible, shifting by
-> > logical not what?
-> Wonderful! Should I add your name as signed-of-by?
+Hi, we tested your kernel and here are the results:
 
-Sure.  Or you can put it as a Suggested-by.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-regards,
-dan carpenter
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.5-2' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/cel/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97288
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
