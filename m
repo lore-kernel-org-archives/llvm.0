@@ -1,125 +1,135 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B803E7C;
-	Wed, 26 Jul 2023 02:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690337449; x=1721873449;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rYyiHYx4CXBouauJ57GHmuYj82f0kVX/1p4BA5r6Y9Y=;
-  b=fTbJPlSYOGkOiXxy6kscXxkg4GPkFLBoYadjDK6XeaJxaxL+5T1hj34u
-   PDpAGxeAGNPG3XDh4qMpUpWrvpxWZqeOzAhuqpMWutIN7aqLAMRHFk13m
-   WtDch2MczbItZkls/SaDAexGsKeHlsAD50Xj51awngOMQsbao/IldR++2
-   tV7oTz+cLbdKPJjE854zaVwH9p8yembSVxOIy44TwCAMI9YgwQYPdyQtQ
-   j5xHttkXn2nm+rmxZ5nnq2Ivcb0jbVJaA+x36vJWKT3KbB2mB4i6Gud4A
-   2/YwBuz+6Cn9FU8QNPbGLOwJrZErDrmcoD0XCkgfJUUuPZL0Dv8NfSPI6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="370567123"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="370567123"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 19:10:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="850256973"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="850256973"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jul 2023 19:10:47 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOTzC-0000Y7-2e;
-	Wed, 26 Jul 2023 02:10:46 +0000
-Date: Wed, 26 Jul 2023 10:10:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 76/343]
- arch/x86/include/asm/tdx.h:102:49: warning: shift count >= width of type
-Message-ID: <202307261053.vBRQCxbk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C1F523F
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 04:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690344679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dVkfQd+QjaHJTvrJwchximCNVmPxj1DpUwiYSRlOUf4=;
+	b=S+uCiXDXHAnIMIvQlCQ07zp+BQpvvr7+YMIxHjKXcS6ySENk8Qk3Cxl86cjzLzeckotuFm
+	izAjhVE+jQ4THmMNOk3s4XV98ofZJ7B1Uar3mmDuDOcVANWjJP2ZdoqHyRgL2SJprwvUW8
+	2kFvzSy5w1/FWlylfR6XgmtJ0ArjgLA=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-T4XMzVb9MauVe1baGibg5A-1; Wed, 26 Jul 2023 00:11:18 -0400
+X-MC-Unique: T4XMzVb9MauVe1baGibg5A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 384A5280AA2F
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 04:11:18 +0000 (UTC)
+Received: from [172.64.1.75] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 20D7A201EC58;
+	Wed, 26 Jul 2023 04:11:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 27 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, af2e1938)
+Date: Wed, 26 Jul 2023 04:11:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <33699.123072600111800947@us-mta-14.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   76c1c9e7f4012a2878b2fdf292245aa685c34b2d
-commit: 2d81a22fc1d641b3f66aec13e5d1ee13ad266857 [76/343] KVM: TDX: Add C wrapper functions for SEAMCALLs to the TDX module
-config: i386-randconfig-r032-20230725 (https://download.01.org/0day-ci/archive/20230726/202307261053.vBRQCxbk-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307261053.vBRQCxbk-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307261053.vBRQCxbk-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   In file included from arch/x86/kernel/asm-offsets.c:22:
->> arch/x86/include/asm/tdx.h:102:49: warning: shift count >= width of type [-Wshift-count-overflow]
-                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-                                                                        ^~~~~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:26:28: note: expanded from macro 'TDX_SEAMCALL_UD'
-   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
-                                            ^~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:22:25: note: expanded from macro 'TDX_SW_ERROR'
-   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
-                                            ^~~~~~~~~
-   arch/x86/include/asm/tdx.h:21:21: note: expanded from macro 'TDX_ERROR'
-   #define TDX_ERROR                       _BITUL(63)
-                                           ^~~~~~~~~~
-   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
-   #define _BITUL(x)       (_UL(1) << (x))
-                                   ^  ~~~
-   1 warning generated.
---
-   In file included from arch/x86/kernel/asm-offsets.c:22:
->> arch/x86/include/asm/tdx.h:102:49: warning: shift count >= width of type [-Wshift-count-overflow]
-                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-                                                                        ^~~~~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:26:28: note: expanded from macro 'TDX_SEAMCALL_UD'
-   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
-                                            ^~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:22:25: note: expanded from macro 'TDX_SW_ERROR'
-   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
-                                            ^~~~~~~~~
-   arch/x86/include/asm/tdx.h:21:21: note: expanded from macro 'TDX_ERROR'
-   #define TDX_ERROR                       _BITUL(63)
-                                           ^~~~~~~~~~
-   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
-   #define _BITUL(x)       (_UL(1) << (x))
-                                   ^  ~~~
-   1 warning generated.
+Kernel information:
+    Commit message: Merge tag 'm68k-for-v6.5-tag2' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/geert/linux-m68k
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97257
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
+3': Input/output error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1436
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 
-vim +102 arch/x86/include/asm/tdx.h
 
-    86	
-    87	#ifdef CONFIG_INTEL_TDX_HOST
-    88	bool platform_tdx_enabled(void);
-    89	int tdx_cpu_enable(void);
-    90	int tdx_enable(void);
-    91	void tdx_reset_memory(void);
-    92	bool tdx_is_private_mem(unsigned long phys);
-    93	u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
-    94		       struct tdx_module_output *out);
-    95	#else	/* !CONFIG_INTEL_TDX_HOST */
-    96	static inline bool platform_tdx_enabled(void) { return false; }
-    97	static inline int tdx_cpu_enable(void) { return -ENODEV; }
-    98	static inline int tdx_enable(void)  { return -ENODEV; }
-    99	static inline void tdx_reset_memory(void) { }
-   100	static inline bool tdx_is_private_mem(unsigned long phys) { return false; }
-   101	static inline u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
- > 102				     struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-   103	#endif	/* CONFIG_INTEL_TDX_HOST */
-   104	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
