@@ -1,216 +1,133 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D96CA77;
-	Wed, 26 Jul 2023 12:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690373123; x=1721909123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JypNTHKchRWkHuhYdcEKYuqTkgiIMEsGqiZwAWUNiWY=;
-  b=WuoDC/qBsoW+yTxFg0SFiPSikftHQS7Xnn0Z166cjhojwI/JF4hIxBNp
-   JI0zB6W5ASRuRJz9xMt5oNsdwjWRFy8V/Zmr95fE2UxEMNvBV/8nLMhKD
-   u9K6ha/NmYPELaXWiL4JSiUayPDAC+ztegGnlsqX/Z9+EvXZDKerabuub
-   FCObrABCXc5LBqxZviVlFsY7VCLqLtnDptoor9z37kDWdH56OYfbOZInK
-   59dU73mbCsGT9RtbZWI/DNaNRZGp2RMJSz3iz2oBr++5rCAd+iIOKqoY8
-   g0rrQQ2uCXCAJUGgzBjWCVZIaCgrON9KicXRN13gWpJFg8Qz1BN3o2Aaj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="431801496"
-X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
-   d="scan'208";a="431801496"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 05:05:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="791828965"
-X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
-   d="scan'208";a="791828965"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2023 05:05:17 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOdGW-0000wJ-3A;
-	Wed, 26 Jul 2023 12:05:16 +0000
-Date: Wed, 26 Jul 2023 20:04:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	Bart Van Assche <bvanassche@acm.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Ming Lei <ming.lei@redhat.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	Stanley Chu <stanley.chu@mediatek.com>,
-	Can Guo <quic_cang@quicinc.com>,
-	Asutosh Das <quic_asutoshd@quicinc.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Bean Huo <beanhuo@micron.com>,
-	Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: Re: [PATCH v3 5/6] scsi: ufs: Disable zone write locking
-Message-ID: <202307261940.mazVXKtc-lkp@intel.com>
-References: <20230726005742.303865-6-bvanassche@acm.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F01C126
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 12:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690373483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vRejxK5umOivTgiU7YysucWewPOt6+4ioMoGP7iKC6Q=;
+	b=IpjbPa/BxjEEr7+Q5eKUSqBjo/BupGlhuVLIL9j/EyhlisHh5kmmmGs9SkmdO3TxkzWoTX
+	ntcGaG0o5bNL01VaIfgAw1vtUKteWvycQhxcDjV1wGCHE27QojO+jFoxFrOH/Jr6lBju2U
+	uiruG31W00RGbQA+LVm/oF1bLsAQ8tM=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-138-kqOsfS-ONKOcU27j61qGJg-1; Wed, 26 Jul 2023 08:11:22 -0400
+X-MC-Unique: kqOsfS-ONKOcU27j61qGJg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64418381C169
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 12:11:21 +0000 (UTC)
+Received: from [172.64.1.75] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4F0264094DC0;
+	Wed, 26 Jul 2023 12:11:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 9f911640)
+Date: Wed, 26 Jul 2023 12:11:21 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230726005742.303865-6-bvanassche@acm.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <08549.123072608112200383@us-mta-138.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bart,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.5-rc3]
-[cannot apply to mkp-scsi/for-next next-20230726]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/block-Introduce-the-flag-REQ_NO_WRITE_LOCK/20230726-085936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230726005742.303865-6-bvanassche%40acm.org
-patch subject: [PATCH v3 5/6] scsi: ufs: Disable zone write locking
-config: s390-randconfig-r044-20230726 (https://download.01.org/0day-ci/archive/20230726/202307261940.mazVXKtc-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307261940.mazVXKtc-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: x86/traps: Fix load_unaligned_zeropad() handling for sh=
+ared TDX memory
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307261940.mazVXKtc-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97299
 
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/ufs/core/ufshcd.c:25:
-   In file included from include/scsi/scsi_cmnd.h:5:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/ufs/core/ufshcd.c:25:
-   In file included from include/scsi/scsi_cmnd.h:5:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/ufs/core/ufshcd.c:25:
-   In file included from include/scsi/scsi_cmnd.h:5:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/ufs/core/ufshcd.c:4352:23: error: use of undeclared identifier 'QUEUE_FLAG_NO_ZONE_WRITE_LOCK'; did you mean '__REQ_NO_ZONE_WRITE_LOCK'?
-    4352 |                         blk_queue_flag_set(QUEUE_FLAG_NO_ZONE_WRITE_LOCK, q);
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            __REQ_NO_ZONE_WRITE_LOCK
-   include/linux/blk_types.h:424:2: note: '__REQ_NO_ZONE_WRITE_LOCK' declared here
-     424 |         __REQ_NO_ZONE_WRITE_LOCK,
-         |         ^
-   drivers/ufs/core/ufshcd.c:4354:25: error: use of undeclared identifier 'QUEUE_FLAG_NO_ZONE_WRITE_LOCK'; did you mean '__REQ_NO_ZONE_WRITE_LOCK'?
-    4354 |                         blk_queue_flag_clear(QUEUE_FLAG_NO_ZONE_WRITE_LOCK, q);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                              __REQ_NO_ZONE_WRITE_LOCK
-   include/linux/blk_types.h:424:2: note: '__REQ_NO_ZONE_WRITE_LOCK' declared here
-     424 |         __REQ_NO_ZONE_WRITE_LOCK,
-         |         ^
->> drivers/ufs/core/ufshcd.c:4340:6: warning: no previous prototype for function 'ufshcd_update_no_zone_write_lock' [-Wmissing-prototypes]
-    4340 | void ufshcd_update_no_zone_write_lock(struct ufs_hba *hba,
-         |      ^
-   drivers/ufs/core/ufshcd.c:4340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    4340 | void ufshcd_update_no_zone_write_lock(struct ufs_hba *hba,
-         | ^
-         | static 
-   drivers/ufs/core/ufshcd.c:5180:21: error: use of undeclared identifier 'QUEUE_FLAG_NO_ZONE_WRITE_LOCK'; did you mean '__REQ_NO_ZONE_WRITE_LOCK'?
-    5180 |         blk_queue_flag_set(QUEUE_FLAG_NO_ZONE_WRITE_LOCK, q);
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                            __REQ_NO_ZONE_WRITE_LOCK
-   include/linux/blk_types.h:424:2: note: '__REQ_NO_ZONE_WRITE_LOCK' declared here
-     424 |         __REQ_NO_ZONE_WRITE_LOCK,
-         |         ^
-   drivers/ufs/core/ufshcd.c:10277:44: warning: shift count >= width of type [-Wshift-count-overflow]
-    10277 |                 if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
-          |                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   14 warnings and 3 errors generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/173 failing on ark-eln aarch64
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
 
-vim +4352 drivers/ufs/core/ufshcd.c
 
-  4339	
-> 4340	void ufshcd_update_no_zone_write_lock(struct ufs_hba *hba,
-  4341					      bool set_no_zone_write_lock)
-  4342	{
-  4343		struct scsi_device *sdev;
-  4344	
-  4345		shost_for_each_device(sdev, hba->host)
-  4346			blk_freeze_queue_start(sdev->request_queue);
-  4347		shost_for_each_device(sdev, hba->host) {
-  4348			struct request_queue *q = sdev->request_queue;
-  4349	
-  4350			blk_mq_freeze_queue_wait(q);
-  4351			if (set_no_zone_write_lock)
-> 4352				blk_queue_flag_set(QUEUE_FLAG_NO_ZONE_WRITE_LOCK, q);
-  4353			else
-  4354				blk_queue_flag_clear(QUEUE_FLAG_NO_ZONE_WRITE_LOCK, q);
-  4355			blk_mq_unfreeze_queue(q);
-  4356		}
-  4357	}
-  4358	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
