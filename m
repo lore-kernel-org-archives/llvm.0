@@ -1,59 +1,45 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8078462;
-	Tue, 25 Jul 2023 23:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF117C;
+	Wed, 26 Jul 2023 01:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690328087; x=1721864087;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C5xyKe5/WjYZUNBE8/1FHjpgxl/fMdUuo5xkgVP7J8Y=;
-  b=UPQXMs0USTB8L2B/Amv3cA2QoExmySwNxseJ0NQaFbzackDHLyQs7dxs
-   bgEJqJrbcGwKYjyLeZrk3UomupTcZ8uggHZk42McBht/srznDV9354r7o
-   SoUkO/4Pf/rvLu9Al4+5pSdv3mhKYt1aqwje0W38XWIl1Q81GIhNaLtwq
-   WN47IZW6thQxhXwcBkqomNwNKjMX0S6LY5YVU506EU9ioJjUxdvqEedR0
-   I5I+8tGor0wuSQmBRKwnwK5xatq7uXSz/LoEwRsDMiCPEzkg4mclWV4Nt
-   JEUkPOi9zePhlsgjZ8R+BAvmxWR2XaDjavhcczC63NzcoPGlij87HCj0w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="366747672"
+  t=1690333781; x=1721869781;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8N2pAFQ3if94TCvGhYfcjiKTRVqUsuCoD4cDE6Th3ug=;
+  b=V3i4wILdjkygEt5SHxZIiQG7uO5D2OpwZwG1WLP8kxe4tJGLrzQpMiBP
+   TTMV6GqtHB2tATGRBuQ+LNxgLPV+lcUhwHsq/NRo1fL5FEgs1gbQIhyn8
+   k9VBj4mE5UO8LGJ92gF8jPtp0BkGAmV3pL4Ed63VTHr68Q8pgpIvtLjJb
+   fBz2mx8sltU1mRlm4Byut8Fbf62SkYYpLzld8vogeGB4aa1/YMoiQgyoL
+   GRciwVqu8tTZkrLgKUmdhxUKDWmyt/kiJnOf2wQRdEWsZpyywk5afkU8c
+   QoW2Hpb7Q+g73YGmBasVZrSwNNULk6xIkU+hHXr9EVFmDy+dLki+7Cb3O
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="352785421"
 X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="366747672"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 16:34:46 -0700
+   d="scan'208";a="352785421"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 18:09:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="755945611"
+X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="1056985602"
 X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="755945611"
+   d="scan'208";a="1056985602"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jul 2023 16:34:40 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 25 Jul 2023 18:09:38 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qORY7-0000Qn-2W;
-	Tue, 25 Jul 2023 23:34:39 +0000
-Date: Wed, 26 Jul 2023 07:33:59 +0800
+	id 1qOT1c-0000V1-1E;
+	Wed, 26 Jul 2023 01:09:18 +0000
+Date: Wed, 26 Jul 2023 09:08:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Matthew Wilcox <willy@infradead.org>
+To: Anders Roxell <anders.roxell@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-	Hugh Dickins <hughd@google.com>,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH mm-unstable v7 12/31] powerpc: Convert various functions
- to use ptdescs
-Message-ID: <202307260706.qNPJSnjR-lkp@intel.com>
-References: <20230725042051.36691-13-vishal.moola@gmail.com>
+	Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/mm/book3s64/radix_tlb.c:419:20: error: unused function
+ '_tlbie_pid_lpid'
+Message-ID: <202307260802.Mjr99P5O-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,167 +48,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230725042051.36691-13-vishal.moola@gmail.com>
 
-Hi Vishal,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20230725]
-[cannot apply to powerpc/next powerpc/fixes s390/features geert-m68k/for-next geert-m68k/for-linus linus/master v6.5-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230725-122458
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230725042051.36691-13-vishal.moola%40gmail.com
-patch subject: [PATCH mm-unstable v7 12/31] powerpc: Convert various functions to use ptdescs
-config: powerpc-randconfig-r034-20230725 (https://download.01.org/0day-ci/archive/20230726/202307260706.qNPJSnjR-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   18b44bc5a67275641fb26f2c54ba7eef80ac5950
+commit: d78c8e32890ef7eca79ffd67c96022c7f9d8cce4 powerpc/mm: Rearrange if-else block to avoid clang warning
+date:   5 months ago
+config: powerpc-skiroot_defconfig (https://download.01.org/0day-ci/archive/20230726/202307260802.Mjr99P5O-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260706.qNPJSnjR-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307260802.Mjr99P5O-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307260706.qNPJSnjR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307260802.Mjr99P5O-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-      40 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:610:56: note: expanded from macro '__do_insw'
-     610 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:42:1: note: expanded from here
-      42 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:44:1: note: expanded from here
-      44 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:46:1: note: expanded from here
-      46 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/pgtable-frag.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:48:1: note: expanded from here
-      48 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> arch/powerpc/mm/pgtable-frag.c:125:22: error: use of undeclared identifier 'page'
-     125 |         BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-         |                             ^
-   7 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+>> arch/powerpc/mm/book3s64/radix_tlb.c:419:20: error: unused function '_tlbie_pid_lpid' [-Werror,-Wunused-function]
+     419 | static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+         |                    ^
+>> arch/powerpc/mm/book3s64/radix_tlb.c:663:20: error: unused function '_tlbie_va_range_lpid' [-Werror,-Wunused-function]
+     663 | static inline void _tlbie_va_range_lpid(unsigned long start, unsigned long end,
+         |                    ^
+   2 errors generated.
 
 
-vim +/page +125 arch/powerpc/mm/pgtable-frag.c
+vim +/_tlbie_pid_lpid +419 arch/powerpc/mm/book3s64/radix_tlb.c
 
-0203dd58d897cbd Hugh Dickins          2023-07-11  117  
-a95d133c8643cae Christophe Leroy      2018-11-29  118  void pte_fragment_free(unsigned long *table, int kernel)
-a95d133c8643cae Christophe Leroy      2018-11-29  119  {
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  120) 	struct ptdesc *ptdesc = virt_to_ptdesc(table);
-a95d133c8643cae Christophe Leroy      2018-11-29  121  
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  122) 	if (pagetable_is_reserved(ptdesc))
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  123) 		return free_reserved_ptdesc(ptdesc);
-645d5ce2f7d6cb4 Aneesh Kumar K.V      2020-07-09  124  
-a95d133c8643cae Christophe Leroy      2018-11-29 @125  	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  126) 	if (atomic_dec_and_test(&ptdesc->pt_frag_refcount)) {
-0203dd58d897cbd Hugh Dickins          2023-07-11  127  		if (kernel)
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  128) 			pagetable_free(ptdesc);
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  129) 		else if (folio_test_clear_active(ptdesc_folio(ptdesc)))
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  130) 			call_rcu(&ptdesc->pt_rcu_head, pte_free_now);
-0203dd58d897cbd Hugh Dickins          2023-07-11  131  		else
-e18a6b21f4c0c0c Vishal Moola (Oracle  2023-07-24  132) 			pte_free_now(&ptdesc->pt_rcu_head);
-0203dd58d897cbd Hugh Dickins          2023-07-11  133  	}
-a95d133c8643cae Christophe Leroy      2018-11-29  134  }
-0203dd58d897cbd Hugh Dickins          2023-07-11  135  
+1a472c9dba6b96 arch/powerpc/mm/tlb-radix.c          Aneesh Kumar K.V 2016-04-29  418  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21 @419  static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  420  				   unsigned long ric)
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  421  {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  422  	asm volatile("ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  423  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  424  	/*
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  425  	 * Workaround the fact that the "ric" argument to __tlbie_pid
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  426  	 * must be a compile-time contraint to match the "i" constraint
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  427  	 * in the asm statement.
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  428  	 */
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  429  	switch (ric) {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  430  	case RIC_FLUSH_TLB:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  431  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_TLB);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  432  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  433  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  434  	case RIC_FLUSH_PWC:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  435  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_PWC);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  436  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  437  	case RIC_FLUSH_ALL:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  438  	default:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  439  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_ALL);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  440  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  441  	}
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  442  	asm volatile("eieio; tlbsync; ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  443  }
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  444  struct tlbiel_pid {
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  445  	unsigned long pid;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  446  	unsigned long ric;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  447  };
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  448  
+
+:::::: The code at line 419 was first introduced by commit
+:::::: f0c6fbbb90504fb7e9dbf0865463d3c2b4de49e5 KVM: PPC: Book3S HV: Add support for H_RPT_INVALIDATE
+
+:::::: TO: Bharata B Rao <bharata@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 -- 
 0-DAY CI Kernel Test Service
