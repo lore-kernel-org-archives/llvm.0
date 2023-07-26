@@ -1,196 +1,139 @@
-Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C9A1BEE4
-	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 22:56:52 +0000 (UTC)
-Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-6bc6e6390fcso1045763a34.0
-        for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 15:56:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B626AA93A
+	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 23:11:46 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b8b2b60731so2128455ad.2
+        for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 16:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1690413106; x=1691017906;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r4jdfUVTE7WBKRvJpfj2d5OTzyL4Pf20Sw0o+vzmWQg=;
+        b=cWEM4cw/Xmvw/Yc4U7z6EZydB4+ARQlb9npX06puzQ8ttDgkdjkLDLzoPXiRYyO1Dc
+         /WllWfsJwr4GdgXe+YaoqU38sCxEm2l1Zikmsb8G2cVdoF/6xfyjMS/+FISKFdO/zoHp
+         JJ/jVwdqi8Mz+WxcTEieLsTvVJsQPtnbc/Oe8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690412211; x=1691017011;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uww23Qzs/DVnAxeNoXGeyPDZ7ffs5XsS4ctwL03PTGk=;
-        b=DjMYvzvcoijnGCMYmOTByvOzm45jj/RFoWZHfuh1g/jABiuQgoH5R5U7uXBmgnowXx
-         m09cllsNTovcTl27eVxR/MGEu2b0+jD3KbuA9ZK00VzMlAFFdU8C2I2MKb7AlbMgybgs
-         UduBE1VZsxx+089L29y4IwOV6c40XPoYIBpMFpBjAxA1hFmNP82fpNURajTi5FYPknHg
-         Ee3i5QVYM7b3CffqSFEXW1q8VA1SY+vkgKwQu2Jwx2Htsy3HvsATFU2tB6U4yUoDipYc
-         Ae3vganU4iVbyY3zeJBFpknfH8vkmVI3CDY4TE/kGfKCpk5AYGc9/PGc66BwSAulFr+u
-         Z/ZQ==
-X-Gm-Message-State: ABy/qLZufA5rxMriYkXFi9enkZaQoG4DqjbCrFJIM6mad/7VOy164Yha
-	+MtDfdqJOtdMisV7iSBKdQsYktlSVqTQMPxdHosXyctwapr3
-X-Google-Smtp-Source: APBJJlEQd75G8ckYWcJGWByqGONPqonvJAiFEoUpGtHmEJasooORdi52AgxtLDN020gIljlTOXeOhtynhXm2srMtBw14SRszlRTU
+        d=1e100.net; s=20221208; t=1690413106; x=1691017906;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r4jdfUVTE7WBKRvJpfj2d5OTzyL4Pf20Sw0o+vzmWQg=;
+        b=a8GWJqme4mtP3LlByIbx3hwy4mPMld9HoYeNVuvi2waJeR7XwrAWIO96KQnTp6/Mgt
+         eFjFyo44KZ6bMxBQKsszv9+yJGdlB0o4cPr3+pG0iABrUiR1EkgbxBbgW1aPc5MkPHaX
+         I1Hq7B8SmdP4NHsjEvkmQv2mC6af16iAFxHeQTUiGAHsdXE3C2pfOstLqCyjZu8RRcQS
+         YLv+wqebgP/+xk5tXosrCEF4rBN9TJzl105KupDg4LTw5Wx11cQk5aTLWs3ThDeWbNZq
+         jO1/fowTASQxUJ03x1T86fv1dJRd3byh37wX/tCx5kWBipIjWzwMXs5BDtTEUwiP/6rs
+         WLaA==
+X-Gm-Message-State: ABy/qLbopJ/JY1lpd30ATaStkAWkyXJDeuH2KKL4cFuJ79iDXxJEP75a
+	2wN5iagAk5LzyaCrXBNxzJSO7A==
+X-Google-Smtp-Source: APBJJlHIRT7RagOVEgkyJ4BE8SHUXCP9y/ZI0M+lOoJtFqUBjQgpXV1jOJkoWH9XFaUzbitXWxJXWg==
+X-Received: by 2002:a17:902:f545:b0:1bb:a367:a70 with SMTP id h5-20020a170902f54500b001bba3670a70mr2634155plf.17.1690413105998;
+        Wed, 26 Jul 2023 16:11:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902e9d100b001bb9883714dsm82329plk.143.2023.07.26.16.11.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jul 2023 16:11:45 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Juergen Gross <jgross@suse.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	kernel test robot <lkp@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ajay Kaher <akaher@vmware.com>,
+	Alexey Makhalov <amakhalov@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] x86/paravirt: Fix tlb_remove_table function callback prototype warning
+Date: Wed, 26 Jul 2023 16:11:43 -0700
+Message-Id: <20230726231139.never.601-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6830:1457:b0:6b7:2c41:710 with SMTP id
- w23-20020a056830145700b006b72c410710mr1215164otp.3.1690412211376; Wed, 26 Jul
- 2023 15:56:51 -0700 (PDT)
-Date: Wed, 26 Jul 2023 15:56:51 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000062174006016bc386@google.com>
-Subject: [syzbot] [ntfs3?] WARNING: nested lock was not taken in ntfs_file_write_iter
-From: syzbot <syzbot+12dd1b7c210b98623391@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2323; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=LqLAiBHCS3SOIFmrkPyUKr3/p9LAy4Na2qeKgbyRhrI=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkwagvwZ+7zZjxcV7wmzqScO6yy6gJ+KlcGXU/K
+ mS4h3RYHdSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZMGoLwAKCRCJcvTf3G3A
+ JhbOD/9dxIW8nQqK8eLsN8DjarrXXo2MbTowMSbdqTmppURh3d8EQCiVCszUdxoaRUHvFmiKUwD
+ D86KLX1tiSS5FlmX4ehFA5HpFl8hytrIv6LOuRxqCpKGC2bBI/G9LV1VsezmZIaynIqq33TTzSb
+ 109A2v1VaTm7/xkCakSz3YP1bb54E0aaHp1s8DpDiDQd0TyfFi/M8mdGqi/obyPLhg8JG+rijen
+ upCg0o3/Ein1HDCtKa6opIYvNATV0grvRApCnAIctGb9+8SFY2a0OfcJKvkl6PzUSboTIYJGhUj
+ BouFli9hesufXioK68mpt9jpJN8jbgriMKaxEWrFmMQFplcKDGpsF1mCidFz+XzJYoBc9JHktUb
+ 6MkSAssX4OZC+kqJ6DLNqCWg5au02WpdbEhCtzMlZm79xenUBUIgOEulsIrUSqjm1Cs2q5ovoJl
+ OOrOyA0ckQKVx+JXSgwDfog4rCyllA0sD2ui31ftHyETeH8MPOr6t45gSN/h6rtv3lNCmlbPuLp
+ zwt96o1ZirQgD3U2/AVclaSoqcS7bsL22skLip02dZ0Zx4mVqTxfueAigIzDiB79B6dz+3V4E5J
+ ypR9j+96fTzo6acv0GLam7/8ORNyRhm10PhPoup2PKCgVqq2FuhihR9cmInkFlclyfcxbFFHNBh
+ 00lNaL4 PSbWXsTQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Under W=1, this warning is visible in Clang 16 and newer:
 
-syzbot found the following issue on:
+arch/x86/kernel/paravirt.c:337:4: warning: cast from 'void (*)(struct mmu_gather *, struct page *)' to 'void (*)(struct mmu_gather *, void *)' converts to incompatible function type [-Wcast-function-type-strict]
+                           (void (*)(struct mmu_gather *, void *))tlb_remove_page,
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-HEAD commit:    ae867bc97b71 Add linux-next specific files for 20230721
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13e8efaea80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c403a6b36e7c85ac
-dashboard link: https://syzkaller.appspot.com/bug?extid=12dd1b7c210b98623391
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f7744aa80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e25e52a80000
+Add a direct wrapper instead, which will make this warning (and
+potential KCFI failures) go away.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a76b93f21f84/disk-ae867bc9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8eb30097a952/vmlinux-ae867bc9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7506a6b3ec38/bzImage-ae867bc9.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/26e8694ec3f7/mount_2.gz
-
-The issue was bisected to:
-
-commit ad26a9c84510af7252e582e811de970433a9758f
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Fri Oct 7 17:08:06 2022 +0000
-
-    fs/ntfs3: Fixing wrong logic in attr_set_size and ntfs_fallocate
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=149187d1a80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=169187d1a80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=129187d1a80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+12dd1b7c210b98623391@syzkaller.appspotmail.com
-Fixes: ad26a9c84510 ("fs/ntfs3: Fixing wrong logic in attr_set_size and ntfs_fallocate")
-
-==================================
-WARNING: Nested lock was not taken
-6.5.0-rc2-next-20230721-syzkaller #0 Not tainted
-----------------------------------
-syz-executor992/5289 is trying to lock:
-ffff888077f9f240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_trylock include/linux/fs.h:791 [inline]
-ffff888077f9f240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: ntfs_file_write_iter+0x236/0x1c10 fs/ntfs3/file.c:1060
-
-but this task is not holding:
-general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-CPU: 0 PID: 5289 Comm: syz-executor992 Not tainted 6.5.0-rc2-next-20230721-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2023
-RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4974 [inline]
-RIP: 0010:__lock_acquire+0x12bb/0x5de0 kernel/locking/lockdep.c:5135
-Code: fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 40 4a 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 18 48 8d 7b 18 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 13 4a 00 00 48 8b 73 18 48 c7 c7 20 b1 6c 8a e8
-RSP: 0018:ffffc90004017368 EFLAGS: 00010006
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000003 RSI: ffffffff816acb50 RDI: 0000000000000018
-RBP: ffff88801fc20ac8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff88801fc20000
-R13: ffff88801fc20af0 R14: 0000000000000001 R15: ffffed1003f84158
-FS:  000055555625d380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005555562666f8 CR3: 0000000029b9f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5761 [inline]
- lock_acquire+0x1ae/0x510 kernel/locking/lockdep.c:5726
- down_write_trylock kernel/locking/rwsem.c:1604 [inline]
- down_write_trylock+0x1ae/0x3d0 kernel/locking/rwsem.c:1599
- inode_trylock include/linux/fs.h:791 [inline]
- ntfs_file_write_iter+0x236/0x1c10 fs/ntfs3/file.c:1060
- call_write_iter include/linux/fs.h:1917 [inline]
- do_iter_readv_writev+0x21e/0x3c0 fs/read_write.c:735
- do_iter_write+0x17f/0x830 fs/read_write.c:860
- vfs_iter_write+0x7a/0xb0 fs/read_write.c:901
- iter_file_splice_write+0x698/0xbf0 fs/splice.c:738
- do_splice_from fs/splice.c:933 [inline]
- direct_splice_actor+0x118/0x180 fs/splice.c:1142
- splice_direct_to_actor+0x347/0xa30 fs/splice.c:1088
- do_splice_direct+0x1af/0x280 fs/splice.c:1194
- do_sendfile+0xb88/0x1390 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x1d6/0x220 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f906989afd9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 01 1b 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff4bf5f198 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f906989afd9
-RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000006
-RBP: 0000000000000000 R08: 00007fff4bf5f1d0 R09: 00007fff4bf5f1d0
-R10: 000000007fffffff R11: 0000000000000246 R12: 00007fff4bf5f1bc
-R13: 00000000000000cd R14: 431bde82d7b634db R15: 00007fff4bf5f1f0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4974 [inline]
-RIP: 0010:__lock_acquire+0x12bb/0x5de0 kernel/locking/lockdep.c:5135
-Code: fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 40 4a 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 18 48 8d 7b 18 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 13 4a 00 00 48 8b 73 18 48 c7 c7 20 b1 6c 8a e8
-RSP: 0018:ffffc90004017368 EFLAGS: 00010006
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000003 RSI: ffffffff816acb50 RDI: 0000000000000018
-RBP: ffff88801fc20ac8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff88801fc20000
-R13: ffff88801fc20af0 R14: 0000000000000001 R15: ffffed1003f84158
-FS:  000055555625d380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005555562666f8 CR3: 0000000029b9f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 3 bytes skipped:
-   0:	48 c1 ea 03          	shr    $0x3,%rdx
-   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   8:	0f 85 40 4a 00 00    	jne    0x4a4e
-   e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  15:	fc ff df
-  18:	49 8b 5d 18          	mov    0x18(%r13),%rbx
-  1c:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
-  20:	48 89 fa             	mov    %rdi,%rdx
-  23:	48 c1 ea 03          	shr    $0x3,%rdx
-* 27:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2b:	0f 85 13 4a 00 00    	jne    0x4a44
-  31:	48 8b 73 18          	mov    0x18(%rbx),%rsi
-  35:	48 c7 c7 20 b1 6c 8a 	mov    $0xffffffff8a6cb120,%rdi
-  3c:	e8                   	.byte 0xe8
-
-
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307260332.pJntWR6o-lkp@intel.com/
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Ajay Kaher <akaher@vmware.com>
+Cc: Alexey Makhalov <amakhalov@vmware.com>
+Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: virtualization@lists.linux-foundation.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ arch/x86/kernel/paravirt.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index ac10b46c5832..23d4d7114473 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -79,6 +79,11 @@ void __init native_pv_lock_init(void)
+ 		static_branch_disable(&virt_spin_lock_key);
+ }
+ 
++static void native_tlb_remove_table(struct mmu_gather *tlb, void *table)
++{
++	tlb_remove_page(tlb, table);
++}
++
+ unsigned int paravirt_patch(u8 type, void *insn_buff, unsigned long addr,
+ 			    unsigned int len)
+ {
+@@ -295,8 +300,7 @@ struct paravirt_patch_template pv_ops = {
+ 	.mmu.flush_tlb_kernel	= native_flush_tlb_global,
+ 	.mmu.flush_tlb_one_user	= native_flush_tlb_one_user,
+ 	.mmu.flush_tlb_multi	= native_flush_tlb_multi,
+-	.mmu.tlb_remove_table	=
+-			(void (*)(struct mmu_gather *, void *))tlb_remove_page,
++	.mmu.tlb_remove_table	= native_tlb_remove_table,
+ 
+ 	.mmu.exit_mmap		= paravirt_nop,
+ 	.mmu.notify_page_enc_status_changed	= paravirt_nop,
+-- 
+2.34.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
