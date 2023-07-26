@@ -1,133 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F01C126
-	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 12:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690373483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vRejxK5umOivTgiU7YysucWewPOt6+4ioMoGP7iKC6Q=;
-	b=IpjbPa/BxjEEr7+Q5eKUSqBjo/BupGlhuVLIL9j/EyhlisHh5kmmmGs9SkmdO3TxkzWoTX
-	ntcGaG0o5bNL01VaIfgAw1vtUKteWvycQhxcDjV1wGCHE27QojO+jFoxFrOH/Jr6lBju2U
-	uiruG31W00RGbQA+LVm/oF1bLsAQ8tM=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-kqOsfS-ONKOcU27j61qGJg-1; Wed, 26 Jul 2023 08:11:22 -0400
-X-MC-Unique: kqOsfS-ONKOcU27j61qGJg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64418381C169
-	for <llvm@lists.linux.dev>; Wed, 26 Jul 2023 12:11:21 +0000 (UTC)
-Received: from [172.64.1.75] (unknown [10.30.32.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4F0264094DC0;
-	Wed, 26 Jul 2023 12:11:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
- (6.5.0-rc3, mainline.kernel.org-clang, 9f911640)
-Date: Wed, 26 Jul 2023 12:11:21 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAA11DA20;
+	Wed, 26 Jul 2023 14:39:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690382369; x=1721918369;
+  h=date:from:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RBAiNlNIUVg3mo/vJGenZiAnbAsvvtCDCMY/dF65aog=;
+  b=WJhO/Ep+aV8AQ/mnHKjil2qkEK78kTcPdfqXycVvjHFOyJqdm0tR9Sx9
+   hQlTZZ4wOeL3w8u8sADCUqD5Ty34Q0qxK34d4ZpnKnI13MkGxCHNycg3m
+   swdVNkodQqnWAXa3KM8QwnEOiyGqVy69paBMPHXJQN7kzNSN/V6mXMdkw
+   fX0VYJgn+Bg5dlHm/rnZpVhHxyWInfxA06hw2lAm1+ikqxoyGULz6JEuF
+   YghQZJQmjD6QPoGG7wqIv1dtr1rWYLfvujhO1PUoEfQnVWRwErOgqLnKo
+   BwBeiQ3MFBakEmA6eauUEucmgscEt13uQOm1IwIJHsCBhjvhuRcI8aBlf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="371644925"
+X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
+   d="scan'208";a="371644925"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 07:39:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="900445753"
+X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
+   d="scan'208";a="900445753"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 26 Jul 2023 07:39:25 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOffh-00011R-0W;
+	Wed, 26 Jul 2023 14:39:25 +0000
+Date: Wed, 26 Jul 2023 22:38:58 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-next:master 3835/4710] clang: error: unknown argument:
+ '-msym32'
+Message-ID: <202307262218.hpvyrXrf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <08549.123072608112200383@us-mta-138.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: "Maciej W. Rozycki" <macro@orcam.me.uk>
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC: "Philippe Mathieu-Daudé" <philmd@linaro.org>
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0ba5d07205771c50789fd9063950aa75e7f1183f
+commit: a79a404e6c2241ebc528b9ebf4c0832457b498c3 [3835/4710] MIPS: Fix CONFIG_CPU_DADDI_WORKAROUNDS `modules_install' regression
+config: mips-randconfig-r034-20230726 (https://download.01.org/0day-ci/archive/20230726/202307262218.hpvyrXrf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230726/202307262218.hpvyrXrf-lkp@intel.com/reproduce)
 
-Tested-by: CKI Project <cki-project@redhat.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307262218.hpvyrXrf-lkp@intel.com/
 
-Kernel information:
-    Commit message: x86/traps: Fix load_unaligned_zeropad() handling for sh=
-ared TDX memory
+All errors (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97299
+>> clang: error: unknown argument: '-msym32'
+>> clang: error: unknown argument: '-msym32'
+   make[3]: *** [scripts/Makefile.build:116: kernel/bounds.s] Error 1 shuffle=249098922
+   make[3]: Target 'missing-syscalls' not remade because of errors.
+   make[2]: *** [arch/mips/Makefile:430: archprepare] Error 2 shuffle=249098922
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=249098922
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:234: __sub-make] Error 2 shuffle=249098922
+   make: Target 'prepare' not remade because of errors.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/173 failing on ark-eln aarch64
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
