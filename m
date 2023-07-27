@@ -1,113 +1,121 @@
-Received: from mgamail.intel.com (unknown [192.55.52.115])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DFD13AC1;
-	Thu, 27 Jul 2023 12:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690460886; x=1721996886;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oDB5fH1u+7MkaayvQQI9q5rBAl1d1a9kRG9MGFRm2Z4=;
-  b=I95moxYZpYb5NO9jFUevfuYDjJfHH5audlFLwZudflhzt3zLg9ifN8rj
-   SqG2o/fGIsUW/P8q5gWWXaj2lO+hnyoGtFfLk06HyEASQbg1NXwWRThNG
-   uCw8n7cO1m+54cuXZadLzlv78Rb6Ejdgd1v0QuTCRKrVSsgJEtXLhJhoS
-   QFAshe0p0K1MDvTBP8tIUjtuz+kXDDvtmlFl2DcqmgLs4YRppEXc5A3Qt
-   LsgmZlNMGo41ZWwMw8+1ujjFiDFJb8zQXr+Nn2Nlo7pkom9n3Hcgyr6hL
-   E/2HKKj07+WM6Do2MnKJmJrtJAkybTT2QlQkknpByKWJBBAZtk690kyTA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="368310548"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="368310548"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 05:28:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="704161445"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="704161445"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jul 2023 05:28:03 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qP067-0002H1-02;
-	Thu, 27 Jul 2023 12:28:03 +0000
-Date: Thu, 27 Jul 2023 20:27:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <maxime@cerno.tech>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.10.y 3594/9999]
- drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs'
-Message-ID: <202307272055.DLQgWCti-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1367E16439
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 14:01:52 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-228-MA1g0RDwNJKsqFhPGNhzQA-1; Thu, 27 Jul 2023 15:01:49 +0100
+X-MC-Unique: MA1g0RDwNJKsqFhPGNhzQA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 27 Jul
+ 2023 15:01:48 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 27 Jul 2023 15:01:48 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+CC: 'kernel test robot' <lkp@intel.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, 'Andrew Morton' <akpm@linux-foundation.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Christoph Hellwig
+	<hch@infradead.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, "Linux
+ Memory Management List" <linux-mm@kvack.org>
+Subject: RE: [PATCH next 2/5] minmax: Allow min()/max()/clamp() if the
+ arguments have the same signedness.
+Thread-Topic: [PATCH next 2/5] minmax: Allow min()/max()/clamp() if the
+ arguments have the same signedness.
+Thread-Index: Adm+2wKUQ5yQ6t/FR+W/hRy2DuErJQALXH0AACSnwSAADmS3gAAu/pPA
+Date: Thu, 27 Jul 2023 14:01:48 +0000
+Message-ID: <c7e4b886eae04d3f9ea50be0685839e9@AcuMS.aculab.com>
+References: <454f967d452548a9acfa7c0a0872507e@AcuMS.aculab.com>
+ <202307252359.Is4T2MXC-lkp@intel.com>
+ <350c7fe495424138afd15d797830c417@AcuMS.aculab.com>
+ <ZMFHs4MV6vUhwn7r@smile.fi.intel.com>
+In-Reply-To: <ZMFHs4MV6vUhwn7r@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxime,
+From: 'Andy Shevchenko'
+> Sent: 26 July 2023 17:20
+>=20
+> On Wed, Jul 26, 2023 at 08:30:59AM +0000, David Laight wrote:
+> > From: kernel test robot
+> > > Sent: 25 July 2023 16:58
+> > >
+> > > kernel test robot noticed the following build errors:
+>=20
+> ...
+>=20
+> > >    In file included from init/calibrate.c:8:
+> > > >> include/linux/jiffies.h:427:28: error: call to undeclared function=
+ 'static_assert'; ISO C99 and
+> > > later do not support implicit function declarations [-Wimplicit-funct=
+ion-declaration]
+> > >      427 |         return jiffies_to_clock_t(max(0L, delta));
+> > >          |                                   ^
+> > ...
+> > >    include/linux/minmax.h:29:3: note: expanded from macro '__cmp_once=
+'
+> > >       29 |                 static_assert(__types_ok(x, y),         \
+> >
+> > This is fixed by the earlier patch:
+> > [PATCH v1 1/1] minmax: Fix header inclusions
+> >
+> > which adds #include <linux/build_bug.h> and thus defines static_assert(=
+).
+> >
+> > Can I just assume that will be applied?
+>=20
+> You can test that and reply there with your Tested-by there, it will help=
+ it
+> to be applied.
 
-FYI, the error/warning still remains.
+I can check it doesn't break my x86-64 build.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   3602dbc57b556eff2456715301d35a1ef8964bba
-commit: 6cc1edddcf02f69664887ea7ed4b604481ae300e [3594/9999] drm/vc4: dsi: Introduce a variant structure
-config: mips-randconfig-r023-20230727 (https://download.01.org/0day-ci/archive/20230727/202307272055.DLQgWCti-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307272055.DLQgWCti-lkp@intel.com/reproduce)
+I think the build error was on a 'um' build - not really obvious
+in the report.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307272055.DLQgWCti-lkp@intel.com/
+I suspect everything else gets build_bug.h included from a very
+common header file.
 
-All warnings (new ones prefixed by >>):
+On x86-64 (5.10.xxx) by forcing an error I get:
+  CC      init/calibrate.o
+In file included from linux/include/linux/bits.h:22,
+                 from linux/include/linux/bitops.h:5,
+                 from linux/include/linux/kernel.h:12,
+                 from linux/arch/x86/include/asm/percpu.h:27,
+                 from linux/arch/x86/include/asm/current.h:6,
+                 from linux/arch/x86/include/asm/processor.h:17,
+                 from linux/arch/x86/include/asm/timex.h:5,
+                 from linux/include/linux/timex.h:67,
+                 from linux/include/linux/time32.h:13,
+                 from linux/include/linux/time.h:73,
+                 from linux/include/linux/jiffies.h:10,
+                 from linux/init/calibrate.c:9:
+linux/include/linux/build_bug.h: ...
 
->> drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs' [-Wunused-const-variable]
-     617 | static const struct debugfs_reg32 dsi0_regs[] = {
-         |                                   ^
-   1 warning generated.
+I can't help feeling some of that chain isn't needed :-)
 
+=09David
 
-vim +/dsi0_regs +617 drivers/gpu/drm/vc4/vc4_dsi.c
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-4078f5757144234 Eric Anholt 2017-01-31  616  
-3051719af11eb48 Eric Anholt 2019-02-20 @617  static const struct debugfs_reg32 dsi0_regs[] = {
-3051719af11eb48 Eric Anholt 2019-02-20  618  	VC4_REG32(DSI0_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  619  	VC4_REG32(DSI0_STAT),
-3051719af11eb48 Eric Anholt 2019-02-20  620  	VC4_REG32(DSI0_HSTX_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  621  	VC4_REG32(DSI0_LPRX_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  622  	VC4_REG32(DSI0_TA_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  623  	VC4_REG32(DSI0_PR_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  624  	VC4_REG32(DSI0_DISP0_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  625  	VC4_REG32(DSI0_DISP1_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  626  	VC4_REG32(DSI0_INT_STAT),
-3051719af11eb48 Eric Anholt 2019-02-20  627  	VC4_REG32(DSI0_INT_EN),
-3051719af11eb48 Eric Anholt 2019-02-20  628  	VC4_REG32(DSI0_PHYC),
-3051719af11eb48 Eric Anholt 2019-02-20  629  	VC4_REG32(DSI0_HS_CLT0),
-3051719af11eb48 Eric Anholt 2019-02-20  630  	VC4_REG32(DSI0_HS_CLT1),
-3051719af11eb48 Eric Anholt 2019-02-20  631  	VC4_REG32(DSI0_HS_CLT2),
-3051719af11eb48 Eric Anholt 2019-02-20  632  	VC4_REG32(DSI0_HS_DLT3),
-3051719af11eb48 Eric Anholt 2019-02-20  633  	VC4_REG32(DSI0_HS_DLT4),
-3051719af11eb48 Eric Anholt 2019-02-20  634  	VC4_REG32(DSI0_HS_DLT5),
-3051719af11eb48 Eric Anholt 2019-02-20  635  	VC4_REG32(DSI0_HS_DLT6),
-3051719af11eb48 Eric Anholt 2019-02-20  636  	VC4_REG32(DSI0_HS_DLT7),
-3051719af11eb48 Eric Anholt 2019-02-20  637  	VC4_REG32(DSI0_PHY_AFEC0),
-3051719af11eb48 Eric Anholt 2019-02-20  638  	VC4_REG32(DSI0_PHY_AFEC1),
-3051719af11eb48 Eric Anholt 2019-02-20  639  	VC4_REG32(DSI0_ID),
-4078f5757144234 Eric Anholt 2017-01-31  640  };
-4078f5757144234 Eric Anholt 2017-01-31  641  
-
-:::::: The code at line 617 was first introduced by commit
-:::::: 3051719af11eb48dc8947826cfb66dbe0f281c7d drm/vc4: Use drm_print_regset32() for our debug register dumping.
-
-:::::: TO: Eric Anholt <eric@anholt.net>
-:::::: CC: Eric Anholt <eric@anholt.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
