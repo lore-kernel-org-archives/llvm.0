@@ -1,164 +1,292 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67FB1FA9
-	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 05:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690435219;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XjtbQkbaGfCGoWciW1ybKVfhvGQUsCF5hJu9qPcSvV4=;
-	b=PPUoUYAPVGwu8kbSt6pcbsMZ+5JhN8UVow7dLBLQgR8XBbdEZJZQgGv3/ROnpNY0FK87lB
-	oB7BhuSuF6yLYVJITY1QDV/fmyam7yfKZidp50Kj89dLEBX3ifbcMT87tnpdf4IXMjWcYR
-	UURpZDQ/E5l5+ZgLkl/N5+AlDeMO0ck=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-3daujLFRPYitE444hLNjZQ-1; Thu, 27 Jul 2023 01:20:18 -0400
-X-MC-Unique: 3daujLFRPYitE444hLNjZQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E093E802A7D
-	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 05:20:17 +0000 (UTC)
-Received: from [172.64.0.126] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C9C6E492B01;
-	Thu, 27 Jul 2023 05:20:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 328): Test report for master
- (6.5.0-rc3, mainline.kernel.org-clang, 5f0bc0b0)
-Date: Thu, 27 Jul 2023 05:20:17 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD0538C;
+	Thu, 27 Jul 2023 05:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690435242; x=1721971242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VDEn0hrCg1uYOjtTifszzIiM89uuhKuwm6VqBNZo9MM=;
+  b=O75X0evmop4tMJRYM6OfD9+X0wJhBPw+Pj+Cy1rtj6jNB3/54Sp/wWA4
+   HoQ1MS3TT3he9pNPmwtY/gsB5culOfWGMcsghY4xJ5eU3Z63aHeIpxJlj
+   2BBfFRZFREFquiCKiijS0rQrTkPR+x9bxXqt0SCUmCibkfrvKua8UopBm
+   G1FSaaskkp9bLQG5EWDaefTIFfIuYhd6FHY74JoPS6QLpUwi6IsjrOuBv
+   8kotfGc9ZvB/r34rP1FSnSjo8Qz3fbDj92knkCuztLkt1sQpCGrsTEzId
+   lq56voFEtuQij85cwpCuFONnbB6wQ1d9CKjSekVXQo8brfiiLQHQ629yS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="358209681"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="358209681"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:20:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="756514549"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="756514549"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jul 2023 22:20:40 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOtQV-0001xh-10;
+	Thu, 27 Jul 2023 05:20:39 +0000
+Date: Thu, 27 Jul 2023 13:20:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH 6/6] bitmap: move bitmap_*_region functions to bitmap.h
+Message-ID: <202307271307.tipWMyPF-lkp@intel.com>
+References: <20230727020207.36314-7-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <45574.123072701201800157@us-mta-94.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230727020207.36314-7-yury.norov@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Yury,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.5-rc3 next-20230726]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/bitmap-fix-opencoded-bitmap_allocate_region/20230727-100500
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230727020207.36314-7-yury.norov%40gmail.com
+patch subject: [PATCH 6/6] bitmap: move bitmap_*_region functions to bitmap.h
+config: hexagon-randconfig-r036-20230726 (https://download.01.org/0day-ci/archive/20230727/202307271307.tipWMyPF-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271307.tipWMyPF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271307.tipWMyPF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:63:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:12:
+>> include/linux/bitmap.h:239:8: error: call to undeclared function 'bitmap_allocate_region'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     239 |                 if (!bitmap_allocate_region(bitmap, pos, order))
+         |                      ^
+>> include/linux/bitmap.h:258:2: error: call to undeclared function 'bitmap_clear'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     258 |         bitmap_clear(bitmap, pos, pos + BIT(order));
+         |         ^
+   include/linux/bitmap.h:258:2: note: did you mean '__bitmap_clear'?
+   include/linux/bitmap.h:171:6: note: '__bitmap_clear' declared here
+     171 | void __bitmap_clear(unsigned long *map, unsigned int start, int len);
+         |      ^
+   include/linux/bitmap.h:272:19: error: static declaration of 'bitmap_allocate_region' follows non-static declaration
+     272 | static inline int bitmap_allocate_region(unsigned long *bitmap, unsigned int pos, int order)
+         |                   ^
+   include/linux/bitmap.h:239:8: note: previous implicit declaration is here
+     239 |                 if (!bitmap_allocate_region(bitmap, pos, order))
+         |                      ^
+>> include/linux/bitmap.h:278:2: error: call to undeclared function 'bitmap_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     278 |         bitmap_set(bitmap, pos, nbits);
+         |         ^
+   include/linux/bitmap.h:510:29: error: static declaration of 'bitmap_set' follows non-static declaration
+     510 | static __always_inline void bitmap_set(unsigned long *map, unsigned int start,
+         |                             ^
+   include/linux/bitmap.h:278:2: note: previous implicit declaration is here
+     278 |         bitmap_set(bitmap, pos, nbits);
+         |         ^
+   include/linux/bitmap.h:526:29: error: static declaration of 'bitmap_clear' follows non-static declaration
+     526 | static __always_inline void bitmap_clear(unsigned long *map, unsigned int start,
+         |                             ^
+   include/linux/bitmap.h:258:2: note: previous implicit declaration is here
+     258 |         bitmap_clear(bitmap, pos, pos + BIT(order));
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
 
 
-Kernel information:
-    Commit message: mm: suppress mm fault logging if fatal signal already p=
-ending
+vim +/bitmap_allocate_region +239 include/linux/bitmap.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97488
+   202	
+   203	int bitmap_parse(const char *buf, unsigned int buflen,
+   204				unsigned long *dst, int nbits);
+   205	int bitmap_parse_user(const char __user *ubuf, unsigned int ulen,
+   206				unsigned long *dst, int nbits);
+   207	int bitmap_parselist(const char *buf, unsigned long *maskp,
+   208				int nmaskbits);
+   209	int bitmap_parselist_user(const char __user *ubuf, unsigned int ulen,
+   210				unsigned long *dst, int nbits);
+   211	void bitmap_remap(unsigned long *dst, const unsigned long *src,
+   212			const unsigned long *old, const unsigned long *new, unsigned int nbits);
+   213	int bitmap_bitremap(int oldbit,
+   214			const unsigned long *old, const unsigned long *new, int bits);
+   215	void bitmap_onto(unsigned long *dst, const unsigned long *orig,
+   216			const unsigned long *relmap, unsigned int bits);
+   217	void bitmap_fold(unsigned long *dst, const unsigned long *orig,
+   218			unsigned int sz, unsigned int nbits);
+   219	
+   220	/**
+   221	 * bitmap_find_free_region - find a contiguous aligned mem region
+   222	 *	@bitmap: array of unsigned longs corresponding to the bitmap
+   223	 *	@bits: number of bits in the bitmap
+   224	 *	@order: region size (log base 2 of number of bits) to find
+   225	 *
+   226	 * Find a region of free (zero) bits in a @bitmap of @bits bits and
+   227	 * allocate them (set them to one).  Only consider regions of length
+   228	 * a power (@order) of two, aligned to that power of two, which
+   229	 * makes the search algorithm much faster.
+   230	 *
+   231	 * Return the bit offset in bitmap of the allocated region,
+   232	 * or -errno on failure.
+   233	 */
+   234	static inline int bitmap_find_free_region(unsigned long *bitmap, unsigned int bits, int order)
+   235	{
+   236		unsigned int pos, end;		/* scans bitmap by regions of size order */
+   237	
+   238		for (pos = 0 ; (end = pos + (1U << order)) <= bits; pos = end)
+ > 239			if (!bitmap_allocate_region(bitmap, pos, order))
+   240				return pos;
+   241	
+   242		return -ENOMEM;
+   243	}
+   244	
+   245	/**
+   246	 * bitmap_release_region - release allocated bitmap region
+   247	 *	@bitmap: array of unsigned longs corresponding to the bitmap
+   248	 *	@pos: beginning of bit region to release
+   249	 *	@order: region size (log base 2 of number of bits) to release
+   250	 *
+   251	 * This is the complement to __bitmap_find_free_region() and releases
+   252	 * the found region (by clearing it in the bitmap).
+   253	 *
+   254	 * No return value.
+   255	 */
+   256	static inline void bitmap_release_region(unsigned long *bitmap, unsigned int pos, int order)
+   257	{
+ > 258		bitmap_clear(bitmap, pos, pos + BIT(order));
+   259	}
+   260	
+   261	/**
+   262	 * bitmap_allocate_region - allocate bitmap region
+   263	 *	@bitmap: array of unsigned longs corresponding to the bitmap
+   264	 *	@pos: beginning of bit region to allocate
+   265	 *	@order: region size (log base 2 of number of bits) to allocate
+   266	 *
+   267	 * Allocate (set bits in) a specified region of a bitmap.
+   268	 *
+   269	 * Return 0 on success, or %-EBUSY if specified region wasn't
+   270	 * free (not all bits were zero).
+   271	 */
+   272	static inline int bitmap_allocate_region(unsigned long *bitmap, unsigned int pos, int order)
+   273	{
+   274		unsigned int nbits = pos + BIT(order);
+   275	
+   276		if (find_next_bit(bitmap, pos, nbits) < nbits)
+   277			return -EBUSY;
+ > 278		bitmap_set(bitmap, pos, nbits);
+   279		return 0;
+   280	}
+   281	
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         ppc64le - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8910346
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-         ppc64le - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8910411
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/173 failing on ark-eln aarch64
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1188
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Aborting task xxxx from recipe xxxx as system expects to run=
- tests for recipe xxxx
-            URL: https://gitlab.com/cki-project/upt/-/issues/99
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-                  x86_64 - Reboot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
