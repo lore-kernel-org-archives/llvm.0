@@ -1,156 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (unknown [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16161C154
-	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 07:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1434EC433C7;
-	Thu, 27 Jul 2023 07:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690444440;
-	bh=N4vD5j/AWTskadRXxiH3iN9/rRLw1xJvEc+0YLJvx8U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m+ao2uFgcShr6jnD/bBgFiLj0mFMLOdwcj2dj1/w+jGR4Bu9NGX2MwMrGZ/zJ/3mq
-	 O86ypdhEOvfgOUl+2VGAt44TviqCUlHpLwDv5uMe8bVhdORFDDzB26HFN356gYnYxx
-	 5rRIofqncHudt0bO6kSxlz8jsV+L9DtR4Bp/EMmaHNpk0jq9uYrACx+Sz9ilqqFr4k
-	 BasN2UO+iMZBhocwQq7HqwF4TB20ciGb7RjKqLcScb5Cswg3A5todAM20llwGaSaYJ
-	 0g0Snm/d6lFMu5ukoubQtfRALvL/pLSLIrQXXyG9FByaZBmq5FpGEz6cqi5u4qlOve
-	 YBVMx4AvmE+kA==
-Date: Thu, 27 Jul 2023 08:53:55 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Bin Meng <bmeng@tinylab.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: Handle zicsr/zifencei issue between gcc and
- binutils
-Message-ID: <20230727-briskness-sappy-e2d9e4c1ef36@spud>
-References: <20230726174524.340952-1-xingmingzheng@iscas.ac.cn>
- <20230726-outclass-parade-2ccea9f6688a@spud>
- <10231b81-ea42-26d0-4c11-92851229e658@iscas.ac.cn>
- <20230726-armchair-evasive-427dd245a9fe@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CC1FBF2;
+	Thu, 27 Jul 2023 08:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690445437; x=1721981437;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zrfAmZ4o52ulOEe2NdPrWdHquCo9OaUriPnqqYF+iO0=;
+  b=hQR8S9CcDKSwjvBH4f+P/iDPWq4i1nPDwmqwunDPzq+Fiuq3NudrtKQv
+   RW2K+cmTUt3mU119QDr30o2eAsx0da8VUoiNBByCajdz313TYDQGgyL7u
+   jZ32JrmBU7KSPxHNBFt2cj3vVBcdtZR2nDcHSJbA4gBYUiNQvpWNvl1lQ
+   G1NB66etQZRjNpx5dZjqNSpMWYXIxdAgWoqsKH/uHtb7ttKhdtC2vDP7E
+   iLW74GZJxaWVEktn73fmKnWE9ZryNKUc3mNyS1Wf2QTI2+QOjjEQtQV6G
+   gCRNfa1UdLaFgWokEPj6b8c+WezvCtvTECQMWfbF+boqhte9tJ++sK4pl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="399182052"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="399182052"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:10:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="850768991"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="850768991"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 27 Jul 2023 01:10:33 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOw4O-00024h-0b;
+	Thu, 27 Jul 2023 08:10:09 +0000
+Date: Thu, 27 Jul 2023 16:05:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 9/20] drivers/media/i2c/ov5693.c:1280:19:
+ error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202307271519.XIXA0WQd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="dEwon71W2kG8wE2d"
-Content-Disposition: inline
-In-Reply-To: <20230726-armchair-evasive-427dd245a9fe@spud>
-
-
---dEwon71W2kG8wE2d
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 26, 2023 at 08:41:55PM +0100, Conor Dooley wrote:
-> On Thu, Jul 27, 2023 at 03:34:16AM +0800, Mingzheng Xing wrote:
-> > On 7/27/23 02:02, Conor Dooley wrote:
->=20
-> > > This is still broken for:
-> > > CONFIG_CLANG_VERSION=3D0
-> > > CONFIG_AS_IS_GNU=3Dy
-> > > CONFIG_AS_VERSION=3D23500
-> > > CONFIG_LD_IS_BFD=3Dy
-> > > CONFIG_LD_VERSION=3D23500
-> >=20
-> > Do you mean that these CONFIG_* will cause kernel
-> > compilation errors when paired with certain versions of GCC?
-> > Or perhaps I misunderstood your meaning.
->=20
-> No, this section is generated by kconfig, although I messed up my
-> trimming of the list & accidentally removed the gcc version, rather
-> than the clang version. Here's the full thing:
->=20
-> CONFIG_CC_VERSION_TEXT=3D"riscv64-unknown-linux-gnu-gcc (g2ee5e430018) 12=
-=2E2.0"
-> CONFIG_CC_IS_GCC=3Dy
-> CONFIG_GCC_VERSION=3D120200
-> CONFIG_CLANG_VERSION=3D0
-> CONFIG_AS_IS_GNU=3Dy
-> CONFIG_AS_VERSION=3D23500
-> CONFIG_LD_IS_BFD=3Dy
-> CONFIG_LD_VERSION=3D23500
-> CONFIG_LLD_VERSION=3D0
-> CONFIG_CC_CAN_LINK=3Dy
-> CONFIG_CC_CAN_LINK_STATIC=3Dy
-> CONFIG_CC_HAS_ASM_GOTO_OUTPUT=3Dy
-> CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=3Dy
-> CONFIG_CC_HAS_ASM_INLINE=3Dy
-> CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=3Dy
-> CONFIG_PAHOLE_VERSION=3D0
-> CONFIG_CONSTRUCTORS=3Dy
-> CONFIG_IRQ_WORK=3Dy
-> CONFIG_BUILDTIME_TABLE_SORT=3Dy
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
+config: mips-randconfig-r013-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271519.XIXA0WQd-lkp@intel.com/reproduce)
 
-I think this should sort things out for the even-older binutils case. I
-took the opportunity to fix some grammatical issues that seem to have
-snuck into the help text in your patch & to drop the \, since the
-depends on fits in one line.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271519.XIXA0WQd-lkp@intel.com/
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e1b66ee88323..2d0d89213c97 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -571,25 +571,27 @@ config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
- 	def_bool y
- 	# https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Daed4428=
-6efa8ae8717a77d94b51ac3614e2ca6dc
- 	# https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a62579d4a7=
-a4a76bab51b5b52fec2cd
--	depends on GCC_VERSION >=3D 120100 || (AS_IS_GNU && AS_VERSION >=3D 23800)
-+	depends on AS_IS_GNU
-+	depends on (GCC_VERSION >=3D 120100 && AS_VERSION >=3D 23600) || AS_VERSI=
-ON >=3D 23800
- 	help
--	  Binutils-2.38 and GCC-12.1.0 bump default ISA spec to newer version
-+	  Binutils-2.38 and GCC-12.1.0 bump the default ISA spec to version
- 	  20191213 which moves some instructions from the I extension to the
--	  Zicsr and Zifencei extensions.
-+	  Zicsr and Zifencei extensions. On the other hand, Binutils prior to
-+	  2.35 does not understand these arguments and will error if they are
-+	  passed.
-=20
- config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
- 	def_bool y
- 	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
- 	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d449=
-8694e15bf8a16
- 	# https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3Db03be74bad08c382da4=
-7e048007a78fa3fb4ef49
--	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || \
--		   (CC_IS_GCC && GCC_VERSION < 110100)
-+	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_V=
-ERSION < 110100)
- 	help
--	  Certain versions of clang (or GCC) do not support zicsr and zifencei via
-+	  Certain versions of clang and GCC do not support zicsr and zifencei via
- 	  -march but newer versions of binutils require it for the reasons noted
- 	  in the help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
- 	  option causes an older ISA spec compatible with these older versions
--	  of clang (or GCC) to be passed to GAS, which has the same result as
-+	  of clang and GCC to be passed to GAS, which has the same result as
- 	  passing zicsr and zifencei to -march.
-=20
- config FPU
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov5693.c:1280:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                          ^
+>> drivers/media/i2c/ov5693.c:1280:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+    1280 |         ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
---dEwon71W2kG8wE2d
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/devm_cci_regmap_init_i2c +1280 drivers/media/i2c/ov5693.c
 
------BEGIN PGP SIGNATURE-----
+  1267	
+  1268	static int ov5693_probe(struct i2c_client *client)
+  1269	{
+  1270		struct ov5693_device *ov5693;
+  1271		u32 xvclk_rate;
+  1272		int ret = 0;
+  1273	
+  1274		ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+  1275		if (!ov5693)
+  1276			return -ENOMEM;
+  1277	
+  1278		ov5693->dev = &client->dev;
+  1279	
+> 1280		ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+  1281		if (IS_ERR(ov5693->regmap))
+  1282			return PTR_ERR(ov5693->regmap);
+  1283	
+  1284		ret = ov5693_check_hwcfg(ov5693);
+  1285		if (ret)
+  1286			return ret;
+  1287	
+  1288		mutex_init(&ov5693->lock);
+  1289	
+  1290		v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+  1291	
+  1292		ov5693->xvclk = devm_clk_get_optional(&client->dev, "xvclk");
+  1293		if (IS_ERR(ov5693->xvclk))
+  1294			return dev_err_probe(&client->dev, PTR_ERR(ov5693->xvclk),
+  1295					     "failed to get xvclk: %ld\n",
+  1296					     PTR_ERR(ov5693->xvclk));
+  1297	
+  1298		if (ov5693->xvclk) {
+  1299			xvclk_rate = clk_get_rate(ov5693->xvclk);
+  1300		} else {
+  1301			ret = fwnode_property_read_u32(dev_fwnode(&client->dev),
+  1302					     "clock-frequency",
+  1303					     &xvclk_rate);
+  1304	
+  1305			if (ret) {
+  1306				dev_err(&client->dev, "can't get clock frequency");
+  1307				return ret;
+  1308			}
+  1309		}
+  1310	
+  1311		if (xvclk_rate != OV5693_XVCLK_FREQ)
+  1312			dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+  1313				 xvclk_rate, OV5693_XVCLK_FREQ);
+  1314	
+  1315		ret = ov5693_configure_gpios(ov5693);
+  1316		if (ret)
+  1317			return ret;
+  1318	
+  1319		ret = ov5693_get_regulators(ov5693);
+  1320		if (ret)
+  1321			return dev_err_probe(&client->dev, ret,
+  1322					     "Error fetching regulators\n");
+  1323	
+  1324		ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+  1325		ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
+  1326		ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+  1327	
+  1328		ov5693->mode.crop = ov5693_default_crop;
+  1329		ov5693->mode.format = ov5693_default_fmt;
+  1330		ov5693->mode.vts = __ov5693_calc_vts(ov5693->mode.format.height);
+  1331	
+  1332		ret = ov5693_init_controls(ov5693);
+  1333		if (ret)
+  1334			return ret;
+  1335	
+  1336		ret = media_entity_pads_init(&ov5693->sd.entity, 1, &ov5693->pad);
+  1337		if (ret)
+  1338			goto err_ctrl_handler_free;
+  1339	
+  1340		/*
+  1341		 * We need the driver to work in the event that pm runtime is disable in
+  1342		 * the kernel, so power up and verify the chip now. In the event that
+  1343		 * runtime pm is disabled this will leave the chip on, so that streaming
+  1344		 * will work.
+  1345		 */
+  1346	
+  1347		ret = ov5693_sensor_powerup(ov5693);
+  1348		if (ret)
+  1349			goto err_media_entity_cleanup;
+  1350	
+  1351		ret = ov5693_detect(ov5693);
+  1352		if (ret)
+  1353			goto err_powerdown;
+  1354	
+  1355		pm_runtime_set_active(&client->dev);
+  1356		pm_runtime_get_noresume(&client->dev);
+  1357		pm_runtime_enable(&client->dev);
+  1358	
+  1359		ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
+  1360		if (ret) {
+  1361			dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+  1362				ret);
+  1363			goto err_pm_runtime;
+  1364		}
+  1365	
+  1366		pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+  1367		pm_runtime_use_autosuspend(&client->dev);
+  1368		pm_runtime_put_autosuspend(&client->dev);
+  1369	
+  1370		return ret;
+  1371	
+  1372	err_pm_runtime:
+  1373		pm_runtime_disable(&client->dev);
+  1374		pm_runtime_put_noidle(&client->dev);
+  1375	err_powerdown:
+  1376		ov5693_sensor_powerdown(ov5693);
+  1377	err_media_entity_cleanup:
+  1378		media_entity_cleanup(&ov5693->sd.entity);
+  1379	err_ctrl_handler_free:
+  1380		v4l2_ctrl_handler_free(&ov5693->ctrls.handler);
+  1381	
+  1382		return ret;
+  1383	}
+  1384	
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMIikwAKCRB4tDGHoIJi
-0mJTAQCcVmPmrdY2nAX7oDB6KjPT6SR3RrzjqiuOt7KYjgKgwgEAm67Q03vVDHxp
-3ehmCH7U3lO1Yol4wFTLp9UNPt9cWw8=
-=byRz
------END PGP SIGNATURE-----
-
---dEwon71W2kG8wE2d--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
