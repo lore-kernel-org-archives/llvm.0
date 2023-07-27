@@ -1,45 +1,46 @@
-Received: from mgamail.intel.com (unknown [192.55.52.151])
+Received: from mgamail.intel.com (unknown [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5554C10946;
-	Thu, 27 Jul 2023 08:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF20EC8EC;
+	Thu, 27 Jul 2023 08:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690445533; x=1721981533;
+  t=1690445935; x=1721981935;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7pp6T/77kywCBngbY/3TOicHmUuENooeVcc07EjxAaA=;
-  b=g4wJA9Q2xxGURtSrxEwCNyoRpGXFUky+wPs1nfamHpMbmh3sBfQiYQyt
-   kezJTdS1P2jwME3/RBZ4Gm8wSd6aQHAt3LZrk+wjcZzDE5nsRrtVK5swy
-   1h4ZkCk57fiamNOJr9ZNdzGyC6XsfM07Y7pjNGrIHBVLedf9O+6kM6Em1
-   KAFijgUW8TFP6dXp4hLI3ak0osEIpbDkzcYe9MbDI2jZA2L7O15JtckJp
-   2qhu/XSpkbtNr8Cb/Unnc5T0erHCzDiG3T/jZv1kHf9gXDf/oeiynBMHW
-   xPbKEbr+e2Oeap/1fEXOqGXHFCcVa5o1gtW0blalS9bNN1A0b2AppEYZJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="348522469"
+  bh=N6D3Z7WGditHoLQws1W+RFXG+wdqFs5MhCVLjURj05s=;
+  b=TlsQRMh5y/4ywlw6OfeA7QVErONIBVek9jfIwwd4vulncNVmlr5qTcZC
+   OlkePnp6+/l9ZD8ihkLqqVW9gHFqNLr6o2KLzt5RsQycfaWLFXFWZPqVH
+   X9vMJp0nNUQ40ltbtX4dtdnBw/munpJ4VQdNyYrsoh2OGOHLdW/eA2SzT
+   fzOO21MJ1r4Zu5CZThE0+2Q8+eo2Hm2wTs22azEqnMVFZGFDb5gg5NbDk
+   HZCXkOi2ARPKdZsevplgYmd74X0Ux4YA5JQHR8PTwdwcmCLaaF4HAWR4P
+   UoYikLu656/ahwKQV53nvp5+QlqtY4DYB65vuA0H82Ey8Zl4soKbVosa3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="432040541"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="348522469"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:11:48 -0700
+   d="scan'208";a="432040541"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:18:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="726850167"
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="762091750"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="726850167"
+   d="scan'208";a="762091750"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 27 Jul 2023 01:11:43 -0700
+  by orsmga001.jf.intel.com with ESMTP; 27 Jul 2023 01:18:48 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qOw5Y-00024r-12;
-	Thu, 27 Jul 2023 08:11:22 +0000
-Date: Thu, 27 Jul 2023 16:05:50 +0800
+	id 1qOwB0-000255-2K;
+	Thu, 27 Jul 2023 08:18:11 +0000
+Date: Thu, 27 Jul 2023 16:16:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Hans de Goede <hdegoede@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: arch/powerpc/mm/book3s64/pgtable.c:422:6: warning: no previous
- prototype for function 'arch_report_meminfo'
-Message-ID: <202307271640.lJoABLx9-lkp@intel.com>
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 10/20] drivers/media/i2c/imx290.c:1526:17:
+ warning: incompatible integer to pointer conversion assigning to 'struct
+ regmap *' from 'int'
+Message-ID: <202307271639.6vSx9BOA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,166 +50,137 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0a8db05b571ad5b8d5c8774a004c0424260a90bd
-commit: ef104443bffa004f631729dfc924f0b84abbd602 procfs: consolidate arch_report_meminfo declaration
-date:   2 months ago
-config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20230727/202307271640.lJoABLx9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271640.lJoABLx9-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 51b1f81e3b15a4cf6c5c1bfd6bb14ff8bc9951fb [10/20] media: imx290: Convert to new CCI register access helpers
+config: arm-randconfig-r012-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271639.6vSx9BOA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271639.6vSx9BOA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307271640.lJoABLx9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271639.6vSx9BOA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:155:1: note: expanded from here
-     155 | __do_insb
-         | ^
-   arch/powerpc/include/asm/io.h:614:56: note: expanded from macro '__do_insb'
-     614 | #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/book3s64/pgtable.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/powerpc/include/asm/dma.h:22:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      45 | DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      46 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:157:1: note: expanded from here
-     157 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
-     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/book3s64/pgtable.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/powerpc/include/asm/dma.h:22:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:159:1: note: expanded from here
-     159 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
-     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/book3s64/pgtable.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/powerpc/include/asm/dma.h:22:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:161:1: note: expanded from here
-     161 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
-     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/book3s64/pgtable.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/powerpc/include/asm/dma.h:22:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:163:1: note: expanded from here
-     163 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
-     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/mm/book3s64/pgtable.c:8:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/powerpc/include/asm/dma.h:22:
-   In file included from arch/powerpc/include/asm/io.h:677:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     674 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:165:1: note: expanded from here
-     165 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
-     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> arch/powerpc/mm/book3s64/pgtable.c:422:6: warning: no previous prototype for function 'arch_report_meminfo' [-Wmissing-prototypes]
-     422 | void arch_report_meminfo(struct seq_file *m)
-         |      ^
-   arch/powerpc/mm/book3s64/pgtable.c:422:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     422 | void arch_report_meminfo(struct seq_file *m)
-         | ^
-         | static 
-   arch/powerpc/mm/book3s64/pgtable.c:478:5: warning: no previous prototype for function 'pmd_move_must_withdraw' [-Wmissing-prototypes]
-     478 | int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
-         |     ^
-   arch/powerpc/mm/book3s64/pgtable.c:478:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     478 | int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
-         | ^
-         | static 
-   14 warnings generated.
+   drivers/media/i2c/imx290.c:1526:19: error: implicit declaration of function 'devm_cci_regmap_init_i2c' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+                            ^
+   drivers/media/i2c/imx290.c:1526:19: note: did you mean '__devm_regmap_init_i2c'?
+   include/linux/regmap.h:660:16: note: '__devm_regmap_init_i2c' declared here
+   struct regmap *__devm_regmap_init_i2c(struct i2c_client *i2c,
+                  ^
+>> drivers/media/i2c/imx290.c:1526:17: warning: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+           imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/arch_report_meminfo +422 arch/powerpc/mm/book3s64/pgtable.c
+vim +1526 drivers/media/i2c/imx290.c
 
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  421  
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13 @422  void arch_report_meminfo(struct seq_file *m)
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  423  {
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  424  	/*
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  425  	 * Hash maps the memory with one size mmu_linear_psize.
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  426  	 * So don't bother to print these on hash
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  427  	 */
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  428  	if (!radix_enabled())
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  429  		return;
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  430  	seq_printf(m, "DirectMap4k:    %8lu kB\n",
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  431  		   atomic_long_read(&direct_pages_count[MMU_PAGE_4K]) << 2);
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  432  	seq_printf(m, "DirectMap64k:    %8lu kB\n",
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  433  		   atomic_long_read(&direct_pages_count[MMU_PAGE_64K]) << 6);
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  434  	seq_printf(m, "DirectMap2M:    %8lu kB\n",
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  435  		   atomic_long_read(&direct_pages_count[MMU_PAGE_2M]) << 11);
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  436  	seq_printf(m, "DirectMap1G:    %8lu kB\n",
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  437  		   atomic_long_read(&direct_pages_count[MMU_PAGE_1G]) << 20);
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  438  }
-a2dc009afa9ae8 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2018-08-13  439  #endif /* CONFIG_PROC_FS */
-579b9239c1f386 arch/powerpc/mm/pgtable-book3s64.c Aneesh Kumar K.V 2019-01-23  440  
-
-:::::: The code at line 422 was first introduced by commit
-:::::: a2dc009afa9ae8b92305be7728676562a104cb40 powerpc/mm/book3s/radix: Add mapping statistics
-
-:::::: TO: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+  1514	
+  1515	static int imx290_probe(struct i2c_client *client)
+  1516	{
+  1517		struct device *dev = &client->dev;
+  1518		struct imx290 *imx290;
+  1519		int ret;
+  1520	
+  1521		imx290 = devm_kzalloc(dev, sizeof(*imx290), GFP_KERNEL);
+  1522		if (!imx290)
+  1523			return -ENOMEM;
+  1524	
+  1525		imx290->dev = dev;
+> 1526		imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
+  1527		if (IS_ERR(imx290->regmap)) {
+  1528			dev_err(dev, "Unable to initialize I2C\n");
+  1529			return -ENODEV;
+  1530		}
+  1531	
+  1532		ret = imx290_parse_dt(imx290);
+  1533		if (ret)
+  1534			return ret;
+  1535	
+  1536		/* Acquire resources. */
+  1537		imx290->xclk = devm_clk_get(dev, "xclk");
+  1538		if (IS_ERR(imx290->xclk))
+  1539			return dev_err_probe(dev, PTR_ERR(imx290->xclk),
+  1540					     "Could not get xclk\n");
+  1541	
+  1542		ret = imx290_get_regulators(dev, imx290);
+  1543		if (ret < 0)
+  1544			return dev_err_probe(dev, ret, "Cannot get regulators\n");
+  1545	
+  1546		imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
+  1547							   GPIOD_OUT_HIGH);
+  1548		if (IS_ERR(imx290->rst_gpio))
+  1549			return dev_err_probe(dev, PTR_ERR(imx290->rst_gpio),
+  1550					     "Cannot get reset gpio\n");
+  1551	
+  1552		/* Initialize external clock frequency. */
+  1553		ret = imx290_init_clk(imx290);
+  1554		if (ret)
+  1555			return ret;
+  1556	
+  1557		/*
+  1558		 * Enable power management. The driver supports runtime PM, but needs to
+  1559		 * work when runtime PM is disabled in the kernel. To that end, power
+  1560		 * the sensor on manually here.
+  1561		 */
+  1562		ret = imx290_power_on(imx290);
+  1563		if (ret < 0) {
+  1564			dev_err(dev, "Could not power on the device\n");
+  1565			return ret;
+  1566		}
+  1567	
+  1568		/*
+  1569		 * Enable runtime PM with autosuspend. As the device has been powered
+  1570		 * manually, mark it as active, and increase the usage count without
+  1571		 * resuming the device.
+  1572		 */
+  1573		pm_runtime_set_active(dev);
+  1574		pm_runtime_get_noresume(dev);
+  1575		pm_runtime_enable(dev);
+  1576		pm_runtime_set_autosuspend_delay(dev, 1000);
+  1577		pm_runtime_use_autosuspend(dev);
+  1578	
+  1579		/* Initialize the V4L2 subdev. */
+  1580		ret = imx290_subdev_init(imx290);
+  1581		if (ret)
+  1582			goto err_pm;
+  1583	
+  1584		v4l2_i2c_subdev_set_name(&imx290->sd, client,
+  1585					 imx290->model->name, NULL);
+  1586	
+  1587		/*
+  1588		 * Finally, register the V4L2 subdev. This must be done after
+  1589		 * initializing everything as the subdev can be used immediately after
+  1590		 * being registered.
+  1591		 */
+  1592		ret = v4l2_async_register_subdev(&imx290->sd);
+  1593		if (ret < 0) {
+  1594			dev_err(dev, "Could not register v4l2 device\n");
+  1595			goto err_subdev;
+  1596		}
+  1597	
+  1598		/*
+  1599		 * Decrease the PM usage count. The device will get suspended after the
+  1600		 * autosuspend delay, turning the power off.
+  1601		 */
+  1602		pm_runtime_mark_last_busy(dev);
+  1603		pm_runtime_put_autosuspend(dev);
+  1604	
+  1605		return 0;
+  1606	
+  1607	err_subdev:
+  1608		imx290_subdev_cleanup(imx290);
+  1609	err_pm:
+  1610		pm_runtime_disable(dev);
+  1611		pm_runtime_put_noidle(dev);
+  1612		imx290_power_off(imx290);
+  1613		return ret;
+  1614	}
+  1615	
 
 -- 
 0-DAY CI Kernel Test Service
