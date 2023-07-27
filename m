@@ -1,187 +1,243 @@
-Received: from mgamail.intel.com (unknown [134.134.136.31])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF20EC8EC;
-	Thu, 27 Jul 2023 08:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690445935; x=1721981935;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N6D3Z7WGditHoLQws1W+RFXG+wdqFs5MhCVLjURj05s=;
-  b=TlsQRMh5y/4ywlw6OfeA7QVErONIBVek9jfIwwd4vulncNVmlr5qTcZC
-   OlkePnp6+/l9ZD8ihkLqqVW9gHFqNLr6o2KLzt5RsQycfaWLFXFWZPqVH
-   X9vMJp0nNUQ40ltbtX4dtdnBw/munpJ4VQdNyYrsoh2OGOHLdW/eA2SzT
-   fzOO21MJ1r4Zu5CZThE0+2Q8+eo2Hm2wTs22azEqnMVFZGFDb5gg5NbDk
-   HZCXkOi2ARPKdZsevplgYmd74X0Ux4YA5JQHR8PTwdwcmCLaaF4HAWR4P
-   UoYikLu656/ahwKQV53nvp5+QlqtY4DYB65vuA0H82Ey8Zl4soKbVosa3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="432040541"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="432040541"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 01:18:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="762091750"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="762091750"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jul 2023 01:18:48 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOwB0-000255-2K;
-	Thu, 27 Jul 2023 08:18:11 +0000
-Date: Thu, 27 Jul 2023 16:16:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [sailus-media-tree:master 10/20] drivers/media/i2c/imx290.c:1526:17:
- warning: incompatible integer to pointer conversion assigning to 'struct
- regmap *' from 'int'
-Message-ID: <202307271639.6vSx9BOA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DAA15AC3
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 08:35:03 +0000 (UTC)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36R76NDT027825;
+	Thu, 27 Jul 2023 04:34:47 -0400
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3s36afn2g2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 27 Jul 2023 04:34:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JlBtZcSYPDEO/y2yiyRbJboDuajUzsIwW9LFhwmZl7FUfgC2EFkz+phYwHh5Amiq/BtYPz+LwiAd7Ict1Jeej2RASEIE8XFnc67IQAF3vAwVPAfPBJX7YH73zSzKJVl+Zn24TLHukV0v9Fe1/E/KoZSVIVFSfF0e/S2QO5MQB0+adqjZbAR/0/AhuLdBdrLDlLdwkDeJeWg7E+prXQk6uio4yFkJqUwhzeTwSInOwdIJYnntbFf9/y+AZbzf5Gw4mAezUDHukk9ASPe1s2TVKO78M2Futmj8KPSK7u5XgV+WvEA5eI7in4fPl89e0J78Zhge8+xgDmZ2h5fqmCCbTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lI3WVBqtBgCyspxFtNQeN9xGr6Z/YOZ/3NJfURThKkc=;
+ b=EXOryqIMlrlB1dEboutzZAhTUI+KfbWDLFT/5dH/MbMQKRkm0Qvp+kC6jabkjgqwuERK35lqz5ZoTAGGIH/cwCnCjO50zgz7Ud5UU+kPUw5RMcJOulL9Wj1etLxns0z8b0ca1yks05kZ9sRLtyBEwFi70IwH1mJSLXc7P7KJxVFf95EnOMfGg2uziC+CL44HiSgoO0+zm0NYq1jUcEyrmMEjaMqPOVQt2H6g6k+gzyiTPVdLRr4eMMIXkRIO1yzvxXiuuoDZOAO/RUiklyYoFmK69ew8ZspiAYZRjsj+if+KAnKZBXxYJcpfOPZ6w+5ekYzGNh1YOHslYMslByKKaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lI3WVBqtBgCyspxFtNQeN9xGr6Z/YOZ/3NJfURThKkc=;
+ b=p7qTuh2TBGtDqSrIUzglHOe88/zlqVyfL3GXKQYz2PBnNxVvlKV+DDx8SAEg5jSWUyQYDusE8MGsxpbk2vmgWbEyw1/CUPy+Ubl6Ummnc0h/KNIl6vY84/vKf9IZuJNbpka/mbDO7bPMWmUNpO0bpPLnELdwFivaw1X2Q9l9Wqo=
+Received: from PH7PR03MB7391.namprd03.prod.outlook.com (2603:10b6:510:2e6::5)
+ by SJ0PR03MB6359.namprd03.prod.outlook.com (2603:10b6:a03:399::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29; Thu, 27 Jul
+ 2023 08:34:45 +0000
+Received: from PH7PR03MB7391.namprd03.prod.outlook.com
+ ([fe80::2adc:1975:dfe2:776c]) by PH7PR03MB7391.namprd03.prod.outlook.com
+ ([fe80::2adc:1975:dfe2:776c%3]) with mapi id 15.20.6631.026; Thu, 27 Jul 2023
+ 08:34:44 +0000
+From: "Sahin, Okan" <Okan.Sahin@analog.com>
+To: Nathan Chancellor <nathan@kernel.org>
+CC: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Rob
+ Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "zzzzTilki, zzzzIbrahim" <Ibrahim.Tilki@analog.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
+ Regulator Support
+Thread-Topic: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
+ Regulator Support
+Thread-Index: AQHZuGy8mN9TLCcuJkyLQ19F8fkBDa+/r5IAgAyW/YCAARHLsA==
+Date: Thu, 27 Jul 2023 08:34:44 +0000
+Message-ID: 
+ <PH7PR03MB739122A373964651D995EA5AE701A@PH7PR03MB7391.namprd03.prod.outlook.com>
+References: <20230717050736.10075-1-okan.sahin@analog.com>
+ <20230717050736.10075-3-okan.sahin@analog.com>
+ <20230718155502.GA3542993@dev-arch.thelio-3990X>
+ <20230726161033.GA1102409@dev-arch.thelio-3990X>
+In-Reply-To: <20230726161033.GA1102409@dev-arch.thelio-3990X>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: 
+ =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zYWhp?=
+ =?us-ascii?Q?blxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4?=
+ =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLTZkN2ZiM2FjLTJjNTgtMTFlZS1iZjAwLTU4?=
+ =?us-ascii?Q?NmMyNWQzYzNlNFxhbWUtdGVzdFw2ZDdmYjNhZS0yYzU4LTExZWUtYmYwMC01?=
+ =?us-ascii?Q?ODZjMjVkM2MzZTRib2R5LnR4dCIgc3o9IjU4MTAiIHQ9IjEzMzM0OTIwNDgx?=
+ =?us-ascii?Q?MDk3NTk2NCIgaD0ieUY5UDVvYW5BZFNzNlduNVYwSFZRUExZMUZVPSIgaWQ9?=
+ =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBRW9D?=
+ =?us-ascii?Q?QUFEY3l0WXZaY0RaQVFTNi9GYXVFU3FQQkxyOFZxNFJLbzhEQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBRGFBUUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQVFBQkFBQUF2ZGhreGdBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
+ =?us-ascii?Q?QWFRQmZBSE1BWlFCakFIVUFjZ0JsQUY4QWNBQnlBRzhBYWdCbEFHTUFkQUJ6?=
+ =?us-ascii?Q?QUY4QVpnQmhBR3dBY3dCbEFGOEFaZ0J2QUhNQWFRQjBBR2tBZGdCbEFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHRUFaQUJwQUY4QWN3QmxBR01B?=
+ =?us-ascii?Q?ZFFCeUFHVUFYd0J3QUhJQWJ3QnFBR1VBWXdCMEFITUFYd0IwQUdrQVpRQnlB?=
+ =?us-ascii?Q?REVBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
+ =?us-ascii?Q?QUFBQUFBQ2VBQUFBWVFCa0FHa0FYd0J6QUdVQVl3QjFBSElBWlFCZkFIQUFj?=
+ =?us-ascii?Q?Z0J2QUdvQVpRQmpBSFFBY3dCZkFIUUFhUUJsQUhJQU1nQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUE9PSIvPjwv?=
+ =?us-ascii?Q?bWV0YT4=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR03MB7391:EE_|SJ0PR03MB6359:EE_
+x-ms-office365-filtering-correlation-id: a7b368e0-0664-4254-60bd-08db8e7c5474
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ 8Xl5vPQL/pMWembLrTI64bvz99IjHAZszxEvdV1hxyl3dwD42aDGTAhDlr6WnQtytfC0yti7lXeFDvbx1uiB4q9IrBm0ehqO+59l7kUrDO6BJC2G/VZPq1HkhXUD8WQkh7uYilN+NJ2/CDrFx0ytDPJAVoAUZKNsq5w1febNa/AS9UbgF8Iign6R7eJrjE0qtdNWbXXwftB31AppqKqVM3+kZ7LH2hZKRxiKxnJMEesPL42e6EORWq/Z5eQBYYiMAW/gmSMWjigpp88XlYVrm9Aw8ByE+rhYQJDcsZXcIsJgdBalj12YQgvd13Znf5fHEPA3DvGCr2OMevo38+vu2gRWlvb/n2jGpDgdAbGuMD9up00cyXr/fX2PBaWor2G5OcqvS52h8UI7FOJf0dNhRwLDozJtjPAdXzEzkj04ZXxBrwpIbVcBvEOCnI5YL9oLwPoeDjMVGBiCnssc+BVCrefXy++WVXe/RxHymgOdJkS3mYj3pexF5t115Fm+lLhMG3TolBgNJPRDlmt11TSHROFduPy6lp13ewRGR82SGaKJ58Dl1fbFH9sfFgWd6JENev4CHZj/rsA/sVSMW72kvW424L3TAugZfoUQfGjj0XE=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR03MB7391.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199021)(26005)(478600001)(9686003)(7696005)(71200400001)(54906003)(64756008)(66446008)(6916009)(66946007)(76116006)(4326008)(66556008)(66476007)(41300700001)(83380400001)(52536014)(5660300002)(186003)(8936002)(8676002)(122000001)(2906002)(6506007)(38100700002)(38070700005)(86362001)(33656002)(316002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?iMdTO0okfz4oP0FiAQkm/GTWaVElkUpg4er5OuOcPjP4aGd7/xAl06qLNf1T?=
+ =?us-ascii?Q?0tv8xS8DTmvcMztUbInot8QcbYxzgp9/26xyyfSkkn5tkmbpIpPKeSNFXks3?=
+ =?us-ascii?Q?3sFcxUMcEbB+3nIYhSuMnSjxFJygSWBY1jlyaYt5kS1RJSGn5fi/G4+PFnet?=
+ =?us-ascii?Q?JhguSYVa0YEgbEkTfy/I52nABiZN6uDPI5LoHNf7TarxGA5DcsvOIT3ppMyO?=
+ =?us-ascii?Q?taSYEsp2iMRYIg2s88hgYjTYxrY1L9EGOV+v4vB6Zyx99yjcCP1mZy8t15Tb?=
+ =?us-ascii?Q?zbphzJablTJdmSD7piPJj3DCIysFpth17wraOSqnifr8mdtz+O4otFtwqY5c?=
+ =?us-ascii?Q?1H3nPp8kGUbuy9EM4WG3/Nc8O88gjT8cWW/BIYI9BksRYrrNAltcJvm27cEx?=
+ =?us-ascii?Q?xhxPfdrS9sn6zEeILFq9okvaVFmz9deRtNhY1TheVzDX7PrLbAXOiBcCGpNt?=
+ =?us-ascii?Q?PY88hJCTuhOdH4YoMvdDRB4E2SE7Wgwlv63MzeNBFSxYUFXV2+mGGH6zBSKa?=
+ =?us-ascii?Q?ZJt28ktGfJD6hprTybJd7G6i43ZxzQQuTXYeynbAkvoWa8qKFlWpI8KIMMUl?=
+ =?us-ascii?Q?z5zwEZv/I7tousoKaKEsNkr/9b+o3gt8tSnPM+1IF1b/GjFNsHWAHdeX6AB+?=
+ =?us-ascii?Q?ICBdYu7f7VbOA7RJC3yTAk73LRAN79/U2j4My0AtITj5V3FQZg7I8AS37pbG?=
+ =?us-ascii?Q?3o6CDF/UvtX5lbC53tTBIw5zFkaYIWnotlhzHrjKV9oUPC4Pcq4dQRSBdJTd?=
+ =?us-ascii?Q?Xsya8lqmDUzKYex+qlll8Lfun8yooza/eEMf467QjqXnprT+GPr2+Sa2YIC/?=
+ =?us-ascii?Q?FTeKyYs255GGy/c6lFOAn0V8G5gnI0SOw5UzDvM4GJCTx9T3sMMRwKD4ZgvN?=
+ =?us-ascii?Q?/eOjSRa69pq6PI6vjOO1gETLpZsVR5vh9h+HzJb9SvQDwLht3m8+mLBcbJB6?=
+ =?us-ascii?Q?OqOakD2y0q+7mrNC7MPeIIhWgoRktDbFeP8XIR8TcEm8WhXyIzBNgwKHrgYd?=
+ =?us-ascii?Q?Dq2IwFmXuhZJQPvQfEErRJGXwfcvpOGf8pjDBCqcaYjh8TXFUfNhrQ69wNYW?=
+ =?us-ascii?Q?storYFp/nlb9XEYCY+RhV/eVQ2HJ1MrckmgE2X0359BT0eA699qMDtm+SIp4?=
+ =?us-ascii?Q?DxBs9deSa6JVUEx8PrMe8+qvgjs6D4i4h2uyWq5555Zdt79BOicWQ6b6B0hf?=
+ =?us-ascii?Q?QDHLAOYuNE+GsdlUZUU4unVbpJt7rcylaY4Wm8UqG7sn8Vx6jQaSJ3mZU4/Y?=
+ =?us-ascii?Q?1EwqzKmR08l6jFYFIXfRFSVVuPEiYGu6GAy6u9I+TQEOfuD2imK/7Eqrte/M?=
+ =?us-ascii?Q?XvJgF0Q+pqE+LB2mIT9tQWfnUZM8rwO3cDrDSx++xR3aQNdlqYXzplL1AomD?=
+ =?us-ascii?Q?QDCsYP1g2/sXwm0GhQgHvYGlAviAn1/8QxI6gbJv4ta4TsHMkWLtZ+YkrxO2?=
+ =?us-ascii?Q?aOqeEoRquGW9nNxyP+Z7E/IiifW2PQb8VTXu12Nkr2KItD7bHsfL8PqSdD5e?=
+ =?us-ascii?Q?LAOw6zxZ6QDbb4wFKHxUeBHbSDeB2zu0HppXYCbd3utrNHrqZBnUweGTqI4R?=
+ =?us-ascii?Q?ytMsKb+BqeI3c2knwwP6G5SVLlgbHmpDRRPebqII?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   git://linuxtv.org/sailus/media_tree.git master
-head:   215e4463b11d94668b841368cb6882f3a2968148
-commit: 51b1f81e3b15a4cf6c5c1bfd6bb14ff8bc9951fb [10/20] media: imx290: Convert to new CCI register access helpers
-config: arm-randconfig-r012-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271639.6vSx9BOA-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271639.6vSx9BOA-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307271639.6vSx9BOA-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/media/i2c/imx290.c:1526:19: error: implicit declaration of function 'devm_cci_regmap_init_i2c' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
-                            ^
-   drivers/media/i2c/imx290.c:1526:19: note: did you mean '__devm_regmap_init_i2c'?
-   include/linux/regmap.h:660:16: note: '__devm_regmap_init_i2c' declared here
-   struct regmap *__devm_regmap_init_i2c(struct i2c_client *i2c,
-                  ^
->> drivers/media/i2c/imx290.c:1526:17: warning: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
-           imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR03MB7391.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7b368e0-0664-4254-60bd-08db8e7c5474
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2023 08:34:44.6827
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: E1BGtpTk3sJBL45rpC6FJlUFQoNeoiw2149txFGXd3XCZtgMKxB6RmEhZORdTK3WvxtuhPgwrE5wmsa8EvUDhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6359
+X-Proofpoint-GUID: cBQ6cRJdl21C5PWPDogxo2DnVT4BYcxR
+X-Proofpoint-ORIG-GUID: cBQ6cRJdl21C5PWPDogxo2DnVT4BYcxR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-26_08,2023-07-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ mlxlogscore=999 clxscore=1011 spamscore=0 impostorscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307270075
 
 
-vim +1526 drivers/media/i2c/imx290.c
 
-  1514	
-  1515	static int imx290_probe(struct i2c_client *client)
-  1516	{
-  1517		struct device *dev = &client->dev;
-  1518		struct imx290 *imx290;
-  1519		int ret;
-  1520	
-  1521		imx290 = devm_kzalloc(dev, sizeof(*imx290), GFP_KERNEL);
-  1522		if (!imx290)
-  1523			return -ENOMEM;
-  1524	
-  1525		imx290->dev = dev;
-> 1526		imx290->regmap = devm_cci_regmap_init_i2c(client, 16);
-  1527		if (IS_ERR(imx290->regmap)) {
-  1528			dev_err(dev, "Unable to initialize I2C\n");
-  1529			return -ENODEV;
-  1530		}
-  1531	
-  1532		ret = imx290_parse_dt(imx290);
-  1533		if (ret)
-  1534			return ret;
-  1535	
-  1536		/* Acquire resources. */
-  1537		imx290->xclk = devm_clk_get(dev, "xclk");
-  1538		if (IS_ERR(imx290->xclk))
-  1539			return dev_err_probe(dev, PTR_ERR(imx290->xclk),
-  1540					     "Could not get xclk\n");
-  1541	
-  1542		ret = imx290_get_regulators(dev, imx290);
-  1543		if (ret < 0)
-  1544			return dev_err_probe(dev, ret, "Cannot get regulators\n");
-  1545	
-  1546		imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
-  1547							   GPIOD_OUT_HIGH);
-  1548		if (IS_ERR(imx290->rst_gpio))
-  1549			return dev_err_probe(dev, PTR_ERR(imx290->rst_gpio),
-  1550					     "Cannot get reset gpio\n");
-  1551	
-  1552		/* Initialize external clock frequency. */
-  1553		ret = imx290_init_clk(imx290);
-  1554		if (ret)
-  1555			return ret;
-  1556	
-  1557		/*
-  1558		 * Enable power management. The driver supports runtime PM, but needs to
-  1559		 * work when runtime PM is disabled in the kernel. To that end, power
-  1560		 * the sensor on manually here.
-  1561		 */
-  1562		ret = imx290_power_on(imx290);
-  1563		if (ret < 0) {
-  1564			dev_err(dev, "Could not power on the device\n");
-  1565			return ret;
-  1566		}
-  1567	
-  1568		/*
-  1569		 * Enable runtime PM with autosuspend. As the device has been powered
-  1570		 * manually, mark it as active, and increase the usage count without
-  1571		 * resuming the device.
-  1572		 */
-  1573		pm_runtime_set_active(dev);
-  1574		pm_runtime_get_noresume(dev);
-  1575		pm_runtime_enable(dev);
-  1576		pm_runtime_set_autosuspend_delay(dev, 1000);
-  1577		pm_runtime_use_autosuspend(dev);
-  1578	
-  1579		/* Initialize the V4L2 subdev. */
-  1580		ret = imx290_subdev_init(imx290);
-  1581		if (ret)
-  1582			goto err_pm;
-  1583	
-  1584		v4l2_i2c_subdev_set_name(&imx290->sd, client,
-  1585					 imx290->model->name, NULL);
-  1586	
-  1587		/*
-  1588		 * Finally, register the V4L2 subdev. This must be done after
-  1589		 * initializing everything as the subdev can be used immediately after
-  1590		 * being registered.
-  1591		 */
-  1592		ret = v4l2_async_register_subdev(&imx290->sd);
-  1593		if (ret < 0) {
-  1594			dev_err(dev, "Could not register v4l2 device\n");
-  1595			goto err_subdev;
-  1596		}
-  1597	
-  1598		/*
-  1599		 * Decrease the PM usage count. The device will get suspended after the
-  1600		 * autosuspend delay, turning the power off.
-  1601		 */
-  1602		pm_runtime_mark_last_busy(dev);
-  1603		pm_runtime_put_autosuspend(dev);
-  1604	
-  1605		return 0;
-  1606	
-  1607	err_subdev:
-  1608		imx290_subdev_cleanup(imx290);
-  1609	err_pm:
-  1610		pm_runtime_disable(dev);
-  1611		pm_runtime_put_noidle(dev);
-  1612		imx290_power_off(imx290);
-  1613		return ret;
-  1614	}
-  1615	
+>-----Original Message-----
+>From: Nathan Chancellor <nathan@kernel.org>
+>Sent: Wednesday, July 26, 2023 7:11 PM
+>To: Sahin, Okan <Okan.Sahin@analog.com>
+>Cc: Liam Girdwood <lgirdwood@gmail.com>; Mark Brown <broonie@kernel.org>;
+>Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+><krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
+>zzzzTilki, zzzzIbrahim <Ibrahim.Tilki@analog.com>; linux-kernel@vger.kerne=
+l.org;
+>devicetree@vger.kernel.org; llvm@lists.linux.dev
+>Subject: Re: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77=
+831
+>Regulator Support
+>
+>[External]
+>
+>Hi Okan,
+>
+>On Tue, Jul 18, 2023 at 08:55:02AM -0700, Nathan Chancellor wrote:
+>
+><snip>
+>
+>> > +static struct regulator_desc max77857_regulator_desc =3D {
+>> > +	.ops =3D &max77857_regulator_ops,
+>> > +	.name =3D "max77857",
+>> > +	.linear_ranges =3D max77857_lin_ranges,
+>> > +	.n_linear_ranges =3D ARRAY_SIZE(max77857_lin_ranges),
+>> > +	.vsel_mask =3D 0xFF,
+>> > +	.vsel_reg =3D MAX77857_REG_CONT2,
+>> > +	.ramp_delay_table =3D max77857_ramp_table[0],
+>> > +	.n_ramp_values =3D ARRAY_SIZE(max77857_ramp_table[0]),
+>> > +	.ramp_reg =3D MAX77857_REG_CONT3,
+>> > +	.ramp_mask =3D GENMASK(1, 0),
+>> > +	.ramp_delay =3D max77857_ramp_table[0][0],
+>>
+>> This breaks the build with GCC 5.x through 7.x:
+>>
+>>   drivers/regulator/max77857-regulator.c:312:16: error: initializer elem=
+ent is not
+>constant
+>>     .ramp_delay =3D max77857_ramp_table[0][0],
+>>                   ^~~~~~~~~~~~~~~~~~~
+>>   drivers/regulator/max77857-regulator.c:312:16: note: (near initializat=
+ion for
+>'max77857_regulator_desc.ramp_delay')
+>>
+>> and clang:
+>>
+>>   drivers/regulator/max77857-regulator.c:312:16: error: initializer elem=
+ent is not a
+>compile-time constant
+>>     312 |         .ramp_delay =3D max77857_ramp_table[0][0],
+>>         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>   1 error generated.
+>>
+>> This relies on a GCC 8.x+ change that accepts more things as
+>> compile-time constants, which is being worked on in clang
+>>
+>(https://urldefense.com/v3/__https://reviews.llvm.org/D76096__;!!A3Ni8CS0y=
+2Y!7B
+>eWxuzHgLzOprQA_madbvdR7hd0ZgmS73lUlDbgoxWUFWdDSIRXLnhyqLeRhu3uTaqpS
+>kzZKwc5pHA$ ). Since the kernel supports older
+>> compilers, this will have to be worked around somehow. Perhaps a define
+>> that can be used in both places?
+>
+>Was there any update on this? I do not mind sending a patch for this
+>myself if I have some sort of guidance on how you would prefer for this
+>to be fixed, should you be too busy to look into it.
+>
+>Cheers,
+>Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hi Nathan,
+
+I thought that I should fix this issue after merging main branch that's why=
+ I did not send patch.
+I sent patch v3 so should I send new patch as v4?
+
+Regards,
+Okan Sahin
