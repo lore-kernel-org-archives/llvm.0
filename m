@@ -1,192 +1,164 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628EB1FA9
-	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 05:14:36 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67FB1FA9
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 05:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690435219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XjtbQkbaGfCGoWciW1ybKVfhvGQUsCF5hJu9qPcSvV4=;
+	b=PPUoUYAPVGwu8kbSt6pcbsMZ+5JhN8UVow7dLBLQgR8XBbdEZJZQgGv3/ROnpNY0FK87lB
+	oB7BhuSuF6yLYVJITY1QDV/fmyam7yfKZidp50Kj89dLEBX3ifbcMT87tnpdf4IXMjWcYR
+	UURpZDQ/E5l5+ZgLkl/N5+AlDeMO0ck=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-3daujLFRPYitE444hLNjZQ-1; Thu, 27 Jul 2023 01:20:18 -0400
+X-MC-Unique: 3daujLFRPYitE444hLNjZQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 7B4741F383;
-	Thu, 27 Jul 2023 05:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1690434868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XTdHiNQcaCZE78fGeClmYN0Gm2fXFHfS4a+GD564Hu0=;
-	b=myHTM2Rhzyxpy1H5Kex389WmVZshtWc7iSQ99qhW/mjupBGZA033+zb/Qt5y73J2sJMnpl
-	Zi5b1iHln/QgIHVy/3SolO0gT1NvjTmnBoMOq5ph7pF7OvjhNucaNqJjO5RsnvVBrI289S
-	cxWQrm46qyRlmcOOV8faN7rKzDg0SWY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B287138E5;
-	Thu, 27 Jul 2023 05:14:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id v2g3ATT9wWQ6eAAAMHmgww
-	(envelope-from <jgross@suse.com>); Thu, 27 Jul 2023 05:14:28 +0000
-Message-ID: <3d363767-3960-7ed9-8dce-c46fa5445b51@suse.com>
-Date: Thu, 27 Jul 2023 07:14:27 +0200
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E093E802A7D
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 05:20:17 +0000 (UTC)
+Received: from [172.64.0.126] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C9C6E492B01;
+	Thu, 27 Jul 2023 05:20:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 5f0bc0b0)
+Date: Thu, 27 Jul 2023 05:20:17 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] x86/paravirt: Fix tlb_remove_table function callback
- prototype warning
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: kernel test robot <lkp@intel.com>, Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Ajay Kaher <akaher@vmware.com>,
- Alexey Makhalov <amakhalov@vmware.com>,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
- x86@kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230726231139.never.601-kees@kernel.org>
-From: Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230726231139.never.601-kees@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------BLDac3cN9XMDOl1400k3wyYK"
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------BLDac3cN9XMDOl1400k3wyYK
-Content-Type: multipart/mixed; boundary="------------0MQ0mNlwNh22tS7tBfV8UZJW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: kernel test robot <lkp@intel.com>, Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Ajay Kaher <akaher@vmware.com>,
- Alexey Makhalov <amakhalov@vmware.com>,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
- x86@kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Message-ID: <3d363767-3960-7ed9-8dce-c46fa5445b51@suse.com>
-Subject: Re: [PATCH] x86/paravirt: Fix tlb_remove_table function callback
- prototype warning
-References: <20230726231139.never.601-kees@kernel.org>
-In-Reply-To: <20230726231139.never.601-kees@kernel.org>
-
---------------0MQ0mNlwNh22tS7tBfV8UZJW
-Content-Type: multipart/mixed; boundary="------------PFivGCtLbQJW6OwguXOkv0PR"
-
---------------PFivGCtLbQJW6OwguXOkv0PR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjcuMDcuMjMgMDE6MTEsIEtlZXMgQ29vayB3cm90ZToNCj4gVW5kZXIgVz0xLCB0aGlz
-IHdhcm5pbmcgaXMgdmlzaWJsZSBpbiBDbGFuZyAxNiBhbmQgbmV3ZXI6DQo+IA0KPiBhcmNo
-L3g4Ni9rZXJuZWwvcGFyYXZpcnQuYzozMzc6NDogd2FybmluZzogY2FzdCBmcm9tICd2b2lk
-ICgqKShzdHJ1Y3QgbW11X2dhdGhlciAqLCBzdHJ1Y3QgcGFnZSAqKScgdG8gJ3ZvaWQgKCop
-KHN0cnVjdCBtbXVfZ2F0aGVyICosIHZvaWQgKiknIGNvbnZlcnRzIHRvIGluY29tcGF0aWJs
-ZSBmdW5jdGlvbiB0eXBlIFstV2Nhc3QtZnVuY3Rpb24tdHlwZS1zdHJpY3RdDQo+ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAodm9pZCAoKikoc3RydWN0IG1tdV9nYXRoZXIgKiwg
-dm9pZCAqKSl0bGJfcmVtb3ZlX3BhZ2UsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn4NCj4gDQo+IEFkZCBhIGRpcmVjdCB3cmFwcGVyIGluc3RlYWQsIHdoaWNoIHdpbGwgbWFr
-ZSB0aGlzIHdhcm5pbmcgKGFuZA0KPiBwb3RlbnRpYWwgS0NGSSBmYWlsdXJlcykgZ28gYXdh
-eS4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNv
-bT4NCj4gQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxsLzIw
-MjMwNzI2MDMzMi5wSm50V1I2by1sa3BAaW50ZWwuY29tLw0KPiBDYzogSnVlcmdlbiBHcm9z
-cyA8amdyb3NzQHN1c2UuY29tPg0KPiBDYzogUGV0ZXIgWmlqbHN0cmEgPHBldGVyekBpbmZy
-YWRlYWQub3JnPg0KPiBDYzogU2FtaSBUb2x2YW5lbiA8c2FtaXRvbHZhbmVuQGdvb2dsZS5j
-b20+DQo+IENjOiBOYXRoYW4gQ2hhbmNlbGxvciA8bmF0aGFuQGtlcm5lbC5vcmc+DQo+IENj
-OiBBamF5IEthaGVyIDxha2FoZXJAdm13YXJlLmNvbT4NCj4gQ2M6IEFsZXhleSBNYWtoYWxv
-diA8YW1ha2hhbG92QHZtd2FyZS5jb20+DQo+IENjOiBWTXdhcmUgUFYtRHJpdmVycyBSZXZp
-ZXdlcnMgPHB2LWRyaXZlcnNAdm13YXJlLmNvbT4NCj4gQ2M6IFRob21hcyBHbGVpeG5lciA8
-dGdseEBsaW51dHJvbml4LmRlPg0KPiBDYzogSW5nbyBNb2xuYXIgPG1pbmdvQHJlZGhhdC5j
-b20+DQo+IENjOiBCb3Jpc2xhdiBQZXRrb3YgPGJwQGFsaWVuOC5kZT4NCj4gQ2M6IERhdmUg
-SGFuc2VuIDxkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb20+DQo+IENjOiB2aXJ0dWFsaXph
-dGlvbkBsaXN0cy5saW51eC1mb3VuZGF0aW9uLm9yZw0KPiBTaWduZWQtb2ZmLWJ5OiBLZWVz
-IENvb2sgPGtlZXNjb29rQGNocm9taXVtLm9yZz4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4g
-R3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQoNCg==
---------------PFivGCtLbQJW6OwguXOkv0PR
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <45574.123072701201800157@us-mta-94.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Hi, we tested your kernel and here are the results:
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
---------------PFivGCtLbQJW6OwguXOkv0PR--
 
---------------0MQ0mNlwNh22tS7tBfV8UZJW--
+Kernel information:
+    Commit message: mm: suppress mm fault logging if fatal signal already p=
+ending
 
---------------BLDac3cN9XMDOl1400k3wyYK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97488
 
------BEGIN PGP SIGNATURE-----
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8910346
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8910411
+                   Non-passing subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmTB/TMFAwAAAAAACgkQsN6d1ii/Ey9r
-AAf+PvD92wMKH9/SWZ0mRYuLdayuTWzEYugdwQkKjyGBR6O+Ff0ereIZOraCf+yFftG5iy2ntIvN
-VNZodzdG4qkn406WscGnoqBlHpwcZT9QeRP5EvGE2oxapmFPu5SwWN+JMNQ8rna/P947rTYZdh/h
-SeIshf18Mi8RGtNx7D29DAZPSr8fTayyd+uVSKMkkZEjDq7BQtZp99QWYmTPb/4Co8kXfebi+H2x
-dL0DE4PHvteYKAAxJZ85uBu41vt3c2lXLc7zBGkLkNAChIAUExlqSQYIzHWq0tCkgLvMkyAQt7Y3
-mNjsTE/NxFvDEwx8SLaubpBfzkP4DO+3At6jfqTaWg==
-=OMjt
------END PGP SIGNATURE-----
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/173 failing on ark-eln aarch64
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+        Issue: Storage blktests - nvme-tcp: nvme/012: TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1188
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Aborting task xxxx from recipe xxxx as system expects to run=
+ tests for recipe xxxx
+            URL: https://gitlab.com/cki-project/upt/-/issues/99
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+                  x86_64 - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
---------------BLDac3cN9XMDOl1400k3wyYK--
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
