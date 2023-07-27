@@ -1,156 +1,104 @@
-Received: from mgamail.intel.com (unknown [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3771174D0;
-	Thu, 27 Jul 2023 14:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690467781; x=1722003781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tVmXn8OQubx5m3Wv00d0TOMJ2VIMCX79C3U8NiiaI2s=;
-  b=DZRdBUC8ta14iaC3GT9YOml7oYnPKk7/SXOtLHOKlQruCLWzLcjVGMzB
-   rA6qm8t/LysGl3Fo1DG1qIgq/ckw6O9ydH5zjplGHTHMg9OZmregpvjsR
-   i8eWfZAw1buqjNMRRZRSWeJmYrOloG5aEJK4QenRDK/S8b0rXPM2/DDEL
-   zfVK8soPkM28L3BR8XEJfGB+cwUge+LRV3gbg5GePAo/1qS7lEttVqiZm
-   AEmMkSkxWn/xWC7cwvLiij6Sz6E33UcfkqOA9Wx+7igiUei+gbIeLI2Z5
-   cf/kkyohl1pSp0Q7tD1+biEuFoOBYsS3IGJPWH3JG23GwmKTFOgBHkDnA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="399260411"
-X-IronPort-AV: E=Sophos;i="6.01,235,1684825200"; 
-   d="scan'208";a="399260411"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 07:22:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="900892893"
-X-IronPort-AV: E=Sophos;i="6.01,235,1684825200"; 
-   d="scan'208";a="900892893"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 27 Jul 2023 07:22:03 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qP1sQ-0002KR-2C;
-	Thu, 27 Jul 2023 14:22:02 +0000
-Date: Thu, 27 Jul 2023 22:21:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-6.4.y-rt-rebase 50/85]
- kernel/printk/printk.c:3361:6: warning: no previous prototype for function
- 'console_bkl_kthread_create'
-Message-ID: <202307272243.gHGeMfJW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48159FBEF;
+	Thu, 27 Jul 2023 14:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA913C433C7;
+	Thu, 27 Jul 2023 14:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690468880;
+	bh=aBSoh8vyUSFQygN17NIxATijctvrIz3m9z5UE5Aolwo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QX60Xks3nyqfTY+hUSinT9rcvhFuieEG/0UfencjdPpD4YKKjXei+ZMoZ7X5vexlq
+	 QUsQ6SKYp1DQzt995n3aBoXP5+NrYSFR3ez4hqljwWBrrP+M6SLOiLVKiDlOEfAxf3
+	 6spGwnGhd1+smh/wELppsZjf9dvHHbqKWuW1NDyNLrSXBvkDdA659TUUCSTfgjj6WA
+	 VReFZElAZWaGsSpRjSIjsT7OULttKhZkxnmo40rpztTXI9O/LWGrrccA6xtcSku+mo
+	 hF4V21aQW7KBK/58pgIMHcYZUIgYuK2SDjlWcf2ZFQGzvrS8tmQ9rK4N1Lf9nRYY3f
+	 DKFSWHsKo2e7g==
+Date: Thu, 27 Jul 2023 07:41:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Maira Canal <mcanal@igalia.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	emma@anholt.net, mwen@igalia.com, trix@redhat.com,
+	intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
+	ndesaulniers@google.com, patches@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, justinstitt@google.com
+Subject: Re: [PATCH 1/2] drm/v3d: Avoid -Wconstant-logical-operand in
+ nsecs_to_jiffies_timeout()
+Message-ID: <20230727144118.GA2013261@dev-arch.thelio-3990X>
+References: <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-0-36ed8fc8faea@kernel.org>
+ <20230718-nsecs_to_jiffies_timeout-constant-logical-operand-v1-1-36ed8fc8faea@kernel.org>
+ <daaf05b5-3b18-c365-62e8-e7848c403ab7@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <daaf05b5-3b18-c365-62e8-e7848c403ab7@igalia.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.4.y-rt-rebase
-head:   fb7828286d1ee12dc132500e9fc84085ceadabc3
-commit: 6222f512e52abd73ca47462f12ede8872ff59f0f [50/85] printk: Add threaded printing support for BKL consoles.
-config: hexagon-randconfig-r013-20230727 (https://download.01.org/0day-ci/archive/20230727/202307272243.gHGeMfJW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307272243.gHGeMfJW-lkp@intel.com/reproduce)
+Hi Maira,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307272243.gHGeMfJW-lkp@intel.com/
+On Thu, Jul 27, 2023 at 11:01:27AM -0300, Maira Canal wrote:
+> Hi Nathan,
+> 
+> On 7/18/23 18:44, Nathan Chancellor wrote:
+> > A proposed update to clang's -Wconstant-logical-operand to warn when the
+> > left hand side is a constant shows the following instance in
+> > nsecs_to_jiffies_timeout() when NSEC_PER_SEC is not a multiple of HZ,
+> > such as CONFIG_HZ=300:
+> > 
+> >    In file included from drivers/gpu/drm/v3d/v3d_debugfs.c:12:
+> >    drivers/gpu/drm/v3d/v3d_drv.h:343:24: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+> >      343 |         if (NSEC_PER_SEC % HZ &&
+> >          |             ~~~~~~~~~~~~~~~~~ ^
+> >    drivers/gpu/drm/v3d/v3d_drv.h:343:24: note: use '&' for a bitwise operation
+> >      343 |         if (NSEC_PER_SEC % HZ &&
+> >          |                               ^~
+> >          |                               &
+> >    drivers/gpu/drm/v3d/v3d_drv.h:343:24: note: remove constant to silence this warning
+> >    1 warning generated.
+> > 
+> > Turn this into an explicit comparison against zero to make the
+> > expression a boolean to make it clear this should be a logical check,
+> > not a bitwise one.
+> > 
+> > Link: https://reviews.llvm.org/D142609
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Reviewed-by: Maíra Canal <mcanal@igalia.com>
+> 
+> Thanks for all the hard work with clang! Let me know if you need someone
+> to push it to drm-misc-next.
 
-All warnings (new ones prefixed by >>):
+Yes I will, I do not have drm commit rights. I think the i915 patch can
+go to drm-misc as well with Tvrtko's ack. Thanks a lot for taking a
+look!
 
-   In file included from kernel/printk/printk.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/printk/printk.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/printk/printk.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
-    3361 | void console_bkl_kthread_create(void)
-         |      ^
-   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3361 | void console_bkl_kthread_create(void)
-         | ^
-         | static 
-   7 warnings generated.
+Cheers,
+Nathan
 
-
-vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
-
-  3360	
-> 3361	void console_bkl_kthread_create(void)
-  3362	{
-  3363		struct task_struct *kt;
-  3364		struct console *c;
-  3365	
-  3366		lockdep_assert_held(&console_mutex);
-  3367	
-  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-  3369			return;
-  3370	
-  3371		if (!printk_threads_enabled || console_bkl_kthread)
-  3372			return;
-  3373	
-  3374		for_each_console(c) {
-  3375			if (c->flags & CON_BOOT)
-  3376				return;
-  3377		}
-  3378	
-  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
-  3380		if (IS_ERR(kt)) {
-  3381			pr_err("unable to start BKL printing thread\n");
-  3382			return;
-  3383		}
-  3384	
-  3385		console_bkl_kthread = kt;
-  3386	
-  3387		/*
-  3388		 * It is important that console printing threads are scheduled
-  3389		 * shortly after a printk call and with generous runtime budgets.
-  3390		 */
-  3391		sched_set_normal(console_bkl_kthread, -20);
-  3392	}
-  3393	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Best Regards,
+> - Maíra
+> 
+> > ---
+> >   drivers/gpu/drm/v3d/v3d_drv.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/v3d/v3d_drv.h b/drivers/gpu/drm/v3d/v3d_drv.h
+> > index b74b1351bfc8..7f664a4b2a75 100644
+> > --- a/drivers/gpu/drm/v3d/v3d_drv.h
+> > +++ b/drivers/gpu/drm/v3d/v3d_drv.h
+> > @@ -340,7 +340,7 @@ struct v3d_submit_ext {
+> >   static inline unsigned long nsecs_to_jiffies_timeout(const u64 n)
+> >   {
+> >   	/* nsecs_to_jiffies64() does not guard against overflow */
+> > -	if (NSEC_PER_SEC % HZ &&
+> > +	if ((NSEC_PER_SEC % HZ) != 0 &&
+> >   	    div_u64(n, NSEC_PER_SEC) >= MAX_JIFFY_OFFSET / HZ)
+> >   		return MAX_JIFFY_OFFSET;
+> > 
