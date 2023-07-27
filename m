@@ -1,46 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD0538C;
-	Thu, 27 Jul 2023 05:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3844F20F1;
+	Thu, 27 Jul 2023 05:32:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690435242; x=1721971242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VDEn0hrCg1uYOjtTifszzIiM89uuhKuwm6VqBNZo9MM=;
-  b=O75X0evmop4tMJRYM6OfD9+X0wJhBPw+Pj+Cy1rtj6jNB3/54Sp/wWA4
-   HoQ1MS3TT3he9pNPmwtY/gsB5culOfWGMcsghY4xJ5eU3Z63aHeIpxJlj
-   2BBfFRZFREFquiCKiijS0rQrTkPR+x9bxXqt0SCUmCibkfrvKua8UopBm
-   G1FSaaskkp9bLQG5EWDaefTIFfIuYhd6FHY74JoPS6QLpUwi6IsjrOuBv
-   8kotfGc9ZvB/r34rP1FSnSjo8Qz3fbDj92knkCuztLkt1sQpCGrsTEzId
-   lq56voFEtuQij85cwpCuFONnbB6wQ1d9CKjSekVXQo8brfiiLQHQ629yS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="358209681"
+  t=1690435946; x=1721971946;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fWZkOYFjJikPd2ygu+ECME7kjUB74SmD2Q9G5r9pZVw=;
+  b=mP5wIhdDXQFbI+evY2+mfN8fqI++r6AUmrRzW9dNznUtXzbv0VB/D8Oz
+   EW1o/CbH5LbYhDL4g6foXeA6mxCBzdoigK/bZSor8V1Xwz+xhDknk1iKM
+   /UWuDVP5PiKqCanCd/QXWMDyuSoQtL2N8HcZ9vWzbjLc0RjcLaBba9ffU
+   flXh63b7UNbNCU+b9L2Yl4H3q5P+sp8EPNMBwP5/qvEIC+YVf33FJXYJe
+   KYT/0YFhC+Y8EtSKJKvZS/4v9rUDz0I+OaVydhxNNdOedIO936L335O4u
+   laFUbysECzbRKP0DGHqlNxUsbaPDtuQPwL8FcLUK++XN0Kw0Xh25+Um8F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="367083590"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="358209681"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:20:42 -0700
+   d="scan'208";a="367083590"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 22:32:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="756514549"
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="796851009"
 X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="756514549"
+   d="scan'208";a="796851009"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jul 2023 22:20:40 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 26 Jul 2023 22:32:22 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qOtQV-0001xh-10;
-	Thu, 27 Jul 2023 05:20:39 +0000
-Date: Thu, 27 Jul 2023 13:20:10 +0800
+	id 1qOtbI-0001yH-2a;
+	Thu, 27 Jul 2023 05:32:00 +0000
+Date: Thu, 27 Jul 2023 13:30:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH 6/6] bitmap: move bitmap_*_region functions to bitmap.h
-Message-ID: <202307271307.tipWMyPF-lkp@intel.com>
-References: <20230727020207.36314-7-yury.norov@gmail.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-kernelci 1/2] drivers/watchdog/stm32_iwdg.c:216:34:
+ warning: unused variable 'stm32_iwdg_of_match'
+Message-ID: <202307271312.1V52c3HN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,243 +45,237 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230727020207.36314-7-yury.norov@gmail.com>
 
-Hi Yury,
+Hi Rob,
 
-kernel test robot noticed the following build errors:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.5-rc3 next-20230726]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/bitmap-fix-opencoded-bitmap_allocate_region/20230727-100500
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230727020207.36314-7-yury.norov%40gmail.com
-patch subject: [PATCH 6/6] bitmap: move bitmap_*_region functions to bitmap.h
-config: hexagon-randconfig-r036-20230726 (https://download.01.org/0day-ci/archive/20230727/202307271307.tipWMyPF-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
+head:   683789ff1e1c0a9373ca20daed4bbc700eccc22e
+commit: 11b42f6418bd440f99d1816557a31cc529645b6a [1/2] watchdog: Enable more drivers for COMPILE_TEST
+config: hexagon-randconfig-r045-20230726 (https://download.01.org/0day-ci/archive/20230727/202307271312.1V52c3HN-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271307.tipWMyPF-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271312.1V52c3HN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307271307.tipWMyPF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271312.1V52c3HN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:63:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:13:
-   In file included from include/linux/cpumask.h:12:
->> include/linux/bitmap.h:239:8: error: call to undeclared function 'bitmap_allocate_region'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     239 |                 if (!bitmap_allocate_region(bitmap, pos, order))
-         |                      ^
->> include/linux/bitmap.h:258:2: error: call to undeclared function 'bitmap_clear'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     258 |         bitmap_clear(bitmap, pos, pos + BIT(order));
-         |         ^
-   include/linux/bitmap.h:258:2: note: did you mean '__bitmap_clear'?
-   include/linux/bitmap.h:171:6: note: '__bitmap_clear' declared here
-     171 | void __bitmap_clear(unsigned long *map, unsigned int start, int len);
-         |      ^
-   include/linux/bitmap.h:272:19: error: static declaration of 'bitmap_allocate_region' follows non-static declaration
-     272 | static inline int bitmap_allocate_region(unsigned long *bitmap, unsigned int pos, int order)
+   In file included from drivers/watchdog/stm32_iwdg.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/watchdog/stm32_iwdg.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/watchdog/stm32_iwdg.c:14:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   drivers/watchdog/stm32_iwdg.c:77:19: warning: unused function 'reg_read' [-Wunused-function]
+      77 | static inline u32 reg_read(void __iomem *base, u32 reg)
          |                   ^
-   include/linux/bitmap.h:239:8: note: previous implicit declaration is here
-     239 |                 if (!bitmap_allocate_region(bitmap, pos, order))
-         |                      ^
->> include/linux/bitmap.h:278:2: error: call to undeclared function 'bitmap_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     278 |         bitmap_set(bitmap, pos, nbits);
-         |         ^
-   include/linux/bitmap.h:510:29: error: static declaration of 'bitmap_set' follows non-static declaration
-     510 | static __always_inline void bitmap_set(unsigned long *map, unsigned int start,
-         |                             ^
-   include/linux/bitmap.h:278:2: note: previous implicit declaration is here
-     278 |         bitmap_set(bitmap, pos, nbits);
-         |         ^
-   include/linux/bitmap.h:526:29: error: static declaration of 'bitmap_clear' follows non-static declaration
-     526 | static __always_inline void bitmap_clear(unsigned long *map, unsigned int start,
-         |                             ^
-   include/linux/bitmap.h:258:2: note: previous implicit declaration is here
-     258 |         bitmap_clear(bitmap, pos, pos + BIT(order));
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      97 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
+>> drivers/watchdog/stm32_iwdg.c:216:34: warning: unused variable 'stm32_iwdg_of_match' [-Wunused-const-variable]
+     216 | static const struct of_device_id stm32_iwdg_of_match[] = {
+         |                                  ^
+   8 warnings generated.
 
 
-vim +/bitmap_allocate_region +239 include/linux/bitmap.h
+vim +/stm32_iwdg_of_match +216 drivers/watchdog/stm32_iwdg.c
 
-   202	
-   203	int bitmap_parse(const char *buf, unsigned int buflen,
-   204				unsigned long *dst, int nbits);
-   205	int bitmap_parse_user(const char __user *ubuf, unsigned int ulen,
-   206				unsigned long *dst, int nbits);
-   207	int bitmap_parselist(const char *buf, unsigned long *maskp,
-   208				int nmaskbits);
-   209	int bitmap_parselist_user(const char __user *ubuf, unsigned int ulen,
-   210				unsigned long *dst, int nbits);
-   211	void bitmap_remap(unsigned long *dst, const unsigned long *src,
-   212			const unsigned long *old, const unsigned long *new, unsigned int nbits);
-   213	int bitmap_bitremap(int oldbit,
-   214			const unsigned long *old, const unsigned long *new, int bits);
-   215	void bitmap_onto(unsigned long *dst, const unsigned long *orig,
-   216			const unsigned long *relmap, unsigned int bits);
-   217	void bitmap_fold(unsigned long *dst, const unsigned long *orig,
-   218			unsigned int sz, unsigned int nbits);
-   219	
-   220	/**
-   221	 * bitmap_find_free_region - find a contiguous aligned mem region
-   222	 *	@bitmap: array of unsigned longs corresponding to the bitmap
-   223	 *	@bits: number of bits in the bitmap
-   224	 *	@order: region size (log base 2 of number of bits) to find
-   225	 *
-   226	 * Find a region of free (zero) bits in a @bitmap of @bits bits and
-   227	 * allocate them (set them to one).  Only consider regions of length
-   228	 * a power (@order) of two, aligned to that power of two, which
-   229	 * makes the search algorithm much faster.
-   230	 *
-   231	 * Return the bit offset in bitmap of the allocated region,
-   232	 * or -errno on failure.
-   233	 */
-   234	static inline int bitmap_find_free_region(unsigned long *bitmap, unsigned int bits, int order)
-   235	{
-   236		unsigned int pos, end;		/* scans bitmap by regions of size order */
-   237	
-   238		for (pos = 0 ; (end = pos + (1U << order)) <= bits; pos = end)
- > 239			if (!bitmap_allocate_region(bitmap, pos, order))
-   240				return pos;
-   241	
-   242		return -ENOMEM;
-   243	}
-   244	
-   245	/**
-   246	 * bitmap_release_region - release allocated bitmap region
-   247	 *	@bitmap: array of unsigned longs corresponding to the bitmap
-   248	 *	@pos: beginning of bit region to release
-   249	 *	@order: region size (log base 2 of number of bits) to release
-   250	 *
-   251	 * This is the complement to __bitmap_find_free_region() and releases
-   252	 * the found region (by clearing it in the bitmap).
-   253	 *
-   254	 * No return value.
-   255	 */
-   256	static inline void bitmap_release_region(unsigned long *bitmap, unsigned int pos, int order)
-   257	{
- > 258		bitmap_clear(bitmap, pos, pos + BIT(order));
-   259	}
-   260	
-   261	/**
-   262	 * bitmap_allocate_region - allocate bitmap region
-   263	 *	@bitmap: array of unsigned longs corresponding to the bitmap
-   264	 *	@pos: beginning of bit region to allocate
-   265	 *	@order: region size (log base 2 of number of bits) to allocate
-   266	 *
-   267	 * Allocate (set bits in) a specified region of a bitmap.
-   268	 *
-   269	 * Return 0 on success, or %-EBUSY if specified region wasn't
-   270	 * free (not all bits were zero).
-   271	 */
-   272	static inline int bitmap_allocate_region(unsigned long *bitmap, unsigned int pos, int order)
-   273	{
-   274		unsigned int nbits = pos + BIT(order);
-   275	
-   276		if (find_next_bit(bitmap, pos, nbits) < nbits)
-   277			return -EBUSY;
- > 278		bitmap_set(bitmap, pos, nbits);
-   279		return 0;
-   280	}
-   281	
+4332d113c66a6e Yannick Fertre      2017-04-06   76  
+4332d113c66a6e Yannick Fertre      2017-04-06  @77  static inline u32 reg_read(void __iomem *base, u32 reg)
+4332d113c66a6e Yannick Fertre      2017-04-06   78  {
+4332d113c66a6e Yannick Fertre      2017-04-06   79  	return readl_relaxed(base + reg);
+4332d113c66a6e Yannick Fertre      2017-04-06   80  }
+4332d113c66a6e Yannick Fertre      2017-04-06   81  
+4332d113c66a6e Yannick Fertre      2017-04-06   82  static inline void reg_write(void __iomem *base, u32 reg, u32 val)
+4332d113c66a6e Yannick Fertre      2017-04-06   83  {
+4332d113c66a6e Yannick Fertre      2017-04-06   84  	writel_relaxed(val, base + reg);
+4332d113c66a6e Yannick Fertre      2017-04-06   85  }
+4332d113c66a6e Yannick Fertre      2017-04-06   86  
+4332d113c66a6e Yannick Fertre      2017-04-06   87  static int stm32_iwdg_start(struct watchdog_device *wdd)
+4332d113c66a6e Yannick Fertre      2017-04-06   88  {
+4332d113c66a6e Yannick Fertre      2017-04-06   89  	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
+e9974166a53acc Ludovic Barre       2019-05-03   90  	u32 tout, presc, iwdg_rlr, iwdg_pr, iwdg_sr;
+4332d113c66a6e Yannick Fertre      2017-04-06   91  	int ret;
+4332d113c66a6e Yannick Fertre      2017-04-06   92  
+4332d113c66a6e Yannick Fertre      2017-04-06   93  	dev_dbg(wdd->parent, "%s\n", __func__);
+4332d113c66a6e Yannick Fertre      2017-04-06   94  
+e9974166a53acc Ludovic Barre       2019-05-03   95  	tout = clamp_t(unsigned int, wdd->timeout,
+e9974166a53acc Ludovic Barre       2019-05-03   96  		       wdd->min_timeout, wdd->max_hw_heartbeat_ms / 1000);
+e9974166a53acc Ludovic Barre       2019-05-03   97  
+e9974166a53acc Ludovic Barre       2019-05-03   98  	presc = DIV_ROUND_UP(tout * wdt->rate, RLR_MAX + 1);
+e9974166a53acc Ludovic Barre       2019-05-03   99  
+e9974166a53acc Ludovic Barre       2019-05-03  100  	/* The prescaler is align on power of 2 and start at 2 ^ PR_SHIFT. */
+e9974166a53acc Ludovic Barre       2019-05-03  101  	presc = roundup_pow_of_two(presc);
+e9974166a53acc Ludovic Barre       2019-05-03  102  	iwdg_pr = presc <= 1 << PR_SHIFT ? 0 : ilog2(presc) - PR_SHIFT;
+e9974166a53acc Ludovic Barre       2019-05-03  103  	iwdg_rlr = ((tout * wdt->rate) / presc) - 1;
+4332d113c66a6e Yannick Fertre      2017-04-06  104  
+4332d113c66a6e Yannick Fertre      2017-04-06  105  	/* enable write access */
+4332d113c66a6e Yannick Fertre      2017-04-06  106  	reg_write(wdt->regs, IWDG_KR, KR_KEY_EWA);
+4332d113c66a6e Yannick Fertre      2017-04-06  107  
+4332d113c66a6e Yannick Fertre      2017-04-06  108  	/* set prescaler & reload registers */
+e9974166a53acc Ludovic Barre       2019-05-03  109  	reg_write(wdt->regs, IWDG_PR, iwdg_pr);
+e9974166a53acc Ludovic Barre       2019-05-03  110  	reg_write(wdt->regs, IWDG_RLR, iwdg_rlr);
+4332d113c66a6e Yannick Fertre      2017-04-06  111  	reg_write(wdt->regs, IWDG_KR, KR_KEY_ENABLE);
+4332d113c66a6e Yannick Fertre      2017-04-06  112  
+4332d113c66a6e Yannick Fertre      2017-04-06  113  	/* wait for the registers to be updated (max 100ms) */
+e9974166a53acc Ludovic Barre       2019-05-03  114  	ret = readl_relaxed_poll_timeout(wdt->regs + IWDG_SR, iwdg_sr,
+e9974166a53acc Ludovic Barre       2019-05-03  115  					 !(iwdg_sr & (SR_PVU | SR_RVU)),
+4332d113c66a6e Yannick Fertre      2017-04-06  116  					 SLEEP_US, TIMEOUT_US);
+4332d113c66a6e Yannick Fertre      2017-04-06  117  	if (ret) {
+e9974166a53acc Ludovic Barre       2019-05-03  118  		dev_err(wdd->parent, "Fail to set prescaler, reload regs\n");
+4332d113c66a6e Yannick Fertre      2017-04-06  119  		return ret;
+4332d113c66a6e Yannick Fertre      2017-04-06  120  	}
+4332d113c66a6e Yannick Fertre      2017-04-06  121  
+4332d113c66a6e Yannick Fertre      2017-04-06  122  	/* reload watchdog */
+4332d113c66a6e Yannick Fertre      2017-04-06  123  	reg_write(wdt->regs, IWDG_KR, KR_KEY_RELOAD);
+4332d113c66a6e Yannick Fertre      2017-04-06  124  
+4332d113c66a6e Yannick Fertre      2017-04-06  125  	return 0;
+4332d113c66a6e Yannick Fertre      2017-04-06  126  }
+4332d113c66a6e Yannick Fertre      2017-04-06  127  
+4332d113c66a6e Yannick Fertre      2017-04-06  128  static int stm32_iwdg_ping(struct watchdog_device *wdd)
+4332d113c66a6e Yannick Fertre      2017-04-06  129  {
+4332d113c66a6e Yannick Fertre      2017-04-06  130  	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
+4332d113c66a6e Yannick Fertre      2017-04-06  131  
+4332d113c66a6e Yannick Fertre      2017-04-06  132  	dev_dbg(wdd->parent, "%s\n", __func__);
+4332d113c66a6e Yannick Fertre      2017-04-06  133  
+4332d113c66a6e Yannick Fertre      2017-04-06  134  	/* reload watchdog */
+4332d113c66a6e Yannick Fertre      2017-04-06  135  	reg_write(wdt->regs, IWDG_KR, KR_KEY_RELOAD);
+4332d113c66a6e Yannick Fertre      2017-04-06  136  
+4332d113c66a6e Yannick Fertre      2017-04-06  137  	return 0;
+4332d113c66a6e Yannick Fertre      2017-04-06  138  }
+4332d113c66a6e Yannick Fertre      2017-04-06  139  
+4332d113c66a6e Yannick Fertre      2017-04-06  140  static int stm32_iwdg_set_timeout(struct watchdog_device *wdd,
+4332d113c66a6e Yannick Fertre      2017-04-06  141  				  unsigned int timeout)
+4332d113c66a6e Yannick Fertre      2017-04-06  142  {
+4332d113c66a6e Yannick Fertre      2017-04-06  143  	dev_dbg(wdd->parent, "%s timeout: %d sec\n", __func__, timeout);
+4332d113c66a6e Yannick Fertre      2017-04-06  144  
+4332d113c66a6e Yannick Fertre      2017-04-06  145  	wdd->timeout = timeout;
+4332d113c66a6e Yannick Fertre      2017-04-06  146  
+4332d113c66a6e Yannick Fertre      2017-04-06  147  	if (watchdog_active(wdd))
+4332d113c66a6e Yannick Fertre      2017-04-06  148  		return stm32_iwdg_start(wdd);
+4332d113c66a6e Yannick Fertre      2017-04-06  149  
+4332d113c66a6e Yannick Fertre      2017-04-06  150  	return 0;
+4332d113c66a6e Yannick Fertre      2017-04-06  151  }
+4332d113c66a6e Yannick Fertre      2017-04-06  152  
+1f53305877fae6 Guenter Roeck       2019-04-10  153  static void stm32_clk_disable_unprepare(void *data)
+1f53305877fae6 Guenter Roeck       2019-04-10  154  {
+1f53305877fae6 Guenter Roeck       2019-04-10  155  	clk_disable_unprepare(data);
+1f53305877fae6 Guenter Roeck       2019-04-10  156  }
+1f53305877fae6 Guenter Roeck       2019-04-10  157  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  158  static int stm32_iwdg_clk_init(struct platform_device *pdev,
+c2cf466cca87e2 Ludovic Barre       2018-06-25  159  			       struct stm32_iwdg *wdt)
+c2cf466cca87e2 Ludovic Barre       2018-06-25  160  {
+1f53305877fae6 Guenter Roeck       2019-04-10  161  	struct device *dev = &pdev->dev;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  162  	u32 ret;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  163  
+1f53305877fae6 Guenter Roeck       2019-04-10  164  	wdt->clk_lsi = devm_clk_get(dev, "lsi");
+7c7164f935c819 Etienne Carriere    2020-11-06  165  	if (IS_ERR(wdt->clk_lsi))
+7c7164f935c819 Etienne Carriere    2020-11-06  166  		return dev_err_probe(dev, PTR_ERR(wdt->clk_lsi), "Unable to get lsi clock\n");
+c2cf466cca87e2 Ludovic Barre       2018-06-25  167  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  168  	/* optional peripheral clock */
+e9974166a53acc Ludovic Barre       2019-05-03  169  	if (wdt->data->has_pclk) {
+1f53305877fae6 Guenter Roeck       2019-04-10  170  		wdt->clk_pclk = devm_clk_get(dev, "pclk");
+7c7164f935c819 Etienne Carriere    2020-11-06  171  		if (IS_ERR(wdt->clk_pclk))
+7c7164f935c819 Etienne Carriere    2020-11-06  172  			return dev_err_probe(dev, PTR_ERR(wdt->clk_pclk),
+7c7164f935c819 Etienne Carriere    2020-11-06  173  					     "Unable to get pclk clock\n");
+c2cf466cca87e2 Ludovic Barre       2018-06-25  174  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  175  		ret = clk_prepare_enable(wdt->clk_pclk);
+c2cf466cca87e2 Ludovic Barre       2018-06-25  176  		if (ret) {
+1f53305877fae6 Guenter Roeck       2019-04-10  177  			dev_err(dev, "Unable to prepare pclk clock\n");
+c2cf466cca87e2 Ludovic Barre       2018-06-25  178  			return ret;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  179  		}
+1f53305877fae6 Guenter Roeck       2019-04-10  180  		ret = devm_add_action_or_reset(dev,
+1f53305877fae6 Guenter Roeck       2019-04-10  181  					       stm32_clk_disable_unprepare,
+1f53305877fae6 Guenter Roeck       2019-04-10  182  					       wdt->clk_pclk);
+1f53305877fae6 Guenter Roeck       2019-04-10  183  		if (ret)
+1f53305877fae6 Guenter Roeck       2019-04-10  184  			return ret;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  185  	}
+c2cf466cca87e2 Ludovic Barre       2018-06-25  186  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  187  	ret = clk_prepare_enable(wdt->clk_lsi);
+c2cf466cca87e2 Ludovic Barre       2018-06-25  188  	if (ret) {
+1f53305877fae6 Guenter Roeck       2019-04-10  189  		dev_err(dev, "Unable to prepare lsi clock\n");
+c2cf466cca87e2 Ludovic Barre       2018-06-25  190  		return ret;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  191  	}
+1f53305877fae6 Guenter Roeck       2019-04-10  192  	ret = devm_add_action_or_reset(dev, stm32_clk_disable_unprepare,
+1f53305877fae6 Guenter Roeck       2019-04-10  193  				       wdt->clk_lsi);
+1f53305877fae6 Guenter Roeck       2019-04-10  194  	if (ret)
+1f53305877fae6 Guenter Roeck       2019-04-10  195  		return ret;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  196  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  197  	wdt->rate = clk_get_rate(wdt->clk_lsi);
+c2cf466cca87e2 Ludovic Barre       2018-06-25  198  
+c2cf466cca87e2 Ludovic Barre       2018-06-25  199  	return 0;
+c2cf466cca87e2 Ludovic Barre       2018-06-25  200  }
+c2cf466cca87e2 Ludovic Barre       2018-06-25  201  
+4332d113c66a6e Yannick Fertre      2017-04-06  202  static const struct watchdog_info stm32_iwdg_info = {
+4332d113c66a6e Yannick Fertre      2017-04-06  203  	.options	= WDIOF_SETTIMEOUT |
+4332d113c66a6e Yannick Fertre      2017-04-06  204  			  WDIOF_MAGICCLOSE |
+4332d113c66a6e Yannick Fertre      2017-04-06  205  			  WDIOF_KEEPALIVEPING,
+4332d113c66a6e Yannick Fertre      2017-04-06  206  	.identity	= "STM32 Independent Watchdog",
+4332d113c66a6e Yannick Fertre      2017-04-06  207  };
+4332d113c66a6e Yannick Fertre      2017-04-06  208  
+d7b16e75d40e57 Gustavo A. R. Silva 2017-07-07  209  static const struct watchdog_ops stm32_iwdg_ops = {
+4332d113c66a6e Yannick Fertre      2017-04-06  210  	.owner		= THIS_MODULE,
+4332d113c66a6e Yannick Fertre      2017-04-06  211  	.start		= stm32_iwdg_start,
+4332d113c66a6e Yannick Fertre      2017-04-06  212  	.ping		= stm32_iwdg_ping,
+4332d113c66a6e Yannick Fertre      2017-04-06  213  	.set_timeout	= stm32_iwdg_set_timeout,
+4332d113c66a6e Yannick Fertre      2017-04-06  214  };
+4332d113c66a6e Yannick Fertre      2017-04-06  215  
+c2cf466cca87e2 Ludovic Barre       2018-06-25 @216  static const struct of_device_id stm32_iwdg_of_match[] = {
+e9974166a53acc Ludovic Barre       2019-05-03  217  	{ .compatible = "st,stm32-iwdg", .data = &stm32_iwdg_data },
+e9974166a53acc Ludovic Barre       2019-05-03  218  	{ .compatible = "st,stm32mp1-iwdg", .data = &stm32mp1_iwdg_data },
+c2cf466cca87e2 Ludovic Barre       2018-06-25  219  	{ /* end node */ }
+c2cf466cca87e2 Ludovic Barre       2018-06-25  220  };
+c2cf466cca87e2 Ludovic Barre       2018-06-25  221  MODULE_DEVICE_TABLE(of, stm32_iwdg_of_match);
+c2cf466cca87e2 Ludovic Barre       2018-06-25  222  
+
+:::::: The code at line 216 was first introduced by commit
+:::::: c2cf466cca87e2072bd6616f751f4c385c2ab71e watchdog: stm32: add pclk feature for stm32mp1
+
+:::::: TO: Ludovic Barre <ludovic.barre@st.com>
+:::::: CC: Wim Van Sebroeck <wim@linux-watchdog.org>
 
 -- 
 0-DAY CI Kernel Test Service
