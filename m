@@ -1,102 +1,178 @@
-Received: from mgamail.intel.com (unknown [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777921FDD;
-	Thu, 27 Jul 2023 09:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690451576; x=1721987576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7ywYBQt+k0wWV597TPC4S52IE0VKtrqKZaO1M88iGqQ=;
-  b=ZoqLQTuCqQoSMKHc2mLAeOKUKM5TmN+Tvvfh3ZTzHkUOwtXeTobIzYol
-   6I/DqqfzwOGLFbw3zws3J3t2AZNRdwBC/p5pgV/crRuDh9qIUK0MTEDgZ
-   1Raw9nbOH7AdJdfWtWmwoCJmc5lV7EtYCc9/PgpIQOq4DaG6cFkjUemAh
-   16UJvlGFzk2H2UzjL46ONxIiWyYrN88BENvs8qJmRNnCSxf6vfIjfJHMI
-   8VqK5BC7HyAPAaqnF1WKnoH8AfmLvDLpHv+J1m/lylIzX8grFvVUSycFi
-   OdB7oFnpTa7EOSZC1aq2blikyunJLVcX2Uvo8jh0QQfmJB9udOZdEY2qT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="347876601"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="347876601"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 02:52:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="973478188"
-X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
-   d="scan'208";a="973478188"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Jul 2023 02:52:51 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qOxfU-00029Z-13;
-	Thu, 27 Jul 2023 09:52:32 +0000
-Date: Thu, 27 Jul 2023 17:50:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Charles Boyer <Charles.Boyer@fii-usa.com>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Vivekanand Veeracholan <vveerach@google.com>,
-	Lancelot Kao <lancelot.cy.kao@fii-na.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Charles Boyer <Charles.Boyer@fii-usa.com>
-Subject: Re: [PATCH] ARM: dts: nuvoton: Add Fii Mori system
-Message-ID: <202307271704.EqCiK6kd-lkp@intel.com>
-References: <20230726184651.1221-1-Charles.Boyer@fii-usa.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE91E107AD
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 10:08:15 +0000 (UTC)
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-4864992dc37so275082e0c.3
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 03:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690452494; x=1691057294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zcl6BwQRr5tucmG2DEZSo0kunSZ6siQNkNbMkfRPkVY=;
+        b=JycG6n7pB2Sc4gu9itmnznIyAZyAdQIB07CNiP83m7hNl6udqjYylENv/mySowU910
+         qRCdjGSpnRdz9zybYyllYUvG7uLY71hoFmSRW9B/7FdDM8eqlgvZpfYW87kkgcjqQchu
+         ku3eAGzrBFUf8PfFTXxW4SCxeHStHNX23nhKp1c+Kmhoyy/V2AZF3GxE6uayejTpxdSh
+         sd0HHoDo2cxHqGsA9aClc4E8DVw5NUOGmWR/6Dn8DVkUUjNlYLi1hJthWYqyWv54pIEU
+         9q/pJxdiX5l1Lfabf6iXseMzPGBap3Uzt800tmGpGB39uWz8kV0wHn9NedIznGjVpTgI
+         +RoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690452494; x=1691057294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zcl6BwQRr5tucmG2DEZSo0kunSZ6siQNkNbMkfRPkVY=;
+        b=WqIhU1rgRYYivdDOII4qubfl6EnrkgJzLd0BrlErGMRmCR8gxqA9WDRRaK2FeSu0R9
+         ALOqXqdkJLfCUHzUKn+s0qDxWogTUpEX/MasqRMgRvMJg2ifGLBFLpBDSClKqpFLg9YU
+         7vIg4+PWGHmMBua4XwzsrjBbKh/6ar/ipiSpd3+0iVza6aZmhiyatFI7vh4BuDz9acQt
+         4apOLYwwXDRG/xN4BnRSX04lN0YLjT3rgVWHZ4sLsrrBD+qeEYUahTuBxRGqNtv/SRA3
+         t+P8TLWzJwvhL0L2frJYLZd3iFREVwN8PtnkMok0uKd32pYfG6CICsJwCni+GVj0jOOY
+         p+qg==
+X-Gm-Message-State: ABy/qLYx8Jf8dRFmZ68YBWx3Oucik0UHgkLkVlTMlsaWGOzObv3VaNE+
+	lEvJ/AJeVYpN6/w1VOFAqvEQnVKJ5lE4vs3nclAj1w==
+X-Google-Smtp-Source: APBJJlHfFpoELAVK4ktLR6yeOkc2l8FGvVMK1919cwae7SwaJre72xp+rCBY5EOc7fMCZvRi0x4FP5bwzauhHaoJROw=
+X-Received: by 2002:a1f:6058:0:b0:486:3e81:9b8a with SMTP id
+ u85-20020a1f6058000000b004863e819b8amr243950vkb.13.1690452494531; Thu, 27 Jul
+ 2023 03:08:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230726184651.1221-1-Charles.Boyer@fii-usa.com>
+References: <20230711133122.3710-1-christian.koenig@amd.com>
+ <20230711133122.3710-2-christian.koenig@amd.com> <20230722220637.GA138486@dev-arch.thelio-3990X>
+In-Reply-To: <20230722220637.GA138486@dev-arch.thelio-3990X>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 27 Jul 2023 15:38:03 +0530
+Message-ID: <CA+G9fYuEah=Kp9DzQf1xmG6XQCUY8f869C87MnDSQocGORV1JA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] drm: execution context for GEM buffers v7
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>, 
+	alexdeucher@gmail.com, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Charles,
+On Sun, 23 Jul 2023 at 03:36, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Christian,
+>
+> On Tue, Jul 11, 2023 at 03:31:17PM +0200, Christian K=C3=B6nig wrote:
+> > This adds the infrastructure for an execution context for GEM buffers
+> > which is similar to the existing TTMs execbuf util and intended to repl=
+ace
+> > it in the long term.
+> >
+> > The basic functionality is that we abstracts the necessary loop to lock
+> > many different GEM buffers with automated deadlock and duplicate handli=
+ng.
+> >
+> > v2: drop xarray and use dynamic resized array instead, the locking
+> >     overhead is unnecessary and measurable.
+> > v3: drop duplicate tracking, radeon is really the only one needing that=
+.
+> > v4: fixes issues pointed out by Danilo, some typos in comments and a
+> >     helper for lock arrays of GEM objects.
+> > v5: some suggestions by Boris Brezillon, especially just use one retry
+> >     macro, drop loop in prepare_array, use flags instead of bool
+> > v6: minor changes suggested by Thomas, Boris and Danilo
+> > v7: minor typos pointed out by checkpatch.pl fixed
+> >
+> > Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+> > Reviewed-by: Danilo Krummrich <dakr@redhat.com>
+> > Tested-by: Danilo Krummrich <dakr@redhat.com>
+>
+> <snip>
+>
+> > diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> > new file mode 100644
+> > index 000000000000..73205afec162
+> > --- /dev/null
+> > +++ b/include/drm/drm_exec.h
+>
+> <snip>
+>
+> > + * Since labels can't be defined local to the loops body we use a jump=
+ pointer
+> > + * to make sure that the retry is only used from within the loops body=
+.
+> > + */
+> > +#define drm_exec_until_all_locked(exec)                              \
+> > +     for (void *__drm_exec_retry_ptr; ({                     \
+> > +             __label__ __drm_exec_retry;                     \
+> > +__drm_exec_retry:                                            \
+> > +             __drm_exec_retry_ptr =3D &&__drm_exec_retry;      \
+> > +             (void)__drm_exec_retry_ptr;                     \
+> > +             drm_exec_cleanup(exec);                         \
+> > +     });)
+> > +
+> > +/**
+> > + * drm_exec_retry_on_contention - restart the loop to grap all locks
+> > + * @exec: drm_exec object
+> > + *
+> > + * Control flow helper to continue when a contention was detected and =
+we need to
+> > + * clean up and re-start the loop to prepare all GEM objects.
+> > + */
+> > +#define drm_exec_retry_on_contention(exec)                   \
+> > +     do {                                                    \
+> > +             if (unlikely(drm_exec_is_contended(exec)))      \
+> > +                     goto *__drm_exec_retry_ptr;             \
+> > +     } while (0)
+>
+> This construct of using a label as a value and goto to jump into a GNU
+> C statement expression is explicitly documented in GCC's manual [1] as
+> undefined behavior:
+>
+> "Jumping into a statement expression with a computed goto (see Labels as
+> Values [2]) has undefined behavior. "
+>
+> A recent change in clang [3] to prohibit this altogether points this out,=
+ so
+> builds using clang-17 and newer will break with this change applied:
+>
+>   drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from thi=
+s indirect goto statement to one of its possible targets
+>      41 |                 drm_exec_retry_on_contention(&exec);
+>         |                 ^
 
-kernel test robot noticed the following build errors:
+LKFT also noticed these build failures on arm and arm64 with clang nightly.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.5-rc3 next-20230727]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Boyer/ARM-dts-nuvoton-Add-Fii-Mori-system/20230727-024931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230726184651.1221-1-Charles.Boyer%40fii-usa.com
-patch subject: [PATCH] ARM: dts: nuvoton: Add Fii Mori system
-config: arm-randconfig-r004-20230726 (https://download.01.org/0day-ci/archive/20230727/202307271704.EqCiK6kd-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271704.EqCiK6kd-lkp@intel.com/reproduce)
+>   include/drm/drm_exec.h:96:4: note: expanded from macro 'drm_exec_retry_=
+on_contention'
+>      96 |                         goto *__drm_exec_retry_ptr;            =
+ \
+>         |                         ^
+>   drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of in=
+direct goto statement
+>      39 |         drm_exec_until_all_locked(&exec) {
+>         |         ^
+>   include/drm/drm_exec.h:79:33: note: expanded from macro 'drm_exec_until=
+_all_locked'
+>      79 |                 __label__ __drm_exec_retry;                    =
+ \
+>         |                                                                =
+ ^
+>   drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a stateme=
+nt expression
+>
+> It seems like if this construct works, it is by chance, although I am
+> not sure if there is another solution.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307271704.EqCiK6kd-lkp@intel.com/
+Thanks for looking into this problem.
 
-All errors (new ones prefixed by >>):
 
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:649.1-6 Label or path emc0 not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:662.1-7 Label or path ohci1 not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:666.1-5 Label or path aes not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:670.1-5 Label or path sha not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:761.1-8 Label or path sdhci0 not found
-   Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:769.1-7 Label or path ohci1 not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:773.1-6 Label or path vdma not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:777.1-9 Label or path pcimbox not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:781.1-5 Label or path vcd not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:785.1-5 Label or path ece not found
->> Error: arch/arm/boot/dts/nuvoton/nuvoton-npcm730-mori.dts:818.1-5 Label or path otp not found
->> FATAL ERROR: Syntax error parsing input tree
+>
+> [1]: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+> [2]: https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
+> [3]: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096=
+eb3aed7b712f5067
+>
+> Cheers,
+> Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Naresh
