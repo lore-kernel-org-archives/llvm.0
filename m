@@ -1,51 +1,32 @@
-Received: from mgamail.intel.com (unknown [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F81827124;
-	Thu, 27 Jul 2023 16:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690475976; x=1722011976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h+4dCkLMPc4K9vhEve+IB/2UKNL6/ESbbvqGzEUUYbo=;
-  b=TWaMajwusGBlM/73JRYYkaf42PX/kaYMimYH2+aHz7qdP8QcYYwpg+th
-   L+dnO7rI/LQtaToZZ9dJpIvxDwzpLXZQ1QbAo5Klb1EjBxwI3w0WLRVT4
-   zXdj3QShEOQXVs9xesAu66asyvPuesv4sS7702ZCxc4JtAcU7GwRNklOY
-   9bKRAYqt7jj+L4gpLYXVvTtuUzOptw5dcrPvsjbLIK4qTES+WXfXxwyZN
-   4s0hpfJSVLKR+g9RNN+cOwh7jVahlq4mfbae4cs59rQwjPFf0VDkA6vx5
-   NwWNdtCHSFyjZZ3N9Vp2cevn/pcBNt1CTuqo3AcTvQlGR5eI8MD+zmxz7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="348643857"
-X-IronPort-AV: E=Sophos;i="6.01,235,1684825200"; 
-   d="scan'208";a="348643857"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 09:36:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="817177974"
-X-IronPort-AV: E=Sophos;i="6.01,235,1684825200"; 
-   d="scan'208";a="817177974"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jul 2023 09:36:24 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qP3yP-0002Pn-0r;
-	Thu, 27 Jul 2023 16:36:24 +0000
-Date: Fri, 28 Jul 2023 00:35:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Feiyang Chen <chenfeiyang@loongson.cn>, andrew@lunn.ch,
-	hkallweit1@gmail.com, peppe.cavallaro@st.com,
-	alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-	chenhuacai@loongson.cn
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Feiyang Chen <chenfeiyang@loongson.cn>, linux@armlinux.org.uk,
-	dongbiao@loongson.cn, loongson-kernel@lists.loongnix.cn,
-	netdev@vger.kernel.org, loongarch@lists.linux.dev,
-	chris.chenfeiyang@gmail.com
-Subject: Re: [PATCH v2 03/10] net: stmmac: dwmac1000: Add multi-channel
- support
-Message-ID: <202307280004.UhGTxBbU-lkp@intel.com>
-References: <373259d4ac9ac0b9e1e64ad96d60a9bbd35b85aa.1690439335.git.chenfeiyang@loongson.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE7A27124;
+	Thu, 27 Jul 2023 16:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64786C433C8;
+	Thu, 27 Jul 2023 16:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690476005;
+	bh=bO56ZHhEtSBEpQFJFvdRzz7TargHjGNdtwpZ8hrxcvs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o2GQ8qyOKThVAfheklwCml5Mng28LizrXQcJwGO0BAx4obL+D7kttr5eAuKi21weu
+	 gQGkJE2vZGz7JZiP0PI0UzbKfHY5j8nOklbdr271dE9VBwqcJdokhC3wcIAyGtxs2R
+	 XWuKPr7TsWaMPP1kny0JTBu7Xv/o/J2dt1hD7trkb2IzZ5BVjPfQJ/VurKA8v4hmpa
+	 hxsdNHpfpasFpEXxlp1Wv/ipauWzfH52vPk8222h8xar7ohRyTdYxZPuV53ylKSuhl
+	 OJpTWKuGxJERt5H6c77ImJLX0tUqZ1E+8CUCC+jjWj13YHREdSA0Oon5O1I8lPNNx3
+	 J9iInrszhtyeQ==
+Date: Thu, 27 Jul 2023 09:40:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Steven French <Steven.French@microsoft.com>
+Cc: kernel test robot <lkp@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXTERNAL] fs/smb/client/sess.c:160:5: warning: stack frame size
+ (1152) exceeds limit (1024) in 'cifs_try_adding_channels'
+Message-ID: <20230727164003.GA79803@dev-arch.thelio-3990X>
+References: <202307270640.5ODmPwDl-lkp@intel.com>
+ <DM4PR21MB34413441C9DF320C24F5A84FE401A@DM4PR21MB3441.namprd21.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,95 +35,253 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <373259d4ac9ac0b9e1e64ad96d60a9bbd35b85aa.1690439335.git.chenfeiyang@loongson.cn>
+In-Reply-To: <DM4PR21MB34413441C9DF320C24F5A84FE401A@DM4PR21MB3441.namprd21.prod.outlook.com>
 
-Hi Feiyang,
+Hi Steve,
 
-kernel test robot noticed the following build warnings:
+On Thu, Jul 27, 2023 at 03:36:11AM +0000, Steven French wrote:
+> Does anyone recognize the problem here - the stack size it is complaining about has a small stack usage not a large one
+>      cifs_try_adding_channels   has five pointers and five ints on the stack.  That seems small - not large.  It is called by cifs_mount which doesn't seem too bad in its stack usage either.
+> 
+> Any ideas why the stack size complaint is made?
 
-[auto build test WARNING on net/main]
-[also build test WARNING on linus/master v6.5-rc3]
-[cannot apply to sunxi/sunxi/for-next net-next/main horms-ipvs/master next-20230727]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Unfortunately, it seems like a recent-ish LLVM change removed the handy
+spill/variable information that would have shed a little more immediate
+light on this situation:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Feiyang-Chen/net-stmmac-Pass-stmmac_priv-and-chan-in-some-callbacks/20230727-155954
-base:   net/main
-patch link:    https://lore.kernel.org/r/373259d4ac9ac0b9e1e64ad96d60a9bbd35b85aa.1690439335.git.chenfeiyang%40loongson.cn
-patch subject: [PATCH v2 03/10] net: stmmac: dwmac1000: Add multi-channel support
-config: i386-buildonly-randconfig-r006-20230727 (https://download.01.org/0day-ci/archive/20230728/202307280004.UhGTxBbU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230728/202307280004.UhGTxBbU-lkp@intel.com/reproduce)
+https://github.com/ClangBuiltLinux/linux/issues/1894
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307280004.UhGTxBbU-lkp@intel.com/
+Building with a version that has that reveals:
 
-All warnings (new ones prefixed by >>):
+  fs/smb/client/sess.c:160:5: warning: stack frame size (1152) exceeds limit (1024) in 'cifs_try_adding_channels' [-Wframe-larger-than]
+  int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses)
+      ^
+  412/1152 (35.76%) spills, 740/1152 (64.24%) variables
+  1 warning generated.
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c:114:6: warning: no previous prototype for function 'dwmac1000_dma_init_channel' [-Wmissing-prototypes]
-   void dwmac1000_dma_init_channel(struct stmmac_priv *priv, void __iomem *ioaddr,
-        ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dwmac1000_dma_init_channel(struct stmmac_priv *priv, void __iomem *ioaddr,
-   ^
-   static 
-   1 warning generated.
+The spills are definitely not great but it looks like there is a
+moderately large stack variable in cifs_ses_add_channel(), which gets
+inlined into cifs_try_adding_channels(). Unfortunately, pahole appears
+to be borked for me but -Rpass-analysis=stack-frame-layout shows it:
 
+  fs/smb/client/sess.c:161:1: remark:
+  Function: cifs_try_adding_channels
+  Offset: [SP-8], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-16], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-24], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-32], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-40], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-48], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-56], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-64], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-72], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-80], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-88], Type: Protector, Align: 8, Size: 8
+  Offset: [SP-712], Type: Variable, Align: 8, Size: 624  <-- ctx, struct smb3_fs_context
+  Offset: [SP-801], Type: Variable, Align: 1, Size: 89
+  Offset: [SP-816], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-824], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-832], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-840], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-848], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-856], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-864], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-872], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-880], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-888], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-896], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-904], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-912], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-920], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-928], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-936], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-944], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-952], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-960], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-968], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-976], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-984], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-992], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1000], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1008], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1016], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1024], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1028], Type: Spill, Align: 4, Size: 4
+  Offset: [SP-1040], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1048], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1056], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1064], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1072], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1080], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1088], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1096], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1104], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1112], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1120], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1124], Type: Spill, Align: 4, Size: 4
+  Offset: [SP-1128], Type: Spill, Align: 4, Size: 4
+  Offset: [SP-1136], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1144], Type: Spill, Align: 8, Size: 8
+  Offset: [SP-1152], Type: Spill, Align: 8, Size: 8 [-Rpass-analysis=stack-frame-layout]
+    161 | {
+        | ^
 
-vim +/dwmac1000_dma_init_channel +114 drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c
+There is probably more we can do on the compiler side to improve the
+spills but I suspect marking cifs_ses_add_channel() as
+noinline_for_stack or switching ctx to a head allocation would resolve
+this.
 
-   113	
- > 114	void dwmac1000_dma_init_channel(struct stmmac_priv *priv, void __iomem *ioaddr,
-   115					struct stmmac_dma_cfg *dma_cfg,
-   116					u32 chan)
-   117	{
-   118		u32 value;
-   119		int txpbl = dma_cfg->txpbl ?: dma_cfg->pbl;
-   120		int rxpbl = dma_cfg->rxpbl ?: dma_cfg->pbl;
-   121	
-   122		if (!priv->plat->dwmac_is_loongson)
-   123			return;
-   124	
-   125		/* common channel control register config */
-   126		value = readl(ioaddr + DMA_BUS_MODE + chan * DMA_CHAN_OFFSET);
-   127	
-   128		/*
-   129		 * Set the DMA PBL (Programmable Burst Length) mode.
-   130		 *
-   131		 * Note: before stmmac core 3.50 this mode bit was 4xPBL, and
-   132		 * post 3.5 mode bit acts as 8*PBL.
-   133		 */
-   134		if (dma_cfg->pblx8)
-   135			value |= DMA_BUS_MODE_MAXPBL;
-   136		value |= DMA_BUS_MODE_USP;
-   137		value &= ~(DMA_BUS_MODE_PBL_MASK | DMA_BUS_MODE_RPBL_MASK);
-   138		value |= (txpbl << DMA_BUS_MODE_PBL_SHIFT);
-   139		value |= (rxpbl << DMA_BUS_MODE_RPBL_SHIFT);
-   140	
-   141		/* Set the Fixed burst mode */
-   142		if (dma_cfg->fixed_burst)
-   143			value |= DMA_BUS_MODE_FB;
-   144	
-   145		/* Mixed Burst has no effect when fb is set */
-   146		if (dma_cfg->mixed_burst)
-   147			value |= DMA_BUS_MODE_MB;
-   148	
-   149		value |= DMA_BUS_MODE_ATDS;
-   150	
-   151		if (dma_cfg->aal)
-   152			value |= DMA_BUS_MODE_AAL;
-   153	
-   154		writel(value, ioaddr + DMA_BUS_MODE + chan * DMA_CHAN_OFFSET);
-   155	
-   156		/* Mask interrupts by writing to CSR7 */
-   157		writel(DMA_INTR_DEFAULT_MASK,
-   158		       ioaddr + DMA_INTR_ENA + chan * DMA_CHAN_OFFSET);
-   159	}
-   160	
+Cheers,
+Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> -----Original Message-----
+> From: kernel test robot <lkp@intel.com>
+> Sent: Wednesday, July 26, 2023 5:44 PM
+> To: Steven French <Steven.French@microsoft.com>
+> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; linux-kernel@vger.kernel.org
+> Subject: [EXTERNAL] fs/smb/client/sess.c:160:5: warning: stack frame size (1152) exceeds limit (1024) in 'cifs_try_adding_channels'
+> 
+> Hi Steve,
+> 
+> First bad commit (maybe != root cause):
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   0a8db05b571ad5b8d5c8774a004c0424260a90bd
+> commit: 38c8a9a52082579090e34c033d439ed2cd1a462d smb: move client and server files to common directory fs/smb
+> date:   9 weeks ago
+> config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230727/202307270640.5ODmPwDl-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230727/202307270640.5ODmPwDl-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes:
+> | https://lore/
+> | .kernel.org%2Foe-kbuild-all%2F202307270640.5ODmPwDl-lkp%40intel.com%2F
+> | &data=05%7C01%7CSteven.French%40microsoft.com%7C2cc584fd937a4cd5b9d008
+> | db8e29f75b%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C63826008313023
+> | 4737%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBT
+> | iI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=AauGIxZRPM5DK1J5j6lyEp
+> | jOkArxfVtIUAnmPcxcCQs%3D&reserved=0
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> fs/smb/client/sess.c:160:5: warning: stack frame size (1152) exceeds
+> >> limit (1024) in 'cifs_try_adding_channels' [-Wframe-larger-than]
+>      160 | int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses)
+>          |     ^
+>    1 warning generated.
+> 
+> 
+> vim +/cifs_try_adding_channels +160 fs/smb/client/sess.c
+> 
+> b54034a73baf9f fs/cifs/sess.c Shyam Prasad N  2022-01-03  158
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  159  /* returns number of channels added */ 387ec58f339b0c fs/cifs/sess.c Ronnie Sahlberg 2020-12-14 @160  int cifs_try_adding_channels(struct cifs_sb_info *cifs_sb, struct cifs_ses *ses)
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  161  {
+> 90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  162   struct TCP_Server_Info *server = ses->server;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  163   int old_chan_count, new_chan_count;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  164   int left;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  165   int rc = 0;
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  166   int tries = 0;
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  167   struct cifs_server_iface *iface = NULL, *niface = NULL;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  168
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  169   spin_lock(&ses->chan_lock);
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  170
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  171   new_chan_count = old_chan_count = ses->chan_count;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  172   left = ses->chan_max - ses->chan_count;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  173
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  174   if (left <= 0) {
+> 88b024f556fcd5 fs/cifs/sess.c Shyam Prasad N  2021-11-19  175           spin_unlock(&ses->chan_lock);
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  176           cifs_dbg(FYI,
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  177                    "ses already at max_channels (%zu), nothing to open\n",
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  178                    ses->chan_max);
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  179           return 0;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  180   }
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  181
+> 90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  182   if (server->dialect < SMB30_PROT_ID) {
+> 53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  183           spin_unlock(&ses->chan_lock);
+> 53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  184           cifs_dbg(VFS, "multichannel is not supported on this protocol version, use 3.0 or above\n");
+> 53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  185           return 0;
+> 53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  186   }
+> 53923e0fe2098f fs/cifs/sess.c Steve French    2022-02-16  187
+> 90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  188   if (!(server->capabilities & SMB2_GLOBAL_CAP_MULTI_CHANNEL)) {
+> 9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  189           ses->chan_max = 1;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  190           spin_unlock(&ses->chan_lock);
+> 90c49fce1c43e1 fs/cifs/sess.c Paulo Alcantara 2023-04-21  191           cifs_server_dbg(VFS, "no multichannel support\n");
+> 9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  192           return 0;
+> 9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  193   }
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  194   spin_unlock(&ses->chan_lock);
+> 9c2dc11df50d1c fs/cifs/sess.c Steve French    2021-05-07  195
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  196   /*
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  197    * Keep connecting to same, fastest, iface for all channels as
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  198    * long as its RSS. Try next fastest one if not RSS or channel
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  199    * creation fails.
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  200    */
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  201   spin_lock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  202   iface = list_first_entry(&ses->iface_list, struct cifs_server_iface,
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  203                            iface_head);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  204   spin_unlock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  205
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  206   while (left > 0) {
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  207
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  208           tries++;
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  209           if (tries > 3*ses->chan_max) {
+> bbbf9eafbfdaa2 fs/cifs/sess.c Steve French    2020-05-30  210                   cifs_dbg(FYI, "too many channel open attempts (%d channels left to open)\n",
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  211                            left);
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  212                   break;
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  213           }
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  214
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  215           spin_lock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  216           if (!ses->iface_count) {
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  217                   spin_unlock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  218                   break;
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  219           }
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  220
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  221           list_for_each_entry_safe_from(iface, niface, &ses->iface_list,
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  222                               iface_head) {
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  223                   /* skip ifaces that are unusable */
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  224                   if (!iface->is_active ||
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  225                       (is_ses_using_iface(ses, iface) &&
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  226                        !iface->rss_capable)) {
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  227                           continue;
+> 65a37a34145ca6 fs/cifs/sess.c Aurelien Aptel  2019-11-20  228                   }
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  229
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  230                   /* take ref before unlock */
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  231                   kref_get(&iface->refcount);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  232
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  233                   spin_unlock(&ses->iface_lock);
+> 387ec58f339b0c fs/cifs/sess.c Ronnie Sahlberg 2020-12-14  234                   rc = cifs_ses_add_channel(cifs_sb, ses, iface);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  235                   spin_lock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  236
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  237                   if (rc) {
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  238                           cifs_dbg(VFS, "failed to open extra channel on iface:%pIS rc=%d\n",
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  239                                    &iface->sockaddr,
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  240                                    rc);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  241                           kref_put(&iface->refcount, release_iface);
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  242                           continue;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  243                   }
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  244
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  245                   cifs_dbg(FYI, "successfully opened new channel on iface:%pIS\n",
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  246                            &iface->sockaddr);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  247                   break;
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  248           }
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  249           spin_unlock(&ses->iface_lock);
+> aa45dadd34e44f fs/cifs/sess.c Shyam Prasad N  2022-01-01  250
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  251           left--;
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  252           new_chan_count++;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  253   }
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  254
+> 724244cdb38285 fs/cifs/sess.c Shyam Prasad N  2021-07-19  255   return new_chan_count - old_chan_count;
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  256  }
+> d70e9fa5588476 fs/cifs/sess.c Aurelien Aptel  2019-09-20  257
+> 
+> :::::: The code at line 160 was first introduced by commit
+> :::::: 387ec58f339b0c45e3767395f11fa8dd3772131e cifs: simplify handling of cifs_sb/ctx->local_nls
+> 
+> :::::: TO: Ronnie Sahlberg <lsahlber@redhat.com>
+> :::::: CC: Steve French <stfrench@microsoft.com>
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
