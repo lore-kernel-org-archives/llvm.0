@@ -1,106 +1,199 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (unknown [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F6EC12B
-	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 07:07:52 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5221cf2bb8cso794855a12.1
-        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 00:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690441670; x=1691046470;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fqOQsXekD6sFK6WYy17hOsZp5/7SJav2yrMJmcsMwVY=;
-        b=CkvLBbKQENAUcbdYvtjnKhFCuEDdLZPn61JZ57yc6kd0UPug8w5y/OYsJT5jKQJfWo
-         TGCTVwSYh/r5zyrfgk1bSPTWA1KVfxM0K0HJsawUrnztpVaGfy0hCGnpKL4QlHaT7Ycb
-         IAlmdhwQJDwzqOcPllqwITEJ8VELWlwVpImt58DEjCEPpKFUYOgKPKPua3Cgt3WvO/q8
-         pJ4TMPasE5wfrHQmCkSbzKKYLDFfvn7OeEHv6qyqLxnlQlTzkiWAJeazaFO/qEvIJXnb
-         pXCu1ghmG5fvaNo5bgVfStImnVYOH/8paAED3pWkCjTjuZoKZOBteInaBvGRuVe/+Wve
-         eO6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690441671; x=1691046471;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fqOQsXekD6sFK6WYy17hOsZp5/7SJav2yrMJmcsMwVY=;
-        b=aycg5c8CYpg4pIKcHBjg4YLB5F+/ttuZvB/Ye6lnrr8/u2UXnQUqqViJrujv0B2DMc
-         kE4uYdwbNxc2gFohrhJscrQ18m12FUPXAszHirlD+noLJymuj0oPMuzcacBMKjmLnoCJ
-         /Br6rY9q6yOr8ZchAma4rm2u9mIgNdQoM1SnA/vDGYAH8RwR7QgCKhECrY8S0sgwfWCJ
-         LMMn+qRWJfqDx2T597HY1GUekEAZW33ouDYPsGwdMToHxVizEo5pC/M58X5qiJR3eS5R
-         qFauV8WoJlJRk9Dbt/pBQfoCA2J+at8uM2g2fXFS9iyHr0/qo6kT6WQF62iZYctCZ3Ab
-         OvFw==
-X-Gm-Message-State: ABy/qLZKX/1o3e7YKQDHiU8dVp8bnrcSb22WFIqmDxeD54wR9v0uYa8v
-	Jotvm4uz6l/ntAveZWRlY+BnZg==
-X-Google-Smtp-Source: APBJJlH0jrNgLEoeZag63NmlA+d74+LDSnMgmUsHAoDTB3LniXqupxvPa61maXNWsNZ+1q5a7JpmTA==
-X-Received: by 2002:aa7:c490:0:b0:522:5855:ee78 with SMTP id m16-20020aa7c490000000b005225855ee78mr953040edq.32.1690441670722;
-        Thu, 27 Jul 2023 00:07:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id b21-20020a056402139500b005227e53cec2sm296242edv.50.2023.07.27.00.07.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jul 2023 00:07:50 -0700 (PDT)
-Message-ID: <5bb55bec-6a38-3a88-3fc1-79b12cfe7e02@linaro.org>
-Date: Thu, 27 Jul 2023 09:07:48 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28EABE72;
+	Thu, 27 Jul 2023 07:34:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690443297; x=1721979297;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m62EafBUUGnvw65JvFV5yDJjSwgYCCFo1q/imM6cWiA=;
+  b=GRazqH8ozRASvmRI3qxzYYSWCfa2ZKvCcXhN3+l7Burv5zJi/xxZ47p0
+   pxra6z/EJ4cmoGY2FVRIG4U/B4OJ+Cv+pZChqkce97lfgesSf0fCH8g41
+   yfkXFl8feJmPMEsGtLmnfG61PmuYjjeBObe9furJK0vL4pSTFUZoZ3Q2E
+   km+mx1EnpvRaQN5+qbG5fTIcJreKPaFz8OIzoD3fwcK6/lpyMXs8L9Mmz
+   e4/pB/8/OUcr+tT0OZQ3HALcjRMoiiLxcrhQWtNAsa9EQ+96S6DuW5hM5
+   0MjgIe1xhagi3b5dV0l7MJM2nQPdun43RpiWPcU0MNzjIwV7S6XklsT47
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="454601936"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="454601936"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 00:34:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="756552160"
+X-IronPort-AV: E=Sophos;i="6.01,234,1684825200"; 
+   d="scan'208";a="756552160"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jul 2023 00:34:54 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qOvWG-00023X-2P;
+	Thu, 27 Jul 2023 07:34:49 +0000
+Date: Thu, 27 Jul 2023 15:34:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 9/20] drivers/media/i2c/ov5693.c:1280:17:
+ warning: incompatible integer to pointer conversion assigning to 'struct
+ regmap *' from 'int'
+Message-ID: <202307271517.dPa1bTSi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new
- SPMI vibrator
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Fenglin Wu
- <quic_fenglinw@quicinc.com>, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
- robh+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
- dmitry.baryshkov@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
- quic_kamalw@quicinc.com, jestar@qti.qualcomm.com
-References: <20230725054138.129497-2-quic_fenglinw@quicinc.com>
- <202307251741.PMtlVAgD-lkp@intel.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <202307251741.PMtlVAgD-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 25/07/2023 12:01, kernel test robot wrote:
-> Hi Fenglin,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on dtor-input/next]
-> [also build test WARNING on dtor-input/for-linus linus/master v6.5-rc3 next-20230725]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Fenglin-Wu/input-pm8xxx-vib-refactor-to-easily-support-new-SPMI-vibrator/20230725-134504
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-> patch link:    https://lore.kernel.org/r/20230725054138.129497-2-quic_fenglinw%40quicinc.com
-> patch subject: [PATCH v3 1/3] input: pm8xxx-vib: refactor to easily support new SPMI vibrator
-> config: x86_64-buildonly-randconfig-r002-20230725 (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251741.PMtlVAgD-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307251741.PMtlVAgD-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/input/misc/pm8xxx-vibrator.c:190:17: warning: cast to smaller integer type 'enum pm8xxx_vib_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
->            vib->hw_type = (enum pm8xxx_vib_type)of_device_get_match_data(dev);
->                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
-> 
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   215e4463b11d94668b841368cb6882f3a2968148
+commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
+config: arm-randconfig-r012-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271517.dPa1bTSi-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271517.dPa1bTSi-lkp@intel.com/reproduce)
 
-Remember to fix all the warnings.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307271517.dPa1bTSi-lkp@intel.com/
 
-Best regards,
-Krzysztof
+All warnings (new ones prefixed by >>):
 
+   drivers/media/i2c/ov5693.c:1280:19: error: implicit declaration of function 'devm_cci_regmap_init_i2c' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+                            ^
+>> drivers/media/i2c/ov5693.c:1280:17: warning: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+           ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +1280 drivers/media/i2c/ov5693.c
+
+  1267	
+  1268	static int ov5693_probe(struct i2c_client *client)
+  1269	{
+  1270		struct ov5693_device *ov5693;
+  1271		u32 xvclk_rate;
+  1272		int ret = 0;
+  1273	
+  1274		ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+  1275		if (!ov5693)
+  1276			return -ENOMEM;
+  1277	
+  1278		ov5693->dev = &client->dev;
+  1279	
+> 1280		ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
+  1281		if (IS_ERR(ov5693->regmap))
+  1282			return PTR_ERR(ov5693->regmap);
+  1283	
+  1284		ret = ov5693_check_hwcfg(ov5693);
+  1285		if (ret)
+  1286			return ret;
+  1287	
+  1288		mutex_init(&ov5693->lock);
+  1289	
+  1290		v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+  1291	
+  1292		ov5693->xvclk = devm_clk_get_optional(&client->dev, "xvclk");
+  1293		if (IS_ERR(ov5693->xvclk))
+  1294			return dev_err_probe(&client->dev, PTR_ERR(ov5693->xvclk),
+  1295					     "failed to get xvclk: %ld\n",
+  1296					     PTR_ERR(ov5693->xvclk));
+  1297	
+  1298		if (ov5693->xvclk) {
+  1299			xvclk_rate = clk_get_rate(ov5693->xvclk);
+  1300		} else {
+  1301			ret = fwnode_property_read_u32(dev_fwnode(&client->dev),
+  1302					     "clock-frequency",
+  1303					     &xvclk_rate);
+  1304	
+  1305			if (ret) {
+  1306				dev_err(&client->dev, "can't get clock frequency");
+  1307				return ret;
+  1308			}
+  1309		}
+  1310	
+  1311		if (xvclk_rate != OV5693_XVCLK_FREQ)
+  1312			dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+  1313				 xvclk_rate, OV5693_XVCLK_FREQ);
+  1314	
+  1315		ret = ov5693_configure_gpios(ov5693);
+  1316		if (ret)
+  1317			return ret;
+  1318	
+  1319		ret = ov5693_get_regulators(ov5693);
+  1320		if (ret)
+  1321			return dev_err_probe(&client->dev, ret,
+  1322					     "Error fetching regulators\n");
+  1323	
+  1324		ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+  1325		ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
+  1326		ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+  1327	
+  1328		ov5693->mode.crop = ov5693_default_crop;
+  1329		ov5693->mode.format = ov5693_default_fmt;
+  1330		ov5693->mode.vts = __ov5693_calc_vts(ov5693->mode.format.height);
+  1331	
+  1332		ret = ov5693_init_controls(ov5693);
+  1333		if (ret)
+  1334			return ret;
+  1335	
+  1336		ret = media_entity_pads_init(&ov5693->sd.entity, 1, &ov5693->pad);
+  1337		if (ret)
+  1338			goto err_ctrl_handler_free;
+  1339	
+  1340		/*
+  1341		 * We need the driver to work in the event that pm runtime is disable in
+  1342		 * the kernel, so power up and verify the chip now. In the event that
+  1343		 * runtime pm is disabled this will leave the chip on, so that streaming
+  1344		 * will work.
+  1345		 */
+  1346	
+  1347		ret = ov5693_sensor_powerup(ov5693);
+  1348		if (ret)
+  1349			goto err_media_entity_cleanup;
+  1350	
+  1351		ret = ov5693_detect(ov5693);
+  1352		if (ret)
+  1353			goto err_powerdown;
+  1354	
+  1355		pm_runtime_set_active(&client->dev);
+  1356		pm_runtime_get_noresume(&client->dev);
+  1357		pm_runtime_enable(&client->dev);
+  1358	
+  1359		ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
+  1360		if (ret) {
+  1361			dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+  1362				ret);
+  1363			goto err_pm_runtime;
+  1364		}
+  1365	
+  1366		pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+  1367		pm_runtime_use_autosuspend(&client->dev);
+  1368		pm_runtime_put_autosuspend(&client->dev);
+  1369	
+  1370		return ret;
+  1371	
+  1372	err_pm_runtime:
+  1373		pm_runtime_disable(&client->dev);
+  1374		pm_runtime_put_noidle(&client->dev);
+  1375	err_powerdown:
+  1376		ov5693_sensor_powerdown(ov5693);
+  1377	err_media_entity_cleanup:
+  1378		media_entity_cleanup(&ov5693->sd.entity);
+  1379	err_ctrl_handler_free:
+  1380		v4l2_ctrl_handler_free(&ov5693->ctrls.handler);
+  1381	
+  1382		return ret;
+  1383	}
+  1384	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
