@@ -1,105 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DA227136;
-	Thu, 27 Jul 2023 18:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11600C433CA;
-	Thu, 27 Jul 2023 18:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690484184;
-	bh=GdpvQy+TLxh28j9Lg5uaAuL2Xcd/FYyhWzOcnOULMlw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s2Ew6aBZARlLfx31eWWZweVOcZIMUduWA+np7Jf9y2zLOu3nvAouIoUG6zEQRMdKy
-	 x1v1mqXsdPNJTDfQxJuPL3SuEUBIs/RuBRIYYxF0cJTowePuG2CwwNTX2BDomSfk2j
-	 7dk+YV8ikL2xOs3P8dr+Y9lJZ/wjL0EXA8OHCAhoswbXsbpqXI2Hl7bs8tPOKCjjJL
-	 latFIBBoOf+Z+MFj6tSLGN9TlTzT9IA8nPZ5ueEKpUG33gHgHEtzVNnffog0EXa2f4
-	 59JBDwscyq81amAoRXGntXfMuYwnacklvAt9ntnIyOV1srhKPbkMy/TjpDyB5SVD1z
-	 bzxQNjqkPOI2g==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b9ba3d6157so19817071fa.3;
-        Thu, 27 Jul 2023 11:56:23 -0700 (PDT)
-X-Gm-Message-State: ABy/qLaKVVnpo56Qyr7IY2CFJk7HMIcaI2jCqobmH7YOszr0gWlZ5t8r
-	6xzdh6Iv4yv5Ey588nvUi26BJ8v1TcVm5jtp7g==
-X-Google-Smtp-Source: APBJJlG4rtYiGyh12FBhcTdOAmGuW518edMYvz47WsBMlAInLev7gPxJ/hJNCFkrTIilCdzsj9806LAk0wdKvNfhnTA=
-X-Received: by 2002:a2e:9796:0:b0:2b6:e536:a2a9 with SMTP id
- y22-20020a2e9796000000b002b6e536a2a9mr2503657lji.47.1690484182034; Thu, 27
- Jul 2023 11:56:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186733FF4
+	for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 22:47:14 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-58378ae25bfso15195817b3.0
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 15:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690498034; x=1691102834;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=h8M17W+SY6LNnIrBQCPmXoDqQ4N8XZNCU3T7YHTRw88=;
+        b=qKt37uGq/wscmlYr8MsZg//pXb6RySyaO4y6NJeuPda08KKiBjtJBS67P14T6qV1M0
+         LL9mjLjQYaJiLnSUF4EWtgT2q06OnX5y+YpaxLHO6f+6a3EIbFNrTc+7RB4U+ZiuyvVa
+         wVuGmAuWeRbHjs/5JgVP2QOlnsY5lyobE6B9bss/BiV7uNJCKRAb8KCsQodxtcNumAeV
+         tfOwogzv3MOn84SrebCIma7DNohFZJb5l213YxgBfudwFCoGEAXHH/L6snpDUdyijney
+         6+Vc/w4tJvqI9+iRC6+Sw/3tZ8W5zMhUWDBE49fQTskT0ezoLHQgsg5p62+Ls2Lm9eBP
+         fV9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690498034; x=1691102834;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h8M17W+SY6LNnIrBQCPmXoDqQ4N8XZNCU3T7YHTRw88=;
+        b=k8xJPW+K1+KXxlyiCbiTmzfbUIBAemlX6qd/QwODTwikT+qvBiiC/jp4YW7C6lO/qU
+         LQcKA3nvtkCToi/0UCNkmioKWlQXHytkn7rYu7vSf93W4bJ+a8jocYVn/CGN6AWGo6GN
+         zL4fKBtU7LowFV6CJFVXfs1r0sbQiipEPRLmLoWtx4u7SSoa85kzzP8wK+7K+jnbD1sm
+         9sEiVDdO05WLuXlsYFYbCsbagx1fDCp+j6AP3AtG/uO0TW4RB713ZXqOpPtZ72Fxottg
+         OO5YPRPPxfzImWONwymKgM3EfLuqX3GZW0L/iICS2712ilNaCdfcjk+Ok2hQNIsSBqZ3
+         6vVA==
+X-Gm-Message-State: ABy/qLY8lBqb7QQWitfN+GHOPAmwvLH7X4P1kAoTu8+Ce80U/aVisbds
+	aUsV4Tqh9O4KcUs5fQXYQ27/eai3WjSM76SBZL8=
+X-Google-Smtp-Source: APBJJlFGnVWRLJUkrTVrUmig5mpkfOptKBJYmMCfyEC709K8nbUaHxXMj+WKdKG5zBlRCFhHoXkA4S2rhsmnF/EMJIQ=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:659f:4728:cfbb:8cc3])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:690c:721:b0:573:8316:8d04 with
+ SMTP id bt1-20020a05690c072100b0057383168d04mr212ywb.4.1690498033839; Thu, 27
+ Jul 2023 15:47:13 -0700 (PDT)
+Date: Thu, 27 Jul 2023 15:47:09 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202307280212.w1lY1gCG-lkp@intel.com>
-In-Reply-To: <202307280212.w1lY1gCG-lkp@intel.com>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 27 Jul 2023 12:56:10 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKGgt18rPaE1JsVZGru6Y-gwyf3t94gL+Knpt21QRW6sQ@mail.gmail.com>
-Message-ID: <CAL_JsqKGgt18rPaE1JsVZGru6Y-gwyf3t94gL+Knpt21QRW6sQ@mail.gmail.com>
-Subject: Re: [linux-next:master 3825/5027] arch/mips/pic32/pic32mzda/config.c:22:8:
- error: type specifier missing, defaults to 'int'; ISO C99 and later do not
- support implicit int
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAOzzwmQC/x2MQQqAIBAAvxJ7TjAlwr4SHdS2XCgLpQjEv7d0n
+ GGYAhkTYYaxKZDwoUxnZOjaBnywcUNBCzMoqbQc1CDssWzXLYz2Enstlek74NjZjMIlG33gPN7 7zvJKuNL736e51g9FP1hgbQAAAA==
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690498032; l=3429;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=h5xjymXwHB0lf01RIpHtYLR4vTj4v+sUfx87gYKkB7Y=; b=N2uJPCF50jFFN4PLKe1RA7MLTy5RlIkmUWI7lMBscLyrcTCLI3tbqj7jsQDczYGb8rXqmc7m4
+ fVVfKltnA+lByM/BerwonDXLZydewq7ck6QpVuol9QtpGTy2Znh+q3q
+X-Mailer: b4 0.12.2
+Message-ID: <20230727-amdgpu-v1-1-a95690e75388@google.com>
+Subject: [PATCH] drm: fix indirect goto into statement expression UB
+From: ndesaulniers@google.com
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Jul 27, 2023 at 12:19=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
-> commit: 657c45b303f87d77eb4ef49e9452f1c5d1fc363c [3825/5027] MIPS: Explic=
-itly include correct DT includes
-> config: mips-randconfig-r022-20230727 (https://download.01.org/0day-ci/ar=
-chive/20230728/202307280212.w1lY1gCG-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
-4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230728/202307280212=
-.w1lY1gCG-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307280212.w1lY1gCG-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> arch/mips/pic32/pic32mzda/config.c:22:8: error: type specifier missing=
-, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimpli=
-cit-int]
->       22 | static DEFINE_SPINLOCK(config_lock);
->          | ~~~~~~ ^
->          | int
-> >> arch/mips/pic32/pic32mzda/config.c:22:24: error: a parameter list with=
-out types is only allowed in a function definition
->       22 | static DEFINE_SPINLOCK(config_lock);
->          |                        ^
-> >> arch/mips/pic32/pic32mzda/config.c:41:2: error: call to undeclared fun=
-ction 'spin_lock_irqsave'; ISO C99 and later do not support implicit functi=
-on declarations [-Wimplicit-function-declaration]
->       41 |         spin_lock_irqsave(&config_lock, flags);
->          |         ^
-> >> arch/mips/pic32/pic32mzda/config.c:41:21: error: use of undeclared ide=
-ntifier 'config_lock'
->       41 |         spin_lock_irqsave(&config_lock, flags);
->          |                            ^
-> >> arch/mips/pic32/pic32mzda/config.c:46:2: error: call to undeclared fun=
-ction 'spin_unlock_irqrestore'; ISO C99 and later do not support implicit f=
-unction declarations [-Wimplicit-function-declaration]
->       46 |         spin_unlock_irqrestore(&config_lock, flags);
->          |         ^
->    arch/mips/pic32/pic32mzda/config.c:46:26: error: use of undeclared ide=
-ntifier 'config_lock'
->       46 |         spin_unlock_irqrestore(&config_lock, flags);
->          |                                 ^
->    6 errors generated.
+A new diagnostic in clang-17 now produces the following build error:
 
-Already fixed in [1].
+drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this
+indirect goto statement to one of its possible targets
+   41 |                 drm_exec_retry_on_contention(&exec);
+      |                 ^
+include/drm/drm_exec.h:96:4: note: expanded from macro
+'drm_exec_retry_on_contention'
+   96 |                         goto *__drm_exec_retry_ptr;
+      |                         ^
+drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of
+indirect goto statement
+   39 |         drm_exec_until_all_locked(&exec) {
+      |         ^
+include/drm/drm_exec.h:79:33: note: expanded from macro
+'drm_exec_until_all_locked'
+   79 |                 __label__ __drm_exec_retry;
+drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a
+statement expression
 
-Rob
+The GCC manually currently states that:
+>> Jumping into a statement expression with a computed goto (see Labels
+>> as Values) has undefined behavior.
 
-[1] https://lore.kernel.org/all/20230727012028.3933785-1-robh@kernel.org/
+So the diagnostic appears correct, even if codegen happened to produce
+working code.
+
+Looking closer at this code, while the original combination of statement
+expression, local label, and computed/indirect goto GNU C expressions
+were clever, a simple while loop and continue block might have sufficed.
+
+This approach might not work as expected if drm_exec_until_all_locked
+"loops" can be nested, but that doesn't appear to be an existing use
+case in the codebase.
+
+Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
+Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+Link: https://github.com/ClangBuiltLinux/linux/issues/1890
+Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ include/drm/drm_exec.h | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+index 73205afec162..393ac022ed3a 100644
+--- a/include/drm/drm_exec.h
++++ b/include/drm/drm_exec.h
+@@ -70,18 +70,9 @@ struct drm_exec {
+  * Core functionality of the drm_exec object. Loops until all GEM objects are
+  * locked and no more contention exists. At the beginning of the loop it is
+  * guaranteed that no GEM object is locked.
+- *
+- * Since labels can't be defined local to the loops body we use a jump pointer
+- * to make sure that the retry is only used from within the loops body.
+  */
+ #define drm_exec_until_all_locked(exec)				\
+-	for (void *__drm_exec_retry_ptr; ({			\
+-		__label__ __drm_exec_retry;			\
+-__drm_exec_retry:						\
+-		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
+-		(void)__drm_exec_retry_ptr;			\
+-		drm_exec_cleanup(exec);				\
+-	});)
++	while(drm_exec_cleanup(exec))
+ 
+ /**
+  * drm_exec_retry_on_contention - restart the loop to grap all locks
+@@ -93,7 +84,7 @@ __drm_exec_retry:						\
+ #define drm_exec_retry_on_contention(exec)			\
+ 	do {							\
+ 		if (unlikely(drm_exec_is_contended(exec)))	\
+-			goto *__drm_exec_retry_ptr;		\
++			continue;				\
+ 	} while (0)
+ 
+ /**
+
+---
+base-commit: 451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
+change-id: 20230727-amdgpu-93c0e5302951
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
