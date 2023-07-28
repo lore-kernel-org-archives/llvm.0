@@ -1,105 +1,218 @@
-Received: from mail-il1-f195.google.com (mail-il1-f195.google.com [209.85.166.195])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C023F156D3
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 17:29:32 +0000 (UTC)
-Received: by mail-il1-f195.google.com with SMTP id e9e14a558f8ab-346434c7793so2056445ab.0
-        for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 10:29:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE071118C
+	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 17:33:56 +0000 (UTC)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7748ca56133so23354839f.0
+        for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 10:33:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690565371; x=1691170171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TyD41TjCbmVuD3Q46FNMhjbjisbmz8hDWYj37AkUnHk=;
-        b=hRWim4l1+IGA137PJlwexSNurfpuER9flcSAxOm4LsJLdw4LW3UU3afJMVs4uU00D3
-         1Qt5g/3GnnH930VtMFyQBycmOwkuWCDxTkUfNRg36JNk6CjHSj/4FJQSx52zavvuSDms
-         r8tm/WVlJJnSmLy94GGd+gUn1klK5b8ETym7Y=
+        d=linuxfoundation.org; s=google; t=1690565635; x=1691170435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aklSTLsAdsXkyztpg3+XAijGiHhtrBrXRWs6NCnGTzA=;
+        b=QMjtYfC7c2iyLJqTyd1kyafeb3BFunFp/e0culOjRU9ewmtqiQ4hxbF1scOqd3i0Jj
+         ZGKAYORniatq226NZVw52IdIFsPXH6D4AgOL4VxvR5HQA4k1CDjlYbf0k7yQ//pxSq+N
+         oYHy/AKA2e9M48Te7g19hPAlbx9bQS/hl26ik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690565371; x=1691170171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TyD41TjCbmVuD3Q46FNMhjbjisbmz8hDWYj37AkUnHk=;
-        b=D1rWuCrAxxNocCTYrzlnFgpHYmACbtiEi/e4Q476UOtVb6hFtNMmITqfXK+/Z97WMP
-         f66rl+iKMrnuAPSwyMpVNk9gndDApfDXY4wf0p/GnNf/1N61sCkAUy99dOenS/vfJTRq
-         VoJlyc/1TgLNRJvTlWLRdaIgSPw8C5dmzoIbHoqyQtwHZqz/dPC5lXtfQ+EDQLzIfr3U
-         4MdPWq0aMf46Upb4hTW40x6jTP1nT0zHn81wcsVc6SGsX6j4kk1NgNO3/vK0iYZ30Xb0
-         Z2AQxRZYguTQix/mJHblHKkDd+2hDzumyd+M6Eip7y/+Qb96k9oCkNFuDVFZfoVicoTw
-         sBWg==
-X-Gm-Message-State: ABy/qLbEfhXKKaq4lXRpT74roV19r31kX//RZ8Yi+tahnru/TSBGFSdg
-	F6Ajg52ClQ85OBiPZXkZUpMSpA==
-X-Google-Smtp-Source: APBJJlEG47QTZ1NoYk+U+Zk7I8oCNRRLU7ElqoKqeRa52rla1kFe15V3Xjtvfnln+NhSRMvp/M6PGg==
-X-Received: by 2002:a05:6602:2b91:b0:77a:ee79:652 with SMTP id r17-20020a0566022b9100b0077aee790652mr339190iov.1.1690565371630;
-        Fri, 28 Jul 2023 10:29:31 -0700 (PDT)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b2-20020a029a02000000b0042b37dda71asm1181050jal.136.2023.07.28.10.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jul 2023 10:29:30 -0700 (PDT)
-From: Shuah Khan <skhan@linuxfoundation.org>
-To: shuah@kernel.org,
-	Liam.Howlett@oracle.com,
-	anjali.k.kulkarni@oracle.com,
-	naresh.kamboju@linaro.org,
-	kuba@kernel.org
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	davem@davemloft.net,
-	lkft-triage@lists.linaro.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH next 1/3] selftests:connector: Fix Makefile to include KHDR_INCLUDES
-Date: Fri, 28 Jul 2023 11:29:26 -0600
-Message-Id: <d0055c8cdf18516db8ba9edec99cfc5c08f32a7c.1690564372.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1690564372.git.skhan@linuxfoundation.org>
-References: <cover.1690564372.git.skhan@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1690565635; x=1691170435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aklSTLsAdsXkyztpg3+XAijGiHhtrBrXRWs6NCnGTzA=;
+        b=SxeJ+J6JAI1CmsYmwXelhR3+lxa4d34vT+sh/JcK8U7+EU2nqAPWJ5ykzkfL6o8CYs
+         rzz/vNn+jM3Fdbs3+CGlZPikSjtZr+yhBw2DcjPzEda0TFmojSei3NWf/D67DoUAssv5
+         qlnaddMzc0Z6z0eNUD9Wjhjilv9zgcRw1z0+xXOvzcTrzrmFyorKPYpJ2Py9FeWccw9B
+         g8XgT+stKYLFbTySGdrSxf/pLrJyBu/0M128GCQCTvbo068FCfS/wpR+2IcEEqXG0m+t
+         7dnOfUOrqDO8TIxe+sOy6KKc4rsJktqQHL5mPHkU8nK+yFSzWZMFPIQjq6sbjGLFdGkl
+         NedA==
+X-Gm-Message-State: ABy/qLbM5YisdC67ltLdYyPWaU95vLO9oGR50qovJvTNyDsYLCQIvrxV
+	w0Op5zKBZ0bYXKXBi6q4FyYBybcyyymlh5vv42HbEQ==
+X-Google-Smtp-Source: APBJJlHQZypJRFj1SLtdNhEL/1iWRYCO08vs34N2nXnEbCuZzoUuWCVeMAHuS1Q2trNIRQjqmMRnjQ==
+X-Received: by 2002:a92:d38d:0:b0:348:ec3f:fce1 with SMTP id o13-20020a92d38d000000b00348ec3ffce1mr247599ilo.0.1690565635234;
+        Fri, 28 Jul 2023 10:33:55 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p11-20020a92da4b000000b00345d00dc3fdsm1322646ilq.78.2023.07.28.10.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 10:33:54 -0700 (PDT)
+Message-ID: <e6d7a9ab-ca03-57dc-b023-fa2cbf35fd65@linuxfoundation.org>
+Date: Fri, 28 Jul 2023 11:33:54 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: selftests: connector: proc_filter.c:48:20: error: invalid
+ application of 'sizeof' to an incomplete type 'struct proc_input'
+Content-Language: en-US
+To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+ Netdev <netdev@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+ Shuah Khan <shuah@kernel.org>, Anders Roxell <anders.roxell@linaro.org>,
+ "David S. Miller" <davem@davemloft.net>,
+ Liam Howlett <liam.howlett@oracle.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <CA+G9fYt=6ysz636XcQ=-KJp7vJcMZ=NjbQBrn77v7vnTcfP2cA@mail.gmail.com>
+ <E8C72537-4280-401A-B25D-9734D2756A6A@oracle.com>
+ <BB43F17E-EC00-4E72-BB3D-F4E6FA65F954@oracle.com>
+ <799d6088-e28f-f386-6a00-2291304171a2@linuxfoundation.org>
+ <DD53AFBE-F948-40F9-A980-2DA155236237@oracle.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <DD53AFBE-F948-40F9-A980-2DA155236237@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The test compile fails with following errors. Fix the Makefile
-CFLAGS to include KHDR_INCLUDES to pull in uapi defines.
+On 7/27/23 19:38, Anjali Kulkarni wrote:
+> 
+> 
+>> On Jul 27, 2023, at 5:43 PM, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 7/27/23 11:34, Anjali Kulkarni wrote:
+>>>> On Jul 25, 2023, at 9:48 AM, Anjali Kulkarni <Anjali.K.Kulkarni@oracle.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>>> On Jul 25, 2023, at 6:05 AM, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>>>>
+>>>>> selftests: connector: proc_filter build failed with clang-16 due to below
+>>>>> warnings / errors on Linux next-20230725.
+>>>>>
+>>>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>>>>
+>>>>> clang --target=aarch64-linux-gnu -fintegrated-as
+>>>>> -Werror=unknown-warning-option -Werror=ignored-optimization-argument
+>>>>> -Werror=option-ignored -Werror=unused-command-line-argument
+>>>>> --target=aarch64-linux-gnu -fintegrated-as -Wall proc_filter.c -o
+>>>>> /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/connector/proc_filter
+>>>>> proc_filter.c:42:12: error: invalid application of 'sizeof' to an
+>>>>> incomplete type 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^~~~~~~~~~~~~~~
+>>>>> proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:48:20: error: invalid application of 'sizeof' to an
+>>>>> incomplete type 'struct proc_input'
+>>>>> hdr->nlmsg_len = NL_MESSAGE_SIZE;
+>>>>> ^~~~~~~~~~~~~~~
+>>>>> proc_filter.c:22:5: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:64:14: error: invalid application of 'sizeof' to an
+>>>>> incomplete type 'struct proc_input'
+>>>>> msg->len = sizeof(struct proc_input);
+>>>>> ^ ~~~~~~~~~~~~~~~~~~~
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:65:35: error: incomplete definition of type 'struct proc_input'
+>>>>> ((struct proc_input *)msg->data)->mcast_op =
+>>>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:66:31: error: incomplete definition of type 'struct proc_input'
+>>>>> ((struct proc_input *)pinp)->mcast_op;
+>>>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:67:35: error: incomplete definition of type 'struct proc_input'
+>>>>> ((struct proc_input *)msg->data)->event_type =
+>>>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:68:31: error: incomplete definition of type 'struct proc_input'
+>>>>> ((struct proc_input *)pinp)->event_type;
+>>>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+>>>>> proc_filter.c:42:12: note: forward declaration of 'struct proc_input'
+>>>>> char buff[NL_MESSAGE_SIZE];
+>>>>> ^
+>>>>> proc_filter.c:22:19: note: expanded from macro 'NL_MESSAGE_SIZE'
+>>>>> sizeof(struct proc_input))
+>>>>> ^
+>>>>> proc_filter.c:245:20: error: variable has incomplete type 'struct proc_input'
+>>>>> struct proc_input input;
+>>>>> ^
+>>>>> proc_filter.c:245:9: note: forward declaration of 'struct proc_input'
+>>>>> struct proc_input input;
+>>>>> ^
+>>>>> proc_filter.c:264:22: error: use of undeclared identifier
+>>>>> 'PROC_EVENT_NONZERO_EXIT'
+>>>>> input.event_type = PROC_EVENT_NONZERO_EXIT;
+>>>>> ^
+>>>>> 9 errors generated.
+>>>>> make[4]: Leaving directory '/builds/linux/tools/testing/selftests/connector’
+>>>>>
+>>>>>
+>>>> These are expected since you need to have the changes in kernel that were committed with this patch to be installed on the kernel on which this is being compiled/run on. That is what the test is for, and the check to make it run on previous kernels as well was made a runtime check. Do you expect this to compile on a kernel without the corresponding kernel changes that were committed with this patch?
+>>>>
+>>>> Anjali
+>>> Gentle ping - could you answer above questions?
+>>>>
+>>
+>> I am seeing the same on linux-next next-20230727
+>>
+>> PROC_EVENT_NONZERO_EXIT is defined and NL_MESSAGE_SIZE
+>>
+>> Anjali,
+>>
+>> What are the dependent commits and should they be in next?
+>> Shouldn't this test patch go with the kernel patches it depends
+>> on? Can you do some testing on next and let me know why this
+>> test is failing to build?
+> 
+> All the commits went in together - however, the kernel changes that went in this patch need to be *installed on kernel on which this is being built*. Did you do that and then try?
+> 
 
-gcc -Wall     proc_filter.c  -o ../tools/testing/selftests/connector/proc_filter
-proc_filter.c: In function ‘send_message’:
-proc_filter.c:22:33: error: invalid application of ‘sizeof’ to incomplete type ‘struct proc_input’
-   22 |                          sizeof(struct proc_input))
-      |                                 ^~~~~~
-proc_filter.c:42:19: note: in expansion of macro ‘NL_MESSAGE_SIZE’
-   42 |         char buff[NL_MESSAGE_SIZE];
-      |                   ^~~~~~~~~~~~~~~
-proc_filter.c:22:33: error: invalid application of ‘sizeof’ to incomplete type ‘struct proc_input’
-   22 |                          sizeof(struct proc_input))
-      |                                 ^~~~~~
-proc_filter.c:48:34: note: in expansion of macro ‘NL_MESSAGE_SIZE’
-   48 |                 hdr->nlmsg_len = NL_MESSAGE_SIZE;
-      |                                  ^~~~~~~~~~~~~~~
-`
+Building kernel and running "make headers" before building the test
+is what is needed. That is what Naresh and I did.
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Link: https://lore.kernel.org/all/CA+G9fYt=6ysz636XcQ=-KJp7vJcMZ=NjbQBrn77v7vnTcfP2cA@mail.gmail.com/
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/connector/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+How are you building this test?
 
-diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
-index 21c9f3a973a0..92188b9bac5c 100644
---- a/tools/testing/selftests/connector/Makefile
-+++ b/tools/testing/selftests/connector/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -Wall
-+CFLAGS += -Wall $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS = proc_filter
- 
--- 
-2.39.2
+I sent a 3 patch series with the fix to this problem and a couple of
+others I found during testing.
+
+Also please check the error messages - some of them are cryptic and
+could use clarity.
+
+Another thing is argument check - arg == 2 - does this test require
+arguments? Note that without arguments the test runs - of that is
+default it is fine. This test could use an usage information. Please
+fix the above.
+
+thanks,
+-- Shuah
+
+
 
