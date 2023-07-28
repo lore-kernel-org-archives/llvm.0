@@ -1,82 +1,94 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2447101D9
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 08:57:46 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FA95D75;
-	Fri, 28 Jul 2023 01:58:29 -0700 (PDT)
-Received: from [10.57.0.116] (unknown [10.57.0.116])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03EA73F67D;
-	Fri, 28 Jul 2023 01:57:42 -0700 (PDT)
-Message-ID: <c44279fa-9c7c-fe18-8040-677ed3eb1a95@arm.com>
-Date: Fri, 28 Jul 2023 09:57:41 +0100
+Received: from mgamail.intel.com (unknown [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F272D107AB;
+	Fri, 28 Jul 2023 09:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690536270; x=1722072270;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=YMvNMmhYVVTrUGcqbuxkZyzrjdg+OX3XjMEY5971Hbc=;
+  b=aqiyH4pOGqb1MUGchLZyeqWM1+AHFVrL+z2tYFZo+j0C3UrtEZxv4Q4s
+   /udEUPzhM3FFhVOfAR87d90zH+ZOgv4VwLBz0X2Hz9INOYg7boh2sJ8IJ
+   DhbaVVcLvxvF0HfSfhaMYt+F0QgrpSG/OxPW6ZR4mahkZ8B7e29Ls454x
+   f0TVp6ivMH/q4lTY/VqYeYuhODfIgnEluuOEfk0da/582DlskhkW8r7v/
+   YqzXznBQRAWElLrxWYil6xUuutWZSqDi/oAUDzuDkwXnbUYm/BhJwIj4T
+   t3yF8ryEu5iyC4uPv9PIy4Q3WryIGOgnQvZfz7oJSShKPVXMaWOAAuIIa
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="348152396"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="348152396"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 02:24:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="792867066"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="792867066"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jul 2023 02:24:23 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPJhu-00034D-2E;
+	Fri, 28 Jul 2023 09:24:23 +0000
+Date: Fri, 28 Jul 2023 17:22:28 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>
+Subject: [arm-platforms:kvm-arm64/asahi-base-6.5 1/2]
+ sound/soc/mediatek/mt8188/mt8188-mt6359.c:1014:20: error: incompatible
+ function pointer types initializing 'int (*)(struct snd_soc_card *)' with an
+ expression of type 'void (struct snd_soc_card *)'
+Message-ID: <202307281757.FZ0J8Upa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 3/6] perf build: Add Wextra for C++ compilation
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>
-References: <20230728064917.767761-1-irogers@google.com>
- <20230728064917.767761-4-irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Kan Liang <kan.liang@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Gaosheng Cui <cuigaosheng1@huawei.com>,
- Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <20230728064917.767761-4-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/asahi-base-6.5
+head:   e3df40097445878321c27aaeb4177dfe22ccc568
+commit: 3181a21c5289c9b913dd3402a80704e4140d9d43 [1/2] Merge tag 'v6.5-rc1' into kvm-arm64/asahi-base-6.5
+config: x86_64-buildonly-randconfig-r003-20230727 (https://download.01.org/0day-ci/archive/20230728/202307281757.FZ0J8Upa-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230728/202307281757.FZ0J8Upa-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307281757.FZ0J8Upa-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> sound/soc/mediatek/mt8188/mt8188-mt6359.c:1014:20: error: incompatible function pointer types initializing 'int (*)(struct snd_soc_card *)' with an expression of type 'void (struct snd_soc_card *)' [-Wincompatible-function-pointer-types]
+           .fixup_controls = mt8188_fixup_controls,
+                             ^~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +1014 sound/soc/mediatek/mt8188/mt8188-mt6359.c
 
-On 28/07/2023 07:49, Ian Rogers wrote:
-> Commit d58ac0bf8d1e ("perf build: Add clang and llvm compile and
-> linking support") added -Wall and -Wno-strict-aliasing for CXXFLAGS,
-> but not -Wextra. -Wno-strict-aliasing is no longer necessary, adding
-> -Wextra for CXXFLAGS requires adding -Wno-unused-parameter clang.cpp
-> and clang-test.cpp for LIBCLANGLLVM=1 to build.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Makefile.config | 2 +-
->  tools/perf/util/c++/Build  | 3 +++
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 14709a6bd622..fe7afe6d8529 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -333,8 +333,8 @@ CORE_CFLAGS += -std=gnu11
->  
->  CXXFLAGS += -std=gnu++14 -fno-exceptions -fno-rtti
->  CXXFLAGS += -Wall
-> +CXXFLAGS += -Wextra
->  CXXFLAGS += -fno-omit-frame-pointer
-> -CXXFLAGS += -Wno-strict-aliasing
->  
->  HOSTCFLAGS += -Wall
->  HOSTCFLAGS += -Wextra
-> diff --git a/tools/perf/util/c++/Build b/tools/perf/util/c++/Build
-> index 613ecfd76527..8610d032ac19 100644
-> --- a/tools/perf/util/c++/Build
-> +++ b/tools/perf/util/c++/Build
-> @@ -1,2 +1,5 @@
->  perf-$(CONFIG_CLANGLLVM) += clang.o
->  perf-$(CONFIG_CLANGLLVM) += clang-test.o
-> +
-> +CXXFLAGS_clang.o += -Wno-unused-parameter
-> +CXXFLAGS_clang-test.o += -Wno-unused-parameter
+9f08dcbddeb307 Trevor Wu 2023-05-26  1005  
+96035d46d4b452 Trevor Wu 2023-01-16  1006  static struct snd_soc_card mt8188_mt6359_soc_card = {
+96035d46d4b452 Trevor Wu 2023-01-16  1007  	.owner = THIS_MODULE,
+96035d46d4b452 Trevor Wu 2023-01-16  1008  	.dai_link = mt8188_mt6359_dai_links,
+96035d46d4b452 Trevor Wu 2023-01-16  1009  	.num_links = ARRAY_SIZE(mt8188_mt6359_dai_links),
+96035d46d4b452 Trevor Wu 2023-01-16  1010  	.dapm_widgets = mt8188_mt6359_widgets,
+96035d46d4b452 Trevor Wu 2023-01-16  1011  	.num_dapm_widgets = ARRAY_SIZE(mt8188_mt6359_widgets),
+96035d46d4b452 Trevor Wu 2023-01-16  1012  	.controls = mt8188_mt6359_controls,
+96035d46d4b452 Trevor Wu 2023-01-16  1013  	.num_controls = ARRAY_SIZE(mt8188_mt6359_controls),
+9f08dcbddeb307 Trevor Wu 2023-05-26 @1014  	.fixup_controls = mt8188_fixup_controls,
+96035d46d4b452 Trevor Wu 2023-01-16  1015  };
+96035d46d4b452 Trevor Wu 2023-01-16  1016  
 
-Acked-by: James Clark <james.clark@arm.com>
+:::::: The code at line 1014 was first introduced by commit
+:::::: 9f08dcbddeb307793bbfff036db213d2cdf03a50 ASoC: mediatek: mt8188-mt6359: support new board with nau88255
+
+:::::: TO: Trevor Wu <trevor.wu@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
