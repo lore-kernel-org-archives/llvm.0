@@ -1,102 +1,200 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (unknown [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A878D16405
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 17:34:19 +0000 (UTC)
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-760dff4b701so29679039f.0
-        for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 10:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690565658; x=1691170458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JJok0QwvQYR36IKSjL8u59VRoTv1ncFddhWzUUY4CBU=;
-        b=XtTBKKi+apn2fenZceCkRVw6TxyPthsMizJvUJrPqjkPN2XI4pbqgSDa4uDCTSd/FZ
-         Luwhkl++4arII4ixaGEnK+WoPSnFplB1+9+0uYlYuXC3ax638pDV07ieqSvgaYshQcyp
-         rzWhvpVh7VgJH0aZBOO0gZz5olNyXWLlSAzTQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690565658; x=1691170458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JJok0QwvQYR36IKSjL8u59VRoTv1ncFddhWzUUY4CBU=;
-        b=l3CP3P4t+pNFRigVoKoR0MM35IpBIJl5YJ69oyJcJvoZ3/zoVVAqhOy7hLCMBGWq3r
-         YkGm8GIdfP42zI6isJVgoyAfDTC/eXfRLA4IkVf3t34854sx+1WILUywbqDlL7nTWRyk
-         /7BEwTn5KD0aXHVaOGft/GSBM57jrJyVCRdEA9IhWmqlgjUS0x/2F+DACpAoBsg6G/x4
-         tbq5fcmmo4NPZCpYIPtZHuamR9BvZsaktJqFMzlTet2w7yTEzRrTcbSshkCVL8wM3gjK
-         B/UklEGMN6bJG9OhyP2Smt9dW4LMq+nsbQ4zg1ax3bI0SaTB3BtXDXp0/Bki1tNfKGj2
-         +UAg==
-X-Gm-Message-State: ABy/qLbdL0abDwo87oLSa3EFAc5Q5aapJ2cylddGE47mM5ZDalD+qx7z
-	So9UP7oqQuMKCTSlvTA4wDDS2Q==
-X-Google-Smtp-Source: APBJJlGurOK8bCZ2RudKd5/e+thD+HiWjwVIx2Tiv/Vlhq/itMoQKBCYEu4Myp6ksjRe3coqJq70vw==
-X-Received: by 2002:a6b:3b09:0:b0:780:cb36:6f24 with SMTP id i9-20020a6b3b09000000b00780cb366f24mr199256ioa.2.1690565658763;
-        Fri, 28 Jul 2023 10:34:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a10-20020a056638018a00b0042b599b224bsm1244019jaq.121.2023.07.28.10.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 10:34:18 -0700 (PDT)
-Message-ID: <b247219c-f988-bcc2-36f5-22659e2ced96@linuxfoundation.org>
-Date: Fri, 28 Jul 2023 11:34:17 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF86A1641C;
+	Fri, 28 Jul 2023 17:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690566426; x=1722102426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fQcCyWy7ZpLKPdeNo1tv2DTEdBFWmo67ai8pbgNx/Sc=;
+  b=Fv6HZ5BjOCC5k//0yllmvdpQ/WiXsn+0dmbk8zqP680ULTg0sz3KbSQk
+   +BSlSgG22FdCtT0gQah4Q9y39gjexbglZeedPSaoaXhNanPzjdtrkk2cm
+   1RQjAC8lo+60wOgwxVe6YMXHqSd89LAToSwMpeqdQNEZ5dFvcCAM7z3Z2
+   yd5tyMykCtsFgmWPkTE01yJiG6zsl5PkxtQsB2/3mQiRa+OkXwFWWlJb5
+   i16dHdVaB9FBDnSuRW2QWkxs3g8NwNyLurbJBPHyol6DWxnGxE22cMHj+
+   /YL4yxT2BOjnTuu8pagfS0YPK2bQc7wUKJWZD/rQekt9iYlRgsFGgg1T5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="371348208"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="371348208"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:47:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="901369122"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="901369122"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jul 2023 10:47:03 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPRYM-0003Rn-16;
+	Fri, 28 Jul 2023 17:47:02 +0000
+Date: Sat, 29 Jul 2023 01:46:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, igt-dev@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
+Message-ID: <202307290100.7X8zOW5k-lkp@intel.com>
+References: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: selftests: connector: proc_filter.c:48:20: error: invalid
- application of 'sizeof' to an incomplete type 'struct proc_input'
-Content-Language: en-US
-To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
- Netdev <netdev@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
- Shuah Khan <shuah@kernel.org>, Anders Roxell <anders.roxell@linaro.org>,
- "David S. Miller" <davem@davemloft.net>,
- Liam Howlett <liam.howlett@oracle.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <CA+G9fYt=6ysz636XcQ=-KJp7vJcMZ=NjbQBrn77v7vnTcfP2cA@mail.gmail.com>
- <E8C72537-4280-401A-B25D-9734D2756A6A@oracle.com>
- <BB43F17E-EC00-4E72-BB3D-F4E6FA65F954@oracle.com>
- <799d6088-e28f-f386-6a00-2291304171a2@linuxfoundation.org>
- <DD53AFBE-F948-40F9-A980-2DA155236237@oracle.com>
- <20230727194311.6a51f285@kernel.org>
- <5844361F-E776-4C52-BA8F-7E13D6B4EDE1@oracle.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <5844361F-E776-4C52-BA8F-7E13D6B4EDE1@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
 
-On 7/28/23 10:46, Anjali Kulkarni wrote:
-> 
-> 
->> On Jul 27, 2023, at 7:43 PM, Jakub Kicinski <kuba@kernel.org> wrote:
->>
->> On Fri, 28 Jul 2023 01:38:40 +0000 Anjali Kulkarni wrote:
->>> Jakub,
->>> Do I need to revert the -f runtime filter option back to compile time
->>> and commit with that disabled so the selftest compiles on a kernel on
->>> which the new options are not defined?
->>
->> I'm not 100% sure myself on what's the expectations for building
->> selftests against uAPI headers is..
->>
->> I _think_ that you're supposed to add an -I$something to
->> the CFLAGS in your Makefile. KHDR_INCLUDES maybe? So that the uAPI
->> headers from the build get used (rendered by make headers).
->>
->> Take a look at Documentation/dev-tools/kselftest.rst, I hope
->> the answer is somewhere there.
-> Ok thanks, I will look into your suggestions.
-> Anjali
-> 
+Hi Janusz,
 
-I sent a 3 patch series with the fix to this problem and a couple of
-others I found during testing.
+kernel test robot noticed the following build errors:
 
-thanks,
--- Shuah
+[auto build test ERROR on shuah-kselftest/kunit-fixes]
+[also build test ERROR on linus/master v6.5-rc3]
+[cannot apply to shuah-kselftest/kunit next-20230728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Janusz-Krzysztofik/kunit-Report-the-count-of-test-suites-in-a-module/20230728-234736
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
+patch link:    https://lore.kernel.org/r/20230728154419.1810177-8-janusz.krzysztofik%40linux.intel.com
+patch subject: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
+config: mips-randconfig-r002-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290100.7X8zOW5k-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290100.7X8zOW5k-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290100.7X8zOW5k-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> lib/kunit/executor.c:182:42: warning: declaration of 'struct suite_set' will not be visible outside of this function [-Wvisibility]
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+>> lib/kunit/executor.c:190:25: error: incomplete definition of type 'struct suite_set'
+     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
+         |                       ~~~~~~~~~^
+   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+   lib/kunit/executor.c:190:52: error: incomplete definition of type 'struct suite_set'
+     190 |         for (suites = suite_set->start; suites < suite_set->end; suites++)
+         |                                                  ~~~~~~~~~^
+   lib/kunit/executor.c:182:42: note: forward declaration of 'struct suite_set'
+     182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
+         |                                          ^
+>> lib/kunit/executor.c:198:19: error: variable has incomplete type 'struct suite_set'
+     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
+         |                          ^
+   lib/kunit/executor.c:198:9: note: forward declaration of 'struct suite_set'
+     198 |         struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
+         |                ^
+   In file included from lib/kunit/executor.c:230:
+>> lib/kunit/executor_test.c:45:19: error: variable has incomplete type 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:46:19: error: variable has incomplete type 'struct suite_set'
+      46 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:45:9: note: forward declaration of 'struct suite_set'
+      45 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:69:19: error: variable has incomplete type 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:70:19: error: variable has incomplete type 'struct suite_set'
+      70 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:69:9: note: forward declaration of 'struct suite_set'
+      69 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:96:19: error: variable has incomplete type 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                          ^
+   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:97:19: error: variable has incomplete type 'struct suite_set'
+      97 |         struct suite_set got;
+         |                          ^
+   lib/kunit/executor_test.c:96:9: note: forward declaration of 'struct suite_set'
+      96 |         struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+         |                ^
+   lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+     138 |                         (kunit_action_t *)kfree,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 9 errors generated.
+
+
+vim +190 lib/kunit/executor.c
+
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  181  
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30 @182  static void kunit_exec_list_tests(struct suite_set *suite_set)
+aac35468ca20a3 Alan Maguire    2020-08-04  183  {
+e5857d396f35e5 Daniel Latypov  2022-07-09  184  	struct kunit_suite * const *suites;
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  185  	struct kunit_case *test_case;
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  186  
+6c738b52316c58 Rae Moar        2022-11-23  187  	/* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
+6c738b52316c58 Rae Moar        2022-11-23  188  	pr_info("KTAP version 1\n");
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  189  
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30 @190  	for (suites = suite_set->start; suites < suite_set->end; suites++)
+e5857d396f35e5 Daniel Latypov  2022-07-09  191  		kunit_suite_for_each_test_case((*suites), test_case) {
+e5857d396f35e5 Daniel Latypov  2022-07-09  192  			pr_info("%s.%s\n", (*suites)->name, test_case->name);
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  193  		}
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  194  }
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  195  
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  196  int kunit_run_all_tests(void)
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  197  {
+e5857d396f35e5 Daniel Latypov  2022-07-09 @198  	struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
+1b11063d32d7e1 Daniel Latypov  2022-05-13  199  	int err = 0;
+d20a6ba5e3be5f Joe Fradley     2022-08-23  200  	if (!kunit_enabled()) {
+d20a6ba5e3be5f Joe Fradley     2022-08-23  201  		pr_info("kunit: disabled\n");
+d20a6ba5e3be5f Joe Fradley     2022-08-23  202  		goto out;
+d20a6ba5e3be5f Joe Fradley     2022-08-23  203  	}
+aac35468ca20a3 Alan Maguire    2020-08-04  204  
+a02353f491622e Daniel Latypov  2022-05-11  205  	if (filter_glob_param) {
+a02353f491622e Daniel Latypov  2022-05-11  206  		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
+a02353f491622e Daniel Latypov  2022-05-11  207  		if (err) {
+a02353f491622e Daniel Latypov  2022-05-11  208  			pr_err("kunit executor: error filtering suites: %d\n", err);
+1b11063d32d7e1 Daniel Latypov  2022-05-13  209  			goto out;
+a02353f491622e Daniel Latypov  2022-05-11  210  		}
+a02353f491622e Daniel Latypov  2022-05-11  211  	}
+45dcbb6f5ef78b Brendan Higgins 2020-08-04  212  
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  213  	if (!action_param)
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  214  		kunit_exec_run_tests(&suite_set);
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  215  	else if (strcmp(action_param, "list") == 0)
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  216  		kunit_exec_list_tests(&suite_set);
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  217  	else
+9c6b0e1d8993e4 Daniel Latypov  2021-09-30  218  		pr_err("kunit executor: unknown action '%s'\n", action_param);
+aac35468ca20a3 Alan Maguire    2020-08-04  219  
+e5857d396f35e5 Daniel Latypov  2022-07-09  220  	if (filter_glob_param) { /* a copy was made of each suite */
+a127b154a8f231 Daniel Latypov  2021-09-14  221  		kunit_free_suite_set(suite_set);
+5d31f71efcb6bc Daniel Latypov  2021-02-05  222  	}
+5d31f71efcb6bc Daniel Latypov  2021-02-05  223  
+1b11063d32d7e1 Daniel Latypov  2022-05-13  224  out:
+1b11063d32d7e1 Daniel Latypov  2022-05-13  225  	kunit_handle_shutdown();
+1b11063d32d7e1 Daniel Latypov  2022-05-13  226  	return err;
+aac35468ca20a3 Alan Maguire    2020-08-04  227  }
+aac35468ca20a3 Alan Maguire    2020-08-04  228  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
