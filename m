@@ -1,83 +1,119 @@
-Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802501FAF
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:53:24 +0000 (UTC)
-Received: from [192.168.1.166] ([91.218.190.200])
-	by cmgsmtp with ESMTPSA
-	id PHGuqQdvWPm6CPHGwqknNL; Fri, 28 Jul 2023 08:48:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-	t=1690526903; bh=wNCr6ECi53A9+aj5+69BlskR7OtUltgiHZXVfwsSghI=;
-	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-	b=Pd7E5VNjX8JQvOheV+6el81wzHB2N8eG1Yy2csQGd0pAzeHa932zd692MSL0jlcol
-	 EgXW9WCRcnR+6t5uErQcyOIt3yfh8+Ks3JT865pZMZzz3rNAf8a6OibuD/JYILecBO
-	 l/XQ/i3XHR1YtFTycUxnZPqGPlxDe4D0pOqpcb4bpXIiALD2ORcDa1p3boEZPFCnVM
-	 9WNSjpfia1zVdXTc4K6kLbq9W4RQiQqY9MqRZ7a3aNem2gHYkZI/GHXDXkmORMz18S
-	 6xfhMMgDmoBg8/J9Lk20RzY+KpmuF+60ICxNLyYQmcJ+EEugaLoDdx6U90fiprRDKi
-	 reNDwNgrFjQUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-	t=1690526903; bh=wNCr6ECi53A9+aj5+69BlskR7OtUltgiHZXVfwsSghI=;
-	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-	b=Pd7E5VNjX8JQvOheV+6el81wzHB2N8eG1Yy2csQGd0pAzeHa932zd692MSL0jlcol
-	 EgXW9WCRcnR+6t5uErQcyOIt3yfh8+Ks3JT865pZMZzz3rNAf8a6OibuD/JYILecBO
-	 l/XQ/i3XHR1YtFTycUxnZPqGPlxDe4D0pOqpcb4bpXIiALD2ORcDa1p3boEZPFCnVM
-	 9WNSjpfia1zVdXTc4K6kLbq9W4RQiQqY9MqRZ7a3aNem2gHYkZI/GHXDXkmORMz18S
-	 6xfhMMgDmoBg8/J9Lk20RzY+KpmuF+60ICxNLyYQmcJ+EEugaLoDdx6U90fiprRDKi
-	 reNDwNgrFjQUg==
-Message-ID: <fbceb8e5444eab23788501b002926e07f54fdd7c.camel@triops.cz>
-Subject: Re: [usb:usb-testing 25/42] drivers/usb/dwc3/dwc3-octeon.c:403:10:
- warning: shift count >= width of type
-From: Ladislav Michl <ladis@triops.cz>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, kernel test robot
-	 <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-usb@vger.kernel.org
-Date: Fri, 28 Jul 2023 08:48:20 +0200
-In-Reply-To: <2023072653-viewable-harmonics-09e0@gregkh>
-References: <202307260537.MROrhVNM-lkp@intel.com>
-	 <2023072653-viewable-harmonics-09e0@gregkh>
-Organization: Triops, s.r.o.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22323C2C0
+	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:54:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690527295;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Bj0unbsgzTyLqXvVgkRn1pNWfHKbeGC/DCkbHQPV1hI=;
+	b=Onm2ZSngl/iOLSvNhICMK2daFAWsnCkF37sinuny4ufOJ5KPRe8SuGVl6WSR+tawAaQ/Zw
+	WMVhhPdqy+GM1I8GJNSURdN0kcFsjrB9etM+J5lP7TWOGMD+M8drr73GIsE1UYbu7EhmWX
+	XmnQQinbNoc4eQx87lwMDpEnDcv/aF0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-269-gGIGRHLtO42FSI-Mgep3Og-1; Fri, 28 Jul 2023 02:54:52 -0400
+X-MC-Unique: gGIGRHLtO42FSI-Mgep3Og-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5224c6b937bso1036947a12.0
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:54:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690527291; x=1691132091;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bj0unbsgzTyLqXvVgkRn1pNWfHKbeGC/DCkbHQPV1hI=;
+        b=AdojB4fL8gG6k+YMySNGTlp95LYnZMrx8vIwxl/TLpmpD7O/fuyMYdnYMsH2xKGM9m
+         qHKBYe9jKhGr/rGgvnCB5ev/hSJlVpW8g1pMDbirc6wmDr4XgSJgSxCCm3/d/9oDKROo
+         PAwIoOqV+eflc37zdP6REcO29zhRgFRLNL3qRu6vzINhTUSNqyni/0Pd4zLWOvdIVbva
+         5pLUJwORCcxH+SomYwgnuU11JqYV+f5aAF+fRlD8rfcoDevoG0mscB86vaOL3RNCU9cv
+         A4rRKFdIhymMiFD3INnQ8Jt+F7UjfSy/nhKzPc3VxjaEcJ4TneQDeKMP1WiFO+1+byWO
+         u6Zg==
+X-Gm-Message-State: ABy/qLZUHJDf5bxUmsqr8KONcgRrQfiy9vi0eSWsLgBnuIXA6Of22a1O
+	1O/gtoYnso7BBbWlc2NmiDAw/Z+vWgMr98ELn6mbMcZRitduBLlooYGnYJfKt0sNTPialL2j7KG
+	ybGTufF4Mi6CJzX9p9cc03lYkb9EZ2g==
+X-Received: by 2002:aa7:d507:0:b0:522:29b7:741d with SMTP id y7-20020aa7d507000000b0052229b7741dmr875207edq.29.1690527291706;
+        Thu, 27 Jul 2023 23:54:51 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEYESMvZST052Gx5ljC9nktz+PQBfpCV/crEEkYr/ZCFBfd+cLigELjNsYPntG1kaBkcalrkjh4xKMsu7HSDKA=
+X-Received: by 2002:aa7:d507:0:b0:522:29b7:741d with SMTP id
+ y7-20020aa7d507000000b0052229b7741dmr875196edq.29.1690527291400; Thu, 27 Jul
+ 2023 23:54:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfJEvISPn+xE8iYqJouYIpnSQ0RL60IieVgfhbgeJFAK0k0hQ2zMHO713m3FaJ9QegWffSg17lbVogstW6+U1LwFfuBxvHB7dA1S2FPstwxQcSFCL3/E9
- s0AfghZhOEly6UCdf/m+9QsDBBe3frppc4hbKcyWi8LB2VMGSgmCdfPLzfu9gjiMHG+h3aOEt34kxLXQsFqtIC3PbtlMHSDWitNACcZAmxBeJTxoWpPpRzPG
- n2s6wXVxoCwAUubis4oUWX1TVyiLEZ/x4M5LIfwzTvibpbScfkqUIF36LE+sQYUo5ym4JuHsYTzCRMP7d9ZiyQ==
+References: <65365.123072800401200236@us-mta-556.us.mimecast.lan> <ZMNKpJCzbAERwqp/@MiWiFi-R3L-srv>
+In-Reply-To: <ZMNKpJCzbAERwqp/@MiWiFi-R3L-srv>
+From: Bruno Goncalves <bgoncalv@redhat.com>
+Date: Fri, 28 Jul 2023 08:54:39 +0200
+Message-ID: <CA+QYu4pHZjgXriy4rmvdpYnPcRbzs1_mEF=fdUJxLQs7WEsYEQ@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=E2=9D=8C_FAIL_=28SKIPPED_191_of_328=29=3A_Test_report_for_m?=
+	=?UTF-8?Q?aster_=286=2E5=2E0=2Drc3=2C_mainline=2Ekernel=2Eorg=2Dclang=2C_57012c57=29?=
+To: Baoquan He <bhe@redhat.com>
+Cc: cki-project@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev, 
+	xiawu@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+On Fri, 28 Jul 2023 at 06:57, Baoquan He <bhe@redhat.com> wrote:
+>
+> Hi CKI team,
+>
+> On 07/28/23 at 04:40am, cki-project@redhat.com wrote:
+> > Hi, we tested your kernel and here are the results:
+> >
+> >     Overall result: FAILED
+> >              Merge: OK
+> >            Compile: OK
+> >               Test: FAILED
+> >
+> >
+> > Kernel information:
+> >     Commit message: Merge tag 'net-6.5-rc4' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/netdev/net
+> >
+> > You can find all the details about the test run at
+> >     https://datawarehouse.cki-project.org/kcidb/checkouts/97648
+> >
+> > One or more kernel tests failed:
+> >     Unrecognized or new issues:
+> >           x86_64 - kdump - sysrq-c
+> >                    Logs: https://datawarehouse.cki-project.org/kcidb/te=
+sts/8928580
+> >                    Non-passing subtests:
+> >                        =E2=9D=8C FAIL /kdump/crash-sysrq-c
+> >           x86_64 - kdump - file-load
+> >                    Logs: https://datawarehouse.cki-project.org/kcidb/te=
+sts/8928581
+> >                    Non-passing subtests:
+> >                        =E2=9D=8C FAIL /kdump/crash-sysrq-c
+> >           x86_64 (debug) - Boot test
+> >                    Logs: https://datawarehouse.cki-project.org/kcidb/te=
+sts/8928644
+> >                    Non-passing subtests:
+> >                        =E2=9D=8C FAIL distribution/kpkginstall/journalc=
+tl-check
+>
+> All these failure cases have empty console.log, there's no way to check
+> what's going on there. The empty console.log is related to 1st kernel,
+> there must something wrong withih it.
 
-I'm sorry for late reply (travelling)
+Thanks, yes it is a pain. Sometimes the serial console in the machines
+don't work at all, that's why the console.log is empty.
+I wonder if the kdump tests would upload journalctl logs, we would be
+able to use it to check for failures instead of relying only on
+console.log.
 
-On Wed, 2023-07-26 at 06:39 +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jul 26, 2023 at 05:09:56AM +0800, kernel test robot wrote:
-> > Hi Ladislav,
-> >=20
-> > First bad commit (maybe !=3D root cause):
-> >=20
-> > tree:=C2=A0=C2=A0
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=C2=A0usb=
--
-> > testing
-> > head:=C2=A0=C2=A0 ac47051f0bb8ccf1eaedb296a19fcb541474db53
-> > commit: b3061c5a15fe460502e9574b4663dd7c6ed80b48 [25/42] usb: dwc3:
-> > dwc3-octeon: Convert to glue driver
->=20
-> Ladislav, I've dropped your dwc3-octeon patches from my tree now,
-> please fix up and resend when you have this resolved.
+Bruno
+>
+> Thanks
+> Baoquan
+>
 
-As I didn't find a better place to ask, I'm asking here:
-all registers are 64bit and driver is now using GENMASK and BIT
-macros to access their values. Reported problem comes from 32bit
-configuration, where BIT is UL(1) << (nr) and BITS_PER_LONG is 32.
-Is using GENMASK_ULL and BIT_ULL preferred way to go here? I'm not a
-bit fan of "fixing" code just to silence warning on irrelevant
-configurations, but will do it unless someone points me to better way.
-
-Thank you,
-	l.
