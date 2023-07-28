@@ -1,42 +1,42 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38577C2D5
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:49:50 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-c64ef5bde93so1768382276.0
-        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:49:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59DCC2D5
+	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:49:52 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-583c49018c6so19022297b3.0
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690526989; x=1691131789;
+        d=google.com; s=20221208; t=1690526991; x=1691131791;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o+NuSN9XkT+qsQuvKgJBdNq4nk4vcI3JH0hFT1DVHgI=;
-        b=dBWfagtHD8/GX5CfSM0USkliKrcgjg7HFq51oTJfadYnvK2v3CXXfjwoGKERNpv3cI
-         4AUh0LL57JfZLlBfahYZs7188BkkTzaC6XOahh1G7K6UlM+Ll8rC86zWvjSKyi7LhZP5
-         M7RMyGdKmtrbQ8AI3nAe18nKyqLPfckUcaMM3nVyHIue/AQSImE85rbc2i4MXRJmHCN9
-         TNXXK0CuMC8RLg39DqApn3XqceSzf0vyA3QhKs3XLbwDbUmTT6bLYabPOh73nfBhDH1H
-         oH9n2bueV+aOOiThlR2LuT0Qa+Dq1E2g02ybR//9V6PXxgIS5SzcAGGaW5wpHjsLXWuT
-         gI0w==
+        bh=yvpEokk/Mu+ZE+CJyBkDreLaqziwX68WuK1LqhXECqc=;
+        b=hVmuTBJ1Yox9HBREo2lnQL3+qmpioV9r5UsFkBpcTMWs9ujPbivpL62+ixWzmxYbld
+         2oj5+aaUkdI7MiXvfOBbiXL6vzkchIAT7sgf/1xEqv1qyiVTkUXz46qqAzkz8YE7IjAc
+         a7dAw3ZtkKE0Hdi0zukSamMUV+hxfnGCH1q0cA12gs0ILJz3moGg3LylCmSfm5vhIZ0H
+         1nxyLuWhnWNjY6730d+R+507i6pKyHJOqb1BFoQMRvynVEhaUkfZy+JvYJdFIeA3lhV3
+         fjl0oWJqm5kdcfw2zmcGWXuqcb300wHWC8naQmdWY1IonPToG6OaTflMjrpM9bqM63Bd
+         F1/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690526989; x=1691131789;
+        d=1e100.net; s=20221208; t=1690526991; x=1691131791;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+NuSN9XkT+qsQuvKgJBdNq4nk4vcI3JH0hFT1DVHgI=;
-        b=PHbi53zfeukJqVHuZVKZ6AWfxvdZI/mpxiJfcXOFq0uDj93dAo6YgOmE1j1bpHowd9
-         1qb7DOjFDpEd2gO0+zRH9z1pHFkWE4hs5MnYLEiYx2Sib5Zec8Xf72SM+8HUmk981Xr/
-         XQveVU3nX1TfcxSkmT1cMenO20tUgeLZOo2w6XO2he+qsnCXYyH9poCL3yjvH7yHasYS
-         Vj/iuAdGoy1WVp4Ylv1FHULCFV+F+EShThPSRgoPvgLG26jXlNzZ1OdfdHp4aNWY6/Ae
-         pZ0fZ8u2W68JF2Z7v1bzknqlHfU0bKrlTM9RAQhtleVO65PvSL9krrJRW2bggRs69I/5
-         8bJA==
-X-Gm-Message-State: ABy/qLaJC/5J8r9RKS2e8Mu2ckYQRf4IaTmvAcfRBnalN1MX8nOw3ky1
-	euMwtmYPzImVNSzFq9oYwltqcoes3IAD
-X-Google-Smtp-Source: APBJJlH1isPienb9pKw3EcA/eACCf//JnX+EHZyFmUKd3n/1Raax6Ty/uxc322vFBpfbg4KszcnotojxYicG
+        bh=yvpEokk/Mu+ZE+CJyBkDreLaqziwX68WuK1LqhXECqc=;
+        b=TG5/9RF2pIl5nZh6+rHqPKNl3m4z3L9jGBd28XHc2SeLUqkehU5aB1QtlhzZEpK/Bd
+         FC2imGZjUvR0+nL0iONUJds1z5VU+v8NokxF0E87URbOMIi/fdljCfqOMlq6zLyK1NKI
+         +9kK+EoLMc5C5PYUDBCIACpHLOtciTtd/wMYQwvQI6BHCWTo9xdGruCcFQDcCp22tAJX
+         RQVPTJFTzNO9G/Vze40scmxbYOSZQ+g2J8AjIHDMe/GG9YCyZ2+WEBdPb/bdLMqX5Isd
+         9yvgtKW9QvhGxvanjQuoCHum7Dh76WoYlI0TE8n+/kJkRBFrwAkZh/f7Tfft/UnyR4Aj
+         tGNw==
+X-Gm-Message-State: ABy/qLbozjM4JXl6k/4cw3IfIIOf31ojwL2pywfpwaBNqAd503cir/OL
+	7Te2fkShXZuiO+b6vFs7gMMd7fPcbrxA
+X-Google-Smtp-Source: APBJJlE4sPZ8c2Rq2bZAztF25wIkgTHXbSIfDU4obqALIt5bZH9JO3jXTK5qgYFJMBGfyHqayH2sgvVAeYMT
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:3d03:ff18:af30:2dad])
- (user=irogers job=sendgmr) by 2002:a25:37d8:0:b0:c64:2bcd:a451 with SMTP id
- e207-20020a2537d8000000b00c642bcda451mr4280yba.7.1690526989081; Thu, 27 Jul
- 2023 23:49:49 -0700 (PDT)
-Date: Thu, 27 Jul 2023 23:49:14 -0700
+ (user=irogers job=sendgmr) by 2002:a25:2311:0:b0:d0c:e71d:fab with SMTP id
+ j17-20020a252311000000b00d0ce71d0fabmr5532ybj.0.1690526991697; Thu, 27 Jul
+ 2023 23:49:51 -0700 (PDT)
+Date: Thu, 27 Jul 2023 23:49:15 -0700
 In-Reply-To: <20230728064917.767761-1-irogers@google.com>
-Message-Id: <20230728064917.767761-4-irogers@google.com>
+Message-Id: <20230728064917.767761-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230728064917.767761-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Subject: [PATCH v1 3/6] perf build: Add Wextra for C++ compilation
+Subject: [PATCH v1 4/6] perf build: Disable fewer flex warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -59,42 +59,35 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Commit d58ac0bf8d1e ("perf build: Add clang and llvm compile and
-linking support") added -Wall and -Wno-strict-aliasing for CXXFLAGS,
-but not -Wextra. -Wno-strict-aliasing is no longer necessary, adding
--Wextra for CXXFLAGS requires adding -Wno-unused-parameter clang.cpp
-and clang-test.cpp for LIBCLANGLLVM=1 to build.
+If flex is version 2.6.4, reduce the number of flex C warnings
+disabled. Earlier flex versions have all C warnings disabled.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 2 +-
- tools/perf/util/c++/Build  | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ tools/perf/util/Build | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 14709a6bd622..fe7afe6d8529 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -333,8 +333,8 @@ CORE_CFLAGS += -std=gnu11
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 96f4ea1d45c5..32239c4b0393 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -279,13 +279,9 @@ $(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-filter-bison.h: util/bpf-filt
+ 	$(Q)$(call echo-cmd,bison)$(BISON) -v $< -d $(PARSER_DEBUG_BISON) $(BISON_FILE_PREFIX_MAP) \
+ 		-o $(OUTPUT)util/bpf-filter-bison.c -p perf_bpf_filter_
  
- CXXFLAGS += -std=gnu++14 -fno-exceptions -fno-rtti
- CXXFLAGS += -Wall
-+CXXFLAGS += -Wextra
- CXXFLAGS += -fno-omit-frame-pointer
--CXXFLAGS += -Wno-strict-aliasing
- 
- HOSTCFLAGS += -Wall
- HOSTCFLAGS += -Wextra
-diff --git a/tools/perf/util/c++/Build b/tools/perf/util/c++/Build
-index 613ecfd76527..8610d032ac19 100644
---- a/tools/perf/util/c++/Build
-+++ b/tools/perf/util/c++/Build
-@@ -1,2 +1,5 @@
- perf-$(CONFIG_CLANGLLVM) += clang.o
- perf-$(CONFIG_CLANGLLVM) += clang-test.o
-+
-+CXXFLAGS_clang.o += -Wno-unused-parameter
-+CXXFLAGS_clang-test.o += -Wno-unused-parameter
+-FLEX_GE_26 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 26)
+-ifeq ($(FLEX_GE_26),1)
+-  flex_flags := -Wno-switch-enum -Wno-switch-default -Wno-unused-function -Wno-redundant-decls -Wno-sign-compare -Wno-unused-parameter -Wno-missing-prototypes -Wno-missing-declarations
+-  CC_HASNT_MISLEADING_INDENTATION := $(shell echo "int main(void) { return 0 }" | $(CC) -Werror -Wno-misleading-indentation -o /dev/null -xc - 2>&1 | grep -q -- -Wno-misleading-indentation ; echo $$?)
+-  ifeq ($(CC_HASNT_MISLEADING_INDENTATION), 1)
+-    flex_flags += -Wno-misleading-indentation
+-  endif
++FLEX_GE_264 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\= 264)
++ifeq ($(FLEX_GE_264),1)
++  flex_flags := -Wno-redundant-decls -Wno-switch-default -Wno-unused-function
+ else
+   flex_flags := -w
+ endif
 -- 
 2.41.0.487.g6d72f3e995-goog
 
