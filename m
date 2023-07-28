@@ -1,89 +1,87 @@
-Received: from mgamail.intel.com (unknown [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369F92F35;
-	Fri, 28 Jul 2023 06:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690526103; x=1722062103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uCAYqtPO646FojTPeUaVaOlxNfh1eZtXR/rGcjHLlXA=;
-  b=f1t/c31CUGbEumzcDkat+8ibCdnKzeJ7B8JAW7E/cajvbooW15e38TGh
-   jAND/j92K6nJyZm3MvB8OL85FInwCuqlKPqzDRMRK7lCGCDbtVOkWaYsD
-   sFkq1L7byLWsoTxdc1bGf2xdzllZFXAN9vD96w7U31W3VBgAiwQUTy7Xt
-   XztWNhD0ctSUvX8Gm+PqMMKE60pRyHFdgb8SznHXvi9BYh+taewUp8CIP
-   BoyvG3u6O6ggK3qguVF79YuUEM7GfwZ7smHCkamoiy37UAuAtldXYkBXq
-   n8HLhHx5Z4syadkUAlqQplMYwOzxeBfIJWajG9qCgwxjlQsrVQulz8YXj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="454882807"
-X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
-   d="scan'208";a="454882807"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 23:34:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="727352725"
-X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
-   d="scan'208";a="727352725"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 27 Jul 2023 23:34:46 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qPH3l-0002wx-0G;
-	Fri, 28 Jul 2023 06:34:45 +0000
-Date: Fri, 28 Jul 2023 14:34:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Emil Renner Berthing <kernel@esmil.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [esmil:visionfive 33/75] drivers/soc/sifive/sifive_ccache.c:156:21:
- error: '__section__' attribute only applies to functions, global variables,
- Objective-C methods, and Objective-C properties
-Message-ID: <202307281457.a61VNqfJ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797681FAF
+	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:49:43 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-c8f360a07a2so1642395276.2
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690526982; x=1691131782;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JSRNyTgH2RQM+IopPYAVHpRofqMWho9ANhQe7NRcfyI=;
+        b=nRXi1Z1xCu+ny9dJx+xC1ohGfwhMrbNXm3ILlxZ3d8TaGL1vQWN1Y8b119HfJeOH+L
+         sYKDJmVsp9CBS2egYSkyBlP6MXSlJmcM60reg1cTMtzo3s2yoXU4YF41uTIre8F6TBak
+         IV7uqTL1PElSoXiUNzEsLMQ6Vt12zexPCG/AQVo9mBnI5/+IJYT5zRffhRstt5aFptQH
+         aa98iwrlnIVy5+oVyhwnEV9xk0Uv4CWqfHV05vOOSjVxW3uJfPyTFTd2hQjYpTDrkTEW
+         4vf0idf827w3L+2/4kRyak9lzmfRYrBeTuZj9mxJJxnARn3FrgPJ9mNUgA+HPLxu9GCS
+         4tpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690526982; x=1691131782;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JSRNyTgH2RQM+IopPYAVHpRofqMWho9ANhQe7NRcfyI=;
+        b=l1DBZNy5iLv9yE1FrJ5yDW9ORw/TqmMObxdjVYo3DoVvnoDYLb3dlOcecARLy8BJ4e
+         P5uy9gqeY6X3twdCHYjoJA2Mu0tugeVVKAhQlK7hzknjXF+HP2bigVrkXWlVr4hwLo5u
+         5LtVCoBBbEhOPZgl9QS/W2rHP8pgXAkNjeTy57LwiCIDWoE2hV7Xw1lyv8pCYb5108X9
+         eVIUATsyu5fO1iQ/ek19mTSoZfStzENd8HF42O5dWnLz6Tdjl+07rmTqsQOmTWfW1fv1
+         AVCXjC9qZRrpgcn95GaMexXsFJgyrvQTpS48aG8H2Jdu++CwC/Mtur31Yw7SqBcNOZlV
+         qoNA==
+X-Gm-Message-State: ABy/qLbMBwf3Qx5kZ9aXO2wRvFmf6h+9qguKtnjzkiGbXoRAmit+XJHd
+	DIINEspbG72ZX65B/00NjAvYjVIZlm0k
+X-Google-Smtp-Source: APBJJlH3g+5y4xz+Nx2m6TkDig3uk0UwJ/M7ao/vA9fmwc712RvGVnodtkcrYfR1OT2c4G9x/YNVMhG1rfj/
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:3d03:ff18:af30:2dad])
+ (user=irogers job=sendgmr) by 2002:a25:ab47:0:b0:d08:8cf5:c5d8 with SMTP id
+ u65-20020a25ab47000000b00d088cf5c5d8mr4845ybi.5.1690526982027; Thu, 27 Jul
+ 2023 23:49:42 -0700 (PDT)
+Date: Thu, 27 Jul 2023 23:49:11 -0700
+Message-Id: <20230728064917.767761-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
+Subject: [PATCH v1 0/6] Simplify C/C++ compiler flags
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Gaosheng Cui <cuigaosheng1@huawei.com>, 
+	Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/esmil/linux visionfive
-head:   4370487fce31acaedcc03e8bd2e64f3a9c591821
-commit: 49753f0d8f50a1e78df6b1d095eb548e72f4f205 [33/75] soc: sifive: ccache: Support cache management operations
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230728/202307281457.a61VNqfJ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230728/202307281457.a61VNqfJ-lkp@intel.com/reproduce)
+Some compiler flags have been brought forward in the perf build but
+without any explicit need, for example -ggdb3. Some warnings were
+disabled but the underlying warning could be addressed. Try to reduce
+the number of compiler options used in the perf build, to enable
+Wextra for C++, and to disable fewer compiler warnings.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307281457.a61VNqfJ-lkp@intel.com/
+Ian Rogers (6):
+  perf bpf-loader: Remove unneeded diagnostic pragma
+  perf build: Don't always set -funwind-tables and -ggdb3
+  perf build: Add Wextra for C++ compilation
+  perf build: Disable fewer flex warnings
+  perf build: Disable fewer bison warnings
+  perf build: Remove -Wno-redundant-decls in 2 cases
 
-All errors (new ones prefixed by >>):
-
->> drivers/soc/sifive/sifive_ccache.c:156:21: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-     156 | static const struct __initdata riscv_cache_ops ccache_mgmt_ops = {
-         |                     ^
-   include/linux/init.h:53:20: note: expanded from macro '__initdata'
-      53 | #define __initdata      __section(".init.data")
-         |                         ^
-   include/linux/compiler_attributes.h:334:56: note: expanded from macro '__section'
-     334 | #define __section(section)              __attribute__((__section__(section)))
-         |                                                        ^
-   1 error generated.
-
-
-vim +/__section__ +156 drivers/soc/sifive/sifive_ccache.c
-
-   155	
- > 156	static const struct __initdata riscv_cache_ops ccache_mgmt_ops = {
-   157		.wback = &ccache_flush_range,
-   158		.inv = &ccache_flush_range,
-   159		.wback_inv = &ccache_flush_range,
-   160	};
-   161	#endif /* CONFIG_RISCV_NONSTANDARD_CACHE_OPS */
-   162	
+ tools/perf/Makefile.config     |  9 ++++-----
+ tools/perf/util/Build          | 18 ++++++------------
+ tools/perf/util/bpf-filter.y   |  2 ++
+ tools/perf/util/bpf-loader.c   |  3 ---
+ tools/perf/util/c++/Build      |  3 +++
+ tools/perf/util/expr.y         |  4 +++-
+ tools/perf/util/parse-events.c |  1 -
+ tools/perf/util/parse-events.y |  1 +
+ tools/perf/util/pmu.y          |  3 +++
+ 9 files changed, 22 insertions(+), 22 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0.487.g6d72f3e995-goog
+
