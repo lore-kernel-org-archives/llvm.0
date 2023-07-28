@@ -1,35 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (unknown [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2835154A8
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 17:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF95BC433C8;
-	Fri, 28 Jul 2023 17:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690564680;
-	bh=cv/PDocAmxbGFwdA+baufqPji8T3ipwDf7Jyfbvf32c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rp68SqAMtcXPF33g9ZwvZAV27WFZERhO6B6y8qniOYuaCg78BnEezs/Fp3U/T3Rfd
-	 YXjXtdwMDdxkzdDV9gSqO/9S1Lj0YO4rcdeGNFts0ufq3VI3FWktGgEXT/d9InCSzI
-	 88U3X9u5x1BBrA0Bu2ofG03x8UVE12IAo6OOQ116oQUqnYexC+osAAknRUP2dHnYPg
-	 Y05se9EQDxWD2VPrf593NRT+NGlLOyUdFWia/gpVnphCe9bDoCuvLFZcGQjLh5SA65
-	 /8OLqYZtuA7YVSJwJY2BSPdSnTcZn55r3FTvFcHJUDRZNj/K7alTvd1mnzbiiDJtRJ
-	 LJYlUO+Ela+FA==
-Date: Fri, 28 Jul 2023 10:17:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: ndesaulniers@google.com
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	christian.koenig@amd.com, boris.brezillon@collabora.com,
-	dakr@redhat.com, alexander.deucher@amd.com
-Subject: Re: [PATCH v2] drm: fix indirect goto into statement expression UB
-Message-ID: <20230728171757.GA433645@dev-arch.thelio-3990X>
-References: <20230727-amdgpu-v2-1-7fc66bc52bf6@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F08413FEC;
+	Fri, 28 Jul 2023 17:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690565130; x=1722101130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3OMEL78n+IiszhIQ/pV+083zZcBq7zO+EddRxlkRz3Q=;
+  b=YJc5deb5gCJfdsyyPCWOePghaWsyurSrjz4PTnddsF2kbdX2XVmBtsn3
+   KTtEACD0vuDF2M1Tv/S43ucVEkmQg0sy5TQtWJVMD31wkCtaEjykS0cus
+   +HZaAv7b3glAco2byp3cQ/QNHq4gZinQpnRbovWACwk3YxmuH2TWUdqtS
+   8VaS5MvszfIvGhhBNvKf0AGyq6g5I2N+MQyjOJtu/A6k+Fo0oZ5wFoHJf
+   nzLZoF7br8xNQbGByI5kgrlZ+uCrOGnKyMns8cTN2auvFOTIJNDWrQ0AO
+   9U3uhVj9z2nqjpjlwVtwm5fS1FcPWc/VgSTpkHQWCTzZjiPebB698R0Sz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="434930888"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="434930888"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:25:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="727556235"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="727556235"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jul 2023 10:25:26 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPRDG-0003QR-1z;
+	Fri, 28 Jul 2023 17:25:16 +0000
+Date: Sat, 29 Jul 2023 01:25:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org,
+	muchun.song@linux.dev, mike.kravetz@oracle.com, rppt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, fam.zheng@bytedance.com,
+	liangma@liangbit.com, simon.evans@bytedance.com,
+	punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: Re: [v1 6/6] mm: hugetlb: Skip initialization of struct pages freed
+ later by HVO
+Message-ID: <202307290124.suQ4U8Y4-lkp@intel.com>
+References: <20230727204624.1942372-7-usama.arif@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,115 +51,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230727-amdgpu-v2-1-7fc66bc52bf6@google.com>
+In-Reply-To: <20230727204624.1942372-7-usama.arif@bytedance.com>
 
-+ people from trailers of 09593216bff1
+Hi Usama,
 
-On Thu, Jul 27, 2023 at 03:50:58PM -0700, ndesaulniers@google.com wrote:
-> A new diagnostic in clang-17 now produces the following build error:
-> 
-> drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this
-> indirect goto statement to one of its possible targets
->    41 |                 drm_exec_retry_on_contention(&exec);
->       |                 ^
-> include/drm/drm_exec.h:96:4: note: expanded from macro
-> 'drm_exec_retry_on_contention'
->    96 |                         goto *__drm_exec_retry_ptr;
->       |                         ^
-> drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of
-> indirect goto statement
->    39 |         drm_exec_until_all_locked(&exec) {
->       |         ^
-> include/drm/drm_exec.h:79:33: note: expanded from macro
-> 'drm_exec_until_all_locked'
->    79 |                 __label__ __drm_exec_retry;
-> drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a
-> statement expression
-> 
-> The GCC manually currently states that:
+kernel test robot noticed the following build errors:
 
-          ^ manual
+[auto build test ERROR on akpm-mm/mm-everything]
 
-> >> Jumping into a statement expression with a computed goto (see Labels
-> >> as Values) has undefined behavior.
-> 
-> So the diagnostic appears correct, even if codegen happened to produce
-> working code.
-> 
-> Looking closer at this code, while the original combination of statement
-> expression, local label, and computed/indirect goto GNU C expressions
-> were clever, a simple while loop and continue block might have sufficed.
-> 
-> This approach might not work as expected if drm_exec_until_all_locked
-> "loops" can be nested, but that doesn't appear to be an existing use
-> case in the codebase.
-> 
-> Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1890
-> Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/mm-hugetlb-Skip-prep-of-tail-pages-when-HVO-is-enabled/20230728-044839
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230727204624.1942372-7-usama.arif%40bytedance.com
+patch subject: [v1 6/6] mm: hugetlb: Skip initialization of struct pages freed later by HVO
+config: arm64-randconfig-r032-20230727 (https://download.01.org/0day-ci/archive/20230729/202307290124.suQ4U8Y4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290124.suQ4U8Y4-lkp@intel.com/reproduce)
 
-Thanks for the patch!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290124.suQ4U8Y4-lkp@intel.com/
 
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+All errors (new ones prefixed by >>):
 
-> ---
-> Changes in v2:
-> Fix the continue to be outside of the do while
-> - Link to v1: https://lore.kernel.org/r/20230727-amdgpu-v1-1-a95690e75388@google.com
-> ---
->  include/drm/drm_exec.h | 21 +++++----------------
->  1 file changed, 5 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-> index 73205afec162..fa1cc5c3d021 100644
-> --- a/include/drm/drm_exec.h
-> +++ b/include/drm/drm_exec.h
-> @@ -70,18 +70,8 @@ struct drm_exec {
->   * Core functionality of the drm_exec object. Loops until all GEM objects are
->   * locked and no more contention exists. At the beginning of the loop it is
->   * guaranteed that no GEM object is locked.
-> - *
-> - * Since labels can't be defined local to the loops body we use a jump pointer
-> - * to make sure that the retry is only used from within the loops body.
->   */
-> -#define drm_exec_until_all_locked(exec)				\
-> -	for (void *__drm_exec_retry_ptr; ({			\
-> -		__label__ __drm_exec_retry;			\
-> -__drm_exec_retry:						\
-> -		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
-> -		(void)__drm_exec_retry_ptr;			\
-> -		drm_exec_cleanup(exec);				\
-> -	});)
-> +#define drm_exec_until_all_locked(exec)	while(drm_exec_cleanup(exec))
->  
->  /**
->   * drm_exec_retry_on_contention - restart the loop to grap all locks
-> @@ -90,11 +80,10 @@ __drm_exec_retry:						\
->   * Control flow helper to continue when a contention was detected and we need to
->   * clean up and re-start the loop to prepare all GEM objects.
->   */
-> -#define drm_exec_retry_on_contention(exec)			\
-> -	do {							\
-> -		if (unlikely(drm_exec_is_contended(exec)))	\
-> -			goto *__drm_exec_retry_ptr;		\
-> -	} while (0)
-> +#define drm_exec_retry_on_contention(exec)		\
-> +	if (unlikely(drm_exec_is_contended(exec)))	\
-> +		continue;				\
-> +	do {} while (0)
->  
->  /**
->   * drm_exec_is_contended - check for contention
-> 
-> ---
-> base-commit: 451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
-> change-id: 20230727-amdgpu-93c0e5302951
-> 
-> Best regards,
-> -- 
-> Nick Desaulniers <ndesaulniers@google.com>
-> 
+   In file included from mm/hugetlb.c:49:
+   mm/hugetlb_vmemmap.h:56:6: warning: no previous prototype for function 'vmemmap_should_optimize' [-Wmissing-prototypes]
+      56 | bool vmemmap_should_optimize(const struct hstate *h, const struct page *head)
+         |      ^
+   mm/hugetlb_vmemmap.h:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      56 | bool vmemmap_should_optimize(const struct hstate *h, const struct page *head)
+         | ^
+         | static 
+>> mm/hugetlb.c:3198:3: error: use of undeclared identifier 'HUGETLB_VMEMMAP_RESERVE_SIZE'
+    3198 |                 HUGETLB_VMEMMAP_RESERVE_SIZE * sizeof(struct page);
+         |                 ^
+   1 warning and 1 error generated.
+
+
+vim +/HUGETLB_VMEMMAP_RESERVE_SIZE +3198 mm/hugetlb.c
+
+  3190	
+  3191	int alloc_bootmem_huge_page(struct hstate *h, int nid)
+  3192		__attribute__ ((weak, alias("__alloc_bootmem_huge_page")));
+  3193	int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+  3194	{
+  3195		struct huge_bootmem_page *m = NULL; /* initialize for clang */
+  3196		int nr_nodes, node;
+  3197		phys_addr_t hugetlb_vmemmap_reserve_size =
+> 3198			HUGETLB_VMEMMAP_RESERVE_SIZE * sizeof(struct page);
+  3199		phys_addr_t noinit_base;
+  3200	
+  3201		/* do node specific alloc */
+  3202		if (nid != NUMA_NO_NODE) {
+  3203			m = memblock_alloc_try_nid_raw(huge_page_size(h), huge_page_size(h),
+  3204					0, MEMBLOCK_ALLOC_ACCESSIBLE, nid);
+  3205			if (!m)
+  3206				return 0;
+  3207	
+  3208			if (vmemmap_optimize_enabled && hugetlb_vmemmap_optimizable(h)) {
+  3209				noinit_base = virt_to_phys(
+  3210					(void *)((phys_addr_t) m + hugetlb_vmemmap_reserve_size));
+  3211				memblock_rsrv_mark_noinit(
+  3212					noinit_base,
+  3213					huge_page_size(h) - hugetlb_vmemmap_reserve_size);
+  3214			}
+  3215	
+  3216			goto found;
+  3217		}
+  3218		/* allocate from next node when distributing huge pages */
+  3219		for_each_node_mask_to_alloc(h, nr_nodes, node, &node_states[N_MEMORY]) {
+  3220			m = memblock_alloc_try_nid_raw(
+  3221					huge_page_size(h), huge_page_size(h),
+  3222					0, MEMBLOCK_ALLOC_ACCESSIBLE, node);
+  3223			/*
+  3224			 * Use the beginning of the huge page to store the
+  3225			 * huge_bootmem_page struct (until gather_bootmem
+  3226			 * puts them into the mem_map).
+  3227			 */
+  3228			if (!m)
+  3229				return 0;
+  3230	
+  3231			if (vmemmap_optimize_enabled && hugetlb_vmemmap_optimizable(h)) {
+  3232				noinit_base = virt_to_phys(
+  3233					(void *)((phys_addr_t) m + hugetlb_vmemmap_reserve_size));
+  3234				memblock_rsrv_mark_noinit(
+  3235					noinit_base,
+  3236					huge_page_size(h) - hugetlb_vmemmap_reserve_size);
+  3237			}
+  3238	
+  3239			goto found;
+  3240		}
+  3241	
+  3242	found:
+  3243		/* Put them into a private list first because mem_map is not up yet */
+  3244		INIT_LIST_HEAD(&m->list);
+  3245		list_add(&m->list, &huge_boot_pages);
+  3246		m->hstate = h;
+  3247		return 1;
+  3248	}
+  3249	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
