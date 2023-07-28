@@ -1,357 +1,84 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D270AD45
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:18:02 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-563d3e4f73cso967874a12.3
-        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1690525081; x=1691129881;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=sNxhTYkcMoh9ZKNvWNArVtU+L64SIZNqzZ85ABD+dNs=;
-        b=POchvW7jWC4WyQUersYUu8Etf/d50NR4Ict4INXxm+t9lEA42cyJxXFxez+jRx34mK
-         KXQeb1YTuY6MtDsupZlBZptBzSF1FzF9eAiQe77ZwhLANlO9Snkzu6UvOss6gcv84hlZ
-         FqM7rrJEM/qgn14B6itoXTDuKq39F/kH4nMBx/ji8RE9H8oEv+X3uZaJfPOqfEKHyP9E
-         lqmHxFMhLoIpZQyxxSqcSITV/aij/EdsjwhNMz2p7XxQNpMZ+MBMAHRnoBrHTxZBICei
-         uJl78YkodwgGlDVg6Mc1jJbeycJ2ImvNTeml0xadeMIWCP1PyMCl5LDWpL9ZanhQLHNN
-         ltnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690525081; x=1691129881;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sNxhTYkcMoh9ZKNvWNArVtU+L64SIZNqzZ85ABD+dNs=;
-        b=ixUayuPKzanPvElWXEjg2rv55qSXF9FlemYeOzKwegdtZHzsDP4d0PEpzWgBBzwZCe
-         d6w6I2thEV41w/obxJoAKIYa86POvNR6WjWBf9vuHTvqM8ncleYQ90GQRejAzyWS2vNC
-         GNPRQx/GQAM9z6NRKeQIfwgzza0NL0/TlUaCv9jG37whc17O1blMDjQuIn4h9Dh9t3Fd
-         BPTkjq5vsgnkjXxoQKyBYue/MFoscVRED0mCWrN/NB6PfxBkS0DzlESISSAh+ELYwl6G
-         l59/tmEYsxxgSNkd1cPUoiNDXj8+nOr7XWhWbKt1LFyFjvOyF/RVglmJ0uBJVtofSFPK
-         exnw==
-X-Gm-Message-State: ABy/qLaq6L3zHNkLEofWvjyNGeW8Ti6WO8ZuEMMCAqEexvE7dhEK+Pao
-	WesMHvyJiQ+VlnHNPnqp0RE8QKI0cm647S0dSvWNuw==
-X-Google-Smtp-Source: APBJJlE9n/9iXqKduekrQhN+tN/HWTlOaclGhUyNR7xbd3vHswTcvxbGx3QG6ve7BPSH2f79kHDx8Q==
-X-Received: by 2002:a17:90b:1806:b0:268:5203:b8b7 with SMTP id lw6-20020a17090b180600b002685203b8b7mr483253pjb.21.1690525081107;
-        Thu, 27 Jul 2023 23:18:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id rj6-20020a17090b3e8600b00263dee538b1sm2027593pjb.25.2023.07.27.23.18.00
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 23:18:00 -0700 (PDT)
-Message-ID: <64c35d98.170a0220.59510.3cf4@mx.google.com>
-Date: Thu, 27 Jul 2023 23:18:00 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B081FAF;
+	Fri, 28 Jul 2023 06:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690525488; x=1722061488;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=R1234sSFCYtAqBc2xmIYNG5CtfD1ZllDHzdpvQAFCgM=;
+  b=NnvQhNIe1Mz7QrEKNle+Hy1OsgyKmZgqGJukPRRVsgoq0mRt7YjUj4ta
+   TnwlhdEnrbSGgQhwFG/t18RTdiA8aEBJeS23kayqdkx2i3lNZ9z6vpX0G
+   LvVOx5EnCopKUhMO4SDcILpHv+oJHCIVVRFCMn07esortwIc0j9/2aJbe
+   dE7fj/q2e9dp64OMWTyDWUr07Tmwnp6hvXmJHRelclOxaXGo6CgYTzPGP
+   D/OpLBO4Q6BbSAzpyshd608K60leEI1Hgkxi3eP2RlfjIjvvwgH/8GU9O
+   GtB5SHEcTatcxNGniegnS6redJmpO4jr/OolTsAj1a/CkduJyT96ms3/u
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="348121868"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="348121868"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 23:24:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="797327229"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="797327229"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jul 2023 23:24:45 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPGu4-0002wO-2p;
+	Fri, 28 Jul 2023 06:24:44 +0000
+Date: Fri, 28 Jul 2023 14:24:09 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [avpatel:riscv_vector_crypto_v4 19/41] ld.lld: error:
+ vmlinux.a(fs/xfs/xfs_inode_item_recover.o):(function
+ xlog_recover_inode_ra_pass2: .text+0xa0): relocation R_RISCV_HI20 out of
+ range: 531295 is not in [-524288, 524287]; references 'xfs_inode_buf_ra_ops'
+Message-ID: <202307281410.oDKxyv96-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20230728
-X-Kernelci-Report-Type: build
-Subject: next/master build: 30 builds: 3 failed, 27 passed, 9 errors,
- 6 warnings (next-20230728)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-next/master build: 30 builds: 3 failed, 27 passed, 9 errors, 6 warnings (ne=
-xt-20230728)
+TO: Anup Patel <apatel@ventanamicro.com>
+CC: Conor Dooley <conor.dooley@microchip.com>
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230728/
+Hi Anup,
 
-Tree: next
-Branch: master
-Git Describe: next-20230728
-Git Commit: d7b3af5a77e8d8da28f435f313e069aea5bcf172
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Build Failures Detected:
+tree:   https://github.com/avpatel/linux.git riscv_vector_crypto_v4
+head:   a9087cb6e7e4c2d5148bf2e7c08c7cc705ec261a
+commit: cd8ff4b4ec7499ad1a62ef1c09168c555b2f0e8d [19/41] RISC-V: Select APLIC and IMSIC drivers
+config: riscv-randconfig-r035-20230727 (https://download.01.org/0day-ci/archive/20230728/202307281410.oDKxyv96-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230728/202307281410.oDKxyv96-lkp@intel.com/reproduce)
 
-arm:
-    rpc_defconfig: (gcc-10) FAIL
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307281410.oDKxyv96-lkp@intel.com/
 
-mips:
-    xway_defconfig: (gcc-10) FAIL
+Note: the avpatel/riscv_vector_crypto_v4 HEAD a9087cb6e7e4c2d5148bf2e7c08c7cc705ec261a builds fine.
+      It only hurts bisectability.
 
-x86_64:
-    x86_64_defconfig+rust: (rustc-1.70) FAIL
+All errors (new ones prefixed by >>):
 
-Errors and Warnings Detected:
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_inode_item_recover.o):(function xlog_recover_inode_ra_pass2: .text+0xa0): relocation R_RISCV_HI20 out of range: 531295 is not in [-524288, 524287]; references 'xfs_inode_buf_ra_ops'
+   >>> referenced by xfs_inode_item_recover.c:39 (fs/xfs/xfs_inode_item_recover.c:39)
+   >>> defined in vmlinux.a(fs/xfs/libxfs/xfs_inode_buf.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_inode_item_recover.o):(function xlog_recover_inode_commit_pass2: .text+0xe0): relocation R_RISCV_HI20 out of range: 534652 is not in [-524288, 524287]; references '.LCPI1_0'
+   >>> referenced by xfs_inode_item_recover.c:39 (fs/xfs/xfs_inode_item_recover.c:39)
+   >>> defined in vmlinux.a(fs/xfs/xfs_inode_item_recover.o)
 
-arc:
-
-arm64:
-    defconfig+arm64-chromebook (clang-13): 2 warnings
-
-arm:
-    rpc_defconfig (gcc-10): 8 errors
-
-mips:
-    xway_defconfig (gcc-10): 1 error, 1 warning
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-
-x86_64:
-
-Errors summary:
-
-    1    arch/mips/lantiq/xway/gptu.c:140:6: error: implicit declaration of=
- function =E2=80=98of_irq_to_resource_table=E2=80=99 [-Werror=3Dimplicit-fu=
-nction-declaration]
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r2,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r1,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r2,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r2,=
-=3D0x'
-    1    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r1,=
-=3D0x'
-
-Warnings summary:
-
-    3    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' s=
-et but not used [-Wunused-but-set-variable]
-    1    cc1: all warnings being treated as errors
-    1    1 warning generated.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 2 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set bu=
-t not used [-Wunused-but-set-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r1,=3D0x'
-    arch/arm/kernel/debug.S:84: Error: missing expression -- `ldr r2,=3D0x'
-    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r1,=3D0x'
-    arch/arm/kernel/debug.S:110: Error: missing expression -- `ldr r2,=3D0x'
-    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r2,=3D0x'
-    arch/arm/kernel/debug.S:118: Error: missing expression -- `ldr r3,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.70) =E2=80=94 FAIL, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    arch/mips/lantiq/xway/gptu.c:140:6: error: implicit declaration of func=
-tion =E2=80=98of_irq_to_resource_table=E2=80=99 [-Werror=3Dimplicit-functio=
-n-declaration]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
