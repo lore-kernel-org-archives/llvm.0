@@ -1,49 +1,51 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797681FAF
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:49:43 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-c8f360a07a2so1642395276.2
-        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:49:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82C11FAF
+	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 06:49:45 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-583b256faf5so29870037b3.1
+        for <llvm@lists.linux.dev>; Thu, 27 Jul 2023 23:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690526982; x=1691131782;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JSRNyTgH2RQM+IopPYAVHpRofqMWho9ANhQe7NRcfyI=;
-        b=nRXi1Z1xCu+ny9dJx+xC1ohGfwhMrbNXm3ILlxZ3d8TaGL1vQWN1Y8b119HfJeOH+L
-         sYKDJmVsp9CBS2egYSkyBlP6MXSlJmcM60reg1cTMtzo3s2yoXU4YF41uTIre8F6TBak
-         IV7uqTL1PElSoXiUNzEsLMQ6Vt12zexPCG/AQVo9mBnI5/+IJYT5zRffhRstt5aFptQH
-         aa98iwrlnIVy5+oVyhwnEV9xk0Uv4CWqfHV05vOOSjVxW3uJfPyTFTd2hQjYpTDrkTEW
-         4vf0idf827w3L+2/4kRyak9lzmfRYrBeTuZj9mxJJxnARn3FrgPJ9mNUgA+HPLxu9GCS
-         4tpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690526982; x=1691131782;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1690526984; x=1691131784;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JSRNyTgH2RQM+IopPYAVHpRofqMWho9ANhQe7NRcfyI=;
-        b=l1DBZNy5iLv9yE1FrJ5yDW9ORw/TqmMObxdjVYo3DoVvnoDYLb3dlOcecARLy8BJ4e
-         P5uy9gqeY6X3twdCHYjoJA2Mu0tugeVVKAhQlK7hzknjXF+HP2bigVrkXWlVr4hwLo5u
-         5LtVCoBBbEhOPZgl9QS/W2rHP8pgXAkNjeTy57LwiCIDWoE2hV7Xw1lyv8pCYb5108X9
-         eVIUATsyu5fO1iQ/ek19mTSoZfStzENd8HF42O5dWnLz6Tdjl+07rmTqsQOmTWfW1fv1
-         AVCXjC9qZRrpgcn95GaMexXsFJgyrvQTpS48aG8H2Jdu++CwC/Mtur31Yw7SqBcNOZlV
-         qoNA==
-X-Gm-Message-State: ABy/qLbMBwf3Qx5kZ9aXO2wRvFmf6h+9qguKtnjzkiGbXoRAmit+XJHd
-	DIINEspbG72ZX65B/00NjAvYjVIZlm0k
-X-Google-Smtp-Source: APBJJlH3g+5y4xz+Nx2m6TkDig3uk0UwJ/M7ao/vA9fmwc712RvGVnodtkcrYfR1OT2c4G9x/YNVMhG1rfj/
+        bh=C14Lkth5YhYGrilJLa3as9gLOwkujqv4yqaGCfXT1cI=;
+        b=pTjgM814griVQd95nxRaERmRO4ta0it5y0NikLDzqte4Dxn2OcWCpUMVSOvdBGreHj
+         PZJRS4r4rVxhf29d7VG6q96fZkFs1VfPbiGyiQrPDC6Q9vUxd2rIephumHnoDhePDv2s
+         dZbeVLCAvL5Q+Mv4ZDP+F2ec55M3eGwo3vCBg8m30lXOcsi/8UbFGTLKyJw4IeRjmbFD
+         kTV85zxQ5M5/yBE4/QrnJEK2Mn1TnBXO1PxDUJWAlKuX+PuB0RRx31rFWa82I+LvrfuM
+         iww3QIxpJUoNGzIl7w8eydhXRjvGgmD818Sy6noQENKa3nyDJQixl0m0FI6X5wuwbhVr
+         Gg0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690526984; x=1691131784;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C14Lkth5YhYGrilJLa3as9gLOwkujqv4yqaGCfXT1cI=;
+        b=hMiZ6huyn8NZNH9AJfbCJJtxZ+RIXeJ4BkvpKFVM5ripIqT1bxAF22eHdyaOQpupxp
+         1OC4zhUkoQRY2wrPUs5md4hHOsS1iwGgHZ82podeja0CFlRJpv/7JcsSc3e6WZMkMpxC
+         czoO8gZeyS8+rAUJDzL5szC3U08izNYrYSXd3qPCKdQsSzfmGuJov5/keTcmMgHdGPCb
+         SQ15VfyBfbevqx2nmWPIIyfM2rjUpxuz8YMNO8i2F1mrafKtXWPi2gj0ALT/79g+YYRS
+         /X3u2fI9pTrQKHLfqIP9C7mW4BURgkpOOBuUta7UPnXQa//8frfL3UM94cPXo2YtQiUB
+         Q5EQ==
+X-Gm-Message-State: ABy/qLbt4pFDQuh6tFA/Ew4Il3Pbz7xLRvDUOnH4OI6cfXBw4tQo72w8
+	aZ1cvYhpzcTb466UGc0aIGu7CJKIdDqe
+X-Google-Smtp-Source: APBJJlHY5OrUkocwZKG462E8XmaFPEseNqQWvhpbV4IL+1aqabtUQ0n/nVuKjAoPgqFX/ErHS1qmqEk8D1gC
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:3d03:ff18:af30:2dad])
- (user=irogers job=sendgmr) by 2002:a25:ab47:0:b0:d08:8cf5:c5d8 with SMTP id
- u65-20020a25ab47000000b00d088cf5c5d8mr4845ybi.5.1690526982027; Thu, 27 Jul
- 2023 23:49:42 -0700 (PDT)
-Date: Thu, 27 Jul 2023 23:49:11 -0700
-Message-Id: <20230728064917.767761-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:c509:0:b0:583:9d8d:fb0d with SMTP id
+ k9-20020a81c509000000b005839d8dfb0dmr10517ywi.0.1690526984540; Thu, 27 Jul
+ 2023 23:49:44 -0700 (PDT)
+Date: Thu, 27 Jul 2023 23:49:12 -0700
+In-Reply-To: <20230728064917.767761-1-irogers@google.com>
+Message-Id: <20230728064917.767761-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230728064917.767761-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Subject: [PATCH v1 0/6] Simplify C/C++ compiler flags
+Subject: [PATCH v1 1/6] perf bpf-loader: Remove unneeded diagnostic pragma
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -57,31 +59,28 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Some compiler flags have been brought forward in the perf build but
-without any explicit need, for example -ggdb3. Some warnings were
-disabled but the underlying warning could be addressed. Try to reduce
-the number of compiler options used in the perf build, to enable
-Wextra for C++, and to disable fewer compiler warnings.
+Added during the progress to libbpf 1.0 the deprecated functions are
+no longer used and so the pragma can be removed.
 
-Ian Rogers (6):
-  perf bpf-loader: Remove unneeded diagnostic pragma
-  perf build: Don't always set -funwind-tables and -ggdb3
-  perf build: Add Wextra for C++ compilation
-  perf build: Disable fewer flex warnings
-  perf build: Disable fewer bison warnings
-  perf build: Remove -Wno-redundant-decls in 2 cases
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/bpf-loader.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
- tools/perf/Makefile.config     |  9 ++++-----
- tools/perf/util/Build          | 18 ++++++------------
- tools/perf/util/bpf-filter.y   |  2 ++
- tools/perf/util/bpf-loader.c   |  3 ---
- tools/perf/util/c++/Build      |  3 +++
- tools/perf/util/expr.y         |  4 +++-
- tools/perf/util/parse-events.c |  1 -
- tools/perf/util/parse-events.y |  1 +
- tools/perf/util/pmu.y          |  3 +++
- 9 files changed, 22 insertions(+), 22 deletions(-)
-
+diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+index 44cde27d6389..8f4c76f2265a 100644
+--- a/tools/perf/util/bpf-loader.c
++++ b/tools/perf/util/bpf-loader.c
+@@ -32,9 +32,6 @@
+ 
+ #include <internal/xyarray.h>
+ 
+-/* temporarily disable libbpf deprecation warnings */
+-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+-
+ static int libbpf_perf_print(enum libbpf_print_level level __attribute__((unused)),
+ 			      const char *fmt, va_list args)
+ {
 -- 
 2.41.0.487.g6d72f3e995-goog
 
