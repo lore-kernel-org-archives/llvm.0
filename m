@@ -1,46 +1,45 @@
-Received: from mgamail.intel.com (unknown [192.55.52.120])
+Received: from mgamail.intel.com (unknown [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FACF14A98;
-	Fri, 28 Jul 2023 16:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFBA12B95;
+	Fri, 28 Jul 2023 16:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690560859; x=1722096859;
+  t=1690562668; x=1722098668;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/sHPSp5CO9qpoH0krtxZGrMN/jzGqbgU2TjOO0q1a4o=;
-  b=C218Zp5PRvyJtwbf6BsIGmxZcrWbATd7Uun/USqUsHxcios9OHILWYtw
-   OClkhZI+6dZZOfYUvdqv7iemOwHeph2q8CX05KGgG+GmTR7W2mHiEPsQp
-   BdZi38vKOwloELKLLdlDWUtVcVrcVA+k8RnKGtjtjheORbjwhmiRVnoYZ
-   DmE37f9SY8KtJuzkw2v+FqxWnWks+nKXUHFTkKEqdZop7oFcTLrS4Pebu
-   LlqVsqKFHrxcRk3SOX4fy/kdzdLOQ9P6oHOz6POTLEyfRP5xiJKAwUhxN
-   upZ30Ux4xkRuZcNfFOABnBRdtcEQo5kSYzsFYp2jIpNWt1uYbuZnk+Bpj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="367508447"
+  bh=mseWZlNtJGRrbvOrNZCSIZzeAppJMxwlXbNI4EI0PqM=;
+  b=KG5W1BdsaaYh/j06bUhxvOk24gsxgBYR63oNZFCDp0b//rK9PCh/zQIg
+   DGhswExLRKztX4nt+C5hjhrKN1B5w4rnD9t3SFn+moAlI0/enA1rVRYhW
+   z/3QiS9aDZcQA63NPE3IwhLG0i02MndYOkbGrfIBt74a7NSdnsY/9YN2Y
+   Dz+cyJGQxNRE+1DI8vDtp8rdZfULaQFC5BePnhNdv/8wfD+UCB1483/QR
+   sirTNEbJZl6HYlsmvJREcf6XEYnHiqKNV0gctJhNKVt5gbk1TvEr6GYaB
+   aT1vdWuwsGQDTbzqRACzaMJmys1vsJTDADw0uPUZEhBbEG3bKlIDNAavD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="372258685"
 X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="367508447"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 09:08:26 -0700
+   d="scan'208";a="372258685"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 09:44:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="851264272"
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="851264272"
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="841378018"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="841378018"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jul 2023 09:08:23 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 28 Jul 2023 09:44:26 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qPQ0t-0003Ly-0h;
-	Fri, 28 Jul 2023 16:08:23 +0000
-Date: Sat, 29 Jul 2023 00:01:50 +0800
+	id 1qPQZc-0003OF-2b;
+	Fri, 28 Jul 2023 16:44:25 +0000
+Date: Sat, 29 Jul 2023 00:44:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+To: Hans de Goede <hdegoede@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Maxime Ripard <maxime@cerno.tech>
-Subject: [hverkuil-media-tree:hdmi-dbg 25/34]
- drivers/gpu/drm/vc4/vc4_hdmi.c:573:37: error: passing 'const struct
- drm_connector_state *' to parameter of type 'struct drm_connector_state *'
- discards qualifiers
-Message-ID: <202307282352.BKzOHh7k-lkp@intel.com>
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [sailus-media-tree:master 10/20] ld.lld: error: undefined symbol:
+ devm_cci_regmap_init_i2c
+Message-ID: <202307290010.Xjbdp5kg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,54 +49,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git hdmi-dbg
-head:   7cbf796fd240aa51fe399866ae7c223133457a0e
-commit: 3b0ea91f7f9721432d165bb0ad18c28eb776be25 [25/34] drm/vc4: hdmi: Add Broadcast RGB property to allow override of RGB range
-config: riscv-randconfig-r013-20230728 (https://download.01.org/0day-ci/archive/20230728/202307282352.BKzOHh7k-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230728/202307282352.BKzOHh7k-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   78b5f6f940f213e4139b0c8dbd1499a564f1ea89
+commit: 1bb2f576bc647eff694047bb03b52998221657a6 [10/20] media: imx290: Convert to new CCI register access helpers
+config: i386-randconfig-i012-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290010.Xjbdp5kg-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290010.Xjbdp5kg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307282352.BKzOHh7k-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290010.Xjbdp5kg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/vc4/vc4_hdmi.c:573:37: error: passing 'const struct drm_connector_state *' to parameter of type 'struct drm_connector_state *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     573 |                 conn_state_to_vc4_hdmi_conn_state(state);
-         |                                                   ^~~~~
-   drivers/gpu/drm/vc4/vc4_hdmi.h:255:63: note: passing argument to parameter 'conn_state' here
-     255 | conn_state_to_vc4_hdmi_conn_state(struct drm_connector_state *conn_state)
-         |                                                               ^
-   1 error generated.
-
-
-vim +573 drivers/gpu/drm/vc4/vc4_hdmi.c
-
-   563	
-   564	static int vc4_hdmi_connector_get_property(struct drm_connector *connector,
-   565						   const struct drm_connector_state *state,
-   566						   struct drm_property *property,
-   567						   uint64_t *val)
-   568	{
-   569		struct drm_device *drm = connector->dev;
-   570		struct vc4_hdmi *vc4_hdmi =
-   571			connector_to_vc4_hdmi(connector);
-   572		const struct vc4_hdmi_connector_state *vc4_conn_state =
- > 573			conn_state_to_vc4_hdmi_conn_state(state);
-   574	
-   575		if (property == vc4_hdmi->broadcast_rgb_property) {
-   576			*val = vc4_conn_state->broadcast_rgb;
-   577		} else {
-   578			drm_dbg(drm, "Unknown property [PROP:%d:%s]\n",
-   579				property->base.id, property->name);
-   580			return -EINVAL;
-   581		}
-   582	
-   583		return 0;
-   584	}
-   585	
+>> ld.lld: error: undefined symbol: devm_cci_regmap_init_i2c
+   >>> referenced by imx290.c:1526 (drivers/media/i2c/imx290.c:1526)
+   >>>               drivers/media/i2c/imx290.o:(imx290_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: cci_multi_reg_write
+   >>> referenced by imx290.c:614 (drivers/media/i2c/imx290.c:614)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced by imx290.c:614 (drivers/media/i2c/imx290.c:614)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced by imx290.c:614 (drivers/media/i2c/imx290.c:614)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: cci_write
+   >>> referenced by imx290.c:634 (drivers/media/i2c/imx290.c:634)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced by imx290.c:635 (drivers/media/i2c/imx290.c:635)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced by imx290.c:636 (drivers/media/i2c/imx290.c:636)
+   >>>               drivers/media/i2c/imx290.o:(imx290_set_stream) in archive vmlinux.a
+   >>> referenced 24 more times
 
 -- 
 0-DAY CI Kernel Test Service
