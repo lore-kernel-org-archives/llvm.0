@@ -1,71 +1,46 @@
-Received: from mgamail.intel.com (unknown [192.55.52.136])
+Received: from mgamail.intel.com (unknown [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7075C14A84;
-	Fri, 28 Jul 2023 16:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FACF14A98;
+	Fri, 28 Jul 2023 16:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690560513; x=1722096513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6XO8YByLW8dxE5YOqdKPTTlu9HcvmVeDjDgu9q7kPJg=;
-  b=AQsPAYMgMYwt1q83Y4pDkez8dV78RKeSDCqy76//mgA+BXy3s108/5Mj
-   KbsBrtnsYCCqzrDO7SMvJ0c4SEp7Q2oN2dU+LouubUspekXWXHp0DeL9g
-   h87TcfIJQnzK2OQhzOLZItVfZcuBq/xuH8ri1MDOaGQcAerJYa55W5ffh
-   uXi227Va0KCJhQ5GuSVT2smBKvPfW7uMqJhp11Vt5S4nIZkI7nmTANrh2
-   Ihh8b/tnDIOv8WLuuiJVXIQQLT45AZeHw0VF7n8Im9eBqnFFrfOY4ekQ+
-   sAFGOG36u/qBTErTpH8HB6p7fRbBRmW60h+k2k6ggssVHTxW2PV+3/TNR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="348227782"
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="348227782"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 09:08:31 -0700
+  t=1690560859; x=1722096859;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/sHPSp5CO9qpoH0krtxZGrMN/jzGqbgU2TjOO0q1a4o=;
+  b=C218Zp5PRvyJtwbf6BsIGmxZcrWbATd7Uun/USqUsHxcios9OHILWYtw
+   OClkhZI+6dZZOfYUvdqv7iemOwHeph2q8CX05KGgG+GmTR7W2mHiEPsQp
+   BdZi38vKOwloELKLLdlDWUtVcVrcVA+k8RnKGtjtjheORbjwhmiRVnoYZ
+   DmE37f9SY8KtJuzkw2v+FqxWnWks+nKXUHFTkKEqdZop7oFcTLrS4Pebu
+   LlqVsqKFHrxcRk3SOX4fy/kdzdLOQ9P6oHOz6POTLEyfRP5xiJKAwUhxN
+   upZ30Ux4xkRuZcNfFOABnBRdtcEQo5kSYzsFYp2jIpNWt1uYbuZnk+Bpj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="367508447"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="367508447"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 09:08:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="841367149"
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="851264272"
 X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="841367149"
+   d="scan'208";a="851264272"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jul 2023 09:08:24 -0700
+  by orsmga004.jf.intel.com with ESMTP; 28 Jul 2023 09:08:23 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qPQ0t-0003Lv-0d;
+	id 1qPQ0t-0003Ly-0h;
 	Fri, 28 Jul 2023 16:08:23 +0000
-Date: Sat, 29 Jul 2023 00:01:51 +0800
+Date: Sat, 29 Jul 2023 00:01:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shenwei Wang <shenwei.wang@nxp.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>, Vinod Koul <vkoul@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	Simon Horman <simon.horman@corigine.com>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Shenwei Wang <shenwei.wang@nxp.com>,
-	Wong Vee Khee <veekhee@apple.com>
-Subject: Re: [PATCH v2 net 1/2] net: stmmac: add new mode parameter for
- fix_mac_speed
-Message-ID: <202307282338.veVKQvK3-lkp@intel.com>
-References: <20230727152503.2199550-2-shenwei.wang@nxp.com>
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: [hverkuil-media-tree:hdmi-dbg 25/34]
+ drivers/gpu/drm/vc4/vc4_hdmi.c:573:37: error: passing 'const struct
+ drm_connector_state *' to parameter of type 'struct drm_connector_state *'
+ discards qualifiers
+Message-ID: <202307282352.BKzOHh7k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,160 +49,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230727152503.2199550-2-shenwei.wang@nxp.com>
 
-Hi Shenwei,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenwei-Wang/net-stmmac-add-new-mode-parameter-for-fix_mac_speed/20230727-232922
-base:   net/main
-patch link:    https://lore.kernel.org/r/20230727152503.2199550-2-shenwei.wang%40nxp.com
-patch subject: [PATCH v2 net 1/2] net: stmmac: add new mode parameter for fix_mac_speed
-config: x86_64-randconfig-x004-20230728 (https://download.01.org/0day-ci/archive/20230728/202307282338.veVKQvK3-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230728/202307282338.veVKQvK3-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/hverkuil/media_tree.git hdmi-dbg
+head:   7cbf796fd240aa51fe399866ae7c223133457a0e
+commit: 3b0ea91f7f9721432d165bb0ad18c28eb776be25 [25/34] drm/vc4: hdmi: Add Broadcast RGB property to allow override of RGB range
+config: riscv-randconfig-r013-20230728 (https://download.01.org/0day-ci/archive/20230728/202307282352.BKzOHh7k-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230728/202307282352.BKzOHh7k-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307282338.veVKQvK3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307282352.BKzOHh7k-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c:359:22: error: incompatible function pointer types assigning to 'void (*)(void *, uint, uint)' (aka 'void (*)(void *, unsigned int, unsigned int)') from 'void (void *, unsigned int)' [-Wincompatible-function-pointer-types]
-           data->fix_mac_speed = tegra_eqos_fix_speed;
-                               ^ ~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c:108:28: error: incompatible function pointer types assigning to 'void (*)(void *, uint, uint)' (aka 'void (*)(void *, unsigned int, unsigned int)') from 'void (*const)(void *, unsigned int)' [-Wincompatible-function-pointer-types]
-                           plat_dat->fix_mac_speed = dwmac->data->fix_mac_speed;
-                                                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/vc4/vc4_hdmi.c:573:37: error: passing 'const struct drm_connector_state *' to parameter of type 'struct drm_connector_state *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     573 |                 conn_state_to_vc4_hdmi_conn_state(state);
+         |                                                   ^~~~~
+   drivers/gpu/drm/vc4/vc4_hdmi.h:255:63: note: passing argument to parameter 'conn_state' here
+     255 | conn_state_to_vc4_hdmi_conn_state(struct drm_connector_state *conn_state)
+         |                                                               ^
    1 error generated.
 
 
-vim +359 drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
+vim +573 drivers/gpu/drm/vc4/vc4_hdmi.c
 
-e6ea2d16fc615e Thierry Reding 2017-03-10  267  
-a884915f4cef94 Jisheng Zhang  2020-11-09  268  static int tegra_eqos_probe(struct platform_device *pdev,
-e6ea2d16fc615e Thierry Reding 2017-03-10  269  			    struct plat_stmmacenet_data *data,
-e6ea2d16fc615e Thierry Reding 2017-03-10  270  			    struct stmmac_resources *res)
-e6ea2d16fc615e Thierry Reding 2017-03-10  271  {
-1d4605e0aff9ff Ajay Gupta     2019-12-15  272  	struct device *dev = &pdev->dev;
-e6ea2d16fc615e Thierry Reding 2017-03-10  273  	struct tegra_eqos *eqos;
-e6ea2d16fc615e Thierry Reding 2017-03-10  274  	int err;
-e6ea2d16fc615e Thierry Reding 2017-03-10  275  
-e6ea2d16fc615e Thierry Reding 2017-03-10  276  	eqos = devm_kzalloc(&pdev->dev, sizeof(*eqos), GFP_KERNEL);
-a884915f4cef94 Jisheng Zhang  2020-11-09  277  	if (!eqos)
-a884915f4cef94 Jisheng Zhang  2020-11-09  278  		return -ENOMEM;
-e6ea2d16fc615e Thierry Reding 2017-03-10  279  
-e6ea2d16fc615e Thierry Reding 2017-03-10  280  	eqos->dev = &pdev->dev;
-e6ea2d16fc615e Thierry Reding 2017-03-10  281  	eqos->regs = res->addr;
-e6ea2d16fc615e Thierry Reding 2017-03-10  282  
-1d4605e0aff9ff Ajay Gupta     2019-12-15  283  	if (!is_of_node(dev->fwnode))
-1d4605e0aff9ff Ajay Gupta     2019-12-15  284  		goto bypass_clk_reset_gpio;
-1d4605e0aff9ff Ajay Gupta     2019-12-15  285  
-e6ea2d16fc615e Thierry Reding 2017-03-10  286  	eqos->clk_master = devm_clk_get(&pdev->dev, "master_bus");
-e6ea2d16fc615e Thierry Reding 2017-03-10  287  	if (IS_ERR(eqos->clk_master)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  288  		err = PTR_ERR(eqos->clk_master);
-e6ea2d16fc615e Thierry Reding 2017-03-10  289  		goto error;
-e6ea2d16fc615e Thierry Reding 2017-03-10  290  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  291  
-e6ea2d16fc615e Thierry Reding 2017-03-10  292  	err = clk_prepare_enable(eqos->clk_master);
-e6ea2d16fc615e Thierry Reding 2017-03-10  293  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  294  		goto error;
-e6ea2d16fc615e Thierry Reding 2017-03-10  295  
-e6ea2d16fc615e Thierry Reding 2017-03-10  296  	eqos->clk_slave = devm_clk_get(&pdev->dev, "slave_bus");
-e6ea2d16fc615e Thierry Reding 2017-03-10  297  	if (IS_ERR(eqos->clk_slave)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  298  		err = PTR_ERR(eqos->clk_slave);
-e6ea2d16fc615e Thierry Reding 2017-03-10  299  		goto disable_master;
-e6ea2d16fc615e Thierry Reding 2017-03-10  300  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  301  
-e6ea2d16fc615e Thierry Reding 2017-03-10  302  	data->stmmac_clk = eqos->clk_slave;
-e6ea2d16fc615e Thierry Reding 2017-03-10  303  
-e6ea2d16fc615e Thierry Reding 2017-03-10  304  	err = clk_prepare_enable(eqos->clk_slave);
-e6ea2d16fc615e Thierry Reding 2017-03-10  305  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  306  		goto disable_master;
-e6ea2d16fc615e Thierry Reding 2017-03-10  307  
-e6ea2d16fc615e Thierry Reding 2017-03-10  308  	eqos->clk_rx = devm_clk_get(&pdev->dev, "rx");
-e6ea2d16fc615e Thierry Reding 2017-03-10  309  	if (IS_ERR(eqos->clk_rx)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  310  		err = PTR_ERR(eqos->clk_rx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  311  		goto disable_slave;
-e6ea2d16fc615e Thierry Reding 2017-03-10  312  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  313  
-e6ea2d16fc615e Thierry Reding 2017-03-10  314  	err = clk_prepare_enable(eqos->clk_rx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  315  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  316  		goto disable_slave;
-e6ea2d16fc615e Thierry Reding 2017-03-10  317  
-e6ea2d16fc615e Thierry Reding 2017-03-10  318  	eqos->clk_tx = devm_clk_get(&pdev->dev, "tx");
-e6ea2d16fc615e Thierry Reding 2017-03-10  319  	if (IS_ERR(eqos->clk_tx)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  320  		err = PTR_ERR(eqos->clk_tx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  321  		goto disable_rx;
-e6ea2d16fc615e Thierry Reding 2017-03-10  322  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  323  
-e6ea2d16fc615e Thierry Reding 2017-03-10  324  	err = clk_prepare_enable(eqos->clk_tx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  325  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  326  		goto disable_rx;
-e6ea2d16fc615e Thierry Reding 2017-03-10  327  
-e6ea2d16fc615e Thierry Reding 2017-03-10  328  	eqos->reset = devm_gpiod_get(&pdev->dev, "phy-reset", GPIOD_OUT_HIGH);
-e6ea2d16fc615e Thierry Reding 2017-03-10  329  	if (IS_ERR(eqos->reset)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  330  		err = PTR_ERR(eqos->reset);
-e6ea2d16fc615e Thierry Reding 2017-03-10  331  		goto disable_tx;
-e6ea2d16fc615e Thierry Reding 2017-03-10  332  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  333  
-e6ea2d16fc615e Thierry Reding 2017-03-10  334  	usleep_range(2000, 4000);
-e6ea2d16fc615e Thierry Reding 2017-03-10  335  	gpiod_set_value(eqos->reset, 0);
-e6ea2d16fc615e Thierry Reding 2017-03-10  336  
-1a981c0586c038 Thierry Reding 2019-07-26  337  	/* MDIO bus was already reset just above */
-1a981c0586c038 Thierry Reding 2019-07-26  338  	data->mdio_bus_data->needs_reset = false;
-1a981c0586c038 Thierry Reding 2019-07-26  339  
-e6ea2d16fc615e Thierry Reding 2017-03-10  340  	eqos->rst = devm_reset_control_get(&pdev->dev, "eqos");
-e6ea2d16fc615e Thierry Reding 2017-03-10  341  	if (IS_ERR(eqos->rst)) {
-e6ea2d16fc615e Thierry Reding 2017-03-10  342  		err = PTR_ERR(eqos->rst);
-e6ea2d16fc615e Thierry Reding 2017-03-10  343  		goto reset_phy;
-e6ea2d16fc615e Thierry Reding 2017-03-10  344  	}
-e6ea2d16fc615e Thierry Reding 2017-03-10  345  
-e6ea2d16fc615e Thierry Reding 2017-03-10  346  	err = reset_control_assert(eqos->rst);
-e6ea2d16fc615e Thierry Reding 2017-03-10  347  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  348  		goto reset_phy;
-e6ea2d16fc615e Thierry Reding 2017-03-10  349  
-e6ea2d16fc615e Thierry Reding 2017-03-10  350  	usleep_range(2000, 4000);
-e6ea2d16fc615e Thierry Reding 2017-03-10  351  
-e6ea2d16fc615e Thierry Reding 2017-03-10  352  	err = reset_control_deassert(eqos->rst);
-e6ea2d16fc615e Thierry Reding 2017-03-10  353  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  354  		goto reset_phy;
-e6ea2d16fc615e Thierry Reding 2017-03-10  355  
-e6ea2d16fc615e Thierry Reding 2017-03-10  356  	usleep_range(2000, 4000);
-e6ea2d16fc615e Thierry Reding 2017-03-10  357  
-1d4605e0aff9ff Ajay Gupta     2019-12-15  358  bypass_clk_reset_gpio:
-e6ea2d16fc615e Thierry Reding 2017-03-10 @359  	data->fix_mac_speed = tegra_eqos_fix_speed;
-e6ea2d16fc615e Thierry Reding 2017-03-10  360  	data->init = tegra_eqos_init;
-e6ea2d16fc615e Thierry Reding 2017-03-10  361  	data->bsp_priv = eqos;
-029c1c2059e9c4 Jon Hunter     2022-07-06  362  	data->sph_disable = 1;
-e6ea2d16fc615e Thierry Reding 2017-03-10  363  
-e6ea2d16fc615e Thierry Reding 2017-03-10  364  	err = tegra_eqos_init(pdev, eqos);
-e6ea2d16fc615e Thierry Reding 2017-03-10  365  	if (err < 0)
-e6ea2d16fc615e Thierry Reding 2017-03-10  366  		goto reset;
-e6ea2d16fc615e Thierry Reding 2017-03-10  367  
-a884915f4cef94 Jisheng Zhang  2020-11-09  368  	return 0;
-e6ea2d16fc615e Thierry Reding 2017-03-10  369  reset:
-e6ea2d16fc615e Thierry Reding 2017-03-10  370  	reset_control_assert(eqos->rst);
-e6ea2d16fc615e Thierry Reding 2017-03-10  371  reset_phy:
-e6ea2d16fc615e Thierry Reding 2017-03-10  372  	gpiod_set_value(eqos->reset, 1);
-e6ea2d16fc615e Thierry Reding 2017-03-10  373  disable_tx:
-e6ea2d16fc615e Thierry Reding 2017-03-10  374  	clk_disable_unprepare(eqos->clk_tx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  375  disable_rx:
-e6ea2d16fc615e Thierry Reding 2017-03-10  376  	clk_disable_unprepare(eqos->clk_rx);
-e6ea2d16fc615e Thierry Reding 2017-03-10  377  disable_slave:
-e6ea2d16fc615e Thierry Reding 2017-03-10  378  	clk_disable_unprepare(eqos->clk_slave);
-e6ea2d16fc615e Thierry Reding 2017-03-10  379  disable_master:
-e6ea2d16fc615e Thierry Reding 2017-03-10  380  	clk_disable_unprepare(eqos->clk_master);
-e6ea2d16fc615e Thierry Reding 2017-03-10  381  error:
-a884915f4cef94 Jisheng Zhang  2020-11-09  382  	return err;
-e6ea2d16fc615e Thierry Reding 2017-03-10  383  }
-e6ea2d16fc615e Thierry Reding 2017-03-10  384  
+   563	
+   564	static int vc4_hdmi_connector_get_property(struct drm_connector *connector,
+   565						   const struct drm_connector_state *state,
+   566						   struct drm_property *property,
+   567						   uint64_t *val)
+   568	{
+   569		struct drm_device *drm = connector->dev;
+   570		struct vc4_hdmi *vc4_hdmi =
+   571			connector_to_vc4_hdmi(connector);
+   572		const struct vc4_hdmi_connector_state *vc4_conn_state =
+ > 573			conn_state_to_vc4_hdmi_conn_state(state);
+   574	
+   575		if (property == vc4_hdmi->broadcast_rgb_property) {
+   576			*val = vc4_conn_state->broadcast_rgb;
+   577		} else {
+   578			drm_dbg(drm, "Unknown property [PROP:%d:%s]\n",
+   579				property->base.id, property->name);
+   580			return -EINVAL;
+   581		}
+   582	
+   583		return 0;
+   584	}
+   585	
 
 -- 
 0-DAY CI Kernel Test Service
