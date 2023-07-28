@@ -1,98 +1,102 @@
-Received: from mgamail.intel.com (unknown [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63BED125D0;
-	Fri, 28 Jul 2023 11:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690543588; x=1722079588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7eOy4EzY9apybAP2qF/S8saGXI8KA1G1jqjMNxbvaPw=;
-  b=L1VYJlI58+OivGfmWzVNe8+N7M/7reS2Qx9lBwWA/d+FsfQM8wh72U6i
-   nTqITV6A0QFirthd7afXGKSySloW8S1ihBwOQLoiKjMXc9Iuc9E+qwGtg
-   ezvHMbfb3HK+DU8aSb+0ss5fQBQGuHBdZKoOzZSsMEQhLoa+YE10bPBYo
-   Aw/Lof7FnLET2yElSuIgGllESPbGXDbBLCh0Tk2BU51HXbg/tTu3ezmAa
-   vEe8ZJMqHhC7ZGpYZXvyVxDdFydldPba+ggBVMywNVoi+46qMb/ndbjVu
-   VhHco0kACpGoQk6RWjv/u6q10WKu09OC9XnFZtJsmT7sK7n8+2ZMqhflZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="434854495"
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="434854495"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 04:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="730705902"
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="730705902"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jul 2023 04:26:23 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qPLbx-00037z-09;
-	Fri, 28 Jul 2023 11:26:21 +0000
-Date: Fri, 28 Jul 2023 19:26:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Usama Arif <usama.arif@bytedance.com>, linux-mm@kvack.org,
-	muchun.song@linux.dev, mike.kravetz@oracle.com, rppt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, fam.zheng@bytedance.com,
-	liangma@liangbit.com, simon.evans@bytedance.com,
-	punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [v1 1/6] mm: hugetlb: Skip prep of tail pages when HVO is enabled
-Message-ID: <202307281922.cdKbT0tX-lkp@intel.com>
-References: <20230727204624.1942372-2-usama.arif@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D244813ACA;
+	Fri, 28 Jul 2023 13:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E58DC433C7;
+	Fri, 28 Jul 2023 13:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690552781;
+	bh=F3dxrjgbvuK9UxFq0YQioOFyWmM5w9lhpsGUFhh3HYI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TDhAXHeNYDqPzWDzPF1GiG62aQfnHSgcNXvP2CDN7AzMswajRDbm6xRFrxzZ2ypOp
+	 x+Do7ECw8mF4tVlDeZR5OqLgLOwxhZc4SD7GDvOhPfDnQYZ+aK0isbgAbx6VIWupx+
+	 xtYgOEV6br6tMzhLdYKtwLM9UFvNGSYs7d/CvHSGE6Ovrp7V07LVd922j5k0wrjemp
+	 /TNzXdnh9IkQ6DjYB+jSMJV2CLhQs2vjeacVpPBfK8Bzg+sIT+tA/eYQkbv1ZIPPh0
+	 ILykb1OWtw64yZ6WMxK1wW9torVkaPbwBlry4m1Vpj+p2aRFQwmARgz1oKMaq5t2Xl
+	 q0xARtSekqIfQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 48D0C40096; Fri, 28 Jul 2023 10:59:38 -0300 (-03)
+Date: Fri, 28 Jul 2023 10:59:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: James Clark <james.clark@arm.com>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Kan Liang <kan.liang@linux.intel.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Gaosheng Cui <cuigaosheng1@huawei.com>,
+	Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 4/6] perf build: Disable fewer flex warnings
+Message-ID: <ZMPJym7DnCkFH7aA@kernel.org>
+References: <20230728064917.767761-1-irogers@google.com>
+ <20230728064917.767761-5-irogers@google.com>
+ <a8833945-3f0a-7651-39ff-a01e7edc2b3a@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230727204624.1942372-2-usama.arif@bytedance.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a8833945-3f0a-7651-39ff-a01e7edc2b3a@arm.com>
+X-Url: http://acmel.wordpress.com
 
-Hi Usama,
+Em Fri, Jul 28, 2023 at 09:50:59AM +0100, James Clark escreveu:
+> 
+> 
+> On 28/07/2023 07:49, Ian Rogers wrote:
+> > If flex is version 2.6.4, reduce the number of flex C warnings
+> > disabled. Earlier flex versions have all C warnings disabled.
+> 
+> Hi Ian,
+> 
+> I get a build error with either this one or the bison warning change:
+> 
+>   $ make LLVM=1 -C tools/perf NO_BPF_SKEL=1 DEBUG=1
+> 
+>   util/pmu-bison.c:855:9: error: variable 'perf_pmu_nerrs' set but not
+> used [-Werror,-Wunused-but-set-variable]
+>     int yynerrs = 0;
+> 
+> I tried a clean build which normally fixes these kind of bison errors.
+> Let me know if you need any version info.
 
-kernel test robot noticed the following build warnings:
+Trying to build it with the command line above I get:
 
-[auto build test WARNING on akpm-mm/mm-everything]
+  CC      util/expr.o
+  CC      util/parse-events.o
+  CC      util/parse-events-flex.o
+util/parse-events-flex.c:7503:13: error: misleading indentation; statement is not part of the previous 'if' [-Werror,-Wmisleading-indentation]
+            if ( ! yyg->yy_state_buf )
+            ^
+util/parse-events-flex.c:7501:9: note: previous statement is here
+        if ( ! yyg->yy_state_buf )
+        ^
+1 error generated.
+make[4]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:97: util/parse-events-flex.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+  LD      util/scripting-engines/perf-in.o
+make[3]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:140: util] Error 2
+make[2]: *** [Makefile.perf:682: perf-in.o] Error 2
+make[2]: *** Waiting for unfinished jobs....
+  CC      pmu-events/pmu-events.o
+  LD      pmu-events/pmu-events-in.o
+make[1]: *** [Makefile.perf:242: sub-make] Error 2
+make: *** [Makefile:70: all] Error 2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/mm-hugetlb-Skip-prep-of-tail-pages-when-HVO-is-enabled/20230728-044839
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230727204624.1942372-2-usama.arif%40bytedance.com
-patch subject: [v1 1/6] mm: hugetlb: Skip prep of tail pages when HVO is enabled
-config: arm64-randconfig-r032-20230727 (https://download.01.org/0day-ci/archive/20230728/202307281922.cdKbT0tX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230728/202307281922.cdKbT0tX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307281922.cdKbT0tX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/hugetlb.c:49:
->> mm/hugetlb_vmemmap.h:56:6: warning: no previous prototype for function 'vmemmap_should_optimize' [-Wmissing-prototypes]
-      56 | bool vmemmap_should_optimize(const struct hstate *h, const struct page *head)
-         |      ^
-   mm/hugetlb_vmemmap.h:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      56 | bool vmemmap_should_optimize(const struct hstate *h, const struct page *head)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/vmemmap_should_optimize +56 mm/hugetlb_vmemmap.h
-
-    55	
-  > 56	bool vmemmap_should_optimize(const struct hstate *h, const struct page *head)
-    57	{
-    58		return false;
-    59	}
-    60	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+⬢[acme@toolbox perf-tools-next]$ clang --version
+clang version 14.0.5 (Fedora 14.0.5-2.fc36)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+⬢[acme@toolbox perf-tools-next]$
