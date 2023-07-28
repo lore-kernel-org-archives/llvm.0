@@ -1,47 +1,58 @@
-Received: from mgamail.intel.com (unknown [192.55.52.88])
+Received: from mgamail.intel.com (unknown [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6634D14AA0;
-	Fri, 28 Jul 2023 19:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BBA1F186;
+	Fri, 28 Jul 2023 21:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690572571; x=1722108571;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8aRBQf7t+k5Sr4K8mwAHKOil72nZliOx8Qi63WvbUvo=;
-  b=GxsRGld17/gpyQ8uUXI4/GEfH6Qsb7vhWigqmor4Mo9/cXALdNWPd6U9
-   aKnSGRrvQ302iPpmhLcM27/bAj81yQkop8Sps5rtCB6fVRSt6eI/kYuxw
-   k8rwoW/AfznRadan7kWC0dOhWd3sF2itrToNSuOMF5H2KZ5dEyav6LFN6
-   kUj8M3y38wGhrvX7VRKLE4BCvBQWdR3i5gQYHz3DKnCFgub8djN8hxR/T
-   2ZIvH9Id4ukooRzcSFqnDlykf0lEmt2eyCBnojvDJ4xraKACGRHN6ad6g
-   ny3Qx2M5Lb3GJrQhD8FAbzekEirxbJOrNXHPWa3RSSTb1wFgqq5IyyoCQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="399608749"
+  t=1690578165; x=1722114165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TEuzJH5k9NjiUQxxhE7uZppNJs34BvDLFgeNAlEl6/4=;
+  b=MdAFllPDc3Xj0WCd4t/t4dGGII2LZQcyf5gg6N+JKARmeCG7beELGqyW
+   5t5XHRIm7tl53PoBbmSHk5zfleGhE44Y8F1i/qclnKuCTL05gl5r2TuNz
+   iuol7EUbwd7rxMOHw8WJPVEuENJJLEDF15rbqlgTevUoYQjIiwsWw9L3k
+   e++8WF/BTavECnEWMK9z2rSo51EVMhI96ac4yHc+M40vorIHBcz8CbCEB
+   skRS64pa1xORxwi1UNA9JzeCPXviTvxzFMdV/66rR0QuoBvzaJI0rAB8p
+   +Jt49SHpdNf6+sRCkSxThSupWC1M+0ugCCAldbdxUNgoQHZA2fpFpSd9p
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="353588602"
 X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="399608749"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 12:29:30 -0700
+   d="scan'208";a="353588602"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 14:02:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="704683168"
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="817634323"
 X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="704683168"
+   d="scan'208";a="817634323"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2023 12:29:28 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jul 2023 14:02:35 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qPT9T-0003WJ-1q;
-	Fri, 28 Jul 2023 19:29:27 +0000
-Date: Sat, 29 Jul 2023 03:29:25 +0800
+	id 1qPUba-0003Zk-1M;
+	Fri, 28 Jul 2023 21:02:34 +0000
+Date: Sat, 29 Jul 2023 05:02:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
+To: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Christoph Hellwig <hch@lst.de>, Dave Chinner <dchinner@redhat.com>,
-	Jan Kara <jack@suse.cz>
-Subject: [linux-next:master 2208/5284] /bin/bash: line 1: 12782 Segmentation
- fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
- --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/media/radio/shark2.ko
-Message-ID: <202307290344.l7PGPvbU-lkp@intel.com>
+	Larysa Zaremba <larysa.zaremba@intel.com>, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, David Ahern <dsahern@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jesper Dangaard Brouer <brouer@redhat.com>,
+	Anatoly Burakov <anatoly.burakov@intel.com>,
+	Alexander Lobakin <alexandr.lobakin@intel.com>,
+	Magnus Karlsson <magnus.karlsson@gmail.com>,
+	Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+	netdev@vger.kernel.org,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH bpf-next v4 13/21] ice: Implement checksum hint
+Message-ID: <202307290459.rfUV5NZw-lkp@intel.com>
+References: <20230728173923.1318596-14-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,36 +61,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230728173923.1318596-14-larysa.zaremba@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d7b3af5a77e8d8da28f435f313e069aea5bcf172
-commit: 880b9577855edddda1e732748e849c63199d489b [2208/5284] fs: distinguish between user initiated freeze and kernel initiated freeze
-config: hexagon-randconfig-r006-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290344.l7PGPvbU-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290344.l7PGPvbU-lkp@intel.com/reproduce)
+Hi Larysa,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Larysa-Zaremba/ice-make-RX-HW-timestamp-reading-code-more-reusable/20230729-023952
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230728173923.1318596-14-larysa.zaremba%40intel.com
+patch subject: [PATCH bpf-next v4 13/21] ice: Implement checksum hint
+config: i386-randconfig-i012-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290459.rfUV5NZw-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290459.rfUV5NZw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307290344.l7PGPvbU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290459.rfUV5NZw-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   die__create_new_enumeration: DW_TAG_subrange_type (0x21) @ <0x20103> not handled!
-   die__create_new_enumeration: DW_TAG_structure_type (0x13) @ <0x20109> not handled!
-   die__process_unit: DW_TAG_member (0xd) @ <0x20199> not handled!
-   die__process_unit: tag not supported 0xd (member)!
-   die__process_unit: DW_TAG_subrange_type (0x21) @ <0x201a3> not handled!
-   die__process_unit: tag not supported 0x21 (subrange_type)!
-   die__create_new_enumeration: DW_TAG_member (0xd) @ <0xffcf> not handled!
-   die__create_new_enumeration: DW_TAG_structure_type (0x13) @ <0xffd8> not handled!
-   die__create_new_enumeration: DW_TAG_compile_unit (0x11) @ <0xfff2> not handled!
-   die__process_class: DW_TAG_enumerator (0x28) @ <0x10089> not handled!
-   die__process_class: tag not supported 0x28 (enumerator)!
-   die__process_class: DW_TAG_INVALID (0) @ <0x10098> not handled!
-   die__process_class: tag not supported 0 (INVALID)!
-   namespace__recode_dwarf_types: couldn't find 0x100a1 type for 0x1008c (member)!
->> /bin/bash: line 1: 12782 Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/media/radio/shark2.ko
+>> drivers/net/ethernet/intel/ice/ice_txrx_lib.c:674: warning: expecting prototype for ice_xdp_rx_csum_lvl(). Prototype was for ice_xdp_rx_csum() instead
+
+
+vim +674 drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+
+   662	
+   663	/**
+   664	 * ice_xdp_rx_csum_lvl - Get level, at which HW has checked the checksum
+   665	 * @ctx: XDP buff pointer
+   666	 * @csum_status: destination address
+   667	 * @csum_info: destination address
+   668	 *
+   669	 * Copy HW checksum level (if was checked) to the destination address.
+   670	 */
+   671	static int ice_xdp_rx_csum(const struct xdp_md *ctx,
+   672				   enum xdp_csum_status *csum_status,
+   673				   union xdp_csum_info *csum_info)
+ > 674	{
+   675		const struct ice_xdp_buff *xdp_ext = (void *)ctx;
+   676		const union ice_32b_rx_flex_desc *eop_desc;
+   677		enum ice_rx_csum_status status;
+   678		u16 ptype;
+   679	
+   680		eop_desc = xdp_ext->pkt_ctx.eop_desc;
+   681		ptype = ice_get_ptype(eop_desc);
+   682	
+   683		status = ice_get_rx_csum_status(eop_desc, ptype);
+   684		if (status & ICE_RX_CSUM_NONE)
+   685			return -ENODATA;
+   686	
+   687		*csum_status = XDP_CHECKSUM_VALID_LVL0 + ice_rx_csum_lvl(status);
+   688		return 0;
+   689	}
+   690	
 
 -- 
 0-DAY CI Kernel Test Service
