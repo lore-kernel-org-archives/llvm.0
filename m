@@ -1,167 +1,149 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (unknown [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94586129
-	for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 15:27:07 +0000 (UTC)
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-40631c5b9e9so288281cf.1
-        for <llvm@lists.linux.dev>; Fri, 28 Jul 2023 08:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690558026; x=1691162826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w2cHEglOBw7vOs0ctBUQxyK7WvVIZxui8AGCj214fFw=;
-        b=e6XRIlLbdnBV3L+drIGrJ9hpPuszKL9KcdkNU3ekaiyj9oPIi424yCtahEr5IejeLS
-         DVaJsKY6P2gQinDqRDKpkG2Cqzp2iZRE+SuDVrql/sUVH/V6fLH1tcS6jVzZSIYiUExw
-         4mjNGLaKuaNSZpM9kj6StV2PQjstWNDxKKSjF++SSDOHr9RgtdhJON6K/z0E0sdf+HIw
-         GcV0Zs60/0lvk9ceXcscQ7QwYgzn3piuNUGWX3RqXqTt0Bx+NowyQrbj+pniVwxrEnPB
-         eG6jturlsiIsowf+LA6PWNH3FuS9c7Kix3RXflkIjjNKYHtE+5Jk+A2pw/05jXC99LK1
-         QPCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690558026; x=1691162826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w2cHEglOBw7vOs0ctBUQxyK7WvVIZxui8AGCj214fFw=;
-        b=XNWn32DEq0QQBKJRLdjjfZROJ4IM58J+rXyYnR+asZCjNm32AAZw1x3KYLQgWYZI5v
-         Vf7VY+tAxtcw9Lfyu1QWn7t+bE8alRMgHgJc6OyR9dqbkAdntTH61tKLJfEnV4GAdKTI
-         2Z9c6xjZmj+N3KkGoDmfJ4zISjL4c/b2JWrJ5MFOnNe7wODGSP+0CElXuLMAO9u3uMd5
-         IyfdLY1l0yoxdUdPsQ/4H7cVT/7derjZ3XTLBwR1ma07272cpfvO4QZHgmdffaVOtkuF
-         uagaZ+MlIiif/yox4NOnEChdbfCq8rIBSeYRuv8lrJx990RMGXKOlNb4b4TXXn0LbjbT
-         xJjQ==
-X-Gm-Message-State: ABy/qLZS02ZPf5LOogKkvK/E58hNn7g8X6FsR6iXwx68D4J4HkKXCJE2
-	sM2ogoLERCYZgQkwYKf573NSP5L0u31+wVkzFeBxIQ==
-X-Google-Smtp-Source: APBJJlHIpT7XpTvB/yptY7dE3r/zPa8AQ/d9BXKIIJ1YOjIrDkWpf9UIHP7aBlLDk/kRbpYfjgdYrYdtNRjivLcW300=
-X-Received: by 2002:a05:622a:448:b0:3f8:5b2:aef0 with SMTP id
- o8-20020a05622a044800b003f805b2aef0mr297197qtx.24.1690558026249; Fri, 28 Jul
- 2023 08:27:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D85134B0;
+	Fri, 28 Jul 2023 15:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690559579; x=1722095579;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xVo8tOXrAvebYog5HgRDT2/de9+JnRzcN/dfTLrM580=;
+  b=NT5egJYaY4O5spIjQqCRuCA3cj4YNsDBOyE9qT1vcTa8EIo6uXy7HaJM
+   HkSgiucmaxYpwy06HIIB5KSDLc+exqbNs/fQYip/uTinhrfT3tllSK36b
+   kCfN4e310TbyHXPl/HnFBZwBEIdzKXjfV0zXRyTRwOh695ghOJa02iVAA
+   DvVQo1qcsQ1G8K4fBquxSCW2me5QCeAvigrUz5eKd1BiYlbb0Rjz/CTpA
+   jtnHBUAJwN+1D0hUWsFZhRkupMpxLy3BtNrrzqwEclxcyFGPnUdBgxCyA
+   yvMw1xqgEv35+DJhgSd20eBz/vx15kiXD959V+wvKi3W9hCagNcvkUsC5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="434908174"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="434908174"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 08:52:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="762645827"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="762645827"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 28 Jul 2023 08:52:54 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPPlU-0003Kr-2F;
+	Fri, 28 Jul 2023 15:52:34 +0000
+Date: Fri, 28 Jul 2023 23:51:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Animesh Manna <animesh.manna@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [Intel-gfx] [PATCH v3 4/6] drm/i915/panelreplay: Initializaton
+ and compute config for panel replay
+Message-ID: <202307282318.EVEl6EsL-lkp@intel.com>
+References: <20230728124609.2911830-5-animesh.manna@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230728064917.767761-1-irogers@google.com> <20230728064917.767761-5-irogers@google.com>
- <a8833945-3f0a-7651-39ff-a01e7edc2b3a@arm.com> <ZMPJym7DnCkFH7aA@kernel.org> <ZMPKekDl+g5PeiH8@kernel.org>
-In-Reply-To: <ZMPKekDl+g5PeiH8@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 28 Jul 2023 08:26:54 -0700
-Message-ID: <CAP-5=fX2LOdd_34ysAYYB5zq5tr7dMje35Nw6hrLXTPLsOHoaw@mail.gmail.com>
-Subject: Re: [PATCH v1 4/6] perf build: Disable fewer flex warnings
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: James Clark <james.clark@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Gaosheng Cui <cuigaosheng1@huawei.com>, 
-	Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728124609.2911830-5-animesh.manna@intel.com>
 
-On Fri, Jul 28, 2023 at 7:02=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Jul 28, 2023 at 10:59:38AM -0300, Arnaldo Carvalho de Melo escrev=
-eu:
-> > Em Fri, Jul 28, 2023 at 09:50:59AM +0100, James Clark escreveu:
-> > >
-> > >
-> > > On 28/07/2023 07:49, Ian Rogers wrote:
-> > > > If flex is version 2.6.4, reduce the number of flex C warnings
-> > > > disabled. Earlier flex versions have all C warnings disabled.
-> > >
-> > > Hi Ian,
-> > >
-> > > I get a build error with either this one or the bison warning change:
-> > >
-> > >   $ make LLVM=3D1 -C tools/perf NO_BPF_SKEL=3D1 DEBUG=3D1
-> > >
-> > >   util/pmu-bison.c:855:9: error: variable 'perf_pmu_nerrs' set but no=
-t
-> > > used [-Werror,-Wunused-but-set-variable]
-> > >     int yynerrs =3D 0;
-> > >
-> > > I tried a clean build which normally fixes these kind of bison errors=
-.
-> > > Let me know if you need any version info.
-> >
-> > Trying to build it with the command line above I get:
-> >
-> >   CC      util/expr.o
-> >   CC      util/parse-events.o
-> >   CC      util/parse-events-flex.o
-> > util/parse-events-flex.c:7503:13: error: misleading indentation; statem=
-ent is not part of the previous 'if' [-Werror,-Wmisleading-indentation]
-> >             if ( ! yyg->yy_state_buf )
-> >             ^
-> > util/parse-events-flex.c:7501:9: note: previous statement is here
-> >         if ( ! yyg->yy_state_buf )
-> >         ^
->
-> I added this to the patch to get it moving:
->
-> make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
-> =E2=AC=A2[acme@toolbox perf-tools-next]$ git diff
-> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> index 32239c4b0393c319..afa93eff495811cf 100644
-> --- a/tools/perf/util/Build
-> +++ b/tools/perf/util/Build
-> @@ -281,7 +281,7 @@ $(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-fi=
-lter-bison.h: util/bpf-filt
->
->  FLEX_GE_264 :=3D $(shell expr $(shell $(FLEX) --version | sed -e  's/fle=
-x \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\=3D 264)
->  ifeq ($(FLEX_GE_264),1)
-> -  flex_flags :=3D -Wno-redundant-decls -Wno-switch-default -Wno-unused-f=
-unction
-> +  flex_flags :=3D -Wno-redundant-decls -Wno-switch-default -Wno-unused-f=
-unction -Wno-misleading-indentation
->  else
->    flex_flags :=3D -w
->  endif
-> =E2=AC=A2[acme@toolbox perf-tools-next]$
->
->
-> > 1 error generated.
-> > make[4]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.b=
-uild:97: util/parse-events-flex.o] Error 1
-> > make[4]: *** Waiting for unfinished jobs....
-> >   LD      util/scripting-engines/perf-in.o
-> > make[3]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.b=
-uild:140: util] Error 2
-> > make[2]: *** [Makefile.perf:682: perf-in.o] Error 2
-> > make[2]: *** Waiting for unfinished jobs....
-> >   CC      pmu-events/pmu-events.o
-> >   LD      pmu-events/pmu-events-in.o
-> > make[1]: *** [Makefile.perf:242: sub-make] Error 2
-> > make: *** [Makefile:70: all] Error 2
-> >
-> > =E2=AC=A2[acme@toolbox perf-tools-next]$ clang --version
-> > clang version 14.0.5 (Fedora 14.0.5-2.fc36)
-> > Target: x86_64-redhat-linux-gnu
-> > Thread model: posix
-> > InstalledDir: /usr/bin
-> > =E2=AC=A2[acme@toolbox perf-tools-next]$
+Hi Animesh,
 
-Thanks James/Arnaldo, I was trying to be aggressive in having more
-flags, but it seems too aggressive. We should probably bring back the
-logic to make this flag only added if it is supported:
-  CC_HASNT_MISLEADING_INDENTATION :=3D $(shell echo "int main(void) {
-return 0 }" | $(CC) -Werror -Wno-misleading-indentation -o /dev/null
--xc - 2>&1 | grep -q -- -Wno-misleading-indentation ; echo $$?)
-  ifeq ($(CC_HASNT_MISLEADING_INDENTATION), 1)
-    flex_flags +=3D -Wno-misleading-indentation
-  endif
-Arnaldo, is the misleading indentation in the bison generated code or
-something copy-pasted from the parse-events.l ? If the latter we may
-be able to fix the .l file to keep the warning.
+kernel test robot noticed the following build warnings:
 
-Thanks,
-Ian
+[auto build test WARNING on drm-tip/drm-tip]
 
-> --
->
-> - Arnaldo
+url:    https://github.com/intel-lab-lkp/linux/commits/Animesh-Manna/drm-panelreplay-dpcd-register-definition-for-panelreplay/20230728-205902
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230728124609.2911830-5-animesh.manna%40intel.com
+patch subject: [Intel-gfx] [PATCH v3 4/6] drm/i915/panelreplay: Initializaton and compute config for panel replay
+config: x86_64-randconfig-x001-20230728 (https://download.01.org/0day-ci/archive/20230728/202307282318.EVEl6EsL-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230728/202307282318.EVEl6EsL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307282318.EVEl6EsL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_dp.c:3386:27: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
+           if (vsc->revision != 0x5 || vsc->revision != 0x7)
+               ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +3386 drivers/gpu/drm/i915/display/intel_dp.c
+
+  3361	
+  3362	static ssize_t intel_dp_vsc_sdp_pack(const struct drm_dp_vsc_sdp *vsc,
+  3363					     struct dp_sdp *sdp, size_t size)
+  3364	{
+  3365		size_t length = sizeof(struct dp_sdp);
+  3366	
+  3367		if (size < length)
+  3368			return -ENOSPC;
+  3369	
+  3370		memset(sdp, 0, size);
+  3371	
+  3372		/*
+  3373		 * Prepare VSC Header for SU as per DP 1.4a spec, Table 2-119
+  3374		 * VSC SDP Header Bytes
+  3375		 */
+  3376		sdp->sdp_header.HB0 = 0; /* Secondary-Data Packet ID = 0 */
+  3377		sdp->sdp_header.HB1 = vsc->sdp_type; /* Secondary-data Packet Type */
+  3378		sdp->sdp_header.HB2 = vsc->revision; /* Revision Number */
+  3379		sdp->sdp_header.HB3 = vsc->length; /* Number of Valid Data Bytes */
+  3380	
+  3381		/*
+  3382		 * Other than revision 0x5 which supports Pixel Encoding/Colorimetry
+  3383		 * Format as per DP 1.4a spec, revision 0x7 also supports Pixel
+  3384		 * Encoding/Colorimetry Format as per DP 2.0 spec.
+  3385		 */
+> 3386		if (vsc->revision != 0x5 || vsc->revision != 0x7)
+  3387			goto out;
+  3388	
+  3389		/* VSC SDP Payload for DB16 through DB18 */
+  3390		/* Pixel Encoding and Colorimetry Formats  */
+  3391		sdp->db[16] = (vsc->pixelformat & 0xf) << 4; /* DB16[7:4] */
+  3392		sdp->db[16] |= vsc->colorimetry & 0xf; /* DB16[3:0] */
+  3393	
+  3394		switch (vsc->bpc) {
+  3395		case 6:
+  3396			/* 6bpc: 0x0 */
+  3397			break;
+  3398		case 8:
+  3399			sdp->db[17] = 0x1; /* DB17[3:0] */
+  3400			break;
+  3401		case 10:
+  3402			sdp->db[17] = 0x2;
+  3403			break;
+  3404		case 12:
+  3405			sdp->db[17] = 0x3;
+  3406			break;
+  3407		case 16:
+  3408			sdp->db[17] = 0x4;
+  3409			break;
+  3410		default:
+  3411			MISSING_CASE(vsc->bpc);
+  3412			break;
+  3413		}
+  3414		/* Dynamic Range and Component Bit Depth */
+  3415		if (vsc->dynamic_range == DP_DYNAMIC_RANGE_CTA)
+  3416			sdp->db[17] |= 0x80;  /* DB17[7] */
+  3417	
+  3418		/* Content Type */
+  3419		sdp->db[18] = vsc->content_type & 0x7;
+  3420	
+  3421	out:
+  3422		return length;
+  3423	}
+  3424	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
