@@ -1,178 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0593C3E;
-	Sat, 29 Jul 2023 09:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690624583; x=1722160583;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NQFacC9L5QtHY1yiY74lQF4h5DC97r0Z95MUzxvVgJY=;
-  b=RPxZRFxJDjsraQHIbVpmAyQ4lwIXLyqmwQSM9LUhjOxTv+G+oEhrTYf4
-   u+szC2mWDkxiAA1Oa1F8FS5tIR1D3vfBLB3q6l5xWw2VpyomLNpPhoo5M
-   9Wh76BHPodXHJYX1q0awjy8J5tVkD0kz/13P5OfgKxFbF/WzlQs1f/x9s
-   dYl2VU72T97xj2SHen455Dyh85F1J8CJxOaysEkGwCtvxtLEE+Vasib4h
-   3rtsJE+jbZJ1PYG0lJr+q5MHzKi7KT/2lP8i4Nrg5d+eBb854WCehGHUl
-   3uMQrtUqBqD94P3aoe/PkV1MLWNuT0xvqtZK9SLk5QVOANeGNxdovRHT4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="372381401"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="372381401"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 02:56:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="793168798"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="793168798"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Jul 2023 02:56:19 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qPggM-0003xt-2Y;
-	Sat, 29 Jul 2023 09:56:18 +0000
-Date: Sat, 29 Jul 2023 17:55:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-	npiggin@gmail.com, christophe.leroy@csgroup.eu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, foraker1@llnl.gov,
-	Reza Arbab <arbab@linux.ibm.com>
-Subject: Re: [PATCH v3 1/2] powerpc/mm: Cleanup memory block size probing
-Message-ID: <202307291753.opRf3JsB-lkp@intel.com>
-References: <20230728103556.745681-1-aneesh.kumar@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BE03D70
+	for <llvm@lists.linux.dev>; Sat, 29 Jul 2023 11:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690629079;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cH0BIqYVwYLQ5rO7AXW0Jk+K3WpMIkdTJDK4Iaa6mlc=;
+	b=G5VQn70/Q3unETw0VFzs8HG8O52wXyMpN/TSvc5lYC/+9mIGGyy1B2MHxnYR5kaHccYKVx
+	ONRfMOmztFdb3eJF5XHsXCo/5fXp5ffqiPX0yDNgqvycITW08Rd9JqybdpDo4XZy3WKoFm
+	5/BqySQmCLWRqljLHBaNPG0T/jaFuX4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-387-gKZmBh4GO_-4BKTC8htTnQ-1; Sat, 29 Jul 2023 07:11:17 -0400
+X-MC-Unique: gKZmBh4GO_-4BKTC8htTnQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41A5D185A78F
+	for <llvm@lists.linux.dev>; Sat, 29 Jul 2023 11:11:17 +0000 (UTC)
+Received: from [172.64.4.113] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 14A9FC2C859;
+	Sat, 29 Jul 2023 11:11:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 17 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, ffabf7c7)
+Date: Sat, 29 Jul 2023 11:11:17 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728103556.745681-1-aneesh.kumar@linux.ibm.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <49976.123072907111700378@us-mta-387.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Aneesh,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes linus/master v6.5-rc3 next-20230728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/powerpc-mm-Add-memory_block_size-as-a-kernel-parameter/20230728-184256
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20230728103556.745681-1-aneesh.kumar%40linux.ibm.com
-patch subject: [PATCH v3 1/2] powerpc/mm: Cleanup memory block size probing
-config: powerpc-powernv_defconfig (https://download.01.org/0day-ci/archive/20230729/202307291753.opRf3JsB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291753.opRf3JsB-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'ata-6.5-rc4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/dlemoal/libata
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307291753.opRf3JsB-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97803
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
->> arch/powerpc/mm/init_64.c:558:7: error: variable 'base' set but not used [-Werror,-Wunused-but-set-variable]
-     558 |                 u64 base, size;
-         |                     ^
-   1 error generated.
 
 
-vim +/base +558 arch/powerpc/mm/init_64.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   485	
-   486	static int __init probe_memory_block_size(unsigned long node, const char *uname, int
-   487						  depth, void *data)
-   488	{
-   489		const char *type;
-   490		const char *compatible;
-   491		unsigned long *block_size = (unsigned long *)data;
-   492		const __be32 *reg, *endp;
-   493		int l;
-   494	
-   495		if (depth != 1)
-   496			return 0;
-   497		/*
-   498		 * If we have dynamic-reconfiguration-memory node, use the
-   499		 * lmb value.
-   500		 */
-   501		if (strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
-   502	
-   503			const __be32 *prop;
-   504	
-   505			prop = of_get_flat_dt_prop(node, "ibm,lmb-size", &l);
-   506	
-   507			if (!prop || l < dt_root_size_cells * sizeof(__be32))
-   508				/*
-   509				 * Nothing in the device tree
-   510				 */
-   511				*block_size = MIN_MEMORY_BLOCK_SIZE;
-   512			else
-   513				*block_size = of_read_number(prop, dt_root_size_cells);
-   514			/*
-   515			 * We have found the final value. Don't probe further.
-   516			 */
-   517			return 1;
-   518		}
-   519		/*
-   520		 * Find all the device tree nodes of memory type and make sure
-   521		 * the area can be mapped using the memory block size value
-   522		 * we end up using. We start with 1G value and keep reducing
-   523		 * it such that we can map the entire area using memory_block_size.
-   524		 * This will be used on powernv and older pseries that don't
-   525		 * have ibm,lmb-size node.
-   526		 * For ex: with P5 we can end up with
-   527		 * memory@0 -> 128MB
-   528		 * memory@128M -> 64M
-   529		 * This will end up using 64MB  memory block size value.
-   530		 */
-   531		type = of_get_flat_dt_prop(node, "device_type", NULL);
-   532		if (type == NULL || strcmp(type, "memory") != 0)
-   533			return 0;
-   534	
-   535		/*
-   536		 * "ibm,coherent-device-memory with linux,usable-memory = 0
-   537		 * Force 256MiB block size. Work around for GPUs on P9 PowerNV
-   538		 * linux,usable-memory == 0 implies driver managed memory and
-   539		 * we can't use large memory block size due to hotplug/unplug
-   540		 * limitations.
-   541		 */
-   542		compatible = of_get_flat_dt_prop(node, "compatible", NULL);
-   543		if (compatible && !strcmp(compatible, "ibm,coherent-device-memory")) {
-   544			int len = 0;
-   545			const __be32 *usm;
-   546	
-   547			usm = of_get_flat_dt_prop(node, "linux,drconf-usable-memory", &len);
-   548			if (usm && !len) {
-   549				*block_size = SZ_256M;
-   550				return 1;
-   551			}
-   552		}
-   553	
-   554		reg = of_get_flat_dt_prop(node, "reg", &l);
-   555		endp = reg + (l / sizeof(__be32));
-   556	
-   557		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
- > 558			u64 base, size;
-   559	
-   560			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
-   561			size = dt_mem_next_cell(dt_root_size_cells, &reg);
-   562	
-   563			if (size == 0)
-   564				continue;
-   565	
-   566			update_memory_block_size(block_size, size);
-   567		}
-   568		/* continue looking for other memory device types */
-   569		return 0;
-   570	}
-   571	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
