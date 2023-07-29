@@ -1,69 +1,270 @@
-Received: from mgamail.intel.com (unknown [134.134.136.24])
+Received: from mgamail.intel.com (unknown [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A95F4FE;
-	Sat, 29 Jul 2023 15:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D943D60;
+	Sat, 29 Jul 2023 16:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690646286; x=1722182286;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8B2ZXTX/T+9iJs7GisviUMJRO157mD7QeorTcPRymOo=;
-  b=Rq0ZCDG9hFb/jAVogQOAJ2+D3h1K/mHDEGKNY3uCGZO12Xe3BW65/zBW
-   WVUEnwrHHb09GnzyH7DLdnzBb6dh+i8LiEw96MRiC8rrEiyDYx5BsUKoS
-   UsGvQjEu+p3EY5jMLl5uNDJ4wlUeZDALC2AB/rB2HR1pA3hvqYPETY/0p
-   ZCkN4nVS/8KiGzRK6gVZAYgNOKengfkdtppFIhncg3qRMTevBWUNKcuoG
-   z7eqqFH1Qg4vOC4zsYu0jXVecxnQ/4O5d1v1zGPo6xueCRDCiQ0bid3YF
-   WgrBhzkvuS7gPVG/2i0TdzvPWu3THHbFfeHcI0wLo+7k9lgtAz9nXcwmL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="371471165"
+  t=1690647953; x=1722183953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1NzDoRtMi5RDjHQthnAco1mZgSF8TrXW+AA6aSBSRkE=;
+  b=bPNtGq0XYIOnTDNSRWFNwEwe7wYGUnn5wNJha/R9w/DmFPYBsnoG9GoO
+   8bd8k9AFcADH0Ox+aJLL2mMK/XJB07TBKjPij83p23+mk3/6/sO7DK4rh
+   Ntf/ClgxBWesziNGBFZSip5QIgEdzYjOLuM3DLC1Ek628ksgYVMbi7GyC
+   6YnkBHn6Wmgoe7I7OcHDYSoib86eYoQbh9JSlDwBnZ969uaNLnF3FHDpn
+   9MEI/gW4DsIQ2YrcRuT3a7ePeNZ4VXHD84zPzeBon7An7nMo2jU7Y/R00
+   mGtklqEaoJjXSVqM4fcdyi8IDr+kXY+Z++FVogs/v+FC+4FFlHGmhG89r
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="366245715"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="371471165"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 08:58:05 -0700
+   d="scan'208";a="366245715"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 09:25:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="793225232"
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="901630398"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="793225232"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.23.199])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 08:58:02 -0700
-From: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, kernel test robot <lkp@intel.com>
+   d="scan'208";a="901630398"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 29 Jul 2023 09:25:48 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPmlH-0004A7-12;
+	Sat, 29 Jul 2023 16:25:47 +0000
+Date: Sun, 30 Jul 2023 00:24:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Atin Bainada <hi@atinb.me>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- linux-kernel@vger.kernel.org,
- Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: Re: [PATCH 3/3] kunit: Allow kunit test modules to use test filtering
-Date: Sat, 29 Jul 2023 17:57:59 +0200
-Message-ID: <3204833.aV6nBDHxoP@jkrzyszt-mobl2.ger.corp.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
- 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <202307290124.BnnhRy8b-lkp@intel.com>
-References:
- <20230728154419.1810177-8-janusz.krzysztofik@linux.intel.com>
- <202307290124.BnnhRy8b-lkp@intel.com>
+	netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 5/5] net: dsa: qca8k: use dsa_for_each macro
+ instead of for loop
+Message-ID: <202307300000.UBj7WovP-lkp@intel.com>
+References: <20230729115509.32601-5-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230729115509.32601-5-ansuelsmth@gmail.com>
 
-On Friday, 28 July 2023 19:24:55 CEST kernel test robot wrote:
-> >> lib/kunit/executor.c:182:42: warning: declaration of 'struct suite_set' 
-will not be visible outside of this function [-Wvisibility]
->      182 | static void kunit_exec_list_tests(struct suite_set *suite_set)
->          |                                          ^
+Hi Christian,
 
-I've apparently broken this patch while reordering patches in the series.  
-Sorry for submitting that untested.  Please expect v2 soon.
+kernel test robot noticed the following build errors:
 
-Thanks,
-Janusz
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-qca8k-make-learning-configurable-and-keep-off-if-standalone/20230729-195747
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230729115509.32601-5-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH v2 5/5] net: dsa: qca8k: use dsa_for_each macro instead of for loop
+config: i386-randconfig-i006-20230729 (https://download.01.org/0day-ci/archive/20230730/202307300000.UBj7WovP-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230730/202307300000.UBj7WovP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307300000.UBj7WovP-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/dsa/qca/qca8k-8xxx.c:1869:28: error: use of undeclared identifier 'i'
+                   if (dsa_is_user_port(ds, i))
+                                            ^
+   1 error generated.
 
 
+vim +/i +1869 drivers/net/dsa/qca/qca8k-8xxx.c
+
+  1798	
+  1799	static int
+  1800	qca8k_setup(struct dsa_switch *ds)
+  1801	{
+  1802		struct qca8k_priv *priv = ds->priv;
+  1803		int cpu_port, ret, port;
+  1804		struct dsa_port *dp;
+  1805		u32 mask;
+  1806	
+  1807		cpu_port = qca8k_find_cpu_port(ds);
+  1808		if (cpu_port < 0) {
+  1809			dev_err(priv->dev, "No cpu port configured in both cpu port0 and port6");
+  1810			return cpu_port;
+  1811		}
+  1812	
+  1813		/* Parse CPU port config to be later used in phy_link mac_config */
+  1814		ret = qca8k_parse_port_config(priv);
+  1815		if (ret)
+  1816			return ret;
+  1817	
+  1818		ret = qca8k_setup_mdio_bus(priv);
+  1819		if (ret)
+  1820			return ret;
+  1821	
+  1822		ret = qca8k_setup_of_pws_reg(priv);
+  1823		if (ret)
+  1824			return ret;
+  1825	
+  1826		ret = qca8k_setup_mac_pwr_sel(priv);
+  1827		if (ret)
+  1828			return ret;
+  1829	
+  1830		ret = qca8k_setup_led_ctrl(priv);
+  1831		if (ret)
+  1832			return ret;
+  1833	
+  1834		qca8k_setup_pcs(priv, &priv->pcs_port_0, 0);
+  1835		qca8k_setup_pcs(priv, &priv->pcs_port_6, 6);
+  1836	
+  1837		/* Make sure MAC06 is disabled */
+  1838		ret = regmap_clear_bits(priv->regmap, QCA8K_REG_PORT0_PAD_CTRL,
+  1839					QCA8K_PORT0_PAD_MAC06_EXCHANGE_EN);
+  1840		if (ret) {
+  1841			dev_err(priv->dev, "failed disabling MAC06 exchange");
+  1842			return ret;
+  1843		}
+  1844	
+  1845		/* Enable CPU Port */
+  1846		ret = regmap_set_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
+  1847				      QCA8K_GLOBAL_FW_CTRL0_CPU_PORT_EN);
+  1848		if (ret) {
+  1849			dev_err(priv->dev, "failed enabling CPU port");
+  1850			return ret;
+  1851		}
+  1852	
+  1853		/* Enable MIB counters */
+  1854		ret = qca8k_mib_init(priv);
+  1855		if (ret)
+  1856			dev_warn(priv->dev, "mib init failed");
+  1857	
+  1858		/* Initial setup of all ports */
+  1859		dsa_switch_for_each_port(dp, ds) {
+  1860			port = dp->index;
+  1861	
+  1862			/* Disable forwarding by default on all ports */
+  1863			ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
+  1864					QCA8K_PORT_LOOKUP_MEMBER, 0);
+  1865			if (ret)
+  1866				return ret;
+  1867	
+  1868			/* Disable MAC by default on all user ports */
+> 1869			if (dsa_is_user_port(ds, i))
+  1870				qca8k_port_set_status(priv, port, 0);
+  1871		}
+  1872	
+  1873		/* Enable QCA header mode on all cpu ports */
+  1874		dsa_switch_for_each_cpu_port(dp, ds) {
+  1875			port = dp->index;
+  1876	
+  1877			ret = qca8k_write(priv, QCA8K_REG_PORT_HDR_CTRL(port),
+  1878					  FIELD_PREP(QCA8K_PORT_HDR_CTRL_TX_MASK, QCA8K_PORT_HDR_CTRL_ALL) |
+  1879					  FIELD_PREP(QCA8K_PORT_HDR_CTRL_RX_MASK, QCA8K_PORT_HDR_CTRL_ALL));
+  1880			if (ret) {
+  1881				dev_err(priv->dev, "failed enabling QCA header mode on port %d", port);
+  1882				return ret;
+  1883			}
+  1884		}
+  1885	
+  1886		/* Forward all unknown frames to CPU port for Linux processing
+  1887		 * Notice that in multi-cpu config only one port should be set
+  1888		 * for igmp, unknown, multicast and broadcast packet
+  1889		 */
+  1890		ret = qca8k_write(priv, QCA8K_REG_GLOBAL_FW_CTRL1,
+  1891				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_IGMP_DP_MASK, BIT(cpu_port)) |
+  1892				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_BC_DP_MASK, BIT(cpu_port)) |
+  1893				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_MC_DP_MASK, BIT(cpu_port)) |
+  1894				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_UC_DP_MASK, BIT(cpu_port)));
+  1895		if (ret)
+  1896			return ret;
+  1897	
+  1898		/* CPU port gets connected to all user ports of the switch */
+  1899		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(cpu_port),
+  1900				QCA8K_PORT_LOOKUP_MEMBER, dsa_user_ports(ds));
+  1901		if (ret)
+  1902			return ret;
+  1903	
+  1904		/* Setup connection between CPU port & user ports
+  1905		 * Individual user ports get connected to CPU port only
+  1906		 */
+  1907		dsa_switch_for_each_user_port(dp, ds) {
+  1908			port = dp->index;
+  1909	
+  1910			ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
+  1911					QCA8K_PORT_LOOKUP_MEMBER,
+  1912					BIT(cpu_port));
+  1913			if (ret)
+  1914				return ret;
+  1915	
+  1916			ret = regmap_clear_bits(priv->regmap, QCA8K_PORT_LOOKUP_CTRL(port),
+  1917						QCA8K_PORT_LOOKUP_LEARN);
+  1918			if (ret)
+  1919				return ret;
+  1920	
+  1921			/* For port based vlans to work we need to set the
+  1922			 * default egress vid
+  1923			 */
+  1924			ret = qca8k_rmw(priv, QCA8K_EGRESS_VLAN(port),
+  1925					QCA8K_EGREES_VLAN_PORT_MASK(port),
+  1926					QCA8K_EGREES_VLAN_PORT(port, QCA8K_PORT_VID_DEF));
+  1927			if (ret)
+  1928				return ret;
+  1929	
+  1930			ret = qca8k_write(priv, QCA8K_REG_PORT_VLAN_CTRL0(port),
+  1931					  QCA8K_PORT_VLAN_CVID(QCA8K_PORT_VID_DEF) |
+  1932					  QCA8K_PORT_VLAN_SVID(QCA8K_PORT_VID_DEF));
+  1933			if (ret)
+  1934				return ret;
+  1935		}
+  1936	
+  1937		/* The port 5 of the qca8337 have some problem in flood condition. The
+  1938		 * original legacy driver had some specific buffer and priority settings
+  1939		 * for the different port suggested by the QCA switch team. Add this
+  1940		 * missing settings to improve switch stability under load condition.
+  1941		 * This problem is limited to qca8337 and other qca8k switch are not affected.
+  1942		 */
+  1943		if (priv->switch_id == QCA8K_ID_QCA8337)
+  1944			dsa_switch_for_each_available_port(dp, ds)
+  1945				qca8k_setup_hol_fixup(priv, dp->index);
+  1946	
+  1947		/* Special GLOBAL_FC_THRESH value are needed for ar8327 switch */
+  1948		if (priv->switch_id == QCA8K_ID_QCA8327) {
+  1949			mask = QCA8K_GLOBAL_FC_GOL_XON_THRES(288) |
+  1950			       QCA8K_GLOBAL_FC_GOL_XOFF_THRES(496);
+  1951			qca8k_rmw(priv, QCA8K_REG_GLOBAL_FC_THRESH,
+  1952				  QCA8K_GLOBAL_FC_GOL_XON_THRES_MASK |
+  1953				  QCA8K_GLOBAL_FC_GOL_XOFF_THRES_MASK,
+  1954				  mask);
+  1955		}
+  1956	
+  1957		/* Setup our port MTUs to match power on defaults */
+  1958		ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, ETH_FRAME_LEN + ETH_FCS_LEN);
+  1959		if (ret)
+  1960			dev_warn(priv->dev, "failed setting MTU settings");
+  1961	
+  1962		/* Flush the FDB table */
+  1963		qca8k_fdb_flush(priv);
+  1964	
+  1965		/* Set min a max ageing value supported */
+  1966		ds->ageing_time_min = 7000;
+  1967		ds->ageing_time_max = 458745000;
+  1968	
+  1969		/* Set max number of LAGs supported */
+  1970		ds->num_lag_ids = QCA8K_NUM_LAGS;
+  1971	
+  1972		return 0;
+  1973	}
+  1974	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
