@@ -1,133 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (unknown [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C139F14A89
-	for <llvm@lists.linux.dev>; Sat, 29 Jul 2023 11:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690629099;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8M2hL9L6iERGnNEhi/AgsFSYd9LXXhC3upQ865A318k=;
-	b=Ryp1G+XTRQShhWABU3Gsc9rvoGkLLplIT3jiFd8PuZxHum8lVLL03E8gDb0Wc45IVPQH2c
-	F91iI0DbkNTvGNK188M71u8MejouViVfNWZHhdcBD+67jwiqKlAVaPfyKycyJxfpESTnl1
-	TJqitJ5QQ2SK9DmcE+PEgcceHX+pL4E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135-RWN5IV-WPUasuEk2S0SHYw-1; Sat, 29 Jul 2023 07:11:37 -0400
-X-MC-Unique: RWN5IV-WPUasuEk2S0SHYw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1960800B35
-	for <llvm@lists.linux.dev>; Sat, 29 Jul 2023 11:11:37 +0000 (UTC)
-Received: from [172.64.4.113] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 59CA140C2063;
-	Sat, 29 Jul 2023 11:11:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 17 of 328): Test report for master
- (6.5.0-rc3, mainline.kernel.org-clang, 122e7943)
-Date: Sat, 29 Jul 2023 11:11:32 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C742514298;
+	Sat, 29 Jul 2023 11:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690630750; x=1722166750;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VYVphgUxW/IZwuTVDTy1kBZK4eLOSr3761Byb5rYCFU=;
+  b=Vgvg3pvHTWyOLF5crgHV70teetTi/Dwwwfb09RkKkoyFzO3hxnVCKeuo
+   ZxzKRMNGVzMrhNfnYohBEEMlmpACHFJrhP8KvvQ9gUI4F/SPUX+4xDYIR
+   zR03KqVxu6QhK8e2+3lqlHqqf5CbWQ+nftob7EWvlQPTpQnF90VALe6+v
+   LpdLQ72zDMtj9U2P2wCvqVl6Kj+ryUkRCA4jP6cqV5mgE4nY4wRj4B4K4
+   s/b+AgD6aohOASYCBZrzV6dLB5FY/rKOWPEgfxxzaGsPqwn4pJlhbXszm
+   O/Uytz8Bn6zJJ0UX7n36p+8kUZ/NLRzMC2BCuc0Z96AZOgz/GLBrxLL0H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="455115506"
+X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
+   d="scan'208";a="455115506"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 04:39:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="797706733"
+X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
+   d="scan'208";a="797706733"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Jul 2023 04:39:05 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPiHo-00040R-22;
+	Sat, 29 Jul 2023 11:39:04 +0000
+Date: Sat, 29 Jul 2023 19:38:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] of: dynamic: Refactor action prints to not use "%pOF"
+ inside devtree_lock
+Message-ID: <202307291901.IEr9LCpd-lkp@intel.com>
+References: <20230728231950.1619073-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <12309.123072907113704665@us-mta-135.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728231950.1619073-1-robh@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Rob,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.5-rc3 next-20230728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'mm-hotfixes-stable-2023-07-28-15-52' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Herring/of-dynamic-Refactor-action-prints-to-not-use-pOF-inside-devtree_lock/20230729-072155
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230728231950.1619073-1-robh%40kernel.org
+patch subject: [PATCH v3] of: dynamic: Refactor action prints to not use "%pOF" inside devtree_lock
+config: i386-randconfig-i014-20230728 (https://download.01.org/0day-ci/archive/20230729/202307291901.IEr9LCpd-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291901.IEr9LCpd-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97801
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307291901.IEr9LCpd-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/173 failing on ark-eln aarch64
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+All errors (new ones prefixed by >>):
 
+   drivers/of/dynamic.c:74:6: warning: no previous prototype for function 'of_changeset_action_print' [-Wmissing-prototypes]
+   void of_changeset_action_print(unsigned long action, struct device_node *np, const char *prop_name)
+        ^
+   drivers/of/dynamic.c:74:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void of_changeset_action_print(unsigned long action, struct device_node *np, const char *prop_name)
+   ^
+   static 
+>> drivers/of/dynamic.c:87:6: error: expected expression
+           if (pr_debug("notify "))
+               ^
+   include/linux/printk.h:579:2: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:267:2: note: expanded from macro 'dynamic_pr_debug'
+           _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+           ^
+   include/linux/dynamic_debug.h:248:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:246:2: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:219:58: note: expanded from macro '__dynamic_func_call_cls'
+   #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {   \
+                                                            ^
+   drivers/of/dynamic.c:571:6: error: expected expression
+           if (pr_debug("changeset: applying: cset<%p> ", ce))
+               ^
+   include/linux/printk.h:579:2: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:267:2: note: expanded from macro 'dynamic_pr_debug'
+           _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+           ^
+   include/linux/dynamic_debug.h:248:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:246:2: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+           ^
+   include/linux/dynamic_debug.h:219:58: note: expanded from macro '__dynamic_func_call_cls'
+   #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {   \
+                                                            ^
+   1 warning and 2 errors generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +87 drivers/of/dynamic.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+    81	
+    82	int of_reconfig_notify(unsigned long action, struct of_reconfig_data *p)
+    83	{
+    84		int rc;
+    85		struct of_reconfig_data *pr = p;
+    86	
+  > 87		if (pr_debug("notify "))
+    88			of_changeset_action_print(action, pr->dn, pr->prop ? pr->prop->name : NULL);
+    89	
+    90		rc = blocking_notifier_call_chain(&of_reconfig_chain, action, p);
+    91		return notifier_to_errno(rc);
+    92	}
+    93	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
