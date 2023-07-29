@@ -1,47 +1,47 @@
-Received: from mgamail.intel.com (unknown [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C937C;
-	Sat, 29 Jul 2023 09:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0593C3E;
+	Sat, 29 Jul 2023 09:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690623119; x=1722159119;
+  t=1690624583; x=1722160583;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9E5/hXQ/a43ajYHMI2GY6Ykrx/VZGK1+tUN3LvEjnJ0=;
-  b=Cj+6LMDUUk+FT8OhFrg6RRzlvhH57iuOC3gkHapplkCehhDRGfcKnIle
-   /W1d5IDjeMSMoWMgBy/AlzadEy4eYfdWDOGKMFGdOAphpXnd4ppOiP26x
-   5RSHDEsV+tVQXgWFwQYgMDzttK/DSD94yReHMqlK1xXS9jh+QD2d+oQB9
-   FlFMcm8iH2ZASV3sHxHuiLQUdpUOEvfUiDhah3cT1nm5NGOeXqd2R4xXm
-   S5O/7vUPYSHGrQa0lNWBDETAHKZI4Js0Y6RmUa7k2Jrb5xjD2QOaLbn0Z
-   pzneNO7dXtu9QBFDloqe3Byxp4F5e9mNoudSsB8aANjZGQI/CMivqYQ+c
+  bh=NQFacC9L5QtHY1yiY74lQF4h5DC97r0Z95MUzxvVgJY=;
+  b=RPxZRFxJDjsraQHIbVpmAyQ4lwIXLyqmwQSM9LUhjOxTv+G+oEhrTYf4
+   u+szC2mWDkxiAA1Oa1F8FS5tIR1D3vfBLB3q6l5xWw2VpyomLNpPhoo5M
+   9Wh76BHPodXHJYX1q0awjy8J5tVkD0kz/13P5OfgKxFbF/WzlQs1f/x9s
+   dYl2VU72T97xj2SHen455Dyh85F1J8CJxOaysEkGwCtvxtLEE+Vasib4h
+   3rtsJE+jbZJ1PYG0lJr+q5MHzKi7KT/2lP8i4Nrg5d+eBb854WCehGHUl
+   3uMQrtUqBqD94P3aoe/PkV1MLWNuT0xvqtZK9SLk5QVOANeGNxdovRHT4
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="371445470"
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="372381401"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="371445470"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 02:31:58 -0700
+   d="scan'208";a="372381401"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 02:56:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="704849257"
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="793168798"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="704849257"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 02:31:56 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 1EC4411F81F;
-	Sat, 29 Jul 2023 12:31:54 +0300 (EEST)
-Date: Sat, 29 Jul 2023 09:31:54 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [sailus-media-tree:master 9/20]
- drivers/media/i2c/ov5693.c:1280:17: warning: incompatible integer to pointer
- conversion assigning to 'struct regmap *' from 'int'
-Message-ID: <ZMTcirgM3W+C0rag@kekkonen.localdomain>
-References: <202307271517.dPa1bTSi-lkp@intel.com>
- <8848c668-4736-a478-a277-e0cf1aa96ad4@redhat.com>
+   d="scan'208";a="793168798"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jul 2023 02:56:19 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qPggM-0003xt-2Y;
+	Sat, 29 Jul 2023 09:56:18 +0000
+Date: Sat, 29 Jul 2023 17:55:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+	npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, foraker1@llnl.gov,
+	Reza Arbab <arbab@linux.ibm.com>
+Subject: Re: [PATCH v3 1/2] powerpc/mm: Cleanup memory block size probing
+Message-ID: <202307291753.opRf3JsB-lkp@intel.com>
+References: <20230728103556.745681-1-aneesh.kumar@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,42 +50,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8848c668-4736-a478-a277-e0cf1aa96ad4@redhat.com>
+In-Reply-To: <20230728103556.745681-1-aneesh.kumar@linux.ibm.com>
 
-Hi Hans,
+Hi Aneesh,
 
-On Thu, Jul 27, 2023 at 10:57:15AM +0200, Hans de Goede wrote:
-> Hi Sakari,
-> 
-> On 7/27/23 09:34, kernel test robot wrote:
-> > tree:   git://linuxtv.org/sailus/media_tree.git master
-> > head:   215e4463b11d94668b841368cb6882f3a2968148
-> > commit: 6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c [9/20] media: ov5693: Convert to new CCI register access helpers
-> > config: arm-randconfig-r012-20230727 (https://download.01.org/0day-ci/archive/20230727/202307271517.dPa1bTSi-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230727/202307271517.dPa1bTSi-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307271517.dPa1bTSi-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >    drivers/media/i2c/ov5693.c:1280:19: error: implicit declaration of function 'devm_cci_regmap_init_i2c' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-> >            ov5693->regmap = devm_cci_regmap_init_i2c(client, 16);
-> 
-> This is caused by a mis-merge:
-> 
-> https://git.linuxtv.org/sailus/media_tree.git/commit/?id=6ca0d78da91133ec78ecfbdaa7d066849b1b0c0c
-> 
-> Shows that the "select V4L2_CCI_I2C" was added to the DW9768 Kconfig block instead of to the OV5693 block.
+kernel test robot noticed the following build errors:
 
-Oops. Probably a result of the automatic merge, as both mine and your
-patches changed the surrounding lines. I'll send a patch to fix this as
-well as the other issue. Thanks for pointing this out.
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/fixes linus/master v6.5-rc3 next-20230728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/powerpc-mm-Add-memory_block_size-as-a-kernel-parameter/20230728-184256
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/20230728103556.745681-1-aneesh.kumar%40linux.ibm.com
+patch subject: [PATCH v3 1/2] powerpc/mm: Cleanup memory block size probing
+config: powerpc-powernv_defconfig (https://download.01.org/0day-ci/archive/20230729/202307291753.opRf3JsB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291753.opRf3JsB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307291753.opRf3JsB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/mm/init_64.c:558:7: error: variable 'base' set but not used [-Werror,-Wunused-but-set-variable]
+     558 |                 u64 base, size;
+         |                     ^
+   1 error generated.
+
+
+vim +/base +558 arch/powerpc/mm/init_64.c
+
+   485	
+   486	static int __init probe_memory_block_size(unsigned long node, const char *uname, int
+   487						  depth, void *data)
+   488	{
+   489		const char *type;
+   490		const char *compatible;
+   491		unsigned long *block_size = (unsigned long *)data;
+   492		const __be32 *reg, *endp;
+   493		int l;
+   494	
+   495		if (depth != 1)
+   496			return 0;
+   497		/*
+   498		 * If we have dynamic-reconfiguration-memory node, use the
+   499		 * lmb value.
+   500		 */
+   501		if (strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
+   502	
+   503			const __be32 *prop;
+   504	
+   505			prop = of_get_flat_dt_prop(node, "ibm,lmb-size", &l);
+   506	
+   507			if (!prop || l < dt_root_size_cells * sizeof(__be32))
+   508				/*
+   509				 * Nothing in the device tree
+   510				 */
+   511				*block_size = MIN_MEMORY_BLOCK_SIZE;
+   512			else
+   513				*block_size = of_read_number(prop, dt_root_size_cells);
+   514			/*
+   515			 * We have found the final value. Don't probe further.
+   516			 */
+   517			return 1;
+   518		}
+   519		/*
+   520		 * Find all the device tree nodes of memory type and make sure
+   521		 * the area can be mapped using the memory block size value
+   522		 * we end up using. We start with 1G value and keep reducing
+   523		 * it such that we can map the entire area using memory_block_size.
+   524		 * This will be used on powernv and older pseries that don't
+   525		 * have ibm,lmb-size node.
+   526		 * For ex: with P5 we can end up with
+   527		 * memory@0 -> 128MB
+   528		 * memory@128M -> 64M
+   529		 * This will end up using 64MB  memory block size value.
+   530		 */
+   531		type = of_get_flat_dt_prop(node, "device_type", NULL);
+   532		if (type == NULL || strcmp(type, "memory") != 0)
+   533			return 0;
+   534	
+   535		/*
+   536		 * "ibm,coherent-device-memory with linux,usable-memory = 0
+   537		 * Force 256MiB block size. Work around for GPUs on P9 PowerNV
+   538		 * linux,usable-memory == 0 implies driver managed memory and
+   539		 * we can't use large memory block size due to hotplug/unplug
+   540		 * limitations.
+   541		 */
+   542		compatible = of_get_flat_dt_prop(node, "compatible", NULL);
+   543		if (compatible && !strcmp(compatible, "ibm,coherent-device-memory")) {
+   544			int len = 0;
+   545			const __be32 *usm;
+   546	
+   547			usm = of_get_flat_dt_prop(node, "linux,drconf-usable-memory", &len);
+   548			if (usm && !len) {
+   549				*block_size = SZ_256M;
+   550				return 1;
+   551			}
+   552		}
+   553	
+   554		reg = of_get_flat_dt_prop(node, "reg", &l);
+   555		endp = reg + (l / sizeof(__be32));
+   556	
+   557		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+ > 558			u64 base, size;
+   559	
+   560			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+   561			size = dt_mem_next_cell(dt_root_size_cells, &reg);
+   562	
+   563			if (size == 0)
+   564				continue;
+   565	
+   566			update_memory_block_size(block_size, size);
+   567		}
+   568		/* continue looking for other memory device types */
+   569		return 0;
+   570	}
+   571	
 
 -- 
-Kind regards,
-
-Sakari Ailus
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
