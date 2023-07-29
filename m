@@ -1,50 +1,55 @@
-Received: from mgamail.intel.com (unknown [192.55.52.43])
+Received: from mgamail.intel.com (unknown [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C742514298;
-	Sat, 29 Jul 2023 11:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B0914299;
+	Sat, 29 Jul 2023 15:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690630750; x=1722166750;
+  t=1690643606; x=1722179606;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VYVphgUxW/IZwuTVDTy1kBZK4eLOSr3761Byb5rYCFU=;
-  b=Vgvg3pvHTWyOLF5crgHV70teetTi/Dwwwfb09RkKkoyFzO3hxnVCKeuo
-   ZxzKRMNGVzMrhNfnYohBEEMlmpACHFJrhP8KvvQ9gUI4F/SPUX+4xDYIR
-   zR03KqVxu6QhK8e2+3lqlHqqf5CbWQ+nftob7EWvlQPTpQnF90VALe6+v
-   LpdLQ72zDMtj9U2P2wCvqVl6Kj+ryUkRCA4jP6cqV5mgE4nY4wRj4B4K4
-   s/b+AgD6aohOASYCBZrzV6dLB5FY/rKOWPEgfxxzaGsPqwn4pJlhbXszm
-   O/Uytz8Bn6zJJ0UX7n36p+8kUZ/NLRzMC2BCuc0Z96AZOgz/GLBrxLL0H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="455115506"
+  bh=qYNctRq7UP223cDLMDHpgil/19stlw90kyEgzmhtG2A=;
+  b=Ef6EqEv87NWq1SyyFvaRbpvW2gBr+DoU+IdbfuFs9tPRFOc5PNO1jJf5
+   6oDmxk8bh/7QTmaOjcfr09qUSNVxLwD3dGfQ1m/wO26zyBOK+gGgFDkP+
+   L4I93UtAmS3nk8HgsiaDBZMSWZY8nG7uYOFYcu/O6teIN47MXdOg575I0
+   Welp0Hd/DtWV/Afg00+kBfn4LuN+6GmZEbH+Hrhga4re9CNSmXYX9c1yu
+   /tv0V/B/Gf2JOS50KVdIVeggKofsx2KTked5AEU6L2mJATydh45eanb9K
+   BSgMXTZhw2rRwqANTFebfsJwzCcDKbBSJ8/2ypEAJFFa080R+RHd/Ed9m
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="371468532"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="455115506"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 04:39:08 -0700
+   d="scan'208";a="371468532"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 08:13:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="797706733"
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="727758995"
 X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="797706733"
+   d="scan'208";a="727758995"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Jul 2023 04:39:05 -0700
+  by orsmga002.jf.intel.com with ESMTP; 29 Jul 2023 08:13:20 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qPiHo-00040R-22;
-	Sat, 29 Jul 2023 11:39:04 +0000
-Date: Sat, 29 Jul 2023 19:38:47 +0800
+	id 1qPld9-00046l-0a;
+	Sat, 29 Jul 2023 15:13:19 +0000
+Date: Sat, 29 Jul 2023 23:12:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Petr Mladek <pmladek@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Daniel Golle <daniel@makrotopia.org>, Felix Fietkau <nbd@nbd.name>,
+	John Crispin <john@phrozen.org>, Sean Wang <sean.wang@mediatek.com>,
+	Mark Lee <Mark-MC.Lee@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] of: dynamic: Refactor action prints to not use "%pOF"
- inside devtree_lock
-Message-ID: <202307291901.IEr9LCpd-lkp@intel.com>
-References: <20230728231950.1619073-1-robh@kernel.org>
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] net: ethernet: mtk_eth_soc: support per-flow
+ accounting on MT7988
+Message-ID: <202307292316.uxGTiSPC-lkp@intel.com>
+References: <801c89963e95e5ce8f1ab7dbda894dd9da0125cc.1690638748.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,94 +58,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230728231950.1619073-1-robh@kernel.org>
+In-Reply-To: <801c89963e95e5ce8f1ab7dbda894dd9da0125cc.1690638748.git.daniel@makrotopia.org>
 
-Hi Rob,
+Hi Daniel,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.5-rc3 next-20230728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Herring/of-dynamic-Refactor-action-prints-to-not-use-pOF-inside-devtree_lock/20230729-072155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230728231950.1619073-1-robh%40kernel.org
-patch subject: [PATCH v3] of: dynamic: Refactor action prints to not use "%pOF" inside devtree_lock
-config: i386-randconfig-i014-20230728 (https://download.01.org/0day-ci/archive/20230729/202307291901.IEr9LCpd-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291901.IEr9LCpd-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-ethernet-mtk_eth_soc-support-per-flow-accounting-on-MT7988/20230729-215634
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/801c89963e95e5ce8f1ab7dbda894dd9da0125cc.1690638748.git.daniel%40makrotopia.org
+patch subject: [PATCH net-next] net: ethernet: mtk_eth_soc: support per-flow accounting on MT7988
+config: hexagon-randconfig-r023-20230729 (https://download.01.org/0day-ci/archive/20230729/202307292316.uxGTiSPC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307292316.uxGTiSPC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307291901.IEr9LCpd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307292316.uxGTiSPC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/of/dynamic.c:74:6: warning: no previous prototype for function 'of_changeset_action_print' [-Wmissing-prototypes]
-   void of_changeset_action_print(unsigned long action, struct device_node *np, const char *prop_name)
-        ^
-   drivers/of/dynamic.c:74:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void of_changeset_action_print(unsigned long action, struct device_node *np, const char *prop_name)
-   ^
-   static 
->> drivers/of/dynamic.c:87:6: error: expected expression
-           if (pr_debug("notify "))
-               ^
-   include/linux/printk.h:579:2: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:267:2: note: expanded from macro 'dynamic_pr_debug'
-           _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-           ^
-   include/linux/dynamic_debug.h:248:2: note: expanded from macro '_dynamic_func_call'
-           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:246:2: note: expanded from macro '_dynamic_func_call_cls'
-           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:219:58: note: expanded from macro '__dynamic_func_call_cls'
-   #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {   \
-                                                            ^
-   drivers/of/dynamic.c:571:6: error: expected expression
-           if (pr_debug("changeset: applying: cset<%p> ", ce))
-               ^
-   include/linux/printk.h:579:2: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:267:2: note: expanded from macro 'dynamic_pr_debug'
-           _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-           ^
-   include/linux/dynamic_debug.h:248:2: note: expanded from macro '_dynamic_func_call'
-           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:246:2: note: expanded from macro '_dynamic_func_call_cls'
-           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-           ^
-   include/linux/dynamic_debug.h:219:58: note: expanded from macro '__dynamic_func_call_cls'
-   #define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {   \
-                                                            ^
-   1 warning and 2 errors generated.
+   In file included from drivers/net/ethernet/mediatek/mtk_ppe.c:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/mediatek/mtk_ppe.c:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/mediatek/mtk_ppe.c:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/net/ethernet/mediatek/mtk_ppe.c:112:3: error: use of undeclared identifier 'bytes_cnt_low'; did you mean 'byte_cnt_low'?
+     112 |                 bytes_cnt_low = cnt_r0;
+         |                 ^~~~~~~~~~~~~
+         |                 byte_cnt_low
+   drivers/net/ethernet/mediatek/mtk_ppe.c:95:6: note: 'byte_cnt_low' declared here
+      95 |         u32 byte_cnt_low, byte_cnt_high, pkt_cnt_low, pkt_cnt_high;
+         |             ^
+>> drivers/net/ethernet/mediatek/mtk_ppe.c:113:3: error: use of undeclared identifier 'bytes_cnt_high'; did you mean 'byte_cnt_high'?
+     113 |                 bytes_cnt_high = cnt_r1;
+         |                 ^~~~~~~~~~~~~~
+         |                 byte_cnt_high
+   drivers/net/ethernet/mediatek/mtk_ppe.c:95:20: note: 'byte_cnt_high' declared here
+      95 |         u32 byte_cnt_low, byte_cnt_high, pkt_cnt_low, pkt_cnt_high;
+         |                           ^
+   6 warnings and 2 errors generated.
 
 
-vim +87 drivers/of/dynamic.c
+vim +112 drivers/net/ethernet/mediatek/mtk_ppe.c
 
-    81	
-    82	int of_reconfig_notify(unsigned long action, struct of_reconfig_data *p)
-    83	{
-    84		int rc;
-    85		struct of_reconfig_data *pr = p;
-    86	
-  > 87		if (pr_debug("notify "))
-    88			of_changeset_action_print(action, pr->dn, pr->prop ? pr->prop->name : NULL);
-    89	
-    90		rc = blocking_notifier_call_chain(&of_reconfig_chain, action, p);
-    91		return notifier_to_errno(rc);
-    92	}
-    93	
+    92	
+    93	static int mtk_mib_entry_read(struct mtk_ppe *ppe, u16 index, u64 *bytes, u64 *packets)
+    94	{
+    95		u32 byte_cnt_low, byte_cnt_high, pkt_cnt_low, pkt_cnt_high;
+    96		u32 val, cnt_r0, cnt_r1, cnt_r2;
+    97		int ret;
+    98	
+    99		val = FIELD_PREP(MTK_PPE_MIB_SER_CR_ADDR, index) | MTK_PPE_MIB_SER_CR_ST;
+   100		ppe_w32(ppe, MTK_PPE_MIB_SER_CR, val);
+   101	
+   102		ret = mtk_ppe_mib_wait_busy(ppe);
+   103		if (ret)
+   104			return ret;
+   105	
+   106		cnt_r0 = readl(ppe->base + MTK_PPE_MIB_SER_R0);
+   107		cnt_r1 = readl(ppe->base + MTK_PPE_MIB_SER_R1);
+   108		cnt_r2 = readl(ppe->base + MTK_PPE_MIB_SER_R2);
+   109	
+   110		if (mtk_is_netsys_v3_or_greater(ppe->eth)) {
+   111			/* 64 bit for each counter */
+ > 112			bytes_cnt_low = cnt_r0;
+ > 113			bytes_cnt_high = cnt_r1;
+   114			pkt_cnt_low = cnt_r2;
+   115			pkt_cnt_high = readl(ppe->base + MTK_PPE_MIB_SER_R3);
+   116		} else {
+   117			/* 48 bit for each counter */
+   118			byte_cnt_low = FIELD_GET(MTK_PPE_MIB_SER_R0_BYTE_CNT_LOW, cnt_r0);
+   119			byte_cnt_high = FIELD_GET(MTK_PPE_MIB_SER_R1_BYTE_CNT_HIGH, cnt_r1);
+   120			pkt_cnt_low = FIELD_GET(MTK_PPE_MIB_SER_R1_PKT_CNT_LOW, cnt_r1);
+   121			pkt_cnt_high = FIELD_GET(MTK_PPE_MIB_SER_R2_PKT_CNT_HIGH, cnt_r2);
+   122		}
+   123	
+   124		*bytes = ((u64)byte_cnt_high << 32) | byte_cnt_low;
+   125		*packets = (pkt_cnt_high << 16) | pkt_cnt_low;
+   126	
+   127		return 0;
+   128	}
+   129	
 
 -- 
 0-DAY CI Kernel Test Service
