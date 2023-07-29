@@ -1,270 +1,280 @@
-Received: from mgamail.intel.com (unknown [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D943D60;
-	Sat, 29 Jul 2023 16:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690647953; x=1722183953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1NzDoRtMi5RDjHQthnAco1mZgSF8TrXW+AA6aSBSRkE=;
-  b=bPNtGq0XYIOnTDNSRWFNwEwe7wYGUnn5wNJha/R9w/DmFPYBsnoG9GoO
-   8bd8k9AFcADH0Ox+aJLL2mMK/XJB07TBKjPij83p23+mk3/6/sO7DK4rh
-   Ntf/ClgxBWesziNGBFZSip5QIgEdzYjOLuM3DLC1Ek628ksgYVMbi7GyC
-   6YnkBHn6Wmgoe7I7OcHDYSoib86eYoQbh9JSlDwBnZ969uaNLnF3FHDpn
-   9MEI/gW4DsIQ2YrcRuT3a7ePeNZ4VXHD84zPzeBon7An7nMo2jU7Y/R00
-   mGtklqEaoJjXSVqM4fcdyi8IDr+kXY+Z++FVogs/v+FC+4FFlHGmhG89r
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="366245715"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="366245715"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 09:25:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="901630398"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="901630398"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 29 Jul 2023 09:25:48 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qPmlH-0004A7-12;
-	Sat, 29 Jul 2023 16:25:47 +0000
-Date: Sun, 30 Jul 2023 00:24:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Atin Bainada <hi@atinb.me>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 5/5] net: dsa: qca8k: use dsa_for_each macro
- instead of for loop
-Message-ID: <202307300000.UBj7WovP-lkp@intel.com>
-References: <20230729115509.32601-5-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D64515BD
+	for <llvm@lists.linux.dev>; Sat, 29 Jul 2023 17:37:20 +0000 (UTC)
+Received: from [192.168.0.107] (unknown [111.197.209.91])
+	by APP-05 (Coremail) with SMTP id zQCowAC3vxcxTsVkKoC_Dw--.18514S2;
+	Sun, 30 Jul 2023 01:36:49 +0800 (CST)
+Message-ID: <d75ef570-c0ad-cea4-687a-d02b560aa676@iscas.ac.cn>
+Date: Sun, 30 Jul 2023 01:36:49 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230729115509.32601-5-ansuelsmth@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org,
+ Guo Ren <guoren@kernel.org>
+References: <20230726174524.340952-1-xingmingzheng@iscas.ac.cn>
+ <20230726-outclass-parade-2ccea9f6688a@spud>
+ <10231b81-ea42-26d0-4c11-92851229e658@iscas.ac.cn>
+ <20230726-armchair-evasive-427dd245a9fe@spud>
+ <20230727-briskness-sappy-e2d9e4c1ef36@spud>
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+Organization: ISCAS
+In-Reply-To: <20230727-briskness-sappy-e2d9e4c1ef36@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAC3vxcxTsVkKoC_Dw--.18514S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Cr48KFW3Ary8XryUurWDCFg_yoWkGrWkpr
+	WkCr1DGry8Xr18Jr4xJw1UW34UJr15J34UJr45JF1UGrykGr1jqrykXr12gr1UJF4rtr4r
+	Ar1I9w1rZrn8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+	W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+	1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07beAp5UUUUU=
+X-Originating-IP: [111.197.209.91]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiCggHCmTFGJdK4AAAsL
 
-Hi Christian,
+On 7/27/23 15:53, Conor Dooley wrote:
+> On Wed, Jul 26, 2023 at 08:41:55PM +0100, Conor Dooley wrote:
+>> On Thu, Jul 27, 2023 at 03:34:16AM +0800, Mingzheng Xing wrote:
+>>> On 7/27/23 02:02, Conor Dooley wrote:
+>>>> This is still broken for:
+>>>> CONFIG_CLANG_VERSION=0
+>>>> CONFIG_AS_IS_GNU=y
+>>>> CONFIG_AS_VERSION=23500
+>>>> CONFIG_LD_IS_BFD=y
+>>>> CONFIG_LD_VERSION=23500
+>>> Do you mean that these CONFIG_* will cause kernel
+>>> compilation errors when paired with certain versions of GCC?
+>>> Or perhaps I misunderstood your meaning.
+>> No, this section is generated by kconfig, although I messed up my
+>> trimming of the list & accidentally removed the gcc version, rather
+>> than the clang version. Here's the full thing:
+>>
+>> CONFIG_CC_VERSION_TEXT="riscv64-unknown-linux-gnu-gcc (g2ee5e430018) 12.2.0"
+>> CONFIG_CC_IS_GCC=y
+>> CONFIG_GCC_VERSION=120200
+>> CONFIG_CLANG_VERSION=0
+>> CONFIG_AS_IS_GNU=y
+>> CONFIG_AS_VERSION=23500
+>> CONFIG_LD_IS_BFD=y
+>> CONFIG_LD_VERSION=23500
+>> CONFIG_LLD_VERSION=0
+>> CONFIG_CC_CAN_LINK=y
+>> CONFIG_CC_CAN_LINK_STATIC=y
+>> CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+>> CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
+>> CONFIG_CC_HAS_ASM_INLINE=y
+>> CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
+>> CONFIG_PAHOLE_VERSION=0
+>> CONFIG_CONSTRUCTORS=y
+>> CONFIG_IRQ_WORK=y
+>> CONFIG_BUILDTIME_TABLE_SORT=y
+> I think this should sort things out for the even-older binutils case. I
+> took the opportunity to fix some grammatical issues that seem to have
+> snuck into the help text in your patch & to drop the \, since the
+> depends on fits in one line.
 
-kernel test robot noticed the following build errors:
+hi, Conor.
 
-[auto build test ERROR on net-next/main]
+I reproduced the error with gcc-12.2.0 and binutils-2.35. I tried a
+different solution, which I think makes the logic easier. Showing
+the new patch code:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-qca8k-make-learning-configurable-and-keep-off-if-standalone/20230729-195747
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230729115509.32601-5-ansuelsmth%40gmail.com
-patch subject: [net-next PATCH v2 5/5] net: dsa: qca8k: use dsa_for_each macro instead of for loop
-config: i386-randconfig-i006-20230729 (https://download.01.org/0day-ci/archive/20230730/202307300000.UBj7WovP-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230730/202307300000.UBj7WovP-lkp@intel.com/reproduce)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 4c07b9189c86..a6fa1eed895c 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -569,25 +569,24 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307300000.UBj7WovP-lkp@intel.com/
+  config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+         def_bool y
+-       # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+-       depends on AS_IS_GNU && AS_VERSION >= 23800
++       depends on AS_IS_GNU && AS_VERSION >= 23600
+         help
+-         Newer binutils versions default to ISA spec version 20191213 which
+-         moves some instructions from the I extension to the Zicsr and Zifencei
+-         extensions.
++         Binutils has supported zicsr and zifencei extensions since version 2.36,
++         try to adapt to the changes by using explicit zicsr and zifencei via
++         -march. For two special cases, where clang<17 or gcc<11.1.0, we will
++         deal with them in CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
 
-All errors (new ones prefixed by >>):
+  config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+         def_bool y
+         depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+         # https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+-       depends on CC_IS_CLANG && CLANG_VERSION < 170000
+-       help
+-         Certain versions of clang do not support zicsr and zifencei via -march
+-         but newer versions of binutils require it for the reasons noted in the
+-         help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
+-         option causes an older ISA spec compatible with these older versions
+-         of clang to be passed to GAS, which has the same result as passing zicsr
+-         and zifencei to -march.
++       # https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b03be74bad08c382da47e048007a78fa3fb4ef49
++       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_VERSION < 110100)
++       help
++         Certain versions of clang and GCC do not support zicsr and zifencei via
++         -march. This option causes an older ISA spec compatible with these older
++         versions of clang and GCC to be passed to GAS, which has the same result
++         as passing zicsr and zifencei to -march.
 
->> drivers/net/dsa/qca/qca8k-8xxx.c:1869:28: error: use of undeclared identifier 'i'
-                   if (dsa_is_user_port(ds, i))
-                                            ^
-   1 error generated.
+  config FPU
+         bool "FPU support"
+diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/compat_vdso/Makefile
+index 189345773e7e..b86e5e2c3aea 100644
+--- a/arch/riscv/kernel/compat_vdso/Makefile
++++ b/arch/riscv/kernel/compat_vdso/Makefile
+@@ -11,7 +11,13 @@ compat_vdso-syms += flush_icache
+  COMPAT_CC := $(CC)
+  COMPAT_LD := $(LD)
 
+-COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
++# binutils 2.35 does not support the zifencei extension, but in the ISA
++# spec 20191213, G stands for IMAFD_ZICSR_ZIFENCEI.
++ifdef CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
++       COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
++else
++       COMPAT_CC_FLAGS := -march=rv32imafd -mabi=ilp32
++endif
+  COMPAT_LD_FLAGS := -melf32lriscv
 
-vim +/i +1869 drivers/net/dsa/qca/qca8k-8xxx.c
-
-  1798	
-  1799	static int
-  1800	qca8k_setup(struct dsa_switch *ds)
-  1801	{
-  1802		struct qca8k_priv *priv = ds->priv;
-  1803		int cpu_port, ret, port;
-  1804		struct dsa_port *dp;
-  1805		u32 mask;
-  1806	
-  1807		cpu_port = qca8k_find_cpu_port(ds);
-  1808		if (cpu_port < 0) {
-  1809			dev_err(priv->dev, "No cpu port configured in both cpu port0 and port6");
-  1810			return cpu_port;
-  1811		}
-  1812	
-  1813		/* Parse CPU port config to be later used in phy_link mac_config */
-  1814		ret = qca8k_parse_port_config(priv);
-  1815		if (ret)
-  1816			return ret;
-  1817	
-  1818		ret = qca8k_setup_mdio_bus(priv);
-  1819		if (ret)
-  1820			return ret;
-  1821	
-  1822		ret = qca8k_setup_of_pws_reg(priv);
-  1823		if (ret)
-  1824			return ret;
-  1825	
-  1826		ret = qca8k_setup_mac_pwr_sel(priv);
-  1827		if (ret)
-  1828			return ret;
-  1829	
-  1830		ret = qca8k_setup_led_ctrl(priv);
-  1831		if (ret)
-  1832			return ret;
-  1833	
-  1834		qca8k_setup_pcs(priv, &priv->pcs_port_0, 0);
-  1835		qca8k_setup_pcs(priv, &priv->pcs_port_6, 6);
-  1836	
-  1837		/* Make sure MAC06 is disabled */
-  1838		ret = regmap_clear_bits(priv->regmap, QCA8K_REG_PORT0_PAD_CTRL,
-  1839					QCA8K_PORT0_PAD_MAC06_EXCHANGE_EN);
-  1840		if (ret) {
-  1841			dev_err(priv->dev, "failed disabling MAC06 exchange");
-  1842			return ret;
-  1843		}
-  1844	
-  1845		/* Enable CPU Port */
-  1846		ret = regmap_set_bits(priv->regmap, QCA8K_REG_GLOBAL_FW_CTRL0,
-  1847				      QCA8K_GLOBAL_FW_CTRL0_CPU_PORT_EN);
-  1848		if (ret) {
-  1849			dev_err(priv->dev, "failed enabling CPU port");
-  1850			return ret;
-  1851		}
-  1852	
-  1853		/* Enable MIB counters */
-  1854		ret = qca8k_mib_init(priv);
-  1855		if (ret)
-  1856			dev_warn(priv->dev, "mib init failed");
-  1857	
-  1858		/* Initial setup of all ports */
-  1859		dsa_switch_for_each_port(dp, ds) {
-  1860			port = dp->index;
-  1861	
-  1862			/* Disable forwarding by default on all ports */
-  1863			ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-  1864					QCA8K_PORT_LOOKUP_MEMBER, 0);
-  1865			if (ret)
-  1866				return ret;
-  1867	
-  1868			/* Disable MAC by default on all user ports */
-> 1869			if (dsa_is_user_port(ds, i))
-  1870				qca8k_port_set_status(priv, port, 0);
-  1871		}
-  1872	
-  1873		/* Enable QCA header mode on all cpu ports */
-  1874		dsa_switch_for_each_cpu_port(dp, ds) {
-  1875			port = dp->index;
-  1876	
-  1877			ret = qca8k_write(priv, QCA8K_REG_PORT_HDR_CTRL(port),
-  1878					  FIELD_PREP(QCA8K_PORT_HDR_CTRL_TX_MASK, QCA8K_PORT_HDR_CTRL_ALL) |
-  1879					  FIELD_PREP(QCA8K_PORT_HDR_CTRL_RX_MASK, QCA8K_PORT_HDR_CTRL_ALL));
-  1880			if (ret) {
-  1881				dev_err(priv->dev, "failed enabling QCA header mode on port %d", port);
-  1882				return ret;
-  1883			}
-  1884		}
-  1885	
-  1886		/* Forward all unknown frames to CPU port for Linux processing
-  1887		 * Notice that in multi-cpu config only one port should be set
-  1888		 * for igmp, unknown, multicast and broadcast packet
-  1889		 */
-  1890		ret = qca8k_write(priv, QCA8K_REG_GLOBAL_FW_CTRL1,
-  1891				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_IGMP_DP_MASK, BIT(cpu_port)) |
-  1892				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_BC_DP_MASK, BIT(cpu_port)) |
-  1893				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_MC_DP_MASK, BIT(cpu_port)) |
-  1894				  FIELD_PREP(QCA8K_GLOBAL_FW_CTRL1_UC_DP_MASK, BIT(cpu_port)));
-  1895		if (ret)
-  1896			return ret;
-  1897	
-  1898		/* CPU port gets connected to all user ports of the switch */
-  1899		ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(cpu_port),
-  1900				QCA8K_PORT_LOOKUP_MEMBER, dsa_user_ports(ds));
-  1901		if (ret)
-  1902			return ret;
-  1903	
-  1904		/* Setup connection between CPU port & user ports
-  1905		 * Individual user ports get connected to CPU port only
-  1906		 */
-  1907		dsa_switch_for_each_user_port(dp, ds) {
-  1908			port = dp->index;
-  1909	
-  1910			ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-  1911					QCA8K_PORT_LOOKUP_MEMBER,
-  1912					BIT(cpu_port));
-  1913			if (ret)
-  1914				return ret;
-  1915	
-  1916			ret = regmap_clear_bits(priv->regmap, QCA8K_PORT_LOOKUP_CTRL(port),
-  1917						QCA8K_PORT_LOOKUP_LEARN);
-  1918			if (ret)
-  1919				return ret;
-  1920	
-  1921			/* For port based vlans to work we need to set the
-  1922			 * default egress vid
-  1923			 */
-  1924			ret = qca8k_rmw(priv, QCA8K_EGRESS_VLAN(port),
-  1925					QCA8K_EGREES_VLAN_PORT_MASK(port),
-  1926					QCA8K_EGREES_VLAN_PORT(port, QCA8K_PORT_VID_DEF));
-  1927			if (ret)
-  1928				return ret;
-  1929	
-  1930			ret = qca8k_write(priv, QCA8K_REG_PORT_VLAN_CTRL0(port),
-  1931					  QCA8K_PORT_VLAN_CVID(QCA8K_PORT_VID_DEF) |
-  1932					  QCA8K_PORT_VLAN_SVID(QCA8K_PORT_VID_DEF));
-  1933			if (ret)
-  1934				return ret;
-  1935		}
-  1936	
-  1937		/* The port 5 of the qca8337 have some problem in flood condition. The
-  1938		 * original legacy driver had some specific buffer and priority settings
-  1939		 * for the different port suggested by the QCA switch team. Add this
-  1940		 * missing settings to improve switch stability under load condition.
-  1941		 * This problem is limited to qca8337 and other qca8k switch are not affected.
-  1942		 */
-  1943		if (priv->switch_id == QCA8K_ID_QCA8337)
-  1944			dsa_switch_for_each_available_port(dp, ds)
-  1945				qca8k_setup_hol_fixup(priv, dp->index);
-  1946	
-  1947		/* Special GLOBAL_FC_THRESH value are needed for ar8327 switch */
-  1948		if (priv->switch_id == QCA8K_ID_QCA8327) {
-  1949			mask = QCA8K_GLOBAL_FC_GOL_XON_THRES(288) |
-  1950			       QCA8K_GLOBAL_FC_GOL_XOFF_THRES(496);
-  1951			qca8k_rmw(priv, QCA8K_REG_GLOBAL_FC_THRESH,
-  1952				  QCA8K_GLOBAL_FC_GOL_XON_THRES_MASK |
-  1953				  QCA8K_GLOBAL_FC_GOL_XOFF_THRES_MASK,
-  1954				  mask);
-  1955		}
-  1956	
-  1957		/* Setup our port MTUs to match power on defaults */
-  1958		ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, ETH_FRAME_LEN + ETH_FCS_LEN);
-  1959		if (ret)
-  1960			dev_warn(priv->dev, "failed setting MTU settings");
-  1961	
-  1962		/* Flush the FDB table */
-  1963		qca8k_fdb_flush(priv);
-  1964	
-  1965		/* Set min a max ageing value supported */
-  1966		ds->ageing_time_min = 7000;
-  1967		ds->ageing_time_max = 458745000;
-  1968	
-  1969		/* Set max number of LAGs supported */
-  1970		ds->num_lag_ids = QCA8K_NUM_LAGS;
-  1971	
-  1972		return 0;
-  1973	}
-  1974	
-
+  # Disable attributes, as they're useless and break the build.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
+
+Here are the results of my tests:
+
+gcc          binutils       patched         no patch(test on master)
+11.4.0     2.35            ok                  ok
+11.4.0     2.36            ok                  ok
+11.4.0     2.38            ok                  ok
+
+12.2.0     2.35            ok                  error[1]
+12.2.0     2.36            ok                  error[2]
+12.2.0     2.38            ok                  ok
+
+10.5.0     2.35            ok                  ok
+10.5.0     2.36            ok                  ok
+10.5.0     2.38            ok                  error[3]
+
+11.1.0     2.35            ok                  ok
+11.1.0     2.36            ok                  ok
+11.1.0     2.38            ok                  ok
+
+11.2.0     2.35            ok                  ok
+11.2.0     2.36            ok                  ok
+11.2.0     2.38            ok                  ok
+
+[1]
+Assembler messages:
+Fatal error: -march=rv32imafd_zicsr_zifencei: Invalid or unknown z ISA extension: 'zifencei'
+make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:47: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
+
+[2]
+./arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+./arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
+./arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
+./arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
+./arch/riscv/include/asm/vdso/gettimeofday.h:79: Error: unrecognized opcode `csrr a5,0xc01'
+make[2]: *** [scripts/Makefile.build:243: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+
+[3]
+cc1: error: '-march=rv64imac_zicsr_zifencei': unsupported ISA subset 'z'
+cc1: error: ABI requires '-march=rv64'
+make[2]: *** [scripts/Makefile.build:243: scripts/mod/empty.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+cc1: error: '-march=rv64imac_zicsr_zifencei': unsupported ISA subset 'z'
+cc1: error: ABI requires '-march=rv64'
+
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e1b66ee88323..2d0d89213c97 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -571,25 +571,27 @@ config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>   	def_bool y
+>   	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+>   	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
+> -	depends on GCC_VERSION >= 120100 || (AS_IS_GNU && AS_VERSION >= 23800)
+> +	depends on AS_IS_GNU
+> +	depends on (GCC_VERSION >= 120100 && AS_VERSION >= 23600) || AS_VERSION >= 23800
+
+Tests verified that explicit _ZICSR_ZIFENCEI via -march is required
+for gcc>=12.1.0, but this only happens for binutils>=2.36,
+binutils 2.35 + gcc>=12.1.0 does not need that. Considering
+binutils 2.35 together complicates things. So what do you think
+of the above new version patch?
+
+Some more info:
+- The commit[4] for patch changes.
+- binutils 2.36 supports the zifencei extension[5] and splits
+zifencei and zicsr from I[6].
+
+[4] commit 0715372a06ce ("riscv: compat: vdso: Add COMPAT_VDSO base code implementation")
+[5] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=5a1b31e1e1cee6e9f1c92abff59cdcfff0dddf30
+[6] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=729a53530e86972d1143553a415db34e6e01d5d2
+
+Thanks,
+Mingzheng.
+
+>   	help
+> -	  Binutils-2.38 and GCC-12.1.0 bump default ISA spec to newer version
+> +	  Binutils-2.38 and GCC-12.1.0 bump the default ISA spec to version
+>   	  20191213 which moves some instructions from the I extension to the
+> -	  Zicsr and Zifencei extensions.
+> +	  Zicsr and Zifencei extensions. On the other hand, Binutils prior to
+> +	  2.35 does not understand these arguments and will error if they are
+> +	  passed.
+>   
+>   config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+>   	def_bool y
+>   	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>   	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+>   	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b03be74bad08c382da47e048007a78fa3fb4ef49
+> -	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || \
+> -		   (CC_IS_GCC && GCC_VERSION < 110100)
+> +	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_VERSION < 110100)
+>   	help
+> -	  Certain versions of clang (or GCC) do not support zicsr and zifencei via
+> +	  Certain versions of clang and GCC do not support zicsr and zifencei via
+>   	  -march but newer versions of binutils require it for the reasons noted
+>   	  in the help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
+>   	  option causes an older ISA spec compatible with these older versions
+> -	  of clang (or GCC) to be passed to GAS, which has the same result as
+> +	  of clang and GCC to be passed to GAS, which has the same result as
+>   	  passing zicsr and zifencei to -march.
+>   
+>   config FPU
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
