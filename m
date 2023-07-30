@@ -1,43 +1,52 @@
-Received: from mgamail.intel.com (unknown [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4881FDA;
-	Sun, 30 Jul 2023 18:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C071FDA;
+	Sun, 30 Jul 2023 19:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690742575; x=1722278575;
+  t=1690746230; x=1722282230;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3fbJTRy58WzCreIvObfz1pyeiAINqRH2l7m+JVJJejk=;
-  b=Z84YIw94zXaQntaacoTY/xaiBBR9LyC/Lwl7vVz0BuJ2tMU9NQd0LqmU
-   tkWdw3MhOwOS1Q0rGMWDxiviukHaEd5SSUYDAI9ZOk9rm/W0n6haQ9Oh4
-   Kj0qxfYeNHmiHAHlNpw/XmgM8eD8AhTFW7Ff8IfgiGmMK2XThIt3IlSYv
-   Z2I3n7+el3+mmmX3/whAGvHyoF6JiMwniaAEvciHw8MwNbbY6lxycsz1s
-   dQCwtRJUXkkh3+uHAqRNzMEIRw2+aGJEZzaepsgsf6Syafg/k8jXrlv2z
-   D5VD39ojTqVOK+HW8tAfebv5r5LHFjgUIaW5CBUYFJt4C1R5bgiEaK9lu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="399819357"
+  bh=xjdNexIQe3xd5lo8mFEIfQ/m0eBrLTeOcFw9xalhEdw=;
+  b=gre1FKQX0sYfpbmp3wQVuCHXBhlg4YQ5SRR2iHw/t8jU7V3QflQzR/KH
+   hkcprV1oAXuItnkji07148gCLpnU/EXM8J40KOr2Wv1F++8y9RDY4Hmcf
+   p4dM5RYENI//sofvuQfJDzjZWDhY34SsEQoDD1jKO0S94JNdJ/BlltsWg
+   KefNUq2iZp880h5EQddoM/Va00TW7Cv6U7wOnza4pqPNQ1rtdSDpu5neA
+   a9uKrdIM+OILw/MtHFa/5JihUIoNf+J/0BZdxJrju1gcbMOEskOJChI3C
+   hlPkjbLKxYG31FdEePIJlvXOqWDTb2vZrDNrOGzdvPHCpTWYQbCV2WI/4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="366351084"
 X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
-   d="scan'208";a="399819357"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 11:42:54 -0700
+   d="scan'208";a="366351084"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 12:43:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="871392689"
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="841968894"
+X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
+   d="scan'208";a="841968894"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2023 11:42:55 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jul 2023 12:43:45 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qQBNU-0004jj-0K;
-	Sun, 30 Jul 2023 18:42:52 +0000
-Date: Mon, 31 Jul 2023 02:42:34 +0800
+	id 1qQCKO-0004kt-0o;
+	Sun, 30 Jul 2023 19:43:44 +0000
+Date: Mon, 31 Jul 2023 03:43:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maximilian Luz <luzmaximilian@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 2/3] firmware: qcom_scm: Add support for Qualcomm
- Secure Execution Environment SCM interface
-Message-ID: <202307310258.hnVz1dfE-lkp@intel.com>
-References: <20230730161906.606163-3-luzmaximilian@gmail.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Iskren Chernev <me@iskren.info>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Matheus Castello <matheus@castello.eng.br>,
+	Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] power: max17040: get thermal data from adc if
+ available
+Message-ID: <202307310322.iEuhtMME-lkp@intel.com>
+References: <20230730172648.71578-4-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,164 +55,208 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230730161906.606163-3-luzmaximilian@gmail.com>
+In-Reply-To: <20230730172648.71578-4-clamor95@gmail.com>
 
-Hi Maximilian,
+Hi Svyatoslav,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.5-rc3 next-20230728]
+[auto build test ERROR on krzk-dt/for-next]
+[also build test ERROR on linus/master v6.5-rc3 next-20230728]
+[cannot apply to sre-power-supply/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Luz/lib-ucs2_string-Add-UCS-2-strscpy-function/20230731-002132
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230730161906.606163-3-luzmaximilian%40gmail.com
-patch subject: [PATCH v5 2/3] firmware: qcom_scm: Add support for Qualcomm Secure Execution Environment SCM interface
-config: riscv-randconfig-r022-20230731 (https://download.01.org/0day-ci/archive/20230731/202307310258.hnVz1dfE-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230731-012920
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git for-next
+patch link:    https://lore.kernel.org/r/20230730172648.71578-4-clamor95%40gmail.com
+patch subject: [PATCH v2 3/3] power: max17040: get thermal data from adc if available
+config: s390-randconfig-r044-20230731 (https://download.01.org/0day-ci/archive/20230731/202307310322.iEuhtMME-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307310258.hnVz1dfE-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230731/202307310322.iEuhtMME-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307310258.hnVz1dfE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307310322.iEuhtMME-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     743 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     751 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     759 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     768 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     777 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     786 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:7:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from drivers/misc/fastrpc.c:21:
->> include/linux/firmware/qcom/qcom_scm.h:133:5: warning: no previous prototype for function 'qcom_scm_qseecom_app_get_id' [-Wmissing-prototypes]
-     133 | int qcom_scm_qseecom_app_get_id(const char *app_name, u32 *app_id)
-         |     ^
-   include/linux/firmware/qcom/qcom_scm.h:133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     133 | int qcom_scm_qseecom_app_get_id(const char *app_name, u32 *app_id)
-         | ^
-         | static 
->> include/linux/firmware/qcom/qcom_scm.h:138:5: warning: no previous prototype for function 'qcom_scm_qseecom_app_send' [-Wmissing-prototypes]
-     138 | int qcom_scm_qseecom_app_send(u32 app_id, void *req, size_t req_size, void *rsp,
-         |     ^
-   include/linux/firmware/qcom/qcom_scm.h:138:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     138 | int qcom_scm_qseecom_app_send(u32 app_id, void *req, size_t req_size, void *rsp,
-         | ^
-         | static 
-   15 warnings generated.
+   s390x-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_probe':
+>> drivers/power/supply/max17040_battery.c:483: undefined reference to `devm_iio_channel_get'
+   s390x-linux-ld: drivers/power/supply/max17040_battery.o: in function `max17040_get_property':
+>> drivers/power/supply/max17040_battery.c:413: undefined reference to `iio_read_channel_processed_scale'
 
 
-vim +/qcom_scm_qseecom_app_get_id +133 include/linux/firmware/qcom/qcom_scm.h
+vim +483 drivers/power/supply/max17040_battery.c
 
-   132	
- > 133	int qcom_scm_qseecom_app_get_id(const char *app_name, u32 *app_id)
-   134	{
-   135		return -EINVAL;
-   136	}
-   137	
- > 138	int qcom_scm_qseecom_app_send(u32 app_id, void *req, size_t req_size, void *rsp,
-   139				      size_t rsp_size)
-   140	{
-   141		return -EINVAL;
-   142	}
-   143	
+   385	
+   386	static int max17040_get_property(struct power_supply *psy,
+   387				    enum power_supply_property psp,
+   388				    union power_supply_propval *val)
+   389	{
+   390		struct max17040_chip *chip = power_supply_get_drvdata(psy);
+   391	
+   392		switch (psp) {
+   393		case POWER_SUPPLY_PROP_ONLINE:
+   394		case POWER_SUPPLY_PROP_PRESENT:
+   395			val->intval = max17040_get_online(chip);
+   396			break;
+   397		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+   398			val->intval = max17040_get_vcell(chip);
+   399			break;
+   400		case POWER_SUPPLY_PROP_CAPACITY:
+   401			val->intval = max17040_get_soc(chip);
+   402			break;
+   403		case POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN:
+   404			val->intval = chip->low_soc_alert;
+   405			break;
+   406		case POWER_SUPPLY_PROP_STATUS:
+   407			power_supply_get_property_from_supplier(psy, psp, val);
+   408			break;
+   409		case POWER_SUPPLY_PROP_TEMP:
+   410			if (!chip->channel_temp)
+   411				return -ENODATA;
+   412	
+ > 413			iio_read_channel_processed_scale(chip->channel_temp,
+   414							 &val->intval, 10);
+   415			break;
+   416		default:
+   417			return -EINVAL;
+   418		}
+   419		return 0;
+   420	}
+   421	
+   422	static const struct regmap_config max17040_regmap = {
+   423		.reg_bits	= 8,
+   424		.reg_stride	= 2,
+   425		.val_bits	= 16,
+   426		.val_format_endian = REGMAP_ENDIAN_BIG,
+   427	};
+   428	
+   429	static enum power_supply_property max17040_battery_props[] = {
+   430		POWER_SUPPLY_PROP_ONLINE,
+   431		POWER_SUPPLY_PROP_PRESENT,
+   432		POWER_SUPPLY_PROP_VOLTAGE_NOW,
+   433		POWER_SUPPLY_PROP_CAPACITY,
+   434		POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN,
+   435		POWER_SUPPLY_PROP_STATUS,
+   436		POWER_SUPPLY_PROP_TEMP,
+   437	};
+   438	
+   439	static const struct power_supply_desc max17040_battery_desc = {
+   440		.name			= "battery",
+   441		.type			= POWER_SUPPLY_TYPE_BATTERY,
+   442		.get_property		= max17040_get_property,
+   443		.set_property		= max17040_set_property,
+   444		.property_is_writeable  = max17040_prop_writeable,
+   445		.properties		= max17040_battery_props,
+   446		.num_properties		= ARRAY_SIZE(max17040_battery_props),
+   447	};
+   448	
+   449	static int max17040_probe(struct i2c_client *client)
+   450	{
+   451		const struct i2c_device_id *id = i2c_client_get_device_id(client);
+   452		struct i2c_adapter *adapter = client->adapter;
+   453		struct power_supply_config psy_cfg = {};
+   454		struct max17040_chip *chip;
+   455		enum chip_id chip_id;
+   456		bool enable_irq = false;
+   457		int ret;
+   458	
+   459		if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
+   460			return -EIO;
+   461	
+   462		chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+   463		if (!chip)
+   464			return -ENOMEM;
+   465	
+   466		chip->client = client;
+   467		chip->regmap = devm_regmap_init_i2c(client, &max17040_regmap);
+   468		if (IS_ERR(chip->regmap))
+   469			return PTR_ERR(chip->regmap);
+   470		chip_id = (enum chip_id) id->driver_data;
+   471		if (client->dev.of_node) {
+   472			ret = max17040_get_of_data(chip);
+   473			if (ret)
+   474				return ret;
+   475			chip_id = (uintptr_t)of_device_get_match_data(&client->dev);
+   476		}
+   477		chip->data = max17040_family[chip_id];
+   478	
+   479		i2c_set_clientdata(client, chip);
+   480		psy_cfg.drv_data = chip;
+   481	
+   482		/* Switch to devm_iio_channel_get_optional when available  */
+ > 483		chip->channel_temp = devm_iio_channel_get(&client->dev, "temp");
+   484		if (IS_ERR(chip->channel_temp)) {
+   485			ret = PTR_ERR(chip->channel_temp);
+   486			if (ret != -ENODEV)
+   487				return dev_err_probe(&client->dev, PTR_ERR(chip->channel_temp),
+   488						     "failed to get temp\n");
+   489			else
+   490				chip->channel_temp = NULL;
+   491		}
+   492	
+   493		chip->battery = devm_power_supply_register(&client->dev,
+   494					&max17040_battery_desc, &psy_cfg);
+   495		if (IS_ERR(chip->battery)) {
+   496			dev_err(&client->dev, "failed: power supply register\n");
+   497			return PTR_ERR(chip->battery);
+   498		}
+   499	
+   500		ret = max17040_get_version(chip);
+   501		if (ret < 0)
+   502			return ret;
+   503		dev_dbg(&chip->client->dev, "MAX17040 Fuel-Gauge Ver 0x%x\n", ret);
+   504	
+   505		if (chip_id == ID_MAX17040 || chip_id == ID_MAX17041)
+   506			max17040_reset(chip);
+   507	
+   508		max17040_set_rcomp(chip, chip->rcomp);
+   509	
+   510		/* check interrupt */
+   511		if (client->irq && chip->data.has_low_soc_alert) {
+   512			ret = max17040_set_low_soc_alert(chip, chip->low_soc_alert);
+   513			if (ret) {
+   514				dev_err(&client->dev,
+   515					"Failed to set low SOC alert: err %d\n", ret);
+   516				return ret;
+   517			}
+   518	
+   519			enable_irq = true;
+   520		}
+   521	
+   522		if (client->irq && chip->data.has_soc_alert) {
+   523			ret = max17040_set_soc_alert(chip, 1);
+   524			if (ret) {
+   525				dev_err(&client->dev,
+   526					"Failed to set SOC alert: err %d\n", ret);
+   527				return ret;
+   528			}
+   529			enable_irq = true;
+   530		} else {
+   531			/* soc alerts negate the need for polling */
+   532			INIT_DEFERRABLE_WORK(&chip->work, max17040_work);
+   533			ret = devm_add_action(&client->dev, max17040_stop_work, chip);
+   534			if (ret)
+   535				return ret;
+   536			max17040_queue_work(chip);
+   537		}
+   538	
+   539		if (enable_irq) {
+   540			ret = max17040_enable_alert_irq(chip);
+   541			if (ret) {
+   542				client->irq = 0;
+   543				dev_warn(&client->dev,
+   544					 "Failed to get IRQ err %d\n", ret);
+   545			}
+   546		}
+   547	
+   548		return 0;
+   549	}
+   550	
 
 -- 
 0-DAY CI Kernel Test Service
