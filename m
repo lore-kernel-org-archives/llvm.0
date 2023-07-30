@@ -1,41 +1,43 @@
-Received: from mgamail.intel.com (unknown [134.134.136.20])
+Received: from mgamail.intel.com (unknown [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C15369;
-	Sun, 30 Jul 2023 11:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CE2363;
+	Sun, 30 Jul 2023 13:53:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690716107; x=1722252107;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=ObR6JzKrAxIQbiL2j7UMR6a22efiB/GVYK6zIj5Nrp0=;
-  b=cSkUNwHzZgk0W8qMWmyUoJf/bLx96dek7ErYrAOz9AZKd0UwH/ppXw2C
-   slc8uV0hr7aql7dTHejkfmyGtZ7M+XEUmD7W29vCW7oBSdveZuDQy8loO
-   lBPqPgE9kCtqhs8wXVDhaWRDEnM29VBaZtFna6Fr/xbSt30SYwKpi8CtD
-   DPh78BuZPMpZfsFDIHpU9CbdXbErJ8JVy+25/yy0h4Y2gs4BYJYT/Auq2
-   nBp5tIfNU7CceQcT2sro9/RKFRA6bA5kLx3YKl3ZbvToIaIxXrpVSo1J0
-   cmln3wEsC2dvwFxNyNt5cOk2I2BKZtS/oIVHcR0hxNabyCoQI/BtQ7uEn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="358870995"
+  t=1690725222; x=1722261222;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a0aijfoBWxtmeKJNmkd2KTpV2MqSuSWja3e1qop/JrA=;
+  b=MDIX3+IV0kTyTAi88hibepvQYuJfJTzMU4OPEaUiUMYqtYl6lke/9oJU
+   l847xtghqhbbIdEYqFuPL9Xw15kh7yNRL7tzbn9IpvhaCDZPEJZJUL1FY
+   FHWUnJNPwEjDWuOhneTJ0NVOeyD1AiJajkSjwsm+n8iROGhfuAD5fdZdX
+   cOP3R50wOx0SzUR2gwAVVhksHGdrBUT4drEaUE7Q6gm3OkmEhXPxQwl4/
+   ClTdWlE/lsmYSHVEkizGvi2vhLeHSLM+2bdu3uLkyq+QPKDQFZqtmoKZL
+   soKgEA0WTW+O+H0iLmSbJrd3ystSTem0ou7SWnGxQkWPpF+Sw6kTnqFPk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="455213832"
 X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
-   d="scan'208";a="358870995"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 04:21:46 -0700
+   d="scan'208";a="455213832"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 06:53:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="793408603"
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="851754452"
 X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
-   d="scan'208";a="793408603"
+   d="scan'208";a="851754452"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jul 2023 04:21:45 -0700
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2023 06:53:38 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qQ4Ub-0004Z1-0F;
-	Sun, 30 Jul 2023 11:21:45 +0000
-Date: Sun, 30 Jul 2023 19:21:14 +0800
+	id 1qQ6ra-0004bj-37;
+	Sun, 30 Jul 2023 13:53:38 +0000
+Date: Sun, 30 Jul 2023 21:53:38 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: clang: error: unsupported option '-fsanitize=thread' for target
- 'powerpc-unknown-linux-gnu'
-Message-ID: <202307301929.fDdnJJob-lkp@intel.com>
+To: Tomas Winkler <tomas.winkler@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [char-misc:char-misc-testing 5/9] drivers/misc/mei/gsc-me.c:315:58:
+ error: expected ';' after top level declarator
+Message-ID: <202307302110.ed7OdJyc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,39 +47,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Rohan McLure <rmclure@linux.ibm.com>
-CC: Michael Ellerman <mpe@ellerman.id.au>
-CC: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-Hi Rohan,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d31e3792919e5c97d572c8a27a5a7c1eb9de5aca
-commit: 95567f46b4d20c047750a5e3029461afcdc67697 powerpc/{32,book3e}: kcsan: Extend KCSAN Support
-date:   7 weeks ago
-config: powerpc-randconfig-r005-20230730 (https://download.01.org/0day-ci/archive/20230730/202307301929.fDdnJJob-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230730/202307301929.fDdnJJob-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-testing
+head:   94e4fbf7c8756d824c51c04be3b58588d67411a4
+commit: c8de1d2815aa6669b319d2d71401f35b68bb9aa9 [5/9] mei: gsc: add module description
+config: x86_64-buildonly-randconfig-r002-20230730 (https://download.01.org/0day-ci/archive/20230730/202307302110.ed7OdJyc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230730/202307302110.ed7OdJyc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307301929.fDdnJJob-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307302110.ed7OdJyc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> clang: error: unsupported option '-fsanitize=thread' for target 'powerpc-unknown-linux-gnu'
->> clang: error: unsupported option '-fsanitize=thread' for target 'powerpc-unknown-linux-gnu'
-   make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1 shuffle=1218860924
-   make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1 shuffle=1218860924
-   make[2]: Target 'scripts/mod/' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2 shuffle=1218860924
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2 shuffle=1218860924
-   make: Target 'prepare' not remade because of errors.
+>> drivers/misc/mei/gsc-me.c:315:58: error: expected ';' after top level declarator
+   MODULE_DESCRIPTION("Intel(R) Graphics System Controller")
+                                                            ^
+                                                            ;
+   1 error generated.
+
+
+vim +315 drivers/misc/mei/gsc-me.c
+
+   311	
+   312	MODULE_AUTHOR("Intel Corporation");
+   313	MODULE_ALIAS("auxiliary:i915.mei-gsc");
+   314	MODULE_ALIAS("auxiliary:i915.mei-gscfi");
+ > 315	MODULE_DESCRIPTION("Intel(R) Graphics System Controller")
 
 -- 
 0-DAY CI Kernel Test Service
