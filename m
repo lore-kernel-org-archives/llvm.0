@@ -1,117 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6CAA2C
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690785619;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EwKju+twdDvwzbpYHMz7znd4nXYV6EyX5G4TIEHmpYQ=;
-	b=ZD7p2Usuc0tSfdmcOMjZlYiicVvLEunmIzQvPdOyuyoFoKUhfIbo4MH16VPgES/nZ44BiG
-	cCLKMZnWCHEyrOT73C13KENErqIy78ebhA/UtGWR9qPN0jd3nTx1Wp5p32Wx+l3qhsL6Hd
-	+suMRK6X6J4c8O6hbp6M669PAGbcZ/A=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-9Z9Il4-EME6Pv26DlTX-bg-1; Mon, 31 Jul 2023 02:40:16 -0400
-X-MC-Unique: 9Z9Il4-EME6Pv26DlTX-bg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAC7468C
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 07:04:03 +0000 (UTC)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 648191C47663
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:40:16 +0000 (UTC)
-Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A853401061;
-	Mon, 31 Jul 2023 06:40:15 +0000 (UTC)
-Date: Mon, 31 Jul 2023 14:40:11 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Bruno Goncalves <bgoncalv@redhat.com>, xiawu@redhat.com,
-	yiyan@redhat.com
-Cc: cki-project@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev,
-	xiawu@redhat.com
-Subject: Re: =?utf-8?B?4p2MIEZBSUwgKFNLSVBQRUQgMTkx?=
- =?utf-8?Q?_of_328=29=3A_Test_repor?= =?utf-8?Q?t?= for master (6.5.0-rc3,
- mainline.kernel.org-clang, 57012c57)
-Message-ID: <ZMdXS6Xfv/+Ct9tL@MiWiFi-R3L-srv>
-References: <65365.123072800401200236@us-mta-556.us.mimecast.lan>
- <ZMNKpJCzbAERwqp/@MiWiFi-R3L-srv>
- <CA+QYu4pHZjgXriy4rmvdpYnPcRbzs1_mEF=fdUJxLQs7WEsYEQ@mail.gmail.com>
+	(Authenticated sender: bbrezillon)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id A18646607105;
+	Mon, 31 Jul 2023 08:03:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1690787036;
+	bh=h4ff7dyElXSiU2HCDoxKH52aXgTKwtgpwzSppL9MAQY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ToZDxR0VoZrKARAAT6OtEg2+o0PKqpM4P/MdnvE1nIwbEjClxWpG0jU0CykqRR/iy
+	 jlM8+aWm2CMSwB4P9MMq25pLeqH4LlXBBPbXif5CILxiHgulF8L8Is7Pb30ZJjjWbn
+	 vuR7DDI92//oUkeZ1ekBC9fTGRbG4zKjQCDZOiIHurB8t4/ckcXl6/gMlZREFYhtK8
+	 in2UkQ9XbEcjirbXuQwbkaMkeWYOnbGcC7+T8TDgBsp/PdibU53Qz/V5F1/YANiwMe
+	 d+9vO/Xw/Qp27WldVizqu/MtgBK6G/0YRdqeEPlZ93uTGedw9W8/Nm9p4tvWpviYo5
+	 mOXwZz1opz+zQ==
+Date: Mon, 31 Jul 2023 09:03:53 +0200
+From: Boris Brezillon <boris.brezillon@collabora.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: ndesaulniers@google.com, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Tom Rix <trix@redhat.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>,
+ christian.koenig@amd.com, dakr@redhat.com, alexander.deucher@amd.com
+Subject: Re: [PATCH v2] drm: fix indirect goto into statement expression UB
+Message-ID: <20230731090353.1cd5e2d5@collabora.com>
+In-Reply-To: <20230728171757.GA433645@dev-arch.thelio-3990X>
+References: <20230727-amdgpu-v2-1-7fc66bc52bf6@google.com>
+	<20230728171757.GA433645@dev-arch.thelio-3990X>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CA+QYu4pHZjgXriy4rmvdpYnPcRbzs1_mEF=fdUJxLQs7WEsYEQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 07/28/23 at 08:54am, Bruno Goncalves wrote:
-> On Fri, 28 Jul 2023 at 06:57, Baoquan He <bhe@redhat.com> wrote:
-> >
-> > Hi CKI team,
-> >
-> > On 07/28/23 at 04:40am, cki-project@redhat.com wrote:
-> > > Hi, we tested your kernel and here are the results:
-> > >
-> > >     Overall result: FAILED
-> > >              Merge: OK
-> > >            Compile: OK
-> > >               Test: FAILED
-> > >
-> > >
-> > > Kernel information:
-> > >     Commit message: Merge tag 'net-6.5-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-> > >
-> > > You can find all the details about the test run at
-> > >     https://datawarehouse.cki-project.org/kcidb/checkouts/97648
-> > >
-> > > One or more kernel tests failed:
-> > >     Unrecognized or new issues:
-> > >           x86_64 - kdump - sysrq-c
-> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928580
-> > >                    Non-passing subtests:
-> > >                        ❌ FAIL /kdump/crash-sysrq-c
-> > >           x86_64 - kdump - file-load
-> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928581
-> > >                    Non-passing subtests:
-> > >                        ❌ FAIL /kdump/crash-sysrq-c
-> > >           x86_64 (debug) - Boot test
-> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928644
-> > >                    Non-passing subtests:
-> > >                        ❌ FAIL distribution/kpkginstall/journalctl-check
-> >
-> > All these failure cases have empty console.log, there's no way to check
-> > what's going on there. The empty console.log is related to 1st kernel,
-> > there must something wrong withih it.
+On Fri, 28 Jul 2023 10:17:57 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
+
+> + people from trailers of 09593216bff1
 > 
-> Thanks, yes it is a pain. Sometimes the serial console in the machines
-> don't work at all, that's why the console.log is empty.
-> I wonder if the kdump tests would upload journalctl logs, we would be
-> able to use it to check for failures instead of relying only on
-> console.log.
+> On Thu, Jul 27, 2023 at 03:50:58PM -0700, ndesaulniers@google.com wrote:
+> > A new diagnostic in clang-17 now produces the following build error:
+> > 
+> > drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this
+> > indirect goto statement to one of its possible targets
+> >    41 |                 drm_exec_retry_on_contention(&exec);
+> >       |                 ^
+> > include/drm/drm_exec.h:96:4: note: expanded from macro
+> > 'drm_exec_retry_on_contention'
+> >    96 |                         goto *__drm_exec_retry_ptr;
+> >       |                         ^
+> > drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of
+> > indirect goto statement
+> >    39 |         drm_exec_until_all_locked(&exec) {
+> >       |         ^
+> > include/drm/drm_exec.h:79:33: note: expanded from macro
+> > 'drm_exec_until_all_locked'
+> >    79 |                 __label__ __drm_exec_retry;
+> > drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a
+> > statement expression
+> > 
+> > The GCC manually currently states that:  
+> 
+>           ^ manual
+> 
+> > >> Jumping into a statement expression with a computed goto (see Labels
+> > >> as Values) has undefined behavior.  
+> > 
+> > So the diagnostic appears correct, even if codegen happened to produce
+> > working code.
+> > 
+> > Looking closer at this code, while the original combination of statement
+> > expression, local label, and computed/indirect goto GNU C expressions
+> > were clever, a simple while loop and continue block might have sufficed.
+> > 
+> > This approach might not work as expected if drm_exec_until_all_locked
+> > "loops" can be nested, but that doesn't appear to be an existing use
+> > case in the codebase.
 
-Thanks, Bruno.
+Hm, that's exactly the sort of things we were trying to be robust
+against with the original approach. With this version, we're back to a
+situation where
 
-It could be a little helpful to have journalctl logs. However, it may
-not help much in kdump case. When I check these kdump failure case of CKI, I
-usually check test_console.log firstly. If test_console.log is
-incomplete, I will check console.log because console.log contains all
-printed log on console.
+	drm_exec_until_all_locked(exec) {
+		for (...) {
+			drm_exec_retry_on_contention(exec);
+		}
+	}
 
-As for journalctrl logs, it can only get the boot log of 1st kernel. As
-for kdump boot log, e.g kdump boot could hang in early stage or the
-middle of bootup, the journalctl log doesn't make any sense.
+doesn't do what we expect it to do, and that's a use case we want to
+support.
 
-So for kdump, console log is very important.
-
-Thanks
-Baoquan
+> > 
+> > Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
+> > Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1890
+> > Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>  
+> 
+> Thanks for the patch!
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+> 
+> > ---
+> > Changes in v2:
+> > Fix the continue to be outside of the do while
+> > - Link to v1: https://lore.kernel.org/r/20230727-amdgpu-v1-1-a95690e75388@google.com
+> > ---
+> >  include/drm/drm_exec.h | 21 +++++----------------
+> >  1 file changed, 5 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> > index 73205afec162..fa1cc5c3d021 100644
+> > --- a/include/drm/drm_exec.h
+> > +++ b/include/drm/drm_exec.h
+> > @@ -70,18 +70,8 @@ struct drm_exec {
+> >   * Core functionality of the drm_exec object. Loops until all GEM objects are
+> >   * locked and no more contention exists. At the beginning of the loop it is
+> >   * guaranteed that no GEM object is locked.
+> > - *
+> > - * Since labels can't be defined local to the loops body we use a jump pointer
+> > - * to make sure that the retry is only used from within the loops body.
+> >   */
+> > -#define drm_exec_until_all_locked(exec)				\
+> > -	for (void *__drm_exec_retry_ptr; ({			\
+> > -		__label__ __drm_exec_retry;			\
+> > -__drm_exec_retry:						\
+> > -		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
+> > -		(void)__drm_exec_retry_ptr;			\
+> > -		drm_exec_cleanup(exec);				\
+> > -	});)
+> > +#define drm_exec_until_all_locked(exec)	while(drm_exec_cleanup(exec))
+> >  
+> >  /**
+> >   * drm_exec_retry_on_contention - restart the loop to grap all locks
+> > @@ -90,11 +80,10 @@ __drm_exec_retry:						\
+> >   * Control flow helper to continue when a contention was detected and we need to
+> >   * clean up and re-start the loop to prepare all GEM objects.
+> >   */
+> > -#define drm_exec_retry_on_contention(exec)			\
+> > -	do {							\
+> > -		if (unlikely(drm_exec_is_contended(exec)))	\
+> > -			goto *__drm_exec_retry_ptr;		\
+> > -	} while (0)
+> > +#define drm_exec_retry_on_contention(exec)		\
+> > +	if (unlikely(drm_exec_is_contended(exec)))	\
+> > +		continue;				\
+> > +	do {} while (0)
+> >  
+> >  /**
+> >   * drm_exec_is_contended - check for contention
+> > 
+> > ---
+> > base-commit: 451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
+> > change-id: 20230727-amdgpu-93c0e5302951
+> > 
+> > Best regards,
+> > -- 
+> > Nick Desaulniers <ndesaulniers@google.com>
+> >   
 
