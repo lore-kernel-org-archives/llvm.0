@@ -1,158 +1,201 @@
-Received: from mgamail.intel.com (unknown [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5A318AFE;
-	Mon, 31 Jul 2023 15:11:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690816289; x=1722352289;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mUu6+yfnyxQJAA5NSnj31iuaf0Yk0pV/eZsjbLf6OW8=;
-  b=EbJQga/GFykgQD8VjzDujrq4hgkiFeYEvhaeiBsZvpVABcD9Zl8Bj/KQ
-   zr8Hg3BIC7YDGhG0z1nlC3o3mb2UsBwG2ox/EAYK8r9pimPWlQJwGNll+
-   NPpEl/jqdR531jKsNXTZ5+MbKSdzwl+iBigSdSxItCxaPf1VCaKMrqf0H
-   dDGNpwq90A7bkuCuDvxf7fB4Z5uGG9GtPBF0XLlkPhEdJ6wFTsyOIxGNL
-   BK8SKugaqB0+xrZmQrelaRgJqe4hmSe1cLHGvxTyUbqO9B8WKAmO3DxV5
-   TEblm01R7kVVrzeEUwii7XmsEto/ZbxiiW9o0BEYDM4rabkchE7Pr/xim
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="359078923"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="359078923"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 08:11:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="757971876"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="757971876"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 31 Jul 2023 08:11:27 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQUYH-0005Bj-1F;
-	Mon, 31 Jul 2023 15:11:21 +0000
-Date: Mon, 31 Jul 2023 23:10:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:x86/core 2/4] arch/x86/kernel/kprobes/core.c:326:7:
- error: call to undeclared function 'is_cfi_trap'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202307312330.LTRLoRgL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2C13C3F
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 15:16:34 +0000 (UTC)
+Received: from [192.168.0.107] (unknown [111.197.209.91])
+	by APP-05 (Coremail) with SMTP id zQCowACnLeo+0MdkHM9REA--.17667S2;
+	Mon, 31 Jul 2023 23:16:14 +0800 (CST)
+Message-ID: <90d97914-9576-42e7-0d7d-c752b5bd6a68@iscas.ac.cn>
+Date: Mon, 31 Jul 2023 23:16:14 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+Content-Language: en-US
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Conor Dooley <conor@kernel.org>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org,
+ Guo Ren <guoren@kernel.org>
+References: <20230731095936.23397-1-xingmingzheng@iscas.ac.cn>
+ <20230731-calzone-gratified-dbc51639beec@wendy>
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+Organization: ISCAS
+In-Reply-To: <20230731-calzone-gratified-dbc51639beec@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zQCowACnLeo+0MdkHM9REA--.17667S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JF4fCw1kZr4UCFW8uFWDCFg_yoW3JF1Dpr
+	W3CFyDCrs5Xa18G3WfJw1UX3WFvrs3G3yrKry5KryUu3sxCFyxKr9Yka13ZFyDZFnagw4F
+	vw1xuFZY9w1DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvCb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
+	xwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+	b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7IU5IksPUUUUU==
+X-Originating-IP: [111.197.209.91]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiCQYJCmTHvCUmcAABsh
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/core
-head:   81eb8da91648604113321d4f2f966236c91cb3f3
-commit: 4ac2082c5d1ddfbbfe701e8038fd6778cfa50f41 [2/4] x86/kprobes: Prohibit probing on compiler generated CFI checking code
-config: i386-randconfig-r014-20230731 (https://download.01.org/0day-ci/archive/20230731/202307312330.LTRLoRgL-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307312330.LTRLoRgL-lkp@intel.com/reproduce)
+On 7/31/23 22:01, Conor Dooley wrote:
+> Hey,
+>
+> On Mon, Jul 31, 2023 at 05:59:36PM +0800, Mingzheng Xing wrote:
+>> Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the newer
+>> 20191213 version which moves some instructions from the I extension to the
+>> Zicsr and Zifencei extensions. So if one of the binutils and GCC exceeds
+>> that version, we should explicitly specifying Zicsr and Zifencei via -march
+>> to cope with the new changes. but this only occurs when binutils >= 2.36
+>> and GCC >= 11.1.0. It's a different story when binutils < 2.36.
+>>
+>> binutils-2.36 supports the Zifencei extension[2] and splits Zifencei and
+>> Zicsr from I[3]. GCC-11.1.0 is particular[4] because it add support Zicsr
+>> and Zifencei extension for -march. binutils-2.35 does not support the
+>> Zifencei extension, and does not need to specify Zicsr and Zifencei when
+>> working with GCC >= 12.1.0.
+>>
+>> To make our lives easier, let's relax the check to binutils >= 2.36 in
+>> CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. For the other two cases,
+>> where clang < 17 or GCC < 11.1.0, we will deal with them in
+>> CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
+>>
+>> For more information, please refer to:
+>> commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
+>> commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang and binutils")
+>> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc [0]
+>> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd [1]
+>> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=5a1b31e1e1cee6e9f1c92abff59cdcfff0dddf30 [2]
+>> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=729a53530e86972d1143553a415db34e6e01d5d2 [3]
+>> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b03be74bad08c382da47e048007a78fa3fb4ef49 [4]
+>> Link: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.org
+>> Link: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
+>> Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+> You need to actually put the CC: stable@vger.kernel.org into the commit
+> message for the stable folks to pick things up.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307312330.LTRLoRgL-lkp@intel.com/
+Thanks. Fixed in next version.
 
-All errors (new ones prefixed by >>):
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 4c07b9189c86..2704bd91dfb5 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -570,24 +570,31 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+>>   config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>>   	def_bool y
+>>   	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+>> -	depends on AS_IS_GNU && AS_VERSION >= 23800
+>> -	help
+>> -	  Newer binutils versions default to ISA spec version 20191213 which
+>> -	  moves some instructions from the I extension to the Zicsr and Zifencei
+>> -	  extensions.
+>> +	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=98416dbb0a62579d4a7a4a76bab51b5b52fec2cd
+>> +	depends on AS_IS_GNU && AS_VERSION >= 23600
+>> +	help
+>> +	  Binutils-2.38 and GCC-12.1.0 bumped the default ISA spec to the newer
+>> +	  20191213 version, which moves some instructions from the I extension to
+>> +	  the Zicsr and Zifencei extensions. This requires explicitly specifying
+>> +	  zicsr and zifencei when binutils >= 2.38 or GCC >= 12.1.0,
+>> but this only
+>> +	  occurs when binutils >= 2.36 and GCC >= 11.1.0.
+>> +	 It's a different story when binutils < 2.36.
+> I would replace this with something like:
+> 	Binutils-2.38 and GCC-12.1.0 bumped the default ISA spec to the newer
+> 	20191213 version, which moves some instructions from the I extension to
+> 	the Zicsr and Zifencei extensions. This requires explicitly specifying
+> 	zicsr and zifencei when binutils >= 2.38 or GCC >= 12.1.0. Zicsr
+> 	and Zifencei are supported in binutils from version 2.36 onwards.
+> 	To make life easier, and avoid forcing toolchains that default to a
+> 	newer ISA spec to version 2.2, relax the check to binutils >= 2.36.
+> 	For clang < 17 or GCC < 11.1.0, for which this is not possible, this is
+> 	dealt with in CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
+>
+> I tried to take the personification out of it & hopefully made it a
+> little clearer what dropping the check to 2.36 does for us.
+>
+>> Also, we have to consider the case of clang paired with binutils.
+> I think this sentence can go, its covered in the other config text.
+>
+> I'm sorry for being a bit of a pedant about this, but this has been such
+> a can of worms that I would like things to remain explained well enough
+> that the text is sufficient next time a revisit is required.
 
->> arch/x86/kernel/kprobes/core.c:326:7: error: call to undeclared function 'is_cfi_trap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   if (is_cfi_trap(addr + offset))
-                       ^
-   1 error generated.
+Thanks for your review, I've made the changes and submitted a
+new PATCH but there seems to be an email thread issue,
+hopefully it won't have an effect, sorry about that.
 
+:)
+Thanks,
+Mingzheng.
 
-vim +/is_cfi_trap +326 arch/x86/kernel/kprobes/core.c
+>
+> Thanks,
+> Conor.
+>
+>> +	  To make our lives easier, we relax the check to binutils >= 2.36. >
+>>   config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+>>   	def_bool y
+>>   	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>>   	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+>> -	depends on CC_IS_CLANG && CLANG_VERSION < 170000
+>> -	help
+>> -	  Certain versions of clang do not support zicsr and zifencei via -march
+>> -	  but newer versions of binutils require it for the reasons noted in the
+>> -	  help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
+>> -	  option causes an older ISA spec compatible with these older versions
+>> -	  of clang to be passed to GAS, which has the same result as passing zicsr
+>> -	  and zifencei to -march.
+>> +	# https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b03be74bad08c382da47e048007a78fa3fb4ef49
+>> +	depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC && GCC_VERSION < 110100)
+>> +	help
+>> +	  Certain versions of clang and GCC do not support zicsr and zifencei via
+>> +	  -march. This option causes an older ISA spec compatible with these older
+>> +	  versions of clang and GCC to be passed to GAS, which has the same result
+>> +	  as passing zicsr and zifencei to -march.
+>>   
+>>   config FPU
+>>   	bool "FPU support"
+>> diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/compat_vdso/Makefile
+>> index 189345773e7e..b86e5e2c3aea 100644
+>> --- a/arch/riscv/kernel/compat_vdso/Makefile
+>> +++ b/arch/riscv/kernel/compat_vdso/Makefile
+>> @@ -11,7 +11,13 @@ compat_vdso-syms += flush_icache
+>>   COMPAT_CC := $(CC)
+>>   COMPAT_LD := $(LD)
+>>   
+>> -COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
+>> +# binutils 2.35 does not support the zifencei extension, but in the ISA
+>> +# spec 20191213, G stands for IMAFD_ZICSR_ZIFENCEI.
+>> +ifdef CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>> +	COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
+>> +else
+>> +	COMPAT_CC_FLAGS := -march=rv32imafd -mabi=ilp32
+>> +endif
+>>   COMPAT_LD_FLAGS := -melf32lriscv
+>>   
+>>   # Disable attributes, as they're useless and break the build.
+>> -- 
+>> 2.34.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-   254	
-   255	/* Check if paddr is at an instruction boundary */
-   256	static int can_probe(unsigned long paddr)
-   257	{
-   258		unsigned long addr, __addr, offset = 0;
-   259		struct insn insn;
-   260		kprobe_opcode_t buf[MAX_INSN_SIZE];
-   261	
-   262		if (!kallsyms_lookup_size_offset(paddr, NULL, &offset))
-   263			return 0;
-   264	
-   265		/* Decode instructions */
-   266		addr = paddr - offset;
-   267		while (addr < paddr) {
-   268			int ret;
-   269	
-   270			/*
-   271			 * Check if the instruction has been modified by another
-   272			 * kprobe, in which case we replace the breakpoint by the
-   273			 * original instruction in our buffer.
-   274			 * Also, jump optimization will change the breakpoint to
-   275			 * relative-jump. Since the relative-jump itself is
-   276			 * normally used, we just go through if there is no kprobe.
-   277			 */
-   278			__addr = recover_probed_instruction(buf, addr);
-   279			if (!__addr)
-   280				return 0;
-   281	
-   282			ret = insn_decode_kernel(&insn, (void *)__addr);
-   283			if (ret < 0)
-   284				return 0;
-   285	
-   286	#ifdef CONFIG_KGDB
-   287			/*
-   288			 * If there is a dynamically installed kgdb sw breakpoint,
-   289			 * this function should not be probed.
-   290			 */
-   291			if (insn.opcode.bytes[0] == INT3_INSN_OPCODE &&
-   292			    kgdb_has_hit_break(addr))
-   293				return 0;
-   294	#endif
-   295			addr += insn.length;
-   296		}
-   297		if (IS_ENABLED(CONFIG_CFI_CLANG)) {
-   298			/*
-   299			 * The compiler generates the following instruction sequence
-   300			 * for indirect call checks and cfi.c decodes this;
-   301			 *
-   302			 *   movl    -<id>, %r10d       ; 6 bytes
-   303			 *   addl    -4(%reg), %r10d    ; 4 bytes
-   304			 *   je      .Ltmp1             ; 2 bytes
-   305			 *   ud2                        ; <- regs->ip
-   306			 *   .Ltmp1:
-   307			 *
-   308			 * Also, these movl and addl are used for showing expected
-   309			 * type. So those must not be touched.
-   310			 */
-   311			__addr = recover_probed_instruction(buf, addr);
-   312			if (!__addr)
-   313				return 0;
-   314	
-   315			if (insn_decode_kernel(&insn, (void *)__addr) < 0)
-   316				return 0;
-   317	
-   318			if (insn.opcode.value == 0xBA)
-   319				offset = 12;
-   320			else if (insn.opcode.value == 0x3)
-   321				offset = 6;
-   322			else
-   323				goto out;
-   324	
-   325			/* This movl/addl is used for decoding CFI. */
- > 326			if (is_cfi_trap(addr + offset))
-   327				return 0;
-   328		}
-   329	
-   330	out:
-   331		return (addr == paddr);
-   332	}
-   333	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
