@@ -1,121 +1,99 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9765B8BF5
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 12:36:30 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-31765792c7cso4780799f8f.0
-        for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 05:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690806988; x=1691411788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aLp1taY+ERuB3LasQnUEAssMbTidsnt4pqF9zZDF/gU=;
-        b=chwC+wsgzGXj6wjU5jSUeRc5Vjg1jIuVhWvlqm0hd7IggW947rVleeAmnaNBE85PEd
-         9HiQ6m12UnWwDe5eetX7xFu4PZ7KzGyVthZcR3faV1kgd8EVEoCoSVVofNXzH6PclDee
-         cY2YBH2CiTvpzL8zctZbxWQ3knSm1Le3Gjx3N9S4rI88qL4Qvd/Ft9OJwoaGCMYvXKOI
-         8Bw1eak0mWqSWRQrY0z3pHJPvg57h+dif+YRObNbh1HX+ESzcvT2+qTPBUhCzdar/0GT
-         z2FCJgoZv8klH7RqK85RhlZiCU2RyYuRtHrTHE27lgGEeXFzdIHu9ocBBRY11V+JXtna
-         tRNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690806988; x=1691411788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aLp1taY+ERuB3LasQnUEAssMbTidsnt4pqF9zZDF/gU=;
-        b=fxdzTH0j3rH9MeQ7jxTyKjTdfN4Yz5HYi0nUaN8PIO9kBJTAbRVBNXFYgkKsTapJN2
-         dICIv8Wepy9jLTMwvUgKuGKekE32BSsiv6P2Jr//byXYvW1/9aJk2plAuhB97pwDSBMU
-         Z40yNzC3d3CfRG6/XwuM9kL/8cCuz54Tut4RkHTlUGkNm/rACsmc/RDga3EzNq+PbVjf
-         UZd+TANg4QajL0dYmCpD5z69hFlgxS8QYLgsU57c0It2g37aF3uu2GF9gjl0I3waRkTR
-         VMwT2ehacYvNXNwiBKOgxhh0Ug158aSYG+N3J5+4rZ/Y51C85RVbt5sSZHFv2Z4UvaL+
-         gsnA==
-X-Gm-Message-State: ABy/qLZeNoCtYKFpL0X2+bl37Z0riTo8I/6/rC+bFvHyTCWopLSCFF7P
-	z4TIE4xHmWDSvdrHx0TI0sw=
-X-Google-Smtp-Source: APBJJlHvC+FHChEM48GIT9MWRuWxUmhW+e0P0HpxDVwIfuo5KkFvCgGq1hXTIHbBCKhk+j4gUbPGEw==
-X-Received: by 2002:a5d:6310:0:b0:317:5fe7:6844 with SMTP id i16-20020a5d6310000000b003175fe76844mr7371635wru.39.1690806988455;
-        Mon, 31 Jul 2023 05:36:28 -0700 (PDT)
-Received: from able.fritz.box ([2a00:e180:14f0:a600:ce89:8608:2d6f:110d])
-        by smtp.gmail.com with ESMTPSA id e15-20020a5d4e8f000000b003143c532431sm12958292wru.27.2023.07.31.05.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 05:36:28 -0700 (PDT)
-From: "=?UTF-8?q?Christian=20K=C3=B6nig?=" <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To: boris.brezillon@collabora.com,
-	ndesaulniers@google.com,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	trix@redhat.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	naresh.kamboju@linaro.org,
-	dakr@redhat.com
-Subject: [PATCH 2/2] drm/exec: add test case for using a drm_exec multiple times
-Date: Mon, 31 Jul 2023 14:36:25 +0200
-Message-Id: <20230731123625.3766-2-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230731123625.3766-1-christian.koenig@amd.com>
-References: <20230731123625.3766-1-christian.koenig@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F44C182C2
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 13:26:58 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-29-J0C5Am00Mue96-CayWZXzA-1; Mon, 31 Jul 2023 14:26:55 +0100
+X-MC-Unique: J0C5Am00Mue96-CayWZXzA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 31 Jul
+ 2023 14:26:54 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 31 Jul 2023 14:26:54 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>, "'Andy
+ Shevchenko'" <andriy.shevchenko@linux.intel.com>, 'Andrew Morton'
+	<akpm@linux-foundation.org>, "'Matthew Wilcox (Oracle)'"
+	<willy@infradead.org>, 'Christoph Hellwig' <hch@infradead.org>, "'Jason A.
+ Donenfeld'" <Jason@zx2c4.com>
+CC: 'Nathan Chancellor' <nathan@kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [PATCH next v2 5/5] minmax: Relax check to allow comparison
+ between int and small unsigned constants.
+Thread-Topic: [PATCH next v2 5/5] minmax: Relax check to allow comparison
+ between int and small unsigned constants.
+Thread-Index: AQHZwWNPMLQeS+3oD0yU5qzbmq+nnq/T3YRw
+Date: Mon, 31 Jul 2023 13:26:54 +0000
+Message-ID: <9c14002108ff49e1a54819133fe9e2a3@AcuMS.aculab.com>
+References: <bde3d2dc933848bbaceeb9b7102f6f4c@AcuMS.aculab.com>
+ <b4ce9dad748e489f9314a2dc95615033@AcuMS.aculab.com>
+In-Reply-To: <b4ce9dad748e489f9314a2dc95615033@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
 
-Not really a common use case, but let's make sure that we don't
-accidentially break that somehow.
-
-CC: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/tests/drm_exec_test.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/drm/tests/drm_exec_test.c
-index 727ac267682e..7b0238c5d9fa 100644
---- a/drivers/gpu/drm/tests/drm_exec_test.c
-+++ b/drivers/gpu/drm/tests/drm_exec_test.c
-@@ -138,6 +138,26 @@ static void test_prepare_array(struct kunit *test)
- 	drm_exec_fini(&exec);
- }
- 
-+static void test_multiple_loops(struct kunit *test)
-+{
-+	struct drm_exec exec;
-+
-+	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
-+	drm_exec_until_all_locked(&exec)
-+	{
-+		break;
-+	}
-+	drm_exec_fini(&exec);
-+
-+	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
-+	drm_exec_until_all_locked(&exec)
-+	{
-+		break;
-+	}
-+	drm_exec_fini(&exec);
-+	KUNIT_SUCCEED(test);
-+}
-+
- static struct kunit_case drm_exec_tests[] = {
- 	KUNIT_CASE(sanitycheck),
- 	KUNIT_CASE(test_lock),
-@@ -145,6 +165,7 @@ static struct kunit_case drm_exec_tests[] = {
- 	KUNIT_CASE(test_duplicates),
- 	KUNIT_CASE(test_prepare),
- 	KUNIT_CASE(test_prepare_array),
-+	KUNIT_CASE(test_multiple_loops),
- 	{}
- };
- 
--- 
-2.34.1
+QnkgdGhlIHRpbWUgSSd2ZSBkb25lOg0KDQojZGVmaW5lIF9faXNfbm9uZWdfaW50KHgpCQkJCQlc
+DQoJX19idWlsdGluX2Nob29zZV9leHByKCFfX2lzX2NvbnN0ZXhwcih4KSwgZmFsc2UsIAlcDQoJ
+CSgoeCkgPj0gKHR5cGVvZih4KSkwICYmICh4KSA8PSAodHlwZW9mKCh4KSArIDApKShsb25nKV9f
+SU5UX01BWF9fKSkNCg0KI2RlZmluZSBfX2lzX3NpZ25lZCh4KSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCiAgICAgICBfX2J1aWx0aW5f
+Y2hvb3NlX2V4cHIoX19pc19jb25zdGV4cHIoaXNfc2lnbmVkX3R5cGUodHlwZW9mKHgpKSksICAg
+ICAgICBcDQogICAgICAgICAgICAgICBpc19zaWduZWRfdHlwZSh0eXBlb2YoeCkpLCAwKQ0KDQoj
+ZGVmaW5lIF9fdHlwZXNfb2soeCwgeSkgCQkJCQlcDQoJKF9faXNfc2lnbmVkKHgpID09IF9faXNf
+c2lnbmVkKHkpIHx8CQkJXA0KCQlfX2lzX3NpZ25lZCgoeCkgKyAwKSA9PSBfX2lzX3NpZ25lZCgo
+eSkgKyAwKSB8fAlcDQoJCV9faXNfbm9uZWdfaW50KHgpIHx8IF9faXNfbm9uZWdfaW50KHkpKQ0K
+DQp0aGUgZXJyb3IgbWVzc2FnZSBmb3INCg0KPiAgCXN0YXRpY19hc3NlcnQoX190eXBlc19vayh4
+LCB5KSwJCQlcDQo+ICAJCSNvcCAiKCIgI3ggIiwgIiAjeSAiKSBzaWduZWRuZXNzIGVycm9yLCBm
+aXggdHlwZXMgb3IgY29uc2lkZXIgIiAjb3AgIl91bnNpZ25lZCgpIGJlZm9yZSAiICNvcCAiX3Qo
+KSIpOyBcDQoNCmdlbmVyYXRlZCBieSBjbGFuZyA4LjAuMCBhbmQgbGF0ZXIgaXMgc2ltaWxhciB0
+byAoc2VlIGh0dHBzOi8vZ29kYm9sdC5vcmcvei9qcTYxM0duc2EpOg0KDQo8c291cmNlPjo0OTox
+MjogZXJyb3I6IHN0YXRpYyBhc3NlcnRpb24gZmFpbGVkIGR1ZSB0byByZXF1aXJlbWVudCAnX19i
+dWlsdGluX2Nob29zZV9leHByKChzaXplb2YoaW50KSA9PSBzaXplb2YgKCooOCA/ICgodm9pZCAq
+KSgobG9uZykoKCgoaW50KSgtMSkpIDwgKGludCkxKSkgKiAwTCkpIDogKGludCAqKTgpKSksICgo
+KGludCkoLTEpKSA8IChpbnQpMSksIDApID09IF9fYnVpbHRpbl9jaG9vc2VfZXhwcigoc2l6ZW9m
+KGludCkgPT0gc2l6ZW9mICgqKDggPyAoKHZvaWQgKikoKGxvbmcpKCgoKHVuc2lnbmVkIGludCko
+LTEpKSA8ICh1bnNpZ25lZCBpbnQpMSkpICogMEwpKSA6IChpbnQgKik4KSkpLCAoKCh1bnNpZ25l
+ZCBpbnQpKC0xKSkgPCAodW5zaWduZWQgaW50KTEpLCAwKSB8fCBfX2J1aWx0aW5fY2hvb3NlX2V4
+cHIoKHNpemVvZihpbnQpID09IHNpemVvZiAoKig4ID8gKCh2b2lkICopKChsb25nKSgoKChpbnQp
+KC0xKSkgPCAoaW50KTEpKSAqIDBMKSkgOiAoaW50ICopOCkpKSwgKCgoaW50KSgtMSkpIDwgKGlu
+dCkxKSwgMCkgPT0gX19idWlsdGluX2Nob29zZV9leHByKChzaXplb2YoaW50KSA9PSBzaXplb2Yg
+KCooOCA/ICgodm9pZCAqKSgobG9uZykoKCgodW5zaWduZWQgaW50KSgtMSkpIDwgKHVuc2lnbmVk
+IGludCkxKSkgKiAwTCkpIDogKGludCAqKTgpKSksICgoKHVuc2lnbmVkIGludCkoLTEpKSA8ICh1
+bnNpZ25lZCBpbnQpMSksIDApIHx8IChfX2J1aWx0aW5fY2hvb3NlX2V4cHIoIShzaXplb2YoaW50
+KSA9PSBzaXplb2YgKCooOCA/ICgodm9pZCAqKSgobG9uZykoYSkgKiAwTCkpIDogKGludCAqKTgp
+KSksIDAsIF9fYnVpbHRpbl9jaG9vc2VfZXhwcihfX2J1aWx0aW5fY2hvb3NlX2V4cHIoKHNpemVv
+ZihpbnQpID09IHNpemVvZiAoKig4ID8gKCh2b2lkICopKChsb25nKSgoKChpbnQpKC0xKSkgPCAo
+aW50KTEpKSAqIDBMKSkgOiAoaW50ICopOCkpKSwgKCgoaW50KSgtMSkpIDwgKGludCkxKSwgMCks
+IGEsIDApID49IDAgJiYgKGEpIDw9IChpbnQpKGxvbmcpMjE0NzQ4MzY0NykpIHx8IChfX2J1aWx0
+aW5fY2hvb3NlX2V4cHIoIShzaXplb2YoaW50KSA9PSBzaXplb2YgKCooOCA/ICgodm9pZCAqKSgo
+bG9uZykoMjE0NzQ4MzY0OFUgLSAwKSAqIDBMKSkgOiAoaW50ICopOCkpKSwgMCwgX19idWlsdGlu
+X2Nob29zZV9leHByKF9fYnVpbHRpbl9jaG9vc2VfZXhwcigoc2l6ZW9mKGludCkgPT0gc2l6ZW9m
+ICgqKDggPyAoKHZvaWQgKikoKGxvbmcpKCgoKHVuc2lnbmVkIGludCkoLTEpKSA8ICh1bnNpZ25l
+ZCBpbnQpMSkpICogMEwpKSA6IChpbnQgKik4KSkpLCAoKCh1bnNpZ25lZCBpbnQpKC0xKSkgPCAo
+dW5zaWduZWQgaW50KTEpLCAwKSwgMjE0NzQ4MzY0OFUgLSAwLCAwKSA+PSAwICYmICgyMTQ3NDgz
+NjQ4VSAtIDApIDw9ICh1bnNpZ25lZCBpbnQpKGxvbmcpMjE0NzQ4MzY0NykpJzogbWluKGEsIDB4
+ODAwMDAwMDB1IC0gMCkgc2lnbmVkbmVzcyBlcnJvciwgZml4IHR5cGVzIG9yIGNvbnNpZGVyIG1p
+bl91bnNpZ25lZCgpIGJlZm9yZSBtaW5fdCgpDQoNClJlcGVhdGluZyB0aGUgZXhwcmVzc2lvbiBz
+ZWVtcyBzb21ld2hhdCBzdWItb3B0aW1hbCENClN1cmVseSBpdCBzaG91bGRuJ3QgYmUgb3V0cHV0
+dGluZyB0aGUgZXhwYW5zaW9uIG9mIHRoZQ0KaW5wdXQgd2hlbiBhbiBlcnJvciBtZXNzYWdlIGlz
+IHN1cHBsaWVkPw0KDQpJcyB0aGVyZSBhbnkgKHNhbmUpIHdheSB0byBzdG9wIGl0IGJlaW5nIHRo
+YXQgdmVyYm9zZT8NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
