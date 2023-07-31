@@ -1,93 +1,68 @@
-Received: from mgamail.intel.com (unknown [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE3C1DDDC;
-	Mon, 31 Jul 2023 21:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690839895; x=1722375895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C9zFns7zZQESZ7pDAZt3AXPRmGcqxla5AiTsmJC26Zg=;
-  b=BSpLa2AelDM/I04uvuFEJruN8hTqUtJ4d0pZ9TH2z65wx6xssOUKLNKo
-   0u0FBjM2rmqGBNnOCAabRM0mQNEg7oKIFP3FVZObFyQ7R6xxtTJNkb7xb
-   BbZp5f0zXsX79ovzfj8vKc10HW6AsL8shT17hgmkvlWpRq62Kz4f7cxwg
-   u0FbI3zHdZj01e3ijCYwOOlilNFjOYXSVYYW1NeikC/neS05y3gOHjM/2
-   JvB7U+reAdYGvNPHbx36UNRWH2VKdNYIcUP4CrCghorMm1n39HxmSS0wl
-   DoKzE9HebVSwx884JDUK6ia6e80oZYuVBwYagC6/na+mAe8mE3C5o3bQF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="359170563"
-X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
-   d="scan'208";a="359170563"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 14:44:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="722240566"
-X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
-   d="scan'208";a="722240566"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 31 Jul 2023 14:44:50 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQah4-0005O5-0W;
-	Mon, 31 Jul 2023 21:44:47 +0000
-Date: Tue, 1 Aug 2023 05:43:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Mina Almasry <almasrymina@google.com>, kirill@shutemov.name,
-	joel@joelfernandes.org, william.kucharski@oracle.com,
-	kaleshsingh@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH 2/4] mm: mremap: use flush_pmd_tlb_range() in
- move_normal_pmd()
-Message-ID: <202308010553.KxefZFdO-lkp@intel.com>
-References: <20230731074829.79309-3-wangkefeng.wang@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC231DDDC;
+	Mon, 31 Jul 2023 21:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 830EEC433CA;
+	Mon, 31 Jul 2023 21:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690840222;
+	bh=HRUAYLY4xMp5A21cfdxIGXZgK/4NLgM8TKnmkB3vKl4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=J+oiR05Po6f7gdgEkH5gS0PcUNqJP2avdwKvcHmq8EI3N9+EDfRFntp+oTIxBnRTT
+	 Fa63T58zWEGqkBpOKeMRwjJ8ZUkZMDFDMGJFar2QowBOaIMY9Lmwv+Gq3k2D6oOL2T
+	 qnYPy/144SO6E38pnoEwmKjaKt8OCgVjUUjAbBbsJltvsiYA0NPd15nhcM7SrhP0zZ
+	 UU/7SKzlhf9htf1vjLQqn4ppEi3vHt7uIskHmU1qxDRSOL9yFnA8YcjVefwmvoXIaY
+	 jMo461lprdODQc0sIV5GxIw6fbGaEfNnv9etHoowiWkW/ZqfobV4qneSUu8god3Z6Q
+	 ejN+O6YPpUucg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58455C595C5;
+	Mon, 31 Jul 2023 21:50:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731074829.79309-3-wangkefeng.wang@huawei.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH next 0/3] Connector/proc_filter test fixes 
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169084022235.13504.17826979255292322380.git-patchwork-notify@kernel.org>
+Date: Mon, 31 Jul 2023 21:50:22 +0000
+References: <cover.1690564372.git.skhan@linuxfoundation.org>
+In-Reply-To: <cover.1690564372.git.skhan@linuxfoundation.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: shuah@kernel.org, Liam.Howlett@oracle.com, anjali.k.kulkarni@oracle.com,
+ naresh.kamboju@linaro.org, kuba@kernel.org, davem@davemloft.net,
+ lkft-triage@lists.linaro.org, netdev@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hi Kefeng,
+Hello:
 
-kernel test robot noticed the following build errors:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm-perf/for-next/perf linus/master v6.5-rc4]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Fri, 28 Jul 2023 11:29:25 -0600 you wrote:
+> This 3 patch series consists of fixes to proc_filter test
+> found during linun-next testing.
+> 
+> The first patch fixes the LKFT reported compile error, second
+> one adds .gitignore and the third fixes error paths to skip
+> instead of fail (root check, and argument checks)
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-hugetlb-use-flush_hugetlb_tlb_range-in-move_hugetlb_page_tables/20230731-154016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230731074829.79309-3-wangkefeng.wang%40huawei.com
-patch subject: [PATCH 2/4] mm: mremap: use flush_pmd_tlb_range() in move_normal_pmd()
-config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230801/202308010553.KxefZFdO-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230801/202308010553.KxefZFdO-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [next,1/3] selftests:connector: Fix Makefile to include KHDR_INCLUDES
+    https://git.kernel.org/netdev/net-next/c/165f6890586e
+  - [next,2/3] selftests:connector: Add .gitignore and poupulate it with test
+    https://git.kernel.org/netdev/net-next/c/f4dcfa6fa1a8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308010553.KxefZFdO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: call to __compiletime_assert_860 marked "dontcall-error": BUILD_BUG failed
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
