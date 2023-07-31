@@ -1,133 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC4F364
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6CAA2C
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690783876;
+	s=mimecast20190719; t=1690785619;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lVjADLyPMQJxyH1kmYk8KC9McRcSPlUumeXZpmyTrqI=;
-	b=JmWIWmXTG4YXBMtSxe/zPRb/1irdBZH72gVfyhScg6pZffL6EtqLhrKjStqiOirynCWZFp
-	1icb2kF4PFNaBAatUM+UEk9lLW76Ii+zMWPKgoi7B9G8mE3WhIshvAvknqrP4s4Qh6Qth6
-	WwMB+AXafaDuXAgU9kdP4VcyfgbUC3U=
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EwKju+twdDvwzbpYHMz7znd4nXYV6EyX5G4TIEHmpYQ=;
+	b=ZD7p2Usuc0tSfdmcOMjZlYiicVvLEunmIzQvPdOyuyoFoKUhfIbo4MH16VPgES/nZ44BiG
+	cCLKMZnWCHEyrOT73C13KENErqIy78ebhA/UtGWR9qPN0jd3nTx1Wp5p32Wx+l3qhsL6Hd
+	+suMRK6X6J4c8O6hbp6M669PAGbcZ/A=
 Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-7oUJ4sc7NZSmBHEmzdORbw-1; Mon, 31 Jul 2023 02:11:13 -0400
-X-MC-Unique: 7oUJ4sc7NZSmBHEmzdORbw-1
+ us-mta-452-9Z9Il4-EME6Pv26DlTX-bg-1; Mon, 31 Jul 2023 02:40:16 -0400
+X-MC-Unique: 9Z9Il4-EME6Pv26DlTX-bg-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5FBA71C47663
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:11:13 +0000 (UTC)
-Received: from [172.64.4.113] (unknown [10.30.32.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4B7A4401061;
-	Mon, 31 Jul 2023 06:11:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 13 of 328): Test report for master
- (6.5.0-rc4, mainline.kernel.org-clang, 5d0c230f)
-Date: Mon, 31 Jul 2023 06:11:13 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 648191C47663
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 06:40:16 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A853401061;
+	Mon, 31 Jul 2023 06:40:15 +0000 (UTC)
+Date: Mon, 31 Jul 2023 14:40:11 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Bruno Goncalves <bgoncalv@redhat.com>, xiawu@redhat.com,
+	yiyan@redhat.com
+Cc: cki-project@redhat.com, yiyan@redhat.com, llvm@lists.linux.dev,
+	xiawu@redhat.com
+Subject: Re: =?utf-8?B?4p2MIEZBSUwgKFNLSVBQRUQgMTkx?=
+ =?utf-8?Q?_of_328=29=3A_Test_repor?= =?utf-8?Q?t?= for master (6.5.0-rc3,
+ mainline.kernel.org-clang, 57012c57)
+Message-ID: <ZMdXS6Xfv/+Ct9tL@MiWiFi-R3L-srv>
+References: <65365.123072800401200236@us-mta-556.us.mimecast.lan>
+ <ZMNKpJCzbAERwqp/@MiWiFi-R3L-srv>
+ <CA+QYu4pHZjgXriy4rmvdpYnPcRbzs1_mEF=fdUJxLQs7WEsYEQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <CA+QYu4pHZjgXriy4rmvdpYnPcRbzs1_mEF=fdUJxLQs7WEsYEQ@mail.gmail.com>
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <75003.123073102111300934@us-mta-613.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 07/28/23 at 08:54am, Bruno Goncalves wrote:
+> On Fri, 28 Jul 2023 at 06:57, Baoquan He <bhe@redhat.com> wrote:
+> >
+> > Hi CKI team,
+> >
+> > On 07/28/23 at 04:40am, cki-project@redhat.com wrote:
+> > > Hi, we tested your kernel and here are the results:
+> > >
+> > >     Overall result: FAILED
+> > >              Merge: OK
+> > >            Compile: OK
+> > >               Test: FAILED
+> > >
+> > >
+> > > Kernel information:
+> > >     Commit message: Merge tag 'net-6.5-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+> > >
+> > > You can find all the details about the test run at
+> > >     https://datawarehouse.cki-project.org/kcidb/checkouts/97648
+> > >
+> > > One or more kernel tests failed:
+> > >     Unrecognized or new issues:
+> > >           x86_64 - kdump - sysrq-c
+> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928580
+> > >                    Non-passing subtests:
+> > >                        ❌ FAIL /kdump/crash-sysrq-c
+> > >           x86_64 - kdump - file-load
+> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928581
+> > >                    Non-passing subtests:
+> > >                        ❌ FAIL /kdump/crash-sysrq-c
+> > >           x86_64 (debug) - Boot test
+> > >                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/8928644
+> > >                    Non-passing subtests:
+> > >                        ❌ FAIL distribution/kpkginstall/journalctl-check
+> >
+> > All these failure cases have empty console.log, there's no way to check
+> > what's going on there. The empty console.log is related to 1st kernel,
+> > there must something wrong withih it.
+> 
+> Thanks, yes it is a pain. Sometimes the serial console in the machines
+> don't work at all, that's why the console.log is empty.
+> I wonder if the kdump tests would upload journalctl logs, we would be
+> able to use it to check for failures instead of relying only on
+> console.log.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks, Bruno.
 
+It could be a little helpful to have journalctl logs. However, it may
+not help much in kdump case. When I check these kdump failure case of CKI, I
+usually check test_console.log firstly. If test_console.log is
+incomplete, I will check console.log because console.log contains all
+printed log on console.
 
-Kernel information:
-    Commit message: Linux 6.5-rc4
+As for journalctrl logs, it can only get the boot log of 1st kernel. As
+for kdump boot log, e.g kdump boot could hang in early stage or the
+middle of bootup, the journalctl log doesn't make any sense.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/97868
+So for kdump, console log is very important.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-8956810
-                   Non-passing subtests:
-                       =E2=9D=8C FAIL generic/001
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks
+Baoquan
 
