@@ -1,176 +1,142 @@
-Received: from mgamail.intel.com (unknown [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075DF62D;
-	Mon, 31 Jul 2023 03:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690775839; x=1722311839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YdTa927pxNiekVVILvmjD2ho5UjOjenDnP3CDC2vxf4=;
-  b=ZN+nyKYD6lJMrZSlV+QsBDpHLfgbmuT+tOLnR8CaMhnbYqEY99HYyHrD
-   m2ObtwKeKHFqniWH3a1z/RRp+jXjJVcay36e6p003CTKdAPC7Pc+m0ATY
-   PYWcmGSV0b0PJSWjCZBRUjV45to7HyPWVT2deisHQTbK+zTXoIGfd+E4q
-   R80+fduJTZMQVZzoyPnrDky11EraGPan7oUerrqtqn7ha4hvA/D+8fvzI
-   Dz42Vjg/6eOmUc222bo3h6RZ9nR3IKjb5ueRRwUf1ohGyJq3rgzk7wXLR
-   J7nejRA14kfGTP8omc7sJH0xCXxTCCD6O2rUizdxDamHnlPrLeANacUj0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="371624102"
-X-IronPort-AV: E=Sophos;i="6.01,243,1684825200"; 
-   d="scan'208";a="371624102"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 20:57:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="721916538"
-X-IronPort-AV: E=Sophos;i="6.01,243,1684825200"; 
-   d="scan'208";a="721916538"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jul 2023 20:57:15 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQK1z-0004vD-01;
-	Mon, 31 Jul 2023 03:57:15 +0000
-Date: Mon, 31 Jul 2023 11:56:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fangrui Song <maskray@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [stable:linux-4.19.y 2317/9999] lib/mpi/generic_mpih-mul2.c:49:24:
- error: invalid use of a cast in a inline asm context requiring an lvalue:
- remove the cast or build with -fheinous-gnu-extensions
-Message-ID: <202307311111.jPEdYIJR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E345651
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 05:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690780877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=t+QD8/m7KJ1dtssr0lfABEjaUbCpVuaw9yP2kr5O4Vg=;
+	b=dsObWCjYk5V2kWafQImjmkCFU9UhF0xlzi9A27gBuHZkCogpTq6dLwXN7VW30qIPPL1qi0
+	F27EQquvUQE8sMgCYsErjp7T/k0TCceo9u5uR66xQNhfBuC/rirBdLXTYqxhnLXn0lbKo+
+	yWtOu2DrTUbuGe1aC7+N0NuHy00QhFA=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-nRTk59sSNmuaIPik1_MCfg-1; Mon, 31 Jul 2023 01:21:15 -0400
+X-MC-Unique: nRTk59sSNmuaIPik1_MCfg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 283111C05144
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 05:21:15 +0000 (UTC)
+Received: from [172.64.4.113] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 16648492B03;
+	Mon, 31 Jul 2023 05:21:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 10 of 328): Test report for master
+ (6.5.0-rc3, mainline.kernel.org-clang, 88f66f13)
+Date: Mon, 31 Jul 2023 05:21:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <09382.123073101211500357@us-mta-637.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Fangrui,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
-head:   767049cead76cf699707290d5aeefb3e4d0d5b43
-commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [2317/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-config: mips-randconfig-r036-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311111.jPEdYIJR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311111.jPEdYIJR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307311111.jPEdYIJR-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/net/netdevsim/netdev.c:167:35: warning: unused variable 'nsim_switchdev_ops' [-Wunused-const-variable]
-     167 | static const struct switchdev_ops nsim_switchdev_ops = {
-         |                                   ^
-   1 warning generated.
---
->> lib/mpi/generic_mpih-mul2.c:49:24: error: invalid use of a cast in a inline asm context requiring an lvalue: remove the cast or build with -fheinous-gnu-extensions
-      49 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-     652 |         : "=l" ((USItype)(w0)), \
-         |                 ~~~~~~~~~~^~~
->> lib/mpi/generic_mpih-mul2.c:49:3: error: invalid output constraint '=h' in asm
-      49 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ^
-   lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
-     653 |              "=h" ((USItype)(w1)) \
-         |              ^
-   2 errors generated.
---
-   lib/mpi/generic_mpih-mul3.c:49:24: error: invalid use of a cast in a inline asm context requiring an lvalue: remove the cast or build with -fheinous-gnu-extensions
-      49 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-     652 |         : "=l" ((USItype)(w0)), \
-         |                 ~~~~~~~~~~^~~
->> lib/mpi/generic_mpih-mul3.c:49:3: error: invalid output constraint '=h' in asm
-      49 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ^
-   lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
-     653 |              "=h" ((USItype)(w1)) \
-         |              ^
-   2 errors generated.
---
->> lib/mpi/mpih-div.c:142:20: error: invalid use of a cast in a inline asm context requiring an lvalue: remove the cast or build with -fheinous-gnu-extensions
-     142 |                                         umul_ppmm(n1, n0, d0, q);
-         |                                         ~~~~~~~~~~~~~~^~~~~~~~~~
-   lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-     652 |         : "=l" ((USItype)(w0)), \
-         |                 ~~~~~~~~~~^~~
->> lib/mpi/mpih-div.c:142:6: error: invalid output constraint '=h' in asm
-     142 |                                         umul_ppmm(n1, n0, d0, q);
-         |                                         ^
-   lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
-     653 |              "=h" ((USItype)(w1)) \
-         |              ^
-   lib/mpi/mpih-div.c:205:20: error: invalid use of a cast in a inline asm context requiring an lvalue: remove the cast or build with -fheinous-gnu-extensions
-     205 |                                         umul_ppmm(n1, n0, d1, q);
-         |                                         ~~~~~~~~~~~~~~^~~~~~~~~~
-   lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-     652 |         : "=l" ((USItype)(w0)), \
-         |                 ~~~~~~~~~~^~~
-   lib/mpi/mpih-div.c:205:6: error: invalid output constraint '=h' in asm
-     205 |                                         umul_ppmm(n1, n0, d1, q);
-         |                                         ^
-   lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
-     653 |              "=h" ((USItype)(w1)) \
-         |              ^
-   4 errors generated.
---
->> lib/mpi/generic_mpih-mul1.c:50:24: error: invalid use of a cast in a inline asm context requiring an lvalue: remove the cast or build with -fheinous-gnu-extensions
-      50 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-     652 |         : "=l" ((USItype)(w0)), \
-         |                 ~~~~~~~~~~^~~
->> lib/mpi/generic_mpih-mul1.c:50:3: error: invalid output constraint '=h' in asm
-      50 |                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
-         |                 ^
-   lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
-     653 |              "=h" ((USItype)(w1)) \
-         |              ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +49 lib/mpi/generic_mpih-mul2.c
+Kernel information:
+    Commit message: Merge tag 'usb-6.5-rc4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/gregkh/usb
 
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  31  
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  32  mpi_limb_t
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  33  mpihelp_addmul_1(mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  34  		 mpi_size_t s1_size, mpi_limb_t s2_limb)
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  35  {
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  36  	mpi_limb_t cy_limb;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  37  	mpi_size_t j;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  38  	mpi_limb_t prod_high, prod_low;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  39  	mpi_limb_t x;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  40  
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  41  	/* The loop counter and index J goes from -SIZE to -1.  This way
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  42  	 * the loop becomes faster.  */
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  43  	j = -s1_size;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  44  	res_ptr -= j;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  45  	s1_ptr -= j;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  46  
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  47  	cy_limb = 0;
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31  48  	do {
-cdec9cb5167ab1 Dmitry Kasatkin 2011-08-31 @49  		umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/97866
 
-:::::: The code at line 49 was first introduced by commit
-:::::: cdec9cb5167ab1113ba9c58e395f664d9d3f9acb crypto: GnuPG based MPI lib - source files (part 1)
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+         aarch64 - stress: stress-ng - memory
+                   Issue: stress: stress-ng - memory: stress-ng --mcontend =
+0 TIMEOUT
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1185
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+8956017
 
-:::::: TO: Dmitry Kasatkin <dmitry.kasatkin@intel.com>
-:::::: CC: Dmitry Kasatkin <dmitry.kasatkin@intel.com>
+    Note: Any of these might not be a regression and/or we might have mista=
+kenly thought this issue to be fixed.
+          If it is not a regression, please ask the test maintainer to reop=
+en the issue and untag the regression from this execution.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
