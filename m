@@ -1,176 +1,72 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (unknown [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAC7468C
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 07:04:03 +0000 (UTC)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id A18646607105;
-	Mon, 31 Jul 2023 08:03:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1690787036;
-	bh=h4ff7dyElXSiU2HCDoxKH52aXgTKwtgpwzSppL9MAQY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ToZDxR0VoZrKARAAT6OtEg2+o0PKqpM4P/MdnvE1nIwbEjClxWpG0jU0CykqRR/iy
-	 jlM8+aWm2CMSwB4P9MMq25pLeqH4LlXBBPbXif5CILxiHgulF8L8Is7Pb30ZJjjWbn
-	 vuR7DDI92//oUkeZ1ekBC9fTGRbG4zKjQCDZOiIHurB8t4/ckcXl6/gMlZREFYhtK8
-	 in2UkQ9XbEcjirbXuQwbkaMkeWYOnbGcC7+T8TDgBsp/PdibU53Qz/V5F1/YANiwMe
-	 d+9vO/Xw/Qp27WldVizqu/MtgBK6G/0YRdqeEPlZ93uTGedw9W8/Nm9p4tvWpviYo5
-	 mOXwZz1opz+zQ==
-Date: Mon, 31 Jul 2023 09:03:53 +0200
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Tom Rix <trix@redhat.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>,
- christian.koenig@amd.com, dakr@redhat.com, alexander.deucher@amd.com
-Subject: Re: [PATCH v2] drm: fix indirect goto into statement expression UB
-Message-ID: <20230731090353.1cd5e2d5@collabora.com>
-In-Reply-To: <20230728171757.GA433645@dev-arch.thelio-3990X>
-References: <20230727-amdgpu-v2-1-7fc66bc52bf6@google.com>
-	<20230728171757.GA433645@dev-arch.thelio-3990X>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E3146B0;
+	Mon, 31 Jul 2023 07:48:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690789686; x=1722325686;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=HCvszp3PepRz3FfNrB9mTLBzmFtZs7Y/fWUZs4VAW74=;
+  b=d5ZDvVG4Yw+AhjWuL2V0xYi1TbLbTwjlzrJtDjUKXWb6rf9eMJSreqdR
+   nv12Cu1uGoPQDNGB1P8im7Ux3oxq54IP3HldhjdKf2iEOWNQYAhv0o8ug
+   Yyil6q/NBsV4r4WrHLrs0epUnYowuOdgpjnTHUdQIj86WiZvByPZyYeNl
+   wJeidzTsSMkFZiJkVQ5eU4+GEmtkWXd1JMscQRZXqupRhJ5Cl5GKWNwb1
+   /OH/hHFo+lasZQ7M1N3tBhFKEuK2enGFBfVfOxfKSiBSiMVL3iyBOGhxa
+   ChSzUhzjaEd+1JMGL0Qi2vF+Wjz99mJ6wZ8n/gkdi9LYFLtf+PvOYbrf7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="399895198"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="399895198"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 00:48:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="757863671"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="757863671"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 31 Jul 2023 00:48:03 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qQNdL-00050P-0L;
+	Mon, 31 Jul 2023 07:48:03 +0000
+Date: Mon, 31 Jul 2023 15:47:10 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [csky-linux:qspinlock_v10 8/11] ld.lld: error:
+ vmlinux.a(init/main.o):(function rcu_lock_acquire: .text+0x5fc): relocation
+ R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references
+ '.Ltmp6'
+Message-ID: <202307311545.GcmkuXIC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 28 Jul 2023 10:17:57 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+TO: Guo Ren <guoren@linux.alibaba.com>
 
-> + people from trailers of 09593216bff1
-> 
-> On Thu, Jul 27, 2023 at 03:50:58PM -0700, ndesaulniers@google.com wrote:
-> > A new diagnostic in clang-17 now produces the following build error:
-> > 
-> > drivers/gpu/drm/tests/drm_exec_test.c:41:3: error: cannot jump from this
-> > indirect goto statement to one of its possible targets
-> >    41 |                 drm_exec_retry_on_contention(&exec);
-> >       |                 ^
-> > include/drm/drm_exec.h:96:4: note: expanded from macro
-> > 'drm_exec_retry_on_contention'
-> >    96 |                         goto *__drm_exec_retry_ptr;
-> >       |                         ^
-> > drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: possible target of
-> > indirect goto statement
-> >    39 |         drm_exec_until_all_locked(&exec) {
-> >       |         ^
-> > include/drm/drm_exec.h:79:33: note: expanded from macro
-> > 'drm_exec_until_all_locked'
-> >    79 |                 __label__ __drm_exec_retry;
-> > drivers/gpu/drm/tests/drm_exec_test.c:39:2: note: jump enters a
-> > statement expression
-> > 
-> > The GCC manually currently states that:  
-> 
->           ^ manual
-> 
-> > >> Jumping into a statement expression with a computed goto (see Labels
-> > >> as Values) has undefined behavior.  
-> > 
-> > So the diagnostic appears correct, even if codegen happened to produce
-> > working code.
-> > 
-> > Looking closer at this code, while the original combination of statement
-> > expression, local label, and computed/indirect goto GNU C expressions
-> > were clever, a simple while loop and continue block might have sufficed.
-> > 
-> > This approach might not work as expected if drm_exec_until_all_locked
-> > "loops" can be nested, but that doesn't appear to be an existing use
-> > case in the codebase.
+tree:   https://github.com/c-sky/csky-linux qspinlock_v10
+head:   c6c7aa7ef6b82649e2726b4b1eeb8118c8c889f3
+commit: 5c447554aadb75a2636b8b7d1e99bc9ebc6f5377 [8/11] riscv: qspinlock: Introduce combo spinlock
+config: riscv-randconfig-r025-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311545.GcmkuXIC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311545.GcmkuXIC-lkp@intel.com/reproduce)
 
-Hm, that's exactly the sort of things we were trying to be robust
-against with the original approach. With this version, we're back to a
-situation where
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307311545.GcmkuXIC-lkp@intel.com/
 
-	drm_exec_until_all_locked(exec) {
-		for (...) {
-			drm_exec_retry_on_contention(exec);
-		}
-	}
+All errors (new ones prefixed by >>):
 
-doesn't do what we expect it to do, and that's a use case we want to
-support.
+>> ld.lld: error: vmlinux.a(init/main.o):(function rcu_lock_acquire: .text+0x5fc): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references '.Ltmp6'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
 
-> > 
-> > Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
-> > Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1890
-> > Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>  
-> 
-> Thanks for the patch!
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-> 
-> > ---
-> > Changes in v2:
-> > Fix the continue to be outside of the do while
-> > - Link to v1: https://lore.kernel.org/r/20230727-amdgpu-v1-1-a95690e75388@google.com
-> > ---
-> >  include/drm/drm_exec.h | 21 +++++----------------
-> >  1 file changed, 5 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-> > index 73205afec162..fa1cc5c3d021 100644
-> > --- a/include/drm/drm_exec.h
-> > +++ b/include/drm/drm_exec.h
-> > @@ -70,18 +70,8 @@ struct drm_exec {
-> >   * Core functionality of the drm_exec object. Loops until all GEM objects are
-> >   * locked and no more contention exists. At the beginning of the loop it is
-> >   * guaranteed that no GEM object is locked.
-> > - *
-> > - * Since labels can't be defined local to the loops body we use a jump pointer
-> > - * to make sure that the retry is only used from within the loops body.
-> >   */
-> > -#define drm_exec_until_all_locked(exec)				\
-> > -	for (void *__drm_exec_retry_ptr; ({			\
-> > -		__label__ __drm_exec_retry;			\
-> > -__drm_exec_retry:						\
-> > -		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
-> > -		(void)__drm_exec_retry_ptr;			\
-> > -		drm_exec_cleanup(exec);				\
-> > -	});)
-> > +#define drm_exec_until_all_locked(exec)	while(drm_exec_cleanup(exec))
-> >  
-> >  /**
-> >   * drm_exec_retry_on_contention - restart the loop to grap all locks
-> > @@ -90,11 +80,10 @@ __drm_exec_retry:						\
-> >   * Control flow helper to continue when a contention was detected and we need to
-> >   * clean up and re-start the loop to prepare all GEM objects.
-> >   */
-> > -#define drm_exec_retry_on_contention(exec)			\
-> > -	do {							\
-> > -		if (unlikely(drm_exec_is_contended(exec)))	\
-> > -			goto *__drm_exec_retry_ptr;		\
-> > -	} while (0)
-> > +#define drm_exec_retry_on_contention(exec)		\
-> > +	if (unlikely(drm_exec_is_contended(exec)))	\
-> > +		continue;				\
-> > +	do {} while (0)
-> >  
-> >  /**
-> >   * drm_exec_is_contended - check for contention
-> > 
-> > ---
-> > base-commit: 451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
-> > change-id: 20230727-amdgpu-93c0e5302951
-> > 
-> > Best regards,
-> > -- 
-> > Nick Desaulniers <ndesaulniers@google.com>
-> >   
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
