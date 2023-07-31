@@ -1,104 +1,129 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mgamail.intel.com (unknown [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FAE1426B
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 10:17:00 +0000 (UTC)
-Received: from [192.168.0.107] (unknown [111.197.209.91])
-	by APP-03 (Coremail) with SMTP id rQCowACHj8fxicdkWHydDw--.11897S2;
-	Mon, 31 Jul 2023 18:16:17 +0800 (CST)
-Message-ID: <572ad471-8a0b-95e2-1112-c55f42e5594b@iscas.ac.cn>
-Date: Mon, 31 Jul 2023 18:16:16 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DF017FEB;
+	Mon, 31 Jul 2023 12:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690805080; x=1722341080;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Scbc1k97nOjYXKL92XVgiWyP02TWnisk0n+vpo+gYPk=;
+  b=Du5vLpMD3P20Icw+Tn/XCWDJRUQ+hZRUN/OkKtJgG75wBD13nyJZdsew
+   RtlUDxqAW37uV5/G8JsifAKMfYXih4AC42Z4ssgHaaomcUcCU4jprl+cx
+   HXWIX2HyTOcA15h3pEdqYTVR+gokWAhwWP086n1XIztPJbClnbXf33FNQ
+   Br3DcGwcFemv6TMPncxuNiZv/VzIX6QSDgKBnZBIUbzhu/uHQjMEBeCzR
+   CsN1UGQk4j5Ygm1YDxAMkDrJuOeaY1L2Q3D+seHSriMGQ1dR5Et2dyr3e
+   f8PgvUYPRqufEn9EiQjBiYreOkGXJOinKPdL/Am2Vt+X/TXC+yxh1i+vR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="432816283"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="432816283"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:04:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="678311425"
+X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
+   d="scan'208";a="678311425"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 31 Jul 2023 05:04:34 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qQRdZ-00056n-2a;
+	Mon, 31 Jul 2023 12:04:33 +0000
+Date: Mon, 31 Jul 2023 20:04:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, olivia@selenic.com,
+	herbert@gondor.apana.org.au, jiajie.ho@starfivetech.com,
+	conor.dooley@microchip.com, martin@kaiser.cx, mmyangfl@gmail.com,
+	jenny.zhang@starfivetech.com, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, leoliu@zhaoxin.com,
+	CobeChen@zhaoxin.com, YunShen@zhaoxin.com, TonyWWang@zhaoxin.com,
+	leoliu-oc <leoliu-oc@zhaoxin.com>
+Subject: Re: [PATCH v2 2/2] hwrng: add Zhaoxin HW RNG driver
+Message-ID: <202307311920.0ZdHwXvk-lkp@intel.com>
+References: <20230731084515.2057375-3-LeoLiu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] riscv: Handle zicsr/zifencei issue between gcc and
- binutils
-To: Conor Dooley <conor@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org,
- Guo Ren <guoren@kernel.org>
-References: <20230726174524.340952-1-xingmingzheng@iscas.ac.cn>
- <20230726-outclass-parade-2ccea9f6688a@spud>
- <10231b81-ea42-26d0-4c11-92851229e658@iscas.ac.cn>
- <20230726-armchair-evasive-427dd245a9fe@spud>
- <20230727-briskness-sappy-e2d9e4c1ef36@spud>
- <d75ef570-c0ad-cea4-687a-d02b560aa676@iscas.ac.cn>
- <20230729-chaps-coauthor-95557d86b189@spud>
-Content-Language: en-US
-From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Organization: ISCAS
-In-Reply-To: <20230729-chaps-coauthor-95557d86b189@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACHj8fxicdkWHydDw--.11897S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45Gw18tryDtw17KFyDKFg_yoW8Zw43pF
-	4kCFyDGry5Xw1xGw4xJ34UWry0yr4rJay5Jr45W3WUAryUAFy0grykXw1Ygr1DArs5tw10
-	vr1093WDZwn8JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvCb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-	C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
-	xwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-	b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-	nxnUUI43ZEXa7IU56c_DUUUUU==
-X-Originating-IP: [111.197.209.91]
-X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiCQkJCmTHZrJ09wAAs3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731084515.2057375-3-LeoLiu-oc@zhaoxin.com>
 
-On 7/30/23 01:48, Conor Dooley wrote:
-> On Sun, Jul 30, 2023 at 01:36:49AM +0800, Mingzheng Xing wrote:
->
->> I reproduced the error with gcc-12.2.0 and binutils-2.35. I tried a
->> different solution, which I think makes the logic easier. Showing
->> the new patch code:
-> It is indeed simpler, neat.
->
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 4c07b9189c86..a6fa1eed895c 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -569,25 +569,24 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
->>
->>   config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
->>          def_bool y
->> -       # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
->> -       depends on AS_IS_GNU && AS_VERSION >= 23800
->> +       depends on AS_IS_GNU && AS_VERSION >= 23600
->>          help
->> -         Newer binutils versions default to ISA spec version 20191213 which
->> -         moves some instructions from the I extension to the Zicsr and Zifencei
->> -         extensions.
->> +         Binutils has supported zicsr and zifencei extensions since version 2.36,
->> +         try to adapt to the changes by using explicit zicsr and zifencei via
->> +         -march.
-> This sentence no longer makes sense to me, the motivation for why we are
-> doing this is lost. Please preserve the link & explanation about the
-> 20191213 version of the spec, adding to it the commentary about how we
-> can relax the check to 2.36, since that makes our lives easier.
->
-> The rest of this looks fine to me, if you resubmit I'll look at it
-> further on Monday.
+Hi LeoLiu-oc,
 
-I updated it in v3 [1]. Thanks for your review.
+kernel test robot noticed the following build errors:
 
-[1] https://lore.kernel.org/all/20230731095936.23397-1-xingmingzheng@iscas.ac.cn
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master linus/master v6.5-rc4 next-20230731]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/hwrng-via-rng-convert-to-x86_cpu_id-probing/20230731-164950
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20230731084515.2057375-3-LeoLiu-oc%40zhaoxin.com
+patch subject: [PATCH v2 2/2] hwrng: add Zhaoxin HW RNG driver
+config: hexagon-randconfig-r024-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311920.0ZdHwXvk-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311920.0ZdHwXvk-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307311920.0ZdHwXvk-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/char/hw_random/zhaoxin-rng.c:16:10: fatal error: 'asm/cpu_device_id.h' file not found
+   #include <asm/cpu_device_id.h>
+            ^~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
+
+
+vim +16 drivers/char/hw_random/zhaoxin-rng.c
+
+  > 16	#include <asm/cpu_device_id.h>
+    17	#include <asm/fpu/api.h>
+    18	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
