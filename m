@@ -1,164 +1,144 @@
-Received: from mgamail.intel.com (unknown [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f207.google.com (mail-oi1-f207.google.com [209.85.167.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C27363;
-	Mon, 31 Jul 2023 02:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690770753; x=1722306753;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cwj1dWkccQrL9SYy7anSD3GwlkOhYGdHTTkSsYxs3B8=;
-  b=J79kVaZ3kIe5TxqVenoAiiynM68gJn8oIxxoX9Ex3k8lco9qiXYP/9SG
-   zVS0rPRNZeyU0Ty1g1L/Genz+VKn2wLZiN0azOp8JLDOjvOADHuAEawMb
-   cSnWf3ckgYcZx5pryB175mpJMjdI/ncEx6m+v8M3nawq790x/5cNei682
-   zT7sUIhuAa15Kdi5VLgng2jeLsiFjh6wt3Q9OGiN0O1ykjsm2afgDGHEF
-   x9C7tixHGUnYKVdprkHy9Y/dnWcCUjH+MgylSCdV2nDR3e8tIQqdKHl1K
-   43BUW3MYsylzoKJPOzCIFtsrph8rSQCuQlIh1g/QSFpBDcPG2o6Kt47bN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="432712556"
-X-IronPort-AV: E=Sophos;i="6.01,243,1684825200"; 
-   d="scan'208";a="432712556"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 19:32:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="731421621"
-X-IronPort-AV: E=Sophos;i="6.01,243,1684825200"; 
-   d="scan'208";a="731421621"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2023 19:32:30 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQIhl-0004tB-3D;
-	Mon, 31 Jul 2023 02:32:28 +0000
-Date: Mon, 31 Jul 2023 10:31:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [andi-shyti:i2c/andi-for-next 23/27]
- drivers/i2c/busses/i2c-virtio.c:270:3: error: field designator 'freeze' does
- not refer to any field in type 'struct virtio_driver'
-Message-ID: <202307311024.dAcru88T-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AA862D
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 03:34:58 +0000 (UTC)
+Received: by mail-oi1-f207.google.com with SMTP id 5614622812f47-3a1c2d69709so7299764b6e.1
+        for <llvm@lists.linux.dev>; Sun, 30 Jul 2023 20:34:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690774497; x=1691379297;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eNn46kxg48m+Q5oWGr+r8mpJ1OOx1r1wF8Gt6l4ZDzw=;
+        b=Re4LNEvl7r1nUBoDto/6UZ/59u3/PfxnpdYv1USqEH7AfiVA2Lhfv3S5IZgPjxt8VP
+         EhLGjBTTuUhFuOcH7dtFHjGp7xqCvmdwuhz5IMdDu/wjUWb/tqUUvs1hhJyqFp9fwRKX
+         k6QqJuUY37b4P23DGXf3McQBA4j5ZtEdi8o8OovmQd0FjJc5i4P4ZTl7pu/B6Q7Isotc
+         l56ian7bPMaRM4g+Oxjrvdjb6ygFttx3msIOPWrtcqJXrcDtN59hLQv8xU491nnRvaHy
+         C6oASHK9WQg99K8iAF/e71CFsaeoCgnufBC3t/jGfzlCj4ur7hCNkvzvI/ryzRr783zk
+         MfhA==
+X-Gm-Message-State: ABy/qLaMGn0Z0qaVqymZFsvIDhK9W50bSZS1PCyfWYLi+F0HL33FNr03
+	rKm5iIOYyxAAoIYtGFJztfavDz9c7cotHC2JU+6KoPc0Ch0D
+X-Google-Smtp-Source: APBJJlEZebHKiiADqjSYSifoPxsJOxzd9K6nGEmHSsFY8PSZQvn/2D2VpKn+ESfRoYFYgPIMFC4LcL0doQYHFZBfAR+leFnYYTEG
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6808:158c:b0:3a4:1f25:7508 with SMTP id
+ t12-20020a056808158c00b003a41f257508mr17127033oiw.0.1690774497775; Sun, 30
+ Jul 2023 20:34:57 -0700 (PDT)
+Date: Sun, 30 Jul 2023 20:34:57 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000055d5e90601c01dee@google.com>
+Subject: [syzbot] [ext4?] WARNING: locking bug in ext4_xattr_inode_update_ref (2)
+From: syzbot <syzbot+6699abaff302165de416@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/andi-for-next
-head:   1851a80ee87d2decf774ee5785c8dd25e30bd118
-commit: 73d546c76235b5329c0b6d370c836777443fd208 [23/27] i2c: virtio: Remove #ifdef guards for PM related functions
-config: hexagon-randconfig-r004-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311024.dAcru88T-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311024.dAcru88T-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307311024.dAcru88T-lkp@intel.com/
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    0ba5d0720577 Add linux-next specific files for 20230726
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1747a881a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f33fb77ef67a25e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=6699abaff302165de416
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1217c65ea80000
 
-   In file included from drivers/i2c/busses/i2c-virtio.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/i2c/busses/i2c-virtio.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/i2c/busses/i2c-virtio.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/i2c/busses/i2c-virtio.c:270:3: error: field designator 'freeze' does not refer to any field in type 'struct virtio_driver'
-     270 |         .freeze                 = pm_sleep_ptr(virtio_i2c_freeze),
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/i2c/busses/i2c-virtio.c:271:3: error: field designator 'restore' does not refer to any field in type 'struct virtio_driver'
-     271 |         .restore                = pm_sleep_ptr(virtio_i2c_restore),
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 2 errors generated.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2fa09c6312ae/disk-0ba5d072.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7361000a4380/vmlinux-0ba5d072.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/48a015458a58/bzImage-0ba5d072.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/405ee39c557d/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6699abaff302165de416@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+Looking for class "&ea_inode->i_rwsem" with key ext4_fs_type, but found a different class "&sb->s_type->i_mutex_key" with the same key
+WARNING: CPU: 0 PID: 5364 at kernel/locking/lockdep.c:940 look_up_lock_class+0xad/0x120 kernel/locking/lockdep.c:940
+Modules linked in:
+CPU: 0 PID: 5364 Comm: syz-executor.3 Not tainted 6.5.0-rc3-next-20230726-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2023
+RIP: 0010:look_up_lock_class+0xad/0x120 kernel/locking/lockdep.c:940
+Code: 59 49 8b 14 24 48 81 fa a0 d9 49 90 74 4c 80 3d 43 17 60 04 00 75 43 48 c7 c7 00 82 6c 8a c6 05 33 17 60 04 01 e8 03 f2 16 f7 <0f> 0b eb 2c 89 74 24 04 e8 36 ae e7 f9 8b 74 24 04 48 c7 c7 40 81
+RSP: 0018:ffffc90004a4f008 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: ffffffff918a53c0 RCX: 0000000000000000
+RDX: ffff88802a8ebb80 RSI: ffffffff814d5b56 RDI: 0000000000000001
+RBP: ffffffff8cc46c78 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff888066815e00
+R13: ffff888066815e00 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f046301d6c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020002000 CR3: 000000002a7c9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0xbd/0x1320 kernel/locking/lockdep.c:1292
+ __lock_acquire+0x13c/0x5de0 kernel/locking/lockdep.c:5021
+ lock_acquire kernel/locking/lockdep.c:5761 [inline]
+ lock_acquire+0x1ae/0x510 kernel/locking/lockdep.c:5726
+ down_write+0x93/0x200 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:771 [inline]
+ ext4_xattr_inode_update_ref+0xa6/0x5c0 fs/ext4/xattr.c:1042
+ ext4_xattr_inode_inc_ref fs/ext4/xattr.c:1088 [inline]
+ ext4_xattr_inode_inc_ref_all fs/ext4/xattr.c:1115 [inline]
+ ext4_xattr_block_set+0x2305/0x30e0 fs/ext4/xattr.c:2159
+ ext4_xattr_set_handle+0xd6e/0x1420 fs/ext4/xattr.c:2456
+ ext4_xattr_set+0x149/0x370 fs/ext4/xattr.c:2558
+ __vfs_setxattr+0x173/0x1d0 fs/xattr.c:201
+ __vfs_setxattr_noperm+0x127/0x5e0 fs/xattr.c:235
+ __vfs_setxattr_locked+0x17e/0x250 fs/xattr.c:296
+ vfs_setxattr+0x146/0x350 fs/xattr.c:322
+ do_setxattr+0x142/0x170 fs/xattr.c:630
+ setxattr+0x159/0x170 fs/xattr.c:653
+ path_setxattr+0x1a3/0x1d0 fs/xattr.c:672
+ __do_sys_setxattr fs/xattr.c:688 [inline]
+ __se_sys_setxattr fs/xattr.c:684 [inline]
+ __x64_sys_setxattr+0xc4/0x160 fs/xattr.c:684
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f046c07cb29
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f046301d0c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000bc
+RAX: ffffffffffffffda RBX: 00007f046c19c050 RCX: 00007f046c07cb29
+RDX: 00000000200005c0 RSI: 0000000020000180 RDI: 00000000200000c0
+RBP: 00007f046c0c847a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000002000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000006e R14: 00007f046c19c050 R15: 00007ffd0e4f6698
+ </TASK>
 
 
-vim +270 drivers/i2c/busses/i2c-virtio.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   260	
-   261	static struct virtio_driver virtio_i2c_driver = {
-   262		.feature_table		= features,
-   263		.feature_table_size	= ARRAY_SIZE(features),
-   264		.id_table		= id_table,
-   265		.probe			= virtio_i2c_probe,
-   266		.remove			= virtio_i2c_remove,
-   267		.driver			= {
-   268			.name	= "i2c_virtio",
-   269		},
- > 270		.freeze			= pm_sleep_ptr(virtio_i2c_freeze),
- > 271		.restore		= pm_sleep_ptr(virtio_i2c_restore),
-   272	};
-   273	module_virtio_driver(virtio_i2c_driver);
-   274	
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
