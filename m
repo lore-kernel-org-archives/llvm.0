@@ -1,41 +1,43 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF75D4429
-	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 12:36:29 +0000 (UTC)
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3fe1d9a8ec6so7672205e9.1
-        for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 05:36:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9765B8BF5
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 12:36:30 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-31765792c7cso4780799f8f.0
+        for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 05:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1690806988; x=1691411788;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zf2opAJWpIyipvbGeaqpygqhHDn8/Va05DqGxlPq9ZA=;
-        b=nGLy3tslf30CMuBGiZ5azZCYGUYkwNJncgji3o/tFpCs0J6224of147dgfuLSF8hfZ
-         s0sra2xiU81n0Y/Dg+xkeGNm14dsEc2WNGZW1Sr6cqD2b7+j6sGO9A3eAhxq6gchENsx
-         CzG3oMkOfFWE5FkttESQiNcQJ8DiWjy+07iT+0OH5+szSzEXPhDzY9poIBHCmprvsXKM
-         eu3tyZoXW5C/a1SqK/mQlG+n8cOik2L9vgA2l5h+kzQ9G/wXO6MAupp9jN8nnfHSSGTb
-         Qew89VNs8dD6l3I1+bLKRBuLm/+7hJostcnoqboC8KsSxP20bjvPRMYQCB5Jy5htO7il
-         9cKw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aLp1taY+ERuB3LasQnUEAssMbTidsnt4pqF9zZDF/gU=;
+        b=chwC+wsgzGXj6wjU5jSUeRc5Vjg1jIuVhWvlqm0hd7IggW947rVleeAmnaNBE85PEd
+         9HiQ6m12UnWwDe5eetX7xFu4PZ7KzGyVthZcR3faV1kgd8EVEoCoSVVofNXzH6PclDee
+         cY2YBH2CiTvpzL8zctZbxWQ3knSm1Le3Gjx3N9S4rI88qL4Qvd/Ft9OJwoaGCMYvXKOI
+         8Bw1eak0mWqSWRQrY0z3pHJPvg57h+dif+YRObNbh1HX+ESzcvT2+qTPBUhCzdar/0GT
+         z2FCJgoZv8klH7RqK85RhlZiCU2RyYuRtHrTHE27lgGEeXFzdIHu9ocBBRY11V+JXtna
+         tRNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1690806988; x=1691411788;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zf2opAJWpIyipvbGeaqpygqhHDn8/Va05DqGxlPq9ZA=;
-        b=TueASKm2iemtJC6WptkRdcW9hTUKeyPGkcwVew0jezWCkM83ssjwyxNrYD3aA0UOY/
-         h/p5OqEqlpTtKoK84roN6HzLIbSRlvuLIpi059NPWwGKcRFJJepXtz6kQb01Tg62xj7l
-         cRvrJpU+NrfbC8R1uo7clhOHea2T+Xf62LwWSewKwFmnBZSQ9qNXqB/rfx5Yyk6OyKXc
-         aES2LLSqbE/5AW/dbhpzLhZNmgZqtbNPaflkRu3NqXC/qshNWs4bXCFA9oufsEtczOol
-         PD33V6PAXdRVC/hPZUO9xdt1c6wWCLs7FUSkDMAOF1eEl/OtCtFZs7V9U29hEYofHcZJ
-         b/8A==
-X-Gm-Message-State: ABy/qLaeHf1Zi3fV3YnQUoFNrMYIg+rxHKA8tGoMHK9irwh3E2yefTzq
-	lmt6xgez6i4ae/XllqTmy5c=
-X-Google-Smtp-Source: APBJJlEvv30ndSO7ZKIgteoM7qxvowfzxbYmdIS/70P2PRqn3P/08DXO9LgWFAkN1dyyP8slBRUhWw==
-X-Received: by 2002:adf:fece:0:b0:313:df09:acfb with SMTP id q14-20020adffece000000b00313df09acfbmr8245282wrs.11.1690806987609;
-        Mon, 31 Jul 2023 05:36:27 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aLp1taY+ERuB3LasQnUEAssMbTidsnt4pqF9zZDF/gU=;
+        b=fxdzTH0j3rH9MeQ7jxTyKjTdfN4Yz5HYi0nUaN8PIO9kBJTAbRVBNXFYgkKsTapJN2
+         dICIv8Wepy9jLTMwvUgKuGKekE32BSsiv6P2Jr//byXYvW1/9aJk2plAuhB97pwDSBMU
+         Z40yNzC3d3CfRG6/XwuM9kL/8cCuz54Tut4RkHTlUGkNm/rACsmc/RDga3EzNq+PbVjf
+         UZd+TANg4QajL0dYmCpD5z69hFlgxS8QYLgsU57c0It2g37aF3uu2GF9gjl0I3waRkTR
+         VMwT2ehacYvNXNwiBKOgxhh0Ug158aSYG+N3J5+4rZ/Y51C85RVbt5sSZHFv2Z4UvaL+
+         gsnA==
+X-Gm-Message-State: ABy/qLZeNoCtYKFpL0X2+bl37Z0riTo8I/6/rC+bFvHyTCWopLSCFF7P
+	z4TIE4xHmWDSvdrHx0TI0sw=
+X-Google-Smtp-Source: APBJJlHvC+FHChEM48GIT9MWRuWxUmhW+e0P0HpxDVwIfuo5KkFvCgGq1hXTIHbBCKhk+j4gUbPGEw==
+X-Received: by 2002:a5d:6310:0:b0:317:5fe7:6844 with SMTP id i16-20020a5d6310000000b003175fe76844mr7371635wru.39.1690806988455;
+        Mon, 31 Jul 2023 05:36:28 -0700 (PDT)
 Received: from able.fritz.box ([2a00:e180:14f0:a600:ce89:8608:2d6f:110d])
-        by smtp.gmail.com with ESMTPSA id e15-20020a5d4e8f000000b003143c532431sm12958292wru.27.2023.07.31.05.36.26
+        by smtp.gmail.com with ESMTPSA id e15-20020a5d4e8f000000b003143c532431sm12958292wru.27.2023.07.31.05.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 05:36:27 -0700 (PDT)
+        Mon, 31 Jul 2023 05:36:28 -0700 (PDT)
 From: "=?UTF-8?q?Christian=20K=C3=B6nig?=" <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To: boris.brezillon@collabora.com,
@@ -51,10 +53,12 @@ To: boris.brezillon@collabora.com,
 	llvm@lists.linux.dev,
 	naresh.kamboju@linaro.org,
 	dakr@redhat.com
-Subject: [PATCH 1/2] drm/exec: use unique instead of local label
-Date: Mon, 31 Jul 2023 14:36:24 +0200
-Message-Id: <20230731123625.3766-1-christian.koenig@amd.com>
+Subject: [PATCH 2/2] drm/exec: add test case for using a drm_exec multiple times
+Date: Mon, 31 Jul 2023 14:36:25 +0200
+Message-Id: <20230731123625.3766-2-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230731123625.3766-1-christian.koenig@amd.com>
+References: <20230731123625.3766-1-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,56 +68,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-GCC forbids to jump to labels in loop conditions and a new clang
-check stumbled over this.
+Not really a common use case, but let's make sure that we don't
+accidentially break that somehow.
 
-So instead using a local label inside the loop condition use an
-unique label outside of it.
-
-Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
-Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-Link: https://github.com/ClangBuiltLinux/linux/issues/1890
-Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d096eb3aed7b712f5067
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 CC: Boris Brezillon <boris.brezillon@collabora.com>
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- include/drm/drm_exec.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/tests/drm_exec_test.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-index 73205afec162..e0462361adf9 100644
---- a/include/drm/drm_exec.h
-+++ b/include/drm/drm_exec.h
-@@ -3,6 +3,7 @@
- #ifndef __DRM_EXEC_H__
- #define __DRM_EXEC_H__
+diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/drm/tests/drm_exec_test.c
+index 727ac267682e..7b0238c5d9fa 100644
+--- a/drivers/gpu/drm/tests/drm_exec_test.c
++++ b/drivers/gpu/drm/tests/drm_exec_test.c
+@@ -138,6 +138,26 @@ static void test_prepare_array(struct kunit *test)
+ 	drm_exec_fini(&exec);
+ }
  
-+#include <linux/compiler.h>
- #include <linux/ww_mutex.h>
++static void test_multiple_loops(struct kunit *test)
++{
++	struct drm_exec exec;
++
++	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
++	drm_exec_until_all_locked(&exec)
++	{
++		break;
++	}
++	drm_exec_fini(&exec);
++
++	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
++	drm_exec_until_all_locked(&exec)
++	{
++		break;
++	}
++	drm_exec_fini(&exec);
++	KUNIT_SUCCEED(test);
++}
++
+ static struct kunit_case drm_exec_tests[] = {
+ 	KUNIT_CASE(sanitycheck),
+ 	KUNIT_CASE(test_lock),
+@@ -145,6 +165,7 @@ static struct kunit_case drm_exec_tests[] = {
+ 	KUNIT_CASE(test_duplicates),
+ 	KUNIT_CASE(test_prepare),
+ 	KUNIT_CASE(test_prepare_array),
++	KUNIT_CASE(test_multiple_loops),
+ 	{}
+ };
  
- #define DRM_EXEC_INTERRUPTIBLE_WAIT	BIT(0)
-@@ -74,13 +75,12 @@ struct drm_exec {
-  * Since labels can't be defined local to the loops body we use a jump pointer
-  * to make sure that the retry is only used from within the loops body.
-  */
--#define drm_exec_until_all_locked(exec)				\
--	for (void *__drm_exec_retry_ptr; ({			\
--		__label__ __drm_exec_retry;			\
--__drm_exec_retry:						\
--		__drm_exec_retry_ptr = &&__drm_exec_retry;	\
--		(void)__drm_exec_retry_ptr;			\
--		drm_exec_cleanup(exec);				\
-+#define drm_exec_until_all_locked(exec)					\
-+__PASTE(__drm_exec_, __LINE__):						\
-+	for (void *__drm_exec_retry_ptr; ({				\
-+		__drm_exec_retry_ptr = &&__PASTE(__drm_exec_, __LINE__);\
-+		(void)__drm_exec_retry_ptr;				\
-+		drm_exec_cleanup(exec);					\
- 	});)
- 
- /**
 -- 
 2.34.1
 
