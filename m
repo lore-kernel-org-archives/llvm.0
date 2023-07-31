@@ -1,121 +1,104 @@
-Received: from mgamail.intel.com (unknown [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB2517744;
-	Mon, 31 Jul 2023 10:12:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690798356; x=1722334356;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=dT5IIav0dUcp0rDI+sTuQmKVo0RmKVULnvbHffqxu4w=;
-  b=YybVhVnOMHPYLgx9wxBJXq6hlSlIewPZFe9KlVzOJZXhPK9J5bYhhYQU
-   IUawXsf8UVHwjBHfaUVI32VsO1Lxkan2eEQTLcmTl5Q1FS0FzP19Fby8p
-   aZ57DGi30W1HXvg3Epnvl8gQ8ycvzv0ptw6PyYOY1c3w908S+c1uCsJZh
-   A6gE4ULtLSMJ60k+wE/96p2d89CbOEpZuKn3fh58Q8BIkKF1cb0KHXpI6
-   f/gIB3sw6sowNGYdGVjgbf0Ft3ayrQqOn4oyBL/aUcfhrX0y8ONgMBBtT
-   QDcZWgecjlWJ6kG5PQTU05qpOgmy2GkYOl5yGOViVjjhtK31UExpludb6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="359015565"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="359015565"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 03:12:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="728250334"
-X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="728250334"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jul 2023 03:12:35 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQPt9-00053f-2o;
-	Mon, 31 Jul 2023 10:12:32 +0000
-Date: Mon, 31 Jul 2023 18:11:52 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(init/main.o):(function
- __traceiter_initcall_level: .text+0x10): relocation R_RISCV_HI20 out of
- range: 531482 is not in [-524288, 524287]; references
- '__tracepoint_initcall_level'
-Message-ID: <202307311845.TZgGkg4U-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FAE1426B
+	for <llvm@lists.linux.dev>; Mon, 31 Jul 2023 10:17:00 +0000 (UTC)
+Received: from [192.168.0.107] (unknown [111.197.209.91])
+	by APP-03 (Coremail) with SMTP id rQCowACHj8fxicdkWHydDw--.11897S2;
+	Mon, 31 Jul 2023 18:16:17 +0800 (CST)
+Message-ID: <572ad471-8a0b-95e2-1112-c55f42e5594b@iscas.ac.cn>
+Date: Mon, 31 Jul 2023 18:16:16 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2] riscv: Handle zicsr/zifencei issue between gcc and
+ binutils
+To: Conor Dooley <conor@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org,
+ Guo Ren <guoren@kernel.org>
+References: <20230726174524.340952-1-xingmingzheng@iscas.ac.cn>
+ <20230726-outclass-parade-2ccea9f6688a@spud>
+ <10231b81-ea42-26d0-4c11-92851229e658@iscas.ac.cn>
+ <20230726-armchair-evasive-427dd245a9fe@spud>
+ <20230727-briskness-sappy-e2d9e4c1ef36@spud>
+ <d75ef570-c0ad-cea4-687a-d02b560aa676@iscas.ac.cn>
+ <20230729-chaps-coauthor-95557d86b189@spud>
+Content-Language: en-US
+From: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+Organization: ISCAS
+In-Reply-To: <20230729-chaps-coauthor-95557d86b189@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowACHj8fxicdkWHydDw--.11897S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45Gw18tryDtw17KFyDKFg_yoW8Zw43pF
+	4kCFyDGry5Xw1xGw4xJ34UWry0yr4rJay5Jr45W3WUAryUAFy0grykXw1Ygr1DArs5tw10
+	vr1093WDZwn8JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvCb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
+	xwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+	b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7IU56c_DUUUUU==
+X-Originating-IP: [111.197.209.91]
+X-CM-SenderInfo: 50lqwzhlqj6xxhqjqxpvfd2hldfou0/1tbiCQkJCmTHZrJ09wAAs3
 
-CC: linux-kernel@vger.kernel.org
-TO: Jesse Taube <mr.bossman075@gmail.com>
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+On 7/30/23 01:48, Conor Dooley wrote:
+> On Sun, Jul 30, 2023 at 01:36:49AM +0800, Mingzheng Xing wrote:
+>
+>> I reproduced the error with gcc-12.2.0 and binutils-2.35. I tried a
+>> different solution, which I think makes the logic easier. Showing
+>> the new patch code:
+> It is indeed simpler, neat.
+>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 4c07b9189c86..a6fa1eed895c 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -569,25 +569,24 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+>>
+>>   config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>>          def_bool y
+>> -       # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+>> -       depends on AS_IS_GNU && AS_VERSION >= 23800
+>> +       depends on AS_IS_GNU && AS_VERSION >= 23600
+>>          help
+>> -         Newer binutils versions default to ISA spec version 20191213 which
+>> -         moves some instructions from the I extension to the Zicsr and Zifencei
+>> -         extensions.
+>> +         Binutils has supported zicsr and zifencei extensions since version 2.36,
+>> +         try to adapt to the changes by using explicit zicsr and zifencei via
+>> +         -march.
+> This sentence no longer makes sense to me, the motivation for why we are
+> doing this is lost. Please preserve the link & explanation about the
+> 20191213 version of the spec, adding to it the commentary about how we
+> can relax the check to 2.36, since that makes our lives easier.
+>
+> The rest of this looks fine to me, if you resubmit I'll look at it
+> further on Monday.
 
-Hi Jesse,
+I updated it in v3 [1]. Thanks for your review.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+[1] https://lore.kernel.org/all/20230731095936.23397-1-xingmingzheng@iscas.ac.cn
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
-commit: 49f965b6fbca63904d7397ce96066fa992f401a3 soc: canaan: Make K210_SYSCTL depend on CLK_K210
-date:   5 months ago
-config: riscv-randconfig-r025-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311845.TZgGkg4U-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311845.TZgGkg4U-lkp@intel.com/reproduce)
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307311845.TZgGkg4U-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_level: .text+0x10): relocation R_RISCV_HI20 out of range: 531482 is not in [-524288, 524287]; references '__tracepoint_initcall_level'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_start: .text+0x64): relocation R_RISCV_HI20 out of range: 531482 is not in [-524288, 524287]; references '__tracepoint_initcall_start'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function get_cpu_mask: .text+0x3d4): relocation R_RISCV_HI20 out of range: 528113 is not in [-524288, 524287]; references 'cpu_bit_bitmap'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(kernel/cpu.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(.text+0x40c): relocation R_RISCV_HI20 out of range: 527434 is not in [-524288, 524287]; references '__init_begin'
-   >>> referenced by main.c
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:26
---
->> ld.lld: error: vmlinux.a(init/main.o):(.text+0x414): relocation R_RISCV_HI20 out of range: 528111 is not in [-524288, 524287]; references '__init_end'
-   >>> referenced by main.c
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:69
---
->> ld.lld: error: vmlinux.a(init/main.o):(.text+0x41c): relocation R_RISCV_HI20 out of range: 530403 is not in [-524288, 524287]; references '.L.str.80'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_raw_output_initcall_level: .text+0x480): relocation R_RISCV_HI20 out of range: 530334 is not in [-524288, 524287]; references '.L.str.23'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_raw_output_initcall_start: .text+0x514): relocation R_RISCV_HI20 out of range: 530369 is not in [-524288, 524287]; references '.L.str.26'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_raw_output_initcall_finish: .text+0x5a4): relocation R_RISCV_HI20 out of range: 530239 is not in [-524288, 524287]; references '.L.str.29'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function rcu_lock_acquire: .text+0x5e8): relocation R_RISCV_HI20 out of range: 530495 is not in [-524288, 524287]; references 'rcu_lock_map'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(kernel/rcu/update.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function rcu_lock_release: .text+0x610): relocation R_RISCV_HI20 out of range: 530495 is not in [-524288, 524287]; references 'rcu_lock_map'
-   >>> referenced by main.c
-   >>> defined in vmlinux.a(kernel/rcu/update.o)
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
