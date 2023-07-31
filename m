@@ -1,129 +1,68 @@
-Received: from mgamail.intel.com (unknown [134.134.136.31])
+Received: from mgamail.intel.com (unknown [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DF017FEB;
-	Mon, 31 Jul 2023 12:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B75E17FEB;
+	Mon, 31 Jul 2023 12:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690805080; x=1722341080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Scbc1k97nOjYXKL92XVgiWyP02TWnisk0n+vpo+gYPk=;
-  b=Du5vLpMD3P20Icw+Tn/XCWDJRUQ+hZRUN/OkKtJgG75wBD13nyJZdsew
-   RtlUDxqAW37uV5/G8JsifAKMfYXih4AC42Z4ssgHaaomcUcCU4jprl+cx
-   HXWIX2HyTOcA15h3pEdqYTVR+gokWAhwWP086n1XIztPJbClnbXf33FNQ
-   Br3DcGwcFemv6TMPncxuNiZv/VzIX6QSDgKBnZBIUbzhu/uHQjMEBeCzR
-   CsN1UGQk4j5Ygm1YDxAMkDrJuOeaY1L2Q3D+seHSriMGQ1dR5Et2dyr3e
-   f8PgvUYPRqufEn9EiQjBiYreOkGXJOinKPdL/Am2Vt+X/TXC+yxh1i+vR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="432816283"
+  t=1690805275; x=1722341275;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gTwSW5Pi476YcxNfncRebsXRrqRzP0HUL96D8nDTvMw=;
+  b=SPNSoy4XGadNl2dhVquzBqmy75S1LFJAXeJKrLfcs06TP1+iuimqP2+f
+   HST5rF1M6eznCRVuReAZ04wmUleFSBKSHSQkbgzbQDE/o9y8R5Ne5Z1bH
+   zZQyVg60XRe98gofIbnoQjTygqwKBjqWMXI8A2BaUM6JeqCMLaM89E+/m
+   s2COu3BNxV/xK9JtVIWImViVv9beJJYn0zA16BkViZloZoqsle/VoUQIp
+   EcfLJzsqYFPMX7FCIVPSWUzj6/6Bhe7RmsA9tFPpff/v9Ppo8UKplLwAA
+   GaOV7UhczFOAsPOeZgr6bKRtPChR0wPtLbP3tRoeURsj63pXHgr2rYZi/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="455375339"
 X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="432816283"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:04:39 -0700
+   d="scan'208";a="455375339"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:07:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="678311425"
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="798223224"
 X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="678311425"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 31 Jul 2023 05:04:34 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQRdZ-00056n-2a;
-	Mon, 31 Jul 2023 12:04:33 +0000
-Date: Mon, 31 Jul 2023 20:04:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, olivia@selenic.com,
-	herbert@gondor.apana.org.au, jiajie.ho@starfivetech.com,
-	conor.dooley@microchip.com, martin@kaiser.cx, mmyangfl@gmail.com,
-	jenny.zhang@starfivetech.com, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, leoliu@zhaoxin.com,
-	CobeChen@zhaoxin.com, YunShen@zhaoxin.com, TonyWWang@zhaoxin.com,
-	leoliu-oc <leoliu-oc@zhaoxin.com>
-Subject: Re: [PATCH v2 2/2] hwrng: add Zhaoxin HW RNG driver
-Message-ID: <202307311920.0ZdHwXvk-lkp@intel.com>
-References: <20230731084515.2057375-3-LeoLiu-oc@zhaoxin.com>
+   d="scan'208";a="798223224"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.1.128])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:07:51 -0700
+From: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
+ igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH v2 3/3] kunit: Allow kunit test modules to use test filtering
+Date: Mon, 31 Jul 2023 14:07:49 +0200
+Message-ID: <1971193.8hb0ThOEGa@jkrzyszt-mobl2.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
+ 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <202307311645.CdN0xKiF-lkp@intel.com>
+References:
+ <20230731054552.2145292-8-janusz.krzysztofik@linux.intel.com>
+ <202307311645.CdN0xKiF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731084515.2057375-3-LeoLiu-oc@zhaoxin.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi LeoLiu-oc,
+On Monday, 31 July 2023 10:39:03 CEST kernel test robot wrote:
+> >> ERROR: modpost: "glob_match" [lib/kunit/kunit.ko] undefined!
 
-kernel test robot noticed the following build errors:
+Caused by CONFIG_GLOB possibly not selected when building kunit as a module  
+(it was selected via another, unrelated setting in my test .config).
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master linus/master v6.5-rc4 next-20230731]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Please expect v3 with that fixed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/hwrng-via-rng-convert-to-x86_cpu_id-probing/20230731-164950
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20230731084515.2057375-3-LeoLiu-oc%40zhaoxin.com
-patch subject: [PATCH v2 2/2] hwrng: add Zhaoxin HW RNG driver
-config: hexagon-randconfig-r024-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311920.0ZdHwXvk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311920.0ZdHwXvk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307311920.0ZdHwXvk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/char/hw_random/zhaoxin-rng.c:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/char/hw_random/zhaoxin-rng.c:16:10: fatal error: 'asm/cpu_device_id.h' file not found
-   #include <asm/cpu_device_id.h>
-            ^~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+Thanks,
+Janusz
 
 
-vim +16 drivers/char/hw_random/zhaoxin-rng.c
-
-  > 16	#include <asm/cpu_device_id.h>
-    17	#include <asm/fpu/api.h>
-    18	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
