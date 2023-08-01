@@ -1,198 +1,134 @@
-Received: from mgamail.intel.com (unknown [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6961ADCA;
-	Tue,  1 Aug 2023 15:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690904944; x=1722440944;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ijHKWyxMDFX2U0gtiiQl9OLeh2+s4wzjS1aKzHDmD7Y=;
-  b=UEtnMj82SfCDRJeYfzbzm1EHQrWcwfsvYPtsAnaduCELB7aazoIWiG+S
-   +SUrzLWGsvuPkOIFIUsow+TfOKhPPfqXs881vJTL3Pb3pceifCLWEKlL1
-   pxOEMIasI5grsbWxzXwOmyf5xAG6vVvh93I0yKF5vNXyA8IfojMqh5PSO
-   pbxE42JtBQWWDV2CkQRrLuDW26ZPwaB8Fx/SQ2S+C7BDN3EGiUI/CMbzm
-   87Gsh7TlB9URgIw9DDhEyPSk9Q+FTWY5e6okF0OP/59QqA3UWeFidOQJb
-   +tPRE9IykENbpW+sLIsqcnLLJsA7gzcL7To2Lw0aadBZPExfydRcHljaV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="369330144"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="369330144"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 08:49:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="975358851"
-X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="975358851"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Aug 2023 08:49:02 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qQrcL-0000P5-0V;
-	Tue, 01 Aug 2023 15:49:01 +0000
-Date: Tue, 1 Aug 2023 23:48:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:timers/softirq-preemptible 5/6]
- kernel/time/timer.c:1700:3: error: implicit declaration of function
- 'local_bh_vec_disable' is invalid in C99
-Message-ID: <202308012358.5V8YXhOZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC5A4DC61
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 16:02:18 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63d1238c300so29259956d6.0
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 09:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690905737; x=1691510537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=03aieGdgBxbYMor+zrbkfIBxz/KLfdHy7Dl2oJFgL9Q=;
+        b=dtmuBO6Fb+DNoOV0Y2U8m6eJh8nWPZxx7E7wRQNiJO2s+Ifq81nKUpE/0J1ZXHJmga
+         hHaOSLF8rAv1gi+00Uxf+4KnC4PrW4Srbfpenxb52befJwBmxZNOtTXgIW1KsZr26vRc
+         vJeBIt4U+e1DhruiCFR14Pn9fHrZBtEdRI0Zz7F4GnHr4TBvfGPErUjAOaRsUSu/97NF
+         JAq8Mzj2cfRM+RnHPdbvYmWEQr14VJMdc44oQaBYbktAYwuTDL7slK2uCZl3d6Le+fYw
+         upGxuwChc1apybgOHGWzBGcjXH3N8o9ilLYDxX/Q6ZJCao1Vqen84QXVzF8wDuMRIjzi
+         nlRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690905737; x=1691510537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=03aieGdgBxbYMor+zrbkfIBxz/KLfdHy7Dl2oJFgL9Q=;
+        b=RpCDjbr+mtFzopDSCFvf2f/as19hvgcRSmvdW+E8rjzqACFeNm2GFgHMwLTOesZ+5v
+         OoYPYVkvTMMrawTIEcpigpDGE4U9G1xdfQMTJ46kZj2CHIyxxAJZAsaHOG75KbQOLi2u
+         MYcOPk10JeNk6T+eNhalDHSauZRl8CZd89CZYlZoobgGqmI8v9XAsqxL70+LtoTiqJJR
+         7TYU5TcKHGKz5hqbCXw6fGQKaFaVNqMye1lQ9UNs4xWtYUmg0Ge+tE19x3eMLrelg1HW
+         IZ5g48OHFUrNMgT6LQ4lOaA9atOaA3b6sMAz4hlvwS510OI7eSdMW1G7lw4e7YcBZGBQ
+         ipfA==
+X-Gm-Message-State: ABy/qLbRjw3PQ6YsWvbb0mddI81fb1+M7cQvjegT9jAkkqdvLgpAVsXv
+	QseHJHl1e908RdFHHv1TefotFRyYvbPRI926u62jlg==
+X-Google-Smtp-Source: APBJJlFhlDXyfDh1bir6NtiRwgyu53SQkMwG14hApKnu7Xh4DgS+oyRQEYihjYIk6TpeJYBq4Ki/kTENkUO2wINlBms=
+X-Received: by 2002:a05:6214:459c:b0:63d:1e4e:d745 with SMTP id
+ op28-20020a056214459c00b0063d1e4ed745mr11462027qvb.61.1690905737445; Tue, 01
+ Aug 2023 09:02:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <bde3d2dc933848bbaceeb9b7102f6f4c@AcuMS.aculab.com>
+ <b4ce9dad748e489f9314a2dc95615033@AcuMS.aculab.com> <9c14002108ff49e1a54819133fe9e2a3@AcuMS.aculab.com>
+In-Reply-To: <9c14002108ff49e1a54819133fe9e2a3@AcuMS.aculab.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 1 Aug 2023 09:02:06 -0700
+Message-ID: <CAKwvOdm6ZVSMpzSJ0tFMR_rVb1+=REk8ETLS2SBe3s8QrbYUQw@mail.gmail.com>
+Subject: Re: [PATCH next v2 5/5] minmax: Relax check to allow comparison
+ between int and small unsigned constants.
+To: David Laight <David.Laight@aculab.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Christoph Hellwig <hch@infradead.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
+	Nathan Chancellor <nathan@kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/softirq-preemptible
-head:   c233aee141ddb78d07b2f7311be38cfc286de654
-commit: e54180a8daee54a469b182cd7e753d17e52394ef [5/6] timers: Introduce soft-interruptible timers
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230801/202308012358.5V8YXhOZ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230801/202308012358.5V8YXhOZ-lkp@intel.com/reproduce)
+On Mon, Jul 31, 2023 at 6:27=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> By the time I've done:
+>
+> #define __is_noneg_int(x)                                       \
+>         __builtin_choose_expr(!__is_constexpr(x), false,        \
+>                 ((x) >=3D (typeof(x))0 && (x) <=3D (typeof((x) + 0))(long=
+)__INT_MAX__))
+>
+> #define __is_signed(x)                                                   =
+      \
+>        __builtin_choose_expr(__is_constexpr(is_signed_type(typeof(x))),  =
+      \
+>                is_signed_type(typeof(x)), 0)
+>
+> #define __types_ok(x, y)                                        \
+>         (__is_signed(x) =3D=3D __is_signed(y) ||                    \
+>                 __is_signed((x) + 0) =3D=3D __is_signed((y) + 0) || \
+>                 __is_noneg_int(x) || __is_noneg_int(y))
+>
+> the error message for
+>
+> >       static_assert(__types_ok(x, y),                 \
+> >               #op "(" #x ", " #y ") signedness error, fix types or cons=
+ider " #op "_unsigned() before " #op "_t()"); \
+>
+> generated by clang 8.0.0 and later is similar to (see https://godbolt.org=
+/z/jq613Gnsa):
+>
+> <source>:49:12: error: static assertion failed due to requirement '__buil=
+tin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((int)(=
+-1)) < (int)1)) * 0L)) : (int *)8))), (((int)(-1)) < (int)1), 0) =3D=3D __b=
+uiltin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((un=
+signed int)(-1)) < (unsigned int)1)) * 0L)) : (int *)8))), (((unsigned int)=
+(-1)) < (unsigned int)1), 0) || __builtin_choose_expr((sizeof(int) =3D=3D s=
+izeof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * 0L)) : (int *)8))),=
+ (((int)(-1)) < (int)1), 0) =3D=3D __builtin_choose_expr((sizeof(int) =3D=
+=3D sizeof (*(8 ? ((void *)((long)((((unsigned int)(-1)) < (unsigned int)1)=
+) * 0L)) : (int *)8))), (((unsigned int)(-1)) < (unsigned int)1), 0) || (__=
+builtin_choose_expr(!(sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)(a) =
+* 0L)) : (int *)8))), 0, __builtin_choose_expr(__builtin_choose_expr((sizeo=
+f(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * 0L))=
+ : (int *)8))), (((int)(-1)) < (int)1), 0), a, 0) >=3D 0 && (a) <=3D (int)(=
+long)2147483647)) || (__builtin_choose_expr(!(sizeof(int) =3D=3D sizeof (*(=
+8 ? ((void *)((long)(2147483648U - 0) * 0L)) : (int *)8))), 0, __builtin_ch=
+oose_expr(__builtin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)=
+((long)((((unsigned int)(-1)) < (unsigned int)1)) * 0L)) : (int *)8))), (((=
+unsigned int)(-1)) < (unsigned int)1), 0), 2147483648U - 0, 0) >=3D 0 && (2=
+147483648U - 0) <=3D (unsigned int)(long)2147483647))': min(a, 0x80000000u =
+- 0) signedness error, fix types or consider min_unsigned() before min_t()
+>
+> Repeating the expression seems somewhat sub-optimal!
+> Surely it shouldn't be outputting the expansion of the
+> input when an error message is supplied?
+>
+> Is there any (sane) way to stop it being that verbose?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308012358.5V8YXhOZ-lkp@intel.com/
+No, but we can probably change that in clang. Filed:
+https://github.com/llvm/llvm-project/issues/64310
 
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/time/timer.c:21:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/time/timer.c:21:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/time/timer.c:21:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/time/timer.c:1700:3: error: implicit declaration of function 'local_bh_vec_disable' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   local_bh_vec_disable(1 << TIMER_SOFTIRQ);
-                   ^
-   kernel/time/timer.c:1700:3: note: did you mean 'local_bh_disable'?
-   include/linux/bottom_half.h:18:20: note: 'local_bh_disable' declared here
-   static inline void local_bh_disable(void)
-                      ^
->> kernel/time/timer.c:1719:3: error: implicit declaration of function 'local_bh_vec_enable' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   local_bh_vec_enable(1 << TIMER_SOFTIRQ);
-                   ^
-   kernel/time/timer.c:1719:3: note: did you mean 'local_bh_enable'?
-   include/linux/bottom_half.h:31:20: note: 'local_bh_enable' declared here
-   static inline void local_bh_enable(void)
-                      ^
-   12 warnings and 2 errors generated.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
 
 
-vim +/local_bh_vec_disable +1700 kernel/time/timer.c
 
-  1693	
-  1694		if (IS_ENABLED(CONFIG_PREEMPT_RT) &&
-  1695		    IS_ENABLED(CONFIG_ARCH_HAS_SOFTIRQ_DISABLED_MASK) &&
-  1696		    timer->flags & TIMER_SOFTINTERRUPTIBLE)
-  1697			softinterruptible = true;
-  1698	
-  1699		if (softinterruptible) {
-> 1700			local_bh_vec_disable(1 << TIMER_SOFTIRQ);
-  1701			local_bh_exit();
-  1702		}
-  1703	
-  1704		/*
-  1705		 * Couple the lock chain with the lock chain at
-  1706		 * timer_delete_sync() by acquiring the lock_map around the fn()
-  1707		 * call here and in timer_delete_sync().
-  1708		 */
-  1709		lock_map_acquire(&lockdep_map);
-  1710	
-  1711		trace_timer_expire_entry(timer, baseclk);
-  1712		fn(timer);
-  1713		trace_timer_expire_exit(timer);
-  1714	
-  1715		lock_map_release(&lockdep_map);
-  1716	
-  1717		if (softinterruptible) {
-  1718			local_bh_enter();
-> 1719			local_bh_vec_enable(1 << TIMER_SOFTIRQ);
-  1720		}
-  1721	
-  1722	
-  1723		if (count != preempt_count()) {
-  1724			WARN_ONCE(1, "timer: %pS preempt leak: %08x -> %08x\n",
-  1725				  fn, count, preempt_count());
-  1726			/*
-  1727			 * Restore the preempt count. That gives us a decent
-  1728			 * chance to survive and extract information. If the
-  1729			 * callback kept a lock held, bad luck, but not worse
-  1730			 * than the BUG() we had.
-  1731			 */
-  1732			preempt_count_set(count);
-  1733		}
-  1734	}
-  1735	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
