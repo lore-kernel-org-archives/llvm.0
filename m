@@ -1,199 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (unknown [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB3446A0
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 10:59:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4449CC433C7
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 10:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690887598;
-	bh=cJ6HxF/ThVR/+zvBOoBquVMaIQzGoP/7I5cRuZVbKXk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GrZtGmBdeIoyU2JiaGKKDBn3Nl8VLA+7Vojpmhlw3zVvHa48VBG3ieI9OytShJwi2
-	 U2nN8BFFtw+YOUkkOoSm1BkUwCfjaU2my6TFQ2yTJkdke+21jEZKYk0QTF9wM6KzNc
-	 5poC1oTNbMl9oaOWm3lKK7riTCj2rQXfkSzRt4QJTXF1lfTD1lxGZn56rkMo0rGOlT
-	 S9c1jBV8AaqiEhfz23ekmGVZ9nTJQ4J6uuNekicEPyjWP0fs2JULp2a20aoICXYuuM
-	 bkn6+6+p6T/jRgJ7cw+db3NlG1hEBvbxVnffE0in0mjLKh1n+vYlDqELzaIMGSVrrD
-	 781oZ0oHW02Nw==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-522c7b81ef8so2742341a12.2
-        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 03:59:58 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZ2I/uZD+V7bPYsLG9ZkKScepzkzM7+852ZvUvKhxOU1mTvF3R5
-	2/dd788e83+YQAIYQjnq/nqP+FfGXDGguOBr18g=
-X-Google-Smtp-Source: APBJJlGsjvVUdm0WV1N6LPXXmNwny1y2pnBM4pxtv3fQG12+7vk1ulLoruprtA24W9EggBNpBOOK4g/odFc4GuJfPZk=
-X-Received: by 2002:a50:ec92:0:b0:522:2d1b:5a2e with SMTP id
- e18-20020a50ec92000000b005222d1b5a2emr2092080edr.12.1690887596515; Tue, 01
- Aug 2023 03:59:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A2F46A0;
+	Tue,  1 Aug 2023 11:32:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690889573; x=1722425573;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FD69+KNCQqKAUph7dQfNY7nvz8hXschlb9hSwAbjSXE=;
+  b=d3WH/WSzps2dhQKiX24Sn2A4VupY3WPDmTQLIVvsiD7VBTRoakFbG/5C
+   YUUPEeZ77MFBU0PwLXZQaOJMmmM5PGE7/cGWPKpZj03XnkVZN5mBY9fvQ
+   p5CfThLJbdECcRHFF2SVoYcIlrKcDaRgdItmJBa9TlCEDchUPb9jf088C
+   KT94Cr1IuH4VY5Cm36oakEQSoPQeacLp5+lJYgnq8o/uv5dp0/SNBrkCe
+   5F2AVE4FyknHK+IkQGN0vr4A7OwCecS/hRH6UzRKK8nNarCU4N3zQFzSp
+   gq3OaoJaiyh+bv5ftJGJ/4Zxp1S7e0kMqUicSBooi1oLTjjiURvZP3rJ8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="372902199"
+X-IronPort-AV: E=Sophos;i="6.01,246,1684825200"; 
+   d="scan'208";a="372902199"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 04:32:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="705801056"
+X-IronPort-AV: E=Sophos;i="6.01,246,1684825200"; 
+   d="scan'208";a="705801056"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2023 04:32:51 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qQncQ-0000Ex-0K;
+	Tue, 01 Aug 2023 11:32:50 +0000
+Date: Tue, 1 Aug 2023 19:32:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
+ 'ipmmu_of_ids'
+Message-ID: <202308011923.SJDDG6oN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230731095534.22842-1-xingmingzheng@iscas.ac.cn> <20230731150511.38140-1-xingmingzheng@iscas.ac.cn>
-In-Reply-To: <20230731150511.38140-1-xingmingzheng@iscas.ac.cn>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 1 Aug 2023 18:59:45 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ75bFm+=dZBV1dijNv5h-kKuAYKHkakgq-seTS5BWOBw@mail.gmail.com>
-Message-ID: <CAJF2gTQ75bFm+=dZBV1dijNv5h-kKuAYKHkakgq-seTS5BWOBw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and binutils
-To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-Cc: Conor Dooley <conor@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 31, 2023 at 11:06=E2=80=AFPM Mingzheng Xing
-<xingmingzheng@iscas.ac.cn> wrote:
->
-> Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the new=
-er
-> 20191213 version which moves some instructions from the I extension to th=
-e
-> Zicsr and Zifencei extensions. So if one of the binutils and GCC exceeds
-> that version, we should explicitly specifying Zicsr and Zifencei via -mar=
-ch
-> to cope with the new changes. but this only occurs when binutils >=3D 2.3=
-6
-> and GCC >=3D 11.1.0. It's a different story when binutils < 2.36.
->
-> binutils-2.36 supports the Zifencei extension[2] and splits Zifencei and
-> Zicsr from I[3]. GCC-11.1.0 is particular[4] because it add support Zicsr
-> and Zifencei extension for -march. binutils-2.35 does not support the
-> Zifencei extension, and does not need to specify Zicsr and Zifencei when
-> working with GCC >=3D 12.1.0.
->
-> To make our lives easier, let's relax the check to binutils >=3D 2.36 in
-> CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. For the other two cases,
-> where clang < 17 or GCC < 11.1.0, we will deal with them in
-> CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
->
-> For more information, please refer to:
-> commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
-> commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang a=
-nd binutils")
-> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Daed=
-44286efa8ae8717a77d94b51ac3614e2ca6dc [0]
-> Link: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a62579=
-d4a7a4a76bab51b5b52fec2cd [1]
-> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D5a1=
-b31e1e1cee6e9f1c92abff59cdcfff0dddf30 [2]
-> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D729=
-a53530e86972d1143553a415db34e6e01d5d2 [3]
-> Link: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3Db03be74bad08c38=
-2da47e048007a78fa3fb4ef49 [4]
-> Link: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.o=
-rg
-> Link: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
-> ---
->  arch/riscv/Kconfig                     | 32 +++++++++++++++-----------
->  arch/riscv/kernel/compat_vdso/Makefile |  8 ++++++-
->  2 files changed, 26 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 4c07b9189c86..10e7a7ad175a 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -570,24 +570,30 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
->  config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
->         def_bool y
->         # https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=
-=3Daed44286efa8ae8717a77d94b51ac3614e2ca6dc
-> -       depends on AS_IS_GNU && AS_VERSION >=3D 23800
-> -       help
-> -         Newer binutils versions default to ISA spec version 20191213 wh=
-ich
-> -         moves some instructions from the I extension to the Zicsr and Z=
-ifencei
-> -         extensions.
-> +       # https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a6=
-2579d4a7a4a76bab51b5b52fec2cd
-> +       depends on AS_IS_GNU && AS_VERSION >=3D 23600
-> +       help
-> +         Binutils-2.38 and GCC-12.1.0 bumped the default ISA spec to the=
- newer
-> +         20191213 version, which moves some instructions from the I exte=
-nsion to
-> +         the Zicsr and Zifencei extensions. This requires explicitly spe=
-cifying
-> +         Zicsr and Zifencei when binutils >=3D 2.38 or GCC >=3D 12.1.0. =
-Zicsr
-> +         and Zifencei are supported in binutils from version 2.36 onward=
-s.
-> +         To make life easier, and avoid forcing toolchains that default =
-to a
-> +         newer ISA spec to version 2.2, relax the check to binutils >=3D=
- 2.36.
-> +         For clang < 17 or GCC < 11.1.0, for which this is not possible,=
- this is
-> +         dealt with in CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
->
->  config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
->         def_bool y
->         depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
->         # https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943=
-c0c0d4498694e15bf8a16
-> -       depends on CC_IS_CLANG && CLANG_VERSION < 170000
-> -       help
-> -         Certain versions of clang do not support zicsr and zifencei via=
- -march
-> -         but newer versions of binutils require it for the reasons noted=
- in the
-> -         help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. Th=
-is
-> -         option causes an older ISA spec compatible with these older ver=
-sions
-> -         of clang to be passed to GAS, which has the same result as pass=
-ing zicsr
-> -         and zifencei to -march.
-> +       # https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3Db03be74bad0=
-8c382da47e048007a78fa3fb4ef49
-> +       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC =
-&& GCC_VERSION < 110100)
-> +       help
-> +         Certain versions of clang and GCC do not support zicsr and zife=
-ncei via
-> +         -march. This option causes an older ISA spec compatible with th=
-ese older
-> +         versions of clang and GCC to be passed to GAS, which has the sa=
-me result
-> +         as passing zicsr and zifencei to -march.
->
->  config FPU
->         bool "FPU support"
-> diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/c=
-ompat_vdso/Makefile
-> index 189345773e7e..b86e5e2c3aea 100644
-> --- a/arch/riscv/kernel/compat_vdso/Makefile
-> +++ b/arch/riscv/kernel/compat_vdso/Makefile
-> @@ -11,7 +11,13 @@ compat_vdso-syms +=3D flush_icache
->  COMPAT_CC :=3D $(CC)
->  COMPAT_LD :=3D $(LD)
->
-> -COMPAT_CC_FLAGS :=3D -march=3Drv32g -mabi=3Dilp32
-> +# binutils 2.35 does not support the zifencei extension, but in the ISA
-> +# spec 20191213, G stands for IMAFD_ZICSR_ZIFENCEI.
-> +ifdef CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-Acked-by: Guo Ren <guoren@kernel.org>
+Hi Robin,
 
-> +       COMPAT_CC_FLAGS :=3D -march=3Drv32g -mabi=3Dilp32
-> +else
-> +       COMPAT_CC_FLAGS :=3D -march=3Drv32imafd -mabi=3Dilp32
-> +endif
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
+commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+date:   11 months ago
+config: s390-randconfig-r015-20230731 (https://download.01.org/0day-ci/archive/20230801/202308011923.SJDDG6oN-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230801/202308011923.SJDDG6oN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308011923.SJDDG6oN-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
+     946 | static const struct of_device_id ipmmu_of_ids[] = {
+         |                                  ^
+   13 warnings generated.
 
 
->  COMPAT_LD_FLAGS :=3D -melf32lriscv
->
->  # Disable attributes, as they're useless and break the build.
-> --
-> 2.34.1
->
+vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
 
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
+33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
+33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
+33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
+33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
+60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
+60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
+60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
+757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
+757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
+757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
+b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
+b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
+b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
+58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
+58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
+0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
+0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
+0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
+0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
+98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
+98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
+98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
+3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
+b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
+b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
+b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
+3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
+9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
+33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
+33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
+33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
+33f3ac9b511612 Magnus Damm             2017-10-16  995  };
+33f3ac9b511612 Magnus Damm             2017-10-16  996  
 
---=20
-Best Regards
- Guo Ren
+:::::: The code at line 946 was first introduced by commit
+:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
+
+:::::: TO: Magnus Damm <damm+renesas@opensource.se>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
