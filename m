@@ -1,86 +1,199 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24DA1ED41
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 08:45:14 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-202-eBnQEioCP9Cm7QIsQJ1Wuw-1; Tue, 01 Aug 2023 09:45:12 +0100
-X-MC-Unique: eBnQEioCP9Cm7QIsQJ1Wuw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 1 Aug
- 2023 09:45:10 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 1 Aug 2023 09:45:10 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'kernel test robot' <lkp@intel.com>, "'linux-kernel@vger.kernel.org'"
-	<linux-kernel@vger.kernel.org>, 'Andy Shevchenko'
-	<andriy.shevchenko@linux.intel.com>, 'Andrew Morton'
-	<akpm@linux-foundation.org>, "'Matthew Wilcox (Oracle)'"
-	<willy@infradead.org>, 'Christoph Hellwig' <hch@infradead.org>, "'Jason A.
- Donenfeld'" <Jason@zx2c4.com>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, "Linux
- Memory Management List" <linux-mm@kvack.org>
-Subject: RE: [PATCH next v2 2/5] minmax: Allow min()/max()/clamp() if the
- arguments have the same signedness.
-Thread-Topic: [PATCH next v2 2/5] minmax: Allow min()/max()/clamp() if the
- arguments have the same signedness.
-Thread-Index: AdnBYvtzc0TxoNEXQSCZpxDmi1SwuQCjLWkAABi9BYA=
-Date: Tue, 1 Aug 2023 08:45:10 +0000
-Message-ID: <a576676d66284659bc91afe93d2b0159@AcuMS.aculab.com>
-References: <bf92800b0c5445e2b2ca8c88e1f5e90f@AcuMS.aculab.com>
- <202308010559.SEtfkzQU-lkp@intel.com>
-In-Reply-To: <202308010559.SEtfkzQU-lkp@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB3446A0
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 10:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4449CC433C7
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 10:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690887598;
+	bh=cJ6HxF/ThVR/+zvBOoBquVMaIQzGoP/7I5cRuZVbKXk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GrZtGmBdeIoyU2JiaGKKDBn3Nl8VLA+7Vojpmhlw3zVvHa48VBG3ieI9OytShJwi2
+	 U2nN8BFFtw+YOUkkOoSm1BkUwCfjaU2my6TFQ2yTJkdke+21jEZKYk0QTF9wM6KzNc
+	 5poC1oTNbMl9oaOWm3lKK7riTCj2rQXfkSzRt4QJTXF1lfTD1lxGZn56rkMo0rGOlT
+	 S9c1jBV8AaqiEhfz23ekmGVZ9nTJQ4J6uuNekicEPyjWP0fs2JULp2a20aoICXYuuM
+	 bkn6+6+p6T/jRgJ7cw+db3NlG1hEBvbxVnffE0in0mjLKh1n+vYlDqELzaIMGSVrrD
+	 781oZ0oHW02Nw==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-522c7b81ef8so2742341a12.2
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 03:59:58 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZ2I/uZD+V7bPYsLG9ZkKScepzkzM7+852ZvUvKhxOU1mTvF3R5
+	2/dd788e83+YQAIYQjnq/nqP+FfGXDGguOBr18g=
+X-Google-Smtp-Source: APBJJlGsjvVUdm0WV1N6LPXXmNwny1y2pnBM4pxtv3fQG12+7vk1ulLoruprtA24W9EggBNpBOOK4g/odFc4GuJfPZk=
+X-Received: by 2002:a50:ec92:0:b0:522:2d1b:5a2e with SMTP id
+ e18-20020a50ec92000000b005222d1b5a2emr2092080edr.12.1690887596515; Tue, 01
+ Aug 2023 03:59:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+References: <20230731095534.22842-1-xingmingzheng@iscas.ac.cn> <20230731150511.38140-1-xingmingzheng@iscas.ac.cn>
+In-Reply-To: <20230731150511.38140-1-xingmingzheng@iscas.ac.cn>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 1 Aug 2023 18:59:45 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ75bFm+=dZBV1dijNv5h-kKuAYKHkakgq-seTS5BWOBw@mail.gmail.com>
+Message-ID: <CAJF2gTQ75bFm+=dZBV1dijNv5h-kKuAYKHkakgq-seTS5BWOBw@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Handle zicsr/zifencei issue between gcc and binutils
+To: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+Cc: Conor Dooley <conor@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Bin Meng <bmeng@tinylab.org>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-From: kernel test robot
-> Sent: 31 July 2023 22:44
->=20
-> kernel test robot noticed the following build errors:
->=20
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on linus/master crng-random/master v6.5-rc4 next-2=
-0230731]
-> [cannot apply to next-20230728]
-...
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git
-> f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce: (https://download.01.org/0day-ci/archive/20230801/202308010559=
-.SEtfkzQU-
-> lkp@intel.com/reproduce)
->=20
-....
-> >> drivers/gpu/drm/drm_modes.c:2474:15: error: static_assert expression i=
-s not an integral constant
-> expression
->                    extra_ptr =3D max(bpp_end_ptr, refresh_end_ptr);
->                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Mon, Jul 31, 2023 at 11:06=E2=80=AFPM Mingzheng Xing
+<xingmingzheng@iscas.ac.cn> wrote:
+>
+> Binutils-2.38 and GCC-12.1.0 bumped[0][1] the default ISA spec to the new=
+er
+> 20191213 version which moves some instructions from the I extension to th=
+e
+> Zicsr and Zifencei extensions. So if one of the binutils and GCC exceeds
+> that version, we should explicitly specifying Zicsr and Zifencei via -mar=
+ch
+> to cope with the new changes. but this only occurs when binutils >=3D 2.3=
+6
+> and GCC >=3D 11.1.0. It's a different story when binutils < 2.36.
+>
+> binutils-2.36 supports the Zifencei extension[2] and splits Zifencei and
+> Zicsr from I[3]. GCC-11.1.0 is particular[4] because it add support Zicsr
+> and Zifencei extension for -march. binutils-2.35 does not support the
+> Zifencei extension, and does not need to specify Zicsr and Zifencei when
+> working with GCC >=3D 12.1.0.
+>
+> To make our lives easier, let's relax the check to binutils >=3D 2.36 in
+> CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. For the other two cases,
+> where clang < 17 or GCC < 11.1.0, we will deal with them in
+> CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
+>
+> For more information, please refer to:
+> commit 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
+> commit e89c2e815e76 ("riscv: Handle zicsr/zifencei issues between clang a=
+nd binutils")
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Daed=
+44286efa8ae8717a77d94b51ac3614e2ca6dc [0]
+> Link: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a62579=
+d4a7a4a76bab51b5b52fec2cd [1]
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D5a1=
+b31e1e1cee6e9f1c92abff59cdcfff0dddf30 [2]
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D729=
+a53530e86972d1143553a415db34e6e01d5d2 [3]
+> Link: https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3Db03be74bad08c38=
+2da47e048007a78fa3fb4ef49 [4]
+> Link: https://lore.kernel.org/all/20230308220842.1231003-1-conor@kernel.o=
+rg
+> Link: https://lore.kernel.org/all/20230223220546.52879-1-conor@kernel.org
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Mingzheng Xing <xingmingzheng@iscas.ac.cn>
+> ---
+>  arch/riscv/Kconfig                     | 32 +++++++++++++++-----------
+>  arch/riscv/kernel/compat_vdso/Makefile |  8 ++++++-
+>  2 files changed, 26 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 4c07b9189c86..10e7a7ad175a 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -570,24 +570,30 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+>  config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>         def_bool y
+>         # https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=
+=3Daed44286efa8ae8717a77d94b51ac3614e2ca6dc
+> -       depends on AS_IS_GNU && AS_VERSION >=3D 23800
+> -       help
+> -         Newer binutils versions default to ISA spec version 20191213 wh=
+ich
+> -         moves some instructions from the I extension to the Zicsr and Z=
+ifencei
+> -         extensions.
+> +       # https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3D98416dbb0a6=
+2579d4a7a4a76bab51b5b52fec2cd
+> +       depends on AS_IS_GNU && AS_VERSION >=3D 23600
+> +       help
+> +         Binutils-2.38 and GCC-12.1.0 bumped the default ISA spec to the=
+ newer
+> +         20191213 version, which moves some instructions from the I exte=
+nsion to
+> +         the Zicsr and Zifencei extensions. This requires explicitly spe=
+cifying
+> +         Zicsr and Zifencei when binutils >=3D 2.38 or GCC >=3D 12.1.0. =
+Zicsr
+> +         and Zifencei are supported in binutils from version 2.36 onward=
+s.
+> +         To make life easier, and avoid forcing toolchains that default =
+to a
+> +         newer ISA spec to version 2.2, relax the check to binutils >=3D=
+ 2.36.
+> +         For clang < 17 or GCC < 11.1.0, for which this is not possible,=
+ this is
+> +         dealt with in CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC.
+>
+>  config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+>         def_bool y
+>         depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+>         # https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943=
+c0c0d4498694e15bf8a16
+> -       depends on CC_IS_CLANG && CLANG_VERSION < 170000
+> -       help
+> -         Certain versions of clang do not support zicsr and zifencei via=
+ -march
+> -         but newer versions of binutils require it for the reasons noted=
+ in the
+> -         help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. Th=
+is
+> -         option causes an older ISA spec compatible with these older ver=
+sions
+> -         of clang to be passed to GAS, which has the same result as pass=
+ing zicsr
+> -         and zifencei to -march.
+> +       # https://gcc.gnu.org/git/?p=3Dgcc.git;a=3Dcommit;h=3Db03be74bad0=
+8c382da47e048007a78fa3fb4ef49
+> +       depends on (CC_IS_CLANG && CLANG_VERSION < 170000) || (CC_IS_GCC =
+&& GCC_VERSION < 110100)
+> +       help
+> +         Certain versions of clang and GCC do not support zicsr and zife=
+ncei via
+> +         -march. This option causes an older ISA spec compatible with th=
+ese older
+> +         versions of clang and GCC to be passed to GAS, which has the sa=
+me result
+> +         as passing zicsr and zifencei to -march.
+>
+>  config FPU
+>         bool "FPU support"
+> diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/c=
+ompat_vdso/Makefile
+> index 189345773e7e..b86e5e2c3aea 100644
+> --- a/arch/riscv/kernel/compat_vdso/Makefile
+> +++ b/arch/riscv/kernel/compat_vdso/Makefile
+> @@ -11,7 +11,13 @@ compat_vdso-syms +=3D flush_icache
+>  COMPAT_CC :=3D $(CC)
+>  COMPAT_LD :=3D $(LD)
+>
+> -COMPAT_CC_FLAGS :=3D -march=3Drv32g -mabi=3Dilp32
+> +# binutils 2.35 does not support the zifencei extension, but in the ISA
+> +# spec 20191213, G stands for IMAFD_ZICSR_ZIFENCEI.
+> +ifdef CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
+Acked-by: Guo Ren <guoren@kernel.org>
 
-This is really a bug in clang - fixed in 16.0.0.
-In C (but probably not C++) '(void *)1' should be a compile-time constant.
-Will be fixed in v3 of the patch.
+> +       COMPAT_CC_FLAGS :=3D -march=3Drv32g -mabi=3Dilp32
+> +else
+> +       COMPAT_CC_FLAGS :=3D -march=3Drv32imafd -mabi=3Dilp32
+> +endif
 
-=09David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+>  COMPAT_LD_FLAGS :=3D -melf32lriscv
+>
+>  # Disable attributes, as they're useless and break the build.
+> --
+> 2.34.1
+>
 
+
+--=20
+Best Regards
+ Guo Ren
