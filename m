@@ -1,117 +1,145 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986CC4DC6B;
-	Tue,  1 Aug 2023 20:27:11 +0000 (UTC)
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-63cef62a944so39750166d6.1;
-        Tue, 01 Aug 2023 13:27:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B02B4DC94
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 20:35:25 +0000 (UTC)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-403a7066bc8so44329361cf.0
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 13:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690921630; x=1691526430;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UH+96n1dxGiQRmm/Y8iuGfDIC+4CahwM19klE8HcHso=;
-        b=ANbBy17uXBlXL9O0hN4pSlYwLkkvDhpQyFaqbAo4yGGVxOcuUj4M0X4tyn7A9sVuvb
-         ozX12dfoizOD9u/CFDel09kYw5br7c2MiBtP4Qua/XA1W9khF+HrqL5YTw3m7BThKAIh
-         FZ9ijPeJWjricMYrmvamoa9Gmg0GTNPlE/3EY1AkZhqYX+ISFSq+gA1l9N33Joxr6+uD
-         9/nxxbUKPhi14hQeNV0AnYDruWwmO+4UCLcjhmBTixYLRqBbPYgzt5Bi5+s2x5b+Nccm
-         oWx/otFTodC/dMvvLRd86X93PB8r3kF72dtNEexPTMkeyTQUmgQt8Q/DnH78h/lqO7ab
-         S9tg==
+        d=google.com; s=20221208; t=1690922125; x=1691526925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nf9b5ArRYyIVdrw7rdZ9H8YQljZ2dhYx/WgjJXtbi90=;
+        b=zt+nePwElf098r6sKk/gQOji9C+o+MPTbAwCfrY9GUmRgmE4TTHLRZOV+JPrB0kICg
+         uRiUNQANWEg+KHmRuhggtdxFTvqv9ZANBUuUxTbWx4+kYyQiMVlIQSKe7ZqoFVPmHfDl
+         hDkj10yRFkQNJ9vfIpZTqvyu3xMBjPO01C8VHwDIO51fFt+hBOCj7L7DgPBFEW2/EvFP
+         e84SDiS539tMsKja/psGxarB8iEYt/GZ93WPHy1iyioyR9c4lCVvbGtwYkcZOnk/QI7Q
+         VSM7lb47Gx8vQheU4x9PcqS5DzUKkUya3Xiq26LtFCZ3Offt3FsWu87mf6kTtXydQ+aZ
+         /i7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690921630; x=1691526430;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH+96n1dxGiQRmm/Y8iuGfDIC+4CahwM19klE8HcHso=;
-        b=erGb2buyxPr1CRqWcoUnQF0s31/XavsYIZ82y20wgeKlRmFVBRJ39xsN9DQv33HcKg
-         PynUFLS4LO4Mp8ZJmj05wS3mTIFORaSHloGPc5suEsX/MoyHTJXHVOvskUwvAqdGr4Ey
-         M0hhTiE2TFvXfjST6KaqSgn+bmM0cvAmvwTF4L+fuG7ih+2bIGw0QmyMIVcW6vQxvVqC
-         6XMABmMJAx85zKi6H4IQ5iFIbi3XHa6NzKK4m5wBN67gA1HMWz5fEfnuEu4x+godPlaw
-         zH3NxG/fledH9I7Ur7p5MRSPHCNJObCRX7ZTEj1glolpE6+yQZc35eMMp/akuhC3iJ7g
-         Fvxg==
-X-Gm-Message-State: ABy/qLZZ5CwNCIcKV2ogim4hAMcQQHl+/zGaPlOv8wPsHQNwrCp5ZkfX
-	koSLicJZWowzJ7YBmdICqxQ=
-X-Google-Smtp-Source: APBJJlE6VBKShw0Rlyj1OLHXOFeaJpygktQJo+MxOm+odspLGrCYUNuKiGwVY8FgDFNYgU1uuNTFNA==
-X-Received: by 2002:a0c:e2d0:0:b0:5ef:5e1b:a365 with SMTP id t16-20020a0ce2d0000000b005ef5e1ba365mr16104431qvl.10.1690921630267;
-        Tue, 01 Aug 2023 13:27:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d28-20020a0caa1c000000b006363f2c37f0sm4924337qvb.91.2023.08.01.13.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 13:27:09 -0700 (PDT)
-Message-ID: <15f84f96-1150-0fbf-424c-65efa316454c@gmail.com>
-Date: Tue, 1 Aug 2023 13:27:06 -0700
+        d=1e100.net; s=20221208; t=1690922125; x=1691526925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nf9b5ArRYyIVdrw7rdZ9H8YQljZ2dhYx/WgjJXtbi90=;
+        b=BOoQYk76U614xfXzqpJ2O0S5y3Hulv6vHxkzvUdDW7JMenU5oeCK/sIQ3KppU+usg2
+         CUL0urOJa/WrlsluTQP9bEK9wcA8SSDUEIFIQjMit67uW+mp8ziZ4TEgaCbeTlPf7+wU
+         HvQXNhtvvEgheNb5IWG2Wcog5ZHdx5Mx5AyZxB+P0B/g7aslYW1CJqYIyOFKcFYdfP8T
+         3gAhZJt9j17Fzoy4Athyo2GeGApIJKXz8mUSEQHDFux9r+PlwbDqdddyK8VXLk1YVx1E
+         7v7b13AHSkcxrx0WcpN691XHIo6l3vcc2m9P2wA4PEt0c7BSkw/h70CL6lVkzaHulemI
+         icHQ==
+X-Gm-Message-State: ABy/qLZfejaZgr8o0zPDSdoHt5OQFrQYwaEH73fRynzaE8pQxjNvph2q
+	jG3YL+25w5buUsHbp7vW0K4J7ouWc+3jArOCNuvj2g==
+X-Google-Smtp-Source: APBJJlEuoeiPGNMDv5kGiNrPu5wxV6+seqvoAcOaJ4oQ4V9hKgcO2ZE6cIhNx9OxQVoXVwVoyH3whzrqhk+OfvfkWMg=
+X-Received: by 2002:a05:6214:84d:b0:63c:f5c0:cd14 with SMTP id
+ dg13-20020a056214084d00b0063cf5c0cd14mr12573306qvb.49.1690922124679; Tue, 01
+ Aug 2023 13:35:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [stable:linux-4.19.y 2317/9999]
- lib/mpi/generic_mpih-mul2.c:49:24: error: invalid use of a cast in a inline
- asm context requiring an lvalue: remove the cast or build with
- -fheinous-gnu-extensions
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Fangrui Song <maskray@google.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <natechancellor@gmail.com>,
- Masahiro Yamada <masahiroy@kernel.org>, kernel test robot <lkp@intel.com>
-References: <202307311111.jPEdYIJR-lkp@intel.com>
- <CAKwvOdmgunghdn9fpfXcz8O0+tDuK7GgNrKCUF+-7=nTHOp2nQ@mail.gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAKwvOdmgunghdn9fpfXcz8O0+tDuK7GgNrKCUF+-7=nTHOp2nQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230731123625.3766-1-christian.koenig@amd.com>
+In-Reply-To: <20230731123625.3766-1-christian.koenig@amd.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 1 Aug 2023 13:35:13 -0700
+Message-ID: <CAKwvOdmRm=vOjNXGWeuKw-h78CXMrkcwc5vnCRVqFxMxWzhCcg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc: boris.brezillon@collabora.com, maarten.lankhorst@linux.intel.com, 
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
+	trix@redhat.com, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, naresh.kamboju@linaro.org, 
+	dakr@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/1/23 13:15, Nick Desaulniers wrote:
-> On Sun, Jul 30, 2023 at 8:57 PM kernel test robot <lkp@intel.com> wrote:
->>
->> Hi Fangrui,
->>
->> First bad commit (maybe != root cause):
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
->> head:   767049cead76cf699707290d5aeefb3e4d0d5b43
->> commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [2317/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-> 
-> These aren't a result of Fangrui's change.  Fangrui's change probably
-> allows this config to mostly build, modulo the below error in
-> lib/mpi/generic_mpih-mul2.c.
-> 
->> config: mips-randconfig-r036-20230731 (https://download.01.org/0day-ci/archive/20230731/202307311111.jPEdYIJR-lkp@intel.com/config)
->> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
->> reproduce: (https://download.01.org/0day-ci/archive/20230731/202307311111.jPEdYIJR-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202307311111.jPEdYIJR-lkp@intel.com/
->>
->> All error/warnings (new ones prefixed by >>):
->>
->>>> drivers/net/netdevsim/netdev.c:167:35: warning: unused variable 'nsim_switchdev_ops' [-Wunused-const-variable]
->>       167 | static const struct switchdev_ops nsim_switchdev_ops = {
->>           |                                   ^
->>     1 warning generated.
-> 
-> ^ fixed by
-> commit e58df56c8564 ("netdevsim: Implement ndo_get_port_parent_id()")
-> in v5.1-rc1 (this report is against 4.19.y)
-> Florian, does it make sense for the stable maintainers to cherry-pick
-> e58df56c8564 to 4.19.y in isolation?
+On Mon, Jul 31, 2023 at 5:36=E2=80=AFAM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> GCC forbids to jump to labels in loop conditions and a new clang
+> check stumbled over this.
+>
+> So instead using a local label inside the loop condition use an
+> unique label outside of it.
+>
+> Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1890
+> Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d09=
+6eb3aed7b712f5067
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> CC: Boris Brezillon <boris.brezillon@collabora.com>
+> Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 
-In isolation no, because you will get a build failure because 
-netdevice_ops has no ndo_get_port_parent_id member. The complete patch 
-set was 12 patches:
+Works for me; thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-https://lore.kernel.org/all/20190205235326.14600-1-f.fainelli@gmail.com/
+I suspect it's possible to change the indirect goto into a direct goto
+with some further refactoring (macros can take block statements; if
+drm_exec_until_all_locked accepted a block statement arg then you
+could introduce a new scope, and a new local label to that scope, then
+just use direct goto), but this will probably apply cleaner. (oh, is
+09593216bff1 only in next at the moment? The AuthorDate threw me.)
 
-which is too big for a stable candidate. IMHO the simplest way is to 
-mark the structure as __maybe_unused since this configured has 
-CONFIG_NET_SWITCHDEV=n presumably?
--- 
-Florian
+There are some curious cases where __attribute__((cleanup())) doesn't
+mesh well with indirect gotos.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D37722
 
+May not ever be a problem here...
+
+> ---
+>  include/drm/drm_exec.h | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> index 73205afec162..e0462361adf9 100644
+> --- a/include/drm/drm_exec.h
+> +++ b/include/drm/drm_exec.h
+> @@ -3,6 +3,7 @@
+>  #ifndef __DRM_EXEC_H__
+>  #define __DRM_EXEC_H__
+>
+> +#include <linux/compiler.h>
+
+If you wanted to be more specific (if this addition is due to
+__PASTE), then `compiler_types.h` is more precise.
+
+>  #include <linux/ww_mutex.h>
+>
+>  #define DRM_EXEC_INTERRUPTIBLE_WAIT    BIT(0)
+> @@ -74,13 +75,12 @@ struct drm_exec {
+>   * Since labels can't be defined local to the loops body we use a jump p=
+ointer
+>   * to make sure that the retry is only used from within the loops body.
+>   */
+> -#define drm_exec_until_all_locked(exec)                                \
+> -       for (void *__drm_exec_retry_ptr; ({                     \
+> -               __label__ __drm_exec_retry;                     \
+> -__drm_exec_retry:                                              \
+> -               __drm_exec_retry_ptr =3D &&__drm_exec_retry;      \
+> -               (void)__drm_exec_retry_ptr;                     \
+> -               drm_exec_cleanup(exec);                         \
+> +#define drm_exec_until_all_locked(exec)                                 =
+       \
+> +__PASTE(__drm_exec_, __LINE__):                                         =
+       \
+> +       for (void *__drm_exec_retry_ptr; ({                             \
+> +               __drm_exec_retry_ptr =3D &&__PASTE(__drm_exec_, __LINE__)=
+;\
+> +               (void)__drm_exec_retry_ptr;                             \
+> +               drm_exec_cleanup(exec);                                 \
+>         });)
+>
+>  /**
+> --
+> 2.34.1
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
