@@ -1,132 +1,98 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC5A4DC61
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 16:02:18 +0000 (UTC)
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63d1238c300so29259956d6.0
-        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 09:02:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F83F1ADF3
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 16:19:07 +0000 (UTC)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-63cf57c79b5so38412956d6.0
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 09:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690905737; x=1691510537;
+        d=google.com; s=20221208; t=1690906746; x=1691511546;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=03aieGdgBxbYMor+zrbkfIBxz/KLfdHy7Dl2oJFgL9Q=;
-        b=dtmuBO6Fb+DNoOV0Y2U8m6eJh8nWPZxx7E7wRQNiJO2s+Ifq81nKUpE/0J1ZXHJmga
-         hHaOSLF8rAv1gi+00Uxf+4KnC4PrW4Srbfpenxb52befJwBmxZNOtTXgIW1KsZr26vRc
-         vJeBIt4U+e1DhruiCFR14Pn9fHrZBtEdRI0Zz7F4GnHr4TBvfGPErUjAOaRsUSu/97NF
-         JAq8Mzj2cfRM+RnHPdbvYmWEQr14VJMdc44oQaBYbktAYwuTDL7slK2uCZl3d6Le+fYw
-         upGxuwChc1apybgOHGWzBGcjXH3N8o9ilLYDxX/Q6ZJCao1Vqen84QXVzF8wDuMRIjzi
-         nlRQ==
+        bh=9bO4EMps/8stuDZiI8Gpdidb8h9+MIAhmvaNg3KYj1s=;
+        b=o4UnwJgpk8yeTzZUK1FZTs65eYsnacdGTDhjwzMy+DqQRhE2jTupyokcvRFqP1MKuo
+         qAu+yNtKzWXdHC5YGT3qGXgvBJ0yvodc24S05t5lVNoUZlrjld+c3ZYg84ALagFSl5E1
+         0e1IPmRVyqT2GVIRYdARMkHo0CkuvhYNhdAmnof9UiM53aClnQ1FS5ZSzeTK2gVSd53B
+         063XdvfBsZ51WyTLXABYzSrXYL1XyijHBazCJn4+IrTGw38FuZoFnqi2U6TZNyoEfv5r
+         ytN07iG/2nB0AbEtc586oI3xWMZoIT8TzfHqCOMBm0ZBpqNjIRXHSeGMlbbE1pfY9N/D
+         MP5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690905737; x=1691510537;
+        d=1e100.net; s=20221208; t=1690906746; x=1691511546;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=03aieGdgBxbYMor+zrbkfIBxz/KLfdHy7Dl2oJFgL9Q=;
-        b=RpCDjbr+mtFzopDSCFvf2f/as19hvgcRSmvdW+E8rjzqACFeNm2GFgHMwLTOesZ+5v
-         OoYPYVkvTMMrawTIEcpigpDGE4U9G1xdfQMTJ46kZj2CHIyxxAJZAsaHOG75KbQOLi2u
-         MYcOPk10JeNk6T+eNhalDHSauZRl8CZd89CZYlZoobgGqmI8v9XAsqxL70+LtoTiqJJR
-         7TYU5TcKHGKz5hqbCXw6fGQKaFaVNqMye1lQ9UNs4xWtYUmg0Ge+tE19x3eMLrelg1HW
-         IZ5g48OHFUrNMgT6LQ4lOaA9atOaA3b6sMAz4hlvwS510OI7eSdMW1G7lw4e7YcBZGBQ
-         ipfA==
-X-Gm-Message-State: ABy/qLbRjw3PQ6YsWvbb0mddI81fb1+M7cQvjegT9jAkkqdvLgpAVsXv
-	QseHJHl1e908RdFHHv1TefotFRyYvbPRI926u62jlg==
-X-Google-Smtp-Source: APBJJlFhlDXyfDh1bir6NtiRwgyu53SQkMwG14hApKnu7Xh4DgS+oyRQEYihjYIk6TpeJYBq4Ki/kTENkUO2wINlBms=
-X-Received: by 2002:a05:6214:459c:b0:63d:1e4e:d745 with SMTP id
- op28-20020a056214459c00b0063d1e4ed745mr11462027qvb.61.1690905737445; Tue, 01
- Aug 2023 09:02:17 -0700 (PDT)
+        bh=9bO4EMps/8stuDZiI8Gpdidb8h9+MIAhmvaNg3KYj1s=;
+        b=PAraNCjzVTYRBZC4SwCZB4W001Ft4ggXQs9bJ21RmWnliu7mgnZ5NXjsAEMRb8Ncqk
+         DT/Y+r4wIKWsZNlG507APAs0IWRnhC6M6tv3ilRBWV0o0XjN86IXd6BXX2eLcRQAua8K
+         K0AxWH8KEce2CPlSZdHKrJutTTV1M7iHo51cTttRrlhJ/1FeXYA//a+Yly6adFa/+WC+
+         UZ3Yz+GoFhXgZafUnq1CRnokpE8Dzer7ztX17nvDgiyV77B4511//4l5PVxKtpitmu0Q
+         2g/VkuM50fMPWk1XUOO/gy10q3aqmRoKy+dakHCe+vLmrocj2qozGH6bPfqZVfT8l57E
+         XAzw==
+X-Gm-Message-State: ABy/qLZfxosLAd6RVY2dN+O1HznbEMRzt7BEhNdrb4X0vO5I5P6maswV
+	jrWjPRWEPyo9g1fdJUwEcARkpw2NkPb2CcGlTmr65Q==
+X-Google-Smtp-Source: APBJJlExjHsbEshbD/7fM07TlWTefBlG0GYpx+aMVrkgKVZzEhxPirjTfZFjF6Rla5/eWjDqzfKNP/t4CWrr7MCsFFs=
+X-Received: by 2002:ad4:5847:0:b0:635:fa7b:6c22 with SMTP id
+ de7-20020ad45847000000b00635fa7b6c22mr10424824qvb.55.1690906745972; Tue, 01
+ Aug 2023 09:19:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <bde3d2dc933848bbaceeb9b7102f6f4c@AcuMS.aculab.com>
- <b4ce9dad748e489f9314a2dc95615033@AcuMS.aculab.com> <9c14002108ff49e1a54819133fe9e2a3@AcuMS.aculab.com>
-In-Reply-To: <9c14002108ff49e1a54819133fe9e2a3@AcuMS.aculab.com>
+References: <20230725043310.1227621-1-suhui@nfschina.com>
+In-Reply-To: <20230725043310.1227621-1-suhui@nfschina.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 1 Aug 2023 09:02:06 -0700
-Message-ID: <CAKwvOdm6ZVSMpzSJ0tFMR_rVb1+=REk8ETLS2SBe3s8QrbYUQw@mail.gmail.com>
-Subject: Re: [PATCH next v2 5/5] minmax: Relax check to allow comparison
- between int and small unsigned constants.
-To: David Laight <David.Laight@aculab.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Christoph Hellwig <hch@infradead.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
-	Nathan Chancellor <nathan@kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Date: Tue, 1 Aug 2023 09:18:55 -0700
+Message-ID: <CAKwvOdn2Qn219Ys6vyR0Xryi_32XTARBWsfmuc3zhdH8TLREWQ@mail.gmail.com>
+Subject: Re: [PATCH v2] ext4: mballoc: avoid garbage value from err
+To: Su Hui <suhui@nfschina.com>
+Cc: tytso@mit.edu, adilger.kernel@dilger.ca, nathan@kernel.org, 
+	trix@redhat.com, linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 31, 2023 at 6:27=E2=80=AFAM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Mon, Jul 24, 2023 at 9:34=E2=80=AFPM Su Hui <suhui@nfschina.com> wrote:
 >
-> By the time I've done:
+> clang's static analysis warning: fs/ext4/mballoc.c
+> line 4178, column 6, Branch condition evaluates to a garbage value.
 >
-> #define __is_noneg_int(x)                                       \
->         __builtin_choose_expr(!__is_constexpr(x), false,        \
->                 ((x) >=3D (typeof(x))0 && (x) <=3D (typeof((x) + 0))(long=
-)__INT_MAX__))
+> err is uninitialized and will be judged when 'len <=3D 0' or
+> it first enters the loop while the condition "!ext4_sb_block_valid()"
+> is true. Although this can't make problems now, it's better to
+> correct it.
 >
-> #define __is_signed(x)                                                   =
-      \
->        __builtin_choose_expr(__is_constexpr(is_signed_type(typeof(x))),  =
-      \
->                is_signed_type(typeof(x)), 0)
->
-> #define __types_ok(x, y)                                        \
->         (__is_signed(x) =3D=3D __is_signed(y) ||                    \
->                 __is_signed((x) + 0) =3D=3D __is_signed((y) + 0) || \
->                 __is_noneg_int(x) || __is_noneg_int(y))
->
-> the error message for
->
-> >       static_assert(__types_ok(x, y),                 \
-> >               #op "(" #x ", " #y ") signedness error, fix types or cons=
-ider " #op "_unsigned() before " #op "_t()"); \
->
-> generated by clang 8.0.0 and later is similar to (see https://godbolt.org=
-/z/jq613Gnsa):
->
-> <source>:49:12: error: static assertion failed due to requirement '__buil=
-tin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((int)(=
--1)) < (int)1)) * 0L)) : (int *)8))), (((int)(-1)) < (int)1), 0) =3D=3D __b=
-uiltin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((un=
-signed int)(-1)) < (unsigned int)1)) * 0L)) : (int *)8))), (((unsigned int)=
-(-1)) < (unsigned int)1), 0) || __builtin_choose_expr((sizeof(int) =3D=3D s=
-izeof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * 0L)) : (int *)8))),=
- (((int)(-1)) < (int)1), 0) =3D=3D __builtin_choose_expr((sizeof(int) =3D=
-=3D sizeof (*(8 ? ((void *)((long)((((unsigned int)(-1)) < (unsigned int)1)=
-) * 0L)) : (int *)8))), (((unsigned int)(-1)) < (unsigned int)1), 0) || (__=
-builtin_choose_expr(!(sizeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)(a) =
-* 0L)) : (int *)8))), 0, __builtin_choose_expr(__builtin_choose_expr((sizeo=
-f(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * 0L))=
- : (int *)8))), (((int)(-1)) < (int)1), 0), a, 0) >=3D 0 && (a) <=3D (int)(=
-long)2147483647)) || (__builtin_choose_expr(!(sizeof(int) =3D=3D sizeof (*(=
-8 ? ((void *)((long)(2147483648U - 0) * 0L)) : (int *)8))), 0, __builtin_ch=
-oose_expr(__builtin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void *)=
-((long)((((unsigned int)(-1)) < (unsigned int)1)) * 0L)) : (int *)8))), (((=
-unsigned int)(-1)) < (unsigned int)1), 0), 2147483648U - 0, 0) >=3D 0 && (2=
-147483648U - 0) <=3D (unsigned int)(long)2147483647))': min(a, 0x80000000u =
-- 0) signedness error, fix types or consider min_unsigned() before min_t()
->
-> Repeating the expression seems somewhat sub-optimal!
-> Surely it shouldn't be outputting the expansion of the
-> input when an error message is supplied?
->
-> Is there any (sane) way to stop it being that verbose?
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 
-No, but we can probably change that in clang. Filed:
-https://github.com/llvm/llvm-project/issues/64310
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+> v2:
+>  - modify commit message
 >
->         David
+>  fs/ext4/mballoc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
-
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 21b903fe546e..769000c970b0 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4084,7 +4084,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_f=
+sblk_t block,
+>         struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+>         ext4_group_t group;
+>         ext4_grpblk_t blkoff;
+> -       int i, err;
+> +       int i, err =3D 0;
+>         int already;
+>         unsigned int clen, clen_changed, thisgrp_len;
+>
+> --
+> 2.30.2
+>
 
 
 --=20
