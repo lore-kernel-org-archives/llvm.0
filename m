@@ -1,182 +1,157 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DF21ADEE
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 16:28:12 +0000 (UTC)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-76c97a137c8so146887885a.1
-        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 09:28:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAE94DC9B
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 16:51:10 +0000 (UTC)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-63cfe6e0c32so41361476d6.1
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 09:51:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690907291; x=1691512091;
+        d=google.com; s=20221208; t=1690908670; x=1691513470;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2xPDjNj+bRgDC1j1IMv7oxTopb6gzOMFHFdUvlWj/9s=;
-        b=f4ma9t02LSsWv/kUEm65ry524cdBk0OCujy2V6ngKk4tmZHYHODT7JEmNYUOxnYfDu
-         muIMyhImBtuyXmNu2ejMfCWUdHv7fal2hgxOuKkeAhK1W4bPzEwH/ZfShdQj0u7KiUyZ
-         M3hX08rSnUHaIsLlHuS5NzzTo1UrPt7mQmpHJZsW5AURYSiwwvqX+nFf79/yGeLCd70Z
-         yw1lVatavNKQ6U4q57D1b2yViebZgCbbefvBsbqFI3zcU05viaXO0mnjmAHmKpMBqkEW
-         YJwqeJL4Zx0jtPntC/v8FMD4IM/gxclZrxH/Y5kG0DjiZ0RY1tk22ZVUk44jv4sUBI0x
-         u+0Q==
+        bh=SzryMjySR1ilIQJogkpEiq4/HKuChL2WRfawPAgdQ7I=;
+        b=Ay6+nlDYEoqMNTybOc0KFFJlHBad2YSerfhdGyk+P162oTlZ4rSIxgYECnAFdPYfZC
+         QjG9FYti6+ZPqeC6KTIB9NN1mRHYa/iKXOjEaMPTqUHcxrKqTpCW564dIxBmXL//A8HB
+         MYYLwahJ9g/qa4y6sqbcgZzqyjvhy3P3TwvoWIiI/u6RAak/bqUI1YQutMdJSyEwSGZZ
+         3m53lbPQUWxVPY2WtnTQvN0setYnWeBP/AdbOKatEHphdtAPQYOU4yIEt+Dvw4fJbN4M
+         9SUWlcnv+BDLm5rqjYq9EzG4hsyBuRwioBV71s0xh0jrGkJ2LJLhD7KLn2h/XOJCN6Nc
+         apeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690907291; x=1691512091;
+        d=1e100.net; s=20221208; t=1690908670; x=1691513470;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2xPDjNj+bRgDC1j1IMv7oxTopb6gzOMFHFdUvlWj/9s=;
-        b=XGf7ouv5XC3VxOKh7Iks5o9OW2eh1kVsnwcccXUvTjvO55jKqJNAEvkBBHIm22hMUb
-         uv3KwOFeR5sZQSS9PTW72XbFXinRH2lAq/dhVjPharlNW9cTRl2FWFFASo0iC5TOLzey
-         ElXKN9U+j9HurNk4iPCE1v7nbMc0MTc5ndiBhoDupn3Zv0zlmO/liSd9wfHWULWmbOi1
-         QtXS0oLd4Nn9ixUr+LaNpdzR3Qg3f9qRyGtmF68VyrqepWVRaTzkUIrqQBAwBfgzOS9m
-         qv08OdkUPAAXI/1NiRFPsW6DQHAICmhy1WtoRH8WLZviRSS0yAile5CoRnfH4QsDFuIR
-         C8rA==
-X-Gm-Message-State: ABy/qLYYRYwh64HoOKudzRdakVvyBOGB219p650xSXwx+FzqQyO4nJHN
-	Vq/YfmcCzE1uyXOad5GEqhj7kMrUrWMynGXqoy7hSw==
-X-Google-Smtp-Source: APBJJlFvv94MKeWwxRdCoN+H/svBm6lgolCtroBwJjXtgyCBuxzkx5c5JaPj/WuFJiE4Oxslyqg4ZEX/RRwi4fzQF4U=
-X-Received: by 2002:ad4:55c8:0:b0:61b:65f4:2a15 with SMTP id
- bt8-20020ad455c8000000b0061b65f42a15mr14633412qvb.12.1690907290859; Tue, 01
- Aug 2023 09:28:10 -0700 (PDT)
+        bh=SzryMjySR1ilIQJogkpEiq4/HKuChL2WRfawPAgdQ7I=;
+        b=H/EnpsoSpmFtajiLxdbuNP+xep2Xsft/0l/9Uo0M3SJMVAdwIO70gSC7rqkH9+fvDp
+         IMuT2eaLGXeX1aVXVhpz4qxJq81RAicS36kHSKsrD/msHhDbCgYamcmWCcd1TbjOIWpy
+         KZJhBluMhPM6dXzZm1ugG9yeyzWtinkSvrtlYO81uQpfiPD3k5ZDqcpHI/GdH0YUP8Ue
+         rH9jrKS0tXEm4jR2DRBBbNzVyOEnKhflU5WoBpI2kkGIsRFlRXjJWaOyEna25g22Q3nl
+         MCRGBkw/qOkc9c0N+xYyIoFYXYtCnNrPbn3eT2gUYctJstSIC0oHtwI7uJ3YNpvRJwT2
+         tHNw==
+X-Gm-Message-State: ABy/qLZX5Q7jrb84qdOvKeOj5kiFAM8S/OxkdHdoTex8ECGR6B08BsdN
+	oA9etGu8VII8A/q7Uub9sQTniKnlYs9vaE8GBjovdw==
+X-Google-Smtp-Source: APBJJlFz/6BADrSwtiTVvMZa6M/4XOaJ8DJhEWR8hoAe1oALta5l1GpWPAUhN9QLDVEAM35A+giuSxBF3BNpkqI8xCs=
+X-Received: by 2002:a05:6214:57cb:b0:63d:1aed:72ee with SMTP id
+ lw11-20020a05621457cb00b0063d1aed72eemr13837966qvb.64.1690908669745; Tue, 01
+ Aug 2023 09:51:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202307242310.CdOnd2py-lkp@intel.com> <CAMhs-H8Zz_8w7Lcq5f=mEiucjwx+TAfBbVZ12PE1a47ioxTu2A@mail.gmail.com>
-In-Reply-To: <CAMhs-H8Zz_8w7Lcq5f=mEiucjwx+TAfBbVZ12PE1a47ioxTu2A@mail.gmail.com>
+References: <20230728113415.21067-1-will@kernel.org> <20230728113415.21067-2-will@kernel.org>
+ <CAK7LNATaXbGb7w=5xHtpVdPwcpm3iMPfzooABpftah1Sdw7ooQ@mail.gmail.com>
+In-Reply-To: <CAK7LNATaXbGb7w=5xHtpVdPwcpm3iMPfzooABpftah1Sdw7ooQ@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 1 Aug 2023 09:28:00 -0700
-Message-ID: <CAKwvOd=NdeDEp_kv9TyZk8biO1u0bN2r67kDAWQK195hbBzHUw@mail.gmail.com>
-Subject: Re: drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable 'mtmips_of_match'
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Tue, 1 Aug 2023 09:50:58 -0700
+Message-ID: <CAKwvOd=BPCoib2zcMnnuw-S9T52CGXvJ3MXyTawurV7x2P_XqQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] scripts/faddr2line: Use LLVM addr2line and readelf
+ if LLVM=1
+To: Will Deacon <will@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org, kernel-team@android.com, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, John Stultz <jstultz@google.com>, linux-kbuild@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 25, 2023 at 1:04=E2=80=AFAM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
+On Sat, Jul 29, 2023 at 1:48=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
-> Hi!
->
-> On Mon, Jul 24, 2023 at 5:21=E2=80=AFPM kernel test robot <lkp@intel.com>=
- wrote:
+> On Fri, Jul 28, 2023 at 8:34=E2=80=AFPM Will Deacon <will@kernel.org> wro=
+te:
 > >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   6eaae198076080886b9e7d57f4ae06fa782f90ef
-> > commit: 6f3b15586eef736831abe6a14f2a6906bc0dc074 clk: ralink: add clock=
- and reset driver for MTMIPS SoCs
-> > date:   5 weeks ago
-> > config: x86_64-buildonly-randconfig-r003-20230723 (https://download.01.=
-org/0day-ci/archive/20230724/202307242310.CdOnd2py-lkp@intel.com/config)
-> > compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.gi=
-t 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230724/2023072423=
-10.CdOnd2py-lkp@intel.com/reproduce)
+> > GNU utilities cannot necessarily parse objects built by LLVM, which can
+> > result in confusing errors when using 'faddr2line':
 > >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202307242310.CdOnd2py-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    drivers/clk/ralink/clk-mtmips.c:309:9: warning: variable 'ret' is un=
-initialized when used here [-Wuninitialized]
-> >            return ret;
-> >                   ^~~
-> >    drivers/clk/ralink/clk-mtmips.c:285:9: note: initialize the variable=
- 'ret' to silence this warning
-> >            int ret, i;
-> >                   ^
-> >                    =3D 0
-> >    drivers/clk/ralink/clk-mtmips.c:359:9: warning: variable 'ret' is un=
-initialized when used here [-Wuninitialized]
-> >            return ret;
-> >                   ^~~
-> >    drivers/clk/ralink/clk-mtmips.c:335:9: note: initialize the variable=
- 'ret' to silence this warning
-> >            int ret, i;
-> >                   ^
-> >                    =3D 0
->
-> This two errors were already fixed in:
->
-> 6e68dae946e3: ("clk: ralink: mtmips: Fix uninitialized use of ret in
-> mtmips_register_{fixed,factor}_clocks()")
->
-> > >> drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable 'mt=
-mips_of_match' [-Wunused-const-variable]
-> >    static const struct of_device_id mtmips_of_match[] =3D {
-> >                                     ^
-> >    3 warnings generated.
->
-> This one is because CONFIG_OF is disabled so 'of_match_node()' turns
-> into a dummy macro. What would be the correct approach here?
-> Add select OF in Kconfig for this driver or silence the warning
-> declaring 'mtmips_of_match' with __maybe_unused?
+> > $ CROSS_COMPILE=3Daarch64-linux-gnu- ./scripts/faddr2line vmlinux do_on=
+e_initcall+0xf4/0x260
+> > aarch64-linux-gnu-addr2line: vmlinux: unknown type [0x13] section `.rel=
+r.dyn'
 
-That or perhaps wrapping the definition of `mtmips_of_match` in
-`#ifdef CONFIG_OF`?
+^ old GNU binutils missing support for RELR relocation format.
+https://maskray.me/blog/2021-10-31-relative-relocations-and-relr
+
+> > aarch64-linux-gnu-addr2line: DWARF error: invalid or unhandled FORM val=
+ue: 0x25
+
+^ old GNU binutils missing support for DWARFv5
+
+I suppose if someone used a new GCC with an old binutils, they could
+observe the exact same errors.
+
+> > do_one_initcall+0xf4/0x260:
+> > aarch64-linux-gnu-addr2line: vmlinux: unknown type [0x13] section `.rel=
+r.dyn'
+> > aarch64-linux-gnu-addr2line: DWARF error: invalid or unhandled FORM val=
+ue: 0x25
+> > $x.73 at main.c:?
+> >
+> > Although this can be worked around by setting CROSS_COMPILE to "llvm=3D=
+-",
+> > it's cleaner to follow the same syntax as the top-level Makefile and
+> > accept LLVM=3D1 as an indication to use the llvm- tools.
+>
+>
+> Just a note.
+> The top Makefile accepts not only LLVM=3D1
+> but also LLVM=3D/usr/lib/llvm-16/bin/.
+> The latter is useful when you want to use
+> a particular version or a custom one.
+
+Ah, like LLVM_PREFIX/LLVM_SUFFIX a la
+commit e9c281928c24 ("kbuild: Make $(LLVM) more flexible")
+
+Then we could have both UTIL_PREFIX+UTIL_SUFFIX.
 
 >
-> Thanks in advance for clarification.
+> Another idea might be to use a generic '${prefix}'
+> as this is not hooked to the Makefile,
+> but I do not have a strong opinion.
 >
-> Best regards,
->     Sergio Paracuellos
+>
+>
 >
 > >
+> > Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> > Cc: John Stultz <jstultz@google.com>
+> > Signed-off-by: Will Deacon <will@kernel.org>
+> > ---
+> >  scripts/faddr2line | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
 > >
-> > vim +/mtmips_of_match +821 drivers/clk/ralink/clk-mtmips.c
+> > diff --git a/scripts/faddr2line b/scripts/faddr2line
+> > index 0e73aca4f908..62a3fa6f6f59 100755
+> > --- a/scripts/faddr2line
+> > +++ b/scripts/faddr2line
+> > @@ -58,8 +58,14 @@ die() {
+> >         exit 1
+> >  }
 > >
-> >    820
-> >  > 821  static const struct of_device_id mtmips_of_match[] =3D {
-> >    822          {
-> >    823                  .compatible =3D "ralink,rt2880-sysc",
-> >    824                  .data =3D &rt2880_clk_data,
-> >    825          },
-> >    826          {
-> >    827                  .compatible =3D "ralink,rt3050-sysc",
-> >    828                  .data =3D &rt305x_clk_data,
-> >    829          },
-> >    830          {
-> >    831                  .compatible =3D "ralink,rt3052-sysc",
-> >    832                  .data =3D &rt305x_clk_data,
-> >    833          },
-> >    834          {
-> >    835                  .compatible =3D "ralink,rt3352-sysc",
-> >    836                  .data =3D &rt3352_clk_data,
-> >    837          },
-> >    838          {
-> >    839                  .compatible =3D "ralink,rt3883-sysc",
-> >    840                  .data =3D &rt3883_clk_data,
-> >    841          },
-> >    842          {
-> >    843                  .compatible =3D "ralink,rt5350-sysc",
-> >    844                  .data =3D &rt5350_clk_data,
-> >    845          },
-> >    846          {
-> >    847                  .compatible =3D "ralink,mt7620-sysc",
-> >    848                  .data =3D &mt7620_clk_data,
-> >    849          },
-> >    850          {
-> >    851                  .compatible =3D "ralink,mt7628-sysc",
-> >    852                  .data =3D &mt76x8_clk_data,
-> >    853          },
-> >    854          {
-> >    855                  .compatible =3D "ralink,mt7688-sysc",
-> >    856                  .data =3D &mt76x8_clk_data,
-> >    857          },
-> >    858          {}
-> >    859  };
-> >    860
+> > -READELF=3D"${CROSS_COMPILE:-}readelf"
+> > -ADDR2LINE=3D"${CROSS_COMPILE:-}addr2line"
+> > +if [ "${LLVM:-}" =3D=3D "1" ]; then
+> > +       UTIL_PREFIX=3Dllvm-
+> > +else
+> > +       UTIL_PREFIX=3D${CROSS_COMPILE:-}
+> > +fi
+> > +
+> > +READELF=3D"${UTIL_PREFIX}readelf"
+> > +ADDR2LINE=3D"${UTIL_PREFIX}addr2line"
+> >  AWK=3D"awk"
+> >  GREP=3D"grep"
 > >
 > > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
+> > 2.41.0.487.g6d72f3e995-goog
+> >
 >
+>
+> --
+> Best Regards
+> Masahiro Yamada
+
 
 
 --=20
