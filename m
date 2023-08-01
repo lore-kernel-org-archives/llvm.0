@@ -1,145 +1,88 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B02B4DC94
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 20:35:25 +0000 (UTC)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-403a7066bc8so44329361cf.0
-        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 13:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690922125; x=1691526925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nf9b5ArRYyIVdrw7rdZ9H8YQljZ2dhYx/WgjJXtbi90=;
-        b=zt+nePwElf098r6sKk/gQOji9C+o+MPTbAwCfrY9GUmRgmE4TTHLRZOV+JPrB0kICg
-         uRiUNQANWEg+KHmRuhggtdxFTvqv9ZANBUuUxTbWx4+kYyQiMVlIQSKe7ZqoFVPmHfDl
-         hDkj10yRFkQNJ9vfIpZTqvyu3xMBjPO01C8VHwDIO51fFt+hBOCj7L7DgPBFEW2/EvFP
-         e84SDiS539tMsKja/psGxarB8iEYt/GZ93WPHy1iyioyR9c4lCVvbGtwYkcZOnk/QI7Q
-         VSM7lb47Gx8vQheU4x9PcqS5DzUKkUya3Xiq26LtFCZ3Offt3FsWu87mf6kTtXydQ+aZ
-         /i7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690922125; x=1691526925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nf9b5ArRYyIVdrw7rdZ9H8YQljZ2dhYx/WgjJXtbi90=;
-        b=BOoQYk76U614xfXzqpJ2O0S5y3Hulv6vHxkzvUdDW7JMenU5oeCK/sIQ3KppU+usg2
-         CUL0urOJa/WrlsluTQP9bEK9wcA8SSDUEIFIQjMit67uW+mp8ziZ4TEgaCbeTlPf7+wU
-         HvQXNhtvvEgheNb5IWG2Wcog5ZHdx5Mx5AyZxB+P0B/g7aslYW1CJqYIyOFKcFYdfP8T
-         3gAhZJt9j17Fzoy4Athyo2GeGApIJKXz8mUSEQHDFux9r+PlwbDqdddyK8VXLk1YVx1E
-         7v7b13AHSkcxrx0WcpN691XHIo6l3vcc2m9P2wA4PEt0c7BSkw/h70CL6lVkzaHulemI
-         icHQ==
-X-Gm-Message-State: ABy/qLZfejaZgr8o0zPDSdoHt5OQFrQYwaEH73fRynzaE8pQxjNvph2q
-	jG3YL+25w5buUsHbp7vW0K4J7ouWc+3jArOCNuvj2g==
-X-Google-Smtp-Source: APBJJlEuoeiPGNMDv5kGiNrPu5wxV6+seqvoAcOaJ4oQ4V9hKgcO2ZE6cIhNx9OxQVoXVwVoyH3whzrqhk+OfvfkWMg=
-X-Received: by 2002:a05:6214:84d:b0:63c:f5c0:cd14 with SMTP id
- dg13-20020a056214084d00b0063cf5c0cd14mr12573306qvb.49.1690922124679; Tue, 01
- Aug 2023 13:35:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C99E263D7
+	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 21:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EE9C433C8;
+	Tue,  1 Aug 2023 21:52:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690926763;
+	bh=/MJtcmuDxCcRCloI1q+HiSSif7LIAPt0IVFs1ZlKo9Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sjWvtXIeR3ZZjDZCFv2HsZhN9AC36ylZ5gKSVN7GOCf8YiY8M0iRnNkZIXDGwvIFx
+	 zaX1A4yf8f8OjDnBgwQXDjf3MdnxoBzIKCumYvLCnPb/muPutxHFN4ec5rWdaTOfYb
+	 8aCDCB1KrcMIaP8T87+yM57sT3FlUJtYVYV0Uov2RT9WIfxlj4Lk56nYR9cvjEnZC1
+	 eiw3Jz1pAJG1YMf9TQMQ0UvW3wK3oFaGVpJFzFOfG/5e8RohVbDMMIOQ50iNYV6UQH
+	 H4Is8MhuZCikip2cfRd87YnEmyp29l0SpmJV/0HGf+W2xmuVZtmnBMXv8R5s9d2sSg
+	 aHGPQTvhmqs7w==
+Date: Tue, 1 Aug 2023 14:52:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+	linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	Stanley Chu <stanley.chu@mediatek.com>,
+	Avri Altman <avri.altman@wdc.com>, Bean Huo <beanhuo@micron.com>,
+	Asutosh Das <quic_asutoshd@quicinc.com>,
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+	Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+	Can Guo <quic_cang@quicinc.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: ufs: Fix the build for gcc 9 and before
+Message-ID: <20230801215240.GA534984@dev-arch.thelio-3990X>
+References: <20230801201337.1007617-1-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230731123625.3766-1-christian.koenig@amd.com>
-In-Reply-To: <20230731123625.3766-1-christian.koenig@amd.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 1 Aug 2023 13:35:13 -0700
-Message-ID: <CAKwvOdmRm=vOjNXGWeuKw-h78CXMrkcwc5vnCRVqFxMxWzhCcg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc: boris.brezillon@collabora.com, maarten.lankhorst@linux.intel.com, 
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
-	trix@redhat.com, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, naresh.kamboju@linaro.org, 
-	dakr@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230801201337.1007617-1-bvanassche@acm.org>
 
-On Mon, Jul 31, 2023 at 5:36=E2=80=AFAM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> GCC forbids to jump to labels in loop conditions and a new clang
-> check stumbled over this.
->
-> So instead using a local label inside the loop condition use an
-> unique label outside of it.
->
-> Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1890
-> Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d09=
-6eb3aed7b712f5067
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Aug 01, 2023 at 01:13:23PM -0700, Bart Van Assche wrote:
+> gcc compilers before version 10 cannot do constant-folding for sub-byte
+> bitfields. This makes the compiler layout tests fail. Hence skip the
+> layout checks for gcc 9 and before.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
 > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> CC: Boris Brezillon <boris.brezillon@collabora.com>
-> Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-
-Works for me; thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-I suspect it's possible to change the indirect goto into a direct goto
-with some further refactoring (macros can take block statements; if
-drm_exec_until_all_locked accepted a block statement arg then you
-could introduce a new scope, and a new local label to that scope, then
-just use direct goto), but this will probably apply cleaner. (oh, is
-09593216bff1 only in next at the moment? The AuthorDate threw me.)
-
-There are some curious cases where __attribute__((cleanup())) doesn't
-mesh well with indirect gotos.
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D37722
-
-May not ever be a problem here...
-
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
->  include/drm/drm_exec.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
-> index 73205afec162..e0462361adf9 100644
-> --- a/include/drm/drm_exec.h
-> +++ b/include/drm/drm_exec.h
-> @@ -3,6 +3,7 @@
->  #ifndef __DRM_EXEC_H__
->  #define __DRM_EXEC_H__
->
-> +#include <linux/compiler.h>
+>  drivers/ufs/core/ufshcd.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 23335aaa6a66..875c860bcc05 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -10564,6 +10564,15 @@ static const struct dev_pm_ops ufshcd_wl_pm_ops = {
+>  
+>  static void ufshcd_check_header_layout(void)
+>  {
+> +#if defined(__GNUC__) && __GNUC__ -0 < 10
 
-If you wanted to be more specific (if this addition is due to
-__PASTE), then `compiler_types.h` is more precise.
+clang defines __GNUC__ and it does not sound like it is impacted by this
+issue? I just built with LLVM 11 through 17 and did not see it. Can this
+be made more specific?
 
->  #include <linux/ww_mutex.h>
->
->  #define DRM_EXEC_INTERRUPTIBLE_WAIT    BIT(0)
-> @@ -74,13 +75,12 @@ struct drm_exec {
->   * Since labels can't be defined local to the loops body we use a jump p=
-ointer
->   * to make sure that the retry is only used from within the loops body.
->   */
-> -#define drm_exec_until_all_locked(exec)                                \
-> -       for (void *__drm_exec_retry_ptr; ({                     \
-> -               __label__ __drm_exec_retry;                     \
-> -__drm_exec_retry:                                              \
-> -               __drm_exec_retry_ptr =3D &&__drm_exec_retry;      \
-> -               (void)__drm_exec_retry_ptr;                     \
-> -               drm_exec_cleanup(exec);                         \
-> +#define drm_exec_until_all_locked(exec)                                 =
-       \
-> +__PASTE(__drm_exec_, __LINE__):                                         =
-       \
-> +       for (void *__drm_exec_retry_ptr; ({                             \
-> +               __drm_exec_retry_ptr =3D &&__PASTE(__drm_exec_, __LINE__)=
-;\
-> +               (void)__drm_exec_retry_ptr;                             \
-> +               drm_exec_cleanup(exec);                                 \
->         });)
->
->  /**
-> --
-> 2.34.1
->
+Also, can we use IS_ENABLED() and not rely on the preprocessor? This
+appears to work for me.
 
+    if (IS_ENABLED(CONFIG_CC_IS_GCC) && CONFIG_GCC_VERSION < 100000)
+        return;
 
---=20
-Thanks,
-~Nick Desaulniers
+> +	/*
+> +	 * gcc compilers before version 10 cannot do constant-folding for
+> +	 * sub-byte bitfields. Hence skip the layout checks for gcc 9 and
+> +	 * before.
+> +	 */
+> +	return;
+> +#endif
+> +
+>  	BUILD_BUG_ON(((u8 *)&(struct request_desc_header){
+>  				.cci = 3})[0] != 3);
+>  
