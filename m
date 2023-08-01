@@ -1,44 +1,43 @@
-Received: from mgamail.intel.com (unknown [134.134.136.31])
+Received: from mgamail.intel.com (unknown [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FA21ADC5;
-	Tue,  1 Aug 2023 14:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6961ADCA;
+	Tue,  1 Aug 2023 15:49:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690901982; x=1722437982;
+  t=1690904944; x=1722440944;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ukvCFNrd9s4xLeAGl5CWyUh7MaDl1MFjtdbAcuz7zuI=;
-  b=BZznfVIbV4Q4yIJyQGHEs59V8wbiyA8xpwiyMOGY0icq4dQJEsBmpGOE
-   FyhfqpnmZEibRVZs4JgPilIz34W83mWYy3b0CZ9R3M9cQSaikIEMyp8Z0
-   yPpmR+KeAY4//sjPMSNTg7Dn8npRPYM9/k3I5/QrYYeB5kcePqF9JIBUF
-   gaDBHekCBWB1CJ+PpzTiGaVn24OcXsfU4EYgo4NIMeXb5/jJ6TnDJ96Xn
-   8fDfPhISpDhi5VTxOKJ6md9LXHwBgnCQGIoDlCItp9hImWxItzx8UuPaa
-   PIy0aiylxpxdNX4OJcCBPxVgClJCg6X1bdlakDq+Tyu8b5orEY7DUgaVj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="433159003"
+  bh=ijHKWyxMDFX2U0gtiiQl9OLeh2+s4wzjS1aKzHDmD7Y=;
+  b=UEtnMj82SfCDRJeYfzbzm1EHQrWcwfsvYPtsAnaduCELB7aazoIWiG+S
+   +SUrzLWGsvuPkOIFIUsow+TfOKhPPfqXs881vJTL3Pb3pceifCLWEKlL1
+   pxOEMIasI5grsbWxzXwOmyf5xAG6vVvh93I0yKF5vNXyA8IfojMqh5PSO
+   pbxE42JtBQWWDV2CkQRrLuDW26ZPwaB8Fx/SQ2S+C7BDN3EGiUI/CMbzm
+   87Gsh7TlB9URgIw9DDhEyPSk9Q+FTWY5e6okF0OP/59QqA3UWeFidOQJb
+   +tPRE9IykENbpW+sLIsqcnLLJsA7gzcL7To2Lw0aadBZPExfydRcHljaV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="369330144"
 X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="433159003"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 07:58:02 -0700
+   d="scan'208";a="369330144"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 08:49:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="818823532"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="975358851"
 X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
-   d="scan'208";a="818823532"
+   d="scan'208";a="975358851"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Aug 2023 07:58:00 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 01 Aug 2023 08:49:02 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qQqox-0000N3-2Y;
-	Tue, 01 Aug 2023 14:57:59 +0000
-Date: Tue, 1 Aug 2023 22:57:53 +0800
+	id 1qQrcL-0000P5-0V;
+	Tue, 01 Aug 2023 15:49:01 +0000
+Date: Tue, 1 Aug 2023 23:48:34 +0800
 From: kernel test robot <lkp@intel.com>
 To: Frederic Weisbecker <frederic@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [frederic-dynticks:timers/softirq-preemptible 5/6]
- kernel/time/timer.c:1700:3: error: call to undeclared function
- 'local_bh_vec_disable'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202308012245.VWA9uc8o-lkp@intel.com>
+ kernel/time/timer.c:1700:3: error: implicit declaration of function
+ 'local_bh_vec_disable' is invalid in C99
+Message-ID: <202308012358.5V8YXhOZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,32 +50,101 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/softirq-preemptible
 head:   c233aee141ddb78d07b2f7311be38cfc286de654
 commit: e54180a8daee54a469b182cd7e753d17e52394ef [5/6] timers: Introduce soft-interruptible timers
-config: arm64-randconfig-r021-20230731 (https://download.01.org/0day-ci/archive/20230801/202308012245.VWA9uc8o-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230801/202308012245.VWA9uc8o-lkp@intel.com/reproduce)
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230801/202308012358.5V8YXhOZ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230801/202308012358.5V8YXhOZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308012245.VWA9uc8o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308012358.5V8YXhOZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/time/timer.c:1700:3: error: call to undeclared function 'local_bh_vec_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   In file included from kernel/time/timer.c:21:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/time/timer.c:21:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/time/timer.c:21:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/time/timer.c:1700:3: error: implicit declaration of function 'local_bh_vec_disable' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
                    local_bh_vec_disable(1 << TIMER_SOFTIRQ);
                    ^
    kernel/time/timer.c:1700:3: note: did you mean 'local_bh_disable'?
    include/linux/bottom_half.h:18:20: note: 'local_bh_disable' declared here
    static inline void local_bh_disable(void)
                       ^
->> kernel/time/timer.c:1719:3: error: call to undeclared function 'local_bh_vec_enable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> kernel/time/timer.c:1719:3: error: implicit declaration of function 'local_bh_vec_enable' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
                    local_bh_vec_enable(1 << TIMER_SOFTIRQ);
                    ^
    kernel/time/timer.c:1719:3: note: did you mean 'local_bh_enable'?
    include/linux/bottom_half.h:31:20: note: 'local_bh_enable' declared here
    static inline void local_bh_enable(void)
                       ^
-   2 errors generated.
+   12 warnings and 2 errors generated.
 
 
 vim +/local_bh_vec_disable +1700 kernel/time/timer.c
