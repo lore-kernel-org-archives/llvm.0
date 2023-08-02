@@ -1,107 +1,89 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0295661
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 08:21:45 +0000 (UTC)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3727efrU023604;
-	Wed, 2 Aug 2023 07:50:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=WUG9XLUVxLD7YIOS1nqOLP6cSeDLTC0hGYP99dM8eH0=;
- b=bM5ub1zz1WkYeipfcRZrFYrWldGUj2gfIAAKnMOEOACR5ozS4+lO+fWTth6HVudw4u8/
- eCi6uTohMkcnFfIEORufE4EG04WbZaLgky2xu6RY8UlvqpTrDLsI0Hop9SvyIvMGLaIE
- a3kKq43chLqb6Y/XkmK7h4Ah9XVmC4wkE0yO6OIK3WW0kfO/kf6x8W2PeNql4lUBurBs
- rru86ne+R8yAeH0RRZ4xfR8ZhU7UbGRiZ2UoQgbhDytfBOp6+6Q5C5ds6rZ2t9Oa82na
- 3XPFxNHBvpK2S5IaH+1nkDi87xqguPKWUU5qzgqKSv4XqLOiaA4QyY+PITG1VDW+Linr YA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s7jtbgb28-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 02 Aug 2023 07:50:47 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3727okDX028336;
-	Wed, 2 Aug 2023 07:50:46 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s7jtbgb1p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 02 Aug 2023 07:50:46 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3725lVkV017127;
-	Wed, 2 Aug 2023 07:50:45 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3s5fajt96q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 02 Aug 2023 07:50:45 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3727ogS439584194
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 2 Aug 2023 07:50:42 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ADF9B20043;
-	Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 53D6E20040;
-	Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.233])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  2 Aug 2023 07:50:42 +0000 (GMT)
-Date: Wed, 2 Aug 2023 09:50:41 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-Message-ID: <20230802075041.6227-A-hca@linux.ibm.com>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
- <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02005396
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 08:44:20 +0000 (UTC)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bbrezillon)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 71AFC6601F5E;
+	Wed,  2 Aug 2023 09:44:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1690965858;
+	bh=nwhyDlk6TAwpAhBI3YFnIgFq7eJSx5UC/NeXeHfryAk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GssfvuMohyVAsC3K3gUBIXV/rDYVKejdiVwfIKe4BYGKoMOjQc4IuSHolUc4EZJ6X
+	 z7xyFKJxsH44UrdQzxLnkpo8zynVZhOzxLGH/rxhM+I1t57+ogHK+sZV4ZxBYygp3a
+	 7wfp8mkoNfpQWMJ0NV1YagtKAOkrdqQBoqxddcz2ai+gN5HDeSCbSqEfY3pl9jEpM1
+	 YSpsAfSU8lA+2a73zpQ2VAlwZeiohftwYsFY1miCyeIrDOWa3m9H5gnR04xfOLwjky
+	 NPU/pEIOmGbxul2ja7BsAmpLV0eFWy9hDyij5qrsv8oM//txir2CIAY55Eapj+7KIz
+	 1oSlEZndz5mPQ==
+Date: Wed, 2 Aug 2023 10:44:15 +0200
+From: Boris Brezillon <boris.brezillon@collabora.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
+ airlied@gmail.com, daniel@ffwll.ch, trix@redhat.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, naresh.kamboju@linaro.org, dakr@redhat.com
+Subject: Re: [PATCH 1/2] drm/exec: use unique instead of local label
+Message-ID: <20230802104415.7fe64b67@collabora.com>
+In-Reply-To: <CAKwvOdmRm=vOjNXGWeuKw-h78CXMrkcwc5vnCRVqFxMxWzhCcg@mail.gmail.com>
+References: <20230731123625.3766-1-christian.koenig@amd.com>
+	<CAKwvOdmRm=vOjNXGWeuKw-h78CXMrkcwc5vnCRVqFxMxWzhCcg@mail.gmail.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mHE9DXdOLlfh0U8erF_iRnnf87LWW2mN
-X-Proofpoint-ORIG-GUID: nV5PTDj8_7vOlCsetG4JPZrIcfMJb1U7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-02_03,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1011 phishscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=579 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308020067
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 02, 2023 at 07:59:48AM +0200, Arnd Bergmann wrote:
-> On Wed, Aug 2, 2023, at 03:07, Linus Torvalds wrote:
-> > On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
-> 
-> > Who ends up being affected by this? Powerpc does its own
-> > word-at-a-time thing because the big-endian case is nasty and you can
-> > do better with special instructions that they have.
-> 
-> powerpc needs the same patch though.
-> 
-> > Who else is even BE any more? Some old 32-bit arm setup?
+On Tue, 1 Aug 2023 13:35:13 -0700
+Nick Desaulniers <ndesaulniers@google.com> wrote:
+
+> On Mon, Jul 31, 2023 at 5:36=E2=80=AFAM Christian K=C3=B6nig
+> <ckoenig.leichtzumerken@gmail.com> wrote:
 > >
-> > I think the patch is fine, but I guess I'd like to know that people
-> > who are affected actually don't see any code generation changes (or
-> > possibly see improvements from not turning it into a bool until later)
-> 
-> s390 is the main one here, maintainers added to Cc.
+> > GCC forbids to jump to labels in loop conditions and a new clang
+> > check stumbled over this.
+> >
+> > So instead using a local label inside the loop condition use an
+> > unique label outside of it.
+> >
+> > Fixes: commit 09593216bff1 ("drm: execution context for GEM buffers v7")
+> > Link: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1890
+> > Link: https://github.com/llvm/llvm-project/commit/20219106060208f0c2f5d=
+096eb3aed7b712f5067
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > CC: Boris Brezillon <boris.brezillon@collabora.com>
+> > Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com> =20
+>=20
+> Works for me; thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>=20
+> I suspect it's possible to change the indirect goto into a direct goto
+> with some further refactoring (macros can take block statements; if
+> drm_exec_until_all_locked accepted a block statement arg then you
+> could introduce a new scope, and a new local label to that scope, then
+> just use direct goto),
 
-The generated code on s390 is identical with and without the patch
-using gcc 13.2.
-So this looks fine from my point of view.
+Maybe I'm wrong, but this sounds like the version I proposed here [1].
+
+> but this will probably apply cleaner. (oh, is
+> 09593216bff1 only in next at the moment? The AuthorDate threw me.)
+>=20
+> There are some curious cases where __attribute__((cleanup())) doesn't
+> mesh well with indirect gotos.
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D37722
+>=20
+> May not ever be a problem here...
+
+[1]https://patchwork.freedesktop.org/patch/543077/
