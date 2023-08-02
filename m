@@ -1,110 +1,147 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from mgamail.intel.com (unknown [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6B015BA
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 06:00:12 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id E63BD320094E;
-	Wed,  2 Aug 2023 02:00:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 02 Aug 2023 02:00:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1690956010; x=1691042410; bh=Yt
-	vb0mJTCqFvSWUzjrpJ3J+FljcDta2FuHCw3g9+xyM=; b=X8GskQHKcF/CLu6sH9
-	eHdMyaeNGKePN3uazuZn7+yG1MgasXQeSW+4D5a9qh01PZJ7ruxAhWLUmqLv/5A1
-	W6H07qlbCkDckdcSq23RL5reCF4qGn2CJ7AFFzvrvuiIyF6avFGWDuPiIDTDDza7
-	sITrpD0bLEVEOugi610GvCf2CpcRN/uAN7rFDfopQ9Kls2M+mvohHTIgclscWePT
-	IzeLsuUrotGQT+H+7RNajuQNxx1XCoa1DvJJ5Hga0P3V/DrFgmlN48jWyzxywzvR
-	EIsEeQt1j8VMOaYXXdnLEFTpd/PIDbv3gVRDO2Rf4qW2CutL5wCa7f3aFyUesjBm
-	qnXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1690956010; x=1691042410; bh=Ytvb0mJTCqFvS
-	WUzjrpJ3J+FljcDta2FuHCw3g9+xyM=; b=rVZI7NEq96ProyK7mRRMmZ9uNP1XY
-	U60ejYdcwBAhAR8FRm0b43P47NNM4476RHXJVqz/nect8HFS32ww2FrZLZfDJNFj
-	nTnKfBQ8SOHjto76Bp9hInu8Z2aQgIa95Tj0/F+hnsevQld0WJob9UOapGSFOrr5
-	N+cc0kc4CXtrZ9sb+emUOVvGisqm5TaiFNe0yyVC4BFqIe069x7BSdzhm3i9GTlL
-	AxvGwPLPUCK3283/Shk2fhcVU6K8QFI2TOkxy+6PQD4C/MzdLPr25hYGQV6ncCu9
-	K1tQdzUC8qIQLrxnIQQcYoqNk6IjHludpZUC7nMTg3HpQ+ejVpLz7Nv/A==
-X-ME-Sender: <xms:6fDJZAxUer9v1pqOKwDKxJPmHD6m2WEnq-gFKAVMUjSs92lscT1I2w>
-    <xme:6fDJZEStnpkvBnfb_iENwlU_lnFYxbd-7Ho7ravoYFk-448ZPHdfLsBkq7D46yGlE
-    bia4TPj1nkIiLw9Bhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeejgddutddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:6fDJZCU2S6Lh3XFdHrkVmf5T2UyWJ4LVI0770K80Yb5gBkjxojhaXA>
-    <xmx:6fDJZOi3qvEj8IktGXtLSuF7DBXnlsvyVKHFAUaYBLa9QLkaV2_Mxw>
-    <xmx:6fDJZCCCDj2SyFda5G2C6Lr1Bd-i411TdgCr_MhafwfaBdfxVAY9sw>
-    <xmx:6vDJZDK3c5_EB4fgcQFgzX4-go5CWzYwLeKaw7J7u6zkYYoyze36mQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D5750B60089; Wed,  2 Aug 2023 02:00:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CED9EBB;
+	Wed,  2 Aug 2023 06:38:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690958298; x=1722494298;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=06s6IXT38pDIEvuOZNt5UOvKSjWFDSzTRJ2afpvCZJY=;
+  b=GH31+cGN4838sk4BN/FNf8uSvmX0dn8TM8AdjPxg+Q0RBqOOnDPScA30
+   JEij/inC+LcdHXzMNhZswuOdpSG4dSjCoCw6Lh2dL0QMQh1p5QZc0cxGV
+   wZ//Os+7kHLckQjNJozvs7fNEOjejpmQFFxZW48njpe/YQvZuS0rfwj4X
+   Tgbl6csQFPx7gIF2nNldd1wGOXER3LZAGioHsIM7tHozOKxN+uFlK0Gfp
+   SfpJWIdu61Jwx9XfLbdI3oUNOK/uHrdQnqSs8NiUidOyKBTOaxGTmoaGf
+   NwgPqnZHb5eFk2wf5sHpE05lI52FA9wv8dXkt4e2CSCGQIQ4hNlqAZhcM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="372227786"
+X-IronPort-AV: E=Sophos;i="6.01,248,1684825200"; 
+   d="scan'208";a="372227786"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 23:38:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="975564207"
+X-IronPort-AV: E=Sophos;i="6.01,248,1684825200"; 
+   d="scan'208";a="975564207"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Aug 2023 23:38:15 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qR5Us-0000x9-2a;
+	Wed, 02 Aug 2023 06:38:14 +0000
+Date: Wed, 2 Aug 2023 14:37:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Tobin C. Harding" <tobin@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-4.19.y 5172/9999] lib/string.c:312:7: error:
+ redefinition of 'stpcpy'
+Message-ID: <202308021401.lhJd2bLx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <847747a8-b773-4b7b-8c14-b8ef4ba7c022@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
-Date: Wed, 02 Aug 2023 07:59:48 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>
-Cc: "Nathan Chancellor" <nathan@kernel.org>, "Tom Rix" <trix@redhat.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero regardless
- of endianness
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 2, 2023, at 03:07, Linus Torvalds wrote:
-> On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
+Hi Tobin,
 
-> Who ends up being affected by this? Powerpc does its own
-> word-at-a-time thing because the big-endian case is nasty and you can
-> do better with special instructions that they have.
+First bad commit (maybe != root cause):
 
-powerpc needs the same patch though.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+head:   767049cead76cf699707290d5aeefb3e4d0d5b43
+commit: 2a3687034e47c51cd4f01ce82ed16f1964008b9e [5172/9999] lib/string: Add strscpy_pad() function
+config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/reproduce)
 
-> Who else is even BE any more? Some old 32-bit arm setup?
->
-> I think the patch is fine, but I guess I'd like to know that people
-> who are affected actually don't see any code generation changes (or
-> possibly see improvements from not turning it into a bool until later)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308021401.lhJd2bLx-lkp@intel.com/
 
-s390 is the main one here, maintainers added to Cc.
+All errors (new ones prefixed by >>):
 
-Atheros and Realtek MIPS are older but still shipping in low-end
-network equipment, and there are still users on old embedded
-big-endian mips (broadcom, cavium, intel/lantiq and arm
-(intel ixp4xx) hardware. All modern Arm hardware (v6/v7/v8/v9)
-can do both big-endian and little-endian, but actual user numbers
-for big-endian are close to zero -- I have not heard from anyone
-actually using it in years.
+>> lib/string.c:312:7: error: redefinition of 'stpcpy'
+   char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+         ^
+   lib/string.c:255:7: note: previous definition is here
+   char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+         ^
+   lib/string.c:318:1: error: redefinition of '__kstrtab_stpcpy'
+   EXPORT_SYMBOL(stpcpy);
+   ^
+   include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+           __EXPORT_SYMBOL(sym, "")
+           ^
+   include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+   #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+                           ^
+   include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+           static const char __kstrtab_##sym[]                             \
+                             ^
+   <scratch space>:220:1: note: expanded from here
+   __kstrtab_stpcpy
+   ^
+   lib/string.c:261:1: note: previous definition is here
+   EXPORT_SYMBOL(stpcpy);
+   ^
+   include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+           __EXPORT_SYMBOL(sym, "")
+           ^
+   include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+   #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+                           ^
+   include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+           static const char __kstrtab_##sym[]                             \
+                             ^
+   <scratch space>:202:1: note: expanded from here
+   __kstrtab_stpcpy
+   ^
+   2 errors generated.
 
-And then there was a lot of the old-school workstation/server
-hardware (m68k, mips, parisc and sparc, not alpha/ia64) that is
-mostly big-endian and still maintained to some degree.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for BACKLIGHT_CLASS_DEVICE
+   Depends on [n]: HAS_IOMEM [=y] && BACKLIGHT_LCD_SUPPORT [=n]
+   Selected by [m]:
+   - DRM_GMA500 [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && X86 [=y] && MMU [=y] && ACPI [=y]
 
-      Arnd
+
+vim +/stpcpy +312 lib/string.c
+
+2a3687034e47c5 Tobin C. Harding               2019-04-05  295  
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  296  #ifndef __HAVE_ARCH_STRCAT
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  297  /**
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  298   * strcat - Append one %NUL-terminated string to another
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  299   * @dest: The string to be appended to
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  300   * @src: The string to append to it
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  301   */
+0c28130b5c9e8f Paolo 'Blaisorblade' Giarrusso 2005-05-05  302  #undef strcat
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  303  char *strcat(char *dest, const char *src)
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  304  {
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  305  	char *tmp = dest;
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  306  
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  307  	while (*dest)
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  308  		dest++;
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  309  	while ((*dest++ = *src++) != '\0')
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  310  		;
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  311  	return tmp;
+^1da177e4c3f41 Linus Torvalds                 2005-04-16 @312  }
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  313  EXPORT_SYMBOL(strcat);
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  314  #endif
+^1da177e4c3f41 Linus Torvalds                 2005-04-16  315  
+
+:::::: The code at line 312 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
