@@ -1,94 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (unknown [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA925DF62
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 23:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A36C433C8;
-	Wed,  2 Aug 2023 23:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691017632;
-	bh=sHIKg/nDNw3R4xGSVyhZMISd3sEKpe+1jfL2edNNHgA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r6pNyZVV7c9ABVfYRda6Jya1y6gTBcFtI4Gs4CndLhCx3ZUj/fmC0MgVcSsruNZUA
-	 92JnAeXnuHV1eFMr9AD1f2bpBWvCXnU0Zm0Vp4aAcRWkzHp0pddHt6R6vtJ0Uz7nOH
-	 pUIUDFslkrzFI5PeAKrhU4Vt/xwa89RonPkeVOENLhtPz1ZDe+bX/m8IzPG+PX4ch5
-	 OTFaKX7NndxImTa7zobq3VEMRZONo/sORnMA6Hzv1oXLOjkGh+lXwie38AjeeKqEdM
-	 j2/7FXtkr6LWJMweWcArFyizc8l5DsV0b3XejajRAvdJS8LODSmywydaj3Og1dfMLx
-	 MAzwAL2/w3ONw==
-Date: Thu, 3 Aug 2023 00:07:06 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	"Sahin, Okan" <okan.sahin@analog.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"zzzzTilki, zzzzIbrahim" <Ibrahim.Tilki@analog.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, linux@leemhuis.info
-Subject: Re: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
- Regulator Support
-Message-ID: <ae431bb5-d132-4737-b4bb-58a323f877a6@sirena.org.uk>
-References: <20230717050736.10075-1-okan.sahin@analog.com>
- <20230717050736.10075-3-okan.sahin@analog.com>
- <20230718155502.GA3542993@dev-arch.thelio-3990X>
- <20230726161033.GA1102409@dev-arch.thelio-3990X>
- <PH7PR03MB739122A373964651D995EA5AE701A@PH7PR03MB7391.namprd03.prod.outlook.com>
- <20230727145143.GB2013261@dev-arch.thelio-3990X>
- <CAKwvOdnPQEdbTGBO0hBn7CC4d0xtRV2zmfrYDfAhH0stfDYeJA@mail.gmail.com>
- <32af6891-8246-46de-ba1d-ae1999f6eb10@sirena.org.uk>
- <20230802230426.GA3027248@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DE7134B6;
+	Wed,  2 Aug 2023 23:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691018914; x=1722554914;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SosQ6XtOTnUjvK9QyYp1jV9TerKWmMOHJiDxLiHnXbY=;
+  b=QuYKoZosMM+VqtC/4fn353dVKmM4fOTtAVP8/bsMetLhmrH8drNd/61x
+   y1nA04PlC9WLqe5qhRHN5aTSM4eboEhXPtxraUD1kmVV6UQ2+rfuLiUpS
+   g7udODd9neoIvZQjDMM3cUma+jg0dXbS0FPBaIGLBuqe3BiKVir1xdgxo
+   HjR2bhGvUopqHJtzaE7XjvTufFQZRdf+xe5HuRxa4LzkjDoAsB9hDWd95
+   kwMRwaSTVZQ1X+SCsuMCWVukPHTV3h4C9qAg5mOyB4KSBbeu07zS7AR1J
+   eatxIZ96rAk9R3MIHrZRxrdCuCg+YIBAx8VJM+a2PJ6+zrliMCbnoh06F
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="372458451"
+X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
+   d="scan'208";a="372458451"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 16:28:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="729324104"
+X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
+   d="scan'208";a="729324104"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 Aug 2023 16:28:32 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRLGa-0001Zd-0X;
+	Wed, 02 Aug 2023 23:28:32 +0000
+Date: Thu, 3 Aug 2023 07:27:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: zhanchengbin <zhanchengbin1@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/2] ext4: ioctl adds a framework for modifying
+ superblock parameters
+Message-ID: <202308030734.qYKK5Phq-lkp@intel.com>
+References: <20230802083402.515570-2-zhanchengbin1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2LX9drZDxEXVlZBe"
-Content-Disposition: inline
-In-Reply-To: <20230802230426.GA3027248@dev-arch.thelio-3990X>
-X-Cookie: Humpty Dumpty was pushed.
-
-
---2LX9drZDxEXVlZBe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230802083402.515570-2-zhanchengbin1@huawei.com>
 
-On Wed, Aug 02, 2023 at 04:04:26PM -0700, Nathan Chancellor wrote:
-> On Thu, Aug 03, 2023 at 12:02:38AM +0100, Mark Brown wrote:
-> > On Wed, Aug 02, 2023 at 03:52:52PM -0700, Nick Desaulniers wrote:
-> > > Hi Okan,
-> > > Have you sent a follow up fix? The build should not remain broken for
-> > > so long.  Otherwise I think Broonie should drop your patch.
-> >=20
-> > Someone sent what's probably a fix but I was waiting for some
-> > confirmation that the change actually works on hardware, it's not super
-> > obvious.
->=20
-> Got a pointer? I don't see anything on lore:
->=20
-> https://lore.kernel.org/all/?q=3Ddfn:drivers/regulator/max77857-regulator=
-=2Ec
+Hi zhanchengbin,
 
-Oh, they didn't actuallly send it to the list :(
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
---2LX9drZDxEXVlZBe
-Content-Type: application/pgp-signature; name="signature.asc"
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.5-rc4 next-20230802]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
------BEGIN PGP SIGNATURE-----
+url:    https://github.com/intel-lab-lkp/linux/commits/zhanchengbin/ext4-ioctl-adds-a-framework-for-modifying-superblock-parameters/20230802-163905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230802083402.515570-2-zhanchengbin1%40huawei.com
+patch subject: [RFC PATCH 1/2] ext4: ioctl adds a framework for modifying superblock parameters
+config: i386-randconfig-i012-20230731 (https://download.01.org/0day-ci/archive/20230803/202308030734.qYKK5Phq-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230803/202308030734.qYKK5Phq-lkp@intel.com/reproduce)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTK4ZkACgkQJNaLcl1U
-h9ASwAf9EgOXf2eaprSEmmkAg6E0PBhk53WjSA3+uyZ9WVMDppxj9A5mAbXM7yQU
-5BWMxzZeCiawZDUEKj4j1vfy7m9MenZ/HLTSrkCWMl8MNvhpqCwow0cjSk5gLadU
-aywjTAYv0MX0yhkBEgHG1zjOchsIRYGt7uqS9KpQWGkPu11SiA7sfEuC8bOd0jDF
-laXWu6xKF6xFrYPMuqfjojnE+fOfjdAXxhCMeWHsdlO22CvrL4XZqK+rb+i8Kg1z
-3uiXzG0XOR23ObrAaphBnTR1j2aWJxDWxmjR9upNxvtGP5dyZLyFERqN4DfY8Ozt
-Xj8LHN5SuNGcbAv6pOaFb5JlXevv6Q==
-=gRU5
------END PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308030734.qYKK5Phq-lkp@intel.com/
 
---2LX9drZDxEXVlZBe--
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/ext4.h:77:22: warning: // comments are not allowed in this language [-Wcomment]
+           __u32                           sba_count; // attrs number
+                                                      ^
+   1 warning generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
