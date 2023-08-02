@@ -1,44 +1,31 @@
-Received: from mgamail.intel.com (unknown [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02D579FF;
-	Wed,  2 Aug 2023 15:16:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690989405; x=1722525405;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EKjZVP+dw+1PIBJaO7TbC7knNk+bNdogDRoAEsG5RQ0=;
-  b=gBnopeWDTGADODu+N1q/GkwQHm9u1KwXCSF6EaBJ+3gWB8BQwFrhi3QG
-   nKNgaIpYqkc9ONNjLRnM4P0TJqKPYb+5ypwX9huL1Iv2vjgO6RrmdMpcX
-   /YyTNUMTxRGBzCSr7imz3qnwqYrdwQCyk4CjrHDI5G1iyfRbVv0fcsEzQ
-   dP5PP802ZuCrNmbD8qOsO9fAt4YQFsRLjVbAqvvNLULSHWwThQyUU9kKE
-   8OHbBtM4L1vUBTPHCsXFntifbW2c68VdFGpCkYEbP2g88MRnwqxm/99Ds
-   t4+90uF299f+DXhPXPbO+VcGrKqAodkT7nP81aIe/Uk+TkHIOpQqekfDH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="359650981"
-X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="359650981"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 08:16:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="799147151"
-X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="799147151"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Aug 2023 08:16:43 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRDac-0001Hn-2T;
-	Wed, 02 Aug 2023 15:16:42 +0000
-Date: Wed, 2 Aug 2023 23:16:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 15/37]
- sound/soc/codecs/cs42l84.c:1019:34: warning: unused variable
- 'cs42l84_of_match'
-Message-ID: <202308022345.V1wR1TMg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B3FD505
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 16:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689FC433C9;
+	Wed,  2 Aug 2023 16:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690992955;
+	bh=aFB7V+3UZPnXI2t7HCSOEac0MGFqyimdDX0kPkq9PJY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FcGDg/QoAgueCnjJ9htQ21ACnmhEnP0HCMC52BIWD717UyZgx8nRkDxGhxFbuZHHP
+	 Vt8nmloqhzQ+kreiqcdM9z98m0TUC5I9yHpVh5PWkbLEae7niNndRzm4U25INskyXG
+	 nzo/QO+8fgzpwBW95+RmRGtEJ3Qm8P9llSmcyrpA8p3KOd2xpU10b4Sus2IaauQN7R
+	 sm0wC3ji2L1BnZ4zwgIuy8XM7MMba58e+JO07lbDb/HKmEdXgaBK7iW8pA45ACUMhL
+	 Y50QJvBdQVgDP+eSoVsMvKTVcBd2W+A+PJd1m53TzNJPriX3GsPFin+4iPM90jal3t
+	 jP7BzbnsPCqvw==
+Date: Wed, 2 Aug 2023 09:15:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>,
+	Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
+ regardless of endianness
+Message-ID: <20230802161553.GA2108867@dev-arch.thelio-3990X>
+References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+ <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,106 +34,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   fd19415d77a7612b4edbe780d58328ec41019816
-commit: b9975c37cf715a768dc69134ae5812ec2cceb65b [15/37] wip: ASoC: cs42l84: Start new codec driver
-config: hexagon-randconfig-r022-20230731 (https://download.01.org/0day-ci/archive/20230802/202308022345.V1wR1TMg-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230802/202308022345.V1wR1TMg-lkp@intel.com/reproduce)
+On Tue, Aug 01, 2023 at 06:07:08PM -0700, Linus Torvalds wrote:
+> I think the patch is fine, but I guess I'd like to know that people
+> who are affected actually don't see any code generation changes (or
+> possibly see improvements from not turning it into a bool until later)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308022345.V1wR1TMg-lkp@intel.com/
+We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
+With both clang 18.0.0 (tip of tree) and GCC 13.1.0, I don't see any
+actual code generation changes in fs/namei.o with this configuration.
+I'd be pretty surprised if any of the other uses of has_zero() show any
+changes, I at least checked lib/string.o with that configuration and
+s390 and did not see anything.
 
-All warnings (new ones prefixed by >>):
+As far as I can tell, arm and arm64 with CONFIG_CPU_BIG_ENDIAN=y are the
+only configurations that can hit the particular bit of code with the
+generic big endian has_zero() implementation because the version of
+hash_name() that uses has_zero() in this manner is only used when
+CONFIG_DCACHE_WORD_ACCESS is set, which only arm, arm64, powerpc (little
+endian), and x86 select.
 
-   In file included from sound/soc/codecs/cs42l84.c:21:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/codecs/cs42l84.c:21:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/codecs/cs42l84.c:21:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/codecs/cs42l84.c:1019:34: warning: unused variable 'cs42l84_of_match' [-Wunused-const-variable]
-    1019 | static const struct of_device_id cs42l84_of_match[] = {
-         |                                  ^
-   7 warnings generated.
+arch/arm/Kconfig:49:         select DCACHE_WORD_ACCESS if HAVE_EFFICIENT_UNALIGNED_ACCESS
+arch/arm64/Kconfig:121:        select DCACHE_WORD_ACCESS
+arch/powerpc/Kconfig:183:        select DCACHE_WORD_ACCESS                if PPC64 && CPU_LITTLE_ENDIAN
+arch/x86/Kconfig:140:        select DCACHE_WORD_ACCESS                if !KMSAN
+arch/x86/um/Kconfig:12:         select DCACHE_WORD_ACCESS
 
+So seems like a pretty low risk patch to me but I could be missing
+something.
 
-vim +/cs42l84_of_match +1019 sound/soc/codecs/cs42l84.c
-
-  1018	
-> 1019	static const struct of_device_id cs42l84_of_match[] = {
-  1020		{ .compatible = "cirrus,cs42l84", },
-  1021		{}
-  1022	};
-  1023	MODULE_DEVICE_TABLE(of, cs42l84_of_match);
-  1024	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
