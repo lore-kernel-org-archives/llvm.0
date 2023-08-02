@@ -1,77 +1,94 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94452440C
-	for <llvm@lists.linux.dev>; Tue,  1 Aug 2023 23:23:26 +0000 (UTC)
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-55fcc15e109so3629326a12.3
-        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 16:23:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950267E
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 01:07:29 +0000 (UTC)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-99bf1f632b8so717561566b.1
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 18:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1690938447; x=1691543247;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FXkdVovEwsRXfv+Dg7OQg7KZYMXc3NVjQ9UsNbCmbkM=;
+        b=h2oAqqiZHA1I7+7KJ4qkiD6c+sb34x9IKFRrWiIgIKCjYGnQ9LY5YfGQeIXDkWDb7n
+         gaC4QjEwJE9EC56qPqcn+iDm0F8zZ/suBTIWB7KirvXY9IApXagyXhHGhA16U9vBIiRf
+         g4LVUfyHUdi2IVB2eTF2vDKxmPMNA7awbpXws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690932206; x=1691537006;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D88o907lNN2lO8wyEg1oXR0GwGcoGl4Tzq1oVFdFa+o=;
-        b=dnNV7pA35f1M0jMWau8ZRI9GGZKRqimNDPv+Fllq5iSjgYxhduy9tcuK3Y9vtpEykF
-         ZC/kgWVADa/lLoUX3IFWCEdXn2fwEwIZMaBk1gnqlkyzEeiXk+UC8HZNnx+qxzhvibem
-         UY7btp3+43oW2IwUT04bpuckBLtoXGaws4XkrGvQqKyN52hoanQIYUBNYBO5m/vx+XUf
-         DCwxaJtuvkIV3EDjj6LQZqdp2qHnDwBOJg3Bb4TvjeI6WivQIOV0ThoFIlEwINt7J4ZF
-         2/2EynhCTDQZYMrIB+xnOnjPvAyxh3Iz29c8g25VphbG/Q8AIWKK8xus/c3B+qPaqRTY
-         8JRA==
-X-Gm-Message-State: ABy/qLYB+IdOzP0x+N5V1v3ssee0pgxkasxLj7Nzx80KhGU9PbtVvkke
-	jrj+vFqyHvfkwER5XVs8mxg=
-X-Google-Smtp-Source: APBJJlHaRLFkt7gDfX7uryX/ds/6acyxNbGLePDypJ8k6akLl61wLJ0WvJEaL/1JNtvsaobKFHfRCA==
-X-Received: by 2002:a05:6a20:a104:b0:118:e70:6f7d with SMTP id q4-20020a056a20a10400b001180e706f7dmr14628412pzk.10.1690932205565;
-        Tue, 01 Aug 2023 16:23:25 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id iw14-20020a170903044e00b001bb54abfc07sm10923944plb.252.2023.08.01.16.23.22
+        d=1e100.net; s=20221208; t=1690938447; x=1691543247;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FXkdVovEwsRXfv+Dg7OQg7KZYMXc3NVjQ9UsNbCmbkM=;
+        b=BHAoiNPsx3HyHjlen05iGvaraCdujz4NfLPwl15/b0DpYCFf1eIi3O/8AvWGTIAjDQ
+         bRSmOcf/ws/FsWXChEKPjHo6mVX5cXx/MrL6KTOwaQOhPe5OzABzR88MGiU/vt1mcByD
+         6noXQZI6ZqhWPB2WOUsH/YUxN0GMrma8Y4U52hKvM6N003kTpWODqbgd7PFAUpK5hAOn
+         gSgfla38BY3h3avtTeoQMlbinkqT/FmCKznfZR6MzNbPB3phQAbiRXOTnW9vAxLm/S87
+         dDJknHuO/o6heoJ2J7SclhfE/a9I0ATMcgfryy0YKbyfObaJXje2DehWS4wPEzndwsK9
+         nw+g==
+X-Gm-Message-State: ABy/qLbngh7GX7ZIAQrLs9zQbg/bg8Q+r5o3EvDO13g9mVIlZr8cNFvI
+	V6BBEqcnpPpq2vASjlO7ed9m0dq6j039V6iwxz2Xjtuu
+X-Google-Smtp-Source: APBJJlF8nejDA+XDB94rAKJeeW6sCPI0JVgJAF4OLpdfHBkY/gmY80t+cdCx3PVLsJ+Bi812T+NWrA==
+X-Received: by 2002:a17:906:8459:b0:99b:eeeb:84a1 with SMTP id e25-20020a170906845900b0099beeeb84a1mr3578262ejy.27.1690938447594;
+        Tue, 01 Aug 2023 18:07:27 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id mf25-20020a170906cb9900b0099251a40184sm8314044ejb.99.2023.08.01.18.07.25
+        for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 16:23:24 -0700 (PDT)
-Message-ID: <8f7404dd-dab7-e599-31ff-3204b6a11943@acm.org>
-Date: Tue, 1 Aug 2023 16:23:22 -0700
+        Tue, 01 Aug 2023 18:07:26 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5222c5d71b8so8864451a12.2
+        for <llvm@lists.linux.dev>; Tue, 01 Aug 2023 18:07:25 -0700 (PDT)
+X-Received: by 2002:aa7:df18:0:b0:522:289d:8dcd with SMTP id
+ c24-20020aa7df18000000b00522289d8dcdmr3129466edy.35.1690938445668; Tue, 01
+ Aug 2023 18:07:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] scsi: ufs: Fix the build for gcc 9 and before
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- "James E.J. Bottomley" <jejb@linux.ibm.com>,
- Stanley Chu <stanley.chu@mediatek.com>, Avri Altman <avri.altman@wdc.com>,
- Bean Huo <beanhuo@micron.com>, Asutosh Das <quic_asutoshd@quicinc.com>,
- "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
- Arthur Simchaev <Arthur.Simchaev@wdc.com>, Can Guo <quic_cang@quicinc.com>,
- llvm@lists.linux.dev
-References: <20230801201337.1007617-1-bvanassche@acm.org>
- <20230801215240.GA534984@dev-arch.thelio-3990X>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230801215240.GA534984@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+In-Reply-To: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 1 Aug 2023 18:07:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+Message-ID: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
+ regardless of endianness
+To: ndesaulniers@google.com
+Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 8/1/23 14:52, Nathan Chancellor wrote:
-> On Tue, Aug 01, 2023 at 01:13:23PM -0700, Bart Van Assche wrote:
->>   static void ufshcd_check_header_layout(void)
->>   {
->> +#if defined(__GNUC__) && __GNUC__ -0 < 10
-> 
-> clang defines __GNUC__ and it does not sound like it is impacted by this
-> issue? I just built with LLVM 11 through 17 and did not see it. Can this
-> be made more specific?
-> 
-> Also, can we use IS_ENABLED() and not rely on the preprocessor? This
-> appears to work for me.
-> 
->      if (IS_ENABLED(CONFIG_CC_IS_GCC) && CONFIG_GCC_VERSION < 100000)
->          return;
+On Tue, 1 Aug 2023 at 15:22, <ndesaulniers@google.com> wrote:
+>
+> Compiling big-endian targets with Clang produces the diagnostic:
+>
+> fs/namei.c:2173:13: warning: use of bitwise '|' with boolean operands
+> [-Wbitwise-instead-of-logical]
+> } while (!(has_zero(a, &adata, &constants) | has_zero(b, &bdata, &constants)));
 
-Thanks for the feedback. A new version of this patch has been posted.
+Gaah.
 
-Bart.
+Yes, I think that 'has_zero()' should return the 'unsigned long' bits
+on big-endian too, because I do think we always want the bit ops, and
+turn it into a boolean only at the very end.
 
+> It appears that when has_zero was introduced, two definitions were
+> produced with different signatures (in particular different return types).
+
+Big-endian was kind of a later addition, and while that file is called
+"generic", it's really "little-endian has an easier time of this all,
+but let's do the 'generic' file for the more complicated case".
+
+Who ends up being affected by this? Powerpc does its own
+word-at-a-time thing because the big-endian case is nasty and you can
+do better with special instructions that they have.
+
+Who else is even BE any more? Some old 32-bit arm setup?
+
+I think the patch is fine, but I guess I'd like to know that people
+who are affected actually don't see any code generation changes (or
+possibly see improvements from not turning it into a bool until later)
+
+            Linus
