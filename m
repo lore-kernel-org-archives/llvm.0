@@ -1,252 +1,152 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (unknown [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1308BE7
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 15:07:35 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-583f048985bso88812737b3.2
-        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 08:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690988854; x=1691593654;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QsQzCCvgsUc29iN0t+r4OrRLxcOlAg596pNmSZ7559A=;
-        b=4ZYamtVu7c5DBlxohGCGmrb3sFLfmn9HVQ5Wg0u74wgUuS9HmeqzsIbgmvxx4vbynp
-         G5rhNqMQc/y5nAAokrb8biNfvQGEp8VjT02HxfGGmCTT5wPDSvxvnVw8kiA6iPjuGFVD
-         LA+s86W47CrKMLOaDF3oTsFV1irTVQ90npxdXPTIsyYRRVrnjksYD/YOpvA5gcb/NJON
-         1/DNjlxIfTxKKGGO7EWAXeVsoT9Ba6/DtSkaghydahqdF14skDb3T2FlkiHoREdye/Wn
-         PP4uXHlG/PZ7eozLUn1Qs2nxG2z0Y5gSqG2d0rJKhv4XdK6rQ2bU5XD8YUaBIrlQg13L
-         ZuFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690988854; x=1691593654;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QsQzCCvgsUc29iN0t+r4OrRLxcOlAg596pNmSZ7559A=;
-        b=F52XjL4GpssYKIFUqngPf0CTnwnsrro0s10xnGZqP0mOi+1DbpPxmsEGPb/yYcV0WW
-         rv/yHgoai7o7OETKi1qu/bxZkgm5I+JQ2nD2tcmOukoYdWwxLveXFFRonS3AZ0YMwwoH
-         M91sGQDdBoyCE5aLFBDGriydvnZzBEDCSrHtvVUid0HibPiFPxFBsY8Ysx0LsmPzrPHH
-         zStt+yCpEiBHrX7Xb+Y26BK8uFahrRzXAWAjTaxnfsQVyp539Hs1hINSBwgumsruYge8
-         AN5WFgEm1OZE0VfchLoBmLLecL468alPFJdWmUSKji7SJX9fYUTXh+3O0SJ8jaRj5tVw
-         qSHQ==
-X-Gm-Message-State: ABy/qLZKJlkyHxwlpqf/4VfcSK7WEFFMQkFBLCb+zqIUxDCJqQbhJ+2f
-	sGP/8++w8L8YXeDq9AUBEoCTBeGn/A==
-X-Google-Smtp-Source: APBJJlF2dxbHCNlW4tE69srWZHv4LNf1FBrEIP73vEfLojj7ssYK9cpF/2NfJOSE1k3fWGXBcvsb8SmIjQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:5f73:1fc0:c9fd:f203])
- (user=elver job=sendgmr) by 2002:a81:b50d:0:b0:586:4e84:26d2 with SMTP id
- t13-20020a81b50d000000b005864e8426d2mr79140ywh.3.1690988854773; Wed, 02 Aug
- 2023 08:07:34 -0700 (PDT)
-Date: Wed,  2 Aug 2023 17:06:39 +0200
-In-Reply-To: <20230802150712.3583252-1-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02D579FF;
+	Wed,  2 Aug 2023 15:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690989405; x=1722525405;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EKjZVP+dw+1PIBJaO7TbC7knNk+bNdogDRoAEsG5RQ0=;
+  b=gBnopeWDTGADODu+N1q/GkwQHm9u1KwXCSF6EaBJ+3gWB8BQwFrhi3QG
+   nKNgaIpYqkc9ONNjLRnM4P0TJqKPYb+5ypwX9huL1Iv2vjgO6RrmdMpcX
+   /YyTNUMTxRGBzCSr7imz3qnwqYrdwQCyk4CjrHDI5G1iyfRbVv0fcsEzQ
+   dP5PP802ZuCrNmbD8qOsO9fAt4YQFsRLjVbAqvvNLULSHWwThQyUU9kKE
+   8OHbBtM4L1vUBTPHCsXFntifbW2c68VdFGpCkYEbP2g88MRnwqxm/99Ds
+   t4+90uF299f+DXhPXPbO+VcGrKqAodkT7nP81aIe/Uk+TkHIOpQqekfDH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="359650981"
+X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
+   d="scan'208";a="359650981"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 08:16:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="799147151"
+X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
+   d="scan'208";a="799147151"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Aug 2023 08:16:43 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRDac-0001Hn-2T;
+	Wed, 02 Aug 2023 15:16:42 +0000
+Date: Wed, 2 Aug 2023 23:16:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 15/37]
+ sound/soc/codecs/cs42l84.c:1019:34: warning: unused variable
+ 'cs42l84_of_match'
+Message-ID: <202308022345.V1wR1TMg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230802150712.3583252-1-elver@google.com>
-X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
-Message-ID: <20230802150712.3583252-3-elver@google.com>
-Subject: [PATCH 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Andrew Morton <akpm@linux-foundation.org>, 
-	Kees Cook <keescook@chromium.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Numerous production kernel configs (see [1, 2]) are choosing to enable
-CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
-configs [3]. The feature has never been designed with performance in
-mind, yet common list manipulation is happening across hot paths all
-over the kernel.
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   fd19415d77a7612b4edbe780d58328ec41019816
+commit: b9975c37cf715a768dc69134ae5812ec2cceb65b [15/37] wip: ASoC: cs42l84: Start new codec driver
+config: hexagon-randconfig-r022-20230731 (https://download.01.org/0day-ci/archive/20230802/202308022345.V1wR1TMg-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230802/202308022345.V1wR1TMg-lkp@intel.com/reproduce)
 
-Introduce CONFIG_DEBUG_LIST_MINIMAL, which performs list pointer
-checking inline, and only upon list corruption delegates to the
-reporting slow path.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308022345.V1wR1TMg-lkp@intel.com/
 
-To generate optimal machine code with CONFIG_DEBUG_LIST_MINIMAL:
+All warnings (new ones prefixed by >>):
 
-  1. Elide checking for pointer values which upon dereference would
-     result in an immediate access fault -- therefore "minimal" checks.
-     The trade-off is lower-quality error reports.
+   In file included from sound/soc/codecs/cs42l84.c:21:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/cs42l84.c:21:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/cs42l84.c:21:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> sound/soc/codecs/cs42l84.c:1019:34: warning: unused variable 'cs42l84_of_match' [-Wunused-const-variable]
+    1019 | static const struct of_device_id cs42l84_of_match[] = {
+         |                                  ^
+   7 warnings generated.
 
-  2. Use the newly introduced __preserve_most function attribute
-     (available with Clang, but not yet with GCC) to minimize the code
-     footprint for calling the reporting slow path. As a result,
-     function size of callers is reduced by avoiding saving registers
-     before calling the rarely called reporting slow path.
 
-  3. Because the inline checks are a subset of the full set of checks in
-     ___list_*_valid(), always return false if the inline checks failed.
-     This avoids redundant compare and conditional branch right after
-     return from the slow path.
+vim +/cs42l84_of_match +1019 sound/soc/codecs/cs42l84.c
 
-As a side-effect of the checks being inline, if the compiler can prove
-some condition to always be true, it can completely elide some checks.
+  1018	
+> 1019	static const struct of_device_id cs42l84_of_match[] = {
+  1020		{ .compatible = "cirrus,cs42l84", },
+  1021		{}
+  1022	};
+  1023	MODULE_DEVICE_TABLE(of, cs42l84_of_match);
+  1024	
 
-Running netperf with CONFIG_DEBUG_LIST_MINIMAL (using a Clang compiler
-with "preserve_most") shows throughput improvements, in my case of ~7%
-on average (up to 20-30% on some test cases).
-
-Link: https://r.android.com/1266735 [1]
-Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/config [2]
-Link: https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings [3]
-Signed-off-by: Marco Elver <elver@google.com>
----
- arch/arm64/kvm/hyp/nvhe/list_debug.c |  2 +
- include/linux/list.h                 | 56 +++++++++++++++++++++++++---
- lib/Kconfig.debug                    | 15 ++++++++
- lib/list_debug.c                     |  2 +
- 4 files changed, 69 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-index 589284496ac5..df718e29f6d4 100644
---- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
-+++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-@@ -26,6 +26,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
- 
- /* The predicates checked here are taken from lib/list_debug.c. */
- 
-+__list_valid_slowpath
- bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 		       struct list_head *next)
- {
-@@ -37,6 +38,7 @@ bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 	return true;
- }
- 
-+__list_valid_slowpath
- bool ___list_del_entry_valid(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
-diff --git a/include/linux/list.h b/include/linux/list.h
-index e0b2cf904409..a28a215a3eb1 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -39,20 +39,64 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
- }
- 
- #ifdef CONFIG_DEBUG_LIST
--extern bool ___list_add_valid(struct list_head *new,
--			      struct list_head *prev,
--			      struct list_head *next);
-+
-+#ifdef CONFIG_DEBUG_LIST_MINIMAL
-+# define __list_valid_slowpath __cold __preserve_most
-+#else
-+# define __list_valid_slowpath
-+#endif
-+
-+extern bool __list_valid_slowpath ___list_add_valid(struct list_head *new,
-+						    struct list_head *prev,
-+						    struct list_head *next);
- static __always_inline bool __list_add_valid(struct list_head *new,
- 					     struct list_head *prev,
- 					     struct list_head *next)
- {
--	return ___list_add_valid(new, prev, next);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_DEBUG_LIST_MINIMAL)) {
-+		/*
-+		 * In the minimal config, elide checking if next and prev are
-+		 * NULL, since the immediate dereference of them below would
-+		 * result in a fault if NULL.
-+		 *
-+		 * With the minimal config we can afford to inline the checks,
-+		 * which also gives the compiler a chance to elide some of them
-+		 * completely if they can be proven at compile-time. If one of
-+		 * the pre-conditions does not hold, the slow-path will show a
-+		 * report which pre-condition failed.
-+		 */
-+		if (likely(next->prev == prev && prev->next == next && new != prev && new != next))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= ___list_add_valid(new, prev, next);
-+	return ret;
- }
- 
--extern bool ___list_del_entry_valid(struct list_head *entry);
-+extern bool __list_valid_slowpath ___list_del_entry_valid(struct list_head *entry);
- static __always_inline bool __list_del_entry_valid(struct list_head *entry)
- {
--	return ___list_del_entry_valid(entry);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_DEBUG_LIST_MINIMAL)) {
-+		struct list_head *prev = entry->prev;
-+		struct list_head *next = entry->next;
-+
-+		/*
-+		 * In the minimal config, elide checking if next and prev are
-+		 * NULL, LIST_POISON1 or LIST_POISON2, since the immediate
-+		 * dereference of them below would result in a fault.
-+		 */
-+		if (likely(prev->next == entry && next->prev == entry))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= ___list_del_entry_valid(entry);
-+	return ret;
- }
- #else
- static inline bool __list_add_valid(struct list_head *new,
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index fbc89baf7de6..e72cf08af0fa 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1680,6 +1680,21 @@ config DEBUG_LIST
- 
- 	  If unsure, say N.
- 
-+config DEBUG_LIST_MINIMAL
-+	bool "Minimal linked list debug checks"
-+	default !DEBUG_KERNEL
-+	depends on DEBUG_LIST
-+	help
-+	  Only perform the minimal set of checks in the linked-list walking
-+	  routines to catch corruptions that are not guaranteed to result in an
-+	  immediate access fault.
-+
-+	  This trades lower quality error reports for improved performance: the
-+	  generated code should be more optimal and provide trade-offs that may
-+	  better serve safety- and performance- critical environments.
-+
-+	  If unsure, say Y.
-+
- config DEBUG_PLIST
- 	bool "Debug priority linked list manipulation"
- 	depends on DEBUG_KERNEL
-diff --git a/lib/list_debug.c b/lib/list_debug.c
-index fd69009cc696..daad32855f0d 100644
---- a/lib/list_debug.c
-+++ b/lib/list_debug.c
-@@ -17,6 +17,7 @@
-  * attempt).
-  */
- 
-+__list_valid_slowpath
- bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 		       struct list_head *next)
- {
-@@ -39,6 +40,7 @@ bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- }
- EXPORT_SYMBOL(___list_add_valid);
- 
-+__list_valid_slowpath
- bool ___list_del_entry_valid(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
 -- 
-2.41.0.585.gd2178a4bd4-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
