@@ -1,51 +1,45 @@
-Received: from mgamail.intel.com (unknown [192.55.52.88])
+Received: from mgamail.intel.com (unknown [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3C1A40;
-	Wed,  2 Aug 2023 03:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0130310E2;
+	Wed,  2 Aug 2023 03:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690947011; x=1722483011;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eA9FZhqDubY7F2rAvuLG3N+t8DmGYvtDYbk+ECdalHk=;
-  b=oGygL5PrlUr6z68pxC267w5+nEEbHZjGse/2xtY9d2zPL4BXrl24p/MB
-   Sfg3I3o6hTquhItFAuP5tgFobYUzkHkeuOk5yyuCJk0/07a0l8e+9aTB0
-   jRXtbezL0EjVvdIn4Hex57j37H6xbLN37BOQsqjfa46OXWsyTmVMws+7e
-   /xE6vZZ09He0h8yGH7B5CAqAJoE1AVs+9s1ivqzQfK/LVatLVgjZYHTD6
-   NOrneS1flCNHiErz8D7k6GtWg1t3WuC+KAD/sO+Rz2mmkDmOB6F1R3hj+
-   OdzpmS54Wd7aLddWu84ffyYDFyh+zCNERn0NXjdWepaBeTR8S0BjjOzzs
+  t=1690948332; x=1722484332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oG+mnJCH1tsDQQDsYxdeXnIOUvFbdC4npmVAGyd7baY=;
+  b=cvRTL6tTnH+Low2w2AwDOlEr2BF5Bf1VROGXnNz3BjAqhVty3cFWkcWM
+   CpxVZV0qVssbjiFZQFDUAiKIVyTLs+eRweC+JqY1LU30i+1pK4iJkpL8+
+   RiGh8jS6R732PXAK2ltMvH140NnRDfpJNn8AbSZyDnuLpF0T5E/eNV/5z
+   DBcl1EAxzB3iLvnWj9SW5I8FXdaMIRTcNmeZ96WTiwfrllgqp0NFLRrnr
+   5GzekW//ZDOlnOW8YPdSAyO5Bp++QRTm3xwDlYNdWwBR6H3mMAXlogIfR
+   7tN/Vgk34zJYOL8v1mYwIaoaKaK00e/Q9uxaIXc3PAoOhKSA6xYJ9fXYJ
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="400416633"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="433312652"
 X-IronPort-AV: E=Sophos;i="6.01,248,1684825200"; 
-   d="scan'208";a="400416633"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 20:30:08 -0700
+   d="scan'208";a="433312652"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 20:52:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="706022839"
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="852721899"
 X-IronPort-AV: E=Sophos;i="6.01,248,1684825200"; 
-   d="scan'208";a="706022839"
+   d="scan'208";a="852721899"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2023 20:30:05 -0700
+  by orsmga004.jf.intel.com with ESMTP; 01 Aug 2023 20:52:06 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qR2Ym-0000o3-1c;
-	Wed, 02 Aug 2023 03:30:04 +0000
-Date: Wed, 2 Aug 2023 11:29:54 +0800
+	id 1qR2u5-0000pT-1B;
+	Wed, 02 Aug 2023 03:52:05 +0000
+Date: Wed, 2 Aug 2023 11:51:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: cujomalainey@chromium.org, alsa-devel@alsa-project.org
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Curtis Malainey <cujomalainey@chromium.org>,
-	Doug Anderson <dianders@chromium.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Zheyu Ma <zheyuma97@gmail.com>, Dan Carpenter <error27@gmail.com>,
-	"Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-	Clement Lecigne <clecigne@google.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] sound: core: fix device ownership model in card and pcm
-Message-ID: <202308021152.c3aRSumS-lkp@intel.com>
-References: <20230801171928.1460120-1-cujomalainey@chromium.org>
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>
+Subject: [pinchartl:rpi/v6.4/isp/v2 32/47]
+ drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:518:17: warning: implicit
+ truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1
+Message-ID: <202308021107.kJpzuO6a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,212 +48,254 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230801171928.1460120-1-cujomalainey@chromium.org>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tiwai-sound/for-next]
-[also build test ERROR on tiwai-sound/for-linus linus/master v6.5-rc4 next-20230801]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/cujomalainey-chromium-org/sound-core-fix-device-ownership-model-in-card-and-pcm/20230802-012331
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230801171928.1460120-1-cujomalainey%40chromium.org
-patch subject: [PATCH] sound: core: fix device ownership model in card and pcm
-config: powerpc-randconfig-r014-20230801 (https://download.01.org/0day-ci/archive/20230802/202308021152.c3aRSumS-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git rpi/v6.4/isp/v2
+head:   fa6e05c138b9be3efb409e6a5a913ac9ad342a8d
+commit: e4f0aebd1ac235c8960d3c23c34d5ddd775ed46a [32/47] staging: vc04_services: Add new vc-sm-cma driver
+config: s390-randconfig-r015-20230801 (https://download.01.org/0day-ci/archive/20230802/202308021107.kJpzuO6a-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230802/202308021152.c3aRSumS-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230802/202308021107.kJpzuO6a-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308021152.c3aRSumS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308021107.kJpzuO6a-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> sound/aoa/soundbus/i2sbus/pcm.c:975:51: error: member reference type 'struct device *' is a pointer; did you mean to use '->'?
-     975 |                 dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].dev.parent =
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-         |                                                                 ->
-   sound/aoa/soundbus/i2sbus/pcm.c:992:50: error: member reference type 'struct device *' is a pointer; did you mean to use '->'?
-     992 |                 dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE].dev.parent =
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-         |                                                                ->
-   2 errors generated.
+   In file included from drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:518:17: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
+     518 |         buffer->in_use = 1;
+         |                        ^ ~
+>> drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:417:1: warning: no previous prototype for function 'vc_sm_cma_import_dmabuf_internal' [-Wmissing-prototypes]
+     417 | vc_sm_cma_import_dmabuf_internal(struct sm_state_t *state,
+         | ^
+   drivers/staging/vc04_services/vc-sm-cma/vc_sm.c:416:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     416 | int
+         | ^
+         | static 
+   14 warnings generated.
+--
+>> drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_vchi.c:283:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     283 |         default:
+         |         ^
+   drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_vchi.c:283:2: note: insert 'break;' to avoid fall-through
+     283 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
-vim +975 sound/aoa/soundbus/i2sbus/pcm.c
+vim +/int +518 drivers/staging/vc04_services/vc-sm-cma/vc_sm.c
 
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   866  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   867  int
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   868  i2sbus_attach_codec(struct soundbus_dev *dev, struct snd_card *card,
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   869  		    struct codec_info *ci, void *data)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   870  {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   871  	int err, in = 0, out = 0;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   872  	struct transfer_info *tmp;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   873  	struct i2sbus_dev *i2sdev = soundbus_dev_to_i2sbus_dev(dev);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   874  	struct codec_info_item *cii;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   875  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   876  	if (!dev->pcmname || dev->pcmid == -1) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   877  		printk(KERN_ERR "i2sbus: pcm name and id must be set!\n");
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   878  		return -EINVAL;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   879  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   880  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   881  	list_for_each_entry(cii, &dev->codec_list, list) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   882  		if (cii->codec_data == data)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   883  			return -EALREADY;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   884  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   885  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   886  	if (!ci->transfers || !ci->transfers->formats
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   887  	    || !ci->transfers->rates || !ci->usable)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   888  		return -EINVAL;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   889  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   890  	/* we currently code the i2s transfer on the clock, and support only
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   891  	 * 32 and 64 */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   892  	if (ci->bus_factor != 32 && ci->bus_factor != 64)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   893  		return -EINVAL;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   894  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   895  	/* If you want to fix this, you need to keep track of what transport infos
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   896  	 * are to be used, which codecs they belong to, and then fix all the
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   897  	 * sysclock/busclock stuff above to depend on which is usable */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   898  	list_for_each_entry(cii, &dev->codec_list, list) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   899  		if (cii->codec->sysclock_factor != ci->sysclock_factor) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   900  			printk(KERN_DEBUG
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   901  			       "cannot yet handle multiple different sysclocks!\n");
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   902  			return -EINVAL;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   903  		}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   904  		if (cii->codec->bus_factor != ci->bus_factor) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   905  			printk(KERN_DEBUG
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   906  			       "cannot yet handle multiple different bus clocks!\n");
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   907  			return -EINVAL;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   908  		}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   909  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   910  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   911  	tmp = ci->transfers;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   912  	while (tmp->formats && tmp->rates) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   913  		if (tmp->transfer_in)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   914  			in = 1;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   915  		else
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   916  			out = 1;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   917  		tmp++;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   918  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   919  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   920  	cii = kzalloc(sizeof(struct codec_info_item), GFP_KERNEL);
-37d122c5768b41 sound/aoa/soundbus/i2sbus/pcm.c        Zhen Lei      2021-06-17   921  	if (!cii)
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   922  		return -ENOMEM;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   923  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   924  	/* use the private data to point to the codec info */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   925  	cii->sdev = soundbus_dev_get(dev);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   926  	cii->codec = ci;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   927  	cii->codec_data = data;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   928  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   929  	if (!cii->sdev) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   930  		printk(KERN_DEBUG
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   931  		       "i2sbus: failed to get soundbus dev reference\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   932  		err = -ENODEV;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   933  		goto out_free_cii;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   934  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   935  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   936  	if (!try_module_get(THIS_MODULE)) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   937  		printk(KERN_DEBUG "i2sbus: failed to get module reference!\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   938  		err = -EBUSY;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   939  		goto out_put_sdev;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   940  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   941  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   942  	if (!try_module_get(ci->owner)) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   943  		printk(KERN_DEBUG
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   944  		       "i2sbus: failed to get module reference to codec owner!\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   945  		err = -EBUSY;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   946  		goto out_put_this_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   947  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   948  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   949  	if (!dev->pcm) {
-73e85fe8452b95 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   950  		err = snd_pcm_new(card, dev->pcmname, dev->pcmid, 0, 0,
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   951  				  &dev->pcm);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   952  		if (err) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   953  			printk(KERN_DEBUG "i2sbus: failed to create pcm\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   954  			goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   955  		}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   956  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   957  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   958  	/* ALSA yet again sucks.
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   959  	 * If it is ever fixed, remove this line. See below. */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   960  	out = in = 1;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   961  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   962  	if (!i2sdev->out.created && out) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   963  		if (dev->pcm->card != card) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   964  			/* eh? */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   965  			printk(KERN_ERR
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   966  			       "Can't attach same bus to different cards!\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   967  			err = -EINVAL;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   968  			goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   969  		}
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   970  		err = snd_pcm_new_stream(dev->pcm, SNDRV_PCM_STREAM_PLAYBACK, 1);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   971  		if (err)
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   972  			goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   973  		snd_pcm_set_ops(dev->pcm, SNDRV_PCM_STREAM_PLAYBACK,
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   974  				&i2sbus_playback_ops);
-ef46c7af93f98d sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2015-01-29  @975  		dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].dev.parent =
-ef46c7af93f98d sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2015-01-29   976  			&dev->ofdev.dev;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   977  		i2sdev->out.created = 1;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   978  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   979  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   980  	if (!i2sdev->in.created && in) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   981  		if (dev->pcm->card != card) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   982  			printk(KERN_ERR
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   983  			       "Can't attach same bus to different cards!\n");
-3d3909ffe57174 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Takashi Iwai  2007-11-23   984  			err = -EINVAL;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   985  			goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   986  		}
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   987  		err = snd_pcm_new_stream(dev->pcm, SNDRV_PCM_STREAM_CAPTURE, 1);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   988  		if (err)
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05   989  			goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   990  		snd_pcm_set_ops(dev->pcm, SNDRV_PCM_STREAM_CAPTURE,
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   991  				&i2sbus_record_ops);
-ef46c7af93f98d sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2015-01-29   992  		dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE].dev.parent =
-ef46c7af93f98d sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2015-01-29   993  			&dev->ofdev.dev;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   994  		i2sdev->in.created = 1;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   995  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   996  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   997  	/* so we have to register the pcm after adding any substream
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   998  	 * to it because alsa doesn't create the devices for the
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21   999  	 * substreams when we add them later.
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1000  	 * Therefore, force in and out on both busses (above) and
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1001  	 * register the pcm now instead of just after creating it.
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1002  	 */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1003  	err = snd_device_register(card, dev->pcm);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1004  	if (err) {
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1005  		printk(KERN_ERR "i2sbus: error registering new pcm\n");
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1006  		goto out_put_ci_module;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1007  	}
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1008  	/* no errors any more, so let's add this to our list */
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1009  	list_add(&cii->list, &dev->codec_list);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1010  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1011  	dev->pcm->private_data = i2sdev;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1012  	dev->pcm->private_free = i2sbus_private_free;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1013  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1014  	/* well, we really should support scatter/gather DMA */
-9b2433a9c5b392 sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2019-12-09  1015  	snd_pcm_set_managed_buffer_all(
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1016  		dev->pcm, SNDRV_DMA_TYPE_DEV,
-3ca5fc0664ec47 sound/aoa/soundbus/i2sbus/pcm.c        Takashi Iwai  2019-11-05  1017  		&macio_get_pci_dev(i2sdev->macio)->dev,
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1018  		64 * 1024, 64 * 1024);
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1019  
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1020  	return 0;
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1021   out_put_ci_module:
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1022  	module_put(ci->owner);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1023   out_put_this_module:
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1024  	module_put(THIS_MODULE);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1025   out_put_sdev:
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1026  	soundbus_dev_put(dev);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1027   out_free_cii:
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1028  	kfree(cii);
-d595ee7e0162ae sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-10-05  1029  	return err;
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1030  }
-f3d9478b2ce468 sound/aoa/soundbus/i2sbus/i2sbus-pcm.c Johannes Berg 2006-06-21  1031  
+   414	
+   415	/* Import a dma_buf to be shared with VC. */
+   416	int
+ > 417	vc_sm_cma_import_dmabuf_internal(struct sm_state_t *state,
+   418					 struct dma_buf *dma_buf,
+   419					 int fd,
+   420					 struct dma_buf **imported_buf)
+   421	{
+   422		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+   423		struct vc_sm_buffer *buffer = NULL;
+   424		struct vc_sm_import import = { };
+   425		struct vc_sm_import_result result = { };
+   426		struct dma_buf_attachment *attach = NULL;
+   427		struct sg_table *sgt = NULL;
+   428		dma_addr_t dma_addr;
+   429		int ret = 0;
+   430		int status;
+   431	
+   432		/* Setup our allocation parameters */
+   433		pr_debug("%s: importing dma_buf %p/fd %d\n", __func__, dma_buf, fd);
+   434	
+   435		if (fd < 0)
+   436			get_dma_buf(dma_buf);
+   437		else
+   438			dma_buf = dma_buf_get(fd);
+   439	
+   440		if (!dma_buf)
+   441			return -EINVAL;
+   442	
+   443		attach = dma_buf_attach(dma_buf, &sm_state->pdev->dev);
+   444		if (IS_ERR(attach)) {
+   445			ret = PTR_ERR(attach);
+   446			goto error;
+   447		}
+   448	
+   449		sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+   450		if (IS_ERR(sgt)) {
+   451			ret = PTR_ERR(sgt);
+   452			goto error;
+   453		}
+   454	
+   455		/* Verify that the address block is contiguous */
+   456		if (sgt->nents != 1) {
+   457			ret = -ENOMEM;
+   458			goto error;
+   459		}
+   460	
+   461		/* Allocate local buffer to track this allocation. */
+   462		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+   463		if (!buffer) {
+   464			ret = -ENOMEM;
+   465			goto error;
+   466		}
+   467	
+   468		import.type = VC_SM_ALLOC_NON_CACHED;
+   469		dma_addr = sg_dma_address(sgt->sgl);
+   470		import.addr = (u32)dma_addr;
+   471		if ((import.addr & 0xC0000000) != 0xC0000000) {
+   472			pr_err("%s: Expecting an uncached alias for dma_addr %pad\n",
+   473			       __func__, &dma_addr);
+   474			import.addr |= 0xC0000000;
+   475		}
+   476		import.size = sg_dma_len(sgt->sgl);
+   477		import.allocator = current->tgid;
+   478		import.kernel_id = get_kernel_id(buffer);
+   479	
+   480		memcpy(import.name, VC_SM_RESOURCE_NAME_DEFAULT,
+   481		       sizeof(VC_SM_RESOURCE_NAME_DEFAULT));
+   482	
+   483		pr_debug("[%s]: attempt to import \"%s\" data - type %u, addr %pad, size %u.\n",
+   484			 __func__, import.name, import.type, &dma_addr, import.size);
+   485	
+   486		/* Allocate the videocore buffer. */
+   487		status = vc_sm_cma_vchi_import(sm_state->sm_handle, &import, &result,
+   488					       &sm_state->int_trans_id);
+   489		if (status == -EINTR) {
+   490			pr_debug("[%s]: requesting import memory action restart (trans_id: %u)\n",
+   491				 __func__, sm_state->int_trans_id);
+   492			ret = -ERESTARTSYS;
+   493			sm_state->restart_sys = -EINTR;
+   494			sm_state->int_action = VC_SM_MSG_TYPE_IMPORT;
+   495			goto error;
+   496		} else if (status || !result.res_handle) {
+   497			pr_debug("[%s]: failed to import memory on videocore (status: %u, trans_id: %u)\n",
+   498				 __func__, status, sm_state->int_trans_id);
+   499			ret = -ENOMEM;
+   500			goto error;
+   501		}
+   502	
+   503		mutex_init(&buffer->lock);
+   504		INIT_LIST_HEAD(&buffer->attachments);
+   505		memcpy(buffer->name, import.name,
+   506		       min(sizeof(buffer->name), sizeof(import.name) - 1));
+   507	
+   508		/* Keep track of the buffer we created. */
+   509		buffer->vc_handle = result.res_handle;
+   510		buffer->size = import.size;
+   511		buffer->vpu_state = VPU_MAPPED;
+   512	
+   513		buffer->imported_dma_buf = dma_buf;
+   514	
+   515		buffer->attach = attach;
+   516		buffer->sgt = sgt;
+   517		buffer->dma_addr = dma_addr;
+ > 518		buffer->in_use = 1;
+   519		buffer->kernel_id = import.kernel_id;
+   520	
+   521		/*
+   522		 * We're done - we need to export a new dmabuf chaining through most
+   523		 * functions, but enabling us to release our own internal references
+   524		 * here.
+   525		 */
+   526		exp_info.ops = &dma_buf_import_ops;
+   527		exp_info.size = import.size;
+   528		exp_info.flags = O_RDWR;
+   529		exp_info.priv = buffer;
+   530	
+   531		buffer->dma_buf = dma_buf_export(&exp_info);
+   532		if (IS_ERR(buffer->dma_buf)) {
+   533			ret = PTR_ERR(buffer->dma_buf);
+   534			goto error;
+   535		}
+   536	
+   537		vc_sm_add_resource(buffer);
+   538	
+   539		*imported_buf = buffer->dma_buf;
+   540	
+   541		return 0;
+   542	
+   543	error:
+   544		if (result.res_handle) {
+   545			struct vc_sm_free_t free = { result.res_handle, 0 };
+   546	
+   547			vc_sm_cma_vchi_free(sm_state->sm_handle, &free,
+   548					    &sm_state->int_trans_id);
+   549		}
+   550		free_kernel_id(import.kernel_id);
+   551		kfree(buffer);
+   552		if (sgt)
+   553			dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
+   554		if (attach)
+   555			dma_buf_detach(dma_buf, attach);
+   556		dma_buf_put(dma_buf);
+   557		return ret;
+   558	}
+   559	
 
 -- 
 0-DAY CI Kernel Test Service
