@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B81DF62
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 23:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CCBC433C8;
-	Wed,  2 Aug 2023 23:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA925DF62
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 23:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A36C433C8;
+	Wed,  2 Aug 2023 23:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691017468;
-	bh=AyckQbINUXyvMIJTDA4FvQVV7MtXBC3frps+2v05rDA=;
+	s=k20201202; t=1691017632;
+	bh=sHIKg/nDNw3R4xGSVyhZMISd3sEKpe+1jfL2edNNHgA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nLmEHvkuER6UeMI6RiY7RXRNJX3AyMg/4Yds8SA7hPLDCdecDjVsKUBqHQzg3tDq1
-	 Dd1g2hZU3/YZfzKd38CaEJqMEr4cxjNj10Oac4boeHiANhUJs2ExFnt1V2wC+7sV1R
-	 tNHkcefYD6H36QKFcgCxdkeSdQY0K0i0hIie0jPV/c/rO+Dq3XqCWHq67jUg7Qtv+o
-	 MmGpJM0Hro2TlL4Mhb8hWinTXjeL3Qv3Ebs5WzWjiASL4Mo6ou7S79aF8ZomunadQk
-	 zzPvJRVDEVCrFuJYn8QaTKjuFj9ox13Ga45u7JkG0Q/aBdglsylkPrxJf9J0/Pkce4
-	 oFa6qMgrrx1Fw==
-Date: Wed, 2 Aug 2023 16:04:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	b=r6pNyZVV7c9ABVfYRda6Jya1y6gTBcFtI4Gs4CndLhCx3ZUj/fmC0MgVcSsruNZUA
+	 92JnAeXnuHV1eFMr9AD1f2bpBWvCXnU0Zm0Vp4aAcRWkzHp0pddHt6R6vtJ0Uz7nOH
+	 pUIUDFslkrzFI5PeAKrhU4Vt/xwa89RonPkeVOENLhtPz1ZDe+bX/m8IzPG+PX4ch5
+	 OTFaKX7NndxImTa7zobq3VEMRZONo/sORnMA6Hzv1oXLOjkGh+lXwie38AjeeKqEdM
+	 j2/7FXtkr6LWJMweWcArFyizc8l5DsV0b3XejajRAvdJS8LODSmywydaj3Og1dfMLx
+	 MAzwAL2/w3ONw==
+Date: Thu, 3 Aug 2023 00:07:06 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	"Sahin, Okan" <okan.sahin@analog.com>,
 	Liam Girdwood <lgirdwood@gmail.com>,
@@ -30,7 +30,7 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, linux@leemhuis.info
 Subject: Re: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
  Regulator Support
-Message-ID: <20230802230426.GA3027248@dev-arch.thelio-3990X>
+Message-ID: <ae431bb5-d132-4737-b4bb-58a323f877a6@sirena.org.uk>
 References: <20230717050736.10075-1-okan.sahin@analog.com>
  <20230717050736.10075-3-okan.sahin@analog.com>
  <20230718155502.GA3542993@dev-arch.thelio-3990X>
@@ -39,29 +39,56 @@ References: <20230717050736.10075-1-okan.sahin@analog.com>
  <20230727145143.GB2013261@dev-arch.thelio-3990X>
  <CAKwvOdnPQEdbTGBO0hBn7CC4d0xtRV2zmfrYDfAhH0stfDYeJA@mail.gmail.com>
  <32af6891-8246-46de-ba1d-ae1999f6eb10@sirena.org.uk>
+ <20230802230426.GA3027248@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2LX9drZDxEXVlZBe"
+Content-Disposition: inline
+In-Reply-To: <20230802230426.GA3027248@dev-arch.thelio-3990X>
+X-Cookie: Humpty Dumpty was pushed.
+
+
+--2LX9drZDxEXVlZBe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <32af6891-8246-46de-ba1d-ae1999f6eb10@sirena.org.uk>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 03, 2023 at 12:02:38AM +0100, Mark Brown wrote:
-> On Wed, Aug 02, 2023 at 03:52:52PM -0700, Nick Desaulniers wrote:
-> > Hi Okan,
-> > Have you sent a follow up fix? The build should not remain broken for
-> > so long.  Otherwise I think Broonie should drop your patch.
-> 
-> Someone sent what's probably a fix but I was waiting for some
-> confirmation that the change actually works on hardware, it's not super
-> obvious.
+On Wed, Aug 02, 2023 at 04:04:26PM -0700, Nathan Chancellor wrote:
+> On Thu, Aug 03, 2023 at 12:02:38AM +0100, Mark Brown wrote:
+> > On Wed, Aug 02, 2023 at 03:52:52PM -0700, Nick Desaulniers wrote:
+> > > Hi Okan,
+> > > Have you sent a follow up fix? The build should not remain broken for
+> > > so long.  Otherwise I think Broonie should drop your patch.
+> >=20
+> > Someone sent what's probably a fix but I was waiting for some
+> > confirmation that the change actually works on hardware, it's not super
+> > obvious.
+>=20
+> Got a pointer? I don't see anything on lore:
+>=20
+> https://lore.kernel.org/all/?q=3Ddfn:drivers/regulator/max77857-regulator=
+=2Ec
 
-Got a pointer? I don't see anything on lore:
+Oh, they didn't actuallly send it to the list :(
 
-https://lore.kernel.org/all/?q=dfn:drivers/regulator/max77857-regulator.c
+--2LX9drZDxEXVlZBe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cheers,
-Nathan
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTK4ZkACgkQJNaLcl1U
+h9ASwAf9EgOXf2eaprSEmmkAg6E0PBhk53WjSA3+uyZ9WVMDppxj9A5mAbXM7yQU
+5BWMxzZeCiawZDUEKj4j1vfy7m9MenZ/HLTSrkCWMl8MNvhpqCwow0cjSk5gLadU
+aywjTAYv0MX0yhkBEgHG1zjOchsIRYGt7uqS9KpQWGkPu11SiA7sfEuC8bOd0jDF
+laXWu6xKF6xFrYPMuqfjojnE+fOfjdAXxhCMeWHsdlO22CvrL4XZqK+rb+i8Kg1z
+3uiXzG0XOR23ObrAaphBnTR1j2aWJxDWxmjR9upNxvtGP5dyZLyFERqN4DfY8Ozt
+Xj8LHN5SuNGcbAv6pOaFb5JlXevv6Q==
+=gRU5
+-----END PGP SIGNATURE-----
+
+--2LX9drZDxEXVlZBe--
