@@ -1,128 +1,96 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5F3F9F2
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 18:18:24 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 498BF3200754;
-	Wed,  2 Aug 2023 14:18:23 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 02 Aug 2023 14:18:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1691000302; x=1691086702; bh=Sm
-	MQ6kJN4Wc3hcGgVxP+bMiAcMtZCScse6Dh72DQZNY=; b=RS2lZDrqYqL/YCzd28
-	LQCEyYTBpZ9AsOx0epUPG7MNbrjDFXtbn2z9kisIrwzEFRddS8DfdcM4pINxZ//S
-	5OZE92Kstnns7ub7HeGv0fpTJBX8OtBSFKJpxGDUGHF8XRBobYAx/rMNGnyCjym7
-	YMESHJFdKICPLHtuv6ikqbcVe3W7vyxG+OaoTho+CZi9nYIvCwjRJdKhf57NElLn
-	jPBvbA2kRk8Sx+ttZ0omoSfqXeXMjP/gBLwz+9y5dTYLnxLIhGtXkGiqnOpt9v5m
-	43bdfIu9/HZyez1rthW6GvPxKTxX20wVPxAZiNEZjpSFXabaFM6wVQdH0mFK2RUy
-	vAKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1691000302; x=1691086702; bh=SmMQ6kJN4Wc3h
-	cGgVxP+bMiAcMtZCScse6Dh72DQZNY=; b=xi6gI5pRORVFWj2yXsvH8AwNVpnA9
-	A5a1Fyq0dj4s0Io3/eZsSzAY4OFS64wWHck4CM0gPb81+pJadaLf00nsSoPmHJGI
-	yqdSVZAjgY8ehq3RhWDC8UYbVMzAjmVMcHBwywcIOa99Qy8QIUW+xbMGwUSFU/Hs
-	FsKW2jX4AqemuoL3171ZDDO0JyfwO5hM/zB1YSrSGeShaHj08n4uujRORratQFhl
-	PdYVWLxvY+XY+sg3MZG5ljs1mFykrJFTKazhDfBDkPHOoXt9PCcCQyRrdFxl5fzU
-	UzHNPG8eosDSYySxkWrL7sJIGGLzV7IY67xLvNFuQEpYFlAws4/AKP5Bw==
-X-ME-Sender: <xms:7Z3KZCgwPzHXYeemGEu9Qyj5ErRzXXH7EmceR0J370__O_AtKGSjjQ>
-    <xme:7Z3KZDCNARqZ3h2BImuDxS4dIQevS2UNF-oTbZUqXfYBpaiOyAILrbSyW8-38C9LE
-    EfCTFet5V4DvB9mokg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedtgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:7Z3KZKGVIjfLGAQDf86B3N3SiiyttqfRRZrEnPxSrvNnVIeMTrgxGQ>
-    <xmx:7Z3KZLTHd1_k1KnwARlCRCdU78UDy3la_61mG4Ce8f6O-CyIIGuYXA>
-    <xmx:7Z3KZPyDn7GRtzeLKBJWaBVSepGHmVV8VtgKVnt7SFKOubhKGBQC1Q>
-    <xmx:7p3KZGkolqmrhhVrqabX3Jmlg1oqsm7SuSv25c8SSN5llD02sVBiBQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 9F7D1B60089; Wed,  2 Aug 2023 14:18:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CDEDDB2
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 18:52:07 +0000 (UTC)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so1724015e9.3
+        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 11:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691002326; x=1691607126;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e52Aik7+FekPE4EeT0gUdOPtk6uJBw/P3h7TeG+ZQTM=;
+        b=WfVLnk4FWXPNM0WW627hTSTpm7C1QI/GaOlJ/IVv7BwfSgJZ1fD4ypk5OZ8R4EARS8
+         CSrHuK7ypa5A+bPWY7otmO7cd8gXEJ6oH8W7EpMd/T7W1knurhj8U/6aodvbqWV3Ztvy
+         RGw+qHxhDKdzspoRfTT326Svc/BjrRc2YFlcO/qpICZ2gsdzQlEf3rE/caVy55R8yUmX
+         EWZKiBE+y501N0kpmXdMBFH38U2FoYKpAcQMNEb5K2rmcmrHJb/y1JxNpJ8a7wIbb76m
+         FGC1n5C8fy/vs4Nq5jKJsUKG+AEaEx9rFb8B+AIzmU4qZ5gYWug1jbhFhWKIYg6fQfJU
+         iJ8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691002326; x=1691607126;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e52Aik7+FekPE4EeT0gUdOPtk6uJBw/P3h7TeG+ZQTM=;
+        b=YxbAA/I95XlPU0PodXV0ae/1d0qCvMoKp3s6WDtTO33T+gcuORLSCNclOVrcHo8ogs
+         H8dqGE0HdBPRTjTJIh2bko8AB22llLlhzgkGEKwVPEm0FHVxTzKX61TjMZG72xFhWBEM
+         r021qsqZnlZDMSMoYysR0FOiwmUBQa6j+gIZ+JiBLpl4Q2mkTwW+Z+XN8JrG69MyVP+b
+         BwfAdf4EvNhT94/GktYxacsyscrdRFshvsP2j9rBYchR4P8ROPwVsl3si+l58I9UUEQZ
+         iWpIDxkpioWaTMOpZZYxzc9PWHYJZr7W8g1X93Otw9dUKSnL3PzcAS7hDV4l+nXtnrxm
+         y3ow==
+X-Gm-Message-State: ABy/qLYGgEk2TebtBhEBgtw/iSnq/OJSUEFsOMaEcoHVtv5eIQypC6dh
+	mnJ0ExsDI6yEDC9KpTOVmjUtharOSKbwlFAhL6p7jA==
+X-Google-Smtp-Source: APBJJlFGJmuh9G19C0lrt8whk0BOd6695zMBbC3wUwduITvwBCYcOoVfLa4zq2ZnVZjsm9Lnt615gAFmoBX8dXCD6VU=
+X-Received: by 2002:a7b:c3d5:0:b0:3fb:b34f:6cd6 with SMTP id
+ t21-20020a7bc3d5000000b003fbb34f6cd6mr5624229wmj.41.1691002326042; Wed, 02
+ Aug 2023 11:52:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <dd48b4ff-1009-41fe-baf5-be89432c5d28@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
- <20230802161553.GA2108867@dev-arch.thelio-3990X>
- <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
-Date: Wed, 02 Aug 2023 20:17:32 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Michael Ellerman" <mpe@ellerman.id.au>, "Will Deacon" <will.deacon@arm.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>
-Cc: "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero regardless
- of endianness
-Content-Type: text/plain
+MIME-Version: 1.0
+References: <20230802150712.3583252-1-elver@google.com> <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
+In-Reply-To: <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
+From: Marco Elver <elver@google.com>
+Date: Wed, 2 Aug 2023 20:51:29 +0200
+Message-ID: <CANpmjNNZ7sRLxCFF0jTZvOK6s-=Z=DOAy8uz=B-i22GEnhNjbA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Compiler attributes: Introduce the __preserve_most
+ function attribute
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Aug 2, 2023, at 19:37, Linus Torvalds wrote:
-> On Wed, 2 Aug 2023 at 09:16, Nathan Chancellor <nathan@kernel.org> wrote:
->>
->> We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
+On Wed, 2 Aug 2023 at 20:03, Andrew Morton <akpm@linux-foundation.org> wrote:
 >
-> Oh Christ. I didn't even realize that arm64 allowed a BE config.
+> On Wed,  2 Aug 2023 17:06:37 +0200 Marco Elver <elver@google.com> wrote:
 >
-> The config option goes back to 2013 - are there actually BE user space
-> implementations around?
-
-At least NXP's Layerscape and Huawei's SoCs ended up in big-endian
-appliances, running legacy software ported from mips or powerpc.
-I agree this was a mistake, but that wasn't nearly as obvious ten
-years ago when there were still new BE-only sparc, mips and powerpc
-put on the market -- that really only ended in 2017.
-
-> People, why do we do that? That's positively crazy. BE is dead and
-> should be relegated to legacy platforms. There are no advantages to
-> being different just for the sake of being different - any "security
-> by obscurity" argument would be far outweighed by the inconvenience to
-> actual users.
+> > [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+> > convention of a function. The preserve_most calling convention attempts
+> > to make the code in the caller as unintrusive as possible. This
+> > convention behaves identically to the C calling convention on how
+> > arguments and return values are passed, but it uses a different set of
+> > caller/callee-saved registers. This alleviates the burden of saving and
+> > recovering a large register set before and after the call in the
+> > caller."
+> >
+> > [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> >
+> > Use of this attribute results in better code generation for calls to
+> > very rarely called functions, such as error-reporting functions, or
+> > rarely executed slow paths.
+> >
+> > Introduce the attribute to compiler_attributes.h.
 >
-> Yes, yes, I know the aarch64 architecture technically allows BE
-> implementations - and apparently you can even do it by exception
-> level, which I had to look up. But do any actually exist?
->
-> Does the kernel even work right in BE mode? It's really easy to miss
-> some endianness check when all the actual hardware and use is LE, and
-> when (for example) instruction encoding and IO is then always LE
-> anyway.
+> That sounds fairly radical.  And no changes are needed for assembly
+> code or asm statements?
 
-This was always only done for compatibility with non-portable
-software when companies with large custom network stacks argued
-that it was cheaper to build the entire open source software to
-big-endian than port their own product to little-endian. ;-)
+The callee in this case is supposed to save the registers and restore
+them. If the caller (such as in asm) redundantly saves the registers
+as well, this would be safe although redundant. That being said, there
+are no plans to call functions marked with the attribute from asm.
+Only issue would be if someone implements such a function in asm with
+a C decl with the attribute - but also, there are no plans to do this.
 
-We (Linaro) used to test all toolchain and kernel releases in
-big-endian mode as member companies had customers that asked
-for it, but that stopped a while ago as those legacy software
-stacks either got more portable or got replaced over time.
-
-Many Arm systems won't boot BE kernels any more because UEFI
-firmware only supports LE, or because of driver bugs.
-Virtual machines are still likely to work fine though.
-I'm fairly sure that all Arm Cortex and Neoverse cores still\
-support BE mode in all exception levels, OTOH at least Apple's
-custom CPUs do not implement it at all.
-
-     Arnd
+I'll need to spin a v2 to always add notrace: one way this can go
+wrong if something inserts itself between the callers and callee, such
+as tracing would.
