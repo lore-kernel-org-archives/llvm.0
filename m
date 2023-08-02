@@ -1,85 +1,68 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90278DF58
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 17:55:25 +0000 (UTC)
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-63d48c3d242so525706d6.2
-        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 10:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690998924; x=1691603724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qoQ9QQBh3aNb5HAI8gb3WGWfLp4PhO0tFoxt1vgia60=;
-        b=Q6P7YDb36YHTIT0J9J3mRC0xO/oM72diYAGVE7wD9ZrpTSgrRwMkpx6qVc3FNK/2Pn
-         NUoLOyN5EysVLEw9KnReNoTXT1TQmvu/EeFjSPIPW4VXIHL3EQDOE7WQ3yXUa1FrC/q9
-         SLdeuv1arpwmrKZHc+UXMvhgn6GtH/o6AGUfCqeO5D8DLkc9oT1MlWzSXTycAZmzBBuY
-         3o5K/9EM7UZ1IoLeFl2zlLP+kQSS7ajteuX+ugpeIRpRriPMJeWFXa31Myc1VRBHmzPc
-         Sd1+kJajsbenswNhz61a/cWYqHt4VZPzpbfJ9epJWbFXZ/2d8xv7i2rW2Sf190ta7Xkt
-         Sc9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690998924; x=1691603724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qoQ9QQBh3aNb5HAI8gb3WGWfLp4PhO0tFoxt1vgia60=;
-        b=b0YcnsIQfWGq538X3+JxbJErxn9rJR6qZhNOXcYmvQPu8zCKGS86QKAY6LcIimwjPV
-         2S2QZVdvr9wkOzYRD9Emm/Gi7Qlc2Xj1CBo3S2D+IRcmQ/+jZPQyRQ5GHj41HNjPpCjB
-         SiZtDd+GvmepIegv4YDZekhI58M9CeGo062XYJk2JGptDk5tNWzE36++zh7+H8wwrCSw
-         P0zohf1kFGH8b+CjpZBX/nVQhPowIQg7NcWMkFP82WwIQYGZCUjSLp04wDydMapburry
-         cB+YyxHwCpF6JWRJsGnEHm99hfVYArJmJIZePvElqs6hyhHQfZZcnUy5DHrfFOUk0D+W
-         mK6Q==
-X-Gm-Message-State: ABy/qLYAD2+e4S3krz0T0JCI/0vqwtJIRcJobu7WKcI9R/QZ3q2k3G5f
-	Lqo/Rc2OXKcKmx3tqsRMcQoEsgWqKh9AJmOBem8RW1FozAubi3H6+sc=
-X-Google-Smtp-Source: APBJJlFXbcDAluXzkimyBCOpTg/tYoevL512peHPLiVSwrCaU15QF3ls/Tpp4KxMI08oy/Wr6Kb//rNAL8a2uSaqlHw=
-X-Received: by 2002:a05:6214:21a9:b0:63d:2369:6c41 with SMTP id
- t9-20020a05621421a900b0063d23696c41mr20837155qvc.55.1690998924158; Wed, 02
- Aug 2023 10:55:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFE56D22;
+	Wed,  2 Aug 2023 18:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E5EC433C9;
+	Wed,  2 Aug 2023 18:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1690999385;
+	bh=b3H1cxTxktEnjXl+iExW/YcKRfU1BuhonrjVJGBbVXY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=2Nmf/GfPEkagF9BmZl/oPNQfos2XuRpiubItnG9HrgJX4XueGbgDG2UGKJAUVJy/r
+	 FBg7gFXRVOU8DbSBGdtmS0/rfnaquGaBhHiYQoAOsVOsIGq7SOMeugtLr9/uyaM/Ox
+	 gX/17ad4oY8MT9g0HDCZS34KX6zvvb3mBpCF8an8=
+Date: Wed, 2 Aug 2023 11:03:03 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Marco Elver <elver@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Guenter Roeck <linux@roeck-us.net>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, James
+ Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Miguel Ojeda
+ <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Nathan
+ Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Dmitry Vyukov
+ <dvyukov@google.com>, Alexander Potapenko <glider@google.com>,
+ kasan-dev@googlegroups.com, linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH 1/3] Compiler attributes: Introduce the __preserve_most
+ function attribute
+Message-Id: <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
+In-Reply-To: <20230802150712.3583252-1-elver@google.com>
+References: <20230802150712.3583252-1-elver@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
-In-Reply-To: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 2 Aug 2023 10:54:47 -0700
-Message-ID: <CABCJKud-ve+6v5h1QeDwUm4q7XzuhMorDTwAGmsV4h-R+0MKxg@mail.gmail.com>
-Subject: Re: [PATCH] mISDN: Update parameter type of dsp_cmx_send()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: isdn@linux-pingi.de, netdev@vger.kernel.org, keescook@chromium.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Nathan,
+On Wed,  2 Aug 2023 17:06:37 +0200 Marco Elver <elver@google.com> wrote:
 
-On Wed, Aug 2, 2023 at 10:40=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> When booting a kernel with CONFIG_MISDN_DSP=3Dy and CONFIG_CFI_CLANG=3Dy,
-> there is a failure when dsp_cmx_send() is called indirectly from
-> call_timer_fn():
->
->   [    0.371412] CFI failure at call_timer_fn+0x2f/0x150 (target: dsp_cmx=
-_send+0x0/0x530; expected type: 0x92ada1e9)
->
-> The function pointer prototype that call_timer_fn() expects is
->
->   void (*fn)(struct timer_list *)
->
-> whereas dsp_cmx_send() has a parameter type of 'void *', which causes
-> the control flow integrity checks to fail because the parameter types do
-> not match.
->
-> Change dsp_cmx_send()'s parameter type to be 'struct timer_list' to
-> match the expected prototype. The argument is unused anyways, so this
-> has no functional change, aside from avoiding the CFI failure.
+> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+> convention of a function. The preserve_most calling convention attempts
+> to make the code in the caller as unintrusive as possible. This
+> convention behaves identically to the C calling convention on how
+> arguments and return values are passed, but it uses a different set of
+> caller/callee-saved registers. This alleviates the burden of saving and
+> recovering a large register set before and after the call in the
+> caller."
+> 
+> [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> 
+> Use of this attribute results in better code generation for calls to
+> very rarely called functions, such as error-reporting functions, or
+> rarely executed slow paths.
+> 
+> Introduce the attribute to compiler_attributes.h.
 
-Looks correct to me, thanks for fixing this!
+That sounds fairly radical.  And no changes are needed for assembly
+code or asm statements?
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+I'll add "LLVM" to the patch title to make it clear that gcc isn't
+affected.
 
-Sami
