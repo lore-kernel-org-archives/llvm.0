@@ -1,96 +1,104 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CDEDDB2
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 18:52:07 +0000 (UTC)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so1724015e9.3
-        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 11:52:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8691078F
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 19:59:14 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-68706b39c4cso127686b3a.2
+        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 12:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691002326; x=1691607126;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e52Aik7+FekPE4EeT0gUdOPtk6uJBw/P3h7TeG+ZQTM=;
-        b=WfVLnk4FWXPNM0WW627hTSTpm7C1QI/GaOlJ/IVv7BwfSgJZ1fD4ypk5OZ8R4EARS8
-         CSrHuK7ypa5A+bPWY7otmO7cd8gXEJ6oH8W7EpMd/T7W1knurhj8U/6aodvbqWV3Ztvy
-         RGw+qHxhDKdzspoRfTT326Svc/BjrRc2YFlcO/qpICZ2gsdzQlEf3rE/caVy55R8yUmX
-         EWZKiBE+y501N0kpmXdMBFH38U2FoYKpAcQMNEb5K2rmcmrHJb/y1JxNpJ8a7wIbb76m
-         FGC1n5C8fy/vs4Nq5jKJsUKG+AEaEx9rFb8B+AIzmU4qZ5gYWug1jbhFhWKIYg6fQfJU
-         iJ8g==
+        d=chromium.org; s=google; t=1691006354; x=1691611154;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/aA++90/fHCZVh7rcJAqnB4uADfByOv/2qJK2PTK8tE=;
+        b=AVzmg/QvoodRNbXCaoo6UCWEOmJTDZkOPCrWOd7bjQlQCeeTdfqXGImKbUmMcbqts0
+         P/zl0oxtVZrnw13aqmoicSmo+GrW8bz7RtfVM3F1J4jtovkb811JIMCaBVmWnpfSXviP
+         Gw0JeczO8k98S2psQSEENSvByatX1RS6Yckh8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691002326; x=1691607126;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e52Aik7+FekPE4EeT0gUdOPtk6uJBw/P3h7TeG+ZQTM=;
-        b=YxbAA/I95XlPU0PodXV0ae/1d0qCvMoKp3s6WDtTO33T+gcuORLSCNclOVrcHo8ogs
-         H8dqGE0HdBPRTjTJIh2bko8AB22llLlhzgkGEKwVPEm0FHVxTzKX61TjMZG72xFhWBEM
-         r021qsqZnlZDMSMoYysR0FOiwmUBQa6j+gIZ+JiBLpl4Q2mkTwW+Z+XN8JrG69MyVP+b
-         BwfAdf4EvNhT94/GktYxacsyscrdRFshvsP2j9rBYchR4P8ROPwVsl3si+l58I9UUEQZ
-         iWpIDxkpioWaTMOpZZYxzc9PWHYJZr7W8g1X93Otw9dUKSnL3PzcAS7hDV4l+nXtnrxm
-         y3ow==
-X-Gm-Message-State: ABy/qLYGgEk2TebtBhEBgtw/iSnq/OJSUEFsOMaEcoHVtv5eIQypC6dh
-	mnJ0ExsDI6yEDC9KpTOVmjUtharOSKbwlFAhL6p7jA==
-X-Google-Smtp-Source: APBJJlFGJmuh9G19C0lrt8whk0BOd6695zMBbC3wUwduITvwBCYcOoVfLa4zq2ZnVZjsm9Lnt615gAFmoBX8dXCD6VU=
-X-Received: by 2002:a7b:c3d5:0:b0:3fb:b34f:6cd6 with SMTP id
- t21-20020a7bc3d5000000b003fbb34f6cd6mr5624229wmj.41.1691002326042; Wed, 02
- Aug 2023 11:52:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691006354; x=1691611154;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/aA++90/fHCZVh7rcJAqnB4uADfByOv/2qJK2PTK8tE=;
+        b=Uaa40XG3/hQu+rFlomil95cBDdz2NenAaxFT+1UjcMnoUzZMo84wpOeKtQrY7vMnvw
+         QFU+CnAjH9GoejuuS1A9Bz3E7FekFOVe2dTLSIJdrhXjJ98x1az7jFXgszndAY/aWHDm
+         UusXIQCaQ8tXg63ePnDEqWCQz6ZNJi73O0gr7c0UWGdYkFPBH0wQRZscw8UhSaVtCHdP
+         YFRDzCw6z5Effrwxbt7o/JbgUy4VSeqV+ABOzX3d71l3q6KIgAsoL15iL9WMfwIFxTfW
+         ux2c89aw6OqJ7rvfCAtsDX+F96KZFU/icOsepENJQyLhI1/raWtEXWT2bBYv2ShdEjpE
+         FIbw==
+X-Gm-Message-State: ABy/qLZgK6cNl1p452IYPr3X7dfMZyMre6cv8Tm9s7ITIgRqrpHKjaZd
+	NgpGZjQh2vb3n9g1eFSJx1UzWA==
+X-Google-Smtp-Source: APBJJlGRIRM0zaiDLPqaJbDXG+V7IHTHMlItsJinyOGJ/4TgiIKhU0mdE0RQajnU+sOFZQM9vrkuRQ==
+X-Received: by 2002:a05:6a00:16c2:b0:687:570:5021 with SMTP id l2-20020a056a0016c200b0068705705021mr19158141pfc.15.1691006353941;
+        Wed, 02 Aug 2023 12:59:13 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b9-20020aa78109000000b0064378c52398sm11403642pfi.25.2023.08.02.12.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Aug 2023 12:59:13 -0700 (PDT)
+Date: Wed, 2 Aug 2023 12:59:12 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: isdn@linux-pingi.de, netdev@vger.kernel.org, samitolvanen@google.com,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH] mISDN: Update parameter type of dsp_cmx_send()
+Message-ID: <202308021255.9A6328D@keescook>
+References: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230802150712.3583252-1-elver@google.com> <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
-In-Reply-To: <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
-From: Marco Elver <elver@google.com>
-Date: Wed, 2 Aug 2023 20:51:29 +0200
-Message-ID: <CANpmjNNZ7sRLxCFF0jTZvOK6s-=Z=DOAy8uz=B-i22GEnhNjbA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Compiler attributes: Introduce the __preserve_most
- function attribute
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
 
-On Wed, 2 Aug 2023 at 20:03, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed,  2 Aug 2023 17:06:37 +0200 Marco Elver <elver@google.com> wrote:
->
-> > [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
-> > convention of a function. The preserve_most calling convention attempts
-> > to make the code in the caller as unintrusive as possible. This
-> > convention behaves identically to the C calling convention on how
-> > arguments and return values are passed, but it uses a different set of
-> > caller/callee-saved registers. This alleviates the burden of saving and
-> > recovering a large register set before and after the call in the
-> > caller."
-> >
-> > [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
-> >
-> > Use of this attribute results in better code generation for calls to
-> > very rarely called functions, such as error-reporting functions, or
-> > rarely executed slow paths.
-> >
-> > Introduce the attribute to compiler_attributes.h.
->
-> That sounds fairly radical.  And no changes are needed for assembly
-> code or asm statements?
+On Wed, Aug 02, 2023 at 10:40:29AM -0700, Nathan Chancellor wrote:
+> When booting a kernel with CONFIG_MISDN_DSP=y and CONFIG_CFI_CLANG=y,
+> there is a failure when dsp_cmx_send() is called indirectly from
+> call_timer_fn():
+> 
+>   [    0.371412] CFI failure at call_timer_fn+0x2f/0x150 (target: dsp_cmx_send+0x0/0x530; expected type: 0x92ada1e9)
+> 
+> The function pointer prototype that call_timer_fn() expects is
+> 
+>   void (*fn)(struct timer_list *)
+> 
+> whereas dsp_cmx_send() has a parameter type of 'void *', which causes
+> the control flow integrity checks to fail because the parameter types do
+> not match.
+> 
+> Change dsp_cmx_send()'s parameter type to be 'struct timer_list' to
+> match the expected prototype. The argument is unused anyways, so this
+> has no functional change, aside from avoiding the CFI failure.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202308020936.58787e6c-oliver.sang@intel.com
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I am not sure if there is an appropriate fixes tag for this, I see this
+> area was modified by commit e313ac12eb13 ("mISDN: Convert timers to use
+> timer_setup()") but I don't think it was the original source of the
+> issue. It could also be commit cf68fffb66d6 ("add support for Clang
+> CFI") but I think that just exposes the problem/makes it fatal.
 
-The callee in this case is supposed to save the registers and restore
-them. If the caller (such as in asm) redundantly saves the registers
-as well, this would be safe although redundant. That being said, there
-are no plans to call functions marked with the attribute from asm.
-Only issue would be if someone implements such a function in asm with
-a C decl with the attribute - but also, there are no plans to do this.
+Oh man. I missed one! How did I miss that one? I think "Fixes:
+e313ac12eb13" is the most correct. That was the patch that went through
+trying to fix all the prototypes, and _did_ fix all the _other_ prototypes
+in there.
 
-I'll need to spin a v2 to always add notrace: one way this can go
-wrong if something inserts itself between the callers and callee, such
-as tracing would.
+Thanks for the patch!
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+> 
+> Also not sure who should take this or how soon it should go in, I'll let
+> that to maintainers to figure out :)
+
+If no one speaks up, I'll snag it, but since this got aimed at netdev, I
+suspect someone may pick it up. :)
+
+-Kees
+
+-- 
+Kees Cook
