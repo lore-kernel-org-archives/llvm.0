@@ -1,124 +1,114 @@
-Received: from mgamail.intel.com (unknown [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629115230;
-	Wed,  2 Aug 2023 16:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690995027; x=1722531027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SjrhUfmUTRs0znB4RfQf3tTTDrqFwiLjTLl/vgLRaG8=;
-  b=be2RGhbMyhOIxVdBbs0+OSroROzuuOAOgq4velsksX0Q+APjzeEUjS1h
-   5jiMnpcIanBjAfkUBEjtQlVMaU/QZoWZ2Q8c2lFrjXM+VI70zvZ7YnVgz
-   tJo01pD4al5U9uASqBcrTZSjkqfAlON9VG3bm9ooPlJObjyWPsKZrOFo9
-   Tytj6t+WEc+knjZQfSmH3kaSrV0P+avZxUx4Vu4bDfBO+F65G+p33WPOk
-   r+j6HsFcRYWuJEqdhCix3tJbCZGjHo7tqY+PqqppBS74/3pRpXzw2bCUW
-   UBTtetNoIdZwwp46afUmdVuYDQ8NtSjQEIjnQDbkAzSEL5xff2X2NdUB0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="433480809"
-X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="433480809"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 09:50:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="1059904147"
-X-IronPort-AV: E=Sophos;i="6.01,249,1684825200"; 
-   d="scan'208";a="1059904147"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2023 09:50:25 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRF3I-0001LL-2o;
-	Wed, 02 Aug 2023 16:50:24 +0000
-Date: Thu, 3 Aug 2023 00:49:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: zhanchengbin <zhanchengbin1@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] ext4: ioctl add EXT4_IOC_SUPERBLOCK_KEY_S_ERRORS
-Message-ID: <202308030029.p1ufH6az-lkp@intel.com>
-References: <20230802083402.515570-3-zhanchengbin1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B925230
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 16:51:18 +0000 (UTC)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-314417861b9so32783f8f.0
+        for <llvm@lists.linux.dev>; Wed, 02 Aug 2023 09:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690995077; x=1691599877;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LrJLBG38n+Wiyfmv9S4MGg4xgt3i7BNwPWJDTs2HMj8=;
+        b=Yr2vtAOieZy3/74CDEAGC2Gnt8sgnypV0sH1nFYDYE+Z9U73wi72vRoBj9mOPgJwjv
+         99wZ+YY4Rl0iV4S7hY5jTJtBu9E+Wq+0WPHsLe7dYzPVxIQ7tL3K9N9EEAXWyXptkr4R
+         ias3QXAFYMwvc666cOayPBqLwNU+Kv7rga8bPxnBbLZRg9CrOcJ+FBK+rP2suecmhpuK
+         73IMHyBKaqHCKBxo5PMwGaIBZKNj+nCrhhmAYIbNw5hpKlBf+9T+TnMkonjeqbOS1kee
+         h/worVBInk2I1mObvjC5ogsA2iH6t0VXQGFlLd+k2vwihb2JKETOekCztRRPYmPBl9O/
+         EQ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690995077; x=1691599877;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LrJLBG38n+Wiyfmv9S4MGg4xgt3i7BNwPWJDTs2HMj8=;
+        b=MdSGp8j0TcUbjVV4JVaoazdschjTi1lc+sXazXYLiX6G5iaZzEUGlx8iwQbtiQD4LE
+         4FYjd/qAlHK8n67i2uTUrOdBAxcc8/sPEKixdDK7qKQ1ysDAtONwHKow/t1BJo/TG10j
+         Pihco2S6B1Ql6N8+edepKID1Haqld6PEq1rtbpGOupN3vjYhq/a1HnEfjxENq33zBlyW
+         EaHKuqwtuoP2SNJjLlkXt/Bsj5iXjfM/MFvYspKzyBd12BTvhOCd7kpACfY0OA2iQCQB
+         yRWjzksul4RB29DZHubs9U7fkqEeuhmRoj9xRKqAC8Q9914g8bj2TOu7rGfgQwmX31w+
+         YfxA==
+X-Gm-Message-State: ABy/qLZuC9s6hRVvaiqd5LmPp8m5dP2vq1APjouFTTSygbi9PVnxQhHh
+	S/6CQ+uO9KMv35DxElyZqk+SxbUTxW4084NP5F8qkg==
+X-Google-Smtp-Source: APBJJlEF0ih0QHv1ekEfW69+6kAWN0K+fahB0BVsKiKPMI+3V3I/aF86Y1eNpJYuOPhD4pxG0Cgwhi1Awcn8a9ebJvM=
+X-Received: by 2002:adf:facc:0:b0:317:49a2:1f89 with SMTP id
+ a12-20020adffacc000000b0031749a21f89mr5196369wrs.1.1690995076610; Wed, 02 Aug
+ 2023 09:51:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230802083402.515570-3-zhanchengbin1@huawei.com>
+References: <20230802150712.3583252-1-elver@google.com>
+In-Reply-To: <20230802150712.3583252-1-elver@google.com>
+From: Marco Elver <elver@google.com>
+Date: Wed, 2 Aug 2023 18:50:39 +0200
+Message-ID: <CANpmjNPVO_t058c6Wcwr9TBwxeoH7Ba0ECsf6Wapn60br8EtkQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Compiler attributes: Introduce the __preserve_most
+ function attribute
+To: elver@google.com, Andrew Morton <akpm@linux-foundation.org>, 
+	Kees Cook <keescook@chromium.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	linux-toolchains@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi zhanchengbin,
+On Wed, 2 Aug 2023 at 17:07, Marco Elver <elver@google.com> wrote:
+>
+> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+> convention of a function. The preserve_most calling convention attempts
+> to make the code in the caller as unintrusive as possible. This
+> convention behaves identically to the C calling convention on how
+> arguments and return values are passed, but it uses a different set of
+> caller/callee-saved registers. This alleviates the burden of saving and
+> recovering a large register set before and after the call in the
+> caller."
+>
+> [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+>
+> Use of this attribute results in better code generation for calls to
+> very rarely called functions, such as error-reporting functions, or
+> rarely executed slow paths.
+>
+> Introduce the attribute to compiler_attributes.h.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  include/linux/compiler_attributes.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 00efa35c350f..615a63ecfcf6 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -321,6 +321,17 @@
+>  # define __pass_object_size(type)
+>  #endif
+>
+> +/*
+> + * Optional: not supported by gcc.
+> + *
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#preserve-most
+> + */
+> +#if __has_attribute(__preserve_most__)
+> +# define __preserve_most __attribute__((__preserve_most__))
+> +#else
+> +# define __preserve_most
+> +#endif
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Mark says that there may be an issue with using this in combination
+with ftrace because arm64 tracing relies on AAPCS. Probably not just
+arm64, but also other architectures (x86?).
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v6.5-rc4 next-20230802]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/zhanchengbin/ext4-ioctl-adds-a-framework-for-modifying-superblock-parameters/20230802-163905
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230802083402.515570-3-zhanchengbin1%40huawei.com
-patch subject: [RFC PATCH 2/2] ext4: ioctl add EXT4_IOC_SUPERBLOCK_KEY_S_ERRORS
-config: i386-randconfig-r026-20230801 (https://download.01.org/0day-ci/archive/20230803/202308030029.p1ufH6az-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230803/202308030029.p1ufH6az-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308030029.p1ufH6az-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/ext4/ioctl.c:33:5: warning: no previous prototype for function 'sb_attr_errors_check' [-Wmissing-prototypes]
-   int sb_attr_errors_check(struct ext4_sbattr *p_sbattr)
-       ^
-   fs/ext4/ioctl.c:33:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sb_attr_errors_check(struct ext4_sbattr *p_sbattr)
-   ^
-   static 
->> fs/ext4/ioctl.c:47:6: warning: no previous prototype for function 'sb_attr_errors_set' [-Wmissing-prototypes]
-   void sb_attr_errors_set(struct ext4_super_block *es, const void *arg)
-        ^
-   fs/ext4/ioctl.c:47:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sb_attr_errors_set(struct ext4_super_block *es, const void *arg)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/sb_attr_errors_check +33 fs/ext4/ioctl.c
-
-    29	
-    30	typedef void ext4_update_sb_callback(struct ext4_super_block *es,
-    31					       const void *arg);
-    32	
-  > 33	int sb_attr_errors_check(struct ext4_sbattr *p_sbattr)
-    34	{
-    35		__u16 error_behavior = *(__u16 *)(p_sbattr->sba_value);
-    36	
-    37		if (p_sbattr->sba_len != EXT4_IOC_SUPERBLOCK_LEN_S_ERRORS)
-    38			return -EINVAL;
-    39	
-    40		if (error_behavior < EXT4_ERRORS_CONTINUE ||
-    41		    error_behavior > EXT4_ERRORS_PANIC)
-    42			return -EINVAL;
-    43	
-    44		return 0;
-    45	}
-    46	
-  > 47	void sb_attr_errors_set(struct ext4_super_block *es, const void *arg)
-    48	{
-    49		struct ext4_sbattr *p_sbattr = (struct ext4_sbattr *)arg;
-    50	
-    51		es->s_errors = cpu_to_le16(*(__u16 *)p_sbattr->sba_value);
-    52	}
-    53	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+To make this safe, I'm going to move __preserve_most to
+compiler_types.h and always pair it with notrace and some comments in
+v2.
