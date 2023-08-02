@@ -1,31 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B3FD505
-	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 16:15:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689FC433C9;
-	Wed,  2 Aug 2023 16:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4464A8476;
+	Wed,  2 Aug 2023 16:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43EA2C433C8;
+	Wed,  2 Aug 2023 16:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690992955;
-	bh=aFB7V+3UZPnXI2t7HCSOEac0MGFqyimdDX0kPkq9PJY=;
+	s=k20201202; t=1690994323;
+	bh=SjvF9mfpUkMBEAjBLC1ZVHzrIHDs09gaX3bOlhkRwX8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FcGDg/QoAgueCnjJ9htQ21ACnmhEnP0HCMC52BIWD717UyZgx8nRkDxGhxFbuZHHP
-	 Vt8nmloqhzQ+kreiqcdM9z98m0TUC5I9yHpVh5PWkbLEae7niNndRzm4U25INskyXG
-	 nzo/QO+8fgzpwBW95+RmRGtEJ3Qm8P9llSmcyrpA8p3KOd2xpU10b4Sus2IaauQN7R
-	 sm0wC3ji2L1BnZ4zwgIuy8XM7MMba58e+JO07lbDb/HKmEdXgaBK7iW8pA45ACUMhL
-	 Y50QJvBdQVgDP+eSoVsMvKTVcBd2W+A+PJd1m53TzNJPriX3GsPFin+4iPM90jal3t
-	 jP7BzbnsPCqvw==
-Date: Wed, 2 Aug 2023 09:15:53 -0700
+	b=uGkwr0myRsvTZ0hItP+4W/krYkF69fmvF/oTEB94fVGKz93nlSkI1BEO7xv30D0P3
+	 TCwf+3Y5lsUWx+2mkrmDFi+a252bdLGx7DI7cUBgfrMUhPf2C0JdP/zn/jfYO27rIn
+	 na0+6IwLhYW23vrjeUFtuGUQdbtSdiORuIcOcdoK7tZZsb0j0Jovmr+sg4rd+S6UpN
+	 GMQrUXLZuUVNnUQ2dmBdHSWhbEwXD+D2PA0ByrE5fC6rFKD3O1iMyBHv8Cc76xVc5M
+	 MN16CJoN3pw44D7y594vnbajBHAv9jx+rE3r49uQjkbChSf/3khzJkYtAs8TO2sBDR
+	 HEpIIVBWiuHsg==
+Date: Wed, 2 Aug 2023 09:38:41 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ndesaulniers@google.com, Arnd Bergmann <arnd@arndb.de>,
-	Tom Rix <trix@redhat.com>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-Message-ID: <20230802161553.GA2108867@dev-arch.thelio-3990X>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: "Tobin C. Harding" <tobin@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [stable:linux-4.19.y 5172/9999] lib/string.c:312:7: error:
+ redefinition of 'stpcpy'
+Message-ID: <20230802163841.GA2149436@dev-arch.thelio-3990X>
+References: <202308021401.lhJd2bLx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,35 +35,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+In-Reply-To: <202308021401.lhJd2bLx-lkp@intel.com>
 
-On Tue, Aug 01, 2023 at 06:07:08PM -0700, Linus Torvalds wrote:
-> I think the patch is fine, but I guess I'd like to know that people
-> who are affected actually don't see any code generation changes (or
-> possibly see improvements from not turning it into a bool until later)
+On Wed, Aug 02, 2023 at 02:37:36PM +0800, kernel test robot wrote:
+> Hi Tobin,
+> 
+> First bad commit (maybe != root cause):
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+> head:   767049cead76cf699707290d5aeefb3e4d0d5b43
+> commit: 2a3687034e47c51cd4f01ce82ed16f1964008b9e [5172/9999] lib/string: Add strscpy_pad() function
+> config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce: (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308021401.lhJd2bLx-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> lib/string.c:312:7: error: redefinition of 'stpcpy'
+>    char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+>          ^
+>    lib/string.c:255:7: note: previous definition is here
+>    char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+>          ^
+>    lib/string.c:318:1: error: redefinition of '__kstrtab_stpcpy'
+>    EXPORT_SYMBOL(stpcpy);
+>    ^
+>    include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+>            __EXPORT_SYMBOL(sym, "")
+>            ^
+>    include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+>    #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+>                            ^
+>    include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+>            static const char __kstrtab_##sym[]                             \
+>                              ^
+>    <scratch space>:220:1: note: expanded from here
+>    __kstrtab_stpcpy
+>    ^
+>    lib/string.c:261:1: note: previous definition is here
+>    EXPORT_SYMBOL(stpcpy);
+>    ^
+>    include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+>            __EXPORT_SYMBOL(sym, "")
+>            ^
+>    include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+>    #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+>                            ^
+>    include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+>            static const char __kstrtab_##sym[]                             \
+>                              ^
+>    <scratch space>:202:1: note: expanded from here
+>    __kstrtab_stpcpy
+>    ^
+>    2 errors generated.
 
-We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
-With both clang 18.0.0 (tip of tree) and GCC 13.1.0, I don't see any
-actual code generation changes in fs/namei.o with this configuration.
-I'd be pretty surprised if any of the other uses of has_zero() show any
-changes, I at least checked lib/string.o with that configuration and
-s390 and did not see anything.
+This report/error makes no sense. At both the commit the robot bisected
+to (2a3687034e47c51cd4f01ce82ed16f1964008b9e) and current linux-4.19.y,
+there is only one definition of stpcpy()... Am I missing something here?
 
-As far as I can tell, arm and arm64 with CONFIG_CPU_BIG_ENDIAN=y are the
-only configurations that can hit the particular bit of code with the
-generic big endian has_zero() implementation because the version of
-hash_name() that uses has_zero() in this manner is only used when
-CONFIG_DCACHE_WORD_ACCESS is set, which only arm, arm64, powerpc (little
-endian), and x86 select.
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:240: * stpcpy - copy a string from src to dest returning a pointer to the new end
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:247: * stpcpy differs from strcpy in a key way: the return value is a pointer
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:252: * the compiler lowers other libcalls to stpcpy.
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:254:char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:255:char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+2a3687034e47c51cd4f01ce82ed16f1964008b9e:lib/string.c:261:EXPORT_SYMBOL(stpcpy);
 
-arch/arm/Kconfig:49:         select DCACHE_WORD_ACCESS if HAVE_EFFICIENT_UNALIGNED_ACCESS
-arch/arm64/Kconfig:121:        select DCACHE_WORD_ACCESS
-arch/powerpc/Kconfig:183:        select DCACHE_WORD_ACCESS                if PPC64 && CPU_LITTLE_ENDIAN
-arch/x86/Kconfig:140:        select DCACHE_WORD_ACCESS                if !KMSAN
-arch/x86/um/Kconfig:12:         select DCACHE_WORD_ACCESS
-
-So seems like a pretty low risk patch to me but I could be missing
-something.
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:240: * stpcpy - copy a string from src to dest returning a pointer to the new end
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:247: * stpcpy differs from strcpy in a key way: the return value is a pointer
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:252: * the compiler lowers other libcalls to stpcpy.
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:254:char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:255:char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+767049cead76cf699707290d5aeefb3e4d0d5b43:lib/string.c:261:EXPORT_SYMBOL(stpcpy);
 
 Cheers,
 Nathan
