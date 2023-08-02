@@ -1,68 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFE56D22;
-	Wed,  2 Aug 2023 18:03:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E5EC433C9;
-	Wed,  2 Aug 2023 18:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1690999385;
-	bh=b3H1cxTxktEnjXl+iExW/YcKRfU1BuhonrjVJGBbVXY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=2Nmf/GfPEkagF9BmZl/oPNQfos2XuRpiubItnG9HrgJX4XueGbgDG2UGKJAUVJy/r
-	 FBg7gFXRVOU8DbSBGdtmS0/rfnaquGaBhHiYQoAOsVOsIGq7SOMeugtLr9/uyaM/Ox
-	 gX/17ad4oY8MT9g0HDCZS34KX6zvvb3mBpCF8an8=
-Date: Wed, 2 Aug 2023 11:03:03 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Guenter Roeck <linux@roeck-us.net>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, James
- Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Miguel Ojeda
- <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Nathan
- Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Dmitry Vyukov
- <dvyukov@google.com>, Alexander Potapenko <glider@google.com>,
- kasan-dev@googlegroups.com, linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH 1/3] Compiler attributes: Introduce the __preserve_most
- function attribute
-Message-Id: <20230802110303.1e3ceeba5a96076f723d1d08@linux-foundation.org>
-In-Reply-To: <20230802150712.3583252-1-elver@google.com>
-References: <20230802150712.3583252-1-elver@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5F3F9F2
+	for <llvm@lists.linux.dev>; Wed,  2 Aug 2023 18:18:24 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 498BF3200754;
+	Wed,  2 Aug 2023 14:18:23 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 02 Aug 2023 14:18:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1691000302; x=1691086702; bh=Sm
+	MQ6kJN4Wc3hcGgVxP+bMiAcMtZCScse6Dh72DQZNY=; b=RS2lZDrqYqL/YCzd28
+	LQCEyYTBpZ9AsOx0epUPG7MNbrjDFXtbn2z9kisIrwzEFRddS8DfdcM4pINxZ//S
+	5OZE92Kstnns7ub7HeGv0fpTJBX8OtBSFKJpxGDUGHF8XRBobYAx/rMNGnyCjym7
+	YMESHJFdKICPLHtuv6ikqbcVe3W7vyxG+OaoTho+CZi9nYIvCwjRJdKhf57NElLn
+	jPBvbA2kRk8Sx+ttZ0omoSfqXeXMjP/gBLwz+9y5dTYLnxLIhGtXkGiqnOpt9v5m
+	43bdfIu9/HZyez1rthW6GvPxKTxX20wVPxAZiNEZjpSFXabaFM6wVQdH0mFK2RUy
+	vAKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1691000302; x=1691086702; bh=SmMQ6kJN4Wc3h
+	cGgVxP+bMiAcMtZCScse6Dh72DQZNY=; b=xi6gI5pRORVFWj2yXsvH8AwNVpnA9
+	A5a1Fyq0dj4s0Io3/eZsSzAY4OFS64wWHck4CM0gPb81+pJadaLf00nsSoPmHJGI
+	yqdSVZAjgY8ehq3RhWDC8UYbVMzAjmVMcHBwywcIOa99Qy8QIUW+xbMGwUSFU/Hs
+	FsKW2jX4AqemuoL3171ZDDO0JyfwO5hM/zB1YSrSGeShaHj08n4uujRORratQFhl
+	PdYVWLxvY+XY+sg3MZG5ljs1mFykrJFTKazhDfBDkPHOoXt9PCcCQyRrdFxl5fzU
+	UzHNPG8eosDSYySxkWrL7sJIGGLzV7IY67xLvNFuQEpYFlAws4/AKP5Bw==
+X-ME-Sender: <xms:7Z3KZCgwPzHXYeemGEu9Qyj5ErRzXXH7EmceR0J370__O_AtKGSjjQ>
+    <xme:7Z3KZDCNARqZ3h2BImuDxS4dIQevS2UNF-oTbZUqXfYBpaiOyAILrbSyW8-38C9LE
+    EfCTFet5V4DvB9mokg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedtgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:7Z3KZKGVIjfLGAQDf86B3N3SiiyttqfRRZrEnPxSrvNnVIeMTrgxGQ>
+    <xmx:7Z3KZLTHd1_k1KnwARlCRCdU78UDy3la_61mG4Ce8f6O-CyIIGuYXA>
+    <xmx:7Z3KZPyDn7GRtzeLKBJWaBVSepGHmVV8VtgKVnt7SFKOubhKGBQC1Q>
+    <xmx:7p3KZGkolqmrhhVrqabX3Jmlg1oqsm7SuSv25c8SSN5llD02sVBiBQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 9F7D1B60089; Wed,  2 Aug 2023 14:18:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Message-Id: <dd48b4ff-1009-41fe-baf5-be89432c5d28@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
+References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
+ <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
+ <20230802161553.GA2108867@dev-arch.thelio-3990X>
+ <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
+Date: Wed, 02 Aug 2023 20:17:32 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Michael Ellerman" <mpe@ellerman.id.au>, "Will Deacon" <will.deacon@arm.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>
+Cc: "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero regardless
+ of endianness
+Content-Type: text/plain
 
-On Wed,  2 Aug 2023 17:06:37 +0200 Marco Elver <elver@google.com> wrote:
+On Wed, Aug 2, 2023, at 19:37, Linus Torvalds wrote:
+> On Wed, 2 Aug 2023 at 09:16, Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
+>
+> Oh Christ. I didn't even realize that arm64 allowed a BE config.
+>
+> The config option goes back to 2013 - are there actually BE user space
+> implementations around?
 
-> [1]: "On X86-64 and AArch64 targets, this attribute changes the calling
-> convention of a function. The preserve_most calling convention attempts
-> to make the code in the caller as unintrusive as possible. This
-> convention behaves identically to the C calling convention on how
-> arguments and return values are passed, but it uses a different set of
-> caller/callee-saved registers. This alleviates the burden of saving and
-> recovering a large register set before and after the call in the
-> caller."
-> 
-> [1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
-> 
-> Use of this attribute results in better code generation for calls to
-> very rarely called functions, such as error-reporting functions, or
-> rarely executed slow paths.
-> 
-> Introduce the attribute to compiler_attributes.h.
+At least NXP's Layerscape and Huawei's SoCs ended up in big-endian
+appliances, running legacy software ported from mips or powerpc.
+I agree this was a mistake, but that wasn't nearly as obvious ten
+years ago when there were still new BE-only sparc, mips and powerpc
+put on the market -- that really only ended in 2017.
 
-That sounds fairly radical.  And no changes are needed for assembly
-code or asm statements?
+> People, why do we do that? That's positively crazy. BE is dead and
+> should be relegated to legacy platforms. There are no advantages to
+> being different just for the sake of being different - any "security
+> by obscurity" argument would be far outweighed by the inconvenience to
+> actual users.
+>
+> Yes, yes, I know the aarch64 architecture technically allows BE
+> implementations - and apparently you can even do it by exception
+> level, which I had to look up. But do any actually exist?
+>
+> Does the kernel even work right in BE mode? It's really easy to miss
+> some endianness check when all the actual hardware and use is LE, and
+> when (for example) instruction encoding and IO is then always LE
+> anyway.
 
-I'll add "LLVM" to the patch title to make it clear that gcc isn't
-affected.
+This was always only done for compatibility with non-portable
+software when companies with large custom network stacks argued
+that it was cheaper to build the entire open source software to
+big-endian than port their own product to little-endian. ;-)
 
+We (Linaro) used to test all toolchain and kernel releases in
+big-endian mode as member companies had customers that asked
+for it, but that stopped a while ago as those legacy software
+stacks either got more portable or got replaced over time.
+
+Many Arm systems won't boot BE kernels any more because UEFI
+firmware only supports LE, or because of driver bugs.
+Virtual machines are still likely to work fine though.
+I'm fairly sure that all Arm Cortex and Neoverse cores still\
+support BE mode in all exception levels, OTOH at least Apple's
+custom CPUs do not implement it at all.
+
+     Arnd
