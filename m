@@ -1,94 +1,53 @@
-Received: from mgamail.intel.com (unknown [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA425387;
-	Thu,  3 Aug 2023 01:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691027438; x=1722563438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LRsDLJhvTUpYRlixB+9UVWHr77vJPkh7RO04vqPXvEQ=;
-  b=Oi8zzRW2aH6q9rOT+hW9a3yH60cthUqID+CLNYW5A8fTzl/xZSQMPBZh
-   5u4SvS6k5IOhe45ToxjOPmUOd0RyX5rjFwQNqhfhcXDJK2S4QBmIP1/Q9
-   EFn0pJ0fHd3impe5yNJK4ufH6iA3wL9k4kQlSUsfF9VA2mz8vEC6W8UvE
-   Bn8FnymBCv90X8DIfCgdtZVZi8IShMWy0IsU4Djkog6ykdITh2Y0TP4Jd
-   6q9BkhtKwz8Sq5bQtrxXBHK5qXUje3g6lf9uDau1sNwwLf6zyD//PPZLw
-   Hz6Kkt/R8N4HkVQ94g1tBsKG/CZfJUNBMNhOzSJKm0FK5v5HlrFsG4hY+
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="372480194"
-X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
-   d="scan'208";a="372480194"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2023 18:50:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="729357739"
-X-IronPort-AV: E=Sophos;i="6.01,250,1684825200"; 
-   d="scan'208";a="729357739"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Aug 2023 18:50:36 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRNU3-0001eV-0n;
-	Thu, 03 Aug 2023 01:50:35 +0000
-Date: Thu, 3 Aug 2023 09:50:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:perf/core 15/17]
- drivers/platform/x86/intel/speed_select_if/isst_if_common.c:723:2: error:
- use of undeclared identifier 'INTEL_FAM6_SIERRAFOREST_X'
-Message-ID: <202308030949.RgZ4Lz9T-lkp@intel.com>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id EB1BA6105
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 03:08:47 +0000 (UTC)
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 374596082CF9F;
+	Thu,  3 Aug 2023 11:08:35 +0800 (CST)
+Message-ID: <414e987b-df9f-53c9-6455-4a2d10f7fcf5@nfschina.com>
+Date: Thu, 3 Aug 2023 11:08:34 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] fs: lockd: avoid possible wrong NULL parameter
+Content-Language: en-US
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
+ kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ trond.myklebust@hammerspace.com, anna@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, bfields@fieldses.org,
+ linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+In-Reply-To: <0bd584fd-74ac-4b08-ae03-12e329ab186e@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-head:   322e3d171eb9e48484a86fc187e26132f063e5c4
-commit: 271f9a993c86023cf4dfd331e7a6d3e7a8f8bdeb [15/17] x86/cpu: Fix Crestmont uarch
-config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230803/202308030949.RgZ4Lz9T-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230803/202308030949.RgZ4Lz9T-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308030949.RgZ4Lz9T-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/platform/x86/intel/speed_select_if/isst_if_common.c:723:2: error: use of undeclared identifier 'INTEL_FAM6_SIERRAFOREST_X'
-           X86_MATCH_INTEL_FAM6_MODEL(SIERRAFOREST_X,      NULL),
-           ^
-   arch/x86/include/asm/cpu_device_id.h:161:39: note: expanded from macro 'X86_MATCH_INTEL_FAM6_MODEL'
-           X86_MATCH_VENDOR_FAM_MODEL(INTEL, 6, INTEL_FAM6_##model, data)
-                                                ^
-   <scratch space>:142:1: note: expanded from here
-   INTEL_FAM6_SIERRAFOREST_X
-   ^
-   1 error generated.
-
-
-vim +/INTEL_FAM6_SIERRAFOREST_X +723 drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-
-35f2c14d2a076b drivers/platform/x86/intel_speed_select_if/isst_if_common.c Srinivas Pandruvada 2019-06-26  720  
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07  721  static const struct x86_cpu_id hpm_cpu_ids[] = {
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07  722  	X86_MATCH_INTEL_FAM6_MODEL(GRANITERAPIDS_X,	NULL),
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07 @723  	X86_MATCH_INTEL_FAM6_MODEL(SIERRAFOREST_X,	NULL),
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07  724  	{}
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07  725  };
-e6d3418130cdf7 drivers/platform/x86/intel/speed_select_if/isst_if_common.c Srinivas Pandruvada 2023-03-07  726  
-
-:::::: The code at line 723 was first introduced by commit
-:::::: e6d3418130cdf718eff72db9a05d7262ebb49cff platform/x86: ISST: Add support for MSR 0x54
-
-:::::: TO: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-:::::: CC: Hans de Goede <hdegoede@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 2023/8/2 18:41, Dan Carpenter wrote:
+> There was a big fight about memcpy() in 2010.
+>
+> https://lwn.net/Articles/416821/
+>
+> It's sort of related but also sort of different.  My understanding is
+> that the glibc memcpy() says that memcpy() always does a dereference so
+> it can delete all the NULL checks which come after.  The linux kernel
+> uses -fno-delete-null-pointer-checks to turn this behavior off.
+Really big fight!
+This article seems talk about  problem that using memcpy() to copy 
+overlapping regions.
+I'm not sure glibc memcpy does the check about NULL， but glibc printf 
+does this check.
+"And GNU libc checks strings passed to printf for a %s placeholder for 
+NULL,
+when the C standard says this is not allowed."[1]
+[1] https://lwn.net/Articles/416821/
+>
+> regards,
+> dan carpenter
