@@ -1,56 +1,56 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF667E
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 09:08:37 +0000 (UTC)
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so10570991fa.2
-        for <llvm@lists.linux.dev>; Thu, 03 Aug 2023 02:08:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA197E
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 09:10:51 +0000 (UTC)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so7482595e9.3
+        for <llvm@lists.linux.dev>; Thu, 03 Aug 2023 02:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691053715; x=1691658515;
+        d=linaro.org; s=google; t=1691053849; x=1691658649;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lL6o/KcStrptKgvvlzpf2g3HB3hx11T5k5Y/jU/1lFU=;
-        b=NI9g2tBpu8/9zS0rwuwUWSv6MvnFoaUBwXr4sK9UTsHdyUvkrNMi8Ks+zt9da/jHrw
-         Ve0Egy6UUcn+qghjFjUrSkehwu/8mQ/l4hqx5K/2v8hstX4/3f6tXBpKrxvjBzYJF9QT
-         8gW+4CGXpG9VKNUlEraiLHhlMgICDJ5q7HXZhc0e0gPz8n7pw8MUYtFNvpf4yoePmNS2
-         4fkDqmUXRbPTSqay4emxrXtCobrPsdHdje03JHfcam/P4/SPBEzf3BHz4jvV4wPmb9DG
-         ULmjU6S25u2aY0lqaD8lJZxNL4oUvsNBF65lviF3YSY/OizSLCCaPgU5poFOrWTzxRxK
-         5KLQ==
+        bh=OJpah36ty+h1V+d/yS60/V9o8V1RRKpQA+HMeX/JC0I=;
+        b=zRU32KM/s4kejwypSNsftglC4dId0r9jmFUNmjuS56xQIPZKXicT/nxtm7K0Vo7rmt
+         e7H37M922zt/gFoHsDGnUXQLs+jyzey5hfJLzRcvYwBowjqlU8tySGn/7oiJafC/5tde
+         f0qol4Y3xusJ/wEZBTGEpSqzTQrZyMkwmTnWZt8bZ3Tewr+DkOsdty638egRkk2g/4RZ
+         Gp+cfU27t6obG+V6TwMCjrKMsu5o2Q9dpUtpXZ7eTD7DWf6DMOf/+GepJGqhF1etOI8/
+         fW/zxjuzkaC17izXgyg1IuPbrUX7RvxojGxpwHiLncGwtQrfSDDRQxYkZnkgT1TZKiEn
+         hHMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691053715; x=1691658515;
+        d=1e100.net; s=20221208; t=1691053849; x=1691658649;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lL6o/KcStrptKgvvlzpf2g3HB3hx11T5k5Y/jU/1lFU=;
-        b=NhTmtd1VpbhXWwnEte00z4c+Z9W6WTJAtE2Dkpl94VJBt2tsNOxslWGyztbgtr/bSu
-         zKXyVmHzHa0xshTgHiBULBOyOdoVQOdyy8wg2jo3yunblrMU41VFEsGLHhxwUA81Ggur
-         nFfDLptWi1yazGOkISCM3QajGRe0Pd5wz91+bA62PRjltHt7UZHEzgSbJ7YkssrlcUF1
-         xgP1090V/HVHZ8hHASf9cNgqNS1HzguZd2beT8Szf8CQ/HZthEAeHDkwaypYPx+Laatl
-         Ebz1hb0nKUMHGegrzBtUIPo1jw/zNfor2nl0EMCJGgWB8k/vovE4XKOYjZM5x0MCRQSw
-         R3aw==
-X-Gm-Message-State: ABy/qLbbzXg1H6TbH7b30MmudMt+Bnlc9YAYKxoRZCSvydZp03jQmq/M
-	5+yBxQOEQS8IkZLoS1tn3bR5bw==
-X-Google-Smtp-Source: APBJJlHOqAV2i4Wnq0dOO1J5u/qsLMvUhNpr6WrZRCrVB983RluHKR4r4vNi+n6ZlpXBeA1dY0MN1A==
-X-Received: by 2002:a2e:98d0:0:b0:2b6:9ed0:46f4 with SMTP id s16-20020a2e98d0000000b002b69ed046f4mr7505851ljj.23.1691053715562;
-        Thu, 03 Aug 2023 02:08:35 -0700 (PDT)
+        bh=OJpah36ty+h1V+d/yS60/V9o8V1RRKpQA+HMeX/JC0I=;
+        b=buZg+Nk8qY213ZQp+ItdGmnMVjcpeCDMaZ/SZjqGe4Mq8WjmEYi4JMDUFJMIlokc9S
+         X9lZiS+0xue1PF/JeeiXi3pnmuw5cQAirlEofdJ9sYDkNFRWlds9pOz0Bow1d3elxOs0
+         h82GNlIRdxjnFP6RRwkk/2Wa83A1nlFW79/ar0AhbNYxyvNBB6oYc1Ic0zvlraxb0C86
+         hqpZRu7x1O0SKocVp1W8hZs6lUutPPCyBL98vvJUkpTXkUQIXWWNJYnB2Sms4WBfXg3k
+         Ct4Q3/oDkUHd9fItWsodpNeWr4jxW7kd1yX4pgJWjU7QDxWuXGa39CGB3lB29P6FNo3h
+         2BYw==
+X-Gm-Message-State: ABy/qLYilnUFh4638ahZn9kuV2U65cBugiwvhy/07seafT00nKdkmawg
+	MNi5kUEHJTSk3aFaSjaJBPxu8g==
+X-Google-Smtp-Source: APBJJlG1QbuLw2+H8HhnJeVT1Av59WDq9CwoIWlgg+11h4NWNHUKX3rJlFzg7p+nNHtO4/ZveaIgYA==
+X-Received: by 2002:a7b:c34d:0:b0:3fe:179a:9eee with SMTP id l13-20020a7bc34d000000b003fe179a9eeemr6942588wmj.30.1691053849395;
+        Thu, 03 Aug 2023 02:10:49 -0700 (PDT)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05600c4f8100b003fe15ac0934sm13156770wmq.1.2023.08.03.02.08.34
+        by smtp.gmail.com with ESMTPSA id m14-20020a7bce0e000000b003fbc9b9699dsm3702132wmc.45.2023.08.03.02.10.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 02:08:34 -0700 (PDT)
-Date: Thu, 3 Aug 2023 12:08:32 +0300
+        Thu, 03 Aug 2023 02:10:49 -0700 (PDT)
+Date: Thu, 3 Aug 2023 12:10:46 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Su Hui <suhui@nfschina.com>, chuck.lever@oracle.com, jlayton@kernel.org,
-	neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-	trond.myklebust@hammerspace.com, anna@kernel.org, nathan@kernel.org,
-	trix@redhat.com, bfields@fieldses.org, linux-nfs@vger.kernel.org,
+To: Su Hui <suhui@nfschina.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, chuck.lever@oracle.com,
+	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
+	Dai.Ngo@oracle.com, tom@talpey.com, trond.myklebust@hammerspace.com,
+	anna@kernel.org, nathan@kernel.org, trix@redhat.com,
+	bfields@fieldses.org, linux-nfs@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	kernel-janitors@vger.kernel.org
 Subject: Re: [PATCH] fs: lockd: avoid possible wrong NULL parameter
-Message-ID: <0ea832fa-de39-47fa-8666-5743a68a8519@kadam.mountain>
-References: <20230802080544.3239967-1-suhui@nfschina.com>
- <531df8ee-ba09-49df-8201-4221df5853c6@kadam.mountain>
- <CAKwvOdnRwmxGuEidZ=OWxSX60D6ry0Rb__DjSayga6um35Jsrg@mail.gmail.com>
+Message-ID: <057a4eea-d55a-4402-81c1-46b04b405a73@kadam.mountain>
+References: <CAKwvOdnRwmxGuEidZ=OWxSX60D6ry0Rb__DjSayga6um35Jsrg@mail.gmail.com>
+ <18edc2c7-2fb0-493b-9a9f-549acce4e87a@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,15 +59,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnRwmxGuEidZ=OWxSX60D6ry0Rb__DjSayga6um35Jsrg@mail.gmail.com>
+In-Reply-To: <18edc2c7-2fb0-493b-9a9f-549acce4e87a@nfschina.com>
 
-I could have sworn there was an issue with glibc annotating these
-parameters as non-NULL, but maybe it was a different function.
+On Thu, Aug 03, 2023 at 12:16:40PM +0800, Su Hui wrote:
+> Should I send a separate patch for this bug and add you as Reported-by ?
 
-With the memcpy() bug in 2010, there were never any numbers to show that
-it helped improve performance.  The only person who measured was Linus
-and it hurt performance on his laptop.  So from a kernel developer
-perspective it just seemed totally bonkers.
+I feel like neither of us know if we should add a check to the
+intializer or remove the check from dprintk.  If you know the answer,
+than absolutely, please send a patch.
 
 regards,
 dan carpenter
