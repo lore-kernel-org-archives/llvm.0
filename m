@@ -1,178 +1,197 @@
-Received: from mgamail.intel.com (unknown [192.55.52.120])
+Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3EA15AD4;
-	Thu,  3 Aug 2023 10:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691056886; x=1722592886;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6Oy7zDHpZ/ELAjEj3aq+xJGJolwr/niru3HYDczMoe0=;
-  b=AP6S0AdN/kscaHqe8aWm1x1qRSWVyoP4GNY9RS6bRiLAljkPiqRIMCF7
-   viCkTTlcE3t2ea8XhMtAoZCoA38KohAhiVnDVsAYVxG5rByC3KBaV0Nea
-   fodkDNe9KpoHALsLchR342Tw63zbeCVXqqpCTWKVG6LxU54t4yOvXV87a
-   zonV+qCrvGRJ2/xSfrp3HW9PfAf0oefg6KFnvDLMoLPaI+NgfeVMv0e0S
-   /rLuw5X+mwefIUCZfFrHwfxIamUvccnyxiqNrZTHdFB7CmxtfgqGFleuA
-   hcT4OKm4F3t51HNHS84c1+nMGlpm+2Z4L7oa25p1jrxZOuntuhtRt3ah6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="368730539"
-X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
-   d="scan'208";a="368730539"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 03:01:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="872873165"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Aug 2023 03:01:21 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRV8w-00021n-0H;
-	Thu, 03 Aug 2023 10:01:18 +0000
-Date: Thu, 3 Aug 2023 18:01:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tom Rix <trix@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [jarkko-tpmdd:master 3/11]
- security/integrity/ima/ima_crypto.c:785:39: error: too few arguments to
- function call, expected 4, have 3
-Message-ID: <202308031742.PHxsqvbd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3854154A0
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 10:21:46 +0000 (UTC)
+Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37397GKp004411;
+	Thu, 3 Aug 2023 05:10:31 -0400
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2045.outbound.protection.outlook.com [104.47.73.45])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3s7qbk5q8s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Aug 2023 05:10:31 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g5TRw3nJel3rzy6EUE/Lwl+38QXpps3czhUIHoqy0v8CD4kBxobrHC26TdD2RsPXMOcdUlTj/NHNqyZZvWrW3792xvE8aROb1NU9T9hM1cgj1GsHQKBnWG1xvn77xnHheTIuBJCuWVNMyhHoho0wzZL6YBd02CcVNqj2uCpRIAumNMntcSgp7LuAj+WBTq0cUJMF9AsZ60DqUU4FtgDJlkPyTrTf3AvDCDXqHdV830bVAp9LdTiVc3qu3yg51XN05uKhde/DWGLvAm4V6R1nlSfTkAm0gSv7IWv/AQFsvvIKglSTts9BVGgKWEKAVymCVDX74tHw5rTC7AQUDRqsjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7EMi7hPLbmPx9qas3nhqQOgc3Q1SU1yiAVzLpOLV/u0=;
+ b=XNVyt41MyOeFGLCGsHBhpsIf0pSrkhU159tGfDes+LsztsDeYaPqV9Juetflcbxv7Arsm1vwAELgUZlgGU8yuQI7li8Sc/TbDqndEMTHJYPmIXnYiMTgTmIwGyf4XN85aQP81XRsbVEA7y7f8C6jQdCw6bU4ezmvJkaMjLrVs2rzNUJV3EUCxDVS1whFxKX/7IBhlaeHc1trcpB/Os/SWM0t6R+5b52vmjCR0G1dAvstJib0pgYCHoUUYGQqaAqsYDk5aPrNBFFK0+QnfiKPKsmU0X7TAQYrF1/94FaBqin16c4IeRt0iUvJOY+UNLl5p1uhyBGgiHVHaqdxlf0fJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
+ dkim=pass header.d=analog.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7EMi7hPLbmPx9qas3nhqQOgc3Q1SU1yiAVzLpOLV/u0=;
+ b=dFTVlChp80ygZCefXjpgAbNt53obzu/W1Ahtb122mhtodQzumeE5sjfJXr143Pk8j5ppH0ssvQLzAG8s5XHgecPltHbi1t/DEC/eQPDYQNV7ytXWclPz5l8TkjD7tvHp6PKmZlStuY1VeJam+7Ffdzg3eNDJxOpfhWge77Xk080=
+Received: from PH7PR03MB7391.namprd03.prod.outlook.com (2603:10b6:510:2e6::5)
+ by SA2PR03MB5771.namprd03.prod.outlook.com (2603:10b6:806:11e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Thu, 3 Aug
+ 2023 09:10:27 +0000
+Received: from PH7PR03MB7391.namprd03.prod.outlook.com
+ ([fe80::200d:e2:3bae:2a5b]) by PH7PR03MB7391.namprd03.prod.outlook.com
+ ([fe80::200d:e2:3bae:2a5b%4]) with mapi id 15.20.6652.020; Thu, 3 Aug 2023
+ 09:10:26 +0000
+From: "Sahin, Okan" <Okan.Sahin@analog.com>
+To: Mark Brown <broonie@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>,
+        Liam Girdwood
+	<lgirdwood@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "zzzzTilki, zzzzIbrahim" <Ibrahim.Tilki@analog.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux@leemhuis.info"
+	<linux@leemhuis.info>
+Subject: RE: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
+ Regulator Support
+Thread-Topic: [PATCH v3 2/2] regulator: max77857: Add ADI MAX77857/59/MAX77831
+ Regulator Support
+Thread-Index: 
+ AQHZuGy8mN9TLCcuJkyLQ19F8fkBDa+/r5IAgAyW/YCAARHLsIAAaoOAgAn0bACAAAK6AIAAAIEAgAAAvwCAAKY8YA==
+Date: Thu, 3 Aug 2023 09:10:26 +0000
+Message-ID: 
+ <PH7PR03MB7391287FA2CF2C1982724952E708A@PH7PR03MB7391.namprd03.prod.outlook.com>
+References: <20230717050736.10075-1-okan.sahin@analog.com>
+ <20230717050736.10075-3-okan.sahin@analog.com>
+ <20230718155502.GA3542993@dev-arch.thelio-3990X>
+ <20230726161033.GA1102409@dev-arch.thelio-3990X>
+ <PH7PR03MB739122A373964651D995EA5AE701A@PH7PR03MB7391.namprd03.prod.outlook.com>
+ <20230727145143.GB2013261@dev-arch.thelio-3990X>
+ <CAKwvOdnPQEdbTGBO0hBn7CC4d0xtRV2zmfrYDfAhH0stfDYeJA@mail.gmail.com>
+ <32af6891-8246-46de-ba1d-ae1999f6eb10@sirena.org.uk>
+ <20230802230426.GA3027248@dev-arch.thelio-3990X>
+ <ae431bb5-d132-4737-b4bb-58a323f877a6@sirena.org.uk>
+In-Reply-To: <ae431bb5-d132-4737-b4bb-58a323f877a6@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: 
+ =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zYWhp?=
+ =?us-ascii?Q?blxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4?=
+ =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLTkyOTVjY2JkLTMxZGQtMTFlZS1iZjAxLTU4?=
+ =?us-ascii?Q?NmMyNWQzYzNlNFxhbWUtdGVzdFw5Mjk1Y2NiZi0zMWRkLTExZWUtYmYwMS01?=
+ =?us-ascii?Q?ODZjMjVkM2MzZTRib2R5LnR4dCIgc3o9IjIwMjQiIHQ9IjEzMzM1NTI3NDIz?=
+ =?us-ascii?Q?MzQxOTI1NiIgaD0iNjJFNDRSWUxXY2VrR3RPR21mc2VET3pTdDQwPSIgaWQ9?=
+ =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBRW9D?=
+ =?us-ascii?Q?QUFENGxadFY2c1haQVRqQmZTZHBSbk9sT01GOUoybEdjNlVEQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBRGFBUUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQVFBQkFBQUF2ZGhreGdBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
+ =?us-ascii?Q?QWFRQmZBSE1BWlFCakFIVUFjZ0JsQUY4QWNBQnlBRzhBYWdCbEFHTUFkQUJ6?=
+ =?us-ascii?Q?QUY4QVpnQmhBR3dBY3dCbEFGOEFaZ0J2QUhNQWFRQjBBR2tBZGdCbEFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHRUFaQUJwQUY4QWN3QmxBR01B?=
+ =?us-ascii?Q?ZFFCeUFHVUFYd0J3QUhJQWJ3QnFBR1VBWXdCMEFITUFYd0IwQUdrQVpRQnlB?=
+ =?us-ascii?Q?REVBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
+ =?us-ascii?Q?QUFBQUFBQ2VBQUFBWVFCa0FHa0FYd0J6QUdVQVl3QjFBSElBWlFCZkFIQUFj?=
+ =?us-ascii?Q?Z0J2QUdvQVpRQmpBSFFBY3dCZkFIUUFhUUJsQUhJQU1nQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUE9PSIvPjwv?=
+ =?us-ascii?Q?bWV0YT4=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR03MB7391:EE_|SA2PR03MB5771:EE_
+x-ms-office365-filtering-correlation-id: b8af900f-d45f-4e71-b96c-08db94017a11
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ B70rNYSpXTS7YyBgggxEuV1pjWTCOHYxoYMpbgEy2IQ1DzqshNPKu2Nqh6QWkPp5LcHtzEeUrE8BXTFCXLY+73xgYmm+/xVVFSpoE++0lHp/YKhU3V9HBp2MtCR+ZlNTI5jROAmOM0WfAl6m72HDAf/2Ivkp1Ue8dofS8FmUdPVB6+Z9CKVNVOmGbiBoaJXUMv/ZYpM0a/JbzOs0nD4QxhMc9zBVJvTkxaYLrQ7WP2xH9zpi6dmOqrrocNcxXoHyrjPHdpqwH2upsacPMInF0CKF1i7jRWRKw24hv6mYE9Md/bcse6g66pU6hQ4zF5Ab9YkB8Q8X7gX0wtdzIv1jt7n/OX/usAWecF5W0gdVp/KSNn0lokNCwHyuKjmKmtIEUkg2M0gpfTZs7FE1SSlOBh0QlBKlQk1wXUbCXrH8/DuTSoIP5oofJMaiZKTxkYIHzbxKMqfwNQGDzqK09A1zBqWF34uutRdoYKnS6S5sFytqYGAIw2OLYpH11DUnAAAdhjD8uD0d5Az7idSpTfAc+yarZp7o6TKgdTVjDoLNRUGH7bRjNdD2udWsqQdLYW2DWWQs7CR+wgjHe464lXzDS2rrSPedG8QKLvwmlE66xtM=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR03MB7391.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199021)(4744005)(41300700001)(66556008)(66446008)(316002)(2906002)(4326008)(76116006)(64756008)(66946007)(66476007)(52536014)(8936002)(8676002)(5660300002)(122000001)(38100700002)(33656002)(26005)(186003)(38070700005)(6506007)(86362001)(83380400001)(9686003)(478600001)(110136005)(54906003)(7696005)(71200400001)(966005)(55016003)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?keQESOVjSJKG0nWjQnRfk/lEBlH94tgb/kgwp5G/XhndGWYiD6G2gXvkizvT?=
+ =?us-ascii?Q?VCYIQL6WEUZLH4CjqYzooefc8axnpPDyVtAtkELuxwN7i5g+kJTryFfZXRIB?=
+ =?us-ascii?Q?F8PrtSgyf/7VZQbbsTYaYExm59vavybo8jzPAEIcv7kLKluPb6xwhLNgwARl?=
+ =?us-ascii?Q?V/Z7qCAZ7y/o8AEX+Wcy9PyZSzuFbRAGyPCA6eD5ot7dm9m1MZr+8Q504Ych?=
+ =?us-ascii?Q?I8UEwP6LIop2t7WIMS+U2fh4ow+Z6brjGVfdmkYi7hncjvf5V7WGpU5rZ2UB?=
+ =?us-ascii?Q?deIMQGGSEeehiSxd6HjrgdqLipNU9qpy+LB1y3Ov6Mr6UqhwfCAMzyMTLAnP?=
+ =?us-ascii?Q?nX9ynZx37BiYIdrMGO8xJNfemlTHGa6qOdmx8FVtOxfkWGP24TxE6WYsnxL3?=
+ =?us-ascii?Q?TZA4V4oHoQcqiGE0RaFzRKpQVywIDm9WdsdHPdC1samLRK2nxtxU9FKca3au?=
+ =?us-ascii?Q?LAfP+u5PpK7zhCQ3GGv1gKW/kj8zBoUoE6UFxh6sXE5Ti5iK97TX/TU5f+O+?=
+ =?us-ascii?Q?zDz3zzNn2SM7Iig3WNS8Pxj9gHg3grzIeFfgy7tsrlgQLROwYwLDkF0xjImq?=
+ =?us-ascii?Q?wgTqRlE5Q0jJNJFGBWX5Qt6vqh06dSn1inRWpEGaGGDnYLxw3YgW8Sr5hytJ?=
+ =?us-ascii?Q?PPaQuYwdfPn5Nx+C/treoF2HUKXJ0X9T3Ey8Yu3B6SGX7XBCcADC+wQb52au?=
+ =?us-ascii?Q?wJ0xRJA7F6MFjLTV87YdRILp6yEGBRpor6pXqPokQSxndbbvk7hlYw8zTeDt?=
+ =?us-ascii?Q?+Ra8+LXvElyieyrqx+iwmMKmnxCVSayzx0FQu+yfCCMPsBC8+qY8oTGt31rW?=
+ =?us-ascii?Q?5wph0RylXUwGk8lwerJacRPKuFZWaGugGLfakXtLxmRkBM/QPbeIYmtH+dQp?=
+ =?us-ascii?Q?EPkd/h5lCDK5vG5XE0M3MGy7a7AhGOVspI0q+bUfrOq/TjL8KD9o5CCWRtgr?=
+ =?us-ascii?Q?4DrXhNMf9KQ128Z5akyJjuCmHFt+QW0lRZmvNfZrFwEll4iRcZPj4XmHDiem?=
+ =?us-ascii?Q?jxLuyS2lZLgGXzzmmwx42BlBuv1f5hdhZW5JlntZCs+xDFCeCqWEthhGCvXH?=
+ =?us-ascii?Q?kmz9qF8j/yOYwoRrl9IE5lYIlI9fJsC7RJO+ypJlC3xes6Nkk9UCgumJ7NzE?=
+ =?us-ascii?Q?dBnOaUPLQwEI1qIdP59lzuxoHMxPzLptAA/5p/q4es4u9VWPE+Q0Fh4zLyQA?=
+ =?us-ascii?Q?HQlrODGEH9pBCpIqTA0qj/qEk7yymo+I3Q5pOwa/IWUqhSCsvBppC1GWMuwU?=
+ =?us-ascii?Q?iGJi2nuZJAlfW5eR0T5o+qs8/lNsfizE/UQVT3IiCYjPaM9pV9vffvizk3tf?=
+ =?us-ascii?Q?OWIE4VafhrjK3qtwDSSPf8fEpCqH4ZMV4JmAAUmJLnzhPINfWEcmY4Og7sgC?=
+ =?us-ascii?Q?17i7xLdBPWtN4ERVzHTHl1BEqbFovS/M1RilSLjbrqWrUaCOK1eTrnerbaEk?=
+ =?us-ascii?Q?LUfo9vvgDmOuqpRfg9OcMq7bwoOA5LgDYamrVMMdcgfscmxJHemMrwQ6wfUO?=
+ =?us-ascii?Q?0t0F8LHCtcEhxINPZtoLhPmc0Y3MS/ke67iopX27JELjQh1Th52JTPE2ozCp?=
+ =?us-ascii?Q?YX6rNraMPz+25t1MdNtGpZTPnF+V8J2qM9vhBNmI?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR03MB7391.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8af900f-d45f-4e71-b96c-08db94017a11
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2023 09:10:26.6643
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UiyP80alAkuW1BiJ0IXwHVq6c1iMufdyHG1qV4X4mH2/79p0Ymm4M6ZXlqiKDwVbS/NQRZ7+zZwJZ0xwtvN/EA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR03MB5771
+X-Proofpoint-GUID: qQ8KHx5QgmUbrKRZbUIw01QWcg8msYIJ
+X-Proofpoint-ORIG-GUID: qQ8KHx5QgmUbrKRZbUIw01QWcg8msYIJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-03_07,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ mlxscore=0 phishscore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=618 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2306200000 definitions=main-2308030081
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git master
-head:   2c6af65af490b1352a9feefa0eae5cf42f7021b3
-commit: dc4782c1543a065f02c00a47aa03e336f9990ba8 [3/11] sysctl: set variable key_sysctls storage-class-specifier to static
-config: um-randconfig-r003-20230731 (https://download.01.org/0day-ci/archive/20230803/202308031742.PHxsqvbd-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230803/202308031742.PHxsqvbd-lkp@intel.com/reproduce)
+02, 2023 at 04:04:26PM -0700, Nathan Chancellor wrote:
+>> On Thu, Aug 03, 2023 at 12:02:38AM +0100, Mark Brown wrote:
+>> > On Wed, Aug 02, 2023 at 03:52:52PM -0700, Nick Desaulniers wrote:
+>> > > Hi Okan,
+>> > > Have you sent a follow up fix? The build should not remain broken fo=
+r
+>> > > so long.  Otherwise I think Broonie should drop your patch.
+>> >
+>> > Someone sent what's probably a fix but I was waiting for some
+>> > confirmation that the change actually works on hardware, it's not supe=
+r
+>> > obvious.
+>>
+>> Got a pointer? I don't see anything on lore:
+>>
+>> https://lore.kernel.org/all/?q=3Ddfn:drivers/regulator/max77857-regulato=
+r.c
+>
+>Oh, they didn't actuallly send it to the list :(
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308031742.PHxsqvbd-lkp@intel.com/
+Hi Mark and Nathan,
 
-All errors (new ones prefixed by >>):
+Actually, I have received email about fix before I send new patch. As far a=
+s I understand, it was not sent to correct list, right?=20
 
-   In file included from security/integrity/ima/ima_crypto.c:18:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from security/integrity/ima/ima_crypto.c:18:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from security/integrity/ima/ima_crypto.c:18:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> security/integrity/ima/ima_crypto.c:785:39: error: too few arguments to function call, expected 4, have 3
-     785 |         if (tpm_pcr_read(ima_tpm_chip, idx, d) != 0)
-         |             ~~~~~~~~~~~~                     ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   include/linux/tpm.h:441:19: note: 'tpm_pcr_read' declared here
-     441 | static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
-         |                   ^
->> security/integrity/ima/ima_crypto.c:785:39: error: too few arguments to function call, expected 4, have 3
-     785 |         if (tpm_pcr_read(ima_tpm_chip, idx, d) != 0)
-         |             ~~~~~~~~~~~~                     ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                             ^~~~
-   include/linux/tpm.h:441:19: note: 'tpm_pcr_read' declared here
-     441 | static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
-         |                   ^
->> security/integrity/ima/ima_crypto.c:785:39: error: too few arguments to function call, expected 4, have 3
-     785 |         if (tpm_pcr_read(ima_tpm_chip, idx, d) != 0)
-         |             ~~~~~~~~~~~~                     ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                                      ^~~~
-   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
-      68 |         (cond) ?                                        \
-         |          ^~~~
-   include/linux/tpm.h:441:19: note: 'tpm_pcr_read' declared here
-     441 | static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
-         |                   ^
-   12 warnings and 3 errors generated.
-
-
-vim +785 security/integrity/ima/ima_crypto.c
-
-98304bcf71845e Mimi Zohar    2015-12-28  779  
-8b8c704d913b0f Roberto Sassu 2020-06-07  780  static void ima_pcrread(u32 idx, struct tpm_digest *d)
-3323eec921efd8 Mimi Zohar    2009-02-04  781  {
-ec403d8ed08c82 Stefan Berger 2018-06-26  782  	if (!ima_tpm_chip)
-3323eec921efd8 Mimi Zohar    2009-02-04  783  		return;
-3323eec921efd8 Mimi Zohar    2009-02-04  784  
-879b589210a9a0 Roberto Sassu 2019-02-06 @785  	if (tpm_pcr_read(ima_tpm_chip, idx, d) != 0)
-20ee451f5a7cd4 Joe Perches   2014-02-24  786  		pr_err("Error Communicating to TPM chip\n");
-3323eec921efd8 Mimi Zohar    2009-02-04  787  }
-3323eec921efd8 Mimi Zohar    2009-02-04  788  
-
-:::::: The code at line 785 was first introduced by commit
-:::::: 879b589210a9a0c9f77d301aaf0ddee20f2c5052 tpm: retrieve digest size of unknown algorithms with PCR read
-
-:::::: TO: Roberto Sassu <roberto.sassu@huawei.com>
-:::::: CC: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Okan Sahin
