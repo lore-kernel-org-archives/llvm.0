@@ -1,142 +1,129 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 4A70D1847
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 04:16:44 +0000 (UTC)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CF89060863210;
-	Thu,  3 Aug 2023 12:16:40 +0800 (CST)
-Message-ID: <18edc2c7-2fb0-493b-9a9f-549acce4e87a@nfschina.com>
-Date: Thu, 3 Aug 2023 12:16:40 +0800
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF7523D3
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 06:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691043677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WhjWzp2wOakXvIRKbRUTr+1R8qjVGjh40zKQOXhnOL8=;
+	b=hDMl8z5pup1jHZ56IqpqZ5j1tnBm3LgEfEzLg6M4MSrgwR0ppvNU2LuhDEo77MRgWhz5cB
+	R0OUnajLoX2E6cqk03cEWCi0mHRXtBN2dkIwpzCr/s9ZyzTHZiODSbY5JEVhPOXslNg+Mt
+	GhFOepEbMJZFg4H1TlJ+q/LSBdU7MWk=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-_8dRJtayMWOQkUTvPYzbvQ-1; Thu, 03 Aug 2023 02:21:15 -0400
+X-MC-Unique: _8dRJtayMWOQkUTvPYzbvQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67D553C01C2F
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 06:21:15 +0000 (UTC)
+Received: from [172.64.9.24] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A7F4E1454146;
+	Thu,  3 Aug 2023 06:21:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
+ (6.5.0-rc4, mainline.kernel.org-clang, 4b954598)
+Date: Thu, 03 Aug 2023 06:21:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] fs: lockd: avoid possible wrong NULL parameter
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
- kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
- trond.myklebust@hammerspace.com, anna@kernel.org, nathan@kernel.org,
- trix@redhat.com, bfields@fieldses.org, linux-nfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel-janitors@vger.kernel.org
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-In-Reply-To: <CAKwvOdnRwmxGuEidZ=OWxSX60D6ry0Rb__DjSayga6um35Jsrg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <60374.123080302211500751@us-mta-633.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/8/3 05:40, Nick Desaulniers wrote:
-> On Wed, Aug 2, 2023 at 3:25 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
-> I noticed that the function in question already has a guard:
-> 322   if (hostname && memchr(hostname, '/', hostname_len) != NULL) {
->
-> Which implies that hostname COULD be NULL.
->
-> Should this perhaps simply be rewritten as:
->
-> if (!hostname)
->    return NULL;
-> if (memchr(...) != NULL)
->    ...
->
-> Rather than bury yet another guard for the same check further down in
-> the function? Check once and bail early.
+Hi, we tested your kernel and here are the results:
 
-Hi, Nick Desaulnier,
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-This may disrupt the logic of this function. So maybe the past one is better.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-322         if (!hostname)
-323                 return NULL;
-                     ^^^^^^^^^^^^
-If we return in this place.
-                                                                                         
-324         if (memchr(hostname, '/', hostname_len) != NULL) {
-325                 if (printk_ratelimit()) {
-326                         printk(KERN_WARNING "Invalid hostname \"%.*s\" "
-327                                             "in NFS lock request\n",
-328                                 (int)hostname_len, hostname);
-329                 }
-330                 return NULL;
-331         }
-332
-333 retry:
-334         spin_lock(&nsm_lock);
-335
-336         if (nsm_use_hostnames && hostname != NULL)
-337                 cached = nsm_lookup_hostname(&ln->nsm_handles,
-338                                         hostname, hostname_len);
-339         else
-340                 cached = nsm_lookup_addr(&ln->nsm_handles, sap);
-                              ^^^^^^^^^^^^^^^
-This case will be broken when hostname is NULL.
+Kernel information:
+    Commit message: Merge tag 'exfat-for-6.5-rc5' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/linkinjeon/exfat
 
-341
-342         if (cached != NULL) {
-343                 refcount_inc(&cached->sm_count);
-344                 spin_unlock(&nsm_lock);
-345                 kfree(new);
-346                 dprintk("lockd: found nsm_handle for %s (%s), "
-347                                 "cnt %d\n", cached->sm_name,
-348                                 cached->sm_addrbuf,
-349                                 refcount_read(&cached->sm_count));
-350                 return cached;
-351         }
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/98295
 
->> I noticed a related bug which Smatch doesn't find, because of how Smatch
->> handles the dprintk macro.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
-Hi, Dan,
 
-Great eye!
-Should I send a separate patch for this bug and add you as Reported-by ?
 
->>
->> fs/lockd/host.c
->> truct nlm_host *nlmclnt_lookup_host(const struct sockaddr *sap,
->>     217                                       const size_t salen,
->>     218                                       const unsigned short protocol,
->>     219                                       const u32 version,
->>     220                                       const char *hostname,
->>     221                                       int noresvport,
->>     222                                       struct net *net,
->>     223                                       const struct cred *cred)
->>     224  {
->>     225          struct nlm_lookup_host_info ni = {
->>     226                  .server         = 0,
->>     227                  .sap            = sap,
->>     228                  .salen          = salen,
->>     229                  .protocol       = protocol,
->>     230                  .version        = version,
->>     231                  .hostname       = hostname,
->>     232                  .hostname_len   = strlen(hostname),
->>                                                   ^^^^^^^^
->> Dereferenced
->>
->>     233                  .noresvport     = noresvport,
->>     234                  .net            = net,
->>     235                  .cred           = cred,
->>     236          };
->>     237          struct hlist_head *chain;
->>     238          struct nlm_host *host;
->>     239          struct nsm_handle *nsm = NULL;
->>     240          struct lockd_net *ln = net_generic(net, lockd_net_id);
->>     241
->>     242          dprintk("lockd: %s(host='%s', vers=%u, proto=%s)\n", __func__,
->>     243                          (hostname ? hostname : "<none>"), version,
->>                                   ^^^^^^^^
->> Checked too late.
->>
->>     244                          (protocol == IPPROTO_UDP ? "udp" : "tcp"));
->>     245
->>
->> regards,
->> dan carpenter
->
->
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
