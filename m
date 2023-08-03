@@ -1,63 +1,98 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2221F16D
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 18:02:58 +0000 (UTC)
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7656652da3cso89193385a.1
-        for <llvm@lists.linux.dev>; Thu, 03 Aug 2023 11:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691085777; x=1691690577;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rAq2YrG+azV8Ueq6huyg+StqMdELqbivnNJUlDy0Ue4=;
-        b=gAcNsTQaxhp6uB8Nt/wVO+B0jxOtfwCy2ZuFHrZajiGUHJnJdK0NKTCkGbf+ADIViO
-         dRJiUhvXcEYnURopnoTseQdFerluoEDTY6KfcxY+fegbU7AVwY+AQncKaFSbD70T53Bs
-         g2SkA8t8td9MxtiojO+gCUyidjMSkrohYk2hBmPzZODqiuLc9bUg71Di79eARopqlKDm
-         MDGhCR1hGelRGRQ4Wt0ZEEZ2s2tpbYkOj0Yk+XNPJWO/72F8aevhQmUAdv/enQPWtWdr
-         kjkY/u0pPOcIMWXWc6YEcJMulfaVL9Ryb2XUVZfJLQa6KIrffKrFW0AiYXc0WZ93bUda
-         DK6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691085777; x=1691690577;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rAq2YrG+azV8Ueq6huyg+StqMdELqbivnNJUlDy0Ue4=;
-        b=CswR/fWIvyiUtZOumYvxeZDg86AbqudgIFWbRyqy550tOEk1zY3KHDLc2SvuGtAqkD
-         wDADH3BdT7V+R8NI9J5EoB9btjnIwHg301VIWQD3MZzOHAlVliqYSBdVemOO6kUa3oPH
-         w2w0rUoi02WvozP79kgRi8Y9Cm3O6cfNKtsfL3qMjL0tnoD6ekZOWeOYxoDABAFGB2jR
-         YVJIVhHPQ5F1iVMmvCqzTYFX0MdlEAHW9w1x6pd0SZGW0AfmJKxru382anJLaXv726P0
-         jTqBIdPPJcnrAZ3YFrqkyvMejAXrU1jEDxyNyCfPYB2tzZJoFjOc4RBPCX5ladWgpuoa
-         gUWg==
-X-Gm-Message-State: ABy/qLY33d89vPpu2nLy9QmH2bG6eWp4c2L9l1k0nxhnIPtGs6yXbOsW
-	DC5do6v6yiSFLGlM4i8G8CizQccpGl8+528axhB7lA==
-X-Google-Smtp-Source: APBJJlELyYpReSpW4PcwV/6/Rm8KiR7KXc8zKl/PONXDsmGCrMVmWCue5OZMKdkCAO4H3aibnMTaF6nGh1Pcy2mAmMc=
-X-Received: by 2002:ad4:4b2d:0:b0:63c:62fa:745b with SMTP id
- s13-20020ad44b2d000000b0063c62fa745bmr17265920qvw.8.1691085777443; Thu, 03
- Aug 2023 11:02:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB9F24161;
+	Thu,  3 Aug 2023 18:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3B0C433C8;
+	Thu,  3 Aug 2023 18:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691086488;
+	bh=DVr3vaTop5aEKN2dLg5oZiV7ia5I3foLhPl+u/44NRs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=n7hK2tD4MHYvXJVjnymrwlE2xwawPQaiCptAbypypiqVPnACyrbQoRvIXJRyXoo2J
+	 93zFUjaqiB1gCCZD1curb8hO3l4qcngmj4Rt2doGTwE1ZzM/4NoRqNK5Er2XggA1mw
+	 wd113T5Kc927+S0MFJ6PNBOigste8fF2q85qmoJvPMoAL3fTO4078Tgs21opo+n/P2
+	 1EJYW5O1u+ywZrwjQlDsij5UVfx1gkxDCwMAaqY2SABWE5DzgZQVKRc2hEpl/fkSig
+	 UFm6ofo89sg47+CRlk+Uu3ZdBRwjDdAdbI18b7B3NVrRyi48Vrc//4uad8vb0wGuLP
+	 qp6Bq+BTRh/Mw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 03 Aug 2023 11:14:42 -0700
+Subject: [PATCH] lib: test_scanf: Add explicit type cast to result
+ initialization in test_number_prefix()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 3 Aug 2023 11:02:46 -0700
-Message-ID: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
-Subject: FAILED: load BTF from vmlinux: Invalid argument
-To: martin.lau@linux.dev
-Cc: bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	=?UTF-8?Q?Tomasz_Pawe=C5=82_Gajc?= <tpgxyz@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230803-test_scanf-wconstant-conversion-v1-1-74da994dedbc@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJHuy2QC/x2NywqDMBBFf0Vm7UBqKNb+ShHJY1JnM5ZMUEH8d
+ 1N35yzOvQcoZSaFd3NAppWVF6nyaBsIs5MvIcfq0JnOmpexWEjLpMFJwi0sosVJwQor5X+Lceg
+ p+WS9f0aoK79Miff74TOe5wUM3bQecQAAAA==
+To: pmladek@suse.com, rostedt@goodmis.org
+Cc: senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com, 
+ linux@rasmusvillemoes.dk, ndesaulniers@google.com, trix@redhat.com, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2281; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=DVr3vaTop5aEKN2dLg5oZiV7ia5I3foLhPl+u/44NRs=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCmn301/wDvtlZH5Zb4DV5+lduXoX/qgX1+y/KOOXdgFP
+ rGPbkv1O0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEPqUzMuyqNjt2tkBUdqFR
+ CZugIV/xNsXY1CPqahmpW+eWvLcUfcvI0Hc0Tq1LtjP7+hTRXXsWTjd7d3Lpod9BWXfDm6ZqfnW
+ YzA8A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Martin (and BTF/BPF team),
-I've observed 2 user reports with the error from the subject of this email.
-https://github.com/ClangBuiltLinux/linux/issues/1825
-https://bbs.archlinux.org/viewtopic.php?id=284177
+A recent change in clang allows it to consider more expressions as
+compile time constants, which causes it to point out an implicit
+conversion in the scanf tests:
 
-Any chance you could take a look at these reports and help us figure
-out what's going wrong here?  Nathan and I haven't been able to
-reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
+  lib/test_scanf.c:661:2: warning: implicit conversion from 'int' to 'unsigned char' changes value from -168 to 88 [-Wconstant-conversion]
+    661 |         test_number_prefix(unsigned char,       "0xA7", "%2hhx%hhx", 0, 0xa7, 2, check_uchar);
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  lib/test_scanf.c:609:29: note: expanded from macro 'test_number_prefix'
+    609 |         T result[2] = {~expect[0], ~expect[1]};                                 \
+        |                       ~            ^~~~~~~~~~
+  1 warning generated.
 
-Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
+The result of the bitwise negation is the type of the operand after
+going through the integer promotion rules, so this truncation is
+expected but harmless, as the initial values in the result array get
+overwritten by _test() anyways. Add an explicit cast to the expected
+type in test_number_prefix() to silence the warning. There is no
+functional change, as all the tests still pass with GCC 13.1.0 and clang
+18.0.0.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1899
+Link: https://github.com/llvm/llvm-project/commit/610ec954e1f81c0e8fcadedcd25afe643f5a094e
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ lib/test_scanf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/test_scanf.c b/lib/test_scanf.c
+index b620cf7de503..10d557b3738f 100644
+--- a/lib/test_scanf.c
++++ b/lib/test_scanf.c
+@@ -606,7 +606,7 @@ static void __init numbers_slice(void)
+ #define test_number_prefix(T, str, scan_fmt, expect0, expect1, n_args, fn)	\
+ do {										\
+ 	const T expect[2] = { expect0, expect1 };				\
+-	T result[2] = {~expect[0], ~expect[1]};					\
++	T result[2] = {(T)~expect[0], (T)~expect[1]};				\
+ 										\
+ 	_test(fn, &expect, str, scan_fmt, n_args, &result[0], &result[1]);	\
+ } while (0)
+
+---
+base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
+change-id: 20230803-test_scanf-wconstant-conversion-d97efbf3bb5d
+
+Best regards,
 -- 
-Thanks,
-~Nick Desaulniers
+Nathan Chancellor <nathan@kernel.org>
+
