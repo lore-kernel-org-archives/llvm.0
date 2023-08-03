@@ -1,128 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAA411CAE
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 12:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691066475;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ow4GPQTy1+fDchBUfBMOLkykLYNUOhhUhXvY14UAXrg=;
-	b=CIfNJdaJuQuFZNj1tz6FU3JPMJNZIjJ29YP2iQFtL52aceyQ1JN2RqgHZwxCOnEY/RtLiA
-	EcKbABqt8CEsK7noMkLmsAV7DB7U5c+Vauh4QfGEIv3/UohMC8Ia8hOIW3SrAVSVxZtwXp
-	GNzdQ47CH9E9yoTi1QqRsG3AaNxwjbI=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-u-lA-2A4O4OmoROJBzd3hQ-1; Thu, 03 Aug 2023 08:41:13 -0400
-X-MC-Unique: u-lA-2A4O4OmoROJBzd3hQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7262F3C11A17
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 12:41:13 +0000 (UTC)
-Received: from [172.64.9.24] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6053140D296E;
-	Thu,  3 Aug 2023 12:41:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 12 of 328): Test report for master
- (6.5.0-rc4, mainline.kernel.org-clang, ec351c8f)
-Date: Thu, 03 Aug 2023 12:41:13 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD5A200BD;
+	Thu,  3 Aug 2023 14:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691071771; x=1722607771;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oEWKjkJ6HVvpZ65l3Le2wL6xq336wjjshWphPPiyjF8=;
+  b=DvDQ/ZBd5ehACSM9B48znhxvTv80erwlkt38WfpsU2H7vG2sRi85oRGE
+   Y1J1RdOpT2No4ntanLQCSz5Dk+2a9pHNGJNPAKvRJV4zTfw+IsfLAWDRT
+   +G0PFuBEw09jFuldtCl/Yco6m2oMNsNJjrlmPaZs1yjNWy3WTsiDR5QLS
+   dZsa49umez1AZhlpV3/QOZWh8ZdpxDmorro5vnmYF2QCeJzbKBddRsRFT
+   P4nOIBGYvv82+5Ejdix3+BI2UudS3RRIphpodYUueDUNfiWgsJMzSL2cr
+   8QWSVWR10YyhLwWNpWARnvwtl+X6p8WCKq7Di2QzygrJGO5Bmpk+w9HIN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="367341643"
+X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
+   d="scan'208";a="367341643"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 07:09:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="799567599"
+X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
+   d="scan'208";a="799567599"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Aug 2023 07:09:29 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRZ16-00028x-0v;
+	Thu, 03 Aug 2023 14:09:28 +0000
+Date: Thu, 3 Aug 2023 22:09:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:bits/220-tso 3/4]
+ arch/arm64/kernel/cpufeature_impdef.c:11:6: warning: no previous prototype
+ for function 'has_tso_fixed'
+Message-ID: <202308032238.YGGL6y3j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <66596.123080308411301923@us-mta-54.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/AsahiLinux/linux bits/220-tso
+head:   6a8bd3529f0e9a26ebabd614ab6582cda3337142
+commit: 2a13d04cf14b7cb9432177840c840fb42fb411a6 [3/4] arm64: Implement PR_{GET,SET}_MEM_MODEL for always-TSO CPUs
+config: arm64-randconfig-r021-20230731 (https://download.01.org/0day-ci/archive/20230803/202308032238.YGGL6y3j-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230803/202308032238.YGGL6y3j-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308032238.YGGL6y3j-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.5-2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98332
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> arch/arm64/kernel/cpufeature_impdef.c:11:6: warning: no previous prototype for function 'has_tso_fixed' [-Wmissing-prototypes]
+   bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+        ^
+   arch/arm64/kernel/cpufeature_impdef.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+   ^
+   static 
+>> arch/arm64/kernel/cpufeature_impdef.c:36:13: warning: no previous prototype for function 'init_cpu_hwcaps_indirect_list_impdef' [-Wmissing-prototypes]
+   void __init init_cpu_hwcaps_indirect_list_impdef(void)
+               ^
+   arch/arm64/kernel/cpufeature_impdef.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init init_cpu_hwcaps_indirect_list_impdef(void)
+   ^
+   static 
+   2 warnings generated.
+--
+>> arch/arm64/kernel/cpufeature.c:959:1: warning: no previous prototype for function 'init_cpu_hwcaps_indirect_list_from_array' [-Wmissing-prototypes]
+   init_cpu_hwcaps_indirect_list_from_array(const struct arm64_cpu_capabilities *caps)
+   ^
+   arch/arm64/kernel/cpufeature.c:958:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init
+   ^
+   static 
+>> arch/arm64/kernel/cpufeature.c:1428:1: warning: no previous prototype for function 'feature_matches' [-Wmissing-prototypes]
+   feature_matches(u64 reg, const struct arm64_cpu_capabilities *entry)
+   ^
+   arch/arm64/kernel/cpufeature.c:1427:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/has_tso_fixed +11 arch/arm64/kernel/cpufeature_impdef.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    10	
+  > 11	bool has_tso_fixed(const struct arm64_cpu_capabilities *entry, int scope)
+    12	{
+    13		/* List of CPUs that always use the TSO memory model */
+    14		static const struct midr_range fixed_tso_list[] = {
+    15			MIDR_ALL_VERSIONS(MIDR_NVIDIA_DENVER),
+    16			MIDR_ALL_VERSIONS(MIDR_NVIDIA_CARMEL),
+    17			MIDR_ALL_VERSIONS(MIDR_FUJITSU_A64FX),
+    18			{ /* sentinel */ }
+    19		};
+    20	
+    21		return is_midr_in_range_list(read_cpuid_id(), fixed_tso_list);
+    22	}
+    23	
+    24	static const struct arm64_cpu_capabilities arm64_impdef_features[] = {
+    25	#ifdef CONFIG_ARM64_MEMORY_MODEL_CONTROL
+    26		{
+    27			.desc = "TSO memory model (Fixed)",
+    28			.capability = ARM64_HAS_TSO_FIXED,
+    29			.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+    30			.matches = has_tso_fixed,
+    31		},
+    32	#endif
+    33		{},
+    34	};
+    35	
+  > 36	void __init init_cpu_hwcaps_indirect_list_impdef(void)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
