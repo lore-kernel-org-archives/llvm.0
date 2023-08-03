@@ -1,101 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F358F1F937;
-	Thu,  3 Aug 2023 17:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691083622; x=1722619622;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WBNNUEeROBuFhzXK8TLPCZ0r7idZ59HKeoWy9VPD0JU=;
-  b=lJGLqzki8Z6gFUiKUGD2QqkCuVlstEClCwYtpTRrlTGvSqtFiQkSSX6U
-   j9H6OhA1njG9Rkq1cuHP0dCD0J/B81cH6PCbcZF7UauulTB9dKksoX6y+
-   y5JzPmhHuWBl1YnxKh7p1eR5qzyrfisOGeycH4QEExxTXpwt9V6EZbsZP
-   pSowpVlwJnOIlA4WpfLxvx/BAuT3pIO3mtia4SfhRivpDHNjAsj/V5tya
-   yL8PkM1R2uohNozpMPuaFz97WVMYckMYkb/lBAA1EvXR2PS4Ydz2j3Fpf
-   HUz6FlJ2hQcJquWUlI88sIK0qe1FrhBS0Nyx6RQ8HxABLtz1vaZI3gqk4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="368846144"
-X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="368846144"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 10:26:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="976186018"
-X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="976186018"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2023 10:26:44 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRc5z-0002Fh-1f;
-	Thu, 03 Aug 2023 17:26:43 +0000
-Date: Fri, 4 Aug 2023 01:25:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [sre-misc:rk3588 81/83] drivers/clk/rockchip/clk-gate-link.c:50:5:
- warning: no previous prototype for function 'clk_gate_link_prepare'
-Message-ID: <202308040120.7KQxScIs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E9B1F937
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 17:32:53 +0000 (UTC)
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-78a5384a5daso395938241.0
+        for <llvm@lists.linux.dev>; Thu, 03 Aug 2023 10:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691083972; x=1691688772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=72h1vSD+Gc7oxbDzRN4MWCfdaXi7NAc6IXTkZaqvVg4=;
+        b=tTyyvMp5vOdRW2mdAvBQBi99WPmURpo41StkHq5tlTZ6bqF7oEAmRm3dz1zS7x3Z/C
+         +cb+MrDauBBJXS2qfkcWaKseMq74s2AC1qmHfLxWsoHUIURILddgHVTLEGk/vB0Y1yn/
+         M5Amrq/SY1zQmz0RoyWYcJmGA0UtYEyDUxU4Comj0sNgNLOLcWdI0O01vVDMsctFnW5W
+         BTZdj/x8QTU4vUu1SWR/O8RlXHKeI8wpGpwBA2MxufltbuRJseCE6Db4274YxZhVx9Q9
+         w365eX3RTokW5QbT07mKCGCkkTuSzqvPWisZNiu9pSy6QNE4fj5txB9hgkg6gQCCoBkp
+         ozVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691083972; x=1691688772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=72h1vSD+Gc7oxbDzRN4MWCfdaXi7NAc6IXTkZaqvVg4=;
+        b=Wa1JAZsaWAPAKQ9W24NdSmXKQPF626o/xxPCrsH7Cja/NdqW0q+A6YnBfs2ounYJWo
+         5PttjFaN1K6Av8XWvXLK5b1/0HLlzcB+jHfIIwpzmbYWvaIhzxhw6O4EiuRrliybu/yU
+         BAlKyk3Cg/SAnZONj4+RaxMuLiOWgtZuxLWdN0fguFe37zOwtYNXw5kdbd83yiy9K6wE
+         pzbwf94nYZ4R16Xe+DrNwsS+kPImceugCFwq9gDWdEB7fwxq+1RKGIMQCfB976a4g2zN
+         rYR+NiOgixhxYkYnyF1cja/EDvgg1faac6wJLaX8FUUZ1Rg8facXNLvlH/S2f4zLcfQW
+         vfow==
+X-Gm-Message-State: ABy/qLZwzu5ZACsSfEwNBYQEgXshXOq13zxE8HZopDot45kmWvr2aMYV
+	naTK1+YCQE1mn/xHWf6FR9i0qhK78ijyy1JGlyVrhw==
+X-Google-Smtp-Source: APBJJlEv8LYxVtcN3IWdatxyUj8MBicI/X51xRQ5cbz+ciVkP5fj605ez5Ocv9nOXp/7M1O/S3ixeQGC38TDQz3Nk1E=
+X-Received: by 2002:a05:6102:3bc2:b0:447:55e6:15e7 with SMTP id
+ a2-20020a0561023bc200b0044755e615e7mr5333218vsv.11.1691083971886; Thu, 03 Aug
+ 2023 10:32:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230803-ppc_tlbilxlpid-v1-1-84a1bc5cf963@google.com>
+In-Reply-To: <20230803-ppc_tlbilxlpid-v1-1-84a1bc5cf963@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 3 Aug 2023 10:32:40 -0700
+Message-ID: <CAKwvOd=t=n+mo_73MSrHOC9GLHHvH_p4nAA4nZfmJULiH3GZ2g@mail.gmail.com>
+Subject: Re: [PATCH] powerpc/inst: add PPC_TLBILX_LPID
+To: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
-head:   9789e706b415eaf1d0a2d12c6510bec4c15ed05e
-commit: 476b045672c3c13c02f8b5dc8c4a6f4509d19399 [81/83] clk: rockchip: add support for gate link
-config: arm64-randconfig-r013-20230731 (https://download.01.org/0day-ci/archive/20230804/202308040120.7KQxScIs-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040120.7KQxScIs-lkp@intel.com/reproduce)
+On Thu, Aug 3, 2023 at 10:00=E2=80=AFAM <ndesaulniers@google.com> wrote:
+>
+> Clang didn't recognize the instruction tlbilxlpid. This was fixed in
+> clang-18 [0] then backported to clang-17 [1].  To support clang-16 and
+> older, rather than using that instruction bare in inline asm, add it to
+> ppc-opcode.h and use that macro as is done elsewhere for other
+> instructions.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1891
+> Link: https://github.com/llvm/llvm-project/issues/64080
+> Link: https://github.com/llvm/llvm-project/commit/53648ac1d0c953ae6d00886=
+4dd2eddb437a92468 [0]
+> Link: https://github.com/llvm/llvm-project-release-prs/commit/0af7e5e54a8=
+c7ac665773ac1ada328713e8338f5 [1]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/llvm/202307211945.TSPcyOhh-lkp@intel.com/
+> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/powerpc/include/asm/ppc-opcode.h |  4 +++-
+>  arch/powerpc/kvm/e500mc.c             | 10 +++++++---
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include=
+/asm/ppc-opcode.h
+> index ef6972aa33b9..72f184e06bec 100644
+> --- a/arch/powerpc/include/asm/ppc-opcode.h
+> +++ b/arch/powerpc/include/asm/ppc-opcode.h
+> @@ -397,7 +397,8 @@
+>  #define PPC_RAW_RFCI                   (0x4c000066)
+>  #define PPC_RAW_RFDI                   (0x4c00004e)
+>  #define PPC_RAW_RFMCI                  (0x4c00004c)
+> -#define PPC_RAW_TLBILX(t, a, b)                (0x7c000024 | __PPC_T_TLB=
+(t) |  __PPC_RA0(a) | __PPC_RB(b))
+> +#define PPC_RAW_TLBILX_LPID (0x7c000024)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308040120.7KQxScIs-lkp@intel.com/
+^ missing two tabs.
 
-All warnings (new ones prefixed by >>):
+I'm also having issues with b4 and my external mailer setting the From
+header correctly.  To test up local modifications to b4, I'm going to
+send a v2.
 
->> drivers/clk/rockchip/clk-gate-link.c:50:5: warning: no previous prototype for function 'clk_gate_link_prepare' [-Wmissing-prototypes]
-      50 | int clk_gate_link_prepare(struct clk_hw *hw)
-         |     ^
-   drivers/clk/rockchip/clk-gate-link.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      50 | int clk_gate_link_prepare(struct clk_hw *hw)
-         | ^
-         | static 
->> drivers/clk/rockchip/clk-gate-link.c:57:6: warning: no previous prototype for function 'clk_gate_link_unprepare' [-Wmissing-prototypes]
-      57 | void clk_gate_link_unprepare(struct clk_hw *hw)
-         |      ^
-   drivers/clk/rockchip/clk-gate-link.c:57:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      57 | void clk_gate_link_unprepare(struct clk_hw *hw)
-         | ^
-         | static 
-   2 warnings generated.
+> +#define PPC_RAW_TLBILX(t, a, b)                (PPC_RAW_TLBILX_LPID | __=
+PPC_T_TLB(t) | __PPC_RA0(a) | __PPC_RB(b))
+>  #define PPC_RAW_WAIT_v203              (0x7c00007c)
+>  #define PPC_RAW_WAIT(w, p)             (0x7c00003c | __PPC_WC(w) | __PPC=
+_PL(p))
+>  #define PPC_RAW_TLBIE(lp, a)           (0x7c000264 | ___PPC_RB(a) | ___P=
+PC_RS(lp))
+> @@ -616,6 +617,7 @@
+>  #define PPC_TLBILX(t, a, b)    stringify_in_c(.long PPC_RAW_TLBILX(t, a,=
+ b))
+>  #define PPC_TLBILX_ALL(a, b)   PPC_TLBILX(0, a, b)
+>  #define PPC_TLBILX_PID(a, b)   PPC_TLBILX(1, a, b)
+> +#define PPC_TLBILX_LPID                stringify_in_c(.long PPC_RAW_TLBI=
+LX_LPID)
+>  #define PPC_TLBILX_VA(a, b)    PPC_TLBILX(3, a, b)
+>  #define PPC_WAIT_v203          stringify_in_c(.long PPC_RAW_WAIT_v203)
+>  #define PPC_WAIT(w, p)         stringify_in_c(.long PPC_RAW_WAIT(w, p))
+> diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
+> index d58df71ace58..dc054b8b5032 100644
+> --- a/arch/powerpc/kvm/e500mc.c
+> +++ b/arch/powerpc/kvm/e500mc.c
+> @@ -16,10 +16,11 @@
+>  #include <linux/miscdevice.h>
+>  #include <linux/module.h>
+>
+> -#include <asm/reg.h>
+>  #include <asm/cputable.h>
+> -#include <asm/kvm_ppc.h>
+>  #include <asm/dbell.h>
+> +#include <asm/kvm_ppc.h>
+> +#include <asm/ppc-opcode.h>
+> +#include <asm/reg.h>
+>
+>  #include "booke.h"
+>  #include "e500.h"
+> @@ -92,7 +93,10 @@ void kvmppc_e500_tlbil_all(struct kvmppc_vcpu_e500 *vc=
+pu_e500)
+>
+>         local_irq_save(flags);
+>         mtspr(SPRN_MAS5, MAS5_SGS | get_lpid(&vcpu_e500->vcpu));
+> -       asm volatile("tlbilxlpid");
+> +       /* clang-17 and older could not assemble tlbilxlpid.
+> +        * https://github.com/ClangBuiltLinux/linux/issues/1891
+> +        */
+> +       asm volatile (PPC_TLBILX_LPID);
+>         mtspr(SPRN_MAS5, 0);
+>         local_irq_restore(flags);
+>  }
+>
+> ---
+> base-commit: 7bafbd4027ae86572f308c4ddf93120c90126332
+> change-id: 20230803-ppc_tlbilxlpid-cfdbf4fd4f7f
+>
+> Best regards,
+> --
+> Nick Desaulniers <ndesaulniers@google.com>
+>
 
 
-vim +/clk_gate_link_prepare +50 drivers/clk/rockchip/clk-gate-link.c
-
-    49	
-  > 50	int clk_gate_link_prepare(struct clk_hw *hw)
-    51	{
-    52		struct clk_gate_link *gate = to_clk_gate_link(to_clk_gate(hw));
-    53	
-    54		return clk_prepare(gate->link);
-    55	}
-    56	
-  > 57	void clk_gate_link_unprepare(struct clk_hw *hw)
-    58	{
-    59		struct clk_gate_link *gate = to_clk_gate_link(to_clk_gate(hw));
-    60	
-    61		clk_unprepare(gate->link);
-    62	}
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
