@@ -1,42 +1,44 @@
-Received: from mgamail.intel.com (unknown [134.134.136.100])
+Received: from mgamail.intel.com (unknown [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265A7154A0;
-	Thu,  3 Aug 2023 10:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966CC8F7C;
+	Thu,  3 Aug 2023 11:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691058142; x=1722594142;
+  t=1691061268; x=1722597268;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GTpaN0xacLqVHMQmxjfdyudpI87J+MR3cLqw+YTqDdQ=;
-  b=dBIheyNw08FmDaqsc0EJwuos2L9qHxnKIQrzztyFm++zJEnxoCLVK953
-   0Z4e0V1YaWVetvTf6ePKpqmU0Z4LInYOUd8F1z136EnJV6kPriHUSPeLF
-   zTPwjw4Czkk3+jx1LzQxFZ8TTgPbNTYNX8wDMa5BjO1VoOs3KSs+IeygZ
-   +vTDb0y7R5A3GZqYCWRubQj9JNL6QPSOZNLOpU4O1s0pHmrEwPn98yFU5
-   etc59h19A7pfpY0fkNXhHuaQ/VA+5Na1pzZ9RMQu7a9eefd3jbvsULFu+
-   2p6qG7WZN7LkxCFmPArOtsUDYOcudxPPbSDT6MefFjxfZXBV9J8ewCYyf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="436142121"
+  bh=+fs5y237rfzb5uv6K2zteusiY+T4qeIug2Wogoh0utY=;
+  b=O9VJE12BKVwgwKecrHQKVJq6koS8djVw1LKqLsS+edeCxMHuFAUy+KFk
+   bPcPMCAA1omUnEFTdQ+A1NciJ7ePmstwk4qw00HZC334lrbT12li3N0Qj
+   IfbIDIjKezhWOACuvE3RSIwPcNfbg5/UlgI0D3pvHS4dYWnDC1/lgmt8b
+   9I6UaseBy1vOGI23lrmYhQUDdtxoYcD4Pln6idcxCYpYeSw6GgH6Lfv54
+   CqZ9Zl5YQXRWBEwv+5mw8Xn2UIDlMOSuX72BGHBytg4JsmUgRUhBjgFnm
+   BpeCufgtPi2O9JDwY8mmdZzrkvTAeW0P0r+WqrNNWAAKKcMBwhb3KQk3S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="349436343"
 X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="436142121"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 03:22:22 -0700
+   d="scan'208";a="349436343"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 04:14:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="976022638"
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="903342561"
 X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="976022638"
+   d="scan'208";a="903342561"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2023 03:22:20 -0700
+  by orsmga005.jf.intel.com with ESMTP; 03 Aug 2023 04:14:24 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qRVTH-00022Z-37;
-	Thu, 03 Aug 2023 10:22:19 +0000
-Date: Thu, 3 Aug 2023 18:21:20 +0800
+	id 1qRWHf-00024J-07;
+	Thu, 03 Aug 2023 11:14:23 +0000
+Date: Thu, 3 Aug 2023 19:13:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmer@rivosinc.com>
+To: Guo Ren <guoren@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [palmer:timex 1/1] include/asm-generic/io.h:547:20: error: use of
- undeclared identifier 'STRUCT_PAGE_MAX_SHIFT'
-Message-ID: <202308031858.AgBMeNEo-lkp@intel.com>
+Subject: [csky-linux:sg2042-master-qspinlock-64ilp32_v4 30/70]
+ arch/riscv/kernel/setup.c:333:2: error: call to undeclared function
+ 'pv_qspinlock_init'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202308031910.EVcRQack-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,483 +48,390 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git timex
-head:   41c5a952f77e53bf4201296abff0132725aa19e6
-commit: 41c5a952f77e53bf4201296abff0132725aa19e6 [1/1] RISC-V: Include io from timex
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230803/202308031858.AgBMeNEo-lkp@intel.com/config)
+Hi Guo,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://github.com/c-sky/csky-linux sg2042-master-qspinlock-64ilp32_v4
+head:   ee021e57ffe3195b6a3ac5fcb2d4353375d1f261
+commit: 649c597d937299900198d6b54c954dc93d6b91b0 [30/70] RISC-V: paravirt: pvqspinlock: Add kconfig entry
+config: riscv-randconfig-r021-20230731 (https://download.01.org/0day-ci/archive/20230803/202308031910.EVcRQack-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230803/202308031858.AgBMeNEo-lkp@intel.com/reproduce)
+reproduce: (https://download.01.org/0day-ci/archive/20230803/202308031910.EVcRQack-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308031858.AgBMeNEo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308031910.EVcRQack-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
->> arch/riscv/include/asm/pgtable-64.h:226:9: error: use of undeclared identifier 'mem_map'; did you mean 'memcmp'?
-     226 |         return pfn_to_page(__page_val_to_pfn(pud_val(pud)));
-         |                ^
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:29: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                  ^
-   include/linux/string.h:156:12: note: 'memcmp' declared here
-     156 | extern int memcmp(const void *,const void *,__kernel_size_t);
+>> arch/riscv/kernel/setup.c:333:2: error: call to undeclared function 'pv_qspinlock_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     333 |         pv_qspinlock_init();
+         |         ^
+   1 error generated.
+--
+   arch/riscv/kernel/paravirt.c:109:12: warning: no previous prototype for function 'pv_time_init' [-Wmissing-prototypes]
+     109 | int __init pv_time_init(void)
          |            ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
->> arch/riscv/include/asm/pgtable-64.h:226:9: error: incompatible pointer types returning 'int (*)(const void *, const void *, unsigned long)' from a function with result type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     226 |         return pfn_to_page(__page_val_to_pfn(pud_val(pud)));
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:28: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
-   arch/riscv/include/asm/pgtable-64.h:333:9: error: use of undeclared identifier 'mem_map'; did you mean 'memcmp'?
-     333 |         return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
-         |                ^
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:29: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                  ^
-   include/linux/string.h:156:12: note: 'memcmp' declared here
-     156 | extern int memcmp(const void *,const void *,__kernel_size_t);
-         |            ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
-   arch/riscv/include/asm/pgtable-64.h:333:9: error: incompatible pointer types returning 'int (*)(const void *, const void *, unsigned long)' from a function with result type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     333 |         return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:28: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
-   arch/riscv/include/asm/pgtable-64.h:396:9: error: use of undeclared identifier 'mem_map'; did you mean 'memcmp'?
-     396 |         return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
-         |                ^
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:29: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                  ^
-   include/linux/string.h:156:12: note: 'memcmp' declared here
-     156 | extern int memcmp(const void *,const void *,__kernel_size_t);
-         |            ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:118:
-   arch/riscv/include/asm/pgtable-64.h:396:9: error: incompatible pointer types returning 'int (*)(const void *, const void *, unsigned long)' from a function with result type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     396 |         return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:28: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:252:9: error: use of undeclared identifier 'mem_map'; did you mean 'memcmp'?
-     252 |         return pfn_to_page(__page_val_to_pfn(pmd_val(pmd)));
-         |                ^
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:29: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                  ^
-   include/linux/string.h:156:12: note: 'memcmp' declared here
-     156 | extern int memcmp(const void *,const void *,__kernel_size_t);
-         |            ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:252:9: error: incompatible pointer types returning 'int (*)(const void *, const void *, unsigned long)' from a function with result type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     252 |         return pfn_to_page(__page_val_to_pfn(pmd_val(pmd)));
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:65:21: note: expanded from macro 'pfn_to_page'
-      65 | #define pfn_to_page __pfn_to_page
-         |                     ^
-   include/asm-generic/memory_model.h:18:28: note: expanded from macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:518:17: error: incomplete definition of type 'struct vm_area_struct'
-     518 |                 set_pte_at(vma->vm_mm, address, ptep, entry);
-         |                            ~~~^
-   include/linux/mmdebug.h:9:8: note: forward declaration of 'struct vm_area_struct'
-       9 | struct vm_area_struct;
-         |        ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
->> include/linux/pgtable.h:161:42: error: incomplete definition of type 'struct mm_struct'
-     161 |         return pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, va), va), va), va);
-         |                                                 ^~~~~~~~~~~~~~~~~~
-   include/linux/pgtable.h:141:53: note: expanded from macro 'pgd_offset'
-     141 | #define pgd_offset(mm, address)         pgd_offset_pgd((mm)->pgd, (address))
-         |                                                        ~~~~^
-   include/linux/mmdebug.h:10:8: note: forward declaration of 'struct mm_struct'
-      10 | struct mm_struct;
-         |        ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
->> include/linux/pgtable.h:166:42: error: use of undeclared identifier 'init_mm'; did you mean 'init_IRQ'?
-     166 |         return pmd_offset(pud_offset(p4d_offset(pgd_offset_k(va), va), va), va);
-         |                                                 ^
-   include/linux/pgtable.h:149:44: note: expanded from macro 'pgd_offset_k'
-     149 | #define pgd_offset_k(address)           pgd_offset(&init_mm, (address))
-         |                                                     ^
-   include/linux/init.h:156:6: note: 'init_IRQ' declared here
-     156 | void init_IRQ(void);
+   arch/riscv/kernel/paravirt.c:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     109 | int __init pv_time_init(void)
+         | ^
+         | static 
+   In file included from arch/riscv/kernel/paravirt.c:135:
+   arch/riscv/include/asm/qspinlock_paravirt.h:5:37: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
+       5 | void __pv_queued_spin_unlock(struct qspinlock *lock);
+         |                                     ^
+   arch/riscv/kernel/paravirt.c:137:6: warning: no previous prototype for function 'pv_kick' [-Wmissing-prototypes]
+     137 | void pv_kick(int cpu)
          |      ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
->> include/linux/pgtable.h:166:42: error: member reference base type 'void (void)' is not a structure or union
-     166 |         return pmd_offset(pud_offset(p4d_offset(pgd_offset_k(va), va), va), va);
-         |                                                 ^~~~~~~~~~~~~~~~
-   include/linux/pgtable.h:149:32: note: expanded from macro 'pgd_offset_k'
-     149 | #define pgd_offset_k(address)           pgd_offset(&init_mm, (address))
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pgtable.h:141:53: note: expanded from macro 'pgd_offset'
-     141 | #define pgd_offset(mm, address)         pgd_offset_pgd((mm)->pgd, (address))
-         |                                                        ~~~~^ ~~~
-   include/linux/pgtable.h:814:38: error: unknown type name 'swp_entry_t'
-     814 | static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
-         |                                      ^
->> include/linux/pgtable.h:814:64: warning: declaration of 'struct folio' will not be visible outside of this function [-Wvisibility]
-     814 | static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
-         |                                                                ^
->> include/linux/pgtable.h:941:31: error: incomplete definition of type 'struct vm_area_struct'
-     941 |         return ptep_get_and_clear(vma->vm_mm, addr, ptep);
-         |                                   ~~~^
-   include/linux/mmdebug.h:9:8: note: forward declaration of 'struct vm_area_struct'
-       9 | struct vm_area_struct;
-         |        ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:15:
-   include/linux/pgtable.h:952:16: error: incomplete definition of type 'struct vm_area_struct'
-     952 |         set_pte_at(vma->vm_mm, addr, ptep, pte);
-         |                    ~~~^
-   include/linux/mmdebug.h:9:8: note: forward declaration of 'struct vm_area_struct'
-       9 | struct vm_area_struct;
-         |        ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:547:20: error: use of undeclared identifier 'STRUCT_PAGE_MAX_SHIFT'
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ^
-   arch/riscv/include/asm/io.h:30:38: note: expanded from macro 'PCI_IOBASE'
-      30 | #define PCI_IOBASE              ((void __iomem *)PCI_IO_START)
-         |                                                  ^
-   arch/riscv/include/asm/pgtable.h:86:27: note: expanded from macro 'PCI_IO_START'
-      86 | #define PCI_IO_START     (PCI_IO_END - PCI_IO_SIZE)
-         |                           ^
-   arch/riscv/include/asm/pgtable.h:85:26: note: expanded from macro 'PCI_IO_END'
-      85 | #define PCI_IO_END       VMEMMAP_START
-         |                          ^
-   arch/riscv/include/asm/pgtable.h:76:40: note: expanded from macro 'VMEMMAP_START'
-      76 | #define VMEMMAP_START   (VMALLOC_START - VMEMMAP_SIZE)
+   arch/riscv/kernel/paravirt.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     137 | void pv_kick(int cpu)
+         | ^
+         | static 
+   arch/riscv/kernel/paravirt.c:144:6: warning: no previous prototype for function 'pv_wait' [-Wmissing-prototypes]
+     144 | void pv_wait(u8 *ptr, u8 val)
+         |      ^
+   arch/riscv/kernel/paravirt.c:144:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     144 | void pv_wait(u8 *ptr, u8 val)
+         | ^
+         | static 
+   arch/riscv/kernel/paravirt.c:160:46: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
+     196 |         compiletime_assert_atomic_type(*p);                             \
+         |                                         ^
+   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
+     400 |         compiletime_assert(__native_word(t),                            \
          |                                          ^
-   arch/riscv/include/asm/pgtable.h:74:26: note: expanded from macro 'VMEMMAP_SIZE'
-      74 | #define VMEMMAP_SIZE    BIT(VMEMMAP_SHIFT)
-         |                             ^
-   arch/riscv/include/asm/pgtable.h:73:30: note: expanded from macro 'VMEMMAP_SHIFT'
-      73 |         (VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
-         |                                     ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:560:50: error: use of undeclared identifier 'STRUCT_PAGE_MAX_SHIFT'
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ^
-   arch/riscv/include/asm/io.h:30:38: note: expanded from macro 'PCI_IOBASE'
-      30 | #define PCI_IOBASE              ((void __iomem *)PCI_IO_START)
-         |                                                  ^
-   arch/riscv/include/asm/pgtable.h:86:27: note: expanded from macro 'PCI_IO_START'
-      86 | #define PCI_IO_START     (PCI_IO_END - PCI_IO_SIZE)
-         |                           ^
-   arch/riscv/include/asm/pgtable.h:85:26: note: expanded from macro 'PCI_IO_END'
-      85 | #define PCI_IO_END       VMEMMAP_START
-         |                          ^
-   arch/riscv/include/asm/pgtable.h:76:40: note: expanded from macro 'VMEMMAP_START'
-      76 | #define VMEMMAP_START   (VMALLOC_START - VMEMMAP_SIZE)
+   include/linux/compiler_types.h:364:10: note: expanded from macro '__native_word'
+     364 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                 ^
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
+     196 |         compiletime_assert_atomic_type(*p);                             \
+         |                                         ^
+   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
+     400 |         compiletime_assert(__native_word(t),                            \
          |                                          ^
-   arch/riscv/include/asm/pgtable.h:74:26: note: expanded from macro 'VMEMMAP_SIZE'
-      74 | #define VMEMMAP_SIZE    BIT(VMEMMAP_SHIFT)
-         |                             ^
-   arch/riscv/include/asm/pgtable.h:73:30: note: expanded from macro 'VMEMMAP_SHIFT'
-      73 |         (VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
-         |                                     ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:573:50: error: use of undeclared identifier 'STRUCT_PAGE_MAX_SHIFT'
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ^
-   arch/riscv/include/asm/io.h:30:38: note: expanded from macro 'PCI_IOBASE'
-      30 | #define PCI_IOBASE              ((void __iomem *)PCI_IO_START)
-         |                                                  ^
-   arch/riscv/include/asm/pgtable.h:86:27: note: expanded from macro 'PCI_IO_START'
-      86 | #define PCI_IO_START     (PCI_IO_END - PCI_IO_SIZE)
-         |                           ^
-   arch/riscv/include/asm/pgtable.h:85:26: note: expanded from macro 'PCI_IO_END'
-      85 | #define PCI_IO_END       VMEMMAP_START
-         |                          ^
-   arch/riscv/include/asm/pgtable.h:76:40: note: expanded from macro 'VMEMMAP_START'
-      76 | #define VMEMMAP_START   (VMALLOC_START - VMEMMAP_SIZE)
+   include/linux/compiler_types.h:364:39: note: expanded from macro '__native_word'
+     364 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
+     196 |         compiletime_assert_atomic_type(*p);                             \
+         |                                         ^
+   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
+     400 |         compiletime_assert(__native_word(t),                            \
          |                                          ^
-   arch/riscv/include/asm/pgtable.h:74:26: note: expanded from macro 'VMEMMAP_SIZE'
-      74 | #define VMEMMAP_SIZE    BIT(VMEMMAP_SHIFT)
-         |                             ^
-   arch/riscv/include/asm/pgtable.h:73:30: note: expanded from macro 'VMEMMAP_SHIFT'
-      73 |         (VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
-         |                                     ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:24:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/riscv/include/asm/timex.h:10:
+   include/linux/compiler_types.h:365:10: note: expanded from macro '__native_word'
+     365 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                 ^
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
+     196 |         compiletime_assert_atomic_type(*p);                             \
+         |                                         ^
+   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
+     400 |         compiletime_assert(__native_word(t),                            \
+         |                                          ^
+   include/linux/compiler_types.h:365:38: note: expanded from macro '__native_word'
+     365 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
+      62 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
+      62 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
+      62 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
+      62 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
+      62 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                                       ^
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+     385 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+     377 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:63:15: note: expanded from macro 'WRITE_ONCE'
+      63 |         __WRITE_ONCE(x, val);                                           \
+         |                      ^
+   arch/riscv/include/asm/rwonce.h:12:20: note: expanded from macro '__WRITE_ONCE'
+      12 |         *(volatile typeof(x) *)&(x) = (val);            \
+         |                           ^
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
+     162 |         smp_store_release(&lock->locked, 0);
+         |                            ~~~~^
+   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
+     198 |         WRITE_ONCE(*p, v);                                              \
+         |                     ^
+   include/asm-generic/rwonce.h:63:15: note: expanded from macro 'WRITE_ONCE'
+      63 |         __WRITE_ONCE(x, val);                                           \
+         |                      ^
+   arch/riscv/include/asm/rwonce.h:12:27: note: expanded from macro '__WRITE_ONCE'
+      12 |         *(volatile typeof(x) *)&(x) = (val);            \
+         |                                  ^
+   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
+     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
+         |                                              ^
+>> arch/riscv/kernel/paravirt.c:165:50: error: use of undeclared identifier 'native_queued_spin_lock_slowpath'; did you mean '__SCK__pv_queued_spin_lock_slowpath'?
+     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                  __SCK__pv_queued_spin_lock_slowpath
+   include/linux/static_call.h:298:29: note: expanded from macro 'DEFINE_STATIC_CALL'
+     298 |         __DEFINE_STATIC_CALL(name, _func, _func)
+         |                                    ^
+   include/linux/static_call.h:292:28: note: expanded from macro '__DEFINE_STATIC_CALL'
+     292 |         DECLARE_STATIC_CALL(name, _func);                               \
+         |                                   ^
+   include/linux/static_call_types.h:39:16: note: expanded from macro 'DECLARE_STATIC_CALL'
+      39 |         extern typeof(func) STATIC_CALL_TRAMP(name);
+         |                       ^
+   arch/riscv/kernel/paravirt.c:165:1: note: '__SCK__pv_queued_spin_lock_slowpath' declared here
+     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
+         | ^
+   include/linux/static_call.h:298:2: note: expanded from macro 'DEFINE_STATIC_CALL'
+     298 |         __DEFINE_STATIC_CALL(name, _func, _func)
+         |         ^
+   include/linux/static_call.h:292:2: note: expanded from macro '__DEFINE_STATIC_CALL'
+     292 |         DECLARE_STATIC_CALL(name, _func);                               \
+         |         ^
+   include/linux/static_call_types.h:38:32: note: expanded from macro 'DECLARE_STATIC_CALL'
+      38 |         extern struct static_call_key STATIC_CALL_KEY(name);            \
+         |                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
+      75 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
+      74 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:28:1: note: expanded from here
+      28 | __SCK__pv_queued_spin_lock_slowpath
+         | ^
+   arch/riscv/kernel/paravirt.c:165:50: error: use of undeclared identifier 'native_queued_spin_lock_slowpath'
+     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
+         |                                                  ^
+>> arch/riscv/kernel/paravirt.c:195:2: error: call to undeclared function '__pv_init_lock_hash'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     195 |         __pv_init_lock_hash();
+         |         ^
+>> arch/riscv/kernel/paravirt.c:197:51: error: use of undeclared identifier '__pv_queued_spin_lock_slowpath'
+     197 |         static_call_update(pv_queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
+         |                                                          ^
+>> arch/riscv/kernel/paravirt.c:198:2: error: incompatible function pointer types initializing 'typeof (&__SCT__pv_queued_spin_unlock)' (aka 'void (*)(struct qspinlock *)') with an expression of type 'void (struct qspinlock *)' [-Wincompatible-function-pointer-types]
+     198 |         static_call_update(pv_queued_spin_unlock, __pv_queued_spin_unlock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/static_call.h:154:35: note: expanded from macro 'static_call_update'
+     154 |         typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
+         |                                          ^     ~~~~~~
+   arch/riscv/kernel/paravirt.c:178:13: warning: no previous prototype for function 'pv_qspinlock_init' [-Wmissing-prototypes]
+     178 | void __init pv_qspinlock_init(void)
+         |             ^
+   arch/riscv/kernel/paravirt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     178 | void __init pv_qspinlock_init(void)
+         | ^
+         | static 
+   6 warnings and 16 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PARAVIRT_SPINLOCKS
+   Depends on [n]: PARAVIRT [=y] && SMP [=n]
+   Selected by [y]:
+   - PARAVIRT [=y] && RISCV_SBI [=y]
 
 
-vim +/STRUCT_PAGE_MAX_SHIFT +547 include/asm-generic/io.h
+vim +/pv_qspinlock_init +333 arch/riscv/kernel/setup.c
 
-3f7e212df82ca04 Arnd Bergmann  2009-05-13  533  
-9216efafc52ff99 Thierry Reding 2014-10-01  534  /*
-9216efafc52ff99 Thierry Reding 2014-10-01  535   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff99 Thierry Reding 2014-10-01  536   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff99 Thierry Reding 2014-10-01  537   * take effect.
-9216efafc52ff99 Thierry Reding 2014-10-01  538   */
-9216efafc52ff99 Thierry Reding 2014-10-01  539  
-f009c89df79abea John Garry     2020-03-28  540  #if !defined(inb) && !defined(_inb)
-f009c89df79abea John Garry     2020-03-28  541  #define _inb _inb
-214ba3584b2e2c5 Stafford Horne 2020-07-26  542  static inline u8 _inb(unsigned long addr)
-9216efafc52ff99 Thierry Reding 2014-10-01  543  {
-87fe2d543f81730 Sinan Kaya     2018-04-05  544  	u8 val;
-87fe2d543f81730 Sinan Kaya     2018-04-05  545  
-87fe2d543f81730 Sinan Kaya     2018-04-05  546  	__io_pbr();
-87fe2d543f81730 Sinan Kaya     2018-04-05 @547  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e95 Will Deacon    2019-02-22  548  	__io_par(val);
-87fe2d543f81730 Sinan Kaya     2018-04-05  549  	return val;
-9216efafc52ff99 Thierry Reding 2014-10-01  550  }
-9216efafc52ff99 Thierry Reding 2014-10-01  551  #endif
-9216efafc52ff99 Thierry Reding 2014-10-01  552  
+f1e58583b9c7ce Atish Patra 2020-03-17  329  
+5b3283ec604d33 Guo Ren     2023-07-27  330  void __init arch_cpu_finalize_init(void)
+5b3283ec604d33 Guo Ren     2023-07-27  331  {
+349f37f3d4ea50 Guo Ren     2023-07-31  332  #ifdef CONFIG_PARAVIRT_SPINLOCKS
+349f37f3d4ea50 Guo Ren     2023-07-31 @333  	pv_qspinlock_init();
+349f37f3d4ea50 Guo Ren     2023-07-31  334  #endif
+5b3283ec604d33 Guo Ren     2023-07-27  335  	virt_spin_lock_init();
+5b3283ec604d33 Guo Ren     2023-07-27  336  }
+5b3283ec604d33 Guo Ren     2023-07-27  337  
 
-:::::: The code at line 547 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+:::::: The code at line 333 was first introduced by commit
+:::::: 349f37f3d4ea507ce140d44a7fbee4c56994c95b RISC-V: paravirt: pvqspinlock: Add paravirt qspinlock skeleton
 
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+:::::: TO: Guo Ren <guoren@linux.alibaba.com>
+:::::: CC: Guo Ren <guoren@linux.alibaba.com>
 
 -- 
 0-DAY CI Kernel Test Service
