@@ -1,139 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (unknown [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A689440
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 07:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA3EC433CA;
-	Thu,  3 Aug 2023 07:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691049536;
-	bh=1qShQjYaIAI9saShacA94XNnUPtQtDSYRE2iho6abzY=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=X5FMQqqumM/BtJsfK0Fu1SCN37sHPSUYYuu5mUAHvrxMNd/Y1727sE74S8xxyvrJZ
-	 Xtl3rvrVCavMPgA9E0vR6fldLQKUpuG+IJmARBgAGFXNNP9zUUlPkBUL3d2Ncm1HF1
-	 kNT2Nmr0K7oyc+glmvPdmw6ORkkH2mYfAY4DSo1BomweTmw3wknwY43M1zZj/NVT3W
-	 S+rNKMN7xwSTgcCvSnIwug4fFBsok2pTxV/Y+bsD26EotzssKvZwQfghe1tYRGmr1W
-	 oXhd7m0I22D3TuzdDdqu9lR+oZvuOSIoeLjvE+cqU41JQgGkJyDecek9NVf0oFzlvf
-	 5MVhgqE4xbiIw==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 4557D27C0054;
-	Thu,  3 Aug 2023 03:58:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 03 Aug 2023 03:58:55 -0400
-X-ME-Sender: <xms:Pl7LZJ-3J51E4ssLZq_jPPvqAfxn0O339l3SsaufWz-qlKL6uBu8bg>
-    <xme:Pl7LZNskbAnLHD40mbyq3rc_Ff6uBSk6z34YhAfVm42v3bkjTc3-gKb2wMHnYbVMO
-    t-UvcL1Qcd2FWnsvOU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvlefhudeuveekueejuefhveefudefueetuddvieejffehffeiieet
-    leejlefftdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnh
-    gupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Pl7LZHDLbAcR4nLf7eawaAtZE8Rzj8xxjAjrVk5F8SRsb_648I4qCQ>
-    <xmx:Pl7LZNeqPNiZ1OS850XQSFUDHxJ3OhX1EXTuLF5XPrIxH7-uH5vZiA>
-    <xmx:Pl7LZOOryb8J4d4EUUBFmhMu29VCRwMUfmmtu9DmeIqgbJIWiPLQDg>
-    <xmx:P17LZNebZAJs5jRtVluuuJBE6ckHiEKYKhxHDsTW-VvfWjgXGnnLUA>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 97527B60089; Thu,  3 Aug 2023 03:58:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C8D13AFD;
+	Thu,  3 Aug 2023 08:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691050083; x=1722586083;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f3c/fnT9kwrSgc1nZc6dAH78XzrIJqBTvFEFFM8uLaE=;
+  b=S5LYdqhZpPTdSMekEBMN7wEpFeQuwtkSpntPYgf1F2dgVikIo3mpkoc8
+   +l1lrp4yi2rH08grj+n7fpGDUuDU58abzPmi5/89hMnIC3Vj0ZJlW3wzK
+   d2N3s5y03MR+XLTX+dRUG8rPgfgCRsb9m4MYsb+pmqpCs87m3GPlT5N8R
+   TB33CeP2pIHH6yLjYNASPAVxm+bLMdVZQ+RpD6SoxmbaRjirXzOAxw0SU
+   aROfI26AUmp+VGBkSFJKNO5HwRZJywLEG1BCIfvcGVKAD3Q07M2ESDQMi
+   osHarMqSFKoqMxNRj0jadRADXR8hA+Fxl2hGnXuToCt5TCy14n9P06fJj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="367259624"
+X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
+   d="scan'208";a="367259624"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 01:08:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="975973947"
+X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
+   d="scan'208";a="975973947"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2023 01:08:01 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRTNI-0001tD-2Z;
+	Thu, 03 Aug 2023 08:08:00 +0000
+Date: Thu, 3 Aug 2023 16:07:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florent Revest <revest@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 1/1] crypto: Defer transforms destruction to a worker
+ function
+Message-ID: <202308031541.Oa9qeIe2-lkp@intel.com>
+References: <20230802170923.1151605-2-revest@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <b0e203e7-3b3c-40ad-8d99-e43415c0d3c5@app.fastmail.com>
-In-Reply-To: 
- <CAMhs-H-2g2QF8NjZOknEop_3UFc_R3YYhpEveU2fc-Ks-iM1bA@mail.gmail.com>
-References: <20230802092647.3000666-1-sergio.paracuellos@gmail.com>
- <CAKwvOd=SvHUPd8+sWtqgxghPEciD5sqPiggZx+OOEqxtJrML6Q@mail.gmail.com>
- <9a22ecee-ebb0-437e-bd2b-99b5c6944855@app.fastmail.com>
- <CAMhs-H-2g2QF8NjZOknEop_3UFc_R3YYhpEveU2fc-Ks-iM1bA@mail.gmail.com>
-Date: Thu, 03 Aug 2023 09:58:34 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Sergio Paracuellos" <sergio.paracuellos@gmail.com>
-Cc: "Michael Turquette" <mturquette@baylibre.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Stephen Boyd" <sboyd@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- clang-built-linux <llvm@lists.linux.dev>,
- "kernel test robot" <lkp@intel.com>, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: ralink: mtmips: quiet unused variable warning
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230802170923.1151605-2-revest@chromium.org>
 
-On Thu, Aug 3, 2023, at 00:35, Sergio Paracuellos wrote:
-> Hi Arnd.=20
->
-> El El jue, 3 ago 2023 a las 0:02, Arnd Bergmann <arnd@kernel.org> escr=
-ibi=C3=B3:
->> On Wed, Aug 2, 2023, at 23:26, Nick Desaulniers wrote:
->> > On Wed, Aug 2, 2023 at 2:26=E2=80=AFAM Sergio Paracuellos <sergio.p=
-aracuellos@gmail.com> wrote:
->> >>
->> >> When CONFIG_OF is disabled then the matching table is not referenc=
-ed and
->> >> the following warning appears:
->> >>
->> >> drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable '=
-mtmips_of_match' [-Wunused-const-variable]
->> >> 821 |   static const struct of_device_id mtmips_of_match[] =3D {
->> >>     |                          ^
->> >>
->> >> Silence it declaring 'mtmips_of_match' with '__maybe_unused'.
->> >>
->> >> Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for =
-MTMIPS SoCs")
->> >> Reported-by: kernel test robot <lkp@intel.com>
->> >> Closes: https://lore.kernel.org/oe-kbuild-all/202307242310.CdOnd2p=
-y-lkp@intel.com/
->> >> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->> >
->> > I think this is fine; Arnd or Nathan do you have a preference? or t=
-houghts here?
->> >
->> > If not, thanks for the patch.
->> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->> >
->> > (I have a slight preference for wrapping the use in `#ifdef CONFIG_=
-OF`
->> > since with the approach used by this patch, if all users are removed
->> > we will never get a warning for this var. But it's a weak preferenc=
-e;
->> > it's more important to me that we don't have -Werror promote this
->> > warning to a build breakage)
->>=20
->> I don't understand why there are two match tables in the same
->> driver, with almost the same contents. I have not looked very
->> closely here, but why can't we just drop the mtmips_clk_of_match[]
->> table (the one without the .data fields) and use the same
->> table for both? Is this because of the ralink,rt2880-reset entry
->> that is missing in mtmips_of_match, or is that another bug?
->
-> ralink,rt2880-reset is for old dts compatibility and only applies to=20
-> reset driver. The one with data fields apply for clocks and is needed.
+Hi Florent,
 
-Ok, I see. It still looks like the two tables can simply be
-merged by adding the ralink,rt2880-reset entry to mtmips_of_match[],
-which will allow it to be used for mtmips_clk_driver (which doesn't
-use the data) as well as for mtmips_clk_init() (which doesn't
-need get called for ralink,rt2880-reset).
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
->> I also see that there is both a platform_driver instance for
->> late probing and a list of CLK_OF_DECLARE_DRIVER() entries.
->> Do we need both here?
->
-> This system controller driver provide clock and reset controllers.=20
-> Clock cannot be a platform driver since we need to set=20
-> mips_hpr_frequency at a very early sargento. Reset stuff can be a=20
-> platform driver so both of them are needed.
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master linus/master v6.5-rc4 next-20230803]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-     Arnd
+url:    https://github.com/intel-lab-lkp/linux/commits/Florent-Revest/crypto-Defer-transforms-destruction-to-a-worker-function/20230803-011553
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20230802170923.1151605-2-revest%40chromium.org
+patch subject: [RFC 1/1] crypto: Defer transforms destruction to a worker function
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20230803/202308031541.Oa9qeIe2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230803/202308031541.Oa9qeIe2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308031541.Oa9qeIe2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from crypto/api.c:24:
+   In file included from crypto/internal.h:21:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from crypto/api.c:24:
+   In file included from crypto/internal.h:21:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from crypto/api.c:24:
+   In file included from crypto/internal.h:21:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> crypto/api.c:643:6: warning: no previous prototype for function 'crypto_destroy_tfm_workfn' [-Wmissing-prototypes]
+     643 | void crypto_destroy_tfm_workfn(struct work_struct *w)
+         |      ^
+   crypto/api.c:643:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     643 | void crypto_destroy_tfm_workfn(struct work_struct *w)
+         | ^
+         | static 
+   13 warnings generated.
+
+
+vim +/crypto_destroy_tfm_workfn +643 crypto/api.c
+
+   642	
+ > 643	void crypto_destroy_tfm_workfn(struct work_struct *w)
+   644	{
+   645		struct crypto_alg *alg;
+   646		struct crypto_tfm *tfm;
+   647	
+   648		tfm = container_of(w, struct crypto_tfm, free_work);
+   649		alg = tfm->__crt_alg;
+   650	
+   651		if (!tfm->exit && alg->cra_exit)
+   652			alg->cra_exit(tfm);
+   653		crypto_exit_ops(tfm);
+   654		crypto_mod_put(alg);
+   655		kfree_sensitive(tfm->to_free);
+   656	}
+   657	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
