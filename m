@@ -1,335 +1,139 @@
-Received: from mgamail.intel.com (unknown [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540299440;
-	Thu,  3 Aug 2023 07:58:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691049496; x=1722585496;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CuhGtL9DRjQrBgGpiJp1ntMClKcz1xw+W7QDflzHtB8=;
-  b=luIbxE3pApAfCP8PLv1OJ1MVhqwm1ElJtxS6BON/KXCqtqE520dGPV7x
-   TT1HcwZEWBG9ObUanOf2OTawmgSRU4PSkcXzSKS4H+RtkFl7kKFy33OQI
-   76Z2bwbhf58Db9ZcUK5LhuHL/q7J4cgyg/gXeooxV7U3MOS38At8Od2Xh
-   SJaJowbVYhc6snsAu0MScAzehOhxNlRiZrZ+NhvfEMOJWmoodIcUObWaT
-   Sw5LTzgcKavQkuye601dgC5hG9PRhODLL4tTvLLlVeTwSgcXBzGwnjuMy
-   Adln6BfBH5Tu/xdi32ndvI3Vzii7itoCJz/6I1NnwVbfonPMl+X5j8S2V
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="349395416"
-X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
-   d="scan'208";a="349395416"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 00:58:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10790"; a="794892355"
-X-IronPort-AV: E=Sophos;i="6.01,251,1684825200"; 
-   d="scan'208";a="794892355"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Aug 2023 00:58:01 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRTDc-0001sj-1s;
-	Thu, 03 Aug 2023 07:58:00 +0000
-Date: Thu, 3 Aug 2023 15:57:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [csky-linux:sg2042-master-qspinlock-64ilp32_v4 30/70]
- arch/riscv/include/asm/paravirt.h:34:45: warning: declaration of 'struct
- qspinlock' will not be visible outside of this function
-Message-ID: <202308031531.AKSAgdSE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A689440
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 07:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA3EC433CA;
+	Thu,  3 Aug 2023 07:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691049536;
+	bh=1qShQjYaIAI9saShacA94XNnUPtQtDSYRE2iho6abzY=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=X5FMQqqumM/BtJsfK0Fu1SCN37sHPSUYYuu5mUAHvrxMNd/Y1727sE74S8xxyvrJZ
+	 Xtl3rvrVCavMPgA9E0vR6fldLQKUpuG+IJmARBgAGFXNNP9zUUlPkBUL3d2Ncm1HF1
+	 kNT2Nmr0K7oyc+glmvPdmw6ORkkH2mYfAY4DSo1BomweTmw3wknwY43M1zZj/NVT3W
+	 S+rNKMN7xwSTgcCvSnIwug4fFBsok2pTxV/Y+bsD26EotzssKvZwQfghe1tYRGmr1W
+	 oXhd7m0I22D3TuzdDdqu9lR+oZvuOSIoeLjvE+cqU41JQgGkJyDecek9NVf0oFzlvf
+	 5MVhgqE4xbiIw==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 4557D27C0054;
+	Thu,  3 Aug 2023 03:58:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 03 Aug 2023 03:58:55 -0400
+X-ME-Sender: <xms:Pl7LZJ-3J51E4ssLZq_jPPvqAfxn0O339l3SsaufWz-qlKL6uBu8bg>
+    <xme:Pl7LZNskbAnLHD40mbyq3rc_Ff6uBSk6z34YhAfVm42v3bkjTc3-gKb2wMHnYbVMO
+    t-UvcL1Qcd2FWnsvOU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedvlefhudeuveekueejuefhveefudefueetuddvieejffehffeiieet
+    leejlefftdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnh
+    gupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Pl7LZHDLbAcR4nLf7eawaAtZE8Rzj8xxjAjrVk5F8SRsb_648I4qCQ>
+    <xmx:Pl7LZNeqPNiZ1OS850XQSFUDHxJ3OhX1EXTuLF5XPrIxH7-uH5vZiA>
+    <xmx:Pl7LZOOryb8J4d4EUUBFmhMu29VCRwMUfmmtu9DmeIqgbJIWiPLQDg>
+    <xmx:P17LZNebZAJs5jRtVluuuJBE6ckHiEKYKhxHDsTW-VvfWjgXGnnLUA>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 97527B60089; Thu,  3 Aug 2023 03:58:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-Id: <b0e203e7-3b3c-40ad-8d99-e43415c0d3c5@app.fastmail.com>
+In-Reply-To: 
+ <CAMhs-H-2g2QF8NjZOknEop_3UFc_R3YYhpEveU2fc-Ks-iM1bA@mail.gmail.com>
+References: <20230802092647.3000666-1-sergio.paracuellos@gmail.com>
+ <CAKwvOd=SvHUPd8+sWtqgxghPEciD5sqPiggZx+OOEqxtJrML6Q@mail.gmail.com>
+ <9a22ecee-ebb0-437e-bd2b-99b5c6944855@app.fastmail.com>
+ <CAMhs-H-2g2QF8NjZOknEop_3UFc_R3YYhpEveU2fc-Ks-iM1bA@mail.gmail.com>
+Date: Thu, 03 Aug 2023 09:58:34 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Sergio Paracuellos" <sergio.paracuellos@gmail.com>
+Cc: "Michael Turquette" <mturquette@baylibre.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Stephen Boyd" <sboyd@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ clang-built-linux <llvm@lists.linux.dev>,
+ "kernel test robot" <lkp@intel.com>, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: ralink: mtmips: quiet unused variable warning
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Guo,
+On Thu, Aug 3, 2023, at 00:35, Sergio Paracuellos wrote:
+> Hi Arnd.=20
+>
+> El El jue, 3 ago 2023 a las 0:02, Arnd Bergmann <arnd@kernel.org> escr=
+ibi=C3=B3:
+>> On Wed, Aug 2, 2023, at 23:26, Nick Desaulniers wrote:
+>> > On Wed, Aug 2, 2023 at 2:26=E2=80=AFAM Sergio Paracuellos <sergio.p=
+aracuellos@gmail.com> wrote:
+>> >>
+>> >> When CONFIG_OF is disabled then the matching table is not referenc=
+ed and
+>> >> the following warning appears:
+>> >>
+>> >> drivers/clk/ralink/clk-mtmips.c:821:34: warning: unused variable '=
+mtmips_of_match' [-Wunused-const-variable]
+>> >> 821 |   static const struct of_device_id mtmips_of_match[] =3D {
+>> >>     |                          ^
+>> >>
+>> >> Silence it declaring 'mtmips_of_match' with '__maybe_unused'.
+>> >>
+>> >> Fixes: 6f3b15586eef ("clk: ralink: add clock and reset driver for =
+MTMIPS SoCs")
+>> >> Reported-by: kernel test robot <lkp@intel.com>
+>> >> Closes: https://lore.kernel.org/oe-kbuild-all/202307242310.CdOnd2p=
+y-lkp@intel.com/
+>> >> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>> >
+>> > I think this is fine; Arnd or Nathan do you have a preference? or t=
+houghts here?
+>> >
+>> > If not, thanks for the patch.
+>> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>> >
+>> > (I have a slight preference for wrapping the use in `#ifdef CONFIG_=
+OF`
+>> > since with the approach used by this patch, if all users are removed
+>> > we will never get a warning for this var. But it's a weak preferenc=
+e;
+>> > it's more important to me that we don't have -Werror promote this
+>> > warning to a build breakage)
+>>=20
+>> I don't understand why there are two match tables in the same
+>> driver, with almost the same contents. I have not looked very
+>> closely here, but why can't we just drop the mtmips_clk_of_match[]
+>> table (the one without the .data fields) and use the same
+>> table for both? Is this because of the ralink,rt2880-reset entry
+>> that is missing in mtmips_of_match, or is that another bug?
+>
+> ralink,rt2880-reset is for old dts compatibility and only applies to=20
+> reset driver. The one with data fields apply for clocks and is needed.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Ok, I see. It still looks like the two tables can simply be
+merged by adding the ralink,rt2880-reset entry to mtmips_of_match[],
+which will allow it to be used for mtmips_clk_driver (which doesn't
+use the data) as well as for mtmips_clk_init() (which doesn't
+need get called for ralink,rt2880-reset).
 
-tree:   https://github.com/c-sky/csky-linux sg2042-master-qspinlock-64ilp32_v4
-head:   ee021e57ffe3195b6a3ac5fcb2d4353375d1f261
-commit: 649c597d937299900198d6b54c954dc93d6b91b0 [30/70] RISC-V: paravirt: pvqspinlock: Add kconfig entry
-config: riscv-randconfig-r021-20230731 (https://download.01.org/0day-ci/archive/20230803/202308031531.AKSAgdSE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230803/202308031531.AKSAgdSE-lkp@intel.com/reproduce)
+>> I also see that there is both a platform_driver instance for
+>> late probing and a list of CLK_OF_DECLARE_DRIVER() entries.
+>> Do we need both here?
+>
+> This system controller driver provide clock and reset controllers.=20
+> Clock cannot be a platform driver since we need to set=20
+> mips_hpr_frequency at a very early sargento. Reset stuff can be a=20
+> platform driver so both of them are needed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308031531.AKSAgdSE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/riscv/kernel/time.c:15:
->> arch/riscv/include/asm/paravirt.h:34:45: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
-      34 | void dummy_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-         |                                             ^
-   arch/riscv/include/asm/paravirt.h:35:38: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
-      35 | void dummy_queued_spin_unlock(struct qspinlock *lock);
-         |                                      ^
-   2 warnings generated.
---
-   arch/riscv/kernel/paravirt.c:109:12: warning: no previous prototype for function 'pv_time_init' [-Wmissing-prototypes]
-     109 | int __init pv_time_init(void)
-         |            ^
-   arch/riscv/kernel/paravirt.c:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     109 | int __init pv_time_init(void)
-         | ^
-         | static 
-   In file included from arch/riscv/kernel/paravirt.c:135:
->> arch/riscv/include/asm/qspinlock_paravirt.h:5:37: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
-       5 | void __pv_queued_spin_unlock(struct qspinlock *lock);
-         |                                     ^
->> arch/riscv/kernel/paravirt.c:137:6: warning: no previous prototype for function 'pv_kick' [-Wmissing-prototypes]
-     137 | void pv_kick(int cpu)
-         |      ^
-   arch/riscv/kernel/paravirt.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     137 | void pv_kick(int cpu)
-         | ^
-         | static 
->> arch/riscv/kernel/paravirt.c:144:6: warning: no previous prototype for function 'pv_wait' [-Wmissing-prototypes]
-     144 | void pv_wait(u8 *ptr, u8 val)
-         |      ^
-   arch/riscv/kernel/paravirt.c:144:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     144 | void pv_wait(u8 *ptr, u8 val)
-         | ^
-         | static 
->> arch/riscv/kernel/paravirt.c:160:46: warning: declaration of 'struct qspinlock' will not be visible outside of this function [-Wvisibility]
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
-     196 |         compiletime_assert_atomic_type(*p);                             \
-         |                                         ^
-   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                                          ^
-   include/linux/compiler_types.h:364:10: note: expanded from macro '__native_word'
-     364 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                 ^
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
-     196 |         compiletime_assert_atomic_type(*p);                             \
-         |                                         ^
-   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                                          ^
-   include/linux/compiler_types.h:364:39: note: expanded from macro '__native_word'
-     364 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                                              ^
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
-     196 |         compiletime_assert_atomic_type(*p);                             \
-         |                                         ^
-   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                                          ^
-   include/linux/compiler_types.h:365:10: note: expanded from macro '__native_word'
-     365 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                 ^
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:196:34: note: expanded from macro 'smp_store_release'
-     196 |         compiletime_assert_atomic_type(*p);                             \
-         |                                         ^
-   include/linux/compiler_types.h:400:35: note: expanded from macro 'compiletime_assert_atomic_type'
-     400 |         compiletime_assert(__native_word(t),                            \
-         |                                          ^
-   include/linux/compiler_types.h:365:38: note: expanded from macro '__native_word'
-     365 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                                             ^
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
---
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |                     ^
-   include/asm-generic/rwonce.h:62:33: note: expanded from macro 'WRITE_ONCE'
-      62 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                                       ^
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-     397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-     385 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-     377 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |                     ^
-   include/asm-generic/rwonce.h:63:15: note: expanded from macro 'WRITE_ONCE'
-      63 |         __WRITE_ONCE(x, val);                                           \
-         |                      ^
-   arch/riscv/include/asm/rwonce.h:12:20: note: expanded from macro '__WRITE_ONCE'
-      12 |         *(volatile typeof(x) *)&(x) = (val);            \
-         |                           ^
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:162:25: error: incomplete definition of type 'struct qspinlock'
-     162 |         smp_store_release(&lock->locked, 0);
-         |                            ~~~~^
-   include/asm-generic/barrier.h:198:14: note: expanded from macro 'smp_store_release'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |                     ^
-   include/asm-generic/rwonce.h:63:15: note: expanded from macro 'WRITE_ONCE'
-      63 |         __WRITE_ONCE(x, val);                                           \
-         |                      ^
-   arch/riscv/include/asm/rwonce.h:12:27: note: expanded from macro '__WRITE_ONCE'
-      12 |         *(volatile typeof(x) *)&(x) = (val);            \
-         |                                  ^
-   arch/riscv/kernel/paravirt.c:160:46: note: forward declaration of 'struct qspinlock'
-     160 | static void native_queued_spin_unlock(struct qspinlock *lock)
-         |                                              ^
-   arch/riscv/kernel/paravirt.c:165:50: error: use of undeclared identifier 'native_queued_spin_lock_slowpath'; did you mean '__SCK__pv_queued_spin_lock_slowpath'?
-     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
-         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                  __SCK__pv_queued_spin_lock_slowpath
-   include/linux/static_call.h:298:29: note: expanded from macro 'DEFINE_STATIC_CALL'
-     298 |         __DEFINE_STATIC_CALL(name, _func, _func)
-         |                                    ^
-   include/linux/static_call.h:292:28: note: expanded from macro '__DEFINE_STATIC_CALL'
-     292 |         DECLARE_STATIC_CALL(name, _func);                               \
-         |                                   ^
-   include/linux/static_call_types.h:39:16: note: expanded from macro 'DECLARE_STATIC_CALL'
-      39 |         extern typeof(func) STATIC_CALL_TRAMP(name);
-         |                       ^
-   arch/riscv/kernel/paravirt.c:165:1: note: '__SCK__pv_queued_spin_lock_slowpath' declared here
-     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
-         | ^
-   include/linux/static_call.h:298:2: note: expanded from macro 'DEFINE_STATIC_CALL'
-     298 |         __DEFINE_STATIC_CALL(name, _func, _func)
-         |         ^
-   include/linux/static_call.h:292:2: note: expanded from macro '__DEFINE_STATIC_CALL'
-     292 |         DECLARE_STATIC_CALL(name, _func);                               \
-         |         ^
-   include/linux/static_call_types.h:38:32: note: expanded from macro 'DECLARE_STATIC_CALL'
-      38 |         extern struct static_call_key STATIC_CALL_KEY(name);            \
-         |                                       ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:75:22: note: expanded from macro '__PASTE'
-      75 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:74:23: note: expanded from macro '___PASTE'
-      74 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:28:1: note: expanded from here
-      28 | __SCK__pv_queued_spin_lock_slowpath
-         | ^
-   arch/riscv/kernel/paravirt.c:165:50: error: use of undeclared identifier 'native_queued_spin_lock_slowpath'
-     165 | DEFINE_STATIC_CALL(pv_queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
-         |                                                  ^
-   arch/riscv/kernel/paravirt.c:195:2: error: call to undeclared function '__pv_init_lock_hash'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     195 |         __pv_init_lock_hash();
-         |         ^
-   arch/riscv/kernel/paravirt.c:197:51: error: use of undeclared identifier '__pv_queued_spin_lock_slowpath'
-     197 |         static_call_update(pv_queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
-         |                                                          ^
-   arch/riscv/kernel/paravirt.c:198:2: error: incompatible function pointer types initializing 'typeof (&__SCT__pv_queued_spin_unlock)' (aka 'void (*)(struct qspinlock *)') with an expression of type 'void (struct qspinlock *)' [-Wincompatible-function-pointer-types]
-     198 |         static_call_update(pv_queued_spin_unlock, __pv_queued_spin_unlock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/static_call.h:154:35: note: expanded from macro 'static_call_update'
-     154 |         typeof(&STATIC_CALL_TRAMP(name)) __F = (func);                  \
-         |                                          ^     ~~~~~~
->> arch/riscv/kernel/paravirt.c:178:13: warning: no previous prototype for function 'pv_qspinlock_init' [-Wmissing-prototypes]
-     178 | void __init pv_qspinlock_init(void)
-         |             ^
-   arch/riscv/kernel/paravirt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     178 | void __init pv_qspinlock_init(void)
-         | ^
-         | static 
-   6 warnings and 16 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PARAVIRT_SPINLOCKS
-   Depends on [n]: PARAVIRT [=y] && SMP [=n]
-   Selected by [y]:
-   - PARAVIRT [=y] && RISCV_SBI [=y]
-
-
-vim +34 arch/riscv/include/asm/paravirt.h
-
-349f37f3d4ea50 Guo Ren 2023-07-31  33  
-349f37f3d4ea50 Guo Ren 2023-07-31 @34  void dummy_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-349f37f3d4ea50 Guo Ren 2023-07-31  35  void dummy_queued_spin_unlock(struct qspinlock *lock);
-349f37f3d4ea50 Guo Ren 2023-07-31  36  
-
-:::::: The code at line 34 was first introduced by commit
-:::::: 349f37f3d4ea507ce140d44a7fbee4c56994c95b RISC-V: paravirt: pvqspinlock: Add paravirt qspinlock skeleton
-
-:::::: TO: Guo Ren <guoren@linux.alibaba.com>
-:::::: CC: Guo Ren <guoren@linux.alibaba.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
