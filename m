@@ -1,243 +1,237 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC242419F
-	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 22:10:41 +0000 (UTC)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 373LDmon021158;
-	Thu, 3 Aug 2023 22:10:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=5kNoZ9JEI3fMLNq78y3hCA3j/dKqYd/zMsII+PTq4Kk=;
- b=d+0qON1CruEBKLKSKYUYZaf+5AYPdDS12a+s/lCXiFoKiQLM38qjlStJ+U20qZy81AvI
- zgVzNvrqi0snkRqfmMX/WNuonJASdBM3W5017h+sVk0WYUFi+T1W2nGYzLCCoGS2RcOb
- vmskH7kSUwJQEuepVyVRu02vdzcx8V/r+xOyFJKQIhRM6h860nBfIslfoih5uZQ1cr3a
- Eht0pJEYdVwX7gFvNNrHXw7kkQMX3AKBwoYmgrenbBkI3ZeklHK2N1/sEHX99DX2z8tK
- 1TYR8rHxSzVcJcDAypqYWVMHbiFw/mAF/te9tmJE+36DJ7OWoCN7qXhEcmBiJ1EAADnM rg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s4tnbjpm0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 03 Aug 2023 22:10:30 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 373LKkXJ012312;
-	Thu, 3 Aug 2023 22:10:30 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2047.outbound.protection.outlook.com [104.47.57.47])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3s8m2qt1kv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 03 Aug 2023 22:10:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OdUNIdJf9Oxxlmac6Z72y2DeZWH4yRYMoZLLh5KlDAK4vYc5xecQNWf+FcqfCbbRK9cK2gwUoXUXDezBqn8XyYonQYJuh7V5i61SXGmh4+t1L/2/czIRfljYPawp65JEGEUgMy0j0MktWjAk9ycce5idPSsUve6X2TSVpF6PMKTlNDEHa2UvLKO04/nzv2UlLjr0WWOsdoMAIPHYEuAgCBIgRQjpMLqPsnK4rQcxmIW0miPtB7Xqlj5h2k7LfTvegD2+spkdrtRgVs4YydSGG49yGypoJuwMJg3VQO3M56mFYSYyo5gMf3iABow/ZxN742PicQf5rpi5oCGj7UJ04g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5kNoZ9JEI3fMLNq78y3hCA3j/dKqYd/zMsII+PTq4Kk=;
- b=R1ik3b4zrIxwymEPPPs7ElAkyQSjv0Q6vdfxwBbuDovoLWIG14VAd8h4LknxL19mD+naYMB1/6O1pN6SanKON6RfdsotRhD9wrk1h7C6XuI6Zj/acpRJmnyJzDAvE3RBXNlE10vzwFJiHXJgo1kXhK4i/8wjtwrCnIwVaSs+Oy6DToOCH6fMemZ/GS7vnZYDICFU+18sjfDd9GoUOd8uMOwyHexW0EB3CSQ/w82WRJXRfRx6KV/1eqh5AzHG9Keipe8LtVESK/lhfMGstuIKxSxvDl2j1vaOXCluPrknQTeVOwAdWzhVGwgkHnKZoumP6SLo8EjcJB0qUGI5MiwgvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5kNoZ9JEI3fMLNq78y3hCA3j/dKqYd/zMsII+PTq4Kk=;
- b=XG8U855yMR5+6wyaZVowdt6H/yTchSjHKFXqnJFJ3V/dphaTzetcVJ4Nv9WedusA59l8UCV04qVm97Pis2/+Z7WK6F8ervkDIFELq39z2awIfgQLiOrxTuRXWkjk0BP0OkjGGPaPS0zy2XW1rD2UTZItd1LxanZldtv/HxEczkQ=
-Received: from DS7PR10MB5278.namprd10.prod.outlook.com (2603:10b6:5:3a5::9) by
- SN7PR10MB6668.namprd10.prod.outlook.com (2603:10b6:806:29a::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.47; Thu, 3 Aug 2023 22:10:27 +0000
-Received: from DS7PR10MB5278.namprd10.prod.outlook.com
- ([fe80::237d:96e6:7f50:e202]) by DS7PR10MB5278.namprd10.prod.outlook.com
- ([fe80::237d:96e6:7f50:e202%4]) with mapi id 15.20.6652.020; Thu, 3 Aug 2023
- 22:10:21 +0000
-Message-ID: <afe71df3-48e4-837a-e85d-b6a6764eee62@oracle.com>
-Date: Thu, 3 Aug 2023 23:10:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
-Content-Language: en-GB
-To: Nick Desaulniers <ndesaulniers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: martin.lau@linux.dev, bpf <bpf@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        =?UTF-8?Q?Tomasz_Pawe=c5=82_Gajc?= <tpgxyz@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
- <ZMwQivemlha+fU5i@kernel.org>
- <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P123CA0042.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600::30)
- To DS7PR10MB5278.namprd10.prod.outlook.com (2603:10b6:5:3a5::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CBE263BD;
+	Thu,  3 Aug 2023 22:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691100956; x=1722636956;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NbD7jIxZ6syhcmEyeRpAAkmzjdyogWp0Mmg1DvVQHh0=;
+  b=CfzeO2MQ2udo/SfuIZUSJv0shNLGX3NrVRv3UxlgyQiZGmh0L1JKm2Mc
+   YjHwUf0zuggIRzNrQX5pot3R0NkqgXS8gT8VUwej+u7XHQf9xN54sLgdR
+   74fUwWis5qhEf3MkJzIBaRKQ65vO7XVil5JfASqmLjriO5wEKiOE/xd4d
+   8DFPsyn5RC1L/84QPJ0+YeshVdHuIV/1iVzUDy8HRGNWjwWldWhI4Kkmz
+   ZYlZDsGA0ZbNyleuGkkQq4E7hmwCJZiXQyDIXvK0tkpEoBvdzbvd7U39F
+   OolvHPP1DpQFAUMrlYAyzqnEjPKCVDmX3/IPnIVYUqLZJw+JniQ+k1b1K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="456381566"
+X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
+   d="scan'208";a="456381566"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 15:15:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="976295586"
+X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
+   d="scan'208";a="976295586"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2023 15:15:51 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRgbm-0002Oa-2f;
+	Thu, 03 Aug 2023 22:15:50 +0000
+Date: Fri, 4 Aug 2023 06:15:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: sound/soc/pxa/pxa-ssp.c:594:15: warning: variable 'acds' set but not
+ used
+Message-ID: <202308040619.BEismjFv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5278:EE_|SN7PR10MB6668:EE_
-X-MS-Office365-Filtering-Correlation-Id: 75ac3de9-992d-46bb-7e6c-08db946e6c60
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	3I/4lQE0LVwS+WkkirnWP6aedUPiUpiQ4u+LSJ3WFR7/qQTQ7NV1E8pezEPJEg+sSROqMXQspASXRzy/WDZPUgZCME65xvzEainb/BqKUvRjjs07y4SJG8s/7saYMFTf8stMMlulKp9US/o8yeMbrqPEJP1RhJBvrYRbnOnaftkQecFR7D2DsbiWs45T7lf5mj+pFmREtlIPCd5z7H3FBaxEO+GgqsGMCFevDQImhFjFSqvF2YFtEcXszQZ9rTxwr44cE9FJmA6bnQoF5j9O7iaiza7swv2XNp/FAjYfq3vJRcAEBZGMOczkmXJV+2G2yVrTNXAeUKuYVHL/MAiAhVL8YcQLq+aChGii4PMtv2DZWSM64fMPnFECkhqrQctBZHO7l3olH9CFKTjXdJl5SslnKg+q9hVPp9/M8myh3VZipcH6Z0JrUc1tVrgADR1GMitrlsr3ctoDcYoDcG39n/HuvFYaTsMn3ZaPP5D5bzC3tOoipoynHkY28SxKAM9d66gidAZrK27vI7KYtYfBYxHWS+2kvTl9Up2W4OlKYnQQaduZ8cz1Zl8+XGmYF9nQSCJAFW3rY6PHYfvkfzVnb9FwaMnL6CMzvqNJAbrZtjhjvCHm8awK1U8BqgILt5thjTRUqrwMMzuLktUp35kE/w==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5278.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(346002)(366004)(39860400002)(186006)(451199021)(54906003)(6512007)(6666004)(6486002)(966005)(110136005)(478600001)(2616005)(66946007)(6506007)(53546011)(2906002)(66556008)(4326008)(41300700001)(5660300002)(316002)(8936002)(8676002)(44832011)(66476007)(38100700002)(36756003)(16799955002)(31696002)(86362001)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?Rm5rZ2ZWNXA2RFRWWENVN0hPSGVrejM4aExkY0d6S1BtNFYzYVVWYnJIb0hM?=
- =?utf-8?B?NmQxbEloaGhvZXlIQVA5N1ZrWHJGOEZqRnJUcnJRNjdUMUhNbTdDUmt5bCtk?=
- =?utf-8?B?am5IT20zbStGbXpFMmZHRTZidUVyUEE1cmRMZkJCQ1VMS3Z5bWZvd29DbHAr?=
- =?utf-8?B?cFVqMERUZ1pZV0VkTytNUjBXZUFCSjVySTlwanlvTEQ0cWg5NGlsT25DQzBs?=
- =?utf-8?B?c1c4SmU0R0QrekVyZ3hWS0FsREFreGJlOFNvdEtIcEY4dFpVRE4zUTV0dGwz?=
- =?utf-8?B?RU50ZjJITXZBVmNKVjZNcytadTlRaVVzK0VBNy80Y2RHWlB4SjV3TGFLbW9y?=
- =?utf-8?B?K0ovMVNQMFVQWS9KdVdtZ2swWC92KzZNendHeXN6elRwcnNDTmtCeHg3WThN?=
- =?utf-8?B?T25pbFVVT2RKZnlVekRWT21HWFpnY2RsQXFoSkY2RjkzVWMyaXc0SDZ6UXFa?=
- =?utf-8?B?dXJoNlJDK0ZyVmxlek85T0VBek1HM3BNQjhWbHhjRUdCL0NpQWxDdW8yYnlM?=
- =?utf-8?B?M1pNZjJKSzJZWms3T3h0NHhBaFVWYVNJekUrNW16andLWmlvWExnUDVwRy9H?=
- =?utf-8?B?YlJteEtROGlBT0FTMHptbmpEQTZhRHJtU2pQbjNtMThyS2RXM1FGQ09UK2Zh?=
- =?utf-8?B?T2I5Zkt1Vllab1V3MHFqaEZLTmpHZEhzclFKZ1BCMnNnVUYxdTR6WlVvWGd4?=
- =?utf-8?B?c29sN2JZVTdyZG54K3djYWNndVd0SjZDSXBpdXNPcFVXYURPQVpremFkcFFN?=
- =?utf-8?B?ZlRIYXI4dFpaQ0trVmRIS2xhb1JwUkdlZHc0N3gyTUsvR1JESURqZHk3QUpX?=
- =?utf-8?B?aWRkTGkwWkN4U0dPUlQ1Und1aHQreWk2d1NkUDBUcHRQRzNVNDJiaDRTSGQ5?=
- =?utf-8?B?TUZNUzA4UXVhWFNaR3MvclRUbGJ3NnNuZnVXY0MyZTJwQXg1cGY3cTZWZ2t5?=
- =?utf-8?B?ZW1QS2twblpJNjlNK3NrSjdDY25XNnlyL1RCOU5ncEpuZjUwcWdZaHVxVElQ?=
- =?utf-8?B?RkY1cHM0elYvS1NPaU5YTHFZMC9zUnBJMklKQXRJK044ZVdleTV1bHJiLzdp?=
- =?utf-8?B?MzVyQ0NucStGTlArMDg0bmZqNDJCK0VHVWNuTCsvZUlQS2tJN1NXdzduVjhX?=
- =?utf-8?B?VDJhQ05ST0xkMzBDY0tqK3NFa2ZsM3o1SjVEZE9VcnFGWlV0dVR0aEtJTmJE?=
- =?utf-8?B?ZEcyV20vdGhNNnBtblgxQ0VBeUo3WjhTVzBYVlZua3owS2Voek1LUVJ4U2tT?=
- =?utf-8?B?em10ZkJBUFRxWXkvRStlWjdlUW1lS0ZRWExydU40dU5nWVhGZThmMGkrMDF2?=
- =?utf-8?B?dVBsaW0vbnQ3QkNJQUZXNFRLdnk0SHRKN2N2cFNLQ0RrenJKUW10MXdoWmEy?=
- =?utf-8?B?bDBhUU81c3VxanVhanJVbUVTYzdLNlFjNG45NlF2Uko4amtTZEwxK1h5U1Qw?=
- =?utf-8?B?MFBCQWRyTkgzZ1pjZGkyMDhlZkZQYjVGTkNYbDllVG0yOUdtSkhldUZ6ZFdh?=
- =?utf-8?B?WURZWFJSMkRuQ3pTeldNMzJFVVNPWFJ4REtFZHJQMzFRQ0IxRmsxcmJJTmZ5?=
- =?utf-8?B?YWYyR0FCQm01Vnp4L05sZEZwNFdUYnU2ZElqblFzaDkvQUF6YU9qTkQ5NUg5?=
- =?utf-8?B?UVNBOEpaZkRZbDEvb01MV2VlYXdkTDlQbE1nRDh2VW1xRlhTWXUwekNrYVlq?=
- =?utf-8?B?bXlLZC9sOU16MDNYbmlpZVBZRjdYNzlvd0ppZFN0UXRXam94aldyKzA2WXRB?=
- =?utf-8?B?dnpqNml6ZkUzMUQ5c0NZbkUwNWZFbi8xNkJUR1QyUHhGTFQwNHVPZkdaRzNT?=
- =?utf-8?B?ZjRINkRDa1pTRDJvSVNhamxFMHMzZkxiamxiNDJMLzdLODZoazdqVDR1R1Ev?=
- =?utf-8?B?ejdqUFpISGRqcVBaSmZ2RjNZekwxSlVmWmViUEk5TUZvWVpZWkE3NTRMeUpv?=
- =?utf-8?B?eU1jamNvTjRhNmhSYi9PbXU2K1RnNGFHZnUxWEQrSmVuWkhKZWpNcGFuK3FW?=
- =?utf-8?B?bXRKZXV0bk1NOExkbUdTWTdkUkdaMmM5aFNaeisvQ01kNmNoQmZ0aHdQOTVm?=
- =?utf-8?B?cU1DRVE3cWl5S0k4K1hLckw3SmJWK0lvLy9ILzdRT1ZhUFRNSTNJUGV2QlRm?=
- =?utf-8?B?K1JoT25VZTJOdFBmZkZpZVV3MVdzWVhNS2Q5dEN4anZPT1VyVGNtUVJBdTYw?=
- =?utf-8?Q?TYe4LSe+JgmMriKjd6vPaxw=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	g1aDlUsMXv/3s6hTkMT3Oin85FtCKgCgi/duA5IiDZj4NIS2Rvt96URHs5ToTOWA/COPMaJUqRKNEWW52jiEVCrhtGNoaoVdR2OJVH4HtTm07asoHYENZJZv6OMKM56hGqBgJs2igTtD6cY4uC/03+isL3O9Vn+car8dcV+QteSEWw5EgXXlvqexsuqwy7iBE0muweziZcEZtHGmeNZ05IdamqvTmT5vlCbykAtZW+RC1Wt1bTwlhqa3oRA7KaoXHqFQp45J46ArR6vhrZCNYd0h28XU+y1a4T3IEUN6R/HbSu+D8Dc+GZWIdTlCuEE02XGNk224zS5fPDHrHYow+wTH9vwFfng5KL1ey4CArZAvO0XN4/PkPSbe2LggS73vch4yHf7SgDEZYvA4CFZQ5jm0RdVloDT64XSUbQcBJuthvX5ZkYBxrHXgz0+RJnjM9ZTw14wXHQykj38Lp2UDDNK8JBfJjI1rnDNKK7P24ws2r76MWVKwiMZkhp/YR1poTbtYiSqvBnx+6A2waVHq/dp/iEeiUwMtKi7f24ajF1gtsKrRGIvc0lDaM2Ml61DD19fokZyE9Jznfb9+ioVaLSBt0rj5ags9z/DX/4tfTnXJbaasdB0axvxZV9kC32fY7prc8mt2jpuMpT035E+3m9wyfG6M3ezCyYNG9ZwSsURegUjSN5DLpz4W4uXd8S0oduEDjTmocZoB9pN4cojl86Slh5R1h/6xPcTu60SDAazwSHx8di1mLPZdgvj4Ch8pmeH/0qbw2IA2zDH9vjyGzDsuoni5Mmy9z7UufvdY1mSmk6os2IPawsjUHyNWXsAvIh6bGQBHduQn3sMcWxCH29oP98eN1T0BXK3Kg7ZxFO5MHtwJoAH5vIYibSVxUyeh1g7WPW45yKD8B9312fcvQYlP/G6r9Xib0scExkW+Fb0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75ac3de9-992d-46bb-7e6c-08db946e6c60
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5278.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2023 22:10:21.9079
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LXow+WNkPaQn95j/xlLTgZPfdJVbqrZICzb/nMLt5i5DWnD+p5Ng6EBAOnAWDIFgpxXz7ncnBLwjqrIcpTCrAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6668
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_22,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2308030199
-X-Proofpoint-ORIG-GUID: 8nX5SZ0iY0kqSrqykHfLM6GORI0HPkiM
-X-Proofpoint-GUID: 8nX5SZ0iY0kqSrqykHfLM6GORI0HPkiM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 03/08/2023 21:50, Nick Desaulniers wrote:
-> On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->>
->> Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
->>> Hi Martin (and BTF/BPF team),
->>> I've observed 2 user reports with the error from the subject of this email.
->>> https://github.com/ClangBuiltLinux/linux/issues/1825
->>> https://bbs.archlinux.org/viewtopic.php?id=284177
->>>
->>> Any chance you could take a look at these reports and help us figure
->>> out what's going wrong here?  Nathan and I haven't been able to
->>> reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
->>>
->>> Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
->>
->> Masami had a problem with new versions of compilers that was solved
->> with:
->>
->> ------------------------ 8< --------------------------------------------
->>> To check that please tweak:
->>>
->>> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
->>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
->>> # CONFIG_DEBUG_INFO_DWARF4 is not set
->>> # CONFIG_DEBUG_INFO_DWARF5 is not set
->>> ⬢[acme@toolbox perf-tools-next]$
->>>
->>> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
->>> CONFIG_DEBUG_INFO_DWARF4.
->>
->> Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
-> 
-> Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
-> is not what I'd consider a fix. Someday we can move to
-> DWARFv5...someday...
-> 
-> What you describe sounds like build success, but reduction in debug info.
-> 
-> The reports I'm referring to seem to result in a build failure.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   999f6631866e9ea81add935b9c6ebaab0579d259
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   1 year, 2 months ago
+config: arm-randconfig-r024-20230804 (https://download.01.org/0day-ci/archive/20230804/202308040619.BEismjFv-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040619.BEismjFv-lkp@intel.com/reproduce)
 
-This is a strange one. The error in question
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308040619.BEismjFv-lkp@intel.com/
 
-CC .vmlinux.export.o
-UPD include/generated/utsversion.h
-CC init/version-timestamp.o
-LD .tmp_vmlinux.btf
-BTF .btf.vmlinux.bin.o
-libbpf: BTF header not found
-pahole: .tmp_vmlinux.btf: Invalid argument
+All warnings (new ones prefixed by >>):
 
-...occurs during BTF parsing when the raw size of the BTF is smaller
-than the BTF header size, which should never happen unless BTF
-is corrupted. Thing is, at that stage we shouldn't be parsing BTF,
-we should be generating it from DWARF. The only time pahole parses BTF
-is when it's creating split BTF for modules (it parses the base BTF), or
-when it's reading existing BTF, neither of which it should be doing at
-this stage.
+>> sound/soc/pxa/pxa-ssp.c:594:15: warning: variable 'acds' set but not used [-Wunused-but-set-variable]
+     594 |                         int ssacd, acds;
+         |                                    ^
+   1 warning generated.
 
-But I suspect the issue is in gen_btf() in scripts/link-vmlinux.sh.
-Prior to running pahole, we call "vmlinux_link .tmp_vmlinux.btf".
-If that went awry somehow and .tmp_vmlinux.btf wasn't created, it
-would explain the "Invalid argument" error:
 
-$ pahole -J nosuchfile
-pahole: nosuchfile: Invalid argument
+vim +/acds +594 sound/soc/pxa/pxa-ssp.c
 
-I see some clang specifics in vmlinux_link(), so I think a good
-first step would be to check if .tmp_vlinux.btf exists prior
-to running pahole. The submitter mentioned swapping linkers seems to
-help, so that seems a promising angle. If there's a kernel .config
-available I can try and reproduce the failure too. Thanks!
+05739375f1c0a10 Daniel Mack     2018-06-29  526  
+1b340bd7e444f20 Mark Brown      2008-07-30  527  /*
+1b340bd7e444f20 Mark Brown      2008-07-30  528   * Set the SSP audio DMA parameters and sample size.
+1b340bd7e444f20 Mark Brown      2008-07-30  529   * Can be called multiple times by oss emulation.
+1b340bd7e444f20 Mark Brown      2008-07-30  530   */
+1b340bd7e444f20 Mark Brown      2008-07-30  531  static int pxa_ssp_hw_params(struct snd_pcm_substream *substream,
+dee89c4d9443352 Mark Brown      2008-11-18  532  				struct snd_pcm_hw_params *params,
+f0fba2ad1b6b53d Liam Girdwood   2010-03-17  533  				struct snd_soc_dai *cpu_dai)
+1b340bd7e444f20 Mark Brown      2008-07-30  534  {
+f0fba2ad1b6b53d Liam Girdwood   2010-03-17  535  	struct ssp_priv *priv = snd_soc_dai_get_drvdata(cpu_dai);
+f9efc9df94fd126 Eric Miao       2010-02-09  536  	struct ssp_device *ssp = priv->ssp;
+2d7e71fa231035d Eric Miao       2009-04-23  537  	int chn = params_channels(params);
+05739375f1c0a10 Daniel Mack     2018-06-29  538  	u32 sscr0, sspsp;
+1b340bd7e444f20 Mark Brown      2008-07-30  539  	int width = snd_pcm_format_physical_width(params_format(params));
+baffe1699c68da5 Haojian Zhuang  2010-05-05  540  	int ttsa = pxa_ssp_read_reg(ssp, SSTSA) & 0xf;
+d65a14587a9be85 Daniel Mack     2013-08-12  541  	struct snd_dmaengine_dai_dma_data *dma_data;
+05739375f1c0a10 Daniel Mack     2018-06-29  542  	int rate = params_rate(params);
+05739375f1c0a10 Daniel Mack     2018-06-29  543  	int bclk = rate * chn * (width / 8);
+737e370a57e4e83 Daniel Mack     2018-05-21  544  	int ret;
+5f712b2b73a9fc8 Daniel Mack     2010-03-22  545  
+f0fba2ad1b6b53d Liam Girdwood   2010-03-17  546  	dma_data = snd_soc_dai_get_dma_data(cpu_dai, substream);
+1b340bd7e444f20 Mark Brown      2008-07-30  547  
+92429069d0fc9f5 Philipp Zabel   2009-03-19  548  	/* Network mode with one active slot (ttsa == 1) can be used
+92429069d0fc9f5 Philipp Zabel   2009-03-19  549  	 * to force 16-bit frame width on the wire (for S16_LE), even
+92429069d0fc9f5 Philipp Zabel   2009-03-19  550  	 * with two channels. Use 16-bit DMA transfers for this case.
+92429069d0fc9f5 Philipp Zabel   2009-03-19  551  	 */
+d93ca1ae61adf67 guoyh           2012-05-07  552  	pxa_ssp_set_dma_params(ssp,
+2d7e71fa231035d Eric Miao       2009-04-23  553  		((chn == 2) && (ttsa != 1)) || (width == 32),
+d93ca1ae61adf67 guoyh           2012-05-07  554  		substream->stream == SNDRV_PCM_STREAM_PLAYBACK, dma_data);
+5f712b2b73a9fc8 Daniel Mack     2010-03-22  555  
+1b340bd7e444f20 Mark Brown      2008-07-30  556  	/* we can only change the settings if the port is not in use */
+baffe1699c68da5 Haojian Zhuang  2010-05-05  557  	if (pxa_ssp_read_reg(ssp, SSCR0) & SSCR0_SSE)
+1b340bd7e444f20 Mark Brown      2008-07-30  558  		return 0;
+1b340bd7e444f20 Mark Brown      2008-07-30  559  
+737e370a57e4e83 Daniel Mack     2018-05-21  560  	ret = pxa_ssp_configure_dai_fmt(priv);
+737e370a57e4e83 Daniel Mack     2018-05-21  561  	if (ret < 0)
+737e370a57e4e83 Daniel Mack     2018-05-21  562  		return ret;
+737e370a57e4e83 Daniel Mack     2018-05-21  563  
+1b340bd7e444f20 Mark Brown      2008-07-30  564  	/* clear selected SSP bits */
+baffe1699c68da5 Haojian Zhuang  2010-05-05  565  	sscr0 = pxa_ssp_read_reg(ssp, SSCR0) & ~(SSCR0_DSS | SSCR0_EDSS);
+1b340bd7e444f20 Mark Brown      2008-07-30  566  
+1b340bd7e444f20 Mark Brown      2008-07-30  567  	/* bit size */
+1b340bd7e444f20 Mark Brown      2008-07-30  568  	switch (params_format(params)) {
+1b340bd7e444f20 Mark Brown      2008-07-30  569  	case SNDRV_PCM_FORMAT_S16_LE:
+972a55b62d592cf Qiao Zhou       2012-06-04  570  		if (ssp->type == PXA3xx_SSP)
+1b340bd7e444f20 Mark Brown      2008-07-30  571  			sscr0 |= SSCR0_FPCKE;
+1b340bd7e444f20 Mark Brown      2008-07-30  572  		sscr0 |= SSCR0_DataSize(16);
+1b340bd7e444f20 Mark Brown      2008-07-30  573  		break;
+1b340bd7e444f20 Mark Brown      2008-07-30  574  	case SNDRV_PCM_FORMAT_S24_LE:
+1b340bd7e444f20 Mark Brown      2008-07-30  575  		sscr0 |= (SSCR0_EDSS | SSCR0_DataSize(8));
+1b340bd7e444f20 Mark Brown      2008-07-30  576  		break;
+1b340bd7e444f20 Mark Brown      2008-07-30  577  	case SNDRV_PCM_FORMAT_S32_LE:
+1b340bd7e444f20 Mark Brown      2008-07-30  578  		sscr0 |= (SSCR0_EDSS | SSCR0_DataSize(16));
+1b340bd7e444f20 Mark Brown      2008-07-30  579  		break;
+1b340bd7e444f20 Mark Brown      2008-07-30  580  	}
+baffe1699c68da5 Haojian Zhuang  2010-05-05  581  	pxa_ssp_write_reg(ssp, SSCR0, sscr0);
+1b340bd7e444f20 Mark Brown      2008-07-30  582  
+05739375f1c0a10 Daniel Mack     2018-06-29  583  	if (sscr0 & SSCR0_ACS) {
+05739375f1c0a10 Daniel Mack     2018-06-29  584  		ret = pxa_ssp_set_pll(priv, bclk);
+05739375f1c0a10 Daniel Mack     2018-06-29  585  
+05739375f1c0a10 Daniel Mack     2018-06-29  586  		/*
+05739375f1c0a10 Daniel Mack     2018-06-29  587  		 * If we were able to generate the bclk directly,
+05739375f1c0a10 Daniel Mack     2018-06-29  588  		 * all is fine. Otherwise, look up the closest rate
+05739375f1c0a10 Daniel Mack     2018-06-29  589  		 * from the table and also set the dividers.
+05739375f1c0a10 Daniel Mack     2018-06-29  590  		 */
+05739375f1c0a10 Daniel Mack     2018-06-29  591  
+05739375f1c0a10 Daniel Mack     2018-06-29  592  		if (ret < 0) {
+05739375f1c0a10 Daniel Mack     2018-06-29  593  			const struct pxa_ssp_clock_mode *m;
+05739375f1c0a10 Daniel Mack     2018-06-29 @594  			int ssacd, acds;
+05739375f1c0a10 Daniel Mack     2018-06-29  595  
+05739375f1c0a10 Daniel Mack     2018-06-29  596  			for (m = pxa_ssp_clock_modes; m->rate; m++) {
+05739375f1c0a10 Daniel Mack     2018-06-29  597  				if (m->rate == rate)
+05739375f1c0a10 Daniel Mack     2018-06-29  598  					break;
+05739375f1c0a10 Daniel Mack     2018-06-29  599  			}
+05739375f1c0a10 Daniel Mack     2018-06-29  600  
+05739375f1c0a10 Daniel Mack     2018-06-29  601  			if (!m->rate)
+05739375f1c0a10 Daniel Mack     2018-06-29  602  				return -EINVAL;
+05739375f1c0a10 Daniel Mack     2018-06-29  603  
+05739375f1c0a10 Daniel Mack     2018-06-29  604  			acds = m->acds;
+05739375f1c0a10 Daniel Mack     2018-06-29  605  
+05739375f1c0a10 Daniel Mack     2018-06-29  606  			/* The values in the table are for 16 bits */
+05739375f1c0a10 Daniel Mack     2018-06-29  607  			if (width == 32)
+05739375f1c0a10 Daniel Mack     2018-06-29  608  				acds--;
+05739375f1c0a10 Daniel Mack     2018-06-29  609  
+05739375f1c0a10 Daniel Mack     2018-06-29  610  			ret = pxa_ssp_set_pll(priv, bclk);
+05739375f1c0a10 Daniel Mack     2018-06-29  611  			if (ret < 0)
+05739375f1c0a10 Daniel Mack     2018-06-29  612  				return ret;
+05739375f1c0a10 Daniel Mack     2018-06-29  613  
+05739375f1c0a10 Daniel Mack     2018-06-29  614  			ssacd = pxa_ssp_read_reg(ssp, SSACD);
+05739375f1c0a10 Daniel Mack     2018-06-29  615  			ssacd &= ~(SSACD_ACDS(7) | SSACD_SCDB_1X);
+05739375f1c0a10 Daniel Mack     2018-06-29  616  			ssacd |= SSACD_ACDS(m->acds);
+05739375f1c0a10 Daniel Mack     2018-06-29  617  			ssacd |= m->scdb;
+05739375f1c0a10 Daniel Mack     2018-06-29  618  			pxa_ssp_write_reg(ssp, SSACD, ssacd);
+05739375f1c0a10 Daniel Mack     2018-06-29  619  		}
+05739375f1c0a10 Daniel Mack     2018-06-29  620  	} else if (sscr0 & SSCR0_ECS) {
+05739375f1c0a10 Daniel Mack     2018-06-29  621  		/*
+05739375f1c0a10 Daniel Mack     2018-06-29  622  		 * For setups with external clocking, the PLL and its diviers
+05739375f1c0a10 Daniel Mack     2018-06-29  623  		 * are not active. Instead, the SCR bits in SSCR0 can be used
+05739375f1c0a10 Daniel Mack     2018-06-29  624  		 * to divide the clock.
+05739375f1c0a10 Daniel Mack     2018-06-29  625  		 */
+05739375f1c0a10 Daniel Mack     2018-06-29  626  		pxa_ssp_set_scr(ssp, bclk / rate);
+05739375f1c0a10 Daniel Mack     2018-06-29  627  	}
+05739375f1c0a10 Daniel Mack     2018-06-29  628  
+1b340bd7e444f20 Mark Brown      2008-07-30  629  	switch (priv->dai_fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+1b340bd7e444f20 Mark Brown      2008-07-30  630  	case SND_SOC_DAIFMT_I2S:
+baffe1699c68da5 Haojian Zhuang  2010-05-05  631  	       sspsp = pxa_ssp_read_reg(ssp, SSPSP);
+72d7466468b471f Daniel Mack     2009-03-12  632  
+05739375f1c0a10 Daniel Mack     2018-06-29  633  		if (((priv->sysclk / bclk) == 64) && (width == 16)) {
+72d7466468b471f Daniel Mack     2009-03-12  634  			/* This is a special case where the bitclk is 64fs
+72d7466468b471f Daniel Mack     2009-03-12  635  			 * and we're not dealing with 2*32 bits of audio
+72d7466468b471f Daniel Mack     2009-03-12  636  			 * samples.
+72d7466468b471f Daniel Mack     2009-03-12  637  			 *
+72d7466468b471f Daniel Mack     2009-03-12  638  			 * The SSP values used for that are all found out by
+72d7466468b471f Daniel Mack     2009-03-12  639  			 * trying and failing a lot; some of the registers
+72d7466468b471f Daniel Mack     2009-03-12  640  			 * needed for that mode are only available on PXA3xx.
+72d7466468b471f Daniel Mack     2009-03-12  641  			 */
+972a55b62d592cf Qiao Zhou       2012-06-04  642  			if (ssp->type != PXA3xx_SSP)
+72d7466468b471f Daniel Mack     2009-03-12  643  				return -EINVAL;
+72d7466468b471f Daniel Mack     2009-03-12  644  
+72d7466468b471f Daniel Mack     2009-03-12  645  			sspsp |= SSPSP_SFRMWDTH(width * 2);
+72d7466468b471f Daniel Mack     2009-03-12  646  			sspsp |= SSPSP_SFRMDLY(width * 4);
+72d7466468b471f Daniel Mack     2009-03-12  647  			sspsp |= SSPSP_EDMYSTOP(3);
+72d7466468b471f Daniel Mack     2009-03-12  648  			sspsp |= SSPSP_DMYSTOP(3);
+72d7466468b471f Daniel Mack     2009-03-12  649  			sspsp |= SSPSP_DMYSTRT(1);
+0ce36c5f7f87632 Mark Brown      2009-03-13  650  		} else {
+0ce36c5f7f87632 Mark Brown      2009-03-13  651  			/* The frame width is the width the LRCLK is
+0ce36c5f7f87632 Mark Brown      2009-03-13  652  			 * asserted for; the delay is expressed in
+0ce36c5f7f87632 Mark Brown      2009-03-13  653  			 * half cycle units.  We need the extra cycle
+0ce36c5f7f87632 Mark Brown      2009-03-13  654  			 * because the data starts clocking out one BCLK
+0ce36c5f7f87632 Mark Brown      2009-03-13  655  			 * after LRCLK changes polarity.
+0ce36c5f7f87632 Mark Brown      2009-03-13  656  			 */
+0ce36c5f7f87632 Mark Brown      2009-03-13  657  			sspsp |= SSPSP_SFRMWDTH(width + 1);
+0ce36c5f7f87632 Mark Brown      2009-03-13  658  			sspsp |= SSPSP_SFRMDLY((width + 1) * 2);
+0ce36c5f7f87632 Mark Brown      2009-03-13  659  			sspsp |= SSPSP_DMYSTRT(1);
+0ce36c5f7f87632 Mark Brown      2009-03-13  660  		}
+72d7466468b471f Daniel Mack     2009-03-12  661  
+baffe1699c68da5 Haojian Zhuang  2010-05-05  662  		pxa_ssp_write_reg(ssp, SSPSP, sspsp);
+1b340bd7e444f20 Mark Brown      2008-07-30  663  		break;
+1b340bd7e444f20 Mark Brown      2008-07-30  664  	default:
+1b340bd7e444f20 Mark Brown      2008-07-30  665  		break;
+1b340bd7e444f20 Mark Brown      2008-07-30  666  	}
+1b340bd7e444f20 Mark Brown      2008-07-30  667  
+72d7466468b471f Daniel Mack     2009-03-12  668  	/* When we use a network mode, we always require TDM slots
+1b340bd7e444f20 Mark Brown      2008-07-30  669  	 * - complain loudly and fail if they've not been set up yet.
+1b340bd7e444f20 Mark Brown      2008-07-30  670  	 */
+92429069d0fc9f5 Philipp Zabel   2009-03-19  671  	if ((sscr0 & SSCR0_MOD) && !ttsa) {
+4f3d957718e7f0a Andy Shevchenko 2019-10-18  672  		dev_err(ssp->dev, "No TDM timeslot configured\n");
+1b340bd7e444f20 Mark Brown      2008-07-30  673  		return -EINVAL;
+1b340bd7e444f20 Mark Brown      2008-07-30  674  	}
+1b340bd7e444f20 Mark Brown      2008-07-30  675  
+1b340bd7e444f20 Mark Brown      2008-07-30  676  	dump_registers(ssp);
+1b340bd7e444f20 Mark Brown      2008-07-30  677  
+1b340bd7e444f20 Mark Brown      2008-07-30  678  	return 0;
+1b340bd7e444f20 Mark Brown      2008-07-30  679  }
+1b340bd7e444f20 Mark Brown      2008-07-30  680  
 
-Alan
+:::::: The code at line 594 was first introduced by commit
+:::::: 05739375f1c0a1048fea8b9c4cb54d9e4a891938 ASoC: pxa-ssp: remove .set_pll() and .set_clkdiv() callbacks
 
->>
->>   LD      .tmp_vmlinux.btf
->>   BTF     .btf.vmlinux.bin.o
->>   LD      .tmp_vmlinux.kallsyms1
->>
->> And
->>
->> / # strings /sys/kernel/btf/vmlinux | wc -l
->> 89921
->> / # strings /sys/kernel/btf/vmlinux | grep -w kfree
->> kfree
->>
->> It seems the BTF is correctly generated. (with DWARF5, the number of symbols
->> are about 30000.)
-> 
-> 
-> 
+:::::: TO: Daniel Mack <daniel@zonque.org>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
