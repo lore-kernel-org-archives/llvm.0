@@ -1,114 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDE3263BD;
-	Thu,  3 Aug 2023 22:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691101556; x=1722637556;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mJ6W9URh+8DKMfM06sE1vD68va+3oPToTrVe+MWStTw=;
-  b=W2RfAA1lXtLgdwVBaP8o+XzVi5WDMGFLc0Fq1KFK59OegvaYxjSNbXga
-   j02uLV5byuAhbmg7IofV8ssG2nQAQ7tvGbyHx4GOYBFjVSMEAehTXi3ZI
-   r2h/bSHrwKyINeasxm9aXeJJOrjGJLP3FGqkmKnGCg4LbZGUcfTbjBc66
-   asMT9RKOSa5ew+zzozpLgrBmchf4VAaAeO7ROwLp4yNmf69Gch4r/Mo9Q
-   vInb6rDpgoZ3Aj4Xhghrqm7KfDeAYRa+7YIdYVFvEuRRv+vb/+mHCC+H3
-   A//++p3kOYerfDyymC87scaSFu86PWnRMyecEDpSOpcSQ0THYn9qOoCx/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="349601586"
-X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
-   d="scan'208";a="349601586"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 15:25:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="679647389"
-X-IronPort-AV: E=Sophos;i="6.01,253,1684825200"; 
-   d="scan'208";a="679647389"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2023 15:25:52 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRglT-0002PH-0S;
-	Thu, 03 Aug 2023 22:25:51 +0000
-Date: Fri, 4 Aug 2023 06:25:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sudeep-holla:ffa_v1.1_notif 9/13]
- drivers/firmware/arm_ffa/driver.c:976:9: error: call to undeclared function
- 'acpi_register_gsi'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202308040652.qWlKWfEN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD54EA0
+	for <llvm@lists.linux.dev>; Thu,  3 Aug 2023 22:43:00 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1bb9e6c2a90so12795645ad.1
+        for <llvm@lists.linux.dev>; Thu, 03 Aug 2023 15:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1691102580; x=1691707380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=INe5iUN8OqFkxldA5UUSZCvoiHbOkh93tbzwvbZM2yg=;
+        b=AdrcoKcYKsDTC2sk5II1JfGBSGWxn+Mf/Sxnutk3q1l506vOr49iIj/50hD798HN7F
+         b0OZc7JKWeDh12FhSjL1Xl4BHhP+B9RobN0klmBuKMhnefOK9+UFoMYitJo0B22Um2dY
+         eJvU1iwgwiD/b9pJcn2WLq9Pd4MHq6mJciEdg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691102580; x=1691707380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=INe5iUN8OqFkxldA5UUSZCvoiHbOkh93tbzwvbZM2yg=;
+        b=NHx+aIqf551ezvoEC9aAHQ5/DL7Vvcy6JNJXQHsgcVZc4tHE1FXEJm5JLCU1YtZ2bm
+         4wnA997Q9wCf2hjZKi45sqkrBwGfkb28Ib+Nrn68lW0XTAA8Fu8b6RYqpdDbF2eVuxs9
+         CUhoGRk0wtZ8y/ALPf49eq0LfXl6Gu71i7Bi4y0O9Lph9mX3GDmNfgJl4fjG0creLjkC
+         A02N45WMKsIyj6Yy+PPTSCSv7fyhzMJ8PyTYxqLULjtr+Gnz00g/yDGkZ7do/Oha9QMx
+         Rv+yFqZCXClR//pEx+L3C6ZEbdTElbbzMUUX8644uqDtUn17ADhMj9fH51oA8Bi8oMZX
+         4Exw==
+X-Gm-Message-State: AOJu0YxTgHEj0Nn1bLpsEztSlmmLcGfqMNBJJPR8dyPDq06uTa8++LKX
+	lfN5TTIWzF5nhpovREvXBnRRJg==
+X-Google-Smtp-Source: AGHT+IFvgcDqbfRdpydPq4ink9vQ3N7ScSsxcZoM/8xiqyVFgUTfakh0jjBFWkrGAUhq6+xeRCxMNQ==
+X-Received: by 2002:a17:903:2351:b0:1bb:a85c:23cc with SMTP id c17-20020a170903235100b001bba85c23ccmr141262plh.15.1691102579859;
+        Thu, 03 Aug 2023 15:42:59 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902bd0700b001bc2831e1a8sm355952pls.80.2023.08.03.15.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 15:42:59 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Juergen Gross <jgross@suse.com>,
+	Kees Cook <keescook@chromium.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ajay Kaher <akaher@vmware.com>,
+	Alexey Makhalov <amakhalov@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] x86/paravirt: Fix tlb_remove_table function callback prototype warning
+Date: Thu,  3 Aug 2023 15:42:49 -0700
+Message-Id: <169110256709.2294259.13111562642254330671.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230726231139.never.601-kees@kernel.org>
+References: <20230726231139.never.601-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git ffa_v1.1_notif
-head:   40e36d14dadfa296f30d2e2da01fa30de86166be
-commit: 6fc3f0af1086ba56ba2811ab4bc44c09571b5386 [9/13] firmware: arm_ffa: Initial support for scheduler receiver interrupt
-config: arm64-randconfig-r026-20230731 (https://download.01.org/0day-ci/archive/20230804/202308040652.qWlKWfEN-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040652.qWlKWfEN-lkp@intel.com/reproduce)
+On Wed, 26 Jul 2023 16:11:43 -0700, Kees Cook wrote:
+> Under W=1, this warning is visible in Clang 16 and newer:
+> 
+> arch/x86/kernel/paravirt.c:337:4: warning: cast from 'void (*)(struct mmu_gather *, struct page *)' to 'void (*)(struct mmu_gather *, void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>                            (void (*)(struct mmu_gather *, void *))tlb_remove_page,
+>                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Add a direct wrapper instead, which will make this warning (and
+> potential KCFI failures) go away.
+> 
+> [...]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308040652.qWlKWfEN-lkp@intel.com/
+Applied to for-next/hardening, thanks!
 
-All errors (new ones prefixed by >>):
+[1/1] x86/paravirt: Fix tlb_remove_table function callback prototype warning
+      https://git.kernel.org/kees/c/fcce1c6cb156
 
->> drivers/firmware/arm_ffa/driver.c:976:9: error: call to undeclared function 'acpi_register_gsi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     976 |                 irq = acpi_register_gsi(NULL, sr_intid, ACPI_EDGE_SENSITIVE,
-         |                       ^
-   1 error generated.
-
-
-vim +/acpi_register_gsi +976 drivers/firmware/arm_ffa/driver.c
-
-   950	
-   951	static int ffa_sched_recv_irq_map(void)
-   952	{
-   953		int ret, irq, sr_intid;
-   954	
-   955		ret = ffa_features(FFA_FEAT_SCHEDULE_RECEIVER_INT, 0, &sr_intid, NULL);
-   956		if (ret < 0) {
-   957			if (ret != -EOPNOTSUPP)
-   958				pr_err("Failed to retrieve scheduler Rx interrupt\n");
-   959			return ret;
-   960		}
-   961	
-   962		if (acpi_disabled) {
-   963			struct of_phandle_args oirq = {};
-   964			struct device_node *gic;
-   965	
-   966			gic = of_find_compatible_node(NULL, NULL, "arm,gic-v3");
-   967			if (!gic)
-   968				return -ENXIO;
-   969	
-   970			oirq.np = gic;
-   971			oirq.args_count = 1;
-   972			oirq.args[0] = sr_intid;
-   973			irq = irq_create_of_mapping(&oirq);
-   974			of_node_put(gic);
-   975		} else {
- > 976			irq = acpi_register_gsi(NULL, sr_intid, ACPI_EDGE_SENSITIVE,
-   977						ACPI_ACTIVE_HIGH);
-   978		}
-   979	
-   980		if (irq <= 0) {
-   981			pr_err("Failed to create IRQ mapping!\n");
-   982			return -ENODATA;
-   983		}
-   984	
-   985		return irq;
-   986	}
-   987	
+Take care,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
+
