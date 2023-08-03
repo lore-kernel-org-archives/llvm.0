@@ -1,114 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B3D24161;
-	Thu,  3 Aug 2023 18:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691086739; x=1722622739;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R9wCQl0gmuPYKvp9R7qZDyiOeRhl42k2yWVChyovhow=;
-  b=PP1xm7KyoOzF1plVFujIyBKk8hc6U716OQXK4J6iycY054azqKk6CDQC
-   2EY8Ky++8KOZvWA5FASLC9osOvnErSGS/hRyhjWIrqBqw/arJGK5cgs13
-   +0Z14vXpd5FvZMVtkMrx+9G8c7NzPdD7gckPkiKXZen9XMFmClktBcgXN
-   FFLDeEF6kEVC31vm5Jkw868S02HLOrNarm3iWe2HYP4P4Ec9x7j4I1oxf
-   tvZOK+HP2yfP2sBkbWohGo8Du32DSXVkfLb/L4WcePX2c2hJvjMuxKtgu
-   lHLF155Rj7dexqloj91QxCRoWZf2RYwbd5z2WL+xxnNi5PLBHWdB8N8wu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="349552879"
-X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="349552879"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 11:18:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="819783024"
-X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="scan'208";a="819783024"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2023 11:18:45 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRcuK-0002H9-1B;
-	Thu, 03 Aug 2023 18:18:44 +0000
-Date: Fri, 4 Aug 2023 02:17:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 8/37] sound/soc/soc-ops.c:817:5: warning:
- stack frame size (1040) exceeds limit (1024) in 'snd_soc_set_enum_kctl'
-Message-ID: <202308040255.7E1u4mhz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1AA24161;
+	Thu,  3 Aug 2023 18:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3460C433C7;
+	Thu,  3 Aug 2023 18:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691086831;
+	bh=P8dowrEK0UclRupBuhUAOmRE24XQaoAE9Melikb2V6I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SFYHvbtYypVc+GKLHKEeKGaSiU9LR0Atnc1Mw8HXEBmQxDrA6R5DlLf2gUexl5ash
+	 eSurQokkW4BjgIxSXHcPWcXu5R4wwchBnTwcvinhB4mxc+BYgCC3xvYq8Kn8V5tavp
+	 L7W0AS9ZaUhUK+bTDNawzq7ld862NK5UKl8ttohY/sDYy2zDqsV26cxTpZy+w+L++l
+	 sPd3enykeG4SPvngP57l2KkI0afaYwssHdf4QSELg+D6s5/vaty1emv8JieDLquhMe
+	 dUE2sj3CUtNkp4VvqcgsbCz6u1HCpYpcyWms6+rJkNTh7rYgPyRC8XQ1hwkn2JH4L2
+	 hWZB0Tx5d3dQQ==
+Date: Thu, 3 Aug 2023 11:20:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Liu, Yujie" <yujie.liu@intel.com>
+Cc: lkp <lkp@intel.com>, "sashal@kernel.org" <sashal@kernel.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"tobin@kernel.org" <tobin@kernel.org>
+Subject: Re: [stable:linux-4.19.y 5172/9999] lib/string.c:312:7: error:
+ redefinition of 'stpcpy'
+Message-ID: <20230803182029.GA1397709@dev-arch.thelio-3990X>
+References: <202308021401.lhJd2bLx-lkp@intel.com>
+ <20230802163841.GA2149436@dev-arch.thelio-3990X>
+ <55fe2c8bfa678224d0ae1a568d1cb31906d50a05.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <55fe2c8bfa678224d0ae1a568d1cb31906d50a05.camel@intel.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   fd19415d77a7612b4edbe780d58328ec41019816
-commit: eaf57e3237ce9c2addccb003bdc2131b889b46e0 [8/37] ASoC: ops: Introduce 'soc_set_enum_kctl'
-config: arm-randconfig-r004-20230731 (https://download.01.org/0day-ci/archive/20230804/202308040255.7E1u4mhz-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230804/202308040255.7E1u4mhz-lkp@intel.com/reproduce)
+On Thu, Aug 03, 2023 at 04:03:46AM +0000, Liu, Yujie wrote:
+> Hi Nathan,
+> 
+> On Wed, 2023-08-02 at 09:38 -0700, Nathan Chancellor wrote:
+> > On Wed, Aug 02, 2023 at 02:37:36PM +0800, kernel test robot wrote:
+> > > Hi Tobin,
+> > > 
+> > > First bad commit (maybe != root cause):
+> > > 
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+> > > head:   767049cead76cf699707290d5aeefb3e4d0d5b43
+> > > commit: 2a3687034e47c51cd4f01ce82ed16f1964008b9e [5172/9999] lib/string: Add strscpy_pad() function
+> > > config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/config)
+> > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > > reproduce: (https://download.01.org/0day-ci/archive/20230802/202308021401.lhJd2bLx-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes: https://lore.kernel.org/oe-kbuild-all/202308021401.lhJd2bLx-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > > > lib/string.c:312:7: error: redefinition of 'stpcpy'
+> > >    char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+> > >          ^
+> > >    lib/string.c:255:7: note: previous definition is here
+> > >    char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+> > >          ^
+> > >    lib/string.c:318:1: error: redefinition of '__kstrtab_stpcpy'
+> > >    EXPORT_SYMBOL(stpcpy);
+> > >    ^
+> > >    include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+> > >            __EXPORT_SYMBOL(sym, "")
+> > >            ^
+> > >    include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+> > >    #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+> > >                            ^
+> > >    include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+> > >            static const char __kstrtab_##sym[]                             \
+> > >                              ^
+> > >    <scratch space>:220:1: note: expanded from here
+> > >    __kstrtab_stpcpy
+> > >    ^
+> > >    lib/string.c:261:1: note: previous definition is here
+> > >    EXPORT_SYMBOL(stpcpy);
+> > >    ^
+> > >    include/linux/export.h:124:2: note: expanded from macro 'EXPORT_SYMBOL'
+> > >            __EXPORT_SYMBOL(sym, "")
+> > >            ^
+> > >    include/linux/export.h:120:25: note: expanded from macro '__EXPORT_SYMBOL'
+> > >    #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+> > >                            ^
+> > >    include/linux/export.h:81:20: note: expanded from macro '___EXPORT_SYMBOL'
+> > >            static const char __kstrtab_##sym[]                             \
+> > >                              ^
+> > >    <scratch space>:202:1: note: expanded from here
+> > >    __kstrtab_stpcpy
+> > >    ^
+> > >    2 errors generated.
+> > 
+> > This report/error makes no sense. At both the commit the robot bisected
+> > to (2a3687034e47c51cd4f01ce82ed16f1964008b9e) and current linux-4.19.y,
+> > there is only one definition of stpcpy()... Am I missing something here?
+> 
+> Sorry for this false alarm.
+> 
+> We were building some old mainline kernels and got a build error
+> "ld.lld: error: undefined symbol: stpcpy", which was fixed by a later
+> mainline commit 1e1b6d63d634 (lib/string.c: implement stpcpy). We
+> amended the source code to include this stpcpy fix to pass the build
+> for those old kernels, but made a mistake that also impacted stable
+> tree which already backported it, and caused this wrong report of
+> redefinition error. We will fix this bug ASAP.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308040255.7E1u4mhz-lkp@intel.com/
+No worries, I totally understand how that goes, as I have had to bisect
+old versions with a newer compiler before, which results in several
+patches that I need to apply to make things build... Thanks for the
+quick response!
 
-All warnings (new ones prefixed by >>):
-
->> sound/soc/soc-ops.c:817:5: warning: stack frame size (1040) exceeds limit (1024) in 'snd_soc_set_enum_kctl' [-Wframe-larger-than]
-   int snd_soc_set_enum_kctl(struct snd_soc_card *card,
-       ^
-   1 warning generated.
-
-
-vim +/snd_soc_set_enum_kctl +817 sound/soc/soc-ops.c
-
-   806	
-   807	/**
-   808	 * snd_soc_set_enum_kctl - Set enumerated controls matching a pattern
-   809	 *
-   810	 * @card: where to look for the controls
-   811	 * @name: name pattern
-   812	 * @value: string value to set the controls to
-   813	 *
-   814	 * Return number of matching and set controls on success, else error.
-   815	 * No controls need to match.
-   816	 */
- > 817	int snd_soc_set_enum_kctl(struct snd_soc_card *card,
-   818		const char *name, const char *value)
-   819	{
-   820		struct snd_kcontrol *kctl;
-   821		int hits = 0;
-   822		int ret;
-   823	
-   824		/* Sanity check for name */
-   825		if (unlikely(!name))
-   826			return -EINVAL;
-   827	
-   828		list_for_each_entry(kctl, &card->snd_card->controls, list) {
-   829			if (!soc_control_matches(kctl, name))
-   830				continue;
-   831	
-   832			ret = soc_set_enum_kctl(kctl, value);
-   833			if (ret < 0)
-   834				return ret;
-   835			hits++;
-   836		}
-   837	
-   838		if (!hits)
-   839			return -EINVAL;
-   840	
-   841		return hits;
-   842	}
-   843	EXPORT_SYMBOL_GPL(snd_soc_set_enum_kctl);
-   844	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
