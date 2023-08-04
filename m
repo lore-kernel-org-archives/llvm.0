@@ -1,117 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244A179EF;
-	Fri,  4 Aug 2023 08:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E85C433C7;
-	Fri,  4 Aug 2023 08:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691136620;
-	bh=n/fbxmZgAXx2EhdsI/2S74fch9nO3iVOz+1LpZmWgnY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iu2MzKzcD2cspKi4j0qUBryfPs2H/VDOcp+QbnswsIQM++ze1K8Bqc67hs9Pytgnf
-	 qPnHbJdmC4z90XYPZB3IrIcphE40CclpvvHcMKdIh/MKJEteGCEYaPQ+Ju/EHJD2i8
-	 5pKPJuuH7dOBEl3OkpgzQNIb/KIgC46EMqXVkgKeKioszFuu4XtYe5GcUFrhTesWpC
-	 72feH3UcNJJknPm6bI9uT7t2JvfPRCrimNQIX+7kU2TMKSA1U7Y9r05Yvx+yuvgAvq
-	 QdUk+gbk6la6YfjiJVec8Y/TJqXXxZXTXGfKTa3fP9AoGZ2ul4NDIhHZ/uZdlVhEmv
-	 potgPC1tdJ02w==
-Date: Fri, 4 Aug 2023 17:10:16 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, martin.lau@linux.dev, bpf
- <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, Tomasz
- =?UTF-8?B?UGF3ZcWC?= Gajc <tpgxyz@gmail.com>, Masami Hiramatsu
- <mhiramat@kernel.org>
-Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
-Message-Id: <20230804171016.5676b193723d400dec062f5f@kernel.org>
-In-Reply-To: <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
-References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
-	<ZMwQivemlha+fU5i@kernel.org>
-	<CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252FD5236
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 08:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691138416;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cbQ9l9S+pH0NaUUjhsXGOs/4zJQ8XUPzYTJ/gRoXJrc=;
+	b=PEi+HWw0DkBBW2CB1iKHUG1018w0okR39yaaU0SnBbYrTQGV6SCv+yo6q1rsM+e38ZXXzj
+	1La1kda6axFG4EPbmY6GR346gKUpFh/dVrq92cK07pF03kTEC7uMQzoWvwMGkfIht/fq4b
+	yZiu2xaLthpXplx0n6tLsokLVNwrSOI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-GZIMPD_dOIqSF3VpoJuGwg-1; Fri, 04 Aug 2023 04:40:15 -0400
+X-MC-Unique: GZIMPD_dOIqSF3VpoJuGwg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9D818DC662
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 08:40:14 +0000 (UTC)
+Received: from [172.64.9.24] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B869E4094DC0;
+	Fri,  4 Aug 2023 08:40:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 24 of 328): Test report for master
+ (6.5.0-rc4, mainline.kernel.org-clang, c1a515d3)
+Date: Fri, 04 Aug 2023 08:40:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <29413.123080404401500417@us-mta-511.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nick,
+Hi, we tested your kernel and here are the results:
 
-On Thu, 3 Aug 2023 13:50:02 -0700
-Nick Desaulniers <ndesaulniers@google.com> wrote:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >
-> > Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
-> > > Hi Martin (and BTF/BPF team),
-> > > I've observed 2 user reports with the error from the subject of this email.
-> > > https://github.com/ClangBuiltLinux/linux/issues/1825
-> > > https://bbs.archlinux.org/viewtopic.php?id=284177
-> > >
-> > > Any chance you could take a look at these reports and help us figure
-> > > out what's going wrong here?  Nathan and I haven't been able to
-> > > reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
-> > >
-> > > Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
-> >
-> > Masami had a problem with new versions of compilers that was solved
-> > with:
-> >
-> > ------------------------ 8< --------------------------------------------
-> > > To check that please tweak:
-> > >
-> > > ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
-> > > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> > > # CONFIG_DEBUG_INFO_DWARF4 is not set
-> > > # CONFIG_DEBUG_INFO_DWARF5 is not set
-> > > ⬢[acme@toolbox perf-tools-next]$
-> > >
-> > > i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
-> > > CONFIG_DEBUG_INFO_DWARF4.
-> >
-> > Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
-> 
-> Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
-> is not what I'd consider a fix. Someday we can move to
-> DWARFv5...someday...
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Actually, even with DWARFv5, if I use newer clang, pahole succeded to make
-BTF info. So it may depend on compiler version too.
+Kernel information:
+    Commit message: Merge tag 'perf-tools-fixes-for-v6.5-2-2023-08-03' of g=
+it://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
 
-> 
-> What you describe sounds like build success, but reduction in debug info.
-> 
-> The reports I'm referring to seem to result in a build failure.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/98505
 
-Yeah, it seems a different issue. I could build it at least.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
+3': Input/output error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1436
+            Affected tests:
+                  x86_64 - xfstests - cifsv3.11
+        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
+aes_crypt on s390x
+            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
+/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
+            Affected tests:
+                   s390x - Libkcapi AF_ALG test
 
-Thank you,
-
-> 
-> >
-> >   LD      .tmp_vmlinux.btf
-> >   BTF     .btf.vmlinux.bin.o
-> >   LD      .tmp_vmlinux.kallsyms1
-> >
-> > And
-> >
-> > / # strings /sys/kernel/btf/vmlinux | wc -l
-> > 89921
-> > / # strings /sys/kernel/btf/vmlinux | grep -w kfree
-> > kfree
-> >
-> > It seems the BTF is correctly generated. (with DWARF5, the number of symbols
-> > are about 30000.)
-> 
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
