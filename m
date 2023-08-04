@@ -1,43 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86D71988A;
-	Fri,  4 Aug 2023 20:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE211DA2B;
+	Fri,  4 Aug 2023 20:47:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691180810; x=1722716810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mzFj7DMB6qO5hXlGmHLr9mVJ+RiapoBOl5YW1+GILh4=;
-  b=UrfAIXMbXVBr7I5fo0TMgnNm8rjVgqmRrmLGzLgRximeNOVkSDRD1+qS
-   IePQsjblq2ocjBSLFaTFWbO8v0URP1NV1pyULIpykfTqKSD1cn2y+qLQP
-   RF6ihoNyenByddvy/txbDytgQFRTMJpcNtk5KuM8n+xXJpu5raNFCLIpF
-   SX+7XArJt6q0vcOg+jsKP/r9FeEXgdwtso1FeIm3ZGrMe0k0xVZhxAQCC
-   9Lkaev1VbeFnEN7kF+rIuwpY9NJqgJ7mgK+ocfRyI/9XK/2pF1N5O9Tw9
-   eMqLBHp6LSfNxFbKewNw3lwnwVmVB1NzFZ50N8Cu3k8jdesz8hXtEocOF
+  t=1691182070; x=1722718070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nrb38CB1CxDtNRUV9CDVvs0KpO65X9nDYACTZ4KB2xA=;
+  b=mVc0MhXbHwZzGij6VTSTZ012Gpi297m0yg9kazbB2Wf0BamCj5QqZFSS
+   kJ7pen4aWRWtvUjrWyNgURzChUVZbEVEA+NbEn3ph5xhBHkkjIT5oJ6k7
+   vZuby+PYlGtNjZnAeQVfgYghUATHEvVcAW2tnrqFmXL044E9AVcdPD1Nw
+   u1HboNXKF37MWIu9BrfrlC96Y1CaKW7VvhbCm4yctOOBrk8Mu1gZ7B9kp
+   HXG5B4XjnRVs6tzkZCaD0/uFeF148wmsqSCG3h1CCRpC584FL/iYtX7Ai
+   Z6HN6RAXwa6H6wVcgbuxnKmJjcDiiQVT0UjxjzB4omSCtcq1292/SQHoQ
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="456617915"
-X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
-   d="scan'208";a="456617915"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 13:26:47 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="373897677"
+X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
+   d="scan'208";a="373897677"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 13:47:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="733402807"
-X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
-   d="scan'208";a="733402807"
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="759708543"
+X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
+   d="scan'208";a="759708543"
 Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Aug 2023 13:26:46 -0700
+  by orsmga008.jf.intel.com with ESMTP; 04 Aug 2023 13:47:46 -0700
 Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qS1Nl-00035I-1V;
-	Fri, 04 Aug 2023 20:26:45 +0000
-Date: Sat, 5 Aug 2023 04:26:32 +0800
+	id 1qS1i5-000360-3C;
+	Fri, 04 Aug 2023 20:47:45 +0000
+Date: Sat, 5 Aug 2023 04:46:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:x86/topo-full 142/149]
- arch/x86/include/asm/topology.h:205:19: error: redefinition of
- 'topology_phys_to_logical_pkg'
-Message-ID: <202308050412.HWWFdVJB-lkp@intel.com>
+To: WANG Xuerui <kernel@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	loongarch@lists.linux.dev, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
+Message-ID: <202308050433.0KAmYqQ2-lkp@intel.com>
+References: <20230804125609.2054719-1-kernel@xen0n.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,147 +49,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230804125609.2054719-1-kernel@xen0n.name>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topo-full
-head:   ef76f58d8b34b1c6af83139c7d7cbf2a53c50bf2
-commit: dbef13142df070d1598f85df56f0f1879bf50fff [142/149] x86/cpu/topology: Use topology logical mapping mechanism
-config: x86_64-randconfig-x013-20230802 (https://download.01.org/0day-ci/archive/20230805/202308050412.HWWFdVJB-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050412.HWWFdVJB-lkp@intel.com/reproduce)
+Hi WANG,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.5-rc4]
+[cannot apply to next-20230804]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/WANG-Xuerui/LoongArch-Drop-ffreestanding-from-CFLAGS/20230804-205642
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230804125609.2054719-1-kernel%40xen0n.name
+patch subject: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230805/202308050433.0KAmYqQ2-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050433.0KAmYqQ2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308050412.HWWFdVJB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050433.0KAmYqQ2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:8:
-   In file included from include/linux/topology.h:36:
->> arch/x86/include/asm/topology.h:205:19: error: redefinition of 'topology_phys_to_logical_pkg'
-   static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
-                     ^
-   arch/x86/include/asm/topology.h:161:19: note: previous definition is here
-   static inline int topology_phys_to_logical_pkg(unsigned int pkg)
-                     ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/irqflags.h:18,
+                    from include/linux/spinlock.h:59,
+                    from include/linux/debugobjects.h:6,
+                    from include/linux/timer.h:8,
+                    from include/linux/workqueue.h:9,
+                    from drivers/media/usb/em28xx/em28xx.h:21,
+                    from drivers/media/usb/em28xx/em28xx-audio.c:14:
+   arch/loongarch/include/asm/percpu.h:20:4: error: #error compiler support for the model attribute is necessary when a recent assembler is used
+      20 | #  error compiler support for the model attribute is necessary when a recent assembler is used
+         |    ^~~~~
+   drivers/media/usb/em28xx/em28xx-audio.c: In function 'em28xx_audio_init':
+>> drivers/media/usb/em28xx/em28xx-audio.c:808:29: warning: variable 'devnr' set but not used [-Wunused-but-set-variable]
+     808 |         static int          devnr;
+         |                             ^~~~~
+   drivers/media/usb/em28xx/em28xx-audio.c: At top level:
+   drivers/media/usb/em28xx/em28xx-audio.c:47:12: warning: 'index' defined but not used [-Wunused-variable]
+      47 | static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;
+         |            ^~~~~
 
 
-vim +/topology_phys_to_logical_pkg +205 arch/x86/include/asm/topology.h
+vim +/devnr +808 drivers/media/usb/em28xx/em28xx-audio.c
 
-fae50c56bf5c4d arch/x86/include/asm/topology.h Thomas Gleixner 2023-07-26  203  
-f54d4434c281f3 arch/x86/include/asm/topology.h Thomas Gleixner 2023-05-12  204  #else /* CONFIG_SMP */
-1f12e32f4cd524 arch/x86/include/asm/topology.h Thomas Gleixner 2016-02-22 @205  static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
-70b8301f6b8f7b arch/x86/include/asm/topology.h Andi Kleen      2016-05-19  206  static inline int topology_max_smt_threads(void) { return 1; }
-6a4d2657e048f0 arch/x86/include/asm/topology.h Thomas Gleixner 2018-05-29  207  static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
-f048c399e0f749 arch/x86/include/asm/topology.h Thomas Gleixner 2018-06-21  208  static inline bool topology_smt_supported(void) { return false; }
-324469c2f4cec1 arch/x86/include/asm/topology.h Thomas Gleixner 2023-07-12  209  static inline unsigned int topology_amd_nodes_per_pkg(void) { return 0; };
-fae50c56bf5c4d arch/x86/include/asm/topology.h Thomas Gleixner 2023-07-26  210  static inline void topology_apply_cmdline_limits_early(void) { }
-f54d4434c281f3 arch/x86/include/asm/topology.h Thomas Gleixner 2023-05-12  211  #endif /* !CONFIG_SMP */
-3367e56f26a3a8 include/asm-x86/topology.h      Thomas Gleixner 2008-01-30  212  
-
-:::::: The code at line 205 was first introduced by commit
-:::::: 1f12e32f4cd5243ae46d8b933181be0d022c6793 x86/topology: Create logical package id
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  801  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  802  static int em28xx_audio_init(struct em28xx *dev)
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  803  {
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  804  	struct em28xx_audio *adev = &dev->adev;
+c6d48134cb2682 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  805  	struct usb_device *udev = interface_to_usbdev(dev->intf);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  806  	struct snd_pcm      *pcm;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  807  	struct snd_card     *card;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12 @808  	static int          devnr;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  809  	int		    err;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  810  
+c5874208ff78a5 drivers/media/usb/em28xx/em28xx-audio.c   Frank Schaefer        2014-09-13  811  	if (dev->usb_audio_type != EM28XX_USB_AUDIO_VENDOR) {
+9f90f5371f52b4 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-03-03  812  		/*
+9f90f5371f52b4 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-03-03  813  		 * This device does not support the extension (in this case
+9f90f5371f52b4 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-03-03  814  		 * the device is expecting the snd-usb-audio module or
+9f90f5371f52b4 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-03-03  815  		 * doesn't have analog audio support at all)
+9f90f5371f52b4 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-03-03  816  		 */
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  817  		return 0;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  818  	}
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  819  
+29b05e22f5c68c drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  820  	dev_info(&dev->intf->dev, "Binding audio extension\n");
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  821  
+47677e51e2a404 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-03-05  822  	kref_get(&dev->ref);
+47677e51e2a404 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-03-05  823  
+29b05e22f5c68c drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  824  	dev_info(&dev->intf->dev,
+ce8591ff023ef8 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-10-20  825  		 "em28xx-audio.c: Copyright (C) 2006 Markus Rechberger\n");
+29b05e22f5c68c drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  826  	dev_info(&dev->intf->dev,
+ce8591ff023ef8 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-10-20  827  		 "em28xx-audio.c: Copyright (C) 2007-2016 Mauro Carvalho Chehab\n");
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  828  
+29b05e22f5c68c drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  829  	err = snd_card_new(&dev->intf->dev, index[devnr], "Em28xx Audio",
+e735688875208f drivers/media/usb/em28xx/em28xx-audio.c   Takashi Iwai          2014-01-29  830  			   THIS_MODULE, 0, &card);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  831  	if (err < 0)
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  832  		return err;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  833  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  834  	spin_lock_init(&adev->slock);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  835  	adev->sndcard = card;
+c6d48134cb2682 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  836  	adev->udev = udev;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  837  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  838  	err = snd_pcm_new(card, "Em28xx Audio", 0, 0, 1, &pcm);
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  839  	if (err < 0)
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  840  		goto card_free;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  841  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  842  	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_em28xx_pcm_capture);
+2abb1b2daf88ee drivers/media/usb/em28xx/em28xx-audio.c   Takashi Iwai          2019-12-10  843  	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  844  	pcm->info_flags = 0;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  845  	pcm->private_data = dev;
+cc1e6315e83db0 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-09-10  846  	strscpy(pcm->name, "Empia 28xx Capture", sizeof(pcm->name));
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  847  
+cc1e6315e83db0 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-09-10  848  	strscpy(card->driver, "Em28xx-Audio", sizeof(card->driver));
+cc1e6315e83db0 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-09-10  849  	strscpy(card->shortname, "Em28xx Audio", sizeof(card->shortname));
+cc1e6315e83db0 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2018-09-10  850  	strscpy(card->longname, "Empia Em28xx Audio", sizeof(card->longname));
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  851  
+a5c075cfd2386a drivers/media/usb/em28xx/em28xx-audio.c   Frank Schaefer        2014-03-24  852  	INIT_WORK(&adev->wq_trigger, audio_trigger);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  853  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  854  	if (dev->audio_mode.ac97 != EM28XX_NO_AC97) {
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  855  		em28xx_cvol_new(card, dev, "Video", AC97_VIDEO);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  856  		em28xx_cvol_new(card, dev, "Line In", AC97_LINE);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  857  		em28xx_cvol_new(card, dev, "Phone", AC97_PHONE);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  858  		em28xx_cvol_new(card, dev, "Microphone", AC97_MIC);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  859  		em28xx_cvol_new(card, dev, "CD", AC97_CD);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  860  		em28xx_cvol_new(card, dev, "AUX", AC97_AUX);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  861  		em28xx_cvol_new(card, dev, "PCM", AC97_PCM);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  862  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  863  		em28xx_cvol_new(card, dev, "Master", AC97_MASTER);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  864  		em28xx_cvol_new(card, dev, "Line", AC97_HEADPHONE);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  865  		em28xx_cvol_new(card, dev, "Mono", AC97_MASTER_MONO);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  866  		em28xx_cvol_new(card, dev, "LFE", AC97_CENTER_LFE_MASTER);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  867  		em28xx_cvol_new(card, dev, "Surround", AC97_SURROUND_MASTER);
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  868  	}
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  869  
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  870  	err = em28xx_audio_urb_init(dev);
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  871  	if (err)
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  872  		goto card_free;
+966f4163751b45 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  873  
+6d79468dd85375 drivers/media/video/em28xx/em28xx-audio.c Mauro Carvalho Chehab 2008-01-05  874  	err = snd_card_register(card);
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  875  	if (err < 0)
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  876  		goto urb_free;
+6d79468dd85375 drivers/media/video/em28xx/em28xx-audio.c Mauro Carvalho Chehab 2008-01-05  877  
+29b05e22f5c68c drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2016-12-07  878  	dev_info(&dev->intf->dev, "Audio extension successfully initialized\n");
+a52932b405f230 drivers/media/video/em28xx/em28xx-audio.c Markus Rechberger     2008-01-05  879  	return 0;
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  880  
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  881  urb_free:
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  882  	em28xx_audio_free_urb(dev);
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  883  
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  884  card_free:
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  885  	snd_card_free(card);
+452f236fcf845b drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-14  886  	adev->sndcard = NULL;
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  887  
+0cd03a0cb20c75 drivers/media/usb/em28xx/em28xx-audio.c   Mauro Carvalho Chehab 2014-01-12  888  	return err;
+a52932b405f230 drivers/media/video/em28xx/em28xx-audio.c Markus Rechberger     2008-01-05  889  }
+a52932b405f230 drivers/media/video/em28xx/em28xx-audio.c Markus Rechberger     2008-01-05  890  
 
 -- 
 0-DAY CI Kernel Test Service
