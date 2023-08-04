@@ -1,94 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C361513ADF;
-	Fri,  4 Aug 2023 15:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD38C433CB;
-	Fri,  4 Aug 2023 15:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691162764;
-	bh=WvZAHorDIpiciLffkFVJw3h0wT4JjJwW3b25V9pJ9jc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rdgdWpwsgCrdio72CLu/5c47JmPJbC6pDJ9yd7X3ODpdKiXDv3a0AEludD6OO3h0Y
-	 kaaYjSPQ59gET1u3Dj4nloSvhNDFGqXLNNVZ3mvvWHmcfbw/eG5x3Q+n0IpgAqZAg6
-	 fL/++eStQJ5/amosKRZFt4besY0Ga/gHOArYUSlDGugZ7nNU+5cmvtKXAQKS3mhIDG
-	 ynkDtScRIaENlSn+ScpKQWq/S4phsR+kHrE0PirPoeN3/UVCaQFIKLmdDHCLA823F+
-	 oUIVDvVxYzZh7KAOdIYXKtrtsAosCu6wdRTZtM37y0ri6LDkidXfMmoYmVkOYrJrxY
-	 Zal2WDdHSB1uA==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so7099508a12.0;
-        Fri, 04 Aug 2023 08:26:04 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yyq4zcanZ05RyHXjwafdFG7o7S4KzFJFNqqow62JBpOt/2Gkrvt
-	ZxexelxX2STUutBe6NITry3i8Altw1gCMlt5H3g=
-X-Google-Smtp-Source: AGHT+IHgYIxDUocD7XElmW9huTw2tiWuHOgemRBa6n1ZRjbTHykdamk6R3XLjPmb3ulxLHxs7ZYARKgDoOxCKmOvacg=
-X-Received: by 2002:a05:6402:3509:b0:522:ddeb:cdcb with SMTP id
- b9-20020a056402350900b00522ddebcdcbmr58574edd.18.1691162762460; Fri, 04 Aug
- 2023 08:26:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C05134B3;
+	Fri,  4 Aug 2023 15:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691162986; x=1722698986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VzXt7Z7eMo8qbFrIzQm83Cf7+kKWSuq0TCW2k5TVG1w=;
+  b=eLukJC1te9UFvUkkbUq0oorJYOTjAQjtunSk9BVk7kZJXZ/GGVKXxdYR
+   mozlmn9Z83AaLoDLW0ZRYOjD03tnxv0kzy3db4RB/ek0TYy24I2d3OF4S
+   zegFn8X04/hCELYDazktxEl4cB8KGzrMlpY08NbFG3oNHH04fySAZfrlQ
+   /dzCXJKGN/V2uLlrom+XTQTYlnlNLHsuZlJ32NbfU5Ze3Os3+ZWZuWyac
+   heA0QE3wvGL9OPSxAy0ejT8RJHWG3wfMOrcyTzwrg+pC2eWDszbPPt9pX
+   5osS7oPDRpJ+sQ9oLa0oW0ooVK2YdO6Eqi10R8JV5YEOsmhAGke9tG7Q6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="367639328"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="367639328"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 08:29:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="795454136"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="795454136"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Aug 2023 08:29:38 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRwkD-0002vJ-0k;
+	Fri, 04 Aug 2023 15:29:37 +0000
+Date: Fri, 4 Aug 2023 23:28:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:x86/topo-full 146/149]
+ arch/x86/include/asm/topology.h:222:19: error: conflicting types for
+ 'topology_max_dies_per_package'
+Message-ID: <202308042359.aBTHB2ad-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230804125609.2054719-1-kernel@xen0n.name>
-In-Reply-To: <20230804125609.2054719-1-kernel@xen0n.name>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 4 Aug 2023 23:25:50 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
-Message-ID: <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
-To: WANG Xuerui <kernel@xen0n.name>
-Cc: Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, Xuerui,
+Hi Thomas,
 
-On Fri, Aug 4, 2023 at 8:56=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wrot=
-e:
->
-> From: WANG Xuerui <git@xen0n.name>
->
-> As explained by Nick in the original issue: the kernel usually does a
-> good job of providing library helpers that have similar semantics as
-> their ordinary userspace libc equivalents, but -ffreestanding disables
-> such libcall optimization and other related features in the compiler,
-> which can lead to unexpected things such as CONFIG_FORTIFY_SOURCE not
-> working (!).
->
-> As it turns out to be the case, removing the flag does not impact the
-> LoongArch kernel's normal operation at all; so just remove it to
-> restore expected libcall semantics globally on this architecture.
->
-Not all processors support unaligned access, so we need the
-alternative mechanism to select memset/memcpy/memmove implementations.
-If remove -ffreestanding, the builtin implementation cannot be used on
-all hardware.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Huacai
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/topo-full
+head:   5aae6a70fa86fdf5e16adebb719d826e7cca486d
+commit: 2c5be4884ee9aa9511aecce73e1240c27261a65e [146/149] x86/cpu/topology: Rename topology_max_die_per_package()
+config: x86_64-randconfig-x003-20230731 (https://download.01.org/0day-ci/archive/20230804/202308042359.aBTHB2ad-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230804/202308042359.aBTHB2ad-lkp@intel.com/reproduce)
 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1897
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> ---
->  arch/loongarch/Makefile | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index b1e5db51b61c..db0d7210272d 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -83,7 +83,6 @@ KBUILD_CFLAGS_KERNEL          +=3D -fPIE
->  LDFLAGS_vmlinux                        +=3D -static -pie --no-dynamic-li=
-nker -z notext
->  endif
->
-> -cflags-y +=3D -ffreestanding
->  cflags-y +=3D $(call cc-option, -mno-check-zero-division)
->
->  load-y         =3D 0x9000000000200000
-> --
-> 2.40.0
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308042359.aBTHB2ad-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:8:
+   In file included from include/linux/topology.h:36:
+>> arch/x86/include/asm/topology.h:222:19: error: conflicting types for 'topology_max_dies_per_package'
+   static inline int topology_max_dies_per_package(void) { return 1; }
+                     ^
+   arch/x86/include/asm/topology.h:155:28: note: previous definition is here
+   static inline unsigned int topology_max_dies_per_package(void)
+                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+                           set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+                   return (set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+
+
+vim +/topology_max_dies_per_package +222 arch/x86/include/asm/topology.h
+
+   219	
+   220	#else /* CONFIG_SMP */
+   221	static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
+ > 222	static inline int topology_max_dies_per_package(void) { return 1; }
+   223	static inline int topology_max_smt_threads(void) { return 1; }
+   224	static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
+   225	static inline bool topology_smt_supported(void) { return false; }
+   226	static inline unsigned int topology_amd_nodes_per_pkg(void) { return 0; };
+   227	static inline void topology_apply_cmdline_limits_early(void) { }
+   228	#endif /* !CONFIG_SMP */
+   229	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
