@@ -1,126 +1,100 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0A0CA6E
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 15:46:30 +0000 (UTC)
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-63cf6b21035so13835066d6.1
-        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 08:46:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C293FBE7B
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 15:50:00 +0000 (UTC)
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-47ec8c9d7a0so913576e0c.3
+        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 08:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691163990; x=1691768790;
+        d=google.com; s=20221208; t=1691164199; x=1691768999;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lbb2VkUYpcvrjAbuA8UFz73QM1aapinYdQ8PfffEqdw=;
-        b=uSw8srlvkdNUYJYtc5TNkofuuRG9NlvWsa9z1FxvyZgYol80KHdrxc49/RmliZ/fzc
-         W62Zh23a8h9A5Q0U05CYcZlliurch5SLeO+NXbcUxc5Snxe44CHOT6pBpKqbjCQ5tJtu
-         m9x21PVKgCsS8RkvCKOUgc2DDgcdAbsfSxqeCLcGA9Chi5toZU2Pq72NgECAMBtyTp0/
-         EvoBi8TVPPuKrA0RnO0NW6ui2xNhaT15TPafkWO048bdvP9IwJ2EdIlPNR0oKJfBKuZ+
-         326P99bNO/E4ZNzmMhORxtwrEzvIcGTMMa/n/K+eISL7k3poBMBIMrfxtcQw793EssFM
-         NbTg==
+        bh=M6GtJle38GYNlw+gZNdG3pGleXzijHW2VDwwGhqBWf0=;
+        b=AW5cXx0H8S0x5I+u2xfxfy1V7vR/jMhVl1HUEGEbVyMQepbBG7qwJSWaktQ6RUC0ry
+         YWp/wcvzZRS0TmRJPYM7ge8Wunb/krBend8Sku8kZ9/XenVwDkKiznYril6qzO64JRls
+         Q7dCK8fwLyw9HBdWcmAEtxT63VH6KCAnDDnSzC6QWOMes9rU+Bk9lh/QSwVUu/+Q9M3F
+         yXe4ljZivaQrSG9TrCIM4df/WqKdrg0WjCIf3SXhO+Omc+9BDZvl7iaQ3gi46u/Wl8kv
+         8M+yzJ6QwWSZYvFrole4BzasoQzljZn068wOxkBGwSzKUGLR070XifJVqziX33IlqbS0
+         aaJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691163990; x=1691768790;
+        d=1e100.net; s=20221208; t=1691164199; x=1691768999;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Lbb2VkUYpcvrjAbuA8UFz73QM1aapinYdQ8PfffEqdw=;
-        b=WR84CRkralmNQ1x1B+IeYjEg4XB9X5ruIH+MWaRS73BQoSoSEfvJPnZ7f0l5pgqm+m
-         1t7feCFLRjBfQnCumsjx2GY9mQ2FS8LCWfXwya8SfzRZFeHvLimJnUCE25mpInO0ago6
-         h6k4pvH+jr0PQAwjoQzJBXDSeEyzaX9zA2r/biEo/gwOxv1hGZhm8cDmRwsCb/bg0iSO
-         zKd4WL/jNJtrPyXsItKGZnHbuPMsILLLF9Z1mrn3USzC02ME3ebkSP8CwRNc01dZCk0h
-         x6wRxZB4Ua/LvU2aZ1Zc+LpmihecHTVRmh8MB04M+24zjklGSRtO5qemrTSmVMvGJRqU
-         7tDA==
-X-Gm-Message-State: AOJu0Yy3A8XSgEIl6mXS1o+hac6UncajYvVBkekUx+Ru6di/+zskc+1+
-	trrcYaBxlLv95+v1WNAJra0Tmdh5Tt5ng+80WmH7hg==
-X-Google-Smtp-Source: AGHT+IEu1uNcPnRW/G5hBNtOR5DUb/bVDRNMeccdfr2Wm9PDbUnpDbM+4Azra3rGP6+r18EkGk6+83/9IQfnQ1iFGYg=
-X-Received: by 2002:a0c:cb09:0:b0:63d:6fb:c8da with SMTP id
- o9-20020a0ccb09000000b0063d06fbc8damr1804085qvk.14.1691163989483; Fri, 04 Aug
- 2023 08:46:29 -0700 (PDT)
+        bh=M6GtJle38GYNlw+gZNdG3pGleXzijHW2VDwwGhqBWf0=;
+        b=JG+XHk4BW5N+Ho0msDe2FKeIyFkqSYB27tNHbWJo2/4NChn1BavTTGETalsS5rZg3V
+         9XdWQeWSlXYFuB5snmX/i4V7C0CbH5IwDErxvEjO4JzcRB7u/yoFKV04Wa3t6vPT0jiq
+         wdHf3Od4Waa9l1a1mjsVRkBYH86i4jv8IM2QNKNuOKUe1Wag7QXOsPS5bFCjDPZfgnfs
+         UxePhDlBUXBVAOObW4yjuavdoiU+OrVBErFCl27TBCjaZEb3vwXkBsGyOw/mNHHho9OK
+         kBO2VA2JICWTqwg3ZBAcadJbny8RruxrIeQ65M9GM1t1wXKbL4A+rIcDsknvxUZ4wmcq
+         COYQ==
+X-Gm-Message-State: AOJu0YzHzNrAa8gMcGHi7JRL2ed19YK8h4uvTfhY8IRPSparqhY8FFoy
+	RZBJUEzw6yFs7xWAOC1fNfqdzR48JI3qbmuZNbUHfA==
+X-Google-Smtp-Source: AGHT+IGtDHTDweDFtGPqweVEy6/Ojul8h7Go4cQI7kTAsF7TZW0t3PAPJCedcn9OpWUtmtIlxQmADQwpMGsPvotnBTs=
+X-Received: by 2002:a1f:45d7:0:b0:487:1ae2:2ad7 with SMTP id
+ s206-20020a1f45d7000000b004871ae22ad7mr1601447vka.3.1691164199316; Fri, 04
+ Aug 2023 08:49:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230804125609.2054719-1-kernel@xen0n.name> <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
-In-Reply-To: <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
+References: <20230804012656.4091877-1-suhui@nfschina.com>
+In-Reply-To: <20230804012656.4091877-1-suhui@nfschina.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 4 Aug 2023 08:46:18 -0700
-Message-ID: <CAKwvOdmt+p3KM23hz2BfheoWgEa0G9QKnAFYUP+EL2Ta5LXUUg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	WANG Xuerui <git@xen0n.name>
+Date: Fri, 4 Aug 2023 08:49:48 -0700
+Message-ID: <CAKwvOd=1pEE=pspfg7fcofYF5=eziFvcLJgC0_ohG7jq+rbVyg@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: lockd: avoid possible wrong NULL parameter
+To: Su Hui <suhui@nfschina.com>
+Cc: trond.myklebust@hammerspace.com, anna@kernel.org, chuck.lever@oracle.com, 
+	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+	tom@talpey.com, nathan@kernel.org, trix@redhat.com, bfields@fieldses.org, 
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 4, 2023 at 8:26=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org> =
-wrote:
+On Thu, Aug 3, 2023 at 6:28=E2=80=AFPM Su Hui <suhui@nfschina.com> wrote:
 >
-> Hi, Xuerui,
+> clang's static analysis warning: fs/lockd/mon.c: line 293, column 2:
+> Null pointer passed as 2nd argument to memory copy function.
 >
-> On Fri, Aug 4, 2023 at 8:56=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wr=
-ote:
-> >
-> > From: WANG Xuerui <git@xen0n.name>
-> >
-> > As explained by Nick in the original issue: the kernel usually does a
-> > good job of providing library helpers that have similar semantics as
-> > their ordinary userspace libc equivalents, but -ffreestanding disables
-> > such libcall optimization and other related features in the compiler,
-> > which can lead to unexpected things such as CONFIG_FORTIFY_SOURCE not
-> > working (!).
-> >
-> > As it turns out to be the case, removing the flag does not impact the
-> > LoongArch kernel's normal operation at all; so just remove it to
-> > restore expected libcall semantics globally on this architecture.
-> >
-> Not all processors support unaligned access, so we need the
-> alternative mechanism to select memset/memcpy/memmove implementations.
-> If remove -ffreestanding, the builtin implementation cannot be used on
-> all hardware.
-
-That sounds like a compiler bug in that compiler's implementation of
-string.h builtins then; it should default to the safest implementation
-(aligned accesses) until instructed otherwise.  Have you filed a bug
-against your compiler vendor for which compiler you observe that
-behavior from?
-
-At the very least, there should be a comment above the addition of
--ffreestanding justifying why it's being used, probably with a link to
-the above bug report.
-
-I would expect either -mcpu or perhaps some other -m flag to guide the
-compiler when it is safe to emit memcpy (and friends) in terms of
-unaligned access or not.
-
+> Assuming 'hostname' is NULL and calling 'nsm_create_handle()', this will
+> pass NULL as 2nd argument to memory copy function 'memcpy()'. So return
+> NULL if 'hostname' is invalid.
 >
-> Huacai
+> Fixes: 77a3ef33e2de ("NSM: More clean up of nsm_get_handle()")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+
+Thanks for the patch! And thanks for checking clang static analysis reports=
+!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+> v2:
+>  - move NULL check to the callee "nsm_create_handle()"
+>  fs/lockd/mon.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1897
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: WANG Xuerui <git@xen0n.name>
-> > ---
-> >  arch/loongarch/Makefile | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> > index b1e5db51b61c..db0d7210272d 100644
-> > --- a/arch/loongarch/Makefile
-> > +++ b/arch/loongarch/Makefile
-> > @@ -83,7 +83,6 @@ KBUILD_CFLAGS_KERNEL          +=3D -fPIE
-> >  LDFLAGS_vmlinux                        +=3D -static -pie --no-dynamic-=
-linker -z notext
-> >  endif
-> >
-> > -cflags-y +=3D -ffreestanding
-> >  cflags-y +=3D $(call cc-option, -mno-check-zero-division)
-> >
-> >  load-y         =3D 0x9000000000200000
-> > --
-> > 2.40.0
-> >
+> diff --git a/fs/lockd/mon.c b/fs/lockd/mon.c
+> index 1d9488cf0534..87a0f207df0b 100644
+> --- a/fs/lockd/mon.c
+> +++ b/fs/lockd/mon.c
+> @@ -276,6 +276,9 @@ static struct nsm_handle *nsm_create_handle(const str=
+uct sockaddr *sap,
+>  {
+>         struct nsm_handle *new;
+>
+> +       if (!hostname)
+> +               return NULL;
+> +
+>         new =3D kzalloc(sizeof(*new) + hostname_len + 1, GFP_KERNEL);
+>         if (unlikely(new =3D=3D NULL))
+>                 return NULL;
+> --
+> 2.30.2
 >
 
 
