@@ -1,106 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5A7A940
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 13:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C97C433C8;
-	Fri,  4 Aug 2023 13:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24C1BA4F;
+	Fri,  4 Aug 2023 14:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71796C433CA;
+	Fri,  4 Aug 2023 14:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691154288;
-	bh=89r/cdPXUA3crJLOF3jvKSSR2U3OJaNBikJcnHTJn8Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gUYMlOrfhs6V2ihRFqHUGhHMMYmMbicrmDYusJpbidqVz7/W3N9yODCXo+KSy/7IE
-	 Q7WKyfeiHvaKdEwjZ0XfcHRzwBp8IEKN8SMFMsyKgq2TBTZ/tkpJhxSOsjaAV8tO7+
-	 cdoSzqVVANT7dDsGKYnheeTz2lnX4eTOoHAkYAX39McHpg8KzdqvxvSiUrHMkNB8F7
-	 z1yWxTheru1Xu87cnT4nOT33rnMmmgqhfhFz7tE8KgvwkzyBvrvMIWjwF6z+8M6hIV
-	 eEflx7YZSm5zsv4tLE77TXac5S1gfpNvHdxi9ZKWEOw74M2ZGGTKFl8NuBTSqopvAk
-	 kMU68qIP13ohg==
-Date: Fri, 4 Aug 2023 14:04:43 +0100
-From: Will Deacon <will@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Will Deacon <will.deacon@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] word-at-a-time: use the same return type for has_zero
- regardless of endianness
-Message-ID: <20230804130431.GA29929@willie-the-truck>
-References: <20230801-bitwise-v1-1-799bec468dc4@google.com>
- <CAHk-=wgkC80Ey0Wyi3zHYexUmteeDL3hvZrp=EpMrDccRGmMwA@mail.gmail.com>
- <20230802161553.GA2108867@dev-arch.thelio-3990X>
- <CAHk-=wjmWjd+xe88cf14hFGkSK7fYJBSixK8Ym0DLYCa+dTxtg@mail.gmail.com>
- <dd48b4ff-1009-41fe-baf5-be89432c5d28@app.fastmail.com>
+	s=k20201202; t=1691159183;
+	bh=E3e/RrfDh8oIx0OZAQHQ+IDfpwQVMEWdT14roAUdV4Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OCLpdh7eoaScz11goFs38Ng2rtjJ8uzfmOnQpOygNjtun+9bMnKoH4phYDWX16uez
+	 cEwhoXE7qL3uSHw+F6qQZusKpKc4KX8Eg9xvUVcGUK98ifBK66kSV+yGQheeDOyd1a
+	 ijczwVMBK3ex69WwTknCblUC7NcJ0zOEHy2hitxdrVMR86N4ihKqMfGAWXjxXAtp2z
+	 zkkETMsadN400FO2EoH6wIeZMkX7F3RoLU1c4C3LF5DNEF5tyN5yxwm3aiV1B31soX
+	 eB8fTzK4Etphyl18h5khS5HxJx3cD6L16J4tJqHVP92rvE7OwkAnvtBfOgi5QAODIS
+	 sMCsuFf2cQF2Q==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b9cf2b1309so27288051fa.0;
+        Fri, 04 Aug 2023 07:26:23 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyUUaqQCD235B/kwfQycJSZ/uOfFK2lObeqc5ICRiQBxW9rf6Ew
+	0uIYW7go4UZcVc6HdO5MLN8tSekHaOcO1wsrgg==
+X-Google-Smtp-Source: AGHT+IGVwA3t/rc+I8YxkRQqV7zrIm/I886EhP+qYvTae2ciEnvfPlYw7WitcST/wmTl7QqZA9FKIl0ERIQIB+2ZgeU=
+X-Received: by 2002:a2e:b5c8:0:b0:2b9:b1fb:5ff4 with SMTP id
+ g8-20020a2eb5c8000000b002b9b1fb5ff4mr667905ljn.21.1691159181464; Fri, 04 Aug
+ 2023 07:26:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd48b4ff-1009-41fe-baf5-be89432c5d28@app.fastmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <202308042049.8R2tNRoo-lkp@intel.com>
+In-Reply-To: <202308042049.8R2tNRoo-lkp@intel.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 4 Aug 2023 08:26:08 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKn3vm_LQ64eo-fgQ09RBPtSH=CdC-u=ezyOQs=kMHmBQ@mail.gmail.com>
+Message-ID: <CAL_JsqKn3vm_LQ64eo-fgQ09RBPtSH=CdC-u=ezyOQs=kMHmBQ@mail.gmail.com>
+Subject: Re: [herbert-cryptodev-2.6:master 83/83] drivers/char/hw_random/xgene-rng.c:110:2:
+ error: call to undeclared function 'writel'; ISO C99 and later do not support
+ implicit function declarations
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-crypto@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 02, 2023 at 08:17:32PM +0200, Arnd Bergmann wrote:
-> On Wed, Aug 2, 2023, at 19:37, Linus Torvalds wrote:
-> > On Wed, 2 Aug 2023 at 09:16, Nathan Chancellor <nathan@kernel.org> wrote:
-> >>
-> >> We see this warning with ARCH=arm64 defconfig + CONFIG_CPU_BIG_ENDIAN=y.
-> >
-> > Oh Christ. I didn't even realize that arm64 allowed a BE config.
-> >
-> > The config option goes back to 2013 - are there actually BE user space
-> > implementations around?
-> 
-> At least NXP's Layerscape and Huawei's SoCs ended up in big-endian
-> appliances, running legacy software ported from mips or powerpc.
-> I agree this was a mistake, but that wasn't nearly as obvious ten
-> years ago when there were still new BE-only sparc, mips and powerpc
-> put on the market -- that really only ended in 2017.
-> 
-> > People, why do we do that? That's positively crazy. BE is dead and
-> > should be relegated to legacy platforms. There are no advantages to
-> > being different just for the sake of being different - any "security
-> > by obscurity" argument would be far outweighed by the inconvenience to
-> > actual users.
-> >
-> > Yes, yes, I know the aarch64 architecture technically allows BE
-> > implementations - and apparently you can even do it by exception
-> > level, which I had to look up. But do any actually exist?
-> >
-> > Does the kernel even work right in BE mode? It's really easy to miss
-> > some endianness check when all the actual hardware and use is LE, and
-> > when (for example) instruction encoding and IO is then always LE
-> > anyway.
-> 
-> This was always only done for compatibility with non-portable
-> software when companies with large custom network stacks argued
-> that it was cheaper to build the entire open source software to
-> big-endian than port their own product to little-endian. ;-)
-> 
-> We (Linaro) used to test all toolchain and kernel releases in
-> big-endian mode as member companies had customers that asked
-> for it, but that stopped a while ago as those legacy software
-> stacks either got more portable or got replaced over time.
-> 
-> Many Arm systems won't boot BE kernels any more because UEFI
-> firmware only supports LE, or because of driver bugs.
-> Virtual machines are still likely to work fine though.
-> I'm fairly sure that all Arm Cortex and Neoverse cores still\
-> support BE mode in all exception levels, OTOH at least Apple's
-> custom CPUs do not implement it at all.
+On Fri, Aug 4, 2023 at 6:14=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev=
+-2.6.git master
+> head:   1ce1cd8208ad6060e4fcf6e09068c8954687c127
+> commit: 1ce1cd8208ad6060e4fcf6e09068c8954687c127 [83/83] hwrng: Enable CO=
+MPILE_TEST for more drivers
+> config: s390-randconfig-r015-20230801 (https://download.01.org/0day-ci/ar=
+chive/20230804/202308042049.8R2tNRoo-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230804/202308042049=
+.8R2tNRoo-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202308042049.8R2tNRoo-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/char/hw_random/xgene-rng.c:110:2: error: call to undeclared fu=
+nction 'writel'; ISO C99 and later do not support implicit function declara=
+tions [-Wimplicit-function-declaration]
+>      110 |         writel(fro_val, ctx->csr_base + RNG_FRODETUNE);
+>          |         ^
 
-Yes, that's right. The CPUs we have *do* tend to support BE, but
-practically there isn't any software to run on them. I asked about
-removing it a few years ago:
+Looks like my DT header clean-up patch collides with this one. An
+explicit io.h include is needed.
 
-https://lore.kernel.org/linux-arm-kernel/20191011102747.lpbaur2e4nqyf7sw@willie-the-truck/
-
-but Hanjun said that Huawei are using it, so it stayed.
-
-Will
+Rob
