@@ -1,44 +1,30 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE12C18054;
-	Fri,  4 Aug 2023 16:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691166104; x=1722702104;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SkRmCWHjINejDayhUfO2zrXccz5Yf1cMte27jc60wKM=;
-  b=hgUJB1R3+Ra+OUPRrMR5/IGaceg6qx8PPf/pWgjpOQ/PCglbfXfjRBc8
-   LVDkvDpft0ZdO3vNeW5Xs3JyLnprBP8zIDb6RDpMLRoXA/MtmZkkpEbI0
-   Ys9gBWj5qj0MUODpd3KZ18OrGkfWgjQ6apbSdGK0sTSxhrl5AZa0V00w1
-   Kvox5NKHSfW7MApUQxORCpe8y3s9qPh4iP01/4wk/3b+uizZjFqW6zwt4
-   hp3Zj8VF4K09wUsmVHzJxA+N5XkQ3BQwm0FMzInqgfUoPBdV4wHQv3njA
-   PYzXjjqLvAl4ofUil96lonF4U8UmyRZ+L0yJDlGsnb80rK00zqrmoHboL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="372935607"
-X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
-   d="scan'208";a="372935607"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 09:21:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="800119275"
-X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
-   d="scan'208";a="800119275"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2023 09:21:42 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qRxYb-0002yd-26;
-	Fri, 04 Aug 2023 16:21:41 +0000
-Date: Sat, 5 Aug 2023 00:20:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Babrou <ivan@cloudflare.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [driver-core:driver-core-testing 2/16] fs/kernfs/mount.c:50:5:
- warning: no previous prototype for function 'kernfs_statfs'
-Message-ID: <202308050054.TMaWFpME-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6417CBE4A;
+	Fri,  4 Aug 2023 16:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2A0C433C7;
+	Fri,  4 Aug 2023 16:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691167093;
+	bh=Eby5n4ZE0AMvm51ITihJARaywMHTaI7+TdCZEB4JlBI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=EkYEymErHlsBYfc6voP/I5ipDUFZRX2PW1a0Dzn5Z52S+nlaFxKTFbCDZ4nzjTEAs
+	 G9AGKljmTcXzTTcO3fyjbOdtCB5aa31CKRvKZxZjx4q2zX1d55WJeuC8A1uhEBJ7Cr
+	 DfZ2z5kevHi7QuwwYHc+1qFUSoqRf1nlpS4mLi9gSStEHd/XFFbYG8X6qvz4Nbq8RF
+	 PVwLGTO47E8PcYGKpQeGGRIFrUMqbgKmkMd0zrW+NSUMKhsq+CEPqdOKkV7PX91S8n
+	 Ebw6qL0cZ/EEMaC9X3sqcZ/Y/stiL8kaZFgl1leJs3ZA7jVac9poDnPJJkwaxxKWMs
+	 7lMKwPPtVLU0A==
+Date: Fri, 4 Aug 2023 11:38:11 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: suijingfeng <suijingfeng@loongson.cn>
+Cc: kernel test robot <lkp@intel.com>, linux-pci@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn,
+	oe-kbuild-all@lists.linux.dev, bhelgaas@google.com
+Subject: Re: [PATCH] PCI/VGA: Make the vga_is_firmware_default()
+ arch-independent
+Message-ID: <20230804163811.GA144900@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,42 +33,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <8e51eb50-aa7b-f771-e53b-499bf899e22e@loongson.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
-head:   b84388be432d001b3baa782fa047eddb0f375233
-commit: 26dd6e284e277f80468f48b4ff8ebfb0e9ca7369 [2/16] kernfs: attach uuid for every kernfs and report it in fsid
-config: arm-randconfig-r005-20230801 (https://download.01.org/0day-ci/archive/20230805/202308050054.TMaWFpME-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050054.TMaWFpME-lkp@intel.com/reproduce)
+On Fri, Aug 04, 2023 at 11:11:12AM +0800, suijingfeng wrote:
+> On 2023/8/3 20:25, kernel test robot wrote:
+> > Hi Sui,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on pci/next]
+> > [also build test ERROR on pci/for-linus linus/master v6.5-rc4 next-20230803]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/PCI-VGA-Make-the-vga_is_firmware_default-arch-independent/20230803-161838
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+> > patch link:    https://lore.kernel.org/r/20230803081758.968742-1-suijingfeng%40loongson.cn
+> > patch subject: [PATCH] PCI/VGA: Make the vga_is_firmware_default() arch-independent
+> > config: arm64-randconfig-r026-20230731 (https://download.01.org/0day-ci/archive/20230803/202308032022.yiZngbbk-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce: (https://download.01.org/0day-ci/archive/20230803/202308032022.yiZngbbk-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202308032022.yiZngbbk-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> > > > ld.lld: error: undefined symbol: screen_info
+> >     >>> referenced by vgaarb.c:86 (drivers/pci/vgaarb.c:86)
+> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
+> >     >>> referenced by vgaarb.c:86 (drivers/pci/vgaarb.c:86)
+> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
+> >     >>> referenced by vgaarb.c:88 (drivers/pci/vgaarb.c:88)
+> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
+> >     >>> referenced 3 more times
+> > 
+> This is a more like arch-specific problem, It will be pain at many places on platforms
+> that do not export the screen_info symbol. Not only here.
+> 
+> I have already explained that screen_info is arch-dependent many times, but no one cares about me.
+> By using (looking at) screen_info, vgaarb gets infected, and becomes arch-dependent as well.
+> vgaarb deals with VGA class (pdev->class == 0x0300XX) devices only, This makes it device-dependent.
+> Hence, It only works correctly for a small set of PCIe devices on x86.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308050054.TMaWFpME-lkp@intel.com/
+This build error report is from an automated service; there's nothing
+personal about it and the automated service isn't going to respond to
+you.
 
-All warnings (new ones prefixed by >>):
+The build issue is just something that will have to be resolved before
+we can consider merging the patch.
 
->> fs/kernfs/mount.c:50:5: warning: no previous prototype for function 'kernfs_statfs' [-Wmissing-prototypes]
-      50 | int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-         |     ^
-   fs/kernfs/mount.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      50 | int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-         | ^
-         | static 
-   1 warning generated.
+Any explanation needs to go in the commit logs for the relevant
+patches.
 
-
-vim +/kernfs_statfs +50 fs/kernfs/mount.c
-
-    49	
-  > 50	int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-    51	{
-    52		simple_statfs(dentry, buf);
-    53		buf->f_fsid = uuid_to_fsid(dentry->d_sb->s_uuid.b);
-    54		return 0;
-    55	}
-    56	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> arch-dependent, device-dependent, subsystem-dependent (part of it rely on ACPI) and
+> loading order dependent, those dependent itself are the problems.
+> It results in various undefined (uncertain) behaviors on non-x86 architectures.
+> 
+> Even on x86, some platform choose to relay on the firmware to solve the multiple GPU coexist problem.
+> so it is also firmware-dependent.
+> 
+> This patch solves part of the above problems listed, target at the *device level*, as early as possible.
+> while they still a few problems could be only solved at the *driver level*.
+> For an example, The display controller in Intel N2000 and d2000 series don't has a dedicated VRAM bar.
+> they use the "stolen memory", which is carve out by somebody (either bios or kernel?).
+> 
+> 
