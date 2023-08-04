@@ -1,261 +1,138 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB7DA921
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 09:06:56 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-585f04ffa3eso22299007b3.0
-        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 02:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691140015; x=1691744815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzWCD4HwKY1r1A6RBU3efg4gsiTlnVjc3j6YbCfBqUM=;
-        b=X1qQHJBN0yCJmiiCOnUz6+pj65LuFmL9UZz8FfdlIEiWrVdg46nOF6JPHUsBf46tyT
-         gu/cU7tVPjn5xggOa6K89RQzk9Xs2SR+GfyZp18F5E0spipr3dg5dVvX7DslvcvYCFRD
-         2gvOVVugZtDQlWRnRsapExEDo9j1EfKY2zqVkvdakxjxG7T1dXj/JefW2y72bQ2yBMMe
-         weUy74bSRSwjfV9CAKw48V+vgo+KAzLIPbCDKTWEXh9SxkSClJWIQsafkhKswHn4G16r
-         tvs0P0LXkXbfRVlSTUqEog1H3rU0OIcvaDaBHXz9cepHqF4vObfSkJ5xxrTUelL8NE+l
-         pocA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691140015; x=1691744815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzWCD4HwKY1r1A6RBU3efg4gsiTlnVjc3j6YbCfBqUM=;
-        b=UidMrpPRxKLTORsRriWsROYKcy1tGXoMTHY9rOdGgqlTwJaeH0AG7Z/bUE2/n6BXlj
-         xk1LkhbhaomOQFFXwu4xnaU/MOBevk0nli1Kbkn9j4pHBkqC5/+MKeicWDrZg4HGEkHj
-         faitn5Q+B0QoRYE32gmouKTUtTBcvyhPfN5JurepACrk9VH1WYZGTV32blmd9fkhhx09
-         Q7Yy+TM52M6Tw+7KwHJq7cE+mDS5n74VlJXLajvxEF0MCNmgNlv0hd5Wrp+uWjROmC4I
-         hw8uuWQXGOVeELPb2bSs80XrUEdp9ZnjS0DheyfwLSLZqWaZBZ1Q4UhMctqYdjMZUGcJ
-         h7uA==
-X-Gm-Message-State: AOJu0YxWcgVE+ygUgsty/xTz5R6aZ+hfa5ZA3GcglYGQjS/GubHD7D7p
-	672THjKrlxiiTBvH458pkm7SyeRjRg==
-X-Google-Smtp-Source: AGHT+IHb47om6RdVmuoXy9g0+Rz+FIp330BgZAdxPKXZUIucVRKYEj76dp9OQ4SsePP+7+HTjAkoWKdCsg==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:2ebf:f3ea:4841:53b6])
- (user=elver job=sendgmr) by 2002:a81:af41:0:b0:573:8316:8d04 with SMTP id
- x1-20020a81af41000000b0057383168d04mr7391ywj.4.1691140015704; Fri, 04 Aug
- 2023 02:06:55 -0700 (PDT)
-Date: Fri,  4 Aug 2023 11:02:58 +0200
-In-Reply-To: <20230804090621.400-1-elver@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEAEA929;
+	Fri,  4 Aug 2023 09:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691142679; x=1722678679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=atB+0l+Lu+t706a438LCjBf2ULDH+DgjLgq5kcQ1cnM=;
+  b=eIG9ei3SB8/y3L7PLyogfmKF/5gRkkqLVol7ZOHr2tpOfOk6l+2wlgIo
+   ekozLwiVIOTsvXPV0D6R0prG9Lbs6zAPD71PfMdExJL4zaOoAlourqC+W
+   5IcqGkBEYfni0WYt6JhoeAP1Y8CropTR22Ki0D1ZuusfmSjbbWKzyT/bb
+   XVB5OqLy0vlFrIdjrfhjsZ1oY2ERwH4TQ7W7SVmqSenEhvcLctR67hw62
+   3BrrVpy5cZZ4pBIKSZ3uRyPiJ8aZ0bxEDAMi03q9iKgLBMsaclkzuD7c+
+   S0IUADSGTFCj7Hs4ABn6aW5ndo9nJP6LwdyGo5v2oWAWYxGDZDdhsnAfr
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="433966822"
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="scan'208";a="433966822"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 02:51:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="976521357"
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="scan'208";a="976521357"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 04 Aug 2023 02:51:17 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRrSm-0002mN-30;
+	Fri, 04 Aug 2023 09:51:16 +0000
+Date: Fri, 4 Aug 2023 17:50:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH RESEND v2 1/2] memcg: Add support for zram object
+ charge
+Message-ID: <202308041718.hENRizMc-lkp@intel.com>
+References: <20230804075736.207995-1-hezhongkun.hzk@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230804090621.400-1-elver@google.com>
-X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-Message-ID: <20230804090621.400-3-elver@google.com>
-Subject: [PATCH v2 3/3] list_debug: Introduce CONFIG_DEBUG_LIST_MINIMAL
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Andrew Morton <akpm@linux-foundation.org>, 
-	Kees Cook <keescook@chromium.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Peter Zijlstra <peterz@infradead.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804075736.207995-1-hezhongkun.hzk@bytedance.com>
 
-Numerous production kernel configs (see [1, 2]) are choosing to enable
-CONFIG_DEBUG_LIST, which is also being recommended by KSPP for hardened
-configs [3]. The feature has never been designed with performance in
-mind, yet common list manipulation is happening across hot paths all
-over the kernel.
+Hi Zhongkun,
 
-Introduce CONFIG_DEBUG_LIST_MINIMAL, which performs list pointer
-checking inline, and only upon list corruption delegates to the
-reporting slow path.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-To generate optimal machine code with CONFIG_DEBUG_LIST_MINIMAL:
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on akpm-mm/mm-everything linus/master v6.5-rc4 next-20230804]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  1. Elide checking for pointer values which upon dereference would
-     result in an immediate access fault -- therefore "minimal" checks.
-     The trade-off is lower-quality error reports.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhongkun-He/memcg-Add-support-for-zram-object-charge/20230804-155952
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230804075736.207995-1-hezhongkun.hzk%40bytedance.com
+patch subject: [RFC PATCH RESEND v2 1/2] memcg: Add support for zram object charge
+config: arm-randconfig-r032-20230801 (https://download.01.org/0day-ci/archive/20230804/202308041718.hENRizMc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230804/202308041718.hENRizMc-lkp@intel.com/reproduce)
 
-  2. Use the newly introduced __preserve_most function attribute
-     (available with Clang, but not yet with GCC) to minimize the code
-     footprint for calling the reporting slow path. As a result,
-     function size of callers is reduced by avoiding saving registers
-     before calling the rarely called reporting slow path.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308041718.hENRizMc-lkp@intel.com/
 
-     Note that all TUs in lib/Makefile already disable function tracing,
-     including list_debug.c, and __preserve_most's implied notrace has
-     no effect in this case.
+All error/warnings (new ones prefixed by >>):
 
-  3. Because the inline checks are a subset of the full set of checks in
-     ___list_*_valid(), always return false if the inline checks failed.
-     This avoids redundant compare and conditional branch right after
-     return from the slow path.
+   In file included from mm/damon/core.c:10:
+   In file included from include/linux/damon.h:11:
+>> include/linux/memcontrol.h:1886:5: warning: no previous prototype for function 'obj_cgroup_charge_zram' [-Wmissing-prototypes]
+   int obj_cgroup_charge_zram(struct obj_cgroup *objcg, gfp_t gfp,
+       ^
+   include/linux/memcontrol.h:1886:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int obj_cgroup_charge_zram(struct obj_cgroup *objcg, gfp_t gfp,
+   ^
+   static 
+>> include/linux/memcontrol.h:1892:6: warning: no previous prototype for function 'obj_cgroup_uncharge_zram' [-Wmissing-prototypes]
+   void obj_cgroup_uncharge_zram(struct obj_cgroup *objcg, size_t size)
+        ^
+   include/linux/memcontrol.h:1892:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void obj_cgroup_uncharge_zram(struct obj_cgroup *objcg, size_t size)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from drivers/gpu/drm/tilcdc/tilcdc_panel.c:7:
+   In file included from include/linux/backlight.h:13:
+   In file included from include/linux/fb.h:7:
+   In file included from include/uapi/linux/fb.h:6:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+>> include/linux/memcontrol.h:1886:5: error: no previous prototype for function 'obj_cgroup_charge_zram' [-Werror,-Wmissing-prototypes]
+   int obj_cgroup_charge_zram(struct obj_cgroup *objcg, gfp_t gfp,
+       ^
+   include/linux/memcontrol.h:1886:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int obj_cgroup_charge_zram(struct obj_cgroup *objcg, gfp_t gfp,
+   ^
+   static 
+>> include/linux/memcontrol.h:1892:6: error: no previous prototype for function 'obj_cgroup_uncharge_zram' [-Werror,-Wmissing-prototypes]
+   void obj_cgroup_uncharge_zram(struct obj_cgroup *objcg, size_t size)
+        ^
+   include/linux/memcontrol.h:1892:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void obj_cgroup_uncharge_zram(struct obj_cgroup *objcg, size_t size)
+   ^
+   static 
+   2 errors generated.
 
-As a side-effect of the checks being inline, if the compiler can prove
-some condition to always be true, it can completely elide some checks.
 
-Running netperf with CONFIG_DEBUG_LIST_MINIMAL (using a Clang compiler
-with "preserve_most") shows throughput improvements, in my case of ~7%
-on average (up to 20-30% on some test cases).
+vim +/obj_cgroup_charge_zram +1886 include/linux/memcontrol.h
 
-Link: https://r.android.com/1266735 [1]
-Link: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/config [2]
-Link: https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings [3]
-Signed-off-by: Marco Elver <elver@google.com>
----
-v2:
-* Note that lib/Makefile disables function tracing for everything and
-  __preserve_most's implied notrace is a noop here.
----
- arch/arm64/kvm/hyp/nvhe/list_debug.c |  2 +
- include/linux/list.h                 | 56 +++++++++++++++++++++++++---
- lib/Kconfig.debug                    | 15 ++++++++
- lib/list_debug.c                     |  2 +
- 4 files changed, 69 insertions(+), 6 deletions(-)
+  1885	
+> 1886	int obj_cgroup_charge_zram(struct obj_cgroup *objcg, gfp_t gfp,
+  1887						size_t size)
+  1888	{
+  1889		return 0;
+  1890	}
+  1891	
+> 1892	void obj_cgroup_uncharge_zram(struct obj_cgroup *objcg, size_t size)
+  1893	{
+  1894	}
+  1895	#endif /* CONFIG_MEMCG_KMEM */
+  1896	
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-index 589284496ac5..df718e29f6d4 100644
---- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
-+++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
-@@ -26,6 +26,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
- 
- /* The predicates checked here are taken from lib/list_debug.c. */
- 
-+__list_valid_slowpath
- bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 		       struct list_head *next)
- {
-@@ -37,6 +38,7 @@ bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 	return true;
- }
- 
-+__list_valid_slowpath
- bool ___list_del_entry_valid(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
-diff --git a/include/linux/list.h b/include/linux/list.h
-index e0b2cf904409..a28a215a3eb1 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -39,20 +39,64 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
- }
- 
- #ifdef CONFIG_DEBUG_LIST
--extern bool ___list_add_valid(struct list_head *new,
--			      struct list_head *prev,
--			      struct list_head *next);
-+
-+#ifdef CONFIG_DEBUG_LIST_MINIMAL
-+# define __list_valid_slowpath __cold __preserve_most
-+#else
-+# define __list_valid_slowpath
-+#endif
-+
-+extern bool __list_valid_slowpath ___list_add_valid(struct list_head *new,
-+						    struct list_head *prev,
-+						    struct list_head *next);
- static __always_inline bool __list_add_valid(struct list_head *new,
- 					     struct list_head *prev,
- 					     struct list_head *next)
- {
--	return ___list_add_valid(new, prev, next);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_DEBUG_LIST_MINIMAL)) {
-+		/*
-+		 * In the minimal config, elide checking if next and prev are
-+		 * NULL, since the immediate dereference of them below would
-+		 * result in a fault if NULL.
-+		 *
-+		 * With the minimal config we can afford to inline the checks,
-+		 * which also gives the compiler a chance to elide some of them
-+		 * completely if they can be proven at compile-time. If one of
-+		 * the pre-conditions does not hold, the slow-path will show a
-+		 * report which pre-condition failed.
-+		 */
-+		if (likely(next->prev == prev && prev->next == next && new != prev && new != next))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= ___list_add_valid(new, prev, next);
-+	return ret;
- }
- 
--extern bool ___list_del_entry_valid(struct list_head *entry);
-+extern bool __list_valid_slowpath ___list_del_entry_valid(struct list_head *entry);
- static __always_inline bool __list_del_entry_valid(struct list_head *entry)
- {
--	return ___list_del_entry_valid(entry);
-+	bool ret = true;
-+
-+	if (IS_ENABLED(CONFIG_DEBUG_LIST_MINIMAL)) {
-+		struct list_head *prev = entry->prev;
-+		struct list_head *next = entry->next;
-+
-+		/*
-+		 * In the minimal config, elide checking if next and prev are
-+		 * NULL, LIST_POISON1 or LIST_POISON2, since the immediate
-+		 * dereference of them below would result in a fault.
-+		 */
-+		if (likely(prev->next == entry && next->prev == entry))
-+			return true;
-+		ret = false;
-+	}
-+
-+	ret &= ___list_del_entry_valid(entry);
-+	return ret;
- }
- #else
- static inline bool __list_add_valid(struct list_head *new,
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index fbc89baf7de6..e72cf08af0fa 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1680,6 +1680,21 @@ config DEBUG_LIST
- 
- 	  If unsure, say N.
- 
-+config DEBUG_LIST_MINIMAL
-+	bool "Minimal linked list debug checks"
-+	default !DEBUG_KERNEL
-+	depends on DEBUG_LIST
-+	help
-+	  Only perform the minimal set of checks in the linked-list walking
-+	  routines to catch corruptions that are not guaranteed to result in an
-+	  immediate access fault.
-+
-+	  This trades lower quality error reports for improved performance: the
-+	  generated code should be more optimal and provide trade-offs that may
-+	  better serve safety- and performance- critical environments.
-+
-+	  If unsure, say Y.
-+
- config DEBUG_PLIST
- 	bool "Debug priority linked list manipulation"
- 	depends on DEBUG_KERNEL
-diff --git a/lib/list_debug.c b/lib/list_debug.c
-index fd69009cc696..daad32855f0d 100644
---- a/lib/list_debug.c
-+++ b/lib/list_debug.c
-@@ -17,6 +17,7 @@
-  * attempt).
-  */
- 
-+__list_valid_slowpath
- bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- 		       struct list_head *next)
- {
-@@ -39,6 +40,7 @@ bool ___list_add_valid(struct list_head *new, struct list_head *prev,
- }
- EXPORT_SYMBOL(___list_add_valid);
- 
-+__list_valid_slowpath
- bool ___list_del_entry_valid(struct list_head *entry)
- {
- 	struct list_head *prev, *next;
 -- 
-2.41.0.640.ga95def55d0-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
