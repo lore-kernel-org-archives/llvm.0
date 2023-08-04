@@ -1,24 +1,33 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962067E5;
-	Fri,  4 Aug 2023 01:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F866C433CA;
-	Fri,  4 Aug 2023 01:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691112021;
-	bh=NyQViIbcv2wtLMjRQWh1tgUGameZLLC2Kz6PfNBMJig=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=aBEZdPjv83k/U64YozPn99tGBeB5Ed6cS7GO66MOW97NSfwjbkDl8s5fJL7e6Hy+G
-	 byTl+KhIfxZIHQUBRLvkwyl1yIpyhP/CnLcwD+zAcp7R03sGMv56kREGXq0t0YnlAc
-	 ceMU1oIkiEI/lBFJEg1ERlou0NpmF8d19xNpErbIWp28eRDhN7tFA/c8FVVBBTDeUM
-	 D790C1qhgknQadHhVBNQOyfNitufKAM75x49VugELNa/fOCzenin55F945BtJSjPAt
-	 qXz6hKHQVwc1MojF1fNb+wWV+a3vMcLfSOxP2/6+J9q+UAflGcVGV9AV+73pkjvLHM
-	 sPYh2EZyuwYBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E4965C595C1;
-	Fri,  4 Aug 2023 01:20:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 6990CA4E
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 01:28:18 +0000 (UTC)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id E2C10602F96C4;
+	Fri,  4 Aug 2023 09:28:06 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: trond.myklebust@hammerspace.com,
+	anna@kernel.org,
+	chuck.lever@oracle.com,
+	jlayton@kernel.org,
+	neilb@suse.de,
+	kolga@netapp.com,
+	Dai.Ngo@oracle.com,
+	tom@talpey.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: bfields@fieldses.org,
+	linux-nfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org,
+	Su Hui <suhui@nfschina.com>
+Subject: [PATCH v2] fs: lockd: avoid possible wrong NULL parameter
+Date: Fri,  4 Aug 2023 09:26:57 +0800
+Message-Id: <20230804012656.4091877-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,41 +35,36 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] mISDN: Update parameter type of dsp_cmx_send()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169111202093.20038.18092602618780856244.git-patchwork-notify@kernel.org>
-Date: Fri, 04 Aug 2023 01:20:20 +0000
-References: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
-In-Reply-To: <20230802-fix-dsp_cmx_send-cfi-failure-v1-1-2f2e79b0178d@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: isdn@linux-pingi.de, netdev@vger.kernel.org, keescook@chromium.org,
- samitolvanen@google.com, llvm@lists.linux.dev, patches@lists.linux.dev,
- oliver.sang@intel.com
 
-Hello:
+clang's static analysis warning: fs/lockd/mon.c: line 293, column 2:
+Null pointer passed as 2nd argument to memory copy function.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Assuming 'hostname' is NULL and calling 'nsm_create_handle()', this will
+pass NULL as 2nd argument to memory copy function 'memcpy()'. So return
+NULL if 'hostname' is invalid.
 
-On Wed, 02 Aug 2023 10:40:29 -0700 you wrote:
-> When booting a kernel with CONFIG_MISDN_DSP=y and CONFIG_CFI_CLANG=y,
-> there is a failure when dsp_cmx_send() is called indirectly from
-> call_timer_fn():
-> 
->   [    0.371412] CFI failure at call_timer_fn+0x2f/0x150 (target: dsp_cmx_send+0x0/0x530; expected type: 0x92ada1e9)
-> 
-> The function pointer prototype that call_timer_fn() expects is
-> 
-> [...]
+Fixes: 77a3ef33e2de ("NSM: More clean up of nsm_get_handle()")
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+v2:
+ - move NULL check to the callee "nsm_create_handle()"
+ fs/lockd/mon.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Here is the summary with links:
-  - mISDN: Update parameter type of dsp_cmx_send()
-    https://git.kernel.org/netdev/net/c/1696ec865401
-
-You are awesome, thank you!
+diff --git a/fs/lockd/mon.c b/fs/lockd/mon.c
+index 1d9488cf0534..87a0f207df0b 100644
+--- a/fs/lockd/mon.c
++++ b/fs/lockd/mon.c
+@@ -276,6 +276,9 @@ static struct nsm_handle *nsm_create_handle(const struct sockaddr *sap,
+ {
+ 	struct nsm_handle *new;
+ 
++	if (!hostname)
++		return NULL;
++
+ 	new = kzalloc(sizeof(*new) + hostname_len + 1, GFP_KERNEL);
+ 	if (unlikely(new == NULL))
+ 		return NULL;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
