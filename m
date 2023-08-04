@@ -1,104 +1,180 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6417CBE4A;
-	Fri,  4 Aug 2023 16:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2A0C433C7;
-	Fri,  4 Aug 2023 16:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC49DBE4A;
+	Fri,  4 Aug 2023 16:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E309FC433C7;
+	Fri,  4 Aug 2023 16:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691167093;
-	bh=Eby5n4ZE0AMvm51ITihJARaywMHTaI7+TdCZEB4JlBI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=EkYEymErHlsBYfc6voP/I5ipDUFZRX2PW1a0Dzn5Z52S+nlaFxKTFbCDZ4nzjTEAs
-	 G9AGKljmTcXzTTcO3fyjbOdtCB5aa31CKRvKZxZjx4q2zX1d55WJeuC8A1uhEBJ7Cr
-	 DfZ2z5kevHi7QuwwYHc+1qFUSoqRf1nlpS4mLi9gSStEHd/XFFbYG8X6qvz4Nbq8RF
-	 PVwLGTO47E8PcYGKpQeGGRIFrUMqbgKmkMd0zrW+NSUMKhsq+CEPqdOKkV7PX91S8n
-	 Ebw6qL0cZ/EEMaC9X3sqcZ/Y/stiL8kaZFgl1leJs3ZA7jVac9poDnPJJkwaxxKWMs
-	 7lMKwPPtVLU0A==
-Date: Fri, 4 Aug 2023 11:38:11 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: suijingfeng <suijingfeng@loongson.cn>
-Cc: kernel test robot <lkp@intel.com>, linux-pci@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn,
-	oe-kbuild-all@lists.linux.dev, bhelgaas@google.com
-Subject: Re: [PATCH] PCI/VGA: Make the vga_is_firmware_default()
- arch-independent
-Message-ID: <20230804163811.GA144900@bhelgaas>
+	s=k20201202; t=1691167301;
+	bh=Lkrz5fdo48b6U0XEshqshN85hsfuLrLwvnvbpsynonc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B6SG1fYK5kOKTSvTYFMeKkaub/Q3bf1uWHe2FAHjqIM6NRYeKVy857xoXTe4DSPp8
+	 jNSNKZ0oOdlmwuOBGq2V6yov6ZHUiDGyrvsrnSVd8vNV5qT2sftmLMTcqo63DEkUZB
+	 oaG3Fll/aCLu+Tz9sWZtEXW/YntuVw+ERoJhLd1zXolNXx4EXDVIX6f7f+vCs4Zj+y
+	 +FDt2H/aR96JHssD+R/KNFajQpr3gQEx6k1mAlortirGpz6naOMs9IGLZKdzB3dJuT
+	 2JULxnROeXJ3qmCwQIoRY6oiPWe+zkFTiuNKSXePH9pVSQj8tGMdp+Lw+jtyBED3XL
+	 HNLoUpBT+TBPw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id BCB7C404DF; Fri,  4 Aug 2023 13:41:38 -0300 (-03)
+Date: Fri, 4 Aug 2023 13:41:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, martin.lau@linux.dev,
+	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+	Tomasz =?utf-8?B?UGF3ZcWC?= Gajc <tpgxyz@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>, m.seyfarth@gmail.com,
+	Fangrui Song <maskray@google.com>
+Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
+Message-ID: <ZM0qQlvd1VKoCeIO@kernel.org>
+References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
+ <ZMwQivemlha+fU5i@kernel.org>
+ <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
+ <afe71df3-48e4-837a-e85d-b6a6764eee62@oracle.com>
+ <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8e51eb50-aa7b-f771-e53b-499bf899e22e@loongson.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-On Fri, Aug 04, 2023 at 11:11:12AM +0800, suijingfeng wrote:
-> On 2023/8/3 20:25, kernel test robot wrote:
-> > Hi Sui,
-> > 
-> > kernel test robot noticed the following build errors:
-> > 
-> > [auto build test ERROR on pci/next]
-> > [also build test ERROR on pci/for-linus linus/master v6.5-rc4 next-20230803]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/PCI-VGA-Make-the-vga_is_firmware_default-arch-independent/20230803-161838
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-> > patch link:    https://lore.kernel.org/r/20230803081758.968742-1-suijingfeng%40loongson.cn
-> > patch subject: [PATCH] PCI/VGA: Make the vga_is_firmware_default() arch-independent
-> > config: arm64-randconfig-r026-20230731 (https://download.01.org/0day-ci/archive/20230803/202308032022.yiZngbbk-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230803/202308032022.yiZngbbk-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202308032022.yiZngbbk-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > > > ld.lld: error: undefined symbol: screen_info
-> >     >>> referenced by vgaarb.c:86 (drivers/pci/vgaarb.c:86)
-> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
-> >     >>> referenced by vgaarb.c:86 (drivers/pci/vgaarb.c:86)
-> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
-> >     >>> referenced by vgaarb.c:88 (drivers/pci/vgaarb.c:88)
-> >     >>>               drivers/pci/vgaarb.o:(vga_arb_firmware_fb_addr_tracker) in archive vmlinux.a
-> >     >>> referenced 3 more times
-> > 
-> This is a more like arch-specific problem, It will be pain at many places on platforms
-> that do not export the screen_info symbol. Not only here.
+Em Fri, Aug 04, 2023 at 09:11:09AM -0700, Nick Desaulniers escreveu:
+> + Marcus (who also just reported seeing this
+> https://github.com/ClangBuiltLinux/linux/issues/1825#issuecomment-1664671027
+> and might be able to help reproduce).
+> + Fangrui (because seeing dd used as a result of 90ceddcb4950 makes me shudder)
 > 
-> I have already explained that screen_info is arch-dependent many times, but no one cares about me.
-> By using (looking at) screen_info, vgaarb gets infected, and becomes arch-dependent as well.
-> vgaarb deals with VGA class (pdev->class == 0x0300XX) devices only, This makes it device-dependent.
-> Hence, It only works correctly for a small set of PCIe devices on x86.
+> On Thu, Aug 3, 2023 at 3:10 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > On 03/08/2023 21:50, Nick Desaulniers wrote:
+> > > On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > >>
+> > >> Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
+> > >>> Hi Martin (and BTF/BPF team),
+> > >>> I've observed 2 user reports with the error from the subject of this email.
+> > >>> https://github.com/ClangBuiltLinux/linux/issues/1825
+> > >>> https://bbs.archlinux.org/viewtopic.php?id=284177
+> > >>>
+> > >>> Any chance you could take a look at these reports and help us figure
+> > >>> out what's going wrong here?  Nathan and I haven't been able to
+> > >>> reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
+> > >>>
+> > >>> Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
+> > >>
+> > >> Masami had a problem with new versions of compilers that was solved
+> > >> with:
+> > >>
+> > >> ------------------------ 8< --------------------------------------------
+> > >>> To check that please tweak:
+> > >>>
+> > >>> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
+> > >>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> > >>> # CONFIG_DEBUG_INFO_DWARF4 is not set
+> > >>> # CONFIG_DEBUG_INFO_DWARF5 is not set
+> > >>> ⬢[acme@toolbox perf-tools-next]$
+> > >>>
+> > >>> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
+> > >>> CONFIG_DEBUG_INFO_DWARF4.
+> > >>
+> > >> Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
+> > >
+> > > Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
+> > > is not what I'd consider a fix. Someday we can move to
+> > > DWARFv5...someday...
+> > >
+> > > What you describe sounds like build success, but reduction in debug info.
+> > >
+> > > The reports I'm referring to seem to result in a build failure.
+> > >
+> >
+> > This is a strange one. The error in question
+> >
+> > CC .vmlinux.export.o
+> > UPD include/generated/utsversion.h
+> > CC init/version-timestamp.o
+> > LD .tmp_vmlinux.btf
+> > BTF .btf.vmlinux.bin.o
+> > libbpf: BTF header not found
+> > pahole: .tmp_vmlinux.btf: Invalid argument
+> 
+> That's slightly different from Tomasz and Marcus' report (not sure if
+> that's relevant):
+> 
+> FAILED: load BTF from vmlinux: Invalid argument
+> 
+> That seems to come from
+> tools/bpf/resolve_btfids/main.c:529
+> Which seems like some failed call to btf_parse().
+> EINVAL is getting propagated up from btf_parse(), but that's not super
+> descriptive...
 
-This build error report is from an automated service; there's nothing
-personal about it and the automated service isn't going to respond to
-you.
+Jiri, have you stumbled on this before? 
 
-The build issue is just something that will have to be resolved before
-we can consider merging the patch.
+- Arnaldo
+ 
+> The hard part is that I suspect OpenMandriva (Tomasz) and Marcus are
+> both setting additional flags in their toolchains, which can make
+> reproducing tricky.
+> 
+> >
+> > ...occurs during BTF parsing when the raw size of the BTF is smaller
+> > than the BTF header size, which should never happen unless BTF
+> > is corrupted. Thing is, at that stage we shouldn't be parsing BTF,
+> > we should be generating it from DWARF. The only time pahole parses BTF
+> > is when it's creating split BTF for modules (it parses the base BTF), or
+> > when it's reading existing BTF, neither of which it should be doing at
+> > this stage.
+> >
+> > But I suspect the issue is in gen_btf() in scripts/link-vmlinux.sh.
+> > Prior to running pahole, we call "vmlinux_link .tmp_vmlinux.btf".
+> > If that went awry somehow and .tmp_vmlinux.btf wasn't created, it
+> 
+> Wouldn't we expect some kind of linker error though in that case?
+> 
+> > would explain the "Invalid argument" error:
+> >
+> > $ pahole -J nosuchfile
+> > pahole: nosuchfile: Invalid argument
+> >
+> > I see some clang specifics in vmlinux_link(), so I think a good
+> > first step would be to check if .tmp_vlinux.btf exists prior
+> > to running pahole. The submitter mentioned swapping linkers seems to
+> > help, so that seems a promising angle. If there's a kernel .config
+> > available I can try and reproduce the failure too. Thanks!
+> >
+> > Alan
+> >
+> > >>
+> > >>   LD      .tmp_vmlinux.btf
+> > >>   BTF     .btf.vmlinux.bin.o
+> > >>   LD      .tmp_vmlinux.kallsyms1
+> > >>
+> > >> And
+> > >>
+> > >> / # strings /sys/kernel/btf/vmlinux | wc -l
+> > >> 89921
+> > >> / # strings /sys/kernel/btf/vmlinux | grep -w kfree
+> > >> kfree
+> > >>
+> > >> It seems the BTF is correctly generated. (with DWARF5, the number of symbols
+> > >> are about 30000.)
+> > >
+> > >
+> > >
+> 
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
 
-Any explanation needs to go in the commit logs for the relevant
-patches.
+-- 
 
-> arch-dependent, device-dependent, subsystem-dependent (part of it rely on ACPI) and
-> loading order dependent, those dependent itself are the problems.
-> It results in various undefined (uncertain) behaviors on non-x86 architectures.
-> 
-> Even on x86, some platform choose to relay on the firmware to solve the multiple GPU coexist problem.
-> so it is also firmware-dependent.
-> 
-> This patch solves part of the above problems listed, target at the *device level*, as early as possible.
-> while they still a few problems could be only solved at the *driver level*.
-> For an example, The display controller in Intel N2000 and d2000 series don't has a dedicated VRAM bar.
-> they use the "stolen memory", which is carve out by somebody (either bios or kernel?).
-> 
-> 
+- Arnaldo
