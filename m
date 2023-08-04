@@ -1,73 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50088A92F
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 10:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72970C433C9;
-	Fri,  4 Aug 2023 10:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691144085;
-	bh=5AbSMMDb611We4H8Uqf50UdR5/vu5K+47HcJ7iRObW4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=pF7bqoESmf4ecbWV81PJn8imMt4V+BWKXh8PJTBVpPQYPDJivBcY0d/8XXPTW4bSs
-	 ZpNzwdHq0W0/EHFRqrRYE7U4WVxCfdWYv931rVIIpzDRbEg6BzvHnTIHFm80hVRhvf
-	 h28iNhNnyR/Bb8qX6wUoyZyjXK7ZaGRx/lCpzGHsSbLhZz/U1i/be7Zr397zFjeiIw
-	 f5kxIpC5ZDdvpZc8kr38S6zONMPTBt998z/PEM5axUQoHZMbz4pbQVUO+iphrr8Jc4
-	 GO6uqR02C1utDNxNThyTIgQdJWuYcpJH2maYVAhXOmoTy8cmI9Qq91cdezNhzYpGBy
-	 LNaKeq4QBN8Rw==
-Message-ID: <85f0d8cb35c8e8c64810f448bae27292703d66ed.camel@kernel.org>
-Subject: Re: [PATCH v2] fs: lockd: avoid possible wrong NULL parameter
-From: Jeff Layton <jlayton@kernel.org>
-To: Su Hui <suhui@nfschina.com>, trond.myklebust@hammerspace.com, 
- anna@kernel.org, chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com, 
- Dai.Ngo@oracle.com, tom@talpey.com, nathan@kernel.org,
- ndesaulniers@google.com,  trix@redhat.com
-Cc: bfields@fieldses.org, linux-nfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org
-Date: Fri, 04 Aug 2023 06:14:43 -0400
-In-Reply-To: <20230804012656.4091877-1-suhui@nfschina.com>
-References: <20230804012656.4091877-1-suhui@nfschina.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D1B5250;
+	Fri,  4 Aug 2023 10:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691145874; x=1722681874;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=12zlVYuzmMIqnsQ14M7whm4ZOEOamQFDiA0wYpiu5/Q=;
+  b=UrqDwbzIIk6O8hxn5mbkDNcRN8DPSVBtMWALIo/nGh/kHWsIhHPiG/XL
+   d4X/bGMDMHMiVz4crYw9dRdeewnC2M9RAIBDDWFskXmDIQm94Oet1puXS
+   B/keBtNJ70Rk5OKMsS1198OpTh/CLMVlegpLErMN7cjwP3vOxu+VMt8PC
+   NkXUww5WB48c77iSrTAOGR1iaQZnpg1xOA4ybmQc9ISog1vUMkkv7ttY5
+   LBrZe79bgnKNKZz/iDiqd+y60TZOt3OQR0spHUkV0o2LqjistyD9JCbKX
+   GeaXs4LxJ4+86u/rx/X4ED6wh+nGLB8AnrfMxnShXa4NXczPylAJV8iI/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="401083147"
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="scan'208";a="401083147"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 03:44:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="706978875"
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="scan'208";a="706978875"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2023 03:41:23 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRsFH-0002nZ-0C;
+	Fri, 04 Aug 2023 10:41:23 +0000
+Date: Fri, 4 Aug 2023 18:41:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-nvme:tls.v8 1/15] ld.lld: error: cannot open
+ drivers/nvme/common/: Is a directory
+Message-ID: <202308041811.vWjFJJLi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 2023-08-04 at 09:26 +0800, Su Hui wrote:
-> clang's static analysis warning: fs/lockd/mon.c: line 293, column 2:
-> Null pointer passed as 2nd argument to memory copy function.
->=20
-> Assuming 'hostname' is NULL and calling 'nsm_create_handle()', this will
-> pass NULL as 2nd argument to memory copy function 'memcpy()'. So return
-> NULL if 'hostname' is invalid.
->=20
-> Fixes: 77a3ef33e2de ("NSM: More clean up of nsm_get_handle()")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
-> v2:
->  - move NULL check to the callee "nsm_create_handle()"
->  fs/lockd/mon.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/fs/lockd/mon.c b/fs/lockd/mon.c
-> index 1d9488cf0534..87a0f207df0b 100644
-> --- a/fs/lockd/mon.c
-> +++ b/fs/lockd/mon.c
-> @@ -276,6 +276,9 @@ static struct nsm_handle *nsm_create_handle(const str=
-uct sockaddr *sap,
->  {
->  	struct nsm_handle *new;
-> =20
-> +	if (!hostname)
-> +		return NULL;
-> +
->  	new =3D kzalloc(sizeof(*new) + hostname_len + 1, GFP_KERNEL);
->  	if (unlikely(new =3D=3D NULL))
->  		return NULL;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/nvme.git tls.v8
+head:   fe5c5678d10ec3d17d9a29641bd64a4304f8abb7
+commit: 67827b320abd757857ab7679741b8ee6d1acf8cc [1/15] nvme-keyring: register '.nvme' keyring
+config: x86_64-randconfig-x006-20230731 (https://download.01.org/0day-ci/archive/20230804/202308041811.vWjFJJLi-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230804/202308041811.vWjFJJLi-lkp@intel.com/reproduce)
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308041811.vWjFJJLi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: cannot open drivers/nvme/common/: Is a directory
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
