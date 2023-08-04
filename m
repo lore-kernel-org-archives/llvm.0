@@ -1,103 +1,77 @@
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xry111.site (xry111.site [89.208.246.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C293FBE7B
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 15:50:00 +0000 (UTC)
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-47ec8c9d7a0so913576e0c.3
-        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 08:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691164199; x=1691768999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6GtJle38GYNlw+gZNdG3pGleXzijHW2VDwwGhqBWf0=;
-        b=AW5cXx0H8S0x5I+u2xfxfy1V7vR/jMhVl1HUEGEbVyMQepbBG7qwJSWaktQ6RUC0ry
-         YWp/wcvzZRS0TmRJPYM7ge8Wunb/krBend8Sku8kZ9/XenVwDkKiznYril6qzO64JRls
-         Q7dCK8fwLyw9HBdWcmAEtxT63VH6KCAnDDnSzC6QWOMes9rU+Bk9lh/QSwVUu/+Q9M3F
-         yXe4ljZivaQrSG9TrCIM4df/WqKdrg0WjCIf3SXhO+Omc+9BDZvl7iaQ3gi46u/Wl8kv
-         8M+yzJ6QwWSZYvFrole4BzasoQzljZn068wOxkBGwSzKUGLR070XifJVqziX33IlqbS0
-         aaJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691164199; x=1691768999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M6GtJle38GYNlw+gZNdG3pGleXzijHW2VDwwGhqBWf0=;
-        b=JG+XHk4BW5N+Ho0msDe2FKeIyFkqSYB27tNHbWJo2/4NChn1BavTTGETalsS5rZg3V
-         9XdWQeWSlXYFuB5snmX/i4V7C0CbH5IwDErxvEjO4JzcRB7u/yoFKV04Wa3t6vPT0jiq
-         wdHf3Od4Waa9l1a1mjsVRkBYH86i4jv8IM2QNKNuOKUe1Wag7QXOsPS5bFCjDPZfgnfs
-         UxePhDlBUXBVAOObW4yjuavdoiU+OrVBErFCl27TBCjaZEb3vwXkBsGyOw/mNHHho9OK
-         kBO2VA2JICWTqwg3ZBAcadJbny8RruxrIeQ65M9GM1t1wXKbL4A+rIcDsknvxUZ4wmcq
-         COYQ==
-X-Gm-Message-State: AOJu0YzHzNrAa8gMcGHi7JRL2ed19YK8h4uvTfhY8IRPSparqhY8FFoy
-	RZBJUEzw6yFs7xWAOC1fNfqdzR48JI3qbmuZNbUHfA==
-X-Google-Smtp-Source: AGHT+IGtDHTDweDFtGPqweVEy6/Ojul8h7Go4cQI7kTAsF7TZW0t3PAPJCedcn9OpWUtmtIlxQmADQwpMGsPvotnBTs=
-X-Received: by 2002:a1f:45d7:0:b0:487:1ae2:2ad7 with SMTP id
- s206-20020a1f45d7000000b004871ae22ad7mr1601447vka.3.1691164199316; Fri, 04
- Aug 2023 08:49:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72ADBC14A;
+	Fri,  4 Aug 2023 15:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1691164570;
+	bh=UamAAPVxLlb4vLDRTAEBwV6EBxinnwPqEAjS6+WRhUE=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=mm6arzXTW2JF1RsjidNfqSIiw1lbWWRWOlaqLM+OF1IR2XYrXNuzKz27Rm7VQ6oNJ
+	 0aLNFrShYbd+6mLzPHc8J54W5c88wEVFJCjyRMXbTwYs06jl5gtynbfXTZGwOqDI/u
+	 a1PRqp1+oF7NDFA64LkPU0DW8ujDgKJmIcIeaTbA=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 110BA6599C;
+	Fri,  4 Aug 2023 11:56:08 -0400 (EDT)
+Message-ID: <b1617fe221f137b49b9a2ba9c864e6b85f89de81.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
+From: Xi Ruoyao <xry111@xry111.site>
+To: Nick Desaulniers <ndesaulniers@google.com>, Huacai Chen
+	 <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>, 
+ loongarch@lists.linux.dev, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org,  WANG Xuerui <git@xen0n.name>
+Date: Fri, 04 Aug 2023 23:56:07 +0800
+In-Reply-To: <CAKwvOdmt+p3KM23hz2BfheoWgEa0G9QKnAFYUP+EL2Ta5LXUUg@mail.gmail.com>
+References: <20230804125609.2054719-1-kernel@xen0n.name>
+	 <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
+	 <CAKwvOdmt+p3KM23hz2BfheoWgEa0G9QKnAFYUP+EL2Ta5LXUUg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230804012656.4091877-1-suhui@nfschina.com>
-In-Reply-To: <20230804012656.4091877-1-suhui@nfschina.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 4 Aug 2023 08:49:48 -0700
-Message-ID: <CAKwvOd=1pEE=pspfg7fcofYF5=eziFvcLJgC0_ohG7jq+rbVyg@mail.gmail.com>
-Subject: Re: [PATCH v2] fs: lockd: avoid possible wrong NULL parameter
-To: Su Hui <suhui@nfschina.com>
-Cc: trond.myklebust@hammerspace.com, anna@kernel.org, chuck.lever@oracle.com, 
-	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
-	tom@talpey.com, nathan@kernel.org, trix@redhat.com, bfields@fieldses.org, 
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 3, 2023 at 6:28=E2=80=AFPM Su Hui <suhui@nfschina.com> wrote:
->
-> clang's static analysis warning: fs/lockd/mon.c: line 293, column 2:
-> Null pointer passed as 2nd argument to memory copy function.
->
-> Assuming 'hostname' is NULL and calling 'nsm_create_handle()', this will
-> pass NULL as 2nd argument to memory copy function 'memcpy()'. So return
-> NULL if 'hostname' is invalid.
->
-> Fixes: 77a3ef33e2de ("NSM: More clean up of nsm_get_handle()")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+On Fri, 2023-08-04 at 08:46 -0700, Nick Desaulniers wrote:
+> > Not all processors support unaligned access, so we need the
+> > alternative mechanism to select memset/memcpy/memmove implementations.
+> > If remove -ffreestanding, the builtin implementation cannot be used on
+> > all hardware.
+>=20
+> That sounds like a compiler bug in that compiler's implementation of
+> string.h builtins then; it should default to the safest implementation
+> (aligned accesses) until instructed otherwise.=C2=A0 Have you filed a bug
+> against your compiler vendor for which compiler you observe that
+> behavior from?
 
-Thanks for the patch! And thanks for checking clang static analysis reports=
-!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+AFAIK there is no such bug in GCC.
 
-> ---
-> v2:
->  - move NULL check to the callee "nsm_create_handle()"
->  fs/lockd/mon.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/fs/lockd/mon.c b/fs/lockd/mon.c
-> index 1d9488cf0534..87a0f207df0b 100644
-> --- a/fs/lockd/mon.c
-> +++ b/fs/lockd/mon.c
-> @@ -276,6 +276,9 @@ static struct nsm_handle *nsm_create_handle(const str=
-uct sockaddr *sap,
->  {
->         struct nsm_handle *new;
->
-> +       if (!hostname)
-> +               return NULL;
-> +
->         new =3D kzalloc(sizeof(*new) + hostname_len + 1, GFP_KERNEL);
->         if (unlikely(new =3D=3D NULL))
->                 return NULL;
-> --
-> 2.30.2
->
+But GCC indeed has a bug about builtin expansion: it generates really
+stupid code for __builtin_memcpy and friends.  See
+https://gcc.gnu.org/PR109465.  The bug is fixed for GCC 14, but GCC 14
+won't be released soon.
 
+> At the very least, there should be a comment above the addition of
+> -ffreestanding justifying why it's being used, probably with a link to
+> the above bug report.
+>=20
+> I would expect either -mcpu or perhaps some other -m flag to guide the
+> compiler when it is safe to emit memcpy (and friends) in terms of
+> unaligned access or not.
+
+It's controlled by -m{no-,}strict-align.  LoongArch kernel defaults to -
+mstrict-align, with this the compiler should not generate unaligned
+access.  -mno-strict-align is hidden behind CONFIG_EXPERT (FWIW I
+personally dislike the decision to hide it).
 
 --=20
-Thanks,
-~Nick Desaulniers
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
