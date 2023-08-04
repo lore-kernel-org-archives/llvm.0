@@ -1,198 +1,195 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DAB8CA55
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 18:38:03 +0000 (UTC)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 374HdXju004299;
-	Fri, 4 Aug 2023 18:37:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=CzhvFNH/xJMYJJhGWfwYN8UEAVWTtwHWYCZ/YT5ZRBs=;
- b=1bbnO1K55UuQ5voBsNtzkTWrKZJx980eBaxrHdRQESy1uRaTlp8S/mlnaxnzN/VVY3iY
- 7YXAS0ObzMiTJhDk5+FxVDusUD4BQiM2sbjnTpG3TusfzVkNbRvQgKktWx7RpRrn5Zw7
- xNKDB0sNaEroxYWjtuj+BPV8b5j/yOQT7nnoM5GNojXBVAkoSqIvjUWdnQU6PFgQVDsh
- 5ylaiHkIeNA4hv48VWg5U+t0ezqPKBuovhcwjZfV1SmPNY6E+lt0KnAJOyhe6rfY7/Rs
- QOzC5BsdG/ahuU2npTfHQy76xGe5jDKxIMVeNdUYmgU6IskIOIY4jymPb0hDuvo6trwP 9g== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s4spccfpc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Aug 2023 18:37:57 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 374H1mCL012220;
-	Fri, 4 Aug 2023 18:37:57 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2170.outbound.protection.outlook.com [104.47.73.170])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3s8m2s7t47-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Aug 2023 18:37:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UzqIo0EMiXojbj6NNyVTBpCSH1h7sOBiJEa/6YbrvtmGlopL3uTdIOlTE1ElZD15usS0G7OskutF4NVRAKQFg5eLOnYBlEI7O8EN/6xUusTAVJWkkkBrcP3+usIRzmsZ6OwQ2gO+RU5Y7k72jnhnG60CwOhh+3XdDMjzwGWHo6+jM7QFStAkS7f5KgzvAFoWrUM5LkbPSeZ4cJcvgFhdTFp3OcegJ0Z40Ud59Zg1WqVe1kewmbeAZz+sGm0s4A6RD8Fd60HKQGQxFRS904RiHa77k8bU7IHlE3EFG57qOWrPw2LWXTLvZeqjBYRt1liPLNGWFqZvarbei3+mldtq1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CzhvFNH/xJMYJJhGWfwYN8UEAVWTtwHWYCZ/YT5ZRBs=;
- b=NKE//XXG+nSCHuCIbNq9PwVJPEYgkP6cRFqY03En3v5/tX9Dg4fXRoLT28AG2AW54vqGUUpgVWGAykKos4+Ph0/4KxQZRwwz1hUIRkADb09aJpqQc3W/YsH2zj+xA5g6aCORODva+eVY0USv9e5hJ8zqTm1yRkYrvJO+gXy0ErYwiJej0XXDCaIT9gEjp8+ZnLsngEkuJrkenUIweBxe36otVzKEGSkB8i4DsGar8CbxVZMR8iXZLbI7u3KxwWPAbgiWOWlUQWYU58E2C0eR2Y7bb9wu8A51DBH4/DfwR/S+gDsteFf8YECVBcAQ+P4s8vjpnc33e+WImArX52Mucg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CzhvFNH/xJMYJJhGWfwYN8UEAVWTtwHWYCZ/YT5ZRBs=;
- b=Vni1syAfD5Xi8xUsexqPz0ZpCAud0R2thabsHtbDgm1qSfE75iCTYKmvL+nEsQk9ihyZikF9o24H0UMm7PJ74zXX3vDBa1hGUmGUoW7XVry+v1qjw4XQRhYfsa9Q3hEoUZr6Pnqnxw86mBY/YqImqFBU0mmRGGoNi5eb8H7DynY=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by PH7PR10MB6250.namprd10.prod.outlook.com (2603:10b6:510:212::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Fri, 4 Aug
- 2023 18:37:54 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::2990:c166:9436:40e]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::2990:c166:9436:40e%6]) with mapi id 15.20.6652.021; Fri, 4 Aug 2023
- 18:37:54 +0000
-Date: Fri, 4 Aug 2023 14:37:51 -0400
-From: Chuck Lever <chuck.lever@oracle.com>
-To: Su Hui <suhui@nfschina.com>
-Cc: trond.myklebust@hammerspace.com, anna@kernel.org, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        bfields@fieldses.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] fs: lockd: avoid possible wrong NULL parameter
-Message-ID: <ZM1Ffz0UpI9ouaeC@tissot.1015granger.net>
-References: <20230804012656.4091877-1-suhui@nfschina.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230804012656.4091877-1-suhui@nfschina.com>
-X-ClientProxiedBy: CH0PR03CA0296.namprd03.prod.outlook.com
- (2603:10b6:610:e6::31) To BN0PR10MB5128.namprd10.prod.outlook.com
- (2603:10b6:408:117::24)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB17CA55;
+	Fri,  4 Aug 2023 18:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691174687; x=1722710687;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LyrfTNWfvpXrheDpsHtjeqsN3kPWxkCd2wTdo6sMte4=;
+  b=V5ZuEVp3/FrjkovsEEEadZjpvvr2PYBl6KxoXoP2eWe6aPVp+bWFiKOQ
+   6ynzsEWs0Zi1K7K3sp2bBGFzsf+ESLUKkuCNMe/5UVQgsU2SGfU7it6Ik
+   /yY5XMpo+pu4V94BnKtbZWgLpV5IQ5rzipRXO/YYnI3r38XD+IdgovoBC
+   aMV2lKI1a1fgRR6nud/gpuXqQ271E0R3BFOSLcgDZ+/7mhU9oQu+YslLm
+   zcGY+wXMLbmhor9tqOB11PUSs8dI0rc1dTXWHPIx/NbRcoGNpbCaaDK0i
+   PXbnDlLXUuniUVLRUTomBHia/4twkRt32ieXg4iSLXczfRKQQxv0D3fwA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="401180610"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="401180610"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 11:44:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="707112904"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="707112904"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2023 11:44:44 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRzn1-00032t-2k;
+	Fri, 04 Aug 2023 18:44:43 +0000
+Date: Sat, 5 Aug 2023 02:43:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 16/18] fs/ceph/addr.c:272:56: error: no
+ member named 'pages' in 'struct ceph_osd_data'
+Message-ID: <202308050225.bCENdGNg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB5128:EE_|PH7PR10MB6250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81cbc99f-65ad-4293-7eae-08db9519ea6b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	S75i0fHl8mZfbeXl7613nf2AtLDUD8bhOBdYIE51sn8iW05nJ54xJPqTUZLlZVt7uQ5Y6gDzoN8PQXu7foi2wgpwWlwtZhBiZ7bSE87TDPaPrERrMNW0JAk1j5ErD5qCXhej6A2x9VrT5i3ZYOX4+i1ZLX2/BsuYvsyASU/njHaxNIQFeLOXoGmUWyGK0314XjR83RG/Fx7VmnOgyzg87MS24wZCr7GnLU64mBlcFkvn2eDs+rYBeSmroj2C8uPXzg/Qx4a3v3Y/ei1p1vVe7N7dzVIedrHYM+mTyO89rC6bIplvwnlCaf/PbetGLrsw36p6oy8HBjC/oDbHAfTx5Z2Ory1ySaQg9Q1Og60D/66W3oEBcrBwzuubvDbFBwEThs0itV1Pfca/gmw6PeHzgfa3yF85xoeyyKHNan/HlL6TefpUW0YAlxP4PHaMUnG/n6FMwcECbUveg0xQmctthd1rpSzp+97xLWmzl6qzX6bAye7bl+44cAA1x0cRXlVuQycCu1j214v6LYNhd4hBCntDkhJtlfbGjCtoLDSiEfHm2W75pmsmDHu6ZwL02Xym
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(39860400002)(366004)(376002)(396003)(186006)(1800799003)(451199021)(86362001)(83380400001)(478600001)(38100700002)(26005)(6506007)(8676002)(41300700001)(6666004)(44832011)(8936002)(7416002)(9686003)(6512007)(6486002)(316002)(66476007)(2906002)(4326008)(6916009)(66556008)(5660300002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?5d8RyMfc2I5Rn8Bh5HpK571E8LVopljDCvMDduMCe0E/EnKWEoVX8LtYIvh+?=
- =?us-ascii?Q?mFC116Xhw6PXQyOkb3jg2biFozJffaDFdJvvuPKUrGyryYGAv4iJKLJ8Ohk5?=
- =?us-ascii?Q?VOzTr/vMCkeSAOetHpL6iQ/oDQrYqpPdHQnFj44czMUdVmoy+bzeCyJXt5AE?=
- =?us-ascii?Q?IihJCEXJYAdz7MlO9GlLiZ3E9XjaJdkbRxxfZ/DE3Xq9IV3YBYh+GHyJ563p?=
- =?us-ascii?Q?s7MoXQZQvvNR2aQjtvJXOsELfE7dfxPFvoI7VW3Ym5HhLt/KMsKcnT+CqoUO?=
- =?us-ascii?Q?JvEVhTkAz6gXr9c1kD5dMP2JtVKn6LQYRl0Wm7U5XOeg/vX+XIg6m+s8OwXU?=
- =?us-ascii?Q?NMUJvlVqVmalA0iQsyogvM/R3bdvdFcxpk4HKiwUXZ/bqy5NSxvpT+mM+n7j?=
- =?us-ascii?Q?DlmzEtDdgKSKUpdabtWWCDkHAwfCpz89SGkVLKBB4TbfFCd94q7wbLuvom9L?=
- =?us-ascii?Q?IcibGZ9VbZ1/xgym5FjUrdFKdgUhX2lxzF9BG8bgKQYQJ4ODyXTiu+w8lS7w?=
- =?us-ascii?Q?n3rEEv9teivZ5LuGXF1rPtY8wudpANEf9zJaoqiq6Lrys2WmeQWuD9WOpBuw?=
- =?us-ascii?Q?NahfMzOfqMw2rZIlEmNBXLI7Yd0A4D1S3tKotGjGLdpvVtFtKLCwyKoZcQPJ?=
- =?us-ascii?Q?mRHi/KAOIdc4MzA+schAo3xB4z0HClFeqR/HFI0CPhI1wqBa6/Y7IpQ5Fu2a?=
- =?us-ascii?Q?pYw0Xmd9aDOuYDnw6XB9DdAO1bNymcPYMEa+OKIBGjv7/WNk+DM137DHo8CH?=
- =?us-ascii?Q?rn6kU+CkbcnJTpZ7KHCrCQNwdBWKdynKf8LURDSQ4xIGkGFFCwXF0C1Ri+d/?=
- =?us-ascii?Q?QD2Bmtp7kiAjQrfXABuI9BVpW72trUORUKKUKy/QVqzKuHhpj0u34XlMxKhs?=
- =?us-ascii?Q?80p7L3G3k+Y2EfI2dyIz+1BwWOVKZtCOoZejfQXfeKtfG56ziRL2y/huWJCB?=
- =?us-ascii?Q?4UnneuFBPk11O1vFATze0iNVFowuBFp7ct3VvdXA67GVIxRJWmqenxmgr6ex?=
- =?us-ascii?Q?e1a+w8hD3tkyUxY8h0/vbGiR0/fbppu8sTE5jsg2J7Kfv5vShufNSuvV5A1j?=
- =?us-ascii?Q?UICWQm3uezlbFpuojmBzRs8T0T2AG2FbZPbKlJyr5tR7OW5vxl+sqdJ3gJvG?=
- =?us-ascii?Q?qWXee/6+Ri9El7dY/zjWWwMzyZSvZiHBW6zB+mlMwR6yfvugfj+M5B9bjGbQ?=
- =?us-ascii?Q?ISgPrw6J486ivENhX15mdee7WWPr9dqmwC5M0P9MeS5EjgKzytHbDi64aC72?=
- =?us-ascii?Q?FwjkoRBhlL79Ps+nfjHB7gHtxpmc2C7TeP+Vbgjemq7BvqNwgWXnIQepm70c?=
- =?us-ascii?Q?QsgmSaIKVWuzW1zEKVFWC3ZreoPlEUh46uI7s3cxBQUeooo2nkkvT1mQ7+NS?=
- =?us-ascii?Q?UnEOv0rWJOS4lEsCSuW3LATVCBusCGbtKC66DeWqGCSoDWFr0LuEOyMowoFo?=
- =?us-ascii?Q?128MciXieRPIvzZS6HQIpU/N8E4ndPRwiLiryTL1ZZq9PegYSm2LavfTnQi6?=
- =?us-ascii?Q?nzJcsLUxyRDhltlwbBu2w1TcgueUHM/NmfIlB7TWPBEo6TdQPkNmDST1Qtev?=
- =?us-ascii?Q?Wlp2HpxYp7K8hnQXVpIsSg4+JIrpeq2rfPxCnYWLs8Bp98+4DI7MirSD8zcn?=
- =?us-ascii?Q?Hg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?us-ascii?Q?eq2v/6DT9nnz9szoOL6uabI8fni6na5ijnQ8EA43DkGr+dOK2/SRRkq6Js43?=
- =?us-ascii?Q?DTCbi5MH9TXkpf3y88NyFZpYLDU0e9Wg7kszEiHJAdFBRQKnrPXor6aohVS8?=
- =?us-ascii?Q?4f8toskGWvMXfYE1MyNvdYm41h6fVtTUfNgutxu/Ir4KpVdR+SxeQ8fkTbzt?=
- =?us-ascii?Q?s/jwY2dKECSm0EUE3mizj/GQQHKnXYSpNsfHgy3AddezMhrhAoTZlDsQDTSx?=
- =?us-ascii?Q?0orcjKhOQxVpVBC18AP3YxjrVs1UI5gCgIrvF2mGZslH+pKS4RlvEZ9MzM7O?=
- =?us-ascii?Q?W2Q4W8NcBwydw2vuaWmyd2U0sv4OaX6FNP/PmUeTqw19WbFzjChnnHv3wqKr?=
- =?us-ascii?Q?RRBLgkV0N/YKdFMDQTHSaMz9uZqAPs+3ZLPsBpU3LW9qXsj06HFEB314ktUC?=
- =?us-ascii?Q?XetB7b3euXHM57lBgrUTabhcBe4JTWTXl1CClPVBIY6FQC+TG4xkSx8sg8WU?=
- =?us-ascii?Q?+yqdTzJcubUMmzbF3sRkyJbA4IblAVvqOEaD2hHX9H7UcAjJ0F4aC01DxG5H?=
- =?us-ascii?Q?cRqtYbN07qh0K9tejeaM5LltBHxz++Lz6nobNVCO9gEsEQ/ETZDwlXC5EbGw?=
- =?us-ascii?Q?xuYpTzQUiFCE+doh/qJB94lnXfofJZp6EtvEZFNpR52VgcsLKNaUpOjIDm9q?=
- =?us-ascii?Q?LKPS5n+g5ZywP6JAeVTosaRHHsQWX+IsJBeOaS9WpT5q6XwE03MST3gCANNr?=
- =?us-ascii?Q?UvIjKTBVxx4Gp74VB45PgxIcjRfmowXuXFlWxh6wXOLysbXIRnSjT5d+tRS1?=
- =?us-ascii?Q?OjkHtZ03iogvDxSgDqcEieKM0mq5Jf6gdr3+MkXqwH+fVW4ByiGdDW0vkr2l?=
- =?us-ascii?Q?xewLkijg+xiFsXXQVkuAEv46ML/9K0+EOLu9clmWm+d90KDgvClBoyArEllD?=
- =?us-ascii?Q?u1mtHI2SVX48vdQftMUiAUVzE1PIPFO89pxnzwDcoVum6OW5M59GHBWAdD8S?=
- =?us-ascii?Q?GgCdoLOBzWpr8n7nmPuEAMMblTDKr2iTsFaTurbtsV+g/Ga8FBq1Vlu8Cgx3?=
- =?us-ascii?Q?xVrFy5eLMMgBvs/zeGT+V29o1Qp70SxfaEdWbmK6c0p3chAUeAqgZjypSI7Y?=
- =?us-ascii?Q?8xPgccSbC+6xNE9qbU3a5mQHijjZ4Q=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81cbc99f-65ad-4293-7eae-08db9519ea6b
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 18:37:54.4191
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /q7xsj9Ya5NY9AVve7h2gPXpS2WIaEriBw62hrMC6LqWOj/SeJoBkLc9nIT5l7bQ9MEIexd1Xgm0i4EbAotsyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6250
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-04_18,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2308040166
-X-Proofpoint-ORIG-GUID: tf6YllqPhCmean6V-NjZjE0-ISWt4loO
-X-Proofpoint-GUID: tf6YllqPhCmean6V-NjZjE0-ISWt4loO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Aug 04, 2023 at 09:26:57AM +0800, Su Hui wrote:
-> clang's static analysis warning: fs/lockd/mon.c: line 293, column 2:
-> Null pointer passed as 2nd argument to memory copy function.
-> 
-> Assuming 'hostname' is NULL and calling 'nsm_create_handle()', this will
-> pass NULL as 2nd argument to memory copy function 'memcpy()'. So return
-> NULL if 'hostname' is invalid.
-> 
-> Fixes: 77a3ef33e2de ("NSM: More clean up of nsm_get_handle()")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   672499b5bfaeda1769d9eab9c9a08f4c2b2e4bf5
+commit: 173db2e634dcd7df7e5d6cac4e83ff496f1845bd [16/18] ceph: Remove CEPH_OS_DATA_TYPE_PAGES and its attendant helpers
+config: i386-randconfig-i013-20230801 (https://download.01.org/0day-ci/archive/20230805/202308050225.bCENdGNg-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050225.bCENdGNg-lkp@intel.com/reproduce)
 
-Applied to nfsd-next (for v6.6).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050225.bCENdGNg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   fs/ceph/addr.c:255:36: error: no member named 'length' in 'struct ceph_osd_data'
+                                    req->r_end_latency, osd_data->length, err);
+                                                        ~~~~~~~~  ^
+>> fs/ceph/addr.c:272:56: error: no member named 'pages' in 'struct ceph_osd_data'
+                           err = ceph_fscrypt_decrypt_extents(inode, osd_data->pages,
+                                                                     ~~~~~~~~  ^
+>> fs/ceph/addr.c:280:24: error: use of undeclared identifier 'CEPH_OSD_DATA_TYPE_PAGES'
+           if (osd_data->type == CEPH_OSD_DATA_TYPE_PAGES) {
+                                 ^
+   fs/ceph/addr.c:281:34: error: no member named 'pages' in 'struct ceph_osd_data'
+                   ceph_put_page_vector(osd_data->pages,
+                                        ~~~~~~~~  ^
+>> fs/ceph/addr.c:282:35: error: no member named 'offset' in 'struct ceph_osd_data'
+                                        calc_pages_for(osd_data->offset,
+                                                       ~~~~~~~~  ^
+   fs/ceph/addr.c:283:16: error: no member named 'length' in 'struct ceph_osd_data'
+                                           osd_data->length), false);
+                                           ~~~~~~~~  ^
+   fs/ceph/addr.c:882:28: error: use of undeclared identifier 'CEPH_OSD_DATA_TYPE_PAGES'
+                   BUG_ON(osd_data->type != CEPH_OSD_DATA_TYPE_PAGES);
+                                            ^
+   fs/ceph/addr.c:883:20: error: no member named 'length' in 'struct ceph_osd_data'
+                   len += osd_data->length;
+                          ~~~~~~~~  ^
+   fs/ceph/addr.c:884:45: error: no member named 'offset' in 'struct ceph_osd_data'
+                   num_pages = calc_pages_for((u64)osd_data->offset,
+                                                   ~~~~~~~~  ^
+   fs/ceph/addr.c:885:24: error: no member named 'length' in 'struct ceph_osd_data'
+                                              (u64)osd_data->length);
+                                                   ~~~~~~~~  ^
+   fs/ceph/addr.c:888:21: error: no member named 'pages' in 'struct ceph_osd_data'
+                           page = osd_data->pages[j];
+                                  ~~~~~~~~  ^
+   fs/ceph/addr.c:891:40: error: no member named 'pages' in 'struct ceph_osd_data'
+                                   fscrypt_free_bounce_page(osd_data->pages[j]);
+                                                            ~~~~~~~~  ^
+   fs/ceph/addr.c:892:15: error: no member named 'pages' in 'struct ceph_osd_data'
+                                   osd_data->pages[j] = page;
+                                   ~~~~~~~~  ^
+   fs/ceph/addr.c:913:38: error: no member named 'length' in 'struct ceph_osd_data'
+                         ceph_vinop(inode), osd_data->length,
+                                            ~~~~~~~~  ^
+   include/linux/ceph/ceph_debug.h:39:6: note: expanded from macro 'doutc'
+                           ##__VA_ARGS__);                         \
+                             ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   fs/ceph/addr.c:916:27: error: no member named 'pages' in 'struct ceph_osd_data'
+                   release_pages(osd_data->pages, num_pages);
+                                 ~~~~~~~~  ^
+>> fs/ceph/addr.c:925:16: error: no member named 'pages_from_pool' in 'struct ceph_osd_data'
+           if (osd_data->pages_from_pool)
+               ~~~~~~~~  ^
+   fs/ceph/addr.c:926:26: error: no member named 'pages' in 'struct ceph_osd_data'
+                   mempool_free(osd_data->pages, ceph_wb_pagevec_pool);
+                                ~~~~~~~~  ^
+   fs/ceph/addr.c:928:19: error: no member named 'pages' in 'struct ceph_osd_data'
+                   kfree(osd_data->pages);
+                         ~~~~~~~~  ^
+   fs/ceph/addr.c:2116:2: error: call to undeclared function 'osd_req_op_raw_data_in_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
+           ^
+   fs/ceph/addr.c:2116:2: note: did you mean 'osd_req_op_raw_data_in_databuf'?
+   include/linux/ceph/osd_client.h:465:6: note: 'osd_req_op_raw_data_in_databuf' declared here
+   void osd_req_op_raw_data_in_databuf(struct ceph_osd_request *osd_req,
+        ^
+   19 errors generated.
 
 
-> ---
-> v2:
->  - move NULL check to the callee "nsm_create_handle()"
->  fs/lockd/mon.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/fs/lockd/mon.c b/fs/lockd/mon.c
-> index 1d9488cf0534..87a0f207df0b 100644
-> --- a/fs/lockd/mon.c
-> +++ b/fs/lockd/mon.c
-> @@ -276,6 +276,9 @@ static struct nsm_handle *nsm_create_handle(const struct sockaddr *sap,
->  {
->  	struct nsm_handle *new;
->  
-> +	if (!hostname)
-> +		return NULL;
-> +
->  	new = kzalloc(sizeof(*new) + hostname_len + 1, GFP_KERNEL);
->  	if (unlikely(new == NULL))
->  		return NULL;
-> -- 
-> 2.30.2
-> 
+vim +272 fs/ceph/addr.c
+
+f0702876e152f0 Jeff Layton   2020-06-01  242  
+f0702876e152f0 Jeff Layton   2020-06-01  243  static void finish_netfs_read(struct ceph_osd_request *req)
+f0702876e152f0 Jeff Layton   2020-06-01  244  {
+48d1edf47c2a8d Jeff Layton   2023-01-02  245  	struct inode *inode = req->r_inode;
+6e6d7e6a04e774 Xiubo Li      2023-06-12  246  	struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
+eba6420eb72b5f Xiubo Li      2023-06-12  247  	struct ceph_client *cl = fsc->client;
+f0702876e152f0 Jeff Layton   2020-06-01  248  	struct ceph_osd_data *osd_data = osd_req_op_extent_osd_data(req, 0);
+6a19114b8e7f1e David Howells 2022-02-17  249  	struct netfs_io_subrequest *subreq = req->r_priv;
+5bc241e020562d Jeff Layton   2022-02-26  250  	struct ceph_osd_req_op *op = &req->r_ops[0];
+f0702876e152f0 Jeff Layton   2020-06-01  251  	int err = req->r_result;
+5bc241e020562d Jeff Layton   2022-02-26  252  	bool sparse = (op->op == CEPH_OSD_OP_SPARSE_READ);
+f0702876e152f0 Jeff Layton   2020-06-01  253  
+8ae99ae2b40766 Xiubo Li      2021-03-22  254  	ceph_update_read_metrics(&fsc->mdsc->metric, req->r_start_latency,
+903f4fec78dd05 Xiubo Li      2021-05-13  255  				 req->r_end_latency, osd_data->length, err);
+f0702876e152f0 Jeff Layton   2020-06-01  256  
+eba6420eb72b5f Xiubo Li      2023-06-12  257  	doutc(cl, "result %d subreq->len=%zu i_size=%lld\n", req->r_result,
+f0702876e152f0 Jeff Layton   2020-06-01  258  	      subreq->len, i_size_read(req->r_inode));
+f0702876e152f0 Jeff Layton   2020-06-01  259  
+f0702876e152f0 Jeff Layton   2020-06-01  260  	/* no object means success but no data */
+48d1edf47c2a8d Jeff Layton   2023-01-02  261  	if (err == -ENOENT)
+f0702876e152f0 Jeff Layton   2020-06-01  262  		err = 0;
+f0702876e152f0 Jeff Layton   2020-06-01  263  	else if (err == -EBLOCKLISTED)
+f0702876e152f0 Jeff Layton   2020-06-01  264  		fsc->blocklisted = true;
+f0702876e152f0 Jeff Layton   2020-06-01  265  
+48d1edf47c2a8d Jeff Layton   2023-01-02  266  	if (err >= 0) {
+48d1edf47c2a8d Jeff Layton   2023-01-02  267  		if (sparse && err > 0)
+48d1edf47c2a8d Jeff Layton   2023-01-02  268  			err = ceph_sparse_ext_map_end(op);
+48d1edf47c2a8d Jeff Layton   2023-01-02  269  		if (err < subreq->len)
+f0702876e152f0 Jeff Layton   2020-06-01  270  			__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
+48d1edf47c2a8d Jeff Layton   2023-01-02  271  		if (IS_ENCRYPTED(inode) && err > 0) {
+48d1edf47c2a8d Jeff Layton   2023-01-02 @272  			err = ceph_fscrypt_decrypt_extents(inode, osd_data->pages,
+48d1edf47c2a8d Jeff Layton   2023-01-02  273  					subreq->start, op->extent.sparse_ext,
+48d1edf47c2a8d Jeff Layton   2023-01-02  274  					op->extent.sparse_ext_cnt);
+48d1edf47c2a8d Jeff Layton   2023-01-02  275  			if (err > subreq->len)
+48d1edf47c2a8d Jeff Layton   2023-01-02  276  				err = subreq->len;
+48d1edf47c2a8d Jeff Layton   2023-01-02  277  		}
+48d1edf47c2a8d Jeff Layton   2023-01-02  278  	}
+f0702876e152f0 Jeff Layton   2020-06-01  279  
+48d1edf47c2a8d Jeff Layton   2023-01-02 @280  	if (osd_data->type == CEPH_OSD_DATA_TYPE_PAGES) {
+48d1edf47c2a8d Jeff Layton   2023-01-02  281  		ceph_put_page_vector(osd_data->pages,
+73acbd205528e5 David Howells 2023-04-20 @282  				     calc_pages_for(osd_data->offset,
+48d1edf47c2a8d Jeff Layton   2023-01-02  283  					osd_data->length), false);
+48d1edf47c2a8d Jeff Layton   2023-01-02  284  	}
+7467b04418d929 Jeff Layton   2022-06-07  285  	netfs_subreq_terminated(subreq, err, false);
+f0702876e152f0 Jeff Layton   2020-06-01  286  	iput(req->r_inode);
+ca50971bd0093c Xiubo Li      2023-05-09  287  	ceph_dec_osd_stopping_blocker(fsc->mdsc);
+f0702876e152f0 Jeff Layton   2020-06-01  288  }
+f0702876e152f0 Jeff Layton   2020-06-01  289  
+
+:::::: The code at line 272 was first introduced by commit
+:::::: 48d1edf47c2a8d9117eab1e1476741f56979510a ceph: add fscrypt decryption support to ceph_netfs_issue_op
+
+:::::: TO: Jeff Layton <jlayton@kernel.org>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
-Chuck Lever
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
