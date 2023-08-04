@@ -1,141 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252FD5236
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 08:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691138416;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cbQ9l9S+pH0NaUUjhsXGOs/4zJQ8XUPzYTJ/gRoXJrc=;
-	b=PEi+HWw0DkBBW2CB1iKHUG1018w0okR39yaaU0SnBbYrTQGV6SCv+yo6q1rsM+e38ZXXzj
-	1La1kda6axFG4EPbmY6GR346gKUpFh/dVrq92cK07pF03kTEC7uMQzoWvwMGkfIht/fq4b
-	yZiu2xaLthpXplx0n6tLsokLVNwrSOI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-GZIMPD_dOIqSF3VpoJuGwg-1; Fri, 04 Aug 2023 04:40:15 -0400
-X-MC-Unique: GZIMPD_dOIqSF3VpoJuGwg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9D818DC662
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 08:40:14 +0000 (UTC)
-Received: from [172.64.9.24] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B869E4094DC0;
-	Fri,  4 Aug 2023 08:40:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 24 of 328): Test report for master
- (6.5.0-rc4, mainline.kernel.org-clang, c1a515d3)
-Date: Fri, 04 Aug 2023 08:40:14 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09241846C
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 09:06:51 +0000 (UTC)
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3176fe7b67bso1023486f8f.2
+        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 02:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691140010; x=1691744810;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mbDuRBO1V21kY8Ln+XMGj8tah/dM0ZngOK9DCSez6Ds=;
+        b=5+NdHYLigl8F6LR7td6fJwq4mY9o+g31biS6M/x67uOl9aEZNMw4T8nENGruiRPiRB
+         +Gw5NEcsPnW4zysL4GKnQBPK9MO8u0Fsh1G5fWlgkmiENC1pguO3W0zZ0X/9KVUs9XYc
+         Tobr1N4uOqLruYOpHjKAtJJ2mDS90eZzDY6tlw9DthEFZ7ugqCsD5LBgD4MRn1hh6V3W
+         c6lem7rrbgF4amzGiob51SzurdoFT2U3i2F0AvVFAwCHWg57HOfRNXyQL4/kaXiOsTGY
+         Q4BSyO6jSC8eDLVGZOooU1CA1YZfiIB3t/WuaZY5AlYApLPEZnbtXoouz1qw8nB4BnEV
+         78og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691140010; x=1691744810;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mbDuRBO1V21kY8Ln+XMGj8tah/dM0ZngOK9DCSez6Ds=;
+        b=fTUiQMzLFdOWfGo+xPr2DkbjfYWiaGeg24W1Wl3GzrscgwWuUdsBmYfNExYtMQLjjk
+         /ch4jdgj02qRrX6rGBwSxLJ4sIrQnDOAogROAxN00iYhUCkfR9sxFaYodN3enE1rHmWo
+         NkdKjN61N+a2T2L/ApfxtjvuTl9eK4Fd1MvSQaF9AHk/tSiITvAz/8HgfC9VznGCLEgs
+         ZbSEr8c52lMpM+IxnztwiLsEbZEtwJQNaPGFj59bkMM2bbIKsfr7dU3o544aP37MLQ9d
+         DkMQT1k1CL1ywlFzEsKY+NZIQRPi71pg4393mpqcH1+G2hB0Oj4USchp8cDmWRF9Kd5O
+         XAnA==
+X-Gm-Message-State: AOJu0YxTVm/zNOZoMdIfMys8S/mSCnOilbDG+H+KchyjOXCkkziFAFjt
+	joupdfMc2QyYrdMhRNa71EZgZJQ9lQ==
+X-Google-Smtp-Source: AGHT+IEPvozwf23yi22U6OKa9kIgIghSUiAWRzblYbPC2JjxGfCAqNsiEHfVbqNraFFYkBMktGuoEKz+Fw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:2ebf:f3ea:4841:53b6])
+ (user=elver job=sendgmr) by 2002:adf:f587:0:b0:313:e68e:885d with SMTP id
+ f7-20020adff587000000b00313e68e885dmr6006wro.13.1691140009920; Fri, 04 Aug
+ 2023 02:06:49 -0700 (PDT)
+Date: Fri,  4 Aug 2023 11:02:56 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <29413.123080404401500417@us-mta-511.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Message-ID: <20230804090621.400-1-elver@google.com>
+Subject: [PATCH v2 1/3] compiler_types: Introduce the Clang __preserve_most
+ function attribute
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Andrew Morton <akpm@linux-foundation.org>, 
+	Kees Cook <keescook@chromium.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
+	linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+[1]: "On X86-64 and AArch64 targets, this attribute changes the calling
+convention of a function. The preserve_most calling convention attempts
+to make the code in the caller as unintrusive as possible. This
+convention behaves identically to the C calling convention on how
+arguments and return values are passed, but it uses a different set of
+caller/callee-saved registers. This alleviates the burden of saving and
+recovering a large register set before and after the call in the
+caller."
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+[1] https://clang.llvm.org/docs/AttributeReference.html#preserve-most
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Introduce the attribute to compiler_types.h as __preserve_most.
 
-Kernel information:
-    Commit message: Merge tag 'perf-tools-fixes-for-v6.5-2-2023-08-03' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
+Use of this attribute results in better code generation for calls to
+very rarely called functions, such as error-reporting functions, or
+rarely executed slow paths.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98505
+Beware that the attribute conflicts with instrumentation calls inserted
+on function entry which do not use __preserve_most themselves. Notably,
+function tracing which assumes the normal C calling convention for the
+given architecture.  Where the attribute is supported, __preserve_most
+will imply notrace. It is recommended to restrict use of the attribute
+to functions that should or already disable tracing.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
-3': Input/output error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1436
-            Affected tests:
-                  x86_64 - xfstests - cifsv3.11
-        Issue: [upstream] Libkcapi AF_ALG test: Oops in gcm_walk_start/gcm_=
-aes_crypt on s390x
-            URL: https://linux-regtracking.leemhuis.info/regzbot/regression=
-/lore/CAAUqJDuRkHE8fPgZJGaKjUjd3QfGwzfumuJBmStPqBhubxyk_A@mail.gmail.com/
-            Affected tests:
-                   s390x - Libkcapi AF_ALG test
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v2:
+* Imply notrace, to avoid any conflicts with tracing which is inserted
+  on function entry. See added comments.
+---
+ include/linux/compiler_types.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 547ea1ff806e..12c4540335b7 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -106,6 +106,33 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ #define __cold
+ #endif
+ 
++/*
++ * On x86-64 and arm64 targets, __preserve_most changes the calling convention
++ * of a function to make the code in the caller as unintrusive as possible. This
++ * convention behaves identically to the C calling convention on how arguments
++ * and return values are passed, but uses a different set of caller- and callee-
++ * saved registers.
++ *
++ * The purpose is to alleviates the burden of saving and recovering a large
++ * register set before and after the call in the caller.  This is beneficial for
++ * rarely taken slow paths, such as error-reporting functions that may be called
++ * from hot paths.
++ *
++ * Note: This may conflict with instrumentation inserted on function entry which
++ * does not use __preserve_most or equivalent convention (if in assembly). Since
++ * function tracing assumes the normal C calling convention, where the attribute
++ * is supported, __preserve_most implies notrace.
++ *
++ * Optional: not supported by gcc.
++ *
++ * clang: https://clang.llvm.org/docs/AttributeReference.html#preserve-most
++ */
++#if __has_attribute(__preserve_most__)
++# define __preserve_most notrace __attribute__((__preserve_most__))
++#else
++# define __preserve_most
++#endif
++
+ /* Builtins */
+ 
+ /*
+-- 
+2.41.0.640.ga95def55d0-goog
 
