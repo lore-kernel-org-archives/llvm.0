@@ -1,136 +1,126 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9576918044
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 15:42:06 +0000 (UTC)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-76cdf055c64so173268685a.3
-        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 08:42:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0A0CA6E
+	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 15:46:30 +0000 (UTC)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-63cf6b21035so13835066d6.1
+        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 08:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691163725; x=1691768525;
+        d=google.com; s=20221208; t=1691163990; x=1691768790;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LMB9HKP4nLwJw3q1s/3PxzF/3mcaB2FmzehgLjwrVXQ=;
-        b=luBKmkxS4KkoBKCMcnSbLsA2xPo/yzjRAPnE2Iste//wyFoCcQlJGz/22eRjpreXEA
-         mXHBlnWEOoOwjGsLTOYAGGE2JEnHi8clhNz+XXqF5sZqS9zngrBydHfzVDzoa4cyUSE7
-         Zg9BBa5JSAgFrSM2Lcn+Y7VJ0wlW6a1ib9psgWEv4gnT7cZAEurA8SEx6CMZ4E/gUw6a
-         5lSfoM9hDSAmdvrkiRyvZ3L9+nVJFp1Qz/rsyu+3cgf1zL83a8qDh46nW7v1cmlplZ6B
-         GtbclzizXIP5nqAYzguk1QcdwMpE9hnJ0hG1O4bfphu3TrtKg9bhZ4fRXtwWBOIF+if0
-         hQDg==
+        bh=Lbb2VkUYpcvrjAbuA8UFz73QM1aapinYdQ8PfffEqdw=;
+        b=uSw8srlvkdNUYJYtc5TNkofuuRG9NlvWsa9z1FxvyZgYol80KHdrxc49/RmliZ/fzc
+         W62Zh23a8h9A5Q0U05CYcZlliurch5SLeO+NXbcUxc5Snxe44CHOT6pBpKqbjCQ5tJtu
+         m9x21PVKgCsS8RkvCKOUgc2DDgcdAbsfSxqeCLcGA9Chi5toZU2Pq72NgECAMBtyTp0/
+         EvoBi8TVPPuKrA0RnO0NW6ui2xNhaT15TPafkWO048bdvP9IwJ2EdIlPNR0oKJfBKuZ+
+         326P99bNO/E4ZNzmMhORxtwrEzvIcGTMMa/n/K+eISL7k3poBMBIMrfxtcQw793EssFM
+         NbTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691163725; x=1691768525;
+        d=1e100.net; s=20221208; t=1691163990; x=1691768790;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LMB9HKP4nLwJw3q1s/3PxzF/3mcaB2FmzehgLjwrVXQ=;
-        b=LEebqbB/QrLI2XdyAQENG8gQsMptpcLELTmoT/DhQb2x6K2P8ppV7J2aZ+Wb39cPvq
-         FEQQe4lh98/6ZaSdwHV3PLdvAoAAMUExQSqk44pyBOuLEHB8XWbhFAvoQ189j/41wPkY
-         DCNxbz0q5FzS9CIqfPV/CODSn5E+bvMa0xsHswhbEZTg0dTv5t2B5Yh/uObNE20e8uLs
-         D3dje/C4u6KzuY1dNT2G4/mDYl4tgU8TV2ROMFAkO0Rg3zY9mef44glOUB7QFbhKsua2
-         4Rhs0Dr7kGEP724yoPXZuQtNJ4LF5Od3lxH8COR2g3NXvH0UGBE7QtGpN5f5hdLoaj3O
-         XqhQ==
-X-Gm-Message-State: AOJu0Yw1oEvg4TMNERpYBnXoIWb3hq1Ymndd1PQJH72CADgRnQxtOaNb
-	f+s7CO/ttemkDph0qRGQHFXUGGTA7eTW/TmFX9FiMg==
-X-Google-Smtp-Source: AGHT+IExVmYTNrYfBnYNOSGaqMCNi67nZElsdl9+XH2gLzLR6yr4pGYdCNAjcxcttnRulmkVHf7kJZQ42nRF7F72f2U=
-X-Received: by 2002:a0c:aa42:0:b0:62d:ee5a:514b with SMTP id
- e2-20020a0caa42000000b0062dee5a514bmr1900649qvb.11.1691163725237; Fri, 04 Aug
- 2023 08:42:05 -0700 (PDT)
+        bh=Lbb2VkUYpcvrjAbuA8UFz73QM1aapinYdQ8PfffEqdw=;
+        b=WR84CRkralmNQ1x1B+IeYjEg4XB9X5ruIH+MWaRS73BQoSoSEfvJPnZ7f0l5pgqm+m
+         1t7feCFLRjBfQnCumsjx2GY9mQ2FS8LCWfXwya8SfzRZFeHvLimJnUCE25mpInO0ago6
+         h6k4pvH+jr0PQAwjoQzJBXDSeEyzaX9zA2r/biEo/gwOxv1hGZhm8cDmRwsCb/bg0iSO
+         zKd4WL/jNJtrPyXsItKGZnHbuPMsILLLF9Z1mrn3USzC02ME3ebkSP8CwRNc01dZCk0h
+         x6wRxZB4Ua/LvU2aZ1Zc+LpmihecHTVRmh8MB04M+24zjklGSRtO5qemrTSmVMvGJRqU
+         7tDA==
+X-Gm-Message-State: AOJu0Yy3A8XSgEIl6mXS1o+hac6UncajYvVBkekUx+Ru6di/+zskc+1+
+	trrcYaBxlLv95+v1WNAJra0Tmdh5Tt5ng+80WmH7hg==
+X-Google-Smtp-Source: AGHT+IEu1uNcPnRW/G5hBNtOR5DUb/bVDRNMeccdfr2Wm9PDbUnpDbM+4Azra3rGP6+r18EkGk6+83/9IQfnQ1iFGYg=
+X-Received: by 2002:a0c:cb09:0:b0:63d:6fb:c8da with SMTP id
+ o9-20020a0ccb09000000b0063d06fbc8damr1804085qvk.14.1691163989483; Fri, 04 Aug
+ 2023 08:46:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202308040553.nMR9oB8v-lkp@intel.com> <20230804153749.GA2148888@dev-arch.thelio-3990X>
-In-Reply-To: <20230804153749.GA2148888@dev-arch.thelio-3990X>
+References: <20230804125609.2054719-1-kernel@xen0n.name> <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
+In-Reply-To: <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 4 Aug 2023 08:41:54 -0700
-Message-ID: <CAKwvOdk7VrGMy95heyyLhdhgNWb1LyV48WmzvhpNUrqaYBin_A@mail.gmail.com>
-Subject: Re: [stable:linux-4.14.y 4459/9999] lib/mpi/mpih-div.c:142:20: error:
- invalid use of a cast in a inline asm context requiring an lvalue: remove the
- cast or build with -fheinous-gnu-extensions
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: Fangrui Song <maskray@google.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <natechancellor@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 4 Aug 2023 08:46:18 -0700
+Message-ID: <CAKwvOdmt+p3KM23hz2BfheoWgEa0G9QKnAFYUP+EL2Ta5LXUUg@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 4, 2023 at 8:37=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
+On Fri, Aug 4, 2023 at 8:26=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org> =
+wrote:
 >
-> On Fri, Aug 04, 2023 at 05:32:55AM +0800, kernel test robot wrote:
-> > Hi Fangrui,
-> >
-> > First bad commit (maybe !=3D root cause):
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able.git linux-4.14.y
-> > head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
-> > commit: 71749b1181eca12af96654a781cabcd058c37c8f [4459/9999] Makefile: =
-Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-> > config: mips-randconfig-r035-20230731 (https://download.01.org/0day-ci/=
-archive/20230804/202308040553.nMR9oB8v-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.gi=
-t 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > reproduce: (https://download.01.org/0day-ci/archive/20230804/2023080405=
-53.nMR9oB8v-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202308040553.nMR9oB8v-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> lib/mpi/mpih-div.c:142:20: error: invalid use of a cast in a inline =
-asm context requiring an lvalue: remove the cast or build with -fheinous-gn=
-u-extensions
-> >      142 |                                         umul_ppmm(n1, n0, d0=
-, q);
-> >          |                                         ~~~~~~~~~~~~~~^~~~~~=
-~~~~
-> >    lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
-> >      652 |         : "=3Dl" ((USItype)(w0)), \
-> >          |                 ~~~~~~~~~~^~~
+> Hi, Xuerui,
 >
-> This is the same as [1] but the upstream solution (b0c091ae04f6) could
-> cause breakage in 4.14 for compilers older than GCC 4.4; 4.14 claims to
-> support GCC 3.2 as a minimum version. An alternative solution if we care
-> about fixing this issue in 4.14 without any regression possiblity would
-> be something like:
+> On Fri, Aug 4, 2023 at 8:56=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wr=
+ote:
+> >
+> > From: WANG Xuerui <git@xen0n.name>
+> >
+> > As explained by Nick in the original issue: the kernel usually does a
+> > good job of providing library helpers that have similar semantics as
+> > their ordinary userspace libc equivalents, but -ffreestanding disables
+> > such libcall optimization and other related features in the compiler,
+> > which can lead to unexpected things such as CONFIG_FORTIFY_SOURCE not
+> > working (!).
+> >
+> > As it turns out to be the case, removing the flag does not impact the
+> > LoongArch kernel's normal operation at all; so just remove it to
+> > restore expected libcall semantics globally on this architecture.
+> >
+> Not all processors support unaligned access, so we need the
+> alternative mechanism to select memset/memcpy/memmove implementations.
+> If remove -ffreestanding, the builtin implementation cannot be used on
+> all hardware.
 
-In our own CI, we don't test mips until 5.4.
-https://github.com/ClangBuiltLinux/continuous-integration2/blob/main/genera=
-tor.yml#L1691-L1698
+That sounds like a compiler bug in that compiler's implementation of
+string.h builtins then; it should default to the safest implementation
+(aligned accesses) until instructed otherwise.  Have you filed a bug
+against your compiler vendor for which compiler you observe that
+behavior from?
 
-Another solution is perhaps to ask kindly that the kernel test robot
-team not test branches of stable w/ clang for ARCH=3Dmips.
+At the very least, there should be a comment above the addition of
+-ffreestanding justifying why it's being used, probably with a link to
+the above bug report.
 
+I would expect either -mcpu or perhaps some other -m flag to guide the
+compiler when it is safe to emit memcpy (and friends) in terms of
+unaligned access or not.
 
 >
-> diff --git a/lib/mpi/longlong.h b/lib/mpi/longlong.h
-> index 6c5229f98c9e..42076c124e23 100644
-> --- a/lib/mpi/longlong.h
-> +++ b/lib/mpi/longlong.h
-> @@ -639,7 +639,7 @@ do { \
->         **************  MIPS  *****************
->         ***************************************/
->  #if defined(__mips__) && W_TYPE_SIZE =3D=3D 32
-> -#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4)
-> +#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4) || d=
-efined(__clang__)
->  #define umul_ppmm(w1, w0, u, v)                        \
->  do {                                           \
->         UDItype __ll =3D (UDItype)(u) * (v);      \
+> Huacai
 >
-> [1]: https://lore.kernel.org/20230801202602.GA2589710@dev-arch.thelio-399=
-0X/
->
-> Cheers,
-> Nathan
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1897
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: WANG Xuerui <git@xen0n.name>
+> > ---
+> >  arch/loongarch/Makefile | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> > index b1e5db51b61c..db0d7210272d 100644
+> > --- a/arch/loongarch/Makefile
+> > +++ b/arch/loongarch/Makefile
+> > @@ -83,7 +83,6 @@ KBUILD_CFLAGS_KERNEL          +=3D -fPIE
+> >  LDFLAGS_vmlinux                        +=3D -static -pie --no-dynamic-=
+linker -z notext
+> >  endif
+> >
+> > -cflags-y +=3D -ffreestanding
+> >  cflags-y +=3D $(call cc-option, -mno-check-zero-division)
+> >
+> >  load-y         =3D 0x9000000000200000
+> > --
+> > 2.40.0
+> >
 >
 
 
