@@ -1,180 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC49DBE4A;
-	Fri,  4 Aug 2023 16:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E309FC433C7;
-	Fri,  4 Aug 2023 16:41:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691167301;
-	bh=Lkrz5fdo48b6U0XEshqshN85hsfuLrLwvnvbpsynonc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B6SG1fYK5kOKTSvTYFMeKkaub/Q3bf1uWHe2FAHjqIM6NRYeKVy857xoXTe4DSPp8
-	 jNSNKZ0oOdlmwuOBGq2V6yov6ZHUiDGyrvsrnSVd8vNV5qT2sftmLMTcqo63DEkUZB
-	 oaG3Fll/aCLu+Tz9sWZtEXW/YntuVw+ERoJhLd1zXolNXx4EXDVIX6f7f+vCs4Zj+y
-	 +FDt2H/aR96JHssD+R/KNFajQpr3gQEx6k1mAlortirGpz6naOMs9IGLZKdzB3dJuT
-	 2JULxnROeXJ3qmCwQIoRY6oiPWe+zkFTiuNKSXePH9pVSQj8tGMdp+Lw+jtyBED3XL
-	 HNLoUpBT+TBPw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id BCB7C404DF; Fri,  4 Aug 2023 13:41:38 -0300 (-03)
-Date: Fri, 4 Aug 2023 13:41:38 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>, martin.lau@linux.dev,
-	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
-	Tomasz =?utf-8?B?UGF3ZcWC?= Gajc <tpgxyz@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>, m.seyfarth@gmail.com,
-	Fangrui Song <maskray@google.com>
-Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
-Message-ID: <ZM0qQlvd1VKoCeIO@kernel.org>
-References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
- <ZMwQivemlha+fU5i@kernel.org>
- <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
- <afe71df3-48e4-837a-e85d-b6a6764eee62@oracle.com>
- <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC51ECA64;
+	Fri,  4 Aug 2023 16:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691167340; x=1722703340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Aix0fhmGUEkDVxFMY9z2Bt8WwWhM6K8bS2ydJILJ5a0=;
+  b=F7ucg5bxOvxZZe4YunGxApbiJ8iIgPSSmbWx5ClDjUIE1aRn+wnvCSiz
+   gSdLDG0JozOAaTZrcc5q5rZThd0HX3M7FnjVAOilDmrlnQa5TF7SyqX0E
+   0N4aZYDteTU90xEXe4r0JoojmUo9XJlYmN+4Wb+pgm6YcBu5seO8b8Ftb
+   oMaSBwN1FLNdnukpyQZADQGCWSneGZlekkYlTWQOpHGgn/YZDNDC0IBIf
+   2a39sX0bWqIIuRT2lRP6pK6g1THMIFQ6yo+o+8BiPmFkxAgfwoX2LHd3W
+   /llO7hHjB3R6UHGEghG4972xYYsf02MX36AwxKN79pbBRumqSEPKlVOaY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="372940333"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="372940333"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 09:42:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="733314163"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="733314163"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Aug 2023 09:41:42 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRxry-0002zL-09;
+	Fri, 04 Aug 2023 16:41:42 +0000
+Date: Sat, 5 Aug 2023 00:41:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zheng Yejian <zhengyejian1@huawei.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org, vnagarnaik@google.com, shuah@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to
+ 'record_disabled' messed
+Message-ID: <202308050048.bUnVeBjV-lkp@intel.com>
+References: <20230804124549.2562977-2-zhengyejian1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20230804124549.2562977-2-zhengyejian1@huawei.com>
 
-Em Fri, Aug 04, 2023 at 09:11:09AM -0700, Nick Desaulniers escreveu:
-> + Marcus (who also just reported seeing this
-> https://github.com/ClangBuiltLinux/linux/issues/1825#issuecomment-1664671027
-> and might be able to help reproduce).
-> + Fangrui (because seeing dd used as a result of 90ceddcb4950 makes me shudder)
-> 
-> On Thu, Aug 3, 2023 at 3:10 PM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >
-> > On 03/08/2023 21:50, Nick Desaulniers wrote:
-> > > On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > >>
-> > >> Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
-> > >>> Hi Martin (and BTF/BPF team),
-> > >>> I've observed 2 user reports with the error from the subject of this email.
-> > >>> https://github.com/ClangBuiltLinux/linux/issues/1825
-> > >>> https://bbs.archlinux.org/viewtopic.php?id=284177
-> > >>>
-> > >>> Any chance you could take a look at these reports and help us figure
-> > >>> out what's going wrong here?  Nathan and I haven't been able to
-> > >>> reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
-> > >>>
-> > >>> Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
-> > >>
-> > >> Masami had a problem with new versions of compilers that was solved
-> > >> with:
-> > >>
-> > >> ------------------------ 8< --------------------------------------------
-> > >>> To check that please tweak:
-> > >>>
-> > >>> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
-> > >>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> > >>> # CONFIG_DEBUG_INFO_DWARF4 is not set
-> > >>> # CONFIG_DEBUG_INFO_DWARF5 is not set
-> > >>> ⬢[acme@toolbox perf-tools-next]$
-> > >>>
-> > >>> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
-> > >>> CONFIG_DEBUG_INFO_DWARF4.
-> > >>
-> > >> Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
-> > >
-> > > Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
-> > > is not what I'd consider a fix. Someday we can move to
-> > > DWARFv5...someday...
-> > >
-> > > What you describe sounds like build success, but reduction in debug info.
-> > >
-> > > The reports I'm referring to seem to result in a build failure.
-> > >
-> >
-> > This is a strange one. The error in question
-> >
-> > CC .vmlinux.export.o
-> > UPD include/generated/utsversion.h
-> > CC init/version-timestamp.o
-> > LD .tmp_vmlinux.btf
-> > BTF .btf.vmlinux.bin.o
-> > libbpf: BTF header not found
-> > pahole: .tmp_vmlinux.btf: Invalid argument
-> 
-> That's slightly different from Tomasz and Marcus' report (not sure if
-> that's relevant):
-> 
-> FAILED: load BTF from vmlinux: Invalid argument
-> 
-> That seems to come from
-> tools/bpf/resolve_btfids/main.c:529
-> Which seems like some failed call to btf_parse().
-> EINVAL is getting propagated up from btf_parse(), but that's not super
-> descriptive...
+Hi Zheng,
 
-Jiri, have you stumbled on this before? 
+kernel test robot noticed the following build errors:
 
-- Arnaldo
- 
-> The hard part is that I suspect OpenMandriva (Tomasz) and Marcus are
-> both setting additional flags in their toolchains, which can make
-> reproducing tricky.
-> 
-> >
-> > ...occurs during BTF parsing when the raw size of the BTF is smaller
-> > than the BTF header size, which should never happen unless BTF
-> > is corrupted. Thing is, at that stage we shouldn't be parsing BTF,
-> > we should be generating it from DWARF. The only time pahole parses BTF
-> > is when it's creating split BTF for modules (it parses the base BTF), or
-> > when it's reading existing BTF, neither of which it should be doing at
-> > this stage.
-> >
-> > But I suspect the issue is in gen_btf() in scripts/link-vmlinux.sh.
-> > Prior to running pahole, we call "vmlinux_link .tmp_vmlinux.btf".
-> > If that went awry somehow and .tmp_vmlinux.btf wasn't created, it
-> 
-> Wouldn't we expect some kind of linker error though in that case?
-> 
-> > would explain the "Invalid argument" error:
-> >
-> > $ pahole -J nosuchfile
-> > pahole: nosuchfile: Invalid argument
-> >
-> > I see some clang specifics in vmlinux_link(), so I think a good
-> > first step would be to check if .tmp_vlinux.btf exists prior
-> > to running pahole. The submitter mentioned swapping linkers seems to
-> > help, so that seems a promising angle. If there's a kernel .config
-> > available I can try and reproduce the failure too. Thanks!
-> >
-> > Alan
-> >
-> > >>
-> > >>   LD      .tmp_vmlinux.btf
-> > >>   BTF     .btf.vmlinux.bin.o
-> > >>   LD      .tmp_vmlinux.kallsyms1
-> > >>
-> > >> And
-> > >>
-> > >> / # strings /sys/kernel/btf/vmlinux | wc -l
-> > >> 89921
-> > >> / # strings /sys/kernel/btf/vmlinux | grep -w kfree
-> > >> kfree
-> > >>
-> > >> It seems the BTF is correctly generated. (with DWARF5, the number of symbols
-> > >> are about 30000.)
-> > >
-> > >
-> > >
-> 
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+[auto build test ERROR on linus/master]
+[cannot apply to rostedt-trace/for-next-urgent]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Yejian/tracing-Fix-cpu-buffers-unavailable-due-to-record_disabled-messed/20230804-204751
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230804124549.2562977-2-zhengyejian1%40huawei.com
+patch subject: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to 'record_disabled' messed
+config: i386-randconfig-r025-20230731 (https://download.01.org/0day-ci/archive/20230805/202308050048.bUnVeBjV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050048.bUnVeBjV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050048.bUnVeBjV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:5280:39: error: no member named 'max_buffer' in 'struct trace_array'
+                           ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+                                                          ~~  ^
+   kernel/trace/trace.c:5286:38: error: no member named 'max_buffer' in 'struct trace_array'
+                           ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+                                                         ~~  ^
+   2 errors generated.
+
+
+vim +5280 kernel/trace/trace.c
+
+  5260	
+  5261	int tracing_set_cpumask(struct trace_array *tr,
+  5262				cpumask_var_t tracing_cpumask_new)
+  5263	{
+  5264		int cpu;
+  5265	
+  5266		if (!tr)
+  5267			return -EINVAL;
+  5268	
+  5269		local_irq_disable();
+  5270		arch_spin_lock(&tr->max_lock);
+  5271		for_each_tracing_cpu(cpu) {
+  5272			/*
+  5273			 * Increase/decrease the disabled counter if we are
+  5274			 * about to flip a bit in the cpumask:
+  5275			 */
+  5276			if (cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+  5277					!cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+  5278				atomic_inc(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+  5279				ring_buffer_record_disable_cpu(tr->array_buffer.buffer, cpu);
+> 5280				ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+  5281			}
+  5282			if (!cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+  5283					cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+  5284				atomic_dec(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+  5285				ring_buffer_record_enable_cpu(tr->array_buffer.buffer, cpu);
+  5286				ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+  5287			}
+  5288		}
+  5289		arch_spin_unlock(&tr->max_lock);
+  5290		local_irq_enable();
+  5291	
+  5292		cpumask_copy(tr->tracing_cpumask, tracing_cpumask_new);
+  5293	
+  5294		return 0;
+  5295	}
+  5296	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
