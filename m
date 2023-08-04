@@ -1,114 +1,88 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250F7198A1
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 16:16:06 +0000 (UTC)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-63d3583d0efso14516016d6.1
-        for <llvm@lists.linux.dev>; Fri, 04 Aug 2023 09:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691165766; x=1691770566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=25RqaLOVYFfPy9s/EZCIR1SBifhYM46rMdPj4bA+or8=;
-        b=xEw45MZnEqdJ293zZ92EP/3OWo4q7OequDcJDIIN9FkZuaVqfsPtMn9pRV2MNBpvwT
-         CG5mNkBxAZt+iyzUazrWY3HB6oGDnZ14U9JpZci/06YGqtgwCrBHiGyz8zAH/G7u0Wwx
-         mAVrEMW0IAQGNHC/+7poXSAflvfPM3IFOgGtpB765hXaqwmle+lxRiWrX8ginIYTW17b
-         wS6k1fJ46sGDTRGzClYccdhTIp/teyPZZAa9BZ5yEysfDvErBjiVpvgvKl50m4swvCIM
-         mNh+SDoyUsVvJn4WpQHTe96I3xrJLSunv0eLjbx8HSkrFCo2c9Oa8kkkGenhWFaQjRb/
-         W1hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691165766; x=1691770566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=25RqaLOVYFfPy9s/EZCIR1SBifhYM46rMdPj4bA+or8=;
-        b=j3LtG7W64GCF+KczYZTr9DyO7nwQixiPFcn88CtGDAYRDG+g4kt0LqC3Eg/xu9dwYT
-         E3TX9s1vE2wnWTYZAAomiFuC05P6SfCBxACSNsFINfdpG9HHpiNu8GgyHmD8aUH3/O+9
-         wE7a0RxPciX7mz76htMwAEBw9o80jaiRsPEpd+nnW40aac7+jzc7KI6ZMKxybFndTVNf
-         7e0lsA9PXzR8wBhlLDZ7Ov25AxHC0WMfr8KYsXV7fJE5jilCDekd3CJXFViHHzDM5mWR
-         CpLc6kYtSziz2iX8RF/AUh6hI7Dtpk0WCeImCO9KpJRj0knGPgUgRu6xrl/nibF1Y5vb
-         qJig==
-X-Gm-Message-State: AOJu0Yx++99qUQViJFgpxsPQdbMwYoGNQfvP8D/msgzUndWVWOZk7cGL
-	ZU8CXQh8f1taqVe4doHU9CM4EuSBDSS2jFPmRfot9g==
-X-Google-Smtp-Source: AGHT+IHxsFGUtaXN8q7zeA5C+xhBK+BWU+T3q6tUpLZSxFyzPk4Ytg+bEKJmDZn+VB7W8WZB8mo1hnhZ4iwhiZOvZSU=
-X-Received: by 2002:a05:6214:448d:b0:637:849d:b2bc with SMTP id
- on13-20020a056214448d00b00637849db2bcmr1901680qvb.64.1691165765772; Fri, 04
- Aug 2023 09:16:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE12C18054;
+	Fri,  4 Aug 2023 16:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691166104; x=1722702104;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SkRmCWHjINejDayhUfO2zrXccz5Yf1cMte27jc60wKM=;
+  b=hgUJB1R3+Ra+OUPRrMR5/IGaceg6qx8PPf/pWgjpOQ/PCglbfXfjRBc8
+   LVDkvDpft0ZdO3vNeW5Xs3JyLnprBP8zIDb6RDpMLRoXA/MtmZkkpEbI0
+   Ys9gBWj5qj0MUODpd3KZ18OrGkfWgjQ6apbSdGK0sTSxhrl5AZa0V00w1
+   Kvox5NKHSfW7MApUQxORCpe8y3s9qPh4iP01/4wk/3b+uizZjFqW6zwt4
+   hp3Zj8VF4K09wUsmVHzJxA+N5XkQ3BQwm0FMzInqgfUoPBdV4wHQv3njA
+   PYzXjjqLvAl4ofUil96lonF4U8UmyRZ+L0yJDlGsnb80rK00zqrmoHboL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="372935607"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="372935607"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 09:21:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="800119275"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="800119275"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2023 09:21:42 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qRxYb-0002yd-26;
+	Fri, 04 Aug 2023 16:21:41 +0000
+Date: Sat, 5 Aug 2023 00:20:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivan Babrou <ivan@cloudflare.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [driver-core:driver-core-testing 2/16] fs/kernfs/mount.c:50:5:
+ warning: no previous prototype for function 'kernfs_statfs'
+Message-ID: <202308050054.TMaWFpME-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230804125609.2054719-1-kernel@xen0n.name> <CAAhV-H5g-jmeQMhicrqhpStV9n0Z-EZ1dZAsuT2hmOaHki4ucg@mail.gmail.com>
- <CAKwvOdmt+p3KM23hz2BfheoWgEa0G9QKnAFYUP+EL2Ta5LXUUg@mail.gmail.com> <b1617fe221f137b49b9a2ba9c864e6b85f89de81.camel@xry111.site>
-In-Reply-To: <b1617fe221f137b49b9a2ba9c864e6b85f89de81.camel@xry111.site>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 4 Aug 2023 09:15:54 -0700
-Message-ID: <CAKwvOdnk8ofgW+4D8HnFBqgoi49vkLHqsAMCtM=SpuKyJHVkaQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Drop -ffreestanding from CFLAGS
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Aug 4, 2023 at 8:56=E2=80=AFAM Xi Ruoyao <xry111@xry111.site> wrote=
-:
->
-> On Fri, 2023-08-04 at 08:46 -0700, Nick Desaulniers wrote:
-> > > Not all processors support unaligned access, so we need the
-> > > alternative mechanism to select memset/memcpy/memmove implementations=
-.
-> > > If remove -ffreestanding, the builtin implementation cannot be used o=
-n
-> > > all hardware.
-> >
-> > That sounds like a compiler bug in that compiler's implementation of
-> > string.h builtins then; it should default to the safest implementation
-> > (aligned accesses) until instructed otherwise.  Have you filed a bug
-> > against your compiler vendor for which compiler you observe that
-> > behavior from?
->
-> AFAIK there is no such bug in GCC.
->
-> But GCC indeed has a bug about builtin expansion: it generates really
-> stupid code for __builtin_memcpy and friends.  See
-> https://gcc.gnu.org/PR109465.  The bug is fixed for GCC 14, but GCC 14
-> won't be released soon.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
+head:   b84388be432d001b3baa782fa047eddb0f375233
+commit: 26dd6e284e277f80468f48b4ff8ebfb0e9ca7369 [2/16] kernfs: attach uuid for every kernfs and report it in fsid
+config: arm-randconfig-r005-20230801 (https://download.01.org/0day-ci/archive/20230805/202308050054.TMaWFpME-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050054.TMaWFpME-lkp@intel.com/reproduce)
 
-Perhaps -fno-builtin-* flags may be of help here, and more precise an
-incision than the blunt -ffreestanding.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050054.TMaWFpME-lkp@intel.com/
 
->
-> > At the very least, there should be a comment above the addition of
-> > -ffreestanding justifying why it's being used, probably with a link to
-> > the above bug report.
-> >
-> > I would expect either -mcpu or perhaps some other -m flag to guide the
-> > compiler when it is safe to emit memcpy (and friends) in terms of
-> > unaligned access or not.
->
-> It's controlled by -m{no-,}strict-align.  LoongArch kernel defaults to -
-> mstrict-align, with this the compiler should not generate unaligned
-> access.  -mno-strict-align is hidden behind CONFIG_EXPERT (FWIW I
-> personally dislike the decision to hide it).
+All warnings (new ones prefixed by >>):
 
-If GCC generates unaligned accesses in its implementation of
-__builtin_memcpy when -mstrict-align is set, then that is a bug in GCC
-and should be reported.
-
-Clang users should not have to pay for such mistakes.
-
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+>> fs/kernfs/mount.c:50:5: warning: no previous prototype for function 'kernfs_statfs' [-Wmissing-prototypes]
+      50 | int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+         |     ^
+   fs/kernfs/mount.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      50 | int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+         | ^
+         | static 
+   1 warning generated.
 
 
+vim +/kernfs_statfs +50 fs/kernfs/mount.c
 
---=20
-Thanks,
-~Nick Desaulniers
+    49	
+  > 50	int kernfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+    51	{
+    52		simple_statfs(dentry, buf);
+    53		buf->f_fsid = uuid_to_fsid(dentry->d_sb->s_uuid.b);
+    54		return 0;
+    55	}
+    56	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
