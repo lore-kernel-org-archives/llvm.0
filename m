@@ -1,111 +1,223 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0691DC121;
-	Sat,  5 Aug 2023 14:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691244156; x=1722780156;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=os3qsMhMS5h3IELSLLEkYnXpa00SVVtZaZivAJC23zU=;
-  b=d/5GfxXQ5PATwv9fORfCjY159vVd9W3c+J2witk2fWZ7Cxzu4A8AT3dt
-   6hDpyEYo8jdSWreoNLTfAk0TLgo7h/t3y86vMhX5UJtBYqkqz5n9zG+op
-   OGg3CQCZ6Km3Y3tg+g+/u9H4amzmTHa1fDuCqNEWnHOh1TYpT22PqYPO9
-   ZIVCU2ZJqhGxMdzvqfYYoMcAN8lBDBV+N5wkWDRAZRF4kWUc06aGbuGJD
-   2f7S1z3rq5PgG0inOx+FrPW6YEYGeXAzVfR8VvqrLVf12fxsGOeSSaZd1
-   K3nahlM6EBbPr4V+BRmFKctA7sWyEVkPLBeH9wnn20I5CcaFflvDVJWWT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10793"; a="355246065"
-X-IronPort-AV: E=Sophos;i="6.01,257,1684825200"; 
-   d="scan'208";a="355246065"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2023 07:02:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10793"; a="759942161"
-X-IronPort-AV: E=Sophos;i="6.01,257,1684825200"; 
-   d="scan'208";a="759942161"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 Aug 2023 07:02:32 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qSHrT-0003Xt-2l;
-	Sat, 05 Aug 2023 14:02:31 +0000
-Date: Sat, 5 Aug 2023 22:02:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>,
-	linux-arm-kernel@lists.infradead.org, suzuki.poulose@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] coresight: trbe: Enable ACPI based TRBE devices
-Message-ID: <202308052123.uqR35d19-lkp@intel.com>
-References: <20230728112733.359620-4-anshuman.khandual@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28679A92A
+	for <llvm@lists.linux.dev>; Sat,  5 Aug 2023 15:42:14 +0000 (UTC)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-52229f084beso4234968a12.2
+        for <llvm@lists.linux.dev>; Sat, 05 Aug 2023 08:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691250133; x=1691854933;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5oPGlPcQoIGdgM0VCxXAjsaz8qStZCqVt1y/O55TbU4=;
+        b=UFweuQbNV4JurJGWQjoD+wJciMB9H3KlN8C1Y2VUFPBhhX6sVGKaCkW/MpCIXVN5nt
+         C57P3lZvHzg6z7lZfEc0RlmRA84cp4S5Hjisry90yGZXE/65jiumw6IQ3Yj8/pQAtgDO
+         SVlRG8vFPinL6F8dfRcJ7HJqOltipBzNMqu6ojC3bOh1G/G17kqW1OBLh59zF1Fgs58m
+         eKNGsfz5xyfTBWvtcCgiAgB3qDR500YrTPgCCktVMPfVsnkvEv/9x2UOgmqVBhF/ykFU
+         j/Kb0PWVVbUk4R9mjelzdwVJOssYMyUsmQpUdHOdzCfhG7ivezmQnTfRHzT8rzjIqLFb
+         glxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691250133; x=1691854933;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5oPGlPcQoIGdgM0VCxXAjsaz8qStZCqVt1y/O55TbU4=;
+        b=GwKaPsbV6EPXGqkqivoLKLXgZotrZDv659U2Ta+Mx1YX8UHgu1WI8t/ro5aXWlmgSB
+         NhMJbji3beQfeOJQgWUIkuG/Tf6NLKCXphTpCcB/dNOt0yJ8WgOxaEazuJK8gE/Md6RN
+         coN5FgG02SHy1m6HbX+DiQIBkYtamwu/kIJHoX2oAJHC1hBDzIEUFbScQRELt3r+SfzI
+         pkgZmcqPhgG3YEOUnRSuQbr/fq1QcAEgwqodNd3oDSGI5hUXRI6IbdQZkR0pqFGNgOrr
+         9NhmLQeekXBtV6aLbIoi1sPYsoSAtbB60KjJGioSo06mud1zos0oXORMNNfAEantRHWr
+         7iDA==
+X-Gm-Message-State: AOJu0YyVlSsXtVaVLp1Cv+iF/vea/rYRal9k3aIIhfN6kYk0vm0+gw8i
+	3UNDBPeqlFO83s7VUlXe1yk=
+X-Google-Smtp-Source: AGHT+IE/HMWsULhkXl7ttOYIT+mNc+J9SfE66Ad1bnDfnLmrAudP21AMWaSGDN8uiPVJYZvTnqkSOA==
+X-Received: by 2002:a05:6402:78a:b0:522:5980:ae08 with SMTP id d10-20020a056402078a00b005225980ae08mr4206668edy.18.1691250132873;
+        Sat, 05 Aug 2023 08:42:12 -0700 (PDT)
+Received: from krava ([83.240.60.134])
+        by smtp.gmail.com with ESMTPSA id j2-20020a50ed02000000b005223e54d1edsm2780976eds.20.2023.08.05.08.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Aug 2023 08:42:12 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sat, 5 Aug 2023 17:42:10 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, martin.lau@linux.dev,
+	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+	Tomasz =?utf-8?B?UGF3ZcWC?= Gajc <tpgxyz@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>, m.seyfarth@gmail.com,
+	Fangrui Song <maskray@google.com>
+Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
+Message-ID: <ZM5t0mMODRtvpi1c@krava>
+References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
+ <ZMwQivemlha+fU5i@kernel.org>
+ <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
+ <afe71df3-48e4-837a-e85d-b6a6764eee62@oracle.com>
+ <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
+ <7eea26c2-e3c9-d212-1688-21d448649e07@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230728112733.359620-4-anshuman.khandual@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7eea26c2-e3c9-d212-1688-21d448649e07@oracle.com>
 
-Hi Anshuman,
+On Fri, Aug 04, 2023 at 11:03:03PM +0100, Alan Maguire wrote:
+> On 04/08/2023 17:11, Nick Desaulniers wrote:
+> > + Marcus (who also just reported seeing this
+> > https://github.com/ClangBuiltLinux/linux/issues/1825#issuecomment-1664671027
+> > and might be able to help reproduce).
+> > + Fangrui (because seeing dd used as a result of 90ceddcb4950 makes me shudder)
+> > 
+> > On Thu, Aug 3, 2023 at 3:10 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >>
+> >> On 03/08/2023 21:50, Nick Desaulniers wrote:
+> >>> On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >>>>
+> >>>> Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
+> >>>>> Hi Martin (and BTF/BPF team),
+> >>>>> I've observed 2 user reports with the error from the subject of this email.
+> >>>>> https://github.com/ClangBuiltLinux/linux/issues/1825
+> >>>>> https://bbs.archlinux.org/viewtopic.php?id=284177
+> >>>>>
+> >>>>> Any chance you could take a look at these reports and help us figure
+> >>>>> out what's going wrong here?  Nathan and I haven't been able to
+> >>>>> reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
+> >>>>>
+> >>>>> Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
+> >>>>
+> >>>> Masami had a problem with new versions of compilers that was solved
+> >>>> with:
+> >>>>
+> >>>> ------------------------ 8< --------------------------------------------
+> >>>>> To check that please tweak:
+> >>>>>
+> >>>>> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
+> >>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> >>>>> # CONFIG_DEBUG_INFO_DWARF4 is not set
+> >>>>> # CONFIG_DEBUG_INFO_DWARF5 is not set
+> >>>>> ⬢[acme@toolbox perf-tools-next]$
+> >>>>>
+> >>>>> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
+> >>>>> CONFIG_DEBUG_INFO_DWARF4.
+> >>>>
+> >>>> Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
+> >>>
+> >>> Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
+> >>> is not what I'd consider a fix. Someday we can move to
+> >>> DWARFv5...someday...
+> >>>
+> >>> What you describe sounds like build success, but reduction in debug info.
+> >>>
+> >>> The reports I'm referring to seem to result in a build failure.
+> >>>
+> >>
+> >> This is a strange one. The error in question
+> >>
+> >> CC .vmlinux.export.o
+> >> UPD include/generated/utsversion.h
+> >> CC init/version-timestamp.o
+> >> LD .tmp_vmlinux.btf
+> >> BTF .btf.vmlinux.bin.o
+> >> libbpf: BTF header not found
+> >> pahole: .tmp_vmlinux.btf: Invalid argument
+> > 
+> > That's slightly different from Tomasz and Marcus' report (not sure if
+> > that's relevant):
+> > 
+> > FAILED: load BTF from vmlinux: Invalid argument
+> > 
+> > That seems to come from
+> > tools/bpf/resolve_btfids/main.c:529
+> > Which seems like some failed call to btf_parse().
+> > EINVAL is getting propagated up from btf_parse(), but that's not super
+> > descriptive...
+> > 
+> Okay, that makes more sense. Basically the stage where we read vmlinux
+> BTF to do BTF id resolution (BTFIDS) is finding an empty BTF section.
 
-kernel test robot noticed the following build errors:
++1, looks like pahole failed to generate the BTF section, the BTFIDS
+is just follow up error.. we might want to consider special error
+output for missing BTF data ;-)
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm/for-next soc/for-next linus/master arm/fixes v6.5-rc4 next-20230804]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I can't reproduce this on my setup with either gcc or clang and trying
+DWARF4/5 config options and latest and 1.24 pahole version
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm_pmu-acpi-Add-a-representative-platform-device-for-TRBE/20230728-192939
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230728112733.359620-4-anshuman.khandual%40arm.com
-patch subject: [PATCH 3/3] coresight: trbe: Enable ACPI based TRBE devices
-config: arm64-randconfig-r021-20230731 (https://download.01.org/0day-ci/archive/20230805/202308052123.uqR35d19-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230805/202308052123.uqR35d19-lkp@intel.com/reproduce)
+> 
+> > The hard part is that I suspect OpenMandriva (Tomasz) and Marcus are
+> > both setting additional flags in their toolchains, which can make
+> > reproducing tricky.
+> >
+> 
+> I tried falling back to the config referenced in the earlier bug report
+> 
+> https://github.com/ClangBuiltLinux/linux/files/10050200/config_bpf.txt
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308052123.uqR35d19-lkp@intel.com/
+hum, I did not find this in the report.. are there more kernel configs
+related to this issue? seems like more people hit this
 
-All errors (new ones prefixed by >>):
+thanks,
+jirka
 
->> drivers/hwtracing/coresight/coresight-trbe.c:1549:14: error: use of undeclared identifier 'arm_trbe_acpi_match'; did you mean 'arm_trbe_of_match'?
-           .id_table = arm_trbe_acpi_match,
-                       ^~~~~~~~~~~~~~~~~~~
-                       arm_trbe_of_match
-   drivers/hwtracing/coresight/coresight-trbe.c:1534:34: note: 'arm_trbe_of_match' declared here
-   static const struct of_device_id arm_trbe_of_match[] = {
-                                    ^
->> drivers/hwtracing/coresight/coresight-trbe.c:1549:14: error: incompatible pointer types initializing 'const struct platform_device_id *' with an expression of type 'const struct of_device_id[2]' [-Werror,-Wincompatible-pointer-types]
-           .id_table = arm_trbe_acpi_match,
-                       ^~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +1549 drivers/hwtracing/coresight/coresight-trbe.c
-
-  1547	
-  1548	static struct platform_driver arm_trbe_driver = {
-> 1549		.id_table = arm_trbe_acpi_match,
-  1550		.driver	= {
-  1551			.name = DRVNAME,
-  1552			.of_match_table = of_match_ptr(arm_trbe_of_match),
-  1553			.suppress_bind_attrs = true,
-  1554		},
-  1555		.probe	= arm_trbe_device_probe,
-  1556		.remove	= arm_trbe_device_remove,
-  1557	};
-  1558	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> ...but still couldn't reproduce it with LLVM 17 + pahole v1.24. That
+> config did specify DWARF5; if we can reproduce this, it would probably
+> be good to vary between forcing DWARF4 and DWARF5 to see if that is a
+> contributing factor as Arnaldo suggested.
+> 
+> Alan
+> 
+> >>
+> >> ...occurs during BTF parsing when the raw size of the BTF is smaller
+> >> than the BTF header size, which should never happen unless BTF
+> >> is corrupted. Thing is, at that stage we shouldn't be parsing BTF,
+> >> we should be generating it from DWARF. The only time pahole parses BTF
+> >> is when it's creating split BTF for modules (it parses the base BTF), or
+> >> when it's reading existing BTF, neither of which it should be doing at
+> >> this stage.
+> >>
+> >> But I suspect the issue is in gen_btf() in scripts/link-vmlinux.sh.
+> >> Prior to running pahole, we call "vmlinux_link .tmp_vmlinux.btf".
+> >> If that went awry somehow and .tmp_vmlinux.btf wasn't created, it
+> > 
+> > Wouldn't we expect some kind of linker error though in that case?
+> > 
+> >> would explain the "Invalid argument" error:
+> >>
+> >> $ pahole -J nosuchfile
+> >> pahole: nosuchfile: Invalid argument
+> >>
+> >> I see some clang specifics in vmlinux_link(), so I think a good
+> >> first step would be to check if .tmp_vlinux.btf exists prior
+> >> to running pahole. The submitter mentioned swapping linkers seems to
+> >> help, so that seems a promising angle. If there's a kernel .config
+> >> available I can try and reproduce the failure too. Thanks!
+> >>
+> >> Alan
+> >>
+> >>>>
+> >>>>   LD      .tmp_vmlinux.btf
+> >>>>   BTF     .btf.vmlinux.bin.o
+> >>>>   LD      .tmp_vmlinux.kallsyms1
+> >>>>
+> >>>> And
+> >>>>
+> >>>> / # strings /sys/kernel/btf/vmlinux | wc -l
+> >>>> 89921
+> >>>> / # strings /sys/kernel/btf/vmlinux | grep -w kfree
+> >>>> kfree
+> >>>>
+> >>>> It seems the BTF is correctly generated. (with DWARF5, the number of symbols
+> >>>> are about 30000.)
+> >>>
+> >>>
+> >>>
+> > 
+> > 
+> > 
+> 
