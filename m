@@ -1,146 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8572B17C6
-	for <llvm@lists.linux.dev>; Sat,  5 Aug 2023 05:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691211701;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=467oB4M+KVAsRJF9RIl22r2uj3xoYqqF3tVTrrdE52Y=;
-	b=TlxGjLJPc9F3Nqi4zmf5c0L5xtoTj3nP+5S5oDQmJEF0HL8IPz6233mXs3TxcdbkJHQ+Wv
-	N1/aIzfMkkftj610wmx1QoRR8OiCUrq/qyhQiyH9XKNVVT9PsJIkV2TJ+4sOzohEKo1ciN
-	H8oSGxnkFNIa0r2Fe2tHcNNUK0xcXmE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-nxQDsp3-Nx-OsGNRpAvF-A-1; Sat, 05 Aug 2023 01:01:40 -0400
-X-MC-Unique: nxQDsp3-Nx-OsGNRpAvF-A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE61D800B35
-	for <llvm@lists.linux.dev>; Sat,  5 Aug 2023 05:01:39 +0000 (UTC)
-Received: from [172.64.9.24] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B8F074021CE;
-	Sat,  5 Aug 2023 05:01:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
- (6.5.0-rc4, mainline.kernel.org-clang, c8273a25)
-Date: Sat, 05 Aug 2023 05:01:39 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BB417C6;
+	Sat,  5 Aug 2023 05:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691213000; x=1722749000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kTNNG0obHMz95xVo7VYy0eCJ7d7oTkTiy8k4b3fMJCg=;
+  b=LYZ8BQR6f5G+0DWdU/XBrpltWDsJi0FkUzOehW+WJtJayZaVORvrl6s7
+   fr95eGXeWaazLAE/QtfIdlKzQt26oYxVlmLEpoJJdmgH+U1x3OkiptcO3
+   psGeRSjl4ToG0KinElKOd+EzIY6rLvtfwCSOCei23ZPtkUR80ppzzOOW1
+   1xCj7IXDXQg21PFHQQMnMg11KleOCTmowTDr1jL1jsolZ/9/dlBmvDmKm
+   4i/bbrbxsHeSycz02NroulLD1+eWZA9Sn4jW0u113oY9Ira4AiZFoV+1f
+   0zDOsAmdz55kZmVox8gMf+QgKQ2KXnYtZbSEqfyamkvCINVWr1l5tZ0N7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="370281327"
+X-IronPort-AV: E=Sophos;i="6.01,257,1684825200"; 
+   d="scan'208";a="370281327"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 22:23:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="733515439"
+X-IronPort-AV: E=Sophos;i="6.01,257,1684825200"; 
+   d="scan'208";a="733515439"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Aug 2023 22:23:16 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qS9kx-0003Kx-2q;
+	Sat, 05 Aug 2023 05:23:15 +0000
+Date: Sat, 5 Aug 2023 13:22:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-acpi@vger.kernel.org,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	Iain Lane <iain@orangesquash.org.uk>,
+	Shyam-sundar S-k <Shyam-sundar.S-k@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v10 7/7] PCI: Use device constraints to decide PCI target
+ state fallback policy
+Message-ID: <202308051340.k7mCXXL3-lkp@intel.com>
+References: <20230804210129.5356-8-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <61136.123080501014000225@us-mta-389.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804210129.5356-8-mario.limonciello@amd.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Mario,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on pci/next pci/for-linus westeri-thunderbolt/next linus/master v6.5-rc4 next-20230804]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'mtd/fixes-for-6.5-rc5' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/mtd/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-Add-comments-to-clarify-some-ifdef-statements/20230805-050559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230804210129.5356-8-mario.limonciello%40amd.com
+patch subject: [PATCH v10 7/7] PCI: Use device constraints to decide PCI target state fallback policy
+config: mips-randconfig-r032-20230731 (https://download.01.org/0day-ci/archive/20230805/202308051340.k7mCXXL3-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308051340.k7mCXXL3-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98676
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308051340.k7mCXXL3-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2' to 'sub/e.=
-3': Input/output error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1436
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/pci.c:1090:9: error: call to undeclared function 'acpi_get_lps0_constraint'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1090 |         return acpi_get_lps0_constraint(&dev->dev);
+         |                ^
+   1 error generated.
 
 
+vim +/acpi_get_lps0_constraint +1090 drivers/pci/pci.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1084	
+  1085	static inline int platform_get_constraint(struct pci_dev *dev)
+  1086	{
+  1087		if (pci_use_mid_pm())
+  1088			return -ENODEV;
+  1089	
+> 1090		return acpi_get_lps0_constraint(&dev->dev);
+  1091	}
+  1092	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
