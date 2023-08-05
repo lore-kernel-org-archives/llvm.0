@@ -1,207 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BCA622;
-	Sat,  5 Aug 2023 00:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691195702; x=1722731702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PX8h316IUNx7SbXQVu0PIA1xTMpFKHufAY5eTFI+CuM=;
-  b=C9e5E00y53zvZdCnHDBSaMY5OlN4JRTLoLJoz6W/wYkqaARuGJIxL/7D
-   YpIZnJSP4BBSMBAvQf6P3Eimu7d3BBcd3e72gWQEK8NyRSBsbOIs7EkQ2
-   UGOijZ9/8Rb0PYCwiOulATT7ZWYgxYkqERbg5jFKVM4YVXFthMTa6kQcH
-   1cheTAepv2k3HMDG3zZ40lmYEZQ3RstDKoe4ynRptiO86wrl+c2L9okby
-   sAj1CxxT/HtIlUxzVpE9W+AlRoCNONn599rtwlESXIJUKNTGmzlyDtlN1
-   zwM6V44qHsjWo1VQOcoKUgrzboGun4S9o3teLEwSq4YCuRFO8v7p+KNHd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="369171154"
-X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
-   d="scan'208";a="369171154"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 17:34:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="873594263"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Aug 2023 17:35:00 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qS5Fx-0003DT-0W;
-	Sat, 05 Aug 2023 00:34:57 +0000
-Date: Sat, 5 Aug 2023 08:34:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: arch/arm/common/locomo.c:368: warning: expecting prototype for
- locomo_probe(). Prototype was for __locomo_probe() instead
-Message-ID: <202308050851.zAvHe6y7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5EB15A6;
+	Sat,  5 Aug 2023 01:58:22 +0000 (UTC)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.57])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RHlz35dSxz1Z1VS;
+	Sat,  5 Aug 2023 09:55:27 +0800 (CST)
+Received: from [10.67.110.218] (10.67.110.218) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sat, 5 Aug 2023 09:58:12 +0800
+Message-ID: <77897888-bd4a-8fb7-36d0-2722402d5095@huawei.com>
+Date: Sat, 5 Aug 2023 09:58:12 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] tracing: Fix cpu buffers unavailable due to
+ 'record_disabled' messed
+Content-Language: en-US
+To: Steven Rostedt <rostedt@goodmis.org>, kernel test robot <lkp@intel.com>
+CC: <mhiramat@kernel.org>, <vnagarnaik@google.com>, <shuah@kernel.org>,
+	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20230804124549.2562977-2-zhengyejian1@huawei.com>
+ <202308050048.bUnVeBjV-lkp@intel.com>
+ <20230804125107.41d6cdb1@gandalf.local.home>
+From: Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <20230804125107.41d6cdb1@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.218]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
 
-Hi Nathan,
+On 2023/8/5 00:51, Steven Rostedt wrote:
+> On Sat, 5 Aug 2023 00:41:13 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+>>    5276			if (cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+>>    5277					!cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+>>    5278				atomic_inc(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+>>    5279				ring_buffer_record_disable_cpu(tr->array_buffer.buffer, cpu);
+>>> 5280				ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
+> 
+> The access to max_buffer requires a:
+> 
+> #ifdef CONFIG_TRACER_MAX_TRACE
+> 
+> Around them.
+> 
+> -- Steve
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Thanks, Steve, I'll add it in v2.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e6fda526d9db2c7897dacb9daff8c80e13ce893d
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-date:   6 months ago
-config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20230805/202308050851.zAvHe6y7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050851.zAvHe6y7-lkp@intel.com/reproduce)
+-- Zheng Yejian
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308050851.zAvHe6y7-lkp@intel.com/
+> 
+>>    5281			}
+>>    5282			if (!cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
+>>    5283					cpumask_test_cpu(cpu, tracing_cpumask_new)) {
+>>    5284				atomic_dec(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
+>>    5285				ring_buffer_record_enable_cpu(tr->array_buffer.buffer, cpu);
+>>    5286				ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
+>>    5287			}
+>>    5288		}
+>>    5289		arch_spin_unlock(&tr->max_lock);
+> 
 
-All warnings (new ones prefixed by >>):
-
-   arch/arm/common/locomo.c:368: warning: Function parameter or member 'me' not described in '__locomo_probe'
-   arch/arm/common/locomo.c:368: warning: Function parameter or member 'mem' not described in '__locomo_probe'
-   arch/arm/common/locomo.c:368: warning: Function parameter or member 'irq' not described in '__locomo_probe'
->> arch/arm/common/locomo.c:368: warning: expecting prototype for locomo_probe(). Prototype was for __locomo_probe() instead
---
->> drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
-     206 | int pcmcia_collie_init(struct device *dev)
-         |     ^
-   drivers/pcmcia/pxa2xx_sharpsl.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     206 | int pcmcia_collie_init(struct device *dev)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +368 arch/arm/common/locomo.c
-
-b38d950d3aedf9 John Lenz         2005-09-08  352  
-4ebf2d00260bac Pavel Machek      2006-03-15  353  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  354  /**
-^1da177e4c3f41 Linus Torvalds    2005-04-16  355   *	locomo_probe - probe for a single LoCoMo chip.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  356   *	@phys_addr: physical address of device.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  357   *
-^1da177e4c3f41 Linus Torvalds    2005-04-16  358   *	Probe for a LoCoMo chip.  This must be called
-^1da177e4c3f41 Linus Torvalds    2005-04-16  359   *	before any other locomo-specific code.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  360   *
-^1da177e4c3f41 Linus Torvalds    2005-04-16  361   *	Returns:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  362   *	%-ENODEV	device not found.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  363   *	%-EBUSY		physical address already marked in-use.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  364   *	%0		successful.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  365   */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  366  static int
-^1da177e4c3f41 Linus Torvalds    2005-04-16  367  __locomo_probe(struct device *me, struct resource *mem, int irq)
-^1da177e4c3f41 Linus Torvalds    2005-04-16 @368  {
-ac609d266e4af4 Eric Miao         2010-02-04  369  	struct locomo_platform_data *pdata = me->platform_data;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  370  	struct locomo *lchip;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  371  	unsigned long r;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  372  	int i, ret = -ENODEV;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  373  
-d2a02b93cf7820 Russell King      2006-03-20  374  	lchip = kzalloc(sizeof(struct locomo), GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  375  	if (!lchip)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  376  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  377  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  378  	spin_lock_init(&lchip->lock);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  379  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  380  	lchip->dev = me;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  381  	dev_set_drvdata(lchip->dev, lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  382  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  383  	lchip->phys = mem->start;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  384  	lchip->irq = irq;
-ac609d266e4af4 Eric Miao         2010-02-04  385  	lchip->irq_base = (pdata) ? pdata->irq_base : NO_IRQ;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  386  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  387  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  388  	 * Map the whole region.  This also maps the
-^1da177e4c3f41 Linus Torvalds    2005-04-16  389  	 * registers for our children.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  390  	 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  391  	lchip->base = ioremap(mem->start, PAGE_SIZE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  392  	if (!lchip->base) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  393  		ret = -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  394  		goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  395  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  396  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  397  	/* locomo initialize */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  398  	locomo_writel(0, lchip->base + LOCOMO_ICR);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  399  	/* KEYBOARD */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  400  	locomo_writel(0, lchip->base + LOCOMO_KEYBOARD + LOCOMO_KIC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  401  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  402  	/* GPIO */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  403  	locomo_writel(0, lchip->base + LOCOMO_GPO);
-2a52efb2cecf78 Thomas Kunze      2008-04-29  404  	locomo_writel((LOCOMO_GPIO(1) | LOCOMO_GPIO(2) | LOCOMO_GPIO(13) | LOCOMO_GPIO(14))
-^1da177e4c3f41 Linus Torvalds    2005-04-16  405  			, lchip->base + LOCOMO_GPE);
-2a52efb2cecf78 Thomas Kunze      2008-04-29  406  	locomo_writel((LOCOMO_GPIO(1) | LOCOMO_GPIO(2) | LOCOMO_GPIO(13) | LOCOMO_GPIO(14))
-^1da177e4c3f41 Linus Torvalds    2005-04-16  407  			, lchip->base + LOCOMO_GPD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  408  	locomo_writel(0, lchip->base + LOCOMO_GIE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  409  
-e4423781850025 Richard Purdie    2006-06-26  410  	/* Frontlight */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  411  	locomo_writel(0, lchip->base + LOCOMO_FRONTLIGHT + LOCOMO_ALS);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  412  	locomo_writel(0, lchip->base + LOCOMO_FRONTLIGHT + LOCOMO_ALD);
-4ebf2d00260bac Pavel Machek      2006-03-15  413  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  414  	/* Longtime timer */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  415  	locomo_writel(0, lchip->base + LOCOMO_LTINT);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  416  	/* SPI */
-1b0d76cb9d5a65 H Hartley Sweeten 2010-03-22  417  	locomo_writel(0, lchip->base + LOCOMO_SPI + LOCOMO_SPIIE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  418  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  419  	locomo_writel(6 + 8 + 320 + 30 - 10, lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  420  	r = locomo_readl(lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  421  	r |= 0x8000;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  422  	locomo_writel(r, lchip->base + LOCOMO_ASD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  423  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  424  	locomo_writel(6 + 8 + 320 + 30 - 10 - 128 + 4, lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  425  	r = locomo_readl(lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  426  	r |= 0x8000;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  427  	locomo_writel(r, lchip->base + LOCOMO_HSD);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  428  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  429  	locomo_writel(128 / 8, lchip->base + LOCOMO_HSC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  430  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  431  	/* XON */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  432  	locomo_writel(0x80, lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  433  	udelay(1000);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  434  	/* CLK9MEN */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  435  	r = locomo_readl(lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  436  	r |= 0x10;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  437  	locomo_writel(r, lchip->base + LOCOMO_TADC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  438  	udelay(100);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  439  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  440  	/* init DAC */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  441  	r = locomo_readl(lchip->base + LOCOMO_DAC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  442  	r |= LOCOMO_DAC_SCLOEB | LOCOMO_DAC_SDAOEB;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  443  	locomo_writel(r, lchip->base + LOCOMO_DAC);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  444  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  445  	r = locomo_readl(lchip->base + LOCOMO_VER);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  446  	printk(KERN_INFO "LoCoMo Chip: %lu%lu\n", (r >> 8), (r & 0xff));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  447  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  448  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  449  	 * The interrupt controller must be initialised before any
-^1da177e4c3f41 Linus Torvalds    2005-04-16  450  	 * other device to ensure that the interrupts are available.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  451  	 */
-ac609d266e4af4 Eric Miao         2010-02-04  452  	if (lchip->irq != NO_IRQ && lchip->irq_base != NO_IRQ)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  453  		locomo_setup_irq(lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  454  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  455  	for (i = 0; i < ARRAY_SIZE(locomo_devices); i++)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  456  		locomo_init_one_child(lchip, &locomo_devices[i]);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  457  	return 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  458  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  459   out:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  460  	kfree(lchip);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  461  	return ret;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  462  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  463  
-
-:::::: The code at line 368 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
