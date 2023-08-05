@@ -1,292 +1,115 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9977C1AA8B
-	for <llvm@lists.linux.dev>; Fri,  4 Aug 2023 22:03:26 +0000 (UTC)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 374JCfpI007565;
-	Fri, 4 Aug 2023 22:03:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=NlbEmITRAZmlI/c6B66kkFN5c6SjjodLF+kmWsbk0cg=;
- b=iTbv36tcKazc5g0vJiN251qVUyHKZPub3P9VyWO1Dfs4KDhLWeEp7ycy78+HQfyKGN8+
- A/X0G8NuvqKmDhp/wzbYgT8mcB9kSUyGUW6bCK2jAjkZWVnBLmsbf+ZRnl+pe0BS/PzA
- KtoVesoxgULCfMPqT+AJDOax0yHhaSdp9IfaflQ1SqhQyyz47oLU/bzXdSXR35u3+TSE
- +BYVxEuEaMP33HX8rSzKm/LKq8nwkKHwIT9hKXwqddgXxFT3mtjqE46PQWyF8F5O58Xy
- 3vcPev1dNzg6zI5CTLsJI0xnFwH1IKaGBnDgNoJEeq4c5AiZds5P0HHhUAAhW3Wiy+/n dw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s4ttdcvh4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Aug 2023 22:03:11 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 374Kt3kc034878;
-	Fri, 4 Aug 2023 22:03:11 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2044.outbound.protection.outlook.com [104.47.51.44])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3s8m0a0fwf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Aug 2023 22:03:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DGwksID8p0uzRVpsMIK0+zmOtUarVxtV31xlYZrihy5ca2+egiAbEt3K2Fkcaorr9Zewuzmgc7ye706wY8HXXE+MEZqnZaiavZBy4WPj4uaIpCod0/cgJHN2II92vywdsmDB/pceTO/AbNBzRb05SDyshEdX+44IJX/sJvKoCX+I2HZgPOewYLvMfjYLcY3ESjGwC44NG58eP38OCRvnaJWA3EEeGTu4fKgbZ0bDok6fUsXorQGAkr2vkIKduno+z0MQJfRZsnClJSAiwabn0fqumyjWLlesV+4s95d7f0iUEWfCZ7Pe+XLCQ3XWw9C+ULqQ/w8n+SRlN1eQ/BWXuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NlbEmITRAZmlI/c6B66kkFN5c6SjjodLF+kmWsbk0cg=;
- b=E2vpx+SrN0uJloV16awiBUhskG4V7QIFVnI6H3zDhPOZqybC4IdUrYqQvPvsrmUn6YaOWJxcg2zJFwJvCRaGLebXYy0Y+YF3C9W11GKlJ5RkoR7gXjCGFaZjWdPAD/p+s/0RUtShUuEW+V1MlJsp3JMoHPSAhWCQNvFlVV1Q2zsfxGnBkwzqMeLb0NpdmUC8J53SeZ5qeIrsjF9lwv6mORUMuI1Fr15yDBp2c5O2y8VMUPk3Ck/qYs0aOMFU3NZM0Z0WjAypWaVPCn3axKZb77i7+gwNA1Zw2GPaK8kcmkVZdo1nb6ymzoRFfoRiuC6ky2U7euJWLnn+aBv2azmnXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NlbEmITRAZmlI/c6B66kkFN5c6SjjodLF+kmWsbk0cg=;
- b=bOH49lM0nBhsrstakEq2wx/NSKyKuOr1AstPDTpSNBYrMY42PEklkNlLK0gWg77AI9b0V7f+U1fUpMNAe9gdGsvrtxzotXnfFGU40d4kV8cWUAodEE0e0vT41YcgfUf6xIDyWiO1sXCsYyC2DxlGmImO3hHBUu64J+7aprM9QtI=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by SA1PR10MB7634.namprd10.prod.outlook.com (2603:10b6:806:38a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Fri, 4 Aug
- 2023 22:03:09 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::97e0:4c4b:17bb:a90f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::97e0:4c4b:17bb:a90f%4]) with mapi id 15.20.6652.022; Fri, 4 Aug 2023
- 22:03:08 +0000
-Message-ID: <7eea26c2-e3c9-d212-1688-21d448649e07@oracle.com>
-Date: Fri, 4 Aug 2023 23:03:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: FAILED: load BTF from vmlinux: Invalid argument
-Content-Language: en-GB
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, martin.lau@linux.dev,
-        bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
-        =?UTF-8?Q?Tomasz_Pawe=c5=82_Gajc?= <tpgxyz@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, m.seyfarth@gmail.com,
-        Fangrui Song <maskray@google.com>
-References: <CAKwvOdm9PqNBLSZa_t5b=15cdtKvKq4q8WZr3i77W66m4FRAAQ@mail.gmail.com>
- <ZMwQivemlha+fU5i@kernel.org>
- <CAKwvOd=w3PFMDyZ1WL1DDx0Gyt-+sh7hYP_+8b9zEFu3uZpVXQ@mail.gmail.com>
- <afe71df3-48e4-837a-e85d-b6a6764eee62@oracle.com>
- <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <CAKwvOdn93Zpdkk3faNNdDw=tnMQ6Mxo5tTVCDmrqStU95MVQqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P302CA0001.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:2c2::6) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7FDEBE;
+	Sat,  5 Aug 2023 00:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691193842; x=1722729842;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UBrZBnFT/Vu4kFH6yg+KLry8jUzteCG2jJbidDpJrVc=;
+  b=PibvzpU9N8Z6eRsIXzJSPtSl38ac6vAX0QIBX/+h89D59mAxCDhbD6FF
+   vVtX4Fykffqrb8zolx1XS5WBP6WRaz/TYNcWPUACJjNpvrHl/jMFUKwC0
+   UC+P8kZIZ2cDgZk9eF/OATzbTnfI98xgUFQJILHY81gqiP5M77Fqeaid/
+   xERyeHhtL1HNoqvqnVI9vBa0xwqA1BLmS0A1RVO/utdWi+/psclESFPcC
+   FQ/9V4HCxgpZHsvXd8ndnxs/ZzNK4iQK55PDEB8LspGPMBOONIUfDGka2
+   1Cs3qKfZ331UfU99F/mbXka/PPiWIChMvO8wob4bqbPCcturL/V+GsO71
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="360336691"
+X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
+   d="scan'208";a="360336691"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 17:03:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="765314647"
+X-IronPort-AV: E=Sophos;i="6.01,256,1684825200"; 
+   d="scan'208";a="765314647"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Aug 2023 17:03:56 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qS4lw-0003Cz-2s;
+	Sat, 05 Aug 2023 00:03:56 +0000
+Date: Sat, 5 Aug 2023 08:02:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [avpatel:riscv_acpi_b2_v1 66/91]
+ arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of
+ non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
+Message-ID: <202308050707.uCLdENbS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|SA1PR10MB7634:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f2b6003-ecc9-4e27-f8b0-08db9536964e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	MHYnzVbrl2Ri7jstaRIACHWyt23gPVDtS2/xPLZoJkXYi1zSbhsZ9pZYCxLDo7DTVNgsfO1Py1GVBYqGf3ToBRnoC7lx8DUKfJ74bAHhUxd9J4uXO9UMilJVoEOjrB+CDGxzszJvnu+RB2h/xlmB0O3rJ64y/Pvjjgflx01Iuv4vc2aJtA62bT2Kqmko1uNuJK2iCVtZIFV1LmUq9xMxzCGL9J+lEk13ie2UkZunfzU3uESmgzp+coNR+lXkAQ2mqBwH+KbFEpVJuJFJ9GsVFr9PrOuXz/8l9IrwN0elkvUIxD+rkZacMOJQMKlNmII3WQ5YXBlYvxfa+tuv7UJ/a83EcVBv6HnDEHbbK/Q1Ui0dbE7S1LUTHYQvxsj2H8NFSzuTUvzraoupj8d/ZcLLVlB547CRsW6fKhLiEfQqRlZ/lOflsOerT3FuLWvHovMe64+2hvAnIls5eqOZMbBB7+qbJDWDQdHNP1DXAAIjQnEqiPckMA2fXi5GaKUA+VbMVrT3XiW3JpTaYA5NI7JfJe4Q6ksKa87N1a2mWUqAlq3ZMamVAXrtImKU9cgd/2lhVdIlwH1jaQ1OsWF4Kw8jRJmO76rKQjVmSS5KQVvBNrUCyNdGbN/HBfx6RdkAXECPp/TUJg7uESkqeY0p1a7BYLUQEm1RBnoUGTnqtB/UiVey6O65OS9b4vDfZPpfc8cQ
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(39860400002)(346002)(136003)(396003)(186006)(1800799003)(451199021)(36756003)(31696002)(16799955002)(86362001)(31686004)(478600001)(54906003)(38100700002)(8936002)(41300700001)(2616005)(53546011)(83380400001)(6506007)(6666004)(6512007)(44832011)(8676002)(966005)(6486002)(6916009)(2906002)(66476007)(4326008)(66556008)(316002)(66946007)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?UHpqVWNOQVVhMjFnWkhzcUkxY2pTenRVK3NzcCtkNW1WVkZQZ0FFOFhRM1B4?=
- =?utf-8?B?Q25GUGtzeWpBOTh0aUFVRHhGNmpYOWorOG1qRUozcmFFTVdsVm5ETVhXZW51?=
- =?utf-8?B?dmZ4cXVlM2k5c2RMeFJWS2l0b1FDbGpkaTNwdFNnWEdtdFQ2dXVkaW9rMHdy?=
- =?utf-8?B?alZxalM5RXdIdkJwZDMzVGtXWFBPbW0ydktBSHgvVVl6bncySUhyR2VpWVM0?=
- =?utf-8?B?MXdzN0NUaDlKZXQ2ZEMrdmFPSG9GdllhenpHMzBoRWlaR3dBUmh2Z2ExbDdl?=
- =?utf-8?B?eWRKYzlIVDlTU0VaOGwwM1NwR1FPSFB5QzZZNmdvK1dTTDhHZTFLT0tPZk53?=
- =?utf-8?B?L3hCQjRtWEU0WUhucTFFVVhlTzEyOVVnU0tKRlZoNWppUjk4VU5pSnFpSjQx?=
- =?utf-8?B?Ui9rSUgvRXZiNXdKdG1MTXRxS2dsYkozTm5FTlliRE13SDF4UGRqMUFhRS9Q?=
- =?utf-8?B?dm1GZ3ZDRHF5KythOFNjUDg0RmU1cXVJSHhNWWsrZHFwb0xXN0R1MzZtUXhM?=
- =?utf-8?B?a2dKc2MyVE81Mys0MUhFWlc3ZFcwbCtGalJqR2NUVDdBY3JvUFZRVUE5Y1pl?=
- =?utf-8?B?OTlWbWY4OHVuaFhMVk0zbmNVS2ZUQS9tS2xETTIyWVpsWXlQT1pMNExMNlky?=
- =?utf-8?B?ODJXblVxZDl3azZ2Y2RYN1lnUTV5cWwxUFFqS2g0YllMdXB5TnFIN043RUx0?=
- =?utf-8?B?M05hSEkvT1VSS0w5N1ErWU1pTDQzZjE1SjRZYUxiTTcwaEV2R1ZiWGFraS9j?=
- =?utf-8?B?eS8zckIvMkJ1ODBscTZLakEzNHA1dmxvbkNMTTh1bGhlUUdabktud0V4aVZy?=
- =?utf-8?B?NzR6c3VvbGNpeDBPaWthNlRBd0RtckszQkJXQXdRYkNjVHh2cVZJQ2NiTkh4?=
- =?utf-8?B?QnNLeFcrWGduZWtmVnFIYUJHcVk0bmovcXdXRW1QT2NJSDlPcGxoTDgzbitX?=
- =?utf-8?B?alV4d3JJcEI0cHFLTXlYUFZPVDJMRlRwT3ZhUW5VVndzaTUzV2dKTHVUVVdJ?=
- =?utf-8?B?a0RkSE4wZDlvYkFzQjB6L2hmTU5TVG0vY2lCSFdHZlpyN2lzayswZGRmTFkr?=
- =?utf-8?B?bmV6NEtaM1UyRkZlVFo2R3FHNTkrbWtZUE9EUzdCejRPcEdmMnc3Rk1SMFAz?=
- =?utf-8?B?TlR1eDRlZFRvSnhrZVQwU3dkOUhwRjBJbW5MVWtzUGtabVFseEJLNnQ0Nkd5?=
- =?utf-8?B?UXNVUjdTZktuZlJrQVhTWGpQdnhDeUhoYnhmUjNkaVQ5RXE3NzF4OGFvSkdp?=
- =?utf-8?B?bkFqM3EzY2tKbkduUDFZTFJ4TDAxanVCZGlMY05UV0tleGQ1czdiQXRtSDBB?=
- =?utf-8?B?WFQ3V29XQUJjWC82V0U0Ny9QaWpoK0xsMy9TcWFLSk9qSDZkOFlmRE15U1Vi?=
- =?utf-8?B?MXJLY2UwbFhVNnRjaFdGSDFrVTF5M083ZFRZclA0TlMxVERlczFEajlGQVlN?=
- =?utf-8?B?TTlwMUNHbVdTem1YbmNiWEtkNWkvVTFORzAybEVqT29adGpKdmtwYTdQSHY5?=
- =?utf-8?B?YlN5NGVIR2hRWGMwc0EyYXhKVzRvR1Y3aHZ0SzBkWkg3cnhrZGRndnZ6d1k4?=
- =?utf-8?B?cmpJZlMxTDZYOGw4Z0pvaXk1RkFDNkg1M2RRUEhZd1duSnlPVmVCYzU2U08z?=
- =?utf-8?B?ai9xS04vTEJSSEtEWjcvWU5BVjZRSk84SjlPZHljc2ZvOStlb2dvQnE3Y09D?=
- =?utf-8?B?VlUvakJ3OThnRnM3NnF3U3lKQ0RQNmRhbDZUU0d1OXpxT281ZUFoNDF3VElC?=
- =?utf-8?B?WFQrMmdQQ3lJWDNRcVVrOTlYdGJTZDdlZTZ6OEJLdTV2U1NIOHoxbFZwbGFU?=
- =?utf-8?B?S0hORlhrUHpIczhMSElydzM5SXQ3T3U1bW1zbVp0eWgrWmRSK1ZLdnZLc0gz?=
- =?utf-8?B?cHBXdlhqTWQ3aHI0aVhjTVdvclNGb2QvWVlXMWJFLzg2WFJXbUpwS3BZOExT?=
- =?utf-8?B?R1dvbFVkb05SNUdBaVk0U3p6R09xRGMvMStWM0Z2Q1RBY1c4blpPdjlmN05Q?=
- =?utf-8?B?MGYvTlpYUHJaZlFnNVNOWDlpaW1CZWpIWjZyajVLWm9TU3YvclRvU0RmTDU4?=
- =?utf-8?B?MnFuOExKeDhqVEd3SmR4YkIvQmlEYXdyNXp3dDZ0bmFLM0dZUXBEcTU4dk5h?=
- =?utf-8?B?dnJWd3lieEhaRk96MVdEV2N6aGltdFRxMVRpeEFQeGZnM3YwM3A1ZkNodG12?=
- =?utf-8?Q?PzK7/PyOSFlxME1muCnr9aU=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	/MfB8Sra4hJyRj+psrXePIHfbPuAr4BEEZakmmRR61vAMTcF6zZHa2cUd70zGahpXxgnb2jUk/J3QH+WfqmQbmAbk5yia4wb7vW7yeBc520CbB0878a/6/lX1UcV6KyAHrDaYlf5Es8AtxoDbiYMIlvLNJJaiCh6eiK0BxqwSWe+t6Ry2emX+YEQZi5Hcoy9LrVmHbxFJKQ++5LOfC/5niOB2qqxz/pD4l/XFpEGiBxZ55x9J9S++oDLeXMDHRKu3bzGxn+JXM0SdKmSwvuj6GjxHS0lWREGAIYFr6QfR0xjanUCXfEKVJfQJDHaK+RO4LBjDL0HEkg0i+Txsn4Dg6YIAr7zy6AY6FqX50pXLkYMTKGrpJQmwnHjKKfe2VEPtyH7kCVmVH1fCbtAvK8mYYlWFFM2AIcV8/i9rSfMXx0tteN+ZWIRPoLKablpFRyfANgdkjKcgbZTfrH2v/fLdOU13gtZwQA81GeepImDMdEAv1LGHkZczyp4VcUSpMIQk4GH5toIs3/3K3DjZJr0OKDZDcUOhhOfK2X0lc0BqLeNbIQUQgAEedEJMrofDOGTeBIkIQU1ZlvKf/oNRDwvsrz4QUcLzkzHYwf5709daACKK94ahwhh+N90j/GiyikOAwg9ad3PgflIkjacGugZmPYfihgLkpBNDdIpRcvRwIY8dNgNqolyg7Mjb02ix4glNol6f7mj2FevtGuePUz0pKbmq17nlKoJVZkG7uxdEk/+iTKxsaM41cztRjCcppws4mAeosFYRXpbVphQbx1Qt1S7sFYbePApFagROgPlhZL9M8Pce+FxwSV5H4s2+Bfi0EAhXdaLh6DDDKKN4Rwf1VGXyNNXXLIXjkFiMZvbdJcAq7mIFNEjH9goXWm8ECI1KAXFA05MqmOPB7dqh9gw2IKnYAuTkYLgeuEst3Z6C9s=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f2b6003-ecc9-4e27-f8b0-08db9536964e
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2023 22:03:08.8382
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /ztK7gDlNjLKBSLcvCSS5q0rI0JiLr3krSLizCxTSEEz+e88ZpGbif08PqK4Oh5+/ct4uxIvdhLgSCkSZmvUlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7634
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-04_21,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
- bulkscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2308040191
-X-Proofpoint-GUID: k69LCeXckL2SpWboL2cxtRO8ZVYyOyJY
-X-Proofpoint-ORIG-GUID: k69LCeXckL2SpWboL2cxtRO8ZVYyOyJY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 04/08/2023 17:11, Nick Desaulniers wrote:
-> + Marcus (who also just reported seeing this
-> https://github.com/ClangBuiltLinux/linux/issues/1825#issuecomment-1664671027
-> and might be able to help reproduce).
-> + Fangrui (because seeing dd used as a result of 90ceddcb4950 makes me shudder)
-> 
-> On Thu, Aug 3, 2023 at 3:10 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->>
->> On 03/08/2023 21:50, Nick Desaulniers wrote:
->>> On Thu, Aug 3, 2023 at 1:39 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->>>>
->>>> Em Thu, Aug 03, 2023 at 11:02:46AM -0700, Nick Desaulniers escreveu:
->>>>> Hi Martin (and BTF/BPF team),
->>>>> I've observed 2 user reports with the error from the subject of this email.
->>>>> https://github.com/ClangBuiltLinux/linux/issues/1825
->>>>> https://bbs.archlinux.org/viewtopic.php?id=284177
->>>>>
->>>>> Any chance you could take a look at these reports and help us figure
->>>>> out what's going wrong here?  Nathan and I haven't been able to
->>>>> reproduce, but this seems to be affecting OpenMandriva (and Tomasz).
->>>>>
->>>>> Sounds like perhaps llvm-objcopy vs gnu objcopy might be a relevant detail?
->>>>
->>>> Masami had a problem with new versions of compilers that was solved
->>>> with:
->>>>
->>>> ------------------------ 8< --------------------------------------------
->>>>> To check that please tweak:
->>>>>
->>>>> ⬢[acme@toolbox perf-tools-next]$ grep DWARF ../build/v6.2-rc5+/.config
->>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
->>>>> # CONFIG_DEBUG_INFO_DWARF4 is not set
->>>>> # CONFIG_DEBUG_INFO_DWARF5 is not set
->>>>> ⬢[acme@toolbox perf-tools-next]$
->>>>>
->>>>> i.e. disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT and enable
->>>>> CONFIG_DEBUG_INFO_DWARF4.
->>>>
->>>> Hm, with CONFIG_DEBUG_INFO_DWARF4, no warning were shown.
->>>
->>> Downgrading from the now-6-year-old DWARFv5 to now-13-year-old DWARFv4
->>> is not what I'd consider a fix. Someday we can move to
->>> DWARFv5...someday...
->>>
->>> What you describe sounds like build success, but reduction in debug info.
->>>
->>> The reports I'm referring to seem to result in a build failure.
->>>
->>
->> This is a strange one. The error in question
->>
->> CC .vmlinux.export.o
->> UPD include/generated/utsversion.h
->> CC init/version-timestamp.o
->> LD .tmp_vmlinux.btf
->> BTF .btf.vmlinux.bin.o
->> libbpf: BTF header not found
->> pahole: .tmp_vmlinux.btf: Invalid argument
-> 
-> That's slightly different from Tomasz and Marcus' report (not sure if
-> that's relevant):
-> 
-> FAILED: load BTF from vmlinux: Invalid argument
-> 
-> That seems to come from
-> tools/bpf/resolve_btfids/main.c:529
-> Which seems like some failed call to btf_parse().
-> EINVAL is getting propagated up from btf_parse(), but that's not super
-> descriptive...
-> 
-Okay, that makes more sense. Basically the stage where we read vmlinux
-BTF to do BTF id resolution (BTFIDS) is finding an empty BTF section.
+Hi Anup,
 
-> The hard part is that I suspect OpenMandriva (Tomasz) and Marcus are
-> both setting additional flags in their toolchains, which can make
-> reproducing tricky.
->
+First bad commit (maybe != root cause):
 
-I tried falling back to the config referenced in the earlier bug report
+tree:   https://github.com/avpatel/linux.git riscv_acpi_b2_v1
+head:   b09364548457cec51680b8f8b1a5e917b5e74cf5
+commit: c25a9f5b7daa98ba6276a4ad01b2f70f86dfb99c [66/91] RISC-V: KVM: Use SBI sync SRET call when available
+config: riscv-randconfig-r042-20230731 (https://download.01.org/0day-ci/archive/20230805/202308050707.uCLdENbS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230805/202308050707.uCLdENbS-lkp@intel.com/reproduce)
 
-https://github.com/ClangBuiltLinux/linux/files/10050200/config_bpf.txt
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308050707.uCLdENbS-lkp@intel.com/
 
-...but still couldn't reproduce it with LLVM 17 + pahole v1.24. That
-config did specify DWARF5; if we can reproduce this, it would probably
-be good to vary between forcing DWARF4 and DWARF5 to see if that is a
-contributing factor as Arnaldo suggested.
+All errors (new ones prefixed by >>):
 
-Alan
+>> arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
+   .type __kvm_riscv_switch_to STT_FUNC ; .set .L__sym_size___kvm_riscv_switch_to, .-__kvm_riscv_switch_to ; .size __kvm_riscv_switch_to, .L__sym_size___kvm_riscv_switch_to
+                                                                                   ^
 
->>
->> ...occurs during BTF parsing when the raw size of the BTF is smaller
->> than the BTF header size, which should never happen unless BTF
->> is corrupted. Thing is, at that stage we shouldn't be parsing BTF,
->> we should be generating it from DWARF. The only time pahole parses BTF
->> is when it's creating split BTF for modules (it parses the base BTF), or
->> when it's reading existing BTF, neither of which it should be doing at
->> this stage.
->>
->> But I suspect the issue is in gen_btf() in scripts/link-vmlinux.sh.
->> Prior to running pahole, we call "vmlinux_link .tmp_vmlinux.btf".
->> If that went awry somehow and .tmp_vmlinux.btf wasn't created, it
-> 
-> Wouldn't we expect some kind of linker error though in that case?
-> 
->> would explain the "Invalid argument" error:
->>
->> $ pahole -J nosuchfile
->> pahole: nosuchfile: Invalid argument
->>
->> I see some clang specifics in vmlinux_link(), so I think a good
->> first step would be to check if .tmp_vlinux.btf exists prior
->> to running pahole. The submitter mentioned swapping linkers seems to
->> help, so that seems a promising angle. If there's a kernel .config
->> available I can try and reproduce the failure too. Thanks!
->>
->> Alan
->>
->>>>
->>>>   LD      .tmp_vmlinux.btf
->>>>   BTF     .btf.vmlinux.bin.o
->>>>   LD      .tmp_vmlinux.kallsyms1
->>>>
->>>> And
->>>>
->>>> / # strings /sys/kernel/btf/vmlinux | wc -l
->>>> 89921
->>>> / # strings /sys/kernel/btf/vmlinux | grep -w kfree
->>>> kfree
->>>>
->>>> It seems the BTF is correctly generated. (with DWARF5, the number of symbols
->>>> are about 30000.)
->>>
->>>
->>>
-> 
-> 
-> 
+
+vim +259 arch/riscv/kvm/vcpu_switch.S
+
+c25a9f5b7daa98 Anup Patel 2022-10-09  230  
+c25a9f5b7daa98 Anup Patel 2022-10-09  231  	/*
+c25a9f5b7daa98 Anup Patel 2022-10-09  232  	 * Parameters:
+c25a9f5b7daa98 Anup Patel 2022-10-09  233  	 * A0 <= Pointer to struct kvm_vcpu_arch
+c25a9f5b7daa98 Anup Patel 2022-10-09  234  	 * A1 <= SBI extension ID
+c25a9f5b7daa98 Anup Patel 2022-10-09  235  	 * A2 <= SBI function ID
+c25a9f5b7daa98 Anup Patel 2022-10-09  236  	 * A3 <= Flags for SBI sync SRET call
+c25a9f5b7daa98 Anup Patel 2022-10-09  237  	 */
+c25a9f5b7daa98 Anup Patel 2022-10-09  238  ENTRY(__kvm_riscv_nacl_switch_to)
+c25a9f5b7daa98 Anup Patel 2022-10-09  239  	SAVE_HOST_GPRS
+c25a9f5b7daa98 Anup Patel 2022-10-09  240  
+c25a9f5b7daa98 Anup Patel 2022-10-09  241  	SAVE_HOST_AND_RESTORE_GUEST_CSRS __kvm_riscv_nacl_switch_to_return
+c25a9f5b7daa98 Anup Patel 2022-10-09  242  
+c25a9f5b7daa98 Anup Patel 2022-10-09  243  	/* Resume Guest using SBI nested acceleration */
+c25a9f5b7daa98 Anup Patel 2022-10-09  244  	add	a6, a2, zero
+c25a9f5b7daa98 Anup Patel 2022-10-09  245  	add	a7, a1, zero
+c25a9f5b7daa98 Anup Patel 2022-10-09  246  	ecall
+c25a9f5b7daa98 Anup Patel 2022-10-09  247  
+c25a9f5b7daa98 Anup Patel 2022-10-09  248  	/* Back to Host */
+c25a9f5b7daa98 Anup Patel 2022-10-09  249  	.align 2
+c25a9f5b7daa98 Anup Patel 2022-10-09  250  __kvm_riscv_nacl_switch_to_return:
+c25a9f5b7daa98 Anup Patel 2022-10-09  251  	SAVE_GUEST_GPRS
+c25a9f5b7daa98 Anup Patel 2022-10-09  252  
+c25a9f5b7daa98 Anup Patel 2022-10-09  253  	SAVE_GUEST_AND_RESTORE_HOST_CSRS
+c25a9f5b7daa98 Anup Patel 2022-10-09  254  
+c25a9f5b7daa98 Anup Patel 2022-10-09  255  	RESTORE_HOST_GPRS
+34bde9d8b9e6e5 Anup Patel 2021-09-27  256  
+34bde9d8b9e6e5 Anup Patel 2021-09-27  257  	/* Return to C code */
+34bde9d8b9e6e5 Anup Patel 2021-09-27  258  	ret
+34bde9d8b9e6e5 Anup Patel 2021-09-27 @259  ENDPROC(__kvm_riscv_switch_to)
+9f7013265112a9 Anup Patel 2021-09-27  260  
+
+:::::: The code at line 259 was first introduced by commit
+:::::: 34bde9d8b9e6e5249db3c07cf1ebfe75c23c671c RISC-V: KVM: Implement VCPU world-switch
+
+:::::: TO: Anup Patel <anup.patel@wdc.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
