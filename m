@@ -1,115 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96882CA6;
-	Sat,  5 Aug 2023 20:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691265650; x=1722801650;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a/uzrtbXHXhqrxxTqvocPj7by47tjIa8lXpB4uuDFQo=;
-  b=W85JkMc444ovrpebIfFS+JX9Ea00ZA7GtfXW6CySrrYqInwosS3jafBI
-   CcHdKHcybEnRF/mtxRBl4IGr7hnYhKf+kTJAnK0r8q3xY6CFqvL7rD6pD
-   2prPpUpFcxopaxS3TL7gMXh17K60gUUlI5Nm8EZIb12m2X3EhCxvHOuNj
-   h0g39/X3eJD6mubdlaVwPbuZlB4j0FGJ7eKsR+mStHx86Ha8zujENUdI4
-   ji1j2HRBr6Wy+jwFF+KfaJkoG7miYmCzO/Nql7sGPxQIwEeTWkNKShHNn
-   PA/45E/s/fvJe61xhBsMRTpSLx9QTO87Db7qIJrqGgP+cPMx3AohPbBTs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10793"; a="456714392"
-X-IronPort-AV: E=Sophos;i="6.01,258,1684825200"; 
-   d="scan'208";a="456714392"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2023 13:00:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10793"; a="854171310"
-X-IronPort-AV: E=Sophos;i="6.01,258,1684825200"; 
-   d="scan'208";a="854171310"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Aug 2023 13:00:47 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qSNSA-0003rj-1j;
-	Sat, 05 Aug 2023 20:00:46 +0000
-Date: Sun, 6 Aug 2023 04:00:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mhiramat:topic/fprobe-ftrace-regs 2/5]
- kernel/trace/rethook.c:298:2: error: call to undeclared function
- 'ftrace_regs_set_instruction_pointer'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202308060332.Ctrtt6hj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0524417F6
+	for <llvm@lists.linux.dev>; Sun,  6 Aug 2023 04:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691295616;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KyDF7ECCTcdOB0CZHvmwoGZqS9tRFAPatMW1Ol3nrpo=;
+	b=LHrzzUPN9HyJKkOTBaaXicjt+vCV4x8P5YMVpvZA9Rzk7dUyYoK6+ArsTil236cAt6cHvu
+	EjAq7dRXHVUPuPO2Kij4DMOslZMdkKrxnTXFxIwP9VXSCWXN2DdoGq7JLlffn6f8PU5Ar2
+	cyWvOCgdyOrpitAlgvBA6nowA7MkfIY=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-687-vbczf7PmNZqW_5Om4cojjw-1; Sun, 06 Aug 2023 00:20:15 -0400
+X-MC-Unique: vbczf7PmNZqW_5Om4cojjw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB1D9380390E
+	for <llvm@lists.linux.dev>; Sun,  6 Aug 2023 04:20:14 +0000 (UTC)
+Received: from [172.64.9.24] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D4B78492B02;
+	Sun,  6 Aug 2023 04:20:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
+ (6.5.0-rc4, mainline.kernel.org-clang, 251a94f1)
+Date: Sun, 06 Aug 2023 04:20:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <31913.123080600201500440@us-mta-687.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-ftrace-regs
-head:   069e6430a717ff19937b79b565595cc7765791d0
-commit: 5d93c6a3e4c0b1911bb29f888466aea92f1fae05 [2/5] fprobe: rethook: Use fprobe_regs in fprobe exit handler and rethook
-config: x86_64-buildonly-randconfig-r003-20230806 (https://download.01.org/0day-ci/archive/20230806/202308060332.Ctrtt6hj-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230806/202308060332.Ctrtt6hj-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308060332.Ctrtt6hj-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> kernel/trace/rethook.c:298:2: error: call to undeclared function 'ftrace_regs_set_instruction_pointer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ftrace_regs_set_instruction_pointer(fregs, correct_ret_addr);
-           ^
-   1 error generated.
---
->> kernel/kprobes.c:2134:25: error: call to undeclared function 'ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                                  ^
->> kernel/kprobes.c:2134:18: error: incompatible integer to pointer conversion initializing 'struct pt_regs *' with an expression of type 'int' [-Wint-conversion]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                           ^      ~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
->> arch/x86/kernel/rethook.c:111:25: error: call to undeclared function 'ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                                  ^
->> arch/x86/kernel/rethook.c:111:18: error: incompatible integer to pointer conversion initializing 'struct pt_regs *' with an expression of type 'int' [-Wint-conversion]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                           ^      ~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/rethook.c:121:25: error: call to undeclared function 'ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                                  ^
-   arch/x86/kernel/rethook.c:121:18: error: incompatible integer to pointer conversion initializing 'struct pt_regs *' with an expression of type 'int' [-Wint-conversion]
-           struct pt_regs *regs = ftrace_get_regs(fregs);
-                           ^      ~~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+Kernel information:
+    Commit message: Merge tag 'powerpc-6.5-5' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/powerpc/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/98730
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://issues.redhat.com/browse/RHELPLAN-138156
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
+mapper/myvg-thinvolume1
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1353
+            Affected tests:
+                 ppc64le - Storage - lvm thinp sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +/ftrace_regs_set_instruction_pointer +298 kernel/trace/rethook.c
 
-   282	
-   283	/* This function will be called from each arch-defined trampoline. */
-   284	unsigned long rethook_trampoline_handler(struct ftrace_regs *fregs,
-   285						 unsigned long frame)
-   286	{
-   287		struct llist_node *first, *node = NULL;
-   288		unsigned long correct_ret_addr;
-   289		rethook_handler_t handler;
-   290		struct rethook_node *rhn;
-   291	
-   292		correct_ret_addr = __rethook_find_ret_addr(current, &node);
-   293		if (!correct_ret_addr) {
-   294			pr_err("rethook: Return address not found! Maybe there is a bug in the kernel\n");
-   295			BUG_ON(1);
-   296		}
-   297	
- > 298		ftrace_regs_set_instruction_pointer(fregs, correct_ret_addr);
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
