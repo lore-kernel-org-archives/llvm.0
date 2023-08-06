@@ -1,128 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0524417F6
-	for <llvm@lists.linux.dev>; Sun,  6 Aug 2023 04:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1691295616;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KyDF7ECCTcdOB0CZHvmwoGZqS9tRFAPatMW1Ol3nrpo=;
-	b=LHrzzUPN9HyJKkOTBaaXicjt+vCV4x8P5YMVpvZA9Rzk7dUyYoK6+ArsTil236cAt6cHvu
-	EjAq7dRXHVUPuPO2Kij4DMOslZMdkKrxnTXFxIwP9VXSCWXN2DdoGq7JLlffn6f8PU5Ar2
-	cyWvOCgdyOrpitAlgvBA6nowA7MkfIY=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-687-vbczf7PmNZqW_5Om4cojjw-1; Sun, 06 Aug 2023 00:20:15 -0400
-X-MC-Unique: vbczf7PmNZqW_5Om4cojjw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F395010E6;
+	Sun,  6 Aug 2023 08:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+	t=1691310632; bh=1PmgJ9UnGd7n2iOLnmG8C4ChzRpzduUPBOOmTK9zmH4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aORIwgZcAgfREdgO3i/MAXyip30WQh7Ju+cHHDGE3LrsfKMzunSQgNuaiZli7qyJz
+	 MzQ2quDLiPQ8iyhlS/TvrVrN1ZFjWKV/xQ33g60df/0PqiASyweEhLQIVgSrivBs1d
+	 5dJFPyZqPNbVnohNfinR6eyaiWFrAyQLfk6g3/T4=
+Received: from ld50.lan (unknown [101.88.28.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB1D9380390E
-	for <llvm@lists.linux.dev>; Sun,  6 Aug 2023 04:20:14 +0000 (UTC)
-Received: from [172.64.9.24] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D4B78492B02;
-	Sun,  6 Aug 2023 04:20:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 328): Test report for master
- (6.5.0-rc4, mainline.kernel.org-clang, 251a94f1)
-Date: Sun, 06 Aug 2023 04:20:14 -0000
-To: llvm@lists.linux.dev
+	by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C02B2600F8;
+	Sun,  6 Aug 2023 16:30:31 +0800 (CST)
+From: WANG Xuerui <kernel@xen0n.name>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Xi Ruoyao <xry111@xry111.site>,
+	loongarch@lists.linux.dev,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	WANG Xuerui <git@xen0n.name>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2] LoongArch: Replace -ffreestanding with finer-grained -fno-builtin's
+Date: Sun,  6 Aug 2023 16:30:21 +0800
+Message-Id: <20230806083021.2243574-1-kernel@xen0n.name>
+X-Mailer: git-send-email 2.40.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <31913.123080600201500440@us-mta-687.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: WANG Xuerui <git@xen0n.name>
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+As explained by Nick in the original issue: the kernel usually does a
+good job of providing library helpers that have similar semantics as
+their ordinary userspace libc equivalents, but -ffreestanding disables
+such libcall optimization and other related features in the compiler,
+which can lead to unexpected things such as CONFIG_FORTIFY_SOURCE not
+working (!).
 
-Tested-by: CKI Project <cki-project@redhat.com>
+As it turns out to be the case, only the memory operations really need
+to be prevented from expansion by the compiler, and this is doable with
+finer-grained -fno-builtin-* toggles. So only disable memcpy, memmove
+and memset, while leaving other builtins enabled, to fix source
+fortification among others.
 
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.5-5' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/powerpc/linux
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1897
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+---
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/98730
+Changes in v2:
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://issues.redhat.com/browse/RHELPLAN-138156
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage - lvm thinp sanity: FAIL: mkfs.xfs -fd noalign /dev/=
-mapper/myvg-thinvolume1
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1353
-            Affected tests:
-                 ppc64le - Storage - lvm thinp sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+- Keep the memory operation builtins disabled, add comments, and tweak the
+  commit message along the way.
 
+ arch/loongarch/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index b1e5db51b61c..34fc48df87f2 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -83,7 +83,14 @@ KBUILD_CFLAGS_KERNEL		+= -fPIE
+ LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext
+ endif
+ 
+-cflags-y += -ffreestanding
++# Make sure the memory libcalls are not expanded by the compiler, for better
++# control over unaligned accesses with respect to CONFIG_ARCH_STRICT_ALIGN,
++# and also for avoiding https://gcc.gnu.org/PR109465.
++#
++# The overly broad -ffreestanding is undesirable as it disables *all* libcall
++# handling, that unfortunately includes proper FORTIFY_SOURCE instrumentation.
++cflags-y += -fno-builtin-memcpy -fno-builtin-memmove -fno-builtin-memset
++
+ cflags-y += $(call cc-option, -mno-check-zero-division)
+ 
+ load-y		= 0x9000000000200000
+-- 
+2.40.0
 
