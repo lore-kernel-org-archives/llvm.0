@@ -1,144 +1,170 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B3620FE
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:17:46 +0000 (UTC)
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3a734b8a27fso2565167b6e.1
-        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:17:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD1B20FE
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:19:32 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63cfd68086dso26328406d6.1
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:19:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691425065; x=1692029865;
+        d=google.com; s=20221208; t=1691425171; x=1692029971;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KOMQKdmZShAbrMOCi8V+xGenD6h4CfjCRpwadFereic=;
-        b=3PEqRyFS+a1U3orlxEi+YML6SOG137afBBLPEYzEiHPo2p/DTaGfS4Hx5jNRreMRrO
-         q+JneVHBLoLRmu7hFmRt8nRLkHybDNwZKj+pqqAZhCG7W+a9ki256RwbrK/ETg3Wj6VM
-         zf+JR/4N7NFsZE8wEiQ9vD6ClFeLB0VwjJFGafE1JdlCDtGVRG6LjQLfEE9fV/DF1LKs
-         ob0LOcliVh7f8vWqKeqE/M0UcrEsLxlTLR1fJP3q3NEcveL//bAn8/tUvOGV02RaulQ0
-         7oOdXMcLBuTclIv7SJ1lqrbIbA0XLHmJvbpCRc2LydVYgoOgPnt8GO+63Bv1njeOHgSW
-         8X1g==
+        bh=LPJnGrRfrqTcFmM1+fKcLOPow/cxlZkJNS27itglHYY=;
+        b=p9f8T/0c2mLFtWQTlr7f8LDvoDunJVOgB6fGL1rGBgdw1Pfh0bq1W2adT1arcPAPss
+         GxDg9zHzK6ZsiKW6CV8daCmVtwVMVoJtxylgiMAg2V/QvuHKdR3V8J78dU2GuqzImcz+
+         BrPvvXG33syUZEhv1Bkc8AUNC2Oj5B3aZIIAwBsaKBsw1igREq1Of5NtiW3HMAfmByO4
+         azORNELxRrYfxDRHi8p7C+P8GzFLPVh/aSdkvI3thYbbap/oPFKf7vADq3UkA+o7eJnx
+         y42w9ElPwpDuqDF8gAqTqCSGgOcJ9pcymUu4GvhVZNpy4V2RCXM2ymmx8JFkGXTvE8QX
+         +UpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691425065; x=1692029865;
+        d=1e100.net; s=20221208; t=1691425171; x=1692029971;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KOMQKdmZShAbrMOCi8V+xGenD6h4CfjCRpwadFereic=;
-        b=Yya152wuxH1hnpmPN6zY29gE92wej8lHikTL0+9z8k2mHa16YADRv+GBU6/G22U6dI
-         CAVQJYQ94NlQa53x1EdXw9yo59tzqd4GDLVu6aXgZsvjXVqVMIy6pInlNfBFu9i3ChHT
-         1q+g17CDDXFaScpEV9TCldykSMxe4iI+D9eXWjip7NGF8DGFcS6NgVA7qZ5ur24Lsba1
-         9ku/Yyh2bizsb1XSVpHNHVy4wRu40zC3OGBDZPqHhgTw1QVa9G6VRc7lpPvDEGKbjhMB
-         W8wCdY8oVZzJb17ZKAmrJDQwgb/wDLw67S0FikaNaCXNSl6IoyHNFsbEunugrn3LXBMY
-         jAtw==
-X-Gm-Message-State: AOJu0YyvYlymBvDO+xEcDkW6QtyjcBH67qbYObBAiDx+cP3bSKXIy6Pl
-	F0ssDMP77/RGhQM9LWKF6lOwX83u3gA/bRgyBUAT7A==
-X-Google-Smtp-Source: AGHT+IGTvk7ouK4vslL42TMdt+8hzcgzNzCUejYDraANLVWCBcGejWMNacBOOb+oEn7QTC7i9fbWey9ZgBxigSCUZ7k=
-X-Received: by 2002:a05:6358:f57:b0:139:c7cb:77d7 with SMTP id
- c23-20020a0563580f5700b00139c7cb77d7mr2159770rwj.13.1691425064908; Mon, 07
- Aug 2023 09:17:44 -0700 (PDT)
+        bh=LPJnGrRfrqTcFmM1+fKcLOPow/cxlZkJNS27itglHYY=;
+        b=J8PUUt4q58hqUOQF8iTihGFbZkECM+3ydD4fmDLdSncpGCPhA9kEH8Cxf6VwuAGNsd
+         XEPTGCKxA4zY+JDlWYUG6CeVDk9UCcmc736RSlOTQR7r5aoufsdJFnAcTRJbScAMz0Nk
+         Pk1ka2R7LenX/VWqtPo7Jl7l3/RFOmTPpjafecVtCoU17OHWnVcL+rHFneOnFziarbFY
+         jrlMOBmOgQyTk/onWRa7uu2o68ig25RLWUXDDYGqwsdAyhIAECLQN33fE6v7V4H/37aq
+         YKLN/5Fd820sQ5JNZ+Fw/dBYlTuOLt4Vehs637TGIs5OeyJ5nZS5sUQOxDMwdsm2amug
+         WY6w==
+X-Gm-Message-State: AOJu0Yw41eZ1YhRBNpKCboGH/livDwwI1VBrGnbN+GC/hv6N2RWKTiLj
+	IV9wnDgD8ViTYcG/4tszIx1Rl5ZuP2CHRypejkpYBCXJzsjgqzoZx3s=
+X-Google-Smtp-Source: AGHT+IEoEDNA6GxnW+ViDsmeCqIO9Q5P6sp4c349+g/L2BJWZ2fenuHgxtv40V7icYfhg/FegnnWJ0s5h88o+1Fs71k=
+X-Received: by 2002:a0c:9ccc:0:b0:630:7a8:f602 with SMTP id
+ j12-20020a0c9ccc000000b0063007a8f602mr7673549qvf.7.1691425170989; Mon, 07 Aug
+ 2023 09:19:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com>
- <2023080743-amendable-moonlit-15b7@gregkh> <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
-In-Reply-To: <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
+References: <202308040553.nMR9oB8v-lkp@intel.com> <20230804153749.GA2148888@dev-arch.thelio-3990X>
+ <CAKwvOdk7VrGMy95heyyLhdhgNWb1LyV48WmzvhpNUrqaYBin_A@mail.gmail.com> <2a1061fb250905545c4a514b5328e3d36ab6f8f7.camel@intel.com>
+In-Reply-To: <2a1061fb250905545c4a514b5328e3d36ab6f8f7.camel@intel.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 7 Aug 2023 09:17:34 -0700
-Message-ID: <CAKwvOdm0Tv0=KGdhVwuJX+8N-Dgx+kzuPy6zCBsV1kOc+6b+qQ@mail.gmail.com>
-Subject: Re: Fwd: CFI violation when reading amd_pstate/status
-To: =?UTF-8?Q?Jannik_Gl=C3=BCckert?= <jannik.glueckert@gmail.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux LLVM Build Support <llvm@lists.linux.dev>
+Date: Mon, 7 Aug 2023 09:19:20 -0700
+Message-ID: <CAKwvOd=LMeeeA68ydcQtFgzd1vv0F4i=DJYCxEiHahN7+OP5_A@mail.gmail.com>
+Subject: Re: [stable:linux-4.14.y 4459/9999] lib/mpi/mpih-div.c:142:20: error:
+ invalid use of a cast in a inline asm context requiring an lvalue: remove the
+ cast or build with -fheinous-gnu-extensions
+To: "Liu, Yujie" <yujie.liu@intel.com>
+Cc: "nathan@kernel.org" <nathan@kernel.org>, lkp <lkp@intel.com>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 6, 2023 at 11:21=E2=80=AFPM Jannik Gl=C3=BCckert
-<jannik.glueckert@gmail.com> wrote:
+On Sun, Aug 6, 2023 at 11:52=E2=80=AFPM Liu, Yujie <yujie.liu@intel.com> wr=
+ote:
 >
-> Hi Greg,
->
-> our kernel uses the Fedora config and has a homeopathic patchset on
-> top of upstream - see
-> https://gitweb.gentoo.org/proj/linux-patches.git/tree/?h=3D6.4 except
-> the 50** patches.
-> Namely we don't touch cpufreq or pm.
-
-Can you tell us more about your distro? Is it public? Is it built with clan=
-g?
-
->
-> > Comm: cat Tainted: P
->
-> I am not using any out of tree modules, the kernel switches to
-> Tainted: P on the first CFI violation.
->
-> Regards
-> Jannik
->
-> Am Mo., 7. Aug. 2023 um 08:03 Uhr schrieb Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org>:
-> >
-> > On Mon, Aug 07, 2023 at 06:55:49AM +0700, Bagas Sanjaya wrote:
-> > > Hi,
+> On Fri, 2023-08-04 at 08:41 -0700, Nick Desaulniers wrote:
+> > On Fri, Aug 4, 2023 at 8:37=E2=80=AFAM Nathan Chancellor <nathan@kernel=
+.org>
+> > wrote:
 > > >
-> > > I notice a bug report on Bugzilla [1]. Quoting from it:
+> > > On Fri, Aug 04, 2023 at 05:32:55AM +0800, kernel test robot wrote:
+> > > > Hi Fangrui,
+> > > >
+> > > > First bad commit (maybe !=3D root cause):
+> > > >
+> > > > tree:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+.git
+> > > >  linux-4.14.y
+> > > > head:   60a6e3043cc8b918c989707a5eba5fd6830a08a4
+> > > > commit: 71749b1181eca12af96654a781cabcd058c37c8f [4459/9999]
+> > > > Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross
+> > > > compilation
+> > > > config: mips-randconfig-r035-20230731
+> > > > (https://download.01.org/0day-ci/archive/20230804/202308040553.nM
+> > > > R9oB8v-lkp@intel.com/config)
+> > > > compiler: clang version 17.0.0
+> > > > (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1
+> > > > ffa0299048db4c88a)
+> > > > reproduce:
+> > > > (https://download.01.org/0day-ci/archive/20230804/202308040553.nM
+> > > > R9oB8v-lkp@intel.com/reproduce)
+> > > >
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a
+> > > > new version of
+> > > > the same patch/commit), kindly add following tags
+> > > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > > Closes:
+> > > > > https://lore.kernel.org/oe-kbuild-all/202308040553.nMR9oB8v-lkp@i=
+ntel.com/
+> > > >
+> > > > All errors (new ones prefixed by >>):
+> > > >
+> > > > > > lib/mpi/mpih-div.c:142:20: error: invalid use of a cast in a
+> > > > > > inline asm context requiring an lvalue: remove the cast or
+> > > > > > build with -fheinous-gnu-extensions
+> > > >      142 |                                         umul_ppmm(n1,
+> > > > n0, d0, q);
+> > > >          |
+> > > > ~~~~~~~~~~~~~~^~~~~~~~~~
+> > > >    lib/mpi/longlong.h:652:20: note: expanded from macro
+> > > > 'umul_ppmm'
+> > > >      652 |         : "=3Dl" ((USItype)(w0)), \
+> > > >          |                 ~~~~~~~~~~^~~
 > > >
-> > > > On kernel 6.4.7, with amd_pstate=3Dactive, with a Ryzen 7700X
-> > > > I get a Clang CFI violation when reading /sys/devices/system/cpu/am=
-d_pstate/status
-> > > >
-> > > > This is reproduceable with every read, I have only tried with amd_p=
-state=3Dactive
-> > > >
-> > > > With the following CFI and Clang configs, Clang 16.0.6
-> > > > CONFIG_CFI_CLANG=3Dy
-> > > > CONFIG_CFI_PERMISSIVE=3Dy
-> > > > CONFIG_LTO_CLANG=3Dy
-> > > > CONFIG_LTO_CLANG_THIN=3Dy
-> > > >
-> > > > Below is the full call trace, let me know if you need a trace with =
-debug info.
-> > > >
-> > > > [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show=
-_status+0x0/0x70; expected type: 0x8651b1de)
-> > > > [ 4947.849358] WARNING: CPU: 2 PID: 16519 at dev_attr_show+0x24/0x6=
-0
-> > > > [ 4947.849360] Modules linked in: binfmt_misc nf_conntrack_netbios_=
-ns nf_conntrack_broadcast wireguard curve25519_x86_64 libcurve25519_generic=
- ip6_udp_tunnel udp_tunnel snd_seq_dummy snd_hrtimer snd_seq rfcomm joydev =
-uhid xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp nf_connt=
-rack_tftp nft_fib_inet nft_fib_ipv6 nft_fib_ipv4 nft_fib nft_reject_inet nf=
-_reject_ipv6 nf_reject_ipv4 nft_reject nft_ct nft_chain_nat bridge 8021q mr=
-p garp stp llc nf_tables ebtable_nat ebtable_broute ip6table_nat ip6table_m=
-angle ip6table_raw ip6table_security iptable_nat nf_nat nf_conntrack nf_def=
-rag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_raw iptable_security ip_set =
-nfnetlink ebtable_filter ebtables ip6table_filter ip6_tables iptable_filter=
- ip_tables bnep vfat fat amdgpu snd_hda_codec_realtek snd_hda_codec_generic=
- snd_hda_codec_hdmi snd_hda_intel mt7921e vfio_pci intel_rapl_msr mt7921_co=
-mmon intel_rapl_common mt76_connac_lib edac_mce_amd vfio_pci_core mt76 vfio=
-_iommu_type1 vfio kvm_amd iommufd iommu_v2 snd_usb_audio
-> > > > [ 4947.849379]  snd_intel_dspcfg gpu_sched snd_intel_sdw_acpi mac80=
-211 drm_suballoc_helper snd_usbmidi_lib i2c_algo_bit drm_ttm_helper snd_hda=
-_codec btusb ttm btrtl libarc4 btmtk snd_hda_core snd_rawmidi kvm snd_seq_d=
-evice drm_display_helper btintel snd_hwdep mc btbcm irqbypass cfg80211 cec =
-snd_pcm asus_nb_wmi bluetooth eeepc_wmi snd_timer asus_wmi drm_kms_helper l=
-edtrig_audio sparse_keymap snd gpio_amdpt platform_profile gpio_generic drm=
-_buddy rfkill soundcore rapl i2c_piix4 wmi_bmof pcspkr k10temp lm92 nct6775=
-_core hwmon_vid fuse loop dm_crypt crct10dif_pclmul polyval_clmulni polyval=
-_generic ghash_clmulni_intel nvme sp5100_tco ccp r8169 nvme_core nvme_commo=
-n video wmi sunrpc
-> > > > [ 4947.849398] CPU: 2 PID: 16519 Comm: cat Tainted: P              =
-     6.4.7-gentoo-dist-hardened #1
+> > > This is the same as [1] but the upstream solution (b0c091ae04f6)
+> > > could
+> > > cause breakage in 4.14 for compilers older than GCC 4.4; 4.14
+> > > claims to
+> > > support GCC 3.2 as a minimum version. An alternative solution if we
+> > > care
+> > > about fixing this issue in 4.14 without any regression possiblity
+> > > would
+> > > be something like:
 > >
-> > Can't do much about this kernel, we don't know what's really in it,
-> > sorry.
+> > In our own CI, we don't test mips until 5.4.
+> > https://github.com/ClangBuiltLinux/continuous-integration2/blob/main/ge=
+nerator.yml#L1691-L1698
 > >
-> > greg k-h
+> > Another solution is perhaps to ask kindly that the kernel test robot
+> > team not test branches of stable w/ clang for ARCH=3Dmips.
 
+^ specifically branches linux-4.19.y and linux-4.14.y.  Newer branches
+should be tested for ARCH=3Dmips LLVM=3D1.
+
+>
+> Thanks for this info. We've configured the kernel test robot to do so.
+>
+> --
+> Best Regards,
+> Yujie
+>
+> >
+> > >
+> > > diff --git a/lib/mpi/longlong.h b/lib/mpi/longlong.h
+> > > index 6c5229f98c9e..42076c124e23 100644
+> > > --- a/lib/mpi/longlong.h
+> > > +++ b/lib/mpi/longlong.h
+> > > @@ -639,7 +639,7 @@ do { \
+> > >         **************  MIPS  *****************
+> > >         ***************************************/
+> > >  #if defined(__mips__) && W_TYPE_SIZE =3D=3D 32
+> > > -#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4)
+> > > +#if (__GNUC__ >=3D 5) || (__GNUC__ >=3D 4 && __GNUC_MINOR__ >=3D 4) =
+||
+> > > defined(__clang__)
+> > >  #define umul_ppmm(w1, w0, u, v)                        \
+> > >  do {                                           \
+> > >         UDItype __ll =3D (UDItype)(u) * (v);      \
+> > >
+> > > [1]:
+> > > https://lore.kernel.org/20230801202602.GA2589710@dev-arch.thelio-3990=
+X/
+> > >
+> > > Cheers,
+> > > Nathan
+> > >
+> >
+> >
+>
 
 
 --=20
