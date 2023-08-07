@@ -1,291 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C474174DF;
-	Mon,  7 Aug 2023 20:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691439441; x=1722975441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v77pNGE+feeDfb5yXyNk7i3bSHrdcpf1hNLzQC6GlE8=;
-  b=FZTxHBljcZAvd9fYjwGQiNI617Dv06t3OQ+uRm/S8xB/W6xk5Ez2i5kL
-   Am6FEOoYeG6ew+KUkfldxfbopP59S85YOe+pdbKwK6mcJqDFiH0572h54
-   Y32VnZxz8aEF24J2on3dcN9PK6OQY6l3Paq0H5JuH4bYM6smKyVgM8XLF
-   XD1zU0ClGJmgzjxXfzPoJLZmG0y75QZurOqyZYmPGkKj2OFS8eqWVmZSD
-   nj/0x7+f0hf/EvPIQ4LCI+oyJgWKI77MzzVHEHYeFUPtOpd9WJaDBmIPZ
-   XpGIfI8/4bct/1ndzqCoIXYaSffmegR9RjwKDv3PA8JoT69qQi7fhpjj6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="368093407"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="368093407"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 13:17:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="766115780"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="766115780"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2023 13:17:14 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qT6fB-0004rZ-1L;
-	Mon, 07 Aug 2023 20:17:13 +0000
-Date: Tue, 8 Aug 2023 04:17:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 12/13] drivers/acpi/thermal.c:817:22:
- error: redefinition of 'device'
-Message-ID: <202308080433.zTgDF79n-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A87D17736
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 22:09:47 +0000 (UTC)
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-6bc9d79cbf6so8998264a34.1
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 15:09:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691446186; x=1692050986;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IbpbMWxtwQHfKpcdmTM26gLkMYaV2V50D6axm5j5Juw=;
+        b=SaLCkNGsZThne8MKII46Y/LbHU1Z/Llrk3fkZ3OboFdeQRQ91QkisLwHvbpH+cfkTp
+         MhriTS9fc4b+xJT/57+W9qoJNSdAoBBfJdY8o0lNGIwJ6z0XFVmzmSWV6fBDel30oF8q
+         Qcn6JtxG+i2ti0gZDeZrEtUo8SusN9ZeGoHtwitsM7yH3b4O2DHgs+pC2PGqRy4HogVt
+         Q3MpFc+M/EYl1CVcwW5mIUhCUGh76g4F7YOw62HVHoin3t/V9SR0UUtJqunzqzkwkT17
+         i8En6usQxfDU/lCvLLYn57/PLO2fYcvQoqQkcgRBRtzYwwfFYClKKEK27xMnvK9vYrns
+         pGbA==
+X-Gm-Message-State: AOJu0Yzw2FixkTnlJDR1gAKPL92oi3fZuA8N7hORzLxlAy1BxBRDgHs7
+	Rv3CcpGcTqhsIkY/BNiiYOWMyGEt+FPtm3jlVZf9/H0kIzvN
+X-Google-Smtp-Source: AGHT+IEduFwtdxrh+dLlyzbh5NbikP80BVHQF2BeYV5I9pFjtdMLw1auLZ7MNsAr6GJ8o7Xm4UJOf0qu7vj4mp34E3NWMDrQCIWQ
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6830:148c:b0:6b8:c631:5c5a with SMTP id
+ s12-20020a056830148c00b006b8c6315c5amr12630266otq.4.1691446186238; Mon, 07
+ Aug 2023 15:09:46 -0700 (PDT)
+Date: Mon, 07 Aug 2023 15:09:46 -0700
+In-Reply-To: <0000000000000e4cc105ff68937b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000166f9e06025c8139@google.com>
+Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
+From: syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
+To: bpf@vger.kernel.org, chris@chrisdown.name, linan122@huawei.com, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   cb7868f075558114df880ebd25d7a0ac7d23f94a
-commit: 34af5a3fdf4c63403109630759454e285d26397c [12/13] Merge branch 'acpi-thermal-next' into bleeding-edge
-config: i386-randconfig-i011-20230807 (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/reproduce)
+syzbot suspects this issue was fixed by commit:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308080433.zTgDF79n-lkp@intel.com/
+commit 125bfc7cd750e68c99f1d446e2c22abea08c237f
+Author: Li Nan <linan122@huawei.com>
+Date:   Fri Jun 9 09:43:20 2023 +0000
 
-All errors (new ones prefixed by >>):
+    md/raid10: fix the condition to call bio_end_io_acct()
 
->> drivers/acpi/thermal.c:817:22: error: redefinition of 'device'
-           struct acpi_device *device = data;
-                               ^
-   drivers/acpi/thermal.c:815:53: note: previous definition is here
-   static void acpi_thermal_notify(struct acpi_device *device, u32 event)
-                                                       ^
->> drivers/acpi/thermal.c:817:31: error: use of undeclared identifier 'data'
-           struct acpi_device *device = data;
-                                        ^
->> drivers/acpi/thermal.c:982:8: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
-                                                    acpi_thermal_notify);
-                                                    ^~~~~~~~~~~~~~~~~~~
-   include/acpi/acpi_bus.h:520:29: note: passing argument to parameter 'handler' here
-                                       acpi_notify_handler handler);
-                                                           ^
-   drivers/acpi/thermal.c:1007:12: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
-                                          acpi_thermal_notify);
-                                          ^~~~~~~~~~~~~~~~~~~
-   include/acpi/acpi_bus.h:523:29: note: passing argument to parameter 'handler' here
-                                       acpi_notify_handler handler);
-                                                           ^
-   drivers/acpi/thermal.c:1026:25: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-           int i, j, power_state, result;
-                                  ^
-   1 warning and 4 errors generated.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15c26ba9a80000
+start commit:   a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f5e1158c5b2f83bb
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3705186451a87fd93b8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12518548a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124ccf70a80000
 
+If the result looks correct, please mark the issue as fixed by replying with:
 
-vim +/device +817 drivers/acpi/thermal.c
+#syz fix: md/raid10: fix the condition to call bio_end_io_acct()
 
-3f655ef8c439e0 Zhang Rui         2008-01-17  809  
-3f655ef8c439e0 Zhang Rui         2008-01-17  810  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  811  /* --------------------------------------------------------------------------
-^1da177e4c3f41 Linus Torvalds    2005-04-16  812                                   Driver Interface
-^1da177e4c3f41 Linus Torvalds    2005-04-16  813     -------------------------------------------------------------------------- */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  814  
-342d550db1bc0b Bjorn Helgaas     2009-04-07  815  static void acpi_thermal_notify(struct acpi_device *device, u32 event)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  816  {
-9d67b6acf1358b Michal Wilczynski 2023-07-03 @817  	struct acpi_device *device = data;
-342d550db1bc0b Bjorn Helgaas     2009-04-07  818  	struct acpi_thermal *tz = acpi_driver_data(device);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  819  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  820  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  821  		return;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  822  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  823  	switch (event) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  824  	case ACPI_THERMAL_NOTIFY_TEMPERATURE:
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  825  		acpi_queue_thermal_check(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  826  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  827  	case ACPI_THERMAL_NOTIFY_THRESHOLDS:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  828  	case ACPI_THERMAL_NOTIFY_DEVICES:
-95d37fab16ec7a Rafael J. Wysocki 2023-08-04  829  		acpi_thermal_trips_update(tz, event);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  830  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  831  	default:
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  832  		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  833  				  event);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  834  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  835  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  836  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  837  
-261cba2deb7d3b Zhang Rui         2012-11-27  838  /*
-261cba2deb7d3b Zhang Rui         2012-11-27  839   * On some platforms, the AML code has dependency about
-261cba2deb7d3b Zhang Rui         2012-11-27  840   * the evaluating order of _TMP and _CRT/_HOT/_PSV/_ACx.
-261cba2deb7d3b Zhang Rui         2012-11-27  841   * 1. On HP Pavilion G4-1016tx, _TMP must be invoked after
-261cba2deb7d3b Zhang Rui         2012-11-27  842   *    /_CRT/_HOT/_PSV/_ACx, or else system will be power off.
-261cba2deb7d3b Zhang Rui         2012-11-27  843   * 2. On HP Compaq 6715b/6715s, the return value of _PSV is 0
-261cba2deb7d3b Zhang Rui         2012-11-27  844   *    if _TMP has never been evaluated.
-261cba2deb7d3b Zhang Rui         2012-11-27  845   *
-261cba2deb7d3b Zhang Rui         2012-11-27  846   * As this dependency is totally transparent to OS, evaluate
-261cba2deb7d3b Zhang Rui         2012-11-27  847   * all of them once, in the order of _CRT/_HOT/_PSV/_ACx,
-261cba2deb7d3b Zhang Rui         2012-11-27  848   * _TMP, before they are actually used.
-261cba2deb7d3b Zhang Rui         2012-11-27  849   */
-261cba2deb7d3b Zhang Rui         2012-11-27  850  static void acpi_thermal_aml_dependency_fix(struct acpi_thermal *tz)
-261cba2deb7d3b Zhang Rui         2012-11-27  851  {
-261cba2deb7d3b Zhang Rui         2012-11-27  852  	acpi_handle handle = tz->device->handle;
-261cba2deb7d3b Zhang Rui         2012-11-27  853  	unsigned long long value;
-261cba2deb7d3b Zhang Rui         2012-11-27  854  	int i;
-261cba2deb7d3b Zhang Rui         2012-11-27  855  
-261cba2deb7d3b Zhang Rui         2012-11-27  856  	acpi_evaluate_integer(handle, "_CRT", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  857  	acpi_evaluate_integer(handle, "_HOT", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  858  	acpi_evaluate_integer(handle, "_PSV", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  859  	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-261cba2deb7d3b Zhang Rui         2012-11-27  860  		char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
-261cba2deb7d3b Zhang Rui         2012-11-27  861  		acpi_status status;
-261cba2deb7d3b Zhang Rui         2012-11-27  862  
-261cba2deb7d3b Zhang Rui         2012-11-27  863  		status = acpi_evaluate_integer(handle, name, NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  864  		if (status == AE_NOT_FOUND)
-261cba2deb7d3b Zhang Rui         2012-11-27  865  			break;
-261cba2deb7d3b Zhang Rui         2012-11-27  866  	}
-261cba2deb7d3b Zhang Rui         2012-11-27  867  	acpi_evaluate_integer(handle, "_TMP", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  868  }
-261cba2deb7d3b Zhang Rui         2012-11-27  869  
-4be44fcd3bf648 Len Brown         2005-08-05  870  static int acpi_thermal_get_info(struct acpi_thermal *tz)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  871  {
-36f554046bd6da Rafael J. Wysocki 2022-10-04  872  	int result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  873  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  874  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  875  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  876  
-261cba2deb7d3b Zhang Rui         2012-11-27  877  	acpi_thermal_aml_dependency_fix(tz);
-261cba2deb7d3b Zhang Rui         2012-11-27  878  
-9bcb8118965ab4 Matthew Garrett   2012-02-01  879  	/* Get trip points [_CRT, _PSV, etc.] (required) */
-9bcb8118965ab4 Matthew Garrett   2012-02-01  880  	result = acpi_thermal_get_trip_points(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  881  	if (result)
-d550d98d331737 Patrick Mochel    2006-06-27  882  		return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  883  
-9bcb8118965ab4 Matthew Garrett   2012-02-01  884  	/* Get temperature [_TMP] (required) */
-9bcb8118965ab4 Matthew Garrett   2012-02-01  885  	result = acpi_thermal_get_temperature(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  886  	if (result)
-d550d98d331737 Patrick Mochel    2006-06-27  887  		return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  888  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  889  	/* Set the cooling mode [_SCP] to active cooling (default) */
-c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  890  	acpi_execute_simple_method(tz->device->handle, "_SCP",
-c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  891  				   ACPI_THERMAL_MODE_ACTIVE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  892  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  893  	/* Get default polling frequency [_TZP] (optional) */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  894  	if (tzp)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  895  		tz->polling_frequency = tzp;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  896  	else
-^1da177e4c3f41 Linus Torvalds    2005-04-16  897  		acpi_thermal_get_polling_frequency(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  898  
-d550d98d331737 Patrick Mochel    2006-06-27  899  	return 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  900  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  901  
-13614e37e94da4 Jean Delvare      2009-04-06  902  /*
-13614e37e94da4 Jean Delvare      2009-04-06  903   * The exact offset between Kelvin and degree Celsius is 273.15. However ACPI
-13614e37e94da4 Jean Delvare      2009-04-06  904   * handles temperature values with a single decimal place. As a consequence,
-13614e37e94da4 Jean Delvare      2009-04-06  905   * some implementations use an offset of 273.1 and others use an offset of
-13614e37e94da4 Jean Delvare      2009-04-06  906   * 273.2. Try to find out which one is being used, to present the most
-13614e37e94da4 Jean Delvare      2009-04-06  907   * accurate and visually appealing number.
-13614e37e94da4 Jean Delvare      2009-04-06  908   *
-13614e37e94da4 Jean Delvare      2009-04-06  909   * The heuristic below should work for all ACPI thermal zones which have a
-13614e37e94da4 Jean Delvare      2009-04-06  910   * critical trip point with a value being a multiple of 0.5 degree Celsius.
-13614e37e94da4 Jean Delvare      2009-04-06  911   */
-13614e37e94da4 Jean Delvare      2009-04-06  912  static void acpi_thermal_guess_offset(struct acpi_thermal *tz)
-13614e37e94da4 Jean Delvare      2009-04-06  913  {
-7266c88cbaa3de Rafael J. Wysocki 2023-06-04  914  	if (tz->trips.critical.valid &&
-13614e37e94da4 Jean Delvare      2009-04-06  915  	    (tz->trips.critical.temperature % 5) == 1)
-7f49a5cb94e68a Akinobu Mita      2020-01-30  916  		tz->kelvin_offset = 273100;
-13614e37e94da4 Jean Delvare      2009-04-06  917  	else
-7f49a5cb94e68a Akinobu Mita      2020-01-30  918  		tz->kelvin_offset = 273200;
-13614e37e94da4 Jean Delvare      2009-04-06  919  }
-13614e37e94da4 Jean Delvare      2009-04-06  920  
-a59ffb2062df3a Aaron Lu          2014-03-04  921  static void acpi_thermal_check_fn(struct work_struct *work)
-a59ffb2062df3a Aaron Lu          2014-03-04  922  {
-a59ffb2062df3a Aaron Lu          2014-03-04  923  	struct acpi_thermal *tz = container_of(work, struct acpi_thermal,
-a59ffb2062df3a Aaron Lu          2014-03-04  924  					       thermal_check_work);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  925  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  926  	/*
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  927  	 * In general, it is not sufficient to check the pending bit, because
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  928  	 * subsequent instances of this function may be queued after one of them
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  929  	 * has started running (e.g. if _TMP sleeps).  Avoid bailing out if just
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  930  	 * one of them is running, though, because it may have done the actual
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  931  	 * check some time ago, so allow at least one of them to block on the
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  932  	 * mutex while another one is running the update.
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  933  	 */
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  934  	if (!refcount_dec_not_one(&tz->thermal_check_count))
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  935  		return;
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  936  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  937  	mutex_lock(&tz->thermal_check_lock);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  938  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  939  	thermal_zone_device_update(tz->thermal_zone, THERMAL_EVENT_UNSPECIFIED);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  940  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  941  	refcount_inc(&tz->thermal_check_count);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  942  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  943  	mutex_unlock(&tz->thermal_check_lock);
-a59ffb2062df3a Aaron Lu          2014-03-04  944  }
-a59ffb2062df3a Aaron Lu          2014-03-04  945  
-4be44fcd3bf648 Len Brown         2005-08-05  946  static int acpi_thermal_add(struct acpi_device *device)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  947  {
-36f554046bd6da Rafael J. Wysocki 2022-10-04  948  	struct acpi_thermal *tz;
-36f554046bd6da Rafael J. Wysocki 2022-10-04  949  	int result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  950  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  951  	if (!device)
-d550d98d331737 Patrick Mochel    2006-06-27  952  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  953  
-36bcbec7ce21e2 Burman Yan        2006-12-19  954  	tz = kzalloc(sizeof(struct acpi_thermal), GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  955  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  956  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  957  
-8348e1b19a06b1 Patrick Mochel    2006-05-19  958  	tz->device = device;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  959  	strcpy(tz->name, device->pnp.bus_id);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  960  	strcpy(acpi_device_name(device), ACPI_THERMAL_DEVICE_NAME);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  961  	strcpy(acpi_device_class(device), ACPI_THERMAL_CLASS);
-db89b4f0dbab83 Pavel Machek      2008-09-22  962  	device->driver_data = tz;
-3f655ef8c439e0 Zhang Rui         2008-01-17  963  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  964  	result = acpi_thermal_get_info(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  965  	if (result)
-3f655ef8c439e0 Zhang Rui         2008-01-17  966  		goto free_memory;
-3f655ef8c439e0 Zhang Rui         2008-01-17  967  
-13614e37e94da4 Jean Delvare      2009-04-06  968  	acpi_thermal_guess_offset(tz);
-13614e37e94da4 Jean Delvare      2009-04-06  969  
-3f655ef8c439e0 Zhang Rui         2008-01-17  970  	result = acpi_thermal_register_thermal_zone(tz);
-3f655ef8c439e0 Zhang Rui         2008-01-17  971  	if (result)
-3f655ef8c439e0 Zhang Rui         2008-01-17  972  		goto free_memory;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  973  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  974  	refcount_set(&tz->thermal_check_count, 3);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  975  	mutex_init(&tz->thermal_check_lock);
-a59ffb2062df3a Aaron Lu          2014-03-04  976  	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
-a59ffb2062df3a Aaron Lu          2014-03-04  977  
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  978  	pr_info("%s [%s] (%ld C)\n", acpi_device_name(device),
-7f49a5cb94e68a Akinobu Mita      2020-01-30  979  		acpi_device_bid(device), deci_kelvin_to_celsius(tz->temperature));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  980  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  981  	result = acpi_dev_install_notify_handler(device, ACPI_DEVICE_NOTIFY,
-9d67b6acf1358b Michal Wilczynski 2023-07-03 @982  						 acpi_thermal_notify);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  983  	if (result)
-9d67b6acf1358b Michal Wilczynski 2023-07-03  984  		goto flush_wq;
-9d67b6acf1358b Michal Wilczynski 2023-07-03  985  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  986  	return 0;
-9d67b6acf1358b Michal Wilczynski 2023-07-03  987  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  988  flush_wq:
-9d67b6acf1358b Michal Wilczynski 2023-07-03  989  	flush_workqueue(acpi_thermal_pm_queue);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  990  	acpi_thermal_unregister_thermal_zone(tz);
-3f655ef8c439e0 Zhang Rui         2008-01-17  991  free_memory:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  992  	kfree(tz);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  993  
-d550d98d331737 Patrick Mochel    2006-06-27  994  	return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  995  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  996  
-
-:::::: The code at line 817 was first introduced by commit
-:::::: 9d67b6acf1358b67a6de3302dc9c344a7cab4807 ACPI: thermal: Install Notify() handler directly
-
-:::::: TO: Michal Wilczynski <michal.wilczynski@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
