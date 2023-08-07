@@ -1,125 +1,89 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AB310781
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 13:07:59 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fe0fe622c3so7039771e87.2
-        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 06:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691413677; x=1692018477;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/4R25p4daYUTehiyP/H6NfDF6hC+5JyB6EXsqzz6/k=;
-        b=CZsy0pok8t9/vlnLGm4O8VdNxEk0CcQX2MtFvzA2zSKcr8mMAe0DHTmVORe3TDmzNw
-         NlF98o2pOwjM3gbhA2QBbnDzxhJUiV/U14l+nq8StfHXCTZfVHlYP9ZlKqXusZ0MlNLC
-         SK3ueVaMMD7GEHVsMwmSnVoS7V8McfsYWRjgqBM+Dqysuzn0htMOI8pLZIeMOL9V8kOk
-         GfsDu5bZ2tVfFVCrEahlI24fLYcd2yhZRD9SE6+P+EWGV2iJoZJ7auhrzdCqn5PTf3VO
-         EflwubvyoVGschLEAI4Xekv7e/Ols84VsR0+dEphPPzqt92Kz0IAjzB3qzrSudUbP8jb
-         92KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691413677; x=1692018477;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y/4R25p4daYUTehiyP/H6NfDF6hC+5JyB6EXsqzz6/k=;
-        b=hTWkL3tD7fQ8Hg8co5u7dywbldXT6nDIbxwVwl5Fpfi3ZU2ZReZiXnQRaSOXZg84er
-         CwfR4crrct9otM0oH1rjOVmyxksqc8mVLwIJizZ/iSPuJUtJSYmLC6dfO74pCaKxlB1f
-         jD2MfJmDMmCNmB49eBCgG8Mph2oN3ab41VM9Ke/GyMiGQ7OAryYgvU1vQOTq4MdyDBZd
-         DHUUtiWcoGly26UTkcoWkzSq39EPawdraWstmW23azdDDDnTMEAZslIqbgn+BhoyOV6g
-         mGzHB4JUwNu+iepbK7cTdqtwPX7RoIeQlMieFaXIB4fnl8iOQdayPjmUH9rsJ0rsIaVm
-         L2lA==
-X-Gm-Message-State: AOJu0Yyv7A7wgwfzG2hgT85gAed3LXA2mrC5ZxVIbNZhNGW2XT8nYAGx
-	Ri1CVPXCaO8o4UfNeRIeIXpC/NqQDvwCADnQWdrKmQ==
-X-Google-Smtp-Source: AGHT+IG88guCru7RMnods2FuhCiVzsW89iZtW1ovHWdm8V/bf9L2PO5Zpf2azd4F+0e536gG22KOf2XlazGJw24fQoo=
-X-Received: by 2002:a05:6512:358b:b0:4fd:d4b4:faba with SMTP id
- m11-20020a056512358b00b004fdd4b4fabamr5211620lfr.51.1691413677214; Mon, 07
- Aug 2023 06:07:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBB4DDBA;
+	Mon,  7 Aug 2023 15:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=zOz2Sl6sETEspUjEfHGN0Doq9IKMqDh9com1ZKQ2ccQ=; b=L84dIEOGbchqXHanFmF61ALhon
+	HTWLrRNFiG+i4OH+sZd6IzaTjVs+X08wTRaG4WbHVcPFUkStJ0VR4FmmWq3yvmQrDyiDSu7t8tALr
+	exouGMBNLEgZ/RkcFRxuAgG0xD3zMAPNH33IuJHyyZ1AMUkM74PWftDLKPgQJdBaWtARbr/k+jncm
+	61WcqynycYOSanAel3SSyem+JxNGHNErJu5tPC6tLnrhAH0AtnGZ3OVSTZyRM/ZqW7pFALUCczdMN
+	TLr6fnqW213OqECH5Z8FjGXOEYmfuFb0j+yJKe+QdQRho8yrtPhLfOk5fjTrtp5WfbXpmuwO669i4
+	EP0Y5+zA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1qT1oI-003w69-37;
+	Mon, 07 Aug 2023 15:06:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B7E7300473;
+	Mon,  7 Aug 2023 17:06:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4840C2028F056; Mon,  7 Aug 2023 17:06:17 +0200 (CEST)
+Date: Mon, 7 Aug 2023 17:06:17 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] compiler_types: Introduce the Clang
+ __preserve_most function attribute
+Message-ID: <20230807150617.GB569857@hirez.programming.kicks-ass.net>
+References: <20230804090621.400-1-elver@google.com>
+ <87il9rgjvw.fsf@oldenburg.str.redhat.com>
+ <CANpmjNN4h2+i3LUG__GHha849PZ3jK=mBoFQWpSz4jffXB4wrw@mail.gmail.com>
+ <87pm3zf2qi.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230804090621.400-1-elver@google.com> <87il9rgjvw.fsf@oldenburg.str.redhat.com>
- <CANpmjNN4h2+i3LUG__GHha849PZ3jK=mBoFQWpSz4jffXB4wrw@mail.gmail.com> <87pm3zf2qi.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <87pm3zf2qi.fsf@oldenburg.str.redhat.com>
-From: Marco Elver <elver@google.com>
-Date: Mon, 7 Aug 2023 15:07:20 +0200
-Message-ID: <CANpmjNMoxZYZQNyZcnci_rC6d6X4WKpS+fX9goaBdGCJFPjUNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] compiler_types: Introduce the Clang
- __preserve_most function attribute
-To: Florian Weimer <fweimer@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Kees Cook <keescook@chromium.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Peter Zijlstra <peterz@infradead.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Dmitry Vyukov <dvyukov@google.com>, Alexander Potapenko <glider@google.com>, kasan-dev@googlegroups.com, 
-	linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 7 Aug 2023 at 14:37, Florian Weimer <fweimer@redhat.com> wrote:
->
-> * Marco Elver:
->
-> > Good idea. I had already created
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110899, and we need
-> > better spec to proceed for GCC anyway.
->
-> Thanks for the reference.
->
-> >> Doesn't this change impact the kernel module ABI?
-> >>
-> >> I would really expect a check here
-> >>
-> >> > +#if __has_attribute(__preserve_most__)
-> >> > +# define __preserve_most notrace __attribute__((__preserve_most__))
-> >> > +#else
-> >> > +# define __preserve_most
-> >> > +#endif
-> >>
-> >> that this is not a compilation for a module.  Otherwise modules built
-> >> with a compiler with __preserve_most__ attribute support are
-> >> incompatible with kernels built with a compiler without that attribute.
-> >
-> > That's true, but is it a real problem? Isn't it known that trying to
-> > make kernel modules built for a kernel with a different config (incl.
-> > compiler) is not guaranteed to work? See IBT, CFI schemes, kernel
-> > sanitizers, etc?
-> >
-> > If we were to start trying to introduce some kind of minimal kernel to
-> > module ABI so that modules and kernels built with different toolchains
-> > keep working together, we'd need a mechanism to guarantee this minimal
-> > ABI or prohibit incompatible modules and kernels somehow. Is there a
-> > precedence for this somewhere?
->
+On Mon, Aug 07, 2023 at 02:36:53PM +0200, Florian Weimer wrote:
+
 > I think the GCC vs Clang thing is expected to work today, isn't it?
-
-I, personally, wouldn't bet on it. It very much depends on the kernel
-config used.
-
 > Using the Clang-based BPF tools with a GCC-compiled kernel requires a
 > matching ABI.
 
-BPF is a different story altogether, and falls more into the category
-of user space to kernel ABI, which the kernel has strong guarantees
-on.
+Nope, all bets are off. There is no module ABI, in the widest possible
+sense.
 
-> The other things you listed result in fairly obvious breakage, sometimes
-> even module loading failures.  Unconditional crashes are possible as
-> well.  With __preserve_most__, the issues are much more subtle and may
-> only appear for some kernel/module compielr combinations and
-> optimization settings.  The impact of incorrectly clobbered registers
-> tends to be like that.
+There's all sorts of subtle breakage, I don't remember the exact
+details, but IIRC building the kernel with a compiler that has
+asm-goto-output and modules with a compiler that doesn't have it gets
+you fireworks.
 
-One way around this would be to make the availability of the attribute
-a Kconfig variable. Then externally compiled kernel modules should do
-the right thing, since they ought to use the right .config when being
-built.
+We absolutely do even bother tracking any of this.
 
-I can make that change for v3.
+There's also things like GCC plugins, they can randomly (literally in
+the case of struct randomization) change things around that isn't
+compatible with what the other compiler does -- or perhaps even a later
+version of the same compiler.
+
+
