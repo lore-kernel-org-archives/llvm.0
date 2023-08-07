@@ -1,65 +1,86 @@
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A87D17736
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 22:09:47 +0000 (UTC)
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-6bc9d79cbf6so8998264a34.1
-        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 15:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691446186; x=1692050986;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IbpbMWxtwQHfKpcdmTM26gLkMYaV2V50D6axm5j5Juw=;
-        b=SaLCkNGsZThne8MKII46Y/LbHU1Z/Llrk3fkZ3OboFdeQRQ91QkisLwHvbpH+cfkTp
-         MhriTS9fc4b+xJT/57+W9qoJNSdAoBBfJdY8o0lNGIwJ6z0XFVmzmSWV6fBDel30oF8q
-         Qcn6JtxG+i2ti0gZDeZrEtUo8SusN9ZeGoHtwitsM7yH3b4O2DHgs+pC2PGqRy4HogVt
-         Q3MpFc+M/EYl1CVcwW5mIUhCUGh76g4F7YOw62HVHoin3t/V9SR0UUtJqunzqzkwkT17
-         i8En6usQxfDU/lCvLLYn57/PLO2fYcvQoqQkcgRBRtzYwwfFYClKKEK27xMnvK9vYrns
-         pGbA==
-X-Gm-Message-State: AOJu0Yzw2FixkTnlJDR1gAKPL92oi3fZuA8N7hORzLxlAy1BxBRDgHs7
-	Rv3CcpGcTqhsIkY/BNiiYOWMyGEt+FPtm3jlVZf9/H0kIzvN
-X-Google-Smtp-Source: AGHT+IEduFwtdxrh+dLlyzbh5NbikP80BVHQF2BeYV5I9pFjtdMLw1auLZ7MNsAr6GJ8o7Xm4UJOf0qu7vj4mp34E3NWMDrQCIWQ
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB11217736;
+	Mon,  7 Aug 2023 22:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691446217; x=1722982217;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=cPb0mGwj+ggqjTlb47F7P/NZMdgKiMZAxZzveoSEGzc=;
+  b=K16tatp2l6lk9EiLttCe76HFZhrY4j3FQffbgOpkYfm24I+x7UMiBSUU
+   R9lQkqqD3sV2QtVU+28ACvayXVBQfLEwSjzMZr6jilqfaVqX44FTsMR+3
+   9B44IAogfbBBJVj0TLIR2jCqTHWgsNF/4U3rROVRWp7GZqYXJTqg1frl9
+   /hDEUf30PbN6uJbRWoKRDCzQj3/PIwA3Zy2pDoR2JP3l2nMaqNgraI+s0
+   +nXAJCoBgKnTBziH1Tczh/wyDLBIWVxSt+cIeRxpAKdyE7Z9ayd0Ja3ZJ
+   aKFxS+xowhn+1fulP9nA3fy0SKVrD03bFL5UNFEHv/YwO/EetMKkfdlvJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="360749111"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="360749111"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 15:10:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="977620641"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="977620641"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Aug 2023 15:10:16 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qT8QZ-0004uR-18;
+	Mon, 07 Aug 2023 22:10:15 +0000
+Date: Tue, 8 Aug 2023 06:09:34 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [iwi:peci-next 1/7] ld.lld: error: vmlinux.a(init/main.o):(function
+ trace_event_raw_event_initcall_level: .text+0x144): relocation R_RISCV_HI20
+ out of range: 527722 is not in [-524288, 524287]; references
+ 'trace_trigger_soft_disabled.______f'
+Message-ID: <202308080516.im85ji03-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6830:148c:b0:6b8:c631:5c5a with SMTP id
- s12-20020a056830148c00b006b8c6315c5amr12630266otq.4.1691446186238; Mon, 07
- Aug 2023 15:09:46 -0700 (PDT)
-Date: Mon, 07 Aug 2023 15:09:46 -0700
-In-Reply-To: <0000000000000e4cc105ff68937b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000166f9e06025c8139@google.com>
-Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
-From: syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, chris@chrisdown.name, linan122@huawei.com, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org, 
-	ndesaulniers@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot suspects this issue was fixed by commit:
+TO: Naresh Solanki <naresh.solanki@9elements.com>
+CC: Iwona Winiarska <iwona.winiarska@intel.com>
+CC: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-commit 125bfc7cd750e68c99f1d446e2c22abea08c237f
-Author: Li Nan <linan122@huawei.com>
-Date:   Fri Jun 9 09:43:20 2023 +0000
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwi/linux.git peci-next
+head:   d7c99890fe06a170c77af12b0c105babb3a47a04
+commit: 37dd6b9f5bb0081082349d808fb4ac07f76fbf97 [1/7] peci: cpu: Add Intel Sapphire Rapids support
+config: riscv-randconfig-r031-20230808 (https://download.01.org/0day-ci/archive/20230808/202308080516.im85ji03-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308080516.im85ji03-lkp@intel.com/reproduce)
 
-    md/raid10: fix the condition to call bio_end_io_acct()
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308080516.im85ji03-lkp@intel.com/
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15c26ba9a80000
-start commit:   a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f5e1158c5b2f83bb
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3705186451a87fd93b8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12518548a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124ccf70a80000
+All errors (new ones prefixed by >>):
 
-If the result looks correct, please mark the issue as fixed by replying with:
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_level: .text+0x144): relocation R_RISCV_HI20 out of range: 527722 is not in [-524288, 524287]; references 'trace_trigger_soft_disabled.______f'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_level: .text+0x164): relocation R_RISCV_HI20 out of range: 527722 is not in [-524288, 524287]; references 'trace_trigger_soft_disabled.______f.21'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_start: .text+0x240): relocation R_RISCV_HI20 out of range: 527722 is not in [-524288, 524287]; references 'trace_trigger_soft_disabled.______f'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_start: .text+0x260): relocation R_RISCV_HI20 out of range: 527722 is not in [-524288, 524287]; references 'trace_trigger_soft_disabled.______f.21'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
 
-#syz fix: md/raid10: fix the condition to call bio_end_io_acct()
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
