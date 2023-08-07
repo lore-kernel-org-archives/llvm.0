@@ -1,160 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAB7FC15
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9AFC433C8;
-	Mon,  7 Aug 2023 16:06:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691424397;
-	bh=ZwgSkM17mLAbzW5Agrgxi1QqjB4UKZiqVCCapuKRcgU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q4YcCyrqSQKiJo6sKcVZfs5eTvqXZUYiaEbopoWNhRgIP9lMIs0IQFjwvHijp3lFn
-	 B64UzMVnlW/LIq+NhbQnVl4dv7nbcRPI/FqM/c3t3qBylZ79H31uNwyS65yZuv0QCe
-	 T4entT1OIkt8hOL98qK40HCjRCuqESn7f9o9AGM9v6ieY+smya+S2QkgYWqKx3xEX7
-	 VNBHQvzvQInFTxRhGnuwvfZRYcHc7sGZyZ2h/LYa72cxWu7i+JFcUPkLHBxueRpaYu
-	 aO/Wl0y40KVNDcsF1F5L+OdxeEUMHX4244tdMwCEAq7flzqWbHg+nAkO+RI3auxluV
-	 Dxd9H3Tz9n7jA==
-Date: Mon, 7 Aug 2023 09:06:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Huang Rui <ray.huang@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jannik Glueckert <jannik.glueckert@gmail.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Linux LLVM Build Support <llvm@lists.linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: amd-pstate: fix global sysfs attribute type
-Message-ID: <20230807160635.GA3061@dev-arch.thelio-3990X>
-References: <20230807-amd-pstate-cfi-v1-1-0263daa13bc3@weissschuh.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C03220FE
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:15:24 +0000 (UTC)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-63cfe6e0c32so33174226d6.1
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691424924; x=1692029724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gBYooyeWK7k6BJIomcF3V8ANL7Caa0RySBNuNDEDGk4=;
+        b=11qzlmUGwi0zoRhNVQFSGqPgVXSOIJlZMoVTzN/0j2NyBTwaXma4OX4foNKLkGHP7g
+         3B4DH3ZF6ElSFg1Lhf87haPAfS47HG8RcaFqw1hyyjvEDbALyQWCk1rBUJXMy9MQsIWo
+         ii5L5aHrwJZzI9Os1QENa5TaKl8xbv2aMuwYs+yZZvYAO+attk7a/hvYeGbFlbbLtmLi
+         rGqWeIvJRND85m+PZR0ZfeKPDGb/MSfH804crSTP/Uh7BnaqW13tNQY6r0HOmz0HvDY1
+         QHA8nsojx80q7pDbPgWtjVSAm8L1KkBt+r5WtjjKY2y03dR66rfOAHR7fl+51/xRIpYi
+         p2Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691424924; x=1692029724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gBYooyeWK7k6BJIomcF3V8ANL7Caa0RySBNuNDEDGk4=;
+        b=PdcLrBRV//eNnkxTQMzXJ0ySVGruxFykZakf83pWdC3wUlhThz8usAZNQqkwBbAIxf
+         dELmYEoSQjFXK6ZH00SUzb99Js+M17hInwkuQSpZoYwwNL03XZTnFJ0JJs4TvY6nfbJG
+         4RUQtmosin82oEdak92hgLMsX6xoRpoa8l4hppirWk8AT1uBEg0VdBnZZbg8XlMRvzEM
+         xui4S48w79RW6ViLsAde2Jgqqw/DgNhMg5buAUeliwv7ebRtSuUGtkS8Zs2AkykKbOeN
+         n3Iyc+CvvUsqT+9cXGhrDAaF/2jyzXtNZHl/zHH9se+tEMxY6XmGabBc+yl3NA60p72w
+         wbCg==
+X-Gm-Message-State: AOJu0Yx6wWyixFC4xM73EmIz9eqdU1o6URiZV4qi2WDXOBpD3kjNXSy+
+	dERFujc9rbU6kVim6jmfJm6ctMUEhHedA3tyZ3YYvQ==
+X-Google-Smtp-Source: AGHT+IGJsPnES8PM+XJgKXF3Z501OznIjg6TcJH0IghWcT/mqUa+UKk+1ETVfctEFGNE2xojsO29Lyk8Zq0nbmlOhFA=
+X-Received: by 2002:a05:6214:3018:b0:63d:1aed:72ee with SMTP id
+ ke24-20020a056214301800b0063d1aed72eemr10531003qvb.64.1691424923690; Mon, 07
+ Aug 2023 09:15:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230807-amd-pstate-cfi-v1-1-0263daa13bc3@weissschuh.net>
+References: <c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com>
+ <2023080743-amendable-moonlit-15b7@gregkh> <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
+In-Reply-To: <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 7 Aug 2023 09:15:12 -0700
+Message-ID: <CAKwvOd=gJO93_eqUcR6VD8n+eqxL7-aG5D7AnAgG1ki1N1ms0g@mail.gmail.com>
+Subject: Re: Fwd: CFI violation when reading amd_pstate/status
+To: =?UTF-8?Q?Jannik_Gl=C3=BCckert?= <jannik.glueckert@gmail.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Huang Rui <ray.huang@amd.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux LLVM Build Support <llvm@lists.linux.dev>, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+On Sun, Aug 6, 2023 at 11:21=E2=80=AFPM Jannik Gl=C3=BCckert
+<jannik.glueckert@gmail.com> wrote:
+>
+> Hi Greg,
+>
+> our kernel uses the Fedora config and has a homeopathic patchset on
+> top of upstream - see
+> https://gitweb.gentoo.org/proj/linux-patches.git/tree/?h=3D6.4 except
+> the 50** patches.
+> Namely we don't touch cpufreq or pm.
+>
+> > Comm: cat Tainted: P
+>
+> I am not using any out of tree modules, the kernel switches to
+> Tainted: P on the first CFI violation.
 
-On Mon, Aug 07, 2023 at 08:37:45AM +0200, Thomas Weißschuh wrote:
-> In commit 3666062b87ec ("cpufreq: amd-pstate: move to use bus_get_dev_root()")
-> the "amd_pstate" attributes where moved from a dedicated kobject to the
-> cpu root kobject.
-> While the dedicated kobject expects to contain kobj_attributes the root
-> kobject needs device_attributes.
-> 
-> As the changed arguments are not used by the callbacks it works most of
-> the time.
-> However CFI will detect this issue:
-> 
-> [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show_status+0x0/0x70; expected type: 0x8651b1de)
-> ...
-> [ 4947.849409] Call Trace:
-> [ 4947.849410]  <TASK>
-> [ 4947.849411]  ? __warn+0xcf/0x1c0
-> [ 4947.849414]  ? dev_attr_show+0x24/0x60
-> [ 4947.849415]  ? report_cfi_failure+0x4e/0x60
-> [ 4947.849417]  ? handle_cfi_failure+0x14c/0x1d0
-> [ 4947.849419]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849420]  ? handle_bug+0x4f/0x90
-> [ 4947.849421]  ? exc_invalid_op+0x1a/0x60
-> [ 4947.849422]  ? asm_exc_invalid_op+0x1a/0x20
-> [ 4947.849424]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849425]  ? dev_attr_show+0x24/0x60
-> [ 4947.849426]  sysfs_kf_seq_show+0xa6/0x110
-> [ 4947.849433]  seq_read_iter+0x16c/0x4b0
-> [ 4947.849436]  vfs_read+0x272/0x2d0
-> [ 4947.849438]  ksys_read+0x72/0xe0
-> [ 4947.849439]  do_syscall_64+0x76/0xb0
-> [ 4947.849440]  ? do_user_addr_fault+0x252/0x650
-> [ 4947.849442]  ? exc_page_fault+0x7a/0x1b0
-> [ 4947.849443]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> 
-> Reported-by: Jannik Glückert <jannik.glueckert@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217765
-> Link: https://lore.kernel.org/lkml/c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com/
-> Fixes: 3666062b87ec ("cpufreq: amd-pstate: move to use bus_get_dev_root()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Thanks for the report.
+Let's track this in
+https://github.com/ClangBuiltLinux/linux/issues/1901
+(You can use the MAINTAINERS file to see issue trackers via the `B:`
+symbol used by various parts of the tree).
 
-Thanks a lot for the quick patch! Unfortunately, it seems like neither
-of my AMD machines support amd-pstate so I can't test this but it seems
-like the right fix to me.
+>
+> Regards
+> Jannik
+>
+> Am Mo., 7. Aug. 2023 um 08:03 Uhr schrieb Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>:
+> >
+> > On Mon, Aug 07, 2023 at 06:55:49AM +0700, Bagas Sanjaya wrote:
+> > > Hi,
+> > >
+> > > I notice a bug report on Bugzilla [1]. Quoting from it:
+> > >
+> > > > On kernel 6.4.7, with amd_pstate=3Dactive, with a Ryzen 7700X
+> > > > I get a Clang CFI violation when reading /sys/devices/system/cpu/am=
+d_pstate/status
+> > > >
+> > > > This is reproduceable with every read, I have only tried with amd_p=
+state=3Dactive
+> > > >
+> > > > With the following CFI and Clang configs, Clang 16.0.6
+> > > > CONFIG_CFI_CLANG=3Dy
+> > > > CONFIG_CFI_PERMISSIVE=3Dy
+> > > > CONFIG_LTO_CLANG=3Dy
+> > > > CONFIG_LTO_CLANG_THIN=3Dy
+> > > >
+> > > > Below is the full call trace, let me know if you need a trace with =
+debug info.
+> > > >
+> > > > [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show=
+_status+0x0/0x70; expected type: 0x8651b1de)
+> > > > [ 4947.849358] WARNING: CPU: 2 PID: 16519 at dev_attr_show+0x24/0x6=
+0
+> > > > [ 4947.849360] Modules linked in: binfmt_misc nf_conntrack_netbios_=
+ns nf_conntrack_broadcast wireguard curve25519_x86_64 libcurve25519_generic=
+ ip6_udp_tunnel udp_tunnel snd_seq_dummy snd_hrtimer snd_seq rfcomm joydev =
+uhid xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp nf_connt=
+rack_tftp nft_fib_inet nft_fib_ipv6 nft_fib_ipv4 nft_fib nft_reject_inet nf=
+_reject_ipv6 nf_reject_ipv4 nft_reject nft_ct nft_chain_nat bridge 8021q mr=
+p garp stp llc nf_tables ebtable_nat ebtable_broute ip6table_nat ip6table_m=
+angle ip6table_raw ip6table_security iptable_nat nf_nat nf_conntrack nf_def=
+rag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_raw iptable_security ip_set =
+nfnetlink ebtable_filter ebtables ip6table_filter ip6_tables iptable_filter=
+ ip_tables bnep vfat fat amdgpu snd_hda_codec_realtek snd_hda_codec_generic=
+ snd_hda_codec_hdmi snd_hda_intel mt7921e vfio_pci intel_rapl_msr mt7921_co=
+mmon intel_rapl_common mt76_connac_lib edac_mce_amd vfio_pci_core mt76 vfio=
+_iommu_type1 vfio kvm_amd iommufd iommu_v2 snd_usb_audio
+> > > > [ 4947.849379]  snd_intel_dspcfg gpu_sched snd_intel_sdw_acpi mac80=
+211 drm_suballoc_helper snd_usbmidi_lib i2c_algo_bit drm_ttm_helper snd_hda=
+_codec btusb ttm btrtl libarc4 btmtk snd_hda_core snd_rawmidi kvm snd_seq_d=
+evice drm_display_helper btintel snd_hwdep mc btbcm irqbypass cfg80211 cec =
+snd_pcm asus_nb_wmi bluetooth eeepc_wmi snd_timer asus_wmi drm_kms_helper l=
+edtrig_audio sparse_keymap snd gpio_amdpt platform_profile gpio_generic drm=
+_buddy rfkill soundcore rapl i2c_piix4 wmi_bmof pcspkr k10temp lm92 nct6775=
+_core hwmon_vid fuse loop dm_crypt crct10dif_pclmul polyval_clmulni polyval=
+_generic ghash_clmulni_intel nvme sp5100_tco ccp r8169 nvme_core nvme_commo=
+n video wmi sunrpc
+> > > > [ 4947.849398] CPU: 2 PID: 16519 Comm: cat Tainted: P              =
+     6.4.7-gentoo-dist-hardened #1
+> >
+> > Can't do much about this kernel, we don't know what's really in it,
+> > sorry.
+> >
+> > greg k-h
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
-> Note:
-> 
-> This was not tested with CFI as I don't have the toolchain available.
 
-For the record, I have LLVM toolchains on kernel.org that should be
-relatively standalone enough to have them somewhere on your hard drive
-then use the LLVM=<prefix>/bin/ syntax that has been supported since
-5.18:
-
-https://mirrors.edge.kernel.org/pub/tools/llvm/
-
-> Jannik, could you give it a spin?
-> ---
->  drivers/cpufreq/amd-pstate.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 81fba0dcbee9..9a1e194d5cf8 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1012,8 +1012,8 @@ static int amd_pstate_update_status(const char *buf, size_t size)
->  	return 0;
->  }
->  
-> -static ssize_t show_status(struct kobject *kobj,
-> -			   struct kobj_attribute *attr, char *buf)
-> +static ssize_t status_show(struct device *dev,
-> +			   struct device_attribute *attr, char *buf)
->  {
->  	ssize_t ret;
->  
-> @@ -1024,7 +1024,7 @@ static ssize_t show_status(struct kobject *kobj,
->  	return ret;
->  }
->  
-> -static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
-> +static ssize_t status_store(struct device *a, struct device_attribute *b,
->  			    const char *buf, size_t count)
->  {
->  	char *p = memchr(buf, '\n', count);
-> @@ -1043,7 +1043,7 @@ cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
->  cpufreq_freq_attr_ro(amd_pstate_highest_perf);
->  cpufreq_freq_attr_rw(energy_performance_preference);
->  cpufreq_freq_attr_ro(energy_performance_available_preferences);
-> -define_one_global_rw(status);
-> +static DEVICE_ATTR_RW(status);
->  
->  static struct freq_attr *amd_pstate_attr[] = {
->  	&amd_pstate_max_freq,
-> @@ -1062,7 +1062,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
->  };
->  
->  static struct attribute *pstate_global_attributes[] = {
-> -	&status.attr,
-> +	&dev_attr_status.attr,
->  	NULL
->  };
->  
-> 
-> ---
-> base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
-> change-id: 20230807-amd-pstate-cfi-8302498c54f5
-> 
-> Best regards,
-> -- 
-> Thomas Weißschuh <linux@weissschuh.net>
-> 
+--=20
+Thanks,
+~Nick Desaulniers
