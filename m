@@ -1,106 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA03BA40;
-	Mon,  7 Aug 2023 15:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68116C433C7;
-	Mon,  7 Aug 2023 15:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691422630;
-	bh=Tv6VzIDd4SIlArHBmIHp9VMuLmiykxV8wOzCt+lQsFg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pYDj8uco4GtRbiwzZQvDQuZqaghPK/L/nkZ2pZfUDnIp7eOfWyTy/bnDqck2DL0gE
-	 8/J8KohuKXxPgOci7K/A8KXF6nnLlgrH1pHUpNk8WGaZtjV1crio+MHCk8fjkQBjPb
-	 CY1iec/HzpPhW3xRDtkKQ+TBmSba1u33OsXGvvv1NKSpJnDCZlzFSg+Ukjgldo+khW
-	 hkBW83rtyKiJj5XWDeHSlFTKBJZH9vPpe7hUyAnitqiN0abMEoeBCyXVJwvI15Mck7
-	 IUf3QHQ/Zl76gPtJEiy8nLKVqbBbA+2zPP6WvhNW+FOwHpha5VtoxoPOMx7osRLVXH
-	 uIYxVPT/mrtUg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 07 Aug 2023 08:36:28 -0700
-Subject: [PATCH v2] lib: test_scanf: Add explicit type cast to result
- initialization in test_number_prefix()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127F6FC10
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 15:56:43 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-63cfd6e3835so26495866d6.3
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 08:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691423803; x=1692028603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4/3HCjX2FDd6NwWI7Dfn7wM+IO0cTfOjTBaP0ZWhR0M=;
+        b=I1KtwYq4X9vF8dUm+SAYay5Osh496KIl8EIso0fdsHP6AuSjHU/0bwM0PCABqlhzXP
+         Y5bIJbEowf/pc1Yae2myn0Y2m4fnl2Afx/gzEsZ5KOBfIgomZuEBj4r0bN5WYsopRJ+6
+         YY0qTlRtCrdJ36hp71KMjmnUHyVCoYUE7LJunJ02bO+hwe8W+xNIclOjcrFUskUNK9LR
+         8syzk+aviPXbxQmmAnvyDKcn03pXe3PJ9JqZX5X9LyPnPOCD69FiPKj7ZxxJ2zITHklH
+         vhKD9sT3f7KjYfnx+knNpFj0qsm0J+dFMlRC9AoEJ8RNc6cJVcRWBRwkQbDwjCIE/qkf
+         LzyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691423803; x=1692028603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4/3HCjX2FDd6NwWI7Dfn7wM+IO0cTfOjTBaP0ZWhR0M=;
+        b=dfR94zvdbtT23nEa6Vz303ebdvxrjQkfoJ6S85f0ela8/cVNVHBFdNUiynP1Rgp8pb
+         YgvfqC7zHvsPonO/6cbA0onB/YIHqJalNWUXbC+eb+AayqGo62ttDGVNfKUhZo/qZ1U6
+         aGQxNlj4epyUp5b4kHbcsZCJpKuNMuQeKjJjOodcRSjQ3fQBxBo1JuWhh/MiYjGzm+SY
+         lUXE8eOlDiRSguvO7Gv744IGzYmiceYxvClRJGxZkKJ8sJ20i0f8kAJ3EPcREo2jwpQc
+         SRhv/GfMHdOQVTHqrn+a5Zqbzn2qPPfTS9CTZQD9ZuTuxP94oQPvA0stu2B1asx5D1g1
+         oToQ==
+X-Gm-Message-State: AOJu0YxgaIRdfD9/uJ2DjW0lEE6aMhbQF3uNLEgkDSnyk3BokuEDGezF
+	EoVGPZQd09HS8t3emLQ6RxGIYcucvJnTqIynCzBe8A==
+X-Google-Smtp-Source: AGHT+IGlTi0iRwJC5cwOfwrT4Jmzbh8fldheRHVXoIZi9LPsr5+w6AnDdx9fHDpY4Q6JYsbgGCWC9X9YJ1lew0ivQg8=
+X-Received: by 2002:a0c:cb8b:0:b0:63d:3abe:162b with SMTP id
+ p11-20020a0ccb8b000000b0063d3abe162bmr8702323qvk.38.1691423802650; Mon, 07
+ Aug 2023 08:56:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230807-test_scanf-wconstant-conversion-v2-1-839ca39083e1@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHsP0WQC/42NXQrCMBCEr1L22ZU2rdT65D2kSH42bVAS2YSol
- N7dtCfwbb6B+WaBSOwowqVagCm76IIvIA4V6Fn6idCZwiBq0dbnusVEMd2jlt7iWwcfk/QJS8j
- E2xbN0JNVtlXqZKBYXkzWffaH21h4djEF/u6Hudna/925wQb7zshh6AwZpa8PYk/PY+AJxnVdf
- 2Pr4zvPAAAA
-To: pmladek@suse.com, rostedt@goodmis.org
-Cc: senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com, 
- linux@rasmusvillemoes.dk, ndesaulniers@google.com, trix@redhat.com, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2585; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Tv6VzIDd4SIlArHBmIHp9VMuLmiykxV8wOzCt+lQsFg=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkX+ZfeXZ6ZtHxLf+QKvwd7Tp7avsChcfJjk+TXPnrKr
- //+fHzwV0cpC4MYB4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYiMJORoav2WeXuqfc1LXM
- uqpxcbGBc36moElHXIvRPN9Z00otxX0Y/kpIswrm9WVFdX77Iffx5Yzku3Ou3OPevTddYY1pq5N
- AOA8A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20230806083021.2243574-1-kernel@xen0n.name> <CAAhV-H4ypd-+z-KbeGM6C_mNk0aggk2yhdDik-XfPNWqsO=j=A@mail.gmail.com>
+ <d591bfef-9146-abf6-04d0-96600ebb7a15@xen0n.name> <254baed00504ef3cec36e58540a3fdcca346a407.camel@xry111.site>
+In-Reply-To: <254baed00504ef3cec36e58540a3fdcca346a407.camel@xry111.site>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 7 Aug 2023 08:56:31 -0700
+Message-ID: <CAKwvOdkJy12sZiqPyoZWb2-m4r5zywjo-cHkHGBu9XksU-RRxg@mail.gmail.com>
+Subject: Re: [PATCH v2] LoongArch: Replace -ffreestanding with finer-grained -fno-builtin's
+To: Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A recent change in clang allows it to consider more expressions as
-compile time constants, which causes it to point out an implicit
-conversion in the scanf tests:
+On Mon, Aug 7, 2023 at 12:17=E2=80=AFAM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
+>
+> On Sun, 2023-08-06 at 18:31 +0800, WANG Xuerui wrote:
+> > > > +cflags-y +=3D -fno-builtin-memcpy -fno-builtin-memmove -fno-builti=
+n-memset
+>
+> Can we only apply them for GCC <=3D 13?  I think with GCC 14 the built-in
+> implementations are quite reasonable (well, maybe it's some human ego
+> because I wrote them :).
 
-  lib/test_scanf.c:661:2: warning: implicit conversion from 'int' to 'unsigned char' changes value from -168 to 88 [-Wconstant-conversion]
-    661 |         test_number_prefix(unsigned char,       "0xA7", "%2hhx%hhx", 0, 0xa7, 2, check_uchar);
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  lib/test_scanf.c:609:29: note: expanded from macro 'test_number_prefix'
-    609 |         T result[2] = {~expect[0], ~expect[1]};                                 \
-        |                       ~            ^~~~~~~~~~
-  1 warning generated.
+Yes, and because only GCC-13 and older users should pay that penalty.
 
-The result of the bitwise negation is the type of the operand after
-going through the integer promotion rules, so this truncation is
-expected but harmless, as the initial values in the result array get
-overwritten by _test() anyways. Add an explicit cast to the expected
-type in test_number_prefix() to silence the warning. There is no
-functional change, as all the tests still pass with GCC 13.1.0 and clang
-18.0.0.
-
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1899
-Link: https://github.com/llvm/llvm-project/commit/610ec954e1f81c0e8fcadedcd25afe643f5a094e
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Add spaces in initializer to match result (Andy)
-- Add 'Cc: stable', as builds with CONFIG_WERROR will be broken, such as
-  allmodconfig
-- Link to v1: https://lore.kernel.org/r/20230803-test_scanf-wconstant-conversion-v1-1-74da994dedbc@kernel.org
----
- lib/test_scanf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/test_scanf.c b/lib/test_scanf.c
-index b620cf7de503..a2707af2951a 100644
---- a/lib/test_scanf.c
-+++ b/lib/test_scanf.c
-@@ -606,7 +606,7 @@ static void __init numbers_slice(void)
- #define test_number_prefix(T, str, scan_fmt, expect0, expect1, n_args, fn)	\
- do {										\
- 	const T expect[2] = { expect0, expect1 };				\
--	T result[2] = {~expect[0], ~expect[1]};					\
-+	T result[2] = { (T)~expect[0], (T)~expect[1] };				\
- 										\
- 	_test(fn, &expect, str, scan_fmt, n_args, &result[0], &result[1]);	\
- } while (0)
-
----
-base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
-change-id: 20230803-test_scanf-wconstant-conversion-d97efbf3bb5d
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+--=20
+Thanks,
+~Nick Desaulniers
