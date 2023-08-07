@@ -1,97 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5775C11CBE
-	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:55:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD06C433C8;
-	Mon,  7 Aug 2023 16:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691427328;
-	bh=WU3AeiqSRDkKCekepGZR4kr95/r5A21Ia8054t6T2ec=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y3NQqGi+B4y/KPTi4YTTMJpZixaDzDrB70X+f+DCDBOWJl6H2ZNBdO0n1AeyWxgJi
-	 4AjZffAdBLZH+6iv1WA/yETU8ipTXzrSFmHtx5EvwUx8ONAdHXcTIjd+RILAD+WqVd
-	 kvNWewKH0h3l0O03+5UeMobT9dBL3JSHQscCN4xds06zOpnQJSLS6Y0tIH7HR9md5P
-	 N7mjgGppNygMOFSCZCduREpb5r7JY78NSidBD6lJN3n3OktnlcwWhXQ/y6WwBKMZUO
-	 QIsvJ3sFcttsVrQc2mj2XvoR2Hoz+fOeTJuxO2x+iyP5itbuN5ksXEjy2FD8b2cxe8
-	 eYrCsM4skQHJA==
-Date: Mon, 7 Aug 2023 09:55:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] Makefile.extrawarn: enable
- -Wmissing-variable-declarations for W=1
-Message-ID: <20230807165526.GA2744968@dev-arch.thelio-3990X>
-References: <20230807-missing_proto-v1-1-7f566b7ba5ca@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F0811CB4
+	for <llvm@lists.linux.dev>; Mon,  7 Aug 2023 16:57:46 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-58419550c3aso41095727b3.0
+        for <llvm@lists.linux.dev>; Mon, 07 Aug 2023 09:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691427465; x=1692032265;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OhiUftOb2o56hkUQV+ZtLncPSlYoXMv0SECjTg7Jt94=;
+        b=TljiyfJW5u5nsEuK9l9Jz1vIL1gWGBr6Px3os1xU1f83SmzDxB6bEquswGJ5SdzB7v
+         jYEdyMj8F83vDjsQxr6QZ5tdLSAvKiPajCYuAg/Wsqv5cfqSMocJ0XSZ6RrS1w4tOB7/
+         Q5TCsCBjULogwwcWjYttdXUVWIXaQrYWQppoeX0kKnOU6HSStOjT2SHLjYxJTV3PPjkK
+         2E8d44Q//5X3h9RwfRfMVXkQFPC3HnwZ03BQZcMO2Pzlet4vtQLODjFWf5VVKziJsrZT
+         d+fifZDim0wavKDzpLRoTj2RFojONIoJbU5hjQpM0U9PIDYm47AeBOWrDq+wNaL8T41x
+         t2AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691427465; x=1692032265;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OhiUftOb2o56hkUQV+ZtLncPSlYoXMv0SECjTg7Jt94=;
+        b=RBZMomawSZhv1WDvjUM/pOPL/tV0ullWrsJblvrKa6cl4Ve4IFnQJb96QpjFSzOTf4
+         DRESbnPCFbox1BikM0UNBIsqeXkfsPyoASguBYUuBnwCQnUA15JjhjkP0/5ZBeyGzXI6
+         eImUdmkELdvBwGs9zqm5dCIFe2BSL2NyIm0/z7vW27F0+NrGLME//EvFX7kYmKRi2M3C
+         WtO4+4r4QbXYrybYqVKLWE51rQpo59aDqD9TKBpgjQI3w++LIl+hCylfJixARXJAbvTS
+         1x4Ehj739/b1/m9QRikB2pLOolDq3Dj0YlVZtn3tEuHVfEtrNVv19ydJh2BtlnztyKP4
+         hh9g==
+X-Gm-Message-State: AOJu0YzIaZvwlPouosudy/JjUVXDyJod8kErD1zUNbUXMb2xPGZrYgH0
+	4cZWIGR/sTPy5u6uiLp8cTF7vxCyrT8cgA5xJJ0=
+X-Google-Smtp-Source: AGHT+IFWkQ0pLgPAKWFDCriEIiAIO+33WqMKSSXVJL3oPrcmXL+Bseok4OpPoN4rRXf53fZG+IVdJph/ei2vIJld6Po=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:4746:957d:1a28:5104])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:a84a:0:b0:570:7d9b:9b16 with SMTP
+ id f71-20020a81a84a000000b005707d9b9b16mr69838ywh.2.1691427465219; Mon, 07
+ Aug 2023 09:57:45 -0700 (PDT)
+Date: Mon, 07 Aug 2023 09:57:43 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807-missing_proto-v1-1-7f566b7ba5ca@google.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAIYi0WQC/3XMQQrCMBCF4auUWRtJa5OoK+8hRZI4TQdspySlK
+ CV3N3bv8n/wvg0SRsIE12qDiCsl4qlEc6jAD3YKKOhZGhrZnORZGjFSSjSFxxx5YSG9u0j0ulW th/KZI/b03r17V3qgtHD87Pxa/9Z/0lqLWpheae2Ms8rbW2AOLzx6HqHLOX8B31sGXKsAAAA=
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691427463; l=1707;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=/3ebNjUMiHT+ZDd7Ua2EPlNM8kr/3S8xi33sTpmWDMc=; b=WZkUghyVlQr8CofcN5Yr2Itll/XZeeEa+w7dIYsN21Mosf0pZvOZYSBDP3MaFJvJfwA7mp+on
+ FTDDnEp75lPAqMse60QXcUKBJ6gadYonZb8YYFKpcH4AmjHHDIz3fC7
+X-Mailer: b4 0.12.3
+Message-ID: <20230807-missing_proto-v2-1-3ae2e188bb0c@google.com>
+Subject: [PATCH v2] Makefile.extrawarn: enable -Wmissing-variable-declarations
+ for W=1
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Aug 07, 2023 at 09:50:32AM -0700, Nick Desaulniers wrote:
-> I noticed Tom was sending patches where smatch was recommending
-> annotating functions as static when no previous declaration existed.
-> Surely the compiler could make such recommendations as well, I thought.
-> 
-> Looks like -Wmissing-variable-declarations can make such
-> recommendations.
-> 
-> GCC just added support for this warning (gcc 14.1.0 will ship with
-> support), and all versions of clang relevant to building the kernel
-> support this flag.
-> 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+I noticed Tom was sending patches where smatch was recommending
+annotating functions as static when no previous declaration existed.
+Surely the compiler could make such recommendations as well, I thought.
 
-Any idea how many instances of this there are? At least x86_64 defconfig
-fails immediately with:
+Looks like -Wmissing-variable-declarations can make such
+recommendations.
 
-  In file included from scripts/mod/devicetable-offsets.c:3:
-  In file included from include/linux/mod_devicetable.h:14:
-  In file included from include/linux/uuid.h:11:
-  In file included from include/linux/string.h:20:
-  In file included from arch/x86/include/asm/string.h:5:
-  In file included from arch/x86/include/asm/string_64.h:6:
-  In file included from include/linux/jump_label.h:112:
-  In file included from arch/x86/include/asm/jump_label.h:7:
-  arch/x86/include/asm/asm.h:208:24: error: no previous extern declaration for non-static variable 'current_stack_pointer' [-Werror,-Wmissing-variable-declarations]
-    208 | register unsigned long current_stack_pointer asm(_ASM_SP);
-        |                        ^
-  arch/x86/include/asm/asm.h:208:10: note: declare 'static' if the variable is not intended to be used outside of this translation unit
-    208 | register unsigned long current_stack_pointer asm(_ASM_SP);
-        |          ^
-  1 error generated.
+GCC just added support for this warning (gcc 14.1.0 will ship with
+support), and all versions of clang relevant to building the kernel
+support this flag.
 
-> ---
->  scripts/Makefile.extrawarn | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 40cd13eca82e..617739eb84e2 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -32,6 +32,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-but-set-variable)
->  KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
->  KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
->  KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
-> +KBUILD_CFLAGS += $(call cc-option, -Wmissing-varibale-declarations)
-                                                ^ variable
->  # The following turn off the warnings enabled by -Wextra
->  KBUILD_CFLAGS += -Wno-missing-field-initializers
->  KBUILD_CFLAGS += -Wno-sign-compare
-> 
-> ---
-> base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
-> change-id: 20230807-missing_proto-0cb90ec6454c
-> 
-> Best regards,
-> -- 
-> Nick Desaulniers <ndesaulniers@google.com>
-> 
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Changes in v2:
+- Fix typo in warning flag name. I thought I tested W=1 but I was
+  looking at -Wmissing-declaration, not the expected
+  -Wmissing-variable-declaration. Actually verified v2.
+- Link to v1: https://lore.kernel.org/r/20230807-missing_proto-v1-1-7f566b7ba5ca@google.com
+---
+ scripts/Makefile.extrawarn | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 40cd13eca82e..18ce75c5c384 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -32,6 +32,7 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-but-set-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
+ KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
+ KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
++KBUILD_CFLAGS += $(call cc-option, -Wmissing-variable-declarations)
+ # The following turn off the warnings enabled by -Wextra
+ KBUILD_CFLAGS += -Wno-missing-field-initializers
+ KBUILD_CFLAGS += -Wno-sign-compare
+
+---
+base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
+change-id: 20230807-missing_proto-0cb90ec6454c
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
