@@ -1,187 +1,291 @@
-Received: from mx1.mythic-beasts.com (mx1.mythic-beasts.com [46.235.224.141])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9837C15ACD;
-	Mon,  7 Aug 2023 19:53:03 +0000 (UTC)
-Received: by mailhub-cam-d.mythic-beasts.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <jic23@jic23.retrosnub.co.uk>)
-	id 1qT603-006bGM-IH; Mon, 07 Aug 2023 20:34:44 +0100
-Date: Mon, 7 Aug 2023 20:34:21 +0100
-From: Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To: kernel test robot <lkp@intel.com>
-Cc: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>
-Subject: Re: drivers/iio/light/opt4001.c:215:9: error: call to
- '__compiletime_assert_355' declared with 'error' attribute: FIELD_PREP:
- value too large for the field
-Message-ID: <20230807203421.4b62f931@jic23-huawei>
-In-Reply-To: <202308061902.0gVz6bSe-lkp@intel.com>
-References: <202308061902.0gVz6bSe-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C474174DF;
+	Mon,  7 Aug 2023 20:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691439441; x=1722975441;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v77pNGE+feeDfb5yXyNk7i3bSHrdcpf1hNLzQC6GlE8=;
+  b=FZTxHBljcZAvd9fYjwGQiNI617Dv06t3OQ+uRm/S8xB/W6xk5Ez2i5kL
+   Am6FEOoYeG6ew+KUkfldxfbopP59S85YOe+pdbKwK6mcJqDFiH0572h54
+   Y32VnZxz8aEF24J2on3dcN9PK6OQY6l3Paq0H5JuH4bYM6smKyVgM8XLF
+   XD1zU0ClGJmgzjxXfzPoJLZmG0y75QZurOqyZYmPGkKj2OFS8eqWVmZSD
+   nj/0x7+f0hf/EvPIQ4LCI+oyJgWKI77MzzVHEHYeFUPtOpd9WJaDBmIPZ
+   XpGIfI8/4bct/1ndzqCoIXYaSffmegR9RjwKDv3PA8JoT69qQi7fhpjj6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="368093407"
+X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
+   d="scan'208";a="368093407"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 13:17:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="766115780"
+X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
+   d="scan'208";a="766115780"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2023 13:17:14 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qT6fB-0004rZ-1L;
+	Mon, 07 Aug 2023 20:17:13 +0000
+Date: Tue, 8 Aug 2023 04:17:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 12/13] drivers/acpi/thermal.c:817:22:
+ error: redefinition of 'device'
+Message-ID: <202308080433.zTgDF79n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 4
-X-Spam-Status: No, score=0.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 6 Aug 2023 20:00:10 +0800
-kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   cb7868f075558114df880ebd25d7a0ac7d23f94a
+commit: 34af5a3fdf4c63403109630759454e285d26397c [12/13] Merge branch 'acpi-thermal-next' into bleeding-edge
+config: i386-randconfig-i011-20230807 (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/reproduce)
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f0ab9f34e59e0c01a1c31142e0b336245367fd86
-> commit: 9a9608418292bb8733805c3f3123dfe0454fadac iio: light: Add support for TI OPT4001 light sensor
-> date:   3 months ago
-> config: s390-randconfig-r034-20230806 (https://download.01.org/0day-ci/archive/20230806/202308061902.0gVz6bSe-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230806/202308061902.0gVz6bSe-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308061902.0gVz6bSe-lkp@intel.com/
-> 	
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/iio/light/opt4001.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      547 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
->      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->          |                                                      ^
->    In file included from drivers/iio/light/opt4001.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
->      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
->          |                                                      ^
->    In file included from drivers/iio/light/opt4001.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      584 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      692 |         readsb(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      700 |         readsw(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      708 |         readsl(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      717 |         writesb(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      726 |         writesw(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      735 |         writesl(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
-> >> drivers/iio/light/opt4001.c:215:9: error: call to '__compiletime_assert_355' declared with 'error' attribute: FIELD_PREP: value too large for the field  
->      215 |         reg |= FIELD_PREP(OPT4001_CTRL_CONV_TIME_MASK, chip->int_time);
->          |                ^
->    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
->      114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->          |                 ^
->    include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
->       68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
->          |                 ^
->    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
->       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->          |                                     ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
->      385 |         __compiletime_assert(condition, msg, prefix, suffix)
->          |         ^
->    include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
->      378 |                         prefix ## suffix();                             \
->          |                         ^
->    <scratch space>:55:1: note: expanded from here
->       55 | __compiletime_assert_355
->          | ^
->    12 warnings and 1 error generated.
-> 
-> 
-> vim +215 drivers/iio/light/opt4001.c
-> 
->    207	
->    208	static int opt4001_set_conf(struct opt4001_chip *chip)
->    209	{
->    210		struct device *dev = &chip->client->dev;
->    211		u16 reg;
->    212		int ret;
->    213	
->    214		reg = FIELD_PREP(OPT4001_CTRL_RANGE_MASK, OPT4001_CTRL_LIGHT_SCALE_AUTO);
->  > 215		reg |= FIELD_PREP(OPT4001_CTRL_CONV_TIME_MASK, chip->int_time);  
->    216		reg |= FIELD_PREP(OPT4001_CTRL_OPER_MODE_MASK, OPT4001_CTRL_OPER_MODE_CONTINUOUS);
->    217	
->    218		ret = regmap_write(chip->regmap, OPT4001_CTRL, reg);
->    219		if (ret)
->    220			dev_err(dev, "Failed to set configuration\n");
->    221	
->    222		return ret;
->    223	}
->    224	
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308080433.zTgDF79n-lkp@intel.com/
 
-This took me a few mins to conjecture what it might be finding.
-I think it's managing to spot the missing divide by 2 in here which ends up in int_time
-and could potentially go as high as 21 - overflowing the field,
+All errors (new ones prefixed by >>):
 
-static int opt4001_als_time_to_index(const u32 als_integration_time)
-{
-	int i;
-
-	for (i = 0; i < ARRAY_SIZE(opt4001_int_time_available); i++) {
-		if (als_integration_time == opt4001_int_time_available[i][1])
-			return i;
-	}
-
-	return -EINVAL;
-}
-
-ARRAY_SIZE is applied to an Nx2 array so that should be ARRAY_SIZE()/2 to index over just
-the first dimension as intended.  I'll send a patch shortly once I've checked with the
-reproducer.  It's a bug either way (I think!)
-
-Jonathan
+>> drivers/acpi/thermal.c:817:22: error: redefinition of 'device'
+           struct acpi_device *device = data;
+                               ^
+   drivers/acpi/thermal.c:815:53: note: previous definition is here
+   static void acpi_thermal_notify(struct acpi_device *device, u32 event)
+                                                       ^
+>> drivers/acpi/thermal.c:817:31: error: use of undeclared identifier 'data'
+           struct acpi_device *device = data;
+                                        ^
+>> drivers/acpi/thermal.c:982:8: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
+                                                    acpi_thermal_notify);
+                                                    ^~~~~~~~~~~~~~~~~~~
+   include/acpi/acpi_bus.h:520:29: note: passing argument to parameter 'handler' here
+                                       acpi_notify_handler handler);
+                                                           ^
+   drivers/acpi/thermal.c:1007:12: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
+                                          acpi_thermal_notify);
+                                          ^~~~~~~~~~~~~~~~~~~
+   include/acpi/acpi_bus.h:523:29: note: passing argument to parameter 'handler' here
+                                       acpi_notify_handler handler);
+                                                           ^
+   drivers/acpi/thermal.c:1026:25: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+           int i, j, power_state, result;
+                                  ^
+   1 warning and 4 errors generated.
 
 
+vim +/device +817 drivers/acpi/thermal.c
 
-> 
+3f655ef8c439e0 Zhang Rui         2008-01-17  809  
+3f655ef8c439e0 Zhang Rui         2008-01-17  810  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  811  /* --------------------------------------------------------------------------
+^1da177e4c3f41 Linus Torvalds    2005-04-16  812                                   Driver Interface
+^1da177e4c3f41 Linus Torvalds    2005-04-16  813     -------------------------------------------------------------------------- */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  814  
+342d550db1bc0b Bjorn Helgaas     2009-04-07  815  static void acpi_thermal_notify(struct acpi_device *device, u32 event)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  816  {
+9d67b6acf1358b Michal Wilczynski 2023-07-03 @817  	struct acpi_device *device = data;
+342d550db1bc0b Bjorn Helgaas     2009-04-07  818  	struct acpi_thermal *tz = acpi_driver_data(device);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  819  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  820  	if (!tz)
+d550d98d331737 Patrick Mochel    2006-06-27  821  		return;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  822  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  823  	switch (event) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  824  	case ACPI_THERMAL_NOTIFY_TEMPERATURE:
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  825  		acpi_queue_thermal_check(tz);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  826  		break;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  827  	case ACPI_THERMAL_NOTIFY_THRESHOLDS:
+^1da177e4c3f41 Linus Torvalds    2005-04-16  828  	case ACPI_THERMAL_NOTIFY_DEVICES:
+95d37fab16ec7a Rafael J. Wysocki 2023-08-04  829  		acpi_thermal_trips_update(tz, event);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  830  		break;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  831  	default:
+f86b15a1e65414 Rafael J. Wysocki 2021-02-03  832  		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
+f86b15a1e65414 Rafael J. Wysocki 2021-02-03  833  				  event);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  834  		break;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  835  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  836  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  837  
+261cba2deb7d3b Zhang Rui         2012-11-27  838  /*
+261cba2deb7d3b Zhang Rui         2012-11-27  839   * On some platforms, the AML code has dependency about
+261cba2deb7d3b Zhang Rui         2012-11-27  840   * the evaluating order of _TMP and _CRT/_HOT/_PSV/_ACx.
+261cba2deb7d3b Zhang Rui         2012-11-27  841   * 1. On HP Pavilion G4-1016tx, _TMP must be invoked after
+261cba2deb7d3b Zhang Rui         2012-11-27  842   *    /_CRT/_HOT/_PSV/_ACx, or else system will be power off.
+261cba2deb7d3b Zhang Rui         2012-11-27  843   * 2. On HP Compaq 6715b/6715s, the return value of _PSV is 0
+261cba2deb7d3b Zhang Rui         2012-11-27  844   *    if _TMP has never been evaluated.
+261cba2deb7d3b Zhang Rui         2012-11-27  845   *
+261cba2deb7d3b Zhang Rui         2012-11-27  846   * As this dependency is totally transparent to OS, evaluate
+261cba2deb7d3b Zhang Rui         2012-11-27  847   * all of them once, in the order of _CRT/_HOT/_PSV/_ACx,
+261cba2deb7d3b Zhang Rui         2012-11-27  848   * _TMP, before they are actually used.
+261cba2deb7d3b Zhang Rui         2012-11-27  849   */
+261cba2deb7d3b Zhang Rui         2012-11-27  850  static void acpi_thermal_aml_dependency_fix(struct acpi_thermal *tz)
+261cba2deb7d3b Zhang Rui         2012-11-27  851  {
+261cba2deb7d3b Zhang Rui         2012-11-27  852  	acpi_handle handle = tz->device->handle;
+261cba2deb7d3b Zhang Rui         2012-11-27  853  	unsigned long long value;
+261cba2deb7d3b Zhang Rui         2012-11-27  854  	int i;
+261cba2deb7d3b Zhang Rui         2012-11-27  855  
+261cba2deb7d3b Zhang Rui         2012-11-27  856  	acpi_evaluate_integer(handle, "_CRT", NULL, &value);
+261cba2deb7d3b Zhang Rui         2012-11-27  857  	acpi_evaluate_integer(handle, "_HOT", NULL, &value);
+261cba2deb7d3b Zhang Rui         2012-11-27  858  	acpi_evaluate_integer(handle, "_PSV", NULL, &value);
+261cba2deb7d3b Zhang Rui         2012-11-27  859  	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
+261cba2deb7d3b Zhang Rui         2012-11-27  860  		char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
+261cba2deb7d3b Zhang Rui         2012-11-27  861  		acpi_status status;
+261cba2deb7d3b Zhang Rui         2012-11-27  862  
+261cba2deb7d3b Zhang Rui         2012-11-27  863  		status = acpi_evaluate_integer(handle, name, NULL, &value);
+261cba2deb7d3b Zhang Rui         2012-11-27  864  		if (status == AE_NOT_FOUND)
+261cba2deb7d3b Zhang Rui         2012-11-27  865  			break;
+261cba2deb7d3b Zhang Rui         2012-11-27  866  	}
+261cba2deb7d3b Zhang Rui         2012-11-27  867  	acpi_evaluate_integer(handle, "_TMP", NULL, &value);
+261cba2deb7d3b Zhang Rui         2012-11-27  868  }
+261cba2deb7d3b Zhang Rui         2012-11-27  869  
+4be44fcd3bf648 Len Brown         2005-08-05  870  static int acpi_thermal_get_info(struct acpi_thermal *tz)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  871  {
+36f554046bd6da Rafael J. Wysocki 2022-10-04  872  	int result;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  873  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  874  	if (!tz)
+d550d98d331737 Patrick Mochel    2006-06-27  875  		return -EINVAL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  876  
+261cba2deb7d3b Zhang Rui         2012-11-27  877  	acpi_thermal_aml_dependency_fix(tz);
+261cba2deb7d3b Zhang Rui         2012-11-27  878  
+9bcb8118965ab4 Matthew Garrett   2012-02-01  879  	/* Get trip points [_CRT, _PSV, etc.] (required) */
+9bcb8118965ab4 Matthew Garrett   2012-02-01  880  	result = acpi_thermal_get_trip_points(tz);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  881  	if (result)
+d550d98d331737 Patrick Mochel    2006-06-27  882  		return result;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  883  
+9bcb8118965ab4 Matthew Garrett   2012-02-01  884  	/* Get temperature [_TMP] (required) */
+9bcb8118965ab4 Matthew Garrett   2012-02-01  885  	result = acpi_thermal_get_temperature(tz);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  886  	if (result)
+d550d98d331737 Patrick Mochel    2006-06-27  887  		return result;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  888  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  889  	/* Set the cooling mode [_SCP] to active cooling (default) */
+c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  890  	acpi_execute_simple_method(tz->device->handle, "_SCP",
+c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  891  				   ACPI_THERMAL_MODE_ACTIVE);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  892  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  893  	/* Get default polling frequency [_TZP] (optional) */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  894  	if (tzp)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  895  		tz->polling_frequency = tzp;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  896  	else
+^1da177e4c3f41 Linus Torvalds    2005-04-16  897  		acpi_thermal_get_polling_frequency(tz);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  898  
+d550d98d331737 Patrick Mochel    2006-06-27  899  	return 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  900  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  901  
+13614e37e94da4 Jean Delvare      2009-04-06  902  /*
+13614e37e94da4 Jean Delvare      2009-04-06  903   * The exact offset between Kelvin and degree Celsius is 273.15. However ACPI
+13614e37e94da4 Jean Delvare      2009-04-06  904   * handles temperature values with a single decimal place. As a consequence,
+13614e37e94da4 Jean Delvare      2009-04-06  905   * some implementations use an offset of 273.1 and others use an offset of
+13614e37e94da4 Jean Delvare      2009-04-06  906   * 273.2. Try to find out which one is being used, to present the most
+13614e37e94da4 Jean Delvare      2009-04-06  907   * accurate and visually appealing number.
+13614e37e94da4 Jean Delvare      2009-04-06  908   *
+13614e37e94da4 Jean Delvare      2009-04-06  909   * The heuristic below should work for all ACPI thermal zones which have a
+13614e37e94da4 Jean Delvare      2009-04-06  910   * critical trip point with a value being a multiple of 0.5 degree Celsius.
+13614e37e94da4 Jean Delvare      2009-04-06  911   */
+13614e37e94da4 Jean Delvare      2009-04-06  912  static void acpi_thermal_guess_offset(struct acpi_thermal *tz)
+13614e37e94da4 Jean Delvare      2009-04-06  913  {
+7266c88cbaa3de Rafael J. Wysocki 2023-06-04  914  	if (tz->trips.critical.valid &&
+13614e37e94da4 Jean Delvare      2009-04-06  915  	    (tz->trips.critical.temperature % 5) == 1)
+7f49a5cb94e68a Akinobu Mita      2020-01-30  916  		tz->kelvin_offset = 273100;
+13614e37e94da4 Jean Delvare      2009-04-06  917  	else
+7f49a5cb94e68a Akinobu Mita      2020-01-30  918  		tz->kelvin_offset = 273200;
+13614e37e94da4 Jean Delvare      2009-04-06  919  }
+13614e37e94da4 Jean Delvare      2009-04-06  920  
+a59ffb2062df3a Aaron Lu          2014-03-04  921  static void acpi_thermal_check_fn(struct work_struct *work)
+a59ffb2062df3a Aaron Lu          2014-03-04  922  {
+a59ffb2062df3a Aaron Lu          2014-03-04  923  	struct acpi_thermal *tz = container_of(work, struct acpi_thermal,
+a59ffb2062df3a Aaron Lu          2014-03-04  924  					       thermal_check_work);
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  925  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  926  	/*
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  927  	 * In general, it is not sufficient to check the pending bit, because
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  928  	 * subsequent instances of this function may be queued after one of them
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  929  	 * has started running (e.g. if _TMP sleeps).  Avoid bailing out if just
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  930  	 * one of them is running, though, because it may have done the actual
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  931  	 * check some time ago, so allow at least one of them to block on the
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  932  	 * mutex while another one is running the update.
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  933  	 */
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  934  	if (!refcount_dec_not_one(&tz->thermal_check_count))
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  935  		return;
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  936  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  937  	mutex_lock(&tz->thermal_check_lock);
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  938  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  939  	thermal_zone_device_update(tz->thermal_zone, THERMAL_EVENT_UNSPECIFIED);
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  940  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  941  	refcount_inc(&tz->thermal_check_count);
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  942  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  943  	mutex_unlock(&tz->thermal_check_lock);
+a59ffb2062df3a Aaron Lu          2014-03-04  944  }
+a59ffb2062df3a Aaron Lu          2014-03-04  945  
+4be44fcd3bf648 Len Brown         2005-08-05  946  static int acpi_thermal_add(struct acpi_device *device)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  947  {
+36f554046bd6da Rafael J. Wysocki 2022-10-04  948  	struct acpi_thermal *tz;
+36f554046bd6da Rafael J. Wysocki 2022-10-04  949  	int result;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  950  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  951  	if (!device)
+d550d98d331737 Patrick Mochel    2006-06-27  952  		return -EINVAL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  953  
+36bcbec7ce21e2 Burman Yan        2006-12-19  954  	tz = kzalloc(sizeof(struct acpi_thermal), GFP_KERNEL);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  955  	if (!tz)
+d550d98d331737 Patrick Mochel    2006-06-27  956  		return -ENOMEM;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  957  
+8348e1b19a06b1 Patrick Mochel    2006-05-19  958  	tz->device = device;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  959  	strcpy(tz->name, device->pnp.bus_id);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  960  	strcpy(acpi_device_name(device), ACPI_THERMAL_DEVICE_NAME);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  961  	strcpy(acpi_device_class(device), ACPI_THERMAL_CLASS);
+db89b4f0dbab83 Pavel Machek      2008-09-22  962  	device->driver_data = tz;
+3f655ef8c439e0 Zhang Rui         2008-01-17  963  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  964  	result = acpi_thermal_get_info(tz);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  965  	if (result)
+3f655ef8c439e0 Zhang Rui         2008-01-17  966  		goto free_memory;
+3f655ef8c439e0 Zhang Rui         2008-01-17  967  
+13614e37e94da4 Jean Delvare      2009-04-06  968  	acpi_thermal_guess_offset(tz);
+13614e37e94da4 Jean Delvare      2009-04-06  969  
+3f655ef8c439e0 Zhang Rui         2008-01-17  970  	result = acpi_thermal_register_thermal_zone(tz);
+3f655ef8c439e0 Zhang Rui         2008-01-17  971  	if (result)
+3f655ef8c439e0 Zhang Rui         2008-01-17  972  		goto free_memory;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  973  
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  974  	refcount_set(&tz->thermal_check_count, 3);
+81b704d3e4674e Rafael J. Wysocki 2021-01-14  975  	mutex_init(&tz->thermal_check_lock);
+a59ffb2062df3a Aaron Lu          2014-03-04  976  	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
+a59ffb2062df3a Aaron Lu          2014-03-04  977  
+f86b15a1e65414 Rafael J. Wysocki 2021-02-03  978  	pr_info("%s [%s] (%ld C)\n", acpi_device_name(device),
+7f49a5cb94e68a Akinobu Mita      2020-01-30  979  		acpi_device_bid(device), deci_kelvin_to_celsius(tz->temperature));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  980  
+9d67b6acf1358b Michal Wilczynski 2023-07-03  981  	result = acpi_dev_install_notify_handler(device, ACPI_DEVICE_NOTIFY,
+9d67b6acf1358b Michal Wilczynski 2023-07-03 @982  						 acpi_thermal_notify);
+9d67b6acf1358b Michal Wilczynski 2023-07-03  983  	if (result)
+9d67b6acf1358b Michal Wilczynski 2023-07-03  984  		goto flush_wq;
+9d67b6acf1358b Michal Wilczynski 2023-07-03  985  
+9d67b6acf1358b Michal Wilczynski 2023-07-03  986  	return 0;
+9d67b6acf1358b Michal Wilczynski 2023-07-03  987  
+9d67b6acf1358b Michal Wilczynski 2023-07-03  988  flush_wq:
+9d67b6acf1358b Michal Wilczynski 2023-07-03  989  	flush_workqueue(acpi_thermal_pm_queue);
+9d67b6acf1358b Michal Wilczynski 2023-07-03  990  	acpi_thermal_unregister_thermal_zone(tz);
+3f655ef8c439e0 Zhang Rui         2008-01-17  991  free_memory:
+^1da177e4c3f41 Linus Torvalds    2005-04-16  992  	kfree(tz);
+9d67b6acf1358b Michal Wilczynski 2023-07-03  993  
+d550d98d331737 Patrick Mochel    2006-06-27  994  	return result;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  995  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  996  
 
+:::::: The code at line 817 was first introduced by commit
+:::::: 9d67b6acf1358b67a6de3302dc9c344a7cab4807 ACPI: thermal: Install Notify() handler directly
+
+:::::: TO: Michal Wilczynski <michal.wilczynski@intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
